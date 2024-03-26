@@ -1,21 +1,80 @@
-import React from 'react'
-import {  Link } from "react-router-dom";
-
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import LogoNavBar from "../../helper/staticImage/logoNavBar.svg";
+import "./NavBar.css";
 const NavBar = () => {
-  return (
-    <div>
-<ul className="App-header">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/pricing">Pricing</Link>
-          </li>
-          <li>
-            <Link to="/meetHostBuddy">Meet HostBuddy</Link>
-          </li>
-        </ul>    </div>
-  )
-}
+  const [deskTopView, DeskTopView] = useState(true);
 
-export default NavBar
+  return (
+    <div className="bg-dark fluid text-white py-4">
+      <div className="container ">
+        <div className="row">
+          <div className="col ">
+            <img src={LogoNavBar}></img>
+          </div>
+          {deskTopView && (
+            <div className="col  d-flex justify-content-evenly align-items-center">
+              <div>
+                <Link to="/" className="navText ">
+                  Home
+                </Link>
+              </div>
+              <div>
+                <Link to="/pricing" className="navText ">
+                  Pricing
+                </Link>
+              </div>
+              <div>
+                <Link to="/meetHostBuddy" className="navText ">
+                  Meet HostBuddy
+                </Link>
+              </div>
+              <div>
+                <Link to="/faqs" className="navText ">
+                  FAQs
+                </Link>
+              </div>
+            </div>
+          )}
+          {deskTopView ? (
+            <div className="col d-flex justify-content-center align-items-center">
+              <div>
+                <button
+                  className="btn btn-primary rounded-pill"
+                >
+                  <Link to="/signup" className="navText ">
+                    Sign Up
+                  </Link>
+                </button>
+              </div>
+              <div className="ms-4">
+                <button
+                  className="btn btn-dark border rounded-pill"
+                >
+                  <Link to="/login" className="navText ">
+                    Login
+                  </Link>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div>
+                <button className="btn btn-primary rounded-pill">
+                  <i class="bi bi-person"></i>
+                </button>
+              </div>
+              <div>
+                <button className="btn btn-dark border rounded-pill">
+                  <i class="bi bi-justify"></i>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default NavBar;
