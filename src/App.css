@@ -7,6 +7,18 @@ body {
     background: #000212;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #146EF5;
+}
+
+::-webkit-scrollbar-track {
+    background: #020D29;
+}
+
 p, a {
     font-family: 'Samsung Sharp Sans Medium';
     font-size: 18px;
@@ -34,6 +46,11 @@ a {
 .heading h2 strong {
     font-weight: 700;
     color: #146EF5;
+}
+
+p {
+    margin: 0;
+    padding: 0;
 }
 
 @media only screen and (max-width: 1199px) {
