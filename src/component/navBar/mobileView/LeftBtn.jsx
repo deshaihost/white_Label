@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Login = () => {
+const LeftBtn = () => {
   return (
     <div>
-        Login
+      LeftBtn
     </div>
   )
 }
 
-export default Login
+export default LeftBtn

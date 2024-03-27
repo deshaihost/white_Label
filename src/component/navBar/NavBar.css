@@ -5,3 +5,15 @@
 .navTextActive{
     color: blue;
 }
+@media only screen and (max-width: 992px) {
+    .mobileView{
+        display: none!important;
+        border: 2px solid red;
+    }
+}
+@media only screen and (min-width: 993px) {
+    .deskTopView{
+        display: none!important;
+        border: 2px solid red;
+    }
+}
