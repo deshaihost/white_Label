@@ -1,0 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #000212;
+}
+
+p, a {
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 18px;
+}
+
+a {
+    transition: .4s ease-in-out;
+    text-decoration: none;
+}
+
+.heading h2 {
+    color: #FFF;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 50px;
+    margin-bottom: 13px;
+}
+
+.heading.heading-center h2 {
+    text-align: center;
+}
+
+.heading h2 strong {
+    font-weight: 700;
+    color: #146EF5;
+}
+
+@media only screen and (max-width: 1199px) {
+    a {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .heading h2 {
+        font-size: 36px;
+        line-height: 45px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .heading h2 {
+        font-size: 27px;
+        line-height: 42px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .heading h2 {
+        font-size: 22px;
+        line-height: 30px;
+    }
+}
+
+@font-face {
+    font-family: 'Samsung Sharp Sans Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Samsung Sharp Sans Regular'), url('../public/samsungsharpsans.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'Samsung Sharp Sans Medium';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Samsung Sharp Sans Medium'), url('../public/samsungsharpsans-medium.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'Samsung Sharp Sans Bold';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Samsung Sharp Sans Bold'), url('../public/samsungsharpsans-bold.woff') format('woff');
+}

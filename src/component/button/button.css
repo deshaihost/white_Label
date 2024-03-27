@@ -1,0 +1,29 @@
+button.button-global {
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border-radius: 160px;
+    display: inline-block;
+    padding: 13px 40px;
+    background: none;
+    border: 1px solid #146EF5;
+    transition: .4s ease-in-out;
+}
+
+button.primary-button {
+    background: #146EF5;
+    color: #FFF;
+}
+
+button.outline-button {
+    color: #146EF5;
+    margin-right: 10px;
+}
+
+@media only screen and (max-width: 1199px) {
+    button.button-global {
+        font-size: 15px;
+    }
+}
