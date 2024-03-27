@@ -1,0 +1,100 @@
+.plans {
+    padding: 0 0 100px;
+}
+
+.plans .plan-box {
+    border-radius: 30px;
+    border: 1px solid #146EF5;
+    padding: 90px 55px;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    place-content: center;
+    justify-content: flex-start;
+}
+
+.plans .plan-box h3 {
+    color: #FFF;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 50px;
+    margin-bottom: 40px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.plans .plan-box h3 strong {
+    color: #146EF5;
+    font-weight: 500;
+}
+
+.plans .col-md-6:nth-child(even) .plan-box  {
+    background: linear-gradient(180deg, #000426 0%, #00031A 100%);
+}
+
+.plans .plan-box a {
+    color: #146EF5;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border-radius: 160px;
+    border: 1px solid #146EF5;
+    display: inline-block;
+    padding: 13px 40px;
+    background: transparent;
+    transition: .4s ease-in-out;
+}
+
+.plans .col-md-6:nth-child(even) .plan-box a {
+    background: #146EF5;
+    color: #fff;
+}
+
+@media only screen and (max-width: 1199px) {
+    .plans .plan-box a {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .plans {
+        padding: 0 0 40px;
+    }
+
+    .plans .plan-box {
+        padding: 20px;
+        border-radius: 10px;
+    }
+    
+    .plans .plan-box h3 {
+        font-size: 27px;
+        line-height: 36px;
+        margin-bottom: 20px;
+    }
+    
+}
+
+@media only screen and (max-width: 767px) {
+    .plans {
+        padding: 0 0 40px;
+    }
+
+    .plans .plan-box {
+        margin-top: 20px;
+        height: auto;
+    }
+
+    .plans .plan-box h3 {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .plans .plan-box a {
+        padding: 10px 30px;
+    }
+}
