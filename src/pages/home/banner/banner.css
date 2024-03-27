@@ -15,6 +15,7 @@
 .banner .banner-container p {
     color: #fff;
     text-align: center;
+    margin-bottom: 30px;
 }
 
 .banner .banner-container a {
@@ -113,6 +114,11 @@
 
     .banner .banner-container .banner-video video {
         height: 295px;
+    }
+
+    .banner .banner-container p {
+        font-size: 16px;
+        margin-bottom: 20px;
     }
 }
 
