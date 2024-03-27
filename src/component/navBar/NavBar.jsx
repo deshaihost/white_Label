@@ -2,88 +2,51 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import LogoNavBar from "../../helper/staticImage/logoNavBar.svg";
 import "./NavBar.css";
-import RightBtn from "./mobileView/RightBtn";
-import LeftBtn from "./mobileView/LeftBtn";
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+
+import PrimaryButton from "../button/button";
+import { OutlineButton } from "../button/button";
 const NavBar = () => {
-  const [mobileViewshow, setMobileViewShow] = useState({
-    rightBtn: false,
-    leftBtn: false,
-  });
 
   return (
-    <>
-      <div className="bg-dark fluid text-white py-4">
-        <div className="container ">
-          <div className="row">
-            <div className="col ">
-              <img src={LogoNavBar}></img>
-            </div>
-            <div className="col  d-flex justify-content-evenly align-items-center mobileView">
-              <div>
-                <Link to="/" className="navText ">
-                  Home
-                </Link>
-              </div>
-              <div>
-                <Link to="/pricing" className="navText ">
-                  Pricing
-                </Link>
-              </div>
-              <div>
-                <Link to="/meetHostBuddy" className="navText ">
-                  Meet HostBuddy
-                </Link>
-              </div>
-              <div>
-                <Link to="/faqs" className="navText ">
-                  FAQs
-                </Link>
-              </div>
-            </div>
-            <div className="col d-flex justify-content-center align-items-center mobileView">
-              <div>
-                <button className="btn btn-primary rounded-pill">
-                  <Link to="/signup" className="navText ">
-                    Sign Up
-                  </Link>
+    <header className="header">
+      <Container>
+        <Navbar expand="lg" className="bg-body-tertiary header-container">
+            <Navbar.Brand href="#"><img src={LogoNavBar}></img></Navbar.Brand>
+            <div className="header-icons-list">
+              <div className="header-icon">
+                <button>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.99999 9.99999C12.5783 9.99999 14.6667 7.91166 14.6667 5.33332C14.6667 2.75499 12.5783 0.666656 9.99999 0.666656C7.42166 0.666656 5.33332 2.75499 5.33332 5.33332C5.33332 7.91166 7.42166 9.99999 9.99999 9.99999ZM9.99999 12.3333C6.88499 12.3333 0.666656 13.8967 0.666656 17V19.3333H19.3333V17C19.3333 13.8967 13.115 12.3333 9.99999 12.3333Z" fill="#146EF5"></path>
+                  </svg>
                 </button>
               </div>
-              <div className="ms-4">
-                <button className="btn btn-dark border rounded-pill">
-                  <Link to="/login" className="navText ">
-                    Login
-                  </Link>
+              <Navbar.Toggle className="header-icon" aria-controls="navbarSupportedContent">
+                <button>
+                  <span className="toggle-line my-1"></span>
+                  <span className="toggle-line my-1"></span>
+                  <span className="toggle-line my-1"></span>
                 </button>
-              </div>
+              </Navbar.Toggle>
             </div>
-            <div className="col d-flex justify-content-center align-items-center deskTopView">
-              <div>
-                <button
-                  className="btn btn-primary rounded-pill"
-                  onClick={() => {
-                    setMobileViewShow({ leftBtn: !mobileViewshow.leftBtn });
-                  }}
-                >
-                  <i class="bi bi-person"></i>
-                </button>
-              </div>
-              <div className="ms-4">
-                <button
-                  className="btn btn-dark border rounded-pill"
-                  onClick={() => {
-                    setMobileViewShow({ rightBtn: !mobileViewshow.rightBtn });
-                  }}
-                >
-                  <i class="bi bi-justify"></i>
-                </button>
-              </div>
+            <Navbar.Collapse id="navbarSupportedContent">
+              <Nav >
+                <Nav.Link href="#action1">Home</Nav.Link>
+                <Nav.Link href="#action2">Pricing</Nav.Link>
+                <Nav.Link href="#action3">Meet HostBuddy</Nav.Link>
+                <Nav.Link href="#action4">FAQs</Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+            <div className="nav-buttons">
+              <OutlineButton text="Sign Up" />
+              <PrimaryButton text="Login" />
             </div>
-          </div>
-        </div>
-      </div>
-      {mobileViewshow?.leftBtn && <LeftBtn />}
-      {mobileViewshow?.rightBtn && <RightBtn />}
-    </>
+        </Navbar>
+      </Container>
+    </header>
+    
   );
 };
 
