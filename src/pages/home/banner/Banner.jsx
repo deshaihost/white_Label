@@ -13,7 +13,7 @@ const Banner = () => {
                             <h2>Property Management Made Easy with Our <strong>AI-Powered Chatbots</strong></h2>
                         </div>
                         <p>24/7 Guest Communication Made Effortless</p>
-                        <Link to='/'>Start 2 Week free trial</Link>
+                        <Link to='/' className="link-btn outline-btn">Start 2 Week free trial</Link>
                     </div>
                     <div className="banner-video">
                         <video autoPlay muted poster="https://hostbuddy.ai/wp-content/themes/hostbuddy/assets/img/video_img11.jpg">

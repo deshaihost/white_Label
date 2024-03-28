@@ -17,9 +17,19 @@ button.primary-button {
     color: #FFF;
 }
 
+button.primary-button:hover {
+    background: transparent;
+    color: #146EF5;
+}
+
 button.outline-button {
     color: #146EF5;
     margin-right: 10px;
+}
+
+button.outline-button:hover {
+    background: #146EF5;
+    color: #fff;
 }
 
 @media only screen and (max-width: 1199px) {

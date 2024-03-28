@@ -3,14 +3,13 @@ import Container from 'react-bootstrap/Container';
 import AuthImage from '../../public/img/auth_left_img.png';
 import Logo from '../../public/img/footer-logo.webp';
 import { Link } from 'react-router-dom';
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { FaRegEye } from "react-icons/fa";
 import '../auth.css';
 import PrimaryButton from '../../component/button/button';
 
-const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
+const ForgotPass = () => {
   return (
-    <div className='login auth'>
+    <div className='forgot-pass auth'>
       <Container>
         <div className="row">
           <div className="col-lg-6">
@@ -24,7 +23,7 @@ const Login = () => {
             </div>
           </div>
           <div className="col-lg-6">
-            <div className="login-content auth-content">
+            <div className="forgot-pass-content auth-content">
               <Link to='/' className="logo">
                 <img src={Logo} alt='logo' />
               </Link>
@@ -36,22 +35,7 @@ const Login = () => {
                     <input type='email' placeholder='Email...' />
                   </div>
                   <div className="input-container">
-                    <div className="password-box">
-                      <input type={showPassword ? 'text' : 'password'} placeholder='Password...' />
-                      <button type='button' className='eye-btn' onClick={() => {setShowPassword(!showPassword)}} style={{cursor: 'pointer'}}>
-                        {!showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-                      </button>
-                    </div>
-                  </div>
-                  <div className="input-container d-flex align-items-center justify-content-between">
-                    <div className="form-check remember">
-                      <input type="checkbox" className='form-check-input' value="" id="login_remember" name='login_remember' />
-                      <label className='form-check-label' htmlFor="login_remember">Remember me</label>
-                    </div>
-                    <Link className='forgot_pass' to='/forgot'>Forgot Password?</Link>
-                  </div>
-                  <div className="input-container">
-                    <PrimaryButton text="Login" additionalClass="w-100" />
+                    <PrimaryButton text="Get Password Reset Token " additionalClass="w-100" />
                   </div>
                 </form>
               </div>
@@ -68,4 +52,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default ForgotPass

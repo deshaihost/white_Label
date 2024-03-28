@@ -35,30 +35,9 @@
     background: linear-gradient(180deg, #000426 0%, #00031A 100%);
 }
 
-.plans .plan-box a {
-    color: #146EF5;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    border-radius: 160px;
-    border: 1px solid #146EF5;
-    display: inline-block;
-    padding: 13px 40px;
-    background: transparent;
-    transition: .4s ease-in-out;
-}
-
 .plans .col-md-6:nth-child(even) .plan-box a {
     background: #146EF5;
     color: #fff;
-}
-
-@media only screen and (max-width: 1199px) {
-    .plans .plan-box a {
-        font-size: 15px;
-    }
 }
 
 @media only screen and (max-width: 991px) {
@@ -92,9 +71,5 @@
     .plans .plan-box h3 {
         font-size: 20px;
         line-height: 28px;
-    }
-
-    .plans .plan-box a {
-        padding: 10px 30px;
     }
 }

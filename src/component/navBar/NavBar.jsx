@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import LogoNavBar from "../../helper/staticImage/logoNavBar.svg";
 import "./NavBar.css";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-
-import PrimaryButton from "../button/button";
-import { OutlineButton } from "../button/button";
 const NavBar = () => {
 
   return (
@@ -32,16 +29,17 @@ const NavBar = () => {
               </Navbar.Toggle>
             </div>
             <Navbar.Collapse id="navbarSupportedContent">
-              <Nav >
-                <Nav.Link href="#action1">Home</Nav.Link>
-                <Nav.Link href="#action2">Pricing</Nav.Link>
-                <Nav.Link href="#action3">Meet HostBuddy</Nav.Link>
-                <Nav.Link href="#action4">FAQs</Nav.Link>
-              </Nav>
+            <Nav >
+              <NavLink exact to="/" className="nav-link" activeClassName="active">Home</NavLink>
+              <NavLink exact to="/pricing" className="nav-link" activeClassName="active">Pricing</NavLink>
+              <NavLink exact to="/meetHostBuddy" className="nav-link" activeClassName="active">Meet HostBuddy</NavLink>
+              <NavLink exact to="/faqs" className="nav-link" activeClassName="active">FAQs</NavLink>
+            </Nav>
             </Navbar.Collapse>
             <div className="nav-buttons">
-              <OutlineButton text="Sign Up" />
-              <PrimaryButton text="Login" />
+              
+              <Link className="nav-btn nav-btn-primary link-btn filled-btn" to='/signup'>Signup</Link>
+              <Link className="nav-btn nav-btn-outline link-btn outline-btn" to='/login'>Login</Link>
             </div>
         </Navbar>
       </Container>
