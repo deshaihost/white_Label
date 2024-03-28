@@ -1,0 +1,233 @@
+.essentials {
+    padding-bottom: 100px;
+}
+
+.essentials .pricing-plan-box {
+    border-radius: 30px;
+    border: 1px solid #000633;
+    background: linear-gradient(180deg, #000426 0%, #00031A 100%);
+    padding: 30px;
+}
+
+.essentials .pricing-plan-box h3 {
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    background: linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+}
+
+.essentials .pricing-plan-box .divider {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.essentials .pricing-plan-box .divider span {
+    display: inline-block;
+    max-width: calc(50% - 65px);
+    width: 100%;
+    height: 1px;
+    background: #9294A3;
+}
+
+.essentials .pricing-plan-box .divider strong {
+    color: #9294A3;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.essentials .pricing-plan-box p {
+    color: #B3B3B3;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    max-width: 365px;
+    margin-bottom: 15px;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box .pricing-bar {
+    width: calc(100% - 200px);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box .pricing-bar input {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 10px;
+    background: #101436;
+    outline: none;
+    opacity: 1;
+    -webkit-transition: opacity .15s ease-in-out;
+    transition: opacity .15s ease-in-out;
+    max-width: calc(100% - 22px);
+    margin: auto;
+    outline: none;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box .pricing-bar input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 100%;
+    background: #146EF5;
+    border: 3px solid #fff;
+    cursor: pointer;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box .pricing-bar input::-webkit-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 100%;
+    background: #146EF5;
+    border: 3px solid #fff;
+    cursor: pointer;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box .pricing-bar input::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 100%;
+    background: #146EF5;
+    border: 3px solid #fff;
+    cursor: pointer;
+}
+
+
+.essentials .pricing-plan-box .pricing-bar-box .pricing-bar .range-label {
+    display: inline-block;
+    position: absolute;
+    left: 0%;
+    top: 20px;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box .pricing-bar .range-value {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #FFF;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box .price-plan h5 {
+    color: #FFF;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 50px;
+    margin: 0;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box .price-plan h5 sup {
+    font-weight: 500;
+    top: -12px;
+    margin-right: 3px;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box .price-plan h5 sub {
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    bottom: 0;
+}
+
+.essentials .pricing-plan-box .pricing-bar-box .price-plan span {
+    color: #CCC;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.essentials .pricing-plan-box a {
+    width: 100%;
+    text-align: center;
+    max-width: 407px;
+    margin: auto;
+    display: table;
+}
+
+.essentials .best-price-plan {
+    border: 2px solid #146EF5;
+}
+
+@media only screen and (max-width: 1199px) {
+
+    .essentials .pricing-plan-box .pricing-bar-box .pricing-bar {
+        width: calc(100% - 135px);
+    }
+
+    .essentials .pricing-plan-box .pricing-bar-box .price-plan h5 {
+        font-size: 30px;
+        line-height: 37px;
+    }
+
+    .essentials .pricing-plan-box .pricing-bar-box .price-plan h5 sup {
+        top: -10px;
+        font-size: 18px;
+    }
+
+    .essentials .pricing-plan-box .pricing-bar-box .price-plan h5 sub, .essentials .pricing-plan-box .pricing-bar-box .price-plan span {
+        font-size: 13px;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .essentials {
+        padding-bottom: 50px;
+    }
+
+    .essentials .best-price-plan {
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .essentials .pricing-plan-box {
+        border-radius: 15px;
+        padding: 20px;
+    }
+
+    .essentials .pricing-plan-box .pricing-bar-box {
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+
+    .essentials .pricing-plan-box .pricing-bar-box .pricing-bar {
+        width: 100%;
+        margin-bottom: 55px;
+    }
+}

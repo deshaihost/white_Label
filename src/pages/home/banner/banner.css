@@ -18,7 +18,7 @@
     margin-bottom: 30px;
 }
 
-.banner .banner-container a {
+/* .banner .banner-container a {
     color: #146EF5;
     font-style: normal;
     line-height: normal;
@@ -27,7 +27,7 @@
     display: inline-block;
     padding: 13px 40px;
     background: transparent;
-}
+} */
 
 .banner .banner-container .heading h2 {
     position: relative;

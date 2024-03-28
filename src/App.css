@@ -53,8 +53,60 @@ p {
     padding: 0;
 }
 
+textarea { resize: none }
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { color: #fff }
+input:-moz-placeholder, textarea:-moz-placeholder { color: #fff }
+input::-moz-placeholder { opacity: 1; outline: none }
+textarea::-moz-placeholder { opacity: 1; outline: none }
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #000212 inset !important;
+}
+
+input:-webkit-autofill{
+    -webkit-text-fill-color: #fff !important;
+}
+
+input[type="checkbox"] {
+    background: #000212;
+}
+
+.link-btn {
+    color: #146EF5;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border-radius: 160px;
+    border: 1px solid #146EF5;
+    display: inline-block;
+    padding: 13px 40px;
+    background: transparent;
+    transition: .4s ease-in-out;
+}
+
+.filled-btn {
+    background: #146EF5;
+    color: #fff;
+}
+
+.link-btn.filled-btn:hover {
+    transition: .4s ease-in-out;
+    background: transparent;
+    color: #146EF5;
+}
+
+.link-btn.outline-btn:hover {
+    transition: .4s ease-in-out;
+    background: #146EF5;
+    color: #fff;
+}
+
 @media only screen and (max-width: 1199px) {
-    a {
+    a, .link-btn {
         font-size: 15px;
     }
 }
@@ -75,6 +127,10 @@ p {
     p {
         font-size: 16px;
     }
+
+    .link-btn {
+        padding: 10px 30px;
+    }
 }
 
 @media only screen and (max-width: 575px) {
@@ -88,6 +144,7 @@ p {
     font-family: 'Samsung Sharp Sans Regular';
     font-style: normal;
     font-weight: normal;
+    font-weight: 400;
     src: local('Samsung Sharp Sans Regular'), url('../public/samsungsharpsans.woff') format('woff');
 }
 
