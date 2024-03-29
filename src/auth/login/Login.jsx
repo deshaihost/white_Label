@@ -6,11 +6,15 @@ import { Link } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import '../auth.css';
 import PrimaryButton from '../../component/button/button';
+import { Helmet } from 'react-helmet';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   return (
     <div className='login auth'>
+      <Helmet>
+            <title>Login – Hostbuddy</title>
+        </Helmet>
       <Container>
         <div className="row">
           <div className="col-lg-6">

@@ -94,4 +94,17 @@ footer.footer .footer-container {
     .footer .col-md-4 a {
         margin-bottom: 15px !important;
     }
+
+    .footer .footer-desc {
+        max-width: 100%;
+    }
+
+    footer.footer .footer-container .row > div:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    footer.footer .footer-container .row > div:not(:last-child) > div {
+        border-bottom: 1px solid rgb(255 255 255 / 10%);
+        padding-bottom: 20px;
+    }
 }

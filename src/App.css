@@ -19,6 +19,11 @@ body {
     background: #020D29;
 }
 
+h1, h2, h3, h4, ul, p {
+    padding: 0;
+    margin: 0;
+}
+
 p, a {
     font-family: 'Samsung Sharp Sans Medium';
     font-size: 18px;
@@ -51,6 +56,11 @@ a {
 p {
     margin: 0;
     padding: 0;
+}
+
+img {
+    border: 0;
+    max-width: 100%;
 }
 
 textarea { resize: none }
@@ -105,9 +115,66 @@ input[type="checkbox"] {
     color: #fff;
 }
 
+.banner-heading {
+    max-width: 753px;
+    margin: 0 auto 45px;
+    text-align: center;
+}
+
+.banner-heading h2 {
+    color: #FFF;
+    text-align: center;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 50px;
+    margin-bottom: 16px;
+}
+
+.banner-heading p {
+    color: #FFF;
+    text-align: center;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.banner-heading a {
+    margin-top: 35px;
+}
+
+.thankerror {
+    padding: 190px 0 120px;
+    text-align: center;
+}
+
+.thankerror p {
+    color: #FFF;
+    text-align: center;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 50px;
+    margin: 32px 0;
+}
+
+.thankerror a {
+    width: 100%;
+    max-width: 380px;
+}
+
 @media only screen and (max-width: 1199px) {
     a, .link-btn {
         font-size: 15px;
+    }
+
+    .banner-heading h2 {
+        font-size: 36px;
+        line-height: 40px;
     }
 }
 
@@ -115,6 +182,16 @@ input[type="checkbox"] {
     .heading h2 {
         font-size: 36px;
         line-height: 45px;
+    }
+
+    .banner-heading {
+        margin-bottom: 25px;
+    }
+
+    .banner-heading h2 {
+        font-size: 32px;
+        line-height: 40px;
+        margin-bottom: 10px;
     }
 }
 
@@ -130,6 +207,19 @@ input[type="checkbox"] {
 
     .link-btn {
         padding: 10px 30px;
+    }
+
+    .banner-heading h2 {
+        font-size: 22px;
+        line-height: 30px;
+    }
+
+    .banner-heading p  {
+        font-family: 'Samsung Sharp Sans Regular';
+    }
+
+    .banner-heading a {
+        margin-top: 15px;
     }
 }
 

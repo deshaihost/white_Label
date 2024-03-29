@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+.faqs {
+    padding: 110px 0 100px;
+}
+
+.faqs .banner-container {
+    max-width: 790px;
+    margin: auto;
+}
+
+.faqs .accordion-item {
+    border-radius: 15px;
+    border: 1px solid var(--main-Color, #146EF5);
+    background: linear-gradient(180deg, #000426 0%, #00031A 100%);
+    padding: 40px 35px;
+}
+
+.faqs .accordion-item:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.faqs .accordion-item .accordion-header {
+    margin-bottom: 0;
+}
+
+.faqs .accordion-item .accordion-header .accordion-button {
+    box-shadow: none !important;
+    outline: none;
+    word-break: break-word;
+    background: transparent;
+    padding: 0;
+    color: #FFF;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    justify-content: space-between;
+}
+
+.faqs .accordion-item:first-of-type .accordion-button {
+    border-top-left-radius: calc(0.25rem - 1px);
+    border-top-right-radius: calc(0.25rem - 1px);
+}
+
+.faqs .accordion-item .accordion-header .accordion-button::after {
+    background-image: url(../../public/img/arrow_down.png) !important;
+    background-position: center;
+    background-size: contain;
+    width: 8.486px;
+    height: 5.656px;
+    margin-left: 20px;
+}
+
+.faqs .accordion-item .accordion-body {
+    padding: 0;
+    padding-top: 20px;
+    color: #CCC;
+    leading-trim: both;
+    text-edge: cap;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+}
+
+@media only screen and (max-width: 991px) {
+    .faqs {
+        padding: 50px 0;
+    }
+
+    .faqs .accordion-item {
+        padding: 20px;
+    }
+
+    .faqs .accordion-item .accordion-header .accordion-button {
+        font-size: 16px;
+    }
+}

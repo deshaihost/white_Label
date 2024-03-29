@@ -11,7 +11,7 @@ const NavBar = () => {
     <header className="header">
       <Container>
         <Navbar expand="lg" className="bg-body-tertiary header-container">
-            <Navbar.Brand href="#"><img src={LogoNavBar}></img></Navbar.Brand>
+            <Navbar.Brand><NavLink exact to="/"><img src={LogoNavBar} /></NavLink></Navbar.Brand>
             <div className="header-icons-list">
               <div className="header-icon">
                 <button>
@@ -32,14 +32,14 @@ const NavBar = () => {
             <Nav >
               <NavLink exact to="/" className="nav-link" activeClassName="active">Home</NavLink>
               <NavLink exact to="/pricing" className="nav-link" activeClassName="active">Pricing</NavLink>
-              <NavLink exact to="/meetHostBuddy" className="nav-link" activeClassName="active">Meet HostBuddy</NavLink>
+              <NavLink exact to="/meet-hostbuddy" className="nav-link" activeClassName="active">Meet HostBuddy</NavLink>
               <NavLink exact to="/faqs" className="nav-link" activeClassName="active">FAQs</NavLink>
             </Nav>
             </Navbar.Collapse>
             <div className="nav-buttons">
               
-              <Link className="nav-btn nav-btn-primary link-btn filled-btn" to='/signup'>Signup</Link>
-              <Link className="nav-btn nav-btn-outline link-btn outline-btn" to='/login'>Login</Link>
+              <Link className="nav-btn nav-btn-primary link-btn outline-btn" to='/signup'>Sign Up</Link>
+              <Link className="nav-btn nav-btn-outline link-btn filled-btn" to='/login'>Login</Link>
             </div>
         </Navbar>
       </Container>
