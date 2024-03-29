@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import PrimaryButton from '../../component/button/button';
 import '../auth.css';
+import { Helmet } from 'react-helmet';
 
 const Signup = () => {
 
@@ -13,6 +14,9 @@ const Signup = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   return (
     <div className='signup auth'>
+      <Helmet>
+            <title>Sign Up – Hostbuddy</title>
+        </Helmet>
       <Container>
         <div className="row">
           <div className="col-lg-6">

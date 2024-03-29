@@ -97,6 +97,7 @@
 
 .auth .auth-content .auth-form form .input-container .password-box {
     position: relative;
+    width: 100%;
 }
 
 .auth .auth-content .auth-form form .input-container button.eye-btn {

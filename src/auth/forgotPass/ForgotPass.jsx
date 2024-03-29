@@ -6,10 +6,14 @@ import { Link } from 'react-router-dom';
 import { FaRegEye } from "react-icons/fa";
 import '../auth.css';
 import PrimaryButton from '../../component/button/button';
+import { Helmet } from 'react-helmet';
 
 const ForgotPass = () => {
   return (
     <div className='forgot-pass auth'>
+      <Helmet>
+            <title>Forgot Password – Hostbuddy</title>
+        </Helmet>
       <Container>
         <div className="row">
           <div className="col-lg-6">

@@ -4,10 +4,14 @@ import './pricing.css';
 import Essentials from './essentials/Essentials';
 import Features from './features/Features';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const Pricing = () => {
   return (
     <section className='pricing'>
+      <Helmet>
+        <title>Pricing – Hostbuddy</title>
+      </Helmet>
       <Container>
         <div className="pricing-heading">
           <h2>Pricing</h2>
