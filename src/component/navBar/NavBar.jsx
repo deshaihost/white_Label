@@ -38,7 +38,7 @@ const NavBar = () => {
             </Navbar.Collapse>
             <div className="nav-buttons">
               
-              <Link className="nav-btn nav-btn-primary link-btn outline-btn" to='/signup'>Sign Up</Link>
+              <Link className="nav-btn nav-btn-primary link-btn outline-btn" to='/signup' style={{marginRight: 10}}>Sign Up</Link>
               <Link className="nav-btn nav-btn-outline link-btn filled-btn" to='/login'>Login</Link>
             </div>
         </Navbar>

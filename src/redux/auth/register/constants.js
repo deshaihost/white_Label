@@ -1,0 +1,7 @@
+export const RegisterActionTypes = {
+    REGISTER_FIRST: '@@auth/REGISTER_FIRST',
+    REGISTER_LOADING: '@@auth/REGISTER_LOADING',
+    REGISTER_SUCCESS: '@@auth/REGISTER_SUCCESS',
+    REGISTER_ERROR: '@@auth/REGISTER_ERROR',
+    REGISTER_RESET: '@@auth/REGISTER_RESET',
+};
