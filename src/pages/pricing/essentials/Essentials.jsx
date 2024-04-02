@@ -37,8 +37,6 @@ const Essentials = () => {
             setWorkLabelLeft(left);
         }
     }, [worksValue]);
-
-    console.log("essentialValue", essentialValue)
     return (
         <div className="essentials">
             <div className="row">

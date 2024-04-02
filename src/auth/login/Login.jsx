@@ -1,27 +1,76 @@
-import React, { useState } from 'react';
-import Container from 'react-bootstrap/Container';
-import AuthImage from '../../public/img/auth_left_img.png';
-import Logo from '../../public/img/footer-logo.webp';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import Container from "react-bootstrap/Container";
+import AuthImage from "../../public/img/auth_left_img.png";
+import Logo from "../../public/img/footer-logo.webp";
+import { Link } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import '../auth.css';
-import PrimaryButton from '../../component/button/button';
-import { Helmet } from 'react-helmet';
-
+import "../auth.css";
+import PrimaryButton from "../../component/button/button";
+import { Helmet } from "react-helmet";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { loginActions, stateEmptyActions } from "../../redux/actions";
+import Loader from "../../helper/Loader";
 const Login = () => {
+  const store = useSelector((state) => state);
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const loginStatus = store?.loginReducer?.login?.status;
+  const loginMessage = store?.loginReducer?.login?.message;
+  const loginLoading = store?.loginReducer?.loading;
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    dispatch(
+      loginActions({
+        email: data.email,
+        password: data.password,
+      })
+    );
+  };
+
+  const [apiError, setApiError] = useState("");
+  const timeOutErrorClear = () => {
+    setTimeout(() => {
+      setApiError(""); // Reset apiError to null after 4 seconds
+    }, 4000);
+  };
+
+  useEffect(() => {
+    if (loginStatus === 401) {
+      setApiError(loginMessage);
+      timeOutErrorClear();
+      dispatch(stateEmptyActions());
+    } else if (loginStatus === 200) {
+      setApiError("LoginSuccess");
+      timeOutErrorClear();
+      dispatch(stateEmptyActions());
+    }
+  }, [loginStatus]);
+
   return (
-    <div className='login auth'>
+    <div className="login auth">
       <Helmet>
-            <title>Login – Hostbuddy</title>
-        </Helmet>
+        <title>Login – Hostbuddy</title>
+      </Helmet>
       <Container>
         <div className="row">
           <div className="col-lg-6">
             <div className="auth-img">
-              <img src={AuthImage} alt='auth-img' />
+              <img src={AuthImage} alt="auth-img" />
               <div className="auth-chat">
-                <p>"I've been using HostBuddy for a while now, and it has completely transformed the way I engage with my customers. Their chatbot solutions are top-notch, and the support team is fantastic.”</p>
+                <p>
+                  "I've been using HostBuddy for a while now, and it has
+                  completely transformed the way I engage with my customers.
+                  Their chatbot solutions are top-notch, and the support team is
+                  fantastic.”
+                </p>
                 <h4>John Smith</h4>
                 <h6>CEO of TechSolutions Inc</h6>
               </div>
@@ -29,39 +78,105 @@ const Login = () => {
           </div>
           <div className="col-lg-6">
             <div className="login-content auth-content">
-              <Link to='/' className="logo">
-                <img src={Logo} alt='logo' />
+              <Link to="/" className="logo">
+                <img src={Logo} alt="logo" />
               </Link>
               <div className="auth-form">
                 <h2>Welcome Back!</h2>
-                <p>Don’t have an account?  <Link to='/signup'>Sign up</Link></p>
-                <form action="">
+                <p>
+                  Don’t have an account? <Link to="/signup">Sign up</Link>
+                </p>
+                <form
+                  action=""
+                  onSubmit={handleSubmit(
+                    (data) => {
+                      onSubmit(data);
+                    },
+                    (err) => {
+                      console.log(err, "ee");
+                    }
+                  )}
+                >
                   <div className="input-container">
-                    <input type='email' placeholder='Email...' />
+                    <input
+                      type="email"
+                      {...register("email", { required: true })}
+                      placeholder="Email..."
+                    />
                   </div>
+                  {errors.email?.type === "required" && (
+                    <span className="text-danger">
+                      Please enter your email{" "}
+                    </span>
+                  )}
                   <div className="input-container">
                     <div className="password-box">
-                      <input type={showPassword ? 'text' : 'password'} placeholder='Password...' />
-                      <button type='button' className='eye-btn' onClick={() => {setShowPassword(!showPassword)}} style={{cursor: 'pointer'}}>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password..."
+                        {...register("password", { required: true })}
+                      />
+                      <button
+                        type="button"
+                        className="eye-btn"
+                        onClick={() => {
+                          setShowPassword(!showPassword);
+                        }}
+                        style={{ cursor: "pointer" }}
+                      >
                         {!showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                       </button>
                     </div>
+                    {errors.password?.type === "required" && (
+                      <span className="text-danger">
+                        Please enter your password{" "}
+                      </span>
+                    )}
                   </div>
                   <div className="input-container d-flex align-items-center justify-content-between">
                     <div className="form-check remember">
-                      <input type="checkbox" className='form-check-input' value="" id="login_remember" name='login_remember' />
-                      <label className='form-check-label' htmlFor="login_remember">Remember me</label>
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        value=""
+                        id="login_remember"
+                        name="login_remember"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="login_remember"
+                      >
+                        Remember me
+                      </label>
                     </div>
-                    <Link className='forgot_pass' to='/forgot'>Forgot Password?</Link>
+                    <Link className="forgot_pass" to="/forgot">
+                      Forgot Password?
+                    </Link>
                   </div>
                   <div className="input-container">
-                    <PrimaryButton text="Login" additionalClass="w-100" />
+                    <PrimaryButton
+                      text={!loginLoading ? "Login" : <Loader />}
+                      additionalClass="w-100"
+                    />
                   </div>
+                  {apiError !== "" && (
+                    <span
+                      className={`${
+                        apiError === "LoginSuccess"
+                          ? "text-success"
+                          : "text-danger"
+                      } border d-flex justify-content-center mt-4`}
+                    >
+                      {apiError}
+                    </span>
+                  )}
                 </form>
               </div>
               <div className="footer-auth">
                 <div>
-                  By Continue, you agree to the <Link to='/'>terms & Conditions</Link> and <Link to='/'>Privacy Policy</Link>
+                  By Continue, you agree to the{" "}
+                  <Link to="/">terms & Conditions</Link> and{" "}
+                  <Link to="/">Privacy Policy</Link>
                 </div>
               </div>
             </div>
@@ -69,7 +184,7 @@ const Login = () => {
         </div>
       </Container>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

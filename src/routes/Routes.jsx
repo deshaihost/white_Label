@@ -9,7 +9,6 @@ import NavBar from '../component/navBar/NavBar';
 import Footer from '../component/footer/Footer';
 import ForgotPass from '../auth/forgotPass/ForgotPass';
 import ThankError from '../component/thankError/ThankError';
-
 import ErrorImg from '../public/img/404.png'
 
 const Routing = () => {
