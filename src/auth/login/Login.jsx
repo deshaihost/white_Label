@@ -11,14 +11,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { loginActions, stateEmptyActions } from "../../redux/actions";
 import Loader from "../../helper/Loader";
+import ToastHandle from "../../helper/ToastMessage";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
   const loginLoading = store?.loginReducer?.loading;
-
   const {
     register,
     handleSubmit,
@@ -35,21 +37,12 @@ const Login = () => {
     );
   };
 
-  const [apiError, setApiError] = useState("");
-  const timeOutErrorClear = () => {
-    setTimeout(() => {
-      setApiError(""); // Reset apiError to null after 4 seconds
-    }, 4000);
-  };
-
   useEffect(() => {
     if (loginStatus === 401) {
-      setApiError(loginMessage);
-      timeOutErrorClear();
+      ToastHandle(loginMessage, "danger");
       dispatch(stateEmptyActions());
     } else if (loginStatus === 200) {
-      setApiError("LoginSuccess");
-      timeOutErrorClear();
+      navigate('/dashboard')
       dispatch(stateEmptyActions());
     }
   }, [loginStatus]);
@@ -99,7 +92,7 @@ const Login = () => {
                 >
                   <div className="input-container">
                     <input
-                      type="email"
+                      type="text"
                       {...register("email", { required: true })}
                       placeholder="Email..."
                     />
@@ -159,17 +152,6 @@ const Login = () => {
                       additionalClass="w-100"
                     />
                   </div>
-                  {apiError !== "" && (
-                    <span
-                      className={`${
-                        apiError === "LoginSuccess"
-                          ? "text-success"
-                          : "text-danger"
-                      } border d-flex justify-content-center mt-4`}
-                    >
-                      {apiError}
-                    </span>
-                  )}
                 </form>
               </div>
               <div className="footer-auth">

@@ -95,6 +95,8 @@ header.header {
     color: #146EF5 !important;
 }
 
+
+
 @media only screen and (max-width: 991px) {
     .navbar-collapse:not(.show) {
         visibility: hidden;

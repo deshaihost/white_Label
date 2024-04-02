@@ -48,7 +48,7 @@ axios.interceptors.response.use(
   }
 );
 
-const AUTH_SESSION_KEY = "hyper_user";
+const AUTH_SESSION_KEY = "hostBuddy_auth";
 
 /**
  * Sets the default authorization

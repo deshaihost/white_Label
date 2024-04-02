@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { stateEmptyActions } from "../../redux/actions";
 import Loader from "../../helper/Loader";
+import ToastHandle from "../../helper/ToastMessage";
 
 const ForgotPass = () => {
   const store = useSelector((state) => state);
@@ -34,35 +35,14 @@ const ForgotPass = () => {
     );
   };
 
-  const [apiError, setApiError] = useState({
-    status: false,
-    message: "",
-  });
-  const timeOutErrorClear = () => {
-    setTimeout(() => {
-      setApiError({
-        status: false,
-        message: "",
-      }); // Reset apiError to null after 3 seconds
-    }, 4000);
-  };
 
   useEffect(() => {
     if (forgetPasswordStatus === 200) {
-      setApiError({
-        status: true,
-        message: forgetPasswordMessage,
-      });
-      timeOutErrorClear();
+      ToastHandle(forgetPasswordMessage, "success");
       dispatch(stateEmptyActions());
     }else if(forgetPasswordStatus===429){
-      setApiError({
-        status: false,
-        message: 'server error 429',
-      });
-      timeOutErrorClear();
+      ToastHandle('server error 429', "danger");
       dispatch(stateEmptyActions());
-
     }
   }, [forgetPasswordStatus]);
 
@@ -137,15 +117,6 @@ const ForgotPass = () => {
                       additionalClass="w-100"
                     />
                   </div>
-                  {apiError?.message !== "" && (
-                    <span
-                      className={`${
-                        apiError?.status ? "text-success" : "text-danger"
-                      } border d-flex justify-content-center mt-4`}
-                    >
-                      {apiError?.message}
-                    </span>
-                  )}
                 </form>
               </div>
               <div className="footer-auth">

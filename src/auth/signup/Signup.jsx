@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../helper/Loader";
 import { stateEmptyActions } from "../../redux/stateEmpty/actions";
 import { useNavigate } from "react-router-dom";
+import ToastHandle from "../../helper/ToastMessage";
 const Signup = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const Signup = () => {
     ? store?.registerReducer?.register
     : [];
   const registerLoading = store?.registerReducer?.loading;
-  // const registerUserMessage = store?.registerReducer?.register?.data?.message;
+  const registerUserMessage = store?.registerReducer?.register?.data?.message;
   const registerUserStatus = store?.registerReducer?.register?.status;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -47,26 +48,18 @@ const Signup = () => {
       })
     );
   };
-  const [apiError, setApiError] = useState("");
-  const timeOutErrorClear = () => {
-    setTimeout(() => {
-      setApiError(""); // Reset apiError to null after 3 seconds
-    }, 4000);
-  };
-
+  
   useEffect(() => {
     if (status === 400) {
-      setApiError(data?.error);
-      timeOutErrorClear();
       dispatch(stateEmptyActions());
+      ToastHandle(data?.error, "danger");
     } else if (status === 409) {
-      setApiError(data?.error);
-      timeOutErrorClear();
       dispatch(stateEmptyActions());
+      ToastHandle(data?.error, "danger");
     } else if (registerUserStatus === 201) {
       navigate('/login');
+      ToastHandle(registerUserMessage, "success");
       dispatch(stateEmptyActions());
-
     }
   }, [status, registerUserStatus]);
 
@@ -138,7 +131,7 @@ const Signup = () => {
                   )}
                   <div className="input-container">
                     <input
-                      type="email"
+                      type="text"
                       {...register("email", {
                         required: true,
                         pattern: {
@@ -286,11 +279,6 @@ const Signup = () => {
                       additionalClass="w-100"
                     />
                   </div>
-                  {apiError !== "" && (
-                    <span className="text-danger border d-flex justify-content-center mt-4">
-                      {apiError}
-                    </span>
-                  )}
                 </form>
               </div>
               <div className="footer-auth">
