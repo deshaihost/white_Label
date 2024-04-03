@@ -13,10 +13,13 @@ import { loginActions, stateEmptyActions } from "../../redux/actions";
 import Loader from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
 import { useNavigate } from "react-router-dom";
+import Authorized from "../../helper/Authorized";
 const Login = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const getAuthToken = Authorized();
+  const { token } = getAuthToken ? getAuthToken : [];
   const [showPassword, setShowPassword] = useState(false);
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
@@ -46,6 +49,14 @@ const Login = () => {
       dispatch(stateEmptyActions());
     }
   }, [loginStatus]);
+
+  useEffect(()=>{
+    if(token!==undefined){
+      navigate('/dashboard')
+    }else{
+      navigate('/login')
+    }
+  },[token])
 
   return (
     <div className="login auth">

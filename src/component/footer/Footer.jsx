@@ -29,12 +29,12 @@ const Footer = () => {
                     </Link>
                   </p>
                   <p className="links">
-                    <Link to="/" className='text-reset'>
+                    <Link to="/pricing" className='text-reset'>
                       Pricing
                     </Link>
                   </p>
                   <p className="links">
-                    <Link to="/" className='text-reset'>
+                    <Link to="/meet-hostbuddy" className='text-reset'>
                       Meet HostBuddy
                     </Link>
                   </p>
