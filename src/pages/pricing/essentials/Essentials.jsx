@@ -10,7 +10,6 @@ const Essentials = () => {
   const [worksValue, setWorksValue] = useState(0);
   const [labelLeft, setLabelLeft] = useState(0);
   const [workLabelLeft, setWorkLabelLeft] = useState(0);
-console.log(token,'token')
   const handleChange = (event) => {
     setEssentialValue(event.target.value);
   };

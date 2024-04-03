@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BotImg from "../../../../public/img/hostbuddy_icon_white.png";
 import UserImg from "../../../../public/img/userimg2.png";
 function Message({ text, sender }) {
+  
   return (
     <div>
       <div className={`message ${sender}`}>

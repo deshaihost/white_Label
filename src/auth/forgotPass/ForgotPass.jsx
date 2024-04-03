@@ -112,7 +112,6 @@ const ForgotPass = () => {
                   )}
                   <div className="input-container">
                     <PrimaryButton
-
                       text= {!forgetPasswordLoading ? "Get Password Reset Token " : <Loader />}
                       additionalClass="w-100"
                     />
