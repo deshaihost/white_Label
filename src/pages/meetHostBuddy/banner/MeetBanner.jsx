@@ -11,8 +11,7 @@ import {
 } from "../../../redux/pages/meetHostBuddy/actions";
 import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
 
-import BotImg from "../../../public/img/hostbuddy_icon_white.png";
-import UserImg from "../../../public/img/userimg2.png";
+
 import Loader from "../../../helper/Loader";
 const MeetBanner = () => {
   const store = useSelector((state) => state);

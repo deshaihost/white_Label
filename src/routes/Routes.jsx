@@ -17,7 +17,7 @@ import Account from "../pages/account/Account";
 import SetupGuide from "../pages/setupGuide/SetupGuide";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
-import ScrollToTop from "../helper/s";
+import ScrollToTop from "../helper/ScrollToTop";
 const Routing = () => {
   const location = useLocation();
   return (
