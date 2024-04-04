@@ -159,6 +159,9 @@
 .chatbot .input-container button svg {
     max-width: 19px;
 }
+.chat-send{
+    cursor: not-allowed!important;
+}
 
 @keyframes msgsent {
     0% {

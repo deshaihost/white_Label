@@ -14,6 +14,7 @@ import Loader from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
 import { useNavigate } from "react-router-dom";
 import Authorized from "../../helper/Authorized";
+import ErrorMessageShow from "../../helper/ErrorMessageShow";
 const Login = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -108,11 +109,9 @@ const Login = () => {
                       placeholder="Email..."
                     />
                   </div>
-                  {errors.email?.type === "required" && (
-                    <span className="text-danger">
-                      Please enter your email{" "}
-                    </span>
-                  )}
+                  {errors.email?.type === "required" && 
+                  <>{ErrorMessageShow("Please enter your email")}</>
+                  }
                   <div className="input-container">
                     <div className="password-box">
                       <input

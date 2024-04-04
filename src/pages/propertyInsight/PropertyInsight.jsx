@@ -3,12 +3,14 @@ import SideBar from '../../component/sideBar/SideBar'
 
 const PropertyInsight = () => {
   return (
-    <div className="d-flex  bg-light my-5 py-5 px-5 justify-content-evenly">
-    <div>
-      <SideBar />
+    <div className="container">
+      <div className="row">
+        <div className="col-lg-4">
+          <SideBar />
+        </div>
+        <div className="col-lg-8">Property Insight</div>
+      </div>
     </div>
-    <div>Property Insight</div>
-  </div>
   )
 }
 

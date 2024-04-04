@@ -1,47 +1,54 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import './sidebar.css';
 
 const SideBar = () => {
   const location = useLocation();
   const findlocation = location?.pathname;
 
   return (
-    <div>
-      <div>
-        <Link
-          to="/dashboard"
-          className={
-            findlocation === "/dashboard" ? "bg-dark text-white py-2 px-2" : ""
-          }
-        >
-          Dashboard
-        </Link>
+      <div className="navigation-links">
+        <ul>
+          <li>
+            <Link
+              to="/dashboard"
+              className={
+                findlocation === "/dashboard" ? "active" : ""
+              }
+            >
+              Dashboard
+            </Link>
+          </li>
+          <li>
+            <Link to="/properties" className={
+                findlocation === "/properties" ? "active" : ""
+              }>Properties</Link>
+          </li>
+          <li>
+            <Link to="/property-insight" className={
+                findlocation === "/property-insight" ? "active" : ""
+              }>Property Insight</Link>
+          </li>
+          <li>
+            <Link to="/subscription" className={
+                findlocation === "/subscription" ? "active" : ""
+              }>Subscription</Link>
+          </li>
+          <li>
+            <Link to="/account" className={
+                findlocation === "/account" ? "active" : ""
+              }>Account</Link>
+          </li>
+          <li>
+            <Link to="/setup-guide" className={
+                findlocation === "/setup-guide" ? "active" : ""
+              }>Setup Guide</Link>
+          </li>
+          <li>
+            <Link to="/">Log out</Link>
+          </li>
+        </ul>
       </div>
-      <div className="my-2">
-        <Link to="/properties" className={
-            findlocation === "/properties" ? "bg-dark text-white py-2 px-2" : ""
-          }>Properties</Link>
-      </div>
-      <div>
-        <Link to="/property-insight" className={
-            findlocation === "/property-insight" ? "bg-dark text-white py-2 px-2" : ""
-          }>Property Insight</Link>
-      </div>
-      <div className="my-2">
-        <Link to="/subscription" className={
-            findlocation === "/subscription" ? "bg-dark text-white py-2 px-2" : ""
-          }>Subscription</Link>
-      </div>
-      <div>
-        <Link to="/account">Account</Link>
-      </div>
-      <div className="my-2">
-        <Link to="/setup-guide">Setup Guide</Link>
-      </div>
-      <div>
-        <Link to="/">Log out</Link>
-      </div>
-    </div>
   );
 };
 

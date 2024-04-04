@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './features.css';
 import CheckImg from '../../../public/img/right_check.png';
 import WrongImg from '../../../public/img/wrong_check.png';
@@ -85,8 +85,8 @@ const Features = () => {
                                 return(
                                     <tr key={i}>
                                         <td><h5>{data.compareTo}</h5></td>
-                                        <td><img src={data.essential == true ? CheckImg : WrongImg} alt='check-img' /></td>
-                                        <td><img src={data.works == true ? CheckImg : WrongImg} alt='check-img' /></td>
+                                        <td><img src={data.essential === true ? CheckImg : WrongImg} alt='check-img' /></td>
+                                        <td><img src={data.works === true ? CheckImg : WrongImg} alt='check-img' /></td>
                                     </tr>
                                 )
                             })}

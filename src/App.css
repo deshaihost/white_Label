@@ -1,255 +1,532 @@
-* {
-    margin: 0;
-    padding: 0;
-}
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
 body {
-    background: #000212;
+  padding: 0;
+  margin: 0;
+  font-family: "Samsung Sharp Sans Medium";
+  background: #000212;
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #146EF5;
+  background: #146ef5;
 }
 
 ::-webkit-scrollbar-track {
-    background: #020D29;
+  background: #020d29;
 }
 
-h1, h2, h3, h4, ul, p {
-    padding: 0;
-    margin: 0;
+h1,
+h2,
+h3,
+h4,
+ul,
+p {
+  padding: 0;
+  margin: 0;
 }
 
-p, a {
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 18px;
+p,
+a {
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 18px;
 }
 
 a {
-    transition: .4s ease-in-out;
-    text-decoration: none;
+  transition: 0.4s ease-in-out;
+  text-decoration: none;
 }
 
 .heading h2 {
-    color: #FFF;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 45px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 50px;
-    margin-bottom: 13px;
+  color: #fff;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 45px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px;
+  margin-bottom: 13px;
 }
 
 .heading.heading-center h2 {
-    text-align: center;
+  text-align: center;
 }
 
 .heading h2 strong {
-    font-weight: 700;
-    color: #146EF5;
+  font-weight: 700;
+  color: #146ef5;
 }
 
 p {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 img {
-    border: 0;
-    max-width: 100%;
+  border: 0;
+  max-width: 100%;
 }
 
-textarea { resize: none }
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { color: #fff }
-input:-moz-placeholder, textarea:-moz-placeholder { color: #fff }
-input::-moz-placeholder { opacity: 1; outline: none }
-textarea::-moz-placeholder { opacity: 1; outline: none }
+ul, li {
+    list-style-type: none;
+}
+
+input {
+    outline: none;
+}
+
+textarea {
+  resize: none;
+}
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #fff;
+}
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  color: #fff;
+}
+input::-moz-placeholder {
+  opacity: 1;
+  outline: none;
+}
+textarea::-moz-placeholder {
+  opacity: 1;
+  outline: none;
+}
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active{
-    -webkit-box-shadow: 0 0 0 30px #000212 inset !important;
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #000212 inset !important;
 }
 
-input:-webkit-autofill{
-    -webkit-text-fill-color: #fff !important;
+input:-webkit-autofill {
+  -webkit-text-fill-color: #fff !important;
 }
 
 input[type="checkbox"] {
-    background: #000212;
+  background: #000212;
 }
 
 .link-btn {
-    color: #146EF5;
+  color: #146ef5;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border-radius: 160px;
+  border: 1px solid #146ef5;
+  display: inline-block;
+  padding: 13px 40px;
+  background: transparent;
+  transition: 0.4s ease-in-out;
+}
+
+.filled-btn {
+  background: #146ef5;
+  color: #fff;
+}
+
+.link-btn.filled-btn:hover {
+  transition: 0.4s ease-in-out;
+  background: transparent;
+  color: #146ef5;
+}
+
+.link-btn.outline-btn:hover {
+  transition: 0.4s ease-in-out;
+  background: #146ef5;
+  color: #fff;
+}
+
+.banner-heading {
+  max-width: 753px;
+  margin: 0 auto 45px;
+  text-align: center;
+}
+
+.banner-heading h2 {
+  color: #fff;
+  text-align: center;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 45px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px;
+  margin-bottom: 16px;
+}
+
+.banner-heading p {
+  color: #fff;
+  text-align: center;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.banner-heading a {
+  margin-top: 35px;
+}
+
+.thankerror {
+  padding: 190px 0 120px;
+  text-align: center;
+}
+
+.thankerror p {
+  color: #fff;
+  text-align: center;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px;
+  margin: 32px 0;
+}
+
+.thankerror a {
+  width: 100%;
+  max-width: 380px;
+}
+
+.modal-content {
+  border-radius: 30px;
+  border: 3px solid #13317b;
+  background: #020d29;
+  overflow: hidden;
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.modal-header {
+  padding: 30px;
+  position: relative;
+  border-bottom: 3px solid #13317b;
+  justify-content: center !important;
+}
+
+.modal-header h5 {
+  color: #fff;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+}
+
+.modal-header .btn-close {
+  box-shadow: none !important;
+  outline: none;
+  filter: brightness(0) invert(1);
+  opacity: 1;
+  padding: 0;
+  position: absolute;
+  top: 43px;
+  right: 30px;
+  z-index: 2;
+}
+
+.upgrade-plan-box {
+  text-align: center;
+  max-width: 585px;
+  margin: auto;
+  padding: 40px 0;
+}
+
+.upgrade-plan-box p {
+    color: #FFF;
+    text-align: center;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 50px 0 20px;
+}
+
+.bg_theme_btn {
+    color: #FFF;
     font-family: 'Samsung Sharp Sans Medium';
     font-size: 18px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
     border-radius: 160px;
-    border: 1px solid #146EF5;
+    background: #146EF5;
     display: inline-block;
     padding: 13px 40px;
-    background: transparent;
-    transition: .4s ease-in-out;
+    border: 1px solid #146EF5;
 }
 
-.filled-btn {
-    background: #146EF5;
-    color: #fff;
-}
-
-.link-btn.filled-btn:hover {
-    transition: .4s ease-in-out;
-    background: transparent;
-    color: #146EF5;
-}
-
-.link-btn.outline-btn:hover {
-    transition: .4s ease-in-out;
-    background: #146EF5;
-    color: #fff;
-}
-
-.banner-heading {
-    max-width: 753px;
-    margin: 0 auto 45px;
-    text-align: center;
-}
-
-.banner-heading h2 {
-    color: #FFF;
-    text-align: center;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 45px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 50px;
-    margin-bottom: 16px;
-}
-
-.banner-heading p {
-    color: #FFF;
-    text-align: center;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-}
-
-.banner-heading a {
-    margin-top: 35px;
-}
-
-.thankerror {
-    padding: 190px 0 120px;
-    text-align: center;
-}
-
-.thankerror p {
-    color: #FFF;
-    text-align: center;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 50px;
-    margin: 32px 0;
-}
-
-.thankerror a {
+.upgrade-plan-box .bg_theme_btn {
     width: 100%;
-    max-width: 380px;
+    max-width: 320px;
+}
+
+.upgrade-plan-box .form-design label {
+  color: #fff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+}
+
+.form-design .form-control {
+  border-radius: 80px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #0a1a44;
+  color: #fff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  padding: 16px 20px;
+  position: relative;
+  margin: 0;
+  height: auto;
+  max-width: 100%;
+}
+
+.pricing_range {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 10px;
+  background: #101436;
+  outline: none;
+  opacity: 1;
+  -webkit-transition: opacity 0.15s ease-in-out;
+  transition: opacity 0.15s ease-in-out;
+  max-width: calc(100% - 22px);
+  margin: auto;
+}
+
+.form-design label:not(.form-floating label) {
+  margin-bottom: 5px;
+}
+
+.form-design select.form-control {
+  background: #0a1a44 url(./public/img/selecticon.png) no-repeat right 20px
+    center;
+}
+
+.form-design button {
+  color: #fff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border-radius: 160px;
+  background: #146ef5;
+  display: inline-block;
+  padding: 13px 40px;
+  border: 1px solid #146ef5;
+  width: 100%;
+  max-width: 320px;
+}
+
+.custom_switch {
+  min-height: inherit;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: #146ef5;
+  border-color: #146ef5;
+}
+
+.custom_switch input[type="checkbox"] {
+  cursor: pointer;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-image: url(./public/img/off_dot.png) !important;
+  background-color: #4f090b;
+  border-radius: 40px;
+  border: 1px solid #fff;
+  width: 32px;
+  flex: 0 0 32px;
+  margin-right: 4px;
+}
+
+.custom_switch label {
+  margin-left: 2px;
+  color: #ff3f45;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 19.5px */
+}
+.custom_switch input[type="checkbox"]:checked ~ label {
+  color: #4caf50;
+}
+.custom_switch input[type="checkbox"]:checked {
+  background-color: #1f4c21;
+  background-image: url(./public/img/checked_dot.png) !important;
+}
+.custom_switch label {
+  margin-left: 2px;
+  color: #ff3f45;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 19.5px */
+}
+.custom_switch input[type="checkbox"]:checked ~ label {
+  color: #4caf50;
+}
+.custom_switch {
+  min-height: inherit;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.expendable_search {
+  position: relative;
+}
+
+.search_btn {
+  position: absolute;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.expendable_search input[type="search"] {
+  color: #146ef5;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  background: transparent;
+  border: none;
+  width: 100px;
+  border-bottom: 1px solid #146ef5;
+  padding-left: 25px;
+  height: 27px;
+  transition: 0.3s linear;
+}
+
+.expendable_search input[type="search"]::placeholder {
+  color: #146ef5;
+}
+
+.expendable_search input[type="search"]:focus {
+    width: 200px;
 }
 
 @media only screen and (max-width: 1199px) {
-    a, .link-btn {
-        font-size: 15px;
-    }
+  a,
+  .link-btn {
+    font-size: 15px;
+  }
 
-    .banner-heading h2 {
-        font-size: 36px;
-        line-height: 40px;
-    }
+  .banner-heading h2 {
+    font-size: 36px;
+    line-height: 40px;
+  }
 }
 
 @media only screen and (max-width: 991px) {
-    .heading h2 {
-        font-size: 36px;
-        line-height: 45px;
-    }
+  .heading h2 {
+    font-size: 36px;
+    line-height: 45px;
+  }
 
-    .banner-heading {
-        margin-bottom: 25px;
-    }
+  .banner-heading {
+    margin-bottom: 25px;
+  }
 
-    .banner-heading h2 {
-        font-size: 32px;
-        line-height: 40px;
-        margin-bottom: 10px;
-    }
+  .banner-heading h2 {
+    font-size: 32px;
+    line-height: 40px;
+    margin-bottom: 10px;
+  }
 }
 
 @media only screen and (max-width: 767px) {
-    .heading h2 {
-        font-size: 27px;
-        line-height: 42px;
-    }
+  .heading h2 {
+    font-size: 27px;
+    line-height: 42px;
+  }
 
-    p {
-        font-size: 16px;
-    }
+  p {
+    font-size: 16px;
+  }
 
-    .link-btn {
-        padding: 10px 30px;
-    }
+  .link-btn {
+    padding: 10px 30px;
+  }
 
-    .banner-heading h2 {
-        font-size: 22px;
-        line-height: 30px;
-    }
+  .banner-heading h2 {
+    font-size: 22px;
+    line-height: 30px;
+  }
 
-    .banner-heading p  {
-        font-family: 'Samsung Sharp Sans Regular';
-    }
+  .banner-heading p {
+    font-family: "Samsung Sharp Sans Regular";
+  }
 
-    .banner-heading a {
-        margin-top: 15px;
-    }
+  .banner-heading a {
+    margin-top: 15px;
+  }
 }
 
 @media only screen and (max-width: 575px) {
-    .heading h2 {
-        font-size: 22px;
-        line-height: 30px;
-    }
+  .heading h2 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .expendable_search {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .expendable_search input[type="search"] {
+    width: 100% !important;
+  }
 }
 
 @font-face {
-    font-family: 'Samsung Sharp Sans Regular';
-    font-style: normal;
-    font-weight: normal;
-    font-weight: 400;
-    src: local('Samsung Sharp Sans Regular'), url('../public/samsungsharpsans.woff') format('woff');
+  font-family: "Samsung Sharp Sans Regular";
+  font-style: normal;
+  font-weight: normal;
+  font-weight: 400;
+  src: local("Samsung Sharp Sans Regular"),
+    url("../public/samsungsharpsans.woff") format("woff");
 }
 
-
 @font-face {
-    font-family: 'Samsung Sharp Sans Medium';
-    font-style: normal;
-    font-weight: 500;
-    src: local('Samsung Sharp Sans Medium'), url('../public/samsungsharpsans-medium.woff') format('woff');
+  font-family: "Samsung Sharp Sans Medium";
+  font-style: normal;
+  font-weight: 500;
+  src: local("Samsung Sharp Sans Medium"),
+    url("../public/samsungsharpsans-medium.woff") format("woff");
 }
 
-
 @font-face {
-    font-family: 'Samsung Sharp Sans Bold';
-    font-style: normal;
-    font-weight: 700;
-    src: local('Samsung Sharp Sans Bold'), url('../public/samsungsharpsans-bold.woff') format('woff');
+  font-family: "Samsung Sharp Sans Bold";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Samsung Sharp Sans Bold"),
+    url("../public/samsungsharpsans-bold.woff") format("woff");
 }
