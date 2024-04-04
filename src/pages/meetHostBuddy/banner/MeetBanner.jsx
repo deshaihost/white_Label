@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./meetBanner.css";
 import Message from "./messages/Messages";
 import HouseImg from "../../../public/img/house-img.png";
@@ -11,16 +11,16 @@ import {
 } from "../../../redux/pages/meetHostBuddy/actions";
 import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
 
-
 import Loader from "../../../helper/Loader";
 const MeetBanner = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
-  const getMessageResp =store?.getSessionIdReducer?.sessionId?.data?.initial_message;
+  const getMessageResp =
+    store?.getSessionIdReducer?.sessionId?.data?.initial_message;
   const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data?.response;
   const statusResp = store?.chatBoxAIReducer?.chatBoxAI?.status;
-  const updateMessageRespLoading = store?.chatBoxAIReducer?.loading
+  const updateMessageRespLoading = store?.chatBoxAIReducer?.loading;
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
@@ -102,7 +102,7 @@ const MeetBanner = () => {
                     </>
                   );
                 })}
-                 {updateMessageRespLoading&&<Loader />}
+                {updateMessageRespLoading && <Loader />}
                 <div ref={messagesEndRef} />
               </div>
               <div className="input-container">
@@ -111,13 +111,17 @@ const MeetBanner = () => {
                   placeholder="Type a message..."
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                      handleSendMessage();
-                    }
-                  }}
+                  // onKeyPress={(e) => {
+                  //   if (e.key === "Enter") {
+                  //     handleSendMessage();
+                  //   }
+                  // }}
                 />
-                <button onClick={handleSendMessage} className="chat-send">
+                <button
+                  onClick={handleSendMessage}
+                  disabled={updateMessageRespLoading ? true : false}
+                  className={updateMessageRespLoading?"chat-send":""}
+                >
                   <svg
                     width="25"
                     height="25"

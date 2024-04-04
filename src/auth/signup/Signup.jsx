@@ -10,11 +10,14 @@ import { Helmet } from "react-helmet";
 //new code
 import { useForm } from "react-hook-form";
 import { registerActions } from "../../redux/auth/register/actions";
+import { loginActions } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../helper/Loader";
 import { stateEmptyActions } from "../../redux/stateEmpty/actions";
 import { useNavigate } from "react-router-dom";
 import ToastHandle from "../../helper/ToastMessage";
+import ErrorMessageShow from "../../helper/ErrorMessageShow";
+import { ErrorMessageKey } from "../../helper/ErrorMessageKey";
 const Signup = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -37,6 +40,11 @@ const Signup = () => {
   const password = useRef({});
   password.current = watch("newPassword", "");
 
+  const [inputData, setInputData] = useState({
+    email: "",
+    password: "",
+  });
+
   const onSubmit = (data) => {
     dispatch(
       registerActions({
@@ -47,8 +55,39 @@ const Signup = () => {
         phone: data.plan,
       })
     );
+    setInputData({
+      email: data.email,
+      password: data.newPassword,
+    });
   };
   
+  // this functionaly used after register
+  const loginStatus = store?.loginReducer?.login?.status;
+  const loginMessage = store?.loginReducer?.login?.message;
+  // const loginLoading = store?.loginReducer?.loading;
+  const [loginLoading, setLoginLoading] = useState(false);
+  const afterRegisterLogin = () => {
+    dispatch(
+      loginActions({
+        email: inputData.email,
+        password: inputData.password,
+      })
+    );
+  };
+  // useEffect(() => {
+  //   afterRegisterLogin();
+  // }, []);
+  useEffect(() => {
+    if (loginStatus === 401) {
+      ToastHandle(loginMessage, "danger");
+      dispatch(stateEmptyActions());
+    } else if (loginStatus === 200) {
+      navigate("/dashboard");
+      dispatch(stateEmptyActions());
+    }
+  }, [loginStatus]);
+  // this functionaly used after register
+
   useEffect(() => {
     if (status === 400) {
       dispatch(stateEmptyActions());
@@ -57,7 +96,9 @@ const Signup = () => {
       dispatch(stateEmptyActions());
       ToastHandle(data?.error, "danger");
     } else if (registerUserStatus === 201) {
-      navigate('/login');
+      // navigate("/login");
+      afterRegisterLogin();
+      setLoginLoading(true);
       ToastHandle(registerUserMessage, "success");
       dispatch(stateEmptyActions());
     }
@@ -114,7 +155,7 @@ const Signup = () => {
                     />
                   </div>
                   {errors.firstName?.type === "required" && (
-                    <span className="text-danger">Please enter your name </span>
+                    <>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_NAME)}</>
                   )}
                   <div className="input-container">
                     <input
@@ -124,10 +165,7 @@ const Signup = () => {
                     />
                   </div>
                   {errors.lastName?.type === "required" && (
-                    <span className="text-danger">
-                      {" "}
-                      Please enter your name{" "}
-                    </span>
+                    <>{ErrorMessageShow( ErrorMessageKey.PLEASE_ENTER_YOUR_LAST_NAME)}</>
                   )}
                   <div className="input-container">
                     <input
@@ -136,19 +174,19 @@ const Signup = () => {
                         required: true,
                         pattern: {
                           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: "Invalid email address",
+                          message:`${ErrorMessageKey.INVALID_EMAIL_ADDRESS}`,
                         },
                       })}
                       placeholder="Email..."
                     />
                   </div>
-                  {errors.email?.type === "required" && (
-                    <span className="text-danger">
-                      Please enter your email{" "}
-                    </span>
-                  )}
+                  {
+                    errors.email?.type === "required" && (
+                      <>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_EMAIL)}</>
+                    )
+                  }
                   {errors.email?.type === "pattern" && (
-                    <span className="text-danger">{errors.email?.message}</span>
+                    <>{ErrorMessageShow(errors.email?.message)}</>
                   )}
                   <div className="input-container">
                     <div className="password-box">
@@ -160,13 +198,12 @@ const Signup = () => {
                           pattern: {
                             value:
                               /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_=+-]).{8,30}$/,
-                            message:
-                              "Mix it up! Use a combination of uppercase and lowercase letters, special characters (!$@%) in your password ",
+                            message:`${ErrorMessageKey.MIX_IT_UP_USE_A_COMBINATION_OF_UPPERCASE_AND_LOWERCASE_LETTERS_SPECIAL_CHARACTERS_IN_YOUR}`
+
                           },
                           minLength: {
                             value: 8,
-                            message:
-                              "Password must be at least 8 characters long!",
+                            message:`${ErrorMessageKey.PASSWORD_MUST_BE_AT_LEAST_8_CHARACTER_LONG}`
                           },
                           maxLength: 30,
                         })}
@@ -182,19 +219,21 @@ const Signup = () => {
                         {!showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                       </button>
                     </div>
-                    {errors?.newPassword?.type === "required" && (
-                      <span className="text-danger">Please enter password</span>
-                    )}
-                    {errors?.newPassword?.type === "pattern" && (
-                      <span className="text-danger">
-                        {errors?.newPassword?.message}
-                      </span>
-                    )}
-                    {errors?.newPassword?.type === "minLength" && (
-                      <span className="text-danger">
-                        {errors?.newPassword?.message}
-                      </span>
-                    )}
+                    {
+                      errors?.newPassword?.type === "required" && (
+                        <>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_PASSWORD)}</>
+                      )
+                    }
+                    {
+                      errors?.newPassword?.type === "pattern" && (
+                        <>{ErrorMessageShow(errors?.newPassword?.message)}</>
+                      )
+                    }
+                    {
+                      errors?.newPassword?.type === "minLength" && (
+                        <>{ErrorMessageShow(errors?.newPassword?.message)}</>
+                      )
+                    }
                     <p className="password-criteria">
                       Password should have special characters like $,@,%,! and
                       minimum 8 length.
@@ -209,7 +248,8 @@ const Signup = () => {
                           required: true,
                           validate: (value) =>
                             value === password.current ||
-                            "password doesn't match ",
+                            ErrorMessageKey.PASSWORD_DOESNT_MATCH
+                            // "password doesn't match ",
                         })}
                       />
                       <button
@@ -227,14 +267,18 @@ const Signup = () => {
                         )}
                       </button>
                     </div>
-                    {errors?.confirmPassword?.type === "required" && (
-                      <span className="text-danger">This field Required</span>
-                    )}
-                    {errors?.confirmPassword?.type === "validate" && (
-                      <span className="text-danger">
-                        {errors?.confirmPassword?.message}
-                      </span>
-                    )}
+                    {
+                      errors?.confirmPassword?.type === "required" && (
+                        <>{ErrorMessageShow( ErrorMessageKey.THIS_FIELD_REQUIRED)}</>
+                      )
+                    }
+                    {
+                      errors?.confirmPassword?.type === "validate" && (
+                        <>
+                          {ErrorMessageShow(errors?.confirmPassword?.message)}
+                        </>
+                      )
+                    }
                   </div>
                   <div className="input-container">
                     <input
@@ -247,16 +291,16 @@ const Signup = () => {
                       maxLength="10"
                     />
                   </div>
-                  {errors.phone?.type === "required" && (
-                    <span className="text-danger">
-                      Please enter your phone number
-                    </span>
-                  )}
-                  {errors.phone?.type === "pattern" && (
-                    <span className="text-danger">
-                      Please enter a valid phone number
-                    </span>
-                  )}
+                  {
+                    errors.phone?.type === "required" && (
+                      <>{ErrorMessageShow("Please enter your phone number")}</>
+                    )
+                  }
+                  {errors.phone?.type === "pattern" &&
+                  (
+                    <>{ErrorMessageShow("Please enter a valid phone number")}</>
+                  ) 
+                  }
                   {/* <div className="input-container">
                     <select
                       name=""
@@ -277,10 +321,17 @@ const Signup = () => {
                     <PrimaryButton
                       text={!registerLoading ? "Register" : <Loader />}
                       additionalClass="w-100"
+                      disableType={registerLoading}
                     />
                   </div>
+                  {loginLoading && (
+                    <div className="text-center border pill text-success py-2">
+                      Redirecting to Dashboard...
+                    </div>
+                  )}
                 </form>
               </div>
+
               <div className="footer-auth">
                 <div>
                   By Continue, you agree to the{" "}

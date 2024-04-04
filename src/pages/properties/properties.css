@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+.account-main {
+    padding: 74px 0;
+}
+
+.banner-heading {
+    max-width: 753px;
+    margin: 0 auto 45px;
+    text-align: center;
+}
+
+.account-container {
+    height: 100%;
+    border-radius: 30px;
+    border: 1px solid #2C389E;
+    background: #000212;
+}
+
+.account-container .account_heading {
+    padding: 22px 40px;
+    border-bottom: 1px solid #2C389E;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.account-container .account_heading .property-heading-right {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.account-container > div:not(:last-child) {
+    border-bottom: 1px solid #2C389E;
+    padding: 22px 40px;
+}
+
+.account-container .account_heading h3 {
+    color: #146EF5;
+    text-align: left;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 150%;
+}
+
+.account-container .account_heading .property-heading-right p {
+    color: #146EF5;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.account-container .account_heading .property-heading-right > *:not(:last-child) {
+    margin-right: 16px;
+}
+
+.addproperty_links button {
+    color: #146EF5;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-decoration-line: underline !important;
+    margin: 0 30px;
+    background: transparent;
+    padding: 0;
+    border: none;
+}
+
+.property_list ul li {
+    padding: 20px 0;
+}
+
+@media only screen and (max-width: 1199px) {
+    .account-container {
+        border-radius: 10px;
+    }
+
+    .account-container > div:not(:last-child) {
+        padding: 18px 20px;
+    }
+
+    .account-container .account_heading h3 {
+        font-size: 18px;
+    }
+
+    
+}
+
+@media only screen and (max-width: 991px) {
+    .banner-heading {
+        margin-bottom: 25px;
+    }
+
+    .addproperty_links button {
+        font-size: 15px;
+        margin: 0 15px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .account-container > div:not(:last-child) {
+        padding: 15px;
+    }
+
+    .account-container .account_heading h3 {
+        font-size: 17px;
+    }
+
+    .account-container .account_heading .property-heading-right {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .property_list ul li {
+        padding: 15px 0;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .account-container .account_heading .property-heading-right {
+        justify-content: space-between;
+    }
+
+    .account-container .account_heading .property-heading-right .form-switch.custom_switch {
+        margin: 0 !important;
+    }
+
+    .account-container .account_heading .property-heading-right .expendable_search {
+        margin-left: auto;
+    }
+}
