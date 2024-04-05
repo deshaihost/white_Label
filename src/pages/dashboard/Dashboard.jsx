@@ -10,6 +10,21 @@ const Dashboard = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [model, setModel] = useState({
+    addProperty: false,
+  });
+  const handleModelOpen = (type) => {
+    if (type === "addPropertyOpen") {
+      setModel({ ...model, addProperty: true });
+    }  
+  };
+  const handleModelClose = (type) => {
+    if (type === "addPropertyClose") {
+      setModel({ ...model, addProperty: false });
+    }  
+  };
+
   return (
   <>
     <div className="account-main">
@@ -66,7 +81,7 @@ const Dashboard = () => {
                           <li>
                             <div className="text-center">
                               <h4 className='text-white'>No property found</h4>
-                              <button type='button' onClick={() => handleShow()}>Add Property</button>
+                              <button type='button' onClick={() => handleModelOpen("addPropertyOpen")}>Add Property</button>
                             </div>
                           </li>
                         </ul>
@@ -87,9 +102,7 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
-      {show && (
-        <AddPropertyModal handleClose={handleClose} show={show} />
-      )}
+    <AddPropertyModal handleClose={handleModelClose} show={model?.addProperty} />
       </>
   );
 };

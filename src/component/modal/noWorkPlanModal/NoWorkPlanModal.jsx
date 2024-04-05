@@ -7,7 +7,7 @@ function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
     <Modal
       show={showNoPlan}
       size="lg"
-      onHide={handleNoPlanClose}
+      onHide={()=>handleNoPlanClose("pmsIntegrationClose")}
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >

@@ -8,7 +8,13 @@ function getUserDataEndPoint(params: any): any {
     return api.create(URL.GET_USER_DATA, data);
 }
 
+function postCreateCheckoutSessionEndPoint(params: any): any {
+    const { data } = params;
+    return api.create(URL.POST_CREATE_CHECKOUT_SESSION, data);
+}
+
 
 export {
     getUserDataEndPoint,
+    postCreateCheckoutSessionEndPoint
 };

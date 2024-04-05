@@ -6,10 +6,15 @@ const GET_USER_DATA_INITIAL_STATE = {
     loading: false,
 };
 
+const POST_CREATE_CHECKOUT_SESSION_INITIAL_STATE = {
+    createCheckoutSessionUrl: [],
+    loading: false,
+};
 
 
 
-const getSessionIdReducer = (
+
+const getUserDataReducer = (
     state = GET_USER_DATA_INITIAL_STATE,
     action
 ) => {
@@ -35,7 +40,34 @@ const getSessionIdReducer = (
             return state;
     }
 };
+const postcreateCheckoutSessionReducer = (
+    state = POST_CREATE_CHECKOUT_SESSION_INITIAL_STATE,
+    action
+) => {
+    switch (action.type) {
+        case PagesApisActionTypes.POST_CREATE_CHECKOUT_SESSION_LOADING:
+            return {
+                createCheckoutSessionUrl: state.createCheckoutSessionUrl,
+                loading: true,
+            };
+        case PagesApisActionTypes.POST_CREATE_CHECKOUT_SESSION_SUCCESS:
+            return {
+                createCheckoutSessionUrl: action.payload,
+                loading: false,
+            };
+        case PagesApisActionTypes.POST_CREATE_CHECKOUT_SESSION_ERROR:
+            return {
+                createCheckoutSessionUrl: action.payload,
+                loading: false,
+            };
+        case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+            return POST_CREATE_CHECKOUT_SESSION_INITIAL_STATE;
+        default:
+            return state;
+    }
+};
 
 export {
-    getSessionIdReducer
+    getUserDataReducer,
+    postcreateCheckoutSessionReducer
 }
