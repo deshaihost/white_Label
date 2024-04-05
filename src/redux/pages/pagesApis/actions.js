@@ -6,5 +6,10 @@ export const getUserDataActions = (data) => ({
     data,
 });
 
+export const postCreateCheckoutSessionActions = (data) => ({
+    type: PagesApisActionTypes.POST_CREATE_CHECKOUT_SESSION_FIRST,
+    data,
+});
+
 
 
