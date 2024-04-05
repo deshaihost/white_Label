@@ -45,115 +45,137 @@
     padding: 30px 40px;
 }
 
-.account-container .account-content .account-box {
-    border-radius: 15px;
-    background: #020D29;
-    padding: 20px;
-    height: 100%;
+.account-container .account-content .guide-steps > div > *:last-child {
+    margin-bottom: 0;
 }
 
-.account-container .account-content .account-box svg {
-    width: 34px;
-    height: 34px;
-    background: rgba(20, 110, 245, 0.20);
-    border-radius: 7px;
-    padding: 8px;
-    margin-bottom: 12px;
-}
-
-.account-container .account-content .account-box h4 {
-    color: #146EF5;
+.account-container .account-content .step-box h4,
+.account-container .account-content .step-box h5 {
+    color: #fff;
+    text-align: left;
     font-family: 'Samsung Sharp Sans Bold';
-    font-size: 24px;
     font-style: normal;
     font-weight: 700;
-    line-height: normal;
-    text-transform: uppercase;
-    margin-bottom: 7px;
+    line-height: 150%;
 }
 
-.account-container .account-content .account-box p {
-    color: #CDCDCD;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+.account-container .account-content .step-box h4 {
+    font-size: 20px;
+    margin: 0 0 15px;
 }
 
-.account-container .account-content > div:not(:last-child) {
-    margin-bottom: 24px;
-}
-
-.account-container .account-content .property-status {
-    border-radius: 15px;
-    border: 1px solid #2C389E;
-    background: #000212;
-}
-
-.account-container .account-content .property-status h3 {
-    color: #CDCDCD;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    padding: 20px 20px 18px;
-    border-bottom: 1px solid #2C389E;
-}
-
-.account-container .account-content .property-status li {
-    padding: 20px;
-}
-
-.account-container .account-content .property-status li button {
-    color: #FFF;
-    font-family: 'Samsung Sharp Sans Medium';
+.account-container .account-content .step-box h5 {
     font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    border-radius: 160px;
-    background: #146EF5;
-    display: inline-block;
-    padding: 13px 40px;
-    border: 1px solid #146EF5;
-    padding: 11px 24px;
-    margin: 12px;
-    font-size: 15px;
+    margin: 0 0 10px;
 }
 
-.account-container .account-content .get-started {
-    border-radius: 15px;
-    border: 1px solid #2C389E;
-    background: #000426;
-    padding: 30px 16px;
-    text-align: center;
+.account-container .account-content .step-box h5 a {
+    font-size: inherit !important;
 }
 
-.account-container .account-content .get-started img {
-    margin: 0 0 20px;
-}
-
-.account-container .account-content .get-started p {
+.account-container .account-content .step-box p {
     color: #CCC;
-    text-align: center;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    margin-bottom: 20px;
+}
+
+.account-container .account-content .step-box ul {
+    padding-left: 20px;
+    margin-bottom: 30px;
+}
+
+.account-container .account-content .step-box li {
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    list-style: disc;
+    color: #ccc;
+}
+
+.account-container .account-content .step-box ol li {
+    list-style: decimal;
+}
+
+.account-container .account-content .step-box ol li ul li {
+    list-style: disc;
+}
+
+.account-container .account-content .step-box li:not(:last-child) {
+    margin-bottom: 4px;
+}
+
+.account-container .account-content .step-box li a {
+    font-size: inherit;
+    color: #146EF5;
+}
+
+.account-container .account-content .guide-steps > div:first-child div#onboarding,
+.account-container .account-content .guide-steps > div:not(:first-child) {
+    padding-top: 60px;
+}
+
+.account-container .account-content .step-box p iframe {
+    width: 100%;
+    max-width: 560px;
+}
+
+.account-container .account-content .step-tab-links {
+    position: sticky;
+    top: 30px;
+    padding-left: 15px;
+}
+
+.account-container .account-content .step-tab-links .steps-line {
+    width: 2px;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    left: 0;
+    background: #041d5b;
+}
+
+.account-container .account-content .step-tab-links .step-active-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.account-container .account-content .step-tab-links ul li button {
+    padding: 7px 0;
+    color: #146EF5;
     font-family: 'DM Sans', sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 130%;
-    margin-bottom: 20px;
+    line-height: 19px;
+    display: block;
+    position: relative;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    text-align: left;
 }
 
-.account-container .account-content .get-started a {
-    color: #146EF5;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    text-decoration-line: underline;
+.account-container .account-content .step-tab-links ul li.active ~ li button {
+    color: #ccc;
+}
+
+.account-container .account-content .step-tab-links ul li.active button:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -15px;
+    width: 2px;
+    height: 100%;
+    background: #146EF5;
 }
 
 @media only screen and (max-width: 1199px) {
@@ -173,37 +195,33 @@
         padding: 25px 20px;
     }
 
-    .account-container .account-content .account-box {
-        padding: 15px;
-        border-radius: 10px;
-        height: 100%;
-    }
-
-    .account-container .account-content .row > div:not(:last-child) .account-box {
-        height: auto;
-        margin-bottom: 20px;
-    }
-
-    .account-container .account-content .property-status li button {
-        font-size: 15px;
-    }
-
-    .account-container .account-content .get-started {
-        padding: 15px;
-    }
-
     .account-main {
         padding: 40px 0;
     }
 }
 
 @media only screen and (max-width: 991px) {
-    .account-container .account-content .get-started {
-        margin-top: 20px;
-    }
 
     .banner-heading {
         margin-bottom: 25px;
+    }
+
+    .account-container .account-content .guide-steps > div:not(:first-child) {
+        padding-top: 60px;
+    }
+
+    .account-container .account-content .guide-steps > div:first-child div#onboarding,
+    .account-container .account-content .guide-steps > div:not(:first-child) {
+        padding-top: 30px;
+    }
+
+    .account-container .account-content .row {
+        flex-direction: column-reverse;
+    }
+
+    .account-container .account-content .step-tab-links {
+        margin-bottom: 30px;
+        background: rgb(255 255 255 / 5%);
     }
 }
 
@@ -220,16 +238,10 @@
     .account-container .account-content .row > div:not(:last-child) .account-box {
         margin-bottom: 15px;
     }
+}
 
-    .account-container .account-content .account-box h4 {
-        font-size: 20px;
-    }
-
-    .account-container .account-content .property-status li {
-        padding: 15px;
-    }
-
-    .account-container .account-content .property-status li button {
-        padding: 10px 30px;
+@media only screen and (max-width: 575px) {
+    .account-container .account-content .step-box ol {
+        padding-left: 20px;
     }
 }

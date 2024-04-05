@@ -1,7 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-function AddPropertyModal({ handleClose, show }) {
+function AddPropertyModal({ handleClose, show, handleSubscribe }) {
   return (
     <Modal
       show={show}
@@ -10,10 +10,10 @@ function AddPropertyModal({ handleClose, show }) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
+      <Modal.Header closeButton>
+        <h5 className="modal-title">Your Plan</h5>
+      </Modal.Header>
       <Modal.Body>
-        <Modal.Header closeButton>
-          <h5 className="modal-title">Your Plan</h5>
-        </Modal.Header>
         
           <div className="upgrade-plan-box plan-box">
             <div className="membership-list">
@@ -24,7 +24,7 @@ function AddPropertyModal({ handleClose, show }) {
                   name="num-of-properties"
                   id="num-of-properties"
                   placeholder="Enter or select"
-                  class="form-control pricing_range"
+                  className="form-control pricing_range"
                   max="50"
                   min="1"
                 />
@@ -34,14 +34,14 @@ function AddPropertyModal({ handleClose, show }) {
                 <select
                   id="selected_plan_stripe"
                   name="selected_plan_stripe"
-                  class="form-control"
+                  className="form-control"
                 >
                   <option value="">The Essentials</option>
                   <option value="">The Works</option>
                 </select>
               </div>
               <div className="form-design mt-3 text-center">
-                <button type="submit">Subscribe Now</button>
+                <button type="submit" onClick={() => handleSubscribe()}>Subscribe Now</button>
               </div>
             </div>
           </div>
