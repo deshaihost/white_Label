@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+.account-main {
+    padding: 74px 0;
+}
+
+.account-main form > div:not(:last-child) {
+    margin-bottom: 15px;
+}
+.account-container {
+    height: 100%;
+    border-radius: 30px;
+    border: 1px solid #2C389E;
+    background: #000212;
+}
+
+.account-container > div:not(:last-child) {
+    border-bottom: 1px solid #2C389E;
+    padding: 22px 40px;
+}
+
+.account-container .account-content {
+    padding: 30px 40px;
+}
+
+.account-container .account-content form label {
+    color: #FFF;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%;
+}
+
+.account-container .account-content form label:not(.form-floating label) {
+    margin-bottom: 5px;
+}
+
+.account-container .account-content form input {
+    border-radius: 80px;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    background: #000212;
+}
+
+
+@media only screen and (max-width: 1199px) {
+    .account-container {
+        border-radius: 10px;
+    }
+
+    .account-container > div:not(:last-child) {
+        padding: 18px 20px;
+    }
+
+    .account-container .account-content {
+        padding: 25px 20px;
+    }
+
+    .account-main {
+        padding: 40px 0;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .account-container .account-content .get-started {
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .account-container > div:not(:last-child),
+    .account-container .account-content {
+        padding: 15px;
+    }
+}

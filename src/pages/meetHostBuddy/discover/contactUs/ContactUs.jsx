@@ -32,6 +32,7 @@ const ContactUs = (props) => {
       size="md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      className="contact-modal"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">Contact Us</Modal.Title>
@@ -47,19 +48,17 @@ const ContactUs = (props) => {
             }
           )}
         >
-          <div>
-            <Form.Label>Name</Form.Label>
+          <div className="input-group">
             <Form.Control
               type="text"
               {...register("name", { required: true })}
-              placeholder="Name"
             />
             {errors.name?.type === "required" && (
               <span className="text-danger">Please enter your Name </span>
             )}
+            <Form.Label>Name</Form.Label>
           </div>
-          <div className="my-3">
-            <Form.Label>Email</Form.Label>
+          <div className="my-3 input-group">
             <Form.Control
               type="text"
               {...register("email", {
@@ -69,7 +68,6 @@ const ContactUs = (props) => {
                   message: "Invalid email address",
                 },
               })}
-              placeholder="Email"
             />
             {errors.email?.type === "required" && (
               <span className="text-danger">Please enter your email </span>
@@ -77,16 +75,15 @@ const ContactUs = (props) => {
             {errors.email?.type === "pattern" && (
               <span className="text-danger">{errors.email?.message}</span>
             )}
+            <Form.Label>Email</Form.Label>
           </div>
-          <div>
-            <Form.Label>Phone</Form.Label>
+          <div className="input-group">
             <Form.Control
               type="text"
               {...register("phone", {
                 required: true,
                 pattern: /^[0-9]{10}$/,
               })}
-              placeholder="Phone"
               maxLength="10"
             />
             {errors.phone?.type === "required" && (
@@ -99,13 +96,14 @@ const ContactUs = (props) => {
                 Please enter a valid phone number
               </span>
             )}
+            <Form.Label>Phone</Form.Label>
           </div>
-          <div className="my-3">
+          <div className="my-3 input-group">
+            <textarea className="form-control" {...register("message")}></textarea>
             <Form.Label>Message</Form.Label>
-            <Form.Control type="text" {...register("message")} placeholder="Message" />
           </div>
           <div className="text-center">
-            <Button type="submit">Submit</Button>
+            <Button type="submit" className="bg_theme_btn">Submit</Button>
           </div>
         </Form>
       </Modal.Body>
