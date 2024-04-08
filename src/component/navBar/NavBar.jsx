@@ -100,14 +100,14 @@ const NavBar = () => {
                   >
                     Setup Guide
                   </NavLink>
-                  <NavLink
+                  {/* <NavLink
                     exact
                     onClick={()=>{sessionStorage.removeItem("hostBuddy_auth")}}
                     className="nav-link"
                     activeClassName="active"
                   >
                      Log out
-                  </NavLink>
+                  </NavLink> */}
                 </>
               ) : (
                 <>

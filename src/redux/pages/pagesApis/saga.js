@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from "redux-saga/effects";
 import { PagesApisActionTypes } from "./constants";
-import { getUserDataEndPoint ,postCreateCheckoutSessionEndPoint} from "./api";
+import { getUserDataEndPoint ,postCreateCheckoutSessionEndPoint,updateAccountInfoEndPoint} from "./api";
 import { StateEmtpyActionTypes } from "../../stateEmpty/constants";
 
 
@@ -56,6 +56,32 @@ function* postCreateCheckoutSessionFunction(data) {
   }
 }
 
+function* updateAccountInfoFunction(data) {
+  try {
+    yield put({
+      type: PagesApisActionTypes.UPDATE_ACCOUNT_INFO_LOADING,
+      payload: {},
+    });
+    const response = yield call(updateAccountInfoEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: PagesApisActionTypes.UPDATE_ACCOUNT_INFO_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: PagesApisActionTypes.UPDATE_ACCOUNT_INFO_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: PagesApisActionTypes.UPDATE_ACCOUNT_INFO_ERROR,
+      payload: error,
+    });
+  }
+}
+
 function* stateEmptyFunction() {
   yield put({
     type: StateEmtpyActionTypes.STATE_EMPTY_SUCCESS,
@@ -73,9 +99,12 @@ export function* acctionStateEmpty(): any {
 export function* acctionCreateCheckoutSession(): any {
   yield takeEvery(PagesApisActionTypes.POST_CREATE_CHECKOUT_SESSION_FIRST, postCreateCheckoutSessionFunction);
 }
+export function* acctionUpdateAccountInfo(): any {
+  yield takeEvery(PagesApisActionTypes.UPDATE_ACCOUNT_INFO_FIRST, updateAccountInfoFunction);
+}
 
 function* pagesApisSaga(): any {
-  yield all([fork(acctionGetUserData), fork(acctionStateEmpty),fork(acctionCreateCheckoutSession)]);
+  yield all([fork(acctionGetUserData), fork(acctionStateEmpty),fork(acctionCreateCheckoutSession),fork(acctionUpdateAccountInfo)]);
 }
 
 export default pagesApisSaga;

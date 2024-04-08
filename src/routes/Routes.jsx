@@ -34,6 +34,7 @@ const Routing = () => {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/forgot" element={<ForgotPass />}></Route>
+        
         <Route
           path="*"
           element={

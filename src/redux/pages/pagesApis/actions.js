@@ -11,5 +11,10 @@ export const postCreateCheckoutSessionActions = (data) => ({
     data,
 });
 
+export const updateAccountInfoActions = (data) => ({
+    type: PagesApisActionTypes.UPDATE_ACCOUNT_INFO_FIRST,
+    data,
+});
+
 
 
