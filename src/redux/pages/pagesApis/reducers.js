@@ -11,6 +11,11 @@ const POST_CREATE_CHECKOUT_SESSION_INITIAL_STATE = {
     loading: false,
 };
 
+const UPDATE_ACCOUNT_INFO_INITIAL_STATE = {
+    updateAccountInof: [],
+    loading: false,
+};
+
 
 
 
@@ -67,7 +72,35 @@ const postcreateCheckoutSessionReducer = (
     }
 };
 
+const updateAccountInfoReducer = (
+    state = UPDATE_ACCOUNT_INFO_INITIAL_STATE,
+    action
+) => {
+    switch (action.type) {
+        case PagesApisActionTypes.UPDATE_ACCOUNT_INFO_LOADING:
+            return {
+                updateAccountInof: state.updateAccountInof,
+                loading: true,
+            };
+        case PagesApisActionTypes.UPDATE_ACCOUNT_INFO_SUCCESS:
+            return {
+                updateAccountInof: action.payload,
+                loading: false,
+            };
+        case PagesApisActionTypes.UPDATE_ACCOUNT_INFO_ERROR:
+            return {
+                updateAccountInof: action.payload,
+                loading: false,
+            };
+        case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+            return UPDATE_ACCOUNT_INFO_INITIAL_STATE;
+        default:
+            return state;
+    }
+};
+
 export {
     getUserDataReducer,
-    postcreateCheckoutSessionReducer
+    postcreateCheckoutSessionReducer,
+    updateAccountInfoReducer
 }
