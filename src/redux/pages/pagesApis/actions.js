@@ -16,5 +16,26 @@ export const updateAccountInfoActions = (data) => ({
     data,
 });
 
+export const getPMSIntegrationActions = (data) => ({
+    type: PagesApisActionTypes.PMS_INTEGRATION_GET_FIRST,
+    data,
+});
+
+export const addPMSIntegrationActions = (data) => ({
+    type: PagesApisActionTypes.PMS_INTEGRATION_ADD_FIRST,
+    data,
+});
+
+export const getRemoveIntegrationActions = (data) => ({
+    type: PagesApisActionTypes.REMOVE_INTEGRATION_LIST_GET_FIRST,
+    data,
+});
+
+export const removeIntegrationActions = (data) => ({
+    type: PagesApisActionTypes.REMOVE_INTEGRATION_FIRST,
+    data,
+});
+
+
 
 

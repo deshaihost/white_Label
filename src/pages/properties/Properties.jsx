@@ -1,30 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "../../component/sideBar/SideBar";
 import "./properties.css";
 import AddPropertyModal from "../../component/modal/addPropertyModal/AddPropertyModal";
 import NoWorkPlanModal from "../../component/modal/noWorkPlanModal/NoWorkPlanModal";
-
+import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
 const Properties = () => {
-
   const [model, setModel] = useState({
     addProperty: false,
     pmsIntegration: false,
+    removeIntegration: false,
   });
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {
       setModel({ ...model, addProperty: true });
     } else if (type === "pmsIntegrationOpen") {
       setModel({ ...model, pmsIntegration: true });
-    } 
+    } else if (type === "removeIntegrationsOpen") {
+      setModel({ ...model, removeIntegration: true });
+    }
   };
   const handleModelClose = (type) => {
     if (type === "addPropertyClose") {
       setModel({ ...model, addProperty: false });
     } else if (type === "pmsIntegrationClose") {
       setModel({ ...model, pmsIntegration: false });
-    } 
+    } else if (type === "removeIntegrationsClose") {
+      setModel({ ...model, removeIntegration: false });
+    }
   };
 
+  
 
   return (
     <>
@@ -98,6 +103,15 @@ const Properties = () => {
                   >
                     PMS Integration
                   </button>
+                  <button
+                    type="button"
+                    // onClick={() => handleNoPlanShow()}
+                    onClick={() => {
+                      handleModelOpen("removeIntegrationsOpen");
+                    }}
+                  >
+                    Remove Integrations
+                  </button>
                 </div>
                 <div className="property_list">
                   <ul>
@@ -122,6 +136,10 @@ const Properties = () => {
       <NoWorkPlanModal
         handleNoPlanClose={handleModelClose}
         showNoPlan={model?.pmsIntegration}
+      />
+      <RemoveIntegrations
+        handleNoPlanClose={handleModelClose}
+        showNoPlan={model?.removeIntegration}
       />
     </>
   );

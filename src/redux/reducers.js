@@ -10,7 +10,11 @@ import {
 import {
   getUserDataReducer,
   postcreateCheckoutSessionReducer,
-  updateAccountInfoReducer
+  updateAccountInfoReducer,
+  pmsIntegrationGetReducer,
+  pmsIntegrationAddReducer,
+  removeIntegrationGetReducer,
+  removeIntegrationReducer
 } from "./pages/pagesApis/reducers";
 import { logoutReducer } from "./auth/logout/reducers";
 export default (combineReducers({
@@ -22,5 +26,9 @@ export default (combineReducers({
   getUserDataReducer,
   postcreateCheckoutSessionReducer,
   updateAccountInfoReducer,
-  logoutReducer
+  logoutReducer,
+  pmsIntegrationGetReducer,
+  pmsIntegrationAddReducer,
+  removeIntegrationGetReducer,
+  removeIntegrationReducer
 }): any);

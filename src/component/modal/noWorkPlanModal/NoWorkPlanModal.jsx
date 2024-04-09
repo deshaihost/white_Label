@@ -1,24 +1,56 @@
+import React, { useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-import NoPlanImg from '../../../public/img/503.png';
+import NoPlanImg from "../../../public/img/503.png";
 import { Link } from "react-router-dom";
-
+import IntegratePlatformSelect from "./IntegratePlatform/IntegratePlatformSelect";
+import { getPMSIntegrationActions } from "../../../redux/actions";
+import { useSelector, useDispatch } from "react-redux";
+import Loader from "../../../helper/Loader";
 function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
+  const store = useSelector((state) => state);
+  const checkPmsNotEmpty =
+    store?.pmsIntegrationGetReducer?.pmsIntegrationData?.data?.integrations;
+  const pmsIntegrationLoading = store?.pmsIntegrationGetReducer?.loading;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (showNoPlan) dispatch(getPMSIntegrationActions());
+  }, [showNoPlan]);
   return (
     <Modal
       show={showNoPlan}
       size="lg"
-      onHide={()=>handleNoPlanClose("pmsIntegrationClose")}
+      onHide={() => handleNoPlanClose("pmsIntegrationClose")}
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
       <Modal.Body>
-        
-          <div className="upgrade-plan-box">
-            <img src={NoPlanImg} alt='no-plan' />
-            <p>You are not on Works plan, Please upgrade plan to access this feature </p>
-            <Link to='/' className="bg_theme_btn manage-subscription">Upgrade Plan</Link>
+        <div className="row">
+          <div className="6">
+            <h3 className="text-white text-center">Integrate Platform</h3>
           </div>
-        </Modal.Body>
+        </div>
+        {!pmsIntegrationLoading ? (
+          <>
+            {checkPmsNotEmpty !== "" ? (
+              <IntegratePlatformSelect handleNoPlanClose={handleNoPlanClose}/>
+            ) : (
+              <div className="upgrade-plan-box">
+                <img src={NoPlanImg} alt="no-plan" />
+                <p>
+                  You are not on Works plan, Please upgrade plan to access this
+                  feature{" "}
+                </p>
+                <Link to="/" className="bg_theme_btn manage-subscription">
+                  Upgrade Plan
+                </Link>
+              </div>
+            )}
+          </>
+        ) : (
+          <Loader />
+        )}
+      </Modal.Body>
     </Modal>
   );
 }

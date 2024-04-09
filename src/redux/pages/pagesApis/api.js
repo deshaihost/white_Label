@@ -1,26 +1,48 @@
-import { APICore } from '../../../helper/apiCore';
-import * as URL from '../../../helper/apiEndPoint';
+import { APICore } from "../../../helper/apiCore";
+import * as URL from "../../../helper/apiEndPoint";
 
 const api = new APICore();
 
 function getUserDataEndPoint(params: any): any {
-    const { data } = params;
-    return api.get(URL.GET_USER_DATA, data);
+  const { data } = params;
+  return api.get(URL.GET_USER_DATA, data);
 }
 
 function postCreateCheckoutSessionEndPoint(params: any): any {
-    const { data } = params;
-    return api.create(URL.POST_CREATE_CHECKOUT_SESSION, data);
+  const { data } = params;
+  return api.create(URL.POST_CREATE_CHECKOUT_SESSION, data);
 }
 
 function updateAccountInfoEndPoint(params: any): any {
-    const { data } = params;
-    return api.update(URL.UPDATE_ACCOUNT_INFO, data);
+  const { data } = params;
+  return api.update(URL.UPDATE_ACCOUNT_INFO, data);
 }
 
+function PMSintegrationEndPoint(params: any): any {
+  return api.get(URL.GET_SUPPORTED_INTEGRATIONS);
+}
+
+function PMSintegrationAddEndPoint(params: any): any {
+  const { data } = params;
+  return api.create(URL.ADD_SUPPORTED_INTEGRATIONS, data);
+}
+
+function removeIntegrationListGetEndPoint(params: any): any {
+  const { data } = params;
+  return api.get(URL.GET_AVAIL_INTEGRATIONS);
+}
+
+function removeIntegrationEndPoint(params: any): any {
+  const { data } = params;
+  return api.delete(URL.REMOVE_INTEGRATION, data);
+}
 
 export {
-    getUserDataEndPoint,
-    postCreateCheckoutSessionEndPoint,
-    updateAccountInfoEndPoint
+  getUserDataEndPoint,
+  postCreateCheckoutSessionEndPoint,
+  updateAccountInfoEndPoint,
+  PMSintegrationEndPoint,
+  PMSintegrationAddEndPoint,
+  removeIntegrationListGetEndPoint,
+  removeIntegrationEndPoint,
 };
