@@ -7,7 +7,8 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import { useForm } from "react-hook-form";
-
+import ErrorMessageShow from "../../../../helper/ErrorMessageShow";
+import { ErrorMessageKey } from "../../../../helper/ErrorMessageKey";
 const ContactUs = (props) => {
   const {
     register,
@@ -17,7 +18,7 @@ const ContactUs = (props) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data,'hello')
+    console.log(data, "hello");
     // dispatch(
     //   loginActions({
     //     email: data.email,
@@ -53,29 +54,33 @@ const ContactUs = (props) => {
               type="text"
               {...register("name", { required: true })}
             />
-            {errors.name?.type === "required" && (
-              <span className="text-danger">Please enter your Name </span>
-            )}
+
             <Form.Label>Name</Form.Label>
           </div>
-          <div className="my-3 input-group">
-            <Form.Control
-              type="text"
-              {...register("email", {
-                required: true,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address",
-                },
-              })}
-            />
+          {errors.name?.type === "required" && (
+            <>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_NAME)}</>
+          )}
+          <div className="my-3">
+            <div className=" input-group">
+              <Form.Control
+                type="text"
+                {...register("email", {
+                  required: true,
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: `${ErrorMessageKey?.INVALID_EMAIL_ADDRESS}`,
+                  },
+                })}
+              />
+
+              <Form.Label>Email</Form.Label>
+            </div>
             {errors.email?.type === "required" && (
-              <span className="text-danger">Please enter your email </span>
+              <>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_EMAIL)}</>
             )}
             {errors.email?.type === "pattern" && (
-              <span className="text-danger">{errors.email?.message}</span>
+              <>{ErrorMessageShow(errors.email?.message)}</>
             )}
-            <Form.Label>Email</Form.Label>
           </div>
           <div className="input-group">
             <Form.Control
@@ -86,24 +91,32 @@ const ContactUs = (props) => {
               })}
               maxLength="10"
             />
-            {errors.phone?.type === "required" && (
-              <span className="text-danger">
-                Please enter your phone number
-              </span>
-            )}
-            {errors.phone?.type === "pattern" && (
-              <span className="text-danger">
-                Please enter a valid phone number
-              </span>
-            )}
             <Form.Label>Phone</Form.Label>
           </div>
+          {errors.phone?.type === "required" && (
+            <>
+              {ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_PHONE_NUMBER)}
+            </>
+          )}
+          {errors.phone?.type === "pattern" && (
+            <>
+              {ErrorMessageShow(
+                ErrorMessageKey.PLEASE_ENTER_A_VALID_PHONE_NUMBER
+              )}
+            </>
+          )}
           <div className="my-3 input-group">
-            <textarea className="form-control" {...register("message")}></textarea>
+            <textarea
+              className="form-control"
+              {...register("message")}
+            ></textarea>
             <Form.Label>Message</Form.Label>
           </div>
+
           <div className="text-center">
-            <Button type="submit" className="bg_theme_btn">Submit</Button>
+            <Button type="submit" className="bg_theme_btn">
+              Submit
+            </Button>
           </div>
         </Form>
       </Modal.Body>
