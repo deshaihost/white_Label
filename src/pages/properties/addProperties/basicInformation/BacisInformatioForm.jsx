@@ -26,8 +26,8 @@ const BacisInformatioForm = () => {
 
   let localStorageKey = "nameKey";
   const [nameKey, setNameKey] = useState({ nameKey: "" });
-  const getLocalStorageData = JSON.parse(localStorage.getItem(localStorageKey));
-  console.log(getLocalStorageData, "getLocalStorageData");
+//   const getLocalStorageData = JSON.parse(localStorage.getItem(localStorageKey));
+//   console.log(getLocalStorageData, "getLocalStorageData");
   const onSubmit = (data) => {
     setNameKey({ nameKey: data.propertyName });
     let formData = new FormData();
@@ -41,7 +41,7 @@ const BacisInformatioForm = () => {
       navigate(
         "/add-properties/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw"
       );
-      localStorage.setItem(localStorageKey, JSON.stringify(nameKey));
+    //   localStorage.setItem(localStorageKey, JSON.stringify(nameKey));
       dispatch(stateEmptyActions());
     } else if (propertiesAddStatus === 402) {
       ToastHandle(propertiesAddMessage, "danger");
