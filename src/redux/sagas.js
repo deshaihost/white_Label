@@ -6,6 +6,7 @@ import logoutSaga from "./auth/logout/saga";
 import forgotPasswordSaga from "./auth/forgotPassword/saga";
 import meetHostBuddySaga from "./pages/meetHostBuddy/saga";
 import pagesApisSaga from "./pages/pagesApis/saga";
+import addPropertiesSaga from "./pages/pagesApis/addProperties/saga";
 export default function* rootSaga(): any {
   yield all([
     loginSaga(),
@@ -13,6 +14,7 @@ export default function* rootSaga(): any {
     logoutSaga(),
     forgotPasswordSaga(),
     meetHostBuddySaga(),
-    pagesApisSaga()
+    pagesApisSaga(),
+    addPropertiesSaga()
   ]);
 }

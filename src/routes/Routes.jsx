@@ -18,6 +18,7 @@ import SetupGuide from "../pages/setupGuide/SetupGuide";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
+import AddPropertiesIndex from "../pages/properties/addProperties/AddPropertiesIndex";
 const Routing = () => {
   const location = useLocation();
   return (
@@ -25,7 +26,7 @@ const Routing = () => {
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/forgot" && <NavBar />}
-        <ScrollToTop />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/pricing" element={<Pricing />}></Route>
@@ -34,7 +35,7 @@ const Routing = () => {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/forgot" element={<ForgotPass />}></Route>
-        
+
         <Route
           path="*"
           element={
@@ -89,6 +90,22 @@ const Routing = () => {
           element={
             <ProtectedRoute>
               <SetupGuide />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-properties/:id"
+          element={
+            <ProtectedRoute>
+              <AddPropertiesIndex />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-properties"
+          element={
+            <ProtectedRoute>
+              <AddPropertiesIndex />
             </ProtectedRoute>
           }
         />
