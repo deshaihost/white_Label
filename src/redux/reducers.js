@@ -14,8 +14,14 @@ import {
   pmsIntegrationGetReducer,
   pmsIntegrationAddReducer,
   removeIntegrationGetReducer,
-  removeIntegrationReducer
+  removeIntegrationReducer,
+  
 } from "./pages/pagesApis/reducers";
+import {
+  postPropertiesReducer,
+  getPropertiesReducer,
+  gotoBillingPortalPostReducer
+} from "./pages/pagesApis/addProperties/reducers";
 import { logoutReducer } from "./auth/logout/reducers";
 export default (combineReducers({
   loginReducer,
@@ -30,5 +36,8 @@ export default (combineReducers({
   pmsIntegrationGetReducer,
   pmsIntegrationAddReducer,
   removeIntegrationGetReducer,
-  removeIntegrationReducer
+  removeIntegrationReducer,
+  postPropertiesReducer,
+  getPropertiesReducer,
+  gotoBillingPortalPostReducer
 }): any);

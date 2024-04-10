@@ -1,0 +1,163 @@
+import { all, fork, put, takeEvery, call } from "redux-saga/effects";
+import { AddPropertiesActionTypes } from "./constants";
+import {
+  testingApiEndPoint,
+  postPropertiesEndPoint,
+  getQuestionnaireEndPoint,
+  goToBillingPortalPostEndPoint,
+} from "./api";
+import { StateEmtpyActionTypes } from "../../../stateEmpty/constants";
+
+function* testingApiFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.TESTING_API_LOADING,
+      payload: {},
+    });
+    const response = yield call(testingApiEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.TESTING_API_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.TESTING_API_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.TESTING_API_ERROR,
+      payload: error,
+    });
+  }
+}
+function* gotoBillingPortalPostFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.GO_TO_BILLING_PORTAL_POST_LOADING,
+      payload: {},
+    });
+    const response = yield call(goToBillingPortalPostEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.GO_TO_BILLING_PORTAL_POST_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.GO_TO_BILLING_PORTAL_POST_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    console.log(error,'errorsaga')
+    yield put({
+      type: AddPropertiesActionTypes.GO_TO_BILLING_PORTAL_POST_ERROR,
+      payload: error,
+    });
+  }
+}
+
+function* postPropertiesFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.POST_PROPERTIES_LOADING,
+      payload: {},
+    });
+    const response = yield call(postPropertiesEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.POST_PROPERTIES_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.POST_PROPERTIES_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.POST_PROPERTIES_ERROR,
+      payload: error,
+    });
+  }
+}
+
+function* getQuestionnaireFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.GET_QUESTIONNAIRE_LOADING,
+      payload: {},
+    });
+    const response = yield call(getQuestionnaireEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.GET_QUESTIONNAIRE_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.GET_QUESTIONNAIRE_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.GET_QUESTIONNAIRE_ERROR,
+      payload: error,
+    });
+  }
+}
+
+function* stateEmptyFunction() {
+  yield put({
+    type: StateEmtpyActionTypes.STATE_EMPTY_SUCCESS,
+    payload: {},
+  });
+}
+
+export function* acctionTestingApi(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.TESTING_API_FIRST,
+    testingApiFunction
+  );
+}
+
+export function* acctionPostProperties(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.POST_PROPERTIES_FIRST,
+    postPropertiesFunction
+  );
+}
+
+export function* acctionGetQuestionnaire(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.GET_QUESTIONNAIRE_FIRST,
+    getQuestionnaireFunction
+  );
+}
+export function* acctionGoToBillingPortalPost(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.GO_TO_BILLING_PORTAL_POST_FIRST,
+    gotoBillingPortalPostFunction
+  );
+}
+
+export function* acctionStateEmpty(): any {
+  yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
+}
+
+function* addPropertiesSaga(): any {
+  yield all([
+    fork(acctionTestingApi),
+    fork(acctionStateEmpty),
+    fork(acctionPostProperties),
+    fork(acctionGetQuestionnaire),
+    fork(acctionGoToBillingPortalPost),
+  ]);
+}
+
+export default addPropertiesSaga;

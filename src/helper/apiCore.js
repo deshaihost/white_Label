@@ -20,8 +20,10 @@ axios.interceptors.response.use(
     };
 
     if (error && error.response && error.response.status === 404) {
+      return Promise.reject(error.response);
       // window.location.href = '/not-found';
-    } else if (error && error.response && error.response.status === 403) {
+    } 
+    else if (error && error.response && error.response.status === 403) {
       // window.location.href = '/access-denied';
     } else {
       switch (error.response.status) {

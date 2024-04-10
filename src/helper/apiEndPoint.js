@@ -11,3 +11,8 @@ export const GET_SUPPORTED_INTEGRATIONS = "/get_supported_integrations";
 export const ADD_SUPPORTED_INTEGRATIONS = "/add_integration";
 export const GET_AVAIL_INTEGRATIONS = "/get_avail_integrations";
 export const REMOVE_INTEGRATION = "/remove_integration";
+export const POST_PROPERTIES = "/properties";
+export const GET_QUESTIONNAIRE = "/properties";
+export const GO_TO_BILLING_PORTAL = "/go_to_billing_portal";
+
+export const TESTING_API = "/go_to_billing_portal";

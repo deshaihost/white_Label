@@ -4,7 +4,21 @@ import "./properties.css";
 import AddPropertyModal from "../../component/modal/addPropertyModal/AddPropertyModal";
 import NoWorkPlanModal from "../../component/modal/noWorkPlanModal/NoWorkPlanModal";
 import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
+import { goToBillingportalPostActions } from "../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { stateEmptyActions } from "../../redux/actions";
+import Loader from "../../helper/Loader";
+import { useNavigate } from "react-router-dom";
+
 const Properties = () => {
+  const navigate = useNavigate();
+  const store = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const gotoBillingPortalCheckPaymentStatus =
+    store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
+  const gotoBillingPortalcheckPaymentLoading =
+    store?.gotoBillingPortalPostReducer?.loading;
+  
   const [model, setModel] = useState({
     addProperty: false,
     pmsIntegration: false,
@@ -12,7 +26,7 @@ const Properties = () => {
   });
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {
-      setModel({ ...model, addProperty: true });
+      dispatch(goToBillingportalPostActions());
     } else if (type === "pmsIntegrationOpen") {
       setModel({ ...model, pmsIntegration: true });
     } else if (type === "removeIntegrationsOpen") {
@@ -29,7 +43,15 @@ const Properties = () => {
     }
   };
 
-  
+  useEffect(() => {
+    if (gotoBillingPortalCheckPaymentStatus === 200) {
+      navigate("/add-properties")
+      dispatch(stateEmptyActions());
+    } else if (gotoBillingPortalCheckPaymentStatus === 404) {
+      setModel({ ...model, addProperty: true });
+      dispatch(stateEmptyActions());
+    }
+  }, [gotoBillingPortalCheckPaymentStatus]);
 
   return (
     <>
@@ -84,19 +106,22 @@ const Properties = () => {
                     </div>
                   </div>
                 </div>
+
                 <div className="addproperty_links text-center">
                   <button
                     type="button"
-                    // onClick={() => handleShow()}
                     onClick={() => {
                       handleModelOpen("addPropertyOpen");
                     }}
                   >
-                    Add Property
+                    {!gotoBillingPortalcheckPaymentLoading ? (
+                      "Add Property"
+                    ) : (
+                      <Loader />
+                    )}
                   </button>
                   <button
                     type="button"
-                    // onClick={() => handleNoPlanShow()}
                     onClick={() => {
                       handleModelOpen("pmsIntegrationOpen");
                     }}
@@ -105,7 +130,6 @@ const Properties = () => {
                   </button>
                   <button
                     type="button"
-                    // onClick={() => handleNoPlanShow()}
                     onClick={() => {
                       handleModelOpen("removeIntegrationsOpen");
                     }}
