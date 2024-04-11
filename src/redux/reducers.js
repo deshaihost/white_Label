@@ -19,8 +19,9 @@ import {
 } from "./pages/pagesApis/reducers";
 import {
   postPropertiesReducer,
-  getPropertiesReducer,
-  gotoBillingPortalPostReducer
+  getQuestionnaireReducer,
+  gotoBillingPortalPostReducer,
+  updateQuestionnaireReducer
 } from "./pages/pagesApis/addProperties/reducers";
 import { logoutReducer } from "./auth/logout/reducers";
 export default (combineReducers({
@@ -38,6 +39,7 @@ export default (combineReducers({
   removeIntegrationGetReducer,
   removeIntegrationReducer,
   postPropertiesReducer,
-  getPropertiesReducer,
-  gotoBillingPortalPostReducer
+  getQuestionnaireReducer,
+  gotoBillingPortalPostReducer,
+  updateQuestionnaireReducer
 }): any);

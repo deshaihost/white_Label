@@ -9,6 +9,10 @@ const GET_QUESTIONNAIRE_INITIAL_STATE = {
   getQuestionnaire: [],
   loading: false,
 };
+const UPDATE_QUESTIONNAIRE_INITIAL_STATE = {
+  updateQuestionnaire: [],
+  loading: false,
+};
 const GO_TO_BILLING_PORTAL_POST_INITIAL_STATE = {
   gotoBillingPortal: [],
   loading: false,
@@ -40,7 +44,7 @@ const postPropertiesReducer = (
       return state;
   }
 };
-const getPropertiesReducer = (
+const getQuestionnaireReducer = (
   state = GET_QUESTIONNAIRE_INITIAL_STATE,
   action
 ) => {
@@ -58,6 +62,32 @@ const getPropertiesReducer = (
     case AddPropertiesActionTypes.GET_QUESTIONNAIRE_ERROR:
       return {
         getQuestionnaire: action.payload,
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      return POST_PROPERTIES_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
+const updateQuestionnaireReducer = (
+  state = UPDATE_QUESTIONNAIRE_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_LOADING:
+      return {
+        updateQuestionnaire: state.updateQuestionnaire,
+        loading: true,
+      };
+    case AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_SUCCESS:
+      return {
+        updateQuestionnaire: action.payload,
+        loading: false,
+      };
+    case AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_ERROR:
+      return {
+        updateQuestionnaire: action.payload,
         loading: false,
       };
     case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
@@ -95,6 +125,7 @@ const gotoBillingPortalPostReducer = (
 
 export {
   postPropertiesReducer,
-  getPropertiesReducer,
+  getQuestionnaireReducer,
   gotoBillingPortalPostReducer,
+  updateQuestionnaireReducer
 };

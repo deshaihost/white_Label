@@ -5,6 +5,7 @@ import {
   postPropertiesEndPoint,
   getQuestionnaireEndPoint,
   goToBillingPortalPostEndPoint,
+  updateQuestionnaireEndPoint
 } from "./api";
 import { StateEmtpyActionTypes } from "../../../stateEmpty/constants";
 
@@ -111,6 +112,31 @@ function* getQuestionnaireFunction(data) {
     });
   }
 }
+function* updateQuestionnaireFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_LOADING,
+      payload: {},
+    });
+    const response = yield call(updateQuestionnaireEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_ERROR,
+      payload: error,
+    });
+  }
+}
 
 function* stateEmptyFunction() {
   yield put({
@@ -139,6 +165,12 @@ export function* acctionGetQuestionnaire(): any {
     getQuestionnaireFunction
   );
 }
+export function* acctionUpdateQuestionnaire(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_FIRST,
+    updateQuestionnaireFunction
+  );
+}
 export function* acctionGoToBillingPortalPost(): any {
   yield takeEvery(
     AddPropertiesActionTypes.GO_TO_BILLING_PORTAL_POST_FIRST,
@@ -157,6 +189,7 @@ function* addPropertiesSaga(): any {
     fork(acctionPostProperties),
     fork(acctionGetQuestionnaire),
     fork(acctionGoToBillingPortalPost),
+    fork(acctionUpdateQuestionnaire)
   ]);
 }
 

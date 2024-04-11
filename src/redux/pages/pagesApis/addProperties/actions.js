@@ -20,6 +20,11 @@ export const getQuestionnaireActions = (data) => ({
     data,
 });
 
+export const updateQuestionnaireActions = (data) => ({
+    type: AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_FIRST,
+    data,
+});
+
 
 
 
