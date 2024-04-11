@@ -76,9 +76,9 @@ const AddPropertiesIndex = () => {
     }
   };
 
-  useEffect(() => {
-    dispatch(testingApiActions());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(testingApiActions());
+  // }, []);
   return (
     <div>
       <div className="row">

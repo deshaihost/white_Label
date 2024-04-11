@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ErrorMessageShow from "../../../../helper/ErrorMessageShow";
-import { postPropertiesActions } from "../../../../redux/actions";
+import {
+  postPropertiesActions,
+} from "../../../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { stateEmptyActions } from "../../../../redux/actions";
 import ToastHandle from "../../../../helper/ToastMessage";
 import Loader from "../../../../helper/Loader";
+import { nameKey, ParamsGet } from "../../../../helper/Authorized";
+import LocationForm from "./location/LocationForm";
 const BacisInformatioForm = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const locationUrl = ParamsGet();
   const propertiesAddStatus =
     store?.postPropertiesReducer?.postProperties?.status;
   const propertiesAddMessage =
@@ -20,16 +25,16 @@ const BacisInformatioForm = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    reset,
     formState: { errors },
   } = useForm();
 
   let localStorageKey = "nameKey";
-  const [nameKey, setNameKey] = useState({ nameKey: "" });
-//   const getLocalStorageData = JSON.parse(localStorage.getItem(localStorageKey));
-//   console.log(getLocalStorageData, "getLocalStorageData");
+  const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
+  const getLocalStorageData = nameKey();
+  const getLocalStorageNameKey = getLocalStorageData?.nameKey;
   const onSubmit = (data) => {
-    setNameKey({ nameKey: data.propertyName });
+    setGetInputNameKey({ nameKey: data.propertyName });
     let formData = new FormData();
     formData.append("property_name:", data.propertyName);
     formData.append("image", data?.files[0]);
@@ -41,13 +46,22 @@ const BacisInformatioForm = () => {
       navigate(
         "/add-properties/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw"
       );
-    //   localStorage.setItem(localStorageKey, JSON.stringify(nameKey));
+      localStorage.setItem(localStorageKey, JSON?.stringify(getInputNameKey));
       dispatch(stateEmptyActions());
     } else if (propertiesAddStatus === 402) {
       ToastHandle(propertiesAddMessage, "danger");
       dispatch(stateEmptyActions());
+    } else if (propertiesAddStatus === 409) {
+      ToastHandle(propertiesAddMessage, "danger");
+      dispatch(stateEmptyActions());
     }
   }, [propertiesAddStatus]);
+
+  useEffect(() => {
+    if (getLocalStorageNameKey !== null) {
+      reset({ propertyName: getLocalStorageNameKey });
+    }
+  }, [getLocalStorageNameKey]);
   return (
     <div>
       <div>
@@ -89,6 +103,7 @@ const BacisInformatioForm = () => {
               </button>
             </div>
           </form>
+          {locationUrl !== undefined && <LocationForm />}
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ const api = new APICore();
 
 function testingApiEndPoint(params: any): any {
   const { data } = params;
-  return api.create(URL.TESTING_API);
+  // return api.create(URL.TESTING_API);
 }
 
 function goToBillingPortalPostEndPoint(): any {
@@ -20,7 +20,11 @@ function postPropertiesEndPoint(params: any): any {
 
 function getQuestionnaireEndPoint(params: any): any {
   const { data } = params;
-  return api.get(`${URL.GET_QUESTIONNAIRE}/${data}/get_questionnaire`, data);
+  return api.get(`${URL.GET_QUESTIONNAIRE}/${data}/get_questionnaire`);
+}
+function updateQuestionnaireEndPoint(params: any): any {
+  const { data } = params;
+  return api.update(`${URL.UPDATE_QUESTIONNAIRE}/${data?.nameKey?.nameKey}/update_questionnaire`,data?.formeData);
 }
 
 export {
@@ -28,4 +32,5 @@ export {
   postPropertiesEndPoint,
   getQuestionnaireEndPoint,
   goToBillingPortalPostEndPoint,
+  updateQuestionnaireEndPoint
 };

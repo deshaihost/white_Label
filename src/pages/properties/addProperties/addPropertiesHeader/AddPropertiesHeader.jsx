@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 const AddPropertiesHeader = (props) => {
   const { id } = useParams();
   const { propertiesTypes, prntFuntionHeaderActive } = props;
-
   const {
     basics,
     supportingDoc,
@@ -14,11 +13,6 @@ const AddPropertiesHeader = (props) => {
     extras,
     progressPoint,
   } = propertiesTypes ? propertiesTypes : [];
-  console.log(propertiesTypes, "propertiesTypes");
-  //   function WithLabelExample() {
-  //     const now = 60;
-  //     return <ProgressBar now={now} label={`${now}%`} />;
-  //   }
   return (
     <div>
       <div className="row">
