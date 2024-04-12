@@ -1,18 +1,8 @@
-import React, { useEffect } from "react";
-import { GetquestionnaireFunction, nameKey } from "../../../../helper/Authorized";
-import { getQuestionnaireActions } from "../../../../redux/actions";
-import { useSelector, useDispatch } from "react-redux";
+import React from "react";
+import { GetquestionnaireFunction } from "../../../../helper/Authorized";
 import Loader from "../../../../helper/Loader";
 const ListingDetailsForm = () => {
-  const store = useSelector((state) => state);
-  const dispatch = useDispatch();
-  // const getLocalStorageData = nameKey();
-  // const getLocalStorageNameKey = getLocalStorageData?.nameKey;
-  // const apiQuestionnaireData =
-  //   store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
-  //   const apiQuestionnaireLoading=store?.getQuestionnaireReducer?.loading
-  // const { questionnaire } = apiQuestionnaireData ? apiQuestionnaireData : [];
-  // const locationFildInput = questionnaire ? questionnaire : [];
+  
   const ExtrasFormCall = GetquestionnaireFunction();
   const { questionnaireApi, apiQuestionnaireLoading } = ExtrasFormCall
     ? ExtrasFormCall
@@ -22,11 +12,6 @@ const ListingDetailsForm = () => {
   const checkInandCheckout = listingDetailsInputData["Check-in and Check-out"];
   const Details = listingDetailsInputData["Details"];
 
-  // useEffect(() => {
-  //   if (getLocalStorageNameKey !== null) {
-  //     dispatch(getQuestionnaireActions(getLocalStorageNameKey));
-  //   }
-  // }, [getLocalStorageNameKey]);
   return (
     <>
       {!apiQuestionnaireLoading ? (

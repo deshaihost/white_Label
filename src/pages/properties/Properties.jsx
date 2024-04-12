@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { stateEmptyActions } from "../../redux/actions";
 import Loader from "../../helper/Loader";
 import { useNavigate } from "react-router-dom";
+import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrationProperties";
 
 const Properties = () => {
   const navigate = useNavigate();
@@ -141,7 +142,8 @@ const Properties = () => {
                   <ul>
                     <li className="not-found">
                       <h4 className="text-center text-white">
-                        No property found
+                        <ListIntegrationProperties/>
+                        
                       </h4>
                     </li>
                   </ul>

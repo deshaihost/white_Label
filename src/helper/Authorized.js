@@ -7,6 +7,8 @@ const Authorized = () => {
   const getAuthToken = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
   return getAuthToken;
 };
+export default Authorized;
+
 export const nameKey = () => {
   let localStorageKey = "nameKey";
   const getLocalStorageData = JSON?.parse(
@@ -14,8 +16,6 @@ export const nameKey = () => {
   );
   return getLocalStorageData;
 };
-
-export default Authorized;
 
 export const ParamsGet = () => {
   const { id } = useParams();
@@ -40,4 +40,15 @@ export const GetquestionnaireFunction = () => {
     }
   }, [getLocalStorageNameKey]);
   return dataQuestionnaire;
+};
+
+export const useSelectorUseDispatch = () => {
+  const store = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  let useSeletUseDispa = {
+    store,
+    dispatch,
+  };
+  return useSeletUseDispa;
 };

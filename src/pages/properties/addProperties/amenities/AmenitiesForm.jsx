@@ -16,7 +16,7 @@ const AmenitiesForm = () => {
   const Outdoor = Amenities["Outdoor"]?.[0];
   const RulesAndServices = Amenities["Rules and Services"]?.[0];
 
-  const [amenitiesInputOnClickGet, setAmenitiesInputOnClickGet] = useState([]);
+  const [amenitiesInputOnClickGet, setAmenitiesInputOnClickGet] = useState([1,2,3,4,5]);
 
   const amenitiesMainHandle = (type, item, id) => {
     if (type) {
@@ -31,6 +31,7 @@ const AmenitiesForm = () => {
           <div className="row border p-5">
             <div className="text-white">{family?.placeholder_text} </div>
             {family?.options?.map((family, indexFamily) => {
+              
               return (
                 <>
                   <div className="col-2">
