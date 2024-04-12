@@ -9,12 +9,26 @@ const GET_QUESTIONNAIRE_INITIAL_STATE = {
   getQuestionnaire: [],
   loading: false,
 };
+
+const DELETE_LIST_INTEGRATION_PROPERTIES_INITIAL_STATE = {
+  deleteListIntegrationProperties: [],
+  loading: false,
+};
 const UPDATE_QUESTIONNAIRE_INITIAL_STATE = {
   updateQuestionnaire: [],
   loading: false,
 };
 const GO_TO_BILLING_PORTAL_POST_INITIAL_STATE = {
   gotoBillingPortal: [],
+  loading: false,
+};
+
+const SUPPORTING_DOCUMENT_POST_INITIAL_STATE = {
+  supportingDoc: [],
+  loading: false,
+};
+const SUPPORTING_URL_POST_INITIAL_STATE = {
+  supportingUrl: [],
   loading: false,
 };
 
@@ -62,6 +76,33 @@ const getQuestionnaireReducer = (
     case AddPropertiesActionTypes.GET_QUESTIONNAIRE_ERROR:
       return {
         getQuestionnaire: action.payload,
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      return POST_PROPERTIES_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
+
+const deleteListIntegrationPropertiesReducer = (
+  state = DELETE_LIST_INTEGRATION_PROPERTIES_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_LOADING:
+      return {
+        deleteListIntegrationProperties: state.deleteListIntegrationProperties,
+        loading: true,
+      };
+    case AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_SUCCESS:
+      return {
+        deleteListIntegrationProperties: action.payload,
+        loading: false,
+      };
+    case AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_ERROR:
+      return {
+        deleteListIntegrationProperties: action.payload,
         loading: false,
       };
     case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
@@ -122,10 +163,65 @@ const gotoBillingPortalPostReducer = (
       return state;
   }
 };
+const supportingDocumentPostReducer = (
+  state = SUPPORTING_DOCUMENT_POST_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_LOADING:
+      return {
+        supportingDoc: state.supportingDoc,
+        loading: true,
+      };
+    case AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_SUCCESS:
+      return {
+        supportingDoc: action.payload,
+        loading: false,
+      };
+    case AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_ERROR:
+      return {
+        supportingDoc: action.payload,
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      return SUPPORTING_DOCUMENT_POST_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
+const supportingUrlPostReducer = (
+  state = SUPPORTING_URL_POST_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case AddPropertiesActionTypes.SUPPORTING_URL_POST_LOADING:
+      return {
+        supportingUrl: state.supportingUrl,
+        loading: true,
+      };
+    case AddPropertiesActionTypes.SUPPORTING_URL_POST_SUCCESS:
+      return {
+        supportingUrl: action.payload,
+        loading: false,
+      };
+    case AddPropertiesActionTypes.SUPPORTING_URL_POST_ERROR:
+      return {
+        supportingUrl: action.payload,
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      return SUPPORTING_URL_POST_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
 
 export {
   postPropertiesReducer,
   getQuestionnaireReducer,
   gotoBillingPortalPostReducer,
-  updateQuestionnaireReducer
+  updateQuestionnaireReducer,
+  deleteListIntegrationPropertiesReducer,
+  supportingDocumentPostReducer,
+  supportingUrlPostReducer
 };

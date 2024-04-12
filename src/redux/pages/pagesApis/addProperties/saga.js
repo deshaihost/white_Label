@@ -5,7 +5,10 @@ import {
   postPropertiesEndPoint,
   getQuestionnaireEndPoint,
   goToBillingPortalPostEndPoint,
-  updateQuestionnaireEndPoint
+  updateQuestionnaireEndPoint,
+  deleteListIntegrationPropertiesEndPoint,
+  supportingDocumentPostEndPoint,
+  supportingUrlPostEndPoint
 } from "./api";
 import { StateEmtpyActionTypes } from "../../../stateEmpty/constants";
 
@@ -86,6 +89,57 @@ function* postPropertiesFunction(data) {
     });
   }
 }
+function* supportingDocumentPostFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_LOADING,
+      payload: {},
+    });
+    const response = yield call(supportingDocumentPostEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_ERROR,
+      payload: error,
+    });
+  }
+}
+function* supportingUrlPostFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.SUPPORTING_URL_POST_LOADING,
+      payload: {},
+    });
+    const response = yield call(supportingUrlPostEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.SUPPORTING_URL_POST_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.SUPPORTING_URL_POST_ERROR,
+      payload: error,
+    });
+  }
+}
+
 
 function* getQuestionnaireFunction(data) {
   try {
@@ -108,6 +162,31 @@ function* getQuestionnaireFunction(data) {
   } catch (error) {
     yield put({
       type: AddPropertiesActionTypes.GET_QUESTIONNAIRE_ERROR,
+      payload: error,
+    });
+  }
+}
+function* deleteListIntegrationFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_LOADING,
+      payload: {},
+    });
+    const response = yield call(deleteListIntegrationPropertiesEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_ERROR,
       payload: error,
     });
   }
@@ -165,6 +244,14 @@ export function* acctionGetQuestionnaire(): any {
     getQuestionnaireFunction
   );
 }
+export function* acctionDeleteListIntegration(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_FIRST,
+    deleteListIntegrationFunction
+  );
+}
+
+
 export function* acctionUpdateQuestionnaire(): any {
   yield takeEvery(
     AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_FIRST,
@@ -177,6 +264,20 @@ export function* acctionGoToBillingPortalPost(): any {
     gotoBillingPortalPostFunction
   );
 }
+export function* acctionSupportingDocumentPost(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_FIRST,
+    supportingDocumentPostFunction
+  );
+}
+export function* acctionUrlDocumentPost(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.SUPPORTING_URL_POST_FIRST,
+    supportingUrlPostFunction
+  );
+}
+
+
 
 export function* acctionStateEmpty(): any {
   yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
@@ -189,7 +290,10 @@ function* addPropertiesSaga(): any {
     fork(acctionPostProperties),
     fork(acctionGetQuestionnaire),
     fork(acctionGoToBillingPortalPost),
-    fork(acctionUpdateQuestionnaire)
+    fork(acctionUpdateQuestionnaire),
+    fork(acctionDeleteListIntegration),
+    fork(acctionSupportingDocumentPost),
+    fork(acctionUrlDocumentPost)
   ]);
 }
 

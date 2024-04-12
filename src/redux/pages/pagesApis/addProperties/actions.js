@@ -20,8 +20,23 @@ export const getQuestionnaireActions = (data) => ({
     data,
 });
 
+export const deleteListIntegrationPropertiesActions = (data) => ({
+    type: AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_FIRST,
+    data,
+})
+
 export const updateQuestionnaireActions = (data) => ({
     type: AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_FIRST,
+    data,
+});
+
+export const supportingDocumentPostActions = (data) => ({
+    type: AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_FIRST,
+    data,
+});
+
+export const supportingUrlPostActions = (data) => ({
+    type: AddPropertiesActionTypes.SUPPORTING_URL_POST_FIRST,
     data,
 });
 

@@ -185,6 +185,7 @@ class APICore {
   //     if (!user || (user && !user.token)) {
   //         return false;
   //     }
+  //     console.log(user.token,'user.token')
   //     const decoded = jwtDecode(user.token);
   //     const currentTime = Date.now() / 1000;
   //     if (decoded.exp < currentTime) {
