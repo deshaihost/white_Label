@@ -59,6 +59,7 @@ const ListIntegrationProperties = () => {
                   <div className="col-4">
                     <button
                       className="btn btn-danger"
+                      disabled={propertiesDeleteLoading ? true : false}
                       onClick={() => {
                         propertiesDeleteHndle(properties, index);
                       }}

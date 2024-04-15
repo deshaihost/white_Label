@@ -45,16 +45,10 @@ const SupportingDocForm = () => {
     : suppertingInput?.urlToWebPage
     ? store?.supportingUrlPostReducer?.loading
     : "";
-  console.log(
-    store?.supportingDocumentPostReducer?.supportingDoc?.data?.error,
-
-    "store?.supportingDocumentPostReducer"
-  );
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
@@ -163,7 +157,6 @@ const SupportingDocForm = () => {
                   </div>
                 </div>
               )}
-
               {suppertingInput?.urlToWebPage && (
                 <div className="col-10 mt-5 ">
                   <div className="text-white">Enter URL</div>

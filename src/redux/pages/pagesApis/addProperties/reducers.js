@@ -31,6 +31,10 @@ const SUPPORTING_URL_POST_INITIAL_STATE = {
   supportingUrl: [],
   loading: false,
 };
+const TOGGLE_CHATBOT_ONOFF_PUT_INITIAL_STATE = {
+  toggleChatBotOnOff: [],
+  loading: false,
+};
 
 const postPropertiesReducer = (
   state = POST_PROPERTIES_INITIAL_STATE,
@@ -215,6 +219,34 @@ const supportingUrlPostReducer = (
       return state;
   }
 };
+const togglechatBotOnOffReducer = (
+  state = TOGGLE_CHATBOT_ONOFF_PUT_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_LOADING:
+      return {
+        toggleChatBotOnOff: state.toggleChatBotOnOff,
+        loading: true,
+      };
+    case AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_SUCCESS:
+      return {
+        toggleChatBotOnOff: action.payload,
+        loading: false,
+      };
+    case AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_ERROR:
+      return {
+        toggleChatBotOnOff: action.payload,
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      return SUPPORTING_URL_POST_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
+
+
 
 export {
   postPropertiesReducer,
@@ -223,5 +255,6 @@ export {
   updateQuestionnaireReducer,
   deleteListIntegrationPropertiesReducer,
   supportingDocumentPostReducer,
-  supportingUrlPostReducer
+  supportingUrlPostReducer,
+  togglechatBotOnOffReducer
 };

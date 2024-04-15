@@ -5,7 +5,9 @@ const api = new APICore();
 
 function testingApiEndPoint(params: any): any {
   const { data } = params;
-  // return api.create(URL.TESTING_API);
+  // return api.get(`${URL.TESTING_API}/${data}/get_schedule`  );
+  return api.update(URL.TESTING_API,data );
+
 }
 
 function goToBillingPortalPostEndPoint(): any {
@@ -42,11 +44,15 @@ function supportingDocumentPostEndPoint(params: any): any {
 }
 function supportingUrlPostEndPoint(params: any): any {
   const { data } = params;
-  console.log(data?.data,'data+++')
   return api.create(
     `${URL.SUPPORTING_URL}/${data?.nameKey?.nameKey}/add_url`,
     data?.data
   );
+}
+
+function toggleChatbotOnOffPutEndPoint(params: any): any {
+  const { data } = params;
+  return api.update(URL.TOGGLE_CHATBOT, data);
 }
 
 export {
@@ -57,5 +63,6 @@ export {
   updateQuestionnaireEndPoint,
   deleteListIntegrationPropertiesEndPoint,
   supportingDocumentPostEndPoint,
-  supportingUrlPostEndPoint
+  supportingUrlPostEndPoint,
+  toggleChatbotOnOffPutEndPoint
 };

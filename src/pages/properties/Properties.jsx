@@ -4,12 +4,16 @@ import "./properties.css";
 import AddPropertyModal from "../../component/modal/addPropertyModal/AddPropertyModal";
 import NoWorkPlanModal from "../../component/modal/noWorkPlanModal/NoWorkPlanModal";
 import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
-import { goToBillingportalPostActions } from "../../redux/actions";
+import {
+  goToBillingportalPostActions,
+  toggleChatbotoNoFFPutActions,
+} from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { stateEmptyActions } from "../../redux/actions";
 import Loader from "../../helper/Loader";
 import { useNavigate } from "react-router-dom";
 import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrationProperties";
+import ToastHandle from "../../helper/ToastMessage";
 
 const Properties = () => {
   const navigate = useNavigate();
@@ -19,7 +23,6 @@ const Properties = () => {
     store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
   const gotoBillingPortalcheckPaymentLoading =
     store?.gotoBillingPortalPostReducer?.loading;
-  
   const [model, setModel] = useState({
     addProperty: false,
     pmsIntegration: false,
@@ -43,16 +46,49 @@ const Properties = () => {
       setModel({ ...model, removeIntegration: false });
     }
   };
+  // toggle chatbot
+  const createPropertiesName =
+    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const toggleChatMessage =
+    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
+  const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
+  const toggleChatStatus =
+    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
+  const [toggleOnOff, setToggleOnOff] = useState("");
+  const [toggleActive, setToggleActive] = useState(true);
+  const toggleChatBotHndle = (type) => {
+    if (type) {
+      setToggleOnOff("on");
+      setToggleActive(true);
+    } else {
+      setToggleOnOff("off");
+      setToggleActive(false);
+    }
+  };
+  useEffect(() => {
+    if (toggleOnOff !== "") {
+      dispatch(
+        toggleChatbotoNoFFPutActions({
+          properties: createPropertiesName,
+          state: toggleOnOff,
+        })
+      );
+      setToggleOnOff("");
+    }
+  }, [toggleOnOff]);
 
   useEffect(() => {
     if (gotoBillingPortalCheckPaymentStatus === 200) {
-      navigate("/add-properties")
+      navigate("/add-properties");
       dispatch(stateEmptyActions());
     } else if (gotoBillingPortalCheckPaymentStatus === 404) {
       setModel({ ...model, addProperty: true });
       dispatch(stateEmptyActions());
+    } else if (toggleChatStatus === 200) {
+      ToastHandle(toggleChatMessage, "success");
+      dispatch(stateEmptyActions());
     }
-  }, [gotoBillingPortalCheckPaymentStatus]);
+  }, [gotoBillingPortalCheckPaymentStatus, toggleChatStatus]);
 
   return (
     <>
@@ -72,17 +108,28 @@ const Properties = () => {
                   <h3>Property Listing</h3>
                   <div className="property-heading-right">
                     <p>Hostbuddy Status</p>
-                    <div className="form-check form-switch custom_switch">
-                      <input
-                        className="form-check-input toggle-user-chatbot"
-                        type="checkbox"
-                        role="switch"
-                        id="statuscheck"
-                      />
-                      <label className="form-check-label" htmlFor="statuscheck">
-                        On
-                      </label>
-                    </div>
+                    {!toggleChatLoading ? (
+                      ""
+                    ) : (
+                      <Loader />
+                    )}<div className="form-check form-switch custom_switch">
+                    <input
+                      className="form-check-input toggle-user-chatbot"
+                      type="checkbox"
+                      role="switch"
+                      id="statuscheck"
+                      onClick={(e) => {
+                        toggleChatBotHndle(e.target.checked);
+                      }}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="statuscheck"
+                    >
+                      {toggleActive ? "ON" : "OFF"}
+                    </label>
+                  </div>
+
                     <div className="expendable_search">
                       <button className="search_btn">
                         <svg
@@ -107,7 +154,6 @@ const Properties = () => {
                     </div>
                   </div>
                 </div>
-
                 <div className="addproperty_links text-center">
                   <button
                     type="button"
@@ -142,8 +188,7 @@ const Properties = () => {
                   <ul>
                     <li className="not-found">
                       <h4 className="text-center text-white">
-                        <ListIntegrationProperties/>
-                        
+                        <ListIntegrationProperties />
                       </h4>
                     </li>
                   </ul>
@@ -158,7 +203,6 @@ const Properties = () => {
         handleClose={handleModelClose}
         show={model?.addProperty}
       />
-
       <NoWorkPlanModal
         handleNoPlanClose={handleModelClose}
         showNoPlan={model?.pmsIntegration}

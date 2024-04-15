@@ -2,12 +2,13 @@ import React from "react";
 import { GetquestionnaireFunction } from "../../../../helper/Authorized";
 import Loader from "../../../../helper/Loader";
 const ListingDetailsForm = () => {
-  
   const ExtrasFormCall = GetquestionnaireFunction();
   const { questionnaireApi, apiQuestionnaireLoading } = ExtrasFormCall
     ? ExtrasFormCall
     : [];
-  const listingDetailsInputData = questionnaireApi["Listing Details"];
+  const listingDetailsInputData = questionnaireApi["Listing Details"]
+    ? questionnaireApi["Listing Details"]
+    : [];
   const Booking = listingDetailsInputData["Booking"];
   const checkInandCheckout = listingDetailsInputData["Check-in and Check-out"];
   const Details = listingDetailsInputData["Details"];

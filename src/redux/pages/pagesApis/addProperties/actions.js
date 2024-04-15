@@ -39,6 +39,10 @@ export const supportingUrlPostActions = (data) => ({
     type: AddPropertiesActionTypes.SUPPORTING_URL_POST_FIRST,
     data,
 });
+export const toggleChatbotoNoFFPutActions = (data) => ({
+    type: AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_FIRST,
+    data,
+});
 
 
 

@@ -1,17 +1,41 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./sidebar.css";
 import { logoutActions } from "../../redux/actions";
-import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import Loader from "../../helper/Loader";
+
 const SideBar = () => {
-  const store = useSelector((state) => state);
-  const dispatch = useDispatch();
+  const navigate=useNavigate()
+  
   const location = useLocation();
   const findlocation = location?.pathname;
   const [logoutFind, setLogoutFind] = useState(false);
-  const logoutHandle = () => {
-    localStorage.clear();
-    sessionStorage.removeItem("hostBuddy_auth");
+  const [logoutLoader, setLogoutLoader] = useState(false);
+  const logoutHandle = async () => {
+    try {
+      setLogoutLoader(true);
+      const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+      const logoutUrl = `${baseUrl}/logout`;
+      // Define the refresh token
+      const getSessionStorageData = JSON.parse(
+        sessionStorage.getItem("hostBuddy_auth")
+      );
+      const refreshToken = getSessionStorageData?.refreshToken;
+      // Define the request headers
+      const headers = {
+        Authorization: `Bearer ${refreshToken}`,
+      };
+      const response = await axios.post(logoutUrl, {}, { headers });
+      if (response.status === 200) {
+        localStorage.clear();
+        sessionStorage.removeItem("hostBuddy_auth");
+        setLogoutLoader(false);
+        navigate("/login")
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -66,14 +90,18 @@ const SideBar = () => {
           </Link>
         </li>
         <li>
-          <Link
-            onClick={() => {
-              logoutHandle("logout");
-            }}
-            className={logoutFind ? "active" : ""}
-          >
-            Log out
-          </Link>
+          {!logoutLoader ? (
+            <Link
+              onClick={() => {
+                logoutHandle("logout");
+              }}
+              className={logoutFind ? "active" : ""}
+            >
+              Log out
+            </Link>
+          ) : (
+            <Loader />
+          )}
         </li>
       </ul>
     </div>

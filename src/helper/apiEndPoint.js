@@ -1,5 +1,4 @@
 export const LOGIN = "/login";
-export const LOGOUT = "/logout";
 export const REGISTER = "/register";
 export const SEND_PASSWORD_RESET_EMAIL = "/send_password_reset_email";
 export const GET_SESSION_INITIALIZE = "/initialize";
@@ -18,6 +17,7 @@ export const GO_TO_BILLING_PORTAL = "/go_to_billing_portal";
 export const DELETE_INTEGRATION_PROPERTIES = "/properties";
 export const SUPPORTING_DOCUMENT = "/properties";
 export const SUPPORTING_URL = "/properties";
+export const TOGGLE_CHATBOT = "/toggle_chatbot";
 
 
-export const TESTING_API = "/go_to_billing_portaldd";
+export const TESTING_API = "/toggle_chatbot";

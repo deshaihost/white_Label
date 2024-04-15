@@ -8,7 +8,8 @@ import {
   updateQuestionnaireEndPoint,
   deleteListIntegrationPropertiesEndPoint,
   supportingDocumentPostEndPoint,
-  supportingUrlPostEndPoint
+  supportingUrlPostEndPoint,
+  toggleChatbotOnOffPutEndPoint
 } from "./api";
 import { StateEmtpyActionTypes } from "../../../stateEmpty/constants";
 
@@ -217,6 +218,32 @@ function* updateQuestionnaireFunction(data) {
   }
 }
 
+function* toggleChatbotOnOffFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_LOADING,
+      payload: {},
+    });
+    const response = yield call(toggleChatbotOnOffPutEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_ERROR,
+      payload: error,
+    });
+  }
+}
+
 function* stateEmptyFunction() {
   yield put({
     type: StateEmtpyActionTypes.STATE_EMPTY_SUCCESS,
@@ -251,7 +278,6 @@ export function* acctionDeleteListIntegration(): any {
   );
 }
 
-
 export function* acctionUpdateQuestionnaire(): any {
   yield takeEvery(
     AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_FIRST,
@@ -277,11 +303,15 @@ export function* acctionUrlDocumentPost(): any {
   );
 }
 
-
-
 export function* acctionStateEmpty(): any {
   yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
 }
+
+export function* acctionToggleChatbotOnOff(): any {
+  yield takeEvery(AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_FIRST, toggleChatbotOnOffFunction);
+}
+
+
 
 function* addPropertiesSaga(): any {
   yield all([
@@ -293,7 +323,8 @@ function* addPropertiesSaga(): any {
     fork(acctionUpdateQuestionnaire),
     fork(acctionDeleteListIntegration),
     fork(acctionSupportingDocumentPost),
-    fork(acctionUrlDocumentPost)
+    fork(acctionUrlDocumentPost),
+    fork(acctionToggleChatbotOnOff)
   ]);
 }
 
