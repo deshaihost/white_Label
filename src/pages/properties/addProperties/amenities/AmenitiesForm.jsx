@@ -9,18 +9,25 @@ const AmenitiesForm = () => {
   const { questionnaireApi, apiQuestionnaireLoading } = ExtrasFormCall
     ? ExtrasFormCall
     : [];
-  const Amenities = questionnaireApi["Amenities"];
+  const Amenities = questionnaireApi["Amenities"]
+    ? questionnaireApi["Amenities"]
+    : [];
   const family = Amenities["Family"]?.[0];
   const Indoor = Amenities["Indoor"]?.[0];
   const More = Amenities["More"]?.[0];
   const Outdoor = Amenities["Outdoor"]?.[0];
   const RulesAndServices = Amenities["Rules and Services"]?.[0];
 
-  const [amenitiesInputOnClickGet, setAmenitiesInputOnClickGet] = useState([1,2,3,4,5]);
+  const [amenitiesInputOnClickGet, setAmenitiesInputOnClickGet] = useState([]);
 
   const amenitiesMainHandle = (type, item, id) => {
     if (type) {
-      setAmenitiesInputOnClickGet([...amenitiesInputOnClickGet, id]);
+      setAmenitiesInputOnClickGet([...amenitiesInputOnClickGet, { id, item }]);
+    } else if (!type) {
+      let getFilter = amenitiesInputOnClickGet?.filter(
+        (items) => items?.id !== id
+      );
+      setAmenitiesInputOnClickGet(getFilter);
     }
   };
   return (
@@ -31,14 +38,19 @@ const AmenitiesForm = () => {
           <div className="row border p-5">
             <div className="text-white">{family?.placeholder_text} </div>
             {family?.options?.map((family, indexFamily) => {
-              
+              const activeName = amenitiesInputOnClickGet.some(el => family.includes(el?.item));
               return (
                 <>
                   <div className="col-2">
-                    <div class="form-check form-check-inline border bg-light mx-5 px-5 py-2">
+                    <div
+                      class={
+                        activeName
+                          ? "form-check border bg-light form-check-inline border  mx-5 px-5 py-2"
+                          : "form-check border  form-check-inline border  mx-5 px-5 py-2"
+                      }
+                    >
                       <input
-                        // class= {amenitiesInputOnClickGet[indexFamily]===indexFamily?"form-check-input text-white bg-dark":"form-check-input"}
-                        class="form-check-input "
+                        class="form-check-input border-danger bg-ligh"
                         type="checkbox"
                         id="inlineCheckbox1"
                         value="option1"
@@ -51,11 +63,7 @@ const AmenitiesForm = () => {
                         }}
                       />
                       <label
-                        class={
-                          amenitiesInputOnClickGet[indexFamily] === indexFamily
-                            ? "form-check-label text-white"
-                            : "form-check-label"
-                        }
+                        class='form-check-label text-white'
                         for="inlineCheckbox1"
                       >
                         {family}

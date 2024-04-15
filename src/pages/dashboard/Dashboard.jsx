@@ -6,11 +6,15 @@ import "./dashboard.css";
 import AddPropertyModal from "../../component/modal/addPropertyModal/AddPropertyModal";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserDataActions } from "../../redux/actions";
+import Loader from "../../helper/Loader";
 const Dashboard = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const userDataLoading = store?.getUserDataReducer?.loading;
+  const userDataGetLoading = store?.getUserDataReducer?.loading;
+  const createPropertiesName =
+    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
 
   const { email } = userDataGet ? userDataGet : [];
   const [show, setShow] = useState(false);
@@ -31,7 +35,6 @@ const Dashboard = () => {
       setModel({ ...model, addProperty: false });
     }
   };
-
   useEffect(() => {
     dispatch(getUserDataActions());
   }, []);
@@ -119,7 +122,24 @@ const Dashboard = () => {
                   </div>
                   <div className="row">
                     <div className="col-lg-8">
-                      <div className="property-status">
+                      {!userDataGetLoading ? (
+                        <>
+                          {createPropertiesName?.map((userCreate) => {
+                            return (
+                              <div className="border py-2 d-flex justify-content-between text-white p-3">
+                                <div className="d-flex">
+                                  <div>image</div>
+                                  <div className="ms-5">{userCreate}</div>
+                                </div>
+                                <div>2</div>
+                              </div>
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <Loader />
+                      )}
+                      {/* <div className="property-status">
                         <h3>Property Status </h3>
                         <div className="property-list">
                           <ul>
@@ -140,7 +160,7 @@ const Dashboard = () => {
                             </li>
                           </ul>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="col-lg-4">
                       <div className="get-started">

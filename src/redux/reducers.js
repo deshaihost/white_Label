@@ -24,9 +24,9 @@ import {
   updateQuestionnaireReducer,
   deleteListIntegrationPropertiesReducer,
   supportingDocumentPostReducer,
-  supportingUrlPostReducer
+  supportingUrlPostReducer,
+  togglechatBotOnOffReducer
 } from "./pages/pagesApis/addProperties/reducers";
-import { logoutReducer } from "./auth/logout/reducers";
 export default (combineReducers({
   loginReducer,
   registerReducer,
@@ -36,7 +36,6 @@ export default (combineReducers({
   getUserDataReducer,
   postcreateCheckoutSessionReducer,
   updateAccountInfoReducer,
-  logoutReducer,
   pmsIntegrationGetReducer,
   pmsIntegrationAddReducer,
   removeIntegrationGetReducer,
@@ -47,5 +46,6 @@ export default (combineReducers({
   updateQuestionnaireReducer,
   deleteListIntegrationPropertiesReducer,
   supportingDocumentPostReducer,
-  supportingUrlPostReducer
+  supportingUrlPostReducer,
+  togglechatBotOnOffReducer
 }): any);

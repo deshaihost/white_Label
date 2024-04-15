@@ -9,7 +9,6 @@ function AddPropertyModal({ handleClose, show, handleSubscribe }) {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 

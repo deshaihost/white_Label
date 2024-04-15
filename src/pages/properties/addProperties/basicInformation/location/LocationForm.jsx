@@ -27,7 +27,7 @@ const LocationForm = () => {
   const onSubmit = (data) => {
     let formData = new FormData();
     formData.append("property-name:", getLocalStorageData?.nameKey);
-    formData.append("property-image", "");
+    formData.append("property-image", data?.defultImage[0]);
     formData.append("Property_Type", data?.select0);
     formData.append("Property_Type_hidden", "");
     formData.append("Street_Address", data?.short_answer1);
@@ -66,6 +66,7 @@ const LocationForm = () => {
               }
             )}
           >
+            <input type="file" {...register("defultImage")} />
             <div className="row">
               <div className="col-12">
                 {locationFildInput?.map((item, index1) => {
