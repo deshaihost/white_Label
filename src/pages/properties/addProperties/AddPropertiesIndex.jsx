@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AddPropertiesHeader from "./addPropertiesHeader/AddPropertiesHeader";
 import BacisInformatioForm from "./basicInformation/BacisInformatioForm";
 import SupportingDocForm from "./supportingDoc/SupportingDocForm";
 import ListingDetailsForm from "./listingDetails/ListingDetailsForm";
 import AmenitiesForm from "./amenities/AmenitiesForm";
 import ExtrasForm from "./extras/ExtrasForm";
-import { useDispatch } from "react-redux";
-import { testingApiActions } from "../../../redux/actions";
 const AddPropertiesIndex = () => {
-  const dispatch = useDispatch();
-  
+  const basics = "basics";
+  const supportingDoc = "supportingDoc";
+  const listingDetails = "listingDetails";
+  const amenities = "amenities";
+  const extras="extras"
+
   const [addPropertiesIndexConditions, setPropertiesConditions] = useState({
     basics: true,
     supportingDoc: false,
@@ -17,13 +19,13 @@ const AddPropertiesIndex = () => {
     amenities: false,
     extras: false,
     progressPoint: 20,
-    propertieShowInterFace: "basics",
+    propertieShowInterFace: basics,
   });
   const propertiesInterFace =
     addPropertiesIndexConditions?.propertieShowInterFace;
 
   const mainHandleHeaderActive = (type) => {
-    if (type === "basics") {
+    if (type === basics) {
       setPropertiesConditions({
         basics: true,
         supportingDoc: false,
@@ -33,7 +35,7 @@ const AddPropertiesIndex = () => {
         progressPoint: 20,
         propertieShowInterFace: type,
       });
-    } else if (type === "supportingDoc") {
+    } else if (type === supportingDoc) {
       setPropertiesConditions({
         basics: true,
         supportingDoc: true,
@@ -43,7 +45,7 @@ const AddPropertiesIndex = () => {
         progressPoint: 40,
         propertieShowInterFace: type,
       });
-    } else if (type === "listingDetails") {
+    } else if (type === listingDetails) {
       setPropertiesConditions({
         basics: true,
         supportingDoc: true,
@@ -53,7 +55,7 @@ const AddPropertiesIndex = () => {
         progressPoint: 60,
         propertieShowInterFace: type,
       });
-    } else if (type === "amenities") {
+    } else if (type === amenities) {
       setPropertiesConditions({
         basics: true,
         supportingDoc: true,
@@ -63,7 +65,7 @@ const AddPropertiesIndex = () => {
         progressPoint: 80,
         propertieShowInterFace: type,
       });
-    } else if (type === "extras") {
+    } else if (type === extras) {
       setPropertiesConditions({
         basics: true,
         supportingDoc: true,
@@ -76,9 +78,6 @@ const AddPropertiesIndex = () => {
     }
   };
 
-  // useEffect(() => {
-  //   dispatch(testingApiActions());
-  // }, []);
   return (
     <div>
       <div className="row">
@@ -91,15 +90,15 @@ const AddPropertiesIndex = () => {
       </div>
       <div className="row">
         <div className="col-12">
-          {propertiesInterFace === "basics" ? (
+          {propertiesInterFace === basics ? (
             <BacisInformatioForm />
-          ) : propertiesInterFace === "supportingDoc" ? (
+          ) : propertiesInterFace === supportingDoc ? (
             <SupportingDocForm />
-          ) : propertiesInterFace === "listingDetails" ? (
+          ) : propertiesInterFace === listingDetails ? (
             <ListingDetailsForm />
-          ) : propertiesInterFace === "amenities" ? (
+          ) : propertiesInterFace === amenities ? (
             <AmenitiesForm />
-          ) : propertiesInterFace === "extras" ? (
+          ) : propertiesInterFace === extras ? (
             <ExtrasForm />
           ) : (
             ""

@@ -150,7 +150,7 @@ const Signup = () => {
                   <div className="input-container">
                     <input
                       type="text"
-                      {...register("firstName", { required: true })}
+                      {...register("firstName", )}
                       placeholder="First Name..."
                     />
                   </div>
@@ -160,7 +160,7 @@ const Signup = () => {
                   <div className="input-container">
                     <input
                       type="text"
-                      {...register("lastName", { required: true })}
+                      {...register("lastName", )}
                       placeholder="Last Name..."
                     />
                   </div>
@@ -284,7 +284,7 @@ const Signup = () => {
                     <input
                       type="text"
                       {...register("phone", {
-                        required: true,
+                        
                         pattern: /^[0-9]{10}$/,
                       })}
                       placeholder="Phone..."
