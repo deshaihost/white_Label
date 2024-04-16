@@ -12,9 +12,15 @@ import {
 import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
 
 import Loader from "../../../helper/Loader";
+import { ParamsGet, nameKey } from "../../../helper/Authorized";
 const MeetBanner = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
+  const chatBoxUrl = ParamsGet();
+  const getName = nameKey();
+  const testPropetyName = getName?.nameKey;
+  console.log(testPropetyName, "getName");
+
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
   const getMessageResp =
     store?.getSessionIdReducer?.sessionId?.data?.initial_message;
@@ -72,23 +78,41 @@ const MeetBanner = () => {
     <div className="meet-banner">
       <Container>
         <div className="banner-heading">
-          <h2>Meet HostBuddy</h2>
-          <p>
-            Get ready to meet our friendly HostBuddy chatbot. We're here to
-            assist you with any questions or support you might need. Just type
-            your query below, and we'll be happy to help
-          </p>
-          <Link to="/" className="link-btn filled-btn">
-            Learn More
-          </Link>
+          <h2>
+            {" "}
+            {chatBoxUrl !== undefined ? (
+              <>{testPropetyName !== "" ? testPropetyName : "Empty"}</>
+            ) : (
+              "Meet HostBuddy"
+            )}
+          </h2>
+          {chatBoxUrl === undefined && (
+            <p>
+              Get ready to meet our friendly HostBuddy chatbot. We're here to
+              assist you with any questions or support you might need. Just type
+              your query below, and we'll be happy to help
+            </p>
+          )}
+          {chatBoxUrl !== undefined ? (
+            <Link to="/properties" className="link-btn filled-btn">
+              Back
+            </Link>
+          ) : (
+            <Link to="/" className="link-btn filled-btn">
+              Learn More
+            </Link>
+          )}
         </div>
         <div className="row">
-          <div className="col-lg-5" id="house-image">
-            <div className="house-img">
-              <img src={HouseImg} alt="house-img" className="img-fluid" />
+          {chatBoxUrl === undefined && (
+            <div className="col-lg-5" id="house-image">
+              <div className="house-img">
+                <img src={HouseImg} alt="house-img" className="img-fluid" />
+              </div>
             </div>
-          </div>
-          <div className="col-lg-7">
+          )}
+
+          <div className={chatBoxUrl!==undefined?"col-lg-12":"col-lg-7"}>
             <div className="chatbot">
               <div className="message-list">
                 {messages?.map((message, index) => {
@@ -111,16 +135,11 @@ const MeetBanner = () => {
                   placeholder="Type a message..."
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  // onKeyPress={(e) => {
-                  //   if (e.key === "Enter") {
-                  //     handleSendMessage();
-                  //   }
-                  // }}
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={updateMessageRespLoading ? true : false}
-                  className={updateMessageRespLoading?"chat-send":""}
+                  className={updateMessageRespLoading ? "chat-send" : ""}
                 >
                   <svg
                     width="25"

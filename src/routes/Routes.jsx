@@ -109,6 +109,7 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/meet-hostbuddy/:id" element={<MeetHostBoddy />}></Route>
       </Routes>
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&

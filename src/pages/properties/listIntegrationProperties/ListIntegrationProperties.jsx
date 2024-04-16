@@ -7,8 +7,17 @@ import {
 import { useSelectorUseDispatch } from "../../../helper/Authorized";
 import ToastHandle from "../../../helper/ToastMessage";
 import Loader from "../../../helper/Loader";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { useNavigate } from "react-router-dom";
+import WebPageUrlModel from "./modelListProperties/webPageUrlModel/WebPageUrlModel";
+import SupportingDocumentModel from "./modelListProperties/supportingDocumentModel/SupportingDocumentModel";
 
 const ListIntegrationProperties = () => {
+  const navigate = useNavigate();
+  let localStorageKey = "nameKey";
+  const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
+  const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
+
   const { store, dispatch } = useSelectorUseDispatch();
   const userDataGetLoading = store?.getUserDataReducer?.loading;
   const createPropertiesName =
@@ -25,10 +34,50 @@ const ListIntegrationProperties = () => {
   const propertiesDeleteLoading =
     store?.deleteListIntegrationPropertiesReducer?.loading;
 
-  const [propertiesDeleteId, setPropertiesDeleteId] = useState("");
-  const propertiesDeleteHndle = (data, id) => {
-    setPropertiesDeleteId(id);
-    dispatch(deleteListIntegrationPropertiesActions(data));
+  const [model, setModel] = useState({
+    webPageUrl: false,
+    supportingDocuments: false,
+  });
+  let webPageUrlOpen = "webPageUrlOpen";
+  let supportingDocumentsOpen = "supportingDocumentsOpen";
+  let webPageUrlClose = "webPageUrlClose";
+  let supportingDocumentsClose = "supportingDocumentsClose";
+  const handleModelOpen = (type) => {
+    if (type === webPageUrlOpen) {
+      setModel({ ...model, webPageUrl: true });
+    } else if (type === supportingDocumentsOpen) {
+      setModel({ ...model, supportingDocuments: true });
+    }
+  };
+  const handleModelClose = (type) => {
+    if (type === webPageUrlClose) {
+      setModel({ ...model, webPageUrl: false });
+    } else if (type === supportingDocumentsClose) {
+      setModel({ ...model, supportingDocuments: false });
+    }
+  };
+
+  let editProperty = "editProperty";
+  let webPageURLs = "webPageURLs";
+  let supportingDocuments = "supportingDocuments";
+  let deleteProperty = "deleteProperty";
+  let copyChatbotLink = "copyChatbotLink";
+  let testProperty = "testProperty";
+
+  const selectedHandle = (types, data) => {
+    let findType = types;
+    if (findType === editProperty) {
+      setGetInputNameKey({ nameKey: data });
+    } else if (findType === webPageURLs) {
+      handleModelOpen(webPageUrlOpen);
+    } else if (findType === supportingDocuments) {
+      handleModelOpen(supportingDocumentsOpen);
+    } else if (findType === deleteProperty) {
+      dispatch(deleteListIntegrationPropertiesActions(data));
+    } else if (findType === copyChatbotLink) {
+    } else if (findType === testProperty) {
+      setTestPropertyKey({ nameKey: data });
+    }
   };
 
   useEffect(() => {
@@ -39,8 +88,20 @@ const ListIntegrationProperties = () => {
     } else if (propertiesDeleteStatus === 404) {
       ToastHandle(propertiesDeleteError, "danger");
       dispatch(stateEmptyActions());
+    } else if (getInputNameKey.nameKey !== "") {
+      navigate(
+        "/add-properties/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw"
+      );
+      localStorage.setItem(localStorageKey, JSON?.stringify(getInputNameKey));
+      setGetInputNameKey({ nameKey: "" });
+    } else if (testPropertyKey.nameKey !== "") {
+      navigate(
+        "/meet-hostbuddy/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw"
+      );
+      localStorage.setItem(localStorageKey, JSON?.stringify(testPropertyKey));
+      setTestPropertyKey({ nameKey: "" });
     }
-  }, [propertiesDeleteStatus]);
+  }, [propertiesDeleteStatus, getInputNameKey, testPropertyKey]);
 
   useEffect(() => {
     dispatch(getUserDataActions());
@@ -48,6 +109,7 @@ const ListIntegrationProperties = () => {
 
   return (
     <div>
+      {propertiesDeleteLoading && <Loader />}
       {!userDataGetLoading ? (
         <>
           {createPropertiesName?.map((properties, index) => {
@@ -55,27 +117,71 @@ const ListIntegrationProperties = () => {
               <>
                 <div className="row border p-4">
                   <div className="col-4 ">image</div>
-                  <div className="col-4">{properties}</div>
                   <div className="col-4">
-                    <button
-                      className="btn btn-danger"
-                      disabled={propertiesDeleteLoading ? true : false}
+                    <div>{properties}</div>
+                    <div>
+                      <span>Switch</span>
+                      <span className="border ms-2">Celander</span>
+
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    <div className="d-flex justify-content-between px-5">
+                      <div
+                        onClick={() => {
+                          selectedHandle(editProperty, properties);
+                        }}
+                      >
+                        <i class="bi bi-pen"></i>
+                      </div>
+                      <div>
+                        <NavDropdown title="..." id="basic-nav-dropdown">
+                          <NavDropdown.Item
+                            onClick={() => {
+                              selectedHandle(editProperty, properties);
+                            }}
+                          >
+                            Edit Property
+                          </NavDropdown.Item>
+                          <NavDropdown.Item
+                            onClick={() => {
+                              selectedHandle(webPageURLs);
+                            }}
+                          >
+                            Web Page URLs
+                          </NavDropdown.Item>
+                          <NavDropdown.Item
+                            onClick={() => {
+                              selectedHandle(supportingDocuments);
+                            }}
+                          >
+                            Supporting Documents
+                          </NavDropdown.Item>
+                          <NavDropdown.Item
+                            onClick={() => {
+                              selectedHandle(deleteProperty, properties);
+                            }}
+                          >
+                            Delete Property
+                          </NavDropdown.Item>
+                          <NavDropdown.Item
+                            onClick={() => {
+                              selectedHandle(copyChatbotLink);
+                            }}
+                          >
+                            Copy Chatbot Link
+                          </NavDropdown.Item>
+                        </NavDropdown>
+                      </div>
+                    </div>
+                    <div
+                      className="border"
                       onClick={() => {
-                        propertiesDeleteHndle(properties, index);
+                        selectedHandle(testProperty, properties);
                       }}
                     >
-                      {!propertiesDeleteLoading ? (
-                        <i class="bi bi-trash"></i>
-                      ) : (
-                        <>
-                          {propertiesDeleteId === index ? (
-                            <Loader />
-                          ) : (
-                            <i class="bi bi-trash"></i>
-                          )}
-                        </>
-                      )}
-                    </button>
+                      Test Property
+                    </div>
                   </div>
                 </div>
               </>
@@ -85,6 +191,16 @@ const ListIntegrationProperties = () => {
       ) : (
         <Loader />
       )}
+      <div>
+        <WebPageUrlModel
+          handleShow={model.webPageUrl}
+          handleClose={handleModelClose}
+        />
+        <SupportingDocumentModel
+          handleShow={model.supportingDocuments}
+          handleClose={handleModelClose}
+        />
+      </div>
     </div>
   );
 };

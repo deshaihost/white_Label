@@ -28,9 +28,11 @@ const Properties = () => {
     pmsIntegration: false,
     removeIntegration: false,
   });
+  const [propertyConditionCheck, setPropertyConditionCheck] = useState(false);
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {
       dispatch(goToBillingportalPostActions());
+      setPropertyConditionCheck(true);
     } else if (type === "pmsIntegrationOpen") {
       setModel({ ...model, pmsIntegration: true });
     } else if (type === "removeIntegrationsOpen") {
@@ -78,9 +80,12 @@ const Properties = () => {
   }, [toggleOnOff]);
 
   useEffect(() => {
-    if (gotoBillingPortalCheckPaymentStatus === 200) {
-      navigate("/add-properties");
-      dispatch(stateEmptyActions());
+    if (propertyConditionCheck) {
+      if (gotoBillingPortalCheckPaymentStatus === 200) {
+        setPropertyConditionCheck(false);
+        navigate("/add-properties");
+        dispatch(stateEmptyActions());
+      }
     } else if (gotoBillingPortalCheckPaymentStatus === 404) {
       setModel({ ...model, addProperty: true });
       dispatch(stateEmptyActions());
@@ -88,7 +93,11 @@ const Properties = () => {
       ToastHandle(toggleChatMessage, "success");
       dispatch(stateEmptyActions());
     }
-  }, [gotoBillingPortalCheckPaymentStatus, toggleChatStatus]);
+  }, [
+    gotoBillingPortalCheckPaymentStatus,
+    propertyConditionCheck,
+    toggleChatStatus,
+  ]);
 
   return (
     <>
@@ -108,27 +117,21 @@ const Properties = () => {
                   <h3>Property Listing</h3>
                   <div className="property-heading-right">
                     <p>Hostbuddy Status</p>
-                    {!toggleChatLoading ? (
-                      ""
-                    ) : (
-                      <Loader />
-                    )}<div className="form-check form-switch custom_switch">
-                    <input
-                      className="form-check-input toggle-user-chatbot"
-                      type="checkbox"
-                      role="switch"
-                      id="statuscheck"
-                      onClick={(e) => {
-                        toggleChatBotHndle(e.target.checked);
-                      }}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="statuscheck"
-                    >
-                      {toggleActive ? "ON" : "OFF"}
-                    </label>
-                  </div>
+                    {toggleChatLoading && <Loader />}
+                    <div className="form-check form-switch custom_switch">
+                      <input
+                        className="form-check-input toggle-user-chatbot"
+                        type="checkbox"
+                        role="switch"
+                        id="statuscheck"
+                        onClick={(e) => {
+                          toggleChatBotHndle(e.target.checked);
+                        }}
+                      />
+                      <label className="form-check-label" htmlFor="statuscheck">
+                        {toggleActive ? "ON" : "OFF"}
+                      </label>
+                    </div>
 
                     <div className="expendable_search">
                       <button className="search_btn">
@@ -163,8 +166,10 @@ const Properties = () => {
                   >
                     {!gotoBillingPortalcheckPaymentLoading ? (
                       "Add Property"
-                    ) : (
+                    ) : propertyConditionCheck ? (
                       <Loader />
+                    ) : (
+                      "Add Property"
                     )}
                   </button>
                   <button
