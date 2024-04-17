@@ -111,6 +111,12 @@ input:-webkit-autofill {
 input[type="checkbox"] {
   background: #000212;
 }
+.form-switch .form-check-input{
+  background-repeat: no-repeat !important;
+}
+.bg-none{
+background: transparent !important;
+}
 
 .link-btn {
   color: #146ef5;

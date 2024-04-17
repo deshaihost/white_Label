@@ -4,6 +4,7 @@ import {
   getUserDataActions,
   stateEmptyActions,
 } from "../../../redux/actions";
+import "./Listintigrationproperties.css"
 import { useSelectorUseDispatch } from "../../../helper/Authorized";
 import ToastHandle from "../../../helper/ToastMessage";
 import Loader from "../../../helper/Loader";
@@ -11,6 +12,10 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { useNavigate } from "react-router-dom";
 import WebPageUrlModel from "./modelListProperties/webPageUrlModel/WebPageUrlModel";
 import SupportingDocumentModel from "./modelListProperties/supportingDocumentModel/SupportingDocumentModel";
+import { Button, Dropdown, Form } from "react-bootstrap";
+import { CiCalendar } from "react-icons/ci";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
+
 
 const ListIntegrationProperties = () => {
   const navigate = useNavigate();
@@ -183,6 +188,7 @@ const ListIntegrationProperties = () => {
                       Test Property
                     </div>
                   </div>
+                  
                 </div>
               </>
             );
@@ -191,6 +197,65 @@ const ListIntegrationProperties = () => {
       ) : (
         <Loader />
       )}
+      <div className="row mt-5">
+      <div className="col-lg-12">
+        <div className="d-flex gap-1 align-items-center justify-content-between">
+          <div className="d-flex gap-1 align-items-center">
+            <div className="img-with-title">
+              <img src="https://img.freepik.com/free-photo/sustainable-travel-concept_23-2151049514.jpg?size=626&ext=jpg&ga=GA1.1.1314459612.1713268062&semt=sph" alt="" />
+              <span>THE WORKS</span>
+            </div>
+            <div className="property-detail">
+              <h4>testing21</h4>
+              <div className="d-flex gap-1">
+              <div className="form-check form-switch custom_switch">
+                <input
+                  className="form-check-input toggle-user-chatbot"
+                  type="checkbox"
+                  role="switch"
+                  id="statuscheck"
+                />
+                <label className="form-check-label" htmlFor="statuscheck">
+                  on
+                </label>
+              </div>
+              <Button className="border-0 shadow-none bg-none p-0 fs-5"><CiCalendar className="text-primary" /></Button>
+              </div>              
+            </div>
+            <div>
+                <span className="fs-6">chart</span>
+            </div>
+          </div>
+          <div>
+            <div className="d-flex"> 
+            <Button className="property-edit-btn"
+                // onClick={() => {
+                //   selectedHandle(editProperty, properties);
+                // }}
+              >
+                <i class="bi bi-pen"></i>
+              </Button>
+              <div>
+              <Dropdown className="property-dropdown">
+                <Dropdown.Toggle  className="" id="dropdown-button-drop-down-centered"
+          drop="down-centered">
+                <HiOutlineDotsHorizontal />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+                
+              </div>
+            </div>
+            <Button className="test-property-btn">Test Property</Button>
+          </div>
+        </div>
+      </div>
+      </div>
       <div>
         <WebPageUrlModel
           handleShow={model.webPageUrl}
