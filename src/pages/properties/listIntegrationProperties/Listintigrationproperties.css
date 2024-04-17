@@ -95,3 +95,7 @@
 .property-dropdown .dropdown-menu.show a:hover{
     color: #146EF5 !important;
 }
+.progressBar{
+    height: 50px;
+    width: 50px;
+}

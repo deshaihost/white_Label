@@ -4,11 +4,11 @@ import {
   getUserDataActions,
   stateEmptyActions,
 } from "../../../redux/actions";
-import "./Listintigrationproperties.css"
+import "./Listintigrationproperties.css";
 import { useSelectorUseDispatch } from "../../../helper/Authorized";
 import ToastHandle from "../../../helper/ToastMessage";
 import Loader from "../../../helper/Loader";
-import NavDropdown from "react-bootstrap/NavDropdown";
+// import NavDropdown from "react-bootstrap/NavDropdown";
 import { useNavigate } from "react-router-dom";
 import WebPageUrlModel from "./modelListProperties/webPageUrlModel/WebPageUrlModel";
 import SupportingDocumentModel from "./modelListProperties/supportingDocumentModel/SupportingDocumentModel";
@@ -16,12 +16,17 @@ import { Button, Dropdown, Form } from "react-bootstrap";
 import { CiCalendar } from "react-icons/ci";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import CalenderModel from "./calender/CalenderModel";
 
 const ListIntegrationProperties = () => {
   const navigate = useNavigate();
   let localStorageKey = "nameKey";
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
+
+  const [showCalender, setShowCalender] = useState(false);
 
   const { store, dispatch } = useSelectorUseDispatch();
   const userDataGetLoading = store?.getUserDataReducer?.loading;
@@ -47,6 +52,15 @@ const ListIntegrationProperties = () => {
   let supportingDocumentsOpen = "supportingDocumentsOpen";
   let webPageUrlClose = "webPageUrlClose";
   let supportingDocumentsClose = "supportingDocumentsClose";
+
+  const handleCalenderModalOpen = () => {
+    setShowCalender(true)
+  }
+
+  const handleCalenderModalClose = () => {
+    setShowCalender(false)
+  }
+
   const handleModelOpen = (type) => {
     if (type === webPageUrlOpen) {
       setModel({ ...model, webPageUrl: true });
@@ -112,6 +126,8 @@ const ListIntegrationProperties = () => {
     dispatch(getUserDataActions());
   }, []);
 
+  console.log("Property Data: ", createPropertiesName);
+
   return (
     <div>
       {propertiesDeleteLoading && <Loader />}
@@ -120,14 +136,136 @@ const ListIntegrationProperties = () => {
           {createPropertiesName?.map((properties, index) => {
             return (
               <>
-                <div className="row border p-4">
+                <div className="row mt-5">
+                  <div className="col-lg-12">
+                    <div className="d-flex gap-1 align-items-center justify-content-between">
+                      <div className="d-flex gap-1 align-items-center">
+                        <div className="img-with-title">
+                          <img
+                            src={
+                              properties.img ||
+                              "https://img.freepik.com/free-photo/sustainable-travel-concept_23-2151049514.jpg?size=626&ext=jpg&ga=GA1.1.1314459612.1713268062&semt=sph"
+                            }
+                            alt=""
+                          />
+                          <span>THE WORKS</span>
+                        </div>
+                        <div className="property-detail">
+                          <h4>{properties}</h4>
+                          <div className="d-flex gap-1">
+                            <div className="form-check form-switch custom_switch">
+                              <input
+                                className="form-check-input toggle-user-chatbot"
+                                type="checkbox"
+                                role="switch"
+                                id="statuscheck"
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor="statuscheck"
+                              >
+                                on
+                              </label>
+                            </div>
+                            <Button onClick={handleCalenderModalOpen} className="border-0 shadow-none bg-none p-0 fs-5">
+                              <CiCalendar className="text-primary" />
+                            </Button>
+                          </div>
+                        </div>
+                        <div>
+                          {/* <span className="fs-6"> */}
+                          {/* chart */}
+                          <CircularProgressbar className="progressBar"
+                            styles={buildStyles({
+                              pathColor: "#146EF5",
+                              textColor: '#146EF5',
+                            },)}
+                            value={100}
+                            text={`${100}%`}
+                          />
+                          {/* </span> */}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="d-flex">
+                          <Button
+                            className="property-edit-btn"
+                            onClick={() => {
+                              selectedHandle(editProperty, properties);
+                            }}
+                          >
+                            <i class="bi bi-pen"></i>
+                          </Button>
+                          <div>
+                            <Dropdown className="property-dropdown">
+                              <Dropdown.Toggle
+                                className=""
+                                id="dropdown-button-drop-down-centered"
+                                drop="down-centered"
+                              >
+                                <HiOutlineDotsHorizontal />
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    selectedHandle(editProperty, properties);
+                                  }}
+                                >
+                                  Edit Property
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    selectedHandle(webPageURLs);
+                                  }}
+                                >
+                                  Web Page URLs
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    selectedHandle(supportingDocuments);
+                                  }}
+                                >
+                                  Supporting Documents
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    selectedHandle(deleteProperty, properties);
+                                  }}
+                                >
+                                  Delete Property
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    selectedHandle(copyChatbotLink);
+                                  }}
+                                >
+                                  Copy Chatbot Link
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </div>
+                        </div>
+                        <Button
+                          className="test-property-btn"
+                          onClick={() => {
+                            selectedHandle(testProperty, properties);
+                          }}
+                        >
+                          Test Property
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* previous flow */}
+                {/* <div className="row border p-4">
                   <div className="col-4 ">image</div>
                   <div className="col-4">
                     <div>{properties}</div>
                     <div>
                       <span>Switch</span>
                       <span className="border ms-2">Celander</span>
-
                     </div>
                   </div>
                   <div className="col-4">
@@ -188,8 +326,7 @@ const ListIntegrationProperties = () => {
                       Test Property
                     </div>
                   </div>
-                  
-                </div>
+                </div> */}
               </>
             );
           })}
@@ -197,65 +334,7 @@ const ListIntegrationProperties = () => {
       ) : (
         <Loader />
       )}
-      <div className="row mt-5">
-      <div className="col-lg-12">
-        <div className="d-flex gap-1 align-items-center justify-content-between">
-          <div className="d-flex gap-1 align-items-center">
-            <div className="img-with-title">
-              <img src="https://img.freepik.com/free-photo/sustainable-travel-concept_23-2151049514.jpg?size=626&ext=jpg&ga=GA1.1.1314459612.1713268062&semt=sph" alt="" />
-              <span>THE WORKS</span>
-            </div>
-            <div className="property-detail">
-              <h4>testing21</h4>
-              <div className="d-flex gap-1">
-              <div className="form-check form-switch custom_switch">
-                <input
-                  className="form-check-input toggle-user-chatbot"
-                  type="checkbox"
-                  role="switch"
-                  id="statuscheck"
-                />
-                <label className="form-check-label" htmlFor="statuscheck">
-                  on
-                </label>
-              </div>
-              <Button className="border-0 shadow-none bg-none p-0 fs-5"><CiCalendar className="text-primary" /></Button>
-              </div>              
-            </div>
-            <div>
-                <span className="fs-6">chart</span>
-            </div>
-          </div>
-          <div>
-            <div className="d-flex"> 
-            <Button className="property-edit-btn"
-                // onClick={() => {
-                //   selectedHandle(editProperty, properties);
-                // }}
-              >
-                <i class="bi bi-pen"></i>
-              </Button>
-              <div>
-              <Dropdown className="property-dropdown">
-                <Dropdown.Toggle  className="" id="dropdown-button-drop-down-centered"
-          drop="down-centered">
-                <HiOutlineDotsHorizontal />
-                </Dropdown.Toggle>
 
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-                
-              </div>
-            </div>
-            <Button className="test-property-btn">Test Property</Button>
-          </div>
-        </div>
-      </div>
-      </div>
       <div>
         <WebPageUrlModel
           handleShow={model.webPageUrl}
@@ -266,6 +345,8 @@ const ListIntegrationProperties = () => {
           handleClose={handleModelClose}
         />
       </div>
+
+      <CalenderModel showCalender={showCalender} setShowCalender= {setShowCalender} />
     </div>
   );
 };
