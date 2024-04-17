@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import PopupModal from "../popupmodal/PopupModal";
 
-const Calendar = ({date}) => {
-//   const [date, setDate] = useState(new Date());
+const Calendar = ({ date }) => {
+  //   const [date, setDate] = useState(new Date());
 
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -45,10 +44,7 @@ const Calendar = ({date}) => {
     });
   }
 
-  const handleCellClick = (day) => {
-    console.log("Clicked on day:", day);
-    // Open modal or perform other actions here
-  };
+  console.log("daysFromNextMonth: ", daysFromNextMonth);
 
   const weeks = [];
   let week = [];
@@ -57,22 +53,17 @@ const Calendar = ({date}) => {
       weeks.push(week);
       week = [];
     }
-    const cellClasses = ["calendar-day"];
-    if (new Date(day.year, day.month, day.day) < new Date()) {
-      cellClasses.push("disabled");
-    }
     week.push(
-      <td key={index} className={cellClasses.join(" ")} onClick={() => handleCellClick(day)}>
+      <td key={index} className="calendar-day">
         {day.day}
       </td>
     );
   });
   weeks.push(week);
 
-  console.log("Week: ", weeks)
+  console.log("weeks: ", weeks);
 
   return (
-    <>
     <div className="calendar">
       {/* <h2>{`${date.toLocaleString("default", { month: "long" })} ${year}`}</h2> */}
       <table>
@@ -94,8 +85,6 @@ const Calendar = ({date}) => {
         </tbody>
       </table>
     </div>
-    <PopupModal />
-    </>
   );
 };
 
