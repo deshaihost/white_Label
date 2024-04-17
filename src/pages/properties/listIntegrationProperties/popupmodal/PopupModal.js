@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import "./calenderModel.css";
+// import "./calenderModel.css";
 import Table from "react-bootstrap/Table";
-import Calendar from "./Calender";
+// import Calendar from "./Calender";
 
-const CalenderModel = ({ showCalender, setShowCalender }) => {
+const PopupModal = ({ showCalender, setShowCalender }) => {
   const [monthButton, setMonthButton] = useState(true);
   const [scheduleButton, setscheduleButton] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -22,8 +22,8 @@ const CalenderModel = ({ showCalender, setShowCalender }) => {
   return (
     <div>
       <Modal
-        show={showCalender}
-        size="xl"
+        show={false}
+        size="md"
         onHide={() => setShowCalender(false)}
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -32,7 +32,7 @@ const CalenderModel = ({ showCalender, setShowCalender }) => {
           <div>
             <div className="row">
               <div
-                className="d-flex justify-content-between px-3 calenderHeader"
+                className="d-flex justify-content-between px-3 "
                 style={{ fontSize: "14px", color: "#fff" }}
               >
                 <div>1</div>
@@ -64,31 +64,7 @@ const CalenderModel = ({ showCalender, setShowCalender }) => {
               </div>
             </div>
 
-            {/* <Table bordered className="">
-              <thead>
-                <tr className="text-light text-center">
-                  <th className="text-center">Sun</th>
-                  <th>Mon</th>
-                  <th>Tue</th>
-                  <th>Wed</th>
-                  <th>Thu</th>
-                  <th>Fri</th>
-                  <th>Sat</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="">1</td>
-                  <td className="">1</td>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-              </tbody>
-            </Table> */}
-            <Calendar date={date} />
+            
           </div>
         </Modal.Body>
       </Modal>
@@ -96,4 +72,4 @@ const CalenderModel = ({ showCalender, setShowCalender }) => {
   );
 };
 
-export default CalenderModel;
+export default PopupModal;
