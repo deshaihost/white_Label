@@ -1,70 +1,149 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 // import "./calenderModel.css";
-import Table from "react-bootstrap/Table";
+import Form from "react-bootstrap/Form";
 // import Calendar from "./Calender";
 
-const PopupModal = ({ showCalender, setShowCalender }) => {
-  const [monthButton, setMonthButton] = useState(true);
-  const [scheduleButton, setscheduleButton] = useState(false);
+const PopupModal = ({ show, setShow, selectedDate, setSelectedDate }) => {
   const [date, setDate] = useState(new Date());
 
-  const handleButtonToggle = (type) => {
-    if (type === "month") {
-      setMonthButton(true);
-      setscheduleButton(false);
-    }
-    if (type === "schedule") {
-      setMonthButton(false);
-      setscheduleButton(true);
-    }
+  const [data, setData] = useState({
+    status: "",
+    startDate: "",
+    endDate: "",
+    startTime: "05:30",
+    endTime: "05:30",
+  });
+
+  const handleStatusChange = (e) => {
+    setData({
+      ...data,
+      status: e.target.value,
+    });
   };
+
+  const handleInputChange = (e) => {
+    console.log(e.target.value);
+    setData({
+      ...data,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  useEffect(() => {
+    // Format the selected date
+    const formattedDate = `${selectedDate.year}-${(selectedDate.month + 1)
+      .toString()
+      .padStart(2, "0")}-${selectedDate.day.toString().padStart(2, "0")}`;
+
+    // Set the initial start and end date in the state
+    setData((prevData) => ({
+      ...prevData,
+      startDate: formattedDate,
+      endDate: formattedDate,
+    }));
+  }, [selectedDate]); // Update when selectedDate changes
+
+  console.log("Data: ", data);
+  console.log("selectedDate: ", selectedDate);
+
   return (
     <div>
       <Modal
-        show={false}
+        show={show}
         size="md"
-        onHide={() => setShowCalender(false)}
+        onHide={() => setShow(false)}
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
         <Modal.Body>
-          <div>
+          <div className="row py-3 border-bottom">
+            <div className="6">
+              <h3 className="text-white text-center">Chatbot Status</h3>
+            </div>
+          </div>
+          <div className="d-flex flex-column pt-3 gap-3">
             <div className="row">
-              <div
-                className="d-flex justify-content-between px-3 "
-                style={{ fontSize: "14px", color: "#fff" }}
-              >
-                <div>1</div>
-                <div>{`${date.toLocaleString("default", { month: "long" })}`}</div>
-                <div className="d-flex ">
-                  <button
-                    type="button"
-                    onClick={() => handleButtonToggle("month")}
-                    className={`btn ${
-                      monthButton
-                        ? "btn-primary"
-                        : "btn-tranparent border border-primary text-light"
-                    } rounded-0`}
+              <div className="col">
+                <div>
+                  <label>Status</label>
+                  <Form.Select
+                    aria-label="Default select example"
+                    style={{ backgroundColor: "#0A1A44", color: "#fff" }}
+                    className="form-control"
+                    value={data.status}
+                    onChange={handleStatusChange}
                   >
-                    Month
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleButtonToggle("schedule")}
-                    className={`btn ${
-                      scheduleButton
-                        ? "btn-primary"
-                        : "btn-tranparent border border-primary text-light"
-                    } rounded-0`}
-                  >
-                    Schedule
-                  </button>
+                    <option value="">Select Status</option>
+                    <option value="on">ON</option>
+                    <option value="off">OFF</option>
+                  </Form.Select>
                 </div>
               </div>
             </div>
 
-            
+            <div className="d-flex row">
+              <div className="col">
+                <label>Start Date:</label>
+                <input
+                  type="date"
+                  name="stdate"
+                  id="startDate"
+                  className="form-control"
+                  value={data.startDate}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div class="col">
+                <label>End Date:</label>
+                <input
+                  type="date"
+                  name="etdate"
+                  id="endDate"
+                  className="form-control"
+                  value={data.endDate}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>Start Time:</label>
+                <input
+                  type="time"
+                  name="st"
+                  id="startTime"
+                  class="form-control"
+                  value={data.startTime}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div class="col">
+                <label>End Time:</label>
+                <input
+                  type="time"
+                  name="et"
+                  id="endTime"
+                  class="form-control"
+                  value={data.endTime}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col text-center">
+                <input
+                  type="submit"
+                  data-attr-date="once"
+                  class="bg-primary form-control"
+                  value="Apply"
+                  id="submit-single-property"
+                />{" "}
+              </div>
+            </div>
           </div>
         </Modal.Body>
       </Modal>

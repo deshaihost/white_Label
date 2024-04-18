@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import "./calenderModel.css";
-import Table from "react-bootstrap/Table";
 import Calendar from "./Calender";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import ScheduleCalender from "../schedule/ScheduleCalender";
 
 const CalenderModel = ({ showCalender, setShowCalender }) => {
   const [monthButton, setMonthButton] = useState(true);
@@ -19,12 +20,28 @@ const CalenderModel = ({ showCalender, setShowCalender }) => {
       setscheduleButton(true);
     }
   };
+
+  const handlePrevMonth = () => {
+    const newDate = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+    setDate(newDate);
+  };
+
+  const handleNextMonth = () => {
+    const newDate = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+    setDate(newDate);
+  };
+
+  const handleCalenderClose = () => {
+    setShowCalender(false);
+    setDate(new Date());
+  };
+
   return (
     <div>
       <Modal
         show={showCalender}
         size="xl"
-        onHide={() => setShowCalender(false)}
+        onHide={handleCalenderClose}
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -35,8 +52,20 @@ const CalenderModel = ({ showCalender, setShowCalender }) => {
                 className="d-flex justify-content-between px-3 calenderHeader"
                 style={{ fontSize: "14px", color: "#fff" }}
               >
-                <div>1</div>
-                <div>{`${date.toLocaleString("default", { month: "long" })}`}</div>
+                <div className="d-flex justify-between">
+                  <FiChevronLeft onClick={handlePrevMonth} />
+                  <FiChevronRight onClick={handleNextMonth} />
+                </div>
+                {monthButton && <div>
+                  {`${date.toLocaleString("default", {
+                    month: "long",
+                  })} ${date.getFullYear()}`}
+                </div>}
+
+                {scheduleButton && <div>
+                  Hostbudddy schedule for property
+                </div>}
+
                 <div className="d-flex ">
                   <button
                     type="button"
@@ -64,31 +93,9 @@ const CalenderModel = ({ showCalender, setShowCalender }) => {
               </div>
             </div>
 
-            {/* <Table bordered className="">
-              <thead>
-                <tr className="text-light text-center">
-                  <th className="text-center">Sun</th>
-                  <th>Mon</th>
-                  <th>Tue</th>
-                  <th>Wed</th>
-                  <th>Thu</th>
-                  <th>Fri</th>
-                  <th>Sat</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="">1</td>
-                  <td className="">1</td>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-              </tbody>
-            </Table> */}
-            <Calendar date={date} />
+            {monthButton && <Calendar date={date} />}
+
+            {scheduleButton && <ScheduleCalender />}
           </div>
         </Modal.Body>
       </Modal>
