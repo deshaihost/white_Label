@@ -1,8 +1,7 @@
 import React, { useState } from "react";
+import PopupModal from "../popupmodal/PopupModal";
 
 const Calendar = ({ date }) => {
-  //   const [date, setDate] = useState(new Date());
-
   const year = date.getFullYear();
   const month = date.getMonth();
   const firstDayOfMonth = new Date(year, month, 1);
@@ -14,9 +13,8 @@ const Calendar = ({ date }) => {
   const lastDayOfPrevMonth = new Date(year, month, 0);
   const daysInPrevMonth = lastDayOfPrevMonth.getDate();
 
-  // Determine the number of days to be shown from the next month
-  const totalDays = Math.ceil((daysInMonth + startingDayOfWeek) / 7) * 7;
-  const daysFromNextMonth = totalDays - (daysInMonth + startingDayOfWeek) + 7; // to show extra 1 week from next month
+  // Determine the total number of days to show in the calendar
+  const totalDays = daysInMonth + startingDayOfWeek;
 
   const days = [];
   // Push days from the previous month
@@ -35,56 +33,60 @@ const Calendar = ({ date }) => {
       year: year,
     });
   }
-  // Push days from the next month
-  for (let i = 1; i <= daysFromNextMonth; i++) {
+  // Push days from the next month to fill up to 6 rows
+  const remainingDays = 6 * 7 - days.length; // Total cells in 6 weeks
+  const nextMonth = month === 11 ? 0 : month + 1;
+  const nextYear = month === 11 ? year + 1 : year;
+  for (let i = 1; i <= remainingDays; i++) {
     days.push({
       day: i,
-      month: month === 11 ? 0 : month + 1, // Handle January
-      year: month === 11 ? year + 1 : year, // Handle January
+      month: nextMonth,
+      year: nextYear,
     });
   }
 
-  console.log("daysFromNextMonth: ", daysFromNextMonth);
+  const handleCellClick = (day) => {
+    console.log("Clicked on day:", day);
+    // Open modal or perform other actions here
+  };
 
   const weeks = [];
-  let week = [];
-  days.forEach((day, index) => {
-    if (index % 7 === 0 && index !== 0) {
-      weeks.push(week);
-      week = [];
-    }
-    week.push(
-      <td key={index} className="calendar-day">
-        {day.day}
-      </td>
-    );
-  });
-  weeks.push(week);
+  for (let i = 0; i < days.length; i += 7) {
+    weeks.push(days.slice(i, i + 7));
+  }
 
-  console.log("weeks: ", weeks);
+  console.log("weeks: ", weeks)
 
   return (
-    <div className="calendar">
-      {/* <h2>{`${date.toLocaleString("default", { month: "long" })} ${year}`}</h2> */}
-      <table>
-        <thead>
-          <tr>
-            <th>Sun</th>
-            <th>Mon</th>
-            <th>Tue</th>
-            <th>Wed</th>
-            <th>Thu</th>
-            <th>Fri</th>
-            <th>Sat</th>
-          </tr>
-        </thead>
-        <tbody>
-          {weeks.map((week, index) => (
-            <tr key={index}>{week}</tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <div className="calendar">
+        <table>
+          <thead>
+            <tr>
+              <th>Sun</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+              <th>Sat</th>
+            </tr>
+          </thead>
+          <tbody>
+            {weeks.map((week, index) => (
+              <tr key={index}>
+                {week.map((day, idx) => (
+                  <td key={idx} className="calendar-day" onClick={() => handleCellClick(day)}>
+                    {day.day}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <PopupModal />
+    </>
   );
 };
 
