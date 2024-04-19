@@ -7,6 +7,9 @@ import AddPropertyModal from "../../component/modal/addPropertyModal/AddProperty
 import { useSelector, useDispatch } from "react-redux";
 import { getUserDataActions } from "../../redux/actions";
 import Loader from "../../helper/Loader";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+
 const Dashboard = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -126,13 +129,45 @@ const Dashboard = () => {
                         <>
                           {createPropertiesName?.map((userCreate) => {
                             return (
-                              <div className="border py-2 d-flex justify-content-between text-white p-3">
-                                <div className="d-flex">
+                              <div className="">
+                                {/* <div className="d-flex">
                                   <div>image</div>
                                   <div className="ms-5">{userCreate}</div>
                                 </div>
-                                <div>2</div>
+                                <div>2</div> */}
+                                <div className="property_status">
+                                  <h3>Property Status </h3>
+                                  <div className="property_list">
+                                    <ul>
+                                      <li>
+                                        <div className="property_list_cnt">
+                                          <div className="property_cntleft">
+
+                                            <img src="https://hostbuddy.ai/wp-content/uploads/2024/04/503-1.png" alt="img" />
+                                            <div className="property_detail">
+                                              <h4>{userCreate}</h4>
+                                              <p>Los Angels </p>
+                                            </div>
+                                          </div>
+                                          <div className="chart-module">
+                                            <CircularProgressbar className="progressBar w-auto"
+                                              styles={buildStyles({
+                                                pathColor: "#146EF5",
+                                                textColor: '#146EF5',
+                                              },)}
+                                              value={100}
+                                              text={`${100}%`}
+                                            />
+                                          </div>
+                                        </div>
+
+
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
                               </div>
+
                             );
                           })}
                         </>

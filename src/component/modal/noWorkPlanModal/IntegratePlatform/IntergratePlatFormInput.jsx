@@ -7,13 +7,13 @@ import { addPMSIntegrationActions } from "../../../../redux/actions";
 import ToastHandle from "../../../../helper/ToastMessage";
 import { stateEmptyActions } from "../../../../redux/actions";
 import Loader from "../../../../helper/Loader";
-const IntergratePlatFormInput = ({ PmsIntegrationData,handleNoPlanClose }) => {
+const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
   const { type, data } = PmsIntegrationData ? PmsIntegrationData : [];
   const store = useSelector((state) => state);
   const integrationAddStatus =
     store?.pmsIntegrationAddReducer?.pmsIntegrationDataAdd?.status;
   const integrationLoading = store?.pmsIntegrationAddReducer?.loading;
-  const integrationAddMessage=store?.pmsIntegrationAddReducer?.pmsIntegrationDataAdd?.data?.message
+  const integrationAddMessage = store?.pmsIntegrationAddReducer?.pmsIntegrationDataAdd?.data?.message
 
   const dispatch = useDispatch();
   const {
@@ -62,14 +62,14 @@ const IntergratePlatFormInput = ({ PmsIntegrationData,handleNoPlanClose }) => {
           const capitalizedText = capitalizeFirstLetter(text);
           return (
             <>
-              <div className="col">
-                <div className="input_group">
+              <div className="col form-design">
+                <div className="input_group mb-3">
                   <label htmlFor="">
                     {capitalizedText === "Client_id"
                       ? "Client id"
                       : capitalizedText === "Api_key"
-                      ? "Api key"
-                      : capitalizedText}
+                        ? "Api key"
+                        : capitalizedText}
                   </label>
                   <input
                     type="text"
@@ -83,14 +83,14 @@ const IntergratePlatFormInput = ({ PmsIntegrationData,handleNoPlanClose }) => {
                         capitalizedText === "AccessToken"
                           ? "Please fill the value of AccessToken."
                           : capitalizedText === "RefreshToken"
-                          ? "Please fill the value of RefreshToken."
-                          : capitalizedText === "AgencyUid"
-                          ? "Please fill the value of AgencyUid."
-                          : capitalizedText === "Client_id"
-                          ? "Please fill the value of Client id."
-                          : capitalizedText === "Api_key"
-                          ? "Please fill the value of Api key."
-                          : "",
+                            ? "Please fill the value of RefreshToken."
+                            : capitalizedText === "AgencyUid"
+                              ? "Please fill the value of AgencyUid."
+                              : capitalizedText === "Client_id"
+                                ? "Please fill the value of Client id."
+                                : capitalizedText === "Api_key"
+                                  ? "Please fill the value of Api key."
+                                  : "",
                       ])}
                     </>
                   )}
@@ -99,7 +99,7 @@ const IntergratePlatFormInput = ({ PmsIntegrationData,handleNoPlanClose }) => {
             </>
           );
         })}
-        <div className=" text-center mt-3">
+        <div className=" text-center mt-4 form-design">
           <button
             className="btn btn-primary "
             disabled={integrationLoading ? true : false}

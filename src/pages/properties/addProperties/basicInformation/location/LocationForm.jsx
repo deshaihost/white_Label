@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { updateQuestionnaireActions } from "../../../../../redux/actions";
@@ -7,7 +7,14 @@ import {
   nameKey,
 } from "../../../../../helper/Authorized";
 import Loader from "../../../../../helper/Loader";
+import { Button, Modal } from "react-bootstrap";
 const LocationForm = () => {
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const getLocalStorageData = nameKey();
@@ -54,6 +61,28 @@ const LocationForm = () => {
   };
   return (
     <>
+      <Modal
+        size="md"
+        show={show} onHide={handleClose}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        className="contact-modal"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">Extra Note</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="form-design">
+            <label>Property Type</label>
+            <textarea className="form-control" name="" id="" cols="30" rows="10" placeholder="Enter note here..."></textarea>
+            <div className="d-flex justify-content-center mt-3">
+              <button className="mw-auto">
+                Add Note
+              </button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
       {!apiQuestionnaireLoading ? (
         <div>
           <form
@@ -66,47 +95,39 @@ const LocationForm = () => {
               }
             )}
           >
-            <input type="file" {...register("defultImage")} />
-            <div className="row">
-              <div className="col-12">
-                {locationFildInput?.map((item, index1) => {
-                  const selectOption = item?.options;
-                  return (
-                    <>
-                      {item?.question_type === "select" ? (
-                        <select
-                          class="form-select"
-                          aria-label="Default select example"
-                          {...register(`${item?.question_type}${index1}`)}
-                        >
-                          {selectOption?.map((options) => {
-                            return (
-                              <>
-                                <option value={options}>{options}</option>
-                              </>
-                            );
-                          })}
-                        </select>
-                      ) : (
-                        <>
-                          <div className="text-white">
-                            {item?.question_text}
-                          </div>
-                          <div className="input-container">
-                            <input
-                              type="text"
-                              {...register(`${item?.question_type}${index1}`)}
-                              placeholder={item?.placeholder_text}
-                            />
-                          </div>
-                        </>
-                      )}
-                    </>
-                  );
-                })}
-              </div>
+            {/* <input type="file" {...register("defultImage")} /> */}
+            <div>
+              <h3 className="text-white fw-bold mb-3 fs-4">Location</h3>
             </div>
-            <button>add</button>
+            <div className="row">
+              {locationFildInput?.slice(0, 8).map((item, index) => (
+                <div key={index} className={` mt-4 col-${index % 2 === 0 ? '6' : '6'}`}>
+                  {item.question_type === "select" ? (
+                    <>
+                      <label className="text-white">{item.question_text}<Button style={{ width: 'auto' }} onClick={handleShow} className="bg-none p-0 border-0 d-inline shadow-none">
+                        <svg className="ms-2" style={{ maxWidth: '16px' }} width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z" fill="#146EF5
+                           "></path>
+                        </svg>
+                      </Button></label>
+                      <select className="form-select form-control" {...register(`${item.question_type}${index}`)}>
+                        {item.options.map((option, optionIndex) => (
+                          <option key={optionIndex} value={option}>{option}</option>
+                        ))}
+                      </select>
+                    </>
+                  ) : (
+                    <div>
+                      <label className="text-white">{item.question_text}</label>
+                      <input type="text" className="form-control" {...register(`${item.question_type}${index}`)} placeholder={item.placeholder_text} />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="col-md-12 text-center">
+              <button className="mt-5">Add</button>
+            </div>
           </form>
         </div>
       ) : (

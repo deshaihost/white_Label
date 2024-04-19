@@ -160,6 +160,7 @@ const Properties = () => {
                 <div className="addproperty_links text-center">
                   <button
                     type="button"
+                    className="shadow-none border-0"
                     onClick={() => {
                       handleModelOpen("addPropertyOpen");
                     }}
@@ -173,6 +174,7 @@ const Properties = () => {
                     )}
                   </button>
                   <button
+                    className="shadow-none border-0"
                     type="button"
                     onClick={() => {
                       handleModelOpen("pmsIntegrationOpen");
@@ -181,6 +183,7 @@ const Properties = () => {
                     PMS Integration
                   </button>
                   <button
+                    className="shadow-none border-0"
                     type="button"
                     onClick={() => {
                       handleModelOpen("removeIntegrationsOpen");
@@ -191,10 +194,10 @@ const Properties = () => {
                 </div>
                 <div className="property_list">
                   <ul>
-                    <li className="not-found">
-                      <h4 className="text-center text-white">
+                    <li className="not-found px-0">
+                      <div className="">
                         <ListIntegrationProperties />
-                      </h4>
+                      </div>
                     </li>
                   </ul>
                 </div>

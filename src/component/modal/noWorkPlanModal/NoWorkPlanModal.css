@@ -1,0 +1,40 @@
+#integrate_form1 .custom_checkbox {
+  background: #000426 url(../../../public/img/hostfully_icon.png) no-repeat
+    right 25px center !important;
+  padding-right: 60px;
+}
+#integrate_form1 .custom_checkbox {
+  height: 74px;
+  border-radius: 20px;
+  border: 2px solid #146ef5;
+  background: linear-gradient(180deg, #000426 0%, #00031a 100%);
+  padding: 20px 22px;
+  padding-left: 67px;
+}
+#integrate_form1 .custom_checkbox .form-check-input {
+  border: 2px solid #146ef5;
+  background-color: #000426;
+  width: 28px;
+  height: 28px;
+  margin-left: -40px;
+  float: none;
+  display: inline-block;
+  vertical-align: middle;
+}
+#integrate_form1 .custom_checkbox .form-check-input:checked {
+  background: #146ef5;
+  border: 4px solid #000420;
+  box-shadow: 0 0 0 2px #146ef5 !important;
+  width: 28px;
+  height: 28px;
+}
+#integrate_form1 .custom_checkbox label {
+  color: #fff;
+  text-align: left;
+  font-size: 18px;
+  padding-left: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin: 0 !important;
+}

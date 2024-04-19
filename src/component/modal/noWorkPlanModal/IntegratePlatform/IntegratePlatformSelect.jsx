@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import IntergratePlatFormInput from "./IntergratePlatFormInput";
 import { useSelector, useDispatch } from "react-redux";
-const IntegratePlatformSelect = ({handleNoPlanClose}) => {
+const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const pmsIntegrationData =
@@ -43,53 +43,51 @@ const IntegratePlatformSelect = ({handleNoPlanClose}) => {
         <IntergratePlatFormInput PmsIntegrationData={pmsIntegrationInputGet} handleNoPlanClose={handleNoPlanClose} />
       ) : (
         <>
-          <div className="row">
-            <div className="col-12 ">
-              <div className="row">
-                <div className="col-12 text-center my-3">
-                  <div class="form-check ">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault1"
-                      value="option1"
-                      checked={checkBox?.cloudbeds}
-                      onClick={() => {
-                        onchangeHandlePms("cloudbeds", cloudbeds);
-                      }}
-                    />
-                    <label class="form-check-label" for="flexRadioDefault1">
-                      Cloudbeds
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault2"
-                      value="option2"
-                      checked={checkBox?.hostfully}
-                      onClick={() => {
-                        onchangeHandlePms("hostfully", hostfully);
-                      }}
-                    />
-                    <label class="form-check-label" for="flexRadioDefault2">
-                      Hostfully
-                    </label>
-                  </div>
+          <div id="integrate_form1">
+            <div className="row form-design">
+              <div className="col-12 mt-3">
+                <div class="form-check custom_checkbox mb-3">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault1"
+                    value="option1"
+                    checked={checkBox?.cloudbeds}
+                    onClick={() => {
+                      onchangeHandlePms("cloudbeds", cloudbeds);
+                    }}
+                  />
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    Cloudbeds
+                  </label>
+                </div>
+                <div class="form-check custom_checkbox mb-3">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault2"
+                    value="option2"
+                    checked={checkBox?.hostfully}
+                    onClick={() => {
+                      onchangeHandlePms("hostfully", hostfully);
+                    }}
+                  />
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Hostfully
+                  </label>
                 </div>
               </div>
-              <div className="row">
-                <div className="col-12 text-center">
-                  <button
-                    className="btn btn-primary px-5"
-                    onClick={continueHandleButton}
-                  >
-                    Continue
-                  </button>
-                </div>
+            </div>
+            <div className="row form-design mt-1">
+              <div className="col-12 text-center">
+                <button
+                  className="btn btn-primary px-5"
+                  onClick={continueHandleButton}
+                >
+                  Continue
+                </button>
               </div>
             </div>
           </div>

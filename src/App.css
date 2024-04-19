@@ -69,13 +69,14 @@ img {
   max-width: 100%;
 }
 
-ul, li {
-    list-style-type: none;
+ul,
+li {
+  list-style-type: none;
 }
 
 input {
-    outline: none;
-    box-shadow: none !important;
+  outline: none;
+  box-shadow: none !important;
 }
 
 textarea {
@@ -86,7 +87,7 @@ textarea::-webkit-input-placeholder {
   color: #fff;
 }
 input:-moz-placeholder,
-textarea:-moz-placeholder{
+textarea:-moz-placeholder {
   color: #fff !important;
 }
 input::-moz-placeholder {
@@ -111,11 +112,11 @@ input:-webkit-autofill {
 input[type="checkbox"] {
   background: #000212;
 }
-.form-switch .form-check-input{
+.form-switch .form-check-input {
   background-repeat: no-repeat !important;
 }
-.bg-none{
-background: transparent !important;
+.bg-none {
+  background: transparent !important;
 }
 
 .link-btn {
@@ -220,7 +221,8 @@ background: transparent !important;
   justify-content: center !important;
 }
 
-.modal-header h5, .modal-title.h4 {
+.modal-header h5,
+.modal-title.h4 {
   color: #fff;
   font-family: "Samsung Sharp Sans Bold";
   font-size: 20px;
@@ -252,19 +254,19 @@ background: transparent !important;
 }
 
 .upgrade-plan-box p {
-    color: #FFF;
-    text-align: center;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    margin: 50px 0 20px;
+  color: #fff;
+  text-align: center;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin: 50px 0 20px;
 }
 
 .addition_des {
-  color: #E6E6E6;
-  font-family: 'Samsung Sharp Sans Regular';
+  color: #e6e6e6;
+  font-family: "Samsung Sharp Sans Regular";
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
@@ -310,17 +312,17 @@ background: transparent !important;
   pointer-events: none;
   border: 1px solid transparent;
   transform-origin: 0 0;
-  transition: opacity .1s ease-in-out, transform .1s ease-in-out;
+  transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
   padding: 16px 20px;
 }
 
-.contact-modal .input-group>.form-control:focus~label {
-  opacity: .65;
-  transform: scale(.85) translateY(-0.5rem) translateX(0.15rem);
+.contact-modal .input-group > .form-control:focus ~ label {
+  opacity: 0.65;
+  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
   z-index: 3;
 }
 
-.contact-modal .input-group>.form-control:focus {
+.contact-modal .input-group > .form-control:focus {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
@@ -329,7 +331,7 @@ background: transparent !important;
   border-radius: 20px !important;
   height: 120px !important;
 }
-
+.form-design textarea.form-control,
 textarea.form-control {
   border-radius: 20px !important;
   height: 120px !important;
@@ -337,25 +339,27 @@ textarea.form-control {
 }
 
 .bg_theme_btn {
-    color: #FFF;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    border-radius: 160px;
-    background: #146EF5;
-    display: inline-block;
-    padding: 13px 40px;
-    border: 1px solid #146EF5;
+  color: #fff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border-radius: 160px;
+  background: #146ef5;
+  display: inline-block;
+  padding: 13px 40px;
+  border: 1px solid #146ef5;
 }
 
 .upgrade-plan-box .bg_theme_btn {
-    width: 100%;
-    max-width: 320px;
+  width: 100%;
+  max-width: 320px;
 }
 
-.upgrade-plan-box .form-design label, .modal-content label {
+.upgrade-plan-box .form-design label,
+.modal-content label,
+.form-design label {
   color: #fff;
   font-family: "Samsung Sharp Sans Medium";
   font-size: 15px;
@@ -363,11 +367,19 @@ textarea.form-control {
   font-weight: 500;
   line-height: 150%;
 }
-
-.form-control, .form-design .form-control, .modal-content .form-control {
+.form-design label span {
+  color: #999;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.form-control,
+.form-design .form-control,
+.modal-content .form-control {
   border-radius: 80px !important;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  background: #0a1a44;
+  background: #0a1a44 !important;
   color: #fff;
   font-family: "Samsung Sharp Sans Medium";
   font-size: 15px;
@@ -380,7 +392,56 @@ textarea.form-control {
   height: auto;
   max-width: 100%;
 }
-
+.form-design .form-control[type="file"]::file-selector-button {
+  padding: 8px 10px;
+  border: 0px;
+  border-radius: 6px;
+  background-color: #146ef5 !important;
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: 5px;
+}
+.form-design .form-control[type="file"] {
+  color: #4d5d87;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.form-design .custom_checkbox label {
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  margin-left: 10px;
+  line-height: normal;
+}
+.form-design .custom_checkbox {
+  padding: 18px;
+  padding-left: 40px;
+  height: auto;
+  border-radius: 80px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #0a1a44;
+}
+.form-design .custom_checkbox .form-check-input {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #747474;
+  margin-left: -22px;
+  margin-top: 0 !important;
+  background: #0a1a44;
+}
+.form-design .custom_checkbox .form-check-input:checked {
+  background: #146ef5;
+  box-shadow: 0 0 0 2px #146ef5 !important;
+  width: 22px;
+  height: 22px;
+  border: 3px solid #0a1a44;
+}
 .pricing_range {
   -webkit-appearance: none;
   width: 100%;
@@ -418,6 +479,11 @@ textarea.form-control {
   border: 1px solid #146ef5;
   width: 100%;
   max-width: 320px;
+  transition: all 0.5s ease-in-out;
+}
+.form-design button:hover {
+  background: none;
+  color: #146ef5;
 }
 
 .custom_switch {
@@ -511,14 +577,15 @@ textarea.form-control {
 }
 
 .expendable_search input[type="search"]:focus {
-    width: 200px;
+  width: 200px;
 }
 
 .form-control:focus {
   color: #fff !important;
 }
 
-.show_password_fields, .update_user_info {
+.show_password_fields,
+.update_user_info {
   width: auto !important;
   margin: 15px 5px !important;
 }
