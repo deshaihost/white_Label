@@ -33,18 +33,18 @@ const SupportingDocForm = () => {
   const supportingStatus = suppertingInput?.updateDoc
     ? store?.supportingDocumentPostReducer?.supportingDoc?.status
     : suppertingInput?.urlToWebPage
-    ? store?.supportingUrlPostReducer?.supportingUrl?.status
-    : "";
+      ? store?.supportingUrlPostReducer?.supportingUrl?.status
+      : "";
   const supportingUrlMessage = suppertingInput?.updateDoc
     ? store?.supportingDocumentPostReducer?.supportingDoc?.data?.error
     : suppertingInput?.urlToWebPage
-    ? store?.supportingUrlPostReducer?.supportingUrl?.data?.error
-    : "";
+      ? store?.supportingUrlPostReducer?.supportingUrl?.data?.error
+      : "";
   const supportingLoading = suppertingInput?.updateDoc
     ? store?.supportingDocumentPostReducer?.loading
     : suppertingInput?.urlToWebPage
-    ? store?.supportingUrlPostReducer?.loading
-    : "";
+      ? store?.supportingUrlPostReducer?.loading
+      : "";
 
   const {
     register,
@@ -82,16 +82,17 @@ const SupportingDocForm = () => {
   return (
     <div>
       <div className="row">
-        <div className="col-12 border p-5">
+        <div className="col-12 form-design">
           <div>
-            <h5 className="text-white">
-              Choose one of the method as supporting doc Upload documents
-              Previous Documents
+            <h5 className="text-white fw-bold mb-3 fs-4">
+              Choose one of the method as supporting doc
+              {/* Upload documents
+              Previous Documents */}
             </h5>
           </div>
           <div className="row">
-            <div className="col-3">
-              <div class="form-check">
+            <div className="col-4 mt-3">
+              <div class="form-check custom_checkbox">
                 <input
                   class="form-check-input"
                   type="radio"
@@ -106,9 +107,19 @@ const SupportingDocForm = () => {
                   Upload documents
                 </label>
               </div>
-              <div class="form-check">
+              <div class="old-docs mt-2">
+                <a href="javascript:void(0);">
+                  <svg width="17" height="20" viewBox="0 0 17 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.6875 2H2.125V18H14.875V5H11.6875V2ZM2.125 0H12.75L17 4V18C17 18.5304 16.7761 19.0391 16.3776 19.4142C15.9791 19.7893 15.4386 20 14.875 20H2.125C1.56141 20 1.02091 19.7893 0.622398 19.4142C0.223883 19.0391 0 18.5304 0 18V2C0 1.46957 0.223883 0.960859 0.622398 0.585786C1.02091 0.210714 1.56141 0 2.125 0ZM4.25 9H12.75V11H4.25V9ZM4.25 13H12.75V15H4.25V13Z" fill="#146EF5"></path>
+                  </svg>
+                  Previous Documents
+                </a>
+              </div>
+            </div>
+            <div className="col-4 mt-3">
+              <div class="form-check custom_checkbox">
                 <input
-                  class="form-check-input"
+                  class="form-check-input "
                   type="radio"
                   name="flexRadioDefault"
                   id="flexRadioDefault2"
@@ -121,18 +132,20 @@ const SupportingDocForm = () => {
                   URLs to Web Page
                 </label>
               </div>
-              <div class="form-check">
+            </div>
+            <div className="col-4 mt-3">
+              <div class="form-check custom_checkbox">
                 <input
                   class="form-check-input"
                   type="radio"
                   name="flexRadioDefault"
-                  id="flexRadioDefault2"
+                  id="flexRadioDefault3"
                   onClick={() => {
                     suppertingOnclick(pmsIntegrationN);
                   }}
                   checked={suppertingInput?.pmsIntegration}
                 />
-                <label class="form-check-label" for="flexRadioDefault2">
+                <label class="form-check-label" for="flexRadioDefault3">
                   PMS Integration
                 </label>
               </div>
@@ -148,21 +161,21 @@ const SupportingDocForm = () => {
               )}
             >
               {suppertingInput?.updateDoc && (
-                <div className="col-10 mt-5 ">
-                  <div className="text-white">
-                    Supporting Documents (.txt, .docx, .pdf supported)
-                  </div>
-                  <div className="input-container">
-                    <input type="file" {...register("docx")} />
+                <div className="col-12 mt-4 ">
+                  <label className="text-white">
+                    Supporting Documents <span>(.txt, .docx, .pdf supported)</span>
+                  </label>
+                  <div className="">
+                    <input type="file" className="form-control" {...register("docx")} />
                   </div>
                 </div>
               )}
               {suppertingInput?.urlToWebPage && (
-                <div className="col-10 mt-5 ">
-                  <div className="text-white">Enter URL</div>
-                  <div className="input-container">
+                <div className="col-12 mt-4 ">
+                  <label className="text-white">Enter URL</label>
+                  <div className="">
                     <input
-                      className="bg-dark"
+                      className="bg-dark form-control"
                       type="text"
                       {...register("url")}
                       placeholder="Eg.example.com"
@@ -171,11 +184,11 @@ const SupportingDocForm = () => {
                 </div>
               )}
               {suppertingInput?.pmsIntegration && (
-                <div className="col-10 mt-5 ">
-                  <div className="text-white">PMS Integration</div>
-                  <div className="input-container">
+                <div className="col-12 mt-4 ">
+                  <label className="text-white">PMS Integration</label>
+                  <div className="">
                     <input
-                      className="bg-dark"
+                      className="bg-dark form-control"
                       disabled
                       value="Cloudbeds"
                       type="text"
@@ -183,10 +196,12 @@ const SupportingDocForm = () => {
                   </div>
                 </div>
               )}
-              <button className="btn btn-primary mt-5">
-                {" "}
-                {!supportingLoading ? "save & Next" : <Loader />}
-              </button>
+              <div className="col-lg-12 text-center">
+                <button className="btn btn-primary mt-5">
+                  {" "}
+                  {!supportingLoading ? "Save & Next" : <Loader />}
+                </button>
+              </div>
             </form>
           </div>
         </div>

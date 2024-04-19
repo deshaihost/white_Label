@@ -65,10 +65,10 @@ const BacisInformatioForm = () => {
   return (
     <div>
       <div>
-        <h3 className="text-white">Basic Information</h3>
+        <h3 className="text-white fw-bold mb-3 fs-4">Basic Information</h3>
       </div>
       <div className="row">
-        <div className="col-4 mx-auto">
+        <div className="col-12 mx-auto form-design">
           <form
             onSubmit={handleSubmit(
               (data) => {
@@ -79,28 +79,37 @@ const BacisInformatioForm = () => {
               }
             )}
           >
-            <div className="text-white">Property Name</div>
-            <div className="input-container">
-              <input
-                type="text"
-                {...register("propertyName", { required: true })}
-                placeholder="eg. smith villa"
-              />
-              {errors.propertyName?.type === "required" && (
-                <>{ErrorMessageShow("Please enter property name.")}</>
-              )}
+            <div className="row mt-2">
+              <div className="col-md-6">
+                <label className="text-white">Property Name</label>
+                <div className="">
+                  <input
+                    className="form-control"
+                    type="text"
+                    {...register("propertyName", { required: true })}
+                    placeholder="eg. smith villa"
+                  />
+                  {errors.propertyName?.type === "required" && (
+                    <>{ErrorMessageShow("Please enter property name.")}</>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6">
+                <label className="text-white">
+                  {" "}
+                  Thumbnail Photo <span>(.png, .jpg, .jpeg supported)</span>
+                </label>
+                <div className="">
+                  <input className="form-control" type="file" {...register("files")} placeholder="" />
+                </div>
+              </div>
             </div>
-            <div className="text-white mt-3">
-              {" "}
-              Thumbnail Photo (.png, .jpg, .jpeg supported)
-            </div>
-            <div className="input-container">
-              <input type="file" {...register("files")} placeholder="" />
-            </div>
-            <div className="input-container d-flex justify-content-center">
-              <button disabled={propertiesAddLoading ? true : false}>
-                {!propertiesAddLoading ? <>Save & Next</> : <Loader />}
-              </button>
+            <div className="col-md-12 mt-5">
+              <div className="d-flex justify-content-center">
+                <button className="mw-auto" disabled={propertiesAddLoading ? true : false}>
+                  {!propertiesAddLoading ? <>Save & Next</> : <Loader />}
+                </button>
+              </div>
             </div>
           </form>
           {locationUrl !== undefined && <LocationForm />}

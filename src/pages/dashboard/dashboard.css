@@ -1,235 +1,297 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
 .account-main {
-    padding: 74px 0;
+  padding: 74px 0;
 }
 
 .banner-heading {
-    max-width: 753px;
-    margin: 0 auto 45px;
-    text-align: center;
+  max-width: 753px;
+  margin: 0 auto 45px;
+  text-align: center;
 }
 
 .account-container {
-    height: 100%;
-    border-radius: 30px;
-    border: 1px solid #2C389E;
-    background: #000212;
+  height: 100%;
+  border-radius: 30px;
+  border: 1px solid #2c389e;
+  background: #000212;
 }
 
 .account-container .account_heading {
-    padding: 22px 40px;
-    border-bottom: 1px solid #2C389E;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  padding: 22px 40px;
+  border-bottom: 1px solid #2c389e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .account-container > div:not(:last-child) {
-    border-bottom: 1px solid #2C389E;
-    padding: 22px 40px;
+  border-bottom: 1px solid #2c389e;
+  padding: 22px 40px;
 }
 
 .account-container .account_heading h3 {
-    color: #146EF5;
-    text-align: left;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 150%;
+  color: #146ef5;
+  text-align: left;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
 }
 
 .account-container .account-content {
-    padding: 30px 40px;
+  padding: 30px 40px;
 }
 
 .account-container .account-content .account-box {
-    border-radius: 15px;
-    background: #020D29;
-    padding: 20px;
-    height: 100%;
+  border-radius: 15px;
+  background: #020d29;
+  padding: 20px;
+  height: 100%;
 }
 
 .account-container .account-content .account-box svg {
-    width: 34px;
-    height: 34px;
-    background: rgba(20, 110, 245, 0.20);
-    border-radius: 7px;
-    padding: 8px;
-    margin-bottom: 12px;
+  width: 34px;
+  height: 34px;
+  background: rgba(20, 110, 245, 0.2);
+  border-radius: 7px;
+  padding: 8px;
+  margin-bottom: 12px;
 }
 
 .account-container .account-content .account-box h4 {
-    color: #146EF5;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    text-transform: uppercase;
-    margin-bottom: 7px;
+  color: #146ef5;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  margin-bottom: 7px;
 }
 
 .account-container .account-content .account-box p {
-    color: #CDCDCD;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+  color: #cdcdcd;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .account-container .account-content > div:not(:last-child) {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .account-container .account-content .property-status {
-    border-radius: 15px;
-    border: 1px solid #2C389E;
-    background: #000212;
+  border-radius: 15px;
+  border: 1px solid #2c389e;
+  background: #000212;
 }
 
 .account-container .account-content .property-status h3 {
-    color: #CDCDCD;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    padding: 20px 20px 18px;
-    border-bottom: 1px solid #2C389E;
+  color: #cdcdcd;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  padding: 20px 20px 18px;
+  border-bottom: 1px solid #2c389e;
 }
 
 .account-container .account-content .property-status li {
-    padding: 20px;
+  padding: 20px;
 }
 
 .account-container .account-content .property-status li button {
-    color: #FFF;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    border-radius: 160px;
-    background: #146EF5;
-    display: inline-block;
-    padding: 13px 40px;
-    border: 1px solid #146EF5;
-    padding: 11px 24px;
-    margin: 12px;
-    font-size: 15px;
+  color: #fff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border-radius: 160px;
+  background: #146ef5;
+  display: inline-block;
+  padding: 13px 40px;
+  border: 1px solid #146ef5;
+  padding: 11px 24px;
+  margin: 12px;
+  font-size: 15px;
 }
 
 .account-container .account-content .get-started {
-    border-radius: 15px;
-    border: 1px solid #2C389E;
-    background: #000426;
-    padding: 30px 16px;
-    text-align: center;
+  border-radius: 15px;
+  border: 1px solid #2c389e;
+  background: #000426;
+  padding: 30px 16px;
+  text-align: center;
 }
 
 .account-container .account-content .get-started img {
-    margin: 0 0 20px;
+  margin: 0 0 20px;
 }
 
 .account-container .account-content .get-started p {
-    color: #CCC;
-    text-align: center;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 130%;
-    margin-bottom: 20px;
+  color: #ccc;
+  text-align: center;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  margin-bottom: 20px;
 }
 
 .account-container .account-content .get-started a {
-    color: #146EF5;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    text-decoration-line: underline;
+  color: #146ef5;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-decoration-line: underline;
 }
-
+.property_status {
+  border-radius: 15px;
+  border: 1px solid #2c389e;
+  background: #000212;
+}
+.property_status h3 {
+  color: #cdcdcd;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  padding: 20px 20px 18px;
+  border-bottom: 1px solid #2c389e;
+}
+.property_list_cnt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.property_cntleft {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.property_list > ul > li {
+  padding: 20px;
+}
+.property_cntleft img {
+  width: 54px;
+  height: 54px;
+  border-radius: 7.2px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+.property_cntleft h4 {
+  color: #fff;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  width: 100%;
+}
+.property_cntleft p {
+  color: #ccc;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  width: 100%;
+}
 @media only screen and (max-width: 1199px) {
-    .account-container {
-        border-radius: 10px;
-    }
+  .account-container {
+    border-radius: 10px;
+  }
 
-    .account-container > div:not(:last-child) {
-        padding: 18px 20px;
-    }
+  .account-container > div:not(:last-child) {
+    padding: 18px 20px;
+  }
 
-    .account-container .account_heading h3 {
-        font-size: 18px;
-    }
+  .account-container .account_heading h3 {
+    font-size: 18px;
+  }
 
-    .account-container .account-content {
-        padding: 25px 20px;
-    }
+  .account-container .account-content {
+    padding: 25px 20px;
+  }
 
-    .account-container .account-content .account-box {
-        padding: 15px;
-        border-radius: 10px;
-        height: 100%;
-    }
+  .account-container .account-content .account-box {
+    padding: 15px;
+    border-radius: 10px;
+    height: 100%;
+  }
 
-    .account-container .account-content .row > div:not(:last-child) .account-box {
-        height: auto;
-        margin-bottom: 20px;
-    }
+  .account-container .account-content .row > div:not(:last-child) .account-box {
+    height: auto;
+    margin-bottom: 20px;
+  }
 
-    .account-container .account-content .property-status li button {
-        font-size: 15px;
-    }
+  .account-container .account-content .property-status li button {
+    font-size: 15px;
+  }
 
-    .account-container .account-content .get-started {
-        padding: 15px;
-    }
+  .account-container .account-content .get-started {
+    padding: 15px;
+  }
 
-    .account-main {
-        padding: 40px 0;
-    }
+  .account-main {
+    padding: 40px 0;
+  }
 }
 
 @media only screen and (max-width: 991px) {
-    .account-container .account-content .get-started {
-        margin-top: 20px;
-    }
+  .account-container .account-content .get-started {
+    margin-top: 20px;
+  }
 
-    .banner-heading {
-        margin-bottom: 25px;
-    }
+  .banner-heading {
+    margin-bottom: 25px;
+  }
 }
 
 @media only screen and (max-width: 767px) {
-    .account-container > div:not(:last-child),
-    .account-container .account-content {
-        padding: 15px;
-    }
+  .account-container > div:not(:last-child),
+  .account-container .account-content {
+    padding: 15px;
+  }
 
-    .account-container .account_heading h3 {
-        font-size: 17px;
-    }
+  .account-container .account_heading h3 {
+    font-size: 17px;
+  }
 
-    .account-container .account-content .row > div:not(:last-child) .account-box {
-        margin-bottom: 15px;
-    }
+  .account-container .account-content .row > div:not(:last-child) .account-box {
+    margin-bottom: 15px;
+  }
 
-    .account-container .account-content .account-box h4 {
-        font-size: 20px;
-    }
+  .account-container .account-content .account-box h4 {
+    font-size: 20px;
+  }
 
-    .account-container .account-content .property-status li {
-        padding: 15px;
-    }
+  .account-container .account-content .property-status li {
+    padding: 15px;
+  }
 
-    .account-container .account-content .property-status li button {
-        padding: 10px 30px;
-    }
+  .account-container .account-content .property-status li button {
+    padding: 10px 30px;
+  }
+  .property_list_cnt {
+    flex-wrap: wrap;
+  }
+  .property_list_cnt > div {
+    width: 100%;
+    text-align: left;
+    justify-content: left;
+  }
+  .property_cntleft {
+    margin-bottom: 15px;
+  }
 }

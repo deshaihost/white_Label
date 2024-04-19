@@ -1,0 +1,150 @@
+.form_top_steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  text-align: center;
+  justify-content: center;
+  margin: 50px 0;
+}
+.form_top_steps > div {
+  cursor: pointer;
+}
+.form_top_steps span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border: 2px solid #a0a0a0;
+  background: rgba(160, 160, 160, 0.2);
+  border-radius: 100%;
+  margin: auto;
+  margin-bottom: 48px;
+}
+.form_top_steps svg {
+  max-width: 45px;
+  width: 100%;
+}
+.form_top_steps svg path {
+  fill: #a0a0a0 !important;
+}
+.form_top_steps h2 {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  color: #a0a0a0;
+}
+.form_top_steps .text-primary h2 {
+  color: #146ef5;
+}
+.form_top_steps .text-primary span {
+  border-color: #146ef5;
+  background: rgba(20, 110, 245, 0.2);
+}
+
+.form_top_steps .text-primary.active span {
+  transform-origin: top center;
+  transform: scale(1.3);
+}
+.form_top_steps .text-primary svg path {
+  fill: #146ef5 !important;
+  stroke: #146ef5;
+}
+.old-docs a {
+  color: #146ef5;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+.old-docs a svg {
+  margin-right: 5px;
+  max-height: 17px;
+}
+ul.amenties-list {
+  padding: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+ul.amenties-list .amenties-list-item .form-checkbox {
+  display: inline-flex;
+  border-radius: 160px;
+  background: transparent;
+  padding: 13px 20px 13px 20px;
+  color: rgb(255 255 255 / 60%);
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+  border: 1px solid rgb(255 255 255 / 30%);
+  align-items: center;
+  gap: 10px;
+}
+ul.amenties-list .amenties-list-item .form-checkbox.active {
+  color: #fff;
+  background: #146ef5;
+  border: 1px solid #146ef5;
+  align-items: center;
+  gap: 10px;
+}
+ul.amenties-list
+  .amenties-list-item
+  .form-checkbox.active
+  input[type="checkbox"] {
+  border: 1px solid #fff;
+}
+ul.amenties-list .amenties-list-item .form-checkbox input[type="checkbox"] {
+  border: 1px solid rgb(255 255 255 / 30%);
+  margin: 0;
+  width: 20px;
+  height: 20px;
+}
+ul.amenties-list .amenties-list-item .form-checkbox.active button svg path {
+  fill: #fff;
+}
+
+ul.amenties-list .amenties-list-item .form-checkbox button svg {
+  max-width: 12px;
+}
+@media screen and (max-width: 991px) {
+  .form_top_steps span {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 35px;
+  }
+  .form_top_steps h2 {
+    font-size: 14px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .form_top_steps {
+    grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+    row-gap: 30px;
+    justify-content: center;
+    margin: 50px 0;
+  }
+}
+@media screen and (max-width: 575px) {
+  ul.amenties-list .amenties-list-item .form-checkbox {
+    font-size: 13px;
+  }
+  .form_top_steps h2 {
+    font-size: 13px;
+  }
+  .form_top_steps span {
+    margin-bottom: 20px;
+  }
+  ul.amenties-list .amenties-list-item .form-checkbox input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+}
+}

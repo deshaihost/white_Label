@@ -16,21 +16,21 @@ const ListingDetailsForm = () => {
   return (
     <>
       {!apiQuestionnaireLoading ? (
-        <div>
-          <h1 className="text-white">Booking</h1>
-          <div className="row border p-5 my-3">
+        <div className="form-design">
+          <h1 className="text-white mb-3 fs-4 fw-bold">Booking</h1>
+          <div className="row my-3">
             {Booking?.map((booking) => {
               const selectOption = booking?.options;
               return (
                 <>
                   {booking?.question_type === "select" ? (
                     <>
-                      <div className="col-4">
-                        <div className="text-white">
+                      <div className="col-6 mt-3">
+                        <label className="text-white">
                           {booking?.question_text}
-                        </div>
+                        </label>
                         <select
-                          class="form-select"
+                          class="form-select form-control"
                           aria-label="Default select example"
                         >
                           {selectOption?.map((options) => {
@@ -44,11 +44,11 @@ const ListingDetailsForm = () => {
                       </div>
                     </>
                   ) : (
-                    <div className="col-4">
-                      <div className="text-white">{booking?.question_text}</div>
-                      <div className="input-container">
+                    <div className="col-6 mt-3">
+                      <label className="text-white">{booking?.question_text}</label>
+                      <div className="">
                         <input
-                          className="bg-dark"
+                          className="bg-dark form-control"
                           type="text"
                           // {...register(`${item?.question_type}${index1}`)}
                           placeholder={booking?.placeholder_text}
@@ -61,18 +61,18 @@ const ListingDetailsForm = () => {
             })}
           </div>
 
-          <h1 className="text-white">Check-in and Check-out</h1>
-          <div className="row border p-5 my-3">
+          <h1 className="text-white mb-3 fs-4 fw-bold mt-5">Check-in and Check-out</h1>
+          <div className="row my-3">
             {checkInandCheckout?.map((checkInandCheckout) => {
               return (
                 <>
-                  <div className="col-4">
-                    <div className="text-white">
+                  <div className="col-6 mt-3">
+                    <label className="text-white">
                       {checkInandCheckout?.question_text}
-                    </div>
-                    <div className="input-container">
+                    </label>
+                    <div className="">
                       <input
-                        className="bg-dark"
+                        className="bg-dark form-control"
                         type="text"
                         placeholder={checkInandCheckout?.placeholder_text}
                       />
@@ -83,18 +83,18 @@ const ListingDetailsForm = () => {
             })}
           </div>
 
-          <h1 className="text-white">Details</h1>
-          <div className="row border p-5 my-3">
+          <h1 className="text-white mb-3 fs-4 fw-bold mt-5">Details</h1>
+          <div className="row my-3">
             {Details?.map((checkInandCheckout) => {
               return (
                 <>
-                  <div className="col-4">
-                    <div className="text-white">
+                  <div className="col-6 mt-3">
+                    <label className="text-white">
                       {checkInandCheckout?.question_text}
-                    </div>
-                    <div className="input-container">
+                    </label>
+                    <div className="">
                       <input
-                        className="bg-dark"
+                        className="bg-dark form-control"
                         type="text"
                         placeholder={checkInandCheckout?.placeholder_text}
                       />

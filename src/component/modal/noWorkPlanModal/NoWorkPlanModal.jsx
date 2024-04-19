@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import './NoWorkPlanModal.css'
 import Modal from "react-bootstrap/Modal";
 import NoPlanImg from "../../../public/img/503.png";
 import { Link } from "react-router-dom";
@@ -19,21 +20,19 @@ function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
   return (
     <Modal
       show={showNoPlan}
-      size="lg"
+      size="md"
       onHide={() => handleNoPlanClose("pmsIntegrationClose")}
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
       <Modal.Body>
-        <div className="row">
-          <div className="6">
-            <h3 className="text-white text-center">Integrate Platform</h3>
-          </div>
-        </div>
+
+        <h3 className="text-white text-center mb-4 fw-bold fs-4">Integrate Platform</h3>
+        <hr />
         {!pmsIntegrationLoading ? (
           <>
             {checkPmsNotEmpty !== "" ? (
-              <IntegratePlatformSelect handleNoPlanClose={handleNoPlanClose}/>
+              <IntegratePlatformSelect handleNoPlanClose={handleNoPlanClose} />
             ) : (
               <div className="upgrade-plan-box">
                 <img src={NoPlanImg} alt="no-plan" />
