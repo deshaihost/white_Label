@@ -10,7 +10,7 @@ const Calendar = ({ scheduleData, date }) => {
     return <div>Loading...</div>; // Or display some loading indicator
   }
 
-  const specificDates = scheduleData.specific_dates;
+  const specificDates = scheduleData?.specific_dates;
 
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -66,7 +66,7 @@ const Calendar = ({ scheduleData, date }) => {
   return (
     <>
       <div className="calendar">
-        <table>
+        <table className="w-100">
           <thead>
             <tr className="text-light text-center">
               <th>Sun</th>
@@ -100,12 +100,20 @@ const Calendar = ({ scheduleData, date }) => {
 
                   let status = "";
                   if (specificDates) {
-                    specificDates.on.forEach((onDate, index) => {
+                    specificDates?.on?.forEach((onDate, index) => {
                       const onDateTime = new Date(onDate);
                       const offDateTime = new Date(specificDates.on[index]);
-                      if (onDateTime.toDateString() === dayDate.toDateString()) {
-                        const startTime = onDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                        const endTime = offDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                      if (
+                        onDateTime.toDateString() === dayDate.toDateString()
+                      ) {
+                        const startTime = onDateTime.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
+                        const endTime = offDateTime.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
                         status = (
                           <div className="bg-success">
                             <div>Status: On</div>
@@ -122,16 +130,13 @@ const Calendar = ({ scheduleData, date }) => {
                       className={classNames}
                       onClick={() => handleCellClick(day)}
                     >
-                      <div className="row">
-                        <div className="col">
-                          <div
-                            style={{ minHeight: "100px", minWidth: "100px" }}
-                            className="border pt-0 ps-0 d-flex flex-column justify-content-between"
-                          >
+                      <div className="">
+                        <div className="">
+                          <div className="pt-0 ps-0 d-flex flex-column justify-content-between">
                             <div className="d-flex flex-column justify-content-between">
                               {status}
                             </div>
-                            <div className="text-end text-light">{day.day}</div>
+                            <div className="text-end date-text">{day.day}</div>
                           </div>
                         </div>
                       </div>
@@ -156,4 +161,3 @@ const Calendar = ({ scheduleData, date }) => {
 };
 
 export default Calendar;
-

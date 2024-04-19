@@ -5,6 +5,7 @@ import Calendar from "./Calender";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import ScheduleCalender from "../schedule/ScheduleCalender";
 import axios from "axios";
+import { Button } from "react-bootstrap";
 
 const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
   const [monthButton, setMonthButton] = useState(true);
@@ -64,9 +65,8 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
           config
         );
 
-        setCalendarSchedule(()=> response?.data?.schedule)
-        console.log("API Response: ", response.data.schedule)
-
+        setCalendarSchedule(() => response?.data?.schedule);
+        console.log("API Response: ", response.data.schedule);
 
         // if (response.status === 200) {
         //     dispatch({
@@ -99,27 +99,38 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
       <Modal
         show={showCalender}
         size="xl"
+        className="custom-calendar-modal"
         onHide={handleCalenderClose}
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Body>
+        <Modal.Body className="p-0">
           <div>
-            <div className="row">
+            <div className="">
               <div
                 className="d-flex justify-content-between px-3 calenderHeader"
                 style={{ fontSize: "14px", color: "#fff" }}
               >
                 <div className="d-flex justify-between">
-                  <FiChevronLeft onClick={handlePrevMonth} />
-                  <FiChevronRight onClick={handleNextMonth} />
+                  <Button
+                    className="bg-none border-0 shadow-none fs-3"
+                    onClick={handlePrevMonth}
+                  >
+                    <FiChevronLeft />
+                  </Button>
+                  <Button
+                    onClick={handleNextMonth}
+                    className="bg-none border-0 shadow-none fs-3"
+                  >
+                    <FiChevronRight />
+                  </Button>
                 </div>
                 {monthButton && (
-                  <div>
+                  <h3>
                     {`${date.toLocaleString("default", {
                       month: "long",
                     })} ${date.getFullYear()}`}
-                  </div>
+                  </h3>
                 )}
 
                 {scheduleButton && <div>Hostbudddy schedule for property</div>}
@@ -128,7 +139,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
                   <button
                     type="button"
                     onClick={() => handleButtonToggle("month")}
-                    className={`btn ${
+                    className={`shadow-none btn ${
                       monthButton
                         ? "btn-primary"
                         : "btn-tranparent border border-primary text-light"
@@ -139,7 +150,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
                   <button
                     type="button"
                     onClick={() => handleButtonToggle("schedule")}
-                    className={`btn ${
+                    className={`shadow-none btn ${
                       scheduleButton
                         ? "btn-primary"
                         : "btn-tranparent border border-primary text-light"
@@ -151,7 +162,9 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
               </div>
             </div>
 
-            {monthButton && <Calendar date={date} scheduleData={calendarSchedule}/>}
+            {monthButton && (
+              <Calendar date={date} scheduleData={calendarSchedule} />
+            )}
 
             {scheduleButton && <ScheduleCalender />}
           </div>

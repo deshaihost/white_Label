@@ -172,11 +172,10 @@ const ListIntegrationProperties = () => {
                                   OFF
                                 </label>
                               </div>
-                              <Button onClick={handleCalenderModalOpen} className="border-0 shadow-none bg-none p-0 fs-5">
+                              {/* <Button onClick={handleCalenderModalOpen} className="border-0 shadow-none bg-none p-0 fs-5">
                                 <CiCalendar className="text-primary" />
-                              </Button>
-                            </div>
-                            <Button
+                              </Button> */}
+                              <Button
                               onClick={() =>
                                 handleCalenderModalOpen(properties)
                               }
@@ -184,9 +183,9 @@ const ListIntegrationProperties = () => {
                             >
                               <CiCalendar className="text-primary" />
                             </Button>
+                            </div>
+                            
                           </div>
-                        </div>
-
                         </div>
                       </div>
                       <div className="property_listing_btn">
@@ -259,8 +258,10 @@ const ListIntegrationProperties = () => {
                         </Button>
                       </div>
                     </div>
+
                   </div>
                 </div>
+
                 {/* previous flow */}
                 {/* <div className="row border p-4">
                   <div className="col-4 ">image</div>
@@ -336,7 +337,8 @@ const ListIntegrationProperties = () => {
         </>
       ) : (
         <Loader />
-      )}
+      )
+      }
       <div>
         <WebPageUrlModel
           handleShow={model.webPageUrl}
@@ -347,14 +349,16 @@ const ListIntegrationProperties = () => {
           handleClose={handleModelClose}
         />
       </div>
-      {showCalender && (
-        <CalenderModel
-          selectedProperty={selectedProperty}
-          showCalender={showCalender}
-          setShowCalender={setShowCalender}
-        />
-      )}
-    </div>
+      {
+        showCalender && (
+          <CalenderModel
+            selectedProperty={selectedProperty}
+            showCalender={showCalender}
+            setShowCalender={setShowCalender}
+          />
+        )
+      }
+    </div >
   );
 };
 

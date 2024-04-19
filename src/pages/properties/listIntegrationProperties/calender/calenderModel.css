@@ -1,5 +1,42 @@
+.custom-calendar-modal .modal-dialog {
+  max-width: 960px;
+}
+.calendar table {
+  width: 100%;
+}
+.calendar {
+  height: 613px;
+  overflow-y: auto;
+}
 .calenderHeader {
-  padding: 0 50px 29px;
+  padding: 30px 50px !important;
   margin-bottom: 0 !important;
   border-bottom: 3px solid #13317b;
+}
+
+.calendar tr:last-child td,
+.calendar tr:last-child th {
+  border-bottom: none;
+  font-weight: 500;
+}
+.calendar td > div,
+.calendar td {
+  min-height: 100px;
+  min-width: 100px;
+}
+.calendar td,
+.calendar th {
+  border-color: #13317b !important;
+  border: 1px solid;
+}
+.calendar .calendar-day.past-date {
+  background: rgb(255 255 255 / 10%);
+  cursor: not-allowed;
+}
+.calendar .date-text {
+  color: #fff;
+  padding: 10px;
+}
+.calendar .calendar-day.past-date .date-text {
+  opacity: 0.3;
 }
