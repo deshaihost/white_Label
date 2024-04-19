@@ -88,7 +88,7 @@ const ScheduleCalender = () => {
                   <div className="col">
                     <div
                       style={{ minHeight: "48px", minWidth: "100px" }}
-                      className="border pt-0 ps-0 d-flex flex-column flex-grow justify-content-between"
+                      className="border pt-0 ps-0 d-flex flex-column justify-content-between"
                     >
                       <button
                         type="button"
@@ -104,7 +104,7 @@ const ScheduleCalender = () => {
                       >
                         {/* Add day-specific content here */}
                       </button>
-                      {/* <div className="text-end text-light"> {time}</div> */}
+                      
                     </div>
                   </div>
                 </div>
@@ -122,43 +122,6 @@ const ScheduleCalender = () => {
             </tr>
           ))}
         </tbody>
-        {/* <tbody>
-            {weeks.map((week, index) => (
-              <tr key={index}>
-                {week.map((day, idx) => {
-                  let classNames = "calendar-day";
-                  const dayDate = new Date(day.year, day.month, day.day);
-                  if (
-                    dayDate.getDate() === currentDate.getDate() &&
-                    dayDate.getMonth() === currentDate.getMonth() &&
-                    dayDate.getFullYear() === currentDate.getFullYear()
-                  ) {
-                    classNames += " today-date";
-                  } else if (dayDate < currentDate) {
-                    classNames += " past-date";
-                  } else {
-                    classNames += " future-date";
-                  }
-                  return (
-                    <td
-                      key={idx}
-                      className={classNames}
-                      onClick={() => handleCellClick(day)}
-                    >
-                      <div className="row">
-                        <div className="col">
-                          <div style={{minHeight:'100px', minWidth:'100px'}} className="border pt-0 ps-0 d-flex flex-column justify-content-between">
-                            <div className="bg-success">{dayDate.getDate() === currentDate.getDate() ? 'status' : ''}</div>
-                            <div className="text-end text-light"> {day.day}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody> */}
       </table>
     </div>
   );
