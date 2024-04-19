@@ -13,9 +13,8 @@ const ScheduleCalender = () => {
 
         const timeString = `${hourFormatted
           .toString()
-          .padStart(2, "0")}:${minute.toString().padStart(2, "0")} ${
-          amPm[amPmIndex]
-        }`;
+          .padStart(2, "0")}:${minute.toString().padStart(2, "0")} ${amPm[amPmIndex]
+          }`;
         timeSlots.push(timeString);
       }
     }
@@ -54,7 +53,7 @@ const ScheduleCalender = () => {
                 style={{
                   minHeight: "100px",
                   minWidth: "100px",
-                  border: "1px solid #ddd",
+                  border: "",
                 }}
                 className="text-center border-end"
               >
@@ -62,10 +61,10 @@ const ScheduleCalender = () => {
                   <div className="col">
                     <div
                       style={{ minHeight: "48px", minWidth: "100px" }}
-                      className="border pt-0 ps-0 d-flex flex-column justify-content-between"
+                      className="pt-0 ps-0 d-flex flex-column justify-content-between"
                     >
                       <div className="text-center text-light"> {time}</div>
-                      <div className="bg-success">
+                      <div className="bg-success sdfcd">
                         {/* {dayDate.getDate() === currentDate.getDate()
                           ? "status"
                           : ""} */}
@@ -88,23 +87,23 @@ const ScheduleCalender = () => {
                   <div className="col">
                     <div
                       style={{ minHeight: "48px", minWidth: "100px" }}
-                      className="border pt-0 ps-0 d-flex flex-column justify-content-between"
+                      className=" pt-0 ps-0 d-grid"
                     >
                       <button
                         type="button"
                         className="btn btn-primary"
-                        // Add onClick handler to display modal
+                      // Add onClick handler to display modal
                       >
                         {/* Add day-specific content here */}
                       </button>
                       <button
                         type="button"
                         className="btn btn-primary"
-                        // Add onClick handler to display modal
+                      // Add onClick handler to display modal
                       >
                         {/* Add day-specific content here */}
                       </button>
-                      
+
                     </div>
                   </div>
                 </div>
@@ -113,7 +112,7 @@ const ScheduleCalender = () => {
                 <button
                   type="button"
                   className="btn btn-primary"
-                  // Add onClick handler to display modal
+                // Add onClick handler to display modal
                 >
                   {/* Add day-specific content here */}
                 </button>
