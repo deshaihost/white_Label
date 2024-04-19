@@ -16,9 +16,9 @@ const RemoveIntegrations = ({ handleNoPlanClose, showNoPlan }) => {
   const [integrationIdGet, setIntegrationIdGet] = useState("");
   const removeIntegrateStatus =
     store?.removeIntegrationReducer?.removeIntegration?.status;
-    const removeIntegrateMessage =
+  const removeIntegrateMessage =
     store?.removeIntegrationReducer?.removeIntegration?.data?.error;
-    const removeIntegrateLoading =
+  const removeIntegrateLoading =
     store?.removeIntegrationReducer?.loading;
   console.log(
     store?.removeIntegrationReducer?.removeIntegration?.data?.error
@@ -38,27 +38,28 @@ const RemoveIntegrations = ({ handleNoPlanClose, showNoPlan }) => {
   useEffect(() => {
     if (showNoPlan) dispatch(getRemoveIntegrationActions());
   }, [showNoPlan]);
-  useEffect(()=>{
-    if(removeIntegrateStatus===400){
-      ToastHandle(removeIntegrateMessage,'danger')
+  useEffect(() => {
+    if (removeIntegrateStatus === 400) {
+      ToastHandle(removeIntegrateMessage, 'danger')
       dispatch(stateEmptyActions());
 
     }
 
-  },[removeIntegrateStatus])
+  }, [removeIntegrateStatus])
   return (
     <div>
       <Modal
         show={showNoPlan}
-        size="lg"
+        size="md"
         onHide={() => handleNoPlanClose("removeIntegrationsClose")}
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Body>
-          <div className="row">
-            <div className="6">
-              <h3 className="text-white text-center">Integrate Platform</h3>
+        <Modal.Body className="form-design">
+          <div className="row ">
+            <div className="col-lg-12">
+              <h3 className="text-white text-center mb-5 fs-4 fw-bold">Integrate Platform</h3>
+              <hr />
             </div>
           </div>
           {!removeIntegrationListLoading ? (
@@ -69,7 +70,7 @@ const RemoveIntegrations = ({ handleNoPlanClose, showNoPlan }) => {
                     <>
                       <div class="form-check ">
                         <input
-                          class="form-check-input"
+                          class="form-check-input custom-checkbox"
                           type="radio"
                           name="flexRadioDefault"
                           id="flexRadioDefault1"
@@ -85,8 +86,8 @@ const RemoveIntegrations = ({ handleNoPlanClose, showNoPlan }) => {
                     </>
                   );
                 })}
-                <div>
-                  <button className="btn btn-primary"> {!removeIntegrateLoading?"Remove Platform":<Loader/>}</button>
+                <div className="text-center">
+                  <button className="btn btn-primary"> {!removeIntegrateLoading ? "Remove Platform" : <Loader />}</button>
                 </div>
               </form>
             </>

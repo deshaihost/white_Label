@@ -1,16 +1,18 @@
 import React, { useState } from "react";
+import './AddProperty.css'
 import AddPropertiesHeader from "./addPropertiesHeader/AddPropertiesHeader";
 import BacisInformatioForm from "./basicInformation/BacisInformatioForm";
 import SupportingDocForm from "./supportingDoc/SupportingDocForm";
 import ListingDetailsForm from "./listingDetails/ListingDetailsForm";
 import AmenitiesForm from "./amenities/AmenitiesForm";
 import ExtrasForm from "./extras/ExtrasForm";
+import { Container } from "react-bootstrap";
 const AddPropertiesIndex = () => {
   const basics = "basics";
   const supportingDoc = "supportingDoc";
   const listingDetails = "listingDetails";
   const amenities = "amenities";
-  const extras="extras"
+  const extras = "extras"
 
   const [addPropertiesIndexConditions, setPropertiesConditions] = useState({
     basics: true,
@@ -80,31 +82,37 @@ const AddPropertiesIndex = () => {
 
   return (
     <div>
-      <div className="row">
-        <div className="col-12">
-          <AddPropertiesHeader
-            propertiesTypes={addPropertiesIndexConditions}
-            prntFuntionHeaderActive={mainHandleHeaderActive}
-          />
+      <Container className="mt-3 mt-md-5 py-3 py-md-5">
+
+        <div className="row">
+          <div className="col-lg-8 mx-auto">
+            <hr className="border-secondary" style={{ opacity: '1' }} />
+          </div>
+          <div className="col-12">
+            <AddPropertiesHeader
+              propertiesTypes={addPropertiesIndexConditions}
+              prntFuntionHeaderActive={mainHandleHeaderActive}
+            />
+          </div>
         </div>
-      </div>
-      <div className="row">
-        <div className="col-12">
-          {propertiesInterFace === basics ? (
-            <BacisInformatioForm />
-          ) : propertiesInterFace === supportingDoc ? (
-            <SupportingDocForm />
-          ) : propertiesInterFace === listingDetails ? (
-            <ListingDetailsForm />
-          ) : propertiesInterFace === amenities ? (
-            <AmenitiesForm />
-          ) : propertiesInterFace === extras ? (
-            <ExtrasForm />
-          ) : (
-            ""
-          )}
+        <div className="row">
+          <div className="col-lg-9 mx-auto mt-5 form_multisteps">
+            {propertiesInterFace === basics ? (
+              <BacisInformatioForm />
+            ) : propertiesInterFace === supportingDoc ? (
+              <SupportingDocForm />
+            ) : propertiesInterFace === listingDetails ? (
+              <ListingDetailsForm />
+            ) : propertiesInterFace === amenities ? (
+              <AmenitiesForm />
+            ) : propertiesInterFace === extras ? (
+              <ExtrasForm />
+            ) : (
+              ""
+            )}
+          </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

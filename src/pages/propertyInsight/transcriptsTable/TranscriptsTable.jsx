@@ -3,7 +3,44 @@ import React from "react";
 const TranscriptsTable = () => {
   return (
     <div>
-      <div className="row">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="custom_table_wrapper">
+            <div class="custom_table_heading">
+              <h4>Transcripts </h4>
+              <div class="expendable_search property_select">
+
+                <select id="sort-conversation">
+                  <option>Sort by</option>
+                  <option>Successful</option>
+                  <option>Unsuccessful</option>
+                </select>
+              </div>
+            </div>
+            <div class="custom_table_design table-responsive">
+              <table class="table conversation-table">
+                <thead>
+                  <tr>
+                    <th>Date </th>
+                    <th>Time </th>
+                    <th>Summery </th>
+                    <th>Status</th>
+                    <th>Action </th>
+                  </tr>
+                </thead>
+                <tbody class="transcript-data-table empty-table-conversation">
+                  <tr>
+                    <td colspan="5">
+                      <div class="error">No data found you can manage settings from <a href="https://hostbuddy.ai/properties">here</a></div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <div className="row">
         <div className="col-9">Transcripts</div>
         <div className="col-3">
           <select className="form-select" aria-label="Default select example">
@@ -36,7 +73,7 @@ const TranscriptsTable = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

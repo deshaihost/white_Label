@@ -1,0 +1,133 @@
+.property_select select {
+  color: #fff;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  background: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+}
+.property_select select option {
+  background: #020d29;
+}
+.dash-box {
+  border-radius: 15px;
+  background: #020d29;
+  padding: 20px;
+  height: 100%;
+}
+.dash-box svg {
+  width: 34px;
+  height: 34px;
+  background: rgba(20, 110, 245, 0.2);
+  border-radius: 7px;
+  padding: 8px;
+  margin-bottom: 12px;
+}
+.dash-box h4 {
+  color: #146ef5;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+.dash-box p {
+  color: #cdcdcd;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.custom_table_wrapper {
+  border-radius: 15px;
+  border: 1px solid #2c389e;
+  background: #000212;
+}
+.custom_table_heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+.custom_table_heading h4 {
+  color: #cdcdcd;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.custom_table_design {
+  padding-bottom: 15px;
+}
+.custom_table_design th {
+  color: #ccc;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  text-transform: uppercase;
+  background: #020d29;
+  padding: 15px 20px;
+  border-bottom: none;
+}
+.conversation-table td,
+.conversation-table th {
+  padding: 10px;
+  border: 0;
+  font-size: 14px;
+}
+.custom_table_design .error {
+  background: rgb(255 0 0 / 20%);
+  padding: 5px 10px;
+  border-radius: 4px;
+  color: red;
+  font-weight: 500;
+  font-size: 15px;
+  text-align: center;
+}
+.listing_box_design {
+  border-radius: 15px;
+  border: 1px solid #2c389e;
+  background: #000212;
+  height: 100%;
+}
+
+.listing_box_design > *:not(:last-child) {
+  border-bottom: 1px solid #2c389e;
+}
+
+.listing_box_design h4 {
+  color: #cdcdcd;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100%;
+}
+.listing_box_design > * {
+  padding: 25px 20px;
+}
+.listing_box_design li:not(:last-child) {
+  border-bottom: 1px solid #2c389e;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+.listing_box_design li h6 {
+  color: #fff;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 7px;
+}
+.read_more_link {
+  color: #146ef5;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

@@ -140,10 +140,10 @@ const ListIntegrationProperties = () => {
           {createPropertiesName?.map((properties, index) => {
             return (
               <>
-                <div className="row mt-5">
+                <div className="row">
                   <div className="col-lg-12">
-                    <div className="d-flex gap-1 align-items-center justify-content-between">
-                      <div className="d-flex gap-1 align-items-center">
+                    <div className="d-flex gap-1 align-items-center justify-content-between property_lisiting mb-4">
+                      <div className="d-flex gap-1 align-items-center property_listing_item">
                         <div className="img-with-title">
                           <img
                             src={
@@ -154,22 +154,27 @@ const ListIntegrationProperties = () => {
                           />
                           <span>THE WORKS</span>
                         </div>
-                        <div className="property-detail">
-                          <h4>{properties}</h4>
-                          <div className="d-flex gap-1">
-                            <div className="form-check form-switch custom_switch">
-                              <input
-                                className="form-check-input toggle-user-chatbot"
-                                type="checkbox"
-                                role="switch"
-                                id="statuscheck"
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="statuscheck"
-                              >
-                                on
-                              </label>
+                        <div className="property_listing_detail">
+                          <div className="property-detail">
+                            <h4>{properties}</h4>
+                            <div className="d-flex gap-2">
+                              <div className="form-check form-switch custom_switch">
+                                <input
+                                  className="form-check-input toggle-user-chatbot"
+                                  type="checkbox"
+                                  role="switch"
+                                  id="statuscheck"
+                                />
+                                <label
+                                  className="form-check-label"
+                                  htmlFor="statuscheck"
+                                >
+                                  OFF
+                                </label>
+                              </div>
+                              <Button onClick={handleCalenderModalOpen} className="border-0 shadow-none bg-none p-0 fs-5">
+                                <CiCalendar className="text-primary" />
+                              </Button>
                             </div>
                             <Button
                               onClick={() =>
@@ -181,22 +186,10 @@ const ListIntegrationProperties = () => {
                             </Button>
                           </div>
                         </div>
-                        <div>
-                          {/* <span className="fs-6"> */}
-                          {/* chart */}
-                          <CircularProgressbar
-                            className="progressBar"
-                            styles={buildStyles({
-                              pathColor: "#146EF5",
-                              textColor: "#146EF5",
-                            })}
-                            value={100}
-                            text={`${100}%`}
-                          />
-                          {/* </span> */}
+
                         </div>
                       </div>
-                      <div>
+                      <div className="property_listing_btn">
                         <div className="d-flex">
                           <Button
                             className="property-edit-btn"
@@ -257,7 +250,7 @@ const ListIntegrationProperties = () => {
                           </div>
                         </div>
                         <Button
-                          className="test-property-btn"
+                          className="test-property-btn border-0"
                           onClick={() => {
                             selectedHandle(testProperty, properties);
                           }}
@@ -360,7 +353,7 @@ const ListIntegrationProperties = () => {
           showCalender={showCalender}
           setShowCalender={setShowCalender}
         />
-      )}{" "}
+      )}
     </div>
   );
 };
