@@ -27,6 +27,7 @@ const ListIntegrationProperties = () => {
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
 
   const [showCalender, setShowCalender] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState("");
 
   const { store, dispatch } = useSelectorUseDispatch();
   const userDataGetLoading = store?.getUserDataReducer?.loading;
@@ -53,13 +54,16 @@ const ListIntegrationProperties = () => {
   let webPageUrlClose = "webPageUrlClose";
   let supportingDocumentsClose = "supportingDocumentsClose";
 
-  const handleCalenderModalOpen = () => {
-    setShowCalender(true)
-  }
+  const handleCalenderModalOpen = (propertyName) => {
+    console.log("PropertyName: ", propertyName);
+    setSelectedProperty(() => propertyName);
+
+    setShowCalender(true);
+  };
 
   const handleCalenderModalClose = () => {
-    setShowCalender(false)
-  }
+    setShowCalender(false);
+  };
 
   const handleModelOpen = (type) => {
     if (type === webPageUrlOpen) {
@@ -167,7 +171,12 @@ const ListIntegrationProperties = () => {
                                 on
                               </label>
                             </div>
-                            <Button onClick={handleCalenderModalOpen} className="border-0 shadow-none bg-none p-0 fs-5">
+                            <Button
+                              onClick={() =>
+                                handleCalenderModalOpen(properties)
+                              }
+                              className="border-0 shadow-none bg-none p-0 fs-5"
+                            >
                               <CiCalendar className="text-primary" />
                             </Button>
                           </div>
@@ -175,11 +184,12 @@ const ListIntegrationProperties = () => {
                         <div>
                           {/* <span className="fs-6"> */}
                           {/* chart */}
-                          <CircularProgressbar className="progressBar"
+                          <CircularProgressbar
+                            className="progressBar"
                             styles={buildStyles({
                               pathColor: "#146EF5",
-                              textColor: '#146EF5',
-                            },)}
+                              textColor: "#146EF5",
+                            })}
                             value={100}
                             text={`${100}%`}
                           />
@@ -334,7 +344,6 @@ const ListIntegrationProperties = () => {
       ) : (
         <Loader />
       )}
-
       <div>
         <WebPageUrlModel
           handleShow={model.webPageUrl}
@@ -345,8 +354,13 @@ const ListIntegrationProperties = () => {
           handleClose={handleModelClose}
         />
       </div>
-
-      <CalenderModel showCalender={showCalender} setShowCalender= {setShowCalender} />
+      {showCalender && (
+        <CalenderModel
+          selectedProperty={selectedProperty}
+          showCalender={showCalender}
+          setShowCalender={setShowCalender}
+        />
+      )}{" "}
     </div>
   );
 };
