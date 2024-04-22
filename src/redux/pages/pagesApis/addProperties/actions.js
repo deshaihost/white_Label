@@ -45,6 +45,13 @@ export const toggleChatbotoNoFFPutActions = (data) => ({
 });
 
 
+export const defaultActions = (data) => ({
+    type: AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_FIRST,
+    data,
+});
+
+
+
 
 
 
