@@ -172,9 +172,9 @@ const ListIntegrationProperties = () => {
                                   OFF
                                 </label>
                               </div>
-                              <Button onClick={handleCalenderModalOpen} className="border-0 shadow-none bg-none p-0 fs-5">
+                              {/* <Button onClick={handleCalenderModalOpen} className="border-0 shadow-none bg-none p-0 fs-5">
                                 <CiCalendar className="text-primary" />
-                              </Button>
+                              </Button> */}
                             </div>
                             <Button
                               onClick={() =>
@@ -185,8 +185,6 @@ const ListIntegrationProperties = () => {
                               <CiCalendar className="text-primary" />
                             </Button>
                           </div>
-                        </div>
-
                         </div>
                       </div>
                       <div className="property_listing_btn">
@@ -261,6 +259,7 @@ const ListIntegrationProperties = () => {
                     </div>
                   </div>
                 </div>
+                {/* </div> */}
                 {/* previous flow */}
                 {/* <div className="row border p-4">
                   <div className="col-4 ">image</div>

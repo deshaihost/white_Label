@@ -13,6 +13,7 @@ import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
 
 import Loader from "../../../helper/Loader";
 import { ParamsGet, nameKey } from "../../../helper/Authorized";
+import loaderGif from "../../../public/img/new_loader.gif";
 const MeetBanner = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -30,6 +31,16 @@ const MeetBanner = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
+
+  // const messagesContainerRef = useRef(null);
+
+  // Event handler for key press in the input field
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" || e.keyCode === 13) {
+      handleSendMessage();
+    }
+  };
+
   const handleSendMessage = () => {
     if (inputValue.trim() === "") return;
     const userMessage = { text: inputValue, sender: "user" };
@@ -39,6 +50,7 @@ const MeetBanner = () => {
         message: inputValue,
       })
     );
+
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInputValue("");
   };
@@ -74,6 +86,7 @@ const MeetBanner = () => {
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     }
   }, [statusResp]);
+
   return (
     <div className="meet-banner">
       <Container>
@@ -112,7 +125,7 @@ const MeetBanner = () => {
             </div>
           )}
 
-          <div className={chatBoxUrl!==undefined?"col-lg-12":"col-lg-7"}>
+          <div className={chatBoxUrl !== undefined ? "col-lg-12" : "col-lg-7"}>
             <div className="chatbot">
               <div className="message-list">
                 {messages?.map((message, index) => {
@@ -135,24 +148,31 @@ const MeetBanner = () => {
                   placeholder="Type a message..."
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  disabled={updateMessageRespLoading ? true : false}
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={updateMessageRespLoading ? true : false}
                   className={updateMessageRespLoading ? "chat-send" : ""}
                 >
-                  <svg
-                    width="25"
-                    height="25"
-                    viewBox="0 0 25 25"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M23.9804 3.58131C24.5564 1.98798 23.0124 0.443978 21.419 1.02131L1.94572 8.06398C0.347048 8.64264 0.153715 10.824 1.62438 11.676L7.84038 15.2746L13.391 9.72398C13.6425 9.4811 13.9793 9.34671 14.3289 9.34975C14.6785 9.35278 15.0129 9.49301 15.2601 9.74022C15.5074 9.98743 15.6476 10.3218 15.6506 10.6714C15.6537 11.021 15.5193 11.3578 15.2764 11.6093L9.72571 17.16L13.3257 23.376C14.1764 24.8466 16.3577 24.652 16.9364 23.0546L23.9804 3.58131Z"
-                      fill="white"
-                    ></path>
-                  </svg>
+                  {updateMessageRespLoading && (
+                    <img src={loaderGif} width="25" height="25" />
+                  )}
+                  {!updateMessageRespLoading && (
+                    <svg
+                      width="25"
+                      height="25"
+                      viewBox="0 0 25 25"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M23.9804 3.58131C24.5564 1.98798 23.0124 0.443978 21.419 1.02131L1.94572 8.06398C0.347048 8.64264 0.153715 10.824 1.62438 11.676L7.84038 15.2746L13.391 9.72398C13.6425 9.4811 13.9793 9.34671 14.3289 9.34975C14.6785 9.35278 15.0129 9.49301 15.2601 9.74022C15.5074 9.98743 15.6476 10.3218 15.6506 10.6714C15.6537 11.021 15.5193 11.3578 15.2764 11.6093L9.72571 17.16L13.3257 23.376C14.1764 24.8466 16.3577 24.652 16.9364 23.0546L23.9804 3.58131Z"
+                        fill="white"
+                      ></path>
+                    </svg>
+                  )}
                 </button>
               </div>
             </div>
