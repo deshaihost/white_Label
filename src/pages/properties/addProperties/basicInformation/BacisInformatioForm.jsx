@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ErrorMessageShow from "../../../../helper/ErrorMessageShow";
-import {
-  postPropertiesActions,
-} from "../../../../redux/actions";
+import { postPropertiesActions } from "../../../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { stateEmptyActions } from "../../../../redux/actions";
@@ -21,6 +19,9 @@ const BacisInformatioForm = () => {
   const propertiesAddMessage =
     store?.postPropertiesReducer?.postProperties?.data?.error;
   const propertiesAddLoading = store?.postPropertiesReducer?.loading;
+
+  console.log("propertiesAddStatus: ", propertiesAddStatus);
+  console.log("propertiesAddLoading: ", propertiesAddLoading);
 
   const {
     register,
@@ -100,17 +101,27 @@ const BacisInformatioForm = () => {
                   Thumbnail Photo <span>(.png, .jpg, .jpeg supported)</span>
                 </label>
                 <div className="">
-                  <input className="form-control" type="file" {...register("files")} placeholder="" />
+                  <input
+                    className="form-control"
+                    type="file"
+                    {...register("files")}
+                    placeholder=""
+                  />
                 </div>
               </div>
             </div>
-            <div className="col-md-12 mt-5">
-              <div className="d-flex justify-content-center">
-                <button className="mw-auto" disabled={propertiesAddLoading ? true : false}>
-                  {!propertiesAddLoading ? <>Save & Next</> : <Loader />}
-                </button>
+            {!locationUrl && (
+              <div className="col-md-12 mt-5">
+                <div className="d-flex justify-content-center">
+                  <button
+                    className="mw-auto"
+                    disabled={propertiesAddLoading ? true : false}
+                  >
+                    {!propertiesAddLoading ? <>Save & Next</> : <Loader />}
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </form>
           {locationUrl !== undefined && <LocationForm />}
         </div>
