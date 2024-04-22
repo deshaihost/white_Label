@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const TranscriptsTable = () => {
   return (
@@ -31,7 +32,7 @@ const TranscriptsTable = () => {
                 <tbody class="transcript-data-table empty-table-conversation">
                   <tr>
                     <td colspan="5">
-                      <div class="error">No data found you can manage settings from <a href="https://hostbuddy.ai/properties">here</a></div>
+                      <div class="error">No data found you can manage settings from <Link to="">here</Link></div>
                     </td>
                   </tr>
                 </tbody>
