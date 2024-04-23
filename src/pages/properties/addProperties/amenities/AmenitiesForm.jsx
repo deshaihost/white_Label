@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import {
   GetquestionnaireFunction,
   nameKey,
 } from "../../../../helper/Authorized";
+import { updateQuestionnaireActions } from "../../../../redux/actions";
 import Loader from "../../../../helper/Loader";
 import { Modal } from "react-bootstrap";
+import ToastHandle from "../../../../helper/ToastMessage";
 const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
+  const { id } = useParams();
+  const store = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  const [loadingStatus, setLoadingStatus] = useState(false);
+
+  const [amenitiesFamilyOptions, setAmenitiesFamilyOptions] = useState([]);
+  const [amenitiesIndoorOptions, setAmenitiesIndoorOptions] = useState([]);
+  const [amenitiesMoreOptions, setAmenitiesMoreOptions] = useState([]);
+  const [amenitiesOutdoorOptions, setAmenitiesOutdoorOptions] = useState([]);
+  const [amenitiesRulesOptions, setAmenitiesRulesOptions] = useState([]);
+
+  const getLocalStorageData = nameKey();
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -24,13 +42,20 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   const Outdoor = Amenities["Outdoor"]?.[0];
   const RulesAndServices = Amenities["Rules and Services"]?.[0];
 
-  const [amenitiesInputOnClickGet, setAmenitiesInputOnClickGet] = useState([]);
+  // console.log("Family: ", family)
+  // if (family.response_options.length !== 0) {
+  //   setAmenitiesFamilyOptions(family.response_options);
+  // }
 
-  const [amenitiesFamilyOptions, setAmenitiesFamilyOptions] = useState([]);
-  const [amenitiesIndoorOptions, setAmenitiesIndoorOptions] = useState([]);
-  const [amenitiesMoreOptions, setAmenitiesMoreOptions] = useState([]);
-  const [amenitiesOutdoorOptions, setAmenitiesOutdoorOptions] = useState([]);
-  const [amenitiesRulesOptions, setAmenitiesRulesOptions] = useState([]);
+  // to get the complete questionaire object
+  const apiQuestionnaireObject =
+    store?.getQuestionnaireReducer?.getQuestionnaire?.data;
+
+  // to get the updateQuestionaire status
+  const updateQuestionaireStatus =
+    store?.updateQuestionnaireReducer?.updateQuestionnaire?.status;
+
+  const [amenitiesInputOnClickGet, setAmenitiesInputOnClickGet] = useState([]);
 
   const amenitiesMainHandle = (type, item, id) => {
     if (type) {
@@ -109,9 +134,95 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     }
   };
 
+  const handleSubmit = () => {
+    const questionaireToSend = structuredClone(apiQuestionnaireObject);
+    console.log(
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Family"
+      ][0]["response_options"]
+    );
+
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      "Family"
+    ][0]["response_options"] = amenitiesFamilyOptions;
+
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      "Indoor"
+    ][0]["response_options"] = amenitiesIndoorOptions;
+
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      "More"
+    ][0]["response_options"] = amenitiesMoreOptions;
+
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      "Outdoor"
+    ][0]["response_options"] = amenitiesOutdoorOptions;
+
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      "Rules and Services"
+    ][0]["response_options"] = amenitiesRulesOptions;
+
+    console.log("Updated Data: ", questionaireToSend);
+
+    dispatch(
+      updateQuestionnaireActions({
+        nameKey: getLocalStorageData,
+        formeData: questionaireToSend,
+      })
+    );
+
+    setLoadingStatus(true);
+  };
+
+  useEffect(() => {
+    if (updateQuestionaireStatus === 200) {
+      if (loadingStatus) {
+        ToastHandle("Questionaire updated successfully", "success");
+        setTimeout(() => {
+          prntFuntionHeaderActive(id !== undefined && "extras");
+        }, 1000);
+
+        setLoadingStatus(false);
+      }
+    }
+  }, [updateQuestionaireStatus, loadingStatus]);
+
+  useEffect(() => {
+    if (family.response_options.length > 0) {
+      setAmenitiesFamilyOptions(family.response_options);
+    }
+
+    if (Indoor.response_options.length > 0) {
+      setAmenitiesIndoorOptions(Indoor.response_options);
+    }
+
+    if (More.response_options.length > 0) {
+      setAmenitiesMoreOptions(More.response_options);
+    }
+
+    if (Outdoor.response_options.length > 0) {
+      setAmenitiesOutdoorOptions(Outdoor.response_options);
+    }
+
+    if (RulesAndServices.response_options.length > 0) {
+      setAmenitiesRulesOptions(RulesAndServices.response_options);
+    }
+  }, [family, Indoor, More, Outdoor, RulesAndServices]);
+
   return (
     <>
-      {console.log("amenitiesIndoorOptions: ", amenitiesIndoorOptions)}
+      {console.log(
+        "amenitiesIndoorOptions: ",
+        amenitiesIndoorOptions,
+        " familey: ",
+        amenitiesFamilyOptions,
+        " more: ",
+        amenitiesMoreOptions,
+        " outdoor: ",
+        amenitiesOutdoorOptions,
+        " rules: ",
+        amenitiesRulesOptions
+      )}
       <Modal
         size="md"
         show={show}
@@ -423,6 +534,14 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                 })}
               </ul>
             </div>
+          </div>
+
+          <div className="d-flex justify-content-around my-5 form-design">
+            <button class="btn btn-primary">Previous</button>
+
+            <button class="border_theme_btn previous" onClick={handleSubmit}>
+              Save & Next{" "}
+            </button>
           </div>
         </div>
       ) : (
