@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateQuestionnaireActions } from "../../../../../redux/actions";
 import {
@@ -8,8 +9,12 @@ import {
 } from "../../../../../helper/Authorized";
 import Loader from "../../../../../helper/Loader";
 import { Button, Modal } from "react-bootstrap";
-const LocationForm = () => {
+import ToastHandle from "../../../../../helper/ToastMessage";
+
+const LocationForm = ({ prntFuntionHeaderActive }) => {
+  const { id } = useParams();
   const [show, setShow] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -20,6 +25,11 @@ const LocationForm = () => {
   const apiQuestionnaireData =
     store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
 
+  // to get the updateQuestionaire status
+  const updateQuestionaireStatus =
+    store?.updateQuestionnaireReducer?.updateQuestionnaire?.status;
+
+  console.log("updateQuestionaireStatus: ", updateQuestionaireStatus);
   // to get the complete questionaire object
   const apiQuestionnaireObject =
     store?.getQuestionnaireReducer?.getQuestionnaire?.data;
@@ -44,12 +54,8 @@ const LocationForm = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    console.log("Form Data: ", data);
-
     const questionaireToSend = structuredClone(apiQuestionnaireObject);
-    console.log("Cloned Object: ", questionaireToSend);
 
-    // const dataToUpdate =
     if (questionnaireApi["Basics"] && questionnaireApi["Basics"]["Location"]) {
       // select value updation
       questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
@@ -80,8 +86,7 @@ const LocationForm = () => {
         "Location"
       ][6]["response_text"] = data?.short_answer6;
     }
-    // dataToUpdate = data?.select0;
-    // console.log("dataToUpdate: ", dataToUpdate);
+
     console.log("updatedQuestionaire: ", questionaireToSend);
     // return;
     // let formData = new FormData();
@@ -111,7 +116,23 @@ const LocationForm = () => {
         formeData: questionaireToSend,
       })
     );
+
+    setLoadingStatus(true);
   };
+
+  useEffect(() => {
+    if (updateQuestionaireStatus === 200) {
+      if (loadingStatus) {
+        ToastHandle("Questionaire updated successfully", "success");
+        setTimeout(() => {
+          prntFuntionHeaderActive(id !== undefined && "supportingDoc");
+        }, 1000);
+
+        setLoadingStatus(false);
+      }
+    }
+  }, [updateQuestionaireStatus]);
+
   return (
     <>
       <Modal
@@ -192,12 +213,24 @@ const LocationForm = () => {
                           </svg>
                         </Button>
                       </label>
-                      <select
+                      {/* <select
                         className="form-select form-control"
                         {...register(`${item.question_type}${index}`)}
+                        defaultValue={item.response_option}
                       >
                         {item.options.map((option, optionIndex) => (
                           <option key={optionIndex} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select> */}
+                      <select
+                        className="form-select form-control"
+                        {...register(`${item.question_type}${index}`)}
+                        defaultValue={item.response_option} // Set defaultValue to item.response_option
+                      >
+                        {item.options.map((option, optionIndex) => (
+                          <option key={optionIndex} value={option} selected={option === item.response_option}>
                             {option}
                           </option>
                         ))}

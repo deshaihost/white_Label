@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import './AddProperty.css'
+import "./AddProperty.css";
 import AddPropertiesHeader from "./addPropertiesHeader/AddPropertiesHeader";
 import BacisInformatioForm from "./basicInformation/BacisInformatioForm";
 import SupportingDocForm from "./supportingDoc/SupportingDocForm";
@@ -12,7 +12,7 @@ const AddPropertiesIndex = () => {
   const supportingDoc = "supportingDoc";
   const listingDetails = "listingDetails";
   const amenities = "amenities";
-  const extras = "extras"
+  const extras = "extras";
 
   const [addPropertiesIndexConditions, setPropertiesConditions] = useState({
     basics: true,
@@ -83,10 +83,9 @@ const AddPropertiesIndex = () => {
   return (
     <div>
       <Container className="mt-3 mt-md-5 py-3 py-md-5">
-
         <div className="row">
           <div className="col-lg-8 mx-auto">
-            <hr className="border-secondary" style={{ opacity: '1' }} />
+            <hr className="border-secondary" style={{ opacity: "1" }} />
           </div>
           <div className="col-12">
             <AddPropertiesHeader
@@ -98,13 +97,19 @@ const AddPropertiesIndex = () => {
         <div className="row">
           <div className="col-lg-9 mx-auto mt-5 form_multisteps">
             {propertiesInterFace === basics ? (
-              <BacisInformatioForm />
+              <BacisInformatioForm
+                prntFuntionHeaderActive={mainHandleHeaderActive}
+              />
             ) : propertiesInterFace === supportingDoc ? (
-              <SupportingDocForm />
+              <SupportingDocForm
+                prntFuntionHeaderActive={mainHandleHeaderActive}
+              />
             ) : propertiesInterFace === listingDetails ? (
-              <ListingDetailsForm />
+              <ListingDetailsForm
+                prntFuntionHeaderActive={mainHandleHeaderActive}
+              />
             ) : propertiesInterFace === amenities ? (
-              <AmenitiesForm />
+              <AmenitiesForm prntFuntionHeaderActive={mainHandleHeaderActive} />
             ) : propertiesInterFace === extras ? (
               <ExtrasForm />
             ) : (
