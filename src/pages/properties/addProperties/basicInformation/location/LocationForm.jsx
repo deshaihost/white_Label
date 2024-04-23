@@ -19,12 +19,20 @@ const LocationForm = () => {
   const getLocalStorageData = nameKey();
   const apiQuestionnaireData =
     store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
+
+  // to get the complete questionaire object
+  const apiQuestionnaireObject =
+    store?.getQuestionnaireReducer?.getQuestionnaire?.data;
   // to get the questionaire for the property
   const ExtrasFormCall = GetquestionnaireFunction();
   const { questionnaireApi, apiQuestionnaireLoading } = ExtrasFormCall
     ? ExtrasFormCall
     : [];
   const locationFildInput = questionnaireApi["Basics"]?.["Location"];
+
+  console.log("locationFildInput: ", locationFildInput);
+
+  console.log("apiQuestionnaireObject: ", apiQuestionnaireObject);
 
   console.log("questionnaireApi: ", questionnaireApi);
   console.log("apiQuestionnaireData: ", apiQuestionnaireData);
@@ -38,39 +46,39 @@ const LocationForm = () => {
   const onSubmit = (data) => {
     console.log("Form Data: ", data);
 
-    const questionaireToSend = structuredClone(apiQuestionnaireData);
+    const questionaireToSend = structuredClone(apiQuestionnaireObject);
     console.log("Cloned Object: ", questionaireToSend);
 
     // const dataToUpdate =
     if (questionnaireApi["Basics"] && questionnaireApi["Basics"]["Location"]) {
       // select value updation
-      questionaireToSend["questionnaire"]["Basics"]["Location"][0][
-        "response_option"
-      ] = data?.select0;
+      questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+        "Location"
+      ][0]["response_option"] = data?.select0;
 
-      questionaireToSend["questionnaire"]["Basics"]["Location"][1][
-        "response_text"
-      ] = data?.short_answer1;
+      questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+        "Location"
+      ][1]["response_text"] = data?.short_answer1;
 
-      questionaireToSend["questionnaire"]["Basics"]["Location"][2][
-        "response_text"
-      ] = data?.short_answer2;
+      questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+        "Location"
+      ][2]["response_text"] = data?.short_answer2;
 
-      questionaireToSend["questionnaire"]["Basics"]["Location"][3][
-        "response_text"
-      ] = data?.short_answer3;
+      questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+        "Location"
+      ][3]["response_text"] = data?.short_answer3;
 
-      questionaireToSend["questionnaire"]["Basics"]["Location"][4][
-        "response_text"
-      ] = data?.short_answer4;
+      questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+        "Location"
+      ][4]["response_text"] = data?.short_answer4;
 
-      questionaireToSend["questionnaire"]["Basics"]["Location"][5][
-        "response_text"
-      ] = data?.short_answer5;
+      questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+        "Location"
+      ][5]["response_text"] = data?.short_answer5;
 
-      questionaireToSend["questionnaire"]["Basics"]["Location"][6][
-        "response_text"
-      ] = data?.short_answer6;
+      questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+        "Location"
+      ][6]["response_text"] = data?.short_answer6;
     }
     // dataToUpdate = data?.select0;
     // console.log("dataToUpdate: ", dataToUpdate);
@@ -203,6 +211,7 @@ const LocationForm = () => {
                         className="form-control"
                         {...register(`${item.question_type}${index}`)}
                         placeholder={item.placeholder_text}
+                        defaultValue={item?.response_text}
                       />
                     </div>
                   )}
