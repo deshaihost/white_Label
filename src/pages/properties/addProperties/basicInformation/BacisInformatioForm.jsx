@@ -9,7 +9,7 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import Loader from "../../../../helper/Loader";
 import { nameKey, ParamsGet } from "../../../../helper/Authorized";
 import LocationForm from "./location/LocationForm";
-const BacisInformatioForm = () => {
+const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -123,7 +123,9 @@ const BacisInformatioForm = () => {
               </div>
             )}
           </form>
-          {locationUrl !== undefined && <LocationForm />}
+          {locationUrl !== undefined && (
+            <LocationForm prntFuntionHeaderActive={prntFuntionHeaderActive} />
+          )}
         </div>
       </div>
     </div>
