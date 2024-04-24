@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import {
   supportingDocumentPostActions,
   supportingUrlPostActions,
@@ -13,7 +14,9 @@ import { stateEmptyActions } from "../../../../redux/actions";
 
 import axios from "axios";
 
-const SupportingDocForm = () => {
+const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
+  const { id } = useParams();
+
   const { store, dispatch } = useSelectorUseDispatch();
 
   const supportingNameKey = nameKey();
@@ -83,15 +86,17 @@ const SupportingDocForm = () => {
   }
 
   const handleUploadUrl = async () => {
-    console.log("uploadedurl: ", uploadedUrl)
-    console.log("isvalid: ",isValidURL(uploadedUrl))
+    console.log("uploadedurl: ", uploadedUrl);
+    console.log("isvalid: ", isValidURL(uploadedUrl));
     if (!isValidURL(uploadedUrl)) {
       ToastHandle("Please enter valid webpage url.", "danger");
       return;
     }
 
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = "biUdFBzFi5MDscRDSdO9TgLCmqXbXQCDbZLwQtVPLzixfnEWpw";
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    console.log("API_KEY: ", API_KEY);
 
     const getSessionStorageData = JSON.parse(
       sessionStorage.getItem("hostBuddy_auth")
@@ -122,23 +127,24 @@ const SupportingDocForm = () => {
           config
         );
 
-        console.log("Status: ", response);
-        // if (response.status === 200) {
-        //     dispatch({
-        //         type: "get_all_Task",
-        //         payload: response.data.data,
-        //     });
-        // } else {
-        //     dispatch({
-        //         type: "get_all_Task",
-        //         payload: [],
-        //     });
-        // }
+        if (response.status === 200) {
+          ToastHandle(response?.data?.message, "success");
+          setTimeout(() => {
+            prntFuntionHeaderActive(id !== undefined && "listingDetails");
+          }, 1500);
+        } else {
+          console.log("Error");
+        }
       } else {
         alert("Missing Token or propertyName");
       }
     } catch (error) {
       console.log(error);
+      if (error.status === 400) {
+        ToastHandle(error?.data?.error, "danger");
+      } else {
+        ToastHandle("Something went wrong", "danger");
+      }
     }
   };
 
