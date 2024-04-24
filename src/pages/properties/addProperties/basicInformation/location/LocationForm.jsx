@@ -22,6 +22,8 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const getLocalStorageData = nameKey();
+  const ExtrasFormCall = GetquestionnaireFunction();
+
   const apiQuestionnaireData =
     store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
 
@@ -29,30 +31,32 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
   const updateQuestionaireStatus =
     store?.updateQuestionnaireReducer?.updateQuestionnaire?.status;
 
-  console.log("updateQuestionaireStatus: ", updateQuestionaireStatus);
+  console.log("LocationupdateQuestionaireStatus: ", updateQuestionaireStatus);
   // to get the complete questionaire object
   const apiQuestionnaireObject =
     store?.getQuestionnaireReducer?.getQuestionnaire?.data;
   // to get the questionaire for the property
-  const ExtrasFormCall = GetquestionnaireFunction();
+
   const { questionnaireApi, apiQuestionnaireLoading } = ExtrasFormCall
     ? ExtrasFormCall
     : [];
   const locationFildInput = questionnaireApi["Basics"]?.["Location"];
 
-  console.log("locationFildInput: ", locationFildInput);
+  console.log("LocationlocationFildInput: ", locationFildInput);
 
-  console.log("apiQuestionnaireObject: ", apiQuestionnaireObject);
+  console.log("LocationapiQuestionnaireObject: ", apiQuestionnaireObject);
 
-  console.log("questionnaireApi: ", questionnaireApi);
-  console.log("apiQuestionnaireData: ", apiQuestionnaireData);
-  console.log("apiQuestionnaireLoading: ", apiQuestionnaireLoading);
+  console.log("LocationquestionnaireApi: ", questionnaireApi);
+  console.log("LocationapiQuestionnaireData: ", apiQuestionnaireData);
+  console.log("LocationapiQuestionnaireLoading: ", apiQuestionnaireLoading);
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+
+  console.log("Form : ", register);
   const onSubmit = (data) => {
     const questionaireToSend = structuredClone(apiQuestionnaireObject);
 
@@ -87,29 +91,8 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
       ][6]["response_text"] = data?.short_answer6;
     }
 
-    console.log("updatedQuestionaire: ", questionaireToSend);
-    // return;
-    // let formData = new FormData();
+    console.log("LocationupdatedQuestionaire: ", questionaireToSend);
 
-    // formData.append("property-name:", getLocalStorageData?.nameKey);
-    // formData.append("property-image", data?.defultImage[0]);
-    // formData.append("Property_Type", data?.select0);
-    // formData.append("Property_Type_hidden", "");
-    // formData.append("Street_Address", data?.short_answer1);
-    // formData.append("Unit_Number", data?.short_answer2);
-    // formData.append("City", data?.short_answer3);
-    // formData.append("State", data?.short_answer4);
-    // formData.append("Area_Code", data?.short_answer5);
-    // formData.append("Country", data?.short_answer6);
-    // formData.append("action", "hb_add_property_first_step");
-    // formData.append("security", "a276ea2870");
-    // formData.append("property_complete_percentage_now", "20%");
-    // formData.append("curr_user", 105);
-    // formData.append("is_editing", "");
-    // formData.append("is_added_to_hostbuddy", true);
-    // formData.append("current_main_section", "Basics");
-    // formData.append("current_sub_section", "Location");
-    // formData.append("questionnaire", JSON.stringify(apiQuestionnaireData));
     dispatch(
       updateQuestionnaireActions({
         nameKey: getLocalStorageData,
@@ -130,6 +113,8 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
 
         setLoadingStatus(false);
       }
+    } else {
+      setLoadingStatus(false);
     }
   }, [updateQuestionaireStatus]);
 
@@ -189,6 +174,10 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
                 >
                   {item.question_type === "select" ? (
                     <>
+                      {console.log(
+                        "hello-repeat select: ",
+                        item.response_option
+                      )}
                       <label className="text-white">
                         {item.question_text}
                         <Button
@@ -230,7 +219,11 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
                         defaultValue={item.response_option} // Set defaultValue to item.response_option
                       >
                         {item.options.map((option, optionIndex) => (
-                          <option key={optionIndex} value={option} selected={option === item.response_option}>
+                          <option
+                            key={optionIndex}
+                            value={option}
+                            selected={option === item.response_option}
+                          >
                             {option}
                           </option>
                         ))}
@@ -238,6 +231,7 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
                     </>
                   ) : (
                     <div>
+                      {console.log("hello-repeat select: ", item.response_text)}
                       <label className="text-white">{item.question_text}</label>
                       <input
                         type="text"

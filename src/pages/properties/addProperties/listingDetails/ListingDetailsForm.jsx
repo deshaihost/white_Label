@@ -241,11 +241,12 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
                           {...register(
                             `booking_${booking.question_type}${index}`
                           )}
+                          defaultValue={booking.response_option} // Set defaultValue to item.response_option
                         >
                           {selectOption?.map((options, optionIndex) => {
                             return (
                               <>
-                                <option key={optionIndex} value={options}>
+                                <option key={optionIndex} value={options} selected={options === booking.response_option}>
                                   {options}
                                 </option>
                               </>
