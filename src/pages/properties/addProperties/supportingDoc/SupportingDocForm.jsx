@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import {
   supportingDocumentPostActions,
   supportingUrlPostActions,
@@ -9,10 +10,19 @@ import { nameKey } from "../../../../helper/Authorized";
 import ToastHandle from "../../../../helper/ToastMessage";
 import Loader from "../../../../helper/Loader";
 import { stateEmptyActions } from "../../../../redux/actions";
-const SupportingDocForm = () => {
+// import ToastHandle from "../../../../helper/ToastMessage";
+
+import axios from "axios";
+
+const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
+  const { id } = useParams();
+
   const { store, dispatch } = useSelectorUseDispatch();
 
   const supportingNameKey = nameKey();
+  const [uploadedDoc, setUploadedDoc] = useState();
+  const [uploadedUrl, setUploadedUrl] = useState("");
+
   const [suppertingInput, setSuppertingInput] = useState({
     updateDoc: true,
     urlToWebPage: false,
@@ -33,38 +43,119 @@ const SupportingDocForm = () => {
   const supportingStatus = suppertingInput?.updateDoc
     ? store?.supportingDocumentPostReducer?.supportingDoc?.status
     : suppertingInput?.urlToWebPage
-      ? store?.supportingUrlPostReducer?.supportingUrl?.status
-      : "";
+    ? store?.supportingUrlPostReducer?.supportingUrl?.status
+    : "";
   const supportingUrlMessage = suppertingInput?.updateDoc
     ? store?.supportingDocumentPostReducer?.supportingDoc?.data?.error
     : suppertingInput?.urlToWebPage
-      ? store?.supportingUrlPostReducer?.supportingUrl?.data?.error
-      : "";
+    ? store?.supportingUrlPostReducer?.supportingUrl?.data?.error
+    : "";
   const supportingLoading = suppertingInput?.updateDoc
     ? store?.supportingDocumentPostReducer?.loading
     : suppertingInput?.urlToWebPage
-      ? store?.supportingUrlPostReducer?.loading
-      : "";
+    ? store?.supportingUrlPostReducer?.loading
+    : "";
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  // } = useForm();
 
-  const onSubmit = (data) => {
-    let supportingkeyName = supportingNameKey?.nameKey;
-    if (suppertingInput.updateDoc) {
-      const formData = new FormData();
-      formData.append("filess", data.docx[0]);
-      dispatch(supportingDocumentPostActions({ supportingkeyName, formData }));
-    } else if (suppertingInput.urlToWebPage) {
-      dispatch(
-        supportingUrlPostActions({
-          supportingkeyName,
-          data: { url: data.url },
-        })
-      );
+  // const onSubmit = (data) => {
+  //   console.log(data, "data")
+  //   return
+  //   let supportingkeyName = supportingNameKey?.nameKey;
+  //   if (suppertingInput.updateDoc) {
+  //     const formData = new FormData();
+  //     formData.append("filess", data.docx[0]);
+  //     dispatch(supportingDocumentPostActions({ supportingkeyName, formData }));
+  //   } else if (suppertingInput.urlToWebPage) {
+  //     dispatch(
+  //       supportingUrlPostActions({
+  //         supportingkeyName,
+  //         data: { url: data.url },
+  //       })
+  //     );
+  //   }
+  // };
+
+  function isValidURL(url) {
+    // Regular expression to match a period in the middle of the string
+    return /^[^.].+?\..+[^.]$/.test(url);
+  }
+
+  const handleUploadUrl = async () => {
+    console.log("uploadedurl: ", uploadedUrl);
+    console.log("isvalid: ", isValidURL(uploadedUrl));
+    if (!isValidURL(uploadedUrl)) {
+      ToastHandle("Please enter valid webpage url.", "danger");
+      return;
+    }
+
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    console.log("API_KEY: ", API_KEY);
+
+    const getSessionStorageData = JSON.parse(
+      sessionStorage.getItem("hostBuddy_auth")
+    );
+
+    const token = getSessionStorageData?.token;
+
+    const property = JSON.parse(localStorage.getItem("nameKey"));
+
+    const propertyName = property?.nameKey;
+
+    const urlToSend = {
+      url: uploadedUrl,
+    };
+    console.log("urltosend: ", urlToSend);
+    // return;
+    try {
+      if (token && propertyName) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-API-Key": API_KEY,
+          },
+        };
+        const response = await axios.post(
+          `${baseUrl}/properties/${propertyName}/add_url`,
+          urlToSend,
+          config
+        );
+
+        if (response.status === 200) {
+          ToastHandle(response?.data?.message, "success");
+          setTimeout(() => {
+            prntFuntionHeaderActive(id !== undefined && "listingDetails");
+          }, 1500);
+        } else {
+          console.log("Error");
+        }
+      } else {
+        alert("Missing Token or propertyName");
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.status === 400) {
+        ToastHandle(error?.data?.error, "danger");
+      } else {
+        ToastHandle("Something went wrong", "danger");
+      }
+    }
+  };
+
+  const handleSubmitForm = (e, uploadType) => {
+    e.preventDefault();
+    console.log("uploadType", uploadType?.pmsIntegration);
+    console.log("uploadType", uploadType?.urlToWebPage);
+
+    console.log("uploadType", uploadType?.updateDoc);
+    if (uploadType?.urlToWebPage) {
+      handleUploadUrl();
     }
   };
 
@@ -75,7 +166,6 @@ const SupportingDocForm = () => {
     } else if (supportingStatus === 400) {
       ToastHandle(supportingUrlMessage, "danger");
       dispatch(stateEmptyActions());
-
     }
   }, [supportingStatus]);
 
@@ -109,8 +199,17 @@ const SupportingDocForm = () => {
               </div>
               <div class="old-docs mt-2">
                 <a href="javascript:void(0);">
-                  <svg width="17" height="20" viewBox="0 0 17 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M11.6875 2H2.125V18H14.875V5H11.6875V2ZM2.125 0H12.75L17 4V18C17 18.5304 16.7761 19.0391 16.3776 19.4142C15.9791 19.7893 15.4386 20 14.875 20H2.125C1.56141 20 1.02091 19.7893 0.622398 19.4142C0.223883 19.0391 0 18.5304 0 18V2C0 1.46957 0.223883 0.960859 0.622398 0.585786C1.02091 0.210714 1.56141 0 2.125 0ZM4.25 9H12.75V11H4.25V9ZM4.25 13H12.75V15H4.25V13Z" fill="#146EF5"></path>
+                  <svg
+                    width="17"
+                    height="20"
+                    viewBox="0 0 17 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.6875 2H2.125V18H14.875V5H11.6875V2ZM2.125 0H12.75L17 4V18C17 18.5304 16.7761 19.0391 16.3776 19.4142C15.9791 19.7893 15.4386 20 14.875 20H2.125C1.56141 20 1.02091 19.7893 0.622398 19.4142C0.223883 19.0391 0 18.5304 0 18V2C0 1.46957 0.223883 0.960859 0.622398 0.585786C1.02091 0.210714 1.56141 0 2.125 0ZM4.25 9H12.75V11H4.25V9ZM4.25 13H12.75V15H4.25V13Z"
+                      fill="#146EF5"
+                    ></path>
                   </svg>
                   Previous Documents
                 </a>
@@ -150,23 +249,19 @@ const SupportingDocForm = () => {
                 </label>
               </div>
             </div>
-            <form
-              onSubmit={handleSubmit(
-                (data) => {
-                  onSubmit(data);
-                },
-                (err) => {
-                  console.log(err, "ee");
-                }
-              )}
-            >
+            <form>
               {suppertingInput?.updateDoc && (
                 <div className="col-12 mt-4 ">
                   <label className="text-white">
-                    Supporting Documents <span>(.txt, .docx, .pdf supported)</span>
+                    Supporting Documents{" "}
+                    <span>(.txt, .docx, .pdf supported)</span>
                   </label>
                   <div className="">
-                    <input type="file" className="form-control" {...register("docx")} />
+                    <input
+                      type="file"
+                      className="form-control"
+                      // {...register("docx")}
+                    />
                   </div>
                 </div>
               )}
@@ -177,7 +272,9 @@ const SupportingDocForm = () => {
                     <input
                       className="bg-dark form-control"
                       type="text"
-                      {...register("url")}
+                      // {...register("url")}
+                      value={uploadedUrl}
+                      onChange={(e) => setUploadedUrl(e.target.value)}
                       placeholder="Eg.example.com"
                     />
                   </div>
@@ -197,7 +294,10 @@ const SupportingDocForm = () => {
                 </div>
               )}
               <div className="col-lg-12 text-center">
-                <button className="btn btn-primary mt-5">
+                <button
+                  className="btn btn-primary mt-5"
+                  onClick={(e) => handleSubmitForm(e, suppertingInput)}
+                >
                   {" "}
                   {!supportingLoading ? "Save & Next" : <Loader />}
                 </button>

@@ -26,6 +26,7 @@ export const GetquestionnaireFunction = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const getLocalStorageData = nameKey();
+  console.log("NameKey in Auth: ", getLocalStorageData)
   const getLocalStorageNameKey = getLocalStorageData?.nameKey;
   const apiQuestionnaireData =
     store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
