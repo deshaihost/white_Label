@@ -163,7 +163,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
             </div>
 
             {monthButton && (
-              <Calendar date={date} scheduleData={calendarSchedule} />
+              <Calendar selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} />
             )}
 
             {scheduleButton && <ScheduleCalender />}

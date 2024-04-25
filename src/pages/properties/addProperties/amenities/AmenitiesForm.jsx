@@ -188,23 +188,23 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   }, [updateQuestionaireStatus, loadingStatus]);
 
   useEffect(() => {
-    if (family.response_options.length > 0) {
-      setAmenitiesFamilyOptions(family.response_options);
+    if (family?.response_options.length > 0) {
+      setAmenitiesFamilyOptions(family?.response_options);
     }
 
-    if (Indoor.response_options.length > 0) {
+    if (Indoor?.response_options.length > 0) {
       setAmenitiesIndoorOptions(Indoor.response_options);
     }
 
-    if (More.response_options.length > 0) {
+    if (More?.response_options.length > 0) {
       setAmenitiesMoreOptions(More.response_options);
     }
 
-    if (Outdoor.response_options.length > 0) {
+    if (Outdoor?.response_options.length > 0) {
       setAmenitiesOutdoorOptions(Outdoor.response_options);
     }
 
-    if (RulesAndServices.response_options.length > 0) {
+    if (RulesAndServices?.response_options.length > 0) {
       setAmenitiesRulesOptions(RulesAndServices.response_options);
     }
   }, [family, Indoor, More, Outdoor, RulesAndServices]);
