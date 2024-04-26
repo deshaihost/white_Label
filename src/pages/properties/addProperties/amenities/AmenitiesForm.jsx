@@ -9,6 +9,7 @@ import { updateQuestionnaireActions } from "../../../../redux/actions";
 import Loader from "../../../../helper/Loader";
 import { Modal } from "react-bootstrap";
 import ToastHandle from "../../../../helper/ToastMessage";
+import CheckboxModalNote from "../extraNoteModal/CheckboxModalNote";
 const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   const { id } = useParams();
   const store = useSelector((state) => state);
@@ -22,9 +23,20 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   const [amenitiesOutdoorOptions, setAmenitiesOutdoorOptions] = useState([]);
   const [amenitiesRulesOptions, setAmenitiesRulesOptions] = useState([]);
 
+  const [amenitiesFamilyResponse, setAmenitiesFamilyResponse] = useState([]);
+  const [amenitiesIndoorResponse, setAmenitiesIndoorResponse] = useState([]);
+  const [amenitiesMoreResponse, setAmenitiesMoreResponse] = useState([]);
+  const [amenitiesOutdoorResponse, setAmenitiesOutdoorResponse] = useState([]);
+  const [amenitiesRulesResponse, setAmenitiesRulesResponse] = useState([]);
+
   const getLocalStorageData = nameKey();
 
   const [show, setShow] = useState(false);
+  const [addedNote, setAddedNote] = useState({});
+  const [noteClickData, setNoteClickData] = useState({
+    type: "",
+    name: "",
+  });
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -55,17 +67,103 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   const updateQuestionaireStatus =
     store?.updateQuestionnaireReducer?.updateQuestionnaire?.status;
 
-  const [amenitiesInputOnClickGet, setAmenitiesInputOnClickGet] = useState([]);
+  // const [amenitiesInputOnClickGet, setAmenitiesInputOnClickGet] = useState([]);
 
-  const amenitiesMainHandle = (type, item, id) => {
-    if (type) {
-      setAmenitiesInputOnClickGet([...amenitiesInputOnClickGet, { id, item }]);
-    } else if (!type) {
-      let getFilter = amenitiesInputOnClickGet?.filter(
-        (items) => items?.id !== id
-      );
-      setAmenitiesInputOnClickGet(getFilter);
+  // const amenitiesMainHandle = (type, item, id) => {
+  //   if (type) {
+  //     setAmenitiesInputOnClickGet([...amenitiesInputOnClickGet, { id, item }]);
+  //   } else if (!type) {
+  //     let getFilter = amenitiesInputOnClickGet?.filter(
+  //       (items) => items?.id !== id
+  //     );
+  //     setAmenitiesInputOnClickGet(getFilter);
+  //   }
+  // };
+
+  // handle edit or add note button click to add checkbox to checked state
+  const handleEditButtonClick = (type, amenityValue) => {
+    if (type === "family") {
+      if (!amenitiesFamilyOptions.includes(amenityValue)) {
+        // If the familyValue is not already included, add it to the state
+        setAmenitiesFamilyOptions((prevState) => [...prevState, amenityValue]);
+        // add "" for selected family value
+        setAmenitiesFamilyResponse((prevState) => [...prevState, ""]);
+      }
+
+      setNoteClickData({
+        ...noteClickData,
+        type: type,
+        name: amenityValue,
+      });
     }
+
+    if (type === "Indoor") {
+      if (!amenitiesIndoorOptions.includes(amenityValue)) {
+        // If the familyValue is not already included, add it to the state
+        setAmenitiesIndoorOptions((prevState) => [...prevState, amenityValue]);
+        // add "" for selected family value
+        setAmenitiesIndoorResponse((prevState) => [...prevState, ""]);
+      }
+
+      setNoteClickData({
+        ...noteClickData,
+        type: type,
+        name: amenityValue,
+      });
+    }
+
+    if (type === "More") {
+      if (!amenitiesMoreOptions.includes(amenityValue)) {
+        // If the familyValue is not already included, add it to the state
+        setAmenitiesMoreOptions((prevState) => [...prevState, amenityValue]);
+        // add "" for selected family value
+        setAmenitiesMoreResponse((prevState) => [...prevState, ""]);
+      }
+
+      setNoteClickData({
+        ...noteClickData,
+        type: type,
+        name: amenityValue,
+      });
+    }
+
+    if (type === "Outdoor") {
+      if (!amenitiesOutdoorOptions.includes(amenityValue)) {
+        // If the familyValue is not already included, add it to the state
+        setAmenitiesOutdoorOptions((prevState) => [...prevState, amenityValue]);
+        // add "" for selected family value
+        setAmenitiesOutdoorResponse((prevState) => [...prevState, ""]);
+      }
+
+      setNoteClickData({
+        ...noteClickData,
+        type: type,
+        name: amenityValue,
+      });
+    }
+
+    if (type === "RulesAndServices") {
+      if (!amenitiesRulesOptions.includes(amenityValue)) {
+        // If the familyValue is not already included, add it to the state
+        setAmenitiesRulesOptions((prevState) => [...prevState, amenityValue]);
+        // add "" for selected family value
+        setAmenitiesRulesResponse((prevState) => [...prevState, ""]);
+      }
+
+      setNoteClickData({
+        ...noteClickData,
+        type: type,
+        name: amenityValue,
+      });
+    }
+
+    setShow(true);
+    // handleShow(
+    //   booking.question_text,
+    //   `${booking.question_type}${index}_bookingnote`,
+    //   booking.response_text
+    // )
+    // }
   };
 
   const handleFamilyCheckboxChange = (event) => {
@@ -73,8 +171,16 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     if (checked) {
       // If checkbox is checked, add value to the state
       setAmenitiesFamilyOptions((prevState) => [...prevState, value]);
+      setAmenitiesFamilyResponse((prevState) => [...prevState, ""]);
     } else {
       // If checkbox is unchecked, remove value from the state
+
+      const indexVal = amenitiesFamilyOptions.indexOf(value);
+      // remove responseText from array for family
+      setAmenitiesFamilyResponse((prevState) =>
+        prevState.filter((item, index) => index !== indexVal)
+      );
+
       setAmenitiesFamilyOptions((prevState) =>
         prevState.filter((item) => item !== value)
       );
@@ -87,8 +193,15 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     if (checked) {
       // If checkbox is checked, add value to the state
       setAmenitiesIndoorOptions((prevState) => [...prevState, value]);
+      setAmenitiesIndoorResponse((prevState) => [...prevState, ""]);
     } else {
       // If checkbox is unchecked, remove value from the state
+      const indexVal = amenitiesIndoorOptions.indexOf(value);
+      // remove responseText from array for family
+      setAmenitiesIndoorResponse((prevState) =>
+        prevState.filter((item, index) => index !== indexVal)
+      );
+
       setAmenitiesIndoorOptions((prevState) =>
         prevState.filter((item) => item !== value)
       );
@@ -100,8 +213,15 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     if (checked) {
       // If checkbox is checked, add value to the state
       setAmenitiesMoreOptions((prevState) => [...prevState, value]);
+      setAmenitiesMoreResponse((prevState) => [...prevState, ""]);
     } else {
       // If checkbox is unchecked, remove value from the state
+      const indexVal = amenitiesMoreOptions.indexOf(value);
+      // remove responseText from array for family
+      setAmenitiesMoreResponse((prevState) =>
+        prevState.filter((item, index) => index !== indexVal)
+      );
+
       setAmenitiesMoreOptions((prevState) =>
         prevState.filter((item) => item !== value)
       );
@@ -113,8 +233,15 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     if (checked) {
       // If checkbox is checked, add value to the state
       setAmenitiesOutdoorOptions((prevState) => [...prevState, value]);
+      setAmenitiesOutdoorResponse((prevState) => [...prevState, ""]);
     } else {
       // If checkbox is unchecked, remove value from the state
+      const indexVal = amenitiesOutdoorOptions.indexOf(value);
+      // remove responseText from array for family
+      setAmenitiesOutdoorResponse((prevState) =>
+        prevState.filter((item, index) => index !== indexVal)
+      );
+
       setAmenitiesOutdoorOptions((prevState) =>
         prevState.filter((item) => item !== value)
       );
@@ -126,8 +253,15 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     if (checked) {
       // If checkbox is checked, add value to the state
       setAmenitiesRulesOptions((prevState) => [...prevState, value]);
+      setAmenitiesRulesResponse((prevState) => [...prevState, ""]);
     } else {
       // If checkbox is unchecked, remove value from the state
+      const indexVal = amenitiesRulesOptions.indexOf(value);
+      // remove responseText from array for family
+      setAmenitiesRulesResponse((prevState) =>
+        prevState.filter((item, index) => index !== indexVal)
+      );
+
       setAmenitiesRulesOptions((prevState) =>
         prevState.filter((item) => item !== value)
       );
@@ -136,31 +270,51 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
   const handleSubmit = () => {
     const questionaireToSend = structuredClone(apiQuestionnaireObject);
-    console.log(
-      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-        "Family"
-      ][0]["response_options"]
-    );
+    // console.log(
+    //   questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+    //     "Family"
+    //   ][0]["response_options"]
+    // );
 
     questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
       "Family"
     ][0]["response_options"] = amenitiesFamilyOptions;
 
     questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      "Family"
+    ][0]["response_text"] = amenitiesFamilyResponse;
+
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
       "Indoor"
     ][0]["response_options"] = amenitiesIndoorOptions;
+
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      "Indoor"
+    ][0]["response_text"] = amenitiesIndoorResponse;
 
     questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
       "More"
     ][0]["response_options"] = amenitiesMoreOptions;
 
     questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      "More"
+    ][0]["response_text"] = amenitiesMoreResponse;
+
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
       "Outdoor"
     ][0]["response_options"] = amenitiesOutdoorOptions;
 
     questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      "Outdoor"
+    ][0]["response_text"] = amenitiesOutdoorResponse;
+
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
       "Rules and Services"
     ][0]["response_options"] = amenitiesRulesOptions;
+
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      "Rules and Services"
+    ][0]["response_text"] = amenitiesRulesResponse;
 
     console.log("Updated Data: ", questionaireToSend);
 
@@ -188,24 +342,29 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   }, [updateQuestionaireStatus, loadingStatus]);
 
   useEffect(() => {
-    if (family.response_options.length > 0) {
-      setAmenitiesFamilyOptions(family.response_options);
+    if (family?.response_options.length > 0) {
+      setAmenitiesFamilyOptions(family?.response_options);
+      setAmenitiesFamilyResponse(family?.response_text);
     }
 
-    if (Indoor.response_options.length > 0) {
+    if (Indoor?.response_options.length > 0) {
       setAmenitiesIndoorOptions(Indoor.response_options);
+      setAmenitiesIndoorResponse(Indoor.response_text);
     }
 
-    if (More.response_options.length > 0) {
+    if (More?.response_options.length > 0) {
       setAmenitiesMoreOptions(More.response_options);
+      setAmenitiesMoreResponse(More.response_text);
     }
 
-    if (Outdoor.response_options.length > 0) {
+    if (Outdoor?.response_options.length > 0) {
       setAmenitiesOutdoorOptions(Outdoor.response_options);
+      setAmenitiesOutdoorResponse(Outdoor.response_text);
     }
 
-    if (RulesAndServices.response_options.length > 0) {
+    if (RulesAndServices?.response_options.length > 0) {
       setAmenitiesRulesOptions(RulesAndServices.response_options);
+      setAmenitiesRulesResponse(RulesAndServices.response_text);
     }
   }, [family, Indoor, More, Outdoor, RulesAndServices]);
 
@@ -214,45 +373,57 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
       {console.log(
         "amenitiesIndoorOptions: ",
         amenitiesIndoorOptions,
+        " Indoor Response: ",
+        amenitiesIndoorResponse,
         " familey: ",
         amenitiesFamilyOptions,
+        " family Response: ",
+        amenitiesFamilyResponse,
         " more: ",
         amenitiesMoreOptions,
+        " More Response: ",
+        amenitiesMoreResponse,
         " outdoor: ",
         amenitiesOutdoorOptions,
+        " outdoor Response: ",
+        amenitiesOutdoorResponse,
         " rules: ",
-        amenitiesRulesOptions
+        amenitiesRulesOptions,
+        " rules Response: ",
+        amenitiesRulesResponse
       )}
-      <Modal
-        size="md"
-        show={show}
-        onHide={handleClose}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        className="contact-modal"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Extra Note
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="form-design">
-            <label>Baby bath</label>
-            <textarea
-              className="form-control"
-              name=""
-              id=""
-              cols="30"
-              rows="10"
-              placeholder="Enter note here..."
-            ></textarea>
-            <div className="d-flex justify-content-center mt-3">
-              <button className="mw-auto">Add Note</button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+
+      {show && (
+        <CheckboxModalNote
+          show={show}
+          handleClose={handleClose}
+          noteClickData={noteClickData}
+          responseOptions={
+            (noteClickData.type === "family" && amenitiesFamilyOptions) ||
+            (noteClickData.type === "Indoor" && amenitiesIndoorOptions) ||
+            (noteClickData.type === "More" && amenitiesMoreOptions) ||
+            (noteClickData.type === "Outdoor" && amenitiesOutdoorOptions) ||
+            (noteClickData.type === "RulesAndServices" && amenitiesRulesOptions)
+          }
+          responseText={
+            (noteClickData.type === "family" && amenitiesFamilyResponse) ||
+            (noteClickData.type === "Indoor" && amenitiesIndoorResponse) ||
+            (noteClickData.type === "More" && amenitiesMoreResponse) ||
+            (noteClickData.type === "Outdoor" && amenitiesOutdoorResponse) ||
+            (noteClickData.type === "RulesAndServices" &&
+              amenitiesRulesResponse)
+          }
+          setResponseText={
+            (noteClickData.type === "family" && setAmenitiesFamilyResponse) ||
+            (noteClickData.type === "Indoor" && setAmenitiesIndoorResponse) ||
+            (noteClickData.type === "More" && setAmenitiesMoreResponse) ||
+            (noteClickData.type === "Outdoor" && setAmenitiesOutdoorResponse) ||
+            (noteClickData.type === "RulesAndServices" &&
+              setAmenitiesRulesResponse)
+          }
+        />
+      )}
+
       {!apiQuestionnaireLoading ? (
         <div>
           <h1 className="text-white fs-4 fw-bold mb-3">family</h1>
@@ -276,7 +447,12 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                           <label class="form-check-label" for="inlineCheckbox2">
                             {family}
                           </label>
-                          <button className="bg-none p-0 border-0">
+                          <button
+                            className="bg-none p-0 border-0"
+                            onClick={() =>
+                              handleEditButtonClick("family", family)
+                            }
+                          >
                             <svg
                               width="18"
                               height="18"
@@ -373,7 +549,12 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                           <label class="form-check-label" for="inlineCheckbox2">
                             {Indoor}
                           </label>
-                          <button className="bg-none p-0 border-0">
+                          <button
+                            className="bg-none p-0 border-0"
+                            onClick={() =>
+                              handleEditButtonClick("Indoor", Indoor)
+                            }
+                          >
                             <svg
                               width="18"
                               height="18"
@@ -418,7 +599,10 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                           <label class="form-check-label" for="inlineCheckbox3">
                             {More}
                           </label>
-                          <button className="bg-none p-0 border-0">
+                          <button
+                            className="bg-none p-0 border-0"
+                            onClick={() => handleEditButtonClick("More", More)}
+                          >
                             <svg
                               width="18"
                               height="18"
@@ -462,7 +646,12 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                           <label class="form-check-label" for="inlineCheckbox4">
                             {Outdoor}
                           </label>
-                          <button className="bg-none p-0 border-0">
+                          <button
+                            className="bg-none p-0 border-0"
+                            onClick={() =>
+                              handleEditButtonClick("Outdoor", Outdoor)
+                            }
+                          >
                             <svg
                               width="18"
                               height="18"
@@ -512,7 +701,15 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                           <label class="form-check-label" for="inlineCheckbox5">
                             {RulesAndServices}
                           </label>
-                          <button className="bg-none p-0 border-0">
+                          <button
+                            className="bg-none p-0 border-0"
+                            onClick={() =>
+                              handleEditButtonClick(
+                                "RulesAndServices",
+                                RulesAndServices
+                              )
+                            }
+                          >
                             <svg
                               width="18"
                               height="18"

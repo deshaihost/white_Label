@@ -3,8 +3,16 @@ import Modal from "react-bootstrap/Modal";
 // import "./calenderModel.css";
 import Form from "react-bootstrap/Form";
 // import Calendar from "./Calender";
+import ToastHandle from "../../../../helper/ToastMessage";
+import axios from "axios";
 
-const PopupModal = ({ show, setShow, selectedDate, setSelectedDate }) => {
+const PopupModal = ({
+  show,
+  setShow,
+  selectedDate,
+  setSelectedDate,
+  responseObject,
+}) => {
   const [date, setDate] = useState(new Date());
 
   const [data, setData] = useState({
@@ -14,6 +22,12 @@ const PopupModal = ({ show, setShow, selectedDate, setSelectedDate }) => {
     startTime: "05:30",
     endTime: "05:30",
   });
+
+  //  format date to dd/mm/yyyy format
+  function formatDate(startDate) {
+    const [year, month, day] = startDate.split("-");
+    return `${month}/${day}/${year}`;
+  }
 
   const handleStatusChange = (e) => {
     setData({
@@ -28,6 +42,84 @@ const PopupModal = ({ show, setShow, selectedDate, setSelectedDate }) => {
       ...data,
       [e.target.id]: e.target.value,
     });
+  };
+
+  // to get the schedule to show on the calender
+  const addCalenderSchedule = async (dataToSend) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    const getSessionStorageData = JSON.parse(
+      sessionStorage.getItem("hostBuddy_auth")
+    );
+
+    const token = getSessionStorageData?.token;
+    console.log("dataToSend ", dataToSend);
+
+    // return;
+
+
+    try {
+      if (token) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-API-Key": API_KEY,
+          },
+        };
+        const response = await axios.put(
+          `${baseUrl}/set_datetime_toggle`,
+          dataToSend,
+          config
+        );
+
+        // setCalendarSchedule(() => response?.data?.schedule);
+        console.log("API Response: ", response.data);
+
+        // if (response.status === 200) {
+        //     dispatch({
+        //         type: "get_all_Task",
+        //         payload: response.data.data,
+        //     });
+        // } else {
+        //     dispatch({
+        //         type: "get_all_Task",
+        //         payload: [],
+        //     });
+        // }
+      } else {
+        alert("No Token");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSchedule = (e) => {
+    e.preventDefault();
+
+    const startSchedule = `${formatDate(data.startDate)} ${data.startTime}`;
+    const endSchedule = `${formatDate(data.endDate)} ${data.endTime}`;
+
+    console.log(startSchedule, " ", endSchedule);
+
+    if (data.status === "") {
+      ToastHandle("Please select status", "danger");
+      return;
+    }
+
+    if (data.status === "on") {
+      responseObject.dates.on.push(startSchedule);
+      responseObject.dates.on.push(endSchedule);
+    }
+
+    if (data.status === "off") {
+      responseObject.dates.off.push(startSchedule);
+      responseObject.dates.off.push(endSchedule);
+    }
+
+    addCalenderSchedule(responseObject);
+    console.log("Submit", responseObject);
   };
 
   useEffect(() => {
@@ -138,9 +230,10 @@ const PopupModal = ({ show, setShow, selectedDate, setSelectedDate }) => {
                 <input
                   type="submit"
                   data-attr-date="once"
-                  class="bg-primary form-control"
+                  className="bg-primary form-control"
                   value="Apply"
                   id="submit-single-property"
+                  onClick={handleSchedule}
                 />{" "}
               </div>
             </div>

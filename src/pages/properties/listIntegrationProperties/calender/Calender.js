@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PopupModal from "../popupmodal/PopupModal";
 
-const Calendar = ({ scheduleData, date }) => {
+const Calendar = ({ selectedProperty, scheduleData, date }) => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
   const currentDate = new Date();
@@ -11,6 +11,34 @@ const Calendar = ({ scheduleData, date }) => {
   }
 
   const specificDates = scheduleData?.specific_dates;
+
+  const scheduledDate = structuredClone(specificDates);
+
+  const responseObject = {
+    properties: [
+      selectedProperty
+    ],
+    "dates": scheduledDate
+    // {
+    //     "on": [
+    //         "01/01/2025 10:00",
+    //         "01/01/2025 11:00",
+    //         "02/01/2025 10:00",
+    //         "02/01/2025 11:00"
+    //     ],
+    //     "off": [
+    //         "01/01/2025 10:00",
+    //         "01/01/2025 11:00",
+    //         "02/01/2025 10:00",
+    //         "02/01/2025 11:00"
+    //     ]
+    // }
+}
+
+  console.log("scheduledDate: ", specificDates);
+  console.log("responseObject: ", responseObject);
+  
+
 
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -98,9 +126,34 @@ const Calendar = ({ scheduleData, date }) => {
                     classNames += " future-date";
                   }
 
+                  // let status = "";
+                  // if (specificDates) {
+                  //   specificDates?.on?.forEach((onDate, index) => {
+                  //     const onDateTime = new Date(onDate);
+                  //     const offDateTime = new Date(specificDates.on[index]);
+                  //     if (
+                  //       onDateTime.toDateString() === dayDate.toDateString()
+                  //     ) {
+                  //       const startTime = onDateTime.toLocaleTimeString([], {
+                  //         hour: "2-digit",
+                  //         minute: "2-digit",
+                  //       });
+                  //       const endTime = offDateTime.toLocaleTimeString([], {
+                  //         hour: "2-digit",
+                  //         minute: "2-digit",
+                  //       });
+                  //       status = (
+                  //         <div className="bg-success">
+                  //           <div>Status: On</div>
+                  //           <div>{`${startTime} - ${endTime}`}</div>
+                  //         </div>
+                  //       );
+                  //     }
+                  //   });
+                  // }
                   let status = "";
                   if (specificDates) {
-                    specificDates?.on?.forEach((onDate, index) => {
+                    specificDates.on.forEach((onDate, index) => {
                       const onDateTime = new Date(onDate);
                       const offDateTime = new Date(specificDates.on[index]);
                       if (
@@ -117,6 +170,29 @@ const Calendar = ({ scheduleData, date }) => {
                         status = (
                           <div className="bg-success">
                             <div>Status: On</div>
+                            <div>{`${startTime} - ${endTime}`}</div>
+                          </div>
+                        );
+                      }
+                    });
+
+                    specificDates.off.forEach((offDate, index) => {
+                      const onDateTime = new Date(specificDates.off[index]);
+                      const offDateTime = new Date(offDate);
+                      if (
+                        offDateTime.toDateString() === dayDate.toDateString()
+                      ) {
+                        const startTime = onDateTime.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
+                        const endTime = offDateTime.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
+                        status = (
+                          <div className="bg-danger">
+                            <div>Status: Off</div>
                             <div>{`${startTime} - ${endTime}`}</div>
                           </div>
                         );
@@ -154,6 +230,7 @@ const Calendar = ({ scheduleData, date }) => {
           setShow={setShow}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
+          responseObject={responseObject}
         />
       )}
     </>

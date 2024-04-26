@@ -10,14 +10,29 @@ import {
 import Loader from "../../../../../helper/Loader";
 import { Button, Modal } from "react-bootstrap";
 import ToastHandle from "../../../../../helper/ToastMessage";
+import SelectModalNote from "../../extraNoteModal/SelectModalNote";
 
 const LocationForm = ({ prntFuntionHeaderActive }) => {
   const { id } = useParams();
-  const [show, setShow] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState(false);
+  const [show, setShow] = useState(false);
+  const [addedNote, setAddedNote] = useState({});
+  const [noteClickData, setNoteClickData] = useState({
+    question: "",
+    name: "",
+    value: "",
+  });
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = (question, name, value) => {
+    setNoteClickData({
+      ...noteClickData,
+      question: question,
+      name: name,
+      value: value,
+    });
+    setShow(true);
+  };
 
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -65,6 +80,22 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
       questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
         "Location"
       ][0]["response_option"] = data?.select0;
+
+      // select value note updation
+      // questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+      //   "Location"
+      // ][0]["response_text"] =
+      //   addedNote && "select0_note" in addedNote
+      //     ? addedNote.select0_note
+      //     : null;
+      questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+        "Location"
+      ][0]["response_text"] =
+        addedNote && "select0_note" in addedNote
+          ? addedNote.select0_note === ""
+            ? null
+            : addedNote.select0_note
+          : null;
 
       questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
         "Location"
@@ -118,9 +149,19 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
     }
   }, [updateQuestionaireStatus]);
 
+  console.log("addedNote: ", addedNote);
   return (
     <>
-      <Modal
+      {show && (
+        <SelectModalNote
+          show={show}
+          handleClose={handleClose}
+          noteClickData={noteClickData}
+          addedNote={addedNote}
+          setAddedNote={setAddedNote}
+        />
+      )}
+      {/* <Modal
         size="md"
         show={show}
         onHide={handleClose}
@@ -149,7 +190,7 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
             </div>
           </div>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
       {!apiQuestionnaireLoading ? (
         <div>
           <form
@@ -174,15 +215,17 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
                 >
                   {item.question_type === "select" ? (
                     <>
-                      {console.log(
-                        "hello-repeat select: ",
-                        item.response_option
-                      )}
                       <label className="text-white">
                         {item.question_text}
                         <Button
                           style={{ width: "auto" }}
-                          onClick={handleShow}
+                          onClick={() =>
+                            handleShow(
+                              item.question_text,
+                              `${item.question_type}${index}_note`,
+                              item.response_text
+                            )
+                          }
                           className="bg-none p-0 border-0 d-inline shadow-none"
                         >
                           <svg
