@@ -7,28 +7,26 @@ import {
 import "./Listintigrationproperties.css";
 import { useSelectorUseDispatch } from "../../../helper/Authorized";
 import ToastHandle from "../../../helper/ToastMessage";
-import Loader from "../../../helper/Loader";
-// import NavDropdown from "react-bootstrap/NavDropdown";
+import Loader, { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
 import { useNavigate } from "react-router-dom";
 import WebPageUrlModel from "./modelListProperties/webPageUrlModel/WebPageUrlModel";
 import SupportingDocumentModel from "./modelListProperties/supportingDocumentModel/SupportingDocumentModel";
 import { Button, Dropdown, Form } from "react-bootstrap";
 import { CiCalendar } from "react-icons/ci";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import CalenderModel from "./calender/CalenderModel";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Authorized from "../../../helper/Authorized";
 
 const ListIntegrationProperties = () => {
   const navigate = useNavigate();
   let localStorageKey = "nameKey";
+  const authData = Authorized();
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
-
   const [showCalender, setShowCalender] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState("");
-
   const { store, dispatch } = useSelectorUseDispatch();
   const userDataGetLoading = store?.getUserDataReducer?.loading;
   const createPropertiesName =
@@ -55,9 +53,7 @@ const ListIntegrationProperties = () => {
   let supportingDocumentsClose = "supportingDocumentsClose";
 
   const handleCalenderModalOpen = (propertyName) => {
-    console.log("PropertyName: ", propertyName);
     setSelectedProperty(() => propertyName);
-
     setShowCalender(true);
   };
 
@@ -130,14 +126,20 @@ const ListIntegrationProperties = () => {
     dispatch(getUserDataActions());
   }, []);
 
-  console.log("Property Data: ", createPropertiesName);
-
   return (
     <div>
-      {propertiesDeleteLoading && <Loader />}
+      {propertiesDeleteLoading && <FullScreenLoader />}
       {!userDataGetLoading ? (
         <>
           {createPropertiesName?.map((properties, index) => {
+            let urlLink = {
+              subscription_id: "sub_1P6pSCEiWY94EF2SQCZUN5Bo",
+              property_id: 1612,
+              chatbot_key: 65216557,
+              propertyN: properties,
+              copyLink: true,
+              authData
+            };
             return (
               <>
                 <div className="row">
@@ -173,15 +175,14 @@ const ListIntegrationProperties = () => {
                                 </label>
                               </div>
                               <Button
-                              onClick={() =>
-                                handleCalenderModalOpen(properties)
-                              }
-                              className="border-0 shadow-none bg-none p-0 fs-5"
-                            >
-                              <CiCalendar className="text-primary" />
-                            </Button>
+                                onClick={() =>
+                                  handleCalenderModalOpen(properties)
+                                }
+                                className="border-0 shadow-none bg-none p-0 fs-5"
+                              >
+                                <CiCalendar className="text-primary" />
+                              </Button>
                             </div>
-                            
                           </div>
                         </div>
                       </div>
@@ -235,11 +236,17 @@ const ListIntegrationProperties = () => {
                                   Delete Property
                                 </Dropdown.Item>
                                 <Dropdown.Item
-                                  onClick={() => {
-                                    selectedHandle(copyChatbotLink);
-                                  }}
+                                // onClick={() => {
+                                //   selectedHandle(copyChatbotLink);
+                                // }}
                                 >
-                                  Copy Chatbot Link
+                                  <CopyToClipboard
+                                    text={`https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy/${JSON.stringify(
+                                      urlLink
+                                    )}`}
+                                  >
+                                    <span>Copy Chatbot Link</span>
+                                  </CopyToClipboard>
                                 </Dropdown.Item>
                               </Dropdown.Menu>
                             </Dropdown>
@@ -255,86 +262,15 @@ const ListIntegrationProperties = () => {
                         </Button>
                       </div>
                     </div>
-
                   </div>
                 </div>
-                {/* previous flow */}
-                {/* <div className="row border p-4">
-                  <div className="col-4 ">image</div>
-                  <div className="col-4">
-                    <div>{properties}</div>
-                    <div>
-                      <span>Switch</span>
-                      <span className="border ms-2">Celander</span>
-                    </div>
-                  </div>
-                  <div className="col-4">
-                    <div className="d-flex justify-content-between px-5">
-                      <div
-                        onClick={() => {
-                          selectedHandle(editProperty, properties);
-                        }}
-                      >
-                        <i class="bi bi-pen"></i>
-                      </div>
-                      <div>
-                        <NavDropdown title="..." id="basic-nav-dropdown">
-                          <NavDropdown.Item
-                            onClick={() => {
-                              selectedHandle(editProperty, properties);
-                            }}
-                          >
-                            Edit Property
-                          </NavDropdown.Item>
-                          <NavDropdown.Item
-                            onClick={() => {
-                              selectedHandle(webPageURLs);
-                            }}
-                          >
-                            Web Page URLs
-                          </NavDropdown.Item>
-                          <NavDropdown.Item
-                            onClick={() => {
-                              selectedHandle(supportingDocuments);
-                            }}
-                          >
-                            Supporting Documents
-                          </NavDropdown.Item>
-                          <NavDropdown.Item
-                            onClick={() => {
-                              selectedHandle(deleteProperty, properties);
-                            }}
-                          >
-                            Delete Property
-                          </NavDropdown.Item>
-                          <NavDropdown.Item
-                            onClick={() => {
-                              selectedHandle(copyChatbotLink);
-                            }}
-                          >
-                            Copy Chatbot Link
-                          </NavDropdown.Item>
-                        </NavDropdown>
-                      </div>
-                    </div>
-                    <div
-                      className="border"
-                      onClick={() => {
-                        selectedHandle(testProperty, properties);
-                      }}
-                    >
-                      Test Property
-                    </div>
-                  </div>
-                </div> */}
               </>
             );
           })}
         </>
       ) : (
-        <Loader />
-      )
-      }
+        <BoxLoader />
+      )}
       <div>
         <WebPageUrlModel
           handleShow={model.webPageUrl}
@@ -345,16 +281,14 @@ const ListIntegrationProperties = () => {
           handleClose={handleModelClose}
         />
       </div>
-      {
-        showCalender && (
-          <CalenderModel
-            selectedProperty={selectedProperty}
-            showCalender={showCalender}
-            setShowCalender={setShowCalender}
-          />
-        )
-      }
-    </div >
+      {showCalender && (
+        <CalenderModel
+          selectedProperty={selectedProperty}
+          showCalender={showCalender}
+          setShowCalender={setShowCalender}
+        />
+      )}
+    </div>
   );
 };
 

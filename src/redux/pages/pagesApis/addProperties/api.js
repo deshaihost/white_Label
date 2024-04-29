@@ -6,7 +6,7 @@ const api = new APICore();
 function testingApiEndPoint(params: any): any {
   const { data } = params;
   // return api.get(`${URL.TESTING_API}/${data}/get_schedule`  );
-  return api.update(URL.TESTING_API,data );
+  return api.get(URL.TESTING_API,data );
 
 }
 

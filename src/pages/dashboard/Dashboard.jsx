@@ -6,7 +6,7 @@ import "./dashboard.css";
 import AddPropertyModal from "../../component/modal/addPropertyModal/AddPropertyModal";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserDataActions } from "../../redux/actions";
-import Loader from "../../helper/Loader";
+import Loader, { BoxLoader } from "../../helper/Loader";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
@@ -130,11 +130,6 @@ const Dashboard = () => {
                           {createPropertiesName?.map((userCreate) => {
                             return (
                               <div className="">
-                                {/* <div className="d-flex">
-                                  <div>image</div>
-                                  <div className="ms-5">{userCreate}</div>
-                                </div>
-                                <div>2</div> */}
                                 <div className="property_status">
                                   <h3>Property Status </h3>
                                   <div className="property_list">
@@ -160,42 +155,17 @@ const Dashboard = () => {
                                             />
                                           </div>
                                         </div>
-
-
                                       </li>
                                     </ul>
                                   </div>
                                 </div>
                               </div>
-
                             );
                           })}
                         </>
                       ) : (
-                        <Loader />
+                        <BoxLoader   />
                       )}
-                      {/* <div className="property-status">
-                        <h3>Property Status </h3>
-                        <div className="property-list">
-                          <ul>
-                            <li>
-                              <div className="text-center">
-                                <h4 className="text-white">
-                                  No property found
-                                </h4>
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleModelOpen("addPropertyOpen")
-                                  }
-                                >
-                                  Add Property
-                                </button>
-                              </div>
-                            </li>
-                          </ul>
-                        </div>
-                      </div> */}
                     </div>
                     <div className="col-lg-4">
                       <div className="get-started">

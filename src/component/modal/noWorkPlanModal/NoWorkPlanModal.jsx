@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import IntegratePlatformSelect from "./IntegratePlatform/IntegratePlatformSelect";
 import { getPMSIntegrationActions } from "../../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
-import Loader from "../../../helper/Loader";
+import { BoxLoader } from "../../../helper/Loader";
 function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
   const store = useSelector((state) => state);
   const checkPmsNotEmpty =
@@ -47,7 +47,7 @@ function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
             )}
           </>
         ) : (
-          <Loader />
+          <BoxLoader />
         )}
       </Modal.Body>
     </Modal>

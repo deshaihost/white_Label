@@ -90,6 +90,7 @@ function* postPropertiesFunction(data) {
     });
   }
 }
+
 function* supportingDocumentPostFunction(data) {
   try {
     yield put({

@@ -36,7 +36,6 @@ function* loginFunction(data) {
         payload: {},
       });
     } else {
-      alert("*");
       yield put({
         type: LoginActionTypes.LOGIN_ERROR,
         payload: { ...response.data },

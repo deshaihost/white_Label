@@ -27,6 +27,7 @@ import {
   supportingUrlPostReducer,
   togglechatBotOnOffReducer
 } from "./pages/pagesApis/addProperties/reducers";
+import { getPropertyByNameReducer } from "./pages/pagesApis/propertyInsight/reducers";
 export default (combineReducers({
   loginReducer,
   registerReducer,
@@ -47,5 +48,6 @@ export default (combineReducers({
   deleteListIntegrationPropertiesReducer,
   supportingDocumentPostReducer,
   supportingUrlPostReducer,
-  togglechatBotOnOffReducer
+  togglechatBotOnOffReducer,
+  getPropertyByNameReducer
 }): any);

@@ -10,7 +10,7 @@ import {
 } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { stateEmptyActions } from "../../redux/actions";
-import Loader from "../../helper/Loader";
+import Loader, { FullScreenLoader } from "../../helper/Loader";
 import { useNavigate } from "react-router-dom";
 import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrationProperties";
 import ToastHandle from "../../helper/ToastMessage";
@@ -85,10 +85,10 @@ const Properties = () => {
         setPropertyConditionCheck(false);
         navigate("/add-properties");
         dispatch(stateEmptyActions());
+      } else if (gotoBillingPortalCheckPaymentStatus === 404) {
+        setModel({ ...model, addProperty: true });
+        dispatch(stateEmptyActions());
       }
-    } else if (gotoBillingPortalCheckPaymentStatus === 404) {
-      setModel({ ...model, addProperty: true });
-      dispatch(stateEmptyActions());
     } else if (toggleChatStatus === 200) {
       ToastHandle(toggleChatMessage, "success");
       dispatch(stateEmptyActions());
@@ -117,7 +117,7 @@ const Properties = () => {
                   <h3>Property Listing</h3>
                   <div className="property-heading-right">
                     <p>Hostbuddy Status</p>
-                    {toggleChatLoading && <Loader />}
+                    {toggleChatLoading && <FullScreenLoader />}
                     <div className="form-check form-switch custom_switch">
                       <input
                         className="form-check-input toggle-user-chatbot"
@@ -168,7 +168,12 @@ const Properties = () => {
                     {!gotoBillingPortalcheckPaymentLoading ? (
                       "Add Property"
                     ) : propertyConditionCheck ? (
-                      <Loader />
+                      <>
+                        <span>
+                        Add Property
+                          <span>{<FullScreenLoader />}</span>
+                        </span>
+                      </>
                     ) : (
                       "Add Property"
                     )}
