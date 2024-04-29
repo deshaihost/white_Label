@@ -14,14 +14,14 @@ import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
 import Loader from "../../../helper/Loader";
 import { ParamsGet, nameKey } from "../../../helper/Authorized";
 import loaderGif from "../../../public/img/new_loader.gif";
-const MeetBanner = () => {
+const MeetBanner = ({ urlData }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const chatBoxUrl = ParamsGet();
   const getName = nameKey();
   const testPropetyName = getName?.nameKey;
-  console.log(testPropetyName, "getName");
-
+  const copyChatBotName = urlData?.propertyN;
+  console.log(copyChatBotName, "copyChatBotName");
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
   const getMessageResp =
     store?.getSessionIdReducer?.sessionId?.data?.initial_message;
@@ -94,7 +94,13 @@ const MeetBanner = () => {
           <h2>
             {" "}
             {chatBoxUrl !== undefined ? (
-              <>{testPropetyName !== "" ? testPropetyName : "Empty"}</>
+              <>
+                {testPropetyName !== ""
+                  ? copyChatBotName !== undefined
+                    ? copyChatBotName
+                    : testPropetyName
+                  : "Empty"}
+              </>
             ) : (
               "Meet HostBuddy"
             )}

@@ -18,6 +18,6 @@ export const DELETE_INTEGRATION_PROPERTIES = "/properties";
 export const SUPPORTING_DOCUMENT = "/properties";
 export const SUPPORTING_URL = "/properties";
 export const TOGGLE_CHATBOT = "/toggle_chatbot";
+export const GET_PROPERTY_BY_NAME = "/properties/";
 
-
-export const TESTING_API = "/toggle_chatbot";
+export const TESTING_API = "/properties/property_name";

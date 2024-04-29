@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./sidebar.css";
 import { logoutActions } from "../../redux/actions";
 import axios from "axios";
-import Loader from "../../helper/Loader";
+import Loader, { FullScreenLoader } from "../../helper/Loader";
 
 const SideBar = () => {
   const navigate=useNavigate()
@@ -100,7 +100,7 @@ const SideBar = () => {
               Log out
             </Link>
           ) : (
-            <Loader />
+            <FullScreenLoader />
           )}
         </li>
       </ul>

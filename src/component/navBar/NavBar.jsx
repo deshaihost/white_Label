@@ -6,10 +6,14 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import ToastHandle from "../../helper/ToastMessage";
-import Authorized from "../../helper/Authorized";
+import Authorized, { ParamsGet } from "../../helper/Authorized";
+import { useParams } from "react-router-dom";
 const NavBar = () => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];
+  const chatBoxUrl = ParamsGet();
+  const urlData = typeof chatBoxUrl === "string" && JSON.parse(chatBoxUrl);
+  console.log(urlData,chatBoxUrl,useParams(),'urlData')
 
   return (
     <header className="header">

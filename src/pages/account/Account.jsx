@@ -12,7 +12,7 @@ import {
   stateEmptyActions,
   updateAccountInfoActions,
 } from "../../redux/actions";
-import Loader from "../../helper/Loader";
+import Loader, { FullScreenLoader } from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
 const Account = () => {
   const store = useSelector((state) => state);
@@ -93,7 +93,7 @@ const Account = () => {
               <div className="account-content">
                 {userDataLoading && (
                   <div className="text-end">
-                    <Loader />
+                    <FullScreenLoader />
                   </div>
                 )}
 
@@ -106,7 +106,7 @@ const Account = () => {
                           type="text"
                           name="firstname"
                           className="form-control"
-                          {...register("firstName", { required: true })}
+                          {...register("firstName")}
                         />
                         {errors.firstName?.type === "required" && (
                           <>
@@ -124,7 +124,7 @@ const Account = () => {
                           type="text"
                           name="lastname"
                           className="form-control"
-                          {...register("lastName", { required: true })}
+                          {...register("lastName")}
                         />
                         {errors.lastName?.type === "required" && (
                           <>
@@ -145,7 +145,6 @@ const Account = () => {
                           name="phonenumber"
                           className="form-control"
                           {...register("phone", {
-                            required: true,
                             pattern: /^[0-9]{10}$/,
                           })}
                           maxLength="10"
@@ -258,7 +257,6 @@ const Account = () => {
                       </div>
                     </>
                   )}
-
                   <div className="row">
                     <div className="col text-center">
                       <button
