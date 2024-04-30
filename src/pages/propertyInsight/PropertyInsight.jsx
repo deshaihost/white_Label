@@ -6,19 +6,24 @@ import TranscriptsTable from "./transcriptsTable/TranscriptsTable";
 import SuggestionsBusiness from "./suggestionsBusiness/SuggestionsBusiness";
 import { getUserDataActions } from "../../redux/actions";
 import { useSelectorUseDispatch } from "../../helper/Authorized";
-import { getPropertyInsightByNameActions } from "../../redux/actions";
-import Loader, { BoxLoader } from "../../helper/Loader";
+import { PropertyGetConversationsActions } from "../../redux/actions";
+import Loader, { BoxLoader, FullScreenLoader } from "../../helper/Loader";
 import { useParams } from "react-router-dom";
 const PropertyInsight = () => {
   const { store, dispatch } = useSelectorUseDispatch();
   const chatBoxUrl = useParams();
-  console.log(chatBoxUrl,useParams(),'chatBoxUrl')
+  const propertiesConversationGetData =
+    store?.propertyGetConversationReducer?.propertyGetConversation?.data
+      ?.conversations;
+
+  const propertiesConversationLoading =
+    store?.propertyGetConversationReducer?.loading;
+  console.log(propertiesConversationGetData, "++++");
   const userDataGet =
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
   const userpertieslistName = userDataGet?.[0];
 
   const [propertySelectName, setPropertySelectName] = useState("");
-  const propertyByNameLoading = store?.getPropertyByNameReducer?.loading;
 
   useEffect(() => {
     dispatch(getUserDataActions());
@@ -26,7 +31,7 @@ const PropertyInsight = () => {
 
   useEffect(() => {
     dispatch(
-      getPropertyInsightByNameActions({
+      PropertyGetConversationsActions({
         propertyName:
           propertySelectName !== "" ? propertySelectName : userpertieslistName,
       })
@@ -68,20 +73,42 @@ const PropertyInsight = () => {
                     </select>
                   </div>
                 </div>
-                { !propertyByNameLoading ? (
-                  <div className="px-lg-5 px-md-4 px-3 py-4">
-                    <div>
-                      <SuccessTotalBox />
-                    </div>
-                    <div className="">
-                      <TranscriptsTable />
-                    </div>
-                    {/* <div className="mt-4">
+                {!propertiesConversationLoading ? (
+                  <>
+                    {propertiesConversationGetData?.length > 0 ? (
+                      <div className="px-lg-5 px-md-4 px-3 py-4">
+                        <div>
+                          <SuccessTotalBox
+                            totalConversation={
+                              propertiesConversationGetData?.length 
+                            }
+                          />
+                        </div>
+                        <div className="">
+                          <TranscriptsTable
+                            conversationData={propertiesConversationGetData}
+                          />
+                        </div>
+                        {/* <div className="mt-4">
                   <SuggestionsBusiness />
                 </div> */}
-                  </div>
+                      </div>
+                    ) : (
+                      <div
+                        className="text-danger"
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          height: "85%",
+                        }}
+                      >
+                        Empty
+                      </div>
+                    )}
+                  </>
                 ) : (
-                  <BoxLoader />
+                  <FullScreenLoader />
                 )}
               </div>
             </div>
