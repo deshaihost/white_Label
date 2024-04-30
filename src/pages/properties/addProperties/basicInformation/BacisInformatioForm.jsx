@@ -20,9 +20,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
     store?.postPropertiesReducer?.postProperties?.data?.error;
   const propertiesAddLoading = store?.postPropertiesReducer?.loading;
 
-  console.log("propertiesAddStatus: ", propertiesAddStatus);
-  console.log("propertiesAddLoading: ", propertiesAddLoading);
-
   const {
     register,
     handleSubmit,
@@ -38,7 +35,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
     setGetInputNameKey({ nameKey: data.propertyName });
     let formData = new FormData();
     formData.append("property_name:", data.propertyName);
-    formData.append("image", data?.files[0]);
+    formData.append("file", data?.files[0]);
     dispatch(postPropertiesActions(formData));
   };
 

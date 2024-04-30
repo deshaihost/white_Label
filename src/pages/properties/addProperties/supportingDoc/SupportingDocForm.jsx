@@ -86,8 +86,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   }
 
   const handleUploadUrl = async () => {
-    console.log("uploadedurl: ", uploadedUrl);
-    console.log("isvalid: ", isValidURL(uploadedUrl));
     if (!isValidURL(uploadedUrl)) {
       ToastHandle("Please enter valid webpage url.", "danger");
       return;
@@ -95,8 +93,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-
-    console.log("API_KEY: ", API_KEY);
 
     const getSessionStorageData = JSON.parse(
       sessionStorage.getItem("hostBuddy_auth")
@@ -111,7 +107,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     const urlToSend = {
       url: uploadedUrl,
     };
-    console.log("urltosend: ", urlToSend);
     // return;
     try {
       if (token && propertyName) {
@@ -148,14 +143,21 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     }
   };
 
+  // documents upload handle
+  const [docsInput, setDocsInput] = useState("");
+  const documentUploadHandle = () => {
+    let supportingkeyName = supportingNameKey?.nameKey;
+    const formData = new FormData();
+    formData.append("filess", docsInput?.[0]);
+    dispatch(supportingDocumentPostActions({ supportingkeyName, formData }));
+  };
+
   const handleSubmitForm = (e, uploadType) => {
     e.preventDefault();
-    console.log("uploadType", uploadType?.pmsIntegration);
-    console.log("uploadType", uploadType?.urlToWebPage);
-
-    console.log("uploadType", uploadType?.updateDoc);
     if (uploadType?.urlToWebPage) {
       handleUploadUrl();
+    } else if (uploadType?.updateDoc) {
+      documentUploadHandle();
     }
   };
 
@@ -260,6 +262,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                     <input
                       type="file"
                       className="form-control"
+                      onChange={(e) => setDocsInput(e.target.files)}
                       // {...register("docx")}
                     />
                   </div>

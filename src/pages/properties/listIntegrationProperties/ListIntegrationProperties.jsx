@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   deleteListIntegrationPropertiesActions,
+  getPropertyInsightByNameActions,
   getUserDataActions,
   stateEmptyActions,
 } from "../../../redux/actions";
@@ -25,6 +26,11 @@ const ListIntegrationProperties = () => {
   const authData = Authorized();
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
+  const [chatBox, setChatBox] = useState({
+    linkCopy: false,
+    testingProperty: false,
+  });
+
   const [showCalender, setShowCalender] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState("");
   const { store, dispatch } = useSelectorUseDispatch();
@@ -42,6 +48,21 @@ const ListIntegrationProperties = () => {
       ?.deleteListIntegrationProperties?.status;
   const propertiesDeleteLoading =
     store?.deleteListIntegrationPropertiesReducer?.loading;
+  const chatBoxGetByNameData =
+    store?.getPropertyByNameReducer?.getPropertybyName?.data?.property;
+  const { chatbot_key, property_name } = chatBoxGetByNameData
+    ? chatBoxGetByNameData
+    : [];
+  const [copyLinkSetData, setCopyLinkSetData] = useState({
+    chatBotKey: "",
+    propertyName: "",
+  });
+  console.log(copyLinkSetData, "copyLinkSetDatacopyLinkSetData");
+  const chatBoxGetByNameLoading = store?.getPropertyByNameReducer?.loading;
+  const chatBoxGetByNameError =
+    store?.getPropertyByNameReducer?.getPropertybyName?.data?.error;
+  const chatBoxGetByNameStatus =
+    store?.getPropertyByNameReducer?.getPropertybyName?.status;
 
   const [model, setModel] = useState({
     webPageUrl: false,
@@ -94,8 +115,26 @@ const ListIntegrationProperties = () => {
     } else if (findType === deleteProperty) {
       dispatch(deleteListIntegrationPropertiesActions(data));
     } else if (findType === copyChatbotLink) {
+      setChatBox({
+        linkCopy: true,
+        testingProperty: false,
+      });
+      dispatch(
+        getPropertyInsightByNameActions({
+          propertyName: data,
+        })
+      );
     } else if (findType === testProperty) {
+      setChatBox({
+        linkCopy: false,
+        testingProperty: true,
+      });
       setTestPropertyKey({ nameKey: data });
+      dispatch(
+        getPropertyInsightByNameActions({
+          propertyName: data,
+        })
+      );
     }
   };
 
@@ -113,14 +152,54 @@ const ListIntegrationProperties = () => {
       );
       localStorage.setItem(localStorageKey, JSON?.stringify(getInputNameKey));
       setGetInputNameKey({ nameKey: "" });
-    } else if (testPropertyKey.nameKey !== "") {
-      navigate(
-        "/meet-hostbuddy/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw"
-      );
-      localStorage.setItem(localStorageKey, JSON?.stringify(testPropertyKey));
-      setTestPropertyKey({ nameKey: "" });
     }
+    // else if (testPropertyKey.nameKey !== "") {
+    //   navigate(
+    //     "/meet-hostbuddy/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw"
+    //   );
+    //   localStorage.setItem(localStorageKey, JSON?.stringify(testPropertyKey));
+    //   setTestPropertyKey({ nameKey: "" });
+    // }
   }, [propertiesDeleteStatus, getInputNameKey, testPropertyKey]);
+  // user that chatBox intigration
+  let urlLink = {
+    subscription_id: "sub_1P6pSCEiWY94EF2SQCZUN5Bo",
+    property_id: 1612,
+    chatbot_key: chatbot_key,
+    propertyN: property_name,
+    copyLink: true,
+    authData,
+  };
+  useEffect(() => {
+    if (chatBoxGetByNameStatus === 200) {
+      if (chatBox?.linkCopy) {
+        ToastHandle("Link copied", "success");
+        setCopyLinkSetData({
+          chatBotKey: chatbot_key,
+          propertyName: property_name,
+        });
+        setChatBox({
+          linkCopy: false,
+          testingProperty: false,
+        });
+        dispatch(stateEmptyActions());
+        return;
+      } else if (chatBox?.testingProperty) {
+        setChatBox({
+          linkCopy: false,
+          testingProperty: false,
+        });
+        const routingPart = "/meet-hostbuddy/";
+        navigate(`${routingPart}${JSON?.stringify(urlLink)}`);
+        localStorage.setItem(localStorageKey, JSON?.stringify(testPropertyKey));
+        setTestPropertyKey({ nameKey: "" });
+        dispatch(stateEmptyActions());
+      }
+    } else if (chatBoxGetByNameStatus === 404) {
+      ToastHandle(chatBoxGetByNameError, "danger");
+      dispatch(stateEmptyActions());
+    }
+  }, [chatBoxGetByNameStatus, chatBox]);
 
   useEffect(() => {
     dispatch(getUserDataActions());
@@ -128,6 +207,7 @@ const ListIntegrationProperties = () => {
 
   return (
     <div>
+      {chatBoxGetByNameLoading && <FullScreenLoader />}
       {propertiesDeleteLoading && <FullScreenLoader />}
       {!userDataGetLoading ? (
         <>
@@ -135,10 +215,10 @@ const ListIntegrationProperties = () => {
             let urlLink = {
               subscription_id: "sub_1P6pSCEiWY94EF2SQCZUN5Bo",
               property_id: 1612,
-              chatbot_key: 65216557,
-              propertyN: properties,
+              chatbot_key: copyLinkSetData?.chatBotKey,
+              propertyN: copyLinkSetData?.propertyName,
               copyLink: true,
-              authData
+              authData,
             };
             return (
               <>
@@ -236,9 +316,9 @@ const ListIntegrationProperties = () => {
                                   Delete Property
                                 </Dropdown.Item>
                                 <Dropdown.Item
-                                // onClick={() => {
-                                //   selectedHandle(copyChatbotLink);
-                                // }}
+                                  onClick={() => {
+                                    selectedHandle(copyChatbotLink, properties);
+                                  }}
                                 >
                                   <CopyToClipboard
                                     text={`https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy/${JSON.stringify(

@@ -1,8 +1,11 @@
 import { propertyInsightActionTypes } from "./constants";
-// import { StateEmtpyActionTypes } from "../../stateEmpty/constants";
-
+import { StateEmtpyActionTypes } from "../../../stateEmpty/constants"; 
 const GET_PROPERTY_BY_NAME_INITIAL_STATE = {
   getPropertybyName: [],
+  loading: false,
+};
+const PROPERTY_GET_CONVERSATION_INITIAL_STATE = {
+  propertyGetConversation: [],
   loading: false,
 };
 
@@ -24,8 +27,31 @@ const getPropertyByNameReducer = (state = GET_PROPERTY_BY_NAME_INITIAL_STATE, ac
         getPropertybyName: action.payload,
         loading: false,
       };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+        return GET_PROPERTY_BY_NAME_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
+const propertyGetConversationReducer = (state = PROPERTY_GET_CONVERSATION_INITIAL_STATE, action) => {
+  switch (action.type) {
+    case propertyInsightActionTypes.PROPERTY_GET_CONVERSATION_LOADING:
+      return {
+        propertyGetConversation: state.propertyGetConversation,
+        loading: true,
+      };
+    case propertyInsightActionTypes.PROPERTY_GET_CONVERSATION_SUCCESS:
+      return {
+        propertyGetConversation: action.payload,
+        loading: false,
+      };
+    case propertyInsightActionTypes.PROPERTY_GET_CONVERSATION_ERROR:
+      return {
+        propertyGetConversation: action.payload,
+        loading: false,
+      };
     // case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
-    //     return GET_SESSION_ID_INITIAL_STATE;
+    //     return GET_PROPERTY_BY_NAME_INITIAL_STATE;
     default:
       return state;
   }
@@ -33,5 +59,6 @@ const getPropertyByNameReducer = (state = GET_PROPERTY_BY_NAME_INITIAL_STATE, ac
 
 export {
     getPropertyByNameReducer,
+    propertyGetConversationReducer
 
 };
