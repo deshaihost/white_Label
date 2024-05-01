@@ -5,8 +5,8 @@ import {
   GetquestionnaireFunction,
   nameKey,
 } from "../../../../helper/Authorized";
-import { updateQuestionnaireActions } from "../../../../redux/actions";
-import Loader from "../../../../helper/Loader";
+import { stateEmptyActions, updateQuestionnaireActions } from "../../../../redux/actions";
+import Loader, { BoxLoader } from "../../../../helper/Loader";
 import { Modal } from "react-bootstrap";
 import ToastHandle from "../../../../helper/ToastMessage";
 import CheckboxModalNote from "../extraNoteModal/CheckboxModalNote";
@@ -66,6 +66,9 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   // to get the updateQuestionaire status
   const updateQuestionaireStatus =
     store?.updateQuestionnaireReducer?.updateQuestionnaire?.status;
+  const updateQuestionaireLoading = store?.updateQuestionnaireReducer?.loading;
+  const updateQuestionnaireMessage =
+    store?.updateQuestionnaireReducer?.updateQuestionnaire?.data?.message;
 
   // const [amenitiesInputOnClickGet, setAmenitiesInputOnClickGet] = useState([]);
 
@@ -331,10 +334,9 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   useEffect(() => {
     if (updateQuestionaireStatus === 200) {
       if (loadingStatus) {
-        ToastHandle("Questionaire updated successfully", "success");
-        setTimeout(() => {
-          prntFuntionHeaderActive(id !== undefined && "extras");
-        }, 1000);
+        ToastHandle(updateQuestionnaireMessage, "success");
+        prntFuntionHeaderActive(id !== undefined && "extras");
+        dispatch(stateEmptyActions());
 
         setLoadingStatus(false);
       }
@@ -435,7 +437,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div class="form-checkbox">
+                        <div class={amenitiesFamilyOptions.includes(family)?"form-checkbox bg-light text-dark":"form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
@@ -537,7 +539,9 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div class="form-checkbox">
+                        <div 
+                        // class="form-checkbox"
+                         class={amenitiesIndoorOptions.includes(Indoor)?"form-checkbox bg-light text-dark":"form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
@@ -737,12 +741,12 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
             <button class="btn btn-primary">Previous</button>
 
             <button class="border_theme_btn previous" onClick={handleSubmit}>
-              Save & Next{" "}
+              {!updateQuestionaireLoading ? <>Save & Next</> : <Loader />}
             </button>
           </div>
         </div>
       ) : (
-        <Loader />
+        <BoxLoader />
       )}
     </>
   );

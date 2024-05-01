@@ -18,7 +18,7 @@ const PropertyInsight = () => {
 
   const propertiesConversationLoading =
     store?.propertyGetConversationReducer?.loading;
-  console.log(propertiesConversationGetData, "++++");
+  
   const userDataGet =
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
   const userpertieslistName = userDataGet?.[0];
@@ -68,8 +68,6 @@ const PropertyInsight = () => {
                           </>
                         );
                       })}
-
-                      {/* <option value="w3ewed">w3ewed</option> */}
                     </select>
                   </div>
                 </div>
@@ -89,9 +87,6 @@ const PropertyInsight = () => {
                             conversationData={propertiesConversationGetData}
                           />
                         </div>
-                        {/* <div className="mt-4">
-                  <SuggestionsBusiness />
-                </div> */}
                       </div>
                     ) : (
                       <div
