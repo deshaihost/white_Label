@@ -19,6 +19,8 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import AddPropertiesIndex from "../pages/properties/addProperties/AddPropertiesIndex";
+import { ParamsGet } from "../helper/Authorized";
+
 const Routing = () => {
   const location = useLocation();
   return (

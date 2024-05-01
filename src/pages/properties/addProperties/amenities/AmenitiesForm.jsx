@@ -591,7 +591,9 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div class="form-checkbox">
+                        <div 
+                        // class="form-checkbox"
+                        class={amenitiesMoreOptions.includes(More)?"form-checkbox bg-light text-dark":"form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
@@ -638,7 +640,9 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div class="form-checkbox">
+                        <div 
+                        // class="form-checkbox"
+                        class={amenitiesOutdoorOptions.includes(Outdoor)?"form-checkbox bg-light text-dark":"form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
@@ -691,7 +695,12 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div class="form-checkbox">
+                        <div 
+                        // class="form-checkbox"
+                        class={amenitiesRulesOptions.includes(
+                          RulesAndServices
+                        )?"form-checkbox bg-light text-dark":"form-checkbox"}
+                        >
                           <input
                             class="form-check-input"
                             type="checkbox"

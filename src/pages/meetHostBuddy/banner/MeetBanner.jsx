@@ -67,35 +67,27 @@ const MeetBanner = (props) => {
     setMessages([userMessage, botMessage]);
   }, [getMessageResp]);
 
-  // useEffect(() => {
-  //   dispatch(
-  //     getSessionIdActions({
-  //       action: "hb_meet_hostbuddy_chat_start",
-  //       textareaValue: "Hi",
-  //       chatbot_key:
-  //         chatbot_key !== undefined ? chatbot_key : "meet_hostbuddy_8762",
-  //       data_host_return: " ",
-  //       user: chatbot_key !== undefined ? "guest" : "host",
-  //     })
-  //   );
-  // }, [chatbot_key]);
-
   const isFirstRun = useRef(true);
+  const initialGeneratedFun = () => {
+    dispatch(
+      getSessionIdActions({
+        action: "hb_meet_hostbuddy_chat_start",
+        textareaValue: "Hi",
+        chatbot_key:
+          chatbot_key !== undefined ? chatbot_key : "meet_hostbuddy_8762",
+        data_host_return: " ",
+        user: chatbot_key !== undefined ? "guest" : "host",
+      })
+    );
+  };
 
   useEffect(() => {
     if (isFirstRun.current) {
       isFirstRun.current = false;
-      if (chatbot_key) {
-        dispatch(
-          getSessionIdActions({
-            action: "hb_meet_hostbuddy_chat_start",
-            textareaValue: "Hi",
-            chatbot_key:
-              chatbot_key !== undefined ? chatbot_key : "meet_hostbuddy_8762",
-            data_host_return: " ",
-            user: chatbot_key !== undefined ? "guest" : "host",
-          })
-        );
+      if (chatbot_key !== undefined) {
+        initialGeneratedFun();
+      } else if (chatbot_key === undefined) {
+        initialGeneratedFun();
       }
     }
   }, [chatbot_key]);
