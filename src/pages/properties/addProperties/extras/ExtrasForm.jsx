@@ -7,8 +7,11 @@ import {
   GetquestionnaireFunction,
   nameKey,
 } from "../../../../helper/Authorized";
-import { updateQuestionnaireActions } from "../../../../redux/actions";
-import Loader from "../../../../helper/Loader";
+import {
+  stateEmptyActions,
+  updateQuestionnaireActions,
+} from "../../../../redux/actions";
+import Loader, { BoxLoader } from "../../../../helper/Loader";
 import ToastHandle from "../../../../helper/ToastMessage";
 const ExtrasForm = () => {
   const { id } = useParams();
@@ -27,12 +30,17 @@ const ExtrasForm = () => {
   // to get the updateQuestionaire status
   const updateQuestionaireStatus =
     store?.updateQuestionnaireReducer?.updateQuestionnaire?.status;
+  const updateQuestionaireLoading = store?.updateQuestionnaireReducer?.loading;
+  const updateQuestionnaireMessage =
+    store?.updateQuestionnaireReducer?.updateQuestionnaire?.data?.message;
 
   const ExtrasFormCall = GetquestionnaireFunction();
   const { questionnaireApi, apiQuestionnaireLoading } = ExtrasFormCall
     ? ExtrasFormCall
     : [];
-  const ExtrasTextarea = questionnaireApi["Extras"];
+  const ExtrasTextarea = questionnaireApi["Extras"]
+    ? questionnaireApi["Extras"]
+    : [];
   const AdditionalInformation = ExtrasTextarea["Additional Information"];
 
   const questionaireUpdateMessage =
@@ -78,23 +86,16 @@ const ExtrasForm = () => {
 
   useEffect(() => {
     if (updateQuestionaireStatus === 200) {
-      if (loadingStatus) {
-        ToastHandle("Questionaire updated successfully", "success");
-        setTimeout(() => {
-          navigate("/properties");
-          console.log("hitted route");
-        }, 2000);
-
-        setLoadingStatus(false);
-      }
-      // dispatch(stateEmptyActions());
+      navigate("/properties");
+      dispatch(stateEmptyActions());
+      setLoadingStatus(false);
     } else if (updateQuestionaireStatus === 402) {
       ToastHandle(questionaireUpdateMessage, "danger");
-      // dispatch(stateEmptyActions());
+      dispatch(stateEmptyActions());
       setLoadingStatus(false);
     } else if (updateQuestionaireStatus === 409) {
       ToastHandle(questionaireUpdateMessage, "danger");
-      // dispatch(stateEmptyActions());
+      dispatch(stateEmptyActions());
       setLoadingStatus(false);
     } else {
       setLoadingStatus(false);
@@ -146,12 +147,12 @@ const ExtrasForm = () => {
                 }
               )}
             >
-              Submit{" "}
+              {!updateQuestionaireLoading ? <>Submit</> : <Loader />}
             </button>
           </div>
         </div>
       ) : (
-        <Loader />
+        <BoxLoader />
       )}
     </>
   );

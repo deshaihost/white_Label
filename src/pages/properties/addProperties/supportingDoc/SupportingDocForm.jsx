@@ -85,9 +85,12 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     return /^[^.].+?\..+[^.]$/.test(url);
   }
 
+  const redrectcomponent = () => {
+    prntFuntionHeaderActive(id !== undefined && "listingDetails");
+  };
   const handleUploadUrl = async () => {
     if (!isValidURL(uploadedUrl)) {
-      ToastHandle("Please enter valid webpage url.", "danger");
+      redrectcomponent();
       return;
     }
 
@@ -134,7 +137,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
         alert("Missing Token or propertyName");
       }
     } catch (error) {
-      console.log(error);
       if (error.status === 400) {
         ToastHandle(error?.data?.error, "danger");
       } else {
@@ -146,10 +148,14 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   // documents upload handle
   const [docsInput, setDocsInput] = useState("");
   const documentUploadHandle = () => {
-    let supportingkeyName = supportingNameKey?.nameKey;
-    const formData = new FormData();
-    formData.append("filess", docsInput?.[0]);
-    dispatch(supportingDocumentPostActions({ supportingkeyName, formData }));
+    if (docsInput !== "") {
+      let supportingkeyName = supportingNameKey?.nameKey;
+      const formData = new FormData();
+      formData.append("filess", docsInput?.[0]);
+      dispatch(supportingDocumentPostActions({ supportingkeyName, formData }));
+    } else {
+      redrectcomponent();
+    }
   };
 
   const handleSubmitForm = (e, uploadType) => {

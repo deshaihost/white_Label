@@ -90,9 +90,10 @@ const MeetBanner = (props) => {
           getSessionIdActions({
             action: "hb_meet_hostbuddy_chat_start",
             textareaValue: "Hi",
-            chatbot_key: chatbot_key,
+            chatbot_key:
+              chatbot_key !== undefined ? chatbot_key : "meet_hostbuddy_8762",
             data_host_return: " ",
-            user: "guest",
+            user: chatbot_key !== undefined ? "guest" : "host",
           })
         );
       }
@@ -111,7 +112,7 @@ const MeetBanner = (props) => {
       ToastHandle("Internal Server Error", "danger");
     }
   }, [statusResp]);
-  console.log(statusResp,'statusResp')
+  console.log(statusResp, "statusResp");
 
   return (
     <div className="meet-banner">

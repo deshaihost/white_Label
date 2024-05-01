@@ -24,6 +24,9 @@ const ListIntegrationProperties = () => {
   const navigate = useNavigate();
   let localStorageKey = "nameKey";
   const authData = Authorized();
+  const authToke = authData?.token;
+  const authRefracetoke=authData?.refreshToken
+  console.log(authData?.refreshToken,'authDataauthData');
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
   const [chatBox, setChatBox] = useState({
@@ -57,7 +60,6 @@ const ListIntegrationProperties = () => {
     chatBotKey: "",
     propertyName: "",
   });
-  console.log(copyLinkSetData, "copyLinkSetDatacopyLinkSetData");
   const chatBoxGetByNameLoading = store?.getPropertyByNameReducer?.loading;
   const chatBoxGetByNameError =
     store?.getPropertyByNameReducer?.getPropertybyName?.data?.error;
@@ -163,16 +165,32 @@ const ListIntegrationProperties = () => {
   }, [propertiesDeleteStatus, getInputNameKey, testPropertyKey]);
   // user that chatBox intigration
   let urlLink = {
-    subscription_id: "sub_1P6pSCEiWY94EF2SQCZUN5Bo",
-    property_id: 1612,
+    // subscription_id: "sub_1P6pSCEiWY94EF2SQCZUN5Bo",
+    id:"wdsxIFuw" ,
     chatbot_key: chatbot_key,
     propertyN: property_name,
-    copyLink: true,
-    authData,
+    // copyLi nk: true,
+    // authData,
+    item: authToke,
+    item1:authRefracetoke
+  };
+  const copyToClipboard = (text) => {
+    console.log("text", text);
+    var textField = document.createElement("textarea");
+    textField.innerText = text;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand("copy");
+    textField.remove();
   };
   useEffect(() => {
     if (chatBoxGetByNameStatus === 200) {
       if (chatBox?.linkCopy) {
+        copyToClipboard(
+          `https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy/${JSON.stringify(
+            urlLink
+          )}`
+        );
         ToastHandle("Link copied", "success");
         setCopyLinkSetData({
           chatBotKey: chatbot_key,
@@ -320,13 +338,15 @@ const ListIntegrationProperties = () => {
                                     selectedHandle(copyChatbotLink, properties);
                                   }}
                                 >
-                                  <CopyToClipboard
+                                  <span>Copy Chatbot Link</span>
+
+                                  {/* <CopyToClipboard
                                     text={`https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy/${JSON.stringify(
                                       urlLink
                                     )}`}
                                   >
                                     <span>Copy Chatbot Link</span>
-                                  </CopyToClipboard>
+                                  </CopyToClipboard> */}
                                 </Dropdown.Item>
                               </Dropdown.Menu>
                             </Dropdown>

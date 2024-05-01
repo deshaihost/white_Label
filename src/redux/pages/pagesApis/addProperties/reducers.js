@@ -136,7 +136,7 @@ const updateQuestionnaireReducer = (
         loading: false,
       };
     case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
-      return POST_PROPERTIES_INITIAL_STATE;
+      return UPDATE_QUESTIONNAIRE_INITIAL_STATE;
     default:
       return state;
   }

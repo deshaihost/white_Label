@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateQuestionnaireActions } from "../../../../../redux/actions";
+import {
+  stateEmptyActions,
+  updateQuestionnaireActions,
+} from "../../../../../redux/actions";
 import {
   GetquestionnaireFunction,
   nameKey,
 } from "../../../../../helper/Authorized";
-import Loader from "../../../../../helper/Loader";
+import Loader, { BoxLoader } from "../../../../../helper/Loader";
 import { Button, Modal } from "react-bootstrap";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import SelectModalNote from "../../extraNoteModal/SelectModalNote";
@@ -45,8 +48,14 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
   // to get the updateQuestionaire status
   const updateQuestionaireStatus =
     store?.updateQuestionnaireReducer?.updateQuestionnaire?.status;
+  const updateQuestionaireLoading = store?.updateQuestionnaireReducer?.loading;
+  const updateQuestionnaireMessage = store?.updateQuestionnaireReducer?.updateQuestionnaire?.data?.message;
 
-  console.log("LocationupdateQuestionaireStatus: ", updateQuestionaireStatus);
+  console.log(
+    store?.updateQuestionnaireReducer?.updateQuestionnaire?.data?.message,
+
+    "store?.updateQuestionnaireReducer?.updateQuestionnaire"
+  );
   // to get the complete questionaire object
   const apiQuestionnaireObject =
     store?.getQuestionnaireReducer?.getQuestionnaire?.data;
@@ -56,14 +65,6 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
     ? ExtrasFormCall
     : [];
   const locationFildInput = questionnaireApi["Basics"]?.["Location"];
-
-  console.log("LocationlocationFildInput: ", locationFildInput);
-
-  console.log("LocationapiQuestionnaireObject: ", apiQuestionnaireObject);
-
-  console.log("LocationquestionnaireApi: ", questionnaireApi);
-  console.log("LocationapiQuestionnaireData: ", apiQuestionnaireData);
-  console.log("LocationapiQuestionnaireLoading: ", apiQuestionnaireLoading);
   const {
     register,
     handleSubmit,
@@ -71,7 +72,6 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
     formState: { errors },
   } = useForm();
 
-  console.log("Form : ", register);
   const onSubmit = (data) => {
     const questionaireToSend = structuredClone(apiQuestionnaireObject);
 
@@ -81,13 +81,6 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
         "Location"
       ][0]["response_option"] = data?.select0;
 
-      // select value note updation
-      // questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
-      //   "Location"
-      // ][0]["response_text"] =
-      //   addedNote && "select0_note" in addedNote
-      //     ? addedNote.select0_note
-      //     : null;
       questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
         "Location"
       ][0]["response_text"] =
@@ -122,8 +115,6 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
       ][6]["response_text"] = data?.short_answer6;
     }
 
-    console.log("LocationupdatedQuestionaire: ", questionaireToSend);
-
     dispatch(
       updateQuestionnaireActions({
         nameKey: getLocalStorageData,
@@ -137,11 +128,9 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
   useEffect(() => {
     if (updateQuestionaireStatus === 200) {
       if (loadingStatus) {
-        ToastHandle("Questionaire updated successfully", "success");
-        setTimeout(() => {
-          prntFuntionHeaderActive(id !== undefined && "supportingDoc");
-        }, 1000);
-
+        ToastHandle(updateQuestionnaireMessage, "success");
+        prntFuntionHeaderActive(id !== undefined && "supportingDoc")
+        dispatch(stateEmptyActions())
         setLoadingStatus(false);
       }
     } else {
@@ -149,7 +138,6 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
     }
   }, [updateQuestionaireStatus]);
 
-  console.log("addedNote: ", addedNote);
   return (
     <>
       {show && (
@@ -274,7 +262,6 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
                     </>
                   ) : (
                     <div>
-                      {console.log("hello-repeat select: ", item.response_text)}
                       <label className="text-white">{item.question_text}</label>
                       <input
                         type="text"
@@ -289,12 +276,15 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
               ))}
             </div>
             <div className="col-md-12 text-center">
-              <button className="mt-5">Add</button>
+              <button className="mt-5">
+                {" "}
+                {!updateQuestionaireLoading ? <>Add</> : <Loader />}
+              </button>
             </div>
           </form>
         </div>
       ) : (
-        <Loader />
+        <BoxLoader />
       )}
     </>
   );

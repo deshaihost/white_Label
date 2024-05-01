@@ -6,8 +6,8 @@ import {
   GetquestionnaireFunction,
   nameKey,
 } from "../../../../helper/Authorized";
-import { updateQuestionnaireActions } from "../../../../redux/actions";
-import Loader from "../../../../helper/Loader";
+import { stateEmptyActions, updateQuestionnaireActions } from "../../../../redux/actions";
+import Loader, { BoxLoader } from "../../../../helper/Loader";
 import ToastHandle from "../../../../helper/ToastMessage";
 import { Button, Modal } from "react-bootstrap";
 import SelectModalNote from "../extraNoteModal/SelectModalNote";
@@ -31,6 +31,8 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
   // to get the updateQuestionaire status
   const updateQuestionaireStatus =
     store?.updateQuestionnaireReducer?.updateQuestionnaire?.status;
+    const updateQuestionaireLoading = store?.updateQuestionnaireReducer?.loading;
+  const updateQuestionnaireMessage = store?.updateQuestionnaireReducer?.updateQuestionnaire?.data?.message;
 
   const ExtrasFormCall = GetquestionnaireFunction();
   const { questionnaireApi, apiQuestionnaireLoading } = ExtrasFormCall
@@ -240,8 +242,6 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
       "Details"
     ] = Details;
 
-    console.log("questionaireToSend: ", questionaireToSend);
-
     dispatch(
       updateQuestionnaireActions({
         nameKey: getLocalStorageData,
@@ -255,11 +255,9 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
   useEffect(() => {
     if (updateQuestionaireStatus === 200) {
       if (loadingStatus) {
-        ToastHandle("Questionaire updated successfully", "success");
-        setTimeout(() => {
-          prntFuntionHeaderActive(id !== undefined && "amenities");
-        }, 1000);
-
+        ToastHandle(updateQuestionnaireMessage, "success");
+        prntFuntionHeaderActive(id !== undefined && "amenities");
+        dispatch(stateEmptyActions());
         setLoadingStatus(false);
       }
     }
@@ -435,12 +433,13 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
                 }
               )}
             >
-              Save & Next{" "}
+              {!updateQuestionaireLoading?<>Save & Next</>:<Loader/>}
+            
             </button>
           </div>
         </div>
       ) : (
-        <Loader />
+        <BoxLoader />
       )}
     </>
   );
