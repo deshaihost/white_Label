@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 // import "./calenderModel.css";
 import Form from "react-bootstrap/Form";
-// import Calendar from "./Calender";
+import { useNavigate } from "react-router-dom";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
 
@@ -12,7 +12,13 @@ const PopupModal = ({
   selectedDate,
   setSelectedDate,
   responseObject,
+  setShowCalender
 }) => {
+
+  const navigate = useNavigate();
+
+  const [submit, setSubmit] = useState(false)
+
   const [date, setDate] = useState(new Date());
 
   const [data, setData] = useState({
@@ -46,6 +52,8 @@ const PopupModal = ({
 
   // to get the schedule to show on the calender
   const addCalenderSchedule = async (dataToSend) => {
+    setSubmit(true);
+    console.log("data to send: ", dataToSend)
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -76,23 +84,27 @@ const PopupModal = ({
         // setCalendarSchedule(() => response?.data?.schedule);
         console.log("API Response: ", response.data);
 
-        // if (response.status === 200) {
-        //     dispatch({
-        //         type: "get_all_Task",
-        //         payload: response.data.data,
-        //     });
-        // } else {
-        //     dispatch({
-        //         type: "get_all_Task",
-        //         payload: [],
-        //     });
-        // }
+        if (response.status === 200) {
+          ToastHandle(response.data.message, "success");
+
+          setTimeout(() => {
+            setShow(false);
+            setShowCalender(false);
+          }, 1500);
+
+
+        } else {
+          ToastHandle("Something went wrong", "danger");
+        }
+
       } else {
         alert("No Token");
       }
     } catch (error) {
       console.log(error);
+      ToastHandle(error?.data?.error, "danger");
     }
+    setSubmit(false);
   };
 
   const handleSchedule = (e) => {
@@ -138,6 +150,7 @@ const PopupModal = ({
 
   console.log("Data: ", data);
   console.log("selectedDate: ", selectedDate);
+  console.log("Response Object: ", responseObject)
 
   return (
     <div>
@@ -231,7 +244,7 @@ const PopupModal = ({
                   type="submit"
                   data-attr-date="once"
                   className="bg-primary form-control"
-                  value="Apply"
+                  value={`${submit ? 'Please wait...' : 'Apply'}`}
                   id="submit-single-property"
                   onClick={handleSchedule}
                 />{" "}
