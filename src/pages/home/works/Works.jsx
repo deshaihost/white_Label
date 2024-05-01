@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import './works.css';
-import WorksOne from '../../../public/img/works_img1.png';
-import WorksTwo from '../../../public/img/works_img2.png';
-import WorksThree from '../../../public/img/works_img3.png';
-import WorksFour from '../../../public/img/works_img4.png';
+import WorksOne from '../../../public/img/home/openai_logo.png';
+import WorksTwo from '../../../public/img/home/Property_customization.png';
+import WorksThree from '../../../public/img/home/full_host_control.png';
+import WorksFour from '../../../public/img/home/tailored_recommendations.png';
 
 const Works = () => {
     return(
@@ -48,7 +48,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4>Property <strong> Customization</strong></h4>
-                                <p>Tailor your hosting experience with HostBuddy’s Property Customization feature. Here’s what you can expect</p>
+                                <p>Tailor your hosting experience with HostBuddy’s Property Customization feature. There's no limit to what HostBuddy can learn.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -60,7 +60,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4>Full <strong> Host Control</strong> </h4>
-                                <p>Experience full host control with HostBuddy’s 24/7 Support. Here’s what it means for you</p>
+                                <p>Experience full host control with HostBuddy’s 24/7 Support. Choose when to give Hostbuddy control and when you'd like to jump back in. Customize your weekly calendar to ensure full coverage during the busiest hours of each day.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -72,7 +72,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4><strong>Tailored Recommendations </strong> for Improvement</h4>
-                                <p>Hostbuddy tracks conversations to help inform you of what information it is missing. This ensures that Hostbuddy has everything it needs to best support your business and guests</p>
+                                <p>Hostbuddy tracks conversations to help inform you of what information it is missing. This ensures that Hostbuddy has everything it needs to best support your business and guests.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">

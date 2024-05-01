@@ -4,11 +4,11 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './setup.css';
-import SetupImgOne from '../../../public/img/setup_newimg1.png';
-import SetupImgTwo from '../../../public/img/setup_newimg2.png';
-import SetupImgThree from '../../../public/img/setup_newimg3.png';
-import SetupImgFour from '../../../public/img/setup_newimg4.png';
-import SetupImgFive from '../../../public/img/setup_newimg5.png';
+import SetupImgOne from '../../../public/img/MeetHostbuddy/signup_form.png';
+import SetupImgTwo from '../../../public/img/MeetHostbuddy/Property_customization.png';
+import SetupImgThree from '../../../public/img/MeetHostbuddy/hostbuddy_convo.png';
+import SetupImgFour from '../../../public/img/MeetHostbuddy/connect.png';
+import SetupImgFive from '../../../public/img/MeetHostbuddy/relax.png';
 
 const Setup = () => {
     const [currentItem, setCurrentItem] = useState(1);
@@ -17,7 +17,7 @@ const Setup = () => {
     const items = [
         {
             heading: 'Sign Up',
-            text: 'Begin your journey by signing up using your email, Facebook, or Google Account. It’s quick and easy, providing immediate access to exploring your new Hostbuddy Dashboard.',
+            text: 'Begin your journey by signing up using your email. It’s quick and easy, providing immediate access to exploring your new Hostbuddy Dashboard.',
             img: SetupImgOne
         },
         {
@@ -37,7 +37,7 @@ const Setup = () => {
         },
         {
             heading: 'Sit Back and Relax',
-            text: 'With HostBuddy, powered by state-of-the-art AI technology, you can rest assured that your properties are in good hands. Enjoy peace of mind knowing your guests are receiving top-notch assistance and support.',
+            text: 'HostBuddy is powered by state-of-the-art AI technology which means you can rest assured that your properties are in good hands. Enjoy peace of mind knowing your guests are receiving top-notch assistance and support.',
             img: SetupImgFive
         },
     ];
