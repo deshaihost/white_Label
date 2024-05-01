@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import './features.css';
-import FeatureIconOne from '../../../public/img/feature_icon1.png';
-import FeatureIconTwo from '../../../public/img/feature_icon2.png';
-import FeatureIconThree from '../../../public/img/feature_icon3.png';
-import FeatureIconFour from '../../../public/img/feature_iconnew1.png';
-import FeatureImgOne from '../../../public/img/feature_img1.png';
-import FeatureImgTwo from '../../../public/img/hostbuddy2.png';
-import FeatureImgThree from '../../../public/img/hostbuddy3.png';
-import FeatureImgFour from '../../../public/img/hostbuddy4.png';
+import FeatureIconOne from '../../../public/img/home/feature_icon1.png';
+import FeatureIconTwo from '../../../public/img/home/feature_icon2.png';
+import FeatureIconThree from '../../../public/img/home/feature_icon3.png';
+import FeatureIconFour from '../../../public/img/home/feature_iconnew1.png';
+import FeatureImgOne from '../../../public/img/home/chatgpt.png';
+import FeatureImgTwo from '../../../public/img/home/assistant.png';
+import FeatureImgThree from '../../../public/img/home/intelligence.png';
+import FeatureImgFour from '../../../public/img/home/Direct_Integrations.png';
 import Accordion from 'react-bootstrap/Accordion';
 
 const Features = () => {
@@ -48,7 +48,7 @@ const Features = () => {
                                         24/7 Support
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        In the rapidly evolving landscape of short-term rentals, HostBuddy stands at the forefront of innovation, harnessing the power of ChatGPT, one of the most advanced conversational AI models in the world. This state-of-the-art integration not only ensures impeccable communication accuracy but also delivers real-time, context-aware responses, elevating guest experience to unparalleled heights.
+                                        HostBuddy acts as your personal, dedicated assistant, expertly handling guest communications wherever you require support. With HostBuddy at your service, you can confidently ensure that your guests receive attentive care, whether you’re offline, taking a well-deserved break, or spending quality time with family and friends. Trust HostBuddy to seamlessly manage guest interactions anytime you need support for as long as you need it.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>
@@ -59,7 +59,7 @@ const Features = () => {
                                         Tailored Hosting Intelligence
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        In the rapidly evolving landscape of short-term rentals, HostBuddy stands at the forefront of innovation, harnessing the power of ChatGPT, one of the most advanced conversational AI models in the world. This state-of-the-art integration not only ensures impeccable communication accuracy but also delivers real-time, context-aware responses, elevating guest experience to unparalleled heights.
+                                        Tailored to the unique needs of your business, HostBuddy offers specialized support based on the specific details of each of your properties. Equipped with in-depth knowledge, HostBuddy is adept at resolving guest issues, answering a range of questions - whether general or specific - and even suggesting local activities and attractions. This personalized approach ensures that your guests receive informed and relevant assistance, enhancing their overall experience.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>
@@ -70,7 +70,7 @@ const Features = () => {
                                         Direct Integrations
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        In the rapidly evolving landscape of short-term rentals, HostBuddy stands at the forefront of innovation, harnessing the power of ChatGPT, one of the most advanced conversational AI models in the world. This state-of-the-art integration not only ensures impeccable communication accuracy but also delivers real-time, context-aware responses, elevating guest experience to unparalleled heights.
+                                        Hostbuddy seamlessly integrates into your existing setup. Thanks to our partnerships with leading property management software providers, HostBuddy can engage with guests directly on the booking platforms they use and trust. For more details on how this integration works and the benefits it offers, we invite you to visit our FAQ page.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>
