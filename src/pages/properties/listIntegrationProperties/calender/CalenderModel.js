@@ -139,22 +139,20 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
                   <button
                     type="button"
                     onClick={() => handleButtonToggle("month")}
-                    className={`shadow-none btn ${
-                      monthButton
+                    className={`shadow-none btn ${monthButton
                         ? "btn-primary"
                         : "btn-tranparent border border-primary text-light"
-                    } rounded-0`}
+                      } rounded-0`}
                   >
                     Month
                   </button>
                   <button
                     type="button"
                     onClick={() => handleButtonToggle("schedule")}
-                    className={`shadow-none btn ${
-                      scheduleButton
+                    className={`shadow-none btn ${scheduleButton
                         ? "btn-primary"
                         : "btn-tranparent border border-primary text-light"
-                    } rounded-0`}
+                      } rounded-0`}
                   >
                     Schedule
                   </button>
@@ -163,7 +161,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
             </div>
 
             {monthButton && (
-              <Calendar selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} />
+              <Calendar setShowCalender={setShowCalender} selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} />
             )}
 
             {scheduleButton && <ScheduleCalender />}
