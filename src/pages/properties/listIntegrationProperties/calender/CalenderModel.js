@@ -140,8 +140,8 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
                     type="button"
                     onClick={() => handleButtonToggle("month")}
                     className={`shadow-none btn ${monthButton
-                        ? "btn-primary"
-                        : "btn-tranparent border border-primary text-light"
+                      ? "btn-primary"
+                      : "btn-tranparent border border-primary text-light"
                       } rounded-0`}
                   >
                     Month
@@ -150,8 +150,8 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
                     type="button"
                     onClick={() => handleButtonToggle("schedule")}
                     className={`shadow-none btn ${scheduleButton
-                        ? "btn-primary"
-                        : "btn-tranparent border border-primary text-light"
+                      ? "btn-primary"
+                      : "btn-tranparent border border-primary text-light"
                       } rounded-0`}
                   >
                     Schedule
@@ -164,7 +164,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
               <Calendar setShowCalender={setShowCalender} selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} />
             )}
 
-            {scheduleButton && <ScheduleCalender />}
+            {scheduleButton && <ScheduleCalender setShowCalender={setShowCalender} selectedProperty={selectedProperty} scheduleData={calendarSchedule} />}
           </div>
         </Modal.Body>
       </Modal>
