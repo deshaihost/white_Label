@@ -213,379 +213,6 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
             </tr>
           </thead>
           <tbody>
-            {/* {weeks.map((week, index) => (
-              <tr key={index}>
-                {week.map((day, idx) => {
-                  let classNames = "calendar-day";
-                  const dayDate = new Date(day.year, day.month, day.day);
-
-                  // Check if the day is today, in the past, or in the future
-                  if (
-                    dayDate.getDate() === currentDate.getDate() &&
-                    dayDate.getMonth() === currentDate.getMonth() &&
-                    dayDate.getFullYear() === currentDate.getFullYear()
-                  ) {
-                    classNames += " today-date";
-                  } else if (dayDate < currentDate) {
-                    classNames += " past-date";
-                  } else {
-                    classNames += " future-date";
-                  }
-
-                  let status = "";
-                  let arrayIndex = 0;
-                  let arrayIndexOn = 0;
-                  let statusType;
-                  let startStatus;
-                  let endStatus;
-                  let startTime;
-                  let endTime;
-                  let timeStatus = 0;
-
-                  if (specificDates) {
-
-                    specificDates?.off?.forEach((offDate, index) => {
-                      //   let startTime;
-                      // let endTime;
-                      // const onDateTime = new Date(specificDates.off[index - 1]);
-                      const offDateTime = new Date(offDate);
-                      if (
-                        offDateTime.toDateString() === dayDate.toDateString()
-                      ) {
-
-                        if (arrayIndex % 2 === 0) {
-                          timeStatus = 1;
-                          startStatus = offDate;
-                          startTime = offDateTime.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-                        } else {
-                          timeStatus = 0;
-                          endStatus = offDate
-                          endTime = offDateTime.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-                        }
-                        arrayIndex = arrayIndex + 1;
-                        statusType = "off"
-                        if (timeStatus == 0) {
-
-                          status = (
-                            <div className="bg-danger">
-                              <div>Status: Off</div>
-                              <div>{`${startTime} - ${endTime}`}</div>
-                            </div>
-                          );
-                        }
-                      } else {
-                        if (timeStatus === 1) {
-                          timeStatus = 0;
-                          endStatus = offDate
-                          endTime = offDateTime.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-
-                          arrayIndex = arrayIndex + 1;
-                          statusType = "off"
-                          status = (
-                            <div className="bg-danger">
-                              <div>Status: Off</div>
-                              <div>{`${startTime} - ${endTime}`}</div>
-                            </div>
-                          );
-                        }
-                      }
-                    });
-
-                    specificDates?.on?.forEach((onDate, index) => {
-                      const onDateTime = new Date(onDate);
-
-                      // console.log("dayDate: ", onDate)
-
-                      if (
-                        onDateTime.toDateString() === dayDate.toDateString()
-                      ) {
-                        if (arrayIndexOn % 2 === 0) {
-                          startStatus = onDate;
-
-                          startTime = onDateTime.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-                        }
-                        else {
-                          endStatus = onDate;
-                          endTime = onDateTime.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-                        }
-                        arrayIndexOn = arrayIndexOn + 1;
-                        statusType = "on"
-
-
-
-                        status = (
-                          <div className="bg-success">
-                            <div>Status: On</div>
-                            <div>{`${startTime} - ${endTime}`}</div>
-                          </div>
-                        );
-                      }
-                    });
-
-
-                  }
-
-                  return (
-                    <td
-                      key={idx}
-                      className={classNames}
-                      onClick={() => handleCellClick(day, statusType, startStatus, endStatus)}
-                    >
-                      <div className="">
-                        <div className="">
-                          <div className="pt-0 ps-0 d-flex flex-column justify-content-between">
-                            <div className="d-flex flex-column justify-content-between">
-                              {status}
-                            </div>
-                            <div className="text-end date-text">{day.day}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))} */}
-            {/* nice code for off */}
-            {/* {weeks.map((week, index) => (
-              <tr key={index}>
-                {week.map((day, idx) => {
-                  let classNames = "calendar-day";
-                  const dayDate = new Date(day.year, day.month, day.day);
-
-                  // Check if the day is today, in the past, or in the future
-                  if (
-                    dayDate.getDate() === currentDate.getDate() &&
-                    dayDate.getMonth() === currentDate.getMonth() &&
-                    dayDate.getFullYear() === currentDate.getFullYear()
-                  ) {
-                    classNames += " today-date";
-                  } else if (dayDate < currentDate) {
-                    classNames += " past-date";
-                  } else {
-                    classNames += " future-date";
-                  }
-
-                  let status = "";
-                  let statusType;
-                  let startStatus;
-                  let endStatus;
-                  let startTime;
-                  let endTime;
-
-                  if (specificDates) {
-                    specificDates.off.forEach((offDate, index) => {
-                      const offDateTime = new Date(offDate);
-                      if (index % 2 === 0) {
-                        // This is the start date of off schedule
-                        startStatus = offDate;
-                        startTime = offDateTime.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        });
-                      } else {
-                        // This is the end date of off schedule
-                        endStatus = offDate;
-                        endTime = offDateTime.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        });
-
-                        // Render off status for each day between start and end date
-                        let currentDate = new Date(startStatus);
-                        while (currentDate <= offDateTime) {
-                          const currentDateString = currentDate.toDateString();
-                          if (currentDateString === dayDate.toDateString()) {
-                            status = (
-                              <div className="bg-danger">
-                                <div>Status: Off</div>
-                                <div>{`${startTime} - ${endTime}`}</div>
-                              </div>
-                            );
-                          }
-                          // Move to the next day
-                          currentDate.setDate(currentDate.getDate() + 1);
-                        }
-                      }
-                    });
-
-                    specificDates.on.forEach((onDate) => {
-                      const onDateTime = new Date(onDate);
-                      if (onDateTime.toDateString() === dayDate.toDateString()) {
-                        startTime = onDateTime.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        });
-                        endTime = ''; // Assuming endTime is not provided for on schedule
-                        status = (
-                          <div className="bg-success">
-                            <div>Status: On</div>
-                            <div>{`${startTime} - ${endTime}`}</div>
-                          </div>
-                        );
-                      }
-                    });
-                  }
-
-                  return (
-                    <td
-                      key={idx}
-                      className={classNames}
-                      onClick={() => handleCellClick(day, statusType, startStatus, endStatus)}
-                    >
-                      <div className="">
-                        <div className="">
-                          <div className="pt-0 ps-0 d-flex flex-column justify-content-between">
-                            <div className="d-flex flex-column justify-content-between">
-                              {status}
-                            </div>
-                            <div className="text-end date-text">{day.day}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))} */}
-
-            {/* good one shows both on and off */}
-            {/* {weeks.map((week, index) => (
-              <tr key={index}>
-                {week.map((day, idx) => {
-                  let classNames = "calendar-day";
-                  const dayDate = new Date(day.year, day.month, day.day);
-
-                  // Check if the day is today, in the past, or in the future
-                  if (
-                    dayDate.getDate() === currentDate.getDate() &&
-                    dayDate.getMonth() === currentDate.getMonth() &&
-                    dayDate.getFullYear() === currentDate.getFullYear()
-                  ) {
-                    classNames += " today-date";
-                  } else if (dayDate < currentDate) {
-                    classNames += " past-date";
-                  } else {
-                    classNames += " future-date";
-                  }
-
-                  let status = "";
-                  let statusType;
-                  let startStatus;
-                  let endStatus;
-                  let startTime;
-                  let endTime;
-
-                  if (specificDates) {
-                    specificDates.off.forEach((offDate, index) => {
-                      const offDateTime = new Date(offDate);
-                      if (index % 2 === 0) {
-                        // This is the start date of off schedule
-                        startStatus = offDate;
-                        startTime = offDateTime.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        });
-                      } else {
-                        // This is the end date of off schedule
-                        endStatus = offDate;
-                        endTime = offDateTime.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        });
-
-                        // Render off status for each day between start and end date
-                        let currentDate = new Date(startStatus);
-                        while (currentDate <= offDateTime) {
-                          const currentDateString = currentDate.toDateString();
-                          statusType = "off";
-                          if (currentDateString === dayDate.toDateString()) {
-                            status = (
-                              <div className="bg-danger">
-                                <div>Status: Off</div>
-                                <div>{`${startTime} - ${endTime}`}</div>
-                              </div>
-                            );
-                          }
-                          // Move to the next day
-                          currentDate.setDate(currentDate.getDate() + 1);
-                        }
-                      }
-                    });
-
-                    specificDates.on.forEach((onDate, index) => {
-                      const onDateTime = new Date(onDate);
-                      if (index % 2 === 0) {
-                        // This is the start date of on schedule
-                        startStatus = onDate;
-                        startTime = onDateTime.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        });
-                      } else {
-                        // This is the end date of on schedule
-                        endStatus = onDate;
-                        endTime = onDateTime.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        });
-
-                        // Render on status for each day between start and end date
-                        let currentDate = new Date(startStatus);
-                        while (currentDate <= onDateTime) {
-                          const currentDateString = currentDate.toDateString();
-                          if (currentDateString === dayDate.toDateString()) {
-                            statusType = "on"
-                            status = (
-                              <div className="bg-success">
-                                <div>Status: On</div>
-                                <div>{`${startTime} - ${endTime}`}</div>
-                              </div>
-                            );
-                          }
-                          // Move to the next day
-                          currentDate.setDate(currentDate.getDate() + 1);
-                        }
-                      }
-                    });
-                  }
-
-                  return (
-                    <td
-                      key={idx}
-                      className={classNames}
-                      onClick={() => handleCellClick(day, statusType, startStatus, endStatus)}
-                    >
-                      <div className="">
-                        <div className="">
-                          <div className="pt-0 ps-0 d-flex flex-column justify-content-between">
-                            <div className="d-flex flex-column justify-content-between">
-                              {status}
-                            </div>
-                            <div className="text-end date-text">{day.day}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))} */}
 
             {/* using this code */}
 
@@ -615,15 +242,25 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
                     let endStatus;
                     let startTime;
                     let endTime;
+
+                    // let statusOn = "";
+                    // let statusTypeOn;
+                    // let startStatusOn;
+                    // let endStatusOn;
+                    // let startTimeOn;
+                    // let endTimeOn;
                     // eslint-disable-next-line
                     let startDateString; // Declare startDateString
                     // eslint-disable-next-line
                     let endDateString; // Declare endDateString
+                    let dateCount = 0;
+                    let onDateCount = 0;
 
                     if (specificDates) {
                       specificDates.off.forEach((offDate, index) => {
                         const offDateTime = new Date(offDate);
                         if (index % 2 === 0) {
+
                           // This is the start date of off schedule
                           startStatus = offDate;
                           startDateString = offDateTime.toLocaleString(); // Store full date-time string
@@ -642,27 +279,61 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
 
                           // Render off status for each day between start and end date
                           let currentDate = new Date(startStatus);
+
                           while (currentDate <= offDateTime) {
+                            dateCount++;
                             if (currentDate.toDateString() === dayDate.toDateString()) {
-                              statusType = "off";
-                              status = (
-                                <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data">
-                                  <p>Status: Off</p>
-                                  <span>{`${startTime} - ${endTime}`}</span>
+                              console.log("Hitted", dateCount);
 
-                                </div>
+                              if (dateCount === 1) {
 
-                              );
+                                statusType = "off";
+                                status = (
+                                  <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data" style={{ opacity: '0.5' }}>
+                                    <p>Status: Off</p>
+                                    <span>{`${startTime} - ${endTime}`}</span>
+
+                                  </div>
+
+                                );
+                              } else {
+                                if (currentDate.getDay() === 0) {
+                                  statusType = "off";
+                                  status = (
+                                    <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data opacity-25">
+                                      <p >Status: Off</p>
+                                      <span >{`${startTime} - ${endTime}`}</span>
+
+                                    </div>
+
+                                  );
+
+                                } else {
+                                  statusType = "off";
+                                  status = (
+                                    <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data opacity-25">
+                                      <p style={{ visibility: 'hidden' }}>Status: Off</p>
+                                      <span style={{ visibility: 'hidden' }}>{`${startTime} - ${endTime}`}</span>
+
+                                    </div>
+
+                                  );
+                                }
+
+                              }
                             }
                             // Move to the next day
                             currentDate.setDate(currentDate.getDate() + 1);
+                            // dateCount++;
                           }
+                          dateCount = 0
                         }
                       });
 
                       specificDates.on.forEach((onDate, index) => {
                         const onDateTime = new Date(onDate);
                         if (index % 2 === 0) {
+
                           // This is the start date of on schedule
                           startStatus = onDate;
                           startDateString = onDateTime.toLocaleString(); // Store full date-time string
@@ -671,6 +342,7 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
                             minute: "2-digit",
                           });
                         } else {
+
                           // This is the end date of on schedule
                           endStatus = onDate;
                           endDateString = onDateTime.toLocaleString(); // Store full date-time string
@@ -682,21 +354,50 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
                           // Render on status for each day between start and end date
                           let currentDate = new Date(startStatus);
                           while (currentDate <= onDateTime) {
+                            onDateCount++;
                             if (currentDate.toDateString() === dayDate.toDateString()) {
-                              statusType = "on"
-                              status = (
-                                <div onClick={() => handleScheduleRemove("on", onDate, index)} className="bg-success status-data">
-                                  <p>Status: On</p>
-                                  <span>{`${startTime} - ${endTime}`}</span>
+                              // console.log("start: ", currentDate.getDay())
 
-                                </div>
-                              );
+                              if (onDateCount === 1) {
+                                statusType = "on"
+                                status = (
+                                  <div onClick={() => handleScheduleRemove("on", onDate, index)} className="bg-success status-data" style={{ opacity: '0.5' }}>
+                                    <p>Status: On</p>
+                                    <span>{`${startTime} - ${endTime}`}</span>
+
+                                  </div>
+                                );
+                              } else {
+                                if (currentDate.getDay() === 0) {
+                                  statusType = "on"
+                                  status = (
+                                    <div onClick={() => handleScheduleRemove("on", onDate, index)} className="bg-success status-data" style={{ opacity: '0.5' }}>
+                                      <p >Status: On</p>
+                                      <span>{`${startTime} - ${endTime}`}</span>
+
+                                    </div>
+                                  );
+                                } else {
+                                  statusType = "on"
+                                  status = (
+                                    <div onClick={() => handleScheduleRemove("on", onDate, index)} className="bg-success status-data" style={{ opacity: '0.5' }}>
+                                      <p style={{ visibility: 'hidden' }}>Status: On</p>
+                                      <span style={{ visibility: 'hidden' }}>{`${startTime} - ${endTime}`}</span>
+
+                                    </div>
+                                  );
+                                }
+
+                              }
                             }
                             // Move to the next day
                             currentDate.setDate(currentDate.getDate() + 1);
+
                           }
+                          onDateCount = 0;
                         }
                       });
+
                     }
 
                     return (
@@ -711,6 +412,7 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
                               <div></div>
                               <div className="d-flex flex-column justify-content-between position-relative">
                                 {status}
+                                {/* {statusOn} */}
                               </div>
                               <div className="text-end date-text">{day.day}</div>
                             </div>
