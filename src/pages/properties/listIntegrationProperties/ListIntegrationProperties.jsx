@@ -79,11 +79,6 @@ const ListIntegrationProperties = () => {
     setSelectedProperty(() => propertyName);
     setShowCalender(true);
   };
-
-  const handleCalenderModalClose = () => {
-    setShowCalender(false);
-  };
-
   const handleModelOpen = (type) => {
     if (type === webPageUrlOpen) {
       setModel({ ...model, webPageUrl: true });
@@ -282,8 +277,11 @@ const ListIntegrationProperties = () => {
                                   className="form-check-label"
                                   htmlFor="statuscheck"
                                 >
-                                  {toggleActive ? "ON" : "OFF"}
-                                  {/* OFF */}
+                                  {toggleActive ? (
+                                    <>{chatBoxIndex === index ? "ON" : "OFF"}</>
+                                  ) : (
+                                    "OFF"
+                                  )}
                                 </label>
                               </div>
                               <Button

@@ -57,7 +57,7 @@ const Properties = () => {
   const toggleChatStatus =
     store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
   const [toggleOnOff, setToggleOnOff] = useState("");
-  const [toggleActive, setToggleActive] = useState(true);
+  const [toggleActive, setToggleActive] = useState(false);
   const toggleChatBotHndle = (type) => {
     if (type) {
       setToggleOnOff("on");
