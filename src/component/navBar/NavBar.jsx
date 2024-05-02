@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import LogoNavBar from "../../helper/staticImage/logoNavBar.svg";
 import "./NavBar.css";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import ToastHandle from "../../helper/ToastMessage";
-import Authorized, { ParamsGet } from "../../helper/Authorized";
+import Authorized from "../../helper/Authorized";
 const NavBar = () => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];
-  const chatBoxUrl = ParamsGet();
 
+  const localstorageDataGet = localStorage.getItem("chatBoxId");
+  
+  useEffect(() => {
+    if (localstorageDataGet === 1234) {
+      Authorized();
+    }
+  }, [localstorageDataGet]);
 
   return (
     <header className="header">
@@ -102,14 +107,6 @@ const NavBar = () => {
                   >
                     Setup Guide
                   </NavLink>
-                  {/* <NavLink
-                    exact
-                    onClick={()=>{sessionStorage.removeItem("hostBuddy_auth")}}
-                    className="nav-link"
-                    activeClassName="active"
-                  >
-                     Log out
-                  </NavLink> */}
                 </>
               ) : (
                 <>

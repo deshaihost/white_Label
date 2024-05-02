@@ -60,7 +60,7 @@ const Signup = () => {
       password: data.newPassword,
     });
   };
-  
+
   // this functionaly used after register
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
@@ -150,22 +150,28 @@ const Signup = () => {
                   <div className="input-container">
                     <input
                       type="text"
-                      {...register("firstName", )}
+                      {...register("firstName", { required: true })}
                       placeholder="First Name..."
                     />
                   </div>
                   {errors.firstName?.type === "required" && (
-                    <>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_NAME)}</>
+                    <>
+                      {ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_NAME)}
+                    </>
                   )}
                   <div className="input-container">
                     <input
                       type="text"
-                      {...register("lastName", )}
+                      {...register("lastName", { required: true })}
                       placeholder="Last Name..."
                     />
                   </div>
                   {errors.lastName?.type === "required" && (
-                    <>{ErrorMessageShow( ErrorMessageKey.PLEASE_ENTER_YOUR_LAST_NAME)}</>
+                    <>
+                      {ErrorMessageShow(
+                        ErrorMessageKey.PLEASE_ENTER_YOUR_LAST_NAME
+                      )}
+                    </>
                   )}
                   <div className="input-container">
                     <input
@@ -174,17 +180,19 @@ const Signup = () => {
                         required: true,
                         pattern: {
                           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message:`${ErrorMessageKey.INVALID_EMAIL_ADDRESS}`,
+                          message: `${ErrorMessageKey.INVALID_EMAIL_ADDRESS}`,
                         },
                       })}
                       placeholder="Email..."
                     />
                   </div>
-                  {
-                    errors.email?.type === "required" && (
-                      <>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_EMAIL)}</>
-                    )
-                  }
+                  {errors.email?.type === "required" && (
+                    <>
+                      {ErrorMessageShow(
+                        ErrorMessageKey.PLEASE_ENTER_YOUR_EMAIL
+                      )}
+                    </>
+                  )}
                   {errors.email?.type === "pattern" && (
                     <>{ErrorMessageShow(errors.email?.message)}</>
                   )}
@@ -198,12 +206,11 @@ const Signup = () => {
                           pattern: {
                             value:
                               /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_=+-]).{8,30}$/,
-                            message:`${ErrorMessageKey.MIX_IT_UP_USE_A_COMBINATION_OF_UPPERCASE_AND_LOWERCASE_LETTERS_SPECIAL_CHARACTERS_IN_YOUR}`
-
+                            message: `${ErrorMessageKey.MIX_IT_UP_USE_A_COMBINATION_OF_UPPERCASE_AND_LOWERCASE_LETTERS_SPECIAL_CHARACTERS_IN_YOUR}`,
                           },
                           minLength: {
                             value: 8,
-                            message:`${ErrorMessageKey.PASSWORD_MUST_BE_AT_LEAST_8_CHARACTER_LONG}`
+                            message: `${ErrorMessageKey.PASSWORD_MUST_BE_AT_LEAST_8_CHARACTER_LONG}`,
                           },
                           maxLength: 30,
                         })}
@@ -219,21 +226,19 @@ const Signup = () => {
                         {!showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                       </button>
                     </div>
-                    {
-                      errors?.newPassword?.type === "required" && (
-                        <>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_PASSWORD)}</>
-                      )
-                    }
-                    {
-                      errors?.newPassword?.type === "pattern" && (
-                        <>{ErrorMessageShow(errors?.newPassword?.message)}</>
-                      )
-                    }
-                    {
-                      errors?.newPassword?.type === "minLength" && (
-                        <>{ErrorMessageShow(errors?.newPassword?.message)}</>
-                      )
-                    }
+                    {errors?.newPassword?.type === "required" && (
+                      <>
+                        {ErrorMessageShow(
+                          ErrorMessageKey.PLEASE_ENTER_YOUR_PASSWORD
+                        )}
+                      </>
+                    )}
+                    {errors?.newPassword?.type === "pattern" && (
+                      <>{ErrorMessageShow(errors?.newPassword?.message)}</>
+                    )}
+                    {errors?.newPassword?.type === "minLength" && (
+                      <>{ErrorMessageShow(errors?.newPassword?.message)}</>
+                    )}
                     <p className="password-criteria">
                       Password should have special characters like $,@,%,! and
                       minimum 8 length.
@@ -248,8 +253,8 @@ const Signup = () => {
                           required: true,
                           validate: (value) =>
                             value === password.current ||
-                            ErrorMessageKey.PASSWORD_DOESNT_MATCH
-                            // "password doesn't match ",
+                            ErrorMessageKey.PASSWORD_DOESNT_MATCH,
+                          // "password doesn't match ",
                         })}
                       />
                       <button
@@ -267,40 +272,31 @@ const Signup = () => {
                         )}
                       </button>
                     </div>
-                    {
-                      errors?.confirmPassword?.type === "required" && (
-                        <>{ErrorMessageShow( ErrorMessageKey.THIS_FIELD_REQUIRED)}</>
-                      )
-                    }
-                    {
-                      errors?.confirmPassword?.type === "validate" && (
-                        <>
-                          {ErrorMessageShow(errors?.confirmPassword?.message)}
-                        </>
-                      )
-                    }
+                    {errors?.confirmPassword?.type === "required" && (
+                      <>
+                        {ErrorMessageShow(ErrorMessageKey.THIS_FIELD_REQUIRED)}
+                      </>
+                    )}
+                    {errors?.confirmPassword?.type === "validate" && (
+                      <>{ErrorMessageShow(errors?.confirmPassword?.message)}</>
+                    )}
                   </div>
                   <div className="input-container">
                     <input
                       type="text"
                       {...register("phone", {
-                        
                         pattern: /^[0-9]{10}$/,
                       })}
                       placeholder="Phone..."
                       maxLength="10"
                     />
                   </div>
-                  {
-                    errors.phone?.type === "required" && (
-                      <>{ErrorMessageShow("Please enter your phone number")}</>
-                    )
-                  }
-                  {errors.phone?.type === "pattern" &&
-                  (
+                  {errors.phone?.type === "required" && (
+                    <>{ErrorMessageShow("Please enter your phone number")}</>
+                  )}
+                  {errors.phone?.type === "pattern" && (
                     <>{ErrorMessageShow("Please enter a valid phone number")}</>
-                  ) 
-                  }
+                  )}
                   {/* <div className="input-container">
                     <select
                       name=""

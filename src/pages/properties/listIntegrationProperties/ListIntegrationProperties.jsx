@@ -4,6 +4,7 @@ import {
   getPropertyInsightByNameActions,
   getUserDataActions,
   stateEmptyActions,
+  toggleChatbotoNoFFPutActions,
 } from "../../../redux/actions";
 import "./Listintigrationproperties.css";
 import { useSelectorUseDispatch } from "../../../helper/Authorized";
@@ -25,8 +26,7 @@ const ListIntegrationProperties = () => {
   let localStorageKey = "nameKey";
   const authData = Authorized();
   const authToke = authData?.token;
-  const authRefracetoke=authData?.refreshToken
-  console.log(authData?.refreshToken,'authDataauthData');
+  const authRefracetoke = authData?.refreshToken;
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
   const [chatBox, setChatBox] = useState({
@@ -79,11 +79,6 @@ const ListIntegrationProperties = () => {
     setSelectedProperty(() => propertyName);
     setShowCalender(true);
   };
-
-  const handleCalenderModalClose = () => {
-    setShowCalender(false);
-  };
-
   const handleModelOpen = (type) => {
     if (type === webPageUrlOpen) {
       setModel({ ...model, webPageUrl: true });
@@ -140,6 +135,35 @@ const ListIntegrationProperties = () => {
     }
   };
 
+  // toggle chatBot on/off
+
+  const [toggleOnOff, setToggleOnOff] = useState("");
+  const [toggleActive, setToggleActive] = useState(true);
+  const [chatBoxIndex, setChatBoxIndex] = useState("");
+  const toggleChatBotHndle = (type, id) => {
+    if (type) {
+      setToggleOnOff("on");
+      setToggleActive(true);
+      setChatBoxIndex(id);
+    } else {
+      setToggleOnOff("off");
+      setToggleActive(false);
+      setChatBoxIndex(id);
+    }
+  };
+  useEffect(() => {
+    if (toggleOnOff !== "") {
+      dispatch(
+        toggleChatbotoNoFFPutActions({
+          properties: [createPropertiesName[chatBoxIndex]],
+          state: toggleOnOff,
+        })
+      );
+      setToggleOnOff("");
+    }
+  }, [toggleOnOff]);
+  // toggle chatBot on/off
+
   useEffect(() => {
     if (propertiesDeleteStatus === 200) {
       ToastHandle(propertiesDeleteMessage, "success");
@@ -155,27 +179,16 @@ const ListIntegrationProperties = () => {
       localStorage.setItem(localStorageKey, JSON?.stringify(getInputNameKey));
       setGetInputNameKey({ nameKey: "" });
     }
-    // else if (testPropertyKey.nameKey !== "") {
-    //   navigate(
-    //     "/meet-hostbuddy/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw"
-    //   );
-    //   localStorage.setItem(localStorageKey, JSON?.stringify(testPropertyKey));
-    //   setTestPropertyKey({ nameKey: "" });
-    // }
   }, [propertiesDeleteStatus, getInputNameKey, testPropertyKey]);
   // user that chatBox intigration
   let urlLink = {
-    // subscription_id: "sub_1P6pSCEiWY94EF2SQCZUN5Bo",
-    id:"wdsxIFuw" ,
+    id: "wdsxIFuw",
     chatbot_key: chatbot_key,
     propertyN: property_name,
-    // copyLi nk: true,
-    // authData,
     item: authToke,
-    item1:authRefracetoke
+    item1: authRefracetoke,
   };
   const copyToClipboard = (text) => {
-    console.log("text", text);
     var textField = document.createElement("textarea");
     textField.innerText = text;
     document.body.appendChild(textField);
@@ -230,14 +243,6 @@ const ListIntegrationProperties = () => {
       {!userDataGetLoading ? (
         <>
           {createPropertiesName?.map((properties, index) => {
-            let urlLink = {
-              subscription_id: "sub_1P6pSCEiWY94EF2SQCZUN5Bo",
-              property_id: 1612,
-              chatbot_key: copyLinkSetData?.chatBotKey,
-              propertyN: copyLinkSetData?.propertyName,
-              copyLink: true,
-              authData,
-            };
             return (
               <>
                 <div className="row">
@@ -264,12 +269,19 @@ const ListIntegrationProperties = () => {
                                   type="checkbox"
                                   role="switch"
                                   id="statuscheck"
+                                  onClick={(e) => {
+                                    toggleChatBotHndle(e.target.checked, index);
+                                  }}
                                 />
                                 <label
                                   className="form-check-label"
                                   htmlFor="statuscheck"
                                 >
-                                  OFF
+                                  {toggleActive ? (
+                                    <>{chatBoxIndex === index ? "ON" : "OFF"}</>
+                                  ) : (
+                                    "OFF"
+                                  )}
                                 </label>
                               </div>
                               <Button
@@ -339,14 +351,6 @@ const ListIntegrationProperties = () => {
                                   }}
                                 >
                                   <span>Copy Chatbot Link</span>
-
-                                  {/* <CopyToClipboard
-                                    text={`https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy/${JSON.stringify(
-                                      urlLink
-                                    )}`}
-                                  >
-                                    <span>Copy Chatbot Link</span>
-                                  </CopyToClipboard> */}
                                 </Dropdown.Item>
                               </Dropdown.Menu>
                             </Dropdown>

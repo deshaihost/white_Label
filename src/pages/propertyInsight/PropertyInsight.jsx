@@ -18,9 +18,10 @@ const PropertyInsight = () => {
 
   const propertiesConversationLoading =
     store?.propertyGetConversationReducer?.loading;
-  
+
   const userDataGet =
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  console.log(userDataGet?.length > 0 ? true : false, "userDataGet");
   const userpertieslistName = userDataGet?.[0];
 
   const [propertySelectName, setPropertySelectName] = useState("");
@@ -54,21 +55,25 @@ const PropertyInsight = () => {
                 <div class="account_heading account_heading_white">
                   <h3 className="text-white">Property Insight </h3>
                   <div class="property_select">
-                    <select
-                      id="properies_insight"
-                      className=""
-                      onChange={(e) => {
-                        setPropertySelectName(e.target.value);
-                      }}
-                    >
-                      {userDataGet?.map((userData) => {
-                        return (
-                          <>
-                            <option value={userData}>{userData}</option>
-                          </>
-                        );
-                      })}
-                    </select>
+                    {userDataGet?.length > 0 ? (
+                      <select
+                        id="properies_insight"
+                        className=""
+                        onChange={(e) => {
+                          setPropertySelectName(e.target.value);
+                        }}
+                      >
+                        {userDataGet?.map((userData) => {
+                          return (
+                            <>
+                              <option value={userData}>{userData}</option>
+                            </>
+                          );
+                        })}
+                      </select>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
                 {!propertiesConversationLoading ? (
@@ -78,7 +83,7 @@ const PropertyInsight = () => {
                         <div>
                           <SuccessTotalBox
                             totalConversation={
-                              propertiesConversationGetData?.length 
+                              propertiesConversationGetData?.length
                             }
                           />
                         </div>

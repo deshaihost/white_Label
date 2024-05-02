@@ -171,6 +171,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
   const handleFamilyCheckboxChange = (event) => {
     const { value, checked } = event.target;
+    console.log(value, checked ,'+++++')
     if (checked) {
       // If checkbox is checked, add value to the state
       setAmenitiesFamilyOptions((prevState) => [...prevState, value]);
@@ -192,7 +193,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
   const handleIndoorCheckboxChange = (event) => {
     const { value, checked } = event.target;
-    console.log(value);
     if (checked) {
       // If checkbox is checked, add value to the state
       setAmenitiesIndoorOptions((prevState) => [...prevState, value]);
@@ -372,28 +372,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
   return (
     <>
-      {console.log(
-        "amenitiesIndoorOptions: ",
-        amenitiesIndoorOptions,
-        " Indoor Response: ",
-        amenitiesIndoorResponse,
-        " familey: ",
-        amenitiesFamilyOptions,
-        " family Response: ",
-        amenitiesFamilyResponse,
-        " more: ",
-        amenitiesMoreOptions,
-        " More Response: ",
-        amenitiesMoreResponse,
-        " outdoor: ",
-        amenitiesOutdoorOptions,
-        " outdoor Response: ",
-        amenitiesOutdoorResponse,
-        " rules: ",
-        amenitiesRulesOptions,
-        " rules Response: ",
-        amenitiesRulesResponse
-      )}
 
       {show && (
         <CheckboxModalNote
@@ -441,12 +419,14 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                           <input
                             class="form-check-input"
                             type="checkbox"
-                            id="inlineCheckbox1"
+                            // id="inlineCheckbox1"
                             value={family}
                             onChange={handleFamilyCheckboxChange}
                             checked={amenitiesFamilyOptions.includes(family)}
                           />
-                          <label class="form-check-label" for="inlineCheckbox2">
+                          <label class="form-check-label" 
+                          // for="inlineCheckbox2" 
+                          >
                             {family}
                           </label>
                           <button
@@ -540,17 +520,17 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                     <>
                       <li className="amenties-list-item">
                         <div 
-                        // class="form-checkbox"
                          class={amenitiesIndoorOptions.includes(Indoor)?"form-checkbox bg-light text-dark":"form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
-                            id="inlineCheckbox2"
                             value={Indoor}
                             onChange={handleIndoorCheckboxChange}
                             checked={amenitiesIndoorOptions.includes(Indoor)}
                           />
-                          <label class="form-check-label" for="inlineCheckbox2">
+                          <label class="form-check-label" 
+                          // for="inlineCheckbox2"
+                          >
                             {Indoor}
                           </label>
                           <button
@@ -568,8 +548,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                             >
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                fill="#146EF5
-                                                                    "
+                                fill="#146EF5"
                               ></path>
                             </svg>
                           </button>
@@ -591,16 +570,20 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div class="form-checkbox">
+                        <div 
+                        // class="form-checkbox"
+                        class={amenitiesMoreOptions.includes(More)?"form-checkbox bg-light text-dark":"form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
-                            id="inlineCheckbox3"
+                            // id="inlineCheckbox3"
                             value={More}
                             onChange={handleMoreCheckboxChange}
                             checked={amenitiesMoreOptions.includes(More)}
                           />
-                          <label class="form-check-label" for="inlineCheckbox3">
+                          <label class="form-check-label" 
+                          // for="inlineCheckbox3"
+                          >
                             {More}
                           </label>
                           <button
@@ -638,16 +621,20 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div class="form-checkbox">
+                        <div 
+                        // class="form-checkbox"
+                        class={amenitiesOutdoorOptions.includes(Outdoor)?"form-checkbox bg-light text-dark":"form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
-                            id="inlineCheckbox4"
+                            // id="inlineCheckbox4"
                             value={Outdoor}
                             onChange={handleOutdoorCheckboxChange}
                             checked={amenitiesOutdoorOptions.includes(Outdoor)}
                           />
-                          <label class="form-check-label" for="inlineCheckbox4">
+                          <label class="form-check-label" 
+                          // for="inlineCheckbox4"
+                          >
                             {Outdoor}
                           </label>
                           <button
@@ -691,18 +678,25 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div class="form-checkbox">
+                        <div 
+                        // class="form-checkbox"
+                        class={amenitiesRulesOptions.includes(
+                          RulesAndServices
+                        )?"form-checkbox bg-light text-dark":"form-checkbox"}
+                        >
                           <input
                             class="form-check-input"
                             type="checkbox"
-                            id="inlineCheckbox5"
+                            // id="inlineCheckbox5"
                             value={RulesAndServices}
                             onChange={handleRulesCheckboxChange}
                             checked={amenitiesRulesOptions.includes(
                               RulesAndServices
                             )}
                           />
-                          <label class="form-check-label" for="inlineCheckbox5">
+                          <label class="form-check-label" 
+                          // for="inlineCheckbox5"
+                          >
                             {RulesAndServices}
                           </label>
                           <button
