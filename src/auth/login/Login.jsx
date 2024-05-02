@@ -51,13 +51,13 @@ const Login = () => {
     }
   }, [loginStatus]);
 
-  useEffect(()=>{
-    if(token!==undefined){
+  useEffect(() => {
+    if (token !== undefined) {
       navigate('/dashboard')
-    }else{
+    } else {
       navigate('/login')
     }
-  },[token])
+  }, [token])
 
   return (
     <div className="login auth">
@@ -109,8 +109,8 @@ const Login = () => {
                       placeholder="Email..."
                     />
                   </div>
-                  {errors.email?.type === "required" && 
-                  <>{ErrorMessageShow("Please enter your email")}</>
+                  {errors.email?.type === "required" &&
+                    <>{ErrorMessageShow("Please enter your email")}</>
                   }
                   <div className="input-container">
                     <div className="password-box">
@@ -130,12 +130,13 @@ const Login = () => {
                         {!showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                       </button>
                     </div>
-                    {errors.password?.type === "required" && (
-                      <span className="text-danger">
-                        Please enter your password{" "}
-                      </span>
-                    )}
+
                   </div>
+                  {errors.password?.type === "required" && (
+                    <span className="text-danger ms-3">
+                      Please enter your password{" "}
+                    </span>
+                  )}
                   <div className="input-container d-flex align-items-center justify-content-between">
                     <div className="form-check remember">
                       <input

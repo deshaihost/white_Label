@@ -1,289 +1,304 @@
 .auth {
-    padding: 30px 15px;
-    height: 100vh;
+  padding: 30px 15px;
+  height: 100vh;
 }
 
-.auth .container, .auth .row, .auth .row > div {
-    height: 100%;
+.auth .container,
+.auth .row,
+.auth .row > div {
+  height: 100%;
 }
 
 .auth .auth-content.login-content,
 .auth .auth-content.forgot-pass-content {
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    text-align: center;
-    overflow-y: auto;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  text-align: center;
+  overflow-y: auto;
 }
 
 .auth .auth-content .logo {
-    text-align: center;
-    width: 100%;
-    display: block;
+  text-align: center;
+  width: 100%;
+  display: block;
 }
 
 .auth .auth-content .logo img {
-    width: 100%;
-    max-width: 202px;
+  width: 100%;
+  max-width: 202px;
 }
 
 .auth .auth-content .auth-form {
-    max-width: 480px;
-    margin: 30px auto;
-    width: 100%;
+  max-width: 480px;
+  margin: 30px auto;
+  width: 100%;
 }
 
 .auth .auth-content .auth-form > h2 {
-    color: #FFF;
-    text-align: center;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 35px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 50px;
-    margin-bottom: 0;
+  color: #fff;
+  text-align: center;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 35px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px;
+  margin-bottom: 0;
 }
 
 .auth .auth-content .auth-form > p {
-    color: #FFF;
-    text-align: center;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+  color: #fff;
+  text-align: center;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .auth .auth-content .auth-form > p a {
-    color: #146EF5;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+  color: #146ef5;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .auth .auth-content .auth-form form {
-    text-align: left;
-    margin-top: 20px;
+  text-align: left;
+  margin-top: 20px;
 }
 
 .auth .auth-content .auth-form form .input-container:not(:last-child) {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
-.auth .auth-content .auth-form form .input-container input:not(input[type="checkbox"]),
+.auth
+  .auth-content
+  .auth-form
+  form
+  .input-container
+  input:not(input[type="checkbox"]),
 .auth .auth-content .auth-form form .input-container select {
-    color: #FFF;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    border-radius: 80px;
-    border: 1px solid rgba(255, 255, 255, 0.20);
-    background: #000212;
-    height: 60px;
-    width: 100%;
-    padding: 15px 30px;
-    outline: none;
+  color: #fff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border-radius: 80px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #000212;
+  height: 60px;
+  width: 100%;
+  padding: 15px 30px;
+  outline: none;
 }
 
 .auth .auth-content .auth-form form .input-container select {
-    background: #000212 url(../public/img/arrow_down.png) no-repeat right 20px center !important;
-    -webkit-appearance: none;
+  background: #000212 url(../public/img/arrow_down.png) no-repeat right 20px
+    center !important;
+  -webkit-appearance: none;
 }
 
 .auth .auth-content .auth-form form .input-container .password-box {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .auth .auth-content .auth-form form .input-container button.eye-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 20px;
-    outline: none;
-    background: none;
-    box-shadow: none;
-    border: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 20px;
+  outline: none;
+  background: none;
+  box-shadow: none;
+  border: none;
 }
 
 .auth .auth-content .auth-form form .input-container svg {
-    color: #fff;
+  color: #fff;
 }
 
 .auth .auth-content .auth-form form .input-container .password-criteria {
-    color: #fff;
-    font-size: 12px;
-    margin: 11px;
-    font-family: 'Samsung Sharp Sans Regular';
+  color: #fff;
+  font-size: 12px;
+  margin: 11px;
+  font-family: "Samsung Sharp Sans Regular";
 }
 
 .auth .auth-content .footer-auth {
-    color: #808080;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    text-align: center;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
+  color: #808080;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
 
 .auth .auth-img {
-    height: 100%;
-    position: relative;
+  height: 100%;
+  position: relative;
 }
 
 .auth .auth-img img {
-    max-width: 100%;
-    border-radius: 40px;
-    width: 100%;
-    object-fit: cover;
-    height: 100%;
+  max-width: 100%;
+  border-radius: 40px;
+  width: 100%;
+  object-fit: cover;
+  height: 100%;
 }
 
 .auth .auth-img .auth-chat {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 20px;
-    border-radius: 40px;
-    border: 1px solid #FFF;
-    background: rgba(0, 0, 0, 0.20);
-    backdrop-filter: blur(30px);
-    padding: 40px 32px;
-    width: calc(100% - 40px);
-    text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  border-radius: 40px;
+  border: 1px solid #fff;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(30px);
+  padding: 40px 32px;
+  width: calc(100% - 40px);
+  text-align: center;
 }
 
 .auth .auth-img .auth-chat p {
-    color: #FFF;
-    text-align: center;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 150%;
-    margin-bottom: 25px;
+  color: #fff;
+  text-align: center;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  margin-bottom: 25px;
 }
 
 .auth .auth-img .auth-chat h4 {
-    color: #FFF;
-    text-align: center;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 150%;
+  color: #fff;
+  text-align: center;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
 }
 
 .auth .auth-img .auth-chat h6 {
-    color: #FFF;
-    text-align: center;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 150%;
-    margin: 0;
+  color: #fff;
+  text-align: center;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  margin: 0;
 }
 
 .auth .auth-content .auth-form form .input-container .remember {
-    display: flex;
-    align-items: center;
-    color: #FFF;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .auth .auth-content .auth-form form .input-container input[type="checkbox"] {
-    border-radius: 4px;
-    border: 1px solid #FFF;
-    width: 20px;
-    flex: 0 0 20px;
-    height: 20px;
-    box-shadow: none !important;
-    display: inline-block;
-    margin-right: 10px;
-    margin-top: 0;
-    border-radius: 0.25em;
-    padding: 0;
-    margin-left: 0;
+  border-radius: 4px;
+  border: 1px solid #fff;
+  width: 20px;
+  flex: 0 0 20px;
+  height: 20px;
+  box-shadow: none !important;
+  display: inline-block;
+  margin-right: 10px;
+  margin-top: 0;
+  border-radius: 0.25em;
+  padding: 0;
+  margin-left: 0;
 }
 
-.auth .auth-content .auth-form form .input-container input[type="checkbox"]:checked {
-    background-color: #146EF5;
-    border-color: #146EF5;
+.auth
+  .auth-content
+  .auth-form
+  form
+  .input-container
+  input[type="checkbox"]:checked {
+  background-color: #146ef5;
+  border-color: #146ef5;
 }
 
 .auth .auth-content .auth-form form .input-container .forgot_pass {
-    margin-left: auto;
-    color: #FF3F45;
-    text-align: right;
-    font-size: 14px;
-    font-style: normal;
-    line-height: normal;
-    transition: .4s ease-in-out;
+  margin-left: auto;
+  color: #ff3f45;
+  text-align: right;
+  font-size: 14px;
+  font-style: normal;
+  line-height: normal;
+  transition: 0.4s ease-in-out;
 }
 
 .auth .auth-content .auth-form form .input-container .forgot_pass:hover {
-    color: #146EF5;
+  color: #146ef5;
 }
 
-@media only screen and (max-width: 991px)  {
+.footer-auth a {
+  font-size: 14px;
+}
+@media only screen and (max-width: 991px) {
+  .auth .row {
+    height: auto;
+    flex-direction: column-reverse;
+  }
 
-    .auth .row {
-        height: auto;
-        flex-direction: column-reverse;
-    }
+  .auth {
+    height: auto;
+  }
 
-    .auth {
-        height: auto;
-    }
+  .auth .auth-content .auth-form {
+    margin: 50px auto;
+  }
 
-    .auth .auth-content .auth-form {
-        margin: 50px auto;
-    }
+  .auth .auth-content .auth-form > h2 {
+    font-size: 27px;
+    line-height: 35px;
+  }
 
-    .auth .auth-content .auth-form > h2 {
-        font-size: 27px;
-        line-height: 35px;
-    }
+  .auth .auth-content .auth-form form .input-container input,
+  .auth .auth-content .auth-form form .input-container select {
+    height: 50px;
+    padding: 10px 20px;
+    font-size: 15px;
+  }
 
-    .auth .auth-content .auth-form form .input-container input,
-    .auth .auth-content .auth-form form .input-container select {
-        height: 50px;
-        padding: 10px 20px;
-        font-size: 15px;
-    }
+  .auth .auth-img {
+    height: auto;
+    margin-top: 30px;
+  }
 
-    .auth .auth-img {
-        height: auto;
-        margin-top: 30px;
-    }
+  .auth .auth-img .auth-chat {
+    padding: 20px;
+    border-radius: 20px;
+  }
 
-    .auth .auth-img .auth-chat {
-        padding: 20px;
-        border-radius: 20px;
-    }
+  .auth .auth-img .auth-chat p {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
 
-    .auth .auth-img .auth-chat p {
-        font-size: 15px;
-        font-weight: 500;
-        margin-bottom: 15px;
-    }
-
-    .auth .auth-img .auth-chat h4 {
-        font-size: 18px;
-    }
+  .auth .auth-img .auth-chat h4 {
+    font-size: 18px;
+  }
 }

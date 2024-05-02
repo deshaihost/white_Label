@@ -1,39 +1,39 @@
 .discover {
-    background-image: url(../../../public/img/discover_bg.jpg);
-    padding: 118px 0;
-    background-size: cover;
-    background-position: center;
+  background-image: url(../../../public/img/discover_bg.jpg);
+  padding: 118px 0;
+  background-size: cover;
+  background-position: center;
 }
 
 .discover h2 {
-    color: #FFF;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 34px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 120%;
-    margin-bottom: 35px;
+  color: #fff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 35px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 120%;
+  margin-bottom: 35px;
 }
 
 .discover h2 strong {
-    font-weight: 600;
-    color: #146EF5;
+  font-weight: 600;
+  color: #146ef5;
 }
 
 @media only screen and (max-width: 575px) {
-    .discover {
-        background-position-x: left;
-    }
+  .discover {
+    background-position-x: left;
+  }
 }
 
 @media only screen and (max-width: 991px) {
-    .discover {
-        padding: 50px 0;
-    }
+  .discover {
+    padding: 50px 0;
+  }
 
-    .discover h2 {
-        font-size: 27px;
-        max-width: 400px;
-        margin-bottom: 15px;
-    }
+  .discover h2 {
+    font-size: 27px;
+    max-width: 400px;
+    margin-bottom: 15px;
+  }
 }

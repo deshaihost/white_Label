@@ -88,7 +88,7 @@ const Setup = () => {
                 <div className="heading-box">
                     <h2>How to Setup HostBuddy AI</h2>
                 </div>
-                <div className="slider-container" style={{display: 'flex'}}>
+                <div className="slider-container" style={{ display: 'flex' }}>
                     <div className="item_counter_box">
                         <span className="current_item">{currentItem < 10 ? `0${currentItem}` : currentItem}</span>
                         <div className="bar_track">
@@ -100,7 +100,7 @@ const Setup = () => {
                         <Slider className="setup_slider" {...settings} ref={sliderRef}>
                             {items.map((data, i) => (
                                 <div className="item" key={i}>
-                                    <div className="row">
+                                    <div className="row setup_row">
                                         <div className="col-lg-6">
                                             <div className="setup-content">
                                                 <h4 className={`step${i + 1}`}>STEP #{i + 1}</h4>
