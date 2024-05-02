@@ -35,6 +35,7 @@ const Signup = () => {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm();
   const password = useRef({});
@@ -60,6 +61,34 @@ const Signup = () => {
       password: data.newPassword,
     });
   };
+  // this functionality is space not allow in input
+  const [inputSpaceValidation, setInputSpaceValidation] = useState({
+    firstName: "",
+    lastName: "",
+  });
+  const firstNameSpaceHandle = (event) => {
+    const trimmedValue = event.target.value.trim();
+    const regex = /^[a-zA-Z]*$/;
+    if (event.target.value === "" || regex.test(event.target.value)) {
+      setInputSpaceValidation({
+        ...inputSpaceValidation,
+        firstName: trimmedValue,
+      });
+      setValue("firstName", trimmedValue);
+    }
+  };
+  const lastNameSpaceHandle = (event) => {
+    const trimmedValue = event.target.value.trim();
+    const regex = /^[a-zA-Z]*$/;
+    if (event.target.value === "" || regex.test(event.target.value)) {
+      setInputSpaceValidation({
+        ...inputSpaceValidation,
+        lastName: trimmedValue,
+      });
+      setValue("lastName", trimmedValue);
+    }
+  };
+  // this functionality is space not allow in input
 
   // this functionaly used after register
   const loginStatus = store?.loginReducer?.login?.status;
@@ -121,7 +150,8 @@ const Signup = () => {
                   Their chatbot solutions are top-notch, and the support team is
                   fantastic.”
                 </p>
-                <h4>John Smith</h4>
+                {/* <h4>John Smith</h4> */}
+                <h4>John</h4>
                 <h6>CEO of TechSolutions Inc</h6>
               </div>
             </div>
@@ -152,6 +182,10 @@ const Signup = () => {
                       type="text"
                       {...register("firstName", { required: true })}
                       placeholder="First Name..."
+                      value={inputSpaceValidation?.firstName}
+                      onInput={(e) => {
+                        firstNameSpaceHandle(e);
+                      }}
                     />
                   </div>
                   {errors.firstName?.type === "required" && (
@@ -164,6 +198,8 @@ const Signup = () => {
                       type="text"
                       {...register("lastName", { required: true })}
                       placeholder="Last Name..."
+                      value={inputSpaceValidation?.lastName}
+                      onInput={(e) => { lastNameSpaceHandle(e) }}
                     />
                   </div>
                   {errors.lastName?.type === "required" && (

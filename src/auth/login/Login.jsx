@@ -76,7 +76,7 @@ const Login = () => {
                   Their chatbot solutions are top-notch, and the support team is
                   fantastic.”
                 </p>
-                <h4>John Smith</h4>
+                <h4>John</h4>
                 <h6>CEO of TechSolutions Inc</h6>
               </div>
             </div>

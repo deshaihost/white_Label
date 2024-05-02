@@ -60,6 +60,7 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
           };
           const text = item;
           const capitalizedText = capitalizeFirstLetter(text);
+          console.log(capitalizedText,'capitalizedText')
           return (
             <>
               <div className="col form-design">

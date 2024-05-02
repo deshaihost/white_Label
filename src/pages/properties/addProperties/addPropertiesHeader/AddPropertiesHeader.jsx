@@ -36,7 +36,8 @@ const AddPropertiesHeader = (props) => {
               <h2>Basics</h2>
             </div>
             <div
-              className={supportingDoc && "text-primary active"}
+              // className={supportingDoc && "text-primary active"}
+              className={supportingDoc && "text-primary"}
               onClick={() => {
                 prntFuntionHeaderActive(id !== undefined && "supportingDoc");
               }}

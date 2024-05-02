@@ -21,7 +21,6 @@ const PropertyInsight = () => {
 
   const userDataGet =
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  console.log(userDataGet?.length > 0 ? true : false, "userDataGet");
   const userpertieslistName = userDataGet?.[0];
 
   const [propertySelectName, setPropertySelectName] = useState("");
