@@ -6,7 +6,12 @@ const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
   const dispatch = useDispatch();
   const pmsIntegrationData =
     store?.pmsIntegrationGetReducer?.pmsIntegrationData?.data?.integrations;
-  const { cloudbeds, hostfully } = pmsIntegrationData ? pmsIntegrationData : [];
+  const { cloudbeds, hostfully, lodgify, smoobu } = pmsIntegrationData
+    ? pmsIntegrationData
+    : [];
+  const SmoobuStatic = "Smoobu";
+  const LodgifyStatic = "Lodgify";
+
   const [pmsIntegrationInputGet, setPmsIntergratonInputGet] = useState({
     type: "cloudbeds",
     data: cloudbeds,
@@ -14,6 +19,8 @@ const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
   const [checkBox, setCheckBox] = useState({
     cloudbeds: true,
     hostfully: false,
+    smoobu: false,
+    lodgify: false,
   });
   const onchangeHandlePms = (type, item) => {
     if (type === "cloudbeds") {
@@ -24,6 +31,30 @@ const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
       });
     } else if (type === "hostfully") {
       setCheckBox({ ...checkBox, cloudbeds: false, hostfully: true });
+      setPmsIntergratonInputGet({
+        type: type,
+        data: item,
+      });
+    } else if (type === LodgifyStatic) {
+      setCheckBox({
+        ...checkBox,
+        cloudbeds: false,
+        hostfully: false,
+        smoobu:false ,
+        lodgify:  true,
+      });
+      setPmsIntergratonInputGet({
+        type: type,
+        data: item,
+      });
+    } else if (type === SmoobuStatic) {
+      setCheckBox({
+        ...checkBox,
+        cloudbeds: false,
+        hostfully: false,
+        smoobu: true,
+        lodgify: false,
+      });
       setPmsIntergratonInputGet({
         type: type,
         data: item,
@@ -40,7 +71,10 @@ const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
   return (
     <>
       {conditionCheck ? (
-        <IntergratePlatFormInput PmsIntegrationData={pmsIntegrationInputGet} handleNoPlanClose={handleNoPlanClose} />
+        <IntergratePlatFormInput
+          PmsIntegrationData={pmsIntegrationInputGet}
+          handleNoPlanClose={handleNoPlanClose}
+        />
       ) : (
         <>
           <div id="integrate_form1">
@@ -76,6 +110,38 @@ const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
                   />
                   <label class="form-check-label" for="flexRadioDefault2">
                     Hostfully
+                  </label>
+                </div>
+                <div class="form-check custom_checkbox mb-3">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault2"
+                    value="option2"
+                    checked={checkBox?.lodgify}
+                    onClick={() => {
+                      onchangeHandlePms(LodgifyStatic, lodgify);
+                    }}
+                  />
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Lodgify
+                  </label>
+                </div>
+                <div class="form-check custom_checkbox mb-3">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault2"
+                    value="option2"
+                    checked={checkBox?.smoobu}
+                    onClick={() => {
+                      onchangeHandlePms(SmoobuStatic, smoobu);
+                    }}
+                  />
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Smoobu
                   </label>
                 </div>
               </div>

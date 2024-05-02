@@ -6,8 +6,8 @@ import Authorized from "../../../helper/Authorized";
 const Essentials = () => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];
-  const [essentialValue, setEssentialValue] = useState(0);
-  const [worksValue, setWorksValue] = useState(0);
+  const [essentialValue, setEssentialValue] = useState(1);
+  const [worksValue, setWorksValue] = useState(1);
   const [labelLeft, setLabelLeft] = useState(0);
   const [workLabelLeft, setWorkLabelLeft] = useState(0);
   const handleChange = (event) => {

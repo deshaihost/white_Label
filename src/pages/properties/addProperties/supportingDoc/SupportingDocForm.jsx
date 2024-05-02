@@ -56,30 +56,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     ? store?.supportingUrlPostReducer?.loading
     : "";
 
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm();
-
-  // const onSubmit = (data) => {
-  //   console.log(data, "data")
-  //   return
-  //   let supportingkeyName = supportingNameKey?.nameKey;
-  //   if (suppertingInput.updateDoc) {
-  //     const formData = new FormData();
-  //     formData.append("filess", data.docx[0]);
-  //     dispatch(supportingDocumentPostActions({ supportingkeyName, formData }));
-  //   } else if (suppertingInput.urlToWebPage) {
-  //     dispatch(
-  //       supportingUrlPostActions({
-  //         supportingkeyName,
-  //         data: { url: data.url },
-  //       })
-  //     );
-  //   }
-  // };
-
   function isValidURL(url) {
     // Regular expression to match a period in the middle of the string
     return /^[^.].+?\..+[^.]$/.test(url);
@@ -150,8 +126,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const documentUploadHandle = () => {
     if (docsInput !== "") {
       let supportingkeyName = supportingNameKey?.nameKey;
+      const files = docsInput?.[0];
       const formData = new FormData();
-      formData.append("filess", docsInput?.[0]);
+      formData.append("file", files);
+      formData.append("hide_for_reservations",[])
       dispatch(supportingDocumentPostActions({ supportingkeyName, formData }));
     } else {
       redrectcomponent();
@@ -267,6 +245,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                   <div className="">
                     <input
                       type="file"
+                      id="fileInput"
                       className="form-control"
                       onChange={(e) => setDocsInput(e.target.files)}
                       // {...register("docx")}
