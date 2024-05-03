@@ -188,6 +188,7 @@ const ListIntegrationProperties = () => {
     // item: authToke,
     // item1: authRefracetoke,
   };
+  /* (Mboddie) Rewrote function to remove deprecated "execCommand" and use more straightforward logic
   const copyToClipboard = (text) => {
     var textField = document.createElement("textarea");
     textField.innerText = text;
@@ -195,15 +196,36 @@ const ListIntegrationProperties = () => {
     textField.select();
     document.execCommand("copy");
     textField.remove();
+  }; */
+  const copyToClipboard = async (text) => {
+    try {
+        await navigator.clipboard.writeText(text);
+        console.log('Text copied to clipboard');
+    } catch (err) {
+        console.error('Error in copying text: ', err);
+    }
   };
   useEffect(() => {
     if (chatBoxGetByNameStatus === 200) {
       if (chatBox?.linkCopy) {
-        copyToClipboard(
+
+        /* Mboddie: changed below code to pass URL variables properly as query params, rather than a JSON object.
+        Also changed the corresponding logic in MeetHostBuddy.jsx to correctly parse these variables in their new form.
+        TODO: eventually baseUrl should be a global variable somewhere. There shouldn't be hardcoded references to the vercel URL scattered
+        throughout the code, since it will make it more difficult to change to our actual domain in the future. */
+        const baseUrl = "https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy";
+        const url = new URL(baseUrl);
+        url.searchParams.append("key", urlLink.chatbot_key);
+        url.searchParams.append("name", urlLink.propertyN);
+        url.searchParams.append("user", "guest"); // "guest" since we're using the copied chatbot link, not "Test Property"
+        copyToClipboard(url.toString());
+
+        /* copyToClipboard(
           `https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy/${JSON.stringify(
             urlLink
           )}`
-        );
+        ); */
+
         ToastHandle("Link copied", "success");
         setCopyLinkSetData({
           chatBotKey: chatbot_key,
@@ -220,13 +242,26 @@ const ListIntegrationProperties = () => {
           linkCopy: false,
           testingProperty: false,
         });
-        const routingPart = "/meet-hostbuddy/";
+
+        /* Mboddie: changed below code to pass URL variables properly as query params, rather than a JSON object.
+        Also changed the corresponding logic in MeetHostBuddy.jsx to correctly parse these variables in their new form.
+        TODO: eventually baseUrl should be a global variable somewhere. There shouldn't be hardcoded references to the vercel URL scattered
+        throughout the code, since it will make it more difficult to change to our actual domain in the future. */
+        const baseUrl = "https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy";
+        const url = new URL(baseUrl);
+        url.searchParams.append("key", urlLink.chatbot_key);
+        url.searchParams.append("name", urlLink.propertyN);
+        url.searchParams.append("user", "host"); // "host" since we're using "Test Property", not the copied chatbot link
+
+        window.open( url.toString(), "_blank" );
+
+        /* const routingPart = "/meet-hostbuddy/";
         window.open(
           `https://hostbuddy-react-frontend-three.vercel.app/${routingPart}${JSON?.stringify(
             urlLink
           )}`,
           "_blank"
-        );
+        ); */
         // navigate(`${routingPart}${JSON?.stringify(urlLink)}`);
         localStorage.setItem(localStorageKey, JSON?.stringify(testPropertyKey));
         setTestPropertyKey({ nameKey: "" });

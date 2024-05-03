@@ -278,7 +278,7 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
             <div className="col-md-12 text-center">
               <button className="mt-5">
                 {" "}
-                {!updateQuestionaireLoading ? <>Add</> : <Loader />}
+                {!updateQuestionaireLoading ? <>Save & Next</> : <Loader />}
               </button>
             </div>
           </form>

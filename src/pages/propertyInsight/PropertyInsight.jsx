@@ -102,7 +102,7 @@ const PropertyInsight = () => {
                           height: "85%",
                         }}
                       >
-                        Empty
+                        No data to show yet
                       </div>
                     )}
                   </>

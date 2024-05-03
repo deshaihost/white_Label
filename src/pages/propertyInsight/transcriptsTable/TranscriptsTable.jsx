@@ -146,7 +146,7 @@ const TranscriptsTable = ({ conversationData }) => {
                         <tr>
                           <td>{formattedDateTime.date}</td>
                           <td>{formattedDateTime.time}</td>
-                          <td>{convers?.subject !== undefined ? convers?.subject : <span className="text-danger">Empty</span>}</td>
+                          <td>{convers?.subject !== undefined ? convers?.subject : <span className="text-danger">TBD</span>}</td>
                           <td>
                             {convers?.success_rating === "NEUTRAL" ? (
                               <span>{convers?.success_rating}</span>
@@ -164,7 +164,7 @@ const TranscriptsTable = ({ conversationData }) => {
                                         {convers?.success_rating}
                                       </span>
                                     ) : (
-                                      <span className="text-danger">Empty</span>
+                                      <span className="text-danger">TBD</span>
                                     )}
                                   </>
                                 )}

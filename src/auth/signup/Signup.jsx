@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Container from "react-bootstrap/Container";
-import AuthImage from "../../public/img/auth_left_img.png";
-import Logo from "../../public/img/footer-logo.webp";
+import AuthImage from "../../public/img/Sign_Up_Page.png";
+import Logo from "../../public/img/logo_footer.png";
 import { Link } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import PrimaryButton from "../../component/button/button";
@@ -143,17 +143,16 @@ const Signup = () => {
           <div className="col-lg-6">
             <div className="auth-img">
               <img src={AuthImage} alt="auth-img" />
-              <div className="auth-chat">
+              {/* <div className="auth-chat">
                 <p>
                   "I've been using HostBuddy for a while now, and it has
                   completely transformed the way I engage with my customers.
                   Their chatbot solutions are top-notch, and the support team is
                   fantastic.”
                 </p>
-                {/* <h4>John Smith</h4> */}
                 <h4>John</h4>
                 <h6>CEO of TechSolutions Inc</h6>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="col-lg-6">
@@ -365,11 +364,11 @@ const Signup = () => {
               </div>
 
               <div className="footer-auth">
-                <div>
-                  By Continue, you agree to the{" "}
+                {/*<div>
+                  By continuing, you agree to the{" "}
                   <Link to="/">terms & Conditions</Link> and{" "}
                   <Link to="/">Privacy Policy</Link>
-                </div>
+                </div>*/}
               </div>
             </div>
           </div>
