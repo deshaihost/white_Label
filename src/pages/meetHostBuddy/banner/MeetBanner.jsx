@@ -15,6 +15,7 @@ import Loader from "../../../helper/Loader";
 import { ParamsGet, nameKey } from "../../../helper/Authorized";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
+import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
 const MeetBanner = (props) => {
   const { urlData } = props;
   const { chatbot_key, propertyN } = urlData ? urlData : [];
@@ -56,6 +57,9 @@ const MeetBanner = (props) => {
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInputValue("");
   };
+
+  // message feedback model functionality
+   
 
   // Initial messages
   useEffect(() => {
@@ -104,7 +108,6 @@ const MeetBanner = (props) => {
       ToastHandle("Internal Server Error", "danger");
     }
   }, [statusResp]);
-  console.log(statusResp, "statusResp");
 
   return (
     <div className="meet-banner">
@@ -203,6 +206,7 @@ const MeetBanner = (props) => {
             </div>
           </div>
         </div>
+        {/* <MessgFeedBckModel/> */}
       </Container>
     </div>
   );

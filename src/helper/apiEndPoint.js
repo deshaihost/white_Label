@@ -22,4 +22,4 @@ export const GET_PROPERTY_BY_NAME = "/properties/";
 export const PROPERTY_GET_CONVERSATION = "/properties/";
 
 
-export const TESTING_API = "/properties/property_name";
+export const TESTING_API = "/properties";

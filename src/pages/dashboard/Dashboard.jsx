@@ -38,9 +38,11 @@ const Dashboard = () => {
       setModel({ ...model, addProperty: false });
     }
   };
+
   useEffect(() => {
     dispatch(getUserDataActions());
   }, []);
+  
 
   return (
     <>
@@ -137,19 +139,22 @@ const Dashboard = () => {
                                       <li>
                                         <div className="property_list_cnt">
                                           <div className="property_cntleft">
-
-                                            <img src="https://hostbuddy.ai/wp-content/uploads/2024/04/503-1.png" alt="img" />
+                                            <img
+                                              src="https://hostbuddy.ai/wp-content/uploads/2024/04/503-1.png"
+                                              alt="img"
+                                            />
                                             <div className="property_detail">
                                               <h4>{userCreate}</h4>
                                               <p>Los Angels </p>
                                             </div>
                                           </div>
                                           <div className="chart-module">
-                                            <CircularProgressbar className="progressBar w-auto"
+                                            <CircularProgressbar
+                                              className="progressBar w-auto"
                                               styles={buildStyles({
                                                 pathColor: "#146EF5",
-                                                textColor: '#146EF5',
-                                              },)}
+                                                textColor: "#146EF5",
+                                              })}
                                               value={100}
                                               text={`${100}%`}
                                             />
@@ -164,7 +169,7 @@ const Dashboard = () => {
                           })}
                         </>
                       ) : (
-                        <BoxLoader   />
+                        <BoxLoader />
                       )}
                     </div>
                     <div className="col-lg-4">

@@ -20,25 +20,25 @@ const MeetHostBoddy = () => {
         "kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw" &&
         chatBoxUrl
     );
-  const AUTH_SESSION_KEY = "hostBuddy_auth";
-  const localStorageData = JSON.parse(sessionStorage.getItem(AUTH_SESSION_KEY));
+  // const AUTH_SESSIsssON_KEY = "hostBuddy_auth";
+  // const localStorageData = JSON.parse(sessionStorage.getItem(AUTH_SESSION_KEY));
 
-  useEffect(() => {
-    if (urlData?.id === "wdsxIFuw") {
-      let body = {
-        data: "userData",
-        id: 1,
-        lastName: "User",
-        password: "test",
-        refreshToken: urlData?.item1,
-        role: "userRole",
-        token: urlData?.item,
-      };
-      api.setLoggedInUser(body);
-      setAuthorization(body["token"]);
-      // sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(body));
-    }
-  }, [urlData]);
+  // useEffect(() => {
+  //   if (urlData?.id === "wdsxIFuw") {
+  //     let body = {
+  //       data: "userData",
+  //       id: 1,
+  //       lastName: "User",
+  //       password: "test",
+  //       refreshToken: urlData?.item1,
+  //       role: "userRole",
+  //       token: urlData?.item,
+  //     };
+  //     api.setLoggedInUser(body);
+  //     setAuthorization(body["token"]);
+  //     // sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(body));
+  //   }
+  // }, [urlData]);
 
   return (
     <div className="meet-buddy">
