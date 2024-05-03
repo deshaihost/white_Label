@@ -6,7 +6,7 @@ import {
   MDBCol,
   MDBIcon,
 } from "mdb-react-ui-kit";
-import FooterLogo from "../../public/img/footer-logo.webp";
+import FooterLogo from "../../public/img/logo_footer.png";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import "./footer.css";

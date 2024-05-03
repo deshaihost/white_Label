@@ -82,7 +82,7 @@ const Dashboard = () => {
                             stroke-linejoin="round"
                           ></path>
                         </svg>
-                        <h4>0</h4>
+                        <h4>-</h4>
                         <p>Messages Processed</p>
                       </div>
                     </div>
@@ -100,7 +100,7 @@ const Dashboard = () => {
                             fill="#146EF5"
                           ></path>
                         </svg>
-                        <h4>0</h4>
+                        <h4>-</h4>
                         <p>Average Response Time</p>
                       </div>
                     </div>
@@ -120,14 +120,14 @@ const Dashboard = () => {
                             fill="#146EF5"
                           ></path>
                         </svg>
-                        <h4>0</h4>
+                        <h4>-</h4>
                         <p>Messages Sent</p>
                       </div>
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col-lg-8">
-                      {/* {!userDataGetLoading ? (
+                {/* <div className="col-lg-8">
+                      {!userDataGetLoading ? (
                         <>
                           {createPropertiesName?.map((userCreate) => {
                             return (
@@ -172,12 +172,12 @@ const Dashboard = () => {
                         <BoxLoader />
 
                       )}
-                    </div>
+                    </div> */}
                     <div className="col-lg-4">
                       <div className="get-started">
                         <img src={GetStartedImg} alt="get-started" />
-                        <p>Explore more about how you can Setup hostBuddy</p>
-                        <Link to="/">Get Started</Link>
+                        <p>Explore how to set up and get started with HostBuddy</p>
+                        <Link to="/setup-guide">Get Started</Link>
                       </div>
                     </div>
                   </div>

@@ -16,15 +16,16 @@ import { ParamsGet, nameKey } from "../../../helper/Authorized";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
+import { useLocation } from 'react-router-dom';
 const MeetBanner = (props) => {
   const { urlData } = props;
-  const { chatbot_key, propertyN } = urlData ? urlData : [];
+  const { chatbot_key, property_name, user_type } = urlData ? urlData : {};
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const chatBoxUrl = ParamsGet();
+  //const chatBoxUrl = ParamsGet();
   const getName = nameKey();
   const testPropetyName = getName?.nameKey;
-  const copyChatBotName = urlData?.propertyN;
+  const copyChatBotName = urlData?.property_name;
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
   const getMessageResp =
     store?.getSessionIdReducer?.sessionId?.data?.initial_message;
@@ -34,6 +35,11 @@ const MeetBanner = (props) => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
+
+  /* Mboddie: For now, use this variable to determine whether we're in property chat (query params are present), or Meet hostbuddy front page (no query params).
+  TODO (Expinator team) - please create a new path in the application for the property chat window, since it should not use the same path as Meet Hostbuddy and
+  should not have "Meet-Hostbuddy" in the URL (use a path like "/property-chat"). */
+  const isPropertyChat = (chatbot_key !== undefined && property_name !== undefined && user_type !== undefined);
 
   // const messagesContainerRef = useRef(null);
 
@@ -77,10 +83,9 @@ const MeetBanner = (props) => {
       getSessionIdActions({
         action: "hb_meet_hostbuddy_chat_start",
         textareaValue: "Hi",
-        chatbot_key:
-          chatbot_key !== undefined ? chatbot_key : "meet_hostbuddy_8762",
+        chatbot_key: chatbot_key !== undefined ? chatbot_key : "meet_hostbuddy_8762",
         data_host_return: " ",
-        user: chatbot_key !== undefined ? "guest" : "host",
+        user: user_type !== undefined ? user_type : "guest",
       })
     );
   };
@@ -115,7 +120,7 @@ const MeetBanner = (props) => {
         <div className="banner-heading">
           <h2>
             {" "}
-            {chatBoxUrl !== undefined ? (
+            {isPropertyChat ? (
               <>
                 {testPropetyName !== ""
                   ? copyChatBotName !== undefined
@@ -127,14 +132,14 @@ const MeetBanner = (props) => {
               "Meet HostBuddy"
             )}
           </h2>
-          {chatBoxUrl === undefined && (
+          {!isPropertyChat && (
             <p>
               Get ready to meet our friendly HostBuddy chatbot. We're here to
               assist you with any questions or support you might need. Just type
               your query below, and we'll be happy to help
             </p>
           )}
-          {chatBoxUrl !== undefined ? (
+          {isPropertyChat ? (
             <Link to="/properties" className="link-btn filled-btn">
               Back
             </Link>
@@ -145,7 +150,7 @@ const MeetBanner = (props) => {
           )}
         </div>
         <div className="row">
-          {chatBoxUrl === undefined && (
+          {!isPropertyChat && (
             <div className="col-lg-5" id="house-image">
               <div className="house-img">
                 <img src={HouseImg} alt="house-img" className="img-fluid" />
@@ -153,7 +158,7 @@ const MeetBanner = (props) => {
             </div>
           )}
 
-          <div className={chatBoxUrl !== undefined ? "col-lg-12" : "col-lg-7"}>
+          <div className={isPropertyChat ? "col-lg-12" : "col-lg-7"}>
             <div className="chatbot">
               <div className="message-list">
                 {messages?.map((message, index) => {

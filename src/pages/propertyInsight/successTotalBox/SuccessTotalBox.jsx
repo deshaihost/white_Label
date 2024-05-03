@@ -20,7 +20,7 @@ const SuccessTotalBox = ({ totalConversation }) => {
                 ></path>
               </svg>
             </div>
-            <h4>0</h4>
+            <h4>-</h4>
             <p>Success Rate</p>
           </div>
         </div>
@@ -43,7 +43,7 @@ const SuccessTotalBox = ({ totalConversation }) => {
               </svg>
             </div>
             <h4>{totalConversation}</h4>
-            <p>Total Conversation</p>
+            <p>Total Conversations</p>
           </div>
         </div>
       </div>

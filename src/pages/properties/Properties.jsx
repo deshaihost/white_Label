@@ -114,9 +114,9 @@ const Properties = () => {
             <div className="col-lg-8">
               <div className="account-container">
                 <div className="account_heading">
-                  <h3>Property Listing</h3>
+                  <h3>Properties</h3>
                   <div className="property-heading-right">
-                    <p>Hostbuddy Status</p>
+                    <p>HostBuddy Status</p>
                     {toggleChatLoading && <FullScreenLoader />}
                     <div className="form-check form-switch custom_switch">
                       <input

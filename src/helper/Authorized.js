@@ -17,6 +17,7 @@ export const nameKey = () => {
   return getLocalStorageData;
 };
 
+// Mboddie: ParamsGet is replaced by query param logic and is now UNUSED. TODO: Delete
 export const ParamsGet = () => {
   const { id } = useParams();
   return id;
