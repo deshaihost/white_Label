@@ -200,7 +200,7 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
                 <div
                   key={index}
                   className={` mt-4 col-${index % 2 === 0 ? "6" : "6"}`}
-                >
+                >{console.log("Rsponse: ", item?.responseText)}
                   {item.question_type === "select" ? (
                     <>
                       <label className="text-white">

@@ -7,7 +7,8 @@ import {
   PMSintegrationEndPoint,
   PMSintegrationAddEndPoint,
   removeIntegrationListGetEndPoint,
-  removeIntegrationEndPoint
+  removeIntegrationEndPoint,
+  updateAccountUpdatePasswordEndPoint
 } from "./api";
 import { StateEmtpyActionTypes } from "../../stateEmpty/constants";
 
@@ -83,6 +84,32 @@ function* updateAccountInfoFunction(data) {
   } catch (error) {
     yield put({
       type: PagesApisActionTypes.UPDATE_ACCOUNT_INFO_ERROR,
+      payload: error,
+    });
+  }
+}
+
+function* updateAccountUpdatePasswordFunction(data) {
+  try {
+    yield put({
+      type: PagesApisActionTypes.UPDATE_ACCOUNT_UPDATE_PASSWORD_LOADING,
+      payload: {},
+    });
+    const response = yield call(updateAccountUpdatePasswordEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: PagesApisActionTypes.UPDATE_ACCOUNT_UPDATE_PASSWORD_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: PagesApisActionTypes.UPDATE_ACCOUNT_UPDATE_PASSWORD_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: PagesApisActionTypes.UPDATE_ACCOUNT_UPDATE_PASSWORD_ERROR,
       payload: error,
     });
   }
@@ -219,6 +246,12 @@ export function* acctionUpdateAccountInfo(): any {
     updateAccountInfoFunction
   );
 }
+export function* acctionUpdateAccountUpdatePassword(): any {
+  yield takeEvery(
+    PagesApisActionTypes.UPDATE_ACCOUNT_UPDATE_PASSWORD_FIRST,
+    updateAccountUpdatePasswordFunction
+  );
+}
 export function* acctionPMSIntegrationGet(): any {
   yield takeEvery(
     PagesApisActionTypes.PMS_INTEGRATION_GET_FIRST,
@@ -245,6 +278,8 @@ export function* acctionRemoveIntegration(): any {
   );
 }
 
+
+
 function* pagesApisSaga(): any {
   yield all([
     fork(acctionGetUserData),
@@ -254,7 +289,8 @@ function* pagesApisSaga(): any {
     fork(acctionPMSIntegrationGet),
     fork(acctionPMSIntegrationAdd),
     fork(acctionRemoveIntegrationGet),
-    fork(acctionRemoveIntegration)
+    fork(acctionRemoveIntegration),
+    fork(acctionUpdateAccountUpdatePassword)
   ]);
 }
 

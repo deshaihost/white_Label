@@ -6,6 +6,7 @@ export const CHAT_BOX_AI = "/chat";
 export const GET_USER_DATA = "/get_user_data";
 export const POST_CREATE_CHECKOUT_SESSION = "/create_checkout_session";
 export const UPDATE_ACCOUNT_INFO = "/update_account_info";
+export const UPDATE_ACCOUNT_UPDATE_PASSWORD = "/change_password";
 export const GET_SUPPORTED_INTEGRATIONS = "/get_supported_integrations";
 export const ADD_SUPPORTED_INTEGRATIONS = "/add_integration";
 export const GET_AVAIL_INTEGRATIONS = "/get_avail_integrations";

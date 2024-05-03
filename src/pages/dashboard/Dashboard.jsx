@@ -19,7 +19,7 @@ const Dashboard = () => {
   const createPropertiesName =
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
 
-  const { email } = userDataGet ? userDataGet : [];
+  const { first_name } = userDataGet ? userDataGet : [];
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -58,7 +58,7 @@ const Dashboard = () => {
               <div className="account-container">
                 <div className="account_heading">
                   <h3>
-                    Welcome to HostBuddy, {!userDataLoading && <>{email}</>}{" "}
+                    Welcome to HostBuddy, {!userDataLoading && <>{first_name}</>}{" "}
                   </h3>
                 </div>
                 <div className="account-content">
@@ -125,7 +125,7 @@ const Dashboard = () => {
                   </div>
                   <div className="row">
                     <div className="col-lg-8">
-                      {!userDataGetLoading ? (
+                      {/* {!userDataGetLoading ? (
                         <>
                           {createPropertiesName?.map((userCreate) => {
                             return (
@@ -164,8 +164,8 @@ const Dashboard = () => {
                           })}
                         </>
                       ) : (
-                        <BoxLoader   />
-                      )}
+                        <BoxLoader />
+                      )} */}
                     </div>
                     <div className="col-lg-4">
                       <div className="get-started">

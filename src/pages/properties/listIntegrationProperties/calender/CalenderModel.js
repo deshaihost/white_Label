@@ -89,7 +89,6 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
 
   useEffect(() => {
     if (selectedProperty !== "" || selectedProperty !== undefined) {
-      // axios.get(`${process.env.}`)
       calenderSchedule(selectedProperty);
     }
   }, [selectedProperty]);

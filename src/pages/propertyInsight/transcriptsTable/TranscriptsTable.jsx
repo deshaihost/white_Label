@@ -22,50 +22,93 @@ const TranscriptsTable = ({ conversationData }) => {
     }
   };
 
-  function formatDateAndTime(timestamp) {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
+  // function formatDateAndTime(timestamp) {
+  //   console.log("timestamp", timestamp)
+  //   const months = [
+  //     "Jan",
+  //     "Feb",
+  //     "Mar",
+  //     "Apr",
+  //     "May",
+  //     "Jun",
+  //     "Jul",
+  //     "Aug",
+  //     "Sep",
+  //     "Oct",
+  //     "Nov",
+  //     "Dec",
+  //   ];
 
-    // Parse the timestamp string into a Date object
-    const date = new Date(timestamp);
+
+  //   // Parse the timestamp string into a Date object
+  //   const date = new Date(timestamp);
+
+  //   // Get the components of the date
+  //   const month = months[date.getMonth()];
+  //   const day = date.getDate();
+  //   const year = date.getFullYear();
+
+  //   // Format the date
+  //   const formattedDate = `${month} ${day}, ${year}`;
+
+  //   // Get the components of the time
+  //   let hours = date.getHours();
+  //   const minutes = date.getMinutes();
+
+  //   // Convert hours to 12-hour format and determine am/pm
+  //   const ampm = hours >= 12 ? "pm" : "am";
+  //   hours = hours % 12;
+  //   hours = hours ? hours : 12; // Handle midnight (0 hours)
+
+  //   // Format minutes to have leading zero if necessary
+  //   const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+
+  //   // Format the time
+  //   const formattedTime = `${hours}:${formattedMinutes}${ampm}`;
+
+  //   return { date: formattedDate, time: formattedTime };
+  // }
+
+  function formatDateAndTime(timestamp) {
+    // Parse the timestamp string into a Date object (assuming it's in UTC format)
+    const utcDate = new Date(timestamp);
+
+    // Get the time zone offset in milliseconds
+    const timeZoneOffsetMs = new Date().getTimezoneOffset() * 60000;
+
+    // Convert the UTC timestamp to the local timestamp
+    const localTimestamp = utcDate.getTime() - timeZoneOffsetMs;
+
+    // Create a new Date object for the local timestamp
+    const localDate = new Date(localTimestamp);
 
     // Get the components of the date
-    const month = months[date.getMonth()];
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    // Format the date
-    const formattedDate = `${month} ${day}, ${year}`;
+    const month = localDate.getMonth() + 1; // Months are zero-indexed, so add 1
+    const day = localDate.getDate();
+    const year = localDate.getFullYear();
 
     // Get the components of the time
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
+    let hours = localDate.getHours();
+    const minutes = localDate.getMinutes();
+    const seconds = localDate.getSeconds();
 
     // Convert hours to 12-hour format and determine am/pm
     const ampm = hours >= 12 ? "pm" : "am";
     hours = hours % 12;
     hours = hours ? hours : 12; // Handle midnight (0 hours)
 
-    // Format minutes to have leading zero if necessary
+    // Format minutes and seconds to have leading zero if necessary
     const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+    const formattedSeconds = seconds < 10 ? "0" + seconds : seconds;
 
-    // Format the time
-    const formattedTime = `${hours}:${formattedMinutes}${ampm}`;
+    // Format the date and time in the desired format
+    const formattedDate = `${month}/${day}/${year}`;
+    const formattedTime = `${hours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
 
     return { date: formattedDate, time: formattedTime };
   }
+
+
   return (
     <div>
       <div class="row">
@@ -95,14 +138,15 @@ const TranscriptsTable = ({ conversationData }) => {
                 <tbody class="transcript-data-table empty-table-conversation text-white">
                   {conversationData?.map((convers, index) => {
                     const timestamp = convers?.conversation_start_time;
+                    // const dateObject = new Date(timestamp); // Create a Date object from the timestamp
                     const formattedDateTime = formatDateAndTime(timestamp);
-                    console.log(convers?.subject,'convers?.subject')
+                    console.log(convers?.subject, 'convers?.subject')
                     return (
                       <>
                         <tr>
                           <td>{formattedDateTime.date}</td>
                           <td>{formattedDateTime.time}</td>
-                          <td>{convers?.subject!==undefined?convers?.subject:<span className="text-danger">Empty</span>}</td>
+                          <td>{convers?.subject !== undefined ? convers?.subject : <span className="text-danger">Empty</span>}</td>
                           <td>
                             {convers?.success_rating === "NEUTRAL" ? (
                               <span>{convers?.success_rating}</span>
@@ -115,7 +159,7 @@ const TranscriptsTable = ({ conversationData }) => {
                                 ) : (
                                   <>
                                     {convers?.success_rating ===
-                                    "SUCCESSFUL" ? (
+                                      "SUCCESSFUL" ? (
                                       <span className="text-success">
                                         {convers?.success_rating}
                                       </span>

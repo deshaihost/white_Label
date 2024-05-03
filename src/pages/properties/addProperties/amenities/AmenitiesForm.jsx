@@ -83,6 +83,86 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   //   }
   // };
 
+  // handle checkbox click based on the text click
+  const handleCheckItemClick = (type, checkedValue) => {
+
+    if (type === "family") {
+      if (!amenitiesFamilyOptions.includes(checkedValue)) {
+        // If the familyValue is not already included, add it to the state
+        setAmenitiesFamilyOptions((prevState) => [...prevState, checkedValue]);
+        // add "" for selected family value
+        setAmenitiesFamilyResponse((prevState) => [...prevState, ""]);
+      }
+
+      setNoteClickData({
+        ...noteClickData,
+        type: type,
+        name: checkedValue,
+      });
+    }
+
+    if (type === "Indoor") {
+      if (!amenitiesIndoorOptions.includes(checkedValue)) {
+        // If the familyValue is not already included, add it to the state
+        setAmenitiesIndoorOptions((prevState) => [...prevState, checkedValue]);
+        // add "" for selected family value
+        setAmenitiesIndoorResponse((prevState) => [...prevState, ""]);
+      }
+
+      setNoteClickData({
+        ...noteClickData,
+        type: type,
+        name: checkedValue,
+      });
+    }
+
+    if (type === "More") {
+      if (!amenitiesMoreOptions.includes(checkedValue)) {
+        // If the familyValue is not already included, add it to the state
+        setAmenitiesMoreOptions((prevState) => [...prevState, checkedValue]);
+        // add "" for selected family value
+        setAmenitiesMoreResponse((prevState) => [...prevState, ""]);
+      }
+
+      setNoteClickData({
+        ...noteClickData,
+        type: type,
+        name: checkedValue,
+      });
+    }
+
+    if (type === "Outdoor") {
+      if (!amenitiesOutdoorOptions.includes(checkedValue)) {
+        // If the familyValue is not already included, add it to the state
+        setAmenitiesOutdoorOptions((prevState) => [...prevState, checkedValue]);
+        // add "" for selected family value
+        setAmenitiesOutdoorResponse((prevState) => [...prevState, ""]);
+      }
+
+      setNoteClickData({
+        ...noteClickData,
+        type: type,
+        name: checkedValue,
+      });
+    }
+
+    if (type === "RulesAndServices") {
+      if (!amenitiesRulesOptions.includes(checkedValue)) {
+        // If the familyValue is not already included, add it to the state
+        setAmenitiesRulesOptions((prevState) => [...prevState, checkedValue]);
+        // add "" for selected family value
+        setAmenitiesRulesResponse((prevState) => [...prevState, ""]);
+      }
+
+      setNoteClickData({
+        ...noteClickData,
+        type: type,
+        name: checkedValue,
+      });
+    }
+
+  }
+
   // handle edit or add note button click to add checkbox to checked state
   const handleEditButtonClick = (type, amenityValue) => {
     if (type === "family") {
@@ -171,7 +251,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
   const handleFamilyCheckboxChange = (event) => {
     const { value, checked } = event.target;
-    console.log(value, checked ,'+++++')
+    console.log(value, checked, '+++++')
     if (checked) {
       // If checkbox is checked, add value to the state
       setAmenitiesFamilyOptions((prevState) => [...prevState, value]);
@@ -415,7 +495,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div class={amenitiesFamilyOptions.includes(family)?"form-checkbox bg-light text-dark":"form-checkbox"}>
+                        <div class={amenitiesFamilyOptions.includes(family) ? "form-checkbox bg-light text-dark" : "form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
@@ -424,8 +504,9 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                             onChange={handleFamilyCheckboxChange}
                             checked={amenitiesFamilyOptions.includes(family)}
                           />
-                          <label class="form-check-label" 
-                          // for="inlineCheckbox2" 
+                          <label class="form-check-label"
+                            // for="inlineCheckbox2" 
+                            onClick={() => handleCheckItemClick("family", family)}
                           >
                             {family}
                           </label>
@@ -519,8 +600,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div 
-                         class={amenitiesIndoorOptions.includes(Indoor)?"form-checkbox bg-light text-dark":"form-checkbox"}>
+                        <div
+                          class={amenitiesIndoorOptions.includes(Indoor) ? "form-checkbox bg-light text-dark" : "form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
@@ -528,7 +609,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                             onChange={handleIndoorCheckboxChange}
                             checked={amenitiesIndoorOptions.includes(Indoor)}
                           />
-                          <label class="form-check-label" 
+                          <label class="form-check-label"
+                            onClick={() => handleCheckItemClick("Indoor", Indoor)}
                           // for="inlineCheckbox2"
                           >
                             {Indoor}
@@ -570,9 +652,9 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div 
-                        // class="form-checkbox"
-                        class={amenitiesMoreOptions.includes(More)?"form-checkbox bg-light text-dark":"form-checkbox"}>
+                        <div
+                          // class="form-checkbox"
+                          class={amenitiesMoreOptions.includes(More) ? "form-checkbox bg-light text-dark" : "form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
@@ -581,7 +663,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                             onChange={handleMoreCheckboxChange}
                             checked={amenitiesMoreOptions.includes(More)}
                           />
-                          <label class="form-check-label" 
+                          <label class="form-check-label"
+                            onClick={() => handleCheckItemClick("More", More)}
                           // for="inlineCheckbox3"
                           >
                             {More}
@@ -621,9 +704,9 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div 
-                        // class="form-checkbox"
-                        class={amenitiesOutdoorOptions.includes(Outdoor)?"form-checkbox bg-light text-dark":"form-checkbox"}>
+                        <div
+                          // class="form-checkbox"
+                          class={amenitiesOutdoorOptions.includes(Outdoor) ? "form-checkbox bg-light text-dark" : "form-checkbox"}>
                           <input
                             class="form-check-input"
                             type="checkbox"
@@ -632,7 +715,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                             onChange={handleOutdoorCheckboxChange}
                             checked={amenitiesOutdoorOptions.includes(Outdoor)}
                           />
-                          <label class="form-check-label" 
+                          <label class="form-check-label"
+                            onClick={() => handleCheckItemClick("Outdoor", Outdoor)}
                           // for="inlineCheckbox4"
                           >
                             {Outdoor}
@@ -678,11 +762,11 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div 
-                        // class="form-checkbox"
-                        class={amenitiesRulesOptions.includes(
-                          RulesAndServices
-                        )?"form-checkbox bg-light text-dark":"form-checkbox"}
+                        <div
+                          // class="form-checkbox"
+                          class={amenitiesRulesOptions.includes(
+                            RulesAndServices
+                          ) ? "form-checkbox bg-light text-dark" : "form-checkbox"}
                         >
                           <input
                             class="form-check-input"
@@ -694,7 +778,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                               RulesAndServices
                             )}
                           />
-                          <label class="form-check-label" 
+                          <label class="form-check-label"
+                            onClick={() => handleCheckItemClick("RulesAndServices", RulesAndServices)}
                           // for="inlineCheckbox5"
                           >
                             {RulesAndServices}

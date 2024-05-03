@@ -15,7 +15,7 @@ import {
   pmsIntegrationAddReducer,
   removeIntegrationGetReducer,
   removeIntegrationReducer,
-  
+  updateAccountUpdatePasswordReducer
 } from "./pages/pagesApis/reducers";
 import {
   postPropertiesReducer,
@@ -25,9 +25,10 @@ import {
   deleteListIntegrationPropertiesReducer,
   supportingDocumentPostReducer,
   supportingUrlPostReducer,
-  togglechatBotOnOffReducer
+  togglechatBotOnOffReducer,
+
 } from "./pages/pagesApis/addProperties/reducers";
-import { getPropertyByNameReducer,propertyGetConversationReducer } from "./pages/pagesApis/propertyInsight/reducers";
+import { getPropertyByNameReducer, propertyGetConversationReducer } from "./pages/pagesApis/propertyInsight/reducers";
 export default (combineReducers({
   loginReducer,
   registerReducer,
@@ -50,5 +51,6 @@ export default (combineReducers({
   supportingUrlPostReducer,
   togglechatBotOnOffReducer,
   getPropertyByNameReducer,
-  propertyGetConversationReducer
+  propertyGetConversationReducer,
+  updateAccountUpdatePasswordReducer
 }): any);

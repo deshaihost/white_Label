@@ -17,6 +17,10 @@ function updateAccountInfoEndPoint(params: any): any {
   const { data } = params;
   return api.update(URL.UPDATE_ACCOUNT_INFO, data);
 }
+function updateAccountUpdatePasswordEndPoint(params: any): any {
+  const { data } = params;
+  return api.create(URL.UPDATE_ACCOUNT_UPDATE_PASSWORD, data);
+}
 
 function PMSintegrationEndPoint(params: any): any {
   return api.get(URL.GET_SUPPORTED_INTEGRATIONS);
@@ -45,4 +49,5 @@ export {
   PMSintegrationAddEndPoint,
   removeIntegrationListGetEndPoint,
   removeIntegrationEndPoint,
+  updateAccountUpdatePasswordEndPoint
 };
