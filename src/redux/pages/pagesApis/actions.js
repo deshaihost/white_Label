@@ -16,6 +16,11 @@ export const updateAccountInfoActions = (data) => ({
     data,
 });
 
+export const updateAccountPasswordActions = (data) => ({
+    type: PagesApisActionTypes.UPDATE_ACCOUNT_UPDATE_PASSWORD_FIRST,
+    data,
+});
+
 export const getPMSIntegrationActions = (data) => ({
     type: PagesApisActionTypes.PMS_INTEGRATION_GET_FIRST,
     data,

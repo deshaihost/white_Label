@@ -35,7 +35,11 @@ function updateQuestionnaireEndPoint(params: any): any {
 }
 function supportingDocumentPostEndPoint(params: any): any {
   const { data } = params;
+  // console.log("data in api: ", Object.fromEntries(data.data.formData))
+  console.log("data in api: ", Object.fromEntries(data.formData))
   const formData = data?.formData;
+  console.log("data in api: ", Object.fromEntries(formData))
+  // return
   return api.create(
     `${URL.SUPPORTING_DOCUMENT}/${data?.supportingkeyName}/add_file`,
     formData

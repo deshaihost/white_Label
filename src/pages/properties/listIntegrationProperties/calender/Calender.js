@@ -151,9 +151,6 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
   const handleScheduleRemove = (type, endDate, endDateIndex) => {
     console.log("type: ", type, " start: ", endDate, " end: ", endDateIndex)
 
-
-
-    // console.log("valuesToRemove: ", valuesToRemove)
     if (type === "on") {
 
       let start = responseObject.dates.on[endDateIndex - 1];
@@ -300,7 +297,7 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
                                 if (currentDate.getDay() === 0) {
                                   statusType = "off";
                                   status = (
-                                    <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data opacity-25">
+                                    <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data" style={{ opacity: '0.5' }}>
                                       <p >Status: Off</p>
                                       <span >{`${startTime} - ${endTime}`}</span>
 
@@ -311,7 +308,7 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
                                 } else {
                                   statusType = "off";
                                   status = (
-                                    <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data opacity-25">
+                                    <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data" style={{ opacity: '0.5' }}>
                                       <p style={{ visibility: 'hidden' }}>Status: Off</p>
                                       <span style={{ visibility: 'hidden' }}>{`${startTime} - ${endTime}`}</span>
 

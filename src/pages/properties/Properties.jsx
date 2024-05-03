@@ -133,7 +133,7 @@ const Properties = () => {
                       </label>
                     </div>
 
-                    <div className="expendable_search">
+                    {/* <div className="expendable_search">
                       <button className="search_btn">
                         <svg
                           width="18"
@@ -154,7 +154,7 @@ const Properties = () => {
                         placeholder="Search"
                         id="search_field"
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="addproperty_links text-center">
@@ -170,7 +170,7 @@ const Properties = () => {
                     ) : propertyConditionCheck ? (
                       <>
                         <span>
-                        Add Property
+                          Add Property
                           <span>{<FullScreenLoader />}</span>
                         </span>
                       </>
@@ -178,7 +178,7 @@ const Properties = () => {
                       "Add Property"
                     )}
                   </button>
-                  <button
+                  {/* <button
                     className="shadow-none border-0"
                     type="button"
                     onClick={() => {
@@ -195,7 +195,7 @@ const Properties = () => {
                     }}
                   >
                     Remove Integrations
-                  </button>
+                  </button> */}
                 </div>
                 <div className="property_list">
                   <ul>

@@ -15,6 +15,10 @@ const UPDATE_ACCOUNT_INFO_INITIAL_STATE = {
   updateAccountInof: [],
   loading: false,
 };
+const UPDATE_ACCOUNT_UPDATE_PASSWORD_INITIAL_STATE = {
+  updateAccountUpdatePassword: [],
+  loading: false,
+};
 
 const PMS_INTEGRATION_GET_INITIAL_STATE = {
   pmsIntegrationData: [],
@@ -112,6 +116,32 @@ const updateAccountInfoReducer = (
       return state;
   }
 };
+const updateAccountUpdatePasswordReducer = (
+  state = UPDATE_ACCOUNT_UPDATE_PASSWORD_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case PagesApisActionTypes.UPDATE_ACCOUNT_UPDATE_PASSWORD_LOADING:
+      return {
+        updateAccountUpdatePassword: state.updateAccountUpdatePassword,
+        loading: true,
+      };
+    case PagesApisActionTypes.UPDATE_ACCOUNT_UPDATE_PASSWORD_SUCCESS:
+      return {
+        updateAccountUpdatePassword: action.payload,
+        loading: false,
+      };
+    case PagesApisActionTypes.UPDATE_ACCOUNT_UPDATE_PASSWORD_ERROR:
+      return {
+        updateAccountUpdatePassword: action.payload,
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      return UPDATE_ACCOUNT_UPDATE_PASSWORD_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
 
 const pmsIntegrationGetReducer = (
   state = PMS_INTEGRATION_GET_INITIAL_STATE,
@@ -168,57 +198,57 @@ const pmsIntegrationAddReducer = (
 };
 
 const removeIntegrationGetReducer = (
-    state = REMOVE_INTEGRATION_LIST_GET_INITIAL_STATE,
-    action
-  ) => {
-    switch (action.type) {
-      case PagesApisActionTypes.REMOVE_INTEGRATION_LIST_GET_LOADING:
-        return {
-          removeIntegrationGet: state.removeIntegrationGet,
-          loading: true,
-        };
-      case PagesApisActionTypes.REMOVE_INTEGRATION_LIST_GET_SUCCESS:
-        return {
-          removeIntegrationGet: action.payload,
-          loading: false,
-        };
-      case PagesApisActionTypes.REMOVE_INTEGRATION_LIST_GET_ERROR:
-        return {
-          removeIntegrationGet: action.payload,
-          loading: false,
-        };
+  state = REMOVE_INTEGRATION_LIST_GET_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case PagesApisActionTypes.REMOVE_INTEGRATION_LIST_GET_LOADING:
+      return {
+        removeIntegrationGet: state.removeIntegrationGet,
+        loading: true,
+      };
+    case PagesApisActionTypes.REMOVE_INTEGRATION_LIST_GET_SUCCESS:
+      return {
+        removeIntegrationGet: action.payload,
+        loading: false,
+      };
+    case PagesApisActionTypes.REMOVE_INTEGRATION_LIST_GET_ERROR:
+      return {
+        removeIntegrationGet: action.payload,
+        loading: false,
+      };
     //   case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
     //     return PMS_INTEGRATION_ADD_INITIAL_STATE;
-      default:
-        return state;
-    }
-  };
-  const removeIntegrationReducer = (
-    state = REMOVE_INTEGRATION_INITIAL_STATE,
-    action
-  ) => {
-    switch (action.type) {
-      case PagesApisActionTypes.REMOVE_INTEGRATION_LOADING:
-        return {
-          removeIntegration: state.removeIntegration,
-          loading: true,
-        };
-      case PagesApisActionTypes.REMOVE_INTEGRATION_SUCCESS:
-        return {
-          removeIntegration: action.payload,
-          loading: false,
-        };
-      case PagesApisActionTypes.REMOVE_INTEGRATION_ERROR:
-        return {
-          removeIntegration: action.payload,
-          loading: false,
-        };
-      case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
-        return REMOVE_INTEGRATION_INITIAL_STATE;
-      default:
-        return state;
-    }
-  };
+    default:
+      return state;
+  }
+};
+const removeIntegrationReducer = (
+  state = REMOVE_INTEGRATION_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case PagesApisActionTypes.REMOVE_INTEGRATION_LOADING:
+      return {
+        removeIntegration: state.removeIntegration,
+        loading: true,
+      };
+    case PagesApisActionTypes.REMOVE_INTEGRATION_SUCCESS:
+      return {
+        removeIntegration: action.payload,
+        loading: false,
+      };
+    case PagesApisActionTypes.REMOVE_INTEGRATION_ERROR:
+      return {
+        removeIntegration: action.payload,
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      return REMOVE_INTEGRATION_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
 
 export {
   getUserDataReducer,
@@ -227,5 +257,6 @@ export {
   pmsIntegrationGetReducer,
   pmsIntegrationAddReducer,
   removeIntegrationGetReducer,
-  removeIntegrationReducer
+  removeIntegrationReducer,
+  updateAccountUpdatePasswordReducer
 };

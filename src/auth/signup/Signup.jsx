@@ -53,7 +53,7 @@ const Signup = () => {
         password: data.newPassword,
         first_name: data.firstName,
         last_name: data.lastName,
-        phone: data.plan,
+        phone: data.phone,
       })
     );
     setInputData({

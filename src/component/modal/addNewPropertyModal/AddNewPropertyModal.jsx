@@ -71,6 +71,9 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
       <Modal.Body>
         <div className="addition_des">
           <p>
+            You will be directed to the Stripe payment portal to securely complete your registration payment.
+          </p>
+          {/* <p>
             Before proceeding to add a new property, please review and confirm
             the details below:
           </p>
@@ -107,7 +110,7 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
             <Link to="https://hostbuddy.ai/terms-of-service/" target="_blank">
               terms of service.
             </Link>
-          </p>
+          </p> */}
         </div>
         <div className="text-center mt-3 addition_des_button">
           <button
@@ -115,8 +118,8 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
             className="bg_theme_btn"
             onClick={confirmHandle}
           >
-            {!striteUrlLoading?<>Confirm</>:<><Loader/></>}
-            
+            {!striteUrlLoading ? <>Confirm</> : <><Loader /></>}
+
           </button>
         </div>
       </Modal.Body>
