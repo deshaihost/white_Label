@@ -5,8 +5,7 @@ const api = new APICore();
 
 function testingApiEndPoint(params: any): any {
   const { data } = params;
-  // return api.get(`${URL.TESTING_API}/${data}/get_schedule`  );
-  return api.get(URL.TESTING_API, data);
+  // return api.create(`${URL.TESTING_API}/${data?.name}/add_thumbnail_image` ,data?.formd  );
 }
 
 function goToBillingPortalPostEndPoint(): any {

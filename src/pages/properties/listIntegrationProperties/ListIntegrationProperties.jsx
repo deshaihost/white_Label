@@ -185,8 +185,8 @@ const ListIntegrationProperties = () => {
     id: "wdsxIFuw",
     chatbot_key: chatbot_key,
     propertyN: property_name,
-    item: authToke,
-    item1: authRefracetoke,
+    // item: authToke,
+    // item1: authRefracetoke,
   };
   const copyToClipboard = (text) => {
     var textField = document.createElement("textarea");
@@ -221,7 +221,13 @@ const ListIntegrationProperties = () => {
           testingProperty: false,
         });
         const routingPart = "/meet-hostbuddy/";
-        navigate(`${routingPart}${JSON?.stringify(urlLink)}`);
+        window.open(
+          `https://hostbuddy-react-frontend-three.vercel.app/${routingPart}${JSON?.stringify(
+            urlLink
+          )}`,
+          "_blank"
+        );
+        // navigate(`${routingPart}${JSON?.stringify(urlLink)}`);
         localStorage.setItem(localStorageKey, JSON?.stringify(testPropertyKey));
         setTestPropertyKey({ nameKey: "" });
         dispatch(stateEmptyActions());
