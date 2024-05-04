@@ -131,3 +131,15 @@
   font-weight: 500;
   line-height: normal;
 }
+.headerDivider {
+  border-bottom: 2px solid #146ef5;
+  margin-top: 30px;
+  margin-bottom: 40px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.messageDivider {
+  border-bottom: 2px solid #146ef5;
+  margin: 30px auto;
+  width: 90%;
+}

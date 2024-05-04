@@ -24,14 +24,14 @@ const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
           <div className="row text-white">
             <div className="col-12">
               <div className="row ">
-                <div className="col-6">
+                <div className="col-8">
                   <div>
                     <span>Subject</span>:{" "}
                     <span>
                       {subject !== undefined ? (
                         subject
                       ) : (
-                        <span className="text-danger">Empty</span>
+                        <span className="text-danger">TBD</span>
                       )}
                     </span>
                   </div>
@@ -40,14 +40,18 @@ const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
                     <span>{conversation_start_time}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                <div className="col-4">
                   <div>
                     <span>Rating</span>:{" "}
-                    <span>
+                    <span className={
+                      success_rating === "SUCCESSFUL" ? "text-success" :
+                      success_rating === "UNSUCCESSFUL" ? "text-danger" :
+                      "text-white"
+                    }>
                       {success_rating !== undefined ? (
                         success_rating
                       ) : (
-                        <span className="text-danger">Empty</span>
+                        <span className="text-danger">TBD</span>
                       )}
                     </span>
                   </div>
@@ -56,18 +60,22 @@ const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
                   </div>
                 </div>
               </div>
+
+              <hr className="headerDivider" />
+
               <div className="row mt-5">
                 {messageData?.map((messg) => {
                   console.log(messg, "messg");
                   return (
                     <>
                       <div className="col-3">
-                        <div>{messg?.sender}</div>
+                        <div>{messg?.sender ? messg.sender.toUpperCase() : ''}</div>
                         <div>{messg?.time}</div>
                       </div>
                       <div className="col-9">
-                        <div>{messg?.text}</div>
+                        <div style={{ whiteSpace: 'pre-wrap' }}>{messg?.text}</div>
                       </div>
+                      <hr className="messageDivider" />
                     </>
                   );
                 })}
