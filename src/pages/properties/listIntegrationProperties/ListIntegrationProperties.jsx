@@ -7,6 +7,7 @@ import {
   toggleChatbotoNoFFPutActions,
 } from "../../../redux/actions";
 import "./Listintigrationproperties.css";
+import default_thumbnail_img from '../../../public/img/prop_thumbnail_default.jpg';
 import { useSelectorUseDispatch } from "../../../helper/Authorized";
 import ToastHandle from "../../../helper/ToastMessage";
 import Loader, { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
@@ -40,6 +41,8 @@ const ListIntegrationProperties = () => {
   const userDataGetLoading = store?.getUserDataReducer?.loading;
   const createPropertiesName =
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const PropertiesExtraData =
+    store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // The "property_data" field of the get_user_data API return is an object with thumbnail_image and toggle_status for each property
   const propertiesDeleteMessage =
     store?.deleteListIntegrationPropertiesReducer
       ?.deleteListIntegrationProperties?.data?.message;
@@ -293,8 +296,8 @@ const ListIntegrationProperties = () => {
                         <div className="img-with-title">
                           <img
                             src={
-                              properties.img ||
-                              "https://img.freepik.com/free-photo/sustainable-travel-concept_23-2151049514.jpg?size=626&ext=jpg&ga=GA1.1.1314459612.1713268062&semt=sph"
+                              PropertiesExtraData?.[properties]?.thumbnail_image ||
+                              default_thumbnail_img
                             }
                             alt=""
                           />
