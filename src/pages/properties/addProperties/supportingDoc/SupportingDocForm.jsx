@@ -364,21 +364,20 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                 </div>
               </div>
               <div className="col-4 mt-3">
-                <div class="form-check custom_checkbox">
-                  <input
-                    class="form-check-input "
-                    type="radio"
-                    name="flexRadioDefault"
-                    id="flexRadioDefault2"
-                    onClick={() => {
-                      suppertingOnclick(urlToWebPageN);
-                    }}
-                    checked={suppertingInput?.urlToWebPage}
-                  />
-                  <label class="form-check-label" for="flexRadioDefault2">
-                    URLs to Web Page
-                  </label>
-                </div>
+              <div class="form-check custom_checkbox">
+                <input
+                  class="form-check-input "
+                  type="radio"
+                  name="flexRadioDefault"
+                  id="flexRadioDefault2"
+                  onClick={() => {
+                    suppertingOnclick(urlToWebPageN);
+                  }}
+                  checked={suppertingInput?.urlToWebPage}
+                />
+                <label class="form-check-label" for="flexRadioDefault2">
+                  URLs to Web Page
+                </label>
               </div>
               <div className="col-4 mt-3">
                 <div class="form-check custom_checkbox">

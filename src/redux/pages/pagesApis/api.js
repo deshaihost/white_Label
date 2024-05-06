@@ -26,9 +26,14 @@ function PMSintegrationEndPoint(params: any): any {
   return api.get(URL.GET_SUPPORTED_INTEGRATIONS);
 }
 
-function PMSintegrationAddEndPoint(params: any): any {
+// function PMSintegrationAddEndPoint(params: any): any {
+//   const { data } = params;
+//   return api.create(URL.ADD_SUPPORTED_INTEGRATIONS, data);
+// }
+
+function getCalryLinkEndPoint(params: any): any {
   const { data } = params;
-  return api.create(URL.ADD_SUPPORTED_INTEGRATIONS, data);
+  return api.get(`${URL.GET_CALRY_LINK}integration_platform=${data?.platform}`);
 }
 
 function removeIntegrationListGetEndPoint(params: any): any {
@@ -46,7 +51,7 @@ export {
   postCreateCheckoutSessionEndPoint,
   updateAccountInfoEndPoint,
   PMSintegrationEndPoint,
-  PMSintegrationAddEndPoint,
+  getCalryLinkEndPoint,
   removeIntegrationListGetEndPoint,
   removeIntegrationEndPoint,
   updateAccountUpdatePasswordEndPoint

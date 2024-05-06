@@ -19,6 +19,7 @@ import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel
 import { useLocation } from 'react-router-dom';
 const MeetBanner = (props) => {
   const { urlData } = props;
+  console.log(urlData,'urlDataurlData')
   const { chatbot_key, property_name, user_type } = urlData ? urlData : {};
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
