@@ -363,40 +363,40 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                   </a>
                 </div>
               </div>
-              {/* <div className="col-4 mt-3">
-              <div class="form-check custom_checkbox">
-                <input
-                  class="form-check-input "
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault2"
-                  onClick={() => {
-                    suppertingOnclick(urlToWebPageN);
-                  }}
-                  checked={suppertingInput?.urlToWebPage}
-                />
-                <label class="form-check-label" for="flexRadioDefault2">
-                  URLs to Web Page
-                </label>
+              <div className="col-4 mt-3">
+                <div class="form-check custom_checkbox">
+                  <input
+                    class="form-check-input "
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault2"
+                    onClick={() => {
+                      suppertingOnclick(urlToWebPageN);
+                    }}
+                    checked={suppertingInput?.urlToWebPage}
+                  />
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    URLs to Web Page
+                  </label>
+                </div>
               </div>
-            </div>
-            <div className="col-4 mt-3">
-              <div class="form-check custom_checkbox">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault3"
-                  onClick={() => {
-                    suppertingOnclick(pmsIntegrationN);
-                  }}
-                  checked={suppertingInput?.pmsIntegration}
-                />
-                <label class="form-check-label" for="flexRadioDefault3">
-                  PMS Integration
-                </label>
+              <div className="col-4 mt-3">
+                <div class="form-check custom_checkbox">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault3"
+                    onClick={() => {
+                      suppertingOnclick(pmsIntegrationN);
+                    }}
+                    checked={suppertingInput?.pmsIntegration}
+                  />
+                  <label class="form-check-label" for="flexRadioDefault3">
+                    PMS Integration
+                  </label>
+                </div>
               </div>
-            </div> */}
               <form>
                 {suppertingInput?.updateDoc && (
                   <div className="col-12 mt-4 ">

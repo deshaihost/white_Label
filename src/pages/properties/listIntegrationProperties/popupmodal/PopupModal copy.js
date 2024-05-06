@@ -29,12 +29,6 @@ const PopupModal = ({
     endTime: "05:30",
   });
 
-  const [checkedSchedule, setCheckedSchedule] = useState({
-    Future: false,
-    Past: false,
-    Current: false
-  })
-
   //  format date to dd/mm/yyyy format
   function formatDate(startDate) {
     const [year, month, day] = startDate.split("-");
@@ -56,26 +50,7 @@ const PopupModal = ({
     });
   };
 
-  const handleOnChange = (e, type) => {
-    if (type === "Future") {
-      setCheckedSchedule((prevData) => ({
-        ...prevData,
-        Future: e.target.checked,
-      }))
-    }
-    if (type === "Past") {
-      setCheckedSchedule((prevData) => ({
-        ...prevData,
-        Past: e.target.checked,
-      }))
-    }
-    if (type === "Current") {
-      setCheckedSchedule((prevData) => ({
-        ...prevData,
-        Current: e.target.checked,
-      }))
-    }
-
+  const handleOnChange = (e) => {
     console.log("Checked: ", e.target.checked)
   }
 
@@ -180,7 +155,6 @@ const PopupModal = ({
   console.log("Data: ", data);
   console.log("selectedDate: ", selectedDate);
   console.log("Response Object: ", responseObject)
-  console.log("Checked Data: ", checkedSchedule)
 
   return (
     <div>
@@ -192,28 +166,9 @@ const PopupModal = ({
         centered
       >
         <Modal.Body>
-          <div className="row py-3 border-bottom d-flex flex-column gap-2">
+          <div className="row py-3 border-bottom">
             <div className="6">
-              <h3 className="text-white text-center">Add New Status</h3>
-            </div>
-
-            <div className="6">
-              <p className="text-white text-center">Apply to the following reservation stages:</p>
-            </div>
-
-            <div className="6 d-flex justify-content-between">
-              <div class="col text-center">
-                <input type="checkbox" checked={checkedSchedule.Future} onChange={(e) => handleOnChange(e, "Future")} className="btn-check" id="future" autocomplete="off" />
-                <label className="btn btn-primary" for="future">Future</label>
-              </div>
-              <div class="col text-center">
-                <input type="checkbox" checked={checkedSchedule.Past} onChange={(e) => handleOnChange(e, "Past")} className="btn-check" id="past" autocomplete="off" />
-                <label className="btn btn-primary" for="past">Inquiry/Past</label>
-              </div>
-              <div class="col text-center">
-                <input type="checkbox" checked={checkedSchedule.Current} onChange={(e) => handleOnChange(e, "Current")} className="btn-check" id="current" autocomplete="off" />
-                <label className="btn btn-primary" for="current">Current</label>
-              </div>
+              <h3 className="text-white text-center">Chatbot Status</h3>
             </div>
           </div>
           <div className="d-flex flex-column pt-3 gap-3">
@@ -297,6 +252,10 @@ const PopupModal = ({
                   id="submit-single-property"
                   onClick={handleSchedule}
                 />{" "}
+              </div>
+              <div class="col text-center">
+                <input type="checkbox" onChange={handleOnChange} className="btn-check" id="btn-check" autocomplete="off" />
+                <label className="btn btn-primary" for="btn-check">Single toggle</label>
               </div>
             </div>
           </div>
