@@ -320,7 +320,7 @@ const ListIntegrationProperties = () => {
                           <img
                             src={
                               PropertiesExtraData?.[properties]
-                                ?.thumbnail_image || default_thumbnail_img
+                                ?.thumbnail_image || dummyPropertyImg
                             }
                             alt=""
                           />
