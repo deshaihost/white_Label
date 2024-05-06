@@ -12,7 +12,7 @@ import {
   postcreateCheckoutSessionReducer,
   updateAccountInfoReducer,
   pmsIntegrationGetReducer,
-  pmsIntegrationAddReducer,
+  getCalryLinkReducer,
   removeIntegrationGetReducer,
   removeIntegrationReducer,
   updateAccountUpdatePasswordReducer
@@ -39,7 +39,7 @@ export default (combineReducers({
   postcreateCheckoutSessionReducer,
   updateAccountInfoReducer,
   pmsIntegrationGetReducer,
-  pmsIntegrationAddReducer,
+  getCalryLinkReducer,
   removeIntegrationGetReducer,
   removeIntegrationReducer,
   postPropertiesReducer,

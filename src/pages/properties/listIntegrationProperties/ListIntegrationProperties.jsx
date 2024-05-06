@@ -7,7 +7,8 @@ import {
   toggleChatbotoNoFFPutActions,
 } from "../../../redux/actions";
 import "./Listintigrationproperties.css";
-import default_thumbnail_img from '../../../public/img/prop_thumbnail_default.jpg';
+import default_thumbnail_img from "../../../public/img/prop_thumbnail_default.jpg";
+import dummyPropertyImg from "../../../public/img/dummyPropertyImg.png";
 import { useSelectorUseDispatch } from "../../../helper/Authorized";
 import ToastHandle from "../../../helper/ToastMessage";
 import Loader, { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
@@ -41,8 +42,21 @@ const ListIntegrationProperties = () => {
   const userDataGetLoading = store?.getUserDataReducer?.loading;
   const createPropertiesName =
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const createPropertiesSubscriptionAllowed =
+    store?.getUserDataReducer?.getUserData?.data?.user?.subscription
+      ?.num_properties_allowed;
+  const propertyCheckSubscription =
+    createPropertiesSubscriptionAllowed - (createPropertiesName?.length || 0);
+  const dummyArraySubscriptionAllowed = [];
+
+  for (let i = 0; i < propertyCheckSubscription; i++) {
+    // Your code logic inside the loop goes here
+    dummyArraySubscriptionAllowed.push(i);
+  }
+
   const PropertiesExtraData =
     store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // The "property_data" field of the get_user_data API return is an object with thumbnail_image and toggle_status for each property
+
   const propertiesDeleteMessage =
     store?.deleteListIntegrationPropertiesReducer
       ?.deleteListIntegrationProperties?.data?.message;
@@ -103,6 +117,7 @@ const ListIntegrationProperties = () => {
   let deleteProperty = "deleteProperty";
   let copyChatbotLink = "copyChatbotLink";
   let testProperty = "testProperty";
+  let dummySubscriptionCount = "dummySubscriptionCount";
 
   const selectedHandle = (types, data) => {
     let findType = types;
@@ -135,6 +150,8 @@ const ListIntegrationProperties = () => {
           propertyName: data,
         })
       );
+    } else if (findType === dummySubscriptionCount) {
+      navigate("/add-properties/");
     }
   };
 
@@ -149,7 +166,7 @@ const ListIntegrationProperties = () => {
       setToggleActive(true);
       setChatBoxIndex(id);
     } else {
-      setToggleOnOff("off");
+      setToggleOnOff("FORCED_OFF");
       setToggleActive(false);
       setChatBoxIndex(id);
     }
@@ -202,21 +219,21 @@ const ListIntegrationProperties = () => {
   }; */
   const copyToClipboard = async (text) => {
     try {
-        await navigator.clipboard.writeText(text);
-        console.log('Text copied to clipboard');
+      await navigator.clipboard.writeText(text);
+      console.log("Text copied to clipboard");
     } catch (err) {
-        console.error('Error in copying text: ', err);
+      console.error("Error in copying text: ", err);
     }
   };
   useEffect(() => {
     if (chatBoxGetByNameStatus === 200) {
       if (chatBox?.linkCopy) {
-
         /* Mboddie: changed below code to pass URL variables properly as query params, rather than a JSON object.
         Also changed the corresponding logic in MeetHostBuddy.jsx to correctly parse these variables in their new form.
         TODO: eventually baseUrl should be a global variable somewhere. There shouldn't be hardcoded references to the vercel URL scattered
         throughout the code, since it will make it more difficult to change to our actual domain in the future. */
-        const baseUrl = "https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy";
+        const baseUrl =
+          "https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy";
         const url = new URL(baseUrl);
         url.searchParams.append("key", urlLink.chatbot_key);
         url.searchParams.append("name", urlLink.propertyN);
@@ -250,13 +267,14 @@ const ListIntegrationProperties = () => {
         Also changed the corresponding logic in MeetHostBuddy.jsx to correctly parse these variables in their new form.
         TODO: eventually baseUrl should be a global variable somewhere. There shouldn't be hardcoded references to the vercel URL scattered
         throughout the code, since it will make it more difficult to change to our actual domain in the future. */
-        const baseUrl = "https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy";
+        const baseUrl =
+          "https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy";
         const url = new URL(baseUrl);
         url.searchParams.append("key", urlLink.chatbot_key);
         url.searchParams.append("name", urlLink.propertyN);
         url.searchParams.append("user", "host"); // "host" since we're using "Test Property", not the copied chatbot link
 
-        window.open( url.toString(), "_blank" );
+        window.open(url.toString(), "_blank");
 
         /* const routingPart = "/meet-hostbuddy/";
         window.open(
@@ -287,6 +305,11 @@ const ListIntegrationProperties = () => {
       {!userDataGetLoading ? (
         <>
           {createPropertiesName?.map((properties, index) => {
+            let PropertStop = PropertiesExtraData?.[properties]?.toggle_status;
+            console.log(
+              PropertiesExtraData?.[properties]?.toggle_status,
+              "+++++ FORCED_OFF"
+            );
             return (
               <>
                 <div className="row">
@@ -296,36 +319,45 @@ const ListIntegrationProperties = () => {
                         <div className="img-with-title">
                           <img
                             src={
-                              PropertiesExtraData?.[properties]?.thumbnail_image ||
-                              default_thumbnail_img
+                              PropertiesExtraData?.[properties]
+                                ?.thumbnail_image || default_thumbnail_img
                             }
                             alt=""
                           />
+
                           <span>THE WORKS</span>
                         </div>
                         <div className="property_listing_detail">
                           <div className="property-detail">
                             <h4>{properties}</h4>
                             <div className="d-flex gap-2">
-                              <div className="form-check form-switch custom_switch">
+                              <div 
+                              className="form-check form-switch custom_switch">
                                 <input
-                                  className="form-check-input toggle-user-chatbot"
+                                  className="
+                                  form-check-input toggle-user-chatbot
+                                  "
                                   type="checkbox"
                                   role="switch"
                                   id="statuscheck"
                                   onClick={(e) => {
                                     toggleChatBotHndle(e.target.checked, index);
                                   }}
+                                  // value={
+                                  //   PropertStop === "FORCED_OFF" ? false : true
+                                  // }
+                                  checked={PropertStop === "FORCED_OFF" ? false : true}
                                 />
                                 <label
                                   className="form-check-label"
                                   htmlFor="statuscheck"
                                 >
-                                  {toggleActive ? (
-                                    <>{chatBoxIndex === index ? "ON" : "OFF"}</>
-                                  ) : (
-                                    "OFF"
-                                  )}
+                                  {PropertStop === "FORCED_OFF" ? (
+                                    <>OFF</>
+                                  ) : "ON"
+                                    // <>{chatBoxIndex === index ? "ON" : "OFF"}</>
+                                    
+                                  }
                                 </label>
                               </div>
                               <Button
@@ -408,6 +440,51 @@ const ListIntegrationProperties = () => {
                         >
                           Test Property
                         </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            );
+          })}
+          {dummyArraySubscriptionAllowed?.map((properties, index) => {
+            return (
+              <>
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="d-flex gap-1 align-items-center justify-content-between property_lisiting mb-4">
+                      <div className="d-flex gap-1 align-items-center property_listing_item">
+                        <div className="img-with-title">
+                          <img
+                            src={
+                              PropertiesExtraData?.[properties]
+                                ?.thumbnail_image || dummyPropertyImg
+                            }
+                            alt=""
+                          />
+
+                          <span>THE WORKS</span>
+                        </div>
+                        <div className="property_listing_detail">
+                          <div className="property-detail">
+                            <h4>----</h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="property_listing_btn">
+                        <div className="d-flex">
+                          <Button
+                            className="property-edit-btn"
+                            onClick={() => {
+                              selectedHandle(
+                                dummySubscriptionCount,
+                                properties
+                              );
+                            }}
+                          >
+                            <i class="bi bi-pen"></i>
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>

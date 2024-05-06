@@ -25,8 +25,13 @@ const PMS_INTEGRATION_GET_INITIAL_STATE = {
   loading: false,
 };
 
-const PMS_INTEGRATION_ADD_INITIAL_STATE = {
-  pmsIntegrationDataAdd: [],
+// const PMS_INTEGRATION_ADD_INITIAL_STATE = {
+//   pmsIntegrationDataAdd: [],
+//   loading: false,
+// };
+
+const GET_CALRY_LINK_INITIAL_STATE = {
+  getCalryLing: [],
   loading: false,
 };
 
@@ -170,28 +175,55 @@ const pmsIntegrationGetReducer = (
   }
 };
 
-const pmsIntegrationAddReducer = (
-  state = PMS_INTEGRATION_ADD_INITIAL_STATE,
+// const pmsIntegrationAddReducer = (
+//   state = PMS_INTEGRATION_ADD_INITIAL_STATE,
+//   action
+// ) => {
+//   switch (action.type) {
+//     case PagesApisActionTypes.PMS_INTEGRATION_ADD_LOADING:
+//       return {
+//         pmsIntegrationDataAdd: state.pmsIntegrationDataAdd,
+//         loading: true,
+//       };
+//     case PagesApisActionTypes.PMS_INTEGRATION_ADD_SUCCESS:
+//       return {
+//         pmsIntegrationDataAdd: action.payload,
+//         loading: false,
+//       };
+//     case PagesApisActionTypes.PMS_INTEGRATION_ADD_ERROR:
+//       return {
+//         pmsIntegrationDataAdd: action.payload,
+//         loading: false,
+//       };
+//     case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+//       return PMS_INTEGRATION_ADD_INITIAL_STATE;
+//     default:
+//       return state;
+//   }
+// };
+
+const getCalryLinkReducer = (
+  state = GET_CALRY_LINK_INITIAL_STATE,
   action
 ) => {
   switch (action.type) {
-    case PagesApisActionTypes.PMS_INTEGRATION_ADD_LOADING:
+    case PagesApisActionTypes.GET_CALRY_LINK_LOADING:
       return {
-        pmsIntegrationDataAdd: state.pmsIntegrationDataAdd,
+        getCalryLing: state.getCalryLing,
         loading: true,
       };
-    case PagesApisActionTypes.PMS_INTEGRATION_ADD_SUCCESS:
+    case PagesApisActionTypes.GET_CALRY_LINK_SUCCESS:
       return {
-        pmsIntegrationDataAdd: action.payload,
+        getCalryLing: action.payload,
         loading: false,
       };
-    case PagesApisActionTypes.PMS_INTEGRATION_ADD_ERROR:
+    case PagesApisActionTypes.GET_CALRY_LINK_ERROR:
       return {
-        pmsIntegrationDataAdd: action.payload,
+        getCalryLing: action.payload,
         loading: false,
       };
     case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
-      return PMS_INTEGRATION_ADD_INITIAL_STATE;
+      return GET_CALRY_LINK_INITIAL_STATE;
     default:
       return state;
   }
@@ -255,7 +287,7 @@ export {
   postcreateCheckoutSessionReducer,
   updateAccountInfoReducer,
   pmsIntegrationGetReducer,
-  pmsIntegrationAddReducer,
+  getCalryLinkReducer,
   removeIntegrationGetReducer,
   removeIntegrationReducer,
   updateAccountUpdatePasswordReducer

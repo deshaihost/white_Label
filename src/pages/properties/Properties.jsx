@@ -5,6 +5,7 @@ import AddPropertyModal from "../../component/modal/addPropertyModal/AddProperty
 import NoWorkPlanModal from "../../component/modal/noWorkPlanModal/NoWorkPlanModal";
 import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
 import {
+  getUserDataActions,
   goToBillingportalPostActions,
   toggleChatbotoNoFFPutActions,
 } from "../../redux/actions";
@@ -44,6 +45,7 @@ const Properties = () => {
       setModel({ ...model, addProperty: false });
     } else if (type === "pmsIntegrationClose") {
       setModel({ ...model, pmsIntegration: false });
+      dispatch(stateEmptyActions())
     } else if (type === "removeIntegrationsClose") {
       setModel({ ...model, removeIntegration: false });
     }
@@ -51,6 +53,8 @@ const Properties = () => {
   // toggle chatbot
   const createPropertiesName =
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const intergrations =
+    store?.getUserDataReducer?.getUserData?.data?.integrations;
   const toggleChatMessage =
     store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
@@ -63,7 +67,7 @@ const Properties = () => {
       setToggleOnOff("on");
       setToggleActive(true);
     } else {
-      setToggleOnOff("off");
+      setToggleOnOff("FORCED_OFF");
       setToggleActive(false);
     }
   };
@@ -91,6 +95,7 @@ const Properties = () => {
       }
     } else if (toggleChatStatus === 200) {
       ToastHandle(toggleChatMessage, "success");
+      dispatch(getUserDataActions());
       dispatch(stateEmptyActions());
     }
   }, [
@@ -118,7 +123,9 @@ const Properties = () => {
                   <div className="property-heading-right">
                     <p>HostBuddy Status</p>
                     {toggleChatLoading && <FullScreenLoader />}
-                    <div className="form-check form-switch custom_switch">
+                    <div 
+                    className="form-check form-switch custom_switch"
+                    >
                       <input
                         className="form-check-input toggle-user-chatbot"
                         type="checkbox"
@@ -178,6 +185,19 @@ const Properties = () => {
                       "Add Property"
                     )}
                   </button>
+                  {intergrations !== undefined ? (
+                    "intergrations"
+                  ) : (
+                    <button
+                      className="shadow-none border-0"
+                      type="button"
+                      onClick={() => {
+                        handleModelOpen("pmsIntegrationOpen");
+                      }}
+                    >
+                      PMS Integration
+                    </button>
+                  )}
                   {/* <button
                     className="shadow-none border-0"
                     type="button"
