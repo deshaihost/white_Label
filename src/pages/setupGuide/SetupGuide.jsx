@@ -55,153 +55,107 @@ const SetupGuide = () => {
                     <div className="guide-steps">
                       <div className="step-box">
                         <h4>Onboarding Steps</h4>
-                        <p>Overview of major milestones in onboarding</p>
-                        <p><em>Updated over a week ago</em></p>
-                        <p>Welcome to HostBuddy AI! Follow the directions below to begin Onboarding your Hostbuddy AI Communications Support Platform.</p>
-                        <ul>
-                          <li> <Link to='/'>Onboarding Expectations and Timeline</Link></li>
-                          <li> <Link to='/'>Your First Assignment</Link></li>
-                          <li> <Link to='/'>Configuring Pricing</Link></li>
-                          <li> <Link to='/'>Payment Methods</Link></li>
-                          <li> <Link to='/'>Importing Reservations</Link></li>
-                          <li> <Link to='/'>Automated Messaging</Link></li>
-                          <li> <Link to='/'>Channel Requirements</Link></li>
-                        </ul>
+                        <p>Welcome to HostBuddy! Follow the instructions below to begin onboarding your short-term rental properties with HostBuddy AI.</p>
                       </div>
+                      
                       <div className="step-box section" id="step1">
-                        <h5>Onboarding Expectations and Timeline:</h5>
-                        <p>Onboarding is typically a 45 day period where you’ll meet with an Onboarding Specialist to review the required steps to connect to your booking channels, ask questions, and review your progress. We typically see users go live with their booking channels within 1-2 weeks of using the platform. Onboarding can definitely be expedited, however, it is dependent upon your willingness to learn the system, complete action items, and any channel/integration delays. You’ll meet with your Onboarding Specialist 3 times throughout the 45 days to check in on your progress and get questions answered. Don’t worry, we have lots of resources to guide you through this process!</p>
-                        <p>After you graduate from Onboarding, you will work directly with our amazing Customer Support team for any technical assistance. You might even interact with them during Onboarding. You can utilize the chat button (on the bottom right corner of the platform) to reach out anytime!</p>
+                        <h4>Onboarding Expectations and Timeline:</h4>
+                        <p>The onboarding process involves several steps designed to ensure that HostBuddy performs effectively for each property. While it is possible to complete onboarding in as little as one day, typically, it takes additional time once you begin testing. Don't worry—we provide plenty of resources to guide you through this process! During and after onboarding, you may contact our exceptional Customer Support team for any technical assistance. Our support team is able to assist you with any questions you may have and is able to help troubleshoot fixing responses you are not satisfied with during your testing phase. If you require support, please feel free to email our customer support team at info@hostbuddy.ai.</p>
+                        <p>For some of our frequently asked questions, please visit our FAQ page: <Link to='/faqs'>HostBuddy FAQs</Link></p>
                         <p>For general questions about the Onboarding process, check out our welcome page below:</p>
                       </div>
 
                       <div className="step-box section" id="step2">
-                        <h5>Step 1:&nbsp;<Link to="/setup-guide/">Your First Assignment</Link>&nbsp;(Before your 1st Onboarding Call)</h5>
-                        <p>Start with the basics! Completing the action items below will prepare you for your 1st Onboarding Call and expedite your Onboarding Process.</p>
-                        <ul>
-                          <li><Link to="/setup-guide/">Set up your agency settings</Link></li>
-                          <li><Link to="/setup-guide/">Add your properties to the system</Link></li>
-                          <li><Link to="/setup-guide/">Set up Pricing&nbsp;<strong>(more information on Step 2 below)</strong></Link></li>
-                          <li><Link to="/setup-guide/">Add Rental Conditions</Link></li>
-                          <li><Link to="/setup-guide/">Enable a payment processor in Hostfully</Link></li>
-                          <li><Link to="/setup-guide/">Create accounts for any channel or integration partners you wish to use</Link></li>
-                        </ul>
-                        <p>
-                          <iframe
-                            width="560"
-                            height="315"
-                            src='https://www.youtube.com/embed/GDFm-hwDSrw?si=5QXSMNVlhrJ-IQe6'
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            title="YouTube video player"
-                          />
-                        </p>
+
+                        <h4>Step 1: Property Onboarding</h4>
+
+                        <p>Below is a step by step guide for onboarding your first property!</p>
+                        <h6 style={{ color: 'white' }}>Subscription</h6>
+                        <ol>
+                          <li>Once you have reviewed this Setup Guide and are ready to onboard your first property, navigate to the properties page in your user portal.</li>
+                          <li>Select “Add Property”
+                            <ul style={{ marginBottom: '0px' }}>
+                              <li>Select the number of properties you would like to add, along with the plan that you are interested in. The main difference between our packages is that “The Works” allows for PMS integration and “The Essentials” generates a link to Hostbuddy that you can send to your guests.</li>
+                              <li><em>Note: The number of properties you add initially will be the number of properties you can use for your free trial. Be sure to add the exact number of properties that you would like to use for the trial, as your selection will be final when it comes to the trial period. You can of course add more properties later, but they will not qualify for your trial period. Your card will not be charged until your trial period has been completed.</em></li>
+                            </ul>
+                          </li>
+                          <li>Once you continue, you will be directed to our Stripe payment portal. Please enter in your payment information and click submit, which will bring you back to the Properties page.</li>
+                        </ol>
+
+                        <h6 style={{ color: 'white' }}>Connecting your PMS (“The Works” Users)</h6>
+                        <p>If you’ve selected the works plan, now is a great time to connect your PMS!</p>
+                        <ol>
+                          <li>Click the “Connect PMS” button</li>
+                          <li>Select your PMS and click “next”. You will be redirected to a secure integrations page where you can enter your PMS information and connect to HostBuddy. Once finished, you will be redirected to the Properties page, where you will see your PMS listed in the top right. If you do not see your PMS, please repeat steps 1 and 2 again.
+                            <ul style={{ marginBottom: '0px' }}>
+                              <li><em>Note: If you have trouble locating the required information, please reach out to your PMS support team or refer to your PMS user guide if available.</em></li>
+                            </ul>
+                          </li>
+                          <li>Select your PMS and click “next”. You will be redirected to a secure integrations page where you can enter your PMS information and connect to HostBuddy. Once finished, you will be redirected to the Properties page, where you will see your PMS listed in the top right. If you do not see your PMS, please repeat steps 1 and 2 again.
+                            <ul style={{ marginBottom: '0px' }}>
+                              <li><em>Note: If you have trouble locating the required information, please reach out to your PMS’ support team or refer to your PMS’ user guide if available.</em></li>
+                            </ul>
+                          </li>
+                        </ol>
+
+                        <h6 style={{ color: 'white' }}>Customizing Properties</h6>
+                        <ol>
+                          <li>On the Properties page, you will see a number of editable properties matching your chosen property count in quantity. Select the pencil icon to begin customizing your Hostbuddy properties.</li>
+                          <li>Basics
+                            <ul style={{ marginBottom: '0px' }}>
+                              <li>Add a name for your property and a cover photo under “Basic Information”. After selecting next & next, please continue completing the remaining fields.</li>
+                              <li>Tip: Click the pencil icon next to applicable fields to add any additional information you’d like. For example, the property type field has a pencil icon that can be used to explain that a unit is in an apartment complex, or that a room is in a shared home. This feature is available in each section to provide additional information on specific property details.</li>
+                            </ul>
+                          </li>
+                          <li>Supporting Doc
+                            <ul style={{ marginBottom: '0px' }}>
+                              <li>This page allows for you to upload any documents, such as a welcome document, detailed property document or any other item that you would like Hostbuddy to use to message guests. If you have subscribed to the works plan and you have not yet connected your PMS, please do so here. You also have the option of adding a URL as a supporting document. Please make sure any document or URL you upload contains the necessary information in text format (chatGPT can not process photo images).</li>
+                            </ul>
+                          </li>
+                          <li>Listing Details, Amenities, and Extras
+                            <ul style={{ marginBottom: '0px' }}>
+                              <li>Complete as many fields as possible. The more information you add, the better Hostbuddy will be able to support your property. Please see our <Link to='https://docs.google.com/document/d/14Gh0kUSOft94gi4afjVoYpDB9ujWBBTyb65fJxgZpyU'>Hostbuddy Tips and Tricks</Link> page to learn our best practices for filling out this information.</li>
+                            </ul>
+                          </li>
+                        </ol>
+                        
                       </div>
 
                       <div className="step-box section" id="step3">
-                        <h5>Step 2: Configuring Pricing</h5>
-                        <p>Now that you have your properties in the system, the next step will be to update the pricing. Once you configure pricing in Hostfully and sync to the bookings channels, Hostfully becomes your source of truth for all data. In the future, you’ll make any changes in the Hostfully system and we will push that data to the bookings channels for you. But first, you need to get that data into the system! You have two choices:</p>
+                        <h4>Step 2: Testing</h4>
+                        <p>After inputting all desired property details on Hostbuddy, now it’s time to thoroughly test to ensure it's ready to support your business.</p>
                         <ol>
-                          <li>
-                            <h6>Dynamic Pricer</h6>
-                            <p>Use dynamic pricing software like Price Labs or Beyond Pricing to set up pricing with Hostfully. For the most up-to-date list of dynamic pricing options, please refer to the Hostfully Integrations Zone.</p>
-                            <p>Below are a list of current help articles explaining how to set up different dynamic pricing tools with the Hostfully platform.</p>
-                            <div class="contents_table">
-                              <ul>
-                                <li>Setting up Price Labs</li>
-                                <li>Setting up Wheelhouse</li>
-                                <li>Setting up Beyond Pricing</li>
-                                <li>Setting up DPGO</li>
-                                <li>Setting up NightPricer</li>
-                              </ul>
-                            </div>
-                          </li>
-                          <li>
-                            <h6>Manual Pricing</h6>
-                            <p>If you don’t want to use pricing software you can also manually configure pricing in Hostfully. You can set up your base right, weekend rate adjustment, seasonal pricing periods, and more under the Pricing tab of your listings. If you’ve imported your listing from Airbnb, the pricing data will also import into Hostfully. You will want to make sure your pricing calendar is updated and accurate before going live with any booking channel. Please review this article and the tutorial video below to configure pricing manually:</p>
-                          </li>
+                          <li>Select the “Test Property” button on the “Properties” page. </li>
+                          <li>Compile a list of commonly asked questions that you want to make sure Hostbuddy is capable of handling. We have a list that you can use for this phase, but we recommend that you tailor the questions to your most common scenarios. To review our recommended questions, please see our <Link to='https://docs.google.com/document/d/1-UubWDNGtjd34M1u6fvvnCOEa3mS5t-xvjYt3k_BVew?usp=sharing'>Hostbuddy Testing Questions</Link> document.</li>
+                          <li>Take note of each response that does not align with your expectations. For information that Hostbuddy is missing, please return to the “Properties” page, and select edit for the given property. Here, you can make refinements to the information that you would like for Hostbuddy to use. If there are responses that fall short, which you are having trouble fixing, please contact our team at info@hostbuddy.ai and provide the property name, a screenshot, and an example of what the response should have been. We will reach back out with either a recommendation for how to fix the issue, or a request to meet to discuss more nuanced requirements.</li>
                         </ol>
-                        <h5>Video Tutorial</h5>
-                        <p>
-                          <iframe
-                            width="560"
-                            height="315"
-                            src='https://www.youtube.com/embed/KWqaHWZKSh8?si=1Ck5SrR1VlPVn3-V'
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            title="YouTube video player"
-                          />
-                        </p>
                       </div>
 
                       <div className="step-box section" id="step4">
-                        <h5>Step 3: Payment Methods</h5>
-                        <p>You’ll need to set up a payment method in order to collect payment from your guests. We have 3 options for payment processors. Please review the articles for setup instructions and contact these companies directly to confirm their fees and features.</p>
-                        <p>These three options can be used for direct bookings and channels that require/allow you to be the merchant of record (Vrbo/Booking.com).</p>
+                        <h4>Step 3: Going Live</h4>
+                        <p>“Essentials” Users</p>
                         <ol>
-                          <li>Stripe (able to set on property level aka can connect multiple Stripe accounts and have a different Stripe account per property)</li>
-                          <li>Vacation Rent Payment (all or nothing. 1 VRP account to 1 Hostfully account for all properties)</li>
-                          <li>Paypal (able to set on property level). This option can be used for direct bookings. It can also be used for Vrbo and Booking.com payment processing, but not in the traditional sense. Please see the PayPal help article for more information.</li>
+                          <li>Once you are happy with the responses Hostbuddy is providing, you are ready to provide Hostbuddy’s unique URL to your guests for support. Click the three dots next to your property, and click “Copy URL”. The URL will be copied to your clipboard, and can be provided to your guests via booking channel, text, email, or any other platform you use to communicate.</li>
                         </ol>
-                        <p>If your country is not supported by these companies or you are going to use non-credit card payment methods, you’ll need to set up invoice methods (requirement for Vrbo if you are not using a payment processor).</p>
+                        <p>“The Works” Users</p>
+                        <ol>
+                          <li>Once you are happy with the responses Hostbuddy is providing, it’s time to schedule Hostbuddy’s first shift! Select the calendar icon below your property/s name to set a schedule for Hostbuddy.</li>
+                          <li>The monthly schedule is great for setting certain days that you plan to be offline. The schedule button allows for you to set an ongoing schedule for each calendar day in a week. See our “Hostbuddy Scheduling Walkthrough” document for additional information on scheduling.</li>
+                        </ol>
                       </div>
 
                       <div className="step-box section" id="step5">
-                        <h5>Step 4: Add Your Existing Reservations</h5>
-                        <p>Before syncing any channels, you’ll want to make sure your existing reservations are in the system so you don’t get double bookings.</p>
-                        <p>We also import past reservations. 1 year back for Airbnb and 6 months back for Booking.com. Guest data (name, contact) may not be provided to us by the partner for these reservations per their policy and show as unknown.</p>
-                        <p>Any outstanding Direct, Vrbo, or any other channel reservation will need to be added to your Hostfully calendar.</p>
-                        <ul>
-                          <li>Less than 20 – Manually add them by following this help article</li>
-                          <li>More than 20 – you can manually add them or complete a spreadsheet and have us upload it. For instructions on using our reservation spreadsheet, see this help article.</li>
-                        </ul>
-                        <p>
-                          <iframe
-                            width="560"
-                            height="315"
-                            src='https://www.youtube.com/embed/Jj5OXl3IftU?si=wMgEH4AsWvhFnpkz'
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            title="YouTube video player"
-                          />
-                        </p>
-                      </div>
-
-                      <div className="step-box section" id="step6">
-                        <h5>Step 5: Automatic Messaging</h5>
-                        <p>If you want to set up automatic messaging, you can do this before syncing booking channels. However, you do not have to do this before syncing. If you want to sync first and create messaging later, feel free to do it this way also!</p>
-                        <p><Link to='/'>How to set up automatic messaging</Link></p>
-                        <h5>Video Tutorial</h5>
-                        <p>
-                          <iframe
-                            width="560"
-                            height="315"
-                            src='https://www.youtube.com/embed/t52UMsfW1Ws?si=J86f3ROHwSdSbdhH'
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            title="YouTube video player"
-                          />
-                        </p>
-                      </div>
-
-                      <div className="step-box section" id="step7">
-                        <h5>Step 6: Setting Up the Bookings Channels</h5>
-                        <p>We integrate with a number of bookings channels.</p>
-                        <p>Please make sure you have taken the following actions before syncing.</p>
+                        <h4>Step 4: Post Go Live</h4>
                         <ol>
-                          <li>Imported all properties.</li>
-                          <li>Configured pricing on all properties.</li>
-                          <li>Integrated payment processor.</li>
-                          <li>Entered all non-Airbnb reservations.</li>
+                          <li>After going live with Hostbuddy, we advise that you closely monitor conversations between your guests and Hostbuddy. You can go to the “Property Insights” page in your dashboard to see transcripts that are categorized by whether the conversation was deemed successful by Hostbuddy. Conversations will be marked unsuccessful if Hostbuddy does not have sufficient information to support a guest, or if there is an item that requires human intervention.</li>
+                          <li>Consistently update each Hostbuddy property with missing information, and if you need support, please do not hesitate to reach out to our team! Artificial intelligence is nuanced, and our team is trained to troubleshoot problems that you may encounter.</li>
+                          <li>Sit back and relax! You now have state of the art technology doing the heavy lifting for you. Welcome to the future of hosting!</li>
                         </ol>
-                        <p>Then you can sync with any of these channels following the linked directions.</p>
                       </div>
+
                     </div>
                   </div>
+
                   <div className="col-lg-3">
                     <div className="step-tab-links">
                       <div className="steps-line">
@@ -209,28 +163,23 @@ const SetupGuide = () => {
                       </div>
                       <ul>
                         <li className={activeLink === 'step1' ? 'active' : ''}>
-                          <button type='button' onClick={() => handleClickScroll('step1')} className='sec-link'>Onboarding Expectations and Timeline:</button>
+                          <button type='button' onClick={() => handleClickScroll('step1')} className='sec-link'>Onboarding Expectations and Timeline</button>
                         </li>
                         <li className={activeLink === 'step2' ? 'active' : ''}>
-                          <button type='button' onClick={() => handleClickScroll('step2')} className='sec-link'>Step 1: Your First Assignment (Before your 1st Onboarding Call)</button>
+                          <button type='button' onClick={() => handleClickScroll('step2')} className='sec-link'>Step 1: Property Onboarding</button>
                         </li>
                         <li className={activeLink === 'step3' ? 'active' : ''}>
-                          <button type='button' onClick={() => handleClickScroll('step3')} className='sec-link'>Step 2: Configuring Pricing</button></li>
+                          <button type='button' onClick={() => handleClickScroll('step3')} className='sec-link'>Step 2: Testing</button></li>
                         <li className={activeLink === 'step4' ? 'active' : ''}>
-                          <button type='button' onClick={() => handleClickScroll('step4')} className='sec-link'>Step 3: Payment Methods</button>
+                          <button type='button' onClick={() => handleClickScroll('step4')} className='sec-link'>Step 3: Going Live</button>
                         </li>
                         <li className={activeLink === 'step5' ? 'active' : ''}>
-                          <button type='button' onClick={() => handleClickScroll('step5')} className='sec-link'>Step 4: Add Your Existing Reservations</button>
-                        </li>
-                        <li className={activeLink === 'step6' ? 'active' : ''}>
-                          <button type='button' onClick={() => handleClickScroll('step6')} className='sec-link'>Step 5: Automatic Messaging</button>
-                        </li>
-                        <li className={activeLink === 'step7' ? 'active' : ''}>
-                          <button type='button' onClick={() => handleClickScroll('step7')} className='sec-link'>Step 6: Setting Up the Bookings Channels</button>
+                          <button type='button' onClick={() => handleClickScroll('step5')} className='sec-link'>Step 4: Post Go Live</button>
                         </li>
                       </ul>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
