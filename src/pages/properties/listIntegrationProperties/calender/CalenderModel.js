@@ -68,17 +68,6 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
         setCalendarSchedule(() => response?.data?.schedule);
         console.log("API Response: ", response.data.schedule);
 
-        // if (response.status === 200) {
-        //     dispatch({
-        //         type: "get_all_Task",
-        //         payload: response.data.data,
-        //     });
-        // } else {
-        //     dispatch({
-        //         type: "get_all_Task",
-        //         payload: [],
-        //     });
-        // }
       } else {
         alert("No Token");
       }

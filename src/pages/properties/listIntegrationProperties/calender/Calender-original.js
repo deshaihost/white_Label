@@ -124,26 +124,16 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
     // setSubmit(false);
   };
 
-  const handleCellClick = () => {
-    const todayDate = date.getDate();
-    const todayMonth = date.getMonth();
-    const todayYear = date.getFullYear();
-    //   {
-    //     "day": 7,
-    //     "month": 4,
-    //     "year": 2024
-    // }
-    let day = {
-      "day": todayDate,
-      "month": todayMonth,
-      "year": todayYear
+  const handleCellClick = (day, type, start, end) => {
+    console.log("DayClicked: ", day)
+    console.log("day: ", day, " type: ", type, " start: ", start, " end: ", end)
+    if (!type || type === undefined) {
+      setSelectedDate(day);
+      setShow(true);
+      return
     }
-    console.log("day: ", todayDate, " month: ", todayMonth, " Year: ", todayYear, " day: ", day)
 
-    setSelectedDate(day);
-    setShow(true);
-
-  }
+  };
 
   const handleScheduleRemove = (type, endDate, endDateIndex) => {
     console.log("type: ", type, " start: ", endDate, " end: ", endDateIndex)
@@ -193,11 +183,10 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
 
   return (
     <>
-      {/* <div className="calendar">
+      <div className="calendar">
         <table className="w-100">
           <thead>
             <tr className="text-light text-center">
-              Choose specific dates/times to selectively enable/disable HostBuddy. Tese 
               <th>Sun</th>
               <th>Mon</th>
               <th>Tue</th>
@@ -208,6 +197,8 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
             </tr>
           </thead>
           <tbody>
+
+            {/* using this code */}
 
             {
               weeks.map((week, index) => (
@@ -405,6 +396,7 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
                               <div></div>
                               <div className="d-flex flex-column justify-content-between position-relative">
                                 {status}
+                                {/* {statusOn} */}
                               </div>
                               <div className="text-end date-text">{day.day}</div>
                             </div>
@@ -418,164 +410,14 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
             }
 
 
+
+
+
+
+
           </tbody>
         </table>
-      </div> */}
-      <div className="calendar">
-        <div className="w-100">
-          <div className="row">
-            <div className="text-left text-light">
-              Choose specific dates/times to selectively enable/disable HostBuddy. These selections will override the weekly schedule during the choosen times.
-            </div>
-          </div>
-
-          {/* <div className="row mt-3">
-            <div className="col  border">
-              <div className="w-100">
-                <div className="row border-bottom">
-                  <p className="text-center text-light">Current</p>
-                </div>
-
-                <div className="row text-light border" style={{ minHeight: "200px" }}>
-                  <div className="h-100 overflow-y-scroll">
-                    <div className="d-flex w-100 h-50 border border-secondary">
-                      <div style={{ width: "20%" }}>1</div>
-                      <div style={{ width: "70%" }}>2</div>
-                      <div style={{ width: "10%" }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 h-50 border border-secondary">
-                      <div style={{ width: "20%" }}>1</div>
-                      <div style={{ width: "70%" }}>2</div>
-                      <div style={{ width: "10%" }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 h-50 border border-secondary">
-                      <div style={{ width: "20%" }}>1</div>
-                      <div style={{ width: "70%" }}>2</div>
-                      <div style={{ width: "10%" }}>3</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col">2</div>
-            <div className="col">3</div>
-          </div> */}
-
-          <div class="row mt-3 gap-2">
-            <div class="col border">
-              <div class="w-100">
-                <div class="row border-bottom">
-                  <p class="text-center text-light">Current</p>
-                </div>
-
-                <div class="row text-light border" style={{ minHeight: "300px", maxHeight: "300px", overflowY: "scroll" }}>
-                  <div class="h-full overflow-y-scroll">
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>ON</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Future */}
-            <div class="col border">
-              <div class="w-100">
-                <div class="row border-bottom">
-                  <p class="text-center text-light">Future</p>
-                </div>
-
-                <div class="row text-light border" style={{ minHeight: "300px", maxHeight: "300px", overflowY: "scroll" }}>
-                  <div class="h-full overflow-y-scroll">
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>ON</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Past */}
-            <div class="col border">
-              <div class="w-100">
-                <div class="row border-bottom">
-                  <p class="text-center text-light">Inquiry/Past</p>
-                </div>
-
-                <div class="row text-light border" style={{ minHeight: "300px", maxHeight: "300px", overflowY: "scroll" }}>
-                  <div class="h-full overflow-y-scroll">
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>ON</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row w-full mt-5 d-flex justify-content-center">
-            <div className="d-flex gap-3 w-50">
-              <button className="btn btn-primary form-control"
-                onClick={handleCellClick}>
-                Add
-              </button>
-              <button className="btn btn-primary form-control">
-                Copy to All Properties
-              </button>
-            </div>
-          </div>
-
-        </div>
       </div>
-
       {show && (
         <PopupModal
           show={show}
