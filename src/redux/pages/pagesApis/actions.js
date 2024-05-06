@@ -26,8 +26,13 @@ export const getPMSIntegrationActions = (data) => ({
     data,
 });
 
-export const addPMSIntegrationActions = (data) => ({
-    type: PagesApisActionTypes.PMS_INTEGRATION_ADD_FIRST,
+// export const addPMSIntegrationActions = (data) => ({
+//     type: PagesApisActionTypes.PMS_INTEGRATION_ADD_FIRST,
+//     data,
+// });
+
+export const getCalryLinkActions = (data) => ({
+    type: PagesApisActionTypes.GET_CALRY_LINK_FIRST,
     data,
 });
 

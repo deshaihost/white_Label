@@ -363,7 +363,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                   </a>
                 </div>
               </div>
-              {/* <div className="col-4 mt-3">
+              <div className="col-4 mt-3">
               <div class="form-check custom_checkbox">
                 <input
                   class="form-check-input "
@@ -396,7 +396,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                   PMS Integration
                 </label>
               </div>
-            </div> */}
+            </div>
               <form>
                 {suppertingInput?.updateDoc && (
                   <div className="col-12 mt-4 ">

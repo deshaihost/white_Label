@@ -5,7 +5,7 @@ import {
   postCreateCheckoutSessionEndPoint,
   updateAccountInfoEndPoint,
   PMSintegrationEndPoint,
-  PMSintegrationAddEndPoint,
+  getCalryLinkEndPoint,
   removeIntegrationListGetEndPoint,
   removeIntegrationEndPoint,
   updateAccountUpdatePasswordEndPoint
@@ -141,27 +141,53 @@ function* pmsIntegrationGetFunction(data) {
   }
 }
 
-function* pmsIntegrationAddFunction(data) {
+// function* pmsIntegrationAddFunction(data) {
+//   try {
+//     yield put({
+//       type: PagesApisActionTypes.PMS_INTEGRATION_ADD_LOADING,
+//       payload: {},
+//     });
+//     const response = yield call(PMSintegrationAddEndPoint, data);
+//     if (response.status === 200) {
+//       yield put({
+//         type: PagesApisActionTypes.PMS_INTEGRATION_ADD_SUCCESS,
+//         payload: { data: response.data, status: response.status },
+//       });
+//     } else {
+//       yield put({
+//         type: PagesApisActionTypes.PMS_INTEGRATION_ADD_ERROR,
+//         payload: { ...response.data },
+//       });
+//     }
+//   } catch (error) {
+//     yield put({
+//       type: PagesApisActionTypes.PMS_INTEGRATION_ADD_ERROR,
+//       payload: error,
+//     });
+//   }
+// }
+
+function* getCalryLinkFunction(data) {
   try {
     yield put({
-      type: PagesApisActionTypes.PMS_INTEGRATION_ADD_LOADING,
+      type: PagesApisActionTypes.GET_CALRY_LINK_LOADING,
       payload: {},
     });
-    const response = yield call(PMSintegrationAddEndPoint, data);
+    const response = yield call(getCalryLinkEndPoint, data);
     if (response.status === 200) {
       yield put({
-        type: PagesApisActionTypes.PMS_INTEGRATION_ADD_SUCCESS,
+        type: PagesApisActionTypes.GET_CALRY_LINK_SUCCESS,
         payload: { data: response.data, status: response.status },
       });
     } else {
       yield put({
-        type: PagesApisActionTypes.PMS_INTEGRATION_ADD_ERROR,
+        type: PagesApisActionTypes.GET_CALRY_LINK_ERROR,
         payload: { ...response.data },
       });
     }
   } catch (error) {
     yield put({
-      type: PagesApisActionTypes.PMS_INTEGRATION_ADD_ERROR,
+      type: PagesApisActionTypes.GET_CALRY_LINK_ERROR,
       payload: error,
     });
   }
@@ -259,10 +285,16 @@ export function* acctionPMSIntegrationGet(): any {
   );
 }
 
-export function* acctionPMSIntegrationAdd(): any {
+// export function* acctionPMSIntegrationAdd(): any {
+//   yield takeEvery(
+//     PagesApisActionTypes.PMS_INTEGRATION_ADD_FIRST,
+//     pmsIntegrationAddFunction
+//   );
+// }
+export function* acctionGetCalryLink(): any {
   yield takeEvery(
-    PagesApisActionTypes.PMS_INTEGRATION_ADD_FIRST,
-    pmsIntegrationAddFunction
+    PagesApisActionTypes.GET_CALRY_LINK_FIRST,
+    getCalryLinkFunction
   );
 }
 export function* acctionRemoveIntegrationGet(): any {
@@ -287,7 +319,7 @@ function* pagesApisSaga(): any {
     fork(acctionCreateCheckoutSession),
     fork(acctionUpdateAccountInfo),
     fork(acctionPMSIntegrationGet),
-    fork(acctionPMSIntegrationAdd),
+    fork(acctionGetCalryLink),
     fork(acctionRemoveIntegrationGet),
     fork(acctionRemoveIntegration),
     fork(acctionUpdateAccountUpdatePassword)

@@ -1,114 +1,95 @@
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import ErrorMessageShow from "../../../../helper/ErrorMessageShow";
-import { ErrorMessageKey } from "../../../../helper/ErrorMessageKey";
 import { useSelector, useDispatch } from "react-redux";
-import { addPMSIntegrationActions } from "../../../../redux/actions";
+import {
+  getCalryLinkActions,
+  stateEmptyActions,
+} from "../../../../redux/actions";
 import ToastHandle from "../../../../helper/ToastMessage";
-import { stateEmptyActions } from "../../../../redux/actions";
-import Loader from "../../../../helper/Loader";
+import { BoxLoader } from "../../../../helper/Loader";
 const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
   const { type, data } = PmsIntegrationData ? PmsIntegrationData : [];
   const store = useSelector((state) => state);
-  const integrationAddStatus =
-    store?.pmsIntegrationAddReducer?.pmsIntegrationDataAdd?.status;
-  const integrationLoading = store?.pmsIntegrationAddReducer?.loading;
-  const integrationAddMessage = store?.pmsIntegrationAddReducer?.pmsIntegrationDataAdd?.data?.message
+  const getCarlyLinkStatus = store?.getCalryLinkReducer?.getCalryLing?.status;
+  const getCarlyLink =
+    store?.getCalryLinkReducer?.getCalryLing?.data?.calry_link;
+  console.log(
+    store?.getCalryLinkReducer?.getCalryLing?.data?.error,
+    "getCarlyLinkgetCarlyLink"
+  );
+  const getCalryLinkLoading = store?.getCalryLinkReducer?.loading;
+  const getCarlyLinkMessage =
+    store?.getCalryLinkReducer?.getCalryLing?.data?.message;
+  const getCalryLinkError =
+    store?.getCalryLinkReducer?.getCalryLing?.data?.error;
+
+  const goToCarlyLinkHndle = () => {
+    const baseUrl = getCarlyLink;
+    const url = new URL(baseUrl);
+    window.open(url.toString(), "_blank");
+    handleNoPlanClose('pmsIntegrationClose');
+
+  };
 
   const dispatch = useDispatch();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
-    dispatch(
-      addPMSIntegrationActions({
-        platform: type,
-        credentials: data,
-      })
-    );
-  };
   useEffect(() => {
-    if (integrationAddStatus === 200) {
-      ToastHandle(integrationAddMessage, "success");
-      dispatch(stateEmptyActions());
-      handleNoPlanClose("pmsIntegrationClose")
+    if (type) {
+      dispatch(
+        getCalryLinkActions({
+          platform: type,
+          // credentials: data,
+        })
+      );
+    }
+  }, [type]);
 
-    } else if (integrationAddStatus === 500) {
-      ToastHandle("Unexpected HTTP status: 500", "danger");
+  useEffect(() => {
+    if (getCarlyLinkStatus === 200) {
+      ToastHandle(getCarlyLinkMessage, "success");
+    } else if (getCarlyLinkStatus === 500) {
+      ToastHandle(getCalryLinkError, "danger");
       dispatch(stateEmptyActions());
     }
-  }, [integrationAddStatus]);
+  }, [getCarlyLinkStatus]);
+
   return (
     <div>
-      <form
-        onSubmit={handleSubmit(
-          (data) => {
-            onSubmit(data);
-          },
-          (err) => {
-            console.log(err, "ee");
-          }
-        )}
-      >
-        {data?.map((item) => {
-          const capitalizeFirstLetter = (string) => {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-          };
-          const text = item;
-          const capitalizedText = capitalizeFirstLetter(text);
-          console.log(capitalizedText,'capitalizedText')
-          return (
+      {!getCalryLinkLoading ? (
+        <>
+          {getCarlyLink !== undefined ? (
+            <div className="text-white">
+              <span>Calry link</span> :{" "}
+              <span
+                className="text-success mainCursor"
+                onClick={() => {
+                  getCarlyLink !== undefined ? (
+                    <>{goToCarlyLinkHndle()}</>
+                  ) : (
+                    <></>
+                  );
+                }}
+              >
+                CLICK HERE
+              </span>
+            </div>
+          ) : (
             <>
-              <div className="col form-design">
-                <div className="input_group mb-3">
-                  <label htmlFor="">
-                    {capitalizedText === "Client_id"
-                      ? "Client id"
-                      : capitalizedText === "Api_key"
-                        ? "Api key"
-                        : capitalizedText}
-                  </label>
-                  <input
-                    type="text"
-                    name="firstname"
-                    className="form-control"
-                    {...register(`${item}`, { required: true })}
-                  />
-                  {errors?.[item]?.type === "required" && (
-                    <>
-                      {ErrorMessageShow([
-                        capitalizedText === "AccessToken"
-                          ? "Please fill the value of AccessToken."
-                          : capitalizedText === "RefreshToken"
-                            ? "Please fill the value of RefreshToken."
-                            : capitalizedText === "AgencyUid"
-                              ? "Please fill the value of AgencyUid."
-                              : capitalizedText === "Client_id"
-                                ? "Please fill the value of Client id."
-                                : capitalizedText === "Api_key"
-                                  ? "Please fill the value of Api key."
-                                  : "",
-                      ])}
-                    </>
-                  )}
+              <span className="text-danger">Failed to create Calry link</span>
+              <div className="row form-design mt-1">
+                <div className="col-12 text-center">
+                  <button
+                    className="btn btn-primary px-5 mt-2"
+                    onClick={()=>handleNoPlanClose('pmsIntegrationClose')}
+                  >
+                    Close
+                  </button>
                 </div>
               </div>
             </>
-          );
-        })}
-        <div className=" text-center mt-4 form-design">
-          <button
-            className="btn btn-primary "
-            disabled={integrationLoading ? true : false}
-          >
-            {!integrationLoading ? "Verify & Import Property" : <Loader />}
-          </button>
-        </div>
-      </form>
+          )}
+        </>
+      ) : (
+        <BoxLoader />
+      )}
     </div>
   );
 };
