@@ -38,6 +38,7 @@ const ListIntegrationProperties = () => {
 
   const [showCalender, setShowCalender] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState("");
+  const [allProperties, setAllProperty] = useState([]);
   const { store, dispatch } = useSelectorUseDispatch();
   const userDataGetLoading = store?.getUserDataReducer?.loading;
   const createPropertiesName =
@@ -48,6 +49,8 @@ const ListIntegrationProperties = () => {
   const propertyCheckSubscription =
     createPropertiesSubscriptionAllowed - (createPropertiesName?.length || 0);
   const dummyArraySubscriptionAllowed = [];
+
+  // console.log("createPropertiesName: ", createPropertiesName)
 
   for (let i = 0; i < propertyCheckSubscription; i++) {
     // Your code logic inside the loop goes here
@@ -94,6 +97,7 @@ const ListIntegrationProperties = () => {
 
   const handleCalenderModalOpen = (propertyName) => {
     setSelectedProperty(() => propertyName);
+    setAllProperty(() => createPropertiesName)
     setShowCalender(true);
   };
   const handleModelOpen = (type) => {
@@ -331,8 +335,8 @@ const ListIntegrationProperties = () => {
                           <div className="property-detail">
                             <h4>{properties}</h4>
                             <div className="d-flex gap-2">
-                              <div 
-                              className="form-check form-switch custom_switch">
+                              <div
+                                className="form-check form-switch custom_switch">
                                 <input
                                   className="
                                   form-check-input toggle-user-chatbot
@@ -356,7 +360,7 @@ const ListIntegrationProperties = () => {
                                     <>OFF</>
                                   ) : "ON"
                                     // <>{chatBoxIndex === index ? "ON" : "OFF"}</>
-                                    
+
                                   }
                                 </label>
                               </div>
@@ -511,6 +515,7 @@ const ListIntegrationProperties = () => {
           selectedProperty={selectedProperty}
           showCalender={showCalender}
           setShowCalender={setShowCalender}
+          allProperties={allProperties}
         />
       )}
     </div>

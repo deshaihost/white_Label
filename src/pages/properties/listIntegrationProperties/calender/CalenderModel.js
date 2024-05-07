@@ -7,7 +7,7 @@ import ScheduleCalender from "../schedule/ScheduleCalender";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 
-const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
+const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allProperties }) => {
   const [monthButton, setMonthButton] = useState(true);
   const [scheduleButton, setscheduleButton] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -149,7 +149,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
             </div>
 
             {monthButton && (
-              <Calendar setShowCalender={setShowCalender} selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} />
+              <Calendar allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} />
             )}
 
             {scheduleButton && <ScheduleCalender setShowCalender={setShowCalender} selectedProperty={selectedProperty} scheduleData={calendarSchedule} />}

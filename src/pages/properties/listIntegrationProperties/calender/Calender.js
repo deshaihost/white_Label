@@ -5,7 +5,7 @@ import axios from "axios";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 
-const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => {
+const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleData, date }) => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
   const currentDate = new Date();
@@ -28,7 +28,12 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
     "dates": scheduledDate
   }
 
-  console.log("responseObject: ", responseObject)
+  const copyToAllResponseObject = {
+    properties: allProperties,
+    "dates": scheduledDate
+  }
+
+  console.log("copyToAllResponseObject: ", copyToAllResponseObject)
 
   // Generate sorted schedule data for on and off
   const combineSchedules = () => {
@@ -148,6 +153,76 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
       setFutureStageData((prev) => combineFutureStage)
       setPastStageData((prev) => combinePastStage)
     }
+
+  }
+
+  // to add the schedule to all properties
+  const copyToAllSchedule = async (dataToSend) => {
+    // setSubmit(true);
+    console.log("data to send: ", dataToSend)
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    const getSessionStorageData = JSON.parse(
+      sessionStorage.getItem("hostBuddy_auth")
+    );
+
+    const token = getSessionStorageData?.token;
+    console.log("dataToSend ", dataToSend);
+
+    // return;
+
+
+    try {
+      if (token) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-API-Key": API_KEY,
+          },
+        };
+        const response = await axios.put(
+          `${baseUrl}/set_datetime_toggle`,
+          dataToSend,
+          config
+        );
+
+        // setCalendarSchedule(() => response?.data?.schedule);
+        console.log("API Response: ", response.data);
+
+        if (response.status === 200) {
+          ToastHandle(response.data.message, "success");
+
+          setTimeout(() => {
+            setShow(false);
+            setShowCalender(false);
+          }, 1500);
+
+
+        } else {
+          ToastHandle("Something went wrong", "danger");
+        }
+
+      } else {
+        alert("No Token");
+      }
+    } catch (error) {
+      console.log(error);
+      ToastHandle(error?.data?.error, "danger");
+    }
+    // setSubmit(false);
+  };
+
+  // copy to all property onClickHandle
+
+  const handleCopyToAll = () => {
+    const isConfirmed = window.confirm("Do you want to delete this Status Event?");
+    if (!isConfirmed) {
+      return;
+    }
+
+    copyToAllSchedule(copyToAllResponseObject)
+
 
   }
 
@@ -384,7 +459,7 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
                 <button className="btn btn-primary form-control" onClick={handleCellClick}>
                   Add
                 </button>
-                <button className="btn btn-primary form-control">
+                <button onClick={handleCopyToAll} className="btn btn-primary form-control">
                   Copy to All Properties
                 </button>
               </div>
