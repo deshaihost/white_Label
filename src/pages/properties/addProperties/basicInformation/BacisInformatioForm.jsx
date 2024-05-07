@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import ErrorMessageShow from "../../../../helper/ErrorMessageShow";
 import { postPropertiesActions } from "../../../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,6 +9,8 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import Loader from "../../../../helper/Loader";
 import { nameKey, ParamsGet } from "../../../../helper/Authorized";
 import LocationForm from "./location/LocationForm";
+import axios from "axios";
+
 const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -27,20 +29,74 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
     formState: { errors },
   } = useForm();
 
+  const [uploadedFile, setFile] = useState(null);
+  const [propertyName, setPropertyName] = useState(null);
+
+
+  const add_thumbnail_image = async (propertyName, imgFile) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const getSessionStorageData = JSON.parse(
+      sessionStorage.getItem("hostBuddy_auth")
+    );
+    const token = getSessionStorageData?.token;
+
+    try {
+      if (token) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-API-Key": API_KEY,
+          },
+        };
+
+        let formData = new FormData();
+        formData.append("file", imgFile);
+        config.headers['Content-Type'] = 'multipart/form-data';
+
+        const response = await axios.post(
+          `${baseUrl}/properties/${propertyName}/add_thumbnail_image`,
+          formData,
+          config
+        );
+
+        if (response.status === 200) {
+
+
+        } else {
+          ToastHandle(`Error adding thumbnail image: ${response.error}`, "danger");
+        }
+      } else {
+        alert("No Token");
+      }
+    } catch (error) {
+      console.error("Error adding thumbnail image", error);
+    }
+    finally {
+    }
+  };
+
   let localStorageKey = "nameKey";
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const getLocalStorageData = nameKey();
   const getLocalStorageNameKey = getLocalStorageData?.nameKey;
   const onSubmit = (data) => {
     setGetInputNameKey({ nameKey: data.propertyName });
-    let formData = new FormData();
-    formData.append("property_name:", data.propertyName);
-    formData.append("file", data?.files[0]);
-    dispatch(postPropertiesActions(formData));
+    setFile(data?.files[0]);
+    setPropertyName(data.propertyName);
+
+    //Create the property, with the given name
+    let CreatePropertyData = { property_name: data.propertyName };
+    dispatch(postPropertiesActions(CreatePropertyData));
   };
 
   useEffect(() => {
     if (propertiesAddStatus === 200) {
+
+      // First, add the thumbnail image to the property, if one was included
+      add_thumbnail_image(propertyName, uploadedFile);
+
+      // Then, navigate to the next page
       navigate(
         "/add-properties/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw"
       );
