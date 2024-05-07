@@ -1,9 +1,25 @@
 import React, { useState } from "react";
+import "./ScheduleCalendar.css";
 import SchedulePopupModal from "../popupmodal/SchedulePopupModal";
+import { FaRegEdit } from "react-icons/fa";
+import { FaRegTrashCan } from "react-icons/fa6";
 
-const weekDayName = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+const weekDayName = [
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];
 
-const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) => {
+const ScheduleCalender = ({
+  setShowCalender,
+  selectedProperty,
+  scheduleData,
+}) => {
   const [show, setShow] = useState(false);
   const [selectedTime, setSelectedTime] = useState({});
 
@@ -11,23 +27,27 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
     return <div>Loading...</div>; // Or display some loading indicator
   }
 
+  // const specificDates = scheduleData?.weekly;
   const specificDates = scheduleData?.weekly;
 
   console.log("specificDates: new", specificDates)
 
   const scheduledDate = structuredClone(specificDates);
+  const scheduleDefulatArray = ["CURRENT", "FUTURE", "INQUIRY/PAST"];
+  // const currentData = scheduleData.weekly.CURRENT;
+  // const futureData = scheduleData.weekly.FUTURE;
+  // const inquiryPastData = scheduleData.weekly["INQUIRY/PAST"];
+  console.log(specificDates, "specificDates");
 
   const responseObject = {
-    properties: [
-      selectedProperty
-    ],
-    schedule: scheduledDate
-  }
+    properties: [selectedProperty],
+    schedule: scheduledDate,
+  };
 
   // console.log("scheduleData: ", scheduleData)
   // console.log("specificDates: ", specificDates);
   // console.log("responseObject: ", responseObject);
-  console.log("Schedulefor weekday: ", responseObject.schedule)
+  console.log("Schedulefor weekday: ", responseObject.schedule);
 
   // Function to convert 24-hour format to 12-hour format
   const convertTo12HourFormat = (time) => {
@@ -51,16 +71,17 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
       endMinute = 0;
     }
 
-    const endTime = `${String(endHour).padStart(2, "0")}:${String(endMinute).padStart(2, "0")}`;
+    const endTime = `${String(endHour).padStart(2, "0")}:${String(
+      endMinute
+    ).padStart(2, "0")}`;
     const interval = `${startTime} - ${endTime}`;
 
     const selectedCellTime = {
       startTime: startTime,
       endTime: endTime,
-      day: selectedDay
+      day: selectedDay,
     };
 
-    console.log("StartTime: ", startTime, " endTime: ", endTime, " dayOfWeek: ", dayOfWeek, " dayIndex: ", dayIndex);
     // alert(`You clicked the button for ${interval} on ${dayOfWeek} - ${selectedDay}`);
 
     setSelectedTime(selectedCellTime);
@@ -76,8 +97,12 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
       const hourFormatted = hour % 12 === 0 ? 12 : hour % 12;
       const amPmIndex = Math.floor(hour / 12);
 
-      const startTime = `${hour.toString().padStart(2, "0")}:00 ${amPm[amPmIndex]}`;
-      const endTime = `${((hour + 1) % 12 || 12).toString().padStart(2, "0")}:00 ${amPm[amPmIndex]}`;
+      const startTime = `${hour.toString().padStart(2, "0")}:00 ${
+        amPm[amPmIndex]
+      }`;
+      const endTime = `${((hour + 1) % 12 || 12)
+        .toString()
+        .padStart(2, "0")}:00 ${amPm[amPmIndex]}`;
 
       timeSlots.push({ startTime, endTime });
     }
@@ -86,13 +111,34 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
   };
 
   const timeSlots = generateTimeSlots();
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const daysOfWeek = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
+
+  const renderTimeSlots = (timeSlots) => {
+    const timePairs = [];
+    for (let i = 0; i < timeSlots.length; i += 2) {
+      timePairs.push(
+        <div key={i / 2}>
+          {timeSlots[i]} - {timeSlots[i + 1]}
+        </div>
+      );
+    }
+    return timePairs;
+  };
+
+  const { weekly } = scheduleData;
 
   return (
     <>
-      {console.log("timeSlots: ", timeSlots)}
-      {/* {console.log("Selected time: ", selectedTime)} */}
-      <div className="calendar">
+      {/* <div className="calendar">
         <table>
           <thead>
             <tr className="text-light text-center">
@@ -108,10 +154,10 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
             </tr>
           </thead>
           <tbody>
-            {/* Map over time slots */}
+            
             {timeSlots.map((time, index) => (
               <tr key={index}>
-                {/* Render time slot */}
+               
                 <td
                   style={{
                     minHeight: "100px",
@@ -127,12 +173,12 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
                         className="pt-0 ps-0 d-flex flex-column justify-content-between"
                       >
                         <div className="text-center text-light">{convertTo12HourFormat(time.startTime)}</div>
-                        <div className="bg-success sdfcd">{/* date */}</div>
+                        <div className="bg-success sdfcd"></div>
                       </div>
                     </div>
                   </div>
                 </td>
-                {/* Render weekdays */}
+                
                 {weekDayName.map((dayOfWeek, dayIndex) => (
                   <td
                     key={dayIndex}
@@ -148,7 +194,7 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
                           style={{ minHeight: "48px", minWidth: "100px" }}
                           className=" pt-0 ps-0 d-grid"
                         >
-                          {/* Render two buttons for each time slot in 24-hour format */}
+                          
                           <button
                             type="button"
                             className="btn btn-primary"
@@ -156,7 +202,7 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
                               handleClick(`${time.startTime.split(":")[0]}:00`, daysOfWeek[dayIndex], dayIndex)
                             }
                           >
-                            {/* {`${time.startTime.split(":")[0]}:00 - ${time.startTime.split(":")[0]}:30`} */}
+                            
                           </button>
                           <button
                             type="button"
@@ -169,10 +215,6 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
                               )
                             }
                           >
-                            {/* {`${time.startTime.split(":")[0]}:30 - ${(parseInt(time.startTime.split(":")[0], 10) + 1)
-                            .toString()
-                            .padStart(2, "0")
-                            }:00`} */}
                           </button>
                         </div>
                       </div>
@@ -183,7 +225,125 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
             ))}
           </tbody>
         </table>
+      </div> */}
+      <div className="table-responsive p-3">
+        <table className="w-100">
+          <thead>
+            <tr>
+              <th>
+                <div></div>
+              </th>
+              <th>
+                <div className="calendar-week-field">
+                  <h4>Monday</h4>
+                </div>
+              </th>
+              <th>
+                <div className="calendar-week-field">
+                  <h4>Tuesday</h4>
+                </div>
+              </th>
+              <th>
+                <div className="calendar-week-field">
+                  <h4>Wednesday</h4>
+                </div>
+              </th>
+              <th>
+                <div className="calendar-week-field">
+                  <h4>Thursday</h4>{" "}
+                </div>
+              </th>
+              <th>
+                <div className="calendar-week-field">
+                  <h4>Friday</h4>
+                </div>
+              </th>
+              <th>
+                <div className="calendar-week-field">
+                  <h4>Saturday</h4>
+                </div>
+              </th>
+              <th>
+                <div className="calendar-week-field">
+                  <h4>Sunday</h4>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {scheduleDefulatArray?.map((schedule) => {
+              const weeklySchedule = scheduledDate[schedule];
+
+              return (
+                <tr>
+                  <td
+                    className={
+                      schedule === "CURRENT"
+                        ? "bg-success"
+                        : schedule === "FUTURE"
+                        ? "bg-primary  "
+                        : schedule === "INQUIRY/PAST"
+                        ? "bg-warning"
+                        : ""
+                    }
+                    // style={{ background: "green" }}
+                  >
+                    <div className="calendar-schedule-data data-head ">
+                      <h5 className="mb-0">{schedule}</h5>
+                    </div>
+                  </td>
+                  {daysOfWeek?.map((days) => {
+                    
+                    return (
+                      <td>
+                        <div className="calendar-schedule-data">
+                          <div className="calendar-schedule-time">
+                            <p>
+                              <div className="row">
+                                {weeklySchedule[days]?.map((data, index) => {
+                                  const parsedTime = new Date(`2000-01-01T${data}`);
+                                  // Get hours and minutes
+                                  const hours = parsedTime.getHours();
+                                  const minutes = parsedTime.getMinutes();
+                                  // Determine AM/PM
+                                  const ampm = hours >= 12 ? 'PM' : 'AM';
+                                  // Adjust hours for AM/PM format
+                                  const formattedHours = hours % 12 || 12;
+                                  // Format minutes with leading zero if needed
+                                  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+                                  // Construct formatted time string
+                                  const formattedTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
+
+                                  return (
+                                    <>
+                                      <div className="col-6 ">
+                                      {formattedTime}
+
+                                        {index % 2 !== 0 && ( 
+                                          <span className="calendar-schedule-button mainCursor ms-1">
+                                            <FaRegEdit />
+                                            <FaRegTrashCan />
+                                          </span>
+                                        )}
+                                      </div>
+                                    </>
+                                  );
+                                })}
+                              </div>
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
+
+      <div className="row"></div>
 
       {show && (
         <SchedulePopupModal
@@ -200,7 +360,3 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
 };
 
 export default ScheduleCalender;
-
-
-
-

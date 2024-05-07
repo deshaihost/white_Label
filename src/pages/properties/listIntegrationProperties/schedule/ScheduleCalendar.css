@@ -1,0 +1,63 @@
+
+.calendar-week-field h4{
+    text-align: center;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0;
+}
+.calendar-week-field {
+    border: 2px solid #13317b;
+    padding: 10px;
+    border-radius: 10px;
+}
+/* {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+    padding: 20px;
+} */
+.calendar-schedule-data{
+    border: 2px solid #13317b;
+    border-radius: 10px;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    max-height: 152px;
+    height: 100%;
+    overflow-y: auto;
+}
+.calendar-schedule-data.data-head{
+    border: 0px;
+    /* background: green; */
+    color: #fff;
+    display: flex;
+    font-size: 14px;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0px;
+}
+.calendar-schedule-time{
+    display: flex;
+    border-bottom: 1px solid #13317b;
+    padding: 0px 0 0 5px;
+    gap: 10px;
+    align-items: center;
+}
+.calendar-schedule-time p{
+    font-size: 12px;
+    color: #fff;
+    white-space: nowrap;
+}
+span.calendar-schedule-button svg {
+    width: 12px;
+    height: 12px;
+    color: #0d6efd;
+}
+span.calendar-schedule-button {
+    display: inline-block;
+    text-align: center;
+}
+.calendar-schedule-data::-webkit-scrollbar{
+    width: 2px;
+}
