@@ -16,6 +16,7 @@ export const POST_PROPERTIES = "/properties";
 export const GET_QUESTIONNAIRE = "/properties";
 export const UPDATE_QUESTIONNAIRE = "/properties";
 export const GO_TO_BILLING_PORTAL = "/go_to_billing_portal";
+export const LIST_INTEGRATION_PROPERTIES = "/list_integration_properties";
 export const DELETE_INTEGRATION_PROPERTIES = "/properties";
 export const SUPPORTING_DOCUMENT = "/properties";
 export const SUPPORTING_URL = "/properties";

@@ -115,6 +115,14 @@ const MeetBanner = (props) => {
     }
   }, [statusResp]);
 
+  // When a new message is added, scroll to the bottom of the chat window
+  const messageListRef = useRef(null);
+  useEffect(() => {
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <div className="meet-banner">
       <Container>
@@ -161,7 +169,7 @@ const MeetBanner = (props) => {
 
           <div className={isPropertyChat ? "col-lg-12" : "col-lg-7"}>
             <div className="chatbot">
-              <div className="message-list">
+              <div className="message-list" ref={messageListRef}>
                 {messages?.map((message, index) => {
                   return (
                     <>

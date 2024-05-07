@@ -20,6 +20,11 @@ export const getQuestionnaireActions = (data) => ({
     data,
 });
 
+export const listIntegrationPropertiesActions = (data) => ({
+    type: AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_FIRST,
+    data
+});
+
 export const deleteListIntegrationPropertiesActions = (data) => ({
     type: AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_FIRST,
     data,
@@ -43,7 +48,6 @@ export const toggleChatbotoNoFFPutActions = (data) => ({
     type: AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_FIRST,
     data,
 });
-
 
 export const defaultActions = (data) => ({
     type: AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_FIRST,

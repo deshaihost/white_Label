@@ -21,6 +21,12 @@ function getQuestionnaireEndPoint(params: any): any {
   const { data } = params;
   return api.get(`${URL.GET_QUESTIONNAIRE}/${data}/get_questionnaire`);
 }
+
+function listIntegrationPropertiesEndPoint(params: any): any {
+  const { data } = params;
+  return api.get(`${URL.LIST_INTEGRATION_PROPERTIES}`);
+}
+
 function deleteListIntegrationPropertiesEndPoint(params: any): any {
   const { data } = params;
   return api.delete(`${URL.DELETE_INTEGRATION_PROPERTIES}/${data}`);
@@ -64,6 +70,7 @@ export {
   getQuestionnaireEndPoint,
   goToBillingPortalPostEndPoint,
   updateQuestionnaireEndPoint,
+  listIntegrationPropertiesEndPoint,
   deleteListIntegrationPropertiesEndPoint,
   supportingDocumentPostEndPoint,
   supportingUrlPostEndPoint,
