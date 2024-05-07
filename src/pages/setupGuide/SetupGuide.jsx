@@ -61,7 +61,7 @@ const SetupGuide = () => {
                       <div className="step-box section" id="step1">
                         <h4>Onboarding Expectations and Timeline:</h4>
                         <p>The onboarding process involves several steps designed to ensure that HostBuddy performs effectively for each property. While it is possible to complete onboarding in as little as one day, typically, it takes additional time once you begin testing. Don't worry—we provide plenty of resources to guide you through this process! During and after onboarding, you may contact our exceptional Customer Support team for any technical assistance. Our support team is able to assist you with any questions you may have and is able to help troubleshoot fixing responses you are not satisfied with during your testing phase. If you require support, please feel free to email our customer support team at info@hostbuddy.ai.</p>
-                        <p>For some of our frequently asked questions, please visit our FAQ page: <Link to='/faqs'>HostBuddy FAQs</Link></p>
+                        <p>For some of our frequently asked questions, please visit our FAQ page: <a href='/faqs' target="_blank">HostBuddy FAQs</a></p>
                         <p>For general questions about the Onboarding process, check out our welcome page below:</p>
                       </div>
 
@@ -114,7 +114,7 @@ const SetupGuide = () => {
                           </li>
                           <li>Listing Details, Amenities, and Extras
                             <ul style={{ marginBottom: '0px' }}>
-                              <li>Complete as many fields as possible. The more information you add, the better Hostbuddy will be able to support your property. Please see our <Link to='https://docs.google.com/document/d/14Gh0kUSOft94gi4afjVoYpDB9ujWBBTyb65fJxgZpyU'>Hostbuddy Tips and Tricks</Link> page to learn our best practices for filling out this information.</li>
+                              <li>Complete as many fields as possible. The more information you add, the better Hostbuddy will be able to support your property. Please see our <a href='https://docs.google.com/document/d/14Gh0kUSOft94gi4afjVoYpDB9ujWBBTyb65fJxgZpyU' target="_blank" rel="noopener noreferrer">Hostbuddy Tips and Tricks</a> page to learn our best practices for filling out this information.</li>
                             </ul>
                           </li>
                         </ol>
@@ -126,7 +126,7 @@ const SetupGuide = () => {
                         <p>After inputting all desired property details on Hostbuddy, now it’s time to thoroughly test to ensure it's ready to support your business.</p>
                         <ol>
                           <li>Select the “Test Property” button on the “Properties” page. </li>
-                          <li>Compile a list of commonly asked questions that you want to make sure Hostbuddy is capable of handling. We have a list that you can use for this phase, but we recommend that you tailor the questions to your most common scenarios. To review our recommended questions, please see our <Link to='https://docs.google.com/document/d/1-UubWDNGtjd34M1u6fvvnCOEa3mS5t-xvjYt3k_BVew?usp=sharing'>Hostbuddy Testing Questions</Link> document.</li>
+                          <li>Compile a list of commonly asked questions that you want to make sure Hostbuddy is capable of handling. We have a list that you can use for this phase, but we recommend that you tailor the questions to your most common scenarios. To review our recommended questions, please see our <a href='https://docs.google.com/document/d/1-UubWDNGtjd34M1u6fvvnCOEa3mS5t-xvjYt3k_BVew?usp=sharing' target="_blank" rel="noopener noreferrer">Hostbuddy Testing Questions</a> document.</li>
                           <li>Take note of each response that does not align with your expectations. For information that Hostbuddy is missing, please return to the “Properties” page, and select edit for the given property. Here, you can make refinements to the information that you would like for Hostbuddy to use. If there are responses that fall short, which you are having trouble fixing, please contact our team at info@hostbuddy.ai and provide the property name, a screenshot, and an example of what the response should have been. We will reach back out with either a recommendation for how to fix the issue, or a request to meet to discuss more nuanced requirements.</li>
                         </ol>
                       </div>

@@ -233,7 +233,7 @@ const ListIntegrationProperties = () => {
         TODO: eventually baseUrl should be a global variable somewhere. There shouldn't be hardcoded references to the vercel URL scattered
         throughout the code, since it will make it more difficult to change to our actual domain in the future. */
         const baseUrl =
-          "https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy";
+          "https://hostbuddy.ai/meet-hostbuddy";
         const url = new URL(baseUrl);
         url.searchParams.append("key", urlLink.chatbot_key);
         url.searchParams.append("name", urlLink.propertyN);
@@ -241,7 +241,7 @@ const ListIntegrationProperties = () => {
         copyToClipboard(url.toString());
 
         /* copyToClipboard(
-          `https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy/${JSON.stringify(
+          `https://hostbuddy.ai/meet-hostbuddy/${JSON.stringify(
             urlLink
           )}`
         ); */
@@ -268,7 +268,7 @@ const ListIntegrationProperties = () => {
         TODO: eventually baseUrl should be a global variable somewhere. There shouldn't be hardcoded references to the vercel URL scattered
         throughout the code, since it will make it more difficult to change to our actual domain in the future. */
         const baseUrl =
-          "https://hostbuddy-react-frontend-three.vercel.app/meet-hostbuddy";
+          "https://hostbuddy.ai/meet-hostbuddy";
         const url = new URL(baseUrl);
         url.searchParams.append("key", urlLink.chatbot_key);
         url.searchParams.append("name", urlLink.propertyN);
@@ -278,7 +278,7 @@ const ListIntegrationProperties = () => {
 
         /* const routingPart = "/meet-hostbuddy/";
         window.open(
-          `https://hostbuddy-react-frontend-three.vercel.app/${routingPart}${JSON?.stringify(
+          `https://hostbuddy.ai/${routingPart}${JSON?.stringify(
             urlLink
           )}`,
           "_blank"
