@@ -1,7 +1,5 @@
 #integrate_form1 .custom_checkbox {
-  background: #000426 url(../../../public/img/hostfully_icon.png) no-repeat
-    right 25px center !important;
-  padding-right: 60px;
+  background: #000426 !important;
 }
 #integrate_form1 .custom_checkbox {
   height: 74px;
