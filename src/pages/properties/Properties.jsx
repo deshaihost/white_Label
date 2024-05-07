@@ -20,10 +20,8 @@ const Properties = () => {
   const navigate = useNavigate();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const gotoBillingPortalCheckPaymentStatus =
-    store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
-  const gotoBillingPortalcheckPaymentLoading =
-    store?.gotoBillingPortalPostReducer?.loading;
+  const gotoBillingPortalCheckPaymentStatus = store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
+  const gotoBillingPortalcheckPaymentLoading = store?.gotoBillingPortalPostReducer?.loading;
   const [model, setModel] = useState({
     addProperty: false,
     pmsIntegration: false,
@@ -51,12 +49,9 @@ const Properties = () => {
     }
   };
   // toggle chatbot
-  const createPropertiesName =
-    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const intergrations =
-    store?.getUserDataReducer?.getUserData?.data?.integrations;
-  const toggleChatMessage =
-    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
+  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const intergrations = store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
+  const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
   const toggleChatStatus =
     store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
@@ -119,7 +114,7 @@ const Properties = () => {
             <div className="col-lg-8">
               <div className="account-container">
                 <div className="account_heading">
-                  <h3>Property Listing</h3>
+                  <h3>Properties</h3>
                   <div className="property-heading-right">
                     <p>Hostbuddy Status</p>
                     {toggleChatLoading && <FullScreenLoader />}
@@ -165,7 +160,7 @@ const Properties = () => {
                     </div> */}
                   </div>
                 </div>
-                <div className="addproperty_links text-center">
+                <div className="addproperty_links text-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <button
                     type="button"
                     className="shadow-none border-0"
@@ -186,8 +181,8 @@ const Properties = () => {
                       "Add Property"
                     )}
                   </button>
-                  {intergrations !== undefined ? (
-                    "intergrations"
+                  {intergrations !== undefined && Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key)
+                    <p style={{ color: 'white' }}>Connected to {Object.keys(intergrations)[0]}</p>
                   ) : (
                     <button
                       className="shadow-none border-0"
