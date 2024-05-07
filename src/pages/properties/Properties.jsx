@@ -61,7 +61,7 @@ const Properties = () => {
   const toggleChatStatus =
     store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
   const [toggleOnOff, setToggleOnOff] = useState("");
-  const [toggleActive, setToggleActive] = useState(false);
+  const [toggleActive, setToggleActive] = useState(true);
   const toggleChatBotHndle = (type) => {
     if (type) {
       setToggleOnOff("on");
@@ -131,6 +131,7 @@ const Properties = () => {
                         type="checkbox"
                         role="switch"
                         id="statuscheck"
+                        checked={toggleActive}
                         onClick={(e) => {
                           toggleChatBotHndle(e.target.checked);
                         }}
