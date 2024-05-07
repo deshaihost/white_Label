@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
+import { Button } from "react-bootstrap";
 
 const SchedulePopupModal = ({
   show,
@@ -9,14 +10,19 @@ const SchedulePopupModal = ({
   selectedTime,
   setselectedTime,
   responseObject,
-  setShowCalender
+  setShowCalender,
 }) => {
-
-  const [submit, setSubmit] = useState(false)
+  const [submit, setSubmit] = useState(false);
 
   const [data, setData] = useState({
     startTime: "",
     endTime: "",
+  });
+
+  const [checkedSchedule, setCheckedSchedule] = useState({
+    Future: false,
+    Past: false,
+    Current: false,
   });
 
   const handleInputChange = (e) => {
@@ -27,6 +33,28 @@ const SchedulePopupModal = ({
     });
   };
 
+  const handleOnChange = (e, type) => {
+    if (type === "Future") {
+      setCheckedSchedule((prevData) => ({
+        ...prevData,
+        Future: e.target.checked,
+      }));
+    }
+    if (type === "Past") {
+      setCheckedSchedule((prevData) => ({
+        ...prevData,
+        Past: e.target.checked,
+      }));
+    }
+    if (type === "Current") {
+      setCheckedSchedule((prevData) => ({
+        ...prevData,
+        Current: e.target.checked,
+      }));
+    }
+
+    console.log("Checked: ", e.target.checked);
+  };
   // to get the schedule to show on the calender
   const addCalenderSchedule = async (dataToSend) => {
     setSubmit(true);
@@ -66,11 +94,9 @@ const SchedulePopupModal = ({
             setShow(false);
             setShowCalender(false);
           }, 1500);
-
         } else {
           ToastHandle("Something went wrong", "danger");
         }
-
       } else {
         alert("No Token");
       }
@@ -109,13 +135,13 @@ const SchedulePopupModal = ({
       ...prevData,
       startTime: selectedTime?.startTime,
       endTime: selectedTime?.endTime,
-      day: selectedTime?.day
+      day: selectedTime?.day,
     }));
   }, [selectedTime]); // Update when selectedTime changes
 
   console.log("Data: ", data);
   console.log("selectedTime: ", selectedTime);
-  console.log("Response Object: ", responseObject)
+  console.log("Response Object: ", responseObject);
 
   return (
     <div>
@@ -129,11 +155,70 @@ const SchedulePopupModal = ({
         <Modal.Body>
           <div className="row py-3 border-bottom">
             <div className="6">
-              <h3 className="text-white text-center">Chatbot Status</h3>
+              <h3 className="text-white text-center">Add New Status</h3>
+              <p className="text-white">
+                Apply to the following reservation stages:
+              </p>
+            </div>
+          </div>
+
+          <div className=" d-flex justify-content-between mt-3">
+            <div class="col text-center">
+              <input
+                type="checkbox"
+                checked={checkedSchedule.Future}
+                onChange={(e) => handleOnChange(e, "Future")}
+                className="btn-check"
+                id="future"
+                autocomplete="off"
+              />
+              <label
+                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
+                  checkedSchedule.Future ? "btn-active" : ""
+                }`}
+                for="future"
+              >
+                Future
+              </label>
+            </div>
+            <div class="col text-center">
+              <input
+                type="checkbox"
+                checked={checkedSchedule.Past}
+                onChange={(e) => handleOnChange(e, "Past")}
+                className="btn-check"
+                id="past"
+                autocomplete="off"
+              />
+              <label
+                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
+                  checkedSchedule.Past ? "btn-active" : ""
+                }`}
+                for="past"
+              >
+                Inquiry/Past
+              </label>
+            </div>
+            <div class="col text-center">
+              <input
+                type="checkbox"
+                checked={checkedSchedule.Current}
+                onChange={(e) => handleOnChange(e, "Current")}
+                className="btn-check"
+                id="current"
+                autocomplete="off"
+              />
+              <label
+                className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${
+                  checkedSchedule.Current ? "btn-active" : ""
+                }`}
+                for="current"
+              >
+                Current
+              </label>
             </div>
           </div>
           <div className="d-flex flex-column pt-3 gap-4">
-
             <div class="row py-2">
               <div class="col">
                 <label>Start Time:</label>
@@ -160,12 +245,19 @@ const SchedulePopupModal = ({
             </div>
 
             <div class="row">
+              <div class="col-4 text-center ">
+                <div className="">
+                  <Button className="bg-primary form-control d-block">
+                    Cancel
+                  </Button>
+                </div>
+              </div>
               <div class="col text-center">
                 <input
                   type="submit"
                   data-attr-date="once"
                   className="bg-primary form-control"
-                  value={`${submit ? 'Please wait...' : 'Apply'}`}
+                  value={`${submit ? "Please wait..." : "Apply"}`}
                   id="submit-single-property"
                   onClick={handleSchedule}
                 />{" "}
