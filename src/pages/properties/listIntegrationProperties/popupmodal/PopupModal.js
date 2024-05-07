@@ -30,9 +30,9 @@ const PopupModal = ({
   });
 
   const [checkedSchedule, setCheckedSchedule] = useState({
-    Future: false,
-    Past: false,
-    Current: false,
+    Future: true,
+    Past: true,
+    Current: true,
   });
 
   //  format date to dd/mm/yyyy format
@@ -171,12 +171,12 @@ const PopupModal = ({
     }
 
     if (checkedSchedule.Past) {
-      // Check if "CURRENT" key exists in dates
+      // Check if "INQUIRY/PAST" key exists in dates
       if (!responseObject.dates.hasOwnProperty("INQUIRY/PAST")) {
         responseObject.dates["INQUIRY/PAST"] = { on: [], off: [] }; // Create empty object if not exists
       }
       if (data.status === "on") {
-        // Now you can access responseObject.dates["CURRENT"] safely and push values into "on" or "off" arrays
+        // Now you can access responseObject.dates["INQUIRY/PAST"] safely and push values into "on" or "off" arrays
         responseObject.dates["INQUIRY/PAST"].on.push(startSchedule);
         responseObject.dates["INQUIRY/PAST"].on.push(endSchedule);
       }
@@ -188,12 +188,12 @@ const PopupModal = ({
 
     if (checkedSchedule.Future) {
       console.log("Futuer: ".responseObject);
-      // Check if "CURRENT" key exists in dates
+      // Check if "FUTURE" key exists in dates
       if (!responseObject.dates.hasOwnProperty("FUTURE")) {
         responseObject.dates["FUTURE"] = { on: [], off: [] }; // Create empty object if not exists
       }
       if (data.status === "on") {
-        // Now you can access responseObject.dates["CURRENT"] safely and push values into "on" or "off" arrays
+        // Now you can access responseObject.dates["FUTURE"] safely and push values into "on" or "off" arrays
         responseObject.dates["FUTURE"].on.push(startSchedule);
         responseObject.dates["FUTURE"].on.push(endSchedule);
       }
@@ -259,7 +259,7 @@ const PopupModal = ({
                 />
                 <label
                   className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
-                    checkedSchedule.Future ? "btn-active" : ""
+                    checkedSchedule.Future ? "" : "btn-unselected"
                   }`}
                   for="future"
                 >
@@ -277,7 +277,7 @@ const PopupModal = ({
                 />
                 <label
                   className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
-                    checkedSchedule.Past ? "btn-active" : ""
+                    checkedSchedule.Past ? "" : "btn-unselected"
                   }`}
                   for="past"
                 >
@@ -295,7 +295,7 @@ const PopupModal = ({
                 />
                 <label
                   className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${
-                    checkedSchedule.Current ? "btn-active" : ""
+                    checkedSchedule.Current ? "" : "btn-unselected"
                   }`}
                   for="current"
                 >

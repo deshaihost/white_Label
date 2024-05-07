@@ -37,7 +37,7 @@ const PopupModal = ({
         <Modal.Body>
           <div className="row py-3 border-bottom">
             <div className="6">
-              <h6 className="text-white text-center">Home Documents</h6>
+              <h6 className="text-white text-center">Documents Uploaded For This Property</h6>
             </div>
           </div>
           <div className="d-flex flex-column pt-4 gap-3 text-light" style={{ cursor: "default", userSelect: "none" }}>

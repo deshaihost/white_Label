@@ -404,6 +404,7 @@ const ListIntegrationProperties = () => {
                                 >
                                   Edit Property
                                 </Dropdown.Item>
+                                {/*
                                 <Dropdown.Item
                                   onClick={() => {
                                     selectedHandle(webPageURLs);
@@ -418,6 +419,7 @@ const ListIntegrationProperties = () => {
                                 >
                                   Supporting Documents
                                 </Dropdown.Item>
+                                */}
                                 <Dropdown.Item
                                   onClick={() => {
                                     selectedHandle(deleteProperty, properties);
