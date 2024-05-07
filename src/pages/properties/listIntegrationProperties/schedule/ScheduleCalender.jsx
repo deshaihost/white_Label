@@ -13,6 +13,8 @@ const ScheduleCalender = ({ setShowCalender, selectedProperty, scheduleData }) =
 
   const specificDates = scheduleData?.weekly;
 
+  console.log("specificDates: new", specificDates)
+
   const scheduledDate = structuredClone(specificDates);
 
   const responseObject = {
