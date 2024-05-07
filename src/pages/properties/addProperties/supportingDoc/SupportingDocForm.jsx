@@ -27,6 +27,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const [prevLinkedIntegration, setPrevLinkedIntegration] = useState(null);
   const [uploadedDoc, setUploadedDoc] = useState();
   const [uploadedUrl, setUploadedUrl] = useState("");
+  const [docUploadIsLoading, setdocUploadIsLoading] = useState(false);
 
   const [suppertingInput, setSuppertingInput] = useState({
     updateDoc: true,
@@ -63,9 +64,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
   // list_integration_properties API Logic ------------------------------------------------------------------------------------------
 
-  const [propertySelectName, setPropertySelectName] = useState("");
   const [hasCalledAPI, setHasCalledAPI] = useState(false); // keep track of whether we've already called the list_integration_properties API. We only ever want to do it once, when the user clicks "PMS Integration"
-  const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
   const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties; // array of integration_property objects; each with "name" and "id" properties
   const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
 
@@ -73,7 +72,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   useEffect(() => {
     if (!prevLinkedIntegration) { // If already linked to an integration, don't call the API
       if (suppertingInput.pmsIntegration && !hasCalledAPI) {
-        console.log("Calling listIntegrationPropertiesActions");
         dispatch(listIntegrationPropertiesActions());
         setHasCalledAPI(true);
       }
@@ -95,6 +93,15 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const redrectcomponent = () => {
     prntFuntionHeaderActive(id !== undefined && "listingDetails");
   };
+
+  const go_to_next_page = async () => {
+    setTimeout(() => {
+      redrectcomponent();
+    }, 2000);
+    return;
+  };
+
+
   const handleUploadUrl = async () => {
     if (!isValidURL(uploadedUrl)) {
       redrectcomponent();
@@ -157,12 +164,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
   const documentUploadHandle = async () => {
     if (!file) {
-      ToastHandle("No file uploaded", "success");
-      setTimeout(() => {
-        redrectcomponent();
-      }, 1500);
+      ToastHandle("No file uploaded", "danger");
       return;
     }
+    setdocUploadIsLoading(true);
 
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -196,6 +201,8 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           config
         );
 
+        setdocUploadIsLoading(false);
+
         if (response.status === 200) {
           ToastHandle("File uploaded successfully", "success");
         } else {
@@ -205,11 +212,11 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
         alert("Missing Token or supportingkeyName");
       }
     } catch (error) {
+      setdocUploadIsLoading(false);
       console.error("Error uploading file:", error);
       ToastHandle(error?.data?.error, "danger");
     }
   };
-
 
   const handleSubmitForm = (e, uploadType) => {
     e.preventDefault();
@@ -218,6 +225,11 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     } else if (uploadType?.updateDoc) {
       documentUploadHandle();
     }
+  };
+
+  const save_and_next = (e) => {
+    e.preventDefault();
+    go_to_next_page();
   };
 
   // const previousUploadedDoc = async (propertyName) => {
@@ -345,7 +357,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   return (
     <>
       {console.log("prevUploadedDoc: ", prevUploadedDoc)}
-      {console.log("prevLinkedIntegration: ", prevLinkedIntegration)}
       <div>
         <div className="row">
           <div className="col-12 form-design">
@@ -428,23 +439,36 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                 </div>
               </div>
               <form>
+
                 {suppertingInput?.updateDoc && (
                   <div className="col-12 mt-4 ">
                     <label className="text-white">
                       Supporting Documents{" "}
                       <span>(.txt, .docx, .pdf supported)</span>
                     </label>
-                    <div className="">
-                      <input
-                        type="file"
-                        id="fileInput"
-                        className="form-control"
-                        onChange={(e) => setFile(e.target.files[0])}
-                      // {...register("docx")}
-                      />
+                    <div className="d-flex">
+                      <div className="col-6 me-4">
+                        <input
+                          type="file"
+                          id="fileInput"
+                          className="form-control"
+                          onChange={(e) => setFile(e.target.files[0])}
+                        // {...register("docx")}
+                        />
+                      </div>
+                      <div className="col-3">
+                        {!docUploadIsLoading ? (
+                          <button className="btn btn-primary" onClick={(e) => handleSubmitForm(e, suppertingInput)}>
+                            {"Submit File"}
+                          </button>
+                        ) : (
+                          <BoxLoader />
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
+
                 {suppertingInput?.urlToWebPage && (
                   <div className="col-12 mt-4 ">
                     <label className="text-white">Enter URL</label>
@@ -484,9 +508,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                                   id="integration_property_select"
                                   style={{ marginTop: '20px' }}
                                   className=""
-                                  onChange={(e) => {
-                                    setPropertySelectName(e.target.value);
-                                  }}
+                                  onChange={(e) => { }}
                                 >
                                   {integrationPropertyList?.map((property) => {
                                     return (
@@ -498,7 +520,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                                 </select>
                               ) : (
                                 //""
-                                <option style={{ color: 'white', marginTop: '20px' }}>No integration found</option>
+                                <option style={{ color: 'white', marginTop: '20px' }}>User account does not have an integration.</option>
                               )}
                             </div>
                           </>
@@ -514,9 +536,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                 )}
                       
                 <div className="col-lg-12 text-center">
+                  <div className="mt-5"></div> {/* vertical spacer */}
                   <button
                     className="btn btn-primary mt-5"
-                    onClick={(e) => handleSubmitForm(e, suppertingInput)}
+                    onClick={(e) => save_and_next(e)}
                   >
                     {" "}
                     {!supportingLoading ? "Save & Next" : <Loader />}
