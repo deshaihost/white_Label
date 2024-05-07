@@ -65,8 +65,8 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender }) => {
           config
         );
 
-        setCalendarSchedule(() => response?.data?.schedule);
-        console.log("API Response: ", response.data.schedule);
+        setCalendarSchedule(() => response?.data?.schedules);
+        console.log("API Response: ", response.data.schedules);
 
       } else {
         alert("No Token");

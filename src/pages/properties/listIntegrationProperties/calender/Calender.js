@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PopupModal from "../popupmodal/PopupModal";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { FiEdit } from "react-icons/fi";
 
 const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
   const currentDate = new Date();
+  const [currentStageData, setCurrentStageData] = useState([]);
+  const [futureStageData, setFutureStageData] = useState([]);
+  const [pastStageData, setPastStageData] = useState([]);
 
-  if (!scheduleData) {
-    return <div>Loading...</div>; // Or display some loading indicator
-  }
+  // if (!scheduleData) {
+  //   return <div>Loading...</div>; // Or display some loading indicator
+  // }
 
   const specificDates = scheduleData?.specific_dates;
 
@@ -23,62 +28,131 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
     "dates": scheduledDate
   }
 
-  console.log("scheduleData: ", scheduleData)
-  console.log("specificDates: ", specificDates);
-  console.log("responseObject: ", responseObject);
+  console.log("responseObject: ", responseObject)
+
+  // Generate sorted schedule data for on and off
+  const combineSchedules = () => {
+    if (specificDates) {
+      let combineCurrentStage = [];
+      let combineFutureStage = [];
+      let combinePastStage = [];
+
+      if (specificDates["CURRENT"]) {
+
+        specificDates["CURRENT"]?.on?.forEach((item, index) => {
+          if (index % 2 === 0) {
+            let obj = {
+              status: "on",
+              "start": item,
+              "end": specificDates["CURRENT"].on[index + 1],
+              "startIndex": index,
+              "endIndex": index + 1
+            }
+            combineCurrentStage.push(obj);
+          }
+        })
+
+        specificDates["CURRENT"]?.off?.forEach((item, index) => {
+          if (index % 2 === 0) {
+            let obj = {
+              status: "off",
+              "start": item,
+              "end": specificDates["CURRENT"].off[index + 1],
+              "startIndex": index,
+              "endIndex": index + 1
+            }
+            combineCurrentStage.push(obj);
+          }
+        })
 
 
+        combineCurrentStage?.sort((a, b) => {
+          const dateA = new Date(a.start);
+          const dateB = new Date(b.start);
+          return dateA - dateB;
+        })
+      }
+      if (specificDates["FUTURE"]) {
 
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const firstDayOfMonth = new Date(year, month, 1);
-  const lastDayOfMonth = new Date(year, month + 1, 0);
-  const daysInMonth = lastDayOfMonth.getDate();
-  const startingDayOfWeek = firstDayOfMonth.getDay();
+        specificDates["FUTURE"]?.on?.forEach((item, index) => {
+          if (index % 2 === 0) {
+            let obj = {
+              status: "on",
+              "start": item,
+              "end": specificDates["FUTURE"].on[index + 1],
+              "startIndex": index,
+              "endIndex": index + 1
+            }
+            combineFutureStage.push(obj);
+          }
+        })
 
-  const lastDayOfPrevMonth = new Date(year, month, 0);
-  const daysInPrevMonth = lastDayOfPrevMonth.getDate();
+        specificDates["FUTURE"]?.off?.forEach((item, index) => {
+          if (index % 2 === 0) {
+            let obj = {
+              status: "off",
+              "start": item,
+              "end": specificDates["FUTURE"].off[index + 1],
+              "startIndex": index,
+              "endIndex": index + 1
+            }
+            combineFutureStage.push(obj);
+          }
+        })
 
-  const days = [];
 
-  for (let i = startingDayOfWeek - 1; i >= 0; i--) {
-    days.push({
-      day: daysInPrevMonth - i,
-      month: month === 0 ? 11 : month - 1,
-      year: month === 0 ? year - 1 : year,
-    });
+        combineFutureStage?.sort((a, b) => {
+          const dateA = new Date(a.start);
+          const dateB = new Date(b.start);
+          return dateA - dateB;
+        })
+      }
+
+      if (specificDates["INQUIRY/PAST"]) {
+
+        specificDates["INQUIRY/PAST"]?.on?.forEach((item, index) => {
+          if (index % 2 === 0) {
+            let obj = {
+              status: "on",
+              "start": item,
+              "end": specificDates["INQUIRY/PAST"].on[index + 1],
+              "startIndex": index,
+              "endIndex": index + 1
+            }
+            combinePastStage.push(obj);
+          }
+        })
+
+        specificDates["INQUIRY/PAST"]?.off?.forEach((item, index) => {
+          if (index % 2 === 0) {
+            let obj = {
+              status: "off",
+              "start": item,
+              "end": specificDates["INQUIRY/PAST"].off[index + 1],
+              "startIndex": index,
+              "endIndex": index + 1
+            }
+            combinePastStage.push(obj);
+          }
+        })
+
+
+        combinePastStage?.sort((a, b) => {
+          const dateA = new Date(a.start);
+          const dateB = new Date(b.start);
+          return dateA - dateB;
+        })
+      }
+
+      setCurrentStageData((prev) => combineCurrentStage)
+      setFutureStageData((prev) => combineFutureStage)
+      setPastStageData((prev) => combinePastStage)
+    }
+
   }
 
-  for (let i = 1; i <= daysInMonth; i++) {
-    days.push({
-      day: i,
-      month: month,
-      year: year,
-    });
-  }
-
-  const remainingDays = 6 * 7 - days.length;
-  const nextMonth = month === 11 ? 0 : month + 1;
-  const nextYear = month === 11 ? year + 1 : year;
-
-  for (let i = 1; i <= remainingDays; i++) {
-    days.push({
-      day: i,
-      month: nextMonth,
-      year: nextYear,
-    });
-  }
-
-  const weeks = [];
-
-  for (let i = 0; i < days.length; i += 7) {
-    weeks.push(days.slice(i, i + 7));
-  }
-
-  // to remove the schedule showed on the calender
+  //  Remove Schedule API
   const removeCalenderSchedule = async (dataToSend) => {
-    // setSubmit(true);
-    console.log("data to send: ", dataToSend)
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -108,473 +182,217 @@ const Calendar = ({ setShowCalender, selectedProperty, scheduleData, date }) => 
           setTimeout(() => {
             setShowCalender(false);
           }, 1500);
-
-
         } else {
           ToastHandle("Something went wrong", "danger");
+          setTimeout(() => {
+            setShowCalender(false);
+          }, 1500);
         }
-
       } else {
         ToastHandle("No Token", "danger");
+        setTimeout(() => {
+          setShowCalender(false);
+        }, 1500);
       }
     } catch (error) {
       console.log(error);
       ToastHandle(error?.data?.error, "danger");
+      setTimeout(() => {
+        setShowCalender(false);
+      }, 1500);
     }
-    // setSubmit(false);
   };
 
+  // Add Schedule Click
   const handleCellClick = () => {
     const todayDate = date.getDate();
     const todayMonth = date.getMonth();
     const todayYear = date.getFullYear();
-    //   {
-    //     "day": 7,
-    //     "month": 4,
-    //     "year": 2024
-    // }
+
     let day = {
       "day": todayDate,
       "month": todayMonth,
       "year": todayYear
-    }
-    console.log("day: ", todayDate, " month: ", todayMonth, " Year: ", todayYear, " day: ", day)
+    };
 
     setSelectedDate(day);
     setShow(true);
+  };
 
-  }
+  // Remove Schedule click
+  const handleScheduleDelete = (category, deleteData) => {
+    console.log("deleteData: ", deleteData, " category: ", category)
+    const isConfirmed = window.confirm("Do you want to delete this Status Event?");
+    if (!isConfirmed) {
+      return;
+    }
+    if (category === "CURRENT") {
+      if (deleteData.status === "on") {
+        responseObject.dates[category].on.splice(deleteData.startIndex, 2);
+      }
 
-  const handleScheduleRemove = (type, endDate, endDateIndex) => {
-    console.log("type: ", type, " start: ", endDate, " end: ", endDateIndex)
-
-    if (type === "on") {
-
-      let start = responseObject.dates.on[endDateIndex - 1];
-
-      const valuesToRemove = [start, endDate];
-      console.log("valuesToRemove ", valuesToRemove)
-
-      const isConfirmed = window.confirm("Do you want to delete this Status Event?");
-
-      if (isConfirmed) {
-
-        responseObject.dates.on = responseObject.dates.on.filter(date => !valuesToRemove.includes(date));
-
-        removeCalenderSchedule(responseObject)
-
-      } else {
-        return
+      if (deleteData.status === "off") {
+        responseObject.dates[category].off.splice(deleteData.startIndex, 2);
       }
 
     }
-
-    if (type === "off") {
-
-      let start = responseObject.dates.off[endDateIndex - 1];
-
-      const valuesToRemove = [start, endDate];
-      console.log("valuesToRemove ", valuesToRemove)
-
-      const isConfirmed = window.confirm("Do you want to delete this Status Event?");
-
-      if (isConfirmed) {
-
-        responseObject.dates.off = responseObject.dates.off.filter(date => !valuesToRemove.includes(date));
-
-        removeCalenderSchedule(responseObject)
-
-      } else {
-        return
+    if (category === "FUTURE") {
+      if (deleteData.status === "on") {
+        responseObject.dates[category].on.splice(deleteData.startIndex, 2);
       }
 
+      if (deleteData.status === "off") {
+        responseObject.dates[category].off.splice(deleteData.startIndex, 2);
+      }
     }
+    if (category === "INQUIRY/PAST") {
+      if (deleteData.status === "on") {
+        responseObject.dates[category].on.splice(deleteData.startIndex, 2);
+      }
+
+      if (deleteData.status === "off") {
+        responseObject.dates[category].off.splice(deleteData.startIndex, 2);
+      }
+    }
+
+    console.log("responseObject after delete: ", responseObject)
+
+    removeCalenderSchedule(responseObject);
   }
+
+  const formatDate = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const month = monthNames[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    return `${month} ${day}, ${year} ${time}`;
+  };
+
+  useEffect(() => {
+    if (scheduleData) {
+      combineSchedules();
+    }
+  }, [scheduleData])
 
   return (
     <>
-      {/* <div className="calendar">
-        <table className="w-100">
-          <thead>
-            <tr className="text-light text-center">
-              Choose specific dates/times to selectively enable/disable HostBuddy. Tese 
-              <th>Sun</th>
-              <th>Mon</th>
-              <th>Tue</th>
-              <th>Wed</th>
-              <th>Thu</th>
-              <th>Fri</th>
-              <th>Sat</th>
-            </tr>
-          </thead>
-          <tbody>
+      {!scheduleData ? <div>Loading...</div> : (
+        <>
+          <div className="calendar">
+            <div className="w-100">
+              <div className="row">
+                <div className="text-left text-light">
+                  Choose specific dates/times to selectively enable/disable HostBuddy. These selections will override the weekly schedule during the chosen times.
+                </div>
+              </div>
 
-            {
-              weeks.map((week, index) => (
-                <tr key={index}>
-                  {week.map((day, idx) => {
-                    let classNames = "calendar-day";
-                    const dayDate = new Date(day.year, day.month, day.day);
-
-                    // Check if the day is today, in the past, or in the future
-                    if (
-                      dayDate.getDate() === currentDate.getDate() &&
-                      dayDate.getMonth() === currentDate.getMonth() &&
-                      dayDate.getFullYear() === currentDate.getFullYear()
-                    ) {
-                      classNames += " today-date";
-                    } else if (dayDate < currentDate) {
-                      classNames += " past-date";
-                    } else {
-                      classNames += " future-date";
-                    }
-
-                    let status = "";
-                    let statusType;
-                    let startStatus;
-                    let endStatus;
-                    let startTime;
-                    let endTime;
-
-                    // let statusOn = "";
-                    // let statusTypeOn;
-                    // let startStatusOn;
-                    // let endStatusOn;
-                    // let startTimeOn;
-                    // let endTimeOn;
-                    // eslint-disable-next-line
-                    let startDateString; // Declare startDateString
-                    // eslint-disable-next-line
-                    let endDateString; // Declare endDateString
-                    let dateCount = 0;
-                    let onDateCount = 0;
-
-                    if (specificDates) {
-                      specificDates.off.forEach((offDate, index) => {
-                        const offDateTime = new Date(offDate);
-                        if (index % 2 === 0) {
-
-                          // This is the start date of off schedule
-                          startStatus = offDate;
-                          startDateString = offDateTime.toLocaleString(); // Store full date-time string
-                          startTime = offDateTime.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-                        } else {
-                          // This is the end date of off schedule
-                          endStatus = offDate;
-                          endDateString = offDateTime.toLocaleString(); // Store full date-time string
-                          endTime = offDateTime.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-
-                          // Render off status for each day between start and end date
-                          let currentDate = new Date(startStatus);
-
-                          while (currentDate <= offDateTime) {
-                            dateCount++;
-                            if (currentDate.toDateString() === dayDate.toDateString()) {
-                              console.log("Hitted", dateCount);
-
-                              if (dateCount === 1) {
-
-                                statusType = "off";
-                                status = (
-                                  <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data" style={{ opacity: '0.5' }}>
-                                    <p>Status: Off</p>
-                                    <span>{`${startTime} - ${endTime}`}</span>
-
-                                  </div>
-
-                                );
-                              } else {
-                                if (currentDate.getDay() === 0) {
-                                  statusType = "off";
-                                  status = (
-                                    <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data" style={{ opacity: '0.5' }}>
-                                      <p >Status: Off</p>
-                                      <span >{`${startTime} - ${endTime}`}</span>
-
-                                    </div>
-
-                                  );
-
-                                } else {
-                                  statusType = "off";
-                                  status = (
-                                    <div onClick={() => handleScheduleRemove("off", offDate, index)} className="bg-danger status-data" style={{ opacity: '0.5' }}>
-                                      <p style={{ visibility: 'hidden' }}>Status: Off</p>
-                                      <span style={{ visibility: 'hidden' }}>{`${startTime} - ${endTime}`}</span>
-
-                                    </div>
-
-                                  );
-                                }
-
-                              }
-                            }
-                            // Move to the next day
-                            currentDate.setDate(currentDate.getDate() + 1);
-                            // dateCount++;
-                          }
-                          dateCount = 0
-                        }
-                      });
-
-                      specificDates.on.forEach((onDate, index) => {
-                        const onDateTime = new Date(onDate);
-                        if (index % 2 === 0) {
-
-                          // This is the start date of on schedule
-                          startStatus = onDate;
-                          startDateString = onDateTime.toLocaleString(); // Store full date-time string
-                          startTime = onDateTime.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-                        } else {
-
-                          // This is the end date of on schedule
-                          endStatus = onDate;
-                          endDateString = onDateTime.toLocaleString(); // Store full date-time string
-                          endTime = onDateTime.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-
-                          // Render on status for each day between start and end date
-                          let currentDate = new Date(startStatus);
-                          while (currentDate <= onDateTime) {
-                            onDateCount++;
-                            if (currentDate.toDateString() === dayDate.toDateString()) {
-                              // console.log("start: ", currentDate.getDay())
-
-                              if (onDateCount === 1) {
-                                statusType = "on"
-                                status = (
-                                  <div onClick={() => handleScheduleRemove("on", onDate, index)} className="bg-success status-data" style={{ opacity: '0.5' }}>
-                                    <p>Status: On</p>
-                                    <span>{`${startTime} - ${endTime}`}</span>
-
-                                  </div>
-                                );
-                              } else {
-                                if (currentDate.getDay() === 0) {
-                                  statusType = "on"
-                                  status = (
-                                    <div onClick={() => handleScheduleRemove("on", onDate, index)} className="bg-success status-data" style={{ opacity: '0.5' }}>
-                                      <p >Status: On</p>
-                                      <span>{`${startTime} - ${endTime}`}</span>
-
-                                    </div>
-                                  );
-                                } else {
-                                  statusType = "on"
-                                  status = (
-                                    <div onClick={() => handleScheduleRemove("on", onDate, index)} className="bg-success status-data" style={{ opacity: '0.5' }}>
-                                      <p style={{ visibility: 'hidden' }}>Status: On</p>
-                                      <span style={{ visibility: 'hidden' }}>{`${startTime} - ${endTime}`}</span>
-
-                                    </div>
-                                  );
-                                }
-
-                              }
-                            }
-                            // Move to the next day
-                            currentDate.setDate(currentDate.getDate() + 1);
-
-                          }
-                          onDateCount = 0;
-                        }
-                      });
-
-                    }
-
-                    return (
-                      <td
-                        key={idx}
-                        className={classNames}
-                        onClick={() => !statusType && handleCellClick(day, statusType, startStatus, endStatus)}
-                      >
-                        <div className="main-td-inner">
-                          <div className="child-main-inner">
-                            <div className="pt-0 ps-0 status-data-grid">
-                              <div></div>
-                              <div className="d-flex flex-column justify-content-between position-relative">
-                                {status}
+              <div class="row mt-3 gap-2">
+                {/* Render schedules for CURRENT, FUTURE, and INQUIRY/PAST */}
+                {Object.keys(specificDates).map(category => (
+                  <div key={category} class="col border">
+                    <div class="w-100">
+                      <div class="row border-bottom">
+                        <p class="text-center text-light">{category}</p>
+                      </div>
+                      <div class="row text-light border" style={{ minHeight: "300px", maxHeight: "300px", overflowY: "scroll" }}>
+                        <div class="h-full overflow-y-scroll">
+                          {/* Render ON schedules */}
+                          {category === "CURRENT" && currentStageData?.map((dateTime, index) => (
+                            <div key={index} className="d-flex w-100 border border-secondary align-items-center" style={{ fontSize: '11px', height: "33.33%" }}>
+                              <div className={`${dateTime?.status === "on" ? 'bg-success' : 'bg-danger'}`} style={{ width: '15%' }}>{dateTime?.status}</div>
+                              <div className="d-flex " style={{ width: '70%' }}>
+                                <div className="w-50">
+                                  {formatDate(dateTime?.start)}
+                                </div>
+                                <div className="w-50">
+                                  {"- "} {formatDate(dateTime?.end)}
+                                </div>
                               </div>
-                              <div className="text-end date-text">{day.day}</div>
+                              <div className="h-100 d-flex flex-column justify-content-around" style={{ width: '15%' }}>
+                                <div>
+                                  <FiEdit />
+                                </div>
+                                <div onClick={() => handleScheduleDelete(category, dateTime)}>
+                                  <FaRegTrashCan />
+                                </div>
+                              </div>
                             </div>
-                          </div>
+
+                          ))}
+
+                          {category === "FUTURE" && futureStageData?.map((dateTime, index) => (
+                            <div key={index} className="d-flex w-100 border border-secondary align-items-center" style={{ fontSize: '11px', height: "33.33%" }}>
+                              <div className={`${dateTime?.status === "on" ? 'bg-success' : 'bg-danger'}`} style={{ width: '15%' }}>{dateTime?.status}</div>
+                              <div className="d-flex " style={{ width: '70%' }}>
+                                <div className="w-50">
+                                  {formatDate(dateTime?.start)}
+                                </div>
+                                {/* {specificDates[category].on[index + 1] && // Check if there's a corresponding end time */}
+                                <div className="w-50">
+                                  {"- "} {formatDate(dateTime?.end)}
+
+                                </div>
+                                {/* } */}
+                              </div>
+                              <div className="h-100 d-flex flex-column justify-content-around" style={{ width: '15%' }}>
+                                <div>
+                                  <FiEdit />
+                                </div>
+                                <div onClick={() => handleScheduleDelete(category, dateTime)}>
+                                  <FaRegTrashCan />
+                                </div>
+                              </div>
+                            </div>
+
+                          ))}
+
+                          {category === "INQUIRY/PAST" && pastStageData?.map((dateTime, index) => (
+                            <div key={index} className="d-flex w-100 border border-secondary align-items-center" style={{ fontSize: '11px', height: "33.33%" }}>
+                              <div className={`${dateTime?.status === "on" ? 'bg-success' : 'bg-danger'}`} style={{ width: '15%' }}>{dateTime?.status}</div>
+                              <div className="d-flex " style={{ width: '70%' }}>
+                                <div className="w-50">
+                                  {formatDate(dateTime?.start)}
+                                </div>
+                                <div className="w-50">
+                                  {"- "} {formatDate(dateTime?.end)}
+
+                                </div>
+
+                              </div>
+                              <div className="h-100 d-flex flex-column justify-content-around" style={{ width: '15%' }}>
+                                <div>
+                                  <FiEdit />
+                                </div>
+                                <div onClick={() => handleScheduleDelete(category, dateTime)}>
+                                  <FaRegTrashCan />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))
-            }
+                      </div>
 
-
-          </tbody>
-        </table>
-      </div> */}
-      <div className="calendar">
-        <div className="w-100">
-          <div className="row">
-            <div className="text-left text-light">
-              Choose specific dates/times to selectively enable/disable HostBuddy. These selections will override the weekly schedule during the choosen times.
-            </div>
-          </div>
-
-          {/* <div className="row mt-3">
-            <div className="col  border">
-              <div className="w-100">
-                <div className="row border-bottom">
-                  <p className="text-center text-light">Current</p>
-                </div>
-
-                <div className="row text-light border" style={{ minHeight: "200px" }}>
-                  <div className="h-100 overflow-y-scroll">
-                    <div className="d-flex w-100 h-50 border border-secondary">
-                      <div style={{ width: "20%" }}>1</div>
-                      <div style={{ width: "70%" }}>2</div>
-                      <div style={{ width: "10%" }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 h-50 border border-secondary">
-                      <div style={{ width: "20%" }}>1</div>
-                      <div style={{ width: "70%" }}>2</div>
-                      <div style={{ width: "10%" }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 h-50 border border-secondary">
-                      <div style={{ width: "20%" }}>1</div>
-                      <div style={{ width: "70%" }}>2</div>
-                      <div style={{ width: "10%" }}>3</div>
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
-            <div className="col">2</div>
-            <div className="col">3</div>
-          </div> */}
-
-          <div class="row mt-3 gap-2">
-            <div class="col border">
-              <div class="w-100">
-                <div class="row border-bottom">
-                  <p class="text-center text-light">Current</p>
-                </div>
-
-                <div class="row text-light border" style={{ minHeight: "300px", maxHeight: "300px", overflowY: "scroll" }}>
-                  <div class="h-full overflow-y-scroll">
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>ON</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Future */}
-            <div class="col border">
-              <div class="w-100">
-                <div class="row border-bottom">
-                  <p class="text-center text-light">Future</p>
-                </div>
-
-                <div class="row text-light border" style={{ minHeight: "300px", maxHeight: "300px", overflowY: "scroll" }}>
-                  <div class="h-full overflow-y-scroll">
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>ON</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Past */}
-            <div class="col border">
-              <div class="w-100">
-                <div class="row border-bottom">
-                  <p class="text-center text-light">Inquiry/Past</p>
-                </div>
-
-                <div class="row text-light border" style={{ minHeight: "300px", maxHeight: "300px", overflowY: "scroll" }}>
-                  <div class="h-full overflow-y-scroll">
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>ON</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary align-items-center" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                    <div className="d-flex w-100 border border-secondary" style={{ height: "33.33%" }}>
-                      <div style={{ width: '20%' }}>1</div>
-                      <div style={{ width: '70%' }}>2</div>
-                      <div style={{ width: '10%' }}>3</div>
-                    </div>
-                  </div>
-                </div>
+            <div class="row w-full mt-5 d-flex justify-content-center">
+              <div className="d-flex gap-3 w-50">
+                <button className="btn btn-primary form-control" onClick={handleCellClick}>
+                  Add
+                </button>
+                <button className="btn btn-primary form-control">
+                  Copy to All Properties
+                </button>
               </div>
             </div>
           </div>
-          <div class="row w-full mt-5 d-flex justify-content-center">
-            <div className="d-flex gap-3 w-50">
-              <button className="btn btn-primary form-control"
-                onClick={handleCellClick}>
-                Add
-              </button>
-              <button className="btn btn-primary form-control">
-                Copy to All Properties
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </div>
+        </>
+      )
+      }
 
       {show && (
         <PopupModal

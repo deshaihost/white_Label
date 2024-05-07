@@ -149,14 +149,58 @@ const PopupModal = ({
       return;
     }
 
-    if (data.status === "on") {
-      responseObject.dates.on.push(startSchedule);
-      responseObject.dates.on.push(endSchedule);
+    if (!checkedSchedule.Current && !checkedSchedule.Future && !checkedSchedule.Past) {
+      ToastHandle("Please select schedule", "danger");
+      return;
     }
 
-    if (data.status === "off") {
-      responseObject.dates.off.push(startSchedule);
-      responseObject.dates.off.push(endSchedule);
+    if (checkedSchedule.Current) {
+      // Check if "CURRENT" key exists in dates
+      if (!responseObject.dates.hasOwnProperty("CURRENT")) {
+        responseObject.dates["CURRENT"] = { on: [], off: [] }; // Create empty object if not exists
+      }
+      if (data.status === "on") {
+        // Now you can access responseObject.dates["CURRENT"] safely and push values into "on" or "off" arrays
+        responseObject.dates["CURRENT"].on.push(startSchedule);
+        responseObject.dates["CURRENT"].on.push(endSchedule);
+      }
+      if (data.status === "off") {
+        responseObject.dates["CURRENT"].off.push(startSchedule);
+        responseObject.dates["CURRENT"].off.push(endSchedule);
+      }
+    }
+
+    if (checkedSchedule.Past) {
+      // Check if "CURRENT" key exists in dates
+      if (!responseObject.dates.hasOwnProperty("INQUIRY/PAST")) {
+        responseObject.dates["INQUIRY/PAST"] = { on: [], off: [] }; // Create empty object if not exists
+      }
+      if (data.status === "on") {
+        // Now you can access responseObject.dates["CURRENT"] safely and push values into "on" or "off" arrays
+        responseObject.dates["INQUIRY/PAST"].on.push(startSchedule);
+        responseObject.dates["INQUIRY/PAST"].on.push(endSchedule);
+      }
+      if (data.status === "off") {
+        responseObject.dates["INQUIRY/PAST"].off.push(startSchedule);
+        responseObject.dates["INQUIRY/PAST"].off.push(endSchedule);
+      }
+    }
+
+    if (checkedSchedule.Future) {
+      console.log("Futuer: ".responseObject)
+      // Check if "CURRENT" key exists in dates
+      if (!responseObject.dates.hasOwnProperty("FUTURE")) {
+        responseObject.dates["FUTURE"] = { on: [], off: [] }; // Create empty object if not exists
+      }
+      if (data.status === "on") {
+        // Now you can access responseObject.dates["CURRENT"] safely and push values into "on" or "off" arrays
+        responseObject.dates["FUTURE"].on.push(startSchedule);
+        responseObject.dates["FUTURE"].on.push(endSchedule);
+      }
+      if (data.status === "off") {
+        responseObject.dates["FUTURE"].off.push(startSchedule);
+        responseObject.dates["FUTURE"].off.push(endSchedule);
+      }
     }
 
     addCalenderSchedule(responseObject);
