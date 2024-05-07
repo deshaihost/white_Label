@@ -10,10 +10,16 @@ const GET_QUESTIONNAIRE_INITIAL_STATE = {
   loading: false,
 };
 
+const LIST_INTEGRATION_PROPERTIES_INITIAL_STATE = {
+  listIntegrationProperties: [],
+  loading: false,
+};
+
 const DELETE_LIST_INTEGRATION_PROPERTIES_INITIAL_STATE = {
   deleteListIntegrationProperties: [],
   loading: false,
 };
+
 const UPDATE_QUESTIONNAIRE_INITIAL_STATE = {
   updateQuestionnaire: [],
   loading: false,
@@ -89,6 +95,30 @@ const getQuestionnaireReducer = (
   }
 };
 
+const listIntegrationPropertiesReducer = (state = LIST_INTEGRATION_PROPERTIES_INITIAL_STATE, action) => {
+  switch (action.type) {
+    case AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_LOADING:
+      return {
+        listIntegrationProperties: state.listIntegrationProperties,
+        loading: true,
+      };
+    case AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_SUCCESS:
+      return {
+        listIntegrationProperties: action.payload,
+        loading: false,
+      };
+    case AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_ERROR:
+      return {
+        listIntegrationProperties: action.payload,
+        loading: false,
+      };
+    // case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+    //     return GET_PROPERTY_BY_NAME_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
+
 const deleteListIntegrationPropertiesReducer = (
   state = DELETE_LIST_INTEGRATION_PROPERTIES_INITIAL_STATE,
   action
@@ -115,6 +145,7 @@ const deleteListIntegrationPropertiesReducer = (
       return state;
   }
 };
+
 const updateQuestionnaireReducer = (
   state = UPDATE_QUESTIONNAIRE_INITIAL_STATE,
   action
@@ -253,6 +284,7 @@ export {
   getQuestionnaireReducer,
   gotoBillingPortalPostReducer,
   updateQuestionnaireReducer,
+  listIntegrationPropertiesReducer,
   deleteListIntegrationPropertiesReducer,
   supportingDocumentPostReducer,
   supportingUrlPostReducer,

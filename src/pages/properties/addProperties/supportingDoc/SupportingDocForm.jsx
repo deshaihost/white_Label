@@ -8,8 +8,9 @@ import {
 import { useSelectorUseDispatch } from "../../../../helper/Authorized";
 import { nameKey } from "../../../../helper/Authorized";
 import ToastHandle from "../../../../helper/ToastMessage";
-import Loader from "../../../../helper/Loader";
+import Loader, { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
 import { stateEmptyActions } from "../../../../redux/actions";
+import { listIntegrationPropertiesActions } from "../../../../redux/actions";
 // import ToastHandle from "../../../../helper/ToastMessage";
 
 import axios from "axios";
@@ -23,9 +24,9 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const supportingNameKey = nameKey();
   const [showPreviousDoc, setShowPreviousDoc] = useState(false);
   const [prevUploadedDoc, setPrevUploadedDoc] = useState([]);
+  const [prevLinkedIntegration, setPrevLinkedIntegration] = useState(null);
   const [uploadedDoc, setUploadedDoc] = useState();
   const [uploadedUrl, setUploadedUrl] = useState("");
-
 
   const [suppertingInput, setSuppertingInput] = useState({
     updateDoc: true,
@@ -59,6 +60,27 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     : suppertingInput?.urlToWebPage
       ? store?.supportingUrlPostReducer?.loading
       : "";
+
+  // list_integration_properties API Logic ------------------------------------------------------------------------------------------
+
+  const [propertySelectName, setPropertySelectName] = useState("");
+  const [hasCalledAPI, setHasCalledAPI] = useState(false); // keep track of whether we've already called the list_integration_properties API. We only ever want to do it once, when the user clicks "PMS Integration"
+  const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties; // array of integration_property objects; each with "name" and "id" properties
+  const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
+
+  // When "PMS Integration" is selected, call API to get the list of integration properties
+  useEffect(() => {
+    if (!prevLinkedIntegration) { // If already linked to an integration, don't call the API
+      if (suppertingInput.pmsIntegration && !hasCalledAPI) {
+        console.log("Calling listIntegrationPropertiesActions");
+        dispatch(listIntegrationPropertiesActions());
+        setHasCalledAPI(true);
+      }
+    }
+  }, [suppertingInput?.pmsIntegration]);
+
+  // -------------------------------------------------------------------------------------------------------------------------------
 
   function isValidURL(url) {
     // Regular expression to match a period in the middle of the string
@@ -244,6 +266,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   //   }
   // };
 
+  // Call the backend API to get the list of previously uploaded documents, and the name of any previously linked integration property
   const previousUploadedDoc = async (propertyName) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -276,6 +299,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
               setPrevUploadedDoc(uploadedDocs);
             }
           }
+          if (propertyData && propertyData?.integration?.integration_property_name) {
+            setPrevLinkedIntegration(propertyData?.integration?.integration_property_name);
+          }
+
         } else {
           // Handle non-200 status
           console.log("Received non-200 status:", response.status);
@@ -318,6 +345,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   return (
     <>
       {console.log("prevUploadedDoc: ", prevUploadedDoc)}
+      {console.log("prevLinkedIntegration: ", prevLinkedIntegration)}
       <div>
         <div className="row">
           <div className="col-12 form-design">
@@ -363,6 +391,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                   </a>
                 </div>
               </div>
+              {/*
               <div className="col-4 mt-3">
                 <div class="form-check custom_checkbox">
                   <input
@@ -380,6 +409,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                   </label>
                 </div>
               </div>
+              */}
               <div className="col-4 mt-3">
                 <div class="form-check custom_checkbox">
                   <input
@@ -430,19 +460,59 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                     </div>
                   </div>
                 )}
+
                 {suppertingInput?.pmsIntegration && (
-                  <div className="col-12 mt-4 ">
-                    <label className="text-white">PMS Integration</label>
-                    <div className="">
-                      <input
-                        className="bg-dark form-control"
-                        disabled
-                        value="Cloudbeds"
-                        type="text"
-                      />
-                    </div>
-                  </div>
+                  <>
+                    {prevLinkedIntegration ? ( // If already linked to an integration: show the name of the linked integration property and option to unlink
+                      <>
+                        <div className="row">
+                          <div className="col-6 mt-4 ">
+                            <p style={{ color: 'white', marginTop: '10px' }}>Linked to property: {prevLinkedIntegration}</p>
+                          </div>
+                          <div className="col-6 mt-4 ">
+                            <button className="UnlinkPMSButton">Unlink</button>
+                          </div>
+                        </div>
+                      </>
+                    ) : ( // If not linked to a property: show a select with the list of integration properties (pulled from the backend API)
+                      <>
+                        {!integrationPropertiesLoading ? (
+                          <>
+                            <div class="property_select">
+                              {integrationPropertyList?.length > 0 ? (
+                                <select
+                                  id="integration_property_select"
+                                  style={{ marginTop: '20px' }}
+                                  className=""
+                                  onChange={(e) => {
+                                    setPropertySelectName(e.target.value);
+                                  }}
+                                >
+                                  {integrationPropertyList?.map((property) => {
+                                    return (
+                                      <option key={property.id} value={property.id}>
+                                        {property.name}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
+                              ) : (
+                                //""
+                                <option style={{ color: 'white', marginTop: '20px' }}>No integration found</option>
+                              )}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <p style={{ color: 'white', marginTop: '20px' }}>Loading integration properties...</p>
+                            <BoxLoader />
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
                 )}
+                      
                 <div className="col-lg-12 text-center">
                   <button
                     className="btn btn-primary mt-5"

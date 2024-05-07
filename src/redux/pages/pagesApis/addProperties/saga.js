@@ -6,6 +6,7 @@ import {
   getQuestionnaireEndPoint,
   goToBillingPortalPostEndPoint,
   updateQuestionnaireEndPoint,
+  listIntegrationPropertiesEndPoint,
   deleteListIntegrationPropertiesEndPoint,
   supportingDocumentPostEndPoint,
   supportingUrlPostEndPoint,
@@ -168,6 +169,33 @@ function* getQuestionnaireFunction(data) {
     });
   }
 }
+
+function* listIntegrationFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_LOADING,
+      payload: {},
+    });
+    const response = yield call(listIntegrationPropertiesEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_ERROR,
+      payload: error,
+    });
+  }
+}
+
 function* deleteListIntegrationFunction(data) {
   try {
     yield put({
@@ -193,6 +221,7 @@ function* deleteListIntegrationFunction(data) {
     });
   }
 }
+
 function* updateQuestionnaireFunction(data) {
   try {
     yield put({
@@ -272,6 +301,14 @@ export function* acctionGetQuestionnaire(): any {
     getQuestionnaireFunction
   );
 }
+
+export function* acctionListIntegrationProperties(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_FIRST,
+    listIntegrationFunction
+  );
+}
+
 export function* acctionDeleteListIntegration(): any {
   yield takeEvery(
     AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_FIRST,
@@ -322,6 +359,7 @@ function* addPropertiesSaga(): any {
     fork(acctionGetQuestionnaire),
     fork(acctionGoToBillingPortalPost),
     fork(acctionUpdateQuestionnaire),
+    fork(acctionListIntegrationProperties),
     fork(acctionDeleteListIntegration),
     fork(acctionSupportingDocumentPost),
     fork(acctionUrlDocumentPost),
