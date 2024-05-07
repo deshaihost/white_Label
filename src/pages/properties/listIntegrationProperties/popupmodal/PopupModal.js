@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
+import { Button } from "react-bootstrap";
 
 const PopupModal = ({
   show,
@@ -12,12 +13,11 @@ const PopupModal = ({
   selectedDate,
   setSelectedDate,
   responseObject,
-  setShowCalender
+  setShowCalender,
 }) => {
-
   const navigate = useNavigate();
 
-  const [submit, setSubmit] = useState(false)
+  const [submit, setSubmit] = useState(false);
 
   const [date, setDate] = useState(new Date());
 
@@ -32,8 +32,8 @@ const PopupModal = ({
   const [checkedSchedule, setCheckedSchedule] = useState({
     Future: false,
     Past: false,
-    Current: false
-  })
+    Current: false,
+  });
 
   //  format date to dd/mm/yyyy format
   function formatDate(startDate) {
@@ -61,28 +61,28 @@ const PopupModal = ({
       setCheckedSchedule((prevData) => ({
         ...prevData,
         Future: e.target.checked,
-      }))
+      }));
     }
     if (type === "Past") {
       setCheckedSchedule((prevData) => ({
         ...prevData,
         Past: e.target.checked,
-      }))
+      }));
     }
     if (type === "Current") {
       setCheckedSchedule((prevData) => ({
         ...prevData,
         Current: e.target.checked,
-      }))
+      }));
     }
 
-    console.log("Checked: ", e.target.checked)
-  }
+    console.log("Checked: ", e.target.checked);
+  };
 
   // to get the schedule to show on the calender
   const addCalenderSchedule = async (dataToSend) => {
     setSubmit(true);
-    console.log("data to send: ", dataToSend)
+    console.log("data to send: ", dataToSend);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -94,7 +94,6 @@ const PopupModal = ({
     console.log("dataToSend ", dataToSend);
 
     // return;
-
 
     try {
       if (token) {
@@ -120,12 +119,9 @@ const PopupModal = ({
             setShow(false);
             setShowCalender(false);
           }, 1500);
-
-
         } else {
           ToastHandle("Something went wrong", "danger");
         }
-
       } else {
         alert("No Token");
       }
@@ -149,7 +145,11 @@ const PopupModal = ({
       return;
     }
 
-    if (!checkedSchedule.Current && !checkedSchedule.Future && !checkedSchedule.Past) {
+    if (
+      !checkedSchedule.Current &&
+      !checkedSchedule.Future &&
+      !checkedSchedule.Past
+    ) {
       ToastHandle("Please select schedule", "danger");
       return;
     }
@@ -187,7 +187,7 @@ const PopupModal = ({
     }
 
     if (checkedSchedule.Future) {
-      console.log("Futuer: ".responseObject)
+      console.log("Futuer: ".responseObject);
       // Check if "CURRENT" key exists in dates
       if (!responseObject.dates.hasOwnProperty("FUTURE")) {
         responseObject.dates["FUTURE"] = { on: [], off: [] }; // Create empty object if not exists
@@ -223,8 +223,8 @@ const PopupModal = ({
 
   console.log("Data: ", data);
   console.log("selectedDate: ", selectedDate);
-  console.log("Response Object: ", responseObject)
-  console.log("Checked Data: ", checkedSchedule)
+  console.log("Response Object: ", responseObject);
+  console.log("Checked Data: ", checkedSchedule);
 
   return (
     <div>
@@ -242,21 +242,65 @@ const PopupModal = ({
             </div>
 
             <div className="6">
-              <p className="text-white text-center">Apply to the following reservation stages:</p>
+              <p className="text-white text-center">
+                Apply to the following reservation stages:
+              </p>
             </div>
 
             <div className="6 d-flex justify-content-between">
               <div class="col text-center">
-                <input type="checkbox" checked={checkedSchedule.Future} onChange={(e) => handleOnChange(e, "Future")} className="btn-check" id="future" autocomplete="off" />
-                <label className="btn btn-primary" for="future">Future</label>
+                <input
+                  type="checkbox"
+                  checked={checkedSchedule.Future}
+                  onChange={(e) => handleOnChange(e, "Future")}
+                  className="btn-check"
+                  id="future"
+                  autocomplete="off"
+                />
+                <label
+                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
+                    checkedSchedule.Future ? "btn-active" : ""
+                  }`}
+                  for="future"
+                >
+                  Future
+                </label>
               </div>
               <div class="col text-center">
-                <input type="checkbox" checked={checkedSchedule.Past} onChange={(e) => handleOnChange(e, "Past")} className="btn-check" id="past" autocomplete="off" />
-                <label className="btn btn-primary" for="past">Inquiry/Past</label>
+                <input
+                  type="checkbox"
+                  checked={checkedSchedule.Past}
+                  onChange={(e) => handleOnChange(e, "Past")}
+                  className="btn-check"
+                  id="past"
+                  autocomplete="off"
+                />
+                <label
+                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
+                    checkedSchedule.Past ? "btn-active" : ""
+                  }`}
+                  for="past"
+                >
+                  Inquiry/Past
+                </label>
               </div>
               <div class="col text-center">
-                <input type="checkbox" checked={checkedSchedule.Current} onChange={(e) => handleOnChange(e, "Current")} className="btn-check" id="current" autocomplete="off" />
-                <label className="btn btn-primary" for="current">Current</label>
+                <input
+                  type="checkbox"
+                  checked={checkedSchedule.Current}
+                  onChange={(e) => handleOnChange(e, "Current")}
+                  className="btn-check"
+                  id="current"
+                  autocomplete="off"
+                />
+                <label
+                  className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${
+                    checkedSchedule.Current ? "btn-active" : ""
+                  }`}
+                  for="current"
+                >
+                  Current
+                </label>
               </div>
             </div>
           </div>
@@ -332,15 +376,24 @@ const PopupModal = ({
             </div>
 
             <div class="row">
-              <div class="col text-center">
-                <input
-                  type="submit"
-                  data-attr-date="once"
-                  className="bg-primary form-control"
-                  value={`${submit ? 'Please wait...' : 'Apply'}`}
-                  id="submit-single-property"
-                  onClick={handleSchedule}
-                />{" "}
+              <div class="col-4 text-center ">
+                <div className="">
+                  <Button className="bg-primary form-control d-block">
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+              <div class="col-4 text-center ">
+                <div className="">
+                  <input
+                    type="submit"
+                    data-attr-date="once"
+                    className="bg-primary form-control"
+                    value={`${submit ? "Please wait..." : "Apply"}`}
+                    id="submit-single-property"
+                    onClick={handleSchedule}
+                  />{" "}
+                </div>
               </div>
             </div>
           </div>

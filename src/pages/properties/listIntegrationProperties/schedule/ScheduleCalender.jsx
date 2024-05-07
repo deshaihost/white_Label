@@ -20,7 +20,7 @@ const ScheduleCalender = ({
   selectedProperty,
   scheduleData,
 }) => {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const [selectedTime, setSelectedTime] = useState({});
 
   if (!scheduleData) {
@@ -97,9 +97,8 @@ const ScheduleCalender = ({
       const hourFormatted = hour % 12 === 0 ? 12 : hour % 12;
       const amPmIndex = Math.floor(hour / 12);
 
-      const startTime = `${hour.toString().padStart(2, "0")}:00 ${
-        amPm[amPmIndex]
-      }`;
+      const startTime = `${hour.toString().padStart(2, "0")}:00 ${amPm[amPmIndex]
+        }`;
       const endTime = `${((hour + 1) % 12 || 12)
         .toString()
         .padStart(2, "0")}:00 ${amPm[amPmIndex]}`;
@@ -281,19 +280,19 @@ const ScheduleCalender = ({
                       schedule === "CURRENT"
                         ? "bg-success"
                         : schedule === "FUTURE"
-                        ? "bg-primary  "
-                        : schedule === "INQUIRY/PAST"
-                        ? "bg-warning"
-                        : ""
+                          ? "bg-primary  "
+                          : schedule === "INQUIRY/PAST"
+                            ? "bg-warning"
+                            : ""
                     }
-                    // style={{ background: "green" }}
+                  // style={{ background: "green" }}
                   >
                     <div className="calendar-schedule-data data-head ">
                       <h5 className="mb-0">{schedule}</h5>
                     </div>
                   </td>
                   {daysOfWeek?.map((days) => {
-                    
+
                     return (
                       <td>
                         <div className="calendar-schedule-data">
@@ -317,9 +316,9 @@ const ScheduleCalender = ({
                                   return (
                                     <>
                                       <div className="col-6 ">
-                                      {formattedTime}
+                                        {formattedTime}
 
-                                        {index % 2 !== 0 && ( 
+                                        {index % 2 !== 0 && (
                                           <span className="calendar-schedule-button mainCursor ms-1">
                                             <FaRegEdit />
                                             <FaRegTrashCan />
@@ -343,7 +342,22 @@ const ScheduleCalender = ({
         </table>
       </div>
 
-      <div className="row"></div>
+      <div class="row w-full mb-5 mt-3 d-flex justify-content-center">
+        <div className="d-flex gap-3 w-50">
+          <button
+            className="btn btn-primary form-control"
+          // onClick={handleCellClick}
+          >
+            Add
+          </button>
+          <button
+            // onClick={handleCopyToAll}
+            className="btn btn-primary form-control"
+          >
+            Copy to All Properties
+          </button>
+        </div>
+      </div>
 
       {show && (
         <SchedulePopupModal

@@ -5,7 +5,13 @@ import axios from "axios";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 
-const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleData, date }) => {
+const Calendar = ({
+  allProperties,
+  setShowCalender,
+  selectedProperty,
+  scheduleData,
+  date,
+}) => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
   const currentDate = new Date();
@@ -22,18 +28,16 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
   const scheduledDate = structuredClone(specificDates);
 
   const responseObject = {
-    properties: [
-      selectedProperty
-    ],
-    "dates": scheduledDate
-  }
+    properties: [selectedProperty],
+    dates: scheduledDate,
+  };
 
   const copyToAllResponseObject = {
     properties: allProperties,
-    "dates": scheduledDate
-  }
+    dates: scheduledDate,
+  };
 
-  console.log("copyToAllResponseObject: ", copyToAllResponseObject)
+  console.log("copyToAllResponseObject: ", copyToAllResponseObject);
 
   // Generate sorted schedule data for on and off
   const combineSchedules = () => {
@@ -43,123 +47,116 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
       let combinePastStage = [];
 
       if (specificDates["CURRENT"]) {
-
         specificDates["CURRENT"]?.on?.forEach((item, index) => {
           if (index % 2 === 0) {
             let obj = {
               status: "on",
-              "start": item,
-              "end": specificDates["CURRENT"].on[index + 1],
-              "startIndex": index,
-              "endIndex": index + 1
-            }
+              start: item,
+              end: specificDates["CURRENT"].on[index + 1],
+              startIndex: index,
+              endIndex: index + 1,
+            };
             combineCurrentStage.push(obj);
           }
-        })
+        });
 
         specificDates["CURRENT"]?.off?.forEach((item, index) => {
           if (index % 2 === 0) {
             let obj = {
               status: "off",
-              "start": item,
-              "end": specificDates["CURRENT"].off[index + 1],
-              "startIndex": index,
-              "endIndex": index + 1
-            }
+              start: item,
+              end: specificDates["CURRENT"].off[index + 1],
+              startIndex: index,
+              endIndex: index + 1,
+            };
             combineCurrentStage.push(obj);
           }
-        })
-
+        });
 
         combineCurrentStage?.sort((a, b) => {
           const dateA = new Date(a.start);
           const dateB = new Date(b.start);
           return dateA - dateB;
-        })
+        });
       }
       if (specificDates["FUTURE"]) {
-
         specificDates["FUTURE"]?.on?.forEach((item, index) => {
           if (index % 2 === 0) {
             let obj = {
               status: "on",
-              "start": item,
-              "end": specificDates["FUTURE"].on[index + 1],
-              "startIndex": index,
-              "endIndex": index + 1
-            }
+              start: item,
+              end: specificDates["FUTURE"].on[index + 1],
+              startIndex: index,
+              endIndex: index + 1,
+            };
             combineFutureStage.push(obj);
           }
-        })
+        });
 
         specificDates["FUTURE"]?.off?.forEach((item, index) => {
           if (index % 2 === 0) {
             let obj = {
               status: "off",
-              "start": item,
-              "end": specificDates["FUTURE"].off[index + 1],
-              "startIndex": index,
-              "endIndex": index + 1
-            }
+              start: item,
+              end: specificDates["FUTURE"].off[index + 1],
+              startIndex: index,
+              endIndex: index + 1,
+            };
             combineFutureStage.push(obj);
           }
-        })
-
+        });
 
         combineFutureStage?.sort((a, b) => {
           const dateA = new Date(a.start);
           const dateB = new Date(b.start);
           return dateA - dateB;
-        })
+        });
       }
 
       if (specificDates["INQUIRY/PAST"]) {
-
         specificDates["INQUIRY/PAST"]?.on?.forEach((item, index) => {
           if (index % 2 === 0) {
             let obj = {
               status: "on",
-              "start": item,
-              "end": specificDates["INQUIRY/PAST"].on[index + 1],
-              "startIndex": index,
-              "endIndex": index + 1
-            }
+              start: item,
+              end: specificDates["INQUIRY/PAST"].on[index + 1],
+              startIndex: index,
+              endIndex: index + 1,
+            };
             combinePastStage.push(obj);
           }
-        })
+        });
 
         specificDates["INQUIRY/PAST"]?.off?.forEach((item, index) => {
           if (index % 2 === 0) {
             let obj = {
               status: "off",
-              "start": item,
-              "end": specificDates["INQUIRY/PAST"].off[index + 1],
-              "startIndex": index,
-              "endIndex": index + 1
-            }
+              start: item,
+              end: specificDates["INQUIRY/PAST"].off[index + 1],
+              startIndex: index,
+              endIndex: index + 1,
+            };
             combinePastStage.push(obj);
           }
-        })
-
+        });
 
         combinePastStage?.sort((a, b) => {
           const dateA = new Date(a.start);
           const dateB = new Date(b.start);
           return dateA - dateB;
-        })
+        });
       }
 
-      setCurrentStageData((prev) => combineCurrentStage)
-      setFutureStageData((prev) => combineFutureStage)
-      setPastStageData((prev) => combinePastStage)
+      setCurrentStageData((prev) => combineCurrentStage);
+      setFutureStageData((prev) => combineFutureStage);
+      setPastStageData((prev) => combinePastStage);
     }
-
-  }
+  };
 
   // to add the schedule to all properties
   const copyToAllSchedule = async (dataToSend) => {
     // setSubmit(true);
-    console.log("data to send: ", dataToSend)
+    console.log("data to send: ", dataToSend);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -171,7 +168,6 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
     console.log("dataToSend ", dataToSend);
 
     // return;
-
 
     try {
       if (token) {
@@ -197,12 +193,9 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
             setShow(false);
             setShowCalender(false);
           }, 1500);
-
-
         } else {
           ToastHandle("Something went wrong", "danger");
         }
-
       } else {
         alert("No Token");
       }
@@ -216,15 +209,15 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
   // copy to all property onClickHandle
 
   const handleCopyToAll = () => {
-    const isConfirmed = window.confirm("Do you want to delete this Status Event?");
+    const isConfirmed = window.confirm(
+      "Do you want to delete this Status Event?"
+    );
     if (!isConfirmed) {
       return;
     }
 
-    copyToAllSchedule(copyToAllResponseObject)
-
-
-  }
+    copyToAllSchedule(copyToAllResponseObject);
+  };
 
   //  Remove Schedule API
   const removeCalenderSchedule = async (dataToSend) => {
@@ -285,9 +278,9 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
     const todayYear = date.getFullYear();
 
     let day = {
-      "day": todayDate,
-      "month": todayMonth,
-      "year": todayYear
+      day: todayDate,
+      month: todayMonth,
+      year: todayYear,
     };
 
     setSelectedDate(day);
@@ -296,8 +289,10 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
 
   // Remove Schedule click
   const handleScheduleDelete = (category, deleteData) => {
-    console.log("deleteData: ", deleteData, " category: ", category)
-    const isConfirmed = window.confirm("Do you want to delete this Status Event?");
+    console.log("deleteData: ", deleteData, " category: ", category);
+    const isConfirmed = window.confirm(
+      "Do you want to delete this Status Event?"
+    );
     if (!isConfirmed) {
       return;
     }
@@ -309,7 +304,6 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
       if (deleteData.status === "off") {
         responseObject.dates[category].off.splice(deleteData.startIndex, 2);
       }
-
     }
     if (category === "FUTURE") {
       if (deleteData.status === "on") {
@@ -330,18 +324,34 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
       }
     }
 
-    console.log("responseObject after delete: ", responseObject)
+    console.log("responseObject after delete: ", responseObject);
 
     removeCalenderSchedule(responseObject);
-  }
+  };
 
   const formatDate = (dateTimeString) => {
     const date = new Date(dateTimeString);
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
     const month = monthNames[date.getMonth()];
     const day = date.getDate();
     const year = date.getFullYear();
-    const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    const time = date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     return `${month} ${day}, ${year} ${time}`;
   };
 
@@ -349,106 +359,157 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
     if (scheduleData) {
       combineSchedules();
     }
-  }, [scheduleData])
+  }, [scheduleData]);
 
   return (
     <>
-      {!scheduleData ? <div>Loading...</div> : (
+      {!scheduleData ? (
+        <div>Loading...</div>
+      ) : (
         <>
           <div className="calendar">
-            <div className="w-100">
+            <div className="container">
               <div className="row">
-                <div className="text-left text-light">
-                  Choose specific dates/times to selectively enable/disable HostBuddy. These selections will override the weekly schedule during the chosen times.
+                <div className="col-12 text-left text-light ">
+                  <p className="">
+                    Choose specific dates/times to selectively enable/disable
+                    HostBuddy. These selections will override the weekly
+                    schedule during the chosen times.
+                  </p>
                 </div>
               </div>
 
-              <div class="row mt-3 gap-2">
+              <div class="row mt-3">
                 {/* Render schedules for CURRENT, FUTURE, and INQUIRY/PAST */}
-                {Object.keys(specificDates).map(category => (
-                  <div key={category} class="col border">
-                    <div class="w-100">
-                      <div class="row border-bottom">
-                        <p class="text-center text-light">{category}</p>
+                {Object.keys(specificDates).map((category) => (
+                  <div key={category} class="col">
+                    <div className="main-calendar-card">
+                      <div className="">
+                        <p className="text-center text-white my-2">
+                          {category}
+                        </p>
                       </div>
-                      <div class="row text-light border" style={{ minHeight: "300px", maxHeight: "300px", overflowY: "scroll" }}>
-                        <div class="h-full overflow-y-scroll">
+                      <div className="main-calendar-card-data">
+                        <div className="">
                           {/* Render ON schedules */}
-                          {category === "CURRENT" && currentStageData?.map((dateTime, index) => (
-                            <div key={index} className="d-flex w-100 border border-secondary align-items-center" style={{ fontSize: '11px', height: "33.33%" }}>
-                              <div className={`${dateTime?.status === "on" ? 'bg-success' : 'bg-danger'}`} style={{ width: '15%' }}>{dateTime?.status}</div>
-                              <div className="d-flex " style={{ width: '70%' }}>
-                                <div className="w-50">
-                                  {formatDate(dateTime?.start)}
+                          {category === "CURRENT" &&
+                            currentStageData?.map((dateTime, index) => (
+                              <div
+                                key={index}
+                                className="main-calendar-card-data-child"
+                              >
+                                <div
+                                  className={`main-calendar-data-status ${
+                                    dateTime?.status === "on"
+                                      ? "bg-success"
+                                      : "bg-danger"
+                                  }`}
+                                >
+                                  {dateTime?.status}
                                 </div>
-                                <div className="w-50">
-                                  {"- "} {formatDate(dateTime?.end)}
+                                <div className="d-flex gap-3 text-center py-4 ps-1">
+                                  <div className="w-50">
+                                    {formatDate(dateTime?.start)}
+                                  </div>
+                                  <div className="w-50">
+                                    {"- "} {formatDate(dateTime?.end)}
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="h-100 d-flex flex-column justify-content-around" style={{ width: '15%' }}>
-                                <div>
-                                  <FiEdit />
-                                </div>
-                                <div onClick={() => handleScheduleDelete(category, dateTime)}>
-                                  <FaRegTrashCan />
-                                </div>
-                              </div>
-                            </div>
-
-                          ))}
-
-                          {category === "FUTURE" && futureStageData?.map((dateTime, index) => (
-                            <div key={index} className="d-flex w-100 border border-secondary align-items-center" style={{ fontSize: '11px', height: "33.33%" }}>
-                              <div className={`${dateTime?.status === "on" ? 'bg-success' : 'bg-danger'}`} style={{ width: '15%' }}>{dateTime?.status}</div>
-                              <div className="d-flex " style={{ width: '70%' }}>
-                                <div className="w-50">
-                                  {formatDate(dateTime?.start)}
-                                </div>
-                                {/* {specificDates[category].on[index + 1] && // Check if there's a corresponding end time */}
-                                <div className="w-50">
-                                  {"- "} {formatDate(dateTime?.end)}
-
-                                </div>
-                                {/* } */}
-                              </div>
-                              <div className="h-100 d-flex flex-column justify-content-around" style={{ width: '15%' }}>
-                                <div>
-                                  <FiEdit />
-                                </div>
-                                <div onClick={() => handleScheduleDelete(category, dateTime)}>
-                                  <FaRegTrashCan />
+                                <div className="h-100 d-flex flex-column justify-content-between">
+                                  <div className="text-end">
+                                    <FiEdit />
+                                  </div>
+                                  <div
+                                    className="text-end"
+                                    onClick={() =>
+                                      handleScheduleDelete(category, dateTime)
+                                    }
+                                  >
+                                    <FaRegTrashCan />
+                                  </div>
                                 </div>
                               </div>
-                            </div>
+                            ))}
 
-                          ))}
-
-                          {category === "INQUIRY/PAST" && pastStageData?.map((dateTime, index) => (
-                            <div key={index} className="d-flex w-100 border border-secondary align-items-center" style={{ fontSize: '11px', height: "33.33%" }}>
-                              <div className={`${dateTime?.status === "on" ? 'bg-success' : 'bg-danger'}`} style={{ width: '15%' }}>{dateTime?.status}</div>
-                              <div className="d-flex " style={{ width: '70%' }}>
-                                <div className="w-50">
-                                  {formatDate(dateTime?.start)}
+                          {category === "FUTURE" &&
+                            futureStageData?.map((dateTime, index) => (
+                              <div
+                                key={index}
+                                className="main-calendar-card-data-child"
+                              >
+                                <div
+                                  className={`main-calendar-data-status ${
+                                    dateTime?.status === "on"
+                                      ? "bg-success"
+                                      : "bg-danger"
+                                  }`}
+                                >
+                                  {dateTime?.status}
                                 </div>
-                                <div className="w-50">
-                                  {"- "} {formatDate(dateTime?.end)}
-
+                                <div className="d-flex gap-3 text-center py-4 ps-1">
+                                  <div className="w-50">
+                                    {formatDate(dateTime?.start)}
+                                  </div>
+                                  {/* {specificDates[category].on[index + 1] && // Check if there's a corresponding end time */}
+                                  <div className="w-50">
+                                    {"- "} {formatDate(dateTime?.end)}
+                                  </div>
+                                  {/* } */}
                                 </div>
-
+                                <div className="h-100 d-flex flex-column justify-content-between">
+                                  <div>
+                                    <FiEdit />
+                                  </div>
+                                  <div
+                                    onClick={() =>
+                                      handleScheduleDelete(category, dateTime)
+                                    }
+                                  >
+                                    <FaRegTrashCan />
+                                  </div>
+                                </div>
                               </div>
-                              <div className="h-100 d-flex flex-column justify-content-around" style={{ width: '15%' }}>
-                                <div>
-                                  <FiEdit />
+                            ))}
+
+                          {category === "INQUIRY/PAST" &&
+                            pastStageData?.map((dateTime, index) => (
+                              <div
+                                key={index}
+                                className="main-calendar-card-data-child"
+                              >
+                                <div
+                                  className={`main-calendar-data-status ${
+                                    dateTime?.status === "on"
+                                      ? "bg-success"
+                                      : "bg-danger"
+                                  }`}
+                                >
+                                  {dateTime?.status}
                                 </div>
-                                <div onClick={() => handleScheduleDelete(category, dateTime)}>
-                                  <FaRegTrashCan />
+                                <div className="d-flex gap-3 text-center py-4 ps-1 ">
+                                  <div className="w-50">
+                                    {formatDate(dateTime?.start)}
+                                  </div>
+                                  <div className="w-50">
+                                    {"- "} {formatDate(dateTime?.end)}
+                                  </div>
+                                </div>
+                                <div className="h-100 d-flex flex-column justify-content-between">
+                                  <div>
+                                    <FiEdit />
+                                  </div>
+                                  <div
+                                    onClick={() =>
+                                      handleScheduleDelete(category, dateTime)
+                                    }
+                                  >
+                                    <FaRegTrashCan />
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
+                            ))}
                         </div>
                       </div>
-
                     </div>
                   </div>
                 ))}
@@ -456,18 +517,23 @@ const Calendar = ({ allProperties, setShowCalender, selectedProperty, scheduleDa
             </div>
             <div class="row w-full mt-5 d-flex justify-content-center">
               <div className="d-flex gap-3 w-50">
-                <button className="btn btn-primary form-control" onClick={handleCellClick}>
+                <button
+                  className="btn btn-primary form-control"
+                  onClick={handleCellClick}
+                >
                   Add
                 </button>
-                <button onClick={handleCopyToAll} className="btn btn-primary form-control">
+                <button
+                  onClick={handleCopyToAll}
+                  className="btn btn-primary form-control"
+                >
                   Copy to All Properties
                 </button>
               </div>
             </div>
           </div>
         </>
-      )
-      }
+      )}
 
       {show && (
         <PopupModal
