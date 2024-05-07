@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { set, useForm } from "react-hook-form";
+import { json, useParams } from "react-router-dom";
 import {
   supportingDocumentPostActions,
   supportingUrlPostActions,
@@ -65,6 +65,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   // list_integration_properties API Logic ------------------------------------------------------------------------------------------
 
   const [hasCalledAPI, setHasCalledAPI] = useState(false); // keep track of whether we've already called the list_integration_properties API. We only ever want to do it once, when the user clicks "PMS Integration"
+  const [selectedIntegrationPropertyId, setSelectedIntegrationPropertyId] = useState(null); // User-selected integration property
+  const [linkIsLoading, setLinkIsLoading] = useState(false);
+  const [unlinkIsLoading, setUnlinkIsLoading] = useState(false);
+
   const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties; // array of integration_property objects; each with "name" and "id" properties
   const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
 
@@ -230,6 +234,98 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const save_and_next = (e) => {
     e.preventDefault();
     go_to_next_page();
+  };
+
+  const link_integration = async (e, propertyName, integrationPropertyId) => {
+    e.preventDefault();
+    setLinkIsLoading(true);
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const getSessionStorageData = JSON.parse(
+      sessionStorage.getItem("hostBuddy_auth")
+    );
+    const token = getSessionStorageData?.token;
+
+    // Get the integrationPropertyName from the integrationPropertyId
+    const selectedIntegrationProperty = integrationPropertyList.find(property => property.id === integrationPropertyId);
+    const integrationPropertyName = selectedIntegrationProperty?.name;
+
+    try {
+      if (token) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-API-Key": API_KEY,
+          },
+        };
+
+        const jsonPayload = { platform_property_id:integrationPropertyId, platform_property_name:integrationPropertyName };
+        const response = await axios.post(
+          `${baseUrl}/properties/${propertyName}/link_to_integration`,
+          jsonPayload,
+          config
+        );
+
+        if (response.status === 200) {
+          ToastHandle(response.data.message, "success");
+          setPrevLinkedIntegration(integrationPropertyName);
+          setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
+
+        } else {
+          ToastHandle(response.data.error, "danger");
+        }
+      } else {
+        alert("No Token");
+      }
+    } catch (error) {
+      console.error("Error linking integration:", error);
+      ToastHandle("Error linking integration", "danger");
+    }
+    finally {
+      setLinkIsLoading(false);
+    }
+  };
+
+  const unlink_integration = async (e, propertyName) => {
+    e.preventDefault();
+    setUnlinkIsLoading(true);
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const getSessionStorageData = JSON.parse(
+      sessionStorage.getItem("hostBuddy_auth")
+    );
+    const token = getSessionStorageData?.token;
+
+    try {
+      if (token) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-API-Key": API_KEY,
+          },
+        };
+        const response = await axios.delete(
+          `${baseUrl}/properties/${propertyName}/unlink_from_integration`,
+          config
+        );
+
+        if (response.status === 200) {
+          ToastHandle(response.data.message, "success");
+          setPrevLinkedIntegration(null);
+          setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
+
+        } else {
+          ToastHandle(response.data.error, "danger");
+        }
+      } else {
+        alert("No Token");
+      }
+    } catch (error) {
+      console.error("Error unlinking integration:", error);
+      ToastHandle("Error unlinking integration", "danger");
+    } finally {
+      setUnlinkIsLoading(false);
+    }
   };
 
   // const previousUploadedDoc = async (propertyName) => {
@@ -494,7 +590,14 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                             <p style={{ color: 'white', marginTop: '10px' }}>Linked to property: {prevLinkedIntegration}</p>
                           </div>
                           <div className="col-6 mt-4 ">
-                            <button className="UnlinkPMSButton">Unlink</button>
+                            {unlinkIsLoading ? (
+                              <>
+                                <p style={{ color: 'white', marginTop: '20px' }}>Unlinking...</p>
+                                <BoxLoader />
+                              </>
+                            ) : (
+                              <button className="UnlinkPMSButton" onClick={(e) => unlink_integration(e, supportingNameKey?.nameKey)}>Unlink</button>
+                            )}
                           </div>
                         </div>
                       </>
@@ -502,15 +605,18 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                       <>
                         {!integrationPropertiesLoading ? (
                           <>
+                            <div className="col-12 mt-4 ">
+                              {/* Vertical spacer */}
+                            </div>
                             <div class="property_select">
                               {integrationPropertyList?.length > 0 ? (
                                 <select
                                   id="integration_property_select"
                                   style={{ marginTop: '20px' }}
                                   className=""
-                                  onChange={(e) => { }}
+                                  onChange={(e) => setSelectedIntegrationPropertyId(e.target.value)}
                                 >
-                                  {integrationPropertyList?.map((property) => {
+                                  {integrationPropertyList?.map((property) => { // Each option shows the integration property name, but uses the integration property ID as the value
                                     return (
                                       <option key={property.id} value={property.id}>
                                         {property.name}
@@ -523,9 +629,22 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                                 <option style={{ color: 'white', marginTop: '20px' }}>User account does not have an integration.</option>
                               )}
                             </div>
+                            <div className="col-4 mt-4 ">
+                              {linkIsLoading ? (
+                                <>
+                                  <p style={{ color: 'white', marginTop: '20px' }}>Linking...</p>
+                                  <BoxLoader />
+                                </>
+                              ) : (
+                                <button className="LinkPMSButton" onClick={(e) => link_integration(e, supportingNameKey?.nameKey, selectedIntegrationPropertyId)}>Link To This Property</button>
+                              )}
+                            </div>
                           </>
                         ) : (
                           <>
+                            <div className="col-12 mt-4 ">
+                              {/* Vertical spacer */}
+                            </div>
                             <p style={{ color: 'white', marginTop: '20px' }}>Loading integration properties...</p>
                             <BoxLoader />
                           </>
@@ -537,13 +656,14 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                       
                 <div className="col-lg-12 text-center">
                   <div className="mt-5"></div> {/* vertical spacer */}
-                  <button
-                    className="btn btn-primary mt-5"
-                    onClick={(e) => save_and_next(e)}
-                  >
-                    {" "}
-                    {!supportingLoading ? "Save & Next" : <Loader />}
-                  </button>
+                  {!linkIsLoading && !unlinkIsLoading && (
+                    <button
+                      className="btn btn-primary mt-5"
+                      onClick={(e) => save_and_next(e)}
+                    >
+                      {!supportingLoading ? "Save & Next" : <Loader />}
+                    </button>
+                  )}
                 </div>
               </form>
             </div>
