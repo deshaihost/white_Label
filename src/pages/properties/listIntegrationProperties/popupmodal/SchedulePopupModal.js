@@ -174,7 +174,7 @@ const SchedulePopupModal = ({
               />
               <label
                 className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
-                  checkedSchedule.Future ? "btn-active" : ""
+                  checkedSchedule.Future ? "btn-unselected" : ""
                 }`}
                 for="future"
               >
@@ -192,7 +192,7 @@ const SchedulePopupModal = ({
               />
               <label
                 className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
-                  checkedSchedule.Past ? "btn-active" : ""
+                  checkedSchedule.Past ? "btn-unselected" : ""
                 }`}
                 for="past"
               >
@@ -210,7 +210,7 @@ const SchedulePopupModal = ({
               />
               <label
                 className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${
-                  checkedSchedule.Current ? "btn-active" : ""
+                  checkedSchedule.Current ? "btn-unselected" : ""
                 }`}
                 for="current"
               >
