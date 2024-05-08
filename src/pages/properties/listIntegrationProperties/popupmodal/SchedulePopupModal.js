@@ -3,6 +3,19 @@ import Modal from "react-bootstrap/Modal";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import Select from "react-select";
+
+const weekDay = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+const weekDayOptions = [
+  { value: 'sunday', label: 'Sunday' },
+  { value: 'monday', label: 'Monday' },
+  { value: 'tuesday', label: 'Tuesday' },
+  { value: 'wednesday', label: 'Wednesday' },
+  { value: 'thursday', label: 'Thursday' },
+  { value: 'friday', label: 'Friday' },
+  { value: 'saturday', label: 'Saturday' },
+];
+//  ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
 const SchedulePopupModal = ({
   show,
@@ -11,12 +24,14 @@ const SchedulePopupModal = ({
   setselectedTime,
   responseObject,
   setShowCalender,
+  getScheduleAPI,
+  selectedProperty
 }) => {
   const [submit, setSubmit] = useState(false);
 
   const [data, setData] = useState({
-    startTime: "",
-    endTime: "",
+    startTime: "05:30",
+    endTime: "05:30",
   });
 
   const [checkedSchedule, setCheckedSchedule] = useState({
@@ -25,6 +40,8 @@ const SchedulePopupModal = ({
     Current: false,
   });
 
+  const [selectedDays, setSelectedDays] = useState([]);
+  // handle time change 
   const handleInputChange = (e) => {
     console.log(e.target.value);
     setData({
@@ -33,6 +50,12 @@ const SchedulePopupModal = ({
     });
   };
 
+  // handle select onChange
+  const handleDaySelect = (selectedOptions) => {
+    setSelectedDays(selectedOptions);
+  };
+
+  // handle Stage button clicks
   const handleOnChange = (e, type) => {
     if (type === "Future") {
       setCheckedSchedule((prevData) => ({
@@ -92,17 +115,33 @@ const SchedulePopupModal = ({
 
           setTimeout(() => {
             setShow(false);
-            setShowCalender(false);
+            // setShowCalender(false);
           }, 1500);
+          getScheduleAPI(selectedProperty);
         } else {
           ToastHandle("Something went wrong", "danger");
+          setTimeout(() => {
+            setShow(false);
+            setShowCalender(false);
+          }, 1500);
+          getScheduleAPI(selectedProperty);
         }
       } else {
-        alert("No Token");
+        ToastHandle("No Token", "danger");
+        setTimeout(() => {
+          setShow(false);
+          setShowCalender(false);
+        }, 1500);
+        getScheduleAPI(selectedProperty);
       }
     } catch (error) {
       console.log(error);
       ToastHandle(error?.data?.error, "danger");
+      setTimeout(() => {
+        setShow(false);
+        setShowCalender(false);
+      }, 1500);
+      getScheduleAPI(selectedProperty);
     }
     setSubmit(false);
   };
@@ -113,31 +152,63 @@ const SchedulePopupModal = ({
     const startSchedule = `${data.startTime}`;
     const endSchedule = `${data.endTime}`;
 
+    console.log("selectedDays: ", selectedDays);
     console.log(startSchedule, " ", endSchedule);
 
-    // If the day exists in weekly object, push start and end time
-    if (responseObject.schedule[data.day]) {
-      responseObject.schedule[data.day].push(startSchedule);
-      responseObject.schedule[data.day].push(endSchedule);
-    } else {
-      // If the day doesn't exist, create a new array and push start and end time
-      responseObject.schedule[data.day] = [startSchedule, endSchedule];
+    if (!checkedSchedule.Current && !checkedSchedule.Future && !checkedSchedule.Past) {
+      ToastHandle("Please select schedule", "danger");
+      return;
+    }
+
+    if (selectedDays.length <= 0) {
+      ToastHandle("Please select week day[s]", "danger");
+      return;
+    }
+
+
+    if (checkedSchedule.Current) {
+      if (!responseObject.schedules.hasOwnProperty("CURRENT")) {
+        responseObject.schedules["CURRENT"] = {};
+      }
+      selectedDays.forEach((day) => {
+        if (!responseObject.schedules["CURRENT"].hasOwnProperty(day.value)) {
+          responseObject.schedules["CURRENT"][day.value] = [];
+        }
+        responseObject.schedules["CURRENT"][day.value].push(startSchedule);
+        responseObject.schedules["CURRENT"][day.value].push(endSchedule);
+      });
+    }
+
+    if (checkedSchedule.Past) {
+      if (!responseObject.schedules.hasOwnProperty("INQUIRY/PAST")) {
+        responseObject.schedules["INQUIRY/PAST"] = {};
+      }
+      selectedDays.forEach((day) => {
+        if (!responseObject.schedules["INQUIRY/PAST"].hasOwnProperty(day.value)) {
+          responseObject.schedules["INQUIRY/PAST"][day.value] = [];
+        }
+        responseObject.schedules["INQUIRY/PAST"][day.value].push(startSchedule);
+        responseObject.schedules["INQUIRY/PAST"][day.value].push(endSchedule);
+      });
+    }
+
+    if (checkedSchedule.Future) {
+      if (!responseObject.schedules.hasOwnProperty("FUTURE")) {
+        responseObject.schedules["FUTURE"] = {};
+      }
+      selectedDays.forEach((day) => {
+        if (!responseObject.schedules["FUTURE"].hasOwnProperty(day.value)) {
+          responseObject.schedules["FUTURE"][day.value] = [];
+        }
+        responseObject.schedules["FUTURE"][day.value].push(startSchedule);
+        responseObject.schedules["FUTURE"][day.value].push(endSchedule);
+      });
     }
 
     console.log("Submit", responseObject);
 
     addCalenderSchedule(responseObject);
   };
-
-  useEffect(() => {
-    // Set the initial start and end time in the state
-    setData((prevData) => ({
-      ...prevData,
-      startTime: selectedTime?.startTime,
-      endTime: selectedTime?.endTime,
-      day: selectedTime?.day,
-    }));
-  }, [selectedTime]); // Update when selectedTime changes
 
   console.log("Data: ", data);
   console.log("selectedTime: ", selectedTime);
@@ -173,9 +244,8 @@ const SchedulePopupModal = ({
                 autocomplete="off"
               />
               <label
-                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
-                  checkedSchedule.Future ? "btn-unselected" : ""
-                }`}
+                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "btn-unselected" : ""
+                  }`}
                 for="future"
               >
                 Future
@@ -191,9 +261,8 @@ const SchedulePopupModal = ({
                 autocomplete="off"
               />
               <label
-                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
-                  checkedSchedule.Past ? "btn-unselected" : ""
-                }`}
+                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "btn-unselected" : ""
+                  }`}
                 for="past"
               >
                 Inquiry/Past
@@ -209,9 +278,8 @@ const SchedulePopupModal = ({
                 autocomplete="off"
               />
               <label
-                className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${
-                  checkedSchedule.Current ? "btn-unselected" : ""
-                }`}
+                className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "btn-unselected" : ""
+                  }`}
                 for="current"
               >
                 Current
@@ -219,6 +287,19 @@ const SchedulePopupModal = ({
             </div>
           </div>
           <div className="d-flex flex-column pt-3 gap-4">
+            <div class="row py-2">
+              <div class="col">
+                <label>Choose Day[s] of Week:</label>
+                <Select
+                  isMulti
+                  options={weekDayOptions}
+                  value={selectedDays}
+                  onChange={handleDaySelect}
+                  placeholder="--Select--"
+                />
+              </div>
+            </div>
+
             <div class="row py-2">
               <div class="col">
                 <label>Start Time:</label>

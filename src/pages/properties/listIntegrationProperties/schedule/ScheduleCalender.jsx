@@ -3,9 +3,11 @@ import "./ScheduleCalendar.css";
 import SchedulePopupModal from "../popupmodal/SchedulePopupModal";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
+import ToastHandle from "../../../../helper/ToastMessage";
+import Loader from "../../../../helper/Loader";
+import axios from "axios";
 
-const weekDayName = [
-  "sunday",
+const daysOfWeek = [
   "monday",
   "tuesday",
   "wednesday",
@@ -16,348 +18,310 @@ const weekDayName = [
 ];
 
 const ScheduleCalender = ({
+  getScheduleAPI,
+  allProperties,
   setShowCalender,
   selectedProperty,
   scheduleData,
 }) => {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [selectedTime, setSelectedTime] = useState({});
 
-  if (!scheduleData) {
-    return <div>Loading...</div>; // Or display some loading indicator
-  }
+  // if (!scheduleData) {
+  //   return <div>Loading...</div>; // Or display some loading indicator
+  // }
 
-  // const specificDates = scheduleData?.weekly;
   const specificDates = scheduleData?.weekly;
 
-  console.log("specificDates: new", specificDates)
-
   const scheduledDate = structuredClone(specificDates);
+
   const scheduleDefulatArray = ["CURRENT", "FUTURE", "INQUIRY/PAST"];
-  // const currentData = scheduleData.weekly.CURRENT;
-  // const futureData = scheduleData.weekly.FUTURE;
-  // const inquiryPastData = scheduleData.weekly["INQUIRY/PAST"];
-  console.log(specificDates, "specificDates");
+
+  // console.log(specificDates, "specificDates");
 
   const responseObject = {
     properties: [selectedProperty],
-    schedule: scheduledDate,
+    schedules: scheduledDate,
   };
 
-  // console.log("scheduleData: ", scheduleData)
-  // console.log("specificDates: ", specificDates);
-  // console.log("responseObject: ", responseObject);
-  console.log("Schedulefor weekday: ", responseObject.schedule);
-
-  // Function to convert 24-hour format to 12-hour format
-  const convertTo12HourFormat = (time) => {
-    const [hours, minutes, period] = time.split(/:| /);
-    let hour = parseInt(hours, 10);
-    const formattedHour = hour % 12 || 12;
-    return `${formattedHour}:${minutes.padStart(2, "0")} ${period}`;
+  const copyToAllResponseObject = {
+    properties: allProperties,
+    schedules: scheduledDate,
   };
 
-  const handleClick = (startTime, dayOfWeek, dayIndex) => {
-    const selectedDay = weekDayName[dayIndex];
-    const startHour = parseInt(startTime.split(":")[0]);
-    const startMinute = parseInt(startTime.split(":")[1]);
 
-    let endHour, endMinute;
-    if (startMinute === 0) {
-      endHour = startHour;
-      endMinute = 30;
-    } else {
-      endHour = (startHour + 1) % 24;
-      endMinute = 0;
-    }
+  // const daysOfWeek = [
+  //   "monday",
+  //   "tuesday",
+  //   "wednesday",
+  //   "thursday",
+  //   "friday",
+  //   "saturday",
+  //   "sunday",
+  // ];
 
-    const endTime = `${String(endHour).padStart(2, "0")}:${String(
-      endMinute
-    ).padStart(2, "0")}`;
-    const interval = `${startTime} - ${endTime}`;
-
-    const selectedCellTime = {
-      startTime: startTime,
-      endTime: endTime,
-      day: selectedDay,
-    };
-
-    // alert(`You clicked the button for ${interval} on ${dayOfWeek} - ${selectedDay}`);
-
-    setSelectedTime(selectedCellTime);
+  const handleAddClick = () => {
     setShow(true);
+  }
+
+  // API to remove or update calendar schedule the schedule on the calender
+  const handleCalenderScheduleAPI = async (dataToSend) => {
+
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    const getSessionStorageData = JSON.parse(
+      sessionStorage.getItem("hostBuddy_auth")
+    );
+
+    const token = getSessionStorageData?.token;
+
+    try {
+      if (token) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-API-Key": API_KEY,
+          },
+        };
+        const response = await axios.put(
+          `${baseUrl}/set_recurring_schedule`,
+          dataToSend,
+          config
+        );
+
+        console.log("API Response: ", response.data);
+
+        if (response.status === 200) {
+          ToastHandle(response.data.message, "success");
+
+          setTimeout(() => {
+            setShowCalender(false);
+          }, 1500);
+        } else {
+          ToastHandle("Something went wrong", "danger");
+          setTimeout(() => {
+            setShowCalender(false);
+          }, 1500);
+        }
+      } else {
+        ToastHandle("No Token", "danger");
+        setTimeout(() => {
+          setShowCalender(false);
+        }, 1500);
+      }
+    } catch (error) {
+      console.log(error);
+      ToastHandle(error?.data?.error, "danger");
+      setTimeout(() => {
+        setShowCalender(false);
+      }, 1500);
+    }
   };
 
-  // Generate an array of time slots from 12:00 AM to 11:00 PM with 1 hour intervals
-  const generateTimeSlots = () => {
-    const timeSlots = [];
-    const amPm = ["AM", "PM"];
+  const handleRemoveSchedule = (deleteData) => {
 
-    for (let hour = 0; hour <= 23; hour++) {
-      const hourFormatted = hour % 12 === 0 ? 12 : hour % 12;
-      const amPmIndex = Math.floor(hour / 12);
-
-      const startTime = `${hour.toString().padStart(2, "0")}:00 ${amPm[amPmIndex]
-        }`;
-      const endTime = `${((hour + 1) % 12 || 12)
-        .toString()
-        .padStart(2, "0")}:00 ${amPm[amPmIndex]}`;
-
-      timeSlots.push({ startTime, endTime });
+    const isConfirmed = window.confirm(
+      "Do you want to delete this Status Event?"
+    );
+    if (!isConfirmed) {
+      return;
     }
 
-    return timeSlots;
-  };
-
-  const timeSlots = generateTimeSlots();
-
-  const daysOfWeek = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ];
-
-  const renderTimeSlots = (timeSlots) => {
-    const timePairs = [];
-    for (let i = 0; i < timeSlots.length; i += 2) {
-      timePairs.push(
-        <div key={i / 2}>
-          {timeSlots[i]} - {timeSlots[i + 1]}
-        </div>
-      );
+    if (!deleteData.scheduleStage || !deleteData.day || !deleteData.startTime || !deleteData.endTime || deleteData.startIndex === undefined || deleteData.endIndex === undefined) {
+      console.log("data inside if: ", deleteData)
+      ToastHandle("Something went wrong here", "danger");
+      return;
     }
-    return timePairs;
+
+    responseObject.schedules[deleteData.scheduleStage][deleteData.day].splice(deleteData.startIndex, 2);
+
+    handleCalenderScheduleAPI(responseObject);
+
+  }
+
+  // copy to all property onClickHandle
+
+  const handleCopyToAll = () => {
+    const isConfirmed = window.confirm(
+      "Do you want to Copy this schedule to all properties?"
+    );
+    if (!isConfirmed) {
+      return;
+    }
+
+    handleCalenderScheduleAPI(copyToAllResponseObject);
   };
 
-  const { weekly } = scheduleData;
-
+  console.log("scheduledDate: ", scheduledDate)
+  console.log("responseObject: ", responseObject)
+  console.log("copyToAllResponseObject: ", copyToAllResponseObject);
   return (
     <>
-      {/* <div className="calendar">
-        <table>
-          <thead>
-            <tr className="text-light text-center">
-              <th
-                style={{ minHeight: "100px", minWidth: "100px" }}
-                className="border"
-              ></th>
-              {daysOfWeek.map((day, index) => (
-                <th key={index} style={{ minHeight: "100px", minWidth: "100px" }}>
-                  {day}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            
-            {timeSlots.map((time, index) => (
-              <tr key={index}>
-               
-                <td
-                  style={{
-                    minHeight: "100px",
-                    minWidth: "100px",
-                    border: "",
-                  }}
-                  className="text-center border-end"
-                >
-                  <div className="row">
-                    <div className="col">
-                      <div
-                        style={{ minHeight: "48px", minWidth: "100px" }}
-                        className="pt-0 ps-0 d-flex flex-column justify-content-between"
-                      >
-                        <div className="text-center text-light">{convertTo12HourFormat(time.startTime)}</div>
-                        <div className="bg-success sdfcd"></div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                
-                {weekDayName.map((dayOfWeek, dayIndex) => (
-                  <td
-                    key={dayIndex}
-                    style={{
-                      minHeight: "100px",
-                      minWidth: "100px",
-                      border: "1px solid #ddd",
-                    }}
-                  >
-                    <div className="row">
-                      <div className="col">
-                        <div
-                          style={{ minHeight: "48px", minWidth: "100px" }}
-                          className=" pt-0 ps-0 d-grid"
-                        >
-                          
-                          <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={() =>
-                              handleClick(`${time.startTime.split(":")[0]}:00`, daysOfWeek[dayIndex], dayIndex)
-                            }
-                          >
-                            
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={() =>
-                              handleClick(
-                                `${time.startTime.split(":")[0]}:30`,
-                                daysOfWeek[dayIndex],
-                                dayIndex
-                              )
-                            }
-                          >
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div> */}
-      <div className="table-responsive p-3">
-        <table className="w-100">
-          <thead>
-            <tr>
-              <th>
-                <div></div>
-              </th>
-              <th>
-                <div className="calendar-week-field">
-                  <h4>Monday</h4>
-                </div>
-              </th>
-              <th>
-                <div className="calendar-week-field">
-                  <h4>Tuesday</h4>
-                </div>
-              </th>
-              <th>
-                <div className="calendar-week-field">
-                  <h4>Wednesday</h4>
-                </div>
-              </th>
-              <th>
-                <div className="calendar-week-field">
-                  <h4>Thursday</h4>{" "}
-                </div>
-              </th>
-              <th>
-                <div className="calendar-week-field">
-                  <h4>Friday</h4>
-                </div>
-              </th>
-              <th>
-                <div className="calendar-week-field">
-                  <h4>Saturday</h4>
-                </div>
-              </th>
-              <th>
-                <div className="calendar-week-field">
-                  <h4>Sunday</h4>
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {scheduleDefulatArray?.map((schedule) => {
-              const weeklySchedule = scheduledDate[schedule];
-
-              return (
+      {!scheduleData ? <div className="d-flex w-full justify-content-center"><Loader /></div> : (
+        <>
+          <div className="table-responsive p-3">
+            <table className="w-100">
+              <thead>
                 <tr>
-                  <td
-                    className={
-                      schedule === "CURRENT"
-                        ? "bg-success"
-                        : schedule === "FUTURE"
-                          ? "bg-primary  "
-                          : schedule === "INQUIRY/PAST"
-                            ? "bg-warning"
-                            : ""
-                    }
-                  // style={{ background: "green" }}
-                  >
-                    <div className="calendar-schedule-data data-head ">
-                      <h5 className="mb-0">{schedule}</h5>
+                  <th>
+                    <div></div>
+                  </th>
+                  <th>
+                    <div className="calendar-week-field">
+                      <h4>Monday</h4>
                     </div>
-                  </td>
-                  {daysOfWeek?.map((days) => {
+                  </th>
+                  <th>
+                    <div className="calendar-week-field">
+                      <h4>Tuesday</h4>
+                    </div>
+                  </th>
+                  <th>
+                    <div className="calendar-week-field">
+                      <h4>Wednesday</h4>
+                    </div>
+                  </th>
+                  <th>
+                    <div className="calendar-week-field">
+                      <h4>Thursday</h4>{" "}
+                    </div>
+                  </th>
+                  <th>
+                    <div className="calendar-week-field">
+                      <h4>Friday</h4>
+                    </div>
+                  </th>
+                  <th>
+                    <div className="calendar-week-field">
+                      <h4>Saturday</h4>
+                    </div>
+                  </th>
+                  <th>
+                    <div className="calendar-week-field">
+                      <h4>Sunday</h4>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {scheduleDefulatArray?.map((schedule) => {
+                  const weeklySchedule = scheduledDate[schedule];
 
-                    return (
-                      <td>
-                        <div className="calendar-schedule-data">
-                          <div className="calendar-schedule-time">
-                            <p>
-                              <div className="row">
-                                {weeklySchedule[days]?.map((data, index) => {
-                                  const parsedTime = new Date(`2000-01-01T${data}`);
-                                  // Get hours and minutes
-                                  const hours = parsedTime.getHours();
-                                  const minutes = parsedTime.getMinutes();
-                                  // Determine AM/PM
-                                  const ampm = hours >= 12 ? 'PM' : 'AM';
-                                  // Adjust hours for AM/PM format
-                                  const formattedHours = hours % 12 || 12;
-                                  // Format minutes with leading zero if needed
-                                  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-                                  // Construct formatted time string
-                                  const formattedTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
-
-                                  return (
-                                    <>
-                                      <div className="col-6 ">
-                                        {formattedTime}
-
-                                        {index % 2 !== 0 && (
-                                          <span className="calendar-schedule-button mainCursor ms-1">
-                                            <FaRegEdit />
-                                            <FaRegTrashCan />
-                                          </span>
-                                        )}
-                                      </div>
-                                    </>
-                                  );
-                                })}
-                              </div>
-                            </p>
-                          </div>
+                  return (
+                    <tr>
+                      <td
+                        className={
+                          schedule === "CURRENT"
+                            ? "bg-success"
+                            : schedule === "FUTURE"
+                              ? "bg-primary  "
+                              : schedule === "INQUIRY/PAST"
+                                ? "bg-warning"
+                                : ""
+                        }
+                      >
+                        <div className="calendar-schedule-data data-head ">
+                          <h5 className="mb-0">{schedule}</h5>
                         </div>
                       </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
 
-      <div class="row w-full mb-5 mt-3 d-flex justify-content-center">
-        <div className="d-flex gap-3 w-50">
-          <button
-            className="btn btn-primary form-control"
-          // onClick={handleCellClick}
-          >
-            Add
-          </button>
-          <button
-            // onClick={handleCopyToAll}
-            className="btn btn-primary form-control"
-          >
-            Copy to All Properties
-          </button>
-        </div>
-      </div>
+                      {daysOfWeek?.map((days) => {
+                        let startTime;
+                        let startIndex;
+                        let endTime;
+                        let endIndex;
+
+                        return (
+                          <td>
+                            <div className="calendar-schedule-data">
+                              <div className="calendar-schedule-time">
+                                <p>
+                                  <div className="row custom-row">
+                                    {weeklySchedule[days]?.map((data, index) => {
+                                      const parsedTime = new Date(`2000-01-01T${data}`);
+                                      // Get hours and minutes
+                                      const hours = parsedTime.getHours();
+                                      const minutes = parsedTime.getMinutes();
+                                      // Determine AM/PM
+                                      const ampm = hours >= 12 ? 'PM' : 'AM';
+                                      // Adjust hours for AM/PM format
+                                      const formattedHours = hours % 12 || 12;
+                                      // Format minutes with leading zero if needed
+                                      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+                                      // Construct formatted time string
+                                      const formattedTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
+
+                                      // Get all keys of weeklySchedule object
+                                      const keys = Object.keys(weeklySchedule);
+
+                                      if (index % 2 === 0) {
+                                        startTime = data;
+                                        startIndex = index
+                                      } else {
+                                        endTime = data;
+                                        endIndex = index
+                                      }
+
+
+                                      const dataToRemove = {
+                                        scheduleStage: schedule,
+                                        day: days,
+                                        startTime: startTime,
+                                        endTime: endTime,
+                                        startIndex: startIndex,
+                                        endIndex: endIndex
+
+                                      }
+
+                                      return (
+                                        <>
+                                          <div className="col-6 custom-col">
+                                            {formattedTime}
+
+                                            {index % 2 !== 0 && (
+                                              <span className="calendar-schedule-button mainCursor ms-1">
+                                                <FaRegEdit />
+                                                <FaRegTrashCan onClick={() => handleRemoveSchedule(dataToRemove)} />
+                                              </span>
+                                            )}
+                                          </div>
+                                        </>
+                                      );
+                                    })}
+                                  </div>
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row w-full mb-5 mt-3 d-flex justify-content-center">
+            <div className="d-flex gap-3 w-50">
+              <button
+                className="btn btn-primary form-control"
+                onClick={handleAddClick}
+              >
+                Add
+              </button>
+              <button
+                onClick={handleCopyToAll}
+                className="btn btn-primary form-control"
+              >
+                Copy to All Properties
+              </button>
+            </div>
+          </div>
+
+        </>
+      )}
 
       {show && (
         <SchedulePopupModal
@@ -367,6 +331,8 @@ const ScheduleCalender = ({
           setselectedTime={setSelectedTime}
           responseObject={responseObject}
           setShowCalender={setShowCalender}
+          getScheduleAPI={getScheduleAPI}
+          selectedProperty={selectedProperty}
         />
       )}
     </>

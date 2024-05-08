@@ -73,6 +73,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
       }
     } catch (error) {
       console.log(error);
+      setCalendarSchedule(() => { });
     }
   };
 
@@ -101,14 +102,14 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
               >
                 <div className="d-flex justify-between">
                   <Button
-                    className="bg-none border-0 shadow-none fs-3"
+                    className={`bg-none border-0 shadow-none fs-3 ${scheduleButton && 'invisible'}`}
                     onClick={handlePrevMonth}
                   >
                     <FiChevronLeft />
                   </Button>
                   <Button
                     onClick={handleNextMonth}
-                    className="bg-none border-0 shadow-none fs-3"
+                    className={`bg-none border-0 shadow-none fs-3 ${scheduleButton && 'invisible'}`}
                   >
                     <FiChevronRight />
                   </Button>
@@ -121,7 +122,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
                   </h3>
                 )}
 
-                {scheduleButton && <div>Hostbudddy schedule for property</div>}
+                {scheduleButton && <h3>Schedule</h3>}
 
                 <div className="d-flex ">
                   <button
@@ -149,10 +150,10 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
             </div>
 
             {monthButton && (
-              <Calendar allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} />
+              <Calendar getScheduleAPI={calenderSchedule} allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} />
             )}
 
-            {scheduleButton && <ScheduleCalender setShowCalender={setShowCalender} selectedProperty={selectedProperty} scheduleData={calendarSchedule} />}
+            {scheduleButton && <ScheduleCalender getScheduleAPI={calenderSchedule} allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} scheduleData={calendarSchedule} />}
           </div>
         </Modal.Body>
       </Modal>
