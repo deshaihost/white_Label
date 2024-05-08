@@ -4,6 +4,7 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
+import Loader from "../../../../helper/Loader";
 
 const Calendar = ({
   allProperties,
@@ -363,9 +364,7 @@ const Calendar = ({
 
   return (
     <>
-      {!scheduleData ? (
-        <div>Loading...</div>
-      ) : (
+      {!scheduleData ? <div className="d-flex w-full justify-content-center"><Loader /></div> : (
         <>
           <div className="calendar">
             <div className="container">
@@ -399,11 +398,10 @@ const Calendar = ({
                                 className="main-calendar-card-data-child"
                               >
                                 <div
-                                  className={`main-calendar-data-status ${
-                                    dateTime?.status === "on"
+                                  className={`main-calendar-data-status ${dateTime?.status === "on"
                                       ? "bg-success"
                                       : "bg-danger"
-                                  }`}
+                                    }`}
                                 >
                                   {dateTime?.status}
                                 </div>
@@ -438,11 +436,10 @@ const Calendar = ({
                                 className="main-calendar-card-data-child"
                               >
                                 <div
-                                  className={`main-calendar-data-status ${
-                                    dateTime?.status === "on"
+                                  className={`main-calendar-data-status ${dateTime?.status === "on"
                                       ? "bg-success"
                                       : "bg-danger"
-                                  }`}
+                                    }`}
                                 >
                                   {dateTime?.status}
                                 </div>
@@ -478,11 +475,10 @@ const Calendar = ({
                                 className="main-calendar-card-data-child"
                               >
                                 <div
-                                  className={`main-calendar-data-status ${
-                                    dateTime?.status === "on"
+                                  className={`main-calendar-data-status ${dateTime?.status === "on"
                                       ? "bg-success"
                                       : "bg-danger"
-                                  }`}
+                                    }`}
                                 >
                                   {dateTime?.status}
                                 </div>
