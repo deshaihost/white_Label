@@ -64,7 +64,7 @@ const Routing = () => {
           }
         />
         <Route
-          path="/property-insight"
+          path="/property-insight/:id"
           element={
             <ProtectedRoute>
               <PropertyInsight />

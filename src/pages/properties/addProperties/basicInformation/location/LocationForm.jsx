@@ -15,7 +15,7 @@ import { Button, Modal } from "react-bootstrap";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import SelectModalNote from "../../extraNoteModal/SelectModalNote";
 
-const LocationForm = ({ prntFuntionHeaderActive }) => {
+const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
   const { id } = useParams();
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [show, setShow] = useState(false);
@@ -49,13 +49,9 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
   const updateQuestionaireStatus =
     store?.updateQuestionnaireReducer?.updateQuestionnaire?.status;
   const updateQuestionaireLoading = store?.updateQuestionnaireReducer?.loading;
-  const updateQuestionnaireMessage = store?.updateQuestionnaireReducer?.updateQuestionnaire?.data?.message;
+  const updateQuestionnaireMessage =
+    store?.updateQuestionnaireReducer?.updateQuestionnaire?.data?.message;
 
-  console.log(
-    store?.updateQuestionnaireReducer?.updateQuestionnaire?.data?.message,
-
-    "store?.updateQuestionnaireReducer?.updateQuestionnaire"
-  );
   // to get the complete questionaire object
   const apiQuestionnaireObject =
     store?.getQuestionnaireReducer?.getQuestionnaire?.data;
@@ -73,6 +69,7 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
   } = useForm();
 
   const onSubmit = (data) => {
+    updateImageHndle()
     const questionaireToSend = structuredClone(apiQuestionnaireObject);
 
     if (questionnaireApi["Basics"] && questionnaireApi["Basics"]["Location"]) {
@@ -129,8 +126,8 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
     if (updateQuestionaireStatus === 200) {
       if (loadingStatus) {
         ToastHandle(updateQuestionnaireMessage, "success");
-        prntFuntionHeaderActive(id !== undefined && "supportingDoc")
-        dispatch(stateEmptyActions())
+        prntFuntionHeaderActive(id !== undefined && "supportingDoc");
+        dispatch(stateEmptyActions());
         setLoadingStatus(false);
       }
     } else {
@@ -200,7 +197,8 @@ const LocationForm = ({ prntFuntionHeaderActive }) => {
                 <div
                   key={index}
                   className={` mt-4 col-${index % 2 === 0 ? "6" : "6"}`}
-                >{console.log("Rsponse: ", item?.responseText)}
+                >
+                  {console.log("Rsponse: ", item?.responseText)}
                   {item.question_type === "select" ? (
                     <>
                       <label className="text-white">

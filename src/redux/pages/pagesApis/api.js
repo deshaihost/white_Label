@@ -26,14 +26,19 @@ function PMSintegrationEndPoint(params: any): any {
   return api.get(URL.GET_SUPPORTED_INTEGRATIONS);
 }
 
-// function PMSintegrationAddEndPoint(params: any): any {
-//   const { data } = params;
-//   return api.create(URL.ADD_SUPPORTED_INTEGRATIONS, data);
-// }
+function putCompleteActionItemEndPoint(params: any): any {
+  const { data } = params;
+  return api.update(URL.COMPLETE_ACTIONS_ITEMS, data);
+}
 
 function getCalryLinkEndPoint(params: any): any {
   const { data } = params;
   return api.get(`${URL.GET_CALRY_LINK}integration_platform=${data?.platform}`);
+}
+
+function getActionsItemsEndPoint(params: any): any {
+  const { data } = params;
+  return api.get(URL.GET_ACTIONS_ITEMS);
 }
 
 function removeIntegrationListGetEndPoint(params: any): any {
@@ -54,5 +59,7 @@ export {
   getCalryLinkEndPoint,
   removeIntegrationListGetEndPoint,
   removeIntegrationEndPoint,
-  updateAccountUpdatePasswordEndPoint
+  updateAccountUpdatePasswordEndPoint,
+  getActionsItemsEndPoint,
+  putCompleteActionItemEndPoint
 };

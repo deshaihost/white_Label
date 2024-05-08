@@ -596,6 +596,9 @@ textarea.form-control {
 .mainCursor{
   cursor: pointer;
 }
+.display-none{
+  display: none;
+}
 
 @media only screen and (max-width: 1199px) {
   a,

@@ -15,18 +15,23 @@ import Loader, { FullScreenLoader } from "../../helper/Loader";
 import { useNavigate } from "react-router-dom";
 import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrationProperties";
 import ToastHandle from "../../helper/ToastMessage";
+import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
 
 const Properties = () => {
   const navigate = useNavigate();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const gotoBillingPortalCheckPaymentStatus = store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
-  const gotoBillingPortalcheckPaymentLoading = store?.gotoBillingPortalPostReducer?.loading;
+  const gotoBillingPortalCheckPaymentStatus =
+    store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
+  const gotoBillingPortalcheckPaymentLoading =
+    store?.gotoBillingPortalPostReducer?.loading;
   const [model, setModel] = useState({
     addProperty: false,
     pmsIntegration: false,
     removeIntegration: false,
+    billingPortal: false,
   });
+  console.log(model?.billingPortal, "modelmodel");
   const [propertyConditionCheck, setPropertyConditionCheck] = useState(false);
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {
@@ -43,15 +48,20 @@ const Properties = () => {
       setModel({ ...model, addProperty: false });
     } else if (type === "pmsIntegrationClose") {
       setModel({ ...model, pmsIntegration: false });
-      dispatch(stateEmptyActions())
+      dispatch(stateEmptyActions());
     } else if (type === "removeIntegrationsClose") {
       setModel({ ...model, removeIntegration: false });
+    } else if (type === "billingPortalClose") {
+      setModel({ ...model, billingPortal: false });
     }
   };
   // toggle chatbot
-  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const intergrations = store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
-  const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
+  const createPropertiesName =
+    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const intergrations =
+    store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
+  const toggleChatMessage =
+    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
   const toggleChatStatus =
     store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
@@ -82,8 +92,9 @@ const Properties = () => {
     if (propertyConditionCheck) {
       if (gotoBillingPortalCheckPaymentStatus === 200) {
         setPropertyConditionCheck(false);
-        navigate("/add-properties");
-        dispatch(stateEmptyActions());
+        // navigate("/add-properties");
+        setModel({ ...model, billingPortal: true });
+        // dispatch(stateEmptyActions());
       } else if (gotoBillingPortalCheckPaymentStatus === 404) {
         setModel({ ...model, addProperty: true });
         dispatch(stateEmptyActions());
@@ -118,49 +129,40 @@ const Properties = () => {
                   <div className="property-heading-right">
                     <p>Hostbuddy Status</p>
                     {toggleChatLoading && <FullScreenLoader />}
-                    <div 
-                    className="form-check form-switch custom_switch"
-                    >
-                      <input
-                        className="form-check-input toggle-user-chatbot"
-                        type="checkbox"
-                        role="switch"
-                        id="statuscheck"
-                        checked={toggleActive}
-                        onClick={(e) => {
-                          toggleChatBotHndle(e.target.checked);
-                        }}
-                      />
-                      <label className="form-check-label" htmlFor="statuscheck">
-                        {toggleActive ? "ON" : "OFF"}
-                      </label>
-                    </div>
-
-                    {/* <div className="expendable_search">
-                      <button className="search_btn">
-                        <svg
-                          width="18"
-                          height="18"
-                          viewBox="0 0 18 18"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+                    {!toggleActive ? (
+                      <>
+                        {" "}
+                        <button
+                          className="bg-danger text-white rounded-pill border-danger btn border"
+                          onClick={(e) => {
+                            toggleChatBotHndle(true);
+                          }}
                         >
-                          <path
-                            d="M12.5 11H11.71L11.43 10.73C12.4439 9.55402 13.0011 8.0527 13 6.5C13 5.21442 12.6188 3.95772 11.9046 2.8888C11.1903 1.81988 10.1752 0.986756 8.98744 0.494786C7.79973 0.00281635 6.49279 -0.125905 5.23192 0.124899C3.97104 0.375703 2.81285 0.994767 1.90381 1.90381C0.994767 2.81285 0.375703 3.97104 0.124899 5.23192C-0.125905 6.49279 0.00281635 7.79973 0.494786 8.98744C0.986756 10.1752 1.81988 11.1903 2.8888 11.9046C3.95772 12.6188 5.21442 13 6.5 13C8.11 13 9.59 12.41 10.73 11.43L11 11.71V12.5L16 17.49L17.49 16L12.5 11ZM6.5 11C4.01 11 2 8.99 2 6.5C2 4.01 4.01 2 6.5 2C8.99 2 11 4.01 11 6.5C11 8.99 8.99 11 6.5 11Z"
-                            fill="#146EF5"
-                          ></path>
-                        </svg>
-                      </button>
-                      <input
-                        type="search"
-                        name="properties_search"
-                        placeholder="Search"
-                        id="search_field"
-                      />
-                    </div> */}
+                          STOPPED
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="bg-dark text-primary border-primary btn border rounded-pill"
+                          onClick={(e) => {
+                            toggleChatBotHndle(false);
+                          }}
+                        >
+                          STOP
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
-                <div className="addproperty_links text-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div
+                  className="addproperty_links text-center"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <button
                     type="button"
                     className="shadow-none border-0"
@@ -181,8 +183,11 @@ const Properties = () => {
                       "Add Property"
                     )}
                   </button>
-                  {intergrations !== undefined && Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key)
-                    <p style={{ color: 'white' }}>Connected to {Object.keys(intergrations)[0]}</p>
+                  {intergrations !== undefined &&
+                  Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key)
+                    <p style={{ color: "white" }}>
+                      Connected to {Object.keys(intergrations)[0]}
+                    </p>
                   ) : (
                     <button
                       className="shadow-none border-0"
@@ -194,24 +199,6 @@ const Properties = () => {
                       PMS Integration
                     </button>
                   )}
-                  {/* <button
-                    className="shadow-none border-0"
-                    type="button"
-                    onClick={() => {
-                      handleModelOpen("pmsIntegrationOpen");
-                    }}
-                  >
-                    PMS Integration
-                  </button>
-                  <button
-                    className="shadow-none border-0"
-                    type="button"
-                    onClick={() => {
-                      handleModelOpen("removeIntegrationsOpen");
-                    }}
-                  >
-                    Remove Integrations
-                  </button> */}
                 </div>
                 <div className="property_list">
                   <ul>
@@ -228,6 +215,10 @@ const Properties = () => {
           </div>
         </div>
       </div>
+      <BillingPortalModel
+        handleClose={handleModelClose}
+        show={model?.billingPortal}
+      />
       <AddPropertyModal
         handleClose={handleModelClose}
         show={model?.addProperty}

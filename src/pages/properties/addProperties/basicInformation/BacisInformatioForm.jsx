@@ -30,9 +30,9 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   } = useForm();
 
   const [uploadedFile, setFile] = useState(null);
+  const [updateImage, setUpdateImage] = useState(null);
   const [propertyName, setPropertyName] = useState(null);
-
-
+  const nameKeyGet = nameKey();
   const add_thumbnail_image = async (propertyName, imgFile) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -49,30 +49,33 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
             "X-API-Key": API_KEY,
           },
         };
-
         let formData = new FormData();
-        formData.append("file", imgFile);
-        config.headers['Content-Type'] = 'multipart/form-data';
+        formData.append(
+          "file",
+          updateImage !== null ? updateImage?.[0] : imgFile
+        );
+        config.headers["Content-Type"] = "multipart/form-data";
 
         const response = await axios.post(
-          `${baseUrl}/properties/${propertyName}/add_thumbnail_image`,
+          `${baseUrl}/properties/${
+            nameKeyGet !== null ? nameKeyGet?.nameKey : propertyName
+          }/add_thumbnail_image`,
           formData,
           config
         );
-
         if (response.status === 200) {
-
-
         } else {
-          ToastHandle(`Error adding thumbnail image: ${response.error}`, "danger");
+          ToastHandle(
+            `Error adding thumbnail image: ${response.error}`,
+            "danger"
+          );
         }
       } else {
         alert("No Token");
       }
     } catch (error) {
       console.error("Error adding thumbnail image", error);
-    }
-    finally {
+    } finally {
     }
   };
 
@@ -82,20 +85,23 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   const getLocalStorageNameKey = getLocalStorageData?.nameKey;
   const onSubmit = (data) => {
     setGetInputNameKey({ nameKey: data.propertyName });
+    setUpdateImage(null);
     setFile(data?.files[0]);
     setPropertyName(data.propertyName);
-
     //Create the property, with the given name
     let CreatePropertyData = { property_name: data.propertyName };
     dispatch(postPropertiesActions(CreatePropertyData));
   };
+  // updateImageHndle functinality add only update case
+  const updateImageHndle = () => {
+    add_thumbnail_image();
+  };
+  // updateImageHndle functinality add only update case
 
   useEffect(() => {
     if (propertiesAddStatus === 200) {
-
       // First, add the thumbnail image to the property, if one was included
-      add_thumbnail_image(propertyName, uploadedFile);
-
+      add_thumbnail_image(propertyName,uploadedFile);
       // Then, navigate to the next page
       navigate(
         "/add-properties/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw"
@@ -158,6 +164,9 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
                     className="form-control"
                     type="file"
                     {...register("files")}
+                    onChange={(e) => {
+                      setUpdateImage(e.target.files);
+                    }}
                     placeholder=""
                   />
                 </div>
@@ -177,7 +186,10 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
             )}
           </form>
           {locationUrl !== undefined && (
-            <LocationForm prntFuntionHeaderActive={prntFuntionHeaderActive} />
+            <LocationForm
+              prntFuntionHeaderActive={prntFuntionHeaderActive}
+              updateImageHndle={updateImageHndle}
+            />
           )}
         </div>
       </div>

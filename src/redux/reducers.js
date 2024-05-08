@@ -15,7 +15,9 @@ import {
   getCalryLinkReducer,
   removeIntegrationGetReducer,
   removeIntegrationReducer,
-  updateAccountUpdatePasswordReducer
+  updateAccountUpdatePasswordReducer,
+  getActionItemsReducer,
+  completeActionsItemsReducer
 } from "./pages/pagesApis/reducers";
 import {
   postPropertiesReducer,
@@ -54,5 +56,7 @@ export default (combineReducers({
   togglechatBotOnOffReducer,
   getPropertyByNameReducer,
   propertyGetConversationReducer,
-  updateAccountUpdatePasswordReducer
+  updateAccountUpdatePasswordReducer,
+  getActionItemsReducer,
+  completeActionsItemsReducer
 }): any);

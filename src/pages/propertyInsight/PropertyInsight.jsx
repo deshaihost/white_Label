@@ -4,18 +4,32 @@ import SideBar from "../../component/sideBar/SideBar";
 import SuccessTotalBox from "./successTotalBox/SuccessTotalBox";
 import TranscriptsTable from "./transcriptsTable/TranscriptsTable";
 import SuggestionsBusiness from "./suggestionsBusiness/SuggestionsBusiness";
-import { getUserDataActions } from "../../redux/actions";
+import {
+  getPropertyInsightByNameActions,
+  getUserDataActions,
+} from "../../redux/actions";
 import { useSelectorUseDispatch } from "../../helper/Authorized";
 import { PropertyGetConversationsActions } from "../../redux/actions";
 import Loader, { BoxLoader, FullScreenLoader } from "../../helper/Loader";
 import { useParams } from "react-router-dom";
 const PropertyInsight = () => {
   const { store, dispatch } = useSelectorUseDispatch();
+  const statisticsGetNameByProperty =
+    store?.getPropertyByNameReducer?.getPropertybyName?.data?.property
+      ?.statistics?.num_conversations;
   const chatBoxUrl = useParams();
+  const completeReviewName = chatBoxUrl?.id;
+  // Check if completeReviewName is ":id"
+  const getCompleteReviewNameUrl =
+    completeReviewName === ":id"
+      ? completeReviewName
+      : JSON.parse(completeReviewName);
+  // If completeReviewName is ":id", set propertyName to empty string, else extract propertyName
+  const propertyName =
+    completeReviewName === ":id" ? "" : getCompleteReviewNameUrl?.propertyName;
   const propertiesConversationGetData =
     store?.propertyGetConversationReducer?.propertyGetConversation?.data
       ?.conversations;
-
   const propertiesConversationLoading =
     store?.propertyGetConversationReducer?.loading;
 
@@ -23,20 +37,51 @@ const PropertyInsight = () => {
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
   const userpertieslistName = userDataGet?.[0];
 
-  const [propertySelectName, setPropertySelectName] = useState("");
+  const [propertySelectName, setPropertySelectName] = useState(
+    completeReviewName === ":id" ? "" : propertyName
+  );
+  const [propertySelectNameView, setPropertySelectNameView] = useState(
+    completeReviewName === ":id" ? "" : propertyName
+  );
 
   useEffect(() => {
     dispatch(getUserDataActions());
   }, []);
 
   useEffect(() => {
-    dispatch(
-      PropertyGetConversationsActions({
-        propertyName:
-          propertySelectName !== "" ? propertySelectName : userpertieslistName,
-      })
-    );
-  }, [propertySelectName, userpertieslistName]);
+    if (propertyName === "") {
+      setPropertySelectNameView(userpertieslistName);
+      dispatch(
+        PropertyGetConversationsActions({
+          propertyName:
+            propertySelectName !== ""
+              ? propertySelectName
+              : userpertieslistName,
+        })
+      );
+      dispatch(
+        getPropertyInsightByNameActions({
+          propertyName:
+            propertySelectName !== ""
+              ? propertySelectName
+              : userpertieslistName,
+        })
+      );
+    } else {
+      dispatch(
+        PropertyGetConversationsActions({
+          propertyName:
+            propertySelectName !== "" ? propertySelectName : propertyName,
+        })
+      );
+      dispatch(
+        getPropertyInsightByNameActions({
+          propertyName:
+            propertySelectName !== "" ? propertySelectName : propertyName,
+        })
+      );
+    }
+  }, [propertySelectName, userpertieslistName, propertyName]);
   return (
     <>
       <div className="account-main">
@@ -65,6 +110,9 @@ const PropertyInsight = () => {
                         {userDataGet?.map((userData) => {
                           return (
                             <>
+                              <option selected hidden>
+                                {propertySelectNameView}
+                              </option>
                               <option value={userData}>{userData}</option>
                             </>
                           );
@@ -84,6 +132,7 @@ const PropertyInsight = () => {
                             totalConversation={
                               propertiesConversationGetData?.length
                             }
+                            statisticsGetNameByProperty={statisticsGetNameByProperty}
                           />
                         </div>
                         <div className="">

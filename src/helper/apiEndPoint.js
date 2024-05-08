@@ -23,6 +23,9 @@ export const SUPPORTING_URL = "/properties";
 export const TOGGLE_CHATBOT = "/toggle_chatbot";
 export const GET_PROPERTY_BY_NAME = "/properties/";
 export const PROPERTY_GET_CONVERSATION = "/properties/";
+export const GET_ACTIONS_ITEMS = "/get_action_items";
+export const COMPLETE_ACTIONS_ITEMS = "/complete_action_item";
+
 
 
 export const TESTING_API = "/properties";
