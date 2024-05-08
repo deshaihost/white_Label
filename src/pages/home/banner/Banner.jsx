@@ -3,6 +3,9 @@ import Container from 'react-bootstrap/Container';
 import './banner.css';
 import { Link } from "react-router-dom";
 
+import chatVideo from '../../../public/img/home/chat_video.mp4';
+import videoImgBackup from '../../../public/img/home/video_img.jpg';
+
 const Banner = () => {
     return(
         <section className="banner">
@@ -16,9 +19,8 @@ const Banner = () => {
                         <Link to='/pricing' className="link-btn outline-btn">Start 2 Week free trial</Link>
                     </div>
                     <div className="banner-video">
-                        <video autoPlay muted poster="https://hostbuddy.ai/wp-content/themes/hostbuddy/assets/img/video_img11.jpg">
-                            <source src="https://hostbuddy.ai/wp-content/uploads/2024/02/Property-1Variant4-1.mp4" type="video/mp4" />
-                            <source src="https://hostbuddy.ai/wp-content/uploads/2024/02/Property-1Variant4-1.mp4" type="video/ogg" />
+                        <video autoPlay loop muted poster={videoImgBackup}>
+                            <source src={chatVideo} type="video/mp4" />
                             Your browser does not support HTML video.
                         </video>
                     </div>
