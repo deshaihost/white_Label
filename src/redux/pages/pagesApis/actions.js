@@ -26,11 +26,6 @@ export const getPMSIntegrationActions = (data) => ({
     data,
 });
 
-// export const addPMSIntegrationActions = (data) => ({
-//     type: PagesApisActionTypes.PMS_INTEGRATION_ADD_FIRST,
-//     data,
-// });
-
 export const getCalryLinkActions = (data) => ({
     type: PagesApisActionTypes.GET_CALRY_LINK_FIRST,
     data,
@@ -43,6 +38,16 @@ export const getRemoveIntegrationActions = (data) => ({
 
 export const removeIntegrationActions = (data) => ({
     type: PagesApisActionTypes.REMOVE_INTEGRATION_FIRST,
+    data,
+});
+
+export const getActionItemsActions = (data) => ({
+    type: PagesApisActionTypes.GET_ACTIONS_ITEMS_FIRST,
+    data,
+});
+
+export const putCompleteActionItemActions = (data) => ({
+    type: PagesApisActionTypes.PUT_COMPLETE_ACTION_ITEMS_FIRST,
     data,
 });
 

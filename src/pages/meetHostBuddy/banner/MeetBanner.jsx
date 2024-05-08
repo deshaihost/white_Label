@@ -16,10 +16,10 @@ import { ParamsGet, nameKey } from "../../../helper/Authorized";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 const MeetBanner = (props) => {
   const { urlData } = props;
-  console.log(urlData,'urlDataurlData')
+  console.log(urlData, "urlDataurlData");
   const { chatbot_key, property_name, user_type } = urlData ? urlData : {};
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -40,7 +40,10 @@ const MeetBanner = (props) => {
   /* Mboddie: For now, use this variable to determine whether we're in property chat (query params are present), or Meet hostbuddy front page (no query params).
   TODO (Expinator team) - please create a new path in the application for the property chat window, since it should not use the same path as Meet Hostbuddy and
   should not have "Meet-Hostbuddy" in the URL (use a path like "/property-chat"). */
-  const isPropertyChat = (chatbot_key !== undefined && property_name !== undefined && user_type !== undefined);
+  const isPropertyChat =
+    chatbot_key !== undefined &&
+    property_name !== undefined &&
+    user_type !== undefined;
 
   // const messagesContainerRef = useRef(null);
 
@@ -66,7 +69,6 @@ const MeetBanner = (props) => {
   };
 
   // message feedback model functionality
-   
 
   // Initial messages
   useEffect(() => {
@@ -84,7 +86,8 @@ const MeetBanner = (props) => {
       getSessionIdActions({
         action: "hb_meet_hostbuddy_chat_start",
         textareaValue: "Hi",
-        chatbot_key: chatbot_key !== undefined ? chatbot_key : "meet_hostbuddy_8762",
+        chatbot_key:
+          chatbot_key !== undefined ? chatbot_key : "meet_hostbuddy_8762",
         data_host_return: " ",
         user: user_type !== undefined ? user_type : "guest",
       })
@@ -122,6 +125,18 @@ const MeetBanner = (props) => {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // feed back functionality
+  const [feedBackModelOpen, setFeedBackModelOpen] = useState(false);
+
+  const feedBckModelOpenHndle = (index) => {
+    console.log(index, "indexindex");
+    setFeedBackModelOpen(true);
+  };
+  const messgFeedBckClose=()=>{
+    setFeedBackModelOpen(false);
+
+  }
 
   return (
     <div className="meet-banner">
@@ -177,6 +192,7 @@ const MeetBanner = (props) => {
                         key={index}
                         text={message.text}
                         sender={message.sender}
+                        feedBckModelOpen={feedBckModelOpenHndle}
                       />
                     </>
                   );
@@ -220,7 +236,7 @@ const MeetBanner = (props) => {
             </div>
           </div>
         </div>
-        {/* <MessgFeedBckModel/> */}
+        <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose}/>
       </Container>
     </div>
   );

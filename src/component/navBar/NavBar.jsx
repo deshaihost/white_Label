@@ -77,7 +77,7 @@ const NavBar = () => {
                   </NavLink>
                   <NavLink
                     exact
-                    to="/property-insight"
+                    to="/property-insight/:id"
                     className="nav-link"
                     activeClassName="active"
                   >

@@ -25,10 +25,10 @@ const PMS_INTEGRATION_GET_INITIAL_STATE = {
   loading: false,
 };
 
-// const PMS_INTEGRATION_ADD_INITIAL_STATE = {
-//   pmsIntegrationDataAdd: [],
-//   loading: false,
-// };
+const COMPLETE_ACTIONS_ITEMS_INITIAL_STATE = {
+  completeActionsItems: [],
+  loading: false,
+};
 
 const GET_CALRY_LINK_INITIAL_STATE = {
   getCalryLing: [],
@@ -45,6 +45,10 @@ const REMOVE_INTEGRATION_INITIAL_STATE = {
   loading: false,
 };
 
+const GET_ACTIONS_ITEMS_INITIAL_STATE = {
+  getActionsItems: [],
+  loading: false,
+};
 const getUserDataReducer = (state = GET_USER_DATA_INITIAL_STATE, action) => {
   switch (action.type) {
     case PagesApisActionTypes.GET_USER_DATA_LOADING:
@@ -175,32 +179,32 @@ const pmsIntegrationGetReducer = (
   }
 };
 
-// const pmsIntegrationAddReducer = (
-//   state = PMS_INTEGRATION_ADD_INITIAL_STATE,
-//   action
-// ) => {
-//   switch (action.type) {
-//     case PagesApisActionTypes.PMS_INTEGRATION_ADD_LOADING:
-//       return {
-//         pmsIntegrationDataAdd: state.pmsIntegrationDataAdd,
-//         loading: true,
-//       };
-//     case PagesApisActionTypes.PMS_INTEGRATION_ADD_SUCCESS:
-//       return {
-//         pmsIntegrationDataAdd: action.payload,
-//         loading: false,
-//       };
-//     case PagesApisActionTypes.PMS_INTEGRATION_ADD_ERROR:
-//       return {
-//         pmsIntegrationDataAdd: action.payload,
-//         loading: false,
-//       };
-//     case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
-//       return PMS_INTEGRATION_ADD_INITIAL_STATE;
-//     default:
-//       return state;
-//   }
-// };
+const completeActionsItemsReducer = (
+  state = COMPLETE_ACTIONS_ITEMS_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case PagesApisActionTypes.PUT_COMPLETE_ACTION_ITEMS_LOADING:
+      return {
+        completeActionsItems: state.completeActionsItems,
+        loading: true,
+      };
+    case PagesApisActionTypes.PUT_COMPLETE_ACTION_ITEMS_SUCCESS:
+      return {
+        completeActionsItems: action.payload,
+        loading: false,
+      };
+    case PagesApisActionTypes.PUT_COMPLETE_ACTION_ITEMS_ERROR:
+      return {
+        completeActionsItems: action.payload,
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      return COMPLETE_ACTIONS_ITEMS_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
 
 const getCalryLinkReducer = (
   state = GET_CALRY_LINK_INITIAL_STATE,
@@ -282,6 +286,33 @@ const removeIntegrationReducer = (
   }
 };
 
+const getActionItemsReducer = (
+  state = GET_ACTIONS_ITEMS_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case PagesApisActionTypes.GET_ACTIONS_ITEMS_LOADING:
+      return {
+        getActionsItems: state.getActionsItems,
+        loading: true,
+      };
+    case PagesApisActionTypes.GET_ACTIONS_ITEMS_SUCCESS:
+      return {
+        getActionsItems: action.payload,
+        loading: false,
+      };
+    case PagesApisActionTypes.GET_ACTIONS_ITEMS_ERROR:
+      return {
+        getActionsItems: action.payload,
+        loading: false,
+      };
+    // case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+    //   return GET_CALRY_LINK_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
+
 export {
   getUserDataReducer,
   postcreateCheckoutSessionReducer,
@@ -290,5 +321,7 @@ export {
   getCalryLinkReducer,
   removeIntegrationGetReducer,
   removeIntegrationReducer,
-  updateAccountUpdatePasswordReducer
+  updateAccountUpdatePasswordReducer,
+  getActionItemsReducer,
+  completeActionsItemsReducer
 };

@@ -8,7 +8,9 @@ import {
   getCalryLinkEndPoint,
   removeIntegrationListGetEndPoint,
   removeIntegrationEndPoint,
-  updateAccountUpdatePasswordEndPoint
+  updateAccountUpdatePasswordEndPoint,
+  getActionsItemsEndPoint,
+  putCompleteActionItemEndPoint
 } from "./api";
 import { StateEmtpyActionTypes } from "../../stateEmpty/constants";
 
@@ -141,31 +143,31 @@ function* pmsIntegrationGetFunction(data) {
   }
 }
 
-// function* pmsIntegrationAddFunction(data) {
-//   try {
-//     yield put({
-//       type: PagesApisActionTypes.PMS_INTEGRATION_ADD_LOADING,
-//       payload: {},
-//     });
-//     const response = yield call(PMSintegrationAddEndPoint, data);
-//     if (response.status === 200) {
-//       yield put({
-//         type: PagesApisActionTypes.PMS_INTEGRATION_ADD_SUCCESS,
-//         payload: { data: response.data, status: response.status },
-//       });
-//     } else {
-//       yield put({
-//         type: PagesApisActionTypes.PMS_INTEGRATION_ADD_ERROR,
-//         payload: { ...response.data },
-//       });
-//     }
-//   } catch (error) {
-//     yield put({
-//       type: PagesApisActionTypes.PMS_INTEGRATION_ADD_ERROR,
-//       payload: error,
-//     });
-//   }
-// }
+function* putCompleteActionItemFunction(data) {
+  try {
+    yield put({
+      type: PagesApisActionTypes.PUT_COMPLETE_ACTION_ITEMS_LOADING,
+      payload: {},
+    });
+    const response = yield call(putCompleteActionItemEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: PagesApisActionTypes.PUT_COMPLETE_ACTION_ITEMS_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: PagesApisActionTypes.PUT_COMPLETE_ACTION_ITEMS_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: PagesApisActionTypes.PUT_COMPLETE_ACTION_ITEMS_ERROR,
+      payload: error,
+    });
+  }
+}
 
 function* getCalryLinkFunction(data) {
   try {
@@ -188,6 +190,31 @@ function* getCalryLinkFunction(data) {
   } catch (error) {
     yield put({
       type: PagesApisActionTypes.GET_CALRY_LINK_ERROR,
+      payload: error,
+    });
+  }
+}
+function* getActionsItemsFunction(data) {
+  try {
+    yield put({
+      type: PagesApisActionTypes.GET_ACTIONS_ITEMS_LOADING,
+      payload: {},
+    });
+    const response = yield call(getActionsItemsEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: PagesApisActionTypes.GET_ACTIONS_ITEMS_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: PagesApisActionTypes.GET_ACTIONS_ITEMS_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: PagesApisActionTypes.GET_ACTIONS_ITEMS_ERROR,
       payload: error,
     });
   }
@@ -285,12 +312,12 @@ export function* acctionPMSIntegrationGet(): any {
   );
 }
 
-// export function* acctionPMSIntegrationAdd(): any {
-//   yield takeEvery(
-//     PagesApisActionTypes.PMS_INTEGRATION_ADD_FIRST,
-//     pmsIntegrationAddFunction
-//   );
-// }
+export function* acctionPutCompleteActionItems(): any {
+  yield takeEvery(
+    PagesApisActionTypes.PUT_COMPLETE_ACTION_ITEMS_FIRST,
+    putCompleteActionItemFunction
+  );
+}
 export function* acctionGetCalryLink(): any {
   yield takeEvery(
     PagesApisActionTypes.GET_CALRY_LINK_FIRST,
@@ -309,6 +336,12 @@ export function* acctionRemoveIntegration(): any {
     removeIntegrationFunction
   );
 }
+export function* acctionGetActionItems(): any {
+  yield takeEvery(
+    PagesApisActionTypes.GET_ACTIONS_ITEMS_FIRST,
+    getActionsItemsFunction
+  );
+}
 
 
 
@@ -322,7 +355,9 @@ function* pagesApisSaga(): any {
     fork(acctionGetCalryLink),
     fork(acctionRemoveIntegrationGet),
     fork(acctionRemoveIntegration),
-    fork(acctionUpdateAccountUpdatePassword)
+    fork(acctionUpdateAccountUpdatePassword),
+    fork(acctionGetActionItems),
+    fork(acctionPutCompleteActionItems)
   ]);
 }
 

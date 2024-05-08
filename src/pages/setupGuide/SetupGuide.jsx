@@ -6,7 +6,6 @@ import './setupguide.css';
 const SetupGuide = () => {
   const [activeLink, setActiveLink] = useState('');
   const handleClickScroll = (id) => {
-    console.log("id", id)
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -24,15 +23,11 @@ const SetupGuide = () => {
         }
       });
     };
-
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-
   return (
     <div className="account-main">
       <div className="container">
@@ -57,18 +52,14 @@ const SetupGuide = () => {
                         <h4>Onboarding Steps</h4>
                         <p>Welcome to HostBuddy! Follow the instructions below to begin onboarding your short-term rental properties with HostBuddy AI.</p>
                       </div>
-                      
                       <div className="step-box section" id="step1">
                         <h4>Onboarding Expectations and Timeline:</h4>
                         <p>The onboarding process involves several steps designed to ensure that HostBuddy performs effectively for each property. While it is possible to complete onboarding in as little as one day, typically, it takes additional time once you begin testing. Don't worry—we provide plenty of resources to guide you through this process! During and after onboarding, you may contact our exceptional Customer Support team for any technical assistance. Our support team is able to assist you with any questions you may have and is able to help troubleshoot fixing responses you are not satisfied with during your testing phase. If you require support, please feel free to email our customer support team at info@hostbuddy.ai.</p>
                         <p>For some of our frequently asked questions, please visit our FAQ page: <a href='/faqs' target="_blank">HostBuddy FAQs</a></p>
                         <p>For general questions about the Onboarding process, check out our welcome page below:</p>
                       </div>
-
                       <div className="step-box section" id="step2">
-
                         <h4>Step 1: Property Onboarding</h4>
-
                         <p>Below is a step by step guide for onboarding your first property!</p>
                         <h6 style={{ color: 'white' }}>Subscription</h6>
                         <ol>
@@ -81,7 +72,6 @@ const SetupGuide = () => {
                           </li>
                           <li>Once you continue, you will be directed to our Stripe payment portal. Please enter in your payment information and click submit, which will bring you back to the Properties page.</li>
                         </ol>
-
                         <h6 style={{ color: 'white' }}>Connecting your PMS (“The Works” Users)</h6>
                         <p>If you’ve selected the works plan, now is a great time to connect your PMS!</p>
                         <ol>

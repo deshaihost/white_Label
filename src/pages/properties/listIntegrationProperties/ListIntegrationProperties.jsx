@@ -97,7 +97,7 @@ const ListIntegrationProperties = () => {
 
   const handleCalenderModalOpen = (propertyName) => {
     setSelectedProperty(() => propertyName);
-    setAllProperty(() => createPropertiesName)
+    setAllProperty(() => createPropertiesName);
     setShowCalender(true);
   };
   const handleModelOpen = (type) => {
@@ -155,6 +155,7 @@ const ListIntegrationProperties = () => {
         })
       );
     } else if (findType === dummySubscriptionCount) {
+      localStorage.removeItem(localStorageKey)
       navigate("/add-properties/");
     }
   };
@@ -165,6 +166,7 @@ const ListIntegrationProperties = () => {
   const [toggleActive, setToggleActive] = useState(true);
   const [chatBoxIndex, setChatBoxIndex] = useState("");
   const toggleChatBotHndle = (type, id) => {
+    console.log(type, id, "type, idtype, id");
     if (type) {
       setToggleOnOff("on");
       setToggleActive(true);
@@ -236,8 +238,7 @@ const ListIntegrationProperties = () => {
         Also changed the corresponding logic in MeetHostBuddy.jsx to correctly parse these variables in their new form.
         TODO: eventually baseUrl should be a global variable somewhere. There shouldn't be hardcoded references to the vercel URL scattered
         throughout the code, since it will make it more difficult to change to our actual domain in the future. */
-        const baseUrl =
-          "https://hostbuddy.ai/meet-hostbuddy";
+        const baseUrl = "https://hostbuddy.ai/meet-hostbuddy";
         const url = new URL(baseUrl);
         url.searchParams.append("key", urlLink.chatbot_key);
         url.searchParams.append("name", urlLink.propertyN);
@@ -271,23 +272,12 @@ const ListIntegrationProperties = () => {
         Also changed the corresponding logic in MeetHostBuddy.jsx to correctly parse these variables in their new form.
         TODO: eventually baseUrl should be a global variable somewhere. There shouldn't be hardcoded references to the vercel URL scattered
         throughout the code, since it will make it more difficult to change to our actual domain in the future. */
-        const baseUrl =
-          "https://hostbuddy.ai/meet-hostbuddy";
+        const baseUrl = "https://hostbuddy.ai/meet-hostbuddy";
         const url = new URL(baseUrl);
         url.searchParams.append("key", urlLink.chatbot_key);
         url.searchParams.append("name", urlLink.propertyN);
-        url.searchParams.append("user", "host"); // "host" since we're using "Test Property", not the copied chatbot link
-
+        url.searchParams.append("user", "guest"); // "host" since we're using "Test Property", not the copied chatbot link
         window.open(url.toString(), "_blank");
-
-        /* const routingPart = "/meet-hostbuddy/";
-        window.open(
-          `https://hostbuddy.ai/${routingPart}${JSON?.stringify(
-            urlLink
-          )}`,
-          "_blank"
-        ); */
-        // navigate(`${routingPart}${JSON?.stringify(urlLink)}`);
         localStorage.setItem(localStorageKey, JSON?.stringify(testPropertyKey));
         setTestPropertyKey({ nameKey: "" });
         dispatch(stateEmptyActions());
@@ -310,10 +300,6 @@ const ListIntegrationProperties = () => {
         <>
           {createPropertiesName?.map((properties, index) => {
             let PropertStop = PropertiesExtraData?.[properties]?.toggle_status;
-            console.log(
-              PropertiesExtraData?.[properties]?.toggle_status,
-              "+++++ FORCED_OFF"
-            );
             return (
               <>
                 <div className="row">
@@ -335,35 +321,31 @@ const ListIntegrationProperties = () => {
                           <div className="property-detail">
                             <h4>{properties}</h4>
                             <div className="d-flex gap-2">
-                              <div
-                                className="form-check form-switch custom_switch">
-                                <input
-                                  className="
-                                  form-check-input toggle-user-chatbot
-                                  "
-                                  type="checkbox"
-                                  role="switch"
-                                  id="statuscheck"
-                                  onClick={(e) => {
-                                    toggleChatBotHndle(e.target.checked, index);
-                                  }}
-                                  // value={
-                                  //   PropertStop === "FORCED_OFF" ? false : true
-                                  // }
-                                  checked={PropertStop === "FORCED_OFF" ? false : true}
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor="statuscheck"
-                                >
-                                  {PropertStop === "FORCED_OFF" ? (
-                                    <>OFF</>
-                                  ) : "ON"
-                                    // <>{chatBoxIndex === index ? "ON" : "OFF"}</>
+                              {PropertStop === "FORCED_OFF" ? (
+                                <>
+                                  {" "}
+                                  <button
+                                    className="bg-danger text-white rounded-pill border-danger btn border"
+                                    onClick={(e) => {
+                                      toggleChatBotHndle(true, index);
+                                    }}
+                                  >
+                                    STOPPED
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <button
+                                    className="bg-dark text-primary border-primary btn border rounded-pill"
+                                    onClick={(e) => {
+                                      toggleChatBotHndle(false, index);
+                                    }}
+                                  >
+                                    STOP
+                                  </button>
+                                </>
+                              )}
 
-                                  }
-                                </label>
-                              </div>
                               <Button
                                 onClick={() =>
                                   handleCalenderModalOpen(properties)
@@ -404,22 +386,6 @@ const ListIntegrationProperties = () => {
                                 >
                                   Edit Property
                                 </Dropdown.Item>
-                                {/*
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    selectedHandle(webPageURLs);
-                                  }}
-                                >
-                                  Web Page URLs
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    selectedHandle(supportingDocuments);
-                                  }}
-                                >
-                                  Supporting Documents
-                                </Dropdown.Item>
-                                */}
                                 <Dropdown.Item
                                   onClick={() => {
                                     selectedHandle(deleteProperty, properties);
