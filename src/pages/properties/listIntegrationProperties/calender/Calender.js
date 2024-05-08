@@ -4,8 +4,10 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
+import Loader from "../../../../helper/Loader";
 
 const Calendar = ({
+  getScheduleAPI,
   allProperties,
   setShowCalender,
   selectedProperty,
@@ -184,24 +186,46 @@ const Calendar = ({
         );
 
         // setCalendarSchedule(() => response?.data?.schedule);
-        console.log("API Response: ", response.data);
+        // console.log("API Response: ", response.data);
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
+
 
           setTimeout(() => {
             setShow(false);
             setShowCalender(false);
           }, 1500);
+
+          // getScheduleAPI(selectedProperty);
         } else {
           ToastHandle("Something went wrong", "danger");
+          setTimeout(() => {
+            setShow(false);
+            setShowCalender(false);
+          }, 1500);
+
+          // getScheduleAPI(selectedProperty);
+
         }
       } else {
-        alert("No Token");
+        ToastHandle("No Token", "danger");
+        setTimeout(() => {
+          setShow(false);
+          setShowCalender(false);
+        }, 1500);
+
+        // getScheduleAPI(selectedProperty);
+
       }
     } catch (error) {
       console.log(error);
       ToastHandle(error?.data?.error, "danger");
+      setTimeout(() => {
+        setShow(false);
+        setShowCalender(false);
+      }, 1500);
+      // getScheduleAPI(selectedProperty);
     }
     // setSubmit(false);
   };
@@ -210,7 +234,7 @@ const Calendar = ({
 
   const handleCopyToAll = () => {
     const isConfirmed = window.confirm(
-      "Do you want to delete this Status Event?"
+      "Do you want to Copy this schedule to all properties?"
     );
     if (!isConfirmed) {
       return;
@@ -363,9 +387,7 @@ const Calendar = ({
 
   return (
     <>
-      {!scheduleData ? (
-        <div>Loading...</div>
-      ) : (
+      {!scheduleData ? <div className="d-flex w-full justify-content-center"><Loader /></div> : (
         <>
           <div className="calendar">
             <div className="container">
@@ -399,11 +421,10 @@ const Calendar = ({
                                 className="main-calendar-card-data-child"
                               >
                                 <div
-                                  className={`main-calendar-data-status ${
-                                    dateTime?.status === "on"
-                                      ? "bg-success"
-                                      : "bg-danger"
-                                  }`}
+                                  className={`main-calendar-data-status ${dateTime?.status === "on"
+                                    ? "bg-success"
+                                    : "bg-danger"
+                                    }`}
                                 >
                                   {dateTime?.status}
                                 </div>
@@ -438,11 +459,10 @@ const Calendar = ({
                                 className="main-calendar-card-data-child"
                               >
                                 <div
-                                  className={`main-calendar-data-status ${
-                                    dateTime?.status === "on"
-                                      ? "bg-success"
-                                      : "bg-danger"
-                                  }`}
+                                  className={`main-calendar-data-status ${dateTime?.status === "on"
+                                    ? "bg-success"
+                                    : "bg-danger"
+                                    }`}
                                 >
                                   {dateTime?.status}
                                 </div>
@@ -478,11 +498,10 @@ const Calendar = ({
                                 className="main-calendar-card-data-child"
                               >
                                 <div
-                                  className={`main-calendar-data-status ${
-                                    dateTime?.status === "on"
-                                      ? "bg-success"
-                                      : "bg-danger"
-                                  }`}
+                                  className={`main-calendar-data-status ${dateTime?.status === "on"
+                                    ? "bg-success"
+                                    : "bg-danger"
+                                    }`}
                                 >
                                   {dateTime?.status}
                                 </div>
@@ -543,6 +562,8 @@ const Calendar = ({
           setSelectedDate={setSelectedDate}
           responseObject={responseObject}
           setShowCalender={setShowCalender}
+          getScheduleAPI={getScheduleAPI}
+          selectedProperty={selectedProperty}
         />
       )}
     </>

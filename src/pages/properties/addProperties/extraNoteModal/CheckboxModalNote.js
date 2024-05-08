@@ -27,12 +27,12 @@ const CheckboxModalNote = ({
       updatedResponseText[valIndex] = noteData;
 
       setResponseText(updatedResponseText);
-    }else{
+    } else {
       ToastHandle("Something went wrong", "danger");
     }
 
     handleClose();
-    
+
   };
 
   useEffect(() => {
@@ -76,6 +76,60 @@ const CheckboxModalNote = ({
               <button className="mw-auto" onClick={handleAddNote}>
                 Add Note
               </button>
+            </div>
+          </div>
+
+          <div className=" d-flex justify-content-between mt-3">
+            <div class="col text-center">
+              <input
+                type="checkbox"
+                // checked={checkedSchedule.Future}
+                // onChange={(e) => handleOnChange(e, "Future")}
+                className="btn-check"
+                id="future"
+                autocomplete="off"
+              />
+              <label
+                className={`btn btn-primary rounded-pill px-4 tab-btn-stage 
+                  }`}
+                for="future"
+              >
+                Future
+              </label>
+            </div>
+            <div class="col text-center">
+              <input
+                type="checkbox"
+                // checked={checkedSchedule.Past}
+                // onChange={(e) => handleOnChange(e, "Past")}
+                className="btn-check"
+                id="past"
+                autocomplete="off"
+              />
+              <label
+                className={`btn btn-primary rounded-pill px-4 tab-btn-stage 
+                  }`}
+                for="past"
+              >
+                Inquiry/Past
+              </label>
+            </div>
+            <div class="col text-center">
+              <input
+                type="checkbox"
+                // checked={checkedSchedule.Current}
+                // onChange={(e) => handleOnChange(e, "Current")}
+                className="btn-check"
+                id="current"
+                autocomplete="off"
+              />
+              <label
+                className={`btn btn-primary rounded-pill tab-btn-stage px-4 
+                  }`}
+                for="current"
+              >
+                Current
+              </label>
             </div>
           </div>
         </Modal.Body>

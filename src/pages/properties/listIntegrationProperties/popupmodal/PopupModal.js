@@ -14,6 +14,8 @@ const PopupModal = ({
   setSelectedDate,
   responseObject,
   setShowCalender,
+  getScheduleAPI,
+  selectedProperty
 }) => {
   const navigate = useNavigate();
 
@@ -30,9 +32,9 @@ const PopupModal = ({
   });
 
   const [checkedSchedule, setCheckedSchedule] = useState({
-    Future: true,
-    Past: true,
-    Current: true,
+    Future: false,
+    Past: false,
+    Current: false,
   });
 
   //  format date to dd/mm/yyyy format
@@ -110,24 +112,42 @@ const PopupModal = ({
         );
 
         // setCalendarSchedule(() => response?.data?.schedule);
-        console.log("API Response: ", response.data);
+        // console.log("API Response: ", response.data);
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
 
           setTimeout(() => {
             setShow(false);
-            setShowCalender(false);
+            // setShowCalender(false);
           }, 1500);
+
+          getScheduleAPI(selectedProperty);
         } else {
           ToastHandle("Something went wrong", "danger");
+          setTimeout(() => {
+            setShow(false);
+            setShowCalender(false);
+          }, 1500);
+
+          getScheduleAPI(selectedProperty);
         }
       } else {
-        alert("No Token");
+        ToastHandle("No Token", "danger");
+        setTimeout(() => {
+          setShow(false);
+          setShowCalender(false);
+        }, 1500);
+        getScheduleAPI(selectedProperty);
       }
     } catch (error) {
       console.log(error);
       ToastHandle(error?.data?.error, "danger");
+      setTimeout(() => {
+        setShow(false);
+        setShowCalender(false);
+      }, 1500);
+      getScheduleAPI(selectedProperty);
     }
     setSubmit(false);
   };
@@ -258,9 +278,8 @@ const PopupModal = ({
                   autocomplete="off"
                 />
                 <label
-                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
-                    checkedSchedule.Future ? "" : "btn-unselected"
-                  }`}
+                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "" : "btn-unselected"
+                    }`}
                   for="future"
                 >
                   Future
@@ -276,9 +295,8 @@ const PopupModal = ({
                   autocomplete="off"
                 />
                 <label
-                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
-                    checkedSchedule.Past ? "" : "btn-unselected"
-                  }`}
+                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "" : "btn-unselected"
+                    }`}
                   for="past"
                 >
                   Inquiry/Past
@@ -294,9 +312,8 @@ const PopupModal = ({
                   autocomplete="off"
                 />
                 <label
-                  className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${
-                    checkedSchedule.Current ? "" : "btn-unselected"
-                  }`}
+                  className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "" : "btn-unselected"
+                    }`}
                   for="current"
                 >
                   Current
