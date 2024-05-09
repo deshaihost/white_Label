@@ -210,7 +210,7 @@ const ScheduleCalender = ({
 
                   return (
                     <tr>
-                      <td
+                      <td style={{ width: '100px', marginBottom: '10px' }}
                         className={
                           schedule === "CURRENT"
                             ? "bg-success"
@@ -231,13 +231,15 @@ const ScheduleCalender = ({
                         let startIndex;
                         let endTime;
                         let endIndex;
+                        let startDateTime;
+                        let endDateTime;
 
                         return (
                           <td>
                             <div className="calendar-schedule-data">
                               <div className="calendar-schedule-time">
                                 <p>
-                                  <div className="row custom-row">
+                                  <div className="custom-row">
                                     {weeklySchedule[days]?.map((data, index) => {
                                       const parsedTime = new Date(`2000-01-01T${data}`);
                                       // Get hours and minutes
@@ -258,9 +260,11 @@ const ScheduleCalender = ({
                                       if (index % 2 === 0) {
                                         startTime = data;
                                         startIndex = index
+                                        startDateTime = formattedTime
                                       } else {
                                         endTime = data;
-                                        endIndex = index
+                                        endIndex = index;
+                                        endDateTime = formattedTime
                                       }
 
 
@@ -276,8 +280,26 @@ const ScheduleCalender = ({
 
                                       return (
                                         <>
-                                          <div className="col-6 custom-col">
-                                            {formattedTime}
+                                          {index % 2 !== 0 ? <>
+                                            <div>
+                                              <p>
+                                                <span>{startDateTime}</span>
+                                                <span>-</span>
+                                                <span>{endDateTime}</span>
+                                              </p>
+                                              <div>
+                                                <span className="calendar-schedule-button mainCursor ms-1">
+                                                  <FaRegEdit />
+                                                  <FaRegTrashCan onClick={() => handleRemoveSchedule(dataToRemove)} />
+                                                </span>
+                                              </div>
+                                            </div>
+                                          </>
+                                            :
+                                            <></>
+                                          }
+                                          {/* <div className="col-6 custom-col">
+                                            <span>{formattedTime}</span>
 
                                             {index % 2 !== 0 && (
                                               <span className="calendar-schedule-button mainCursor ms-1">
@@ -285,7 +307,7 @@ const ScheduleCalender = ({
                                                 <FaRegTrashCan onClick={() => handleRemoveSchedule(dataToRemove)} />
                                               </span>
                                             )}
-                                          </div>
+                                          </div> */}
                                         </>
                                       );
                                     })}

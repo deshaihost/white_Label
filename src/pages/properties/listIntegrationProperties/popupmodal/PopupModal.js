@@ -170,7 +170,7 @@ const PopupModal = ({
       !checkedSchedule.Future &&
       !checkedSchedule.Past
     ) {
-      ToastHandle("Please select schedule", "danger");
+      ToastHandle("Please select at least one reservation stage", "danger");
       return;
     }
 

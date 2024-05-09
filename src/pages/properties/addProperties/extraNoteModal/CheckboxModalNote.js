@@ -14,6 +14,40 @@ const CheckboxModalNote = ({
   
   const [noteData, setNoteData] = useState("");
 
+  console.log("responseOptions inside Modal: ", responseOptions);
+  console.log("responseText inside Modal: ", responseText);
+  console.log("noteClickData inside Modal: ", noteClickData);
+
+  const [checkedSchedule, setCheckedSchedule] = useState({
+    Future: false,
+    Past: false,
+    Current: false,
+  });
+
+  // handle Stage button clicks
+  const handleOnChange = (e, type) => {
+    if (type === "Future") {
+      setCheckedSchedule((prevData) => ({
+        ...prevData,
+        Future: e.target.checked,
+      }));
+    }
+    if (type === "Past") {
+      setCheckedSchedule((prevData) => ({
+        ...prevData,
+        Past: e.target.checked,
+      }));
+    }
+    if (type === "Current") {
+      setCheckedSchedule((prevData) => ({
+        ...prevData,
+        Current: e.target.checked,
+      }));
+    }
+
+    console.log("Checked: ", e.target.checked);
+  };
+
   const handleAddNote = () => {
     console.log("Note Data: ", noteData);
     // return;
@@ -80,14 +114,14 @@ const CheckboxModalNote = ({
             <div class="col text-center">
               <input
                 type="checkbox"
-                // checked={checkedSchedule.Future}
-                // onChange={(e) => handleOnChange(e, "Future")}
+                checked={checkedSchedule.Future}
+                onChange={(e) => handleOnChange(e, "Future")}
                 className="btn-check"
                 id="future"
                 autocomplete="off"
               />
               <label
-                className={`btn btn-primary rounded-pill px-4 tab-btn-stage 
+                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "btn-unselected" : ""
                   }`}
                 for="future"
               >
@@ -97,14 +131,14 @@ const CheckboxModalNote = ({
             <div class="col text-center">
               <input
                 type="checkbox"
-                // checked={checkedSchedule.Past}
-                // onChange={(e) => handleOnChange(e, "Past")}
+                checked={checkedSchedule.Past}
+                onChange={(e) => handleOnChange(e, "Past")}
                 className="btn-check"
                 id="past"
                 autocomplete="off"
               />
               <label
-                className={`btn btn-primary rounded-pill px-4 tab-btn-stage 
+                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "btn-unselected" : ""
                   }`}
                 for="past"
               >
@@ -114,14 +148,14 @@ const CheckboxModalNote = ({
             <div class="col text-center">
               <input
                 type="checkbox"
-                // checked={checkedSchedule.Current}
-                // onChange={(e) => handleOnChange(e, "Current")}
+                checked={checkedSchedule.Current}
+                onChange={(e) => handleOnChange(e, "Current")}
                 className="btn-check"
                 id="current"
                 autocomplete="off"
               />
               <label
-                className={`btn btn-primary rounded-pill tab-btn-stage px-4 
+                className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "btn-unselected" : ""
                   }`}
                 for="current"
               >

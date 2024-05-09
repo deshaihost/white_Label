@@ -156,7 +156,7 @@ const SchedulePopupModal = ({
     console.log(startSchedule, " ", endSchedule);
 
     if (!checkedSchedule.Current && !checkedSchedule.Future && !checkedSchedule.Past) {
-      ToastHandle("Please select schedule", "danger");
+      ToastHandle("Please select at least one reservation stage", "danger");
       return;
     }
 
@@ -244,7 +244,7 @@ const SchedulePopupModal = ({
                 autocomplete="off"
               />
               <label
-                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "btn-unselected" : ""
+                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "" : "btn-unselected"
                   }`}
                 for="future"
               >
@@ -261,7 +261,7 @@ const SchedulePopupModal = ({
                 autocomplete="off"
               />
               <label
-                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "btn-unselected" : ""
+                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "" : "btn-unselected"
                   }`}
                 for="past"
               >
@@ -278,7 +278,7 @@ const SchedulePopupModal = ({
                 autocomplete="off"
               />
               <label
-                className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "btn-unselected" : ""
+                className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "" : "btn-unselected"
                   }`}
                 for="current"
               >

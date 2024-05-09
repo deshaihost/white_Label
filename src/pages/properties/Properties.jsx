@@ -55,26 +55,28 @@ const Properties = () => {
     }
   };
   // toggle chatbot
-  const createPropertiesName =
-    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const intergrations =
-    store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
-  const toggleChatMessage =
-    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
+  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const propertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // shows toggle state for each property
+  const intergrations = store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
+  const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
-  const toggleChatStatus =
-    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
+  const toggleChatStatus = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
+
   const [toggleOnOff, setToggleOnOff] = useState("");
   const [toggleActive, setToggleActive] = useState(true);
+
+  const anyPropertyNotForcedOff = Object.values(propertiesExtraData).some(property => property.toggle_status !== "FORCED_OFF");
+
   const toggleChatBotHndle = (type) => {
     if (type) {
-      setToggleOnOff("on");
-      setToggleActive(true);
+      setToggleOnOff("on"); // trigger the API call
+      // setToggleActive(true); // set button state // no longer needed because button appearalce state is controlled by anyPropertyNotForcedOff, which comes directly from API data
     } else {
       setToggleOnOff("FORCED_OFF");
-      setToggleActive(false);
+      // setToggleActive(false);
     }
   };
+
   useEffect(() => {
     if (toggleOnOff !== "") {
       dispatch(
@@ -128,7 +130,7 @@ const Properties = () => {
                   <div className="property-heading-right">
                     <p>Hostbuddy Status</p>
                     {toggleChatLoading && <FullScreenLoader />}
-                    {!toggleActive ? (
+                    {!anyPropertyNotForcedOff ? (
                       <>
                         {" "}
                         <button
