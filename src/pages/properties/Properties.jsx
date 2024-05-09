@@ -31,7 +31,6 @@ const Properties = () => {
     removeIntegration: false,
     billingPortal: false,
   });
-  console.log(model?.billingPortal, "modelmodel");
   const [propertyConditionCheck, setPropertyConditionCheck] = useState(false);
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {
@@ -62,11 +61,12 @@ const Properties = () => {
   const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
   const toggleChatStatus = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
+  console.log(propertiesExtraData,'',Object?.values(propertiesExtraData))
 
   const [toggleOnOff, setToggleOnOff] = useState("");
   const [toggleActive, setToggleActive] = useState(true);
 
-  const anyPropertyNotForcedOff = Object.values(propertiesExtraData).some(property => property.toggle_status !== "FORCED_OFF");
+  const anyPropertyNotForcedOff =propertiesExtraData? Object?.values(propertiesExtraData)?.some(property => property?.toggle_status !== "FORCED_OFF"):[]
 
   const toggleChatBotHndle = (type) => {
     if (type) {
