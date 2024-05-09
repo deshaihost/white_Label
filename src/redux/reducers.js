@@ -6,6 +6,7 @@ import { sendPasswordRestEmailReducer } from "./auth/forgotPassword/reducers";
 import {
   chatBoxAIReducer,
   getSessionIdReducer,
+  messageFeedBackReducer
 } from "./pages/meetHostBuddy/reducers";
 import {
   getUserDataReducer,
@@ -29,6 +30,7 @@ import {
   supportingDocumentPostReducer,
   supportingUrlPostReducer,
   togglechatBotOnOffReducer,
+  copyExistingPropertyReducer
 
 } from "./pages/pagesApis/addProperties/reducers";
 import { getPropertyByNameReducer, propertyGetConversationReducer } from "./pages/pagesApis/propertyInsight/reducers";
@@ -58,5 +60,7 @@ export default (combineReducers({
   propertyGetConversationReducer,
   updateAccountUpdatePasswordReducer,
   getActionItemsReducer,
-  completeActionsItemsReducer
+  completeActionsItemsReducer,
+  copyExistingPropertyReducer,
+  messageFeedBackReducer
 }): any);

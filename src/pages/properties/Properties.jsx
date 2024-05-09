@@ -31,7 +31,6 @@ const Properties = () => {
     removeIntegration: false,
     billingPortal: false,
   });
-  console.log(model?.billingPortal, "modelmodel");
   const [propertyConditionCheck, setPropertyConditionCheck] = useState(false);
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {

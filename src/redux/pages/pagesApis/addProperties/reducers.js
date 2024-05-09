@@ -42,6 +42,11 @@ const TOGGLE_CHATBOT_ONOFF_PUT_INITIAL_STATE = {
   loading: false,
 };
 
+const COPY_EXISTING_PROPERTY_INITIAL_STATE = {
+  copyExistingProperty: [],
+  loading: false,
+};
+
 const postPropertiesReducer = (
   state = POST_PROPERTIES_INITIAL_STATE,
   action
@@ -277,6 +282,33 @@ const togglechatBotOnOffReducer = (
   }
 };
 
+const copyExistingPropertyReducer = (
+  state = COPY_EXISTING_PROPERTY_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case AddPropertiesActionTypes.COPY_EXITING_PROPERTY_LOADING:
+      return {
+        copyExistingProperty: state.copyExistingProperty,
+        loading: true,
+      };
+    case AddPropertiesActionTypes.COPY_EXITING_PROPERTY_SUCCESS:
+      return {
+        copyExistingProperty: action.payload,
+        loading: false,
+      };
+    case AddPropertiesActionTypes.COPY_EXITING_PROPERTY_ERROR:
+      return {
+        copyExistingProperty: action.payload,
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      return COPY_EXISTING_PROPERTY_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
+
 
 
 export {
@@ -288,5 +320,6 @@ export {
   deleteListIntegrationPropertiesReducer,
   supportingDocumentPostReducer,
   supportingUrlPostReducer,
-  togglechatBotOnOffReducer
+  togglechatBotOnOffReducer,
+  copyExistingPropertyReducer
 };

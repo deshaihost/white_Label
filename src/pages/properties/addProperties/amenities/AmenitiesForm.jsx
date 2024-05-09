@@ -399,7 +399,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
       "Rules and Services"
     ][0]["response_text"] = amenitiesRulesResponse;
 
-    console.log("Updated Data: ", questionaireToSend);
 
     dispatch(
       updateQuestionnaireActions({

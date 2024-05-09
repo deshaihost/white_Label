@@ -25,6 +25,9 @@ export const GET_PROPERTY_BY_NAME = "/properties/";
 export const PROPERTY_GET_CONVERSATION = "/properties/";
 export const GET_ACTIONS_ITEMS = "/get_action_items";
 export const COMPLETE_ACTIONS_ITEMS = "/complete_action_item";
+export const COPY_QUESTIONNAIRE = "/properties";
+export const MESSAGE_FEEDBACK = "/properties";
+
 
 
 

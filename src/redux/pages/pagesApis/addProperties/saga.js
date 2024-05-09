@@ -10,7 +10,8 @@ import {
   deleteListIntegrationPropertiesEndPoint,
   supportingDocumentPostEndPoint,
   supportingUrlPostEndPoint,
-  toggleChatbotOnOffPutEndPoint
+  toggleChatbotOnOffPutEndPoint,
+  copyExistingPropertyEndPoint
 } from "./api";
 import { StateEmtpyActionTypes } from "../../../stateEmpty/constants";
 
@@ -274,6 +275,32 @@ function* toggleChatbotOnOffFunction(data) {
   }
 }
 
+function* copyExistingPropertyFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.COPY_EXITING_PROPERTY_LOADING,
+      payload: {},
+    });
+    const response = yield call(copyExistingPropertyEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.COPY_EXITING_PROPERTY_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.COPY_EXITING_PROPERTY_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.COPY_EXITING_PROPERTY_ERROR,
+      payload: error,
+    });
+  }
+}
+
 function* stateEmptyFunction() {
   yield put({
     type: StateEmtpyActionTypes.STATE_EMPTY_SUCCESS,
@@ -348,6 +375,9 @@ export function* acctionStateEmpty(): any {
 export function* acctionToggleChatbotOnOff(): any {
   yield takeEvery(AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_FIRST, toggleChatbotOnOffFunction);
 }
+export function* acctionCopyExistingProperty(): any {
+  yield takeEvery(AddPropertiesActionTypes.COPY_EXITING_PROPERTY_FIRST, copyExistingPropertyFunction);
+}
 
 
 
@@ -363,7 +393,8 @@ function* addPropertiesSaga(): any {
     fork(acctionDeleteListIntegration),
     fork(acctionSupportingDocumentPost),
     fork(acctionUrlDocumentPost),
-    fork(acctionToggleChatbotOnOff)
+    fork(acctionToggleChatbotOnOff),
+    fork(acctionCopyExistingProperty)
   ]);
 }
 

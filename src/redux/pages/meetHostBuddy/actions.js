@@ -11,3 +11,10 @@ export const chatBoxAIActions = (data) => ({
     data,
 });
 
+export const messageFeedBackActions = (data) => ({
+    type: MeetHostActionTypes.MESSAGE_FEEDBACK_FIRST,
+    data,
+});
+
+
+

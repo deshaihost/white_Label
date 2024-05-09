@@ -67,9 +67,7 @@ const Dashboard = () => {
   const completeActionsItemLoading=store?.completeActionsItemsReducer?.loading
   const completeActionsItemStatus=store?.completeActionsItemsReducer?.completeActionsItems?.status;
   const completeActionsItemMessage=store?.completeActionsItemsReducer?.completeActionsItems?.data?.message;
-  console.log(store?.completeActionsItemsReducer?.completeActionsItems?.status
 
-    ,'hhh')
   const compeletHndle = (itemId, propyName, convrtionId) => {
     dispatch(
       putCompleteActionItemActions({

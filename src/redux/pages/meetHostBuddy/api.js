@@ -13,8 +13,14 @@ function chatBoxAIEndPoint(params: any): any {
     return api.create(URL.CHAT_BOX_AI, data);
 }
 
+function messageFeedBackEndPoint(params: any): any {
+    const { data } = params;
+    return api.create(`${URL.MESSAGE_FEEDBACK}/${data?.propertyNm}/message_feedback`, data?.FeedBackData);
+}
+
 
 export {
     getSeccionIdEndPoint,
-    chatBoxAIEndPoint
+    chatBoxAIEndPoint,
+    messageFeedBackEndPoint
 };

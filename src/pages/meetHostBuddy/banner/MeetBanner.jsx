@@ -19,7 +19,6 @@ import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel
 import { useLocation } from "react-router-dom";
 const MeetBanner = (props) => {
   const { urlData } = props;
-  console.log(urlData, "urlDataurlData");
   const { chatbot_key, property_name, user_type } = urlData ? urlData : {};
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -30,7 +29,17 @@ const MeetBanner = (props) => {
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
   const getMessageResp =
     store?.getSessionIdReducer?.sessionId?.data?.initial_message;
-  const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data?.response;
+  const getMessageRespId =
+    store?.getSessionIdReducer?.sessionId?.data?.session_id;
+  let FirstMessageRespo = {
+    response: getMessageResp,
+    message_id: getMessageRespId,
+  };
+  // const getMessageResp =
+  //   store?.getSessionIdReducer?.sessionId?.data?.initial_message;
+  // const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data?.response;
+  const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data;
+
   const statusResp = store?.chatBoxAIReducer?.chatBoxAI?.status;
   const updateMessageRespLoading = store?.chatBoxAIReducer?.loading;
   const [messages, setMessages] = useState([]);
@@ -74,7 +83,7 @@ const MeetBanner = (props) => {
   useEffect(() => {
     const userMessage = { text: "Hi", sender: "user" };
     const botMessage = {
-      text: getMessageResp !== undefined ? getMessageResp : "",
+      text: FirstMessageRespo !== undefined ? FirstMessageRespo : "",
       sender: "bot",
     };
     setMessages([userMessage, botMessage]);
@@ -128,15 +137,28 @@ const MeetBanner = (props) => {
 
   // feed back functionality
   const [feedBackModelOpen, setFeedBackModelOpen] = useState(false);
+  // const [feedBackIconActive, setFeedBackIconActive] = useState("");
+  const [feedBackDataGet, setFeedBackDataGet] = useState({
+    typeThumbs: "",
+    conversationId: "",
+    messageId: "",
+    propertyName: "",
+  });
+  const feedBckModelOpenHndle = (type, messId) => {
+    // setFeedBackIconActive(messId);
+    setFeedBackDataGet({
+      ...feedBackDataGet,
+      typeThumbs: type,
+      conversationId: sessionId?.session_id,
+      messageId: messId,
+      propertyName: copyChatBotName,
+    });
 
-  const feedBckModelOpenHndle = (index) => {
-    console.log(index, "indexindex");
     setFeedBackModelOpen(true);
   };
-  const messgFeedBckClose=()=>{
+  const messgFeedBckClose = () => {
     setFeedBackModelOpen(false);
-
-  }
+  };
 
   return (
     <div className="meet-banner">
@@ -193,6 +215,7 @@ const MeetBanner = (props) => {
                         text={message.text}
                         sender={message.sender}
                         feedBckModelOpen={feedBckModelOpenHndle}
+                        feedBackDataGet={feedBackDataGet}
                       />
                     </>
                   );
@@ -236,7 +259,11 @@ const MeetBanner = (props) => {
             </div>
           </div>
         </div>
-        <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose}/>
+        <MessgFeedBckModel
+          show={feedBackModelOpen}
+          handleClose={messgFeedBckClose}
+          feedBackDataGet={feedBackDataGet}
+        />
       </Container>
     </div>
   );

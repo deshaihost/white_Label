@@ -54,6 +54,12 @@ export const defaultActions = (data) => ({
     data,
 });
 
+export const copyExistingPropertyActions = (data) => ({
+    type: AddPropertiesActionTypes.COPY_EXITING_PROPERTY_FIRST,
+    data,
+});
+
+
 
 
 
