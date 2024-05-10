@@ -395,7 +395,7 @@ const PopupModal = ({
             <div class="row">
               <div class="col-4 text-center ">
                 <div className="">
-                  <Button className="bg-primary form-control d-block">
+                  <Button className="bg-primary form-control d-block" onClick={() => setShow(false)}>
                     Cancel
                   </Button>
                 </div>

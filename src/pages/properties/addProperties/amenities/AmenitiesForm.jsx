@@ -29,6 +29,12 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   const [amenitiesOutdoorResponse, setAmenitiesOutdoorResponse] = useState([]);
   const [amenitiesRulesResponse, setAmenitiesRulesResponse] = useState([]);
 
+  const [amenitiesFamilyHideReservation, setAmenitiesFamilyHideReservation] = useState([]);
+  const [amenitiesIndoorHideReservation, setAmenitiesIndoorHideReservation] = useState([]);
+  const [amenitiesMoreHideReservation, setAmenitiesMoreHideReservation] = useState([]);
+  const [amenitiesOutdoorHideReservation, setAmenitiesOutdoorHideReservation] = useState([]);
+  const [amenitiesRulesHideReservation, setAmenitiesRulesHideReservation] = useState([]);
+
   const getLocalStorageData = nameKey();
 
   const [show, setShow] = useState(false);
@@ -92,6 +98,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         setAmenitiesFamilyOptions((prevState) => [...prevState, checkedValue]);
         // add "" for selected family value
         setAmenitiesFamilyResponse((prevState) => [...prevState, ""]);
+
+        setAmenitiesFamilyHideReservation((prevState) => [...prevState, ""]);
       }
 
       setNoteClickData({
@@ -165,12 +173,15 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
   // handle edit or add note button click to add checkbox to checked state
   const handleEditButtonClick = (type, amenityValue) => {
+    console.log("amenityValue: ", amenityValue)
     if (type === "family") {
       if (!amenitiesFamilyOptions.includes(amenityValue)) {
         // If the familyValue is not already included, add it to the state
         setAmenitiesFamilyOptions((prevState) => [...prevState, amenityValue]);
         // add "" for selected family value
         setAmenitiesFamilyResponse((prevState) => [...prevState, ""]);
+        // add "" for selected family value
+        setAmenitiesFamilyHideReservation((prevState) => [...prevState, ""]);
       }
 
       setNoteClickData({
@@ -426,26 +437,32 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     if (family?.response_options.length > 0) {
       setAmenitiesFamilyOptions(family?.response_options);
       setAmenitiesFamilyResponse(family?.response_text);
+      setAmenitiesFamilyHideReservation(family?.hide_for_reservations);
+
     }
 
     if (Indoor?.response_options.length > 0) {
       setAmenitiesIndoorOptions(Indoor.response_options);
       setAmenitiesIndoorResponse(Indoor.response_text);
+      setAmenitiesIndoorHideReservation(Indoor.hide_for_reservations);
     }
 
     if (More?.response_options.length > 0) {
       setAmenitiesMoreOptions(More.response_options);
       setAmenitiesMoreResponse(More.response_text);
+      setAmenitiesMoreHideReservation(More.hide_for_reservations);
     }
 
     if (Outdoor?.response_options.length > 0) {
       setAmenitiesOutdoorOptions(Outdoor.response_options);
       setAmenitiesOutdoorResponse(Outdoor.response_text);
+      setAmenitiesOutdoorHideReservation(Outdoor.hide_for_reservations);
     }
 
     if (RulesAndServices?.response_options.length > 0) {
       setAmenitiesRulesOptions(RulesAndServices.response_options);
       setAmenitiesRulesResponse(RulesAndServices.response_text);
+      setAmenitiesRulesHideReservation(RulesAndServices.hide_for_reservations);
     }
   }, [family, Indoor, More, Outdoor, RulesAndServices]);
 
@@ -479,6 +496,22 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
             (noteClickData.type === "Outdoor" && setAmenitiesOutdoorResponse) ||
             (noteClickData.type === "RulesAndServices" &&
               setAmenitiesRulesResponse)
+          }
+          hideReservationText={
+            (noteClickData.type === "family" && amenitiesFamilyHideReservation) ||
+            (noteClickData.type === "Indoor" && amenitiesIndoorHideReservation) ||
+            (noteClickData.type === "More" && amenitiesMoreHideReservation) ||
+            (noteClickData.type === "Outdoor" && amenitiesOutdoorHideReservation) ||
+            (noteClickData.type === "RulesAndServices" &&
+              amenitiesRulesHideReservation)
+          }
+          setHideReservationText={
+            (noteClickData.type === "family" && setAmenitiesFamilyHideReservation) ||
+            (noteClickData.type === "Indoor" && setAmenitiesIndoorHideReservation) ||
+            (noteClickData.type === "More" && setAmenitiesMoreHideReservation) ||
+            (noteClickData.type === "Outdoor" && setAmenitiesOutdoorHideReservation) ||
+            (noteClickData.type === "RulesAndServices" &&
+              setAmenitiesRulesHideReservation)
           }
         />
       )}

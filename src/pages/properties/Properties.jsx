@@ -61,12 +61,12 @@ const Properties = () => {
   const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
   const toggleChatStatus = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
-  console.log(propertiesExtraData,'',Object?.values(propertiesExtraData))
+  // console.log(propertiesExtraData,'',Object?.values(propertiesExtraData))
 
   const [toggleOnOff, setToggleOnOff] = useState("");
   const [toggleActive, setToggleActive] = useState(true);
 
-  const anyPropertyNotForcedOff =propertiesExtraData? Object?.values(propertiesExtraData)?.some(property => property?.toggle_status !== "FORCED_OFF"):[]
+  const anyPropertyNotForcedOff = propertiesExtraData ? Object?.values(propertiesExtraData)?.some(property => property?.toggle_status !== "FORCED_OFF") : []
 
   const toggleChatBotHndle = (type) => {
     if (type) {
@@ -186,7 +186,7 @@ const Properties = () => {
                     )}
                   </button>
                   {intergrations !== undefined &&
-                  Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key)
+                    Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key)
                     <p style={{ color: "white" }}>
                       Connected to {Object.keys(intergrations)[0]}
                     </p>

@@ -14,11 +14,14 @@ import Loader, { BoxLoader } from "../../../../../helper/Loader";
 import { Button, Modal } from "react-bootstrap";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import SelectModalNote from "../../extraNoteModal/SelectModalNote";
+import ReservationStageModal from "../../extraNoteModal/ReservationStageModal";
+
 
 const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
   const { id } = useParams();
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [show, setShow] = useState(false);
+  const [showReservation, setShowReservation] = useState(false);
   const [addedNote, setAddedNote] = useState({});
   const [noteClickData, setNoteClickData] = useState({
     question: "",
@@ -26,16 +29,40 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
     value: "",
   });
 
+  const [reservationClickData, setReservationClickData] = useState({
+    name: "",
+    value: "",
+  });
+
   const handleClose = () => setShow(false);
-  const handleShow = (question, name, value) => {
+  const handleReservationClose = () => setShowReservation(false);
+  const handleShow = (question, name, value, hideName, hideValue) => {
     setNoteClickData({
       ...noteClickData,
       question: question,
       name: name,
       value: value,
     });
+
+    setReservationClickData({
+      ...reservationClickData,
+      name: hideName,
+      value: hideValue,
+    });
+
     setShow(true);
   };
+
+  // button click handle for without not data
+  const handleHideReservationShow = (name, value) => {
+    setReservationClickData({
+      ...reservationClickData,
+      name: name,
+      value: value,
+    });
+    setShowReservation(true);
+
+  }
 
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -70,6 +97,9 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
 
   const onSubmit = (data) => {
     updateImageHndle()
+
+    // console.log("addedNote data: ", addedNote)
+    // return
     const questionaireToSend = structuredClone(apiQuestionnaireObject);
 
     if (questionnaireApi["Basics"] && questionnaireApi["Basics"]["Location"]) {
@@ -87,29 +117,79 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
             : addedNote.select0_note
           : null;
 
+      if (addedNote && "select0_hidereservation" in addedNote) {
+        questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+          "Location"
+        ][0]["hide_for_reservations"] = addedNote?.select0_hidereservation ?? "";
+      }
+
       questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
         "Location"
       ][1]["response_text"] = data?.short_answer1;
+
+
+      if (addedNote && "short_answer1_hidereservation" in addedNote) {
+        questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+          "Location"
+        ][1]["hide_for_reservations"] = addedNote?.short_answer1_hidereservation ?? "";
+        // addedNote && "short_answer1_hidereservation" in addedNote
+        //   ? addedNote?.short_answer1_hidereservation ?? ""
+        //   : "";
+      }
+
 
       questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
         "Location"
       ][2]["response_text"] = data?.short_answer2;
 
+      if (addedNote && "short_answer2_hidereservation" in addedNote) {
+        questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+          "Location"
+        ][2]["hide_for_reservations"] = addedNote?.short_answer2_hidereservation ?? "";
+      }
+
       questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
         "Location"
       ][3]["response_text"] = data?.short_answer3;
+
+      if (addedNote && "short_answer3_hidereservation" in addedNote) {
+        questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+          "Location"
+        ][3]["hide_for_reservations"] = addedNote?.short_answer3_hidereservation ?? "";
+      }
+
 
       questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
         "Location"
       ][4]["response_text"] = data?.short_answer4;
 
+      if (addedNote && "short_answer4_hidereservation" in addedNote) {
+
+        questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+          "Location"
+        ][4]["hide_for_reservations"] = addedNote?.short_answer4_hidereservation ?? "";
+      }
+
       questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
         "Location"
       ][5]["response_text"] = data?.short_answer5;
 
+      if (addedNote && "short_answer5_hidereservation" in addedNote) {
+
+        questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+          "Location"
+        ][5]["hide_for_reservations"] = addedNote?.short_answer5_hidereservation ?? "";
+      }
+
       questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
         "Location"
       ][6]["response_text"] = data?.short_answer6;
+
+      if (addedNote && "short_answer6_hidereservation" in addedNote) {
+        questionaireToSend["questionnaire"]["questionnaire"]["Basics"][
+          "Location"
+        ][6]["hide_for_reservations"] = addedNote?.short_answer6_hidereservation ?? "";
+      }
     }
 
     dispatch(
@@ -142,40 +222,22 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
           show={show}
           handleClose={handleClose}
           noteClickData={noteClickData}
+          reservationClickData={reservationClickData}
           addedNote={addedNote}
           setAddedNote={setAddedNote}
         />
       )}
-      {/* <Modal
-        size="md"
-        show={show}
-        onHide={handleClose}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        className="contact-modal"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Extra Note
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="form-design">
-            <label>Property Type</label>
-            <textarea
-              className="form-control"
-              name=""
-              id=""
-              cols="30"
-              rows="10"
-              placeholder="Enter note here..."
-            ></textarea>
-            <div className="d-flex justify-content-center mt-3">
-              <button className="mw-auto">Add Note</button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal> */}
+
+      {showReservation && (
+        <ReservationStageModal
+          show={showReservation}
+          handleClose={handleReservationClose}
+          reservationClickData={reservationClickData}
+          addedNote={addedNote}
+          setAddedNote={setAddedNote}
+        />
+      )}
+
       {!apiQuestionnaireLoading ? (
         <div>
           <form
@@ -209,7 +271,9 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
                             handleShow(
                               item.question_text,
                               `${item.question_type}${index}_note`,
-                              item.response_text
+                              item.response_text,
+                              `${item.question_type}${index}_hidereservation`,
+                              item.hide_for_reservations
                             )
                           }
                           className="bg-none p-0 border-0 d-inline shadow-none"
@@ -225,8 +289,8 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
                           >
                             <path
                               d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                              fill="#146EF5
-                           "
+                              // fill="#146EF5"
+                              fill={`${item.hide_for_reservations.length > 0 ? '#ffeb3b' : '#146EF5'}`}
                             ></path>
                           </svg>
                         </Button>
@@ -261,6 +325,35 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
                   ) : (
                     <div>
                       <label className="text-white">{item.question_text}</label>
+                      <Button
+                        style={{ width: "auto" }}
+                        onClick={() =>
+                          handleHideReservationShow(
+                            // item.question_text,
+                            `${item.question_type}${index}_hidereservation`,
+                            item.hide_for_reservations
+                          )
+                        }
+                        className="bg-none p-0 border-0 d-inline shadow-none"
+                      >
+                        <svg
+                          className="ms-2"
+                          style={{ maxWidth: "16px" }}
+                          width="18"
+                          height="18"
+                          viewBox="0 0 18 18"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
+                            fill={`${(addedNote && `${item.question_type}${index}_hidereservation` in addedNote && addedNote[`${item.question_type}${index}_hidereservation`].length > 0) || (!addedNote || !(`${item.question_type}${index}_hidereservation` in addedNote)) && item.hide_for_reservations.length > 0 ? '#ffeb3b' : '#146EF5'}`}
+
+                          // fill={`${item.hide_for_reservations.length > 0 ? '#ffeb3b' : '#146EF5'}`}
+                          ></path>
+                        </svg>
+                      </Button>
+
                       <input
                         type="text"
                         className="form-control"
