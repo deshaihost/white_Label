@@ -12,6 +12,8 @@ import { useSelectorUseDispatch } from "../../helper/Authorized";
 import { PropertyGetConversationsActions } from "../../redux/actions";
 import Loader, { BoxLoader, FullScreenLoader } from "../../helper/Loader";
 import { useParams } from "react-router-dom";
+import { Helmet } from 'react-helmet';
+
 const PropertyInsight = () => {
   const { store, dispatch } = useSelectorUseDispatch();
   const statisticsGetNameByProperty =
@@ -84,6 +86,9 @@ const PropertyInsight = () => {
   }, [propertySelectName, userpertieslistName, propertyName]);
   return (
     <>
+    <Helmet>
+    <title>Property Insight</title>
+  </Helmet>;
       <div className="account-main">
         <div className="container">
           <div className="banner-heading">

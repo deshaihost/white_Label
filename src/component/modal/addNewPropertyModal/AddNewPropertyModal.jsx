@@ -115,13 +115,18 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
         <div className="text-center mt-3 addition_des_button">
           <button
             type="submit"
-            className="bg_theme_btn"
+            className="bg_theme_btn mb-3"
             onClick={confirmHandle}
           >
             {!striteUrlLoading ? <>Confirm</> : <><Loader /></>}
 
           </button>
         </div>
+        <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap">
+          <Link to="/privacy-policy" className="text-white">Privacy Policy</Link>
+          <span className="text-white">|</span>
+          <Link to="/termsof-service" className="text-white">Terms of Service</Link>
+          </div>
       </Modal.Body>
     </Modal>
   );

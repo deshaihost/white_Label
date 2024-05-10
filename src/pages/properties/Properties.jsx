@@ -4,6 +4,7 @@ import "./properties.css";
 import AddPropertyModal from "../../component/modal/addPropertyModal/AddPropertyModal";
 import NoWorkPlanModal from "../../component/modal/noWorkPlanModal/NoWorkPlanModal";
 import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
+import { Helmet } from 'react-helmet';
 import {
   getUserDataActions,
   goToBillingportalPostActions,
@@ -18,6 +19,7 @@ import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
 
 const Properties = () => {
+  
   const navigate = useNavigate();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -55,18 +57,27 @@ const Properties = () => {
     }
   };
   // toggle chatbot
-  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const propertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // shows toggle state for each property
-  const intergrations = store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
-  const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
+  const createPropertiesName =
+    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const propertiesExtraData =
+    store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // shows toggle state for each property
+  const intergrationsMain =
+    store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
+  const intergrations = intergrationsMain ? intergrationsMain : [];
+  const toggleChatMessage =
+    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
-  const toggleChatStatus = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
-  console.log(propertiesExtraData,'',Object?.values(propertiesExtraData))
+  const toggleChatStatus =
+    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
 
   const [toggleOnOff, setToggleOnOff] = useState("");
   const [toggleActive, setToggleActive] = useState(true);
 
-  const anyPropertyNotForcedOff =propertiesExtraData? Object?.values(propertiesExtraData)?.some(property => property?.toggle_status !== "FORCED_OFF"):[]
+  const anyPropertyNotForcedOff = propertiesExtraData
+    ? Object?.values(propertiesExtraData)?.some(
+        (property) => property?.toggle_status !== "FORCED_OFF"
+      )
+    : [];
 
   const toggleChatBotHndle = (type) => {
     if (type) {
@@ -114,6 +125,9 @@ const Properties = () => {
 
   return (
     <>
+    <Helmet>
+    <title>Properties</title>
+  </Helmet>;
       <div className="account-main">
         <div className="container">
           <div className="banner-heading">

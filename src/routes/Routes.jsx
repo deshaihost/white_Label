@@ -20,6 +20,10 @@ import ProtectedRoute from "./ProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import AddPropertiesIndex from "../pages/properties/addProperties/AddPropertiesIndex";
 import { ParamsGet } from "../helper/Authorized";
+import CopyChatBotLink from "../pages/copyChatbotLink/CopyChatBotLink";
+import TestProperty from "../pages/testProperty/TestProperty";
+import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";
+import TermsofService from "../pages/termsofService/TermsofService";
 
 const Routing = () => {
   const location = useLocation();
@@ -37,7 +41,8 @@ const Routing = () => {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/forgot" element={<ForgotPass />}></Route>
-
+        <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
+        <Route path="/termsof-service" element={<TermsofService />}></Route>
         <Route
           path="*"
           element={
@@ -111,7 +116,12 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/meet-hostbuddy/:id" element={<MeetHostBoddy />}></Route>
+        {/* <Route path="/meet-hostbuddy/:id" element={<MeetHostBoddy />}></Route> */}
+        <Route path="/test-property/:id" element={<TestProperty />}></Route>
+        <Route
+          path="/copy-chatbot-link/:id"
+          element={<CopyChatBotLink />}
+        ></Route>
       </Routes>
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
