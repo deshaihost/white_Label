@@ -41,10 +41,7 @@ function updateQuestionnaireEndPoint(params: any): any {
 }
 function supportingDocumentPostEndPoint(params: any): any {
   const { data } = params;
-  // console.log("data in api: ", Object.fromEntries(data.data.formData))
-  console.log("data in api: ", Object.fromEntries(data.formData))
   const formData = data?.formData;
-  console.log("data in api: ", Object.fromEntries(formData))
   // return
   return api.create(
     `${URL.SUPPORTING_DOCUMENT}/${data?.supportingkeyName}/add_file`,
@@ -64,6 +61,13 @@ function toggleChatbotOnOffPutEndPoint(params: any): any {
   return api.update(URL.TOGGLE_CHATBOT, data);
 }
 
+function copyExistingPropertyEndPoint(params: any): any {
+  const { data } = params;
+  return api.update(`${URL.COPY_QUESTIONNAIRE}/${data?.newPropertyNm}/copy_questionnaire`,{
+    source_property_name:data?.oldPropertyNm
+} );
+}
+
 export {
   testingApiEndPoint,
   postPropertiesEndPoint,
@@ -75,4 +79,5 @@ export {
   supportingDocumentPostEndPoint,
   supportingUrlPostEndPoint,
   toggleChatbotOnOffPutEndPoint,
+  copyExistingPropertyEndPoint
 };

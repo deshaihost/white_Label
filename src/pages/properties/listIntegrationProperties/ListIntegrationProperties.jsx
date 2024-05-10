@@ -226,9 +226,7 @@ const ListIntegrationProperties = () => {
   const copyToClipboard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-      console.log("Text copied to clipboard");
     } catch (err) {
-      console.error("Error in copying text: ", err);
     }
   };
   useEffect(() => {
@@ -242,6 +240,10 @@ const ListIntegrationProperties = () => {
         const url = new URL(baseUrl);
         url.searchParams.append("key", urlLink.chatbot_key);
         url.searchParams.append("name", urlLink.propertyN);
+        // url.searchParams.append("item", urlLink.item);
+        // url.searchParams.append("item1", urlLink.item1);
+
+
         url.searchParams.append("user", "guest"); // "guest" since we're using the copied chatbot link, not "Test Property"
         copyToClipboard(url.toString());
 
@@ -276,6 +278,8 @@ const ListIntegrationProperties = () => {
         const url = new URL(baseUrl);
         url.searchParams.append("key", urlLink.chatbot_key);
         url.searchParams.append("name", urlLink.propertyN);
+        // url.searchParams.append("item", urlLink.item);
+        // url.searchParams.append("item1", urlLink.item1);
         url.searchParams.append("user", "guest"); // "host" since we're using "Test Property", not the copied chatbot link
         window.open(url.toString(), "_blank");
         localStorage.setItem(localStorageKey, JSON?.stringify(testPropertyKey));

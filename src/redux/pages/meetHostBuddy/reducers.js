@@ -10,6 +10,11 @@ const GET_SESSION_ID_INITIAL_STATE = {
     loading: false,
 };
 
+const MESSAGE_FEEDBACK_INITIAL_STATE = {
+    messageFeedBack: [],
+    loading: false,
+};
+
 
 const chatBoxAIReducer = (
     state = CHAT_BOX_AI_INITIAL_STATE,
@@ -65,7 +70,35 @@ const getSessionIdReducer = (
     }
 };
 
+const messageFeedBackReducer = (
+    state = MESSAGE_FEEDBACK_INITIAL_STATE,
+    action
+) => {
+    switch (action.type) {
+        case MeetHostActionTypes.MESSAGE_FEEDBACK_LOADING:
+            return {
+                messageFeedBack: state.messageFeedBack,
+                loading: true,
+            };
+        case MeetHostActionTypes.MESSAGE_FEEDBACK_SUCCESS:
+            return {
+                messageFeedBack: action.payload,
+                loading: false,
+            };
+        case MeetHostActionTypes.MESSAGE_FEEDBACK_ERROR:
+            return {
+                messageFeedBack: action.payload,
+                loading: false,
+            };
+        // case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+        //     return GET_SESSION_ID_INITIAL_STATE;
+        default:
+            return state;
+    }
+};
+
 export {
     chatBoxAIReducer,
-    getSessionIdReducer
+    getSessionIdReducer,
+    messageFeedBackReducer
 }

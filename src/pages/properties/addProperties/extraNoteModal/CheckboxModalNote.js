@@ -11,6 +11,7 @@ const CheckboxModalNote = ({
   responseText,
   setResponseText,
 }) => {
+  
   const [noteData, setNoteData] = useState("");
 
   console.log("responseOptions inside Modal: ", responseOptions);
