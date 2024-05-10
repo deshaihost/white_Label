@@ -11,7 +11,7 @@ const NavBar = () => {
   const { token } = getAuthToken ? getAuthToken : [];
 
   const localstorageDataGet = localStorage.getItem("chatBoxId");
-  
+
   useEffect(() => {
     if (localstorageDataGet === 1234) {
       Authorized();
@@ -82,14 +82,6 @@ const NavBar = () => {
                     activeClassName="active"
                   >
                     Property Insight
-                  </NavLink>
-                  <NavLink
-                    exact
-                    to="/subscription"
-                    className="nav-link"
-                    activeClassName="active"
-                  >
-                    Subscription
                   </NavLink>
                   <NavLink
                     exact

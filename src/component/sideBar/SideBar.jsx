@@ -65,14 +65,14 @@ const SideBar = () => {
             Property Insight
           </Link>
         </li>
-        <li>
+        {/* <li>
           <Link
             to="/subscription"
             className={findlocation === "/subscription" ? "active" : ""}
           >
             Subscription
           </Link>
-        </li>
+        </li> */}
         <li>
           <Link
             to="/account"

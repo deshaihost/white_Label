@@ -7,6 +7,7 @@ import ListingDetailsForm from "./listingDetails/ListingDetailsForm";
 import AmenitiesForm from "./amenities/AmenitiesForm";
 import ExtrasForm from "./extras/ExtrasForm";
 import { Container } from "react-bootstrap";
+import { Helmet } from "react-helmet";
 const AddPropertiesIndex = () => {
   const basics = "basics";
   const supportingDoc = "supportingDoc";
@@ -82,6 +83,9 @@ const AddPropertiesIndex = () => {
 
   return (
     <div>
+      <Helmet>
+    <title>Add Properties</title>
+  </Helmet>;
       <Container className="mt-3 mt-md-5 py-3 py-md-5">
         <div className="row">
           <div className="col-lg-8 mx-auto">

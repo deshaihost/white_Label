@@ -250,7 +250,7 @@ input[type="checkbox"] {
   text-align: center;
   max-width: 585px;
   margin: auto;
-  padding: 40px 0;
+  margin-bottom: 40px;
 }
 
 .upgrade-plan-box p {
@@ -375,6 +375,7 @@ textarea.form-control {
   line-height: normal;
 }
 .form-control,
+.css-13cymwt-control,
 .form-design .form-control,
 .modal-content .form-control {
   border-radius: 80px !important;
@@ -392,6 +393,25 @@ textarea.form-control {
   height: auto;
   max-width: 100%;
 }
+
+.css-13cymwt-control,
+.css-t3ipsp-control{
+  border-radius: 80px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #0a1a44 !important;
+  color: #fff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  padding: 5px;
+  position: relative;
+  margin: 0;
+  height: auto;
+  max-width: 100%;
+}
+
 .form-design .form-control[type="file"]::file-selector-button {
   padding: 8px 10px;
   border: 0px;

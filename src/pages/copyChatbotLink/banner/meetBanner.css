@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+.meet-banner {
+    padding: 60px 0 100px;
+}
+
+.chatbot {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 30px;
+    border: 1px solid #2C389E;
+    background: #000212;
+    max-width: 690px;
+    margin: auto;
+    padding: 25px;
+    height: 613px;
+}
+
+.message-list {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    margin-bottom: 20px;
+    /* overflow-y: auto; */
+    overflow-y: scroll;
+
+}
+
+.message-list::-webkit-scrollbar {
+    width: 0px;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+    background: none;
+}
+
+.message-list::-webkit-scrollbar-track {
+    background: none;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 70%;
+    position: relative;
+}
+
+.message.user {
+    align-self: flex-end;
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+    animation: msgsent .3s ease-in forwards;
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.message p {
+    background: #060F26;
+    color: #FFF;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 135%;
+    padding: 20px;
+    border-radius: 20px;
+    max-width: 400px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    
+}
+
+.message.user p {
+    border-top-right-radius: 0;
+    background: #146EF5;
+    margin: 0;
+    margin-right: 8px;
+}
+
+.message img {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.message.bot {
+    justify-content: flex-start;
+    align-items: flex-start;
+    display: inline-flex;
+    position: relative;
+    animation: msgreceive .3s ease-in forwards;
+}
+
+.message.bot p{
+    margin-left: 8px;
+}
+
+.input-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.input-container input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.input-container button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.chatbot .input-container input {
+    position: relative;
+    max-height: 145px;
+    width: calc(100% - 75px);
+    margin-right: 15px;
+    border-radius: 30px;
+    background: #07122D;
+    border: 1px solid transparent;
+    resize: none;
+    padding: 21px 40px;
+    color: #CCC;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+}
+
+.chatbot .input-container button {
+    border-radius: 30px;
+    background: #146EF5;
+    border: none;
+    width: 60px;
+    height: 60px;
+    flex: 0 0 60px;
+    padding: 0;
+    cursor: pointer;
+}
+
+.chatbot .input-container button svg {
+    max-width: 19px;
+}
+.chat-send{
+    cursor: not-allowed!important;
+}
+
+@keyframes msgsent {
+    0% {
+        opacity: 0;
+        left: -10px;
+    }
+    100% {
+        opacity: 1;
+        left: 0;
+    }
+}
+
+@keyframes msgreceive {
+    0% {
+        opacity: 0;
+        right: -10px
+    }
+    100% {
+        opacity: 1;
+        right: 0;
+    }
+}
+
+
+@media only screen and (max-width: 991px) {
+
+    .meet-banner #house-image {
+        margin-bottom: 20px;
+    }
+
+    .meet-banner {
+        padding: 50px 0;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .chatbot {
+        margin-top: 20px;
+        height: 494px;
+        padding: 15px;
+    }
+
+    .message.user img {
+        width: 30px;
+        height: 30px;
+        flex: 0 0 30px;
+    }
+
+    .message p {
+        font-size: 10px;
+        padding: 10px 15px;
+        max-width: 200px;
+    }
+
+    .message-list {
+        max-height: calc(100% - 74px);
+    }
+
+    .chatbot .input-container input {
+        padding: 18px 15px;
+        width: calc(100% - 58px);
+        max-width: calc(100% - 58px);
+        margin-right: 10px;
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .chatbot .input-container button {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+    }
+}

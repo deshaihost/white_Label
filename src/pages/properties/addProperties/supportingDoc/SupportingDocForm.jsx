@@ -12,6 +12,7 @@ import Loader, { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
 import { stateEmptyActions } from "../../../../redux/actions";
 import { listIntegrationPropertiesActions } from "../../../../redux/actions";
 // import ToastHandle from "../../../../helper/ToastMessage";
+import DochideForReservationsModel from "./dochideForReservationsModel/DochideForReservationsModel";
 
 import axios from "axios";
 import PopupModal from "./PopupModal";
@@ -23,6 +24,8 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
   const supportingNameKey = nameKey();
   const [showPreviousDoc, setShowPreviousDoc] = useState(false);
+  const [showDocHideForResrv, setDocHideForResrv] = useState(false);
+
   const [prevUploadedDoc, setPrevUploadedDoc] = useState([]);
   const [prevLinkedIntegration, setPrevLinkedIntegration] = useState(null);
   const [uploadedDoc, setUploadedDoc] = useState();
@@ -49,32 +52,37 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const supportingStatus = suppertingInput?.updateDoc
     ? store?.supportingDocumentPostReducer?.supportingDoc?.status
     : suppertingInput?.urlToWebPage
-      ? store?.supportingUrlPostReducer?.supportingUrl?.status
-      : "";
+    ? store?.supportingUrlPostReducer?.supportingUrl?.status
+    : "";
   const supportingUrlMessage = suppertingInput?.updateDoc
     ? store?.supportingDocumentPostReducer?.supportingDoc?.data?.error
     : suppertingInput?.urlToWebPage
-      ? store?.supportingUrlPostReducer?.supportingUrl?.data?.error
-      : "";
+    ? store?.supportingUrlPostReducer?.supportingUrl?.data?.error
+    : "";
   const supportingLoading = suppertingInput?.updateDoc
     ? store?.supportingDocumentPostReducer?.loading
     : suppertingInput?.urlToWebPage
-      ? store?.supportingUrlPostReducer?.loading
-      : "";
+    ? store?.supportingUrlPostReducer?.loading
+    : "";
 
   // list_integration_properties API Logic ------------------------------------------------------------------------------------------
 
   const [hasCalledAPI, setHasCalledAPI] = useState(false); // keep track of whether we've already called the list_integration_properties API. We only ever want to do it once, when the user clicks "PMS Integration"
-  const [selectedIntegrationPropertyId, setSelectedIntegrationPropertyId] = useState(null); // User-selected integration property
+  const [selectedIntegrationPropertyId, setSelectedIntegrationPropertyId] =
+    useState(null); // User-selected integration property
   const [linkIsLoading, setLinkIsLoading] = useState(false);
   const [unlinkIsLoading, setUnlinkIsLoading] = useState(false);
 
-  const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties; // array of integration_property objects; each with "name" and "id" properties
-  const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
+  const integrationPropertyList =
+    store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data
+      ?.properties; // array of integration_property objects; each with "name" and "id" properties
+  const integrationPropertiesLoading =
+    store?.listIntegrationPropertiesReducer?.loading;
 
   // When "PMS Integration" is selected, call API to get the list of integration properties
   useEffect(() => {
-    if (!prevLinkedIntegration) { // If already linked to an integration, don't call the API
+    if (!prevLinkedIntegration) {
+      // If already linked to an integration, don't call the API
       if (suppertingInput.pmsIntegration && !hasCalledAPI) {
         dispatch(listIntegrationPropertiesActions());
         setHasCalledAPI(true);
@@ -90,9 +98,8 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   }
 
   const handleShowPopUp = () => {
-    console.log("clicked")
-    setShowPreviousDoc(true)
-  }
+    setShowPreviousDoc(true);
+  };
 
   const redrectcomponent = () => {
     prntFuntionHeaderActive(id !== undefined && "listingDetails");
@@ -104,7 +111,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     }, 2000);
     return;
   };
-
 
   const handleUploadUrl = async () => {
     if (!isValidURL(uploadedUrl)) {
@@ -164,18 +170,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   };
 
   const [file, setFile] = useState(null);
-
-
-  const documentUploadHandle = async () => {
-    if (!file) {
-      ToastHandle("No file uploaded", "danger");
-      return;
-    }
+  const documentUploadMainHndle=async(resrData)=>{
     setdocUploadIsLoading(true);
-
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-
     const getSessionStorageData = JSON.parse(
       sessionStorage.getItem("hostBuddy_auth")
     );
@@ -183,6 +181,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     let payload = new FormData();
 
     payload.append("file", file);
+    resrData.forEach((item, index) => {
+      payload.append(`hide_for_reservations[${index}]`, item);
+  });
+    // payload.append("hide_for_reservations",resrData.join(','))
     // payload.append("hide_for_reservations", []);
 
     const token = getSessionStorageData?.token;
@@ -194,7 +196,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           headers: {
             Authorization: `Bearer ${token}`,
             "X-API-Key": API_KEY,
-            'Content-Type': file.type, // Set the Content-Type based on the file type
+            "Content-Type": file.type, // Set the Content-Type based on the file type
             // 'Content-Type': 'multipart/form-data',
           },
         };
@@ -209,6 +211,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
         if (response.status === 200) {
           ToastHandle("File uploaded successfully", "success");
+          setDocHideForResrv(false)
         } else {
           console.log("Error", response);
         }
@@ -220,6 +223,64 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
       console.error("Error uploading file:", error);
       ToastHandle(error?.data?.error, "danger");
     }
+  }
+
+  const documentUploadHandle =  () => {
+    if (!file) {
+      ToastHandle("No file uploaded", "danger");
+      return;
+    }
+    setDocHideForResrv(true)
+
+    // setdocUploadIsLoading(true);
+
+    // const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    // const API_KEY = process.env.REACT_APP_API_KEY;
+
+    // const getSessionStorageData = JSON.parse(
+    //   sessionStorage.getItem("hostBuddy_auth")
+    // );
+
+    // let payload = new FormData();
+
+    // payload.append("file", file);
+    // // payload.append("hide_for_reservations", []);
+
+    // const token = getSessionStorageData?.token;
+    // const supportingkeyName = supportingNameKey?.nameKey;
+
+    // try {
+    //   if (token && supportingkeyName) {
+    //     const config = {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //         "X-API-Key": API_KEY,
+    //         "Content-Type": file.type, // Set the Content-Type based on the file type
+    //         // 'Content-Type': 'multipart/form-data',
+    //       },
+    //     };
+
+    //     const response = await axios.post(
+    //       `${baseUrl}/properties/${supportingkeyName}/add_file`,
+    //       payload,
+    //       config
+    //     );
+
+    //     setdocUploadIsLoading(false);
+
+    //     if (response.status === 200) {
+    //       ToastHandle("File uploaded successfully", "success");
+    //     } else {
+    //       console.log("Error", response);
+    //     }
+    //   } else {
+    //     alert("Missing Token or supportingkeyName");
+    //   }
+    // } catch (error) {
+    //   setdocUploadIsLoading(false);
+    //   console.error("Error uploading file:", error);
+    //   ToastHandle(error?.data?.error, "danger");
+    // }
   };
 
   const handleSubmitForm = (e, uploadType) => {
@@ -228,6 +289,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
       handleUploadUrl();
     } else if (uploadType?.updateDoc) {
       documentUploadHandle();
+      
     }
   };
 
@@ -247,7 +309,9 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     const token = getSessionStorageData?.token;
 
     // Get the integrationPropertyName from the integrationPropertyId
-    const selectedIntegrationProperty = integrationPropertyList.find(property => property.id === integrationPropertyId);
+    const selectedIntegrationProperty = integrationPropertyList.find(
+      (property) => property.id === integrationPropertyId
+    );
     const integrationPropertyName = selectedIntegrationProperty?.name;
 
     try {
@@ -259,7 +323,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           },
         };
 
-        const jsonPayload = { platform_property_id:integrationPropertyId, platform_property_name:integrationPropertyName };
+        const jsonPayload = {
+          platform_property_id: integrationPropertyId,
+          platform_property_name: integrationPropertyName,
+        };
         const response = await axios.post(
           `${baseUrl}/properties/${propertyName}/link_to_integration`,
           jsonPayload,
@@ -270,7 +337,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           ToastHandle(response.data.message, "success");
           setPrevLinkedIntegration(integrationPropertyName);
           setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
-
         } else {
           ToastHandle(response.data.error, "danger");
         }
@@ -280,8 +346,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     } catch (error) {
       console.error("Error linking integration:", error);
       ToastHandle("Error linking integration", "danger");
-    }
-    finally {
+    } finally {
       setLinkIsLoading(false);
     }
   };
@@ -313,7 +378,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           ToastHandle(response.data.message, "success");
           setPrevLinkedIntegration(null);
           setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
-
         } else {
           ToastHandle(response.data.error, "danger");
         }
@@ -378,11 +442,9 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const previousUploadedDoc = async (propertyName) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-
     const getSessionStorageData = JSON.parse(
       sessionStorage.getItem("hostBuddy_auth")
     );
-
     const token = getSessionStorageData?.token;
 
     try {
@@ -402,15 +464,20 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           const propertyData = response.data.property;
           if (propertyData && propertyData.supporting_doc_items) {
             const fileData = propertyData.supporting_doc_items.file_data;
+            console.log(fileData, "fileData", propertyData);
             if (fileData) {
               const uploadedDocs = Object.keys(fileData);
               setPrevUploadedDoc(uploadedDocs);
             }
           }
-          if (propertyData && propertyData?.integration?.integration_property_name) {
-            setPrevLinkedIntegration(propertyData?.integration?.integration_property_name);
+          if (
+            propertyData &&
+            propertyData?.integration?.integration_property_name
+          ) {
+            setPrevLinkedIntegration(
+              propertyData?.integration?.integration_property_name
+            );
           }
-
         } else {
           // Handle non-200 status
           console.log("Received non-200 status:", response.status);
@@ -436,9 +503,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     const propertyName = property?.nameKey;
 
     previousUploadedDoc(propertyName);
-
   }, [sessionStorage.getItem("hostBuddy_auth")]);
-
 
   useEffect(() => {
     if (supportingStatus === 404) {
@@ -452,7 +517,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
   return (
     <>
-      {console.log("prevUploadedDoc: ", prevUploadedDoc)}
       <div>
         <div className="row">
           <div className="col-12 form-design">
@@ -535,7 +599,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                 </div>
               </div>
               <form>
-
                 {suppertingInput?.updateDoc && (
                   <div className="col-12 mt-4 ">
                     <label className="text-white">
@@ -549,12 +612,17 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                           id="fileInput"
                           className="form-control"
                           onChange={(e) => setFile(e.target.files[0])}
-                        // {...register("docx")}
+                          // {...register("docx")}
                         />
                       </div>
                       <div className="col-3">
                         {!docUploadIsLoading ? (
-                          <button className="btn btn-primary" onClick={(e) => handleSubmitForm(e, suppertingInput)}>
+                          <button
+                            className="btn btn-primary"
+                            onClick={(e) =>
+                              handleSubmitForm(e, suppertingInput)
+                            }
+                          >
                             {"Submit File"}
                           </button>
                         ) : (
@@ -587,21 +655,38 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                       <>
                         <div className="row">
                           <div className="col-6 mt-4 ">
-                            <p style={{ color: 'white', marginTop: '10px' }}>Linked to property: {prevLinkedIntegration}</p>
+                            <p style={{ color: "white", marginTop: "10px" }}>
+                              Linked to property: {prevLinkedIntegration}
+                            </p>
                           </div>
                           <div className="col-6 mt-4 ">
                             {unlinkIsLoading ? (
                               <>
-                                <p style={{ color: 'white', marginTop: '20px' }}>Unlinking...</p>
+                                <p
+                                  style={{ color: "white", marginTop: "20px" }}
+                                >
+                                  Unlinking...
+                                </p>
                                 <BoxLoader />
                               </>
                             ) : (
-                              <button className="UnlinkPMSButton" onClick={(e) => unlink_integration(e, supportingNameKey?.nameKey)}>Unlink</button>
+                              <button
+                                className="UnlinkPMSButton"
+                                onClick={(e) =>
+                                  unlink_integration(
+                                    e,
+                                    supportingNameKey?.nameKey
+                                  )
+                                }
+                              >
+                                Unlink
+                              </button>
                             )}
                           </div>
                         </div>
                       </>
-                    ) : ( // If not linked to a property: show a select with the list of integration properties (pulled from the backend API)
+                    ) : (
+                      // If not linked to a property: show a select with the list of integration properties (pulled from the backend API)
                       <>
                         {!integrationPropertiesLoading ? (
                           <>
@@ -612,13 +697,21 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                               {integrationPropertyList?.length > 0 ? (
                                 <select
                                   id="integration_property_select"
-                                  style={{ marginTop: '20px' }}
+                                  style={{ marginTop: "20px" }}
                                   className=""
-                                  onChange={(e) => setSelectedIntegrationPropertyId(e.target.value)}
+                                  onChange={(e) =>
+                                    setSelectedIntegrationPropertyId(
+                                      e.target.value
+                                    )
+                                  }
                                 >
-                                  {integrationPropertyList?.map((property) => { // Each option shows the integration property name, but uses the integration property ID as the value
+                                  {integrationPropertyList?.map((property) => {
+                                    // Each option shows the integration property name, but uses the integration property ID as the value
                                     return (
-                                      <option key={property.id} value={property.id}>
+                                      <option
+                                        key={property.id}
+                                        value={property.id}
+                                      >
                                         {property.name}
                                       </option>
                                     );
@@ -626,17 +719,39 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                                 </select>
                               ) : (
                                 //""
-                                <option style={{ color: 'white', marginTop: '20px' }}>User account does not have an integration.</option>
+                                <option
+                                  style={{ color: "white", marginTop: "20px" }}
+                                >
+                                  User account does not have an integration.
+                                </option>
                               )}
                             </div>
                             <div className="col-4 mt-4 ">
                               {linkIsLoading ? (
                                 <>
-                                  <p style={{ color: 'white', marginTop: '20px' }}>Linking...</p>
+                                  <p
+                                    style={{
+                                      color: "white",
+                                      marginTop: "20px",
+                                    }}
+                                  >
+                                    Linking...
+                                  </p>
                                   <BoxLoader />
                                 </>
                               ) : (
-                                <button className="LinkPMSButton" onClick={(e) => link_integration(e, supportingNameKey?.nameKey, selectedIntegrationPropertyId)}>Link To This Property</button>
+                                <button
+                                  className="LinkPMSButton"
+                                  onClick={(e) =>
+                                    link_integration(
+                                      e,
+                                      supportingNameKey?.nameKey,
+                                      selectedIntegrationPropertyId
+                                    )
+                                  }
+                                >
+                                  Link To This Property
+                                </button>
                               )}
                             </div>
                           </>
@@ -645,7 +760,9 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                             <div className="col-12 mt-4 ">
                               {/* Vertical spacer */}
                             </div>
-                            <p style={{ color: 'white', marginTop: '20px' }}>Loading integration properties...</p>
+                            <p style={{ color: "white", marginTop: "20px" }}>
+                              Loading integration properties...
+                            </p>
                             <BoxLoader />
                           </>
                         )}
@@ -653,7 +770,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                     )}
                   </>
                 )}
-                      
+
                 <div className="col-lg-12 text-center">
                   <div className="mt-5"></div> {/* vertical spacer */}
                   {!linkIsLoading && !unlinkIsLoading && (
@@ -670,9 +787,19 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           </div>
         </div>
       </div>
-      {showPreviousDoc &&
-        <PopupModal show={showPreviousDoc} setShow={setShowPreviousDoc} prevUploadedDoc={prevUploadedDoc} />
-      }
+      <DochideForReservationsModel
+        show={showDocHideForResrv}
+        setShow={setDocHideForResrv}
+        documentUploadMainHndle={documentUploadMainHndle}
+        btnLoading={docUploadIsLoading}
+      />
+      {showPreviousDoc && (
+        <PopupModal
+          show={showPreviousDoc}
+          setShow={setShowPreviousDoc}
+          prevUploadedDoc={prevUploadedDoc}
+        />
+      )}
     </>
   );
 };
