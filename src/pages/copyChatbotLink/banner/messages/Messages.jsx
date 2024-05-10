@@ -14,7 +14,7 @@ function Message({ key, text, sender, feedBckModelOpen, feedBackDataGet }) {
           <img src={BotImg} className="bot-img" alt="bot-img" />
         )}
         <p>{sender === "bot" ? <>{response}</> : <>{text}</>}</p>
-        {/* {sender === "bot" && (
+        {sender === "bot" && (
           <div className=" py-3">
             <span>
               {typeThumbs === "up"?<>{messageId === message_id?<>
@@ -46,7 +46,7 @@ function Message({ key, text, sender, feedBckModelOpen, feedBackDataGet }) {
             ></i>}
             </span>
           </div>
-        )} */}
+        )}
         {sender === "user" && (
           <img src={UserImg} className="user-img" alt="user-img" />
         )}

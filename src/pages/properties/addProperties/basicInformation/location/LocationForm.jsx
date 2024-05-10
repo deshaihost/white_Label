@@ -11,7 +11,7 @@ import {
   nameKey,
 } from "../../../../../helper/Authorized";
 import Loader, { BoxLoader } from "../../../../../helper/Loader";
-import { Button, Modal } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import SelectModalNote from "../../extraNoteModal/SelectModalNote";
 
@@ -41,9 +41,6 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
   const dispatch = useDispatch();
   const getLocalStorageData = nameKey();
   const ExtrasFormCall = GetquestionnaireFunction();
-
-  const apiQuestionnaireData =
-    store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
 
   // to get the updateQuestionaire status
   const updateQuestionaireStatus =
@@ -146,36 +143,6 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
           setAddedNote={setAddedNote}
         />
       )}
-      {/* <Modal
-        size="md"
-        show={show}
-        onHide={handleClose}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        className="contact-modal"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Extra Note
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="form-design">
-            <label>Property Type</label>
-            <textarea
-              className="form-control"
-              name=""
-              id=""
-              cols="30"
-              rows="10"
-              placeholder="Enter note here..."
-            ></textarea>
-            <div className="d-flex justify-content-center mt-3">
-              <button className="mw-auto">Add Note</button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal> */}
       {!apiQuestionnaireLoading ? (
         <div>
           <form
@@ -188,7 +155,6 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
               }
             )}
           >
-            {/* <input type="file" {...register("defultImage")} /> */}
             <div>
               <h3 className="text-white fw-bold mb-3 mt-4 fs-4">Location</h3>
             </div>
@@ -231,17 +197,6 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
                           </svg>
                         </Button>
                       </label>
-                      {/* <select
-                        className="form-select form-control"
-                        {...register(`${item.question_type}${index}`)}
-                        defaultValue={item.response_option}
-                      >
-                        {item.options.map((option, optionIndex) => (
-                          <option key={optionIndex} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select> */}
                       <select
                         className="form-select form-control"
                         {...register(`${item.question_type}${index}`)}

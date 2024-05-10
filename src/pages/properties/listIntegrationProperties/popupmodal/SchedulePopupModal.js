@@ -223,7 +223,7 @@ const SchedulePopupModal = ({
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Body>
+        <Modal.Body style={{overflowY:'auto'}}>
           <div className="row py-3 border-bottom">
             <div className="6">
               <h3 className="text-white text-center">Add New Status</h3>
@@ -290,7 +290,8 @@ const SchedulePopupModal = ({
             <div class="row py-2">
               <div class="col">
                 <label>Choose Day[s] of Week:</label>
-                <Select
+                <Select 
+                className=""
                   isMulti
                   options={weekDayOptions}
                   value={selectedDays}

@@ -1,8 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import SideBar from "../../component/sideBar/SideBar";
-import GetStartedImg from "../../public/img/getstartedimg.png";
-import { Link } from "react-router-dom";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import "./account.css";
 import { useForm } from "react-hook-form";
 import { ErrorMessageKey } from "../../helper/ErrorMessageKey";
@@ -10,12 +7,14 @@ import ErrorMessageShow from "../../helper/ErrorMessageShow";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUserDataActions,
+  goToBillingportalPostActions,
   stateEmptyActions,
   updateAccountInfoActions,
   updateAccountPasswordActions,
 } from "../../redux/actions";
 import Loader, { FullScreenLoader } from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
+import { Helmet } from "react-helmet";
 const Account = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -45,8 +44,6 @@ const Account = () => {
 
   const updatePasswordErrorMessage =
     store?.updateAccountUpdatePasswordReducer?.updateAccountUpdatePassword?.message;
-
-
 
   const [passwordFieldsShow, setPasswordFielsShow] = useState(false);
 
@@ -128,9 +125,26 @@ const Account = () => {
     }
   }, [updatePasswordStatus]);
 
+// subscription functionality
+  const billingPortalUrl =
+    store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.data
+      ?.billing_portal_url;
+  const billingPortalUrlLoading = store?.gotoBillingPortalPostReducer?.loading;
+  const billingProtalUrlStatus =
+    store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
+  useEffect(() => {
+    if (billingProtalUrlStatus === 200) {
+      window.location.href = billingPortalUrl;
+    } else if (billingProtalUrlStatus === 404) {
+    }
+  }, [billingProtalUrlStatus]);
+// subscription functionality
 
   return (
     <div className="account-main">
+      <Helmet>
+    <title>Account</title>
+  </Helmet>
       <div className="container">
         <div className="banner-heading">
           <h2>My HostBuddy</h2>
@@ -142,7 +156,15 @@ const Account = () => {
           </div>
           <div className="col-lg-8">
             <div className="account-container">
+              <span className="d-flex justify-content-end">
+              <button className="bg_theme_btn update_user_info" onClick={()=>{dispatch(goToBillingportalPostActions())}}>Subscription</button>
+              </span>
               <div className="account-content">
+              {billingPortalUrlLoading && (
+                  <div className="text-end">
+                    <FullScreenLoader />
+                  </div>
+                )}
                 {userDataLoading && (
                   <div className="text-end">
                     <FullScreenLoader />
@@ -275,7 +297,6 @@ const Account = () => {
                           </div>
                         </div>
                       </div>
-
                       <div className="row">
                         <div className="col">
                           <div className="input_group">

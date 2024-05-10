@@ -35,61 +35,164 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
 
   const [uploadedFile, setFile] = useState(null);
   const [updateImage, setUpdateImage] = useState(null);
+  console.log(uploadedFile, "uploadedFileuploadedFile", updateImage);
+
   const [propertyName, setPropertyName] = useState(null);
   const nameKeyGet = nameKey();
   const [oldProperyName, setOldPropertyName] = useState("");
   const add_thumbnail_image = async (propertyName, imgFile) => {
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
-    const token = getSessionStorageData?.token;
-
-    try {
-      if(oldProperyName!==""){
-        dispatch(
-          copyExistingPropertyActions({
-            newPropertyNm: propertyName,
-            oldPropertyNm: oldProperyName?.copyExisting,
-          })
-        );
-      }
+    
+    if (updateImage !== null) {
       
-      if (token) {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
-        };
-        let formData = new FormData();
-        formData.append(
-          "file",
-          updateImage !== null ? updateImage?.[0] : imgFile
-        );
-        config.headers["Content-Type"] = "multipart/form-data";
+      let formData = new FormData();
+      let file = updateImage !== null ? updateImage[0] : imgFile;
 
-        const response = await axios.post(
-          `${baseUrl}/properties/${
-            nameKeyGet !== null ? nameKeyGet?.nameKey : propertyName
-          }/add_thumbnail_image`,
-          formData,
-          config
+      // Check if the file type is valid
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "image/png"
+      ) {
+        formData.append("file", file);
+        const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+        const API_KEY = process.env.REACT_APP_API_KEY;
+        const getSessionStorageData = JSON.parse(
+          sessionStorage.getItem("hostBuddy_auth")
         );
-        if (response.status === 200) {
-        } else {
+        const token = getSessionStorageData?.token;
+
+        try {
+          if (oldProperyName !== "") {
+            dispatch(
+              copyExistingPropertyActions({
+                newPropertyNm: propertyName,
+                oldPropertyNm: oldProperyName?.copyExisting,
+              })
+            );
+          }
+
+          if (token) {
+            const config = {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "X-API-Key": API_KEY,
+              },
+            };
+            let formData = new FormData();
+            formData.append(
+              "file",
+              updateImage !== null ? updateImage?.[0] : imgFile
+            );
+            config.headers["Content-Type"] = "multipart/form-data";
+
+            const response = await axios.post(
+              `${baseUrl}/properties/${
+                nameKeyGet !== null ? nameKeyGet?.nameKey : propertyName
+              }/add_thumbnail_image`,
+              formData,
+              config
+            );
+            if (response.status === 200) {
+            } else {
+              ToastHandle(
+                `Error adding thumbnail image: ${response.error}`,
+                "danger"
+              );
+            }
+          } else {
+            alert("No Token");
+          }
+        } catch (error) {
           ToastHandle(
-            `Error adding thumbnail image: ${response.error}`,
+            "thumbnail file not add because 500 Internal Server Error",
             "danger"
           );
+          // console.error("Error adding thumbnail image", error);
+        } finally {
         }
       } else {
-        alert("No Token");
+        // Handle the error here, for example:
+        ToastHandle(
+          "Invalid file type. Must be .jpg, .jpeg, or .png",
+          "danger"
+        );
       }
-    } catch (error) {
-      console.error("Error adding thumbnail image", error);
-    } finally {
+    } else if (uploadedFile !== null) {
+      
+      let formData = new FormData();
+      let file = uploadedFile !== null ? uploadedFile[0] : imgFile;
+
+      // Check if the file type is valid
+      if (
+        file?.type === "image/jpeg" ||
+        file?.type === "image/jpg" ||
+        file?.type === "image/png"
+      ) {
+        formData?.append("file", file);
+        const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+        const API_KEY = process.env.REACT_APP_API_KEY;
+        const getSessionStorageData = JSON.parse(
+          sessionStorage.getItem("hostBuddy_auth")
+        );
+        const token = getSessionStorageData?.token;
+
+        try {
+          if (oldProperyName !== "") {
+            dispatch(
+              copyExistingPropertyActions({
+                newPropertyNm: propertyName,
+                oldPropertyNm: oldProperyName?.copyExisting,
+              })
+            );
+          }
+
+          if (token) {
+            const config = {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "X-API-Key": API_KEY,
+              },
+            };
+            let formData = new FormData();
+            formData.append(
+              "file",
+              uploadedFile !== null ? uploadedFile?.[0] : imgFile
+            );
+            config.headers["Content-Type"] = "multipart/form-data";
+
+            const response = await axios.post(
+              `${baseUrl}/properties/${
+                nameKeyGet !== null ? nameKeyGet?.nameKey : propertyName
+              }/add_thumbnail_image`,
+              formData,
+              config
+            );
+            console.log(response, "responseresponseresponse");
+            if (response.status === 200) {
+            } else {
+              ToastHandle(
+                `Error adding thumbnail image: ${response.error}`,
+                "danger"
+              );
+            }
+          } else {
+            alert("No Token");
+          }
+        } catch (error) {
+          ToastHandle(
+            "thumbnail file not add because 500 Internal Server Error",
+            "danger"
+          );
+          // console.error("Error adding thumbnail image", error);
+        } finally {
+        }
+      } else {
+        // Handle the error here, for example:
+        ToastHandle(
+          "Invalid file type. Must be .jpg, .jpeg, or .png",
+          "danger"
+        );
+      }
     }
   };
 
@@ -100,7 +203,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   const onSubmit = (data) => {
     setGetInputNameKey({ nameKey: data.propertyName });
     setUpdateImage(null);
-    setFile(data?.files[0]);
+    setFile(data?.files);
     setPropertyName(data.propertyName);
     //Create the property, with the given name
     let CreatePropertyData = { property_name: data.propertyName };

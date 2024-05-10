@@ -236,16 +236,17 @@ const ListIntegrationProperties = () => {
         Also changed the corresponding logic in MeetHostBuddy.jsx to correctly parse these variables in their new form.
         TODO: eventually baseUrl should be a global variable somewhere. There shouldn't be hardcoded references to the vercel URL scattered
         throughout the code, since it will make it more difficult to change to our actual domain in the future. */
-        const baseUrl = "https://hostbuddy.ai/meet-hostbuddy";
-        const url = new URL(baseUrl);
-        url.searchParams.append("key", urlLink.chatbot_key);
-        url.searchParams.append("name", urlLink.propertyN);
-        // url.searchParams.append("item", urlLink.item);
-        // url.searchParams.append("item1", urlLink.item1);
+        const baseUrl =  `https://hostbuddy.ai/copy-chatbot-link/${JSON.stringify(urlLink)}`;
+        // const url = new URL(baseUrl);
+        // url.searchParams.append("key", urlLink.chatbot_key);
+        // url.searchParams.append("name", urlLink.propertyN);
+        // // url.searchParams.append("item", urlLink.item);
+        // // url.searchParams.append("item1", urlLink.item1);
 
 
-        url.searchParams.append("user", "guest"); // "guest" since we're using the copied chatbot link, not "Test Property"
-        copyToClipboard(url.toString());
+        // url.searchParams.append("user", "guest"); // "guest" since we're using the copied chatbot link, not "Test Property"
+        // copyToClipboard(url.toString());
+        copyToClipboard(baseUrl)
 
         /* copyToClipboard(
           `https://hostbuddy.ai/meet-hostbuddy/${JSON.stringify(
@@ -274,14 +275,15 @@ const ListIntegrationProperties = () => {
         Also changed the corresponding logic in MeetHostBuddy.jsx to correctly parse these variables in their new form.
         TODO: eventually baseUrl should be a global variable somewhere. There shouldn't be hardcoded references to the vercel URL scattered
         throughout the code, since it will make it more difficult to change to our actual domain in the future. */
-        const baseUrl = "https://hostbuddy.ai/meet-hostbuddy";
-        const url = new URL(baseUrl);
-        url.searchParams.append("key", urlLink.chatbot_key);
-        url.searchParams.append("name", urlLink.propertyN);
-        // url.searchParams.append("item", urlLink.item);
-        // url.searchParams.append("item1", urlLink.item1);
-        url.searchParams.append("user", "guest"); // "host" since we're using "Test Property", not the copied chatbot link
-        window.open(url.toString(), "_blank");
+        // const baseUrl = "https://hostbuddy.ai/meet-hostbuddy";
+        navigate(`/test-property/${JSON.stringify(urlLink)}`)
+        // const url = new URL(baseUrl);
+        // url.searchParams.append("key", urlLink.chatbot_key);
+        // url.searchParams.append("name", urlLink.propertyN);
+        // // url.searchParams.append("item", urlLink.item);
+        // // url.searchParams.append("item1", urlLink.item1);
+        // url.searchParams.append("user", "guest"); // "host" since we're using "Test Property", not the copied chatbot link
+        // window.open(url.toString(), "_self");
         localStorage.setItem(localStorageKey, JSON?.stringify(testPropertyKey));
         setTestPropertyKey({ nameKey: "" });
         dispatch(stateEmptyActions());

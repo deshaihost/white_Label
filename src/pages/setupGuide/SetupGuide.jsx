@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import SideBar from '../../component/sideBar/SideBar';
 import { Link } from 'react-router-dom';
 import './setupguide.css';
+import { Helmet } from 'react-helmet';
 
 const SetupGuide = () => {
   const [activeLink, setActiveLink] = useState('');
@@ -30,6 +31,9 @@ const SetupGuide = () => {
   }, []);
   return (
     <div className="account-main">
+      <Helmet>
+    <title>Set Up Guide</title>
+  </Helmet>
       <div className="container">
         <div className="banner-heading">
           <h2>My HostBuddy</h2>
