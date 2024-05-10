@@ -119,7 +119,7 @@ const Routing = () => {
         {/* <Route path="/meet-hostbuddy/:id" element={<MeetHostBoddy />}></Route> */}
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route
-          path="/copy-chatbot-link/:id"
+          path="/property-chat/:id"
           element={<CopyChatBotLink />}
         ></Route>
       </Routes>

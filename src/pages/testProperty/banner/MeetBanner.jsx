@@ -19,18 +19,18 @@ import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel
 import { useLocation } from "react-router-dom";
 const MeetBanner = (props) => {
   const { urlData } = props;
-  const { chatbot_key, property_name, user_type } = urlData ? urlData : {};
+  const { chatbot_key } = urlData ? urlData : {};
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   //const chatBoxUrl = ParamsGet();
-  const getName = nameKey();
-  const testPropetyName = getName?.nameKey;
-  const copyChatBotName = urlData?.property_name;
+  //const getName = nameKey();
+  //const testPropetyName = getName?.nameKey;
+  //const copyChatBotName = urlData?.property_name;
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
   const getMessageResp =
     store?.getSessionIdReducer?.sessionId?.data?.initial_message;
-  const getMessageRespId =
-    store?.getSessionIdReducer?.sessionId?.data?.session_id;
+  const getMessageRespId = store?.getSessionIdReducer?.sessionId?.data?.session_id;
+  const getPropertyName = store?.getSessionIdReducer?.sessionId?.data?.property_name;
   let FirstMessageRespo = {
     response: getMessageResp,
     message_id: getMessageRespId,
@@ -45,14 +45,6 @@ const MeetBanner = (props) => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
-
-  /* Mboddie: For now, use this variable to determine whether we're in property chat (query params are present), or Meet hostbuddy front page (no query params).
-  TODO (Expinator team) - please create a new path in the application for the property chat window, since it should not use the same path as Meet Hostbuddy and
-  should not have "Meet-Hostbuddy" in the URL (use a path like "/property-chat"). */
-  const isPropertyChat =
-    chatbot_key !== undefined &&
-    property_name !== undefined &&
-    user_type !== undefined;
 
   // const messagesContainerRef = useRef(null);
 
@@ -95,10 +87,9 @@ const MeetBanner = (props) => {
       getSessionIdActions({
         action: "hb_meet_hostbuddy_chat_start",
         textareaValue: "Hi",
-        chatbot_key:
-          chatbot_key !== undefined ? chatbot_key : "meet_hostbuddy_8762",
+        chatbot_key: chatbot_key,
         data_host_return: " ",
-        user: user_type !== undefined ? user_type : "guest",
+        user: "host"
       })
     );
   };
@@ -151,7 +142,7 @@ const MeetBanner = (props) => {
       typeThumbs: type,
       conversationId: sessionId?.session_id,
       messageId: messId,
-      propertyName: testPropetyName,
+      propertyName: getPropertyName,
     });
 
     setFeedBackModelOpen(true);
@@ -166,11 +157,7 @@ const MeetBanner = (props) => {
         <div className="banner-heading">
           <h2>
             {" "}
-            {testPropetyName !== ""
-                  ? copyChatBotName !== undefined
-                    ? copyChatBotName
-                    : testPropetyName
-                  : "Empty"}
+            {getPropertyName !== undefined ? getPropertyName : ""}
             {/* {isPropertyChat ? (
               <>
                 {testPropetyName !== ""
