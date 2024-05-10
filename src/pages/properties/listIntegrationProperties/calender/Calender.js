@@ -271,27 +271,31 @@ const Calendar = ({
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
 
-          setTimeout(() => {
-            setShowCalender(false);
-          }, 1500);
+          // setTimeout(() => {
+          //   setShowCalender(false);
+          // }, 1500);
+          getScheduleAPI(selectedProperty);
         } else {
           ToastHandle("Something went wrong", "danger");
-          setTimeout(() => {
-            setShowCalender(false);
-          }, 1500);
+          // setTimeout(() => {
+          //   setShowCalender(false);
+          // }, 1500);
+          getScheduleAPI(selectedProperty);
         }
       } else {
         ToastHandle("No Token", "danger");
-        setTimeout(() => {
-          setShowCalender(false);
-        }, 1500);
+        // setTimeout(() => {
+        //   setShowCalender(false);
+        // }, 1500);
+        getScheduleAPI(selectedProperty);
       }
     } catch (error) {
       console.log(error);
       ToastHandle(error?.data?.error, "danger");
-      setTimeout(() => {
-        setShowCalender(false);
-      }, 1500);
+      // setTimeout(() => {
+      //   setShowCalender(false);
+      // }, 1500);
+      getScheduleAPI(selectedProperty);
     }
   };
 

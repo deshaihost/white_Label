@@ -10,19 +10,55 @@ const CheckboxModalNote = ({
   responseOptions,
   responseText,
   setResponseText,
+  hideReservationText,
+  setHideReservationText
 }) => {
-  
+
+  const [checkChange, setCheckChange] = useState(false);
   const [noteData, setNoteData] = useState("");
 
   console.log("responseOptions inside Modal: ", responseOptions);
   console.log("responseText inside Modal: ", responseText);
-  console.log("noteClickData inside Modal: ", noteClickData);
+  console.log("responseText inside Modal: ", responseText);
+  console.log("hideReservationText inside Modal: ", hideReservationText);
 
   const [checkedSchedule, setCheckedSchedule] = useState({
     Future: false,
     Past: false,
     Current: false,
   });
+
+  const handleChangeStatus = (checkedData) => {
+    // Mapping between keys and corresponding values
+    const keyToValueMap = {
+      Future: "FUTURE",
+      Past: "INQUIRY/PAST",
+      Current: "CURRENT"
+    };
+    let newStatus = [];
+    let newReservationStage = "";
+
+    // Iterate over the keys of checkedData
+    for (const key in checkedData) {
+      if (checkedData[key]) {
+        // If the value is true, push the corresponding value to newStatus
+        newStatus.push(keyToValueMap[key]);
+      } else {
+        // If the value is false, remove the corresponding value from newStatus
+        const index = newStatus.indexOf(keyToValueMap[key]);
+        if (index !== -1) {
+          newStatus.splice(index, 1);
+        }
+      }
+    }
+
+    if (newStatus.length > 0) {
+      newReservationStage = newStatus.join(",");
+    }
+
+    handleAddReservationStage(newReservationStage);
+
+  }
 
   // handle Stage button clicks
   const handleOnChange = (e, type) => {
@@ -46,6 +82,7 @@ const CheckboxModalNote = ({
     }
 
     console.log("Checked: ", e.target.checked);
+    setCheckChange(true)
   };
 
   const handleAddNote = () => {
@@ -66,6 +103,20 @@ const CheckboxModalNote = ({
 
   };
 
+  const handleAddReservationStage = (stageToSet) => {
+
+    const valIndex = responseOptions?.indexOf(noteClickData?.name);
+    // If the name exists in responseOptions, set the corresponding value from responseText to noteData
+    if (valIndex !== -1) {
+      const updatedHideReservationText = [...hideReservationText];
+      updatedHideReservationText[valIndex] = stageToSet;
+
+      setHideReservationText(updatedHideReservationText);
+    } else {
+      ToastHandle("Something went wrong", "danger");
+    }
+  };
+
   useEffect(() => {
     // Find the index of noteClickData.name in responseOptions array
     const index = responseOptions?.indexOf(noteClickData?.name);
@@ -74,6 +125,143 @@ const CheckboxModalNote = ({
       setNoteData(responseText[index]);
     }
   }, [noteClickData, responseOptions, responseText]);
+
+
+  useEffect(() => {
+
+    // Find the index of noteClickData.name in responseOptions array
+    const index = responseOptions?.indexOf(noteClickData?.name);
+    // If the name exists in responseOptions, set the corresponding value from responseText to noteData
+    if (index !== -1) {
+      // setNoteData(responseText[index]);
+      // let exisingValue = hideReservationText[index];
+      let existingStatus = hideReservationText[index];
+      if (existingStatus?.length > 0) {
+        let deselectedStages = existingStatus.split(",")
+        deselectedStages.forEach((type, index) => {
+
+          if (type === "FUTURE") {
+            setCheckedSchedule((prevData) => ({
+              ...prevData,
+              Future: true,
+            }));
+          }
+          if (type === "INQUIRY/PAST") {
+            setCheckedSchedule((prevData) => ({
+              ...prevData,
+              Past: true,
+            }));
+          }
+          if (type === "CURRENT") {
+            setCheckedSchedule((prevData) => ({
+              ...prevData,
+              Current: true,
+            }));
+          }
+
+        })
+
+      }
+      // else {
+      //   let existingStatusValue = reservationClickData?.value;
+
+      //   if (existingStatusValue.length > 0) {
+      //     let deselectedStagesData = existingStatusValue.split(",")
+      //     deselectedStagesData.forEach((type, index) => {
+
+      //       if (type === "FUTURE") {
+      //         setCheckedSchedule((prevData) => ({
+      //           ...prevData,
+      //           Future: true,
+      //         }));
+      //       }
+      //       if (type === "INQUIRY/PAST") {
+      //         setCheckedSchedule((prevData) => ({
+      //           ...prevData,
+      //           Past: true,
+      //         }));
+      //       }
+      //       if (type === "CURRENT") {
+      //         setCheckedSchedule((prevData) => ({
+      //           ...prevData,
+      //           Current: true,
+      //         }));
+      //       }
+
+      //     })
+
+      //   }
+      // }
+
+      // if (addedNote && reservationClickData?.name in addedNote) {
+      //   // If addedNote contains a key matching reservationClickData.name, set noteData to its value
+      //   let existingStatus = addedNote[reservationClickData?.name]
+      //   if (existingStatus.length > 0) {
+      //     let deselectedStages = existingStatus.split(",")
+      //     deselectedStages.forEach((type, index) => {
+
+      //       if (type === "FUTURE") {
+      //         setCheckedSchedule((prevData) => ({
+      //           ...prevData,
+      //           Future: true,
+      //         }));
+      //       }
+      //       if (type === "INQUIRY/PAST") {
+      //         setCheckedSchedule((prevData) => ({
+      //           ...prevData,
+      //           Past: true,
+      //         }));
+      //       }
+      //       if (type === "CURRENT") {
+      //         setCheckedSchedule((prevData) => ({
+      //           ...prevData,
+      //           Current: true,
+      //         }));
+      //       }
+
+      //     })
+
+      //   }
+
+      // } else {
+      //   let existingStatusValue = reservationClickData?.value;
+
+      //   if (existingStatusValue.length > 0) {
+      //     let deselectedStagesData = existingStatusValue.split(",")
+      //     deselectedStagesData.forEach((type, index) => {
+
+      //       if (type === "FUTURE") {
+      //         setCheckedSchedule((prevData) => ({
+      //           ...prevData,
+      //           Future: true,
+      //         }));
+      //       }
+      //       if (type === "INQUIRY/PAST") {
+      //         setCheckedSchedule((prevData) => ({
+      //           ...prevData,
+      //           Past: true,
+      //         }));
+      //       }
+      //       if (type === "CURRENT") {
+      //         setCheckedSchedule((prevData) => ({
+      //           ...prevData,
+      //           Current: true,
+      //         }));
+      //       }
+
+      //     })
+
+      //   }
+
+    }
+  }, [noteClickData, hideReservationText]);
+
+  useEffect(() => {
+    if (checkChange) {
+      handleChangeStatus(checkedSchedule);
+      setCheckChange(false);
+    }
+  }, [checkChange, checkedSchedule])
 
   return (
     <>
@@ -91,7 +279,7 @@ const CheckboxModalNote = ({
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="form-design">
+          <div className="form-design mb-4">
             <label>{noteClickData?.name}</label>
             <textarea
               className="form-control"
@@ -108,6 +296,10 @@ const CheckboxModalNote = ({
                 Add Note
               </button>
             </div>
+          </div>
+
+          <div className="form-design">
+            <label>Data will be applied to selected reservation status(es) below</label>
           </div>
 
           <div className=" d-flex justify-content-between mt-3">
