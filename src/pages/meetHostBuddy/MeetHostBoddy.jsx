@@ -61,7 +61,7 @@ const MeetHostBoddy = () => {
   return (
     <div className="meet-buddy">
       <Helmet>
-        <title>Meet HostBuddy – Hostbuddy</title>
+        <title>Meet HostBuddy – HostBuddy</title>
       </Helmet>
       <div className="meet-buddy-container">
         <MeetBanner urlData={urlData} />

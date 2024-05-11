@@ -15,6 +15,7 @@ import {
 import Loader, { FullScreenLoader } from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
 import { Helmet } from "react-helmet";
+import { Link } from 'react-router-dom';
 const Account = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -156,9 +157,6 @@ const Account = () => {
           </div>
           <div className="col-lg-8">
             <div className="account-container">
-              <span className="d-flex justify-content-end">
-              <button className="bg_theme_btn update_user_info" onClick={()=>{dispatch(goToBillingportalPostActions())}}>Subscription</button>
-              </span>
               <div className="account-content">
               {billingPortalUrlLoading && (
                   <div className="text-end">
@@ -402,6 +400,9 @@ const Account = () => {
                     </div>
                   </div>
                 </form>
+                <span className="d-flex justify-content-center" style={{ marginTop: '10px' }}>
+                  <Link to="#" className="text-link" onClick={()=>{dispatch(goToBillingportalPostActions())}}>Subscription</Link>
+                </span>
               </div>
             </div>
           </div>

@@ -138,31 +138,33 @@ const Properties = () => {
                 <div className="account_heading">
                   <h3>Properties</h3>
                   <div className="property-heading-right">
-                    <p>Hostbuddy Status</p>
+                    <p>HostBuddy Status</p>
                     {toggleChatLoading && <FullScreenLoader />}
-                    {!anyPropertyNotForcedOff ? (
-                      <>
-                        {" "}
-                        <button
-                          className="bg-danger text-white rounded-pill border-danger btn border"
-                          onClick={(e) => {
-                            toggleChatBotHndle(true);
-                          }}
-                        >
-                          STOPPED
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="bg-dark text-primary border-primary btn border rounded-pill"
-                          onClick={(e) => {
-                            toggleChatBotHndle(false);
-                          }}
-                        >
-                          STOP
-                        </button>
-                      </>
+                    {Object.keys(propertiesExtraData).length > 0 && (
+                      !anyPropertyNotForcedOff ? (
+                        <>
+                          {" "}
+                          <button
+                            className="bg-danger text-white rounded-pill border-danger btn border"
+                            onClick={(e) => {
+                              toggleChatBotHndle(true);
+                            }}
+                          >
+                            STOPPED
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            className="bg-dark text-primary border-primary btn border rounded-pill"
+                            onClick={(e) => {
+                              toggleChatBotHndle(false);
+                            }}
+                          >
+                            STOP
+                          </button>
+                        </>
+                      )
                     )}
                   </div>
                 </div>

@@ -49,7 +49,7 @@ const ForgotPass = () => {
   return (
     <div className="forgot-pass auth">
       <Helmet>
-        <title>Forgot Password – Hostbuddy</title>
+        <title>Forgot Password – HostBuddy</title>
       </Helmet>
       <Container>
         <div className="row">
@@ -119,11 +119,11 @@ const ForgotPass = () => {
                 </form>
               </div>
               <div className="footer-auth">
-                {/*<div>
+              <div>
                   By continuing, you agree to the{" "}
-                  <Link to="/">terms & Conditions</Link> and{" "}
-                  <Link to="/">Privacy Policy</Link>
-                </div>*/}
+                  <Link to="/termsof-service">Terms of Service</Link> and{" "}
+                  <Link to="/privacy-policy">Privacy Policy</Link>
+                </div>
               </div>
             </div>
           </div>
