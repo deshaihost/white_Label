@@ -170,6 +170,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   };
 
   const [file, setFile] = useState(null);
+
   const documentUploadMainHndle=async(resrData)=>{
     setdocUploadIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -181,11 +182,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     let payload = new FormData();
 
     payload.append("file", file);
-    resrData.forEach((item, index) => {
-      payload.append(`hide_for_reservations[${index}]`, item);
-  });
-    // payload.append("hide_for_reservations",resrData.join(','))
-    // payload.append("hide_for_reservations", []);
+    payload.append("hide_for_reservations", JSON.stringify(resrData)); // JSON-style string representing the array of strings, per backend requirement
 
     const token = getSessionStorageData?.token;
     const supportingkeyName = supportingNameKey?.nameKey;
@@ -522,7 +519,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           <div className="col-12 form-design">
             <div>
               <h5 className="text-white fw-bold mb-3 fs-4">
-                Choose one of the method as supporting doc
+                Integrate external resources here
                 {/* Upload documents
               Previous Documents */}
               </h5>
@@ -602,7 +599,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                 {suppertingInput?.updateDoc && (
                   <div className="col-12 mt-4 ">
                     <label className="text-white">
-                      Supporting Documents{" "}
+                      Documents{" "}
                       <span>(.txt, .docx, .pdf supported)</span>
                     </label>
                     <div className="d-flex">
@@ -617,14 +614,14 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                       </div>
                       <div className="col-3">
                         {!docUploadIsLoading ? (
-                          <button
-                            className="btn btn-primary"
-                            onClick={(e) =>
-                              handleSubmitForm(e, suppertingInput)
-                            }
-                          >
-                            {"Submit File"}
-                          </button>
+                            <button
+                              className="btn btn-primary"
+                              onClick={(e) =>
+                                handleSubmitForm(e, suppertingInput)
+                              }
+                            >
+                              {"Submit File"}
+                            </button>
                         ) : (
                           <BoxLoader />
                         )}
@@ -651,7 +648,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
                 {suppertingInput?.pmsIntegration && (
                   <>
-                    {prevLinkedIntegration ? ( // If already linked to an integration: show the name of the linked integration property and option to unlink
+                    {prevLinkedIntegration ? ( // If already linked to an integration property: show the name of the linked integration property and option to unlink
                       <>
                         <div className="row">
                           <div className="col-6 mt-4 ">
@@ -685,8 +682,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                           </div>
                         </div>
                       </>
-                    ) : (
-                      // If not linked to a property: show a select with the list of integration properties (pulled from the backend API)
+                    ) : ( // If not linked to n integration property: show a select with the list of integration properties (pulled from the backend API)
                       <>
                         {!integrationPropertiesLoading ? (
                           <>
@@ -697,8 +693,8 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                               {integrationPropertyList?.length > 0 ? (
                                 <select
                                   id="integration_property_select"
-                                  style={{ marginTop: "20px" }}
-                                  className=""
+                                  style={{ marginTop: "20px", width: "70%" }}
+                                  class="form-select form-control"
                                   onChange={(e) =>
                                     setSelectedIntegrationPropertyId(
                                       e.target.value

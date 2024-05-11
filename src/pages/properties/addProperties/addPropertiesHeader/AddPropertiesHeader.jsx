@@ -49,7 +49,7 @@ const AddPropertiesHeader = (props) => {
                   </svg>
                 </span>
               </div>
-              <h2>Supporting Doc</h2>
+              <h2>External Resources</h2>
             </div>
             <div
               className={listingDetails && "text-primary"}

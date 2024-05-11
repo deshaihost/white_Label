@@ -195,7 +195,7 @@ const SelectModalNote = ({
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Extra Note
+            Additional Information
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
