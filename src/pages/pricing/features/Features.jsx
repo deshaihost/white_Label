@@ -16,7 +16,7 @@ const Features = () => {
             works: true
         },
         {
-            compareTo: 'AI chatbot optimized with ChatGPT-4',
+            compareTo: 'AI chatbot optimized with GPT-4',
             essential: true,
             works: true
         },

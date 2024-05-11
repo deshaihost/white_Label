@@ -37,7 +37,7 @@ const Features = () => {
                                         Industry Leading AI Technology
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        In the rapidly evolving landscape of short-term rentals, HostBuddy stands at the forefront of innovation, harnessing the power of ChatGPT, one of the most advanced conversational AI models in the world. This state-of-the-art integration not only ensures impeccable communication accuracy but also delivers real-time, context-aware responses, elevating guest experience to unparalleled heights.
+                                        In the rapidly evolving landscape of short-term rentals, HostBuddy stands at the forefront of innovation, harnessing the power of the most advanced conversational AI models in the world. This state-of-the-art integration not only ensures impeccable communication accuracy but also delivers real-time, context-aware responses, elevating guest experience to unparalleled heights.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>

@@ -11,8 +11,7 @@ const CopyExistingPropertyModel = ({
 }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const createPropertiesName =
-    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
 
   const {
     register,
@@ -28,7 +27,8 @@ const CopyExistingPropertyModel = ({
 
   useEffect(() => {
     dispatch(getUserDataActions());
-  }, []);
+  }, []); // TODO: only run this when the user selects "Copy Existing Property"
+
   return (
     <Modal
       show={show}
@@ -38,7 +38,7 @@ const CopyExistingPropertyModel = ({
       centered
     >
       <Modal.Header closeButton>
-        <h5 className="modal-title">Your Plan</h5>
+        <h5 className="modal-title">Choose A Source Property</h5>
       </Modal.Header>
       <Modal.Body>
         <div>

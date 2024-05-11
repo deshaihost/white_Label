@@ -71,16 +71,19 @@ const TranscriptsTable = ({ conversationData }) => {
 
   function formatDateAndTime(timestamp) {
     // Parse the timestamp string into a Date object (assuming it's in UTC format)
-    const utcDate = new Date(timestamp);
+    const apiDate = new Date(timestamp);
 
+    /* MBoddie - removed since time zone handling / conversion is now done in the backend
     // Get the time zone offset in milliseconds
     const timeZoneOffsetMs = new Date().getTimezoneOffset() * 60000;
 
     // Convert the UTC timestamp to the local timestamp
-    const localTimestamp = utcDate.getTime() - timeZoneOffsetMs;
+    const localTimestamp = apiDate.getTime() - timeZoneOffsetMs;
 
     // Create a new Date object for the local timestamp
     const localDate = new Date(localTimestamp);
+    */
+   const localDate = apiDate;
 
     // Get the components of the date
     const month = localDate.getMonth() + 1; // Months are zero-indexed, so add 1

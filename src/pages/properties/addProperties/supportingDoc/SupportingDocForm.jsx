@@ -718,40 +718,39 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                                   })}
                                 </select>
                               ) : (
-                                //""
-                                <option
-                                  style={{ color: "white", marginTop: "20px" }}
-                                >
-                                  User account does not have an integration.
-                                </option>
+                                <div style={{ color: "white", marginTop: "20px", wordWrap: "break-word", width: "100%" }}>
+                                  User account does not have a PMS integration. Connect your account to a PMS from the Properties page first, then you can this property to a property listing on the integration account here.
+                                </div>
                               )}
                             </div>
                             <div className="col-4 mt-4 ">
-                              {linkIsLoading ? (
-                                <>
-                                  <p
-                                    style={{
-                                      color: "white",
-                                      marginTop: "20px",
-                                    }}
+                              {integrationPropertyList?.length === 0 && (
+                                linkIsLoading ? (
+                                  <>
+                                    <p
+                                      style={{
+                                        color: "white",
+                                        marginTop: "20px",
+                                      }}
+                                    >
+                                      Linking...
+                                    </p>
+                                    <BoxLoader />
+                                  </>
+                                ) : (
+                                  <button
+                                    className="LinkPMSButton"
+                                    onClick={(e) =>
+                                      link_integration(
+                                        e,
+                                        supportingNameKey?.nameKey,
+                                        selectedIntegrationPropertyId
+                                      )
+                                    }
                                   >
-                                    Linking...
-                                  </p>
-                                  <BoxLoader />
-                                </>
-                              ) : (
-                                <button
-                                  className="LinkPMSButton"
-                                  onClick={(e) =>
-                                    link_integration(
-                                      e,
-                                      supportingNameKey?.nameKey,
-                                      selectedIntegrationPropertyId
-                                    )
-                                  }
-                                >
-                                  Link To This Property
-                                </button>
+                                    Link To This Property
+                                  </button>
+                                )
                               )}
                             </div>
                           </>
