@@ -137,10 +137,11 @@ const SchedulePopupModal = ({
     } catch (error) {
       console.log(error);
       ToastHandle(error?.data?.error, "danger");
+      /* Leave the windows open so the user can correct the error and resubmit
       setTimeout(() => {
         setShow(false);
         setShowCalender(false);
-      }, 1500);
+      }, 1500); */
       getScheduleAPI(selectedProperty);
     }
     setSubmit(false);

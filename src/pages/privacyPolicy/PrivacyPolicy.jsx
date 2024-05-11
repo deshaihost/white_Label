@@ -46,401 +46,206 @@ const PrivacyPolicy = () => {
             <div className="col-lg-12">
               <div className="account-container">
                 <div className="account_heading">
-                  <h3>Setup Guide</h3>
+                  <h3>Privacy Policy</h3>
                 </div>
                 <div className="account-content">
                   <div className="row">
                     <div className="col-lg-12">
                       <div className="guide-steps">
                         <div className="step-box">
-                          <h4>Onboarding Steps</h4>
+                          <h4>Welcome to Hostbuddy AI!</h4>
                           <p>
-                            Welcome to HostBuddy! Follow the instructions below
-                            to begin onboarding your short-term rental
-                            properties with HostBuddy AI.
+                            This Privacy Policy outlines the policies and procedures of Hostbuddy AI LLC ("we", "our", or "us") regarding the collection, use, processing, and disclosure of your information on https://hostbuddy.ai (the "website") and the services, tools, or features we offer. This policy is designed to inform our users  (referred to as "users" or "you") about how we handle their personal data.
                           </p>
                         </div>
-                        <div className="step-box section" id="step1">
-                          <h4>Onboarding Expectations and Timeline:</h4>
-                          <p>
-                            The onboarding process involves several steps
-                            designed to ensure that HostBuddy performs
-                            effectively for each property. While it is possible
-                            to complete onboarding in as little as one day,
-                            typically, it takes additional time once you begin
-                            testing. Don't worry—we provide plenty of resources
-                            to guide you through this process! During and after
-                            onboarding, you may contact our exceptional Customer
-                            Support team for any technical assistance. Our
-                            support team is able to assist you with any
-                            questions you may have and is able to help
-                            troubleshoot fixing responses you are not satisfied
-                            with during your testing phase. If you require
-                            support, please feel free to email our customer
-                            support team at info@hostbuddy.ai.
-                          </p>
-                          <p>
-                            For some of our frequently asked questions, please
-                            visit our FAQ page:{" "}
-                            <a href="/faqs" target="_blank">
-                              HostBuddy FAQs
-                            </a>
-                          </p>
-                          <p>
-                            For general questions about the Onboarding process,
-                            check out our welcome page below:
-                          </p>
-                        </div>
-                        <div className="step-box section" id="step2">
-                          <h4>Step 1: Property Onboarding</h4>
-                          <p>
-                            Below is a step by step guide for onboarding your
-                            first property!
-                          </p>
-                          <h6 style={{ color: "white" }}>Subscription</h6>
-                          <ol>
-                            <li>
-                              Once you have reviewed this Setup Guide and are
-                              ready to onboard your first property, navigate to
-                              the properties page in your user portal.
-                            </li>
-                            <li>
-                              Select “Add Property”
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  Select the number of properties you would like
-                                  to add, along with the plan that you are
-                                  interested in. The main difference between our
-                                  packages is that “The Works” allows for PMS
-                                  integration and “The Essentials” generates a
-                                  link to Hostbuddy that you can send to your
-                                  guests.
-                                </li>
-                                <li>
-                                  <em>
-                                    Note: The number of properties you add
-                                    initially will be the number of properties
-                                    you can use for your free trial. Be sure to
-                                    add the exact number of properties that you
-                                    would like to use for the trial, as your
-                                    selection will be final when it comes to the
-                                    trial period. You can of course add more
-                                    properties later, but they will not qualify
-                                    for your trial period. Your card will not be
-                                    charged until your trial period has been
-                                    completed.
-                                  </em>
-                                </li>
-                              </ul>
-                            </li>
-                            <li>
-                              Once you continue, you will be directed to our
-                              Stripe payment portal. Please enter in your
-                              payment information and click submit, which will
-                              bring you back to the Properties page.
-                            </li>
-                          </ol>
-                          <h6 style={{ color: "white" }}>
-                            Connecting your PMS (“The Works” Users)
-                          </h6>
-                          <p>
-                            If you’ve selected the works plan, now is a great
-                            time to connect your PMS!
-                          </p>
-                          <ol>
-                            <li>Click the “Connect PMS” button</li>
-                            <li>
-                              Select your PMS and click “next”. You will be
-                              redirected to a secure integrations page where you
-                              can enter your PMS information and connect to
-                              HostBuddy. Once finished, you will be redirected
-                              to the Properties page, where you will see your
-                              PMS listed in the top right. If you do not see
-                              your PMS, please repeat steps 1 and 2 again.
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  <em>
-                                    Note: If you have trouble locating the
-                                    required information, please reach out to
-                                    your PMS support team or refer to your PMS
-                                    user guide if available.
-                                  </em>
-                                </li>
-                              </ul>
-                            </li>
-                            <li>
-                              Select your PMS and click “next”. You will be
-                              redirected to a secure integrations page where you
-                              can enter your PMS information and connect to
-                              HostBuddy. Once finished, you will be redirected
-                              to the Properties page, where you will see your
-                              PMS listed in the top right. If you do not see
-                              your PMS, please repeat steps 1 and 2 again.
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  <em>
-                                    Note: If you have trouble locating the
-                                    required information, please reach out to
-                                    your PMS’ support team or refer to your PMS’
-                                    user guide if available.
-                                  </em>
-                                </li>
-                              </ul>
-                            </li>
-                          </ol>
 
-                          <h6 style={{ color: "white" }}>
-                            Customizing Properties
-                          </h6>
-                          <ol>
+                        <div className="step-box section" id="step1">
+                          <h4>1. Collection of Personal Data</h4>
+                          <p>
+                            At Hostbuddy AI, we prioritize the protection of your personal data while providing AI communication support services for short-term rental management. To ensure efficient service delivery, we collect specific types of personal data, including:
+                          </p>
+                          <ul>
                             <li>
-                              On the Properties page, you will see a number of
-                              editable properties matching your chosen property
-                              count in quantity. Select the pencil icon to begin
-                              customizing your Hostbuddy properties.
+                              a. Contact Information: This encompasses essential details such as your phone number and email address, enabling us to communicate effectively regarding your rental property management needs.
                             </li>
                             <li>
-                              Basics
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  Add a name for your property and a cover photo
-                                  under “Basic Information”. After selecting
-                                  next & next, please continue completing the
-                                  remaining fields.
-                                </li>
-                                <li>
-                                  Tip: Click the pencil icon next to applicable
-                                  fields to add any additional information you’d
-                                  like. For example, the property type field has
-                                  a pencil icon that can be used to explain that
-                                  a unit is in an apartment complex, or that a
-                                  room is in a shared home. This feature is
-                                  available in each section to provide
-                                  additional information on specific property
-                                  details.
-                                </li>
-                              </ul>
+                              b. Payment Information: Should you opt for our subscription services, rest assured that your payment details are handled securely through our trusted payment processing partner, Stripe. We do not share this sensitive financial information with any third parties.
                             </li>
                             <li>
-                              Supporting Doc
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  This page allows for you to upload any
-                                  documents, such as a welcome document,
-                                  detailed property document or any other item
-                                  that you would like Hostbuddy to use to
-                                  message guests. If you have subscribed to the
-                                  works plan and you have not yet connected your
-                                  PMS, please do so here. You also have the
-                                  option of adding a URL as a supporting
-                                  document. Please make sure any document or URL
-                                  you upload contains the necessary information
-                                  in text format (chatGPT can not process photo
-                                  images).
-                                </li>
-                              </ul>
+                              c. Property Details: Understanding the unique aspects of your rental property is crucial for us to tailor our services to your requirements. Therefore, we may collect information such as property addresses, access codes, directions, and any other pertinent details you choose to provide.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step2">
+                          <h4>2. Use of Personal Data</h4>
+                          <p>
+                            Your personal data is utilized with the utmost care and integrity, serving the following purposes:
+                          </p>
+                          <ul>
+                            <li>
+                              a. Service Enhancement: We utilize your personal data to provide, maintain, and enhance our AI communication support services, ensuring seamless management of your short term rental properties.
                             </li>
                             <li>
-                              Listing Details, Amenities, and Extras
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  Complete as many fields as possible. The more
-                                  information you add, the better Hostbuddy will
-                                  be able to support your property. Please see
-                                  our{" "}
-                                  <a
-                                    href="https://docs.google.com/document/d/14Gh0kUSOft94gi4afjVoYpDB9ujWBBTyb65fJxgZpyU"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    Hostbuddy Tips and Tricks
-                                  </a>{" "}
-                                  page to learn our best practices for filling
-                                  out this information.
-                                </li>
-                              </ul>
+                              b. Communication: From time to time, we may send you marketing materials, company updates, newsletters, service announcements, and promotional offers. However, you retain the option to opt out of receiving such communications at any point, respecting  your preferences and privacy.
                             </li>
-                          </ol>
+                          </ul>
                         </div>
 
                         <div className="step-box section" id="step3">
-                          <h4>Step 2: Testing</h4>
+                          <h4>3. Sharing of Personal Data</h4>
                           <p>
-                            After inputting all desired property details on
-                            Hostbuddy, now it’s time to thoroughly test to
-                            ensure it's ready to support your business.
+                            We prioritize transparency and accountability in our data sharing practices, ensuring your information is shared only under specific circumstances:
                           </p>
-                          <ol>
+                          <ul>
                             <li>
-                              Select the “Test Property” button on the
-                              “Properties” page.{" "}
+                              a. Property Management Software Partners: If you choose to integrate your Hostbuddy AI account with external property management software, we may share necessary personal data to facilitate seamless synchronization and operation between platforms.
                             </li>
                             <li>
-                              Compile a list of commonly asked questions that
-                              you want to make sure Hostbuddy is capable of
-                              handling. We have a list that you can use for this
-                              phase, but we recommend that you tailor the
-                              questions to your most common scenarios. To review
-                              our recommended questions, please see our{" "}
-                              <a
-                                href="https://docs.google.com/document/d/1-UubWDNGtjd34M1u6fvvnCOEa3mS5t-xvjYt3k_BVew?usp=sharing"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                Hostbuddy Testing Questions
-                              </a>{" "}
-                              document.
+                              b. Guests: Information exchanged through our AI software may inadvertently be shared with connected property management software partners as part of their data collection processes. However, we take measures to minimize such occurrences and safeguard your privacy.
                             </li>
                             <li>
-                              Take note of each response that does not align
-                              with your expectations. For information that
-                              Hostbuddy is missing, please return to the
-                              “Properties” page, and select edit for the given
-                              property. Here, you can make refinements to the
-                              information that you would like for Hostbuddy to
-                              use. If there are responses that fall short, which
-                              you are having trouble fixing, please contact our
-                              team at info@hostbuddy.ai and provide the property
-                              name, a screenshot, and an example of what the
-                              response should have been. We will reach back out
-                              with either a recommendation for how to fix the
-                              issue, or a request to meet to discuss more
-                              nuanced requirements.
+                              c. Legal Requirements: In compliance with US law, we may be obligated to share personal data in response to lawful requests or legal proceedings, prioritizing transparency and adherence to regulatory requirements.
                             </li>
-                          </ol>
+                          </ul>
                         </div>
 
                         <div className="step-box section" id="step4">
-                          <h4>Step 3: Going Live</h4>
-                          <p>“Essentials” Users</p>
-                          <ol>
+                          <h4>4. Data Security</h4>
+                          <ul>
                             <li>
-                              Once you are happy with the responses Hostbuddy is
-                              providing, you are ready to provide Hostbuddy’s
-                              unique URL to your guests for support. Click the
-                              three dots next to your property, and click “Copy
-                              URL”. The URL will be copied to your clipboard,
-                              and can be provided to your guests via booking
-                              channel, text, email, or any other platform you
-                              use to communicate.
-                            </li>
-                          </ol>
-                          <p>“The Works” Users</p>
-                          <ol>
-                            <li>
-                              Once you are happy with the responses Hostbuddy is
-                              providing, it’s time to schedule Hostbuddy’s first
-                              shift! Select the calendar icon below your
-                              property/s name to set a schedule for Hostbuddy.
+                              a. Security Measures: We implement industry-standard security measures to protect your personal data  against unauthorized access, alteration, disclosure, or destruction.
                             </li>
                             <li>
-                              The monthly schedule is great for setting certain
-                              days that you plan to be offline. The schedule
-                              button allows for you to set an ongoing schedule
-                              for each calendar day in a week. See our
-                              “Hostbuddy Scheduling Walkthrough” document for
-                              additional information on scheduling.
+                              b. Encryption: Personal data transmitted to and from our website is encrypted using Secure Socket Layer  (SSL) technology to ensure its confidentiality and integrity.
                             </li>
-                          </ol>
+                            <li>
+                              c. Access Controls: Access to your personal data is restricted to authorized personnel who need to know  that information in order to operate, develop, or improve our services.
+                            </li>
+                          </ul>
                         </div>
 
                         <div className="step-box section" id="step5">
-                          <h4>Step 4: Post Go Live</h4>
-                          <ol>
+                          <h4>5. Data Minimization</h4>
+                          <ul>
                             <li>
-                              After going live with Hostbuddy, we advise that
-                              you closely monitor conversations between your
-                              guests and Hostbuddy. You can go to the “Property
-                              Insights” page in your dashboard to see
-                              transcripts that are categorized by whether the
-                              conversation was deemed successful by Hostbuddy.
-                              Conversations will be marked unsuccessful if
-                              Hostbuddy does not have sufficient information to
-                              support a guest, or if there is an item that
-                              requires human intervention.
+                              a. Minimization Principle: We collect and process only the minimum amount of personal data necessary  to fulfill the purposes outlined in this Privacy Policy.
                             </li>
                             <li>
-                              Consistently update each Hostbuddy property with
-                              missing information, and if you need support,
-                              please do not hesitate to reach out to our team!
-                              Artificial intelligence is nuanced, and our team
-                              is trained to troubleshoot problems that you may
-                              encounter.
+                              b. Limited Access: Access to personal data is limited to authorized personnel and is restricted to what is  necessary for the performance of their duties.
                             </li>
-                            <li>
-                              Sit back and relax! You now have state of the art
-                              technology doing the heavy lifting for you.
-                              Welcome to the future of hosting!
-                            </li>
-                          </ol>
+                          </ul>
                         </div>
+
+                        <div className="step-box section" id="step6">
+                          <h4>6. Data Accuracy</h4>
+                          <ul>
+                            <li>
+                              a. Accuracy Verification: We take reasonable steps to ensure that personal data we collect and process is  accurate, complete, and up-to-date.
+                            </li>
+                            <li>
+                              b. User Updates: Users can update, correct, or delete their personal data by accessing their account  settings or by contacting us directly.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step7">
+                          <h4>7. Data Transfer</h4>
+                          <ul>
+                            <li>
+                              a. International Transfers: Your personal data may be transferred to, stored, and processed in countries  outside of your own, where data protection laws may differ. By using our services, you consent to such transfers.
+                            </li>
+                            <li>
+                              b. Standard Contractual Clauses: Where required by law, we use standard contractual clauses or other  appropriate safeguards to ensure the protection of your personal data during international transfers.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step8">
+                          <h4>8. Children's Privacy</h4>
+                          <ul>
+                            <li>
+                              a. Age Restriction: Our services are not intended for children under the age of 18. We do not knowingly  collect personal data from children under 18. If you are a parent or guardian and believe that your child has provided us with personal data, please contact us to request deletion of that information.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step9">
+                          <h4>9. Data Breach Notification</h4>
+                          <ul>
+                            <li>
+                              a. Notification Obligation: In the event of a data breach that may compromise the security of your personal data, we will notify you and relevant authorities as required by applicable law.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step10">
+                          <h4>10. Your Rights</h4>
+                          <ul>
+                            <li>
+                              a. Right to Access: You have the right to request access to your personal data and information about how  it is processed.
+                            </li>
+                            <li>
+                              b. Right to Rectification: You have the right to request correction of inaccurate or incomplete personal data.
+                            </li>
+                            <li>
+                              c. Right to Erasure: You have the right to request deletion of your personal data under certain circumstances, such as when it is no longer necessary for the purposes for which it was collected.
+                            </li>
+                            <li>
+                              d. Right to Restriction of Processing: You have the right to request restriction of processing of your personal data under certain circumstances, such as when its accuracy is contested or the processing is unlawful.
+                            </li>
+                            <li>
+                              e. Right to Data Portability: You have the right to receive your personal data in a structured, commonly used, and machine-readable format and to transmit it to another controller.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step11">
+                          <h4>11. Automated Decision-Making</h4>
+                          <ul>
+                            <li>
+                              a. Transparency: If we engage in automated decision-making processes that have legal or significant  effects on you, we will provide information about the logic involved and the potential consequences of such processing.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step12">
+                          <h4>12. Data Retention Policy</h4>
+                          <ul>
+                            <li>
+                              a. Retention Period: We retain your personal data only for as long as necessary to fulfill the purposes  outlined in this Privacy Policy, unless a longer retention period is required or permitted by law.
+                            </li>
+                            <li>
+                              b. Criteria for Retention: We consider factors such as the nature and sensitivity of the personal data, the purposes for which it was collected, and legal requirements when determining the appropriate retention period.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step13">
+                          <h4>13. Consent Withdrawal</h4>
+                          <ul>
+                            <li>
+                              a. Right to Withdraw Consent: If you have provided consent for the processing of your personal data, you  have the right to withdraw that consent at any time. Withdrawal of consent does not affect the lawfulness  of processing based on consent before its withdrawal.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step14">
+                          <h4>14. Changes to This Privacy Policy</h4>
+                          <p>
+                            We may update this Privacy Policy to reflect changes to our information practices. Any changes will be  posted on this page, and we encourage users to review it regularly.
+                          </p>
+                        </div>
+
+                        <div className="step-box section" id="step15">
+                          <h4>15. Contact Us</h4>
+                          <p>
+                            For any questions about this Privacy Policy or our data practices, please contact us at info@hostbuddy.ai.
+                          </p>
+                        </div>
+
                       </div>
                     </div>
-
-                    {/* <div className="col-lg-3">
-                      <div className="step-tab-links">
-                        <div className="steps-line">
-                          <div className="step-active-line"></div>
-                        </div>
-                        <ul>
-                          <li
-                            className={activeLink === "step1" ? "active" : ""}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleClickScroll("step1")}
-                              className="sec-link"
-                            >
-                              Onboarding Expectations and Timeline
-                            </button>
-                          </li>
-                          <li
-                            className={activeLink === "step2" ? "active" : ""}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleClickScroll("step2")}
-                              className="sec-link"
-                            >
-                              Step 1: Property Onboarding
-                            </button>
-                          </li>
-                          <li
-                            className={activeLink === "step3" ? "active" : ""}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleClickScroll("step3")}
-                              className="sec-link"
-                            >
-                              Step 2: Testing
-                            </button>
-                          </li>
-                          <li
-                            className={activeLink === "step4" ? "active" : ""}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleClickScroll("step4")}
-                              className="sec-link"
-                            >
-                              Step 3: Going Live
-                            </button>
-                          </li>
-                          <li
-                            className={activeLink === "step5" ? "active" : ""}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleClickScroll("step5")}
-                              className="sec-link"
-                            >
-                              Step 4: Post Go Live
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div> */}
                   </div>
                 </div>
               </div>

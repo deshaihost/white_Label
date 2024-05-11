@@ -299,6 +299,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
                   )}
                 </div>
                 {locationUrl === undefined && (
+                  /* This should be moved to the case where property already exists (users should create the property obj first, then can copy another prop's information into it)
                   <div className="mt-2 ">
                     <button
                       className="btn bg-dark text-white border border-primary"
@@ -309,6 +310,8 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
                       Copy Existing Property
                     </button>
                   </div>
+                  */
+                 <div></div> // placeholder
                 )}
               </div>
               <div className="col-md-6">

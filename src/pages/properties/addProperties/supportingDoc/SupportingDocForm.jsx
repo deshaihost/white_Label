@@ -623,7 +623,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                               {"Submit File"}
                             </button>
                         ) : (
-                          <BoxLoader />
+                          <>
+                            <span style={{ color: 'white' }}>Submitting...</span>
+                            <BoxLoader />
+                          </>
                         )}
                       </div>
                     </div>

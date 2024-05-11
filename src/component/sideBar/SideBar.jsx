@@ -62,7 +62,7 @@ const SideBar = () => {
             to="/property-insight/:id"
             className={findlocation === "/property-insight/:id" ? "active" : ""}
           >
-            Property Insight
+            Insights
           </Link>
         </li>
         {/* <li>

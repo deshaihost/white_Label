@@ -45,401 +45,187 @@ const TermsofService = () => {
             <div className="col-lg-12">
               <div className="account-container">
                 <div className="account_heading">
-                  <h3>Setup Guide</h3>
+                  <h3>Terms of Service</h3>
                 </div>
                 <div className="account-content">
                   <div className="row">
                     <div className="col-lg-12">
                       <div className="guide-steps">
                         <div className="step-box">
-                          <h4>Onboarding Steps</h4>
-                          <p>
-                            Welcome to HostBuddy! Follow the instructions below
-                            to begin onboarding your short-term rental
-                            properties with HostBuddy AI.
-                          </p>
+                          <h4>Welcome to Hostbuddy AI!</h4>
                         </div>
                         <div className="step-box section" id="step1">
-                          <h4>Onboarding Expectations and Timeline:</h4>
+                          <h4>1. Acceptance of Terms</h4>
                           <p>
-                            The onboarding process involves several steps
-                            designed to ensure that HostBuddy performs
-                            effectively for each property. While it is possible
-                            to complete onboarding in as little as one day,
-                            typically, it takes additional time once you begin
-                            testing. Don't worry—we provide plenty of resources
-                            to guide you through this process! During and after
-                            onboarding, you may contact our exceptional Customer
-                            Support team for any technical assistance. Our
-                            support team is able to assist you with any
-                            questions you may have and is able to help
-                            troubleshoot fixing responses you are not satisfied
-                            with during your testing phase. If you require
-                            support, please feel free to email our customer
-                            support team at info@hostbuddy.ai.
-                          </p>
-                          <p>
-                            For some of our frequently asked questions, please
-                            visit our FAQ page:{" "}
-                            <a href="/faqs" target="_blank">
-                              HostBuddy FAQs
-                            </a>
-                          </p>
-                          <p>
-                            For general questions about the Onboarding process,
-                            check out our welcome page below:
+                          By accessing or using HostBuddy AI, you agree to be bound by these Terms. Your use of the Service  constitutes your acceptance of these Terms in full. If you do not agree to these Terms or any part thereof,  you are prohibited from using the Service.
                           </p>
                         </div>
                         <div className="step-box section" id="step2">
-                          <h4>Step 1: Property Onboarding</h4>
-                          <p>
-                            Below is a step by step guide for onboarding your
-                            first property!
-                          </p>
-                          <h6 style={{ color: "white" }}>Subscription</h6>
-                          <ol>
+                          <h4>2. Use of the Service</h4>
+                          <ul>
                             <li>
-                              Once you have reviewed this Setup Guide and are
-                              ready to onboard your first property, navigate to
-                              the properties page in your user portal.
+                              a. License: Subject to these Terms, HostBuddy AI grants you a non-exclusive, non-transferable license to  use the Service solely for your business purposes. This license allows you to access and utilize the features and functionalities of the Service in accordance with these Terms and any additional guidelines provided  by HostBuddy AI.
                             </li>
                             <li>
-                              Select “Add Property”
+                              b. Prohibited Use: You agree not to:
                               <ul style={{ marginBottom: "0px" }}>
                                 <li>
-                                  Select the number of properties you would like
-                                  to add, along with the plan that you are
-                                  interested in. The main difference between our
-                                  packages is that “The Works” allows for PMS
-                                  integration and “The Essentials” generates a
-                                  link to Hostbuddy that you can send to your
-                                  guests.
+                                  a. Unlawful Purpose: Use the Service for any purpose that is unlawful, prohibited by these Terms,  or in violation of any applicable laws or regulations. This includes, but is not limited to, using the  Service to engage in illegal activities, distribute harmful content, or infringe upon the rights of  others.
                                 </li>
                                 <li>
-                                  <em>
-                                    Note: The number of properties you add
-                                    initially will be the number of properties
-                                    you can use for your free trial. Be sure to
-                                    add the exact number of properties that you
-                                    would like to use for the trial, as your
-                                    selection will be final when it comes to the
-                                    trial period. You can of course add more
-                                    properties later, but they will not qualify
-                                    for your trial period. Your card will not be
-                                    charged until your trial period has been
-                                    completed.
-                                  </em>
+                                  b. Interference and Disruption: Interfere with or disrupt the integrity, security, or performance of  the Service or any related systems, networks, or infrastructure. This includes, but is not limited  to, attempting to gain unauthorized access to the Service, introducing viruses or other malicious  code, or engaging in any activity that may adversely affect the availability or reliability of the  Service.
+                                </li>
+                                <li>
+                                  c. Unauthorized Access: Access or use the Service in any manner that exceeds the scope of the  license granted herein, including accessing or using any unauthorized areas of the Service,  unauthorized accounts, or unauthorized data.
                                 </li>
                               </ul>
                             </li>
-                            <li>
-                              Once you continue, you will be directed to our
-                              Stripe payment portal. Please enter in your
-                              payment information and click submit, which will
-                              bring you back to the Properties page.
-                            </li>
-                          </ol>
-                          <h6 style={{ color: "white" }}>
-                            Connecting your PMS (“The Works” Users)
-                          </h6>
-                          <p>
-                            If you’ve selected the works plan, now is a great
-                            time to connect your PMS!
-                          </p>
-                          <ol>
-                            <li>Click the “Connect PMS” button</li>
-                            <li>
-                              Select your PMS and click “next”. You will be
-                              redirected to a secure integrations page where you
-                              can enter your PMS information and connect to
-                              HostBuddy. Once finished, you will be redirected
-                              to the Properties page, where you will see your
-                              PMS listed in the top right. If you do not see
-                              your PMS, please repeat steps 1 and 2 again.
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  <em>
-                                    Note: If you have trouble locating the
-                                    required information, please reach out to
-                                    your PMS support team or refer to your PMS
-                                    user guide if available.
-                                  </em>
-                                </li>
-                              </ul>
-                            </li>
-                            <li>
-                              Select your PMS and click “next”. You will be
-                              redirected to a secure integrations page where you
-                              can enter your PMS information and connect to
-                              HostBuddy. Once finished, you will be redirected
-                              to the Properties page, where you will see your
-                              PMS listed in the top right. If you do not see
-                              your PMS, please repeat steps 1 and 2 again.
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  <em>
-                                    Note: If you have trouble locating the
-                                    required information, please reach out to
-                                    your PMS’ support team or refer to your PMS’
-                                    user guide if available.
-                                  </em>
-                                </li>
-                              </ul>
-                            </li>
-                          </ol>
-
-                          <h6 style={{ color: "white" }}>
-                            Customizing Properties
-                          </h6>
-                          <ol>
-                            <li>
-                              On the Properties page, you will see a number of
-                              editable properties matching your chosen property
-                              count in quantity. Select the pencil icon to begin
-                              customizing your Hostbuddy properties.
-                            </li>
-                            <li>
-                              Basics
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  Add a name for your property and a cover photo
-                                  under “Basic Information”. After selecting
-                                  next & next, please continue completing the
-                                  remaining fields.
-                                </li>
-                                <li>
-                                  Tip: Click the pencil icon next to applicable
-                                  fields to add any additional information you’d
-                                  like. For example, the property type field has
-                                  a pencil icon that can be used to explain that
-                                  a unit is in an apartment complex, or that a
-                                  room is in a shared home. This feature is
-                                  available in each section to provide
-                                  additional information on specific property
-                                  details.
-                                </li>
-                              </ul>
-                            </li>
-                            <li>
-                              Supporting Doc
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  This page allows for you to upload any
-                                  documents, such as a welcome document,
-                                  detailed property document or any other item
-                                  that you would like Hostbuddy to use to
-                                  message guests. If you have subscribed to the
-                                  works plan and you have not yet connected your
-                                  PMS, please do so here. You also have the
-                                  option of adding a URL as a supporting
-                                  document. Please make sure any document or URL
-                                  you upload contains the necessary information
-                                  in text format (chatGPT can not process photo
-                                  images).
-                                </li>
-                              </ul>
-                            </li>
-                            <li>
-                              Listing Details, Amenities, and Extras
-                              <ul style={{ marginBottom: "0px" }}>
-                                <li>
-                                  Complete as many fields as possible. The more
-                                  information you add, the better Hostbuddy will
-                                  be able to support your property. Please see
-                                  our{" "}
-                                  <a
-                                    href="https://docs.google.com/document/d/14Gh0kUSOft94gi4afjVoYpDB9ujWBBTyb65fJxgZpyU"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    Hostbuddy Tips and Tricks
-                                  </a>{" "}
-                                  page to learn our best practices for filling
-                                  out this information.
-                                </li>
-                              </ul>
-                            </li>
-                          </ol>
+                          </ul>
                         </div>
 
                         <div className="step-box section" id="step3">
-                          <h4>Step 2: Testing</h4>
-                          <p>
-                            After inputting all desired property details on
-                            Hostbuddy, now it’s time to thoroughly test to
-                            ensure it's ready to support your business.
-                          </p>
-                          <ol>
+                          <h4>3. User Responsibilities and Data Regulations compliance</h4>
+                          <ul>
                             <li>
-                              Select the “Test Property” button on the
-                              “Properties” page.{" "}
+                              a. Accuracy of Information: You are responsible for the accuracy and legality of all information provided  to the chatbot. HostBuddy AI is not liable for any inaccuracies or legal violations in the information  provided.
                             </li>
                             <li>
-                              Compile a list of commonly asked questions that
-                              you want to make sure Hostbuddy is capable of
-                              handling. We have a list that you can use for this
-                              phase, but we recommend that you tailor the
-                              questions to your most common scenarios. To review
-                              our recommended questions, please see our{" "}
-                              <a
-                                href="https://docs.google.com/document/d/1-UubWDNGtjd34M1u6fvvnCOEa3mS5t-xvjYt3k_BVew?usp=sharing"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                Hostbuddy Testing Questions
-                              </a>{" "}
-                              document.
+                              b. Data Protection Compliance: Users agree to comply with all applicable international laws and  regulations related to software as a service (SAAS) products, data protection, including but not limited to  the General Data Protection Regulation (GDPR) in the European Union, the California Consumer Privacy  Act (CCPA), and any other relevant laws in the jurisdictions where they operate or where their data  subjects reside.
                             </li>
                             <li>
-                              Take note of each response that does not align
-                              with your expectations. For information that
-                              Hostbuddy is missing, please return to the
-                              “Properties” page, and select edit for the given
-                              property. Here, you can make refinements to the
-                              information that you would like for Hostbuddy to
-                              use. If there are responses that fall short, which
-                              you are having trouble fixing, please contact our
-                              team at info@hostbuddy.ai and provide the property
-                              name, a screenshot, and an example of what the
-                              response should have been. We will reach back out
-                              with either a recommendation for how to fix the
-                              issue, or a request to meet to discuss more
-                              nuanced requirements.
+                              c. Data Security: HostBuddy AI implements industry-standard security measures to protect user data.  However, users acknowledge that no method of transmission over the internet or electronic storage is  completely secure, and HostBuddy AI cannot guarantee the absolute security of user data.
                             </li>
-                          </ol>
+                            <li>
+                              d. Data Ownership: Users retain ownership of all data provided to HostBuddy AI through the Service.  HostBuddy AI does not claim ownership of user data. However, by using the Service, users grant  HostBuddy AI a worldwide, royalty-free license to use, modify, reproduce, and distribute such data for the  purpose of providing and improving the Service.
+                            </li>
+                          </ul>
                         </div>
 
                         <div className="step-box section" id="step4">
-                          <h4>Step 3: Going Live</h4>
-                          <p>“Essentials” Users</p>
-                          <ol>
+                          <h4>4. Limitation of Liability</h4>
+                          <ul>
                             <li>
-                              Once you are happy with the responses Hostbuddy is
-                              providing, you are ready to provide Hostbuddy’s
-                              unique URL to your guests for support. Click the
-                              three dots next to your property, and click “Copy
-                              URL”. The URL will be copied to your clipboard,
-                              and can be provided to your guests via booking
-                              channel, text, email, or any other platform you
-                              use to communicate.
-                            </li>
-                          </ol>
-                          <p>“The Works” Users</p>
-                          <ol>
-                            <li>
-                              Once you are happy with the responses Hostbuddy is
-                              providing, it’s time to schedule Hostbuddy’s first
-                              shift! Select the calendar icon below your
-                              property/s name to set a schedule for Hostbuddy.
+                              a. Disclaimer: The Service is provided "as is" without warranties of any kind. HostBuddy AI disclaims all  liability for any indirect, incidental, consequential, or punitive damages arising out of or related to the use  of the Service.
                             </li>
                             <li>
-                              The monthly schedule is great for setting certain
-                              days that you plan to be offline. The schedule
-                              button allows for you to set an ongoing schedule
-                              for each calendar day in a week. See our
-                              “Hostbuddy Scheduling Walkthrough” document for
-                              additional information on scheduling.
+                              b. Incorrect Guidance: HostBuddy AI may provide incorrect guidance due to limitations in data availability  or the inherent uncertainties of AI. Users accept this risk and agree that HostBuddy AI is not liable for any  negative consequences resulting from such guidance. 
                             </li>
-                          </ol>
+                            <li>
+                              c. Financial Obligations: HostBuddy AI is not responsible for any financial obligations incurred by users,  including but not limited to refunds or compensation to guests based on information provided by the  Service.
+                            </li>
+                          </ul>
                         </div>
 
                         <div className="step-box section" id="step5">
-                          <h4>Step 4: Post Go Live</h4>
-                          <ol>
+                          <h4>5. Privacy</h4>
+                          <ul>
                             <li>
-                              After going live with Hostbuddy, we advise that
-                              you closely monitor conversations between your
-                              guests and Hostbuddy. You can go to the “Property
-                              Insights” page in your dashboard to see
-                              transcripts that are categorized by whether the
-                              conversation was deemed successful by Hostbuddy.
-                              Conversations will be marked unsuccessful if
-                              Hostbuddy does not have sufficient information to
-                              support a guest, or if there is an item that
-                              requires human intervention.
+                              a. Data Collection: HostBuddy AI collects and processes user data in accordance with its Privacy Policy. By  using the Service, you consent to such data practices.
                             </li>
-                            <li>
-                              Consistently update each Hostbuddy property with
-                              missing information, and if you need support,
-                              please do not hesitate to reach out to our team!
-                              Artificial intelligence is nuanced, and our team
-                              is trained to troubleshoot problems that you may
-                              encounter.
-                            </li>
-                            <li>
-                              Sit back and relax! You now have state of the art
-                              technology doing the heavy lifting for you.
-                              Welcome to the future of hosting!
-                            </li>
-                          </ol>
+                          </ul>
                         </div>
+
+                        <div className="step-box section" id="step6">
+                          <h4>6. Termination</h4>
+                          <p>
+                            HostBuddy AI may terminate or suspend your access to the Service at any time, without prior notice or liability, for any reason. 
+                          </p>
+                        </div>
+
+                        <div className="step-box section" id="step7">
+                          <h4>7. Miscellaneous</h4>
+                          <ul>
+                            <li>
+                              a. Governing Law: These Terms shall be governed by and construed in accordance with the laws of your local jurisdiction.
+                            </li>
+                            <li>
+                              b. Changes to Terms: HostBuddy AI reserves the right to update or modify these Terms at any time. Continued use of the Service after such changes constitutes acceptance of the updated Terms.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step8">
+                          <h4>8. Dispute Resolution</h4>
+                          <ul>
+                            <li>
+                              a. Mediation and Arbitration: Any dispute arising from or relating to these Terms shall be resolved first  through good-faith negotiation between the parties. If a resolution cannot be reached, the parties agree  to pursue mediation or arbitration as a means of alternative dispute resolution.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step9">
+                          <h4>9. Intellectual Property</h4>
+                          <ul>
+                            <li>
+                              a. Ownership: All intellectual property rights in the Service and its content, including but not limited to  software, algorithms, trademarks, and logos, are owned by HostBuddy AI or its licensors. Users agree not  to reproduce, modify, or distribute any proprietary content without prior written consent.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step10">
+                          <h4>10. User Feedback</h4>
+                          <ul>
+                            <li>
+                              a. Feedback License: By providing feedback, suggestions, or other comments to HostBuddy AI regarding  the Service, you grant HostBuddy AI a perpetual, irrevocable, worldwide, royalty-free license to use,  modify, and incorporate such feedback into its products and services without any obligation or  compensation to you.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step11">
+                          <h4>11. Representations and Warranties</h4>
+                          <ul>
+                            <li>
+                              a. User Representations: By using the Service, you represent and warrant that you have the legal authority  to enter into these Terms and that your use of the Service will not violate any applicable laws or  regulations.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step12">
+                          <h4>12. Third-Party Services</h4>
+                          <ul>
+                            <li>
+                              a. Integration: HostBuddy AI may integrate with third-party services or platforms to enhance functionality.  Users acknowledge and agree that their use of such third-party services is subject to the terms and  conditions of those services, and HostBuddy AI is not responsible for any actions or omissions of third party providers.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step13">
+                          <h4>13. Severability</h4>
+                          <ul>
+                            <li>
+                              a. Invalid Provisions: If any provision of these Terms is found to be invalid or unenforceable, such  provision shall be severed from the Terms, and the remaining provisions shall remain in full force and  effect.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step14">
+                          <h4>14. Entire Agreement</h4>
+                          <ul>
+                            <li>
+                              a. Comprehensive Agreement: These Terms constitute the entire agreement between you and HostBuddy AI regarding the use of the Service, superseding any prior agreements or understandings between the parties.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step15">
+                          <h4>15. Waiver</h4>
+                          <ul>
+                            <li>
+                              a. Waiver of Rights: The failure of HostBuddy AI to enforce any provision of these Terms shall not be  construed as a waiver of its right to do so in the future.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step16">
+                          <h4>16. Contact Us</h4>
+                          <p>
+                            If you have any questions about these Terms, please contact us at info@hostbuddy.ai.
+                          </p>
+                        </div>
+
                       </div>
                     </div>
 
-                    {/* <div className="col-lg-3">
-                      <div className="step-tab-links">
-                        <div className="steps-line">
-                          <div className="step-active-line"></div>
-                        </div>
-                        <ul>
-                          <li
-                            className={activeLink === "step1" ? "active" : ""}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleClickScroll("step1")}
-                              className="sec-link"
-                            >
-                              Onboarding Expectations and Timeline
-                            </button>
-                          </li>
-                          <li
-                            className={activeLink === "step2" ? "active" : ""}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleClickScroll("step2")}
-                              className="sec-link"
-                            >
-                              Step 1: Property Onboarding
-                            </button>
-                          </li>
-                          <li
-                            className={activeLink === "step3" ? "active" : ""}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleClickScroll("step3")}
-                              className="sec-link"
-                            >
-                              Step 2: Testing
-                            </button>
-                          </li>
-                          <li
-                            className={activeLink === "step4" ? "active" : ""}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleClickScroll("step4")}
-                              className="sec-link"
-                            >
-                              Step 3: Going Live
-                            </button>
-                          </li>
-                          <li
-                            className={activeLink === "step5" ? "active" : ""}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleClickScroll("step5")}
-                              className="sec-link"
-                            >
-                              Step 4: Post Go Live
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div> */}
                   </div>
                 </div>
               </div>

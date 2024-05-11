@@ -40,6 +40,10 @@ const DochideForReservationsModel = ({
         centered
       >
         <Modal.Body>
+          <h4 className="text-center" style={{ color: 'white', marginBottom: '20px' }}>Hide for Reservations</h4>
+          <p className="text-center" style={{ color: 'white', marginBottom: '20px' }}>
+            Information from this document will only be provided to guests at the selected (blue) reservation stages. You can de-select stages below to prevent HostBuddy from sharing this information with those guests.
+          </p>
           <div className="d-flex align-items-center justify-content-between gap-3">
             {hideForReservationDefault.map((item, index) => (
               <button
