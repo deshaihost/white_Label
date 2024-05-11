@@ -87,13 +87,12 @@ const CheckboxModalNote = ({
 
   const handleAddNote = () => {
     console.log("Note Data: ", noteData);
-    // return;
     const valIndex = responseOptions?.indexOf(noteClickData?.name);
+
     // If the name exists in responseOptions, set the corresponding value from responseText to noteData
     if (valIndex !== -1) {
       const updatedResponseText = [...responseText];
       updatedResponseText[valIndex] = noteData;
-
       setResponseText(updatedResponseText);
     } else {
       ToastHandle("Something went wrong", "danger");
@@ -299,7 +298,7 @@ const CheckboxModalNote = ({
           </div>
 
           <div className="form-design">
-            <label>Data will be applied to selected reservation status(es) below</label>
+            <label>Information from this question will only be provided to guests at the selected (blue) reservation stages. You can de-select stages below to prevent HostBuddy from sharing this information with those guests.</label>
           </div>
 
           <div className=" d-flex justify-content-between mt-3">

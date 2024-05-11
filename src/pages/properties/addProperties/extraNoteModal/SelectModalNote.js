@@ -218,7 +218,7 @@ const SelectModalNote = ({
             </div>
           </div>
           <div className="form-design">
-            <label>Data will be applied to selected reservation status(es) below</label>
+            <label>Information from this question will only be provided to guests at the selected (blue) reservation stages. You can de-select stages below to prevent HostBuddy from sharing this information with those guests.</label>
           </div>
 
           <div className=" d-flex justify-content-between mt-3">

@@ -370,45 +370,33 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     //   ][0]["response_options"]
     // );
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      "Family"
-    ][0]["response_options"] = amenitiesFamilyOptions;
+    // "Fill" the hideReservations arrays by adding empty strings where there are nulls, since backend expects an array of strings
+    const amenitiesFamilyHideReservationFilled = amenitiesFamilyHideReservation.map(item => item ?? '');
+    const amenitiesIndoorHideReservationFilled = amenitiesIndoorHideReservation.map(item => item ?? '');
+    const amenitiesMoreHideReservationFilled = amenitiesMoreHideReservation.map(item => item ?? '');
+    const amenitiesOutdoorHideReservationFilled = amenitiesOutdoorHideReservation.map(item => item ?? '');
+    const amenitiesRulesHideReservationFilled = amenitiesRulesHideReservation.map(item => item ?? '');
+    console.log('FINAL', amenitiesFamilyHideReservationFilled)
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      "Family"
-    ][0]["response_text"] = amenitiesFamilyResponse;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Family"][0]["response_options"] = amenitiesFamilyOptions;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Family"][0]["response_text"] = amenitiesFamilyResponse;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Family"][0]["hide_for_reservations"] = amenitiesFamilyHideReservationFilled;
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      "Indoor"
-    ][0]["response_options"] = amenitiesIndoorOptions;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Indoor"][0]["response_options"] = amenitiesIndoorOptions;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Indoor"][0]["response_text"] = amenitiesIndoorResponse;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Indoor"][0]["hide_for_reservations"] = amenitiesIndoorHideReservationFilled;
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      "Indoor"
-    ][0]["response_text"] = amenitiesIndoorResponse;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["More"][0]["response_options"] = amenitiesMoreOptions;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["More"][0]["response_text"] = amenitiesMoreResponse;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["More"][0]["hide_for_reservations"] = amenitiesMoreHideReservationFilled;
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      "More"
-    ][0]["response_options"] = amenitiesMoreOptions;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Outdoor"][0]["response_options"] = amenitiesOutdoorOptions;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Outdoor"][0]["response_text"] = amenitiesOutdoorResponse;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Outdoor"][0]["hide_for_reservations"] = amenitiesOutdoorHideReservationFilled;
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      "More"
-    ][0]["response_text"] = amenitiesMoreResponse;
-
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      "Outdoor"
-    ][0]["response_options"] = amenitiesOutdoorOptions;
-
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      "Outdoor"
-    ][0]["response_text"] = amenitiesOutdoorResponse;
-
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      "Rules and Services"
-    ][0]["response_options"] = amenitiesRulesOptions;
-
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      "Rules and Services"
-    ][0]["response_text"] = amenitiesRulesResponse;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Rules and Services"][0]["response_options"] = amenitiesRulesOptions;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Rules and Services"][0]["response_text"] = amenitiesRulesResponse;
+    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Rules and Services"][0]["hide_for_reservations"] = amenitiesRulesHideReservationFilled;
 
 
     dispatch(

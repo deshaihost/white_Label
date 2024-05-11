@@ -103,7 +103,7 @@ const SetupGuide = () => {
                           </li>
                           <li>Supporting Doc
                             <ul style={{ marginBottom: '0px' }}>
-                              <li>This page allows for you to upload any documents, such as a welcome document, detailed property document or any other item that you would like Hostbuddy to use to message guests. If you have subscribed to the works plan and you have not yet connected your PMS, please do so here. You also have the option of adding a URL as a supporting document. Please make sure any document or URL you upload contains the necessary information in text format (chatGPT can not process photo images).</li>
+                              <li>This page allows for you to upload any documents, such as a welcome document, detailed property document or any other item that you would like Hostbuddy to use to message guests. If you have subscribed to the works plan and you have not yet connected your PMS, please do so here. You also have the option of adding a URL as a supporting document. Please make sure any document or URL you upload contains the necessary information in text format, since we do not yet support image processing.</li>
                             </ul>
                           </li>
                           <li>Listing Details, Amenities, and Extras

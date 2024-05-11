@@ -41,7 +41,7 @@ function Faqs() {
                         <Accordion.Item eventKey="3">
                             <Accordion.Header>My properties have complicated setups and require a human touch to ensure that information is communicated correctly. How can I trust an AI product to take care of my guests' needs?</Accordion.Header>
                             <Accordion.Body>
-                            HostBuddy is built using GPT-4 and is highly customizable to fit the needs of even the most complex property. With robust training on technical problem-solving, it is capable of supporting guests through lockouts, Wi-Fi troubleshooting, usage of HVAC, electronics, or any other challenging support item. Play around with our MeetHostBuddy feature to see how HostBuddy can support your guests today!
+                                HostBuddy is built using the most advanced conversational AI models available today, and is highly customizable to fit the needs of even the most complex property. With robust training on technical problem-solving, it is capable of supporting guests through lockouts, Wi-Fi troubleshooting, usage of HVAC, electronics, or any other challenging support item. Play around with our MeetHostBuddy feature to see how HostBuddy can support your guests today!
                             </Accordion.Body>
                         </Accordion.Item>
 
