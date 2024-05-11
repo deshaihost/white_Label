@@ -149,7 +149,7 @@ const Account = () => {
       <div className="container">
         <div className="banner-heading">
           <h2>My HostBuddy</h2>
-          <p>Manage your profile here </p>
+          {/* <p>Manage your profile here </p> */}
         </div>
         <div className="row">
           <div className="col-lg-4">

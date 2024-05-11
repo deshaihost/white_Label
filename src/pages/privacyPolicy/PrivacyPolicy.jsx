@@ -38,7 +38,6 @@ const PrivacyPolicy = () => {
         <div className="container">
           <div className="banner-heading">
             <h2>Privacy Policy</h2>
-            <p>Manage your profile here </p>
           </div>
           <div className="row">
             {/* <div className="col-lg-4">

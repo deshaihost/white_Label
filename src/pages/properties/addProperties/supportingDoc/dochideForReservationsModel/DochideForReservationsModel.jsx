@@ -8,7 +8,7 @@ const DochideForReservationsModel = ({
   documentUploadMainHndle,
   btnLoading,
 }) => {
-  const hideForReservationDefault = ["PAST", "INQUIRY/PAST", "FUTURE"];
+  const hideForReservationDefault = ["CURRENT", "FUTURE", "INQUIRY/PAST"];
 
   const [hideGetArray, setHideGetArray] = useState([]);
 
@@ -23,8 +23,8 @@ const DochideForReservationsModel = ({
   };
 
   const mainHandleCloe=()=>{
-documentUploadMainHndle(hideGetArray);
-setShow(false)
+    documentUploadMainHndle(hideGetArray);
+    setShow(false)
   }
   useEffect(() => {
     setHideGetArray([]);
@@ -44,10 +44,9 @@ setShow(false)
             {hideForReservationDefault.map((item, index) => (
               <button
                 key={index}
-                className={`btn ${
-                  hideGetArray.includes(item) ? "btn-primary" : "btn-danger"
-                } d-block w-100 rounded-pill`}
+                className={`btn ${ hideGetArray.includes(item) ? "btn-unselected" : "btn-primary" } d-block w-100 rounded-pill`}
                 onClick={() => handleButtonClick(item)}
+                style={hideGetArray.includes(item) ? { borderColor: '#0078f0', color: '#0078f0' } : {}}
               >
                 {item}
               </button>

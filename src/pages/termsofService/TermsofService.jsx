@@ -37,7 +37,6 @@ const TermsofService = () => {
         <div className="container">
           <div className="banner-heading">
             <h2>Terms of Service</h2>
-            <p>Manage your profile here </p>
           </div>
           <div className="row">
             {/* <div className="col-lg-4">
