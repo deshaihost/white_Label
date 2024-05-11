@@ -140,7 +140,7 @@ const SetupGuide = () => {
                       <div className="step-box section" id="step5">
                         <h4>Step 4: Post Go Live</h4>
                         <ol>
-                          <li>After going live with Hostbuddy, we advise that you closely monitor conversations between your guests and Hostbuddy. You can go to the “Property Insights” page in your dashboard to see transcripts that are categorized by whether the conversation was deemed successful by Hostbuddy. Conversations will be marked unsuccessful if Hostbuddy does not have sufficient information to support a guest, or if there is an item that requires human intervention.</li>
+                          <li>After going live with Hostbuddy, we advise that you closely monitor conversations between your guests and Hostbuddy. You can go to the "Insights” page in your dashboard to see transcripts that are categorized by whether the conversation was deemed successful by Hostbuddy. Conversations will be marked unsuccessful if Hostbuddy does not have sufficient information to support a guest, or if there is an item that requires human intervention.</li>
                           <li>Consistently update each Hostbuddy property with missing information, and if you need support, please do not hesitate to reach out to our team! Artificial intelligence is nuanced, and our team is trained to troubleshoot problems that you may encounter.</li>
                           <li>Sit back and relax! You now have state of the art technology doing the heavy lifting for you. Welcome to the future of hosting!</li>
                         </ol>

@@ -81,7 +81,7 @@ const NavBar = () => {
                     className="nav-link"
                     activeClassName="active"
                   >
-                    Property Insight
+                    Insights
                   </NavLink>
                   <NavLink
                     exact

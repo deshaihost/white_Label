@@ -87,7 +87,7 @@ const PropertyInsight = () => {
   return (
     <>
     <Helmet>
-    <title>Property Insight</title>
+    <title>Insights</title>
   </Helmet>;
       <div className="account-main">
         <div className="container">
@@ -102,7 +102,7 @@ const PropertyInsight = () => {
             <div className="col-lg-8">
               <div class="account-container">
                 <div class="account_heading account_heading_white">
-                  <h3 className="text-white">Property Insight </h3>
+                  <h3 className="text-white">Insights</h3>
                   <div class="property_select">
                     {userDataGet?.length > 0 ? (
                       <select

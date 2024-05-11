@@ -5,6 +5,7 @@ let isFirstNotificationShown = false;
 const ToastHandle = (message, type, oneTimeCall) => {
   // Check if isFirstNotificationShown is false
   if (!oneTimeCall) {
+    message = message.charAt(0).toUpperCase() + message.slice(1); // Always capitalize the first letter of the message
     // Display notification
     Store.addNotification({
       message: message,
