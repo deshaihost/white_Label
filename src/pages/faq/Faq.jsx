@@ -8,7 +8,7 @@ function Faqs() {
     return (
         <section className="faqs">
             <Helmet>
-                <title>FAQs – Hostbuddy</title>
+                <title>FAQs – HostBuddy</title>
             </Helmet>
             <Container>
                 <div className="banner-heading">

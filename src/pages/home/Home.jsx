@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <div className='home'>
       <Helmet>
-        <title>Hostbuddy</title>
+        <title>HostBuddy</title>
       </Helmet>
       <Banner />
       <Features />

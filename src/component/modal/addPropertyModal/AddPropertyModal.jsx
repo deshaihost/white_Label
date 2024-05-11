@@ -69,10 +69,9 @@ function AddPropertyModal({ handleClose, show, handleSubscribe }) {
                     className="form-control pricing_range"
                     {...register("num_properties", {
                       required: true,
-                      max: 50,
+                      max: 100,
                       min: 1,
                     })}
-                    // max="50"
                   />
                   {errors.num_properties?.type === "required" && (
                     <>
@@ -122,11 +121,15 @@ function AddPropertyModal({ handleClose, show, handleSubscribe }) {
               </div>
             </div>
           </form>
+
+          {/* Don't show ToS and priv policy here, we'll show in the next modal
           <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap">
-          <Link to="/privacy-policy" className="text-white">Privacy Policy</Link>
+          <Link to="/privacy-policy" className="text-blue">Privacy Policy</Link>
           <span className="text-white">|</span>
-          <Link to="/termsof-service" className="text-white">Terms of Service</Link>
+          <Link to="/termsof-service" className="text-blue">Terms of Service</Link>
           </div>
+          */}
+          
         </Modal.Body>
       </Modal>
       <AddNewPropertyModal

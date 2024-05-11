@@ -10,12 +10,12 @@ const Pricing = () => {
   return (
     <section className='pricing'>
       <Helmet>
-        <title>Pricing – Hostbuddy</title>
+        <title>Pricing – HostBuddy</title>
       </Helmet>
       <Container>
         <div className="pricing-heading">
           <h2>Pricing</h2>
-          <p>Explore our prices and plan to understand more about how we can help you, As Hostbuddy AI is priced based on Number of Property</p>
+          <p>Explore our prices and plan to understand more about how we can help you, As HostBuddy AI is priced based on Number of Property</p>
         </div>
         <Essentials />
         <Features />

@@ -70,7 +70,7 @@ const Features = () => {
                                         Direct Integrations
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        Hostbuddy seamlessly integrates into your existing setup. Thanks to our partnerships with leading property management software providers, HostBuddy can engage with guests directly on the booking platforms they use and trust. For more details on how this integration works and the benefits it offers, we invite you to visit our FAQ page.
+                                        HostBuddy seamlessly integrates into your existing setup. Thanks to our partnerships with leading property management software providers, HostBuddy can engage with guests directly on the booking platforms they use and trust. For more details on how this integration works and the benefits it offers, we invite you to visit our FAQ page.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>

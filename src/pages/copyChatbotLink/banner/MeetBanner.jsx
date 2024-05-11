@@ -46,10 +46,6 @@ const MeetBanner = (props) => {
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
 
-  /* Mboddie: For now, use this variable to determine whether we're in property chat (query params are present), or Meet hostbuddy front page (no query params).
-  TODO (Expinator team) - please create a new path in the application for the property chat window, since it should not use the same path as Meet Hostbuddy and
-  should not have "Meet-Hostbuddy" in the URL (use a path like "/property-chat"). */
-
   // const messagesContainerRef = useRef(null);
 
   // Event handler for key press in the input field

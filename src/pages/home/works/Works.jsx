@@ -60,7 +60,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4>Full <strong> Host Control</strong> </h4>
-                                <p>Experience full host control with HostBuddy’s 24/7 Support. Choose when to give Hostbuddy control and when you'd like to jump back in. Customize your weekly calendar to ensure full coverage during the busiest hours of each day.</p>
+                                <p>Experience full host control with HostBuddy’s 24/7 Support. Choose when to give HostBuddy control and when you'd like to jump back in. Customize your weekly calendar to ensure full coverage during the busiest hours of each day.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -72,7 +72,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4><strong>Tailored Recommendations </strong> for Improvement</h4>
-                                <p>Hostbuddy tracks conversations to help inform you of what information it is missing. This ensures that Hostbuddy has everything it needs to best support your business and guests.</p>
+                                <p>HostBuddy tracks conversations to help inform you of what information it is missing. This ensures that HostBuddy has everything it needs to best support your business and guests.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
