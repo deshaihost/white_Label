@@ -23,26 +23,14 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
   const [show, setShow] = useState(false);
   const [showReservation, setShowReservation] = useState(false);
   const [addedNote, setAddedNote] = useState({});
-  const [noteClickData, setNoteClickData] = useState({
-    question: "",
-    name: "",
-    value: "",
-  });
+  const [noteClickData, setNoteClickData] = useState({ question: "", name: "", value: "", });
+  const [reservationClickData, setReservationClickData] = useState({ name: "", value: "", });
 
-  const [reservationClickData, setReservationClickData] = useState({
-    name: "",
-    value: "",
-  });
 
   const handleClose = () => setShow(false);
   const handleReservationClose = () => setShowReservation(false);
   const handleShow = (question, name, value, hideName, hideValue) => {
-    setNoteClickData({
-      ...noteClickData,
-      question: question,
-      name: name,
-      value: value,
-    });
+    setNoteClickData({ ...noteClickData, question: question, name: name, value: value, });
 
     setReservationClickData({
       ...reservationClickData,
@@ -85,12 +73,52 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
     ? ExtrasFormCall
     : [];
   const locationFildInput = questionnaireApi["Basics"]?.["Location"];
+
+  const [responseOptions, setResponseOptions] = useState({});
+  const [responseTexts, setResponseTexts] = useState({});
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
   } = useForm();
+
+  // When the API data comes in, update responseOptions and responseTexts for all of our questions
+  useEffect(() => {
+    const responseOptions = {};
+    const responseTexts = {};
+    locationFildInput?.forEach((item, index) => {
+      responseTexts[`${item.question_type}${index}`] = item.response_text;
+      if (item.question_type === "select") {
+        responseOptions[`${item.question_type}${index}`] = item.response_option;
+      }
+    }
+    );
+    setResponseOptions(responseOptions);
+    setResponseTexts(responseTexts);
+
+    // Need to use setValue to update the form value when the API data comes in, otherwise it wont be recognized by React (even though it's in the component)
+    locationFildInput?.forEach((item, index) => {
+      if (item.question_type === "select") {
+        setValue(`${item.question_type}${index}`, responseOptions[`${item.question_type}${index}`]);
+      } else {
+        setValue(`${item.question_type}${index}`, responseTexts[`${item.question_type}${index}`]);
+      }
+    });
+
+  }, [locationFildInput]);
+
+  // For select questions, when a new option is selected, update the response_option in the state and the component
+  const handleSelectChange = (event) => {
+    setResponseOptions({ ...responseOptions, [event.target.name]: event.target.value });
+  };
+
+  // For text questions, when a new value is entered, update the response_text in the state and the component
+  const handleTextChange = (event) => {
+    setResponseTexts({ ...responseTexts, [event.target.name]: event.target.value });
+  };
 
   const onSubmit = (data) => {
     updateImageHndle()
@@ -294,7 +322,8 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
                       <select
                         className="form-select form-control"
                         {...register(`${item.question_type}${index}`)}
-                        defaultValue={item.response_option} // Set defaultValue to item.response_option
+                        // value={responseOptions[`${item.question_type}${index}`]} // controlled by React Hook Form
+                        onChange={handleSelectChange}
                       >
                         {item.options.map((option, optionIndex) => (
                           <option
@@ -344,7 +373,8 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
                         className="form-control"
                         {...register(`${item.question_type}${index}`)}
                         placeholder={item.placeholder_text}
-                        defaultValue={item?.response_text}
+                        value={responseTexts[`${item.question_type}${index}`]}
+                        onChange={handleTextChange}
                       />
                     </div>
                   )}
