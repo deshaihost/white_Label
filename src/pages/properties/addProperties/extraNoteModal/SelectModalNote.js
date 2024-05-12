@@ -80,27 +80,15 @@ const SelectModalNote = ({
   };
 
   const handleAddNote = () => {
-    // console.log("Note Data: ", noteData);
-    // if (noteData.trim() !== "") {
-    setAddedNote((prev) => ({
-      ...prev,
-      [noteClickData?.name]: noteData,
-    }));
+    setAddedNote((prev) => ({ ...prev, [noteClickData?.name]: noteData, }));
     handleClose();
-    // }else{
-    //   ToastHandle("Empty note cannot be added", "danger");
-    // }
   };
 
   const handleAddReservationStage = (stageToSet) => {
-    setAddedNote((prev) => ({
-      ...prev,
-      [reservationClickData?.name]: stageToSet,
-    }));
+    setAddedNote((prev) => ({ ...prev, [reservationClickData?.name]: stageToSet, }));
   };
 
   useEffect(() => {
-    // if (!checkChange) {
     if (addedNote && noteClickData?.name in addedNote) {
       // If addedNote contains a key matching noteClickData.name, set noteData to its value
       setNoteData(addedNote[noteClickData.name]);
