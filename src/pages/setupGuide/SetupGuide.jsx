@@ -57,9 +57,8 @@ const SetupGuide = () => {
                       </div>
                       <div className="step-box section" id="step1">
                         <h4>Onboarding Expectations and Timeline:</h4>
-                        <p>The onboarding process involves several steps designed to ensure that HostBuddy performs effectively for each property. While it is possible to complete onboarding in as little as one day, typically, it takes additional time once you begin testing. Don't worry—we provide plenty of resources to guide you through this process! During and after onboarding, you may contact our exceptional Customer Support team for any technical assistance. Our support team is able to assist you with any questions you may have and is able to help troubleshoot fixing responses you are not satisfied with during your testing phase. If you require support, please feel free to email our customer support team at info@hostbuddy.ai.</p>
+                        <p>The onboarding process involves several steps designed to ensure that HostBuddy performs effectively for each property. While it is possible to complete onboarding in as little as one day, typically, it takes additional time once you begin testing. Don't worry—we provide plenty of resources to guide you through this process! During and after onboarding, you may contact our exceptional Customer Support team for any technical assistance. Our support team is able to assist you with any questions you may have and is able to help troubleshoot fixing responses you are not satisfied with during your testing phase. If you require support, please feel free to email our customer support team at info@HostBuddy.ai.</p>
                         <p>For some of our frequently asked questions, please visit our FAQ page: <a href='/faqs' target="_blank">HostBuddy FAQs</a></p>
-                        <p>For general questions about the Onboarding process, check out our welcome page below:</p>
                       </div>
                       <div className="step-box section" id="step2">
                         <h4>Step 1: Property Onboarding</h4>
@@ -69,7 +68,7 @@ const SetupGuide = () => {
                           <li>Once you have reviewed this Setup Guide and are ready to onboard your first property, navigate to the properties page in your user portal.</li>
                           <li>Select “Add Property”
                             <ul style={{ marginBottom: '0px' }}>
-                              <li>Select the number of properties you would like to add, along with the plan that you are interested in. The main difference between our packages is that “The Works” allows for PMS integration and “The Essentials” generates a link to Hostbuddy that you can send to your guests.</li>
+                              <li>Select the number of properties you would like to add, along with the plan that you are interested in. The main difference between our packages is that “The Works” allows for PMS integration and “The Essentials” generates a link to HostBuddy that you can send to your guests.</li>
                               <li><em>Note: The number of properties you add initially will be the number of properties you can use for your free trial. Be sure to add the exact number of properties that you would like to use for the trial, as your selection will be final when it comes to the trial period. You can of course add more properties later, but they will not qualify for your trial period. Your card will not be charged until your trial period has been completed.</em></li>
                             </ul>
                           </li>
@@ -79,7 +78,7 @@ const SetupGuide = () => {
                         <p>If you’ve selected the works plan, now is a great time to connect your PMS!</p>
                         <ol>
                           <li>Click the “Connect PMS” button</li>
-                          <li>Select your PMS and click “next”. You will be redirected to a secure integrations page where you can enter your PMS information and connect to HostBuddy. Once finished, you will be redirected to the Properties page, where you will see your PMS listed in the top right. If you do not see your PMS, please repeat steps 1 and 2 again.
+                          <li>Select your PMS, click “continue”, and click on "CLICK HERE". You will be redirected to a secure integrations page where you can enter your PMS information and connect to HostBuddy. Once finished, you will be redirected to the Properties page, where you will see your PMS listed in the top right. If you do not see your PMS, please repeat steps 1 and 2 again.
                             <ul style={{ marginBottom: '0px' }}>
                               <li><em>Note: If you have trouble locating the required information, please reach out to your PMS support team or refer to your PMS user guide if available.</em></li>
                             </ul>
@@ -93,21 +92,21 @@ const SetupGuide = () => {
 
                         <h6 style={{ color: 'white' }}>Customizing Properties</h6>
                         <ol>
-                          <li>On the Properties page, you will see a number of editable properties matching your chosen property count in quantity. Select the pencil icon to begin customizing your Hostbuddy properties.</li>
+                          <li>On the Properties page, you will see a number of editable properties matching your chosen property count in quantity. Select the pencil icon to begin customizing your HostBuddy properties.</li>
                           <li>Basics
                             <ul style={{ marginBottom: '0px' }}>
-                              <li>Add a name for your property and a cover photo under “Basic Information”. After selecting next & next, please continue completing the remaining fields.</li>
+                              <li>Add a name for your property and a cover photo under “Basic Information”. After selecting save & next, please continue completing the remaining fields.</li>
                               <li>Tip: Click the pencil icon next to applicable fields to add any additional information you’d like. For example, the property type field has a pencil icon that can be used to explain that a unit is in an apartment complex, or that a room is in a shared home. This feature is available in each section to provide additional information on specific property details.</li>
                             </ul>
                           </li>
                           <li>Supporting Doc
                             <ul style={{ marginBottom: '0px' }}>
-                              <li>This page allows for you to upload any documents, such as a welcome document, detailed property document or any other item that you would like Hostbuddy to use to message guests. If you have subscribed to the works plan and you have not yet connected your PMS, please do so here. You also have the option of adding a URL as a supporting document. Please make sure any document or URL you upload contains the necessary information in text format, since we do not yet support image processing.</li>
+                              <li>This page allows for you to upload any documents, such as a welcome document, detailed property document or any other item that you would like HostBuddy to use to message guests. If you have subscribed to the works plan and you have not yet connected your PMS, please do so here. You also have the option of adding a URL as a supporting document. Please make sure any document or URL you upload contains the necessary information in text format, since we do not yet support image processing.</li>
                             </ul>
                           </li>
                           <li>Listing Details, Amenities, and Extras
                             <ul style={{ marginBottom: '0px' }}>
-                              <li>Complete as many fields as possible. The more information you add, the better Hostbuddy will be able to support your property. Please see our <a href='https://docs.google.com/document/d/14Gh0kUSOft94gi4afjVoYpDB9ujWBBTyb65fJxgZpyU' target="_blank" rel="noopener noreferrer">Hostbuddy Tips and Tricks</a> page to learn our best practices for filling out this information.</li>
+                              <li>Complete as many fields as possible. The more information you add, the better HostBuddy will be able to support your property. Please see our <a href='https://docs.google.com/document/d/1DS-NW3nYzfPWet5RGUZfeal27edVL6HtfHutLDVE_sA?usp=sharing' target="_blank" rel="noopener noreferrer">HostBuddy Tips and Tricks</a> page to learn our best practices for filling out this information.</li>
                             </ul>
                           </li>
                         </ol>
@@ -116,11 +115,12 @@ const SetupGuide = () => {
 
                       <div className="step-box section" id="step3">
                         <h4>Step 2: Testing</h4>
-                        <p>After inputting all desired property details on Hostbuddy, now it’s time to thoroughly test to ensure it's ready to support your business.</p>
+                        <p>After inputting all desired property details on HostBuddy, now it’s time to thoroughly test to ensure it's ready to support your business.</p>
                         <ol>
                           <li>Select the “Test Property” button on the “Properties” page. </li>
-                          <li>Compile a list of commonly asked questions that you want to make sure Hostbuddy is capable of handling. We have a list that you can use for this phase, but we recommend that you tailor the questions to your most common scenarios. To review our recommended questions, please see our <a href='https://docs.google.com/document/d/1-UubWDNGtjd34M1u6fvvnCOEa3mS5t-xvjYt3k_BVew?usp=sharing' target="_blank" rel="noopener noreferrer">Hostbuddy Testing Questions</a> document.</li>
-                          <li>Take note of each response that does not align with your expectations. For information that Hostbuddy is missing, please return to the “Properties” page, and select edit for the given property. Here, you can make refinements to the information that you would like for Hostbuddy to use. If there are responses that fall short, which you are having trouble fixing, please contact our team at info@hostbuddy.ai and provide the property name, a screenshot, and an example of what the response should have been. We will reach back out with either a recommendation for how to fix the issue, or a request to meet to discuss more nuanced requirements.</li>
+                          <li>Compile a list of commonly asked questions that you want to make sure Hostbuddy is capable of handling. To review our recommended questions, please see our <a href='https://docs.google.com/document/d/1-UubWDNGtjd34M1u6fvvnCOEa3mS5t-xvjYt3k_BVew?usp=sharing' target="_blank" rel="noopener noreferrer">HostBuddy Testing Questions</a> document.</li>
+                          <li>Ask away! Observe HostBuddy’s responses to a variety of questions.</li>
+                          <li>If HostBuddy is lacking sufficient information, head back to the Properties page and edit your property information to include what is needed. Explore how providing different information will impact your HostBuddy’s responses, and ensure it is responding just how you like it! Additionally, you’ll notice there is a thumbs up/down icon next to each response. Click this icon to provide feedback regarding the responses. This feature provides an opportunity for the technical team at HostBuddy AI to collect feedback for improving your HostBuddy. If there are responses that fall short, which you are having trouble fixing, please contact our team at info@HostBuddy.ai and provide the property name, a screenshot, and an example of your ideal host response. We will reach back out with either a recommendation for how to fix the issue, or a request to meet to discuss more nuanced requirements.</li>
                         </ol>
                       </div>
 
@@ -128,20 +128,28 @@ const SetupGuide = () => {
                         <h4>Step 3: Going Live</h4>
                         <p>“Essentials” Users</p>
                         <ol>
-                          <li>Once you are happy with the responses Hostbuddy is providing, you are ready to provide Hostbuddy’s unique URL to your guests for support. Click the three dots next to your property, and click “Copy URL”. The URL will be copied to your clipboard, and can be provided to your guests via booking channel, text, email, or any other platform you use to communicate.</li>
+                          <li>Once you are happy with the responses HostBuddy is providing, you are ready to provide HostBuddy’s unique URL to your guests for support. Click the three dots next to your property, and click “Copy URL”. The URL will be copied to your clipboard, and can be provided to your guests via booking channel, text, email, or any other platform you use to communicate.</li>
                         </ol>
                         <p>“The Works” Users</p>
                         <ol>
-                          <li>Once you are happy with the responses Hostbuddy is providing, it’s time to schedule Hostbuddy’s first shift! Select the calendar icon below your property/s name to set a schedule for Hostbuddy.</li>
-                          <li>The monthly schedule is great for setting certain days that you plan to be offline. The schedule button allows for you to set an ongoing schedule for each calendar day in a week. See our “Hostbuddy Scheduling Walkthrough” document for additional information on scheduling.</li>
+                          <li>Once you are happy with the responses HostBuddy is providing, it’s time to schedule HostBuddy’s first shift! Select the calendar icon below your property/s name to set a schedule for HostBuddy.
+                            <ul style={{ marginBottom: '0px' }}>
+                              <li>The monthly calendar is great for setting certain days/times that you require HostBuddy’s assistance. For example, if you’ll be out of town for several days you can schedule HostBuddy to activate during the exact start date/time of your trip!</li>
+                              <li>The weekly schedule allows you to set an ongoing schedule for each day of the week. Our users typically schedule their HostBuddies to activate each night while they are asleep, and for other recurring unavailable times. See our <a href='https://docs.google.com/document/d/1qakDp2RMoj2X4YssyvGTf7HF4YqKbUQU11H-9JuJ1rI?usp=sharing' target="_blank" rel="noopener noreferrer">Hostbuddy Scheduling Walkthrough</a> document for additional information on scheduling.</li>
+                            </ul>
+                          </li>
                         </ol>
+                        <ul style={{ marginBottom: '0px' }}>
+                          <li><em>Note: There is one toggle button for each property, and one master toggle button. These buttons control whether or not HostBuddy is following the schedules you have created. The “STOP” button will pause all scheduling, and HostBuddy will remain inactive until the button is clicked again. When unclicked, HostBuddy will follow the schedule. HostBuddy will remain off until it is scheduled to be active based on the statuses you’ve added to your schedule or calendar.</em></li>
+                        </ul>
                       </div>
 
                       <div className="step-box section" id="step5">
                         <h4>Step 4: Post Go Live</h4>
                         <ol>
-                          <li>After going live with Hostbuddy, we advise that you closely monitor conversations between your guests and Hostbuddy. You can go to the "Insights” page in your dashboard to see transcripts that are categorized by whether the conversation was deemed successful by Hostbuddy. Conversations will be marked unsuccessful if Hostbuddy does not have sufficient information to support a guest, or if there is an item that requires human intervention.</li>
-                          <li>Consistently update each Hostbuddy property with missing information, and if you need support, please do not hesitate to reach out to our team! Artificial intelligence is nuanced, and our team is trained to troubleshoot problems that you may encounter.</li>
+                          <li>After going live with HostBuddy, we advise that you closely monitor conversations between your guests and HostBuddy. You can go to the "Insights” page in your dashboard to see transcripts that are categorized by whether the conversation was deemed successful by HostBuddy. Conversations will be marked unsuccessful if HostBuddy does not have sufficient information to support a guest, or if there is an item that requires human intervention.</li>
+                          <li>HostBuddy will track conversations and report any issues it was not able to resolve in the “Action Items” section of the dashboard. Here, you can monitor any action items that were missed when you were away, and mark them complete once they’re taken care of.</li>
+                          <li>Consistently update each HostBuddy property with missing information, and if you need support, please do not hesitate to reach out to our team! Artificial intelligence is nuanced, and our team is trained to troubleshoot problems that you may encounter.</li>
                           <li>Sit back and relax! You now have state of the art technology doing the heavy lifting for you. Welcome to the future of hosting!</li>
                         </ol>
                       </div>

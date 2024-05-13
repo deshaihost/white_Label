@@ -199,68 +199,73 @@ const SelectModalNote = ({
               value={noteData}
               onChange={(e) => setNoteData(e.target.value)}
             ></textarea>
+            
+            <hr style={{borderTop: "0px solid #0078F0"}} />
+          
+            <label >Information from this question will only be provided to guests at the selected (blue) reservation stages. You can de-select stages below to prevent HostBuddy from sharing this information with those guests.</label>
+          
+            <div className=" d-flex justify-content-between mt-3">
+              <div class="col text-center">
+                <input
+                  type="checkbox"
+                  checked={checkedSchedule.Future}
+                  onChange={(e) => handleOnChange(e, "Future")}
+                  className="btn-check"
+                  id="future"
+                  autocomplete="off"
+                />
+                <label
+                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "btn-unselected" : ""
+                    }`}
+                  for="future"
+                >
+                  Future
+                </label>
+              </div>
+              <div class="col text-center">
+                <input
+                  type="checkbox"
+                  checked={checkedSchedule.Past}
+                  onChange={(e) => handleOnChange(e, "Past")}
+                  className="btn-check"
+                  id="past"
+                  autocomplete="off"
+                />
+                <label
+                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "btn-unselected" : ""
+                    }`}
+                  for="past"
+                >
+                  Inquiry/Past
+                </label>
+              </div>
+              <div class="col text-center">
+                <input
+                  type="checkbox"
+                  checked={checkedSchedule.Current}
+                  onChange={(e) => handleOnChange(e, "Current")}
+                  className="btn-check"
+                  id="current"
+                  autocomplete="off"
+                />
+                <label
+                  className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "btn-unselected" : ""
+                    }`}
+                  for="current"
+                >
+                  Current
+                </label>
+              </div>
+            </div>
+
+            <hr style={{borderTop: "2px solid #0078F0", margin: "20px 0 30px 0"}} />
+
             <div className="d-flex justify-content-center mt-3">
               <button className="mw-auto" onClick={handleAddNote}>
-                Add Note
+                Save & Add Note
               </button>
             </div>
-          </div>
-          <div className="form-design">
-            <label>Information from this question will only be provided to guests at the selected (blue) reservation stages. You can de-select stages below to prevent HostBuddy from sharing this information with those guests.</label>
-          </div>
 
-          <div className=" d-flex justify-content-between mt-3">
-            <div class="col text-center">
-              <input
-                type="checkbox"
-                checked={checkedSchedule.Future}
-                onChange={(e) => handleOnChange(e, "Future")}
-                className="btn-check"
-                id="future"
-                autocomplete="off"
-              />
-              <label
-                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "btn-unselected" : ""
-                  }`}
-                for="future"
-              >
-                Future
-              </label>
-            </div>
-            <div class="col text-center">
-              <input
-                type="checkbox"
-                checked={checkedSchedule.Past}
-                onChange={(e) => handleOnChange(e, "Past")}
-                className="btn-check"
-                id="past"
-                autocomplete="off"
-              />
-              <label
-                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "btn-unselected" : ""
-                  }`}
-                for="past"
-              >
-                Inquiry/Past
-              </label>
-            </div>
-            <div class="col text-center">
-              <input
-                type="checkbox"
-                checked={checkedSchedule.Current}
-                onChange={(e) => handleOnChange(e, "Current")}
-                className="btn-check"
-                id="current"
-                autocomplete="off"
-              />
-              <label
-                className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "btn-unselected" : ""
-                  }`}
-                for="current"
-              >
-                Current
-              </label>
-            </div>
           </div>
         </Modal.Body>
       </Modal>

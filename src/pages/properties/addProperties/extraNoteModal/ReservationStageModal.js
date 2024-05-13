@@ -231,6 +231,15 @@ const ReservationStageModal = ({
                             </label>
                         </div>
                     </div>
+
+                    <hr style={{borderTop: "2px solid #0078F0", margin: "20px 0 30px 0"}} />
+
+                    <div className="d-flex justify-content-center mt-3">
+                        <button className="mw-auto" onClick={handleClose}>
+                            Save
+                        </button>
+                    </div>
+
                 </Modal.Body>
             </Modal>
         </>
