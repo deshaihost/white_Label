@@ -24,6 +24,9 @@ import CopyChatBotLink from "../pages/copyChatbotLink/CopyChatBotLink";
 import TestProperty from "../pages/testProperty/TestProperty";
 import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";
 import TermsofService from "../pages/termsofService/TermsofService";
+import SchedulingWalkthrough from "../pages/userGuides/schedulingWalkthrough/schedulingWalkthrough";
+import TipsAndTricks from "../pages/userGuides/tipsAndTricks/tipsAndTricks";
+import TestingQuestions from "../pages/userGuides/testingQuestions/testingQuestions";
 
 const Routing = () => {
   const location = useLocation();
@@ -43,6 +46,9 @@ const Routing = () => {
         <Route path="/forgot" element={<ForgotPass />}></Route>
         <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
         <Route path="/termsof-service" element={<TermsofService />}></Route>
+        <Route path="/scheduling-walkthrough" element={<SchedulingWalkthrough />}></Route>
+        <Route path="/tips-and-tricks" element={<TipsAndTricks />}></Route>
+        <Route path="/testing-questions" element={<TestingQuestions />}></Route>
         <Route
           path="*"
           element={

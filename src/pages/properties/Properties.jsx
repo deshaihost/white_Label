@@ -204,9 +204,9 @@ const Properties = () => {
                     )}
                   </button>
                   {intergrations !== undefined &&
-                  Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key)
+                  Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key). Capitalize the first letter of the integration.
                     <p style={{ color: "white" }}>
-                      Connected to {Object.keys(intergrations)[0]}
+                      {`Connected to ${Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)}`}
                     </p>
                   ) : (
                     <button
