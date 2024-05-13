@@ -97,7 +97,7 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
   }
 
   const onSubmit = (data) => {
-    console.log("New Form Data: ", data);
+    // console.log("New Form Data: ", data);
     // console.log("addedNoe: ", addedNote)
     // return
     const questionaireToSend = structuredClone(apiQuestionnaireObject);
@@ -494,8 +494,8 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
                             >
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                fill="#146EF5
-                           "
+                                // fill="#146EF5"
+                                fill={`${(addedNote && `booking_${booking.question_type}${index}_hidereservation` in addedNote && addedNote[`booking_${booking.question_type}${index}_hidereservation`].length > 0) || (!addedNote || !(`booking_${booking.question_type}${index}_hidereservation` in addedNote)) && booking.hide_for_reservations.length > 0 ? '#ffc107' : '#146EF5'}`}
                               ></path>
                             </svg>
                           </Button>
@@ -551,7 +551,7 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
                             <path
                               d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
                               // fill="#ffeb3b"
-                              fill={`${booking.hide_for_reservations.length > 0 ? '#ffeb3b' : '#146EF5'}`}
+                              fill={`${(addedNote && `booking_${booking.question_type}${index}_hidereservation` in addedNote && addedNote[`booking_${booking.question_type}${index}_hidereservation`].length > 0) || (!addedNote || !(`booking_${booking.question_type}${index}_hidereservation` in addedNote)) && booking.hide_for_reservations.length > 0 ? '#ffc107' : '#146EF5'}`}
                             ></path>
                           </svg>
                         </Button>
@@ -606,8 +606,8 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
                         >
                           <path
                             d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                            fill="#ffeb3b
-                           "
+                            // fill="#ffeb3b"
+                            fill={`${(addedNote && `checkInOut_${checkInandCheckout.question_type}${index}_hidereservation` in addedNote && addedNote[`checkInOut_${checkInandCheckout.question_type}${index}_hidereservation`].length > 0) || (!addedNote || !(`checkInOut_${checkInandCheckout.question_type}${index}_hidereservation` in addedNote)) && checkInandCheckout.hide_for_reservations.length > 0 ? '#ffc107' : '#146EF5'}`}
                           ></path>
                         </svg>
                       </Button>
@@ -659,8 +659,8 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
                         >
                           <path
                             d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                            fill="#ffeb3b
-                           "
+                            // fill="#ffeb3b"
+                            fill={`${(addedNote && `details_${details.question_type}${index}_hidereservation` in addedNote && addedNote[`details_${details.question_type}${index}_hidereservation`].length > 0) || (!addedNote || !(`details_${details.question_type}${index}_hidereservation` in addedNote)) && details.hide_for_reservations.length > 0 ? '#ffc107' : '#146EF5'}`}
                           ></path>
                         </svg>
                       </Button>
