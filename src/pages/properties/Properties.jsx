@@ -148,7 +148,7 @@ const Properties = () => {
                   <div className="property-heading-right">
                     <p>HostBuddy Status</p>
                     {toggleChatLoading && <FullScreenLoader />}
-                    {Object?.keys(propertiesExtraData).length > 0 &&
+                    {propertiesExtraData && Object.keys(propertiesExtraData).length > 0 &&
                       (!anyPropertyNotForcedOff ? (
                         <>
                           {" "}
@@ -203,7 +203,7 @@ const Properties = () => {
                       "Add Property"
                     )}
                   </button>
-                  {intergrations !== undefined &&
+                  {intergrations &&
                   Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key). Capitalize the first letter of the integration.
                     <p style={{ color: "white" }}>
                       {`Connected to ${Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)}`}
