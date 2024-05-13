@@ -70,19 +70,13 @@ const Footer = () => {
               <div className="footer-links">
                 <h6 className=" fw-bold mb-4 links-heading">Contact</h6>
                 <p className="links">
-                  Phone:
-                  <Link to="tel:+146-798-7894"> +1 (530) 401-6167</Link>
+                  Phone: +1 (530) 401-6167
                 </p>
                 <p className="links">
-                  Email:
-                  <Link to="mailto: info@hostbuddyai.com">
-                    {" "}
-                    info@hostbuddyai.com
-                  </Link>
+                  Email: info@hostbuddy.ai
                 </p>
                 <p className="links">
-                  Address:
-                  <Link to="/"> Headquartered in San Diego, CA</Link>
+                  Address: Headquartered in San Diego, CA
                 </p>
               </div>
             </MDBCol>

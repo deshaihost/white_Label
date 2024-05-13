@@ -102,7 +102,7 @@ const PropertyInsight = () => {
             <div className="col-lg-8">
               <div class="account-container">
                 <div class="account_heading account_heading_white">
-                  <h3 className="text-white">Insights</h3>
+                  <h3 className="text-white">Insights and Records</h3>
                   <div class="property_select">
                     {userDataGet?.length > 0 ? (
                       <select

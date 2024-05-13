@@ -115,9 +115,9 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
         <div className="d-flex align-items-center justify-content-left gap-2 flex-wrap" style={{ marginTop: '20px' }}>
           <span className="text-white">
             By continuing, you agree to our 
-            <Link to="/termsof-service" className="text-blue"> Terms of Service </Link> 
+            <a href="/termsof-service" target="_blank" className="text-blue"> Terms of Service </a> 
             and 
-            <Link to="/privacy-policy" className="text-blue"> Privacy Policy </Link>
+            <a href="/privacy-policy" target="_blank" className="text-blue"> Privacy Policy </a>
           </span>
         </div>
         <div className="text-center mt-3 addition_des_button">

@@ -22,53 +22,6 @@ const TranscriptsTable = ({ conversationData }) => {
     }
   };
 
-  // function formatDateAndTime(timestamp) {
-  //   console.log("timestamp", timestamp)
-  //   const months = [
-  //     "Jan",
-  //     "Feb",
-  //     "Mar",
-  //     "Apr",
-  //     "May",
-  //     "Jun",
-  //     "Jul",
-  //     "Aug",
-  //     "Sep",
-  //     "Oct",
-  //     "Nov",
-  //     "Dec",
-  //   ];
-
-
-  //   // Parse the timestamp string into a Date object
-  //   const date = new Date(timestamp);
-
-  //   // Get the components of the date
-  //   const month = months[date.getMonth()];
-  //   const day = date.getDate();
-  //   const year = date.getFullYear();
-
-  //   // Format the date
-  //   const formattedDate = `${month} ${day}, ${year}`;
-
-  //   // Get the components of the time
-  //   let hours = date.getHours();
-  //   const minutes = date.getMinutes();
-
-  //   // Convert hours to 12-hour format and determine am/pm
-  //   const ampm = hours >= 12 ? "pm" : "am";
-  //   hours = hours % 12;
-  //   hours = hours ? hours : 12; // Handle midnight (0 hours)
-
-  //   // Format minutes to have leading zero if necessary
-  //   const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
-
-  //   // Format the time
-  //   const formattedTime = `${hours}:${formattedMinutes}${ampm}`;
-
-  //   return { date: formattedDate, time: formattedTime };
-  // }
-
   function formatDateAndTime(timestamp) {
     // Parse the timestamp string into a Date object (assuming it's in UTC format)
     const apiDate = new Date(timestamp);
@@ -135,13 +88,13 @@ const TranscriptsTable = ({ conversationData }) => {
                     <th scope="col">TIME</th>
                     <th scope="col">SUBJECT</th>
                     <th scope="col">STATUS</th>
-                    <th scope="col">STATUS</th>
+                    <th scope="col">VIEW</th>
                   </tr>
                 </thead>
                 <tbody class="transcript-data-table empty-table-conversation text-white">
                   {conversationData?.map((convers, index) => {
-                    const timestamp = convers?.conversation_start_time;
-                    // const dateObject = new Date(timestamp); // Create a Date object from the timestamp
+                    //const timestamp = convers?.conversation_start_time;
+                    const timestamp = convers?.messages[convers?.messages.length - 1]?.time; // Use the timestamp of the last message in the conversation, instead of convo start time
                     const formattedDateTime = formatDateAndTime(timestamp);
                     console.log(convers?.subject, 'convers?.subject')
                     return (

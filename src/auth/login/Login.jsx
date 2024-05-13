@@ -168,8 +168,8 @@ const Login = () => {
               <div className="footer-auth">
                 <div>
                   By continuing, you agree to the{" "}
-                  <Link to="/termsof-service">Terms of Service</Link> and{" "}
-                  <Link to="/privacy-policy">Privacy Policy</Link>
+                  <a href="/termsof-service" target="_blank">Terms of Service</a> and{" "}
+                  <a href="/privacy-policy" target="_blank">Privacy Policy</a>
                 </div>
               </div>
             </div>
