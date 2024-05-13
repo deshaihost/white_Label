@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "../../component/sideBar/SideBar";
 import GetStartedImg from "../../public/img/getstartedimg.png";
 import { Link } from "react-router-dom";
 import "./dashboard.css";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  PropertyGetConversationsActions,
   getActionItemsActions,
   getUserDataActions,
   putCompleteActionItemActions,
@@ -17,7 +18,7 @@ import { BsCheckCircle } from "react-icons/bs";
 import ToastHandle from "../../helper/ToastMessage";
 import { Helmet } from "react-helmet";
 import { FaCircleCheck } from "react-icons/fa6";
-
+import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/transcriptsModel/ConverSationtranscriptModel";
 
 const Dashboard = () => {
   const store = useSelector((state) => state);
@@ -37,6 +38,7 @@ const Dashboard = () => {
     ? actionItemsConvertationData
     : [];
 
+    console.log(actionItems,'actionItemsactionItems')
   // date formate
   function formatDateTime(dateTimeString) {
     const date = new Date(dateTimeString);
@@ -99,13 +101,65 @@ const Dashboard = () => {
       dispatch(getActionItemsActions());
     }
   }, [completeActionsItemStatus]);
+  const [converSationId, setConverSationId] = useState("");
+  const propertiesConversationGetData =
+    store?.propertyGetConversationReducer?.propertyGetConversation?.data;
+  const propertiesConversationLoading =
+    store?.propertyGetConversationReducer?.loading;
+
+  console.log(propertiesConversationGetData, "propertiesConversationGetData++");
+
+  const conversationCallOnDashboard = (item) => {
+    console.log(item, "itemitem");
+    const { propertyName, itemId } = item;
+    setConverSationId(itemId);
+    dispatch(
+      PropertyGetConversationsActions({
+        propertyName: propertyName,
+      })
+    );
+  };
+  const [model, setModel] = useState({
+    conversationModel: false,
+    conversationDataSend: "",
+  });
+  const conversationModelOpen = "conversationModelOpen";
+  const conversationModelClose = "conversationModelClose";
+  const handleModelOpen = (type, data) => {
+    if (type === conversationModelOpen) {
+      setModel({
+        ...model,
+        conversationModel: true,
+        conversationDataSend: data,
+      });
+    }
+  };
+  const handleModelClose = (type) => {
+    if (type === conversationModelClose) {
+      setModel({ ...model, conversationModel: false });
+    }
+  };
+
+  useEffect(() => {
+    if (propertiesConversationGetData !== undefined) {
+      if (converSationId !== "") {
+        let findConverSationFilter =
+          propertiesConversationGetData?.conversations?.filter(
+            (item) => item?.conversation_id === converSationId
+          );
+        handleModelOpen(conversationModelOpen, findConverSationFilter?.[0]);
+      }
+    }
+  }, [propertiesConversationGetData]);
 
   return (
     <>
       <Helmet>
         <title>Dashboard</title>
       </Helmet>
-      ;{completeActionsItemLoading && <FullScreenLoader />}
+
+      {propertiesConversationLoading && <FullScreenLoader />}
+      {completeActionsItemLoading && <FullScreenLoader />}
       <div className="account-main">
         <div className="container">
           <div className="banner-heading">
@@ -253,38 +307,52 @@ const Dashboard = () => {
                   <div className="row">
                     {!actionItemsCovertationLoading ? (
                       <div className="">
-                        <h3 className="text-white my-3 border-bottom py-3">ACTION ITEMS</h3>
+                        <h3 className="text-white my-3 border-bottom py-3">
+                          ACTION ITEMS
+                        </h3>
                         <div className="table-responsive">
-                        <table class="table text-white action-items-table">
-                          <thead>
-                            <tr>
-                              <th>Date/Time</th>
-                              <th>Property/Guest</th>
-                              <th>Action Item</th>
-                              <th>Review</th>
-                              <th>Complete</th>
-                            </tr>
-                          </thead>
+                          <table class="table text-white action-items-table">
+                            <thead>
+                              <tr>
+                                <th>Date/Time</th>
+                                <th>Property/Guest</th>
+                                <th>Action Item</th>
+                                <th>Review</th>
+                                <th>Complete</th>
+                              </tr>
+                            </thead>
 
-                          <tbody>
-                            {Object?.keys(actionItems)?.map((property) =>
-                              Object?.keys(actionItems[property])?.map(
-                                (itemId) => {
-                                  const item = actionItems[property][itemId];
-                                  let actionItem = {
-                                    propertyName: property,
-                                  };
-                                  return (
-                                    <tr key={itemId}>
-                                      <td>
-                                        {formatDateTime(
-                                          item?.items[0]?.created_at
-                                        )}
-                                      </td>
-                                      <td>{property}</td>
-                                      <td>{item?.items[0]?.item}</td>
-                                      <td className="text-center">
-                                        <Link
+                            <tbody>
+                              {Object?.keys(actionItems)?.sort()?.map((property) =>
+                                Object?.keys(actionItems[property])?.sort()?.map(
+                                  (itemId) => {
+                                    const item = actionItems[property][itemId];
+                                    let actionItem = {
+                                      propertyName: property,
+                                      itemId,
+                                    };
+                                    
+                                    return (
+                                      <tr key={itemId}>
+                                        <td>
+                                          {formatDateTime(
+                                            item?.items[0]?.created_at
+                                          )}
+                                        </td>
+                                        <td>{property}</td>
+                                        <td>{item?.items[0]?.item}</td>
+                                        <td className="text-center">
+                                          <span
+                                            className="mainCursor"
+                                            onClick={() => {
+                                              conversationCallOnDashboard(
+                                                actionItem
+                                              );
+                                            }}
+                                          >
+                                            <GoArrowUpRight className="text-white fs-6" />
+                                          </span>
+                                          {/* <Link
                                           to={`/property-insight/${JSON.stringify(
                                             actionItem
                                           )}`}
@@ -292,29 +360,29 @@ const Dashboard = () => {
                                           <span className="mainCursor">
                                             <GoArrowUpRight className="text-white fs-6" />
                                           </span>
-                                        </Link>
-                                      </td>
-                                      <td className="text-center"> 
-                                        <span
-                                          className=" mainCursor"
-                                          onClick={() => {
-                                            compeletHndle(
-                                              item?.items[0]?.id,
-                                              property,
-                                              itemId
-                                            );
-                                          }}
-                                        >
-                                          <FaCircleCheck className="text-primary fs-6" />
-                                        </span>
-                                      </td>
-                                    </tr>
-                                  );
-                                }
-                              )
-                            )}
-                          </tbody>
-                        </table>
+                                        </Link> */}
+                                        </td>
+                                        <td className="text-center">
+                                          <span
+                                            className=" mainCursor"
+                                            onClick={() => {
+                                              compeletHndle(
+                                                item?.items[0]?.id,
+                                                property,
+                                                itemId
+                                              );
+                                            }}
+                                          >
+                                            <FaCircleCheck className="text-primary fs-6" />
+                                          </span>
+                                        </td>
+                                      </tr>
+                                    );
+                                  }
+                                )
+                              )}
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     ) : (
@@ -327,6 +395,11 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <ConverSationtranscriptModel
+        handleClose={handleModelClose}
+        show={model?.conversationModel}
+        prntData={model?.conversationDataSend}
+      />
     </>
   );
 };

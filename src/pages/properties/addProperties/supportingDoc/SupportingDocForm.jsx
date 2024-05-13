@@ -170,8 +170,8 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   };
 
   const [file, setFile] = useState(null);
-
-  const documentUploadMainHndle=async(resrData)=>{
+  const [getDocApiCall, setGetDocApiCall] = useState(false);
+  const documentUploadMainHndle = async (resrData) => {
     setdocUploadIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -208,7 +208,8 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
         if (response.status === 200) {
           ToastHandle("File uploaded successfully", "success");
-          setDocHideForResrv(false)
+          setDocHideForResrv(false);
+          setGetDocApiCall(true);
         } else {
           console.log("Error", response);
         }
@@ -220,14 +221,14 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
       console.error("Error uploading file:", error);
       ToastHandle(error?.data?.error, "danger");
     }
-  }
+  };
 
-  const documentUploadHandle =  () => {
+  const documentUploadHandle = () => {
     if (!file) {
       ToastHandle("No file uploaded", "danger");
       return;
     }
-    setDocHideForResrv(true)
+    setDocHideForResrv(true);
 
     // setdocUploadIsLoading(true);
 
@@ -286,7 +287,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
       handleUploadUrl();
     } else if (uploadType?.updateDoc) {
       documentUploadHandle();
-      
     }
   };
 
@@ -487,6 +487,9 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
       console.log("Error:", error);
     }
   };
+  const property = JSON.parse(localStorage.getItem("nameKey"));
+
+  const propertyName = property?.nameKey;
 
   useEffect(() => {
     const getSessionStorageData = JSON.parse(
@@ -511,6 +514,13 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
       dispatch(stateEmptyActions());
     }
   }, [supportingStatus]);
+
+  useEffect(() => {
+    if (getDocApiCall) {
+      previousUploadedDoc(propertyName);
+      setGetDocApiCall(false);
+    }
+  }, [getDocApiCall]);
 
   return (
     <>
@@ -599,8 +609,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                 {suppertingInput?.updateDoc && (
                   <div className="col-12 mt-4 ">
                     <label className="text-white">
-                      Documents{" "}
-                      <span>(.txt, .docx, .pdf supported)</span>
+                      Documents <span>(.txt, .docx, .pdf supported)</span>
                     </label>
                     <div className="d-flex">
                       <div className="col-6 me-4">
@@ -614,17 +623,19 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                       </div>
                       <div className="col-3">
                         {!docUploadIsLoading ? (
-                            <button
-                              className="btn btn-primary"
-                              onClick={(e) =>
-                                handleSubmitForm(e, suppertingInput)
-                              }
-                            >
-                              {"Submit File"}
-                            </button>
+                          <button
+                            className="btn btn-primary"
+                            onClick={(e) =>
+                              handleSubmitForm(e, suppertingInput)
+                            }
+                          >
+                            {"Submit File"}
+                          </button>
                         ) : (
                           <>
-                            <span style={{ color: 'white' }}>Submitting...</span>
+                            <span style={{ color: "white" }}>
+                              Submitting...
+                            </span>
                             <BoxLoader />
                           </>
                         )}
@@ -685,7 +696,8 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                           </div>
                         </div>
                       </>
-                    ) : ( // If not linked to n integration property: show a select with the list of integration properties (pulled from the backend API)
+                    ) : (
+                      // If not linked to n integration property: show a select with the list of integration properties (pulled from the backend API)
                       <>
                         {!integrationPropertiesLoading ? (
                           <>
@@ -717,14 +729,25 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                                   })}
                                 </select>
                               ) : (
-                                <div style={{ color: "white", marginTop: "20px", wordWrap: "break-word", width: "100%" }}>
-                                  User account does not have a PMS integration. Connect your account to a PMS from the Properties page first, then you can this property to a property listing on the integration account here.
+                                <div
+                                  style={{
+                                    color: "white",
+                                    marginTop: "20px",
+                                    wordWrap: "break-word",
+                                    width: "100%",
+                                  }}
+                                >
+                                  User account does not have a PMS integration.
+                                  Connect your account to a PMS from the
+                                  Properties page first, then you can this
+                                  property to a property listing on the
+                                  integration account here.
                                 </div>
                               )}
                             </div>
                             <div className="col-4 mt-4 ">
-                              {integrationPropertyList?.length === 0 && (
-                                linkIsLoading ? (
+                              {integrationPropertyList?.length === 0 &&
+                                (linkIsLoading ? (
                                   <>
                                     <p
                                       style={{
@@ -749,8 +772,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                                   >
                                     Link To This Property
                                   </button>
-                                )
-                              )}
+                                ))}
                             </div>
                           </>
                         ) : (
