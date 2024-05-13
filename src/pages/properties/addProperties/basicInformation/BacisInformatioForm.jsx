@@ -40,10 +40,9 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   const [propertyName, setPropertyName] = useState(null);
   const nameKeyGet = nameKey();
   const [oldProperyName, setOldPropertyName] = useState("");
+  console.log(oldProperyName, "oldProperyNameoldProperyName", nameKeyGet);
   const add_thumbnail_image = async (propertyName, imgFile) => {
-    
     if (updateImage !== null) {
-      
       let formData = new FormData();
       let file = updateImage !== null ? updateImage[0] : imgFile;
 
@@ -62,14 +61,15 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
         const token = getSessionStorageData?.token;
 
         try {
-          if (oldProperyName !== "") {
-            dispatch(
-              copyExistingPropertyActions({
-                newPropertyNm: propertyName,
-                oldPropertyNm: oldProperyName?.copyExisting,
-              })
-            );
-          }
+          // if (oldProperyName !== "") {
+          //   alert(123)
+          //   dispatch(
+          //     copyExistingPropertyActions({
+          //       newPropertyNm: nameKeyGet?.nameKey,
+          //       oldPropertyNm: oldProperyName?.copyExisting,
+          //     })
+          //   );
+          // }
 
           if (token) {
             const config = {
@@ -118,7 +118,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
         );
       }
     } else if (uploadedFile !== null) {
-      
       let formData = new FormData();
       let file = uploadedFile !== null ? uploadedFile[0] : imgFile;
 
@@ -193,6 +192,13 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
           "danger"
         );
       }
+    } else if (oldProperyName !== "") {
+      dispatch(
+        copyExistingPropertyActions({
+          newPropertyNm: nameKeyGet?.nameKey,
+          oldPropertyNm: oldProperyName?.copyExisting,
+        })
+      );
     }
   };
 
@@ -298,20 +304,22 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
                     <>{ErrorMessageShow("Please enter property name.")}</>
                   )}
                 </div>
-                {locationUrl === undefined && (
+                {locationUrl !== undefined && (
                   /* This should be moved to the case where property already exists (users should create the property obj first, then can copy another prop's information into it)
-                  <div className="mt-2 ">
-                    <button
-                      className="btn bg-dark text-white border border-primary"
-                      onClick={(e) => {
-                        copyExistingPropertyHndle(e);
-                      }}
-                    >
-                      Copy Existing Property
-                    </button>
-                  </div>
+                 
                   */
-                 <div></div> // placeholder
+                  <div>
+                    <div className="mt-2 ">
+                      <button
+                        className="btn bg-dark text-white border border-primary"
+                        onClick={(e) => {
+                          copyExistingPropertyHndle(e);
+                        }}
+                      >
+                        Copy Existing Property
+                      </button>
+                    </div>
+                  </div> // placeholder
                 )}
               </div>
               <div className="col-md-6">
