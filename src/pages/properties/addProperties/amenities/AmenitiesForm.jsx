@@ -100,7 +100,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
         let reservationStatusData = amenitiesFamilyHideReservation[indexVal];
 
-        if (reservationStatusData.length > 0) {
+        if (reservationStatusData && reservationStatusData.length > 0) {
           return "#ffc107";
         } else {
           return "#146EF5";
@@ -118,7 +118,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
         let reservationStatusData = amenitiesIndoorHideReservation[indexVal];
 
-        if (reservationStatusData.length > 0) {
+        if (reservationStatusData && reservationStatusData.length > 0) {
           return "#ffc107";
         } else {
           return "#146EF5";
@@ -136,7 +136,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
         let reservationStatusData = amenitiesMoreHideReservation[indexVal];
 
-        if (reservationStatusData.length > 0) {
+        if (reservationStatusData && reservationStatusData.length > 0) {
           return "#ffc107";
         } else {
           return "#146EF5";
@@ -154,7 +154,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
         let reservationStatusData = amenitiesOutdoorHideReservation[indexVal];
 
-        if (reservationStatusData.length > 0) {
+        if (reservationStatusData && reservationStatusData.length > 0) {
           return "#ffc107";
         } else {
           return "#146EF5";
@@ -172,7 +172,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
         let reservationStatusData = amenitiesRulesHideReservation[indexVal];
 
-        if (reservationStatusData.length > 0) {
+        if (reservationStatusData && reservationStatusData.length > 0) {
           return "#ffc107";
         } else {
           return "#146EF5";

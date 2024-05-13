@@ -290,55 +290,54 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
           //   }
           // )}
           >
-            <div className="row mt-2">
-              <div className="col-md-6">
-                <label className="text-white">Property Name</label>
-                <div className="">
-                  <input
-                    className="form-control"
-                    type="text"
-                    {...register("propertyName", { required: true })}
-                    placeholder="eg. smith villa"
-                  />
-                  {errors.propertyName?.type === "required" && (
-                    <>{ErrorMessageShow("Please enter property name.")}</>
-                  )}
+            <div className="container">
+              <div className="row mt-2">
+                <div className="col-md-6">
+                  <label className="text-white">Property Name</label>
+                  <div className="">
+                    <input
+                      className="form-control"
+                      type="text"
+                      {...register("propertyName", { required: true })}
+                      placeholder="eg. smith villa"
+                    />
+                    {errors.propertyName?.type === "required" && (
+                      <>{ErrorMessageShow("Please enter property name.")}</>
+                    )}
+                  </div>
                 </div>
-                {locationUrl !== undefined && (
-                  /* This should be moved to the case where property already exists (users should create the property obj first, then can copy another prop's information into it)
-                 
-                  */
-                  <div>
-                    <div className="mt-2 ">
-                      <button
-                        className="btn bg-dark text-white border border-primary"
-                        onClick={(e) => {
-                          copyExistingPropertyHndle(e);
-                        }}
-                      >
-                        Copy Existing Property
-                      </button>
-                    </div>
-                  </div> // placeholder
-                )}
-              </div>
-              <div className="col-md-6">
-                <label className="text-white">
-                  {" "}
-                  Thumbnail Photo <span>(.png, .jpg, .jpeg supported)</span>
-                </label>
-                <div className="">
-                  <input
-                    className="form-control"
-                    type="file"
-                    {...register("files")}
-                    onChange={(e) => {
-                      setUpdateImage(e.target.files);
-                    }}
-                    placeholder=""
-                  />
+                <div className="col-md-6">
+                  <label className="text-white">
+                    {" "}
+                    Thumbnail Photo <span>(.png, .jpg, .jpeg supported)</span>
+                  </label>
+                  <div className="">
+                    <input
+                      className="form-control"
+                      type="file"
+                      {...register("files")}
+                      onChange={(e) => {
+                        setUpdateImage(e.target.files);
+                      }}
+                      placeholder=""
+                    />
+                  </div>
                 </div>
               </div>
+              {locationUrl !== undefined && (
+                <div className="addproperty_links text-center">
+                  <div className="d-flex justify-content-center mt-2">
+                    <button
+                      className="shadow-none border-0 mt-3 font-weight-bold"
+                      onClick={(e) => {
+                        copyExistingPropertyHndle(e);
+                      }}
+                    >
+                      Copy Data From Other Property
+                    </button>
+                  </div>
+                </div> // placeholder
+              )}
             </div>
             {!locationUrl && (
               <div className="col-md-12 mt-5">

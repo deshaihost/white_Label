@@ -106,7 +106,7 @@ const SetupGuide = () => {
                           </li>
                           <li>Listing Details, Amenities, and Extras
                             <ul style={{ marginBottom: '0px' }}>
-                              <li>Complete as many fields as possible. The more information you add, the better HostBuddy will be able to support your property. Please see our <a href='https://docs.google.com/document/d/1DS-NW3nYzfPWet5RGUZfeal27edVL6HtfHutLDVE_sA?usp=sharing' target="_blank" rel="noopener noreferrer">HostBuddy Tips and Tricks</a> page to learn our best practices for filling out this information.</li>
+                              <li>Complete as many fields as possible. The more information you add, the better HostBuddy will be able to support your property. Please see our <a href='/tips-and-tricks' target="_blank">HostBuddy Tips and Tricks</a> page to learn our best practices for filling out this information.</li>
                             </ul>
                           </li>
                         </ol>
@@ -118,7 +118,7 @@ const SetupGuide = () => {
                         <p>After inputting all desired property details on HostBuddy, now it’s time to thoroughly test to ensure it's ready to support your business.</p>
                         <ol>
                           <li>Select the “Test Property” button on the “Properties” page. </li>
-                          <li>Compile a list of commonly asked questions that you want to make sure Hostbuddy is capable of handling. To review our recommended questions, please see our <a href='https://docs.google.com/document/d/1-UubWDNGtjd34M1u6fvvnCOEa3mS5t-xvjYt3k_BVew?usp=sharing' target="_blank" rel="noopener noreferrer">HostBuddy Testing Questions</a> document.</li>
+                          <li>Compile a list of commonly asked questions that you want to make sure Hostbuddy is capable of handling. To review our recommended questions, please see our <a href='/testing-questions' target="_blank">HostBuddy Testing Questions</a> document.</li>
                           <li>Ask away! Observe HostBuddy’s responses to a variety of questions.</li>
                           <li>If HostBuddy is lacking sufficient information, head back to the Properties page and edit your property information to include what is needed. Explore how providing different information will impact your HostBuddy’s responses, and ensure it is responding just how you like it! Additionally, you’ll notice there is a thumbs up/down icon next to each response. Click this icon to provide feedback regarding the responses. This feature provides an opportunity for the technical team at HostBuddy AI to collect feedback for improving your HostBuddy. If there are responses that fall short, which you are having trouble fixing, please contact our team at info@HostBuddy.ai and provide the property name, a screenshot, and an example of your ideal host response. We will reach back out with either a recommendation for how to fix the issue, or a request to meet to discuss more nuanced requirements.</li>
                         </ol>
@@ -135,7 +135,7 @@ const SetupGuide = () => {
                           <li>Once you are happy with the responses HostBuddy is providing, it’s time to schedule HostBuddy’s first shift! Select the calendar icon below your property/s name to set a schedule for HostBuddy.
                             <ul style={{ marginBottom: '0px' }}>
                               <li>The monthly calendar is great for setting certain days/times that you require HostBuddy’s assistance. For example, if you’ll be out of town for several days you can schedule HostBuddy to activate during the exact start date/time of your trip!</li>
-                              <li>The weekly schedule allows you to set an ongoing schedule for each day of the week. Our users typically schedule their HostBuddies to activate each night while they are asleep, and for other recurring unavailable times. See our <a href='https://docs.google.com/document/d/1qakDp2RMoj2X4YssyvGTf7HF4YqKbUQU11H-9JuJ1rI?usp=sharing' target="_blank" rel="noopener noreferrer">Hostbuddy Scheduling Walkthrough</a> document for additional information on scheduling.</li>
+                              <li>The weekly schedule allows you to set an ongoing schedule for each day of the week. Our users typically schedule their HostBuddies to activate each night while they are asleep, and for other recurring unavailable times. See our <a href='/scheduling-walkthrough' target="_blank">Hostbuddy Scheduling Walkthrough</a> document for additional information on scheduling.</li>
                             </ul>
                           </li>
                         </ol>
