@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ConverSationtranscriptModel from "./transcriptsModel/ConverSationtranscriptModel";
-const TranscriptsTable = ({ conversationData }) => {
+const TranscriptsTable = ({ conversationData, propertyConversationId }) => {
   const [model, setModel] = useState({
     conversationModel: false,
     conversationDataSend: "",
@@ -36,7 +36,7 @@ const TranscriptsTable = ({ conversationData }) => {
     // Create a new Date object for the local timestamp
     const localDate = new Date(localTimestamp);
     */
-   const localDate = apiDate;
+    const localDate = apiDate;
 
     // Get the components of the date
     const month = localDate.getMonth() + 1; // Months are zero-indexed, so add 1
@@ -64,6 +64,14 @@ const TranscriptsTable = ({ conversationData }) => {
     return { date: formattedDate, time: formattedTime };
   }
 
+  // useEffect(() => {
+  //   if (propertyConversationId !== "") {
+  //     let conversationDataFilter = conversationData?.filter(
+  //       (item) => item?.conversation_id === propertyConversationId
+  //     );
+  //     handleModelOpen(conversationModelOpen, conversationDataFilter?.[0]);
+  //   }
+  // }, [propertyConversationId]);
 
   return (
     <div>
@@ -94,15 +102,26 @@ const TranscriptsTable = ({ conversationData }) => {
                 <tbody class="transcript-data-table empty-table-conversation text-white">
                   {conversationData?.map((convers, index) => {
                     //const timestamp = convers?.conversation_start_time;
-                    const timestamp = convers?.messages[convers?.messages.length - 1]?.time; // Use the timestamp of the last message in the conversation, instead of convo start time
+                    const timestamp =
+                      convers?.messages[convers?.messages.length - 1]?.time; // Use the timestamp of the last message in the conversation, instead of convo start time
                     const formattedDateTime = formatDateAndTime(timestamp);
-                    console.log(convers?.subject, 'convers?.subject')
+                    const firstConversationId = convers?.conversation_id;
+                    console.log(convers, "convers?.subject");
                     return (
                       <>
+                        {firstConversationId === propertyConversationId
+                          ? true
+                          : false}
                         <tr>
                           <td>{formattedDateTime.date}</td>
                           <td>{formattedDateTime.time}</td>
-                          <td>{convers?.subject !== undefined ? convers?.subject : <span className="text-danger">TBD</span>}</td>
+                          <td>
+                            {convers?.subject !== undefined ? (
+                              convers?.subject
+                            ) : (
+                              <span className="text-danger">TBD</span>
+                            )}
+                          </td>
                           <td>
                             {convers?.success_rating === "NEUTRAL" ? (
                               <span>{convers?.success_rating}</span>
@@ -115,7 +134,7 @@ const TranscriptsTable = ({ conversationData }) => {
                                 ) : (
                                   <>
                                     {convers?.success_rating ===
-                                      "SUCCESSFUL" ? (
+                                    "SUCCESSFUL" ? (
                                       <span className="text-success">
                                         {convers?.success_rating}
                                       </span>

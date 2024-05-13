@@ -60,7 +60,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   const Outdoor = Amenities["Outdoor"]?.[0];
   const RulesAndServices = Amenities["Rules and Services"]?.[0];
 
-  // console.log("Family: ", Family)
   // if (Family.response_options.length !== 0) {
   //   setAmenitiesFamilyOptions(Family.response_options);
   // }
@@ -89,6 +88,100 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   //   }
   // };
 
+  // Checking whether any hideReservationstage present or not and setting pencil color based on that
+  const checkReservationStatus = (type, typeValue) => {
+
+    if (type === "Family") {
+      if (!amenitiesFamilyOptions.includes(typeValue)) {
+        // If the familyValue is not already included,
+        return "#146EF5";
+      } else {
+        const indexVal = amenitiesFamilyOptions.indexOf(typeValue);
+
+        let reservationStatusData = amenitiesFamilyHideReservation[indexVal];
+
+        if (reservationStatusData && reservationStatusData.length > 0) {
+          return "#ffc107";
+        } else {
+          return "#146EF5";
+        }
+      }
+
+    }
+
+    if (type === "Indoor") {
+      if (!amenitiesIndoorOptions.includes(typeValue)) {
+        // If the familyValue is not already included,
+        return "#146EF5";
+      } else {
+        const indexVal = amenitiesIndoorOptions.indexOf(typeValue);
+
+        let reservationStatusData = amenitiesIndoorHideReservation[indexVal];
+
+        if (reservationStatusData && reservationStatusData.length > 0) {
+          return "#ffc107";
+        } else {
+          return "#146EF5";
+        }
+      }
+
+    }
+
+    if (type === "More") {
+      if (!amenitiesMoreOptions.includes(typeValue)) {
+        // If the familyValue is not already included,
+        return "#146EF5";
+      } else {
+        const indexVal = amenitiesMoreOptions.indexOf(typeValue);
+
+        let reservationStatusData = amenitiesMoreHideReservation[indexVal];
+
+        if (reservationStatusData && reservationStatusData.length > 0) {
+          return "#ffc107";
+        } else {
+          return "#146EF5";
+        }
+      }
+
+    }
+
+    if (type === "Outdoor") {
+      if (!amenitiesOutdoorOptions.includes(typeValue)) {
+        // If the familyValue is not already included,
+        return "#146EF5";
+      } else {
+        const indexVal = amenitiesOutdoorOptions.indexOf(typeValue);
+
+        let reservationStatusData = amenitiesOutdoorHideReservation[indexVal];
+
+        if (reservationStatusData && reservationStatusData.length > 0) {
+          return "#ffc107";
+        } else {
+          return "#146EF5";
+        }
+      }
+
+    }
+
+    if (type === "RulesAndServices") {
+      if (!amenitiesRulesOptions.includes(typeValue)) {
+        // If the familyValue is not already included,
+        return "#146EF5";
+      } else {
+        const indexVal = amenitiesRulesOptions.indexOf(typeValue);
+
+        let reservationStatusData = amenitiesRulesHideReservation[indexVal];
+
+        if (reservationStatusData && reservationStatusData.length > 0) {
+          return "#ffc107";
+        } else {
+          return "#146EF5";
+        }
+      }
+
+    }
+  }
+
   // handle checkbox click based on the text click
   const handleCheckItemClick = (type, checkedValue) => {
 
@@ -115,6 +208,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         setAmenitiesIndoorOptions((prevState) => [...prevState, checkedValue]);
         // add "" for selected Family value
         setAmenitiesIndoorResponse((prevState) => [...prevState, ""]);
+
+        setAmenitiesIndoorHideReservation((prevState) => [...prevState, ""]);
       }
 
       setNoteClickData({
@@ -130,6 +225,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         setAmenitiesMoreOptions((prevState) => [...prevState, checkedValue]);
         // add "" for selected Family value
         setAmenitiesMoreResponse((prevState) => [...prevState, ""]);
+
+        setAmenitiesMoreHideReservation((prevState) => [...prevState, ""]);
       }
 
       setNoteClickData({
@@ -145,6 +242,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         setAmenitiesOutdoorOptions((prevState) => [...prevState, checkedValue]);
         // add "" for selected Family value
         setAmenitiesOutdoorResponse((prevState) => [...prevState, ""]);
+
+        setAmenitiesOutdoorHideReservation((prevState) => [...prevState, ""]);
       }
 
       setNoteClickData({
@@ -160,6 +259,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         setAmenitiesRulesOptions((prevState) => [...prevState, checkedValue]);
         // add "" for selected Family value
         setAmenitiesRulesResponse((prevState) => [...prevState, ""]);
+
+        setAmenitiesRulesHideReservation((prevState) => [...prevState, ""]);
       }
 
       setNoteClickData({
@@ -173,7 +274,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
   // handle edit or add note button click to add checkbox to checked state
   const handleEditButtonClick = (type, amenityValue) => {
-    console.log("amenityValue: ", amenityValue)
+    // console.log("amenityValue: ", amenityValue)
     if (type === "Family") {
       if (!amenitiesFamilyOptions.includes(amenityValue)) {
         // If the familyValue is not already included, add it to the state
@@ -197,6 +298,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         setAmenitiesIndoorOptions((prevState) => [...prevState, amenityValue]);
         // add "" for selected Family value
         setAmenitiesIndoorResponse((prevState) => [...prevState, ""]);
+
+        setAmenitiesIndoorHideReservation((prevState) => [...prevState, ""]);
       }
 
       setNoteClickData({
@@ -212,6 +315,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         setAmenitiesMoreOptions((prevState) => [...prevState, amenityValue]);
         // add "" for selected Family value
         setAmenitiesMoreResponse((prevState) => [...prevState, ""]);
+
+        setAmenitiesMoreHideReservation((prevState) => [...prevState, ""]);
       }
 
       setNoteClickData({
@@ -227,6 +332,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         setAmenitiesOutdoorOptions((prevState) => [...prevState, amenityValue]);
         // add "" for selected Family value
         setAmenitiesOutdoorResponse((prevState) => [...prevState, ""]);
+
+        setAmenitiesOutdoorHideReservation((prevState) => [...prevState, ""]);
       }
 
       setNoteClickData({
@@ -242,6 +349,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         setAmenitiesRulesOptions((prevState) => [...prevState, amenityValue]);
         // add "" for selected Family value
         setAmenitiesRulesResponse((prevState) => [...prevState, ""]);
+
+        setAmenitiesRulesHideReservation((prevState) => [...prevState, ""]);
       }
 
       setNoteClickData({
@@ -267,12 +376,18 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
       // If checkbox is checked, add value to the state
       setAmenitiesFamilyOptions((prevState) => [...prevState, value]);
       setAmenitiesFamilyResponse((prevState) => [...prevState, ""]);
+      setAmenitiesFamilyHideReservation((prevState) => [...prevState, ""]);
     } else {
       // If checkbox is unchecked, remove value from the state
 
       const indexVal = amenitiesFamilyOptions.indexOf(value);
       // remove responseText from array for Family
       setAmenitiesFamilyResponse((prevState) =>
+        prevState.filter((item, index) => index !== indexVal)
+      );
+
+      // remove hideReservationText from array for Family
+      setAmenitiesFamilyHideReservation((prevState) =>
         prevState.filter((item, index) => index !== indexVal)
       );
 
@@ -288,11 +403,17 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
       // If checkbox is checked, add value to the state
       setAmenitiesIndoorOptions((prevState) => [...prevState, value]);
       setAmenitiesIndoorResponse((prevState) => [...prevState, ""]);
+      setAmenitiesIndoorHideReservation((prevState) => [...prevState, ""]);
     } else {
       // If checkbox is unchecked, remove value from the state
       const indexVal = amenitiesIndoorOptions.indexOf(value);
       // remove responseText from array for Family
       setAmenitiesIndoorResponse((prevState) =>
+        prevState.filter((item, index) => index !== indexVal)
+      );
+
+      // remove hideReservationText from array for Family
+      setAmenitiesIndoorHideReservation((prevState) =>
         prevState.filter((item, index) => index !== indexVal)
       );
 
@@ -377,6 +498,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     const amenitiesOutdoorHideReservationFilled = amenitiesOutdoorHideReservation.map(item => item ?? '');
     const amenitiesRulesHideReservationFilled = amenitiesRulesHideReservation.map(item => item ?? '');
     console.log('FINAL', amenitiesFamilyHideReservationFilled)
+    // return;
 
     questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Family"][0]["response_options"] = amenitiesFamilyOptions;
     questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Family"][0]["response_text"] = amenitiesFamilyResponse;
@@ -545,8 +667,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                             >
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                fill="#146EF5
-                                                                    "
+                                // fill="#146EF5"
+                                fill={`${checkReservationStatus("Family", Family)}`}
                               ></path>
                             </svg>
                           </button>
@@ -650,7 +772,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                             >
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                fill="#146EF5"
+                                // fill="#146EF5"
+                                fill={`${checkReservationStatus("Indoor", Indoor)}`}
                               ></path>
                             </svg>
                           </button>
@@ -702,8 +825,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                             >
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                fill="#146EF5
-                                                                    "
+                                // fill="#146EF5"
+                                fill={`${checkReservationStatus("More", More)}`}
                               ></path>
                             </svg>
                           </button>
@@ -756,8 +879,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                             >
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                fill="#146EF5
-                                                                    "
+                                // fill="#146EF5"
+                                fill={`${checkReservationStatus("Outdoor", Outdoor)}`}
                               ></path>
                             </svg>
                           </button>
@@ -822,8 +945,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                             >
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                fill="#146EF5
-                                                                    "
+                                // fill="#146EF5"
+                                fill={`${checkReservationStatus("RulesAndServices", RulesAndServices)}`}
                               ></path>
                             </svg>
                           </button>

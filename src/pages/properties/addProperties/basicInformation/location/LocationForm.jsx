@@ -284,7 +284,6 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
                   key={index}
                   className={` mt-4 col-${index % 2 === 0 ? "6" : "6"}`}
                 >
-                  {console.log("Rsponse: ", item?.responseText)}
                   {item.question_type === "select" ? (
                     <>
                       <label className="text-white">
@@ -313,8 +312,10 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
                           >
                             <path
                               d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                              // fill="#146EF5"
-                              fill={`${item.hide_for_reservations.length > 0 ? '#ffeb3b' : '#146EF5'}`}
+
+                              fill={`${(addedNote && `${item.question_type}${index}_hidereservation` in addedNote && addedNote[`${item.question_type}${index}_hidereservation`].length > 0) || (!addedNote || !(`${item.question_type}${index}_hidereservation` in addedNote)) && item.hide_for_reservations.length > 0 ? '#ffc107' : '#146EF5'}`}
+
+                            // fill={`${item.hide_for_reservations.length > 0 ? '#ffeb3b' : '#146EF5'}`}
                             ></path>
                           </svg>
                         </Button>
@@ -361,7 +362,8 @@ const LocationForm = ({ prntFuntionHeaderActive, updateImageHndle }) => {
                         >
                           <path
                             d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                            fill={`${(addedNote && `${item.question_type}${index}_hidereservation` in addedNote && addedNote[`${item.question_type}${index}_hidereservation`].length > 0) || (!addedNote || !(`${item.question_type}${index}_hidereservation` in addedNote)) && item.hide_for_reservations.length > 0 ? '#ffeb3b' : '#146EF5'}`}
+
+                            fill={`${(addedNote && `${item.question_type}${index}_hidereservation` in addedNote && addedNote[`${item.question_type}${index}_hidereservation`].length > 0) || (!addedNote || !(`${item.question_type}${index}_hidereservation` in addedNote)) && item.hide_for_reservations.length > 0 ? '#ffc107' : '#146EF5'}`}
 
                           // fill={`${item.hide_for_reservations.length > 0 ? '#ffeb3b' : '#146EF5'}`}
                           ></path>

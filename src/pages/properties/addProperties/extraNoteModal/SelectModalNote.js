@@ -75,13 +75,18 @@ const SelectModalNote = ({
     }
 
 
-    console.log("Checked: ", e.target.checked);
-    setCheckChange(true)
+    // console.log("Checked: ", e.target.checked);
+    // setCheckChange(true)
   };
 
   const handleAddNote = () => {
     setAddedNote((prev) => ({ ...prev, [noteClickData?.name]: noteData, }));
-    handleClose();
+
+    handleChangeStatus(checkedSchedule)
+
+    setTimeout(() => {
+      handleClose();
+    }, 500);
   };
 
   const handleAddReservationStage = (stageToSet) => {
@@ -164,12 +169,12 @@ const SelectModalNote = ({
     }
   }, [reservationClickData, addedNote]);
 
-  useEffect(() => {
-    if (checkChange) {
-      handleChangeStatus(checkedSchedule);
-      setCheckChange(false);
-    }
-  }, [checkChange, checkedSchedule])
+  // useEffect(() => {
+  //   if (checkChange) {
+  //     handleChangeStatus(checkedSchedule);
+  //     setCheckChange(false);
+  //   }
+  // }, [checkChange, checkedSchedule])
 
   return (
     <>
@@ -199,11 +204,11 @@ const SelectModalNote = ({
               value={noteData}
               onChange={(e) => setNoteData(e.target.value)}
             ></textarea>
-            
-            <hr style={{borderTop: "0px solid #0078F0"}} />
-          
+
+            <hr style={{ borderTop: "0px solid #0078F0" }} />
+
             <label >Information from this question will only be provided to guests at the selected (blue) reservation stages. You can de-select stages below to prevent HostBuddy from sharing this information with those guests.</label>
-          
+
             <div className=" d-flex justify-content-between mt-3">
               <div class="col text-center">
                 <input
@@ -258,7 +263,7 @@ const SelectModalNote = ({
               </div>
             </div>
 
-            <hr style={{borderTop: "2px solid #0078F0", margin: "20px 0 30px 0"}} />
+            <hr style={{ borderTop: "2px solid #0078F0", margin: "20px 0 30px 0" }} />
 
             <div className="d-flex justify-content-center mt-3">
               <button className="mw-auto" onClick={handleAddNote}>

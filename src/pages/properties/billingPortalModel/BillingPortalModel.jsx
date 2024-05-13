@@ -22,9 +22,11 @@ const BillingPortalModel = ({ handleClose, show }) => {
           Visit the billing portal to adjust the number of properties in your
           subscription
         </p>
-        <button type="button" className="shadow-none border-0" onClick={goToBillingSubcripstionhndl}>
-          billing portal
+        <span className="d-flex justify-content-center">
+        <button type="button" className="btn btn-primary mt-3  shadow-none border-0" onClick={goToBillingSubcripstionhndl}>
+          Billing portal
         </button>
+        </span>
       </Modal.Body>
     </Modal>
   );

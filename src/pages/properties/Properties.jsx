@@ -4,7 +4,7 @@ import "./properties.css";
 import AddPropertyModal from "../../component/modal/addPropertyModal/AddPropertyModal";
 import NoWorkPlanModal from "../../component/modal/noWorkPlanModal/NoWorkPlanModal";
 import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
-import { Helmet } from 'react-helmet';
+import { Helmet } from "react-helmet";
 import {
   getUserDataActions,
   goToBillingportalPostActions,
@@ -19,7 +19,6 @@ import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
 
 const Properties = () => {
-  
   const navigate = useNavigate();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -59,20 +58,28 @@ const Properties = () => {
   // toggle chatbot
   const createPropertiesName =
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const propertiesExtraData =
-    store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // shows toggle state for each property
+  const propertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user
+    ?.property_data
+    ? store?.getUserDataReducer?.getUserData?.data?.user?.property_data
+    : [];
+  // shows toggle state for each property
   const intergrationsMain =
     store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
   const intergrations = intergrationsMain ? intergrationsMain : [];
   const toggleChatMessage =
     store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
-  const toggleChatStatus = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
+  const toggleChatStatus =
+    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
 
   const [toggleOnOff, setToggleOnOff] = useState("");
   const [toggleActive, setToggleActive] = useState(true);
 
-  const anyPropertyNotForcedOff = propertiesExtraData ? Object?.values(propertiesExtraData)?.some(property => property?.toggle_status !== "FORCED_OFF") : []
+  const anyPropertyNotForcedOff = propertiesExtraData
+    ? Object?.values(propertiesExtraData)?.some(
+        (property) => property?.toggle_status !== "FORCED_OFF"
+      )
+    : [];
 
   const toggleChatBotHndle = (type) => {
     if (type) {
@@ -120,9 +127,10 @@ const Properties = () => {
 
   return (
     <>
-    <Helmet>
-    <title>Properties</title>
-  </Helmet>;
+      <Helmet>
+        <title>Properties</title>
+      </Helmet>
+      ;
       <div className="account-main">
         <div className="container">
           <div className="banner-heading">
@@ -140,8 +148,8 @@ const Properties = () => {
                   <div className="property-heading-right">
                     <p>HostBuddy Status</p>
                     {toggleChatLoading && <FullScreenLoader />}
-                    {Object.keys(propertiesExtraData).length > 0 && (
-                      !anyPropertyNotForcedOff ? (
+                    {Object?.keys(propertiesExtraData).length > 0 &&
+                      (!anyPropertyNotForcedOff ? (
                         <>
                           {" "}
                           <button
@@ -164,8 +172,7 @@ const Properties = () => {
                             STOP
                           </button>
                         </>
-                      )
-                    )}
+                      ))}
                   </div>
                 </div>
                 <div
@@ -197,9 +204,9 @@ const Properties = () => {
                     )}
                   </button>
                   {intergrations !== undefined &&
-                    Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key)
+                  Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key). Capitalize the first letter of the integration.
                     <p style={{ color: "white" }}>
-                      Connected to {Object.keys(intergrations)[0]}
+                      {`Connected to ${Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)}`}
                     </p>
                   ) : (
                     <button

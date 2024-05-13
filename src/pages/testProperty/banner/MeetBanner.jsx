@@ -89,7 +89,7 @@ const MeetBanner = (props) => {
         textareaValue: "Hi",
         chatbot_key: chatbot_key,
         data_host_return: " ",
-        user: "host"
+        user: "guest"
       })
     );
   };

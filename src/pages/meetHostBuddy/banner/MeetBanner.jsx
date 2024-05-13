@@ -98,11 +98,12 @@ const MeetBanner = (props) => {
         chatbot_key:
           chatbot_key !== undefined ? chatbot_key : "meet_hostbuddy_8762",
         data_host_return: " ",
-        user: user_type !== undefined ? user_type : "guest",
+        user: user_type !== undefined ? user_type : "host",
       })
     );
   };
-
+  
+  
   useEffect(() => {
     if (isFirstRun.current) {
       isFirstRun.current = false;
