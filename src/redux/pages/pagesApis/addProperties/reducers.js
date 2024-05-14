@@ -47,6 +47,10 @@ const COPY_EXISTING_PROPERTY_INITIAL_STATE = {
   loading: false,
 };
 
+const REMOVE_SUPPORTING_DOCS_INITIAL_STATE = {
+  removeSupportingDocs: [],
+  loading: false,
+};
 const postPropertiesReducer = (
   state = POST_PROPERTIES_INITIAL_STATE,
   action
@@ -309,6 +313,32 @@ const copyExistingPropertyReducer = (
   }
 };
 
+const removeSupportingDocsReducer = (
+  state = REMOVE_SUPPORTING_DOCS_INITIAL_STATE,
+  action
+) => {
+  switch (action.type) {
+    case AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_LOADING:
+      return {
+        removeSupportingDocs: state.removeSupportingDocs,
+        loading: true,
+      };
+    case AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_SUCCESS:
+      return {
+        removeSupportingDocs: action.payload,
+        loading: false,
+      };
+    case AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_ERROR:
+      return {
+        removeSupportingDocs: action.payload,
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      return REMOVE_SUPPORTING_DOCS_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
 
 
 export {
@@ -321,5 +351,6 @@ export {
   supportingDocumentPostReducer,
   supportingUrlPostReducer,
   togglechatBotOnOffReducer,
-  copyExistingPropertyReducer
+  copyExistingPropertyReducer,
+  removeSupportingDocsReducer
 };

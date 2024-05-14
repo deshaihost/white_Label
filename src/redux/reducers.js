@@ -30,7 +30,8 @@ import {
   supportingDocumentPostReducer,
   supportingUrlPostReducer,
   togglechatBotOnOffReducer,
-  copyExistingPropertyReducer
+  copyExistingPropertyReducer,
+  removeSupportingDocsReducer
 
 } from "./pages/pagesApis/addProperties/reducers";
 import { getPropertyByNameReducer, propertyGetConversationReducer } from "./pages/pagesApis/propertyInsight/reducers";
@@ -62,5 +63,6 @@ export default (combineReducers({
   getActionItemsReducer,
   completeActionsItemsReducer,
   copyExistingPropertyReducer,
-  messageFeedBackReducer
+  messageFeedBackReducer,
+  removeSupportingDocsReducer
 }): any);

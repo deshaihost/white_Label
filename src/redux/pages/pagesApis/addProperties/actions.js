@@ -59,6 +59,11 @@ export const copyExistingPropertyActions = (data) => ({
     data,
 });
 
+export const removeSupportingDocsActions = (data) => ({
+    type: AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_FIRST,
+    data,
+});
+
 
 
 

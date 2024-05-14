@@ -34,11 +34,31 @@ const Dashboard = () => {
     store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
   const actionItemsCovertationLoading = store?.getActionItemsReducer?.loading;
 
+  // const actionItems = actionItemsConvertationData
+  //   ? actionItemsConvertationData
+  //   : [];
+
   const actionItems = actionItemsConvertationData
     ? actionItemsConvertationData
     : [];
 
-    console.log(actionItems,'actionItemsactionItems')
+  // Flatten and sort action items by creation time
+  const sortedActionItems = Object.keys(actionItems)
+    .flatMap((property) =>
+      Object.keys(actionItems[property]).map((itemId) => {
+        const item = actionItems[property][itemId];
+        
+        return {
+          ...item,
+          property,
+          itemId,
+          createdAt: item?.items[0]?.created_at,
+          actionItems
+        };
+      })
+    )
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
   // date formate
   function formatDateTime(dateTimeString) {
     const date = new Date(dateTimeString);
@@ -71,7 +91,7 @@ const Dashboard = () => {
     return `${month} ${day}, ${year} ${hours}:${minutes}${ampm}`;
   }
   const { first_name } = userDataGet ? userDataGet : [];
-  console.log('t')
+  console.log("t");
   // this functionality complete convertation
   const completeActionsItemLoading =
     store?.completeActionsItemsReducer?.loading;
@@ -103,6 +123,7 @@ const Dashboard = () => {
     }
   }, [completeActionsItemStatus]);
   const [converSationId, setConverSationId] = useState("");
+  console.log(converSationId,'converSationIdconverSationId++++')
   const propertiesConversationGetData =
     store?.propertyGetConversationReducer?.propertyGetConversation?.data;
   const propertiesConversationLoading =
@@ -127,6 +148,7 @@ const Dashboard = () => {
   const conversationModelOpen = "conversationModelOpen";
   const conversationModelClose = "conversationModelClose";
   const handleModelOpen = (type, data) => {
+    console.log(type, data,'type, data')
     if (type === conversationModelOpen) {
       setModel({
         ...model,
@@ -322,66 +344,49 @@ const Dashboard = () => {
                                 <th>Complete</th>
                               </tr>
                             </thead>
-
                             <tbody>
-                              {Object?.keys(actionItems)?.sort()?.map((property) =>
-                                Object?.keys(actionItems[property])?.sort()?.map(
-                                  (itemId) => {
-                                    const item = actionItems[property][itemId];
-                                    let actionItem = {
-                                      propertyName: property,
-                                      itemId,
-                                    };
-                                    
-                                    return (
-                                      <tr key={itemId}>
-                                        <td>
-                                          {formatDateTime(
-                                            item?.items[0]?.created_at
-                                          )}
-                                        </td>
-                                        <td>{property}</td>
-                                        <td>{item?.items[0]?.item}</td>
-                                        <td className="text-center">
-                                          <span
-                                            className="mainCursor"
-                                            onClick={() => {
-                                              conversationCallOnDashboard(
-                                                actionItem
-                                              );
-                                            }}
-                                          >
-                                            <GoArrowUpRight className="text-white fs-6" />
-                                          </span>
-                                          {/* <Link
-                                          to={`/property-insight/${JSON.stringify(
-                                            actionItem
-                                          )}`}
-                                        >
-                                          <span className="mainCursor">
-                                            <GoArrowUpRight className="text-white fs-6" />
-                                          </span>
-                                        </Link> */}
-                                        </td>
-                                        <td className="text-center">
-                                          <span
-                                            className=" mainCursor"
-                                            onClick={() => {
-                                              compeletHndle(
-                                                item?.items[0]?.id,
-                                                property,
-                                                itemId
-                                              );
-                                            }}
-                                          >
-                                            <FaCircleCheck className="text-primary fs-6" />
-                                          </span>
-                                        </td>
-                                      </tr>
-                                    );
-                                  }
-                                )
-                              )}
+                              {sortedActionItems.map((actionItem) => {
+                                const { createdAt, property, itemId } =
+                                  actionItem;
+                                const item = actionItem.items[0];
+                                let actionItemSend = {
+                                  propertyName: property,
+                                  itemId,
+                                };
+                                return (
+                                  <tr key={itemId}>
+                                    <td>{formatDateTime(createdAt)}</td>
+                                    <td>{property}</td>
+                                    <td>{item?.item}</td>
+                                    <td className="text-center">
+                                      <span
+                                        className="mainCursor"
+                                        onClick={() => {
+                                          conversationCallOnDashboard(
+                                            actionItemSend
+                                          );
+                                        }}
+                                      >
+                                        <GoArrowUpRight className="text-white fs-6" />
+                                      </span>
+                                    </td>
+                                    <td className="text-center">
+                                      <span
+                                        className="mainCursor"
+                                        onClick={() => {
+                                          compeletHndle(
+                                            item?.id,
+                                            property,
+                                            itemId
+                                          );
+                                        }}
+                                      >
+                                        <FaCircleCheck className="text-primary fs-6" />
+                                      </span>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
                             </tbody>
                           </table>
                         </div>

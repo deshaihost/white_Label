@@ -22,6 +22,7 @@ const ExtrasForm = () => {
   const navigate = useNavigate();
 
   const [loadingStatus, setLoadingStatus] = useState(false);
+  const [inputChangesCheck, setInputChangesCheck] = useState(false);
 
   const [addedNote, setAddedNote] = useState({});
   const [showReservation, setShowReservation] = useState(false);
@@ -73,46 +74,56 @@ const ExtrasForm = () => {
       value: value,
     });
     setShowReservation(true);
-
-  }
+  };
 
   const onSubmit = (data) => {
     // console.log("New Form Data: ", data);
+    if (inputChangesCheck) {
+      const questionaireToSend = structuredClone(apiQuestionnaireObject);
 
-    const questionaireToSend = structuredClone(apiQuestionnaireObject);
+      AdditionalInformation[0]["response_text"] =
+        data?.AdditionalInformationlong_answer0.trim() === ""
+          ? null
+          : data?.AdditionalInformationlong_answer0;
 
-    AdditionalInformation[0]["response_text"] =
-      data?.AdditionalInformationlong_answer0.trim() === ""
-        ? null
-        : data?.AdditionalInformationlong_answer0;
+      if (
+        addedNote &&
+        "additionalInformation_long_answer0_hidereservation" in addedNote
+      ) {
+        AdditionalInformation[0]["hide_for_reservations"] =
+          addedNote?.additionalInformation_long_answer0_hidereservation ?? "";
+      }
 
-    if (addedNote && "additionalInformation_long_answer0_hidereservation" in addedNote) {
-      AdditionalInformation[0]["hide_for_reservations"] = addedNote?.additionalInformation_long_answer0_hidereservation ?? "";
+      AdditionalInformation[1]["response_text"] =
+        data?.AdditionalInformationlong_answer1.trim() === ""
+          ? null
+          : data?.AdditionalInformationlong_answer1;
+
+      if (
+        addedNote &&
+        "additionalInformation_long_answer1_hidereservation" in addedNote
+      ) {
+        AdditionalInformation[1]["hide_for_reservations"] =
+          addedNote?.additionalInformation_long_answer1_hidereservation ?? "";
+      }
+
+      questionaireToSend["questionnaire"]["questionnaire"]["Extras"][
+        "Additional Information"
+      ] = AdditionalInformation;
+
+      console.log("Updated Data to Send: ", questionaireToSend);
+
+      dispatch(
+        updateQuestionnaireActions({
+          nameKey: getLocalStorageData,
+          formeData: questionaireToSend,
+        })
+      );
+
+      setLoadingStatus(true);
+    } else {
+      navigate("/properties");
     }
-
-    AdditionalInformation[1]["response_text"] =
-      data?.AdditionalInformationlong_answer1.trim() === ""
-        ? null
-        : data?.AdditionalInformationlong_answer1;
-
-    if (addedNote && "additionalInformation_long_answer1_hidereservation" in addedNote) {
-      AdditionalInformation[1]["hide_for_reservations"] = addedNote?.additionalInformation_long_answer1_hidereservation ?? "";
-    }
-
-    questionaireToSend["questionnaire"]["questionnaire"]["Extras"][
-      "Additional Information"
-    ] = AdditionalInformation;
-
-    console.log("Updated Data to Send: ", questionaireToSend);
-
-    dispatch(
-      updateQuestionnaireActions({
-        nameKey: getLocalStorageData,
-        formeData: questionaireToSend,
-      })
-    );
-
-    setLoadingStatus(true);
   };
 
   useEffect(() => {
@@ -135,7 +146,6 @@ const ExtrasForm = () => {
 
   return (
     <>
-
       {showReservation && (
         <ReservationStageModal
           show={showReservation}
@@ -181,7 +191,23 @@ const ExtrasForm = () => {
                           <path
                             d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
                             // fill="#ffeb3b"
-                            fill={`${(addedNote && `additionalInformation_${AdditionalInformation.question_type}${index}_hidereservation` in addedNote && addedNote[`additionalInformation_${AdditionalInformation.question_type}${index}_hidereservation`].length > 0) || (!addedNote || !(`additionalInformation_${AdditionalInformation.question_type}${index}_hidereservation` in addedNote)) && AdditionalInformation.hide_for_reservations.length > 0 ? '#ffc107' : '#146EF5'}`}
+                            fill={`${
+                              (addedNote &&
+                                `additionalInformation_${AdditionalInformation.question_type}${index}_hidereservation` in
+                                  addedNote &&
+                                addedNote[
+                                  `additionalInformation_${AdditionalInformation.question_type}${index}_hidereservation`
+                                ].length > 0) ||
+                              ((!addedNote ||
+                                !(
+                                  `additionalInformation_${AdditionalInformation.question_type}${index}_hidereservation` in
+                                  addedNote
+                                )) &&
+                                AdditionalInformation.hide_for_reservations
+                                  .length > 0)
+                                ? "#ffc107"
+                                : "#146EF5"
+                            }`}
                           ></path>
                         </svg>
                       </Button>
@@ -193,6 +219,7 @@ const ExtrasForm = () => {
                         {...register(
                           `AdditionalInformation${AdditionalInformation.question_type}${index}`
                         )}
+                        onChange={() => setInputChangesCheck(true)}
                         placeholder={AdditionalInformation?.placeholder_text}
                         defaultValue={AdditionalInformation?.response_text}
                       />

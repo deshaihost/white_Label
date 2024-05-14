@@ -34,17 +34,20 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   } = useForm();
 
   const [uploadedFile, setFile] = useState(null);
-  const [updateImage, setUpdateImage] = useState(null);
-  console.log(uploadedFile, "uploadedFileuploadedFile", updateImage);
+  const [updateImage, setUpdateImage] = useState({
+    propertyImg: undefined,
+    propertyOnchangecheck: false,
+  });
+  let propertyImgPath = updateImage?.propertyImg;
+  console.log(propertyImgPath,'propertyImgPathpropertyImgPath')
 
   const [propertyName, setPropertyName] = useState(null);
   const nameKeyGet = nameKey();
   const [oldProperyName, setOldPropertyName] = useState("");
-  console.log(oldProperyName, "oldProperyNameoldProperyName", nameKeyGet);
   const add_thumbnail_image = async (propertyName, imgFile) => {
-    if (updateImage !== null) {
+    if (propertyImgPath !== undefined) {
       let formData = new FormData();
-      let file = updateImage !== null ? updateImage[0] : imgFile;
+      let file = propertyImgPath !== null ? propertyImgPath[0] : imgFile;
 
       // Check if the file type is valid
       if (
@@ -81,7 +84,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
             let formData = new FormData();
             formData.append(
               "file",
-              updateImage !== null ? updateImage?.[0] : imgFile
+              propertyImgPath !== null ? propertyImgPath?.[0] : imgFile
             );
             config.headers["Content-Type"] = "multipart/form-data";
 
@@ -117,7 +120,8 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
           "danger"
         );
       }
-    } else if (uploadedFile !== null) {
+    } 
+    else if (uploadedFile !== null) {
       let formData = new FormData();
       let file = uploadedFile !== null ? uploadedFile[0] : imgFile;
 
@@ -136,14 +140,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
         const token = getSessionStorageData?.token;
 
         try {
-          if (oldProperyName !== "") {
-            dispatch(
-              copyExistingPropertyActions({
-                newPropertyNm: propertyName,
-                oldPropertyNm: oldProperyName?.copyExisting,
-              })
-            );
-          }
 
           if (token) {
             const config = {
@@ -192,14 +188,15 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
           "danger"
         );
       }
-    } else if (oldProperyName !== "") {
-      dispatch(
-        copyExistingPropertyActions({
-          newPropertyNm: nameKeyGet?.nameKey,
-          oldPropertyNm: oldProperyName?.copyExisting,
-        })
-      );
     }
+    // else if (oldProperyName !== "") {
+    //   dispatch(
+    //     copyExistingPropertyActions({
+    //       newPropertyNm: nameKeyGet?.nameKey,
+    //       oldPropertyNm: oldProperyName?.copyExisting,
+    //     })
+    //   );
+    // }
   };
 
   let localStorageKey = "nameKey";
@@ -245,6 +242,14 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
 
   const copyExistingPropertyNameGetChild = (name) => {
     setOldPropertyName(name);
+    if (name?.copyExisting !== "") {
+      dispatch(
+        copyExistingPropertyActions({
+          newPropertyNm: nameKeyGet?.nameKey,
+          oldPropertyNm: name?.copyExisting,
+        })
+      );
+    }
   };
 
   // copy existing property hanlde
@@ -317,7 +322,12 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
                       type="file"
                       {...register("files")}
                       onChange={(e) => {
-                        setUpdateImage(e.target.files);
+                        setUpdateImage({
+                          ...updateImage,
+                          propertyImg: e.target.files,
+                          propertyOnchangecheck: true,
+                        });
+                        // setUpdateImage(e.target.files);
                       }}
                       placeholder=""
                     />
@@ -369,6 +379,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
             <LocationForm
               prntFuntionHeaderActive={prntFuntionHeaderActive}
               updateImageHndle={updateImageHndle}
+              imageOnchageCheck={updateImage}
             />
           )}
         </div>
