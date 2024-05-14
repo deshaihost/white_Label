@@ -490,7 +490,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   };
 
   const handleSubmit = () => {
-    if (inputChangesCheck) {
+    //if (inputChangesCheck) { // disable for now, because it's not recognizing changes to extra note or to reservation stages
+    if (true) {
       const questionaireToSend = structuredClone(apiQuestionnaireObject);
       // console.log(
       //   questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][

@@ -821,7 +821,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           show={showPreviousDoc}
           setShow={setShowPreviousDoc}
           prevUploadedDoc={prevUploadedDoc}
-          hideForReservation={hideForReservation}
+          supportingDocsObj={hideForReservation}
         />
       )}
     </>

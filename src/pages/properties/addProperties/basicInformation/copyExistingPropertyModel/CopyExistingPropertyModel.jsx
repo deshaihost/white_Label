@@ -89,18 +89,11 @@ const CopyExistingPropertyModel = ({
                 </h5>
               </div>
               <div className="d-flex justify-content-center">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => copyExistingPropertyNameGetPrnt(propertySelect)}
-                >
-                  {!copyExistingProertiesLoading ? "YES" : <Loader />}
-                  
-                </button>
-                <button
-                  className="btn btn-danger mx-4"
-                  onClick={() => handleClose("copyExistingPropertyClose")}
-                >
+                <button className="btn btn-danger mx-4" onClick={() => handleClose("copyExistingPropertyClose")}>
                   NO
+                </button>
+                <button className="btn btn-primary" onClick={() => copyExistingPropertyNameGetPrnt(propertySelect)}>
+                  {!copyExistingProertiesLoading ? "YES" : <Loader />}
                 </button>
               </div>
             </div>

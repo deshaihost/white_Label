@@ -146,7 +146,8 @@ const prentImageOnchangeCheckInput=imageOnchageCheck?.propertyOnchangecheck
     });
   };
   const onSubmit = (data) => {
-    if (inputChangesCheck) {
+    //if (inputChangesCheck) { // disable for now, because it's not recognizing changes to extra note or to reservation stages
+    if (true) {
       updateImageHndle();
       // console.log("addedNote data: ", addedNote)
       // return
