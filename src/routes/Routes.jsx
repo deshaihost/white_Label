@@ -32,11 +32,11 @@ import TestingQuestions from "../pages/userGuides/testingQuestions/testingQuesti
 const Routing = () => {
   const location = useLocation();
 
-  // Add user profiling script to the head of the document
+  // Add profiling script to the head of the document
   useEffect(() => {
     const addScript = () => {
       const script = document.createElement('script');
-      script.id = 'site-profiling-script';
+      script.id = 'site-profiling';
       script.type = 'text/javascript';
       script.async = true;
       script.innerHTML = `
@@ -73,7 +73,7 @@ const Routing = () => {
     };
 
     // Add the script only if not already present, and only for the front pages (excluding login/register/forgotpass)
-    const existingScript = document.getElementById('site-profiling-script');
+    const existingScript = document.getElementById('site-profiling');
     const pathnames_to_profile = ["/", "/pricing", "/meet-hostbuddy", "/faqs", "/privacy-policy", "/termsof-service", "/scheduling-walkthrough", "/tips-and-tricks", "/testing-questions"];
     if (!existingScript && pathnames_to_profile.includes(location.pathname)) {
       addScript();
