@@ -38,7 +38,7 @@ const Routing = () => {
       const script = document.createElement('script');
       script.id = 'site-profiling';
       script.type = 'text/javascript';
-      script.async = true;
+      //script.async = true;
       script.innerHTML = `
         !function () {
           var reb2b = window.reb2b = window.reb2b || [];
