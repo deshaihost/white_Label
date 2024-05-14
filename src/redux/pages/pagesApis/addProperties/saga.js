@@ -11,7 +11,8 @@ import {
   supportingDocumentPostEndPoint,
   supportingUrlPostEndPoint,
   toggleChatbotOnOffPutEndPoint,
-  copyExistingPropertyEndPoint
+  copyExistingPropertyEndPoint,
+  removeSupportingDocsEndPoint
 } from "./api";
 import { StateEmtpyActionTypes } from "../../../stateEmpty/constants";
 
@@ -300,6 +301,31 @@ function* copyExistingPropertyFunction(data) {
     });
   }
 }
+function* removeSupportingDocsFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_LOADING,
+      payload: {},
+    });
+    const response = yield call(removeSupportingDocsEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_ERROR,
+        payload: { ...response.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_ERROR,
+      payload: error,
+    });
+  }
+}
 
 function* stateEmptyFunction() {
   yield put({
@@ -378,6 +404,9 @@ export function* acctionToggleChatbotOnOff(): any {
 export function* acctionCopyExistingProperty(): any {
   yield takeEvery(AddPropertiesActionTypes.COPY_EXITING_PROPERTY_FIRST, copyExistingPropertyFunction);
 }
+export function* acctionRemoveSupportingDocs(): any {
+  yield takeEvery(AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_FIRST, removeSupportingDocsFunction);
+}
 
 
 
@@ -394,7 +423,8 @@ function* addPropertiesSaga(): any {
     fork(acctionSupportingDocumentPost),
     fork(acctionUrlDocumentPost),
     fork(acctionToggleChatbotOnOff),
-    fork(acctionCopyExistingProperty)
+    fork(acctionCopyExistingProperty),
+    fork(acctionRemoveSupportingDocs)
   ]);
 }
 

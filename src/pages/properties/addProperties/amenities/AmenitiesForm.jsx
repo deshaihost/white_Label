@@ -5,7 +5,10 @@ import {
   GetquestionnaireFunction,
   nameKey,
 } from "../../../../helper/Authorized";
-import { stateEmptyActions, updateQuestionnaireActions } from "../../../../redux/actions";
+import {
+  stateEmptyActions,
+  updateQuestionnaireActions,
+} from "../../../../redux/actions";
 import Loader, { BoxLoader } from "../../../../helper/Loader";
 import { Modal } from "react-bootstrap";
 import ToastHandle from "../../../../helper/ToastMessage";
@@ -16,6 +19,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   const dispatch = useDispatch();
 
   const [loadingStatus, setLoadingStatus] = useState(false);
+  const [inputChangesCheck, setInputChangesCheck] = useState(false);
 
   const [amenitiesFamilyOptions, setAmenitiesFamilyOptions] = useState([]);
   const [amenitiesIndoorOptions, setAmenitiesIndoorOptions] = useState([]);
@@ -29,11 +33,16 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   const [amenitiesOutdoorResponse, setAmenitiesOutdoorResponse] = useState([]);
   const [amenitiesRulesResponse, setAmenitiesRulesResponse] = useState([]);
 
-  const [amenitiesFamilyHideReservation, setAmenitiesFamilyHideReservation] = useState([]);
-  const [amenitiesIndoorHideReservation, setAmenitiesIndoorHideReservation] = useState([]);
-  const [amenitiesMoreHideReservation, setAmenitiesMoreHideReservation] = useState([]);
-  const [amenitiesOutdoorHideReservation, setAmenitiesOutdoorHideReservation] = useState([]);
-  const [amenitiesRulesHideReservation, setAmenitiesRulesHideReservation] = useState([]);
+  const [amenitiesFamilyHideReservation, setAmenitiesFamilyHideReservation] =
+    useState([]);
+  const [amenitiesIndoorHideReservation, setAmenitiesIndoorHideReservation] =
+    useState([]);
+  const [amenitiesMoreHideReservation, setAmenitiesMoreHideReservation] =
+    useState([]);
+  const [amenitiesOutdoorHideReservation, setAmenitiesOutdoorHideReservation] =
+    useState([]);
+  const [amenitiesRulesHideReservation, setAmenitiesRulesHideReservation] =
+    useState([]);
 
   const getLocalStorageData = nameKey();
 
@@ -90,7 +99,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
   // Checking whether any hideReservationstage present or not and setting pencil color based on that
   const checkReservationStatus = (type, typeValue) => {
-
     if (type === "Family") {
       if (!amenitiesFamilyOptions.includes(typeValue)) {
         // If the familyValue is not already included,
@@ -106,7 +114,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
           return "#146EF5";
         }
       }
-
     }
 
     if (type === "Indoor") {
@@ -124,7 +131,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
           return "#146EF5";
         }
       }
-
     }
 
     if (type === "More") {
@@ -142,7 +148,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
           return "#146EF5";
         }
       }
-
     }
 
     if (type === "Outdoor") {
@@ -160,7 +165,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
           return "#146EF5";
         }
       }
-
     }
 
     if (type === "RulesAndServices") {
@@ -178,13 +182,11 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
           return "#146EF5";
         }
       }
-
     }
-  }
+  };
 
   // handle checkbox click based on the text click
   const handleCheckItemClick = (type, checkedValue) => {
-
     if (type === "Family") {
       if (!amenitiesFamilyOptions.includes(checkedValue)) {
         // If the familyValue is not already included, add it to the state
@@ -269,8 +271,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         name: checkedValue,
       });
     }
-
-  }
+  };
 
   // handle edit or add note button click to add checkbox to checked state
   const handleEditButtonClick = (type, amenityValue) => {
@@ -369,9 +370,10 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     // }
   };
 
-  const handleFamilyCheckboxChange = (event) => {
+  const handleFamilyCheckboxChange = (event, type) => {
+    setInputChangesCheck(type);
     const { value, checked } = event.target;
-    console.log(value, checked, '+++++')
+
     if (checked) {
       // If checkbox is checked, add value to the state
       setAmenitiesFamilyOptions((prevState) => [...prevState, value]);
@@ -397,7 +399,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     }
   };
 
-  const handleIndoorCheckboxChange = (event) => {
+  const handleIndoorCheckboxChange = (event, type) => {
+    setInputChangesCheck(type);
     const { value, checked } = event.target;
     if (checked) {
       // If checkbox is checked, add value to the state
@@ -423,7 +426,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     }
   };
 
-  const handleMoreCheckboxChange = (event) => {
+  const handleMoreCheckboxChange = (event, type) => {
+    setInputChangesCheck(type);
     const { value, checked } = event.target;
     if (checked) {
       // If checkbox is checked, add value to the state
@@ -443,7 +447,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     }
   };
 
-  const handleOutdoorCheckboxChange = (event) => {
+  const handleOutdoorCheckboxChange = (event, type) => {
+    setInputChangesCheck(type);
     const { value, checked } = event.target;
     if (checked) {
       // If checkbox is checked, add value to the state
@@ -463,7 +468,8 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     }
   };
 
-  const handleRulesCheckboxChange = (event) => {
+  const handleRulesCheckboxChange = (event,type) => {
+    setInputChangesCheck(type)
     const { value, checked } = event.target;
     if (checked) {
       // If checkbox is checked, add value to the state
@@ -484,51 +490,89 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
   };
 
   const handleSubmit = () => {
-    const questionaireToSend = structuredClone(apiQuestionnaireObject);
-    // console.log(
-    //   questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-    //     "Family"
-    //   ][0]["response_options"]
-    // );
+    if (inputChangesCheck) {
+      const questionaireToSend = structuredClone(apiQuestionnaireObject);
+      // console.log(
+      //   questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+      //     "Family"
+      //   ][0]["response_options"]
+      // );
 
-    // "Fill" the hideReservations arrays by adding empty strings where there are nulls, since backend expects an array of strings
-    const amenitiesFamilyHideReservationFilled = amenitiesFamilyHideReservation.map(item => item ?? '');
-    const amenitiesIndoorHideReservationFilled = amenitiesIndoorHideReservation.map(item => item ?? '');
-    const amenitiesMoreHideReservationFilled = amenitiesMoreHideReservation.map(item => item ?? '');
-    const amenitiesOutdoorHideReservationFilled = amenitiesOutdoorHideReservation.map(item => item ?? '');
-    const amenitiesRulesHideReservationFilled = amenitiesRulesHideReservation.map(item => item ?? '');
-    console.log('FINAL', amenitiesFamilyHideReservationFilled)
-    // return;
+      // "Fill" the hideReservations arrays by adding empty strings where there are nulls, since backend expects an array of strings
+      const amenitiesFamilyHideReservationFilled =
+        amenitiesFamilyHideReservation.map((item) => item ?? "");
+      const amenitiesIndoorHideReservationFilled =
+        amenitiesIndoorHideReservation.map((item) => item ?? "");
+      const amenitiesMoreHideReservationFilled =
+        amenitiesMoreHideReservation.map((item) => item ?? "");
+      const amenitiesOutdoorHideReservationFilled =
+        amenitiesOutdoorHideReservation.map((item) => item ?? "");
+      const amenitiesRulesHideReservationFilled =
+        amenitiesRulesHideReservation.map((item) => item ?? "");
+      console.log("FINAL", amenitiesFamilyHideReservationFilled);
+      // return;
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Family"][0]["response_options"] = amenitiesFamilyOptions;
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Family"][0]["response_text"] = amenitiesFamilyResponse;
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Family"][0]["hide_for_reservations"] = amenitiesFamilyHideReservationFilled;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Family"
+      ][0]["response_options"] = amenitiesFamilyOptions;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Family"
+      ][0]["response_text"] = amenitiesFamilyResponse;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Family"
+      ][0]["hide_for_reservations"] = amenitiesFamilyHideReservationFilled;
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Indoor"][0]["response_options"] = amenitiesIndoorOptions;
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Indoor"][0]["response_text"] = amenitiesIndoorResponse;
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Indoor"][0]["hide_for_reservations"] = amenitiesIndoorHideReservationFilled;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Indoor"
+      ][0]["response_options"] = amenitiesIndoorOptions;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Indoor"
+      ][0]["response_text"] = amenitiesIndoorResponse;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Indoor"
+      ][0]["hide_for_reservations"] = amenitiesIndoorHideReservationFilled;
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["More"][0]["response_options"] = amenitiesMoreOptions;
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["More"][0]["response_text"] = amenitiesMoreResponse;
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["More"][0]["hide_for_reservations"] = amenitiesMoreHideReservationFilled;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "More"
+      ][0]["response_options"] = amenitiesMoreOptions;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "More"
+      ][0]["response_text"] = amenitiesMoreResponse;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "More"
+      ][0]["hide_for_reservations"] = amenitiesMoreHideReservationFilled;
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Outdoor"][0]["response_options"] = amenitiesOutdoorOptions;
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Outdoor"][0]["response_text"] = amenitiesOutdoorResponse;
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Outdoor"][0]["hide_for_reservations"] = amenitiesOutdoorHideReservationFilled;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Outdoor"
+      ][0]["response_options"] = amenitiesOutdoorOptions;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Outdoor"
+      ][0]["response_text"] = amenitiesOutdoorResponse;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Outdoor"
+      ][0]["hide_for_reservations"] = amenitiesOutdoorHideReservationFilled;
 
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Rules and Services"][0]["response_options"] = amenitiesRulesOptions;
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Rules and Services"][0]["response_text"] = amenitiesRulesResponse;
-    questionaireToSend["questionnaire"]["questionnaire"]["Amenities"]["Rules and Services"][0]["hide_for_reservations"] = amenitiesRulesHideReservationFilled;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Rules and Services"
+      ][0]["response_options"] = amenitiesRulesOptions;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Rules and Services"
+      ][0]["response_text"] = amenitiesRulesResponse;
+      questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
+        "Rules and Services"
+      ][0]["hide_for_reservations"] = amenitiesRulesHideReservationFilled;
 
+      dispatch(
+        updateQuestionnaireActions({
+          nameKey: getLocalStorageData,
+          formeData: questionaireToSend,
+        })
+      );
 
-    dispatch(
-      updateQuestionnaireActions({
-        nameKey: getLocalStorageData,
-        formeData: questionaireToSend,
-      })
-    );
-
-    setLoadingStatus(true);
+      setLoadingStatus(true);
+    } else {
+      prntFuntionHeaderActive(id !== undefined && "extras");
+    }
   };
 
   useEffect(() => {
@@ -548,7 +592,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
       setAmenitiesFamilyOptions(Family?.response_options);
       setAmenitiesFamilyResponse(Family?.response_text);
       setAmenitiesFamilyHideReservation(Family?.hide_for_reservations);
-
     }
 
     if (Indoor?.response_options.length > 0) {
@@ -578,7 +621,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
   return (
     <>
-
       {show && (
         <CheckboxModalNote
           show={show}
@@ -608,18 +650,25 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
               setAmenitiesRulesResponse)
           }
           hideReservationText={
-            (noteClickData.type === "Family" && amenitiesFamilyHideReservation) ||
-            (noteClickData.type === "Indoor" && amenitiesIndoorHideReservation) ||
+            (noteClickData.type === "Family" &&
+              amenitiesFamilyHideReservation) ||
+            (noteClickData.type === "Indoor" &&
+              amenitiesIndoorHideReservation) ||
             (noteClickData.type === "More" && amenitiesMoreHideReservation) ||
-            (noteClickData.type === "Outdoor" && amenitiesOutdoorHideReservation) ||
+            (noteClickData.type === "Outdoor" &&
+              amenitiesOutdoorHideReservation) ||
             (noteClickData.type === "RulesAndServices" &&
               amenitiesRulesHideReservation)
           }
           setHideReservationText={
-            (noteClickData.type === "Family" && setAmenitiesFamilyHideReservation) ||
-            (noteClickData.type === "Indoor" && setAmenitiesIndoorHideReservation) ||
-            (noteClickData.type === "More" && setAmenitiesMoreHideReservation) ||
-            (noteClickData.type === "Outdoor" && setAmenitiesOutdoorHideReservation) ||
+            (noteClickData.type === "Family" &&
+              setAmenitiesFamilyHideReservation) ||
+            (noteClickData.type === "Indoor" &&
+              setAmenitiesIndoorHideReservation) ||
+            (noteClickData.type === "More" &&
+              setAmenitiesMoreHideReservation) ||
+            (noteClickData.type === "Outdoor" &&
+              setAmenitiesOutdoorHideReservation) ||
             (noteClickData.type === "RulesAndServices" &&
               setAmenitiesRulesHideReservation)
           }
@@ -637,18 +686,29 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                   return (
                     <>
                       <li className="amenties-list-item">
-                        <div class={amenitiesFamilyOptions.includes(Family) ? "form-checkbox bg-light text-dark" : "form-checkbox"}>
+                        <div
+                          class={
+                            amenitiesFamilyOptions.includes(Family)
+                              ? "form-checkbox bg-light text-dark"
+                              : "form-checkbox"
+                          }
+                        >
                           <input
                             class="form-check-input"
                             type="checkbox"
                             // id="inlineCheckbox1"
                             value={Family}
-                            onChange={handleFamilyCheckboxChange}
+                            onChange={(e) =>
+                              handleFamilyCheckboxChange(e, true)
+                            }
                             checked={amenitiesFamilyOptions.includes(Family)}
                           />
-                          <label class="form-check-label"
-                            // for="inlineCheckbox2" 
-                            onClick={() => handleCheckItemClick("Family", Family)}
+                          <label
+                            class="form-check-label"
+                            // for="inlineCheckbox2"
+                            onClick={() =>
+                              handleCheckItemClick("Family", Family)
+                            }
                           >
                             {Family}
                           </label>
@@ -668,7 +728,10 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
                                 // fill="#146EF5"
-                                fill={`${checkReservationStatus("Family", Family)}`}
+                                fill={`${checkReservationStatus(
+                                  "Family",
+                                  Family
+                                )}`}
                               ></path>
                             </svg>
                           </button>
@@ -743,17 +806,27 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                     <>
                       <li className="amenties-list-item">
                         <div
-                          class={amenitiesIndoorOptions.includes(Indoor) ? "form-checkbox bg-light text-dark" : "form-checkbox"}>
+                          class={
+                            amenitiesIndoorOptions.includes(Indoor)
+                              ? "form-checkbox bg-light text-dark"
+                              : "form-checkbox"
+                          }
+                        >
                           <input
                             class="form-check-input"
                             type="checkbox"
                             value={Indoor}
-                            onChange={handleIndoorCheckboxChange}
+                            onChange={(e) =>
+                              handleIndoorCheckboxChange(e, true)
+                            }
                             checked={amenitiesIndoorOptions.includes(Indoor)}
                           />
-                          <label class="form-check-label"
-                            onClick={() => handleCheckItemClick("Indoor", Indoor)}
-                          // for="inlineCheckbox2"
+                          <label
+                            class="form-check-label"
+                            onClick={() =>
+                              handleCheckItemClick("Indoor", Indoor)
+                            }
+                            // for="inlineCheckbox2"
                           >
                             {Indoor}
                           </label>
@@ -773,7 +846,10 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
                                 // fill="#146EF5"
-                                fill={`${checkReservationStatus("Indoor", Indoor)}`}
+                                fill={`${checkReservationStatus(
+                                  "Indoor",
+                                  Indoor
+                                )}`}
                               ></path>
                             </svg>
                           </button>
@@ -797,18 +873,24 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                       <li className="amenties-list-item">
                         <div
                           // class="form-checkbox"
-                          class={amenitiesMoreOptions.includes(More) ? "form-checkbox bg-light text-dark" : "form-checkbox"}>
+                          class={
+                            amenitiesMoreOptions.includes(More)
+                              ? "form-checkbox bg-light text-dark"
+                              : "form-checkbox"
+                          }
+                        >
                           <input
                             class="form-check-input"
                             type="checkbox"
                             // id="inlineCheckbox3"
                             value={More}
-                            onChange={handleMoreCheckboxChange}
+                            onChange={(e) => handleMoreCheckboxChange(e, true)}
                             checked={amenitiesMoreOptions.includes(More)}
                           />
-                          <label class="form-check-label"
+                          <label
+                            class="form-check-label"
                             onClick={() => handleCheckItemClick("More", More)}
-                          // for="inlineCheckbox3"
+                            // for="inlineCheckbox3"
                           >
                             {More}
                           </label>
@@ -849,18 +931,28 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                       <li className="amenties-list-item">
                         <div
                           // class="form-checkbox"
-                          class={amenitiesOutdoorOptions.includes(Outdoor) ? "form-checkbox bg-light text-dark" : "form-checkbox"}>
+                          class={
+                            amenitiesOutdoorOptions.includes(Outdoor)
+                              ? "form-checkbox bg-light text-dark"
+                              : "form-checkbox"
+                          }
+                        >
                           <input
                             class="form-check-input"
                             type="checkbox"
                             // id="inlineCheckbox4"
                             value={Outdoor}
-                            onChange={handleOutdoorCheckboxChange}
+                            onChange={(e) =>
+                              handleOutdoorCheckboxChange(e, true)
+                            }
                             checked={amenitiesOutdoorOptions.includes(Outdoor)}
                           />
-                          <label class="form-check-label"
-                            onClick={() => handleCheckItemClick("Outdoor", Outdoor)}
-                          // for="inlineCheckbox4"
+                          <label
+                            class="form-check-label"
+                            onClick={() =>
+                              handleCheckItemClick("Outdoor", Outdoor)
+                            }
+                            // for="inlineCheckbox4"
                           >
                             {Outdoor}
                           </label>
@@ -880,7 +972,10 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
                                 // fill="#146EF5"
-                                fill={`${checkReservationStatus("Outdoor", Outdoor)}`}
+                                fill={`${checkReservationStatus(
+                                  "Outdoor",
+                                  Outdoor
+                                )}`}
                               ></path>
                             </svg>
                           </button>
@@ -907,23 +1002,31 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                       <li className="amenties-list-item">
                         <div
                           // class="form-checkbox"
-                          class={amenitiesRulesOptions.includes(
-                            RulesAndServices
-                          ) ? "form-checkbox bg-light text-dark" : "form-checkbox"}
+                          class={
+                            amenitiesRulesOptions.includes(RulesAndServices)
+                              ? "form-checkbox bg-light text-dark"
+                              : "form-checkbox"
+                          }
                         >
                           <input
                             class="form-check-input"
                             type="checkbox"
                             // id="inlineCheckbox5"
                             value={RulesAndServices}
-                            onChange={handleRulesCheckboxChange}
+                            onChange={(e) => handleRulesCheckboxChange(e, true)}
                             checked={amenitiesRulesOptions.includes(
                               RulesAndServices
                             )}
                           />
-                          <label class="form-check-label"
-                            onClick={() => handleCheckItemClick("RulesAndServices", RulesAndServices)}
-                          // for="inlineCheckbox5"
+                          <label
+                            class="form-check-label"
+                            onClick={() =>
+                              handleCheckItemClick(
+                                "RulesAndServices",
+                                RulesAndServices
+                              )
+                            }
+                            // for="inlineCheckbox5"
                           >
                             {RulesAndServices}
                           </label>
@@ -946,7 +1049,10 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
                               <path
                                 d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
                                 // fill="#146EF5"
-                                fill={`${checkReservationStatus("RulesAndServices", RulesAndServices)}`}
+                                fill={`${checkReservationStatus(
+                                  "RulesAndServices",
+                                  RulesAndServices
+                                )}`}
                               ></path>
                             </svg>
                           </button>

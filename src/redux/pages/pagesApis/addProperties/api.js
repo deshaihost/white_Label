@@ -68,6 +68,14 @@ function copyExistingPropertyEndPoint(params: any): any {
 } );
 }
 
+function removeSupportingDocsEndPoint(params: any): any {
+  const { data } = params;
+  console.log(data?.files,'data')
+  return api.delete(`${URL.REMOVE_SUPPORTING_DOCS}/${data?.newPropertyNm}/remove_supporting_docs`,{
+    files:data?.files
+} );
+}
+
 export {
   testingApiEndPoint,
   postPropertiesEndPoint,
@@ -79,5 +87,6 @@ export {
   supportingDocumentPostEndPoint,
   supportingUrlPostEndPoint,
   toggleChatbotOnOffPutEndPoint,
-  copyExistingPropertyEndPoint
+  copyExistingPropertyEndPoint,
+  removeSupportingDocsEndPoint
 };
