@@ -103,7 +103,8 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
     // console.log("New Form Data: ", data);
     // console.log("addedNoe: ", addedNote)
     // return
-    if(inputChangesCheck){
+    //if (inputChangesCheck) { // disable for now, because it's not recognizing changes to extra note or to reservation stages
+    if (true) {
       const questionaireToSend = structuredClone(apiQuestionnaireObject);
 
       if (Booking) {

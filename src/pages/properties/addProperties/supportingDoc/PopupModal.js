@@ -14,7 +14,7 @@ import {
 import { FullScreenLoader } from "../../../../helper/Loader";
 import { GoArrowUpRight } from "react-icons/go";
 
-const PopupModal = ({ show, setShow, prevUploadedDoc, hideForReservation }) => {
+const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj }) => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [documentLoading, setDocumentLoading] = useState(true);
@@ -24,13 +24,20 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, hideForReservation }) => {
   const removeSupportingDocsLoading =
     store?.removeSupportingDocsReducer?.loading;
   const nameKeyGet = nameKey();
-  const documentRemoveHandle = (doc) => {
+
+  const documentRemoveHandle = (docName) => {
     dispatch(
       removeSupportingDocsActions({
         newPropertyNm: nameKeyGet?.nameKey,
-        files: doc,
+        doc_name: docName,
       })
     );
+  };
+
+  const openTextHandle = (textUrlGet) => {
+    if (textUrlGet) {
+      window.open(textUrlGet, "_blank"); // Open the URL in a new tab
+    }
   };
 
   useEffect(() => {
@@ -75,12 +82,10 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, hideForReservation }) => {
         <Modal.Body>
           {documentLoading && <FullScreenLoader />}
           {removeSupportingDocsLoading && <FullScreenLoader />}
-          <div className="row py-3 border-bottom">
-            <div className="6">
-              <h6 className="text-white text-center">
-                Documents Uploaded For This Property
-              </h6>
-            </div>
+          <div className="6">
+            <h5 className="text-white text-center">
+              Documents Uploaded For This Property
+            </h5>
           </div>
           <div
             className="d-flex flex-column pt-4 gap-3 text-light"
@@ -97,29 +102,25 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, hideForReservation }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object?.keys(hideForReservation)?.map((property) => {
-                    const hideForReservationGet =
-                      hideForReservation[property]?.hide_for_reservations;
+                  {Object?.keys(supportingDocsObj)?.map((docName) => {
+                    const hideForReservationGet = supportingDocsObj[docName]?.hide_for_reservations;
+                    const textUrlGet = supportingDocsObj[docName]?.text_data_url;
                     return (
                       <>
                         <tr>
-                          <td>{property}</td>
+                          <td>{docName}</td>
 
                           <td className="text-center">
-                            {hideForReservationGet?.map((itemss) => {
-                              return `${itemss},`;
-                            })}
+                            {hideForReservationGet?.join(', ')}
                           </td>
                           <td className="text-center">
-                            <span className="mainCursor me-3">
+                            <span className="mainCursor me-3" onClick={() => { openTextHandle(textUrlGet) }}>
                               <GoArrowUpRight className="text-white fs-6" />
                             </span>
                             <span
                               className="mainCursor"
                               onClick={() => {
-                                documentRemoveHandle([
-                                  JSON.stringify(property),
-                                ]);
+                                documentRemoveHandle(docName);
                               }}
                             >
                               <MdDeleteOutline />
