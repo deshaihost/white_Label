@@ -166,7 +166,6 @@ const ListIntegrationProperties = () => {
   const [toggleActive, setToggleActive] = useState(true);
   const [chatBoxIndex, setChatBoxIndex] = useState("");
   const toggleChatBotHndle = (type, id) => {
-    console.log(type, id, "type, idtype, id");
     if (type) {
       setToggleOnOff("on");
       setToggleActive(true);

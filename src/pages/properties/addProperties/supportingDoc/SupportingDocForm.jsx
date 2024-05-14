@@ -27,6 +27,8 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const [showDocHideForResrv, setDocHideForResrv] = useState(false);
 
   const [prevUploadedDoc, setPrevUploadedDoc] = useState([]);
+  const [hideForReservation, setHideForReservatin] = useState([]);
+
   const [prevLinkedIntegration, setPrevLinkedIntegration] = useState(null);
   const [uploadedDoc, setUploadedDoc] = useState();
   const [uploadedUrl, setUploadedUrl] = useState("");
@@ -108,7 +110,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const go_to_next_page = async () => {
     setTimeout(() => {
       redrectcomponent();
-    }, 2000);
+    }, 500);
     return;
   };
 
@@ -465,6 +467,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
             if (fileData) {
               const uploadedDocs = Object.keys(fileData);
               setPrevUploadedDoc(uploadedDocs);
+              setHideForReservatin(fileData)
             }
           }
           if (
@@ -818,6 +821,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           show={showPreviousDoc}
           setShow={setShowPreviousDoc}
           prevUploadedDoc={prevUploadedDoc}
+          supportingDocsObj={hideForReservation}
         />
       )}
     </>

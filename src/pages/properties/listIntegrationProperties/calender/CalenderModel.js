@@ -8,8 +8,8 @@ import axios from "axios";
 import { Button } from "react-bootstrap";
 
 const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allProperties }) => {
-  const [monthButton, setMonthButton] = useState(true);
-  const [scheduleButton, setscheduleButton] = useState(false);
+  const [monthButton, setMonthButton] = useState( false);
+  const [scheduleButton, setscheduleButton] = useState(true);
   const [date, setDate] = useState(new Date());
 
   const [calendarSchedule, setCalendarSchedule] = useState(null);
@@ -125,16 +125,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
                 {scheduleButton && <h3>Schedule</h3>}
 
                 <div className="d-flex ">
-                  <button
-                    type="button"
-                    onClick={() => handleButtonToggle("month")}
-                    className={`shadow-none btn ${monthButton
-                      ? "btn-primary"
-                      : "btn-tranparent border border-primary text-light"
-                      } rounded-0`}
-                  >
-                    Month
-                  </button>
+                  
                   <button
                     type="button"
                     onClick={() => handleButtonToggle("schedule")}
@@ -144,6 +135,16 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
                       } rounded-0`}
                   >
                     Schedule
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleButtonToggle("month")}
+                    className={`shadow-none btn ${monthButton
+                      ? "btn-primary"
+                      : "btn-tranparent border border-primary text-light"
+                      } rounded-0`}
+                  >
+                    Month
                   </button>
                 </div>
               </div>

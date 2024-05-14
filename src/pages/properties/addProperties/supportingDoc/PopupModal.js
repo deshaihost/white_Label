@@ -6,16 +6,69 @@ import { useNavigate } from "react-router-dom";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
 import { MdDeleteOutline } from "react-icons/md";
+import { nameKey, useSelectorUseDispatch } from "../../../../helper/Authorized";
+import {
+  removeSupportingDocsActions,
+  stateEmptyActions,
+} from "../../../../redux/actions";
+import { FullScreenLoader } from "../../../../helper/Loader";
+import { GoArrowUpRight } from "react-icons/go";
 
-const PopupModal = ({ show, setShow, prevUploadedDoc }) => {
+const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj }) => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [documentLoading, setDocumentLoading] = useState(true);
+  const { store, dispatch } = useSelectorUseDispatch();
+  const removeSupportingDocsStatus =
+    store?.removeSupportingDocsReducer?.removeSupportingDocs?.status;
+  const removeSupportingDocsLoading =
+    store?.removeSupportingDocsReducer?.loading;
+  const nameKeyGet = nameKey();
+
+  const documentRemoveHandle = (docName) => {
+    dispatch(
+      removeSupportingDocsActions({
+        newPropertyNm: nameKeyGet?.nameKey,
+        doc_name: docName,
+      })
+    );
+  };
+
+  const openTextHandle = (textUrlGet) => {
+    if (textUrlGet) {
+      window.open(textUrlGet, "_blank"); // Open the URL in a new tab
+    }
+  };
 
   useEffect(() => {
     if (prevUploadedDoc) {
       setData(prevUploadedDoc);
     }
   }, [prevUploadedDoc]);
+
+  useEffect(() => {
+    if (removeSupportingDocsStatus === 200) {
+      ToastHandle("Delete successfully", "success");
+      dispatch(stateEmptyActions());
+    } else if (removeSupportingDocsStatus === 500) {
+      ToastHandle("500 Internal Server Error", "danger");
+      dispatch(stateEmptyActions());
+    }
+  }, [removeSupportingDocsStatus]);
+
+  useEffect(() => {
+    if (data.length !== 0) {
+      setTimeout(() => {
+        setDocumentLoading(false);
+      }, 2000);
+      return;
+    } else if (data.length === 0) {
+      setTimeout(() => {
+        setDocumentLoading(false);
+      }, 2000);
+      return;
+    }
+  }, [data.length]);
 
   return (
     <div>
@@ -27,32 +80,62 @@ const PopupModal = ({ show, setShow, prevUploadedDoc }) => {
         centered
       >
         <Modal.Body>
-          <div className="row py-3 border-bottom">
-            <div className="6">
-              <h6 className="text-white text-center">
-                Documents Uploaded For This Property
-              </h6>
-            </div>
+          {documentLoading && <FullScreenLoader />}
+          {removeSupportingDocsLoading && <FullScreenLoader />}
+          <div className="6">
+            <h5 className="text-white text-center">
+              Documents Uploaded For This Property
+            </h5>
           </div>
           <div
             className="d-flex flex-column pt-4 gap-3 text-light"
             style={{ cursor: "default", userSelect: "none" }}
-          >
-            {data.length > 0 &&
-              data?.map((files, index) => (
-                <>
-                <div className="d-flex row">- {files} <span className="mainCursor" >
-                <MdDeleteOutline />
+          ></div>
+          {data.length !== 0 ? (
+            <div className="table-responsive">
+              <table class="table text-white action-items-table ">
+                <thead className="border-bottom">
+                  <tr>
+                    <th>File Name</th>
+                    <th>Hidden Reservation Stages</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object?.keys(supportingDocsObj)?.map((docName) => {
+                    const hideForReservationGet = supportingDocsObj[docName]?.hide_for_reservations;
+                    const textUrlGet = supportingDocsObj[docName]?.text_data_url;
+                    return (
+                      <>
+                        <tr>
+                          <td>{docName}</td>
 
-                </span></div>
-                
-                </>
-                
-              ))}
-            {data.length === 0 && (
-              <div className="d-flex row">No files Uploaded </div>
-            )}
-          </div>
+                          <td className="text-center">
+                            {hideForReservationGet?.join(', ')}
+                          </td>
+                          <td className="text-center">
+                            <span className="mainCursor me-3" onClick={() => { openTextHandle(textUrlGet) }}>
+                              <GoArrowUpRight className="text-white fs-6" />
+                            </span>
+                            <span
+                              className="mainCursor"
+                              onClick={() => {
+                                documentRemoveHandle(docName);
+                              }}
+                            >
+                              <MdDeleteOutline />
+                            </span>
+                          </td>
+                        </tr>
+                      </>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="d-flex row text-white">No files Uploaded </div>
+          )}
         </Modal.Body>
       </Modal>
     </div>
