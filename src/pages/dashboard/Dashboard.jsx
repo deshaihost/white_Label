@@ -71,6 +71,7 @@ const Dashboard = () => {
     return `${month} ${day}, ${year} ${hours}:${minutes}${ampm}`;
   }
   const { first_name } = userDataGet ? userDataGet : [];
+  console.log('t')
   // this functionality complete convertation
   const completeActionsItemLoading =
     store?.completeActionsItemsReducer?.loading;
