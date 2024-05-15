@@ -86,7 +86,7 @@ const Setup = () => {
         <section className="setup">
             <Container>
                 <div className="heading-box">
-                    <h2>How to Setup HostBuddy AI</h2>
+                    <h2>How to Set Up HostBuddy AI</h2>
                 </div>
                 <div className="slider-container" style={{ display: 'flex' }}>
                     <div className="item_counter_box">
