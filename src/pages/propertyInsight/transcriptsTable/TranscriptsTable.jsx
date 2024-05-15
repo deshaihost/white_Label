@@ -106,7 +106,6 @@ const TranscriptsTable = ({ conversationData, propertyConversationId }) => {
                       convers?.messages[convers?.messages.length - 1]?.time; // Use the timestamp of the last message in the conversation, instead of convo start time
                     const formattedDateTime = formatDateAndTime(timestamp);
                     const firstConversationId = convers?.conversation_id;
-                    console.log(convers, "convers?.subject");
                     return (
                       <>
                         {firstConversationId === propertyConversationId

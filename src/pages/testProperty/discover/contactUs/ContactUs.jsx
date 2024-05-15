@@ -18,7 +18,6 @@ const ContactUs = (props) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data, "hello");
     // dispatch(
     //   loginActions({
     //     email: data.email,

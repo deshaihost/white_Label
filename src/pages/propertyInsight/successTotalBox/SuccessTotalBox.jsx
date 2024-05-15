@@ -6,7 +6,6 @@ const SuccessTotalBox = ({
 }) => {
   const { neutral, successful, total, unsuccessful } =
     statisticsGetNameByProperty ? statisticsGetNameByProperty : [];
-    console.log(total,'total')
 
   return (
     <div className="">

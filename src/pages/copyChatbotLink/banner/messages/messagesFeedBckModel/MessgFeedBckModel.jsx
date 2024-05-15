@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import { useSelector, useDispatch } from "react-redux";
+import {  useDispatch } from "react-redux";
 import { messageFeedBackActions } from "../../../../../redux/actions";
 import ToastHandle from "../../../../../helper/ToastMessage";
 const MessgFeedBckModel = ({ show, handleClose, feedBackDataGet }) => {
-  const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const { typeThumbs, messageId, conversationId, propertyName } =
     feedBackDataGet ? feedBackDataGet : [];
-
   const [feedBackInput, setFeedBackInput] = useState("");
   const [feedBackThanks, setFeedBackThanks] = useState(false);
   const feedBackMainHndl = () => {
@@ -84,18 +82,15 @@ const MessgFeedBckModel = ({ show, handleClose, feedBackDataGet }) => {
                       ? "bi bi-hand-thumbs-down mainCursor text-danger"
                       : "bi bi-hand-thumbs-down mainCursor"
                   }
-                  // onClick={() => feedBckModelOpen(key)}
                 ></i>
               </span>
             </label>
             <textarea
               className="form-control"
-              // name={noteClickData?.name}
               id=""
               cols="30"
               rows="10"
               placeholder="Enter note here..."
-              // value={noteData || ""}
               onChange={(e) => setFeedBackInput(e.target.value)}
             ></textarea>
             <div className="d-flex justify-content-center mt-3">

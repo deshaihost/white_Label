@@ -8,12 +8,15 @@ import AmenitiesForm from "./amenities/AmenitiesForm";
 import ExtrasForm from "./extras/ExtrasForm";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet";
+import { nameKey } from "../../../helper/Authorized";
 const AddPropertiesIndex = () => {
   const basics = "basics";
   const supportingDoc = "supportingDoc";
   const listingDetails = "listingDetails";
   const amenities = "amenities";
   const extras = "extras";
+  const nameKeyGet = nameKey();
+  const propertyName=nameKeyGet?.nameKey
 
   const [addPropertiesIndexConditions, setPropertiesConditions] = useState({
     basics: true,
@@ -95,6 +98,7 @@ const AddPropertiesIndex = () => {
             <AddPropertiesHeader
               propertiesTypes={addPropertiesIndexConditions}
               prntFuntionHeaderActive={mainHandleHeaderActive}
+              propertyName={propertyName}             
             />
           </div>
         </div>

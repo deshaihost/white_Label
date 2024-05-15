@@ -1,7 +1,5 @@
 import React from "react";
-import hostBuddyIcon from "../public/img/hostbuddy_icon_white.png";
 import "./Loader.css";
-
 const Loader = () => {
   return (
     <div>

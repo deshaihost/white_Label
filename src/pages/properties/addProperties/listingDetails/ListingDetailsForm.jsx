@@ -100,8 +100,6 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
   };
 
   const onSubmit = (data) => {
-    // console.log("New Form Data: ", data);
-    // console.log("addedNoe: ", addedNote)
     // return
     //if (inputChangesCheck) { // disable for now, because it's not recognizing changes to extra note or to reservation stages
     if (true) {
@@ -490,9 +488,6 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
       }
     }
   }, [updateQuestionaireStatus, loadingStatus]);
-
-  console.log("addedNote: ", addedNote);
-
   return (
     <>
       {show && (

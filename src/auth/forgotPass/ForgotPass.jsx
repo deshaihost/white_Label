@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import AuthImage from "../../public/img/Sign_Up_Page.png";
 import Logo from "../../public/img/logo_footer.png";
@@ -34,8 +34,6 @@ const ForgotPass = () => {
       })
     );
   };
-
-
   useEffect(() => {
     if (forgetPasswordStatus === 200) {
       ToastHandle(forgetPasswordMessage, "success");
@@ -56,16 +54,6 @@ const ForgotPass = () => {
           <div className="col-lg-6">
             <div className="auth-img">
               <img src={AuthImage} alt="auth-img" />
-              {/* <div className="auth-chat">
-                <p>
-                  "I've been using HostBuddy for a while now, and it has
-                  completely transformed the way I engage with my customers.
-                  Their chatbot solutions are top-notch, and the support team is
-                  fantastic.”
-                </p>
-                <h4>John</h4>
-                <h6>CEO of TechSolutions Inc</h6>
-              </div> */}
             </div>
           </div>
           <div className="col-lg-6">

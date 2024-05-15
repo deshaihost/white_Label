@@ -15,20 +15,15 @@ import Loader, { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
 import { useNavigate } from "react-router-dom";
 import WebPageUrlModel from "./modelListProperties/webPageUrlModel/WebPageUrlModel";
 import SupportingDocumentModel from "./modelListProperties/supportingDocumentModel/SupportingDocumentModel";
-import { Button, Dropdown, Form } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import { CiCalendar } from "react-icons/ci";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import "react-circular-progressbar/dist/styles.css";
 import CalenderModel from "./calender/CalenderModel";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import Authorized from "../../../helper/Authorized";
 
 const ListIntegrationProperties = () => {
   const navigate = useNavigate();
   let localStorageKey = "nameKey";
-  const authData = Authorized();
-  const authToke = authData?.token;
-  const authRefracetoke = authData?.refreshToken;
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
   const [chatBox, setChatBox] = useState({
@@ -49,8 +44,6 @@ const ListIntegrationProperties = () => {
   const propertyCheckSubscription =
     createPropertiesSubscriptionAllowed - (createPropertiesName?.length || 0);
   const dummyArraySubscriptionAllowed = [];
-
-  // console.log("createPropertiesName: ", createPropertiesName)
 
   for (let i = 0; i < propertyCheckSubscription; i++) {
     // Your code logic inside the loop goes here

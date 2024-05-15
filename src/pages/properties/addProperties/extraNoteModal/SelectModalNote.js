@@ -73,9 +73,6 @@ const SelectModalNote = ({
         Current: e.target.checked,
       }));
     }
-
-
-    // console.log("Checked: ", e.target.checked);
     // setCheckChange(true)
   };
 

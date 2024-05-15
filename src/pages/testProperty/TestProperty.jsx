@@ -14,7 +14,6 @@ const TestProperty = () => {
   const { id } = useParams();
   const chatbot_key = id; // path param
   let urlData = { chatbot_key };
-  console.log('FOUND data:', urlData)
 
   return (
     <div>

@@ -61,10 +61,8 @@ const Setup = () => {
                 }
             }
         };
-
         const sliderWrapper = document.querySelector('.slider_wrapper');
         sliderWrapper.addEventListener('wheel', handleWheel);
-
         return () => {
             sliderWrapper.removeEventListener('wheel', handleWheel);
         };

@@ -17,11 +17,6 @@ const CheckboxModalNote = ({
   const [checkChange, setCheckChange] = useState(false);
   const [noteData, setNoteData] = useState("");
 
-  // console.log("responseOptions inside Modal: ", responseOptions);
-  // console.log("responseText inside Modal: ", responseText);
-  // console.log("responseText inside Modal: ", responseText);
-  // console.log("hideReservationText inside Modal: ", hideReservationText);
-
   const [checkedSchedule, setCheckedSchedule] = useState({
     Future: false,
     Past: false,
@@ -79,13 +74,10 @@ const CheckboxModalNote = ({
         Current: e.target.checked,
       }));
     }
-
-    // console.log("Checked: ", e.target.checked);
     // setCheckChange(true)
   };
 
   const handleAddNote = () => {
-    // console.log("Note Data: ", noteData);
     const valIndex = responseOptions?.indexOf(noteClickData?.name);
 
     // If the name exists in responseOptions, set the corresponding value from responseText to noteData
@@ -95,7 +87,6 @@ const CheckboxModalNote = ({
       setResponseText(updatedResponseText);
 
       let stageToSet = handleChangeStatus(checkedSchedule)
-      // console.log("stageToSet: ", stageToSet, " typeof: ", typeof stageToSet, " length: ", stageToSet?.length)
 
       const updatedHideReservationText = [...hideReservationText];
       updatedHideReservationText[valIndex] = stageToSet.length > 0 ? stageToSet : "";

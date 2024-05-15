@@ -275,7 +275,6 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
 
   // handle edit or add note button click to add checkbox to checked state
   const handleEditButtonClick = (type, amenityValue) => {
-    // console.log("amenityValue: ", amenityValue)
     if (type === "Family") {
       if (!amenitiesFamilyOptions.includes(amenityValue)) {
         // If the familyValue is not already included, add it to the state
@@ -493,11 +492,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
     //if (inputChangesCheck) { // disable for now, because it's not recognizing changes to extra note or to reservation stages
     if (true) {
       const questionaireToSend = structuredClone(apiQuestionnaireObject);
-      // console.log(
-      //   questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][
-      //     "Family"
-      //   ][0]["response_options"]
-      // );
+      
 
       // "Fill" the hideReservations arrays by adding empty strings where there are nulls, since backend expects an array of strings
       const amenitiesFamilyHideReservationFilled =
@@ -510,7 +505,7 @@ const AmenitiesForm = ({ prntFuntionHeaderActive }) => {
         amenitiesOutdoorHideReservation.map((item) => item ?? "");
       const amenitiesRulesHideReservationFilled =
         amenitiesRulesHideReservation.map((item) => item ?? "");
-      console.log("FINAL", amenitiesFamilyHideReservationFilled);
+      
       // return;
 
       questionaireToSend["questionnaire"]["questionnaire"]["Amenities"][

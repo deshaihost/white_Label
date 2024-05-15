@@ -71,14 +71,10 @@ const ReservationStageModal = ({
                 Current: e.target.checked,
             }));
         }
-
-
-        console.log("Checked: ", e.target.checked);
         // setCheckChange(true)
     };
 
     const handleAddReservationStage = (stageToSet) => {
-        // console.log("stageToSet: ", stageToSet)
         // if (noteData.trim() !== "") {
         setAddedNote((prev) => ({
             ...prev,

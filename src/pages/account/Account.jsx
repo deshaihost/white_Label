@@ -350,7 +350,6 @@ const Account = () => {
                                 validate: (value) =>
                                   value === password.current ||
                                   ErrorMessageKey.PASSWORD_DOESNT_MATCH,
-                                // "password doesn't match ",
                               })}
                             />
                             {errors?.confirmPassword?.type === "required" && (

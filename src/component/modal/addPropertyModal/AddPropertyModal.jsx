@@ -4,7 +4,6 @@ import { ErrorMessageKey } from "../../../helper/ErrorMessageKey";
 import ErrorMessageShow from "../../../helper/ErrorMessageShow";
 import AddNewPropertyModal from "../addNewPropertyModal/AddNewPropertyModal";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 function AddPropertyModal({ handleClose, show, handleSubscribe }) {
   const {
@@ -121,15 +120,6 @@ function AddPropertyModal({ handleClose, show, handleSubscribe }) {
               </div>
             </div>
           </form>
-
-          {/* Don't show ToS and priv policy here, we'll show in the next modal
-          <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap">
-          <Link to="/privacy-policy" className="text-blue">Privacy Policy</Link>
-          <span className="text-white">|</span>
-          <Link to="/termsof-service" className="text-blue">Terms of Service</Link>
-          </div>
-          */}
-          
         </Modal.Body>
       </Modal>
       <AddNewPropertyModal

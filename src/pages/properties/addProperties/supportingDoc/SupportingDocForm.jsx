@@ -271,7 +271,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     //     if (response.status === 200) {
     //       ToastHandle("File uploaded successfully", "success");
     //     } else {
-    //       console.log("Error", response);
+    //       ("Erconsole.logror", response);
     //     }
     //   } else {
     //     alert("Missing Token or supportingkeyName");
@@ -400,7 +400,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   //   );
 
   //   const token = getSessionStorageData?.token;
-  //   console.log("token ", token);
 
   //   try {
   //     if (token) {
@@ -416,7 +415,6 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   //       );
 
   //       setCalendarSchedule(() => response?.data?.schedule);
-  //       console.log("API Response: ", response.data.schedule);
 
   //       // if (response.status === 200) {
   //       //     dispatch({
@@ -463,11 +461,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           const propertyData = response.data.property;
           if (propertyData && propertyData.supporting_doc_items) {
             const fileData = propertyData.supporting_doc_items.file_data;
-            console.log(fileData, "fileData", propertyData);
             if (fileData) {
               const uploadedDocs = Object.keys(fileData);
               setPrevUploadedDoc(uploadedDocs);
-              setHideForReservatin(fileData)
+              setHideForReservatin(fileData);
             }
           }
           if (
@@ -490,6 +487,13 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
       console.log("Error:", error);
     }
   };
+  // THIS FUNCTIONALITY USED DOCUMENT DELETE AFTER THAT THIS PREVIOUS UPLOAD DOCUMENT START
+  const deleteResAfterPreviousDocCall = () => {
+    previousUploadedDoc(propertyName);
+  };
+
+  // THIS FUNCTIONALITY USED DOCUMENT DELETE AFTER THAT THIS PREVIOUS UPLOAD DOCUMENT END
+
   const property = JSON.parse(localStorage.getItem("nameKey"));
 
   const propertyName = property?.nameKey;
@@ -498,13 +502,9 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     const getSessionStorageData = JSON.parse(
       sessionStorage.getItem("hostBuddy_auth")
     );
-
     const token = getSessionStorageData?.token;
-
     const property = JSON.parse(localStorage.getItem("nameKey"));
-
     const propertyName = property?.nameKey;
-
     previousUploadedDoc(propertyName);
   }, [sessionStorage.getItem("hostBuddy_auth")]);
 
@@ -822,6 +822,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           setShow={setShowPreviousDoc}
           prevUploadedDoc={prevUploadedDoc}
           supportingDocsObj={hideForReservation}
+          deleteResAfterPreviousDocCall={deleteResAfterPreviousDocCall}
         />
       )}
     </>

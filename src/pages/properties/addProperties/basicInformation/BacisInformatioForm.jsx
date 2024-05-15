@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 import ErrorMessageShow from "../../../../helper/ErrorMessageShow";
 import {
   copyExistingPropertyActions,
@@ -39,7 +39,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
     propertyOnchangecheck: false,
   });
   let propertyImgPath = updateImage?.propertyImg;
-  console.log(propertyImgPath,'propertyImgPathpropertyImgPath')
 
   const [propertyName, setPropertyName] = useState(null);
   const nameKeyGet = nameKey();
@@ -48,7 +47,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
     if (propertyImgPath !== undefined) {
       let formData = new FormData();
       let file = propertyImgPath !== null ? propertyImgPath[0] : imgFile;
-
       // Check if the file type is valid
       if (
         file.type === "image/jpeg" ||
@@ -162,7 +160,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
               formData,
               config
             );
-            console.log(response, "responseresponseresponse");
             if (response.status === 200) {
             } else {
               ToastHandle(

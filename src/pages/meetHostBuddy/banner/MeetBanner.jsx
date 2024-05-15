@@ -10,19 +10,16 @@ import {
   getSessionIdActions,
 } from "../../../redux/pages/meetHostBuddy/actions";
 import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
-
 import Loader from "../../../helper/Loader";
-import { ParamsGet, nameKey } from "../../../helper/Authorized";
+import {  nameKey } from "../../../helper/Authorized";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
-import { useLocation } from "react-router-dom";
 const MeetBanner = (props) => {
   const { urlData } = props;
   const { chatbot_key, property_name, user_type } = urlData ? urlData : {};
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  //const chatBoxUrl = ParamsGet();
   const getName = nameKey();
   const testPropetyName = getName?.nameKey;
   const copyChatBotName = urlData?.property_name;
@@ -35,9 +32,7 @@ const MeetBanner = (props) => {
     response: getMessageResp,
     message_id: getMessageRespId,
   };
-  // const getMessageResp =
-  //   store?.getSessionIdReducer?.sessionId?.data?.initial_message;
-  // const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data?.response;
+  
   const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data;
 
   const statusResp = store?.chatBoxAIReducer?.chatBoxAI?.status;
@@ -53,8 +48,6 @@ const MeetBanner = (props) => {
     chatbot_key !== undefined &&
     property_name !== undefined &&
     user_type !== undefined;
-
-  // const messagesContainerRef = useRef(null);
 
   // Event handler for key press in the input field
   const handleKeyPress = (e) => {
@@ -138,7 +131,6 @@ const MeetBanner = (props) => {
 
   // feed back functionality
   const [feedBackModelOpen, setFeedBackModelOpen] = useState(false);
-  // const [feedBackIconActive, setFeedBackIconActive] = useState("");
   const [feedBackDataGet, setFeedBackDataGet] = useState({
     typeThumbs: "",
     conversationId: "",
@@ -146,7 +138,6 @@ const MeetBanner = (props) => {
     propertyName: "",
   });
   const feedBckModelOpenHndle = (type, messId) => {
-    // setFeedBackIconActive(messId);
     setFeedBackDataGet({
       ...feedBackDataGet,
       typeThumbs: type,
@@ -154,13 +145,11 @@ const MeetBanner = (props) => {
       messageId: messId,
       propertyName: copyChatBotName,
     });
-
     setFeedBackModelOpen(true);
   };
   const messgFeedBckClose = () => {
     setFeedBackModelOpen(false);
   };
-
   return (
     <div className="meet-banner">
       <Container>

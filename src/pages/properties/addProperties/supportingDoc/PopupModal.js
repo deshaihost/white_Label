@@ -14,7 +14,7 @@ import {
 import { FullScreenLoader } from "../../../../helper/Loader";
 import { GoArrowUpRight } from "react-icons/go";
 
-const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj }) => {
+const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj,deleteResAfterPreviousDocCall }) => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [documentLoading, setDocumentLoading] = useState(true);
@@ -50,6 +50,7 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj }) => {
     if (removeSupportingDocsStatus === 200) {
       ToastHandle("Delete successfully", "success");
       dispatch(stateEmptyActions());
+      deleteResAfterPreviousDocCall()
     } else if (removeSupportingDocsStatus === 500) {
       ToastHandle("500 Internal Server Error", "danger");
       dispatch(stateEmptyActions());

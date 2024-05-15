@@ -7,15 +7,11 @@ import {
 import ToastHandle from "../../../../helper/ToastMessage";
 import { BoxLoader } from "../../../../helper/Loader";
 const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
-  const { type, data } = PmsIntegrationData ? PmsIntegrationData : [];
+  const { type } = PmsIntegrationData ? PmsIntegrationData : [];
   const store = useSelector((state) => state);
   const getCarlyLinkStatus = store?.getCalryLinkReducer?.getCalryLing?.status;
   const getCarlyLink =
     store?.getCalryLinkReducer?.getCalryLing?.data?.calry_link;
-  console.log(
-    store?.getCalryLinkReducer?.getCalryLing?.data?.error,
-    "getCarlyLinkgetCarlyLink"
-  );
   const getCalryLinkLoading = store?.getCalryLinkReducer?.loading;
   const getCarlyLinkMessage =
     store?.getCalryLinkReducer?.getCalryLing?.data?.message;
@@ -27,7 +23,6 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
     const url = new URL(baseUrl);
     window.open(url.toString(), "_blank");
     handleNoPlanClose('pmsIntegrationClose');
-
   };
 
   const dispatch = useDispatch();
@@ -36,7 +31,6 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
       dispatch(
         getCalryLinkActions({
           platform: type,
-          // credentials: data,
         })
       );
     }
