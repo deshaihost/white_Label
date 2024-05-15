@@ -760,7 +760,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                               )}
                             </div>
                             <div className="col-4 mt-4 ">
-                              {integrationPropertyList?.length === 0 &&
+                              {integrationPropertyList?.length > 0 &&
                                 (linkIsLoading ? (
                                   <>
                                     <p
@@ -807,7 +807,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
                 <div className="col-lg-12 text-center">
                   <div className="mt-5"></div> {/* vertical spacer */}
-                  {!linkIsLoading && !unlinkIsLoading && (
+                  {!linkIsLoading && !unlinkIsLoading && !integrationPropertiesLoading && (
                     <button
                       className="btn btn-primary mt-5"
                       onClick={(e) => save_and_next(e)}
