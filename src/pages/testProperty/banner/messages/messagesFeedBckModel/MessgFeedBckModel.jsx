@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import { useSelector, useDispatch } from "react-redux";
+import {  useDispatch } from "react-redux";
 import { messageFeedBackActions } from "../../../../../redux/actions";
 import ToastHandle from "../../../../../helper/ToastMessage";
 const MessgFeedBckModel = ({ show, handleClose, feedBackDataGet }) => {
-  const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const { typeThumbs, messageId, conversationId, propertyName } =
     feedBackDataGet ? feedBackDataGet : [];

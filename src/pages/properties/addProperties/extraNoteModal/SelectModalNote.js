@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-import { Button, Modal } from "react-bootstrap";
-import ToastHandle from "../../../../helper/ToastMessage";
+import { Modal } from "react-bootstrap";
 
 const SelectModalNote = ({
   show,
@@ -11,7 +9,7 @@ const SelectModalNote = ({
   addedNote,
   setAddedNote,
 }) => {
-  const [checkChange, setCheckChange] = useState(false);
+  // const [checkChange, setCheckChange] = useState(false);
   const [noteData, setNoteData] = useState("");
 
   const [checkedSchedule, setCheckedSchedule] = useState({
@@ -20,13 +18,12 @@ const SelectModalNote = ({
     Current: false,
   });
 
-
   const handleChangeStatus = (checkedData) => {
     // Mapping between keys and corresponding values
     const keyToValueMap = {
       Future: "FUTURE",
       Past: "INQUIRY/PAST",
-      Current: "CURRENT"
+      Current: "CURRENT",
     };
     let newStatus = [];
     let newReservationStage = "";
@@ -44,14 +41,11 @@ const SelectModalNote = ({
         }
       }
     }
-
     if (newStatus.length > 0) {
       newReservationStage = newStatus.join(",");
     }
-
     handleAddReservationStage(newReservationStage);
-
-  }
+  };
 
   // handle Stage button clicks
   const handleOnChange = (e, type) => {
@@ -73,24 +67,21 @@ const SelectModalNote = ({
         Current: e.target.checked,
       }));
     }
-
-
-    // console.log("Checked: ", e.target.checked);
-    // setCheckChange(true)
   };
 
   const handleAddNote = () => {
-    setAddedNote((prev) => ({ ...prev, [noteClickData?.name]: noteData, }));
-
-    handleChangeStatus(checkedSchedule)
-
+    setAddedNote((prev) => ({ ...prev, [noteClickData?.name]: noteData }));
+    handleChangeStatus(checkedSchedule);
     setTimeout(() => {
       handleClose();
     }, 500);
   };
 
   const handleAddReservationStage = (stageToSet) => {
-    setAddedNote((prev) => ({ ...prev, [reservationClickData?.name]: stageToSet, }));
+    setAddedNote((prev) => ({
+      ...prev,
+      [reservationClickData?.name]: stageToSet,
+    }));
   };
 
   useEffect(() => {
@@ -102,17 +93,15 @@ const SelectModalNote = ({
         setNoteData(noteClickData.value !== null ? noteClickData.value : "");
       }
     }
-    // }
   }, [noteClickData, addedNote]);
 
   useEffect(() => {
     if (addedNote && reservationClickData?.name in addedNote) {
       // If addedNote contains a key matching reservationClickData.name, set noteData to its value
-      let existingStatus = addedNote[reservationClickData?.name]
+      let existingStatus = addedNote[reservationClickData?.name];
       if (existingStatus.length > 0) {
-        let deselectedStages = existingStatus.split(",")
+        let deselectedStages = existingStatus.split(",");
         deselectedStages.forEach((type, index) => {
-
           if (type === "FUTURE") {
             setCheckedSchedule((prevData) => ({
               ...prevData,
@@ -131,18 +120,13 @@ const SelectModalNote = ({
               Current: true,
             }));
           }
-
-        })
-
+        });
       }
-
     } else {
       let existingStatusValue = reservationClickData?.value;
-
       if (existingStatusValue.length > 0) {
-        let deselectedStagesData = existingStatusValue.split(",")
+        let deselectedStagesData = existingStatusValue.split(",");
         deselectedStagesData.forEach((type, index) => {
-
           if (type === "FUTURE") {
             setCheckedSchedule((prevData) => ({
               ...prevData,
@@ -161,21 +145,10 @@ const SelectModalNote = ({
               Current: true,
             }));
           }
-
-        })
-
+        });
       }
-
     }
   }, [reservationClickData, addedNote]);
-
-  // useEffect(() => {
-  //   if (checkChange) {
-  //     handleChangeStatus(checkedSchedule);
-  //     setCheckChange(false);
-  //   }
-  // }, [checkChange, checkedSchedule])
-
   return (
     <>
       <Modal
@@ -204,11 +177,13 @@ const SelectModalNote = ({
               value={noteData}
               onChange={(e) => setNoteData(e.target.value)}
             ></textarea>
-
             <hr style={{ borderTop: "0px solid #0078F0" }} />
-
-            <label >Information from this question will only be provided to guests at the selected (blue) reservation stages. You can de-select stages below to prevent HostBuddy from sharing this information with those guests.</label>
-
+            <label>
+              Information from this question will only be provided to guests at
+              the selected (blue) reservation stages. You can de-select stages
+              below to prevent HostBuddy from sharing this information with
+              those guests.
+            </label>
             <div className=" d-flex justify-content-between mt-3">
               <div class="col text-center">
                 <input
@@ -220,8 +195,9 @@ const SelectModalNote = ({
                   autocomplete="off"
                 />
                 <label
-                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "btn-unselected" : ""
-                    }`}
+                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
+                    checkedSchedule.Future ? "btn-unselected" : ""
+                  }`}
                   for="future"
                 >
                   Future
@@ -237,8 +213,9 @@ const SelectModalNote = ({
                   autocomplete="off"
                 />
                 <label
-                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "btn-unselected" : ""
-                    }`}
+                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
+                    checkedSchedule.Past ? "btn-unselected" : ""
+                  }`}
                   for="past"
                 >
                   Inquiry/Past
@@ -254,23 +231,26 @@ const SelectModalNote = ({
                   autocomplete="off"
                 />
                 <label
-                  className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "btn-unselected" : ""
-                    }`}
+                  className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${
+                    checkedSchedule.Current ? "btn-unselected" : ""
+                  }`}
                   for="current"
                 >
                   Current
                 </label>
               </div>
             </div>
-
-            <hr style={{ borderTop: "2px solid #0078F0", margin: "20px 0 30px 0" }} />
-
+            <hr
+              style={{
+                borderTop: "2px solid #0078F0",
+                margin: "20px 0 30px 0",
+              }}
+            />
             <div className="d-flex justify-content-center mt-3">
               <button className="mw-auto" onClick={handleAddNote}>
                 Save & Add Note
               </button>
             </div>
-
           </div>
         </Modal.Body>
       </Modal>

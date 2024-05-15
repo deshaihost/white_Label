@@ -3,14 +3,13 @@ import "./PropertyInsight.css";
 import SideBar from "../../component/sideBar/SideBar";
 import SuccessTotalBox from "./successTotalBox/SuccessTotalBox";
 import TranscriptsTable from "./transcriptsTable/TranscriptsTable";
-import SuggestionsBusiness from "./suggestionsBusiness/SuggestionsBusiness";
 import {
   getPropertyInsightByNameActions,
   getUserDataActions,
 } from "../../redux/actions";
 import { useSelectorUseDispatch } from "../../helper/Authorized";
 import { PropertyGetConversationsActions } from "../../redux/actions";
-import Loader, { BoxLoader, FullScreenLoader } from "../../helper/Loader";
+import  {  FullScreenLoader } from "../../helper/Loader";
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import Select from "react-select";
 
-const weekDay = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+// const weekDay = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 const weekDayOptions = [
   { value: 'sunday', label: 'Sunday' },
   { value: 'monday', label: 'Monday' },
@@ -43,7 +43,6 @@ const SchedulePopupModal = ({
   const [selectedDays, setSelectedDays] = useState([]);
   // handle time change 
   const handleInputChange = (e) => {
-    console.log(e.target.value);
     setData({
       ...data,
       [e.target.id]: e.target.value,
@@ -75,23 +74,16 @@ const SchedulePopupModal = ({
         Current: e.target.checked,
       }));
     }
-
-    console.log("Checked: ", e.target.checked);
   };
   // to get the schedule to show on the calender
   const addCalenderSchedule = async (dataToSend) => {
     setSubmit(true);
-
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-
     const getSessionStorageData = JSON.parse(
       sessionStorage.getItem("hostBuddy_auth")
     );
-
     const token = getSessionStorageData?.token;
-    console.log("dataToSend ", dataToSend);
-
     // return;
 
     try {
@@ -107,9 +99,6 @@ const SchedulePopupModal = ({
           dataToSend,
           config
         );
-
-        console.log("API Response: ", response.data);
-
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
 
@@ -152,21 +141,14 @@ const SchedulePopupModal = ({
 
     const startSchedule = `${data.startTime}`;
     const endSchedule = `${data.endTime}`;
-
-    console.log("selectedDays: ", selectedDays);
-    console.log(startSchedule, " ", endSchedule);
-
     if (!checkedSchedule.Current && !checkedSchedule.Future && !checkedSchedule.Past) {
       ToastHandle("Please select at least one reservation stage", "danger");
       return;
     }
-
     if (selectedDays.length <= 0) {
       ToastHandle("Please select week day[s]", "danger");
       return;
     }
-
-
     if (checkedSchedule.Current) {
       if (!responseObject.schedules.hasOwnProperty("CURRENT")) {
         responseObject.schedules["CURRENT"] = {};
@@ -206,15 +188,9 @@ const SchedulePopupModal = ({
       });
     }
 
-    console.log("Submit", responseObject);
 
     addCalenderSchedule(responseObject);
   };
-
-  console.log("Data: ", data);
-  console.log("selectedTime: ", selectedTime);
-  console.log("Response Object: ", responseObject);
-
   return (
     <div>
       <Modal

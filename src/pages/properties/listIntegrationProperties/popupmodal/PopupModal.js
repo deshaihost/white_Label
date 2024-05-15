@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 // import "./calenderModel.css";
 import Form from "react-bootstrap/Form";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
 import { Button } from "react-bootstrap";
@@ -11,17 +11,17 @@ const PopupModal = ({
   show,
   setShow,
   selectedDate,
-  setSelectedDate,
+  // setSelectedDate,
   responseObject,
   setShowCalender,
   getScheduleAPI,
   selectedProperty
 }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [submit, setSubmit] = useState(false);
 
-  const [date, setDate] = useState(new Date());
+  // const [date, setDate] = useState(new Date());
 
   const [data, setData] = useState({
     status: "",
@@ -51,7 +51,6 @@ const PopupModal = ({
   };
 
   const handleInputChange = (e) => {
-    console.log(e.target.value);
     setData({
       ...data,
       [e.target.id]: e.target.value,
@@ -77,24 +76,17 @@ const PopupModal = ({
         Current: e.target.checked,
       }));
     }
-
-    console.log("Checked: ", e.target.checked);
   };
 
   // to get the schedule to show on the calender
   const addCalenderSchedule = async (dataToSend) => {
     setSubmit(true);
-    console.log("data to send: ", dataToSend);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-
     const getSessionStorageData = JSON.parse(
       sessionStorage.getItem("hostBuddy_auth")
     );
-
     const token = getSessionStorageData?.token;
-    console.log("dataToSend ", dataToSend);
-
     // return;
 
     try {
@@ -112,8 +104,6 @@ const PopupModal = ({
         );
 
         // setCalendarSchedule(() => response?.data?.schedule);
-        // console.log("API Response: ", response.data);
-
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
 
@@ -158,8 +148,6 @@ const PopupModal = ({
 
     const startSchedule = `${formatDate(data.startDate)} ${data.startTime}`;
     const endSchedule = `${formatDate(data.endDate)} ${data.endTime}`;
-
-    console.log(startSchedule, " ", endSchedule);
 
     if (data.status === "") {
       ToastHandle("Please select status", "danger");
@@ -208,7 +196,6 @@ const PopupModal = ({
     }
 
     if (checkedSchedule.Future) {
-      console.log("Futuer: ".responseObject);
       // Check if "FUTURE" key exists in dates
       if (!responseObject.dates.hasOwnProperty("FUTURE")) {
         responseObject.dates["FUTURE"] = { on: [], off: [] }; // Create empty object if not exists
@@ -225,7 +212,6 @@ const PopupModal = ({
     }
 
     addCalenderSchedule(responseObject);
-    console.log("Submit", responseObject);
   };
 
   useEffect(() => {
@@ -241,11 +227,6 @@ const PopupModal = ({
       endDate: formattedDate,
     }));
   }, [selectedDate]); // Update when selectedDate changes
-
-  console.log("Data: ", data);
-  console.log("selectedDate: ", selectedDate);
-  console.log("Response Object: ", responseObject);
-  console.log("Checked Data: ", checkedSchedule);
 
   return (
     <div>

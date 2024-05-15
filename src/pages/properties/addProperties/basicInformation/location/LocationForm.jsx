@@ -149,7 +149,7 @@ const prentImageOnchangeCheckInput=imageOnchageCheck?.propertyOnchangecheck
     //if (inputChangesCheck) { // disable for now, because it's not recognizing changes to extra note or to reservation stages
     if (true) {
       updateImageHndle();
-      // console.log("addedNote data: ", addedNote)
+      
       // return
       const questionaireToSend = structuredClone(apiQuestionnaireObject);
 

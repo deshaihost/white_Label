@@ -50,7 +50,6 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
     );
 
     const token = getSessionStorageData?.token;
-    console.log("token ", token);
 
     try {
       if (token) {
@@ -66,7 +65,6 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
         );
 
         setCalendarSchedule(() => response?.data?.schedules);
-        console.log("API Response: ", response.data.schedules);
 
       } else {
         alert("No Token");

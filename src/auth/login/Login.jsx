@@ -28,7 +28,6 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
@@ -69,16 +68,6 @@ const Login = () => {
           <div className="col-lg-6">
             <div className="auth-img">
               <img src={AuthImage} alt="auth-img" />
-              {/* <div className="auth-chat">
-                <p>
-                  "I've been using HostBuddy for a while now, and it has
-                  completely transformed the way I engage with my customers.
-                  Their chatbot solutions are top-notch, and the support team is
-                  fantastic.”
-                </p>
-                <h4>John</h4>
-                <h6>CEO of TechSolutions Inc</h6>
-              </div> */}
             </div>
           </div>
           <div className="col-lg-6">

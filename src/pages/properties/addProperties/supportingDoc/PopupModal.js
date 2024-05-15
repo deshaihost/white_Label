@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-// import "./calenderModel.css";
-import Form from "react-bootstrap/Form";
-import { useNavigate } from "react-router-dom";
 import ToastHandle from "../../../../helper/ToastMessage";
-import axios from "axios";
 import { MdDeleteOutline } from "react-icons/md";
 import { nameKey, useSelectorUseDispatch } from "../../../../helper/Authorized";
 import {
@@ -14,10 +10,15 @@ import {
 import { FullScreenLoader } from "../../../../helper/Loader";
 import { GoArrowUpRight } from "react-icons/go";
 
-const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj }) => {
-  const navigate = useNavigate();
+const PopupModal = ({
+  show,
+  setShow,
+  prevUploadedDoc,
+  supportingDocsObj,
+  deleteResAfterPreviousDocCall,
+  previouslyGetApiLoading,
+}) => {
   const [data, setData] = useState([]);
-  const [documentLoading, setDocumentLoading] = useState(true);
   const { store, dispatch } = useSelectorUseDispatch();
   const removeSupportingDocsStatus =
     store?.removeSupportingDocsReducer?.removeSupportingDocs?.status;
@@ -50,25 +51,13 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj }) => {
     if (removeSupportingDocsStatus === 200) {
       ToastHandle("Delete successfully", "success");
       dispatch(stateEmptyActions());
+      deleteResAfterPreviousDocCall();
     } else if (removeSupportingDocsStatus === 500) {
       ToastHandle("500 Internal Server Error", "danger");
       dispatch(stateEmptyActions());
     }
   }, [removeSupportingDocsStatus]);
 
-  useEffect(() => {
-    if (data.length !== 0) {
-      setTimeout(() => {
-        setDocumentLoading(false);
-      }, 2000);
-      return;
-    } else if (data.length === 0) {
-      setTimeout(() => {
-        setDocumentLoading(false);
-      }, 2000);
-      return;
-    }
-  }, [data.length]);
 
   return (
     <div>
@@ -80,7 +69,7 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj }) => {
         centered
       >
         <Modal.Body>
-          {documentLoading && <FullScreenLoader />}
+          {previouslyGetApiLoading && <FullScreenLoader />}
           {removeSupportingDocsLoading && <FullScreenLoader />}
           <div className="6">
             <h5 className="text-white text-center">
@@ -103,18 +92,25 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj }) => {
                 </thead>
                 <tbody>
                   {Object?.keys(supportingDocsObj)?.map((docName) => {
-                    const hideForReservationGet = supportingDocsObj[docName]?.hide_for_reservations;
-                    const textUrlGet = supportingDocsObj[docName]?.text_data_url;
+                    const hideForReservationGet =
+                      supportingDocsObj[docName]?.hide_for_reservations;
+                    const textUrlGet =
+                      supportingDocsObj[docName]?.text_data_url;
                     return (
                       <>
                         <tr>
                           <td>{docName}</td>
 
                           <td className="text-center">
-                            {hideForReservationGet?.join(', ')}
+                            {hideForReservationGet?.join(", ")}
                           </td>
                           <td className="text-center">
-                            <span className="mainCursor me-3" onClick={() => { openTextHandle(textUrlGet) }}>
+                            <span
+                              className="mainCursor me-3"
+                              onClick={() => {
+                                openTextHandle(textUrlGet);
+                              }}
+                            >
                               <GoArrowUpRight className="text-white fs-6" />
                             </span>
                             <span

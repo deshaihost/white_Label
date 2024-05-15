@@ -6,7 +6,6 @@ const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
     ? prntData
     : [];
   const messageData = prntData["messages"];
-  console.log(subject, "messageDatamessageData");
 
   return (
     <div>
@@ -65,7 +64,6 @@ const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
 
               <div className="row mt-5">
                 {messageData?.map((messg) => {
-                  console.log(messg, "messg");
                   return (
                     <>
                       <div className="col-3">

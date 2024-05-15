@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import ErrorMessageShow from "../../../../helper/ErrorMessageShow";
 import {
   copyExistingPropertyActions,
@@ -39,16 +39,14 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
     propertyOnchangecheck: false,
   });
   let propertyImgPath = updateImage?.propertyImg;
-  console.log(propertyImgPath,'propertyImgPathpropertyImgPath')
 
   const [propertyName, setPropertyName] = useState(null);
   const nameKeyGet = nameKey();
-  const [oldProperyName, setOldPropertyName] = useState("");
+  // const [oldProperyName, setOldPropertyName] = useState("");
   const add_thumbnail_image = async (propertyName, imgFile) => {
     if (propertyImgPath !== undefined) {
       let formData = new FormData();
       let file = propertyImgPath !== null ? propertyImgPath[0] : imgFile;
-
       // Check if the file type is valid
       if (
         file.type === "image/jpeg" ||
@@ -64,16 +62,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
         const token = getSessionStorageData?.token;
 
         try {
-          // if (oldProperyName !== "") {
-          //   alert(123)
-          //   dispatch(
-          //     copyExistingPropertyActions({
-          //       newPropertyNm: nameKeyGet?.nameKey,
-          //       oldPropertyNm: oldProperyName?.copyExisting,
-          //     })
-          //   );
-          // }
-
           if (token) {
             const config = {
               headers: {
@@ -110,7 +98,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
             "thumbnail file not add because 500 Internal Server Error",
             "danger"
           );
-          // console.error("Error adding thumbnail image", error);
         } finally {
         }
       } else {
@@ -120,11 +107,9 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
           "danger"
         );
       }
-    } 
-    else if (uploadedFile !== null) {
+    } else if (uploadedFile !== null) {
       let formData = new FormData();
       let file = uploadedFile !== null ? uploadedFile[0] : imgFile;
-
       // Check if the file type is valid
       if (
         file?.type === "image/jpeg" ||
@@ -138,9 +123,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
           sessionStorage.getItem("hostBuddy_auth")
         );
         const token = getSessionStorageData?.token;
-
         try {
-
           if (token) {
             const config = {
               headers: {
@@ -162,7 +145,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
               formData,
               config
             );
-            console.log(response, "responseresponseresponse");
             if (response.status === 200) {
             } else {
               ToastHandle(
@@ -178,7 +160,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
             "thumbnail file not add because 500 Internal Server Error",
             "danger"
           );
-          // console.error("Error adding thumbnail image", error);
         } finally {
         }
       } else {
@@ -189,14 +170,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
         );
       }
     }
-    // else if (oldProperyName !== "") {
-    //   dispatch(
-    //     copyExistingPropertyActions({
-    //       newPropertyNm: nameKeyGet?.nameKey,
-    //       oldPropertyNm: oldProperyName?.copyExisting,
-    //     })
-    //   );
-    // }
   };
 
   let localStorageKey = "nameKey";
@@ -241,7 +214,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   };
 
   const copyExistingPropertyNameGetChild = (name) => {
-    setOldPropertyName(name);
+    // setOldPropertyName(name);
     if (name?.copyExisting !== "") {
       dispatch(
         copyExistingPropertyActions({
@@ -251,7 +224,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
       );
     }
   };
-
   // copy existing property hanlde
 
   useEffect(() => {
@@ -285,16 +257,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
       </div>
       <div className="row">
         <div className="col-12 mx-auto form-design">
-          <form
-          // onSubmit={handleSubmit(
-          //   (data) => {
-          //     onSubmit(data);
-          //   },
-          //   (err) => {
-          //     console.log(err, "ee");
-          //   }
-          // )}
-          >
+          <form>
             <div className="container">
               <div className="row mt-2">
                 <div className="col-md-6">
@@ -327,7 +290,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
                           propertyImg: e.target.files,
                           propertyOnchangecheck: true,
                         });
-                        // setUpdateImage(e.target.files);
                       }}
                       placeholder=""
                     />

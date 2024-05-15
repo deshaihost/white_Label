@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { postCreateCheckoutSessionActions } from "../../../redux/pages/pagesApis/actions";
 import { stateEmptyActions } from "../../../redux/actions";
@@ -9,7 +7,6 @@ import Loader from "../../../helper/Loader";
 function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-
   const striteUrlGet =
     store?.postcreateCheckoutSessionReducer?.createCheckoutSessionUrl?.data
       ?.checkout_session_url;
@@ -73,44 +70,6 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
           <p>
             You will be directed to the Stripe payment portal to securely complete your registration payment.
           </p>
-          {/* <p>
-            Before proceeding to add a new property, please review and confirm
-            the details below:
-          </p>
-          <p>
-            <strong>Billing Information:</strong>
-          </p>
-          <ol>
-            <li>
-              <strong>Your Plan:</strong>{" "}
-              <span class="user-cur-plan">{plantPring?.yourPlan}</span>
-            </li>
-            <li>
-              <strong>Total Properties:</strong>{" "}
-              <span class="user-total-properties">
-                {plantPring?.TotalProperties}
-              </span>
-            </li>
-
-            <li>
-              <strong>Price Per Property:</strong>{" "}
-              <span class="user-per-property-price">
-                {plantPring?.PricePerProperty}
-              </span>
-            </li>
-
-            <li>
-              <strong>Prorated Cost:</strong>{" "}
-              <span class="user-eta-cost">{plantPring?.proratedCost}</span>
-            </li>
-          </ol>
-          <p>
-            By clicking the “Proceed to Checkout” button, you confirm that you
-            have read, understood, and agreed to the{" "}
-            <Link to="https://hostbuddy.ai/terms-of-service/" target="_blank">
-              terms of service.
-            </Link>
-          </p> */}
         </div>
         <div className="d-flex align-items-center justify-content-left gap-2 flex-wrap" style={{ marginTop: '20px' }}>
           <span className="text-white">
@@ -127,7 +86,6 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
             onClick={confirmHandle}
           >
             {!striteUrlLoading ? <>Confirm</> : <><Loader /></>}
-
           </button>
         </div>
       </Modal.Body>

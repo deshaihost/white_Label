@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, NavLink } from "react-router-dom";
 import LogoNavBar from "../../helper/staticImage/logoNavBar.svg";
 import "./NavBar.css";
 import Container from "react-bootstrap/Container";
@@ -9,9 +9,7 @@ import Authorized from "../../helper/Authorized";
 const NavBar = () => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];
-
   const localstorageDataGet = localStorage.getItem("chatBoxId");
-
   useEffect(() => {
     if (localstorageDataGet === 1234) {
       Authorized();

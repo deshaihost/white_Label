@@ -12,14 +12,13 @@ import {
 } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { stateEmptyActions } from "../../redux/actions";
-import Loader, { FullScreenLoader } from "../../helper/Loader";
+import  { FullScreenLoader } from "../../helper/Loader";
 import { useNavigate } from "react-router-dom";
 import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrationProperties";
 import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
 
 const Properties = () => {
-  const navigate = useNavigate();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const gotoBillingPortalCheckPaymentStatus =
@@ -73,7 +72,6 @@ const Properties = () => {
     store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
 
   const [toggleOnOff, setToggleOnOff] = useState("");
-  const [toggleActive, setToggleActive] = useState(true);
 
   const anyPropertyNotForcedOff = propertiesExtraData
     ? Object?.values(propertiesExtraData)?.some(

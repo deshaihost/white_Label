@@ -10,7 +10,6 @@ import { useForm } from "react-hook-form";
 import Loader from "../../../../../helper/Loader";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import {
-  GetquestionnaireFunction,
   nameKey,
 } from "../../../../../helper/Authorized";
 
@@ -29,14 +28,11 @@ const CopyExistingPropertyModel = ({
     store?.copyExistingPropertyReducer?.copyExistingProperty?.data?.message;
   const copyExistingProertiesLoading =
     store?.copyExistingPropertyReducer?.loading;
-
   const getLocalStorageData = nameKey();
   const getLocalStorageNameKey = getLocalStorageData?.nameKey;
-
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
   const [propertyCheck, setPropertyCheck] = useState(false);
@@ -45,8 +41,6 @@ const CopyExistingPropertyModel = ({
   const onSubmit = (data) => {
     setPropertySelect(data);
     setPropertyCheck(true);
-    // copyExistingPropertyNameGetPrnt(data);
-    // handleClose("copyExistingPropertyClose");
   };
   const closeHndle = () => {
     handleClose("copyExistingPropertyClose");
@@ -62,6 +56,7 @@ const CopyExistingPropertyModel = ({
       ToastHandle(copyExistingPropertiesMessage, "success");
       dispatch(stateEmptyActions());
       handleClose("copyExistingPropertyClose");
+      setPropertyCheck(false);
       dispatch(getQuestionnaireActions(getLocalStorageNameKey));
     }
   }, [copyExistingPropertiesStatus]);
@@ -131,7 +126,6 @@ const CopyExistingPropertyModel = ({
                 )}
               >
                 Submit
-                
               </button>
             </div>
           </div>

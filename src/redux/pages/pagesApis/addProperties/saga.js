@@ -1,7 +1,6 @@
 import { all, fork, put, takeEvery, call } from "redux-saga/effects";
 import { AddPropertiesActionTypes } from "./constants";
 import {
-  testingApiEndPoint,
   postPropertiesEndPoint,
   getQuestionnaireEndPoint,
   goToBillingPortalPostEndPoint,
@@ -16,31 +15,7 @@ import {
 } from "./api";
 import { StateEmtpyActionTypes } from "../../../stateEmpty/constants";
 
-function* testingApiFunction(data) {
-  try {
-    yield put({
-      type: AddPropertiesActionTypes.TESTING_API_LOADING,
-      payload: {},
-    });
-    const response = yield call(testingApiEndPoint, data);
-    if (response.status === 200) {
-      yield put({
-        type: AddPropertiesActionTypes.TESTING_API_SUCCESS,
-        payload: { data: response.data, status: response.status },
-      });
-    } else {
-      yield put({
-        type: AddPropertiesActionTypes.TESTING_API_ERROR,
-        payload: { ...response.data },
-      });
-    }
-  } catch (error) {
-    yield put({
-      type: AddPropertiesActionTypes.TESTING_API_ERROR,
-      payload: error,
-    });
-  }
-}
+
 function* gotoBillingPortalPostFunction(data) {
   try {
     yield put({
@@ -334,12 +309,7 @@ function* stateEmptyFunction() {
   });
 }
 
-export function* acctionTestingApi(): any {
-  yield takeEvery(
-    AddPropertiesActionTypes.TESTING_API_FIRST,
-    testingApiFunction
-  );
-}
+
 
 export function* acctionPostProperties(): any {
   yield takeEvery(
@@ -412,7 +382,6 @@ export function* acctionRemoveSupportingDocs(): any {
 
 function* addPropertiesSaga(): any {
   yield all([
-    fork(acctionTestingApi),
     fork(acctionStateEmpty),
     fork(acctionPostProperties),
     fork(acctionGetQuestionnaire),

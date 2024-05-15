@@ -37,12 +37,12 @@ function getCalryLinkEndPoint(params: any): any {
 }
 
 function getActionsItemsEndPoint(params: any): any {
-  const { data } = params;
+  
   return api.get(URL.GET_ACTIONS_ITEMS);
 }
 
 function removeIntegrationListGetEndPoint(params: any): any {
-  const { data } = params;
+  
   return api.get(URL.GET_AVAIL_INTEGRATIONS);
 }
 

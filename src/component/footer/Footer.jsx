@@ -1,10 +1,8 @@
 import React from "react";
 import {
   MDBFooter,
-  MDBContainer,
   MDBRow,
   MDBCol,
-  MDBIcon,
 } from "mdb-react-ui-kit";
 import FooterLogo from "../../public/img/logo_footer.png";
 import Container from "react-bootstrap/Container";

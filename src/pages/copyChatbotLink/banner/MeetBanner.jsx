@@ -1,31 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./meetBanner.css";
 import Message from "./messages/Messages";
-import HouseImg from "../../../public/img/house-img.png";
-import { Container, ToastHeader } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import {
   chatBoxAIActions,
   getSessionIdActions,
 } from "../../../redux/pages/meetHostBuddy/actions";
 import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
-
 import Loader from "../../../helper/Loader";
-import { ParamsGet, nameKey } from "../../../helper/Authorized";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
-import { useLocation } from "react-router-dom";
 const MeetBanner = (props) => {
   const { urlData } = props;
   const { chatbot_key } = urlData ? urlData : {};
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  //const chatBoxUrl = ParamsGet();
-  //const getName = nameKey();
-  //const testPropetyName = getName?.nameKey;
-  //const copyChatBotName = urlData?.property_name;
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
   const getMessageResp =
     store?.getSessionIdReducer?.sessionId?.data?.initial_message;
@@ -35,19 +26,12 @@ const MeetBanner = (props) => {
     response: getMessageResp,
     message_id: getMessageRespId,
   };
-  // const getMessageResp =
-  //   store?.getSessionIdReducer?.sessionId?.data?.initial_message;
-  // const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data?.response;
   const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data;
-
   const statusResp = store?.chatBoxAIReducer?.chatBoxAI?.status;
   const updateMessageRespLoading = store?.chatBoxAIReducer?.loading;
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
-
-  // const messagesContainerRef = useRef(null);
-
   // Event handler for key press in the input field
   const handleKeyPress = (e) => {
     if (e.key === "Enter" || e.keyCode === 13) {
@@ -128,7 +112,6 @@ const MeetBanner = (props) => {
 
   // feed back functionality
   const [feedBackModelOpen, setFeedBackModelOpen] = useState(false);
-  // const [feedBackIconActive, setFeedBackIconActive] = useState("");
   const [feedBackDataGet, setFeedBackDataGet] = useState({
     typeThumbs: "",
     conversationId: "",
@@ -136,7 +119,6 @@ const MeetBanner = (props) => {
     propertyName: "",
   });
   const feedBckModelOpenHndle = (type, messId) => {
-    // setFeedBackIconActive(messId);
     setFeedBackDataGet({
       ...feedBackDataGet,
       typeThumbs: type,
@@ -158,46 +140,10 @@ const MeetBanner = (props) => {
           <h2>
             {" "}
             {getPropertyName !== undefined ? getPropertyName : ""}
-            {/* {isPropertyChat ? (
-              <>
-                {testPropetyName !== ""
-                  ? copyChatBotName !== undefined
-                    ? copyChatBotName
-                    : testPropetyName
-                  : "Empty"}
-              </>
-            ) : (
-              "Meet HostBuddy"
-            )} */}
           </h2>
-          {/* {!isPropertyChat && (
-            <p>
-              Get ready to meet our friendly HostBuddy chatbot. We're here to
-              assist you with any questions or support you might need. Just type
-              your query below, and we'll be happy to help
-            </p>
-          )} */}
-          {/* {isPropertyChat ? (
-            <Link to="/properties" className="link-btn filled-btn">
-              Back
-            </Link>
-          ) : (
-            <Link to="/" className="link-btn filled-btn">
-              Learn More
-            </Link>
-          )} */}
         </div>
         <div className="row">
-          {/* {!isPropertyChat && (
-            <div className="col-lg-5" id="house-image">
-              <div className="house-img">
-                <img src={HouseImg} alt="house-img" className="img-fluid" />
-              </div>
-            </div>
-          )} */}
-
           <div 
-          // className={isPropertyChat ? "col-lg-12" : "col-lg-7"}
           className="col-lg-12"
           >
             <div className="chatbot">
