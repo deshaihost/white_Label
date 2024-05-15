@@ -51,19 +51,26 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
         <>
           {getCarlyLink !== undefined ? (
             <div className="text-white">
-              <span>Calry link</span> :{" "}
-              <span
-                className="text-success mainCursor"
-                onClick={() => {
-                  getCarlyLink !== undefined ? (
-                    <>{goToCarlyLinkHndle()}</>
-                  ) : (
-                    <></>
-                  );
-                }}
-              >
-                CLICK HERE
-              </span>
+              <p style={{ fontSize: '1em', marginBottom: '20px' }}>
+                To connect your PMS, you will be redirected to our partner Calry to securely
+                enter your account information and complete the integration.
+              </p>
+              <div className="d-flex justify-content-center">
+                <span>Calry link</span> : {" "}
+                <span
+                  className="text-success mainCursor"
+                  style={{ marginLeft: '10px' }}
+                  onClick={() => {
+                    getCarlyLink !== undefined ? (
+                      <>{goToCarlyLinkHndle()}</>
+                    ) : (
+                      <></>
+                    );
+                  }}
+                >
+                  CLICK HERE
+                </span>
+              </div>
             </div>
           ) : (
             <>

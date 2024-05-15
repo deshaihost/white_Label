@@ -14,6 +14,13 @@ const AddPropertiesHeader = (props) => {
   } = propertiesTypes ? propertiesTypes : [];
   return (
     <div>
+      {propertyName !== undefined && (
+        <div className="d-flex justify-content-center text-white ">
+          <h2 className="fs-2 fw-bold mt-3 mb-3">
+            {propertyName}
+          </h2>
+        </div>
+      )}
       <div className="row">
         <div col="12">
           <div className="form_top_steps">
@@ -150,13 +157,6 @@ const AddPropertiesHeader = (props) => {
           {<ProgressBar now={progressPoint} label={`${progressPoint}%`} />}
         </div>
       </div>
-      {propertyName !== undefined && (
-        <div className="d-flex justify-content-center text-white ">
-          <h5 className="border border-primary px-2 py-2 fs-4 fw-bold">
-            {propertyName}
-          </h5>
-        </div>
-      )}
     </div>
   );
 };

@@ -430,9 +430,11 @@ const Calendar = ({
                                   </div>
                                 </div>
                                 <div className="h-100 d-flex flex-column justify-content-between">
+                                  {/* No functionality, so remove the button
                                   <div className="text-end">
                                     <FiEdit />
                                   </div>
+                                  */}
                                   <div
                                     className="text-end"
                                     onClick={() =>
@@ -470,9 +472,11 @@ const Calendar = ({
                                   {/* } */}
                                 </div>
                                 <div className="h-100 d-flex flex-column justify-content-between">
+                                  {/* No functionality, so remove the button
                                   <div>
                                     <FiEdit />
                                   </div>
+                                  */}
                                   <div
                                     onClick={() =>
                                       handleScheduleDelete(category, dateTime)
@@ -507,9 +511,11 @@ const Calendar = ({
                                   </div>
                                 </div>
                                 <div className="h-100 d-flex flex-column justify-content-between">
+                                  {/* No functionality, so remove the button
                                   <div>
                                     <FiEdit />
                                   </div>
+                                  */}
                                   <div
                                     onClick={() =>
                                       handleScheduleDelete(category, dateTime)
