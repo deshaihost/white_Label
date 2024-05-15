@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { set, useForm } from "react-hook-form";
-import { json, useParams } from "react-router-dom";
-import {
-  supportingDocumentPostActions,
-  supportingUrlPostActions,
-} from "../../../../redux/actions";
+// import { set, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+// import {
+//   supportingDocumentPostActions,
+//   supportingUrlPostActions,
+// } from "../../../../redux/actions";
 import { useSelectorUseDispatch } from "../../../../helper/Authorized";
 import { nameKey } from "../../../../helper/Authorized";
 import ToastHandle from "../../../../helper/ToastMessage";
-import Loader, { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
+import Loader, { BoxLoader } from "../../../../helper/Loader";
 import { stateEmptyActions } from "../../../../redux/actions";
 import { listIntegrationPropertiesActions } from "../../../../redux/actions";
 // import ToastHandle from "../../../../helper/ToastMessage";
@@ -30,7 +30,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const [hideForReservation, setHideForReservatin] = useState([]);
 
   const [prevLinkedIntegration, setPrevLinkedIntegration] = useState(null);
-  const [uploadedDoc, setUploadedDoc] = useState();
+  // const [uploadedDoc, setUploadedDoc] = useState();
   const [uploadedUrl, setUploadedUrl] = useState("");
   const [docUploadIsLoading, setdocUploadIsLoading] = useState(false);
 
@@ -99,9 +99,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     return /^[^.].+?\..+[^.]$/.test(url);
   }
 
-  const handleShowPopUp = () => {
-    setShowPreviousDoc(true);
-  };
+  
 
   const redrectcomponent = () => {
     prntFuntionHeaderActive(id !== undefined && "listingDetails");
@@ -436,7 +434,9 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   // };
 
   // Call the backend API to get the list of previously uploaded documents, and the name of any previously linked integration property
+  const [previouslyGetApiLoading, setPreviousGetApiLoading] = useState(false);
   const previousUploadedDoc = async (propertyName) => {
+    setPreviousGetApiLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     const getSessionStorageData = JSON.parse(
@@ -458,6 +458,8 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
         );
 
         if (response.status === 200) {
+          setPreviousGetApiLoading(false);
+
           const propertyData = response.data.property;
           if (propertyData && propertyData.supporting_doc_items) {
             const fileData = propertyData.supporting_doc_items.file_data;
@@ -477,13 +479,19 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           }
         } else {
           // Handle non-200 status
+          setPreviousGetApiLoading(false);
+
           console.log("Received non-200 status:", response.status);
         }
       } else {
+        setPreviousGetApiLoading(false);
+
         alert("No Token");
       }
     } catch (error) {
       // Handle error
+      setPreviousGetApiLoading(false);
+
       console.log("Error:", error);
     }
   };
@@ -497,7 +505,10 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const property = JSON.parse(localStorage.getItem("nameKey"));
 
   const propertyName = property?.nameKey;
-
+  const handleShowPopUp = () => {
+    setShowPreviousDoc(true);
+    previousUploadedDoc(propertyName)
+  };
   useEffect(() => {
     const getSessionStorageData = JSON.parse(
       sessionStorage.getItem("hostBuddy_auth")
@@ -505,7 +516,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
     const token = getSessionStorageData?.token;
     const property = JSON.parse(localStorage.getItem("nameKey"));
     const propertyName = property?.nameKey;
-    previousUploadedDoc(propertyName);
+    // previousUploadedDoc(propertyName);
   }, [sessionStorage.getItem("hostBuddy_auth")]);
 
   useEffect(() => {
@@ -823,6 +834,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           prevUploadedDoc={prevUploadedDoc}
           supportingDocsObj={hideForReservation}
           deleteResAfterPreviousDocCall={deleteResAfterPreviousDocCall}
+          previouslyGetApiLoading={previouslyGetApiLoading}
         />
       )}
     </>

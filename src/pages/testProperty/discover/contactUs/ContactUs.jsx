@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-// import PrimaryButton from '../../../../component/button/button';
-import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Row from "react-bootstrap/Row";
 import { useForm } from "react-hook-form";
 import ErrorMessageShow from "../../../../helper/ErrorMessageShow";
 import { ErrorMessageKey } from "../../../../helper/ErrorMessageKey";
@@ -13,17 +9,11 @@ const ContactUs = (props) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
-    // dispatch(
-    //   loginActions({
-    //     email: data.email,
-    //     password: data.password,
-    //   })
-    // );
+   
   };
 
   return (

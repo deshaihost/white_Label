@@ -27,4 +27,3 @@ export const COMPLETE_ACTIONS_ITEMS = "/complete_action_item";
 export const COPY_QUESTIONNAIRE = "/properties";
 export const MESSAGE_FEEDBACK = "/properties";
 export const REMOVE_SUPPORTING_DOCS = "/properties";
-export const TESTING_API = "/properties";

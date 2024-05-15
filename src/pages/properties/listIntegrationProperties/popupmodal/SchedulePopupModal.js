@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import Select from "react-select";
 
-const weekDay = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+// const weekDay = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 const weekDayOptions = [
   { value: 'sunday', label: 'Sunday' },
   { value: 'monday', label: 'Monday' },

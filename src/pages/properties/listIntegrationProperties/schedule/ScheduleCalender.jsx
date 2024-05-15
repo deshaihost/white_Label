@@ -252,7 +252,7 @@ const ScheduleCalender = ({
                                       const formattedTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
 
                                       // Get all keys of weeklySchedule object
-                                      const keys = Object.keys(weeklySchedule);
+                                      // const keys = Object.keys(weeklySchedule);
 
                                       if (index % 2 === 0) {
                                         startTime = data;

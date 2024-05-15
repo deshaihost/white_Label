@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import SideBar from '../../component/sideBar/SideBar';
-import { Link } from 'react-router-dom';
+import React, {  useEffect } from 'react'
 import './TermsofService.css';
 import { Helmet } from 'react-helmet';
 const TermsofService = () => {
-  const [activeLink, setActiveLink] = useState("");
-  const handleClickScroll = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setActiveLink(id);
-    }
-  };
+  // const [activeLink, setActiveLink] = useState("");
+  // const handleClickScroll = (id) => {
+  //   const element = document.getElementById(id);
+  //   if (element) {
+  //     element.scrollIntoView({ behavior: "smooth" });
+  //     setActiveLink(id);
+  //   }
+  // };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,7 +17,7 @@ const TermsofService = () => {
       sections.forEach((section) => {
         const bounding = section.getBoundingClientRect();
         if (bounding.top <= 20 && bounding.bottom >= 50) {
-          setActiveLink(section.id);
+          // setActiveLink(section.id);
         }
       });
     };

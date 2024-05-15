@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./meetBanner.css";
 import Message from "./messages/Messages";
-import HouseImg from "../../../public/img/house-img.png";
-import { Container, ToastHeader } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -10,13 +9,10 @@ import {
   getSessionIdActions,
 } from "../../../redux/pages/meetHostBuddy/actions";
 import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
-
 import Loader from "../../../helper/Loader";
-import { ParamsGet, nameKey } from "../../../helper/Authorized";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
-import { useLocation } from "react-router-dom";
 const MeetBanner = (props) => {
   const { urlData } = props;
   const { chatbot_key } = urlData ? urlData : {};

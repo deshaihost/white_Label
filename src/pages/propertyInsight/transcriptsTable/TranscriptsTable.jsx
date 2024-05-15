@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import ConverSationtranscriptModel from "./transcriptsModel/ConverSationtranscriptModel";
 const TranscriptsTable = ({ conversationData, propertyConversationId }) => {
   const [model, setModel] = useState({

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 // import "./calenderModel.css";
 import Form from "react-bootstrap/Form";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
 import { Button } from "react-bootstrap";
@@ -11,17 +11,17 @@ const PopupModal = ({
   show,
   setShow,
   selectedDate,
-  setSelectedDate,
+  // setSelectedDate,
   responseObject,
   setShowCalender,
   getScheduleAPI,
   selectedProperty
 }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [submit, setSubmit] = useState(false);
 
-  const [date, setDate] = useState(new Date());
+  // const [date, setDate] = useState(new Date());
 
   const [data, setData] = useState({
     status: "",

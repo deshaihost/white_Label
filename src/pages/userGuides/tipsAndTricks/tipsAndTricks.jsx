@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, {  useEffect } from 'react'
 import './tipsAndTricks.css';
 import { Helmet } from 'react-helmet';
 const TipsAndTricks = () => {
-  const [activeLink, setActiveLink] = useState("");
-  const handleClickScroll = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setActiveLink(id);
-    }
-  };
+  // const [activeLink, setActiveLink] = useState("");
+  // const handleClickScroll = (id) => {
+  //   const element = document.getElementById(id);
+  //   if (element) {
+  //     element.scrollIntoView({ behavior: "smooth" });
+  //     setActiveLink(id);
+  //   }
+  // };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,7 +17,7 @@ const TipsAndTricks = () => {
       sections.forEach((section) => {
         const bounding = section.getBoundingClientRect();
         if (bounding.top <= 20 && bounding.bottom >= 50) {
-          setActiveLink(section.id);
+          // setActiveLink(section.id);
         }
       });
     };
