@@ -61,6 +61,7 @@ const Routing = () => {
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.async = true;
+            script.id = "profiling-loaded-script";
             script.src = "https://s3-us-west-2.amazonaws.com/b2bjsstore/b/" + key + "/reb2b.js.gz";
             var first = document.getElementsByTagName("script")[0];
             first.parentNode.insertBefore(script, first);
@@ -74,9 +75,15 @@ const Routing = () => {
 
     // Add the script only if not already present, and only for the front pages (excluding login/register/forgotpass)
     const existingScript = document.getElementById('site-profiling');
+    const loadedScript = document.getElementById('profiling-loaded-script');
     const pathnames_to_profile = ["/", "/pricing", "/meet-hostbuddy", "/faqs", "/privacy-policy", "/termsof-service", "/scheduling-walkthrough", "/tips-and-tricks", "/testing-questions"];
-    if (!existingScript && pathnames_to_profile.includes(location.pathname)) {
-      addScript();
+    if (pathnames_to_profile.includes(location.pathname)) {
+      if (!existingScript) {
+        addScript();
+      }
+    } else { // When the user navigates away from the front pages, remove the script (and the script that it loads)
+      if (existingScript) { existingScript.remove(); }
+      if (loadedScript) { loadedScript.remove(); }
     }
   }, [location.pathname]);
 
