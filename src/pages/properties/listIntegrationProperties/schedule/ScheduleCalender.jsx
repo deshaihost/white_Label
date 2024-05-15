@@ -286,7 +286,7 @@ const ScheduleCalender = ({
                                               </p>
                                               <div>
                                                 <span className="calendar-schedule-button mainCursor ms-1">
-                                                  <FaRegEdit />
+                                                  {/* <FaRegEdit />    <-- No functionality for this button, so removed. */}
                                                   <FaRegTrashCan onClick={() => handleRemoveSchedule(dataToRemove)} />
                                                 </span>
                                               </div>

@@ -49,7 +49,7 @@ const PopupModal = ({
 
   useEffect(() => {
     if (removeSupportingDocsStatus === 200) {
-      ToastHandle("Delete successfully", "success");
+      ToastHandle("File deleted successfully", "success");
       dispatch(stateEmptyActions());
       deleteResAfterPreviousDocCall();
     } else if (removeSupportingDocsStatus === 500) {

@@ -13,6 +13,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
   const [date, setDate] = useState(new Date());
 
   const [calendarSchedule, setCalendarSchedule] = useState(null);
+  const [timeZone, setTimeZone] = useState(null);
 
   const handleButtonToggle = (type) => {
     if (type === "month") {
@@ -65,6 +66,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
         );
 
         setCalendarSchedule(() => response?.data?.schedules);
+        setTimeZone(() => response?.data?.time_zone);
 
       } else {
         alert("No Token");
@@ -154,6 +156,11 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
 
             {scheduleButton && <ScheduleCalender getScheduleAPI={calenderSchedule} allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} scheduleData={calendarSchedule} />}
           </div>
+          {timeZone ? (
+            <div className="d-flex justify-content-center">
+              <p style={{ color: 'rgb(128, 128, 128)', marginTop: '0px', marginBottom: '40px' }}>Property time zone: {timeZone}</p>
+            </div>
+          ) : null}
         </Modal.Body>
       </Modal>
     </div>
