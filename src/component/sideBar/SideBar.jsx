@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./sidebar.css";
-import { logoutActions } from "../../redux/actions";
 import axios from "axios";
-import Loader, { FullScreenLoader } from "../../helper/Loader";
+import { FullScreenLoader } from "../../helper/Loader";
 
 const SideBar = () => {
-  const navigate=useNavigate()
-  
+  const navigate = useNavigate();
   const location = useLocation();
   const findlocation = location?.pathname;
-  const [logoutFind, setLogoutFind] = useState(false);
   const [logoutLoader, setLogoutLoader] = useState(false);
   const logoutHandle = async () => {
     try {
@@ -31,7 +28,7 @@ const SideBar = () => {
         localStorage.clear();
         sessionStorage.removeItem("hostBuddy_auth");
         setLogoutLoader(false);
-        navigate("/login")
+        navigate("/login");
       }
     } catch (error) {
       console.error(error);
@@ -65,14 +62,6 @@ const SideBar = () => {
             Insights
           </Link>
         </li>
-        {/* <li>
-          <Link
-            to="/subscription"
-            className={findlocation === "/subscription" ? "active" : ""}
-          >
-            Subscription
-          </Link>
-        </li> */}
         <li>
           <Link
             to="/account"
@@ -95,7 +84,6 @@ const SideBar = () => {
               onClick={() => {
                 logoutHandle("logout");
               }}
-              className={logoutFind ? "active" : ""}
             >
               Log out
             </Link>

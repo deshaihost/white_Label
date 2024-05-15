@@ -7,28 +7,22 @@ import {
   toggleChatbotoNoFFPutActions,
 } from "../../../redux/actions";
 import "./Listintigrationproperties.css";
-import default_thumbnail_img from "../../../public/img/prop_thumbnail_default.jpg";
 import dummyPropertyImg from "../../../public/img/dummyPropertyImg.png";
 import { useSelectorUseDispatch } from "../../../helper/Authorized";
 import ToastHandle from "../../../helper/ToastMessage";
-import Loader, { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
+import  { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
 import { useNavigate } from "react-router-dom";
 import WebPageUrlModel from "./modelListProperties/webPageUrlModel/WebPageUrlModel";
 import SupportingDocumentModel from "./modelListProperties/supportingDocumentModel/SupportingDocumentModel";
-import { Button, Dropdown, Form } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import { CiCalendar } from "react-icons/ci";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import "react-circular-progressbar/dist/styles.css";
 import CalenderModel from "./calender/CalenderModel";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import Authorized from "../../../helper/Authorized";
 
 const ListIntegrationProperties = () => {
   const navigate = useNavigate();
   let localStorageKey = "nameKey";
-  const authData = Authorized();
-  const authToke = authData?.token;
-  const authRefracetoke = authData?.refreshToken;
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
   const [chatBox, setChatBox] = useState({
@@ -49,8 +43,6 @@ const ListIntegrationProperties = () => {
   const propertyCheckSubscription =
     createPropertiesSubscriptionAllowed - (createPropertiesName?.length || 0);
   const dummyArraySubscriptionAllowed = [];
-
-  // console.log("createPropertiesName: ", createPropertiesName)
 
   for (let i = 0; i < propertyCheckSubscription; i++) {
     // Your code logic inside the loop goes here
@@ -76,10 +68,10 @@ const ListIntegrationProperties = () => {
   const { chatbot_key, property_name } = chatBoxGetByNameData
     ? chatBoxGetByNameData
     : [];
-  const [copyLinkSetData, setCopyLinkSetData] = useState({
-    chatBotKey: "",
-    propertyName: "",
-  });
+  // const [copyLinkSetData, setCopyLinkSetData] = useState({
+  //   chatBotKey: "",
+  //   propertyName: "",
+  // });
   const chatBoxGetByNameLoading = store?.getPropertyByNameReducer?.loading;
   const chatBoxGetByNameError =
     store?.getPropertyByNameReducer?.getPropertybyName?.data?.error;
@@ -163,16 +155,16 @@ const ListIntegrationProperties = () => {
   // toggle chatBot on/off
 
   const [toggleOnOff, setToggleOnOff] = useState("");
-  const [toggleActive, setToggleActive] = useState(true);
+  // const [toggleActive, setToggleActive] = useState(true);
   const [chatBoxIndex, setChatBoxIndex] = useState("");
   const toggleChatBotHndle = (type, id) => {
     if (type) {
       setToggleOnOff("on");
-      setToggleActive(true);
+      // setToggleActive(true);
       setChatBoxIndex(id);
     } else {
       setToggleOnOff("FORCED_OFF");
-      setToggleActive(false);
+      // setToggleActive(false);
       setChatBoxIndex(id);
     }
   };
@@ -236,10 +228,10 @@ const ListIntegrationProperties = () => {
         copyToClipboard(urlToCopy);
 
         ToastHandle("Link copied", "success");
-        setCopyLinkSetData({
-          chatBotKey: chatbot_key,
-          propertyName: property_name,
-        });
+        // setCopyLinkSetData({
+        //   chatBotKey: chatbot_key,
+        //   propertyName: property_name,
+        // });
         setChatBox({
           linkCopy: false,
           testingProperty: false,

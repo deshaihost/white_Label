@@ -93,7 +93,6 @@ const Signup = () => {
   // this functionaly used after register
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
-  // const loginLoading = store?.loginReducer?.loading;
   const [loginLoading, setLoginLoading] = useState(false);
   const afterRegisterLogin = () => {
     dispatch(
@@ -103,9 +102,7 @@ const Signup = () => {
       })
     );
   };
-  // useEffect(() => {
-  //   afterRegisterLogin();
-  // }, []);
+  
   useEffect(() => {
     if (loginStatus === 401) {
       ToastHandle(loginMessage, "danger");
@@ -125,7 +122,6 @@ const Signup = () => {
       dispatch(stateEmptyActions());
       ToastHandle(data?.error, "danger");
     } else if (registerUserStatus === 201) {
-      // navigate("/login");
       afterRegisterLogin();
       setLoginLoading(true);
       ToastHandle(registerUserMessage, "success");
@@ -143,16 +139,6 @@ const Signup = () => {
           <div className="col-lg-6">
             <div className="auth-img">
               <img src={AuthImage} alt="auth-img" />
-              {/* <div className="auth-chat">
-                <p>
-                  "I've been using HostBuddy for a while now, and it has
-                  completely transformed the way I engage with my customers.
-                  Their chatbot solutions are top-notch, and the support team is
-                  fantastic.”
-                </p>
-                <h4>John</h4>
-                <h6>CEO of TechSolutions Inc</h6>
-              </div> */}
             </div>
           </div>
           <div className="col-lg-6">
@@ -289,7 +275,6 @@ const Signup = () => {
                           validate: (value) =>
                             value === password.current ||
                             ErrorMessageKey.PASSWORD_DOESNT_MATCH,
-                          // "password doesn't match ",
                         })}
                       />
                       <button
@@ -332,22 +317,6 @@ const Signup = () => {
                   {errors.phone?.type === "pattern" && (
                     <>{ErrorMessageShow("Please enter a valid phone number")}</>
                   )}
-                  {/* <div className="input-container">
-                    <select
-                      name=""
-                      id=""
-                      {...register("plan", { required: true })}
-                    >
-                      <option value="" default>
-                        Select Plan
-                      </option>
-                      <option value="essentials">The Essentials</option>
-                      <option value="work">The Works</option>
-                    </select>
-                  </div>
-                  {errors.plan?.type === "required" && (
-                    <span className="text-danger">Please select one plan</span>
-                  )} */}
                   <div className="input-container">
                     <PrimaryButton
                       text={!registerLoading ? "Register" : <Loader />}
@@ -362,7 +331,6 @@ const Signup = () => {
                   )}
                 </form>
               </div>
-
               <div className="footer-auth">
                 <div>
                   By continuing, you agree to the{" "}

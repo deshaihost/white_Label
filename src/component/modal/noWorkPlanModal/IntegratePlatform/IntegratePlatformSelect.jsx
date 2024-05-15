@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import IntergratePlatFormInput from "./IntergratePlatFormInput";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
   const store = useSelector((state) => state);
-  const dispatch = useDispatch();
-
   const pmsIntegrationData = store?.pmsIntegrationGetReducer?.pmsIntegrationData?.data?.integrations;
   const integrationsArray = Object.keys(pmsIntegrationData || {}); // assign the values of the API return to an array
-
   const [pmsIntegrationInputGet, setPmsIntergratonInputGet] = useState(
     integrationsArray.length > 0
       ? {

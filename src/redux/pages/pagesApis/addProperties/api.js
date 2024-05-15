@@ -3,10 +3,7 @@ import * as URL from "../../../../helper/apiEndPoint";
 
 const api = new APICore();
 
-function testingApiEndPoint(params: any): any {
-  const { data } = params;
-  // return api.create(`${URL.TESTING_API}/${data?.name}/add_thumbnail_image` ,data?.formd  );
-}
+
 
 function goToBillingPortalPostEndPoint(): any {
   return api.create(URL.GO_TO_BILLING_PORTAL);
@@ -23,7 +20,6 @@ function getQuestionnaireEndPoint(params: any): any {
 }
 
 function listIntegrationPropertiesEndPoint(params: any): any {
-  const { data } = params;
   return api.get(`${URL.LIST_INTEGRATION_PROPERTIES}`);
 }
 
@@ -74,7 +70,6 @@ function removeSupportingDocsEndPoint(params: any): any {
 }
 
 export {
-  testingApiEndPoint,
   postPropertiesEndPoint,
   getQuestionnaireEndPoint,
   goToBillingPortalPostEndPoint,

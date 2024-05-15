@@ -37,8 +37,6 @@ const ScheduleCalender = ({
 
   const scheduleDefulatArray = ["CURRENT", "FUTURE", "INQUIRY/PAST"];
 
-  // console.log(specificDates, "specificDates");
-
   const responseObject = {
     properties: [selectedProperty],
     schedules: scheduledDate,
@@ -89,8 +87,6 @@ const ScheduleCalender = ({
           dataToSend,
           config
         );
-
-        console.log("API Response: ", response.data);
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
@@ -157,9 +153,6 @@ const ScheduleCalender = ({
     handleCalenderScheduleAPI(copyToAllResponseObject);
   };
 
-  console.log("scheduledDate: ", scheduledDate)
-  console.log("responseObject: ", responseObject)
-  console.log("copyToAllResponseObject: ", copyToAllResponseObject);
   return (
     <>
       {!scheduleData ? <div className="d-flex w-full justify-content-center"><Loader /></div> : (
@@ -259,7 +252,7 @@ const ScheduleCalender = ({
                                       const formattedTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
 
                                       // Get all keys of weeklySchedule object
-                                      const keys = Object.keys(weeklySchedule);
+                                      // const keys = Object.keys(weeklySchedule);
 
                                       if (index % 2 === 0) {
                                         startTime = data;
@@ -293,7 +286,7 @@ const ScheduleCalender = ({
                                               </p>
                                               <div>
                                                 <span className="calendar-schedule-button mainCursor ms-1">
-                                                  <FaRegEdit />
+                                                  {/* <FaRegEdit />    <-- No functionality for this button, so removed. */}
                                                   <FaRegTrashCan onClick={() => handleRemoveSchedule(dataToRemove)} />
                                                 </span>
                                               </div>

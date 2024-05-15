@@ -45,7 +45,7 @@ const Setup = () => {
     useEffect(() => {
         const itemsCount = items.length;
         setMaxItems(itemsCount);
-    }, []);
+    }, [items.length]);
 
     useEffect(() => {
         const handleWheel = (e) => {

@@ -4,7 +4,7 @@ import UserImg from "../../../../public/img/userimg2.png";
 
 function Message({ key, text, sender, feedBckModelOpen, feedBackDataGet }) {
   const { response, message_id } = text ? text : [];
-  const { typeThumbs, messageId, conversationId } = feedBackDataGet
+  const { typeThumbs, messageId,  } = feedBackDataGet
     ? feedBackDataGet
     : [];
   return (

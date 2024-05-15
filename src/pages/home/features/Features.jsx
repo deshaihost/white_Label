@@ -13,7 +13,6 @@ import Accordion from 'react-bootstrap/Accordion';
 
 const Features = () => {
     const [activeKey, setActiveKey] = useState("0");
-
     const handleToggle = (eventKey) => {
         setActiveKey(eventKey === activeKey ? null : eventKey);
     };

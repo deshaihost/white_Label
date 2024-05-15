@@ -14,7 +14,6 @@ import {
 import { BoxLoader, FullScreenLoader } from "../../helper/Loader";
 import "react-circular-progressbar/dist/styles.css";
 import { GoArrowUpRight } from "react-icons/go";
-import { BsCheckCircle } from "react-icons/bs";
 import ToastHandle from "../../helper/ToastMessage";
 import { Helmet } from "react-helmet";
 import { FaCircleCheck } from "react-icons/fa6";
@@ -33,10 +32,6 @@ const Dashboard = () => {
   const actionItemsConvertationData =
     store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
   const actionItemsCovertationLoading = store?.getActionItemsReducer?.loading;
-
-  // const actionItems = actionItemsConvertationData
-  //   ? actionItemsConvertationData
-  //   : [];
 
   const actionItems = actionItemsConvertationData
     ? actionItemsConvertationData
@@ -91,7 +86,6 @@ const Dashboard = () => {
     return `${month} ${day}, ${year} ${hours}:${minutes}${ampm}`;
   }
   const { first_name } = userDataGet ? userDataGet : [];
-  console.log("t");
   // this functionality complete convertation
   const completeActionsItemLoading =
     store?.completeActionsItemsReducer?.loading;
@@ -123,16 +117,13 @@ const Dashboard = () => {
     }
   }, [completeActionsItemStatus]);
   const [converSationId, setConverSationId] = useState("");
-  console.log(converSationId,'converSationIdconverSationId++++')
   const propertiesConversationGetData =
     store?.propertyGetConversationReducer?.propertyGetConversation?.data;
   const propertiesConversationLoading =
     store?.propertyGetConversationReducer?.loading;
 
-  console.log(propertiesConversationGetData, "propertiesConversationGetData++");
 
   const conversationCallOnDashboard = (item) => {
-    console.log(item, "itemitem");
     const { propertyName, itemId } = item;
     setConverSationId(itemId);
     dispatch(
@@ -148,7 +139,6 @@ const Dashboard = () => {
   const conversationModelOpen = "conversationModelOpen";
   const conversationModelClose = "conversationModelClose";
   const handleModelOpen = (type, data) => {
-    console.log(type, data,'type, data')
     if (type === conversationModelOpen) {
       setModel({
         ...model,
@@ -187,7 +177,6 @@ const Dashboard = () => {
         <div className="container">
           <div className="banner-heading">
             <h2>My HostBuddy</h2>
-            {/* <p>Manage your profile here </p> */}
           </div>
           <div className="row">
             <div className="col-lg-4">
@@ -225,7 +214,6 @@ const Dashboard = () => {
                                   ></path>
                                 </svg>
                                 <h4>{successful}</h4>
-                                {/* <p>Messages Processed</p> */}
                                 <p>Successful</p>
                               </>
                             ) : (
@@ -250,7 +238,6 @@ const Dashboard = () => {
                                   ></path>
                                 </svg>
                                 <h4>{unsuccessful}</h4>
-                                {/* <p>Average Response Time</p> */}
                                 <p>Unsuccessful</p>
                               </>
                             ) : (
@@ -275,7 +262,6 @@ const Dashboard = () => {
                                   ></path>
                                 </svg>
                                 <h4>{neutral}</h4>
-                                {/* <p>Average Response Time</p> */}
                                 <p>Neutral</p>
                               </>
                             ) : (
@@ -302,7 +288,6 @@ const Dashboard = () => {
                                   ></path>
                                 </svg>
                                 <h4>{total}</h4>
-                                {/* <p>Messages Sent</p> */}
                                 <p>Total</p>
                               </>
                             ) : (

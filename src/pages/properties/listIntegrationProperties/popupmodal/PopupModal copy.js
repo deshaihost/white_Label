@@ -43,7 +43,6 @@ const PopupModal = ({
   };
 
   const handleInputChange = (e) => {
-    console.log(e.target.value);
     setData({
       ...data,
       [e.target.id]: e.target.value,
@@ -51,13 +50,11 @@ const PopupModal = ({
   };
 
   const handleOnChange = (e) => {
-    console.log("Checked: ", e.target.checked)
   }
 
   // to get the schedule to show on the calender
   const addCalenderSchedule = async (dataToSend) => {
     setSubmit(true);
-    console.log("data to send: ", dataToSend)
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -66,7 +63,6 @@ const PopupModal = ({
     );
 
     const token = getSessionStorageData?.token;
-    console.log("dataToSend ", dataToSend);
 
     // return;
 
@@ -86,7 +82,6 @@ const PopupModal = ({
         );
 
         // setCalendarSchedule(() => response?.data?.schedule);
-        console.log("API Response: ", response.data);
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
@@ -117,8 +112,6 @@ const PopupModal = ({
     const startSchedule = `${formatDate(data.startDate)} ${data.startTime}`;
     const endSchedule = `${formatDate(data.endDate)} ${data.endTime}`;
 
-    console.log(startSchedule, " ", endSchedule);
-
     if (data.status === "") {
       ToastHandle("Please select status", "danger");
       return;
@@ -135,7 +128,6 @@ const PopupModal = ({
     }
 
     addCalenderSchedule(responseObject);
-    console.log("Submit", responseObject);
   };
 
   useEffect(() => {
@@ -151,10 +143,6 @@ const PopupModal = ({
       endDate: formattedDate,
     }));
   }, [selectedDate]); // Update when selectedDate changes
-
-  console.log("Data: ", data);
-  console.log("selectedDate: ", selectedDate);
-  console.log("Response Object: ", responseObject)
 
   return (
     <div>

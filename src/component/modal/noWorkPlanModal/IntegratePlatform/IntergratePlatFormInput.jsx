@@ -7,15 +7,11 @@ import {
 import ToastHandle from "../../../../helper/ToastMessage";
 import { BoxLoader } from "../../../../helper/Loader";
 const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
-  const { type, data } = PmsIntegrationData ? PmsIntegrationData : [];
+  const { type } = PmsIntegrationData ? PmsIntegrationData : [];
   const store = useSelector((state) => state);
   const getCarlyLinkStatus = store?.getCalryLinkReducer?.getCalryLing?.status;
   const getCarlyLink =
     store?.getCalryLinkReducer?.getCalryLing?.data?.calry_link;
-  console.log(
-    store?.getCalryLinkReducer?.getCalryLing?.data?.error,
-    "getCarlyLinkgetCarlyLink"
-  );
   const getCalryLinkLoading = store?.getCalryLinkReducer?.loading;
   const getCarlyLinkMessage =
     store?.getCalryLinkReducer?.getCalryLing?.data?.message;
@@ -27,7 +23,6 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
     const url = new URL(baseUrl);
     window.open(url.toString(), "_blank");
     handleNoPlanClose('pmsIntegrationClose');
-
   };
 
   const dispatch = useDispatch();
@@ -36,7 +31,6 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
       dispatch(
         getCalryLinkActions({
           platform: type,
-          // credentials: data,
         })
       );
     }
@@ -57,19 +51,26 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
         <>
           {getCarlyLink !== undefined ? (
             <div className="text-white">
-              <span>Calry link</span> :{" "}
-              <span
-                className="text-success mainCursor"
-                onClick={() => {
-                  getCarlyLink !== undefined ? (
-                    <>{goToCarlyLinkHndle()}</>
-                  ) : (
-                    <></>
-                  );
-                }}
-              >
-                CLICK HERE
-              </span>
+              <p style={{ fontSize: '1em', marginBottom: '20px' }}>
+                To connect your PMS, you will be redirected to our partner Calry to securely
+                enter your account information and complete the integration.
+              </p>
+              <div className="d-flex justify-content-center">
+                <span>Calry link</span> : {" "}
+                <span
+                  className="text-success mainCursor"
+                  style={{ marginLeft: '10px' }}
+                  onClick={() => {
+                    getCarlyLink !== undefined ? (
+                      <>{goToCarlyLinkHndle()}</>
+                    ) : (
+                      <></>
+                    );
+                  }}
+                >
+                  CLICK HERE
+                </span>
+              </div>
             </div>
           ) : (
             <>

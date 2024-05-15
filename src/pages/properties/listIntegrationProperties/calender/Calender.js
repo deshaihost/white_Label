@@ -16,7 +16,7 @@ const Calendar = ({
 }) => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
-  const currentDate = new Date();
+  // const currentDate = new Date();
   const [currentStageData, setCurrentStageData] = useState([]);
   const [futureStageData, setFutureStageData] = useState([]);
   const [pastStageData, setPastStageData] = useState([]);
@@ -38,9 +38,6 @@ const Calendar = ({
     properties: allProperties,
     dates: scheduledDate,
   };
-
-  console.log("copyToAllResponseObject: ", copyToAllResponseObject);
-
   // Generate sorted schedule data for on and off
   const combineSchedules = () => {
     if (specificDates) {
@@ -158,16 +155,13 @@ const Calendar = ({
   // to add the schedule to all properties
   const copyToAllSchedule = async (dataToSend) => {
     // setSubmit(true);
-    console.log("data to send: ", dataToSend);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
     const getSessionStorageData = JSON.parse(
       sessionStorage.getItem("hostBuddy_auth")
     );
-
     const token = getSessionStorageData?.token;
-    console.log("dataToSend ", dataToSend);
 
     // return;
 
@@ -186,7 +180,6 @@ const Calendar = ({
         );
 
         // setCalendarSchedule(() => response?.data?.schedule);
-        // console.log("API Response: ", response.data);
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
@@ -317,7 +310,6 @@ const Calendar = ({
 
   // Remove Schedule click
   const handleScheduleDelete = (category, deleteData) => {
-    console.log("deleteData: ", deleteData, " category: ", category);
     const isConfirmed = window.confirm(
       "Do you want to delete this Status Event?"
     );
@@ -351,9 +343,6 @@ const Calendar = ({
         responseObject.dates[category].off.splice(deleteData.startIndex, 2);
       }
     }
-
-    console.log("responseObject after delete: ", responseObject);
-
     removeCalenderSchedule(responseObject);
   };
 
@@ -441,9 +430,11 @@ const Calendar = ({
                                   </div>
                                 </div>
                                 <div className="h-100 d-flex flex-column justify-content-between">
+                                  {/* No functionality, so remove the button
                                   <div className="text-end">
                                     <FiEdit />
                                   </div>
+                                  */}
                                   <div
                                     className="text-end"
                                     onClick={() =>
@@ -481,9 +472,11 @@ const Calendar = ({
                                   {/* } */}
                                 </div>
                                 <div className="h-100 d-flex flex-column justify-content-between">
+                                  {/* No functionality, so remove the button
                                   <div>
                                     <FiEdit />
                                   </div>
+                                  */}
                                   <div
                                     onClick={() =>
                                       handleScheduleDelete(category, dateTime)
@@ -518,9 +511,11 @@ const Calendar = ({
                                   </div>
                                 </div>
                                 <div className="h-100 d-flex flex-column justify-content-between">
+                                  {/* No functionality, so remove the button
                                   <div>
                                     <FiEdit />
                                   </div>
+                                  */}
                                   <div
                                     onClick={() =>
                                       handleScheduleDelete(category, dateTime)

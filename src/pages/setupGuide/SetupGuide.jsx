@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import SideBar from '../../component/sideBar/SideBar';
-import { Link } from 'react-router-dom';
 import './setupguide.css';
 import { Helmet } from 'react-helmet';
 

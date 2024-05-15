@@ -8,7 +8,6 @@ export const POST_CREATE_CHECKOUT_SESSION = "/create_checkout_session";
 export const UPDATE_ACCOUNT_INFO = "/update_account_info";
 export const UPDATE_ACCOUNT_UPDATE_PASSWORD = "/change_password";
 export const GET_SUPPORTED_INTEGRATIONS = "/get_supported_integrations";
-// export const ADD_SUPPORTED_INTEGRATIONS = "/add_integration";
 export const GET_CALRY_LINK = "/get_calry_link?";
 export const GET_AVAIL_INTEGRATIONS = "/get_avail_integrations";
 export const REMOVE_INTEGRATION = "/remove_integration";
@@ -28,9 +27,3 @@ export const COMPLETE_ACTIONS_ITEMS = "/complete_action_item";
 export const COPY_QUESTIONNAIRE = "/properties";
 export const MESSAGE_FEEDBACK = "/properties";
 export const REMOVE_SUPPORTING_DOCS = "/properties";
-
-
-
-
-
-export const TESTING_API = "/properties";

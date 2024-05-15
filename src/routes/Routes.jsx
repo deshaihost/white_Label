@@ -20,7 +20,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import AddPropertiesIndex from "../pages/properties/addProperties/AddPropertiesIndex";
-import { ParamsGet } from "../helper/Authorized";
+// import { ParamsGet } from "../helper/Authorized";
 import CopyChatBotLink from "../pages/copyChatbotLink/CopyChatBotLink";
 import TestProperty from "../pages/testProperty/TestProperty";
 import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";

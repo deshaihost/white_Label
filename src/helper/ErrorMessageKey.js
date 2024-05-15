@@ -6,7 +6,6 @@ export const ErrorMessageKey = {
   INVALID_EMAIL_ADDRESS: "Invalid email address",
   PLEASE_ENTER_YOUR_PASSWORD: " Please enter password",
   PLEASE_ENTER_YOUR_OLD_PASSWORD: " Please enter old password",
-
   PASSWORD_MUST_BE_AT_LEAST_8_CHARACTER_LONG:
     "Password must be at least 8 characters long!",
   MIX_IT_UP_USE_A_COMBINATION_OF_UPPERCASE_AND_LOWERCASE_LETTERS_SPECIAL_CHARACTERS_IN_YOUR:

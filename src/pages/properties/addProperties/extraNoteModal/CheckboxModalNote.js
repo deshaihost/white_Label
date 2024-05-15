@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-import { Button, Modal } from "react-bootstrap";
+import {  Modal } from "react-bootstrap";
 import ToastHandle from "../../../../helper/ToastMessage";
 
 const CheckboxModalNote = ({
@@ -14,13 +13,8 @@ const CheckboxModalNote = ({
   setHideReservationText
 }) => {
 
-  const [checkChange, setCheckChange] = useState(false);
+  // const [checkChange, setCheckChange] = useState(false);
   const [noteData, setNoteData] = useState("");
-
-  // console.log("responseOptions inside Modal: ", responseOptions);
-  // console.log("responseText inside Modal: ", responseText);
-  // console.log("responseText inside Modal: ", responseText);
-  // console.log("hideReservationText inside Modal: ", hideReservationText);
 
   const [checkedSchedule, setCheckedSchedule] = useState({
     Future: false,
@@ -56,7 +50,6 @@ const CheckboxModalNote = ({
       newReservationStage = newStatus.join(",");
     }
     return newReservationStage;
-    // handleAddReservationStage(newReservationStage);
   }
 
   // handle Stage button clicks
@@ -79,13 +72,9 @@ const CheckboxModalNote = ({
         Current: e.target.checked,
       }));
     }
-
-    // console.log("Checked: ", e.target.checked);
-    // setCheckChange(true)
   };
 
   const handleAddNote = () => {
-    // console.log("Note Data: ", noteData);
     const valIndex = responseOptions?.indexOf(noteClickData?.name);
 
     // If the name exists in responseOptions, set the corresponding value from responseText to noteData
@@ -95,7 +84,6 @@ const CheckboxModalNote = ({
       setResponseText(updatedResponseText);
 
       let stageToSet = handleChangeStatus(checkedSchedule)
-      // console.log("stageToSet: ", stageToSet, " typeof: ", typeof stageToSet, " length: ", stageToSet?.length)
 
       const updatedHideReservationText = [...hideReservationText];
       updatedHideReservationText[valIndex] = stageToSet.length > 0 ? stageToSet : "";
@@ -141,7 +129,7 @@ const CheckboxModalNote = ({
       let existingStatus = hideReservationText[index];
       if (existingStatus?.length > 0) {
         let deselectedStages = existingStatus.split(",")
-        deselectedStages.forEach((type, index) => {
+        deselectedStages.forEach((type) => {
 
           if (type === "FUTURE") {
             setCheckedSchedule((prevData) => ({
@@ -167,13 +155,6 @@ const CheckboxModalNote = ({
       }
     }
   }, [noteClickData, hideReservationText]);
-
-  // useEffect(() => {
-  //   if (checkChange) {
-  //     handleChangeStatus(checkedSchedule);
-  //     setCheckChange(false);
-  //   }
-  // }, [checkChange, checkedSchedule])
 
   return (
     <>
@@ -203,11 +184,8 @@ const CheckboxModalNote = ({
               value={noteData || ""}
               onChange={(e) => setNoteData(e.target.value)}
             ></textarea>
-
             <hr style={{ borderTop: "0px solid #0078F0" }} />
-
             <label>Information from this question will only be provided to guests at the selected (blue) reservation stages. You can de-select stages below to prevent HostBuddy from sharing this information with those guests.</label>
-
             <div className=" d-flex justify-content-between mt-3">
               <div class="col text-center">
                 <input
@@ -261,15 +239,12 @@ const CheckboxModalNote = ({
                 </label>
               </div>
             </div>
-
             <hr style={{ borderTop: "2px solid #0078F0", margin: "20px 0 30px 0" }} />
-
             <div className="d-flex justify-content-center mt-3">
               <button className="mw-auto" onClick={handleAddNote}>
                 Save & Add Note
               </button>
             </div>
-
           </div>
         </Modal.Body>
       </Modal>
