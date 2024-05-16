@@ -229,7 +229,7 @@ const Properties = () => {
                         </button>
                         <p style={{ fontSize: '0.9em', color: 'white', marginLeft:'20px', marginRight:'20px' }}>|</p>
                         <button style={{ fontSize: '0.9em', marginLeft:'0px', color: 'blue', background: 'none', border: 'none' }} onClick={() => handleModelOpen("disconnectIntegrationOpen")}>
-                          disconnect
+                          Disconnect
                         </button>
                       </div>
                     </div>
