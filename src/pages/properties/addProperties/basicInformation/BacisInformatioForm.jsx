@@ -44,6 +44,9 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   const nameKeyGet = nameKey();
   // const [oldProperyName, setOldPropertyName] = useState("");
   const add_thumbnail_image = async (propertyName, imgFile) => {
+    console.log("propertyImgPath", propertyImgPath);
+    console.log("uploadedFile", uploadedFile);
+
     if (propertyImgPath !== undefined) {
       let formData = new FormData();
       let file = propertyImgPath !== null ? propertyImgPath[0] : imgFile;
@@ -95,7 +98,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
           }
         } catch (error) {
           ToastHandle(
-            "thumbnail file not add because 500 Internal Server Error",
+            "500 Internal Server Error",
             "danger"
           );
         } finally {
@@ -107,7 +110,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
           "danger"
         );
       }
-    } else if (uploadedFile !== null) {
+    } else if (uploadedFile && uploadedFile.length > 0) {
       let formData = new FormData();
       let file = uploadedFile !== null ? uploadedFile[0] : imgFile;
       // Check if the file type is valid
@@ -157,7 +160,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
           }
         } catch (error) {
           ToastHandle(
-            "thumbnail file not add because 500 Internal Server Error",
+            "500 Internal Server Error",
             "danger"
           );
         } finally {

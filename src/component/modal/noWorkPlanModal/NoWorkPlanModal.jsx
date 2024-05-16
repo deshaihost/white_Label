@@ -36,7 +36,7 @@ function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
               <div className="upgrade-plan-box">
                 <img src={NoPlanImg} alt="no-plan" />
                 <p>
-                  You are not on Works plan, Please upgrade plan to access this
+                  You are not on The Works plan, Please upgrade plan to access this
                   feature{" "}
                 </p>
                 <Link to="/" className="bg_theme_btn manage-subscription">

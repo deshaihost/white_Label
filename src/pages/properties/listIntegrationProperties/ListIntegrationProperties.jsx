@@ -283,8 +283,6 @@ const ListIntegrationProperties = () => {
                             }
                             alt=""
                           />
-
-                          <span>THE WORKS</span>
                         </div>
                         <div className="property_listing_detail">
                           <div className="property-detail">
@@ -403,8 +401,6 @@ const ListIntegrationProperties = () => {
                             }
                             alt=""
                           />
-
-                          <span>THE WORKS</span>
                         </div>
                         <div className="property_listing_detail">
                           <div className="property-detail">

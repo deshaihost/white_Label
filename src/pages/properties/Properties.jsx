@@ -4,6 +4,8 @@ import "./properties.css";
 import AddPropertyModal from "../../component/modal/addPropertyModal/AddPropertyModal";
 import NoWorkPlanModal from "../../component/modal/noWorkPlanModal/NoWorkPlanModal";
 import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
+import DisconnectIntegration from "./removeIntegrationsModel/DisconnectIntegration";
+import ImportPropertiesModal from "../../component/modal/noWorkPlanModal/ImportProperties";
 import { Helmet } from "react-helmet";
 import {
   getUserDataActions,
@@ -17,20 +19,21 @@ import { useNavigate } from "react-router-dom";
 import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrationProperties";
 import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
+import axios from "axios";
 
 const Properties = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const gotoBillingPortalCheckPaymentStatus =
-    store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
-  const gotoBillingPortalcheckPaymentLoading =
-    store?.gotoBillingPortalPostReducer?.loading;
+  const gotoBillingPortalCheckPaymentStatus = store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
+  const gotoBillingPortalcheckPaymentLoading = store?.gotoBillingPortalPostReducer?.loading;
   const [model, setModel] = useState({
     addProperty: false,
     pmsIntegration: false,
     removeIntegration: false,
     billingPortal: false,
+    importProperties: false,
   });
+  const [newPropertiesAdded, setNewPropertiesAdded] = useState(false); // called by ImportPropertiesModal when properties are imported, to trigger a re-render of the property list
   const [propertyConditionCheck, setPropertyConditionCheck] = useState(false);
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {
@@ -40,6 +43,10 @@ const Properties = () => {
       setModel({ ...model, pmsIntegration: true });
     } else if (type === "removeIntegrationsOpen") {
       setModel({ ...model, removeIntegration: true });
+    } else if (type === "disconnectIntegrationOpen") {
+      setModel({ ...model, disconnectIntegration: true });
+    } else if (type === "importPropertiesOpen") {
+      setModel({ ...model, importProperties: true });
     }
   };
   const handleModelClose = (type) => {
@@ -52,24 +59,25 @@ const Properties = () => {
       setModel({ ...model, removeIntegration: false });
     } else if (type === "billingPortalClose") {
       setModel({ ...model, billingPortal: false });
+    } else if (type === "disconnectIntegrationsClose") {
+      setModel({ ...model, disconnectIntegration: false });
+    } else if (type === "importPropertiesClose") {
+      setModel({ ...model, importProperties: false });
     }
   };
   // toggle chatbot
-  const createPropertiesName =
-    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
   const propertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user
     ?.property_data
     ? store?.getUserDataReducer?.getUserData?.data?.user?.property_data
     : [];
   // shows toggle state for each property
-  const intergrationsMain =
-    store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
+  const intergrationsMain = store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
+  const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription
   const intergrations = intergrationsMain ? intergrationsMain : [];
-  const toggleChatMessage =
-    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
+  const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
-  const toggleChatStatus =
-    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
+  const toggleChatStatus = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
 
   const [toggleOnOff, setToggleOnOff] = useState("");
 
@@ -88,6 +96,14 @@ const Properties = () => {
       // setToggleActive(false);
     }
   };
+
+  // When new properties are added (from ImportPropertiesModal), re-render the property list
+  useEffect(() => {
+    if (newPropertiesAdded) {
+      setNewPropertiesAdded(false);
+      dispatch(getUserDataActions());
+    }
+  }, [newPropertiesAdded]);
 
   useEffect(() => {
     if (toggleOnOff !== "") {
@@ -202,9 +218,22 @@ const Properties = () => {
                   </button>
                   {intergrations &&
                   Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key). Capitalize the first letter of the integration.
-                    <p style={{ color: "white" }}>
-                      {`Connected to ${Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)}`}
-                    </p>
+                  <>
+                    <div className="ConnectedStatement" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <p style={{ color: 'white' }}>
+                        {`Connected to ${Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)}`}
+                      </p>
+                      <div className="IntegrationsOptions" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                        <button style={{ fontSize:'0.9em', marginRight:'0px', color: 'blue', background: 'none', border: 'none' }} onClick={() => handleModelOpen("importPropertiesOpen")}>
+                          Import Properties
+                        </button>
+                        <p style={{ fontSize: '0.9em', color: 'white', marginLeft:'20px', marginRight:'20px' }}>|</p>
+                        <button style={{ fontSize: '0.9em', marginLeft:'0px', color: 'blue', background: 'none', border: 'none' }} onClick={() => handleModelOpen("disconnectIntegrationOpen")}>
+                          disconnect
+                        </button>
+                      </div>
+                    </div>
+                  </>
                   ) : (
                     <button
                       className="shadow-none border-0"
@@ -239,6 +268,7 @@ const Properties = () => {
       <AddPropertyModal
         handleClose={handleModelClose}
         show={model?.addProperty}
+        subscription_data={subscription_data}
       />
       <NoWorkPlanModal
         handleNoPlanClose={handleModelClose}
@@ -247,6 +277,15 @@ const Properties = () => {
       <RemoveIntegrations
         handleNoPlanClose={handleModelClose}
         showNoPlan={model?.removeIntegration}
+      />
+      <DisconnectIntegration
+        handleNoPlanClose={handleModelClose}
+        showNoPlan={model?.disconnectIntegration}
+      />
+      <ImportPropertiesModal
+        handleNoPlanClose={handleModelClose}
+        showNoPlan={model?.importProperties}
+        setNewPropertiesAdded={setNewPropertiesAdded}
       />
     </>
   );
