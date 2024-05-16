@@ -78,8 +78,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   const integrationPropertyList =
     store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data
       ?.properties; // array of integration_property objects; each with "name" and "id" properties
-  const integrationPropertiesLoading =
-    store?.listIntegrationPropertiesReducer?.loading;
+  const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
 
   // When "PMS Integration" is selected, call API to get the list of integration properties
   useEffect(() => {
@@ -503,8 +502,16 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   // THIS FUNCTIONALITY USED DOCUMENT DELETE AFTER THAT THIS PREVIOUS UPLOAD DOCUMENT END
 
   const property = JSON.parse(localStorage.getItem("nameKey"));
-
   const propertyName = property?.nameKey;
+
+  // When the page is loaded, call the GET property API to get the name of any previously linked integration property.
+  // TODO: have some functionality to prevent excessive calls, since there are other conditions on this page that also trigger this API call
+  useEffect(() => {
+    if (propertyName) {
+      previousUploadedDoc(propertyName);
+    }
+  }, [propertyName]);
+
   const handleShowPopUp = () => {
     setShowPreviousDoc(true);
     previousUploadedDoc(propertyName)
@@ -807,7 +814,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
                 <div className="col-lg-12 text-center">
                   <div className="mt-5"></div> {/* vertical spacer */}
-                  {!linkIsLoading && !unlinkIsLoading && !integrationPropertiesLoading && (
+                  {(!(linkIsLoading || unlinkIsLoading || (!prevLinkedIntegration && integrationPropertiesLoading))) && ( // hide Save & Next if loading something - but no need to hide if integrationPropertiesLoading but we're already linked to an integration property
                     <button
                       className="btn btn-primary mt-5"
                       onClick={(e) => save_and_next(e)}
