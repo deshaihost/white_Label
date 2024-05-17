@@ -7,7 +7,7 @@ import ScheduleCalender from "../schedule/ScheduleCalender";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 
-const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allProperties }) => {
+const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allProperties, setScheduleChanged }) => {
   const [monthButton, setMonthButton] = useState( false);
   const [scheduleButton, setscheduleButton] = useState(true);
   const [date, setDate] = useState(new Date());
@@ -151,14 +151,15 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
             </div>
 
             {monthButton && (
-              <Calendar getScheduleAPI={calenderSchedule} allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} />
+              <Calendar getScheduleAPI={calenderSchedule} allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} setScheduleChanged={setScheduleChanged} />
             )}
 
-            {scheduleButton && <ScheduleCalender getScheduleAPI={calenderSchedule} allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} scheduleData={calendarSchedule} />}
+            {scheduleButton && <ScheduleCalender getScheduleAPI={calenderSchedule} allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} scheduleData={calendarSchedule} setScheduleChanged={setScheduleChanged} />}
           </div>
           {timeZone ? (
-            <div className="d-flex justify-content-center">
-              <p style={{ color: 'rgb(128, 128, 128)', marginTop: '0px', marginBottom: '40px' }}>Property time zone: {timeZone}</p>
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <p style={{ color: 'rgb(128, 128, 128)', marginTop: '0px', marginBottom: '40px', textAlign: 'center' }}>Property time zone: {timeZone}</p>
+              {/* <p style={{ color: 'rgb(128, 128, 128)', marginTop: '0px', marginBottom: '40px', textAlign: 'center', fontSize: '0.9em' }}>To update time zone, edit the property's address.</p> */}
             </div>
           ) : null}
         </Modal.Body>

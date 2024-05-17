@@ -13,6 +13,7 @@ const Calendar = ({
   selectedProperty,
   scheduleData,
   date,
+  setScheduleChanged
 }) => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
@@ -183,8 +184,7 @@ const Calendar = ({
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
-
-
+          setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
           setTimeout(() => {
             setShow(false);
             setShowCalender(false);
@@ -263,7 +263,7 @@ const Calendar = ({
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
-
+          setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
           // setTimeout(() => {
           //   setShowCalender(false);
           // }, 1500);
@@ -563,6 +563,7 @@ const Calendar = ({
           setShowCalender={setShowCalender}
           getScheduleAPI={getScheduleAPI}
           selectedProperty={selectedProperty}
+          setScheduleChanged={setScheduleChanged}
         />
       )}
     </>

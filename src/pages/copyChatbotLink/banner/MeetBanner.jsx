@@ -73,7 +73,7 @@ const MeetBanner = (props) => {
         textareaValue: "Hi",
         chatbot_key: chatbot_key,
         data_host_return: " ",
-        user: "guest"
+        user: "guest" //user="guest" since we're on the Copy Chatbot Link, not the Test Property page
       })
     );
   };

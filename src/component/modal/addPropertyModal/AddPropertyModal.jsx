@@ -41,7 +41,7 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
         centered
       >
         <Modal.Header closeButton>
-          <h5 className="modal-title">Your Plan</h5>
+          <h5 className="modal-title">Add Properties</h5>
         </Modal.Header>
         <Modal.Body>
           {subscription_data?.num_properties_allowed == 0 || subscription_data?.num_properties_allowed === undefined ? (
@@ -123,8 +123,12 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
             </form>
           ) : (
             <div className="d-flex flex-column justify-content-center">
-              <p style={{ color: 'white', marginBottom: '20px' }}> To add a new property, click on the "Edit" button in one of the listings below. </p>
-              <p style={{ color: 'white' }}> To add more usable listings to your account, go to "Account" &gt; "Subscription" and purchase more properties. </p>
+              <p style={{ color: 'white', marginBottom: '20px', textAlign: 'center' }}> 
+                To add a new property, click on the "Edit" button in one of the blank listings below. 
+              </p>
+              <p style={{ color: 'white', textAlign: 'center' }}> 
+                To add more usable listings, go to "Account" &gt; "Subscription" and purchase more properties for your account.
+              </p>
             </div>
           )}
         </Modal.Body>
