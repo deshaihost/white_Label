@@ -25,7 +25,8 @@ const SchedulePopupModal = ({
   responseObject,
   setShowCalender,
   getScheduleAPI,
-  selectedProperty
+  selectedProperty,
+  setScheduleChanged
 }) => {
   const [submit, setSubmit] = useState(false);
 
@@ -101,6 +102,7 @@ const SchedulePopupModal = ({
         );
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
+          setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
 
           setTimeout(() => {
             setShow(false);
@@ -125,7 +127,7 @@ const SchedulePopupModal = ({
       }
     } catch (error) {
       console.log(error);
-      ToastHandle(error?.data?.error, "danger");
+      //ToastHandle(error?.data?.error, "danger");
       /* Leave the windows open so the user can correct the error and resubmit
       setTimeout(() => {
         setShow(false);
@@ -201,13 +203,13 @@ const SchedulePopupModal = ({
         centered
       >
         <Modal.Body style={{overflowY:'auto'}}>
-          <div className="row py-3 border-bottom">
-            <div className="6">
+          <div className="6">
+            <div className="row border-bottom py-3">
               <h3 className="text-white text-center">Add New Status</h3>
-              <p className="text-white">
-                Apply to the following reservation stages:
-              </p>
             </div>
+            <p style={{marginTop: '10px'}} className="text-white text-center">
+              Apply to the following reservation stages:
+            </p>
           </div>
 
           <div className=" d-flex justify-content-between mt-3">
@@ -303,15 +305,13 @@ const SchedulePopupModal = ({
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-4 text-center ">
-                <div className="">
-                  <Button className="bg-primary form-control d-block" onClick={() => setShow(false)}>
-                    Cancel
-                  </Button>
-                </div>
+            <div className="row">
+              <div className="col-4 offset-2 text-center">
+                <Button className="bg-primary form-control d-block" onClick={() => setShow(false)}>
+                  Cancel
+                </Button>
               </div>
-              <div class="col text-center">
+              <div className="col-4 text-center">
                 <input
                   type="submit"
                   data-attr-date="once"
@@ -319,7 +319,7 @@ const SchedulePopupModal = ({
                   value={`${submit ? "Please wait..." : "Apply"}`}
                   id="submit-single-property"
                   onClick={handleSchedule}
-                />{" "}
+                />
               </div>
             </div>
           </div>

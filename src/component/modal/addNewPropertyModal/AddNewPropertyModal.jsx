@@ -77,6 +77,7 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
             <a href="/termsof-service" target="_blank" className="text-blue"> Terms of Service </a> 
             and 
             <a href="/privacy-policy" target="_blank" className="text-blue"> Privacy Policy </a>
+            .
           </span>
         </div>
         <div className="text-center mt-3 addition_des_button">
