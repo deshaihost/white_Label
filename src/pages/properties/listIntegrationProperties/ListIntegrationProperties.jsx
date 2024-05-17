@@ -25,6 +25,7 @@ const ListIntegrationProperties = () => {
   let localStorageKey = "nameKey";
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
+  const [scheduleChanged, setScheduleChanged] = useState(false); // If the user changes the schedule in the calendar, we need to re-render the listings since the current status line might change
   const [chatBox, setChatBox] = useState({
     linkCopy: false,
     testingProperty: false,
@@ -168,6 +169,15 @@ const ListIntegrationProperties = () => {
       setChatBoxIndex(id);
     }
   };
+
+  // When the schedule is changed, re-render the property list
+  useEffect(() => {
+    if (scheduleChanged) {
+      setScheduleChanged(false);
+      dispatch(getUserDataActions());
+    }
+  }, [scheduleChanged]);
+
   useEffect(() => {
     if (toggleOnOff !== "") {
       dispatch(
@@ -293,6 +303,7 @@ const ListIntegrationProperties = () => {
                                   {" "}
                                   <button
                                     className="bg-danger text-white rounded-pill border-danger btn border"
+                                    style={{ padding: '4px 12px', fontSize: '0.8em' }}
                                     onClick={(e) => {
                                       toggleChatBotHndle(true, index);
                                     }}
@@ -304,6 +315,7 @@ const ListIntegrationProperties = () => {
                                 <>
                                   <button
                                     className="bg-dark text-primary border-primary btn border rounded-pill"
+                                    style={{ padding: '4px 12px', fontSize: '0.8em' }}
                                     onClick={(e) => {
                                       toggleChatBotHndle(false, index);
                                     }}
@@ -459,6 +471,7 @@ const ListIntegrationProperties = () => {
           showCalender={showCalender}
           setShowCalender={setShowCalender}
           allProperties={allProperties}
+          setScheduleChanged={setScheduleChanged}
         />
       )}
     </div>

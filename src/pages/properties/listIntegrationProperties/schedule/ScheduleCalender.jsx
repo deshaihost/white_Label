@@ -23,6 +23,7 @@ const ScheduleCalender = ({
   setShowCalender,
   selectedProperty,
   scheduleData,
+  setScheduleChanged
 }) => {
   const [show, setShow] = useState(false);
   const [selectedTime, setSelectedTime] = useState({});
@@ -90,7 +91,7 @@ const ScheduleCalender = ({
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
-
+          setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
           // setTimeout(() => {
           //   setShowCalender(false);
           // }, 1500);
@@ -352,6 +353,7 @@ const ScheduleCalender = ({
           setShowCalender={setShowCalender}
           getScheduleAPI={getScheduleAPI}
           selectedProperty={selectedProperty}
+          setScheduleChanged={setScheduleChanged}
         />
       )}
     </>

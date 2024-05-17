@@ -15,7 +15,8 @@ const PopupModal = ({
   responseObject,
   setShowCalender,
   getScheduleAPI,
-  selectedProperty
+  selectedProperty,
+  setScheduleChanged
 }) => {
   // const navigate = useNavigate();
 
@@ -106,6 +107,7 @@ const PopupModal = ({
         // setCalendarSchedule(() => response?.data?.schedule);
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
+          setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
 
           setTimeout(() => {
             setShow(false);
@@ -239,12 +241,12 @@ const PopupModal = ({
       >
         <Modal.Body>
           <div className="row py-3 border-bottom d-flex flex-column gap-2">
-            <div className="6">
-              <h3 className="text-white text-center">Add New Status</h3>
-            </div>
 
             <div className="6">
-              <p className="text-white text-center">
+              <div className="row border-bottom py-3">
+                <h3 className="text-white text-center">Add New Status</h3>
+              </div>
+              <p style={{marginTop: '10px'}} className="text-white text-center">
                 Apply to the following reservation stages:
               </p>
             </div>
@@ -374,25 +376,21 @@ const PopupModal = ({
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-4 text-center ">
-                <div className="">
-                  <Button className="bg-primary form-control d-block" onClick={() => setShow(false)}>
-                    Cancel
-                  </Button>
-                </div>
+            <div className="row">
+              <div className="col-4 offset-2 d-flex justify-content-center align-items-center">
+                <Button className="bg-primary form-control d-block" onClick={() => setShow(false)}>
+                  Cancel
+                </Button>
               </div>
-              <div class="col-4 text-center ">
-                <div className="">
-                  <input
-                    type="submit"
-                    data-attr-date="once"
-                    className="bg-primary form-control"
-                    value={`${submit ? "Please wait..." : "Apply"}`}
-                    id="submit-single-property"
-                    onClick={handleSchedule}
-                  />{" "}
-                </div>
+              <div className="col-4 d-flex justify-content-center align-items-center">
+                <input
+                  type="submit"
+                  data-attr-date="once"
+                  className="bg-primary form-control"
+                  value={`${submit ? "Please wait..." : "Apply"}`}
+                  id="submit-single-property"
+                  onClick={handleSchedule}
+                />
               </div>
             </div>
           </div>

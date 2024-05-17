@@ -37,8 +37,10 @@ const Properties = () => {
   const [propertyConditionCheck, setPropertyConditionCheck] = useState(false);
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {
-      dispatch(goToBillingportalPostActions());
-      setPropertyConditionCheck(true);
+      // Billing portal logic is behaving strangely, so removed. Just open the add property modal.
+      setModel({ ...model, addProperty: true });
+      //dispatch(goToBillingportalPostActions());
+      //setPropertyConditionCheck(true);
     } else if (type === "pmsIntegrationOpen") {
       setModel({ ...model, pmsIntegration: true });
     } else if (type === "removeIntegrationsOpen") {
@@ -171,7 +173,7 @@ const Properties = () => {
                               toggleChatBotHndle(true);
                             }}
                           >
-                            STOPPED
+                            ALL STOPPED
                           </button>
                         </>
                       ) : (
@@ -182,7 +184,7 @@ const Properties = () => {
                               toggleChatBotHndle(false);
                             }}
                           >
-                            STOP
+                            STOP ALL
                           </button>
                         </>
                       ))}
