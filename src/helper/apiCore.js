@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // content type
-const API_KEY = "biUdFBzFi5MDscRDSdO9TgLCmqXbXQCDbZLwQtVPLzixfnEWpw";
+const API_KEY = process.env.REACT_APP_API_KEY;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.baseURL = process.env.REACT_APP_API_ENDPOINT;
 axios.defaults.headers.common["X-API-Key"] = API_KEY;
