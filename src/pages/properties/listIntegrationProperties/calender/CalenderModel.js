@@ -44,7 +44,7 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
   // to get the schedule to show on the calender
   const calenderSchedule = async (propertyName) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = "biUdFBzFi5MDscRDSdO9TgLCmqXbXQCDbZLwQtVPLzixfnEWpw";
+    const API_KEY = process.env.REACT_APP_API_KEY;
 
     const getSessionStorageData = JSON.parse(
       sessionStorage.getItem("hostBuddy_auth")
