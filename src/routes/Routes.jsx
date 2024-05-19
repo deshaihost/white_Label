@@ -111,7 +111,7 @@ const Routing = () => {
           element={
             <ThankError
               imgSrc={ErrorImg}
-              text="We Can not find the page you’re looking for "
+              text="We Cannot find the page you’re looking for"
             />
           }
         />
