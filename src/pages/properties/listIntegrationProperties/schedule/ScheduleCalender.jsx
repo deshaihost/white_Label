@@ -92,30 +92,18 @@ const ScheduleCalender = ({
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
           setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
-          // setTimeout(() => {
-          //   setShowCalender(false);
-          // }, 1500);
           getScheduleAPI(selectedProperty);
         } else {
           ToastHandle("Something went wrong", "danger");
-          // setTimeout(() => {
-          //   setShowCalender(false);
-          // }, 1500);
           getScheduleAPI(selectedProperty);
         }
       } else {
         ToastHandle("No Token", "danger");
-        // setTimeout(() => {
-        //   setShowCalender(false);
-        // }, 1500);
         getScheduleAPI(selectedProperty);
       }
     } catch (error) {
       console.log(error);
       ToastHandle(error?.data?.error, "danger");
-      // setTimeout(() => {
-      //   setShowCalender(false);
-      // }, 1500);
       getScheduleAPI(selectedProperty);
     }
   };
@@ -142,16 +130,18 @@ const ScheduleCalender = ({
   }
 
   // copy to all property onClickHandle
-
   const handleCopyToAll = () => {
-    const isConfirmed = window.confirm(
-      "Do you want to Copy this schedule to all properties?"
-    );
-    if (!isConfirmed) {
-      return;
-    }
-
+    const isConfirmed = window.confirm( "Do you want to Copy this schedule to all properties? Month schedules will not be copied or changed." );
+    if (!isConfirmed) { return; }
     handleCalenderScheduleAPI(copyToAllResponseObject);
+  };
+
+  // clear all property onClickHandle
+  const handleClearAll = () => {
+    const isConfirmed = window.confirm( "Do you want to clear the weekly schedule for this property? Month schedule will not be affected." );
+    if (!isConfirmed) { return; }
+    const blankScheduleObject = { properties: [selectedProperty], schedules: {} };
+    handleCalenderScheduleAPI(blankScheduleObject);
   };
 
   return (
@@ -324,18 +314,15 @@ const ScheduleCalender = ({
           </div>
 
           <div class="row w-full mb-5 mt-3 d-flex justify-content-center">
-            <div className="d-flex gap-3 w-50">
-              <button
-                className="btn btn-primary form-control"
-                onClick={handleAddClick}
-              >
-                Add
+            <div className="d-flex gap-3" style={{width: '80%'}}>
+              <button onClick={handleClearAll} className="btn btn-primary form-control" style={{color:'rgb(220, 0, 0)'}}>
+                Clear All
               </button>
-              <button
-                onClick={handleCopyToAll}
-                className="btn btn-primary form-control"
-              >
+              <button onClick={handleCopyToAll} className="btn btn-primary form-control">
                 Copy to All Properties
+              </button>
+              <button className="btn btn-primary form-control" onClick={handleAddClick}>
+                Add
               </button>
             </div>
           </div>

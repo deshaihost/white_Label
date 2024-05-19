@@ -29,8 +29,7 @@ const Dashboard = () => {
     : [];
   const userDataLoading = store?.getUserDataReducer?.loading;
   const userDataGetLoading = store?.getUserDataReducer?.loading;
-  const actionItemsConvertationData =
-    store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
+  const actionItemsConvertationData = store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
   const actionItemsCovertationLoading = store?.getActionItemsReducer?.loading;
 
   const actionItems = actionItemsConvertationData
@@ -57,20 +56,7 @@ const Dashboard = () => {
   // date formate
   function formatDateTime(dateTimeString) {
     const date = new Date(dateTimeString);
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
+    const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ];
 
     const month = months[date.getMonth()];
     const day = date.getDate();
@@ -87,12 +73,9 @@ const Dashboard = () => {
   }
   const { first_name } = userDataGet ? userDataGet : [];
   // this functionality complete convertation
-  const completeActionsItemLoading =
-    store?.completeActionsItemsReducer?.loading;
-  const completeActionsItemStatus =
-    store?.completeActionsItemsReducer?.completeActionsItems?.status;
-  const completeActionsItemMessage =
-    store?.completeActionsItemsReducer?.completeActionsItems?.data?.message;
+  const completeActionsItemLoading = store?.completeActionsItemsReducer?.loading;
+  const completeActionsItemStatus = store?.completeActionsItemsReducer?.completeActionsItems?.status;
+  const completeActionsItemMessage = store?.completeActionsItemsReducer?.completeActionsItems?.data?.message;
 
   const compeletHndle = (itemId, propyName, convrtionId) => {
     dispatch(
@@ -108,6 +91,17 @@ const Dashboard = () => {
     dispatch(getUserDataActions());
     dispatch(getActionItemsActions());
   }, []);
+
+  // When user data is loaded, save the payment status to local storage. If bad, we need this information to show a warning banner, which should be shown on all portal pages.
+  useEffect(() => {
+    if (userDataGet) {
+      localStorage.setItem("paymentStatus", userDataGet?.subscription?.payment_standing);
+      localStorage.setItem("servicesExpireDate", userDataGet?.subscription?.services_good_until);
+    }
+    console.log("userDataGet updated!");
+    console.log("paymentStatus", userDataGet?.subscription?.payment_standing);
+    console.log("servicesExpireDate", userDataGet?.subscription?.services_good_until);
+  }, [userDataGet]);
 
   useEffect(() => {
     if (completeActionsItemStatus === 200) {
