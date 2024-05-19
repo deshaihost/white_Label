@@ -5,6 +5,7 @@ import axios from "axios";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import Loader from "../../../../helper/Loader";
+import { get } from "react-hook-form";
 
 const Calendar = ({
   getScheduleAPI,
@@ -153,143 +154,54 @@ const Calendar = ({
     }
   };
 
-  // to add the schedule to all properties
-  const copyToAllSchedule = async (dataToSend) => {
-    // setSubmit(true);
+
+  const handleSetCalendarAPI = async (dataToSend) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
-    const token = getSessionStorageData?.token;
-
-    // return;
-
-    try {
-      if (token) {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
-        };
-        const response = await axios.put(
-          `${baseUrl}/set_datetime_toggle`,
-          dataToSend,
-          config
-        );
-
-        // setCalendarSchedule(() => response?.data?.schedule);
-
-        if (response.status === 200) {
-          ToastHandle(response.data.message, "success");
-          setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
-          setTimeout(() => {
-            setShow(false);
-            setShowCalender(false);
-          }, 1500);
-
-          // getScheduleAPI(selectedProperty);
-        } else {
-          ToastHandle("Something went wrong", "danger");
-          setTimeout(() => {
-            setShow(false);
-            setShowCalender(false);
-          }, 1500);
-
-          // getScheduleAPI(selectedProperty);
-
-        }
-      } else {
-        ToastHandle("No Token", "danger");
-        setTimeout(() => {
-          setShow(false);
-          setShowCalender(false);
-        }, 1500);
-
-        // getScheduleAPI(selectedProperty);
-
-      }
-    } catch (error) {
-      console.log(error);
-      ToastHandle(error?.data?.error, "danger");
-      setTimeout(() => {
-        setShow(false);
-        setShowCalender(false);
-      }, 1500);
-      // getScheduleAPI(selectedProperty);
-    }
-    // setSubmit(false);
-  };
-
-  // copy to all property onClickHandle
-
-  const handleCopyToAll = () => {
-    const isConfirmed = window.confirm(
-      "Do you want to Copy this schedule to all properties?"
-    );
-    if (!isConfirmed) {
-      return;
-    }
-
-    copyToAllSchedule(copyToAllResponseObject);
-  };
-
-  //  Remove Schedule API
-  const removeCalenderSchedule = async (dataToSend) => {
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
-
+    const getSessionStorageData = JSON.parse( sessionStorage.getItem("hostBuddy_auth") );
     const token = getSessionStorageData?.token;
 
     try {
       if (token) {
         const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
+          headers: { Authorization:`Bearer ${token}`, "X-API-Key":API_KEY, }
         };
-        const response = await axios.put(
-          `${baseUrl}/set_datetime_toggle`,
-          dataToSend,
-          config
-        );
+        const response = await axios.put( `${baseUrl}/set_datetime_toggle`, dataToSend, config );
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
           setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
-          // setTimeout(() => {
-          //   setShowCalender(false);
-          // }, 1500);
           getScheduleAPI(selectedProperty);
         } else {
           ToastHandle("Something went wrong", "danger");
-          // setTimeout(() => {
-          //   setShowCalender(false);
-          // }, 1500);
           getScheduleAPI(selectedProperty);
         }
       } else {
         ToastHandle("No Token", "danger");
-        // setTimeout(() => {
-        //   setShowCalender(false);
-        // }, 1500);
         getScheduleAPI(selectedProperty);
       }
     } catch (error) {
       console.log(error);
       ToastHandle(error?.data?.error, "danger");
-      // setTimeout(() => {
-      //   setShowCalender(false);
-      // }, 1500);
       getScheduleAPI(selectedProperty);
     }
+  };
+
+  // Clear All Button
+  const handleClearAll = () => {
+    const isConfirmed = window.confirm( "Do you want to clear all Status Events for this property? Weekly schedule will not be affected." );
+    if (!isConfirmed) { return; }
+    const blankScheduleObject = { properties: [selectedProperty], dates: {} };
+    handleSetCalendarAPI(blankScheduleObject);
+    
+  };
+
+  // copy to all property onClickHandle
+  const handleCopyToAll = () => {
+    const isConfirmed = window.confirm( "Do you want to Copy this specific date/time scheduling to all properties? Weekly schedules will not be copied or changed." );
+    if (!isConfirmed) { return; }
+    handleSetCalendarAPI(copyToAllResponseObject);
   };
 
   // Add Schedule Click
@@ -298,11 +210,7 @@ const Calendar = ({
     const todayMonth = date.getMonth();
     const todayYear = date.getFullYear();
 
-    let day = {
-      day: todayDate,
-      month: todayMonth,
-      year: todayYear,
-    };
+    let day = { day: todayDate, month: todayMonth, year: todayYear };
 
     setSelectedDate(day);
     setShow(true);
@@ -310,40 +218,22 @@ const Calendar = ({
 
   // Remove Schedule click
   const handleScheduleDelete = (category, deleteData) => {
-    const isConfirmed = window.confirm(
-      "Do you want to delete this Status Event?"
-    );
-    if (!isConfirmed) {
-      return;
-    }
-    if (category === "CURRENT") {
-      if (deleteData.status === "on") {
-        responseObject.dates[category].on.splice(deleteData.startIndex, 2);
-      }
+    const isConfirmed = window.confirm( "Do you want to delete this Status Event?" );
+    if (!isConfirmed) { return; }
 
-      if (deleteData.status === "off") {
-        responseObject.dates[category].off.splice(deleteData.startIndex, 2);
-      }
+    if (category === "CURRENT") {
+      if (deleteData.status === "on") { responseObject.dates[category].on.splice(deleteData.startIndex, 2); }
+      if (deleteData.status === "off") { responseObject.dates[category].off.splice(deleteData.startIndex, 2); }
     }
     if (category === "FUTURE") {
-      if (deleteData.status === "on") {
-        responseObject.dates[category].on.splice(deleteData.startIndex, 2);
-      }
-
-      if (deleteData.status === "off") {
-        responseObject.dates[category].off.splice(deleteData.startIndex, 2);
-      }
+      if (deleteData.status === "on") { responseObject.dates[category].on.splice(deleteData.startIndex, 2); }
+      if (deleteData.status === "off") { responseObject.dates[category].off.splice(deleteData.startIndex, 2); }
     }
     if (category === "INQUIRY/PAST") {
-      if (deleteData.status === "on") {
-        responseObject.dates[category].on.splice(deleteData.startIndex, 2);
-      }
-
-      if (deleteData.status === "off") {
-        responseObject.dates[category].off.splice(deleteData.startIndex, 2);
-      }
+      if (deleteData.status === "on") { responseObject.dates[category].on.splice(deleteData.startIndex, 2); }
+      if (deleteData.status === "off") { responseObject.dates[category].off.splice(deleteData.startIndex, 2); }
     }
-    removeCalenderSchedule(responseObject);
+    handleSetCalendarAPI(responseObject);
   };
 
   const formatDate = (dateTimeString) => {
@@ -534,18 +424,15 @@ const Calendar = ({
               </div>
             </div>
             <div class="row w-full mt-5 d-flex justify-content-center">
-              <div className="d-flex gap-3 w-50">
-                <button
-                  className="btn btn-primary form-control"
-                  onClick={handleCellClick}
-                >
-                  Add
+              <div className="d-flex gap-3" style={{width: '80%'}}>
+                <button className="btn btn-primary form-control" style={{color:'rgb(220, 0, 0)'}} onClick={handleClearAll}>
+                  Clear All
                 </button>
-                <button
-                  onClick={handleCopyToAll}
-                  className="btn btn-primary form-control"
-                >
+                <button className="btn btn-primary form-control" onClick={handleCopyToAll}>
                   Copy to All Properties
+                </button>
+                <button className="btn btn-primary form-control" onClick={handleCellClick}>
+                  Add
                 </button>
               </div>
             </div>
