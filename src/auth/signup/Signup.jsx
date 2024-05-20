@@ -30,6 +30,7 @@ const Signup = () => {
   const registerUserStatus = store?.registerReducer?.register?.status;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [emailEntered, setEmailEntered] = useState("");
 
   const {
     register,
@@ -47,14 +48,9 @@ const Signup = () => {
   });
 
   const onSubmit = (data) => {
+    setEmailEntered(data.email);
     dispatch(
-      registerActions({
-        email: data.email,
-        password: data.newPassword,
-        first_name: data.firstName,
-        last_name: data.lastName,
-        phone: data.phone,
-      })
+      registerActions({ email: data.email, password: data.newPassword, first_name: data.firstName, last_name: data.lastName, phone: data.phone })
     );
     setInputData({
       email: data.email,
@@ -109,6 +105,10 @@ const Signup = () => {
       dispatch(stateEmptyActions());
     } else if (loginStatus === 200) {
       navigate("/dashboard");
+      dispatch(stateEmptyActions());
+    } else if (loginStatus === 202) { // credentials good, but user hasn't confirmed email yet. Backend will not provide tokens until email is confirmed
+      localStorage.setItem('loginEmailEntered', emailEntered); // this nees to be accessible on the confirm-email page
+      navigate('/confirm-email')
       dispatch(stateEmptyActions());
     }
   }, [loginStatus]);
@@ -326,7 +326,7 @@ const Signup = () => {
                   </div>
                   {loginLoading && (
                     <div className="text-center border pill text-success py-2">
-                      Redirecting to Dashboard...
+                      Redirecting...
                     </div>
                   )}
                 </form>

@@ -28,6 +28,8 @@ import TermsofService from "../pages/termsofService/TermsofService";
 import SchedulingWalkthrough from "../pages/userGuides/schedulingWalkthrough/schedulingWalkthrough";
 import TipsAndTricks from "../pages/userGuides/tipsAndTricks/tipsAndTricks";
 import TestingQuestions from "../pages/userGuides/testingQuestions/testingQuestions";
+import ConfirmYourEmail from "../pages/confirmEmail/confirmYourEmail";
+import EmailConfirmationAction from "../pages/confirmEmail/emailConfirmationAction";
 
 const Routing = () => {
   const location = useLocation();
@@ -106,85 +108,62 @@ const Routing = () => {
         <Route path="/scheduling-walkthrough" element={<SchedulingWalkthrough />}></Route>
         <Route path="/tips-and-tricks" element={<TipsAndTricks />}></Route>
         <Route path="/testing-questions" element={<TestingQuestions />}></Route>
-        <Route
-          path="*"
-          element={
-            <ThankError
-              imgSrc={ErrorImg}
-              text="We Cannot find the page you’re looking for"
-            />
+        <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
+        <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
+        <Route path="*" element={
+            <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" />
           }
         />
-        <Route
-          path="/dashboard"
-          element={
+        <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/properties"
-          element={
+        <Route path="/properties" element={
             <ProtectedRoute>
               <Properties />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/property-insight/:id"
-          element={
+        <Route path="/property-insight/:id" element={
             <ProtectedRoute>
               <PropertyInsight />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/subscription"
-          element={
+        <Route path="/subscription" element={
             <ProtectedRoute>
               <Subscription />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/account"
-          element={
+        <Route path="/account" element={
             <ProtectedRoute>
               <Account />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/setup-guide"
-          element={
+        <Route path="/setup-guide" element={
             <ProtectedRoute>
               <SetupGuide />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/add-properties/:id"
-          element={
+        <Route path="/add-properties/:id" element={
             <ProtectedRoute>
               <AddPropertiesIndex />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/add-properties"
-          element={
+        <Route path="/add-properties" element={
             <ProtectedRoute>
               <AddPropertiesIndex />
             </ProtectedRoute>
           }
         />
-        {/* <Route path="/meet-hostbuddy/:id" element={<MeetHostBoddy />}></Route> */}
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
-        <Route
-          path="/property-chat/:id"
-          element={<CopyChatBotLink />}
-        ></Route>
+        <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
       </Routes>
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&

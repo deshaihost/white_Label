@@ -7,14 +7,10 @@ import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
 import DisconnectIntegration from "./removeIntegrationsModel/DisconnectIntegration";
 import ImportPropertiesModal from "../../component/modal/noWorkPlanModal/ImportProperties";
 import { Helmet } from "react-helmet";
-import {
-  getUserDataActions,
-  goToBillingportalPostActions,
-  toggleChatbotoNoFFPutActions,
-} from "../../redux/actions";
+import { getUserDataActions, goToBillingportalPostActions, toggleChatbotoNoFFPutActions } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { stateEmptyActions } from "../../redux/actions";
-import  { FullScreenLoader } from "../../helper/Loader";
+import { FullScreenLoader } from "../../helper/Loader";
 import { useNavigate } from "react-router-dom";
 import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrationProperties";
 import ToastHandle from "../../helper/ToastMessage";
@@ -72,7 +68,7 @@ const Properties = () => {
   const propertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user
     ?.property_data
     ? store?.getUserDataReducer?.getUserData?.data?.user?.property_data
-    : [];
+    : {};
   // shows toggle state for each property
   const intergrationsMain = store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
   const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription
@@ -140,6 +136,15 @@ const Properties = () => {
     propertyConditionCheck,
     toggleChatStatus,
   ]);
+
+  // Whenever the user's subscription data or property data changes, update this information in local storage to ensure we're rendeting the subscription warning banner with correct information
+  useEffect(() => {
+    localStorage.setItem("paymentStatus", subscription_data?.payment_standing);
+    localStorage.setItem("servicesExpireDate", subscription_data?.services_good_until);
+    localStorage.setItem("numPropertiesAllowed", subscription_data?.num_properties_allowed);
+    localStorage.setItem("numPropertiesUsed", Object.keys(propertiesExtraData || {}).length);
+    localStorage.setItem("tooManyPropertiesGraceUntil", subscription_data?.too_many_properties_grace_until);
+  }, [subscription_data, propertiesExtraData]);
 
   return (
     <>
