@@ -36,13 +36,9 @@ const ListIntegrationProperties = () => {
   const [allProperties, setAllProperty] = useState([]);
   const { store, dispatch } = useSelectorUseDispatch();
   const userDataGetLoading = store?.getUserDataReducer?.loading;
-  const createPropertiesName =
-    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const createPropertiesSubscriptionAllowed =
-    store?.getUserDataReducer?.getUserData?.data?.user?.subscription
-      ?.num_properties_allowed;
-  const propertyCheckSubscription =
-    createPropertiesSubscriptionAllowed - (createPropertiesName?.length || 0);
+  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const createPropertiesSubscriptionAllowed = store?.getUserDataReducer?.getUserData?.data?.user?.subscription?.num_properties_allowed;
+  const propertyCheckSubscription = createPropertiesSubscriptionAllowed - (createPropertiesName?.length || 0);
   const dummyArraySubscriptionAllowed = [];
 
   for (let i = 0; i < propertyCheckSubscription; i++) {
@@ -69,10 +65,6 @@ const ListIntegrationProperties = () => {
   const { chatbot_key, property_name } = chatBoxGetByNameData
     ? chatBoxGetByNameData
     : [];
-  // const [copyLinkSetData, setCopyLinkSetData] = useState({
-  //   chatBotKey: "",
-  //   propertyName: "",
-  // });
   const chatBoxGetByNameLoading = store?.getPropertyByNameReducer?.loading;
   const chatBoxGetByNameError =
     store?.getPropertyByNameReducer?.getPropertybyName?.data?.error;
