@@ -11,33 +11,61 @@ const NavBar = () => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];
   const localstorageDataGet = localStorage.getItem("chatBoxId");
-  const paymentStatus = localStorage.getItem("paymentStatus"); // comes from /get_user_data API call on the dashboard page. If "bad", show warning banner (at the top of all pages)
-  const servicesExpireDate = localStorage.getItem("servicesExpireDate"); // Also comes from /get_user_data. Format: MM/DD/YYYY HH:MM:SS (24 hr time, UTC)
+
   useEffect(() => {
     if (localstorageDataGet === 1234) {
       Authorized();
     }
   }, [localstorageDataGet]);
 
+  // Below data comes from /get_user_data API call on the Dashboard or Properties page. Used to determine whether to show warning banner about subscription, and to populate details on the banner
+  const paymentStatus = localStorage.getItem("paymentStatus");
+  const servicesExpireDate = localStorage.getItem("servicesExpireDate"); // Format: MM/DD/YYYY HH:MM:SS (24 hr time, UTC)
+  const numPropertiesAllowed = parseInt(localStorage.getItem("numPropertiesAllowed"));
+  const numPropertiesUsed = parseInt(localStorage.getItem("numPropertiesUsed"));
+  const tooManyPropertiesGraceUntil = localStorage.getItem("tooManyPropertiesGraceUntil"); // Format: MM/DD/YYYY HH:MM:SS (24 hr time, UTC)
+
+  // Parse the date string from the API into a Date object. Need to do it this way to make sure we properly account for UTC time.
+  const parseDate = (dateString) => {
+    const [date, time] = dateString.split(' ');
+    const [month, day, year] = date.split('/');
+    const [hour, minute, second] = time.split(':');
+    return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  };
+
   // Warning banner to be shown to user if their payment standing is bad
   const paymentStatusBanner = () => {
-    const expiryDate = new Date(servicesExpireDate);
-    const currentDate = new Date(Date.now());
-    const diffTime = Math.abs(expiryDate - currentDate); // time remaining, in milliseconds
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // time remaining, in days
+    if (paymentStatus === 'bad') {
+      const expiryDate = parseDate(servicesExpireDate);
+      const currentDate = new Date(Date.now());
+      const diffTime = Math.abs(expiryDate - currentDate); // time remaining, in milliseconds
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // time remaining, in full days
 
-    if (expiryDate > currentDate) { // Payment standing is bad, but user still has grace period before services are paused
-      return (
-        <Alert variant="danger">
-          Your last subscription payment didn't go through. Please click on "Subscription" in your <Link to="/account">Account page</Link> to update your payment info. Otherwise, your services will be paused in {diffDays} days.
-        </Alert>
-      );
-    } else { // Payment standing is bad, and grace period is over
-      return (
-        <Alert variant="danger">
-          Your last subscription payment didn't go through and your services have been paused. Please click on "Subscription" in your <Link to="/account">Account page</Link> to update your payment info.
-        </Alert>
-      );
+      if (expiryDate > currentDate) { // Payment standing is bad, but user still has grace period before services are paused
+        return (
+          <Alert variant="danger"> Your last subscription payment didn't go through. Please click on "Subscription" in your <Link to="/account">Account page</Link> to update your payment info. Otherwise, your services will be paused in {diffDays} days. </Alert>
+        );
+      } else { // Payment standing is bad, and grace period is over. Services have been paused.
+        return (
+          <Alert variant="danger"> Your last subscription payment didn't go through and your services have been paused. Please click on "Subscription" in your <Link to="/account">Account page</Link> to update your payment info. </Alert>
+        );
+      }
+    } else if (numPropertiesUsed > numPropertiesAllowed) {
+      const expiryDate = parseDate(tooManyPropertiesGraceUntil);
+      const currentDate = new Date(Date.now());
+      console.log("expiryDate: ", expiryDate)
+      console.log("currentDate: ", currentDate)
+      const diffTime = Math.abs(expiryDate - currentDate); // time remaining, in milliseconds
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // time remaining, in full days
+      if (expiryDate > currentDate) { // User has too many properties, but still has grace period before services are paused
+        return (
+          <Alert variant="danger"> Your account has {numPropertiesUsed} properties, which is greater than your current subscription allows ({numPropertiesAllowed}). Please reconcile this by clicking on "Subscription" in your <Link to="/account">Account page</Link> to increase your allowance, or by deleting extra properties from the <Link to="/properties">Properties page</Link>. Otherwise, your services will be paused in {diffDays} days. </Alert>
+        );
+      } else { // User has too many properties, and grace period is over. Services have been paused.
+        return (
+          <Alert variant="danger"> Your account has {numPropertiesUsed} properties, which is greater than your current subscription allows ({numPropertiesAllowed}). Your services for this account have been paused. To resume service, please click on "Subscription" in your <Link to="/account">Account page</Link> and ensure all properties are paid for, or delete extra properties from the <Link to="/properties">Properties page</Link> to match the current subscription allowance. </Alert>
+        );
+      }
     }
   };
 
@@ -118,7 +146,7 @@ const NavBar = () => {
             </div>
           )}
         </Navbar>
-        {paymentStatus === 'bad' && paymentStatusBanner()}
+        { (paymentStatus === 'bad' || numPropertiesUsed > numPropertiesAllowed) && paymentStatusBanner() }
       </Container>
     </header>
   );

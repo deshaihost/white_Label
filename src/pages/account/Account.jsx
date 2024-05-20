@@ -126,6 +126,19 @@ const Account = () => {
     }
   }, [updatePasswordStatus]);
 
+  const subscriptionClickHandler = (event) => {
+    event.preventDefault();
+
+    // Remove local storage data related to subscription, since theu ser may be going to change it. This will re-update next time user goes to dashboard page.
+    localStorage.removeItem("paymentStatus");
+    localStorage.removeItem("servicesExpireDate");
+    localStorage.removeItem("numPropertiesAllowed");
+    localStorage.removeItem("numPropertiesUsed");
+    localStorage.removeItem("tooManyPropertiesGraceUntil");
+
+    dispatch(goToBillingportalPostActions());
+  };
+
 // subscription functionality
   const billingPortalUrl =
     store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.data
@@ -400,7 +413,7 @@ const Account = () => {
                   </div>
                 </form>
                 <span className="d-flex justify-content-center" style={{ marginTop: '10px' }}>
-                  <Link to="#" className="text-link" onClick={()=>{dispatch(goToBillingportalPostActions())}}>Subscription</Link>
+                  <Link to="#" className="text-link" onClick={subscriptionClickHandler}>Subscription</Link>
                 </span>
               </div>
             </div>

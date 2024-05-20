@@ -92,15 +92,15 @@ const Dashboard = () => {
     dispatch(getActionItemsActions());
   }, []);
 
-  // When user data is loaded, save the payment status to local storage. If bad, we need this information to show a warning banner, which should be shown on all portal pages.
+  // When user data is loaded, save the payment/subscription information to local storage. We need this information for the warning banner logic (in the NavBar), which should be shown on all portal pages.
   useEffect(() => {
     if (userDataGet) {
       localStorage.setItem("paymentStatus", userDataGet?.subscription?.payment_standing);
       localStorage.setItem("servicesExpireDate", userDataGet?.subscription?.services_good_until);
+      localStorage.setItem("numPropertiesAllowed", userDataGet?.subscription?.num_properties_allowed);
+      localStorage.setItem("numPropertiesUsed", Object.keys(userDataGet?.property_data || {}).length);
+      localStorage.setItem("tooManyPropertiesGraceUntil", userDataGet?.subscription?.too_many_properties_grace_until);
     }
-    console.log("userDataGet updated!");
-    console.log("paymentStatus", userDataGet?.subscription?.payment_standing);
-    console.log("servicesExpireDate", userDataGet?.subscription?.services_good_until);
   }, [userDataGet]);
 
   useEffect(() => {

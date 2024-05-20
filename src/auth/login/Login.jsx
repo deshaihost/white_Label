@@ -15,6 +15,7 @@ import ToastHandle from "../../helper/ToastMessage";
 import { useNavigate } from "react-router-dom";
 import Authorized from "../../helper/Authorized";
 import ErrorMessageShow from "../../helper/ErrorMessageShow";
+
 const Login = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -22,21 +23,16 @@ const Login = () => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];
   const [showPassword, setShowPassword] = useState(false);
+  const [emailEntered, setEmailEntered] = useState("");
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
   const loginLoading = store?.loginReducer?.loading;
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = (data) => {
+    setEmailEntered(data.email);
     dispatch(
-      loginActions({
-        email: data.email,
-        password: data.password,
-      })
+      loginActions({ email: data.email, password: data.password })
     );
   };
 
@@ -46,6 +42,10 @@ const Login = () => {
       dispatch(stateEmptyActions());
     } else if (loginStatus === 200) {
       navigate('/dashboard')
+      dispatch(stateEmptyActions());
+    } else if (loginStatus === 202) { // credentials good, but user hasn't confirmed email yet. Backend will not provide tokens until email is confirmed
+      localStorage.setItem('loginEmailEntered', emailEntered); // this nees to be accessible on the confirm-email page
+      navigate('/confirm-email')
       dispatch(stateEmptyActions());
     }
   }, [loginStatus]);

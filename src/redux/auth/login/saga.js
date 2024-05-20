@@ -35,6 +35,11 @@ function* loginFunction(data) {
         type: LoginActionTypes.LOGIN_RESET,
         payload: {},
       });
+    } else if (response.status === 202) { // credentials good, but user hasn't confirmed email yet. Backend will not provide tokens until email is confirmed. State still needs to be updated so login.jsx can redirect to confirm-email
+      yield put({
+        type: LoginActionTypes.LOGIN_SUCCESS, // should maybe create a new event for this? But this works for now
+        payload: { ...response.data, status: response.status },
+      });
     } else {
       yield put({
         type: LoginActionTypes.LOGIN_ERROR,
