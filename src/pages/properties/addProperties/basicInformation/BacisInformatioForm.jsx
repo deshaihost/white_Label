@@ -44,9 +44,6 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   const nameKeyGet = nameKey();
   // const [oldProperyName, setOldPropertyName] = useState("");
   const add_thumbnail_image = async (propertyName, imgFile) => {
-    console.log("propertyImgPath", propertyImgPath);
-    console.log("uploadedFile", uploadedFile);
-
     if (propertyImgPath !== undefined) {
       let formData = new FormData();
       let file = propertyImgPath !== null ? propertyImgPath[0] : imgFile;
