@@ -63,6 +63,7 @@ const ListingDetailsForm = ({ prntFuntionHeaderActive }) => {
   const apiQuestionnaireObject =
     store?.getQuestionnaireReducer?.getQuestionnaire?.data;
 
+    
   const {
     register,
     handleSubmit,

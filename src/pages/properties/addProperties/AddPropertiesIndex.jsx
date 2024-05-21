@@ -9,21 +9,17 @@ import ExtrasForm from "./extras/ExtrasForm";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import { nameKey } from "../../../helper/Authorized";
+import QuestionnaireInput from "./allQuestionnaireInput/QuestionnaireInput";
 const AddPropertiesIndex = () => {
-  const basics = "basics";
-  const supportingDoc = "supportingDoc";
-  const listingDetails = "listingDetails";
-  const amenities = "amenities";
-  const extras = "extras";
+  const basics = "Basics";
+  const supportingDoc = "External Resources";
+  const listingDetails = "Listing Details";
+  const amenities = "Amenities";
+  const extras = "Extras";
   const nameKeyGet = nameKey();
-  const propertyName=nameKeyGet?.nameKey
+  const propertyName = nameKeyGet?.nameKey;
 
   const [addPropertiesIndexConditions, setPropertiesConditions] = useState({
-    basics: true,
-    supportingDoc: false,
-    listingDetails: false,
-    amenities: false,
-    extras: false,
     progressPoint: 20,
     propertieShowInterFace: basics,
   });
@@ -31,53 +27,29 @@ const AddPropertiesIndex = () => {
     addPropertiesIndexConditions?.propertieShowInterFace;
 
   const mainHandleHeaderActive = (type) => {
-    if (type === basics) {
+    const typeString = type.trim();
+    if (typeString === basics.trim()) {
       setPropertiesConditions({
-        basics: true,
-        supportingDoc: false,
-        listingDetails: false,
-        amenities: false,
-        extras: false,
         progressPoint: 20,
         propertieShowInterFace: type,
       });
-    } else if (type === supportingDoc) {
+    } else if (typeString === supportingDoc.trim()) {
       setPropertiesConditions({
-        basics: true,
-        supportingDoc: true,
-        listingDetails: false,
-        amenities: false,
-        extras: false,
         progressPoint: 40,
         propertieShowInterFace: type,
       });
-    } else if (type === listingDetails) {
+    } else if (typeString === listingDetails.trim()) {
       setPropertiesConditions({
-        basics: true,
-        supportingDoc: true,
-        listingDetails: true,
-        amenities: false,
-        extras: false,
         progressPoint: 60,
         propertieShowInterFace: type,
       });
-    } else if (type === amenities) {
+    } else if (typeString === amenities.trim()) {
       setPropertiesConditions({
-        basics: true,
-        supportingDoc: true,
-        listingDetails: true,
-        amenities: true,
-        extras: false,
         progressPoint: 80,
         propertieShowInterFace: type,
       });
-    } else if (type === extras) {
+    } else if (typeString === extras.trim()) {
       setPropertiesConditions({
-        basics: true,
-        supportingDoc: true,
-        listingDetails: true,
-        amenities: true,
-        extras: true,
         progressPoint: 100,
         propertieShowInterFace: type,
       });
@@ -87,8 +59,9 @@ const AddPropertiesIndex = () => {
   return (
     <div>
       <Helmet>
-    <title>Add Properties</title>
-  </Helmet>;
+        <title>Add Properties</title>
+      </Helmet>
+      ;
       <Container className="mt-3 mt-md-5 py-3 py-md-5">
         <div className="row">
           <div className="col-lg-8 mx-auto">
@@ -98,7 +71,7 @@ const AddPropertiesIndex = () => {
             <AddPropertiesHeader
               propertiesTypes={addPropertiesIndexConditions}
               prntFuntionHeaderActive={mainHandleHeaderActive}
-              propertyName={propertyName}             
+              propertyName={propertyName}
             />
           </div>
         </div>
@@ -113,13 +86,20 @@ const AddPropertiesIndex = () => {
                 prntFuntionHeaderActive={mainHandleHeaderActive}
               />
             ) : propertiesInterFace === listingDetails ? (
-              <ListingDetailsForm
+              <QuestionnaireInput
                 prntFuntionHeaderActive={mainHandleHeaderActive}
+                interFaceActiveQuestionnarie={propertiesInterFace}
               />
             ) : propertiesInterFace === amenities ? (
-              <AmenitiesForm prntFuntionHeaderActive={mainHandleHeaderActive} />
+              <QuestionnaireInput
+                prntFuntionHeaderActive={mainHandleHeaderActive}
+                interFaceActiveQuestionnarie={propertiesInterFace}
+              />
             ) : propertiesInterFace === extras ? (
-              <ExtrasForm />
+              <QuestionnaireInput
+                prntFuntionHeaderActive={mainHandleHeaderActive}
+                interFaceActiveQuestionnarie={propertiesInterFace}
+              />
             ) : (
               ""
             )}
