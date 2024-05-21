@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import './features.css';
+
 import FeatureIconOne from '../../../public/img/home/feature_icon1.png';
 import FeatureIconTwo from '../../../public/img/home/feature_icon2.png';
 import FeatureIconThree from '../../../public/img/home/feature_icon3.png';
 import FeatureIconFour from '../../../public/img/home/feature_iconnew1.png';
+
 import FeatureImgOne from '../../../public/img/home/chatgpt.png';
-import FeatureImgTwo from '../../../public/img/home/assistant.png';
-import FeatureImgThree from '../../../public/img/home/intelligence.png';
 import FeatureImgFour from '../../../public/img/home/Direct_Integrations.png';
+
+import ComputerBrainImg from '../../../public/img/home/intelligence.png';
+import ControlToggleImg from '../../../public/img/home/full_host_control.png';
+import EditPropertyImg from '../../../public/img/home/Property_customization.png';
+import transcriptsPanel from '../../../public/img/home/transcript_panel.png';
+
 import Accordion from 'react-bootstrap/Accordion';
 
 const Features = () => {
@@ -36,7 +42,7 @@ const Features = () => {
                                         Industry Leading AI Technology
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        In the rapidly evolving landscape of short-term rentals, HostBuddy stands at the forefront of innovation, harnessing the power of the most advanced conversational AI models in the world. This state-of-the-art integration not only ensures impeccable communication accuracy but also delivers real-time, context-aware responses, elevating guest experience to unparalleled heights.
+                                        HostBuddy is built using the most advanced conversational AI available today, which we’ve further optimized to perfect its performance in supporting guests at short-term rentals. Our committed team works relentlessly to stay at the forefront as AI technology advances, ensuring you and your guests receive the highest level of service.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>
@@ -44,10 +50,10 @@ const Features = () => {
                                 <Accordion.Item eventKey="1" className={activeKey === "1" ? 'active' : ''}>
                                     <Accordion.Header>
                                         <img src={FeatureIconTwo} alt="feature-icon" />
-                                        24/7 Support
+                                        Robust Customization
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        HostBuddy acts as your personal, dedicated assistant, expertly handling guest communications wherever you require support. With HostBuddy at your service, you can confidently ensure that your guests receive attentive care, whether you’re offline, taking a well-deserved break, or spending quality time with family and friends. Trust HostBuddy to seamlessly manage guest interactions anytime you need support for as long as you need it.
+                                        Our user-friendly interface allows hosts to equip HostBuddy with a diverse range of knowledge. Whether you have a six-bedroom cabin in the woods or a high-rise apartment with multiple points of entry, HostBuddy can be trained to be an expert concierge for your property.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>
@@ -55,10 +61,10 @@ const Features = () => {
                                 <Accordion.Item eventKey="2" className={activeKey === "2" ? 'active' : ''}>
                                     <Accordion.Header>
                                         <img src={FeatureIconThree} alt="feature-icon" />
-                                        Tailored Hosting Intelligence
+                                        Full Host Control
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        Tailored to the unique needs of your business, HostBuddy offers specialized support based on the specific details of each of your properties. Equipped with in-depth knowledge, HostBuddy is adept at resolving guest issues, answering a range of questions - whether general or specific - and even suggesting local activities and attractions. This personalized approach ensures that your guests receive informed and relevant assistance, enhancing their overall experience.
+                                        HostBuddy is at your service whenever you need coverage. Our advanced scheduling feature allows you to set recurring weekly schedules or one-off shifts, giving you the flexibility to manage your time as you see fit. Whether you need a regular break or an occasional day off, you can turn off your phone and unplug, confident that HostBuddy will take care of your guests' needs.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>
@@ -66,10 +72,10 @@ const Features = () => {
                                 <Accordion.Item eventKey="3" className={activeKey === "3" ? 'active' : ''}>
                                     <Accordion.Header>
                                         <img src={FeatureIconFour} alt="feature-icon" />
-                                        Direct Integrations
+                                        Always Stay In The Loop
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        HostBuddy seamlessly integrates into your existing setup. Thanks to our partnerships with leading property management software providers, HostBuddy can engage with guests directly on the booking platforms they use and trust. For more details on how this integration works and the benefits it offers, we invite you to visit our FAQ page.
+                                        Our software ensures you stay informed with what is going on at your property. HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention on the dashboard, so you can see what’s important at a glance. Whether you've been offline for a few hours or a few days, you can access your portal to stay updated.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>
@@ -78,10 +84,10 @@ const Features = () => {
                     </div>
                     <div className="col-lg-6">
                         <div className="features-img">
-                            {activeKey == '0' && <img src={FeatureImgOne} alt='feature-img' />}
-                            {activeKey == '1' && <img src={FeatureImgTwo} alt='feature-img' />}
-                            {activeKey == '2' && <img src={FeatureImgThree} alt='feature-img' />}
-                            {activeKey == '3' && <img src={FeatureImgFour} alt='feature-img' />}
+                            {activeKey == '0' && <img src={ComputerBrainImg} alt='feature-img' />}
+                            {activeKey == '1' && <img src={EditPropertyImg} alt='feature-img' />}
+                            {activeKey == '2' && <img src={ControlToggleImg} alt='feature-img' />}
+                            {activeKey == '3' && <img src={transcriptsPanel} alt='feature-img' />}
                         </div>
                     </div>
                 </div>

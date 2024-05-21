@@ -14,8 +14,7 @@ const Discover = () => {
         <div className="row">
           <div className="col-lg-6">
             <h2>
-              Discover more about <strong>HostBuddy AI</strong>, Contact us
-              today!
+              <strong>Questions?</strong> We're Here To Help!
             </h2>
             <div onClick={() => setModalShow(true)}>
             <Link  className="link-btn filled-btn">

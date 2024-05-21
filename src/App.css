@@ -316,13 +316,15 @@ input[type="checkbox"] {
   padding: 16px 20px;
 }
 
-.contact-modal .input-group > .form-control:focus ~ label {
+/* .contact-modal .input-group > .form-control:focus ~ label { */
+.contact-modal .input-group > .form-control ~ label {
   opacity: 0.65;
   transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
   z-index: 3;
 }
 
-.contact-modal .input-group > .form-control:focus {
+/* .contact-modal .input-group > .form-control:focus { */
+.contact-modal .input-group > .form-control {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }

@@ -10,15 +10,15 @@ const Plans = () => {
                 <div className="row">
                     <div className="col-md-6">
                         <div className="plan-box">
-                            <h3>Explore HostBuddy’s <strong>Pricing Plans </strong>  and Options</h3>
-                            <Link to='/pricing' className='link-btn outline-btn'>Pricing</Link>
-                        </div>    
+                            <h3>Discover The <strong>Power</strong> Of HostBuddy</h3>
+                            <Link to='/meet-hostbuddy' className='link-btn filled-btn'>Meet HostBuddy</Link>
+                        </div>
                     </div>
                     <div className="col-md-6">
                         <div className="plan-box">
-                            <h3>Discover the Magic of <strong>HostBuddy’s </strong> Chatbot</h3>
-                            <Link to='/meet-hostbuddy' className='link-btn filled-btn'>Meet HostBuddy</Link>
-                        </div>
+                            <h3>Explore <strong>Pricing</strong></h3>
+                            <Link to='/pricing' className='link-btn outline-btn'>Pricing</Link>
+                        </div>    
                     </div>
                 </div>
             </Container>

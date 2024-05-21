@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import './works.css';
-import WorksOne from '../../../public/img/home/openai_logo.png';
-import WorksTwo from '../../../public/img/home/Property_customization.png';
-import WorksThree from '../../../public/img/home/full_host_control.png';
+
+import AssistantImg from '../../../public/img/home/assistant.png';
+import ControlToggleImg from '../../../public/img/home/full_host_control.png';
 import WorksFour from '../../../public/img/home/tailored_recommendations.png';
+import IntegrationsImg from '../../../public/img/home/Direct_Integrations.png';
+import PropertyWithAmenitiesImg from '../../../public/img/home/property_with_amenities.jpeg';
+import lateNightBot from '../../../public/img/home/late_night_bot.jpeg';
 
 const Works = () => {
     return(
@@ -35,48 +38,48 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h4><strong>AI-Powered </strong> Communication</h4>
-                                <p>Experience hosting in the digital age. HostBuddy’s AI-powered communication revolutionizes the way you interact with your guests, providing instant assistance, 24/7 availability, and personalized responses.</p>
+                                <h4><strong>Automate</strong> Your Guest Communications</h4>
+                                <p>HostBuddy AI, created by hosts for hosts, aims to alleviate the stress of hosting. Hosts deserve the chance to unplug and recharge. With HostBuddy, you can automate the demanding responsibilities of guest communication, allowing you to relax, knowing your guests are well taken care of.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={WorksOne} alt='works-img' />
+                            <img src={AssistantImg} alt='works-img' />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h4>Property <strong> Customization</strong></h4>
-                                <p>Tailor your hosting experience with HostBuddy’s Property Customization feature. There's no limit to what HostBuddy can learn.</p>
+                                <h4><strong>Integrate</strong> Into Your Existing Systems</h4>
+                                <p>HostBuddy integrates with most major property management softwares on the market. Connect a PMS account to give Hostbuddy access to property details and real-time guest information, and to allow HostBuddy to see and respond to guest messages over your existing communication channels. Visit our FAQ page for a complete list of the connections we currently support.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={WorksTwo} alt='works-img' />
+                            <img src={IntegrationsImg} alt='works-img' />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h4>Full <strong> Host Control</strong> </h4>
-                                <p>Experience full host control with HostBuddy’s 24/7 Support. Choose when to give HostBuddy control and when you'd like to jump back in. Customize your weekly calendar to ensure full coverage during the busiest hours of each day.</p>
+                                <h4>Tailor To <strong>Your Specifications</strong></h4>
+                                <p>Our interface allows you to provide property information, troubleshooting instructions, or any other relevant details for HostBuddy to use in supporting guests. Our easy-to-follow setup guide will have your application ready to go live quickly and effortlessly.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={WorksThree} alt='works-img' />
+                            <img src={PropertyWithAmenitiesImg} alt='works-img' />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h4><strong>Tailored Recommendations </strong> for Improvement</h4>
-                                <p>HostBuddy tracks conversations to help inform you of what information it is missing. This ensures that HostBuddy has everything it needs to best support your business and guests.</p>
+                                <h4><strong>Schedule</strong> To Your Needs</h4>
+                                <p>Think of HostBuddy as the most dedicated employee you could have. Available anytime you need support, HostBuddy can be scheduled to fit your specific coverage needs. Say goodbye to lockouts, late-night messages, and issue troubleshooting—HostBuddy will take it from here.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={WorksFour} alt='works-img' />
+                            <img src={lateNightBot} alt='works-img' />
                         </div>
                     </div>
                 </div>
