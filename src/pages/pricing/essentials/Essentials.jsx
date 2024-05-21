@@ -47,12 +47,11 @@ const Essentials = () => {
             <h3>The Essentials</h3>
             <div className="divider">
               <span></span>
-              <strong>Monthly Billing</strong>
+              <strong>Monthly Pricing</strong>
               <span></span>
             </div>
             <p>
-              Move the slider below to set the number of properties that had a
-              check-in during the month
+              Move the slider below to set the number of properties
             </p>
             <div className="pricing-bar-box">
               <div className="pricing-bar">
@@ -129,7 +128,7 @@ const Essentials = () => {
             </div>
             {token === undefined && (
               <Link to="/signup" className="link-btn outline-btn">
-                Sign up Today!
+                Sign Up
               </Link>
             )}
           </div>
@@ -139,12 +138,11 @@ const Essentials = () => {
             <h3>The Works</h3>
             <div className="divider">
               <span></span>
-              <strong>Monthly Billing</strong>
+              <strong>Monthly Pricing</strong>
               <span></span>
             </div>
             <p>
-              Move the slider below to set the number of properties that had a
-              check-in during the month
+            Move the slider below to set the number of properties
             </p>
             <div className="pricing-bar-box">
               <div className="pricing-bar">
@@ -221,7 +219,7 @@ const Essentials = () => {
             </div>
             {token === undefined && (
               <Link to="/signup" className="link-btn filled-btn">
-                Sign up Today!
+                Sign Up
               </Link>
             )}
           </div>

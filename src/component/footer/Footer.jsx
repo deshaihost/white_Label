@@ -21,9 +21,7 @@ const Footer = () => {
                   <img src={FooterLogo} alt="footer-logo" />
                 </Link>
                 <p>
-                  Our mission is to simplify the hosting experience, making it
-                  easier and more enjoyable for hosts while enhancing the guest
-                  experience.
+                  Welcome to the Future of Hosting!
                 </p>
               </div>
             </MDBCol>
@@ -37,13 +35,13 @@ const Footer = () => {
                   </Link>
                 </p>
                 <p className="links">
-                  <Link to="/pricing" className="text-reset">
-                    Pricing
+                  <Link to="/meet-hostbuddy" className="text-reset">
+                    Meet HostBuddy
                   </Link>
                 </p>
                 <p className="links">
-                  <Link to="/meet-hostbuddy" className="text-reset">
-                    Meet HostBuddy
+                  <Link to="/pricing" className="text-reset">
+                    Pricing
                   </Link>
                 </p>
                 <p className="links">
@@ -58,9 +56,9 @@ const Footer = () => {
               <div className="footer-links">
                 <h6 className=" fw-bold mb-4 links-heading">Features</h6>
                 <p className="links">Industry leading AI technology</p>
-                <p className="links">24/7 Support</p>
-                <p className="links">Tailored Hosting Intelligence</p>
-                <p className="links">Direct integration</p>
+                <p className="links">Robust Customization</p>
+                <p className="links">Full Host Control</p>
+                <p className="links">Always Stay In The Loop</p>
               </div>
             </MDBCol>
 
@@ -68,13 +66,10 @@ const Footer = () => {
               <div className="footer-links">
                 <h6 className=" fw-bold mb-4 links-heading">Contact</h6>
                 <p className="links">
-                  Phone: +1 (530) 401-6167
-                </p>
-                <p className="links">
                   Email: info@hostbuddy.ai
                 </p>
                 <p className="links">
-                  Address: Headquartered in San Diego, CA
+                  Headquartered in San Diego, CA, USA
                 </p>
               </div>
             </MDBCol>

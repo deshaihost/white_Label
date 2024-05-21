@@ -122,11 +122,11 @@ const NavBar = () => {
                   <NavLink exact to="/" className="nav-link" activeClassName="active">
                     Home
                   </NavLink>
-                  <NavLink exact to="/pricing" className="nav-link" activeClassName="active">
-                    Pricing
-                  </NavLink>
                   <NavLink exact to="/meet-hostbuddy" className="nav-link" activeClassName="active">
                     Meet HostBuddy
+                  </NavLink>
+                  <NavLink exact to="/pricing" className="nav-link" activeClassName="active">
+                    Pricing
                   </NavLink>
                   <NavLink exact to="/faqs" className="nav-link" activeClassName="active">
                     FAQs

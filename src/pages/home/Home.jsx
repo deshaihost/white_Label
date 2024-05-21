@@ -12,8 +12,9 @@ const Home = () => {
         <title>HostBuddy</title>
       </Helmet>
       <Banner />
-      <Features />
       <Works />
+      <Features />
+      <div style={{ height: '100px' }} /> {/* Vertical spacer */}
       <Plans />
     </div>
   )

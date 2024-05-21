@@ -170,9 +170,7 @@ const MeetBanner = (props) => {
           </h2>
           {!isPropertyChat && (
             <p>
-              Get ready to meet our friendly HostBuddy chatbot. We're here to
-              assist you with any questions or support you might need. Just type
-              your query below, and we'll be happy to help
+              Try asking Hostbuddy your most commonly received guest questions, and watch it handle them with ease. Its responses here are based on the details of a fictional property, but you’ll be able to seamlessly tailor it to your own!
             </p>
           )}
           {isPropertyChat ? (
