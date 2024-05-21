@@ -13,10 +13,10 @@ const Banner = () => {
                 <div className="banner-container">
                     <div className="banner-content">
                         <div className="heading heading-center">
-                            <h2>Property Management Made Easy with Our <strong>AI-Powered Chatbots</strong></h2>
+                            <h2>Short Term Rental Management Made Easy with our <strong>AI-Powered Software</strong></h2>
                         </div>
-                        <p>24/7 Guest Communication Made Effortless</p>
-                        <Link to='/pricing' className="link-btn outline-btn">Start 2 Week free trial</Link>
+                        <p>Welcome to the Future of Hosting</p>
+                        <Link to='/pricing' className="link-btn outline-btn">Start 2 Week Free Trial</Link>
                     </div>
                     <div className="banner-video">
                         <video autoPlay loop muted poster={videoImgBackup}>

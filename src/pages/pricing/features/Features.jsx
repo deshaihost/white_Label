@@ -49,18 +49,13 @@ const Features = () => {
             compareTo: 'Toggle On/Off Capabilities',
             essential: false,
             works: true
-        },
-        {
-            compareTo: 'Improvement Insights',
-            essential: false,
-            works: true
-        },
+        }
     ]
     return(
         <div className="features">
             <div className="heading-box">
                 <h2>Features</h2>
-                <p>Compare plans to features that best suit your need</p>
+                <p>Find the plan that best suits your needs</p>
             </div>
             <div className='features-list'>
                     <table>
@@ -68,15 +63,15 @@ const Features = () => {
                             <tr>
                                 <th>
                                     <h3>Compare Plan</h3>
-                                    <p>Find one that’s right for you</p>
+                                    <p>Find the one that’s right for you</p>
                                 </th>
                                 <th>
                                     <h3>The Essentials</h3>
-                                    <p>Features in Essentials Plan</p>
+                                    <p>Features in The Essentials Plan</p>
                                 </th>
                                 <th>
                                     <h3>The Works</h3>
-                                    <p>Features in Works Plan</p>
+                                    <p>Features in The Works Plan</p>
                                 </th>
                             </tr>
                         </thead>

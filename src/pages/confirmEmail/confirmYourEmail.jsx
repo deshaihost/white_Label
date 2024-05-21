@@ -1,10 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import './confirmEmail.css';
 import axios from 'axios';
 import ToastHandle from '../../helper/ToastMessage';
 import { BoxLoader } from '../../helper/Loader';
 
 const ConfirmYourEmail = () => {
+
+  // Add the styles here because if I create a standalone .css file for this, it applies to the entire app, and I can't figure out how to make it not do that
+  const styles = {
+  h1: { 
+    marginBottom: '20px', 
+    color: '#fff',
+  },
+  p: { 
+    marginBottom: '20px', 
+    color: '#fff',
+    fontSize: '1.2em',
+  },
+  button: {
+    background: 'none',
+    color: '#007bff',
+    cursor: 'pointer',
+    border: 'none',
+    padding: '0',
+    font: 'inherit',
+    outline: 'inherit',
+  },
+  confirmEmailPageSpacer: { 
+    height: '400px', 
+  },
+  confirmEmailPageContent: { 
+    padding: '50px', 
+  },
+};
+
   const [emailResent, setEmailReSent] = useState(false);
   const [emailEntered, setEmailEntered] = useState("");
   const [reSendApiLoading, setReSendApiLoading] = useState(false);
@@ -51,20 +79,20 @@ const ConfirmYourEmail = () => {
 
   return (
     <>
-        <div className='confirm-email-page-content'>
-        <h1>Confirm Your Email</h1>
-        <p>An email has been sent to "{emailEntered}". Please click the link in the email to continue.</p>
+      <div style={styles.confirmEmailPageContent} className='confirm-email-page-content'>
+        <h1 style={styles.h1}>Confirm Your Email</h1>
+        <p style={styles.p}>An email has been sent to "{emailEntered}". Please click the link in the email to continue.</p>
         {reSendApiLoading ? (
           <BoxLoader />
         ) : (
           !emailResent ? (
-            <button onClick={resendEmail}>Resend Email</button>
+            <button style={styles.button} onClick={resendEmail}>Resend Email</button>
           ) : (
-            <p style={{ fontSize: '1em' }}>Confirmation email to "{emailEntered}" has been re-sent. Please check your inbox.</p>
+            <p style={{ ...styles.p, fontSize: '1em' }}>Confirmation email to "{emailEntered}" has been re-sent. Please check your inbox.</p>
           )
         )}
         </div>
-        <div className='confirm-email-page-spacer'></div>
+        <div className='confirm-email-page-spacer' style={styles.confirmEmailPageSpacer}></div>
     </>
   );
 };
