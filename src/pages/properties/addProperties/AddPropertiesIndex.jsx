@@ -8,9 +8,13 @@ import AmenitiesForm from "./amenities/AmenitiesForm";
 import ExtrasForm from "./extras/ExtrasForm";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet";
-import { nameKey } from "../../../helper/Authorized";
+import { GetquestionnaireFunction, nameKey } from "../../../helper/Authorized";
 import QuestionnaireInput from "./allQuestionnaireInput/QuestionnaireInput";
 const AddPropertiesIndex = () => {
+  const ExtrasFormCall = GetquestionnaireFunction();
+  const { metadata } = ExtrasFormCall ? ExtrasFormCall : [];
+  const { section_order } = metadata ? metadata : [];
+  console.log(section_order, "section_order");
   const basics = "Basics";
   const supportingDoc = "External Resources";
   const listingDetails = "Listing Details";
@@ -55,6 +59,22 @@ const AddPropertiesIndex = () => {
       });
     }
   };
+  const activeComponent = (activePoint) => {
+    return (
+      <>
+        {section_order?.map((section) => {
+          if (section === activePoint) {
+            return (
+              <QuestionnaireInput
+                prntFuntionHeaderActive={mainHandleHeaderActive}
+                interFaceActiveQuestionnarie={propertiesInterFace}
+              />
+            );
+          }
+        })}
+      </>
+    );
+  };
 
   return (
     <div>
@@ -77,32 +97,37 @@ const AddPropertiesIndex = () => {
         </div>
         <div className="row">
           <div className="col-lg-9 mx-auto mt-5 form_multisteps">
-            {propertiesInterFace === basics ? (
-              <BacisInformatioForm
-                prntFuntionHeaderActive={mainHandleHeaderActive}
-              />
-            ) : propertiesInterFace === supportingDoc ? (
-              <SupportingDocForm
-                prntFuntionHeaderActive={mainHandleHeaderActive}
-              />
-            ) : propertiesInterFace === listingDetails ? (
-              <QuestionnaireInput
-                prntFuntionHeaderActive={mainHandleHeaderActive}
-                interFaceActiveQuestionnarie={propertiesInterFace}
-              />
-            ) : propertiesInterFace === amenities ? (
-              <QuestionnaireInput
-                prntFuntionHeaderActive={mainHandleHeaderActive}
-                interFaceActiveQuestionnarie={propertiesInterFace}
-              />
-            ) : propertiesInterFace === extras ? (
-              <QuestionnaireInput
-                prntFuntionHeaderActive={mainHandleHeaderActive}
-                interFaceActiveQuestionnarie={propertiesInterFace}
-              />
-            ) : (
-              ""
-            )}
+            {
+              propertiesInterFace === basics ? (
+                <BacisInformatioForm
+                  prntFuntionHeaderActive={mainHandleHeaderActive}
+                />
+              ) : propertiesInterFace === supportingDoc ? (
+                <SupportingDocForm
+                  prntFuntionHeaderActive={mainHandleHeaderActive}
+                />
+              ) : (
+                <>{activeComponent(propertiesInterFace)}</>
+              )
+              // propertiesInterFace === listingDetails ? (
+              //   <QuestionnaireInput
+              //     prntFuntionHeaderActive={mainHandleHeaderActive}
+              //     interFaceActiveQuestionnarie={propertiesInterFace}
+              //   />
+              // ) : propertiesInterFace === amenities ? (
+              //   <QuestionnaireInput
+              //     prntFuntionHeaderActive={mainHandleHeaderActive}
+              //     interFaceActiveQuestionnarie={propertiesInterFace}
+              //   />
+              // ) : propertiesInterFace === extras ? (
+              //   <QuestionnaireInput
+              //     prntFuntionHeaderActive={mainHandleHeaderActive}
+              //     interFaceActiveQuestionnarie={propertiesInterFace}
+              //   />
+              // ) : (
+              //   ""
+              // )
+            }
           </div>
         </div>
       </Container>

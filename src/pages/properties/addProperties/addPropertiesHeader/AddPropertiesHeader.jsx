@@ -57,7 +57,9 @@ const AddPropertiesHeader = (props) => {
               return (
                 <>
                   <div
-                    className={propertieShowInterFace.trim()===sections.trim() && "text-primary"}
+                    className={
+                      propertieShowInterFace.trim()===sections.trim()
+                       && "text-primary"}
                     onClick={() => {
                       prntFuntionHeaderActive(
                         id !== undefined && sections
