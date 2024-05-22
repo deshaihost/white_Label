@@ -12,8 +12,8 @@ const Banner = () => {
             <Container>
                 <div className="banner-container">
                     <div className="banner-content">
-                        <div className="heading heading-center">
-                            <h2>Short Term Rental Management Made Easy with our <strong>AI-Powered Software</strong></h2>
+                        <div className="heading heading-center" style={{ width: '80%', margin: '0 auto' }}>
+                        <h2>Put the Messaging for your Short Term Rentals <strong>on Autopilot</strong></h2>
                         </div>
                         <p>Welcome to the Future of Hosting</p>
                         <Link to='/pricing' className="link-btn outline-btn">Start 2 Week Free Trial</Link>
