@@ -8,7 +8,7 @@ import FeatureIconThree from '../../../public/img/home/feature_icon3.png';
 import FeatureIconFour from '../../../public/img/home/feature_iconnew1.png';
 
 import ComputerBrainImg from '../../../public/img/home/intelligence.png';
-import ControlToggleImg from '../../../public/img/home/full_host_control.png';
+import ControlToggleImg from '../../../public/img/home/host_control_toggle.png';
 import EditPropertyImg from '../../../public/img/home/Property_customization.png';
 import transcriptsPanel from '../../../public/img/home/actionItems_and_transcripts.png';
 
