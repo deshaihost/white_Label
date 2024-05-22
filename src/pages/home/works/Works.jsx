@@ -3,11 +3,9 @@ import Container from 'react-bootstrap/Container';
 import './works.css';
 
 import AssistantImg from '../../../public/img/home/assistant.png';
-import ControlToggleImg from '../../../public/img/home/full_host_control.png';
-import WorksFour from '../../../public/img/home/tailored_recommendations.png';
-import IntegrationsImg from '../../../public/img/home/Direct_Integrations.png';
+import IntegrationsImg from '../../../public/img/home/integrations_works_crop.png';
 import PropertyWithAmenitiesImg from '../../../public/img/home/property_with_amenities.jpeg';
-import lateNightBot from '../../../public/img/home/late_night_bot.jpeg';
+import lateNightBot from '../../../public/img/home/empty_desk_night.png';
 
 const Works = () => {
     return(
@@ -39,11 +37,11 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4><strong>Automate</strong> Your Guest Communications</h4>
-                                <p>HostBuddy AI, created by hosts for hosts, aims to alleviate the stress of hosting. Hosts deserve the chance to unplug and recharge. With HostBuddy, you can automate the demanding responsibilities of guest communication, allowing you to relax, knowing your guests are well taken care of.</p>
+                                <p>HostBuddy AI was created by hosts, for hosts, and aims to alleviate the stress of hosting. With HostBuddy, you can automate the demanding responsibilities of guest communication, allowing you to relax knowing your guests are well taken care of.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={AssistantImg} alt='works-img' />
+                            <img src={lateNightBot} alt='works-img' />
                         </div>
                     </div>
 
@@ -51,7 +49,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4><strong>Integrate</strong> Into Your Existing Systems</h4>
-                                <p>HostBuddy integrates with most major property management softwares on the market. Connect a PMS account to give Hostbuddy access to property details and real-time guest information, and to allow HostBuddy to see and respond to guest messages over your existing communication channels. Visit our FAQ page for a complete list of the connections we currently support.</p>
+                                <p>Connect a PMS account to give Hostbuddy access to property details and real-time guest information, and to allow HostBuddy to see and respond to guest messages over your existing communication channels. HostBuddy can integrate with most major property management softwares on the market. See our FAQ page for the full list.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -63,7 +61,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4>Tailor To <strong>Your Specifications</strong></h4>
-                                <p>Our interface allows you to provide property information, troubleshooting instructions, or any other relevant details for HostBuddy to use in supporting guests. Our easy-to-follow setup guide will have your application ready to go live quickly and effortlessly.</p>
+                                <p>Our interface makes it easy for you to provide property information, troubleshooting instructions, or any other relevant details for HostBuddy to use in supporting guests. Our easy-to-follow setup guide will have your application ready to go live quickly and effortlessly.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -79,7 +77,7 @@ const Works = () => {
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={lateNightBot} alt='works-img' />
+                            <img src={AssistantImg} alt='works-img' />
                         </div>
                     </div>
                 </div>

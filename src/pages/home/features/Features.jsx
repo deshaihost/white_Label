@@ -7,13 +7,10 @@ import FeatureIconTwo from '../../../public/img/home/feature_icon2.png';
 import FeatureIconThree from '../../../public/img/home/feature_icon3.png';
 import FeatureIconFour from '../../../public/img/home/feature_iconnew1.png';
 
-import FeatureImgOne from '../../../public/img/home/chatgpt.png';
-import FeatureImgFour from '../../../public/img/home/Direct_Integrations.png';
-
 import ComputerBrainImg from '../../../public/img/home/intelligence.png';
 import ControlToggleImg from '../../../public/img/home/full_host_control.png';
 import EditPropertyImg from '../../../public/img/home/Property_customization.png';
-import transcriptsPanel from '../../../public/img/home/transcript_panel.png';
+import transcriptsPanel from '../../../public/img/home/actionItems_and_transcripts.png';
 
 import Accordion from 'react-bootstrap/Accordion';
 
@@ -53,7 +50,7 @@ const Features = () => {
                                         Robust Customization
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        Our user-friendly interface allows hosts to equip HostBuddy with a diverse range of knowledge. Whether you have a six-bedroom cabin in the woods or a high-rise apartment with multiple points of entry, HostBuddy can be trained to be an expert concierge for your property.
+                                        Whether you have a six-bedroom cabin in the woods or a high-rise apartment with multiple points of entry, HostBuddy can be trained to be an expert concierge for your property.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>
@@ -64,7 +61,7 @@ const Features = () => {
                                         Full Host Control
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        HostBuddy is at your service whenever you need coverage. Our advanced scheduling feature allows you to set recurring weekly schedules or one-off shifts, giving you the flexibility to manage your time as you see fit. Whether you need a regular break or an occasional day off, you can turn off your phone and unplug, confident that HostBuddy will take care of your guests' needs.
+                                        HostBuddy is at your service whenever you need coverage. Our advanced scheduling feature allows you to set recurring weekly schedules or one-off shifts, giving you the flexibility to manage your time as you see fit.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>
@@ -75,7 +72,7 @@ const Features = () => {
                                         Always Stay In The Loop
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        Our software ensures you stay informed with what is going on at your property. HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention on the dashboard, so you can see what’s important at a glance. Whether you've been offline for a few hours or a few days, you can access your portal to stay updated.
+                                        Our software ensures you stay informed with what is going on at your property. HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention on the dashboard, so you can see what’s important at a glance.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>

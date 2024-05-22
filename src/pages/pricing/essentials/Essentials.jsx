@@ -98,16 +98,20 @@ const Essentials = () => {
                 </span>
               </div>
               <div className="price-plan">
+                <span>
+                  2 weeks free, then
+                </span>
+                <div style={{ height: '6px' }}></div> {/* vertical spacer */}
                 <h5>
                   <sup>$</sup>
                   <strong>
                     {essentialValue < 6
                       ? essentialValue * 10
-                      : essentialValue > 5 && essentialValue < 11
-                      ? essentialValue * 9
-                      : essentialValue > 10 && essentialValue < 21
-                      ? essentialValue * 8
-                      : essentialValue * 7}
+                      : essentialValue < 11
+                      ? (5 * 10) + ((essentialValue - 5) * 9)
+                      : essentialValue < 21
+                      ? (5 * 10) + (5 * 9) + ((essentialValue - 10) * 8)
+                      : (5 * 10) + (5 * 9) + (10 * 8) + ((essentialValue - 20) * 7)}
                   </strong>
                   /<sub>Month</sub>
                 </h5>
@@ -189,16 +193,20 @@ const Essentials = () => {
                 </span>
               </div>
               <div className="price-plan">
+                <span>
+                  2 weeks free, then
+                </span>
+                <div style={{ height: '6px' }}></div> {/* vertical spacer */}
                 <h5>
                   <sup>$</sup>
                   <strong>
                     {worksValue < 6
                       ? worksValue * 20
-                      : worksValue > 5 && worksValue < 11
-                      ? worksValue * 18
-                      : worksValue > 10 && worksValue < 21
-                      ? worksValue * 15
-                      : worksValue * 10}
+                      : worksValue < 11
+                      ? (5 * 20) + ((worksValue - 5) * 18)
+                      : worksValue < 21
+                      ? (5 * 20) + (5 * 18) + ((worksValue - 10) * 15)
+                      : (5 * 20) + (5 * 18) + (10 * 15) + ((worksValue - 20) * 10)}
                   </strong>
                   /<sub>Month</sub>
                 </h5>

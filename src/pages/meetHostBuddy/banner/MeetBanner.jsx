@@ -178,9 +178,10 @@ const MeetBanner = (props) => {
               Back
             </Link>
           ) : (
-            <Link to="/" className="link-btn filled-btn">
+            <div></div>
+            /*<Link to="/" className="link-btn filled-btn">
               Learn More
-            </Link>
+            </Link>*/
           )}
         </div>
         <div className="row">
