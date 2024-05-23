@@ -3,7 +3,6 @@ import { Modal } from "react-bootstrap";
 
 const ReservationsStageModel = ({ show, handleClose, modelSubmitBtn }) => {
   const { reservations, questionData, CloseType } = show;
-  console.log(questionData,'questionDataquestionData')
   const hideForReservationDefault = ["CURRENT", "FUTURE", "INQUIRY/PAST"];
   const hideForReservations = questionData?.hideForReservations;
   const index=questionData?.questionData

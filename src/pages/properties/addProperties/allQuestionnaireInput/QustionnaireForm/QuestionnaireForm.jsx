@@ -21,34 +21,64 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
   const qustionKey = questionnaire[InterFaceQuestion];
   const entriesArray = Object.entries(qustionKey);
   const formattedArray = entriesArray.map(([key, value]) => ({ key, value }));
+  const amenitesMachingKey = Object.keys(
+    questionaireToSend?.questionnaire?.Amenities
+  );
+
+  const [amenitesArray, setAmenitesArray] = useState({});
+
+  const AmenitesMainComponentFun = (checked, data) => {
+    const { currentValue, index, section } = data;
+    if (amenitesMachingKey.includes(section)) {
+      setAmenitesArray((prevState) => {
+        const sectionArray = prevState[section] ? [...prevState[section]] : [];
+
+        const updatedArray = checked
+          ? [...sectionArray, currentValue]
+          : sectionArray.filter((value) => value !== currentValue);
+
+        // If updatedArray is empty after removal, delete the section key from the state
+        const newState = { ...prevState, [section]: updatedArray };
+        if (updatedArray.length === 0) {
+          delete newState[section];
+        }
+
+        // Update response options and questionnaire inside the setAmenitesArray callback
+        const updatedResponseOptions = {
+          ...newState, // Use newState instead of amenitesArray
+          [section]: updatedArray, // Use updatedArray instead of prevState[section]
+        };
+
+        // Deep clone the questionnaireToSend object
+        const updatedQuestionaire = structuredClone(questionaireToSend);
+        updatedQuestionaire.questionnaire.Amenities[section][
+          index
+        ].response_options = updatedResponseOptions[[section]];
+
+        // Set the updated questionnaireToSend state
+        setQuestionaireToSend(updatedQuestionaire);
+
+        return newState;
+      });
+    }
+  };
+
 
   const inputOnChangeHndle = (event, data) => {
     const { section, index, interFaceInput } = data !== undefined ? data : [];
-    const { questionData, hideGetArray } = event;
-    const comonentCheckInterFace = questionData?.conponentCheck;
-    const sections = questionData?.sections;
-    const indexs = questionData?.indexs;
-    const selectOptionDefult = event?.selectOptionDefult;
-    const responseOptionInput = event?.response_option;
     let updatedQuestionaire = structuredClone(questionaireToSend);
-    if (comonentCheckInterFace === listingDetailsInput) {
-      updatedQuestionaire["questionnaire"]["Listing Details"][sections][indexs][
-        "hide_for_reservations"
-      ] = hideGetArray.length > 0 ? JSON.stringify(hideGetArray) : "";
-      if (selectOptionDefult === "selectOption") {
-        updatedQuestionaire["questionnaire"]["Listing Details"][sections][
-          indexs
-        ]["response_option"] = responseOptionInput;
-      }
-    } else {
-      updatedQuestionaire["questionnaire"]["Listing Details"][section][index][
+    if (interFaceInput === InterFaceQuestion) {
+      updatedQuestionaire["questionnaire"][interFaceInput][section][index][
         "response_text"
       ] = event.target.value;
+    }
+    if (interFaceInput === InterFaceQuestion) {
+      const statusAmenites = event.target.checked;
+      AmenitesMainComponentFun(statusAmenites, data);
     }
     setQuestionaireToSend(updatedQuestionaire);
   };
 
-  console.log(questionaireToSend, "1010questionaireToSend101");
   const questionnaireSubmitHndle = (e) => {
     e.preventDefault();
     const questionnaire = { questionnaire: questionaireToSend };
@@ -60,7 +90,7 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
     );
   };
 
-  // model functionality 
+  //this static code use only model (open model and close model functionality)
   const onlyCheckSelectAmenitesUsed = "onlyCheckSelectAmenitesUsed";
   const checkBoxModelOpen = "checkBoxModelOpen";
   const reservationModelOpen = "reservationModelOpen";
@@ -86,16 +116,6 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
         CloseType: checkBoxModelClose,
         amenitesData: amenitesAllData,
       });
-      if (amenitesAllData?.onlyCheckSelect === onlyCheckSelectAmenitesUsed) {
-        const { currentInputValue, sections, indexs, iconCheckSelect } =
-          amenitesAllData;
-        // amenitiesOnchangesHndle(
-        //   iconCheckSelect,
-        //   sections,
-        //   indexs,
-        //   currentInputValue
-        // );
-      }
     } else if (type === selectModelOpen) {
       setModelQuestion({
         ...modelQuestion,
@@ -137,11 +157,8 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
     const comonentCheckInterFace = questionData?.conponentCheck;
     if (comonentCheckInterFace === listingDetailsInput) {
       inputOnChangeHndle(data);
-    } else if (comonentCheckInterFace === extrasInputInterFace) {
-      // questionModelOpenHndl(data);
     }
   };
-
   return (
     <form>
       <div>
@@ -167,6 +184,9 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                   const response_text = input?.response_text;
                   const hide_for_reservations = input?.hide_for_reservations;
                   const response_option = input?.response_option;
+                  const response_options = input?.response_options;
+                  // console.log(input,'taasarea')
+
                   const questionUpdateInputdataSendOnchange = {
                     section: inputHeadingName,
                     interFaceInput: InterFaceQuestion,
@@ -179,6 +199,7 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                       conponentCheck: listingDetailsInput,
                       hideForReservations: hide_for_reservations,
                       response_option,
+                      interFaceInput: InterFaceQuestion,
                     },
                   };
                   return (
@@ -300,15 +321,37 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                   </div>
                                   <ul className="amenties-list">
                                     {options?.map((options) => {
+                                      const amenitesObjec = {
+                                        section: inputHeadingName,
+                                        interFaceInput: InterFaceQuestion,
+                                        index: inputIndex,
+                                        currentValue: options,
+                                      };
                                       return (
                                         <>
                                           <li className="amenties-list-item">
                                             <div
-                                              className="form-checkbox bg-light text-dark"
+                                              // className="form-checkbox bg-light text-dark"
+                                              className={
+                                                response_options.includes(
+                                                  options
+                                                )
+                                                  ? "form-checkbox bg-light text-dark"
+                                                  : "form-checkbox "
+                                              }
                                             >
                                               <input
                                                 type="checkbox"
                                                 className="form-check-input"
+                                                checked={response_options.includes(
+                                                  options
+                                                )}
+                                                onChange={(e) => {
+                                                  inputOnChangeHndle(
+                                                    e,
+                                                    amenitesObjec
+                                                  );
+                                                }}
                                               />
                                               <label className="form-check-label">
                                                 {options}
@@ -345,9 +388,7 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                               <label className="text-white">
                                 {question_text}
                                 <span>
-                                  <button
-                                    className="bg-none p-0 border-0 w-auto ms-2"
-                                  >
+                                  <button className="bg-none p-0 border-0 w-auto ms-2">
                                     <svg
                                       width="18"
                                       height="18"
@@ -367,6 +408,7 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                 <textarea
                                   className="bg-dark form-control"
                                   type="text"
+                                  // value={response_text}
                                 />
                               </div>
                             </div>
