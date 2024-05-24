@@ -81,11 +81,13 @@ const TranscriptsTable = ({ conversationData, propertyConversationId }) => {
             <div class="custom_table_heading">
               <h4>Transcripts </h4>
               <div class="expendable_search property_select">
+                {/*
                 <select id="sort-conversation">
                   <option>Sort by</option>
                   <option>Successful</option>
                   <option>Unsuccessful</option>
                 </select>
+                */}
               </div>
             </div>
             <div class="custom_table_design table-responsive">
@@ -95,7 +97,8 @@ const TranscriptsTable = ({ conversationData, propertyConversationId }) => {
                     <th scope="col">DATE</th>
                     <th scope="col">TIME</th>
                     <th scope="col">SUBJECT</th>
-                    <th scope="col">STATUS</th>
+                    {/* <th scope="col">STATUS</th> */}
+                    <th scope="col"></th> {/* Empty column to correct spacing, since STATUS was commented out */}
                     <th scope="col">VIEW</th>
                   </tr>
                 </thead>
@@ -118,10 +121,11 @@ const TranscriptsTable = ({ conversationData, propertyConversationId }) => {
                             {convers?.subject !== undefined ? (
                               convers?.subject
                             ) : (
-                              <span className="text-danger">TBD</span>
+                              <span style={{ color: 'rgb(120,120,120)' }}>TBD</span>
                             )}
                           </td>
                           <td>
+                            {/* Remove "STATUS" column & logic for now 
                             {convers?.success_rating === "NEUTRAL" ? (
                               <span>{convers?.success_rating}</span>
                             ) : (
@@ -144,6 +148,7 @@ const TranscriptsTable = ({ conversationData, propertyConversationId }) => {
                                 )}
                               </>
                             )}
+                            */}
                           </td>
                           <td>
                             <i

@@ -74,7 +74,7 @@ const ConfirmYourEmail = () => {
   }
 
   const resendEmail = () => {
-    callResendEmailApi(emailEntered);
+    if (emailEntered) { callResendEmailApi(emailEntered); }
   };
 
   return (
