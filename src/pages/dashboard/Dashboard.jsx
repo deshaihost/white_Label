@@ -188,6 +188,7 @@ const Dashboard = () => {
                   <div className="row">
                     <div className="col-lg-8">
                       <div className="row">
+                        {/* Successful conversations box
                         <div className="col-lg-6 mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
@@ -215,6 +216,8 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
+                        */}
+                        {/* Unsuccessful conversations box
                         <div className="col-lg-6 mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
@@ -239,6 +242,8 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
+                        */}
+                        {/* Neutral conversations box
                         <div className="col-lg-6 mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
@@ -263,6 +268,7 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
+                        */}
                         <div className="col-lg-6 mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
@@ -282,7 +288,7 @@ const Dashboard = () => {
                                   ></path>
                                 </svg>
                                 <h4>{total}</h4>
-                                <p>Total</p>
+                                <p>Total Messages Processed</p>
                               </>
                             ) : (
                               <BoxLoader />

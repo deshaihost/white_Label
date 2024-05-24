@@ -30,22 +30,15 @@ const PropertyInsight = () => {
     completeReviewName === ":id" ? "" : getCompleteReviewNameUrl?.propertyName;
   // const propertyConversationId =
   //   completeReviewName === ":id" ? "" : getCompleteReviewNameUrl?.itemId;
-  const propertiesConversationGetData =
-    store?.propertyGetConversationReducer?.propertyGetConversation?.data
-      ?.conversations;
-  const propertiesConversationLoading =
-    store?.propertyGetConversationReducer?.loading;
+  const propertiesConversationGetData = store?.propertyGetConversationReducer?.propertyGetConversation?.data?.conversations;
+  const propertiesConversationLoading = store?.propertyGetConversationReducer?.loading;
 
-  const userDataGet =
-    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const userpertieslistName = userDataGet?.[0];
+  const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const userProperties = store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // always use this obj as user properties list, as the "properties" field above is deprecated
+  const userpertieslistName = userProperties ? Object.keys(userProperties)[0] : undefined; // grab any property name from the property_data obj, to use as default
 
-  const [propertySelectName, setPropertySelectName] = useState(
-    completeReviewName === ":id" ? "" : propertyName
-  );
-  const [propertySelectNameView, setPropertySelectNameView] = useState(
-    completeReviewName === ":id" ? "" : propertyName
-  );
+  const [propertySelectName, setPropertySelectName] = useState(completeReviewName === ":id" ? "" : propertyName);
+  const [propertySelectNameView, setPropertySelectNameView] = useState(completeReviewName === ":id" ? "" : propertyName);
 
   useEffect(() => {
     dispatch(getUserDataActions());
@@ -73,8 +66,7 @@ const PropertyInsight = () => {
     } else {
       dispatch(
         PropertyGetConversationsActions({
-          propertyName:
-            propertySelectName !== "" ? propertySelectName : propertyName,
+          propertyName: propertySelectName !== "" ? propertySelectName : propertyName,
         })
       );
       dispatch(
@@ -106,24 +98,13 @@ const PropertyInsight = () => {
                 <div class="account_heading account_heading_white">
                   <h3 className="text-white">Insights and Records</h3>
                   <div class="property_select">
-                    {userDataGet?.length > 0 ? (
-                      <select
-                        id="properies_insight"
-                        className=""
-                        onChange={(e) => {
-                          setPropertySelectName(e.target.value);
-                        }}
-                      >
-                        {userDataGet?.map((userData) => {
-                          
-                          return (
-                            <>
-                              <option selected hidden>
-                                {propertySelectNameView}
-                              </option>
-                              <option value={userData}>{userData}</option>
-                            </>
-                          );
+                    {userProperties && Object.keys(userProperties).length > 0 ? (
+                      <select id="properies_insight" className="" onChange={(e) => { setPropertySelectName(e.target.value); }}>
+                        <option selected hidden>
+                          {propertySelectNameView}
+                        </option>
+                        {Object.keys(userProperties).map((key) => {
+                          return <option value={key}>{key}</option>;
                         })}
                       </select>
                     ) : (
@@ -137,12 +118,8 @@ const PropertyInsight = () => {
                       <div className="px-lg-5 px-md-4 px-3 py-4">
                         <div>
                           <SuccessTotalBox
-                            totalConversation={
-                              propertiesConversationGetData?.length
-                            }
-                            statisticsGetNameByProperty={
-                              statisticsGetNameByProperty
-                            }
+                            totalConversation={propertiesConversationGetData?.length}
+                            statisticsGetNameByProperty={statisticsGetNameByProperty}
                           />
                         </div>
                         <div className="">
