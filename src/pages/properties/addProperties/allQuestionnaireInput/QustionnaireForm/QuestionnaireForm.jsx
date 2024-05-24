@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   GetquestionnaireFunction,
   nameKey,
@@ -24,8 +24,10 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
   const amenitesMachingKey = Object.keys(
     questionaireToSend?.questionnaire?.Amenities
   );
-
-  const [amenitesArray, setAmenitesArray] = useState({});
+  const [amenitesArray, setAmenitesArray] = useState(questionnaire?.Amenities);
+  const [amenitesQuestion, setAmenitesQuestion] = useState({});
+  const [amenitesHideForReservations, setAmenitesHideForReservations] =
+    useState({});
 
   const AmenitesMainComponentFun = (checked, data) => {
     const { currentValue, index, section } = data;
@@ -54,16 +56,74 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
         updatedQuestionaire.questionnaire.Amenities[section][
           index
         ].response_options = updatedResponseOptions[[section]];
-
         // Set the updated questionnaireToSend state
         setQuestionaireToSend(updatedQuestionaire);
-
+        console.log(
+          updatedResponseOptions[[section]],
+          "formation",
+          amenitesArray
+        );
         return newState;
       });
     }
   };
 
+  // onchange question
+  const childInputOnchangeText = (value, data) => {
+    const { section, indexOptions } = data;
+    setAmenitesQuestion((prevIndex) => {
+      const sectionName = section; // Assume section is directly available
+      const amenityKey = indexOptions; // Assume indexOptions is the key for the amenity
 
+      // Initialize or retrieve the section object
+      const sections = prevIndex[sectionName]
+        ? { ...prevIndex[sectionName] }
+        : {};
+
+      if (true) {
+        // Set the amenity to an empty string if checked
+        sections[amenityKey] = value;
+      }
+      // Update the main state object with the new section object
+      const newStateAmeniteQuestion = {
+        ...prevIndex,
+        [sectionName]: sections,
+      };
+      // If the section object is empty, remove the section from the main state object
+      if (Object.keys(sections).length === 0) {
+        delete newStateAmeniteQuestion[sectionName];
+      }
+      return newStateAmeniteQuestion;
+    });
+  };
+  // onchange hide
+  const childInputOnchangeHideRes = (value, data) => {
+    const { section, indexOptions } = data;
+    setAmenitesHideForReservations((prevIndex) => {
+      const sectionName = section; // Assume section is directly available
+      const amenityKey = indexOptions; // Assume indexOptions is the key for the amenity
+
+      // Initialize or retrieve the section object
+      const sections = prevIndex[sectionName]
+        ? { ...prevIndex[sectionName] }
+        : {};
+
+      if (true) {
+        // Set the amenity to an empty string if checked
+        sections[amenityKey] = value;
+      }
+      // Update the main state object with the new section object
+      const newStateAmeniteQuestion = {
+        ...prevIndex,
+        [sectionName]: sections,
+      };
+      // If the section object is empty, remove the section from the main state object
+      if (Object.keys(sections).length === 0) {
+        delete newStateAmeniteQuestion[sectionName];
+      }
+      return newStateAmeniteQuestion;
+    });
+  };
   const inputOnChangeHndle = (event, data) => {
     const { section, index, interFaceInput } = data !== undefined ? data : [];
     let updatedQuestionaire = structuredClone(questionaireToSend);
@@ -91,74 +151,51 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
   };
 
   //this static code use only model (open model and close model functionality)
-  const onlyCheckSelectAmenitesUsed = "onlyCheckSelectAmenitesUsed";
-  const checkBoxModelOpen = "checkBoxModelOpen";
+
   const reservationModelOpen = "reservationModelOpen";
   const selectModelOpen = "selectModelOpen";
-  const checkBoxModelClose = "checkBoxModelClose";
-  const reservationModelClose = "reservationModelClose";
   const selectModelClose = "selectModelClose";
   const listingDetailsInput = "listingDetailsInput";
-  const extrasInputInterFace = "extrasInputInterFace";
   const [modelQuestion, setModelQuestion] = useState({
     checkBox: false,
     reservations: false,
     select: false,
   });
 
-  const questionModelOpenHndl = (e, type, data) => {
+  const questionModelOpenHndl = (e, ameniteStatus, type, data) => {
     e.preventDefault();
-    const { listingAllData, amenitesAllData, ExtrasAllData } = data;
-    if (type === checkBoxModelOpen) {
-      setModelQuestion({
-        ...modelQuestion,
-        checkBox: true,
-        CloseType: checkBoxModelClose,
-        amenitesData: amenitesAllData,
-      });
-    } else if (type === selectModelOpen) {
+    if (type === selectModelOpen) {
       setModelQuestion({
         ...modelQuestion,
         select: true,
         CloseType: selectModelClose,
-        questionData: listingAllData,
+        data,
       });
-    } else if (type === reservationModelOpen) {
-      setModelQuestion({
-        ...modelQuestion,
-        reservations: true,
-        CloseType: reservationModelClose,
-        questionData:
-          listingAllData !== undefined ? listingAllData : ExtrasAllData,
-      });
+      AmenitesMainComponentFun(ameniteStatus, data);
     }
   };
   const questionModelCloseHndl = (type) => {
-    if (type === checkBoxModelClose) {
-      setModelQuestion({
-        ...modelQuestion,
-        checkBox: false,
-      });
-    } else if (type === selectModelClose) {
+    if (type === selectModelClose) {
       setModelQuestion({
         ...modelQuestion,
         select: false,
-      });
-    } else if (type === reservationModelClose) {
-      setModelQuestion({
-        ...modelQuestion,
-        reservations: false,
       });
     }
   };
 
   const modelSubmitBtn = (data) => {
-    const { questionData } = data;
-    const comonentCheckInterFace = questionData?.conponentCheck;
-    if (comonentCheckInterFace === listingDetailsInput) {
-      inputOnChangeHndle(data);
-    }
+    const { index, section } = data?.data;
+    const amenitesText = amenitesQuestion?.[section];
+    const amenitesHide = amenitesHideForReservations?.[section];
+    const updatedQuestionaire = structuredClone(questionaireToSend);
+    updatedQuestionaire.questionnaire.Amenities[section][index].response_text =
+      amenitesText !== undefined ? [amenitesText] : [];
+    updatedQuestionaire.questionnaire.Amenities[section][
+      index
+    ].hide_for_reservations = [JSON.stringify(amenitesHide)];
+    setQuestionaireToSend(updatedQuestionaire);
   };
+
   return (
     <form>
       <div>
@@ -185,8 +222,6 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                   const hide_for_reservations = input?.hide_for_reservations;
                   const response_option = input?.response_option;
                   const response_options = input?.response_options;
-                  // console.log(input,'taasarea')
-
                   const questionUpdateInputdataSendOnchange = {
                     section: inputHeadingName,
                     interFaceInput: InterFaceQuestion,
@@ -320,18 +355,37 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                     </label>
                                   </div>
                                   <ul className="amenties-list">
-                                    {options?.map((options) => {
+                                    {options?.map((options, indexOptions) => {
+                                      const amenitTextRes = response_text?.map(
+                                        (option) => {
+                                          return option[indexOptions];
+                                        }
+                                      );
+                                      const ameniteHide =
+                                        hide_for_reservations?.map((hide) => {
+                                          const hideForResrvationsRes =
+                                            JSON.parse(hide);
+                                          console.log(
+                                            hideForResrvationsRes,
+                                            "hkkkhide"
+                                          );
+                                          return hideForResrvationsRes[
+                                            indexOptions
+                                          ];
+                                        });
                                       const amenitesObjec = {
                                         section: inputHeadingName,
                                         interFaceInput: InterFaceQuestion,
                                         index: inputIndex,
                                         currentValue: options,
+                                        indexOptions,
+                                        response_text: amenitTextRes[0],
+                                        hide_for_reservations: ameniteHide[0],
                                       };
                                       return (
                                         <>
                                           <li className="amenties-list-item">
                                             <div
-                                              // className="form-checkbox bg-light text-dark"
                                               className={
                                                 response_options.includes(
                                                   options
@@ -347,7 +401,7 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                                   options
                                                 )}
                                                 onChange={(e) => {
-                                                  inputOnChangeHndle(
+                                                  AmenitesMainComponentFun(
                                                     e,
                                                     amenitesObjec
                                                   );
@@ -356,7 +410,17 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                               <label className="form-check-label">
                                                 {options}
                                               </label>
-                                              <button className="bg-none p-0 border-0">
+                                              <button
+                                                className="bg-none p-0 border-0"
+                                                onClick={(e) => {
+                                                  questionModelOpenHndl(
+                                                    e,
+                                                    true,
+                                                    selectModelOpen,
+                                                    amenitesObjec
+                                                  );
+                                                }}
+                                              >
                                                 <svg
                                                   width="18"
                                                   height="18"
@@ -444,6 +508,8 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
         show={modelQuestion}
         handleClose={questionModelCloseHndl}
         modelSubmitBtn={modelSubmitBtn}
+        prentOnChangeTextHndl={(e, data) => childInputOnchangeText(e, data)}
+        prentOnchangeHideRes={(e, data) => childInputOnchangeHideRes(e, data)}
       />
     </form>
   );

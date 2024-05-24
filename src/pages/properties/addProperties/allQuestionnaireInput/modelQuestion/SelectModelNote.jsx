@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 
-const SelectModelNote = ({ show, handleClose, modelSubmitBtn }) => {
-  const { questionData, CloseType, select } = show;
-  console.log("showshow", questionData);
+const SelectModelNote = ({
+  show,
+  handleClose,
+  modelSubmitBtn,
+  prentOnChangeTextHndl,
+  prentOnchangeHideRes,
+}) => {
+  const { data, CloseType, select } = show;
+  const { response_text, hide_for_reservations } = data ? data : [];
   const [responseOptionInput, setResponseOptionInput] = useState("");
   const selectOptionDefult = "selectOption";
   // hide for reservation button functinality
   const hideForReservationDefault = ["CURRENT", "FUTURE", "INQUIRY/PAST"];
-  const hideForReservations = questionData?.hideForReservations;
-  const response_option = questionData?.response_option;
-  const index = questionData?.questionData;
+  const hideForReservations = data?.hideForReservations;
+  const response_option = data?.response_option;
+  const index = data?.questionData;
   const convertJsonHideForReser =
     hideForReservations !== undefined
       ? hideForReservations !== ""
@@ -32,19 +38,25 @@ const SelectModelNote = ({ show, handleClose, modelSubmitBtn }) => {
   // hide for reservation button functinality
 
   const mainHandleCloe = () => {
-
     const questionModelData = {
-      questionData,
+      data,
       hideGetArray,
-      responseOptionInput,
       selectOptionDefult,
     };
     modelSubmitBtn(questionModelData);
     handleClose(CloseType);
+    setResponseOptionInput("");
+    setHideGetArray([]);
   };
   const closeBtnAllConditioncmp = () => {
     handleClose(CloseType);
     setHideGetArray([]);
+    setResponseOptionInput("");
+  };
+  // onChange Select Model
+  const onChangeSelectModel = (value, data) => {
+    prentOnChangeTextHndl(value, data);
+    setResponseOptionInput(value);
   };
   useEffect(() => {
     if (select) {
@@ -60,6 +72,23 @@ const SelectModelNote = ({ show, handleClose, modelSubmitBtn }) => {
       }
     }
   }, [select, index, response_option]);
+
+  useEffect(() => {
+    if (select) {
+      if (response_text !== undefined) {
+        setResponseOptionInput(response_text);
+      }
+      if (hide_for_reservations !== undefined) {
+        setHideGetArray(hide_for_reservations);
+      }
+    }
+  }, [response_text, select, hide_for_reservations]);
+
+  useEffect(() => {
+    if (select) {
+      prentOnchangeHideRes(hideGetArray, data);
+    }
+  }, [hideGetArray, select]);
 
   return (
     <>
@@ -87,7 +116,7 @@ const SelectModelNote = ({ show, handleClose, modelSubmitBtn }) => {
               rows="10"
               placeholder="Enter note here..."
               value={responseOptionInput}
-              onChange={(e) => setResponseOptionInput(e.target.value)}
+              onChange={(e) => onChangeSelectModel(e.target.value, data)}
             ></textarea>
             <hr style={{ borderTop: "0px solid #0078F0" }} />
             <label>
