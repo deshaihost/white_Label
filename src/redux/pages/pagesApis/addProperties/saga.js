@@ -11,10 +11,9 @@ import {
   supportingUrlPostEndPoint,
   toggleChatbotOnOffPutEndPoint,
   copyExistingPropertyEndPoint,
-  removeSupportingDocsEndPoint
+  removeSupportingDocsEndPoint,
 } from "./api";
 import { StateEmtpyActionTypes } from "../../../stateEmpty/constants";
-
 
 function* gotoBillingPortalPostFunction(data) {
   try {
@@ -35,7 +34,7 @@ function* gotoBillingPortalPostFunction(data) {
       });
     }
   } catch (error) {
-    console.log(error,'errorsaga')
+    console.log(error, "errorsaga");
     yield put({
       type: AddPropertiesActionTypes.GO_TO_BILLING_PORTAL_POST_ERROR,
       payload: error,
@@ -119,7 +118,6 @@ function* supportingUrlPostFunction(data) {
     });
   }
 }
-
 
 function* getQuestionnaireFunction(data) {
   try {
@@ -309,7 +307,12 @@ function* stateEmptyFunction() {
   });
 }
 
-
+function* stateEmptyUpdateQuestionnaireFunction() {
+  yield put({
+    type: AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_EMPTY_SUCCESS,
+    payload: {},
+  });
+}
 
 export function* acctionPostProperties(): any {
   yield takeEvery(
@@ -367,18 +370,31 @@ export function* acctionUrlDocumentPost(): any {
 export function* acctionStateEmpty(): any {
   yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
 }
+export function* acctionStateEmptyUpdateQuestion(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_EMPTY_FIRST,
+    stateEmptyUpdateQuestionnaireFunction
+  );
+}
 
 export function* acctionToggleChatbotOnOff(): any {
-  yield takeEvery(AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_FIRST, toggleChatbotOnOffFunction);
+  yield takeEvery(
+    AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_FIRST,
+    toggleChatbotOnOffFunction
+  );
 }
 export function* acctionCopyExistingProperty(): any {
-  yield takeEvery(AddPropertiesActionTypes.COPY_EXITING_PROPERTY_FIRST, copyExistingPropertyFunction);
+  yield takeEvery(
+    AddPropertiesActionTypes.COPY_EXITING_PROPERTY_FIRST,
+    copyExistingPropertyFunction
+  );
 }
 export function* acctionRemoveSupportingDocs(): any {
-  yield takeEvery(AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_FIRST, removeSupportingDocsFunction);
+  yield takeEvery(
+    AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_FIRST,
+    removeSupportingDocsFunction
+  );
 }
-
-
 
 function* addPropertiesSaga(): any {
   yield all([
@@ -393,7 +409,8 @@ function* addPropertiesSaga(): any {
     fork(acctionUrlDocumentPost),
     fork(acctionToggleChatbotOnOff),
     fork(acctionCopyExistingProperty),
-    fork(acctionRemoveSupportingDocs)
+    fork(acctionRemoveSupportingDocs),
+    fork(acctionStateEmptyUpdateQuestion),
   ]);
 }
 

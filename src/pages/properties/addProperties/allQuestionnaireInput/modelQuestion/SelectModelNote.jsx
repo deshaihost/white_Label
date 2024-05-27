@@ -73,6 +73,7 @@ const SelectModelNote = ({
     }
   }, [select, index, response_option]);
 
+  // new code
   useEffect(() => {
     if (select) {
       if (response_text !== undefined) {
@@ -125,87 +126,34 @@ const SelectModelNote = ({
               below to prevent HostBuddy from sharing this information with
               those guests.
             </label>
-            <div className=" d-flex justify-content-between mt-3">
+            <div className=" d-flex justify-content-between mt-3 gap-2">
               {hideForReservationDefault?.map((item) => {
                 return (
                   <>
-                    <div className=" d-flex justify-content-between mt-3">
-                      <div class="col text-center">
-                        <button
-                          key={index}
-                          className={`btn ${
-                            hideGetArray.includes(item)
-                              ? "btn-unselected"
-                              : "btn-primary"
-                          } d-block w-100 rounded-pill`}
-                          onClick={() => handleButtonClick(item)}
-                          style={
-                            hideGetArray.includes(item)
-                              ? { borderColor: "#0078f0", color: "#0078f0" }
-                              : {}
-                          }
-                        >
-                          {item}
-                        </button>
-                      </div>
-                    </div>
+                    <button
+                      key={index}
+                      size="sm"
+                      className={`btn text-sm ${
+                        hideGetArray.includes(item)
+                          ? "btn-unselected "
+                          : "btn-primary "
+                      } d-block  rounded-pill`}
+                      onClick={() => handleButtonClick(item)}
+                      style={
+                        hideGetArray.includes(item)
+                          ? {
+                              borderColor: "#0078f0",
+                              color: "#fff",
+                              background: "none",
+                            }
+                          : {}
+                      }
+                    >
+                      {item}
+                    </button>
                   </>
                 );
               })}
-              {/* <div class="col text-center">
-                <input
-                  type="checkbox"
-                  // checked={checkedSchedule.Future}
-                  // onChange={(e) => handleOnChange(e, "Future")}
-                  className="btn-check"
-                  id="future"
-                  autocomplete="off"
-                />
-                <label
-                  // className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
-                  //   checkedSchedule.Future ? "btn-unselected" : ""
-                  // }`}
-                  for="future"
-                >
-                  Future
-                </label>
-              </div>
-              <div class="col text-center">
-                <input
-                  type="checkbox"
-                  // checked={checkedSchedule.Past}
-                  // onChange={(e) => handleOnChange(e, "Past")}
-                  className="btn-check"
-                  id="past"
-                  autocomplete="off"
-                />
-                <label
-                  // className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${
-                  //   checkedSchedule.Past ? "btn-unselected" : ""
-                  // }`}
-                  for="past"
-                >
-                  Inquiry/Past
-                </label>
-              </div>
-              <div class="col text-center">
-                <input
-                  type="checkbox"
-                  // checked={checkedSchedule.Current}
-                  // onChange={(e) => handleOnChange(e, "Current")}
-                  className="btn-check"
-                  id="current"
-                  autocomplete="off"
-                />
-                <label
-                  // className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${
-                  //   checkedSchedule.Current ? "btn-unselected" : ""
-                  // }`}
-                  for="current"
-                >
-                  Current
-                </label>
-              </div> */}
             </div>
             <hr
               style={{

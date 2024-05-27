@@ -3,17 +3,30 @@ import {
   GetquestionnaireFunction,
   nameKey,
 } from "../../../../../helper/Authorized";
-import { updateQuestionnaireActions } from "../../../../../redux/actions";
-import { useDispatch } from "react-redux";
+import {
+  getQuestionnaireActions,
+  updateQuestionnaireActions,
+  updateQuestionnaireEmptyActions,
+} from "../../../../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
 import SelectModelNote from "../modelQuestion/SelectModelNote";
 import ReservationsStageModel from "../modelQuestion/ReservationsStageModel";
+import ToastHandle from "../../../../../helper/ToastMessage";
+import Loader from "../../../../../helper/Loader";
+import { useNavigate } from "react-router-dom";
 
-const QuestionnaireForm = ({ InterFaceQuestion }) => {
+const QuestionnaireForm = ({ InterFaceQuestion, prntFuntionHeaderActive }) => {
   const dispatch = useDispatch();
+  const store = useSelector((state) => state);
+  console.log(store);
   const getLocalStorageData = nameKey();
-
+  const navigate = useNavigate();
+  const getLocalStorageNameKey = getLocalStorageData?.nameKey;
   const ExtrasFormCall = GetquestionnaireFunction();
-  const { apiQuestionnaireData } = ExtrasFormCall ? ExtrasFormCall : [];
+  const { apiQuestionnaireData, metadata } = ExtrasFormCall
+    ? ExtrasFormCall
+    : [];
+  const { section_order } = metadata ? metadata : [];
   const [questionaireToSend, setQuestionaireToSend] = useState(
     structuredClone(apiQuestionnaireData)
   );
@@ -24,117 +37,158 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
   const amenitesMachingKey = Object.keys(
     questionaireToSend?.questionnaire?.Amenities
   );
-  const [amenitesArray, setAmenitesArray] = useState(questionnaire?.Amenities);
   const [amenitesQuestion, setAmenitesQuestion] = useState({});
   const [amenitesHideForReservations, setAmenitesHideForReservations] =
     useState({});
 
   const AmenitesMainComponentFun = (checked, data) => {
+    const status = checked !== true ? checked.target.checked : true;
     const { currentValue, index, section } = data;
     if (amenitesMachingKey.includes(section)) {
-      setAmenitesArray((prevState) => {
-        const sectionArray = prevState[section] ? [...prevState[section]] : [];
-
-        const updatedArray = checked
-          ? [...sectionArray, currentValue]
-          : sectionArray.filter((value) => value !== currentValue);
-
-        // If updatedArray is empty after removal, delete the section key from the state
-        const newState = { ...prevState, [section]: updatedArray };
-        if (updatedArray.length === 0) {
-          delete newState[section];
-        }
-
-        // Update response options and questionnaire inside the setAmenitesArray callback
-        const updatedResponseOptions = {
-          ...newState, // Use newState instead of amenitesArray
-          [section]: updatedArray, // Use updatedArray instead of prevState[section]
-        };
-
-        // Deep clone the questionnaireToSend object
+      const amenitesApiResDataUpdateCheck =
+        questionaireToSend?.questionnaire?.Amenities[section][index]
+          ?.response_options;
+      if (status) {
+        const amenitesOldResp = amenitesApiResDataUpdateCheck?.includes(
+          currentValue
+        )
+          ? amenitesApiResDataUpdateCheck
+          : [...(amenitesApiResDataUpdateCheck || []), currentValue];
         const updatedQuestionaire = structuredClone(questionaireToSend);
         updatedQuestionaire.questionnaire.Amenities[section][
           index
-        ].response_options = updatedResponseOptions[[section]];
+        ].response_options = amenitesOldResp;
         // Set the updated questionnaireToSend state
         setQuestionaireToSend(updatedQuestionaire);
-        console.log(
-          updatedResponseOptions[[section]],
-          "formation",
-          amenitesArray
+        // return amenitesOldResp;
+      } else {
+        const ameniteFilter = amenitesApiResDataUpdateCheck?.filter(
+          (filterData) => filterData !== currentValue
         );
-        return newState;
+        const updatedQuestionaire = structuredClone(questionaireToSend);
+        updatedQuestionaire.questionnaire.Amenities[section][
+          index
+        ].response_options = ameniteFilter;
+        // Set the updated questionnaireToSend state
+        setQuestionaireToSend(updatedQuestionaire);
+      }
+    }
+  };
+
+  const childInputOnchangeText = (value, data) => {
+    const { section, indexOptions } = data;
+    const amenitesApiResDataUpdateCheck =
+      questionaireToSend?.questionnaire?.Amenities[section][0]?.response_text;
+
+    if (
+      amenitesApiResDataUpdateCheck &&
+      amenitesApiResDataUpdateCheck.length > 0
+    ) {
+      // Check if the index exists
+      if (amenitesApiResDataUpdateCheck[indexOptions] !== undefined) {
+        amenitesApiResDataUpdateCheck[0][indexOptions] = value;
+      } else {
+        amenitesApiResDataUpdateCheck[0][indexOptions] = value;
+      }
+      setAmenitesQuestion((prevIndex) => {
+        const sections = amenitesApiResDataUpdateCheck;
+
+        const newStateAmeniteQuestion = {
+          [section]: sections,
+        };
+
+        if (Object.keys(sections).length === 0) {
+          delete newStateAmeniteQuestion[section];
+        }
+        return newStateAmeniteQuestion;
+      });
+    } else {
+      setAmenitesQuestion((prevIndex) => {
+        const sections = prevIndex[section] ? { ...prevIndex[section] } : {};
+        sections[indexOptions] = value;
+        const newStateAmeniteQuestion = {
+          ...prevIndex,
+          [section]: sections,
+        };
+        if (Object.keys(sections).length === 0) {
+          delete newStateAmeniteQuestion[section];
+        }
+        return newStateAmeniteQuestion;
       });
     }
   };
 
-  // onchange question
-  const childInputOnchangeText = (value, data) => {
-    const { section, indexOptions } = data;
-    setAmenitesQuestion((prevIndex) => {
-      const sectionName = section; // Assume section is directly available
-      const amenityKey = indexOptions; // Assume indexOptions is the key for the amenity
-
-      // Initialize or retrieve the section object
-      const sections = prevIndex[sectionName]
-        ? { ...prevIndex[sectionName] }
-        : {};
-
-      if (true) {
-        // Set the amenity to an empty string if checked
-        sections[amenityKey] = value;
-      }
-      // Update the main state object with the new section object
-      const newStateAmeniteQuestion = {
-        ...prevIndex,
-        [sectionName]: sections,
-      };
-      // If the section object is empty, remove the section from the main state object
-      if (Object.keys(sections).length === 0) {
-        delete newStateAmeniteQuestion[sectionName];
-      }
-      return newStateAmeniteQuestion;
-    });
-  };
   // onchange hide
   const childInputOnchangeHideRes = (value, data) => {
     const { section, indexOptions } = data;
-    setAmenitesHideForReservations((prevIndex) => {
-      const sectionName = section; // Assume section is directly available
-      const amenityKey = indexOptions; // Assume indexOptions is the key for the amenity
+    const amenitesApiResDataUpdateCheck =
+      questionaireToSend?.questionnaire?.Amenities[section][0]
+        ?.hide_for_reservations;
 
-      // Initialize or retrieve the section object
-      const sections = prevIndex[sectionName]
-        ? { ...prevIndex[sectionName] }
-        : {};
+    if (amenitesApiResDataUpdateCheck.length > 0) {
+      const updatehide = JSON.parse(amenitesApiResDataUpdateCheck);
+      if (updatehide[indexOptions] == undefined) {
+        updatehide[indexOptions] = value;
+        setAmenitesHideForReservations((prevIndex) => {
+          const sectionName = section; // Assume section is directly available
+          const newStateAmeniteQuestion = {
+            ...prevIndex,
+            [sectionName]: updatehide,
+          };
+          return newStateAmeniteQuestion;
+        });
+      } else if (updatehide[indexOptions]) {
+        updatehide[indexOptions] = value;
+        setAmenitesHideForReservations((prevIndex) => {
+          const sectionName = section; // Assume section is directly available
+          const newStateAmeniteQuestion = {
+            ...prevIndex,
+            [sectionName]: updatehide,
+          };
+          return newStateAmeniteQuestion;
+        });
+      }
+    } else {
+      setAmenitesHideForReservations((prevIndex) => {
+        const sectionName = section; // Assume section is directly available
+        const amenityKey = indexOptions; // Assume indexOptions is the key for the amenity
+        // Initialize or retrieve the section object
+        const sections = prevIndex[sectionName]
+          ? { ...prevIndex[sectionName] }
+          : {};
 
-      if (true) {
-        // Set the amenity to an empty string if checked
-        sections[amenityKey] = value;
-      }
-      // Update the main state object with the new section object
-      const newStateAmeniteQuestion = {
-        ...prevIndex,
-        [sectionName]: sections,
-      };
-      // If the section object is empty, remove the section from the main state object
-      if (Object.keys(sections).length === 0) {
-        delete newStateAmeniteQuestion[sectionName];
-      }
-      return newStateAmeniteQuestion;
-    });
+        if (true) {
+          // Set the amenity to an empty string if checked
+          sections[amenityKey] = value;
+        }
+        // Update the main state object with the new section object
+        const newStateAmeniteQuestion = {
+          ...prevIndex,
+          [sectionName]: sections,
+        };
+        // If the section object is empty, remove the section from the main state object
+        if (Object.keys(sections).length === 0) {
+          delete newStateAmeniteQuestion[sectionName];
+        }
+        return newStateAmeniteQuestion;
+      });
+    }
   };
+
   const inputOnChangeHndle = (event, data) => {
-    const { section, index, interFaceInput } = data !== undefined ? data : [];
+    const { section, index, interFaceInput, question_type } =
+      data !== undefined ? data : [];
     let updatedQuestionaire = structuredClone(questionaireToSend);
     if (interFaceInput === InterFaceQuestion) {
-      updatedQuestionaire["questionnaire"][interFaceInput][section][index][
-        "response_text"
-      ] = event.target.value;
-    }
-    if (interFaceInput === InterFaceQuestion) {
-      const statusAmenites = event.target.checked;
-      AmenitesMainComponentFun(statusAmenites, data);
+      if (question_type === "select") {
+        updatedQuestionaire.questionnaire[interFaceInput][section][
+          index
+        ].response_option = event.target.value;
+      } else {
+        updatedQuestionaire.questionnaire[interFaceInput][section][
+          index
+        ].response_text = event.target.value;
+      }
     }
     setQuestionaireToSend(updatedQuestionaire);
   };
@@ -151,11 +205,10 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
   };
 
   //this static code use only model (open model and close model functionality)
-
   const reservationModelOpen = "reservationModelOpen";
   const selectModelOpen = "selectModelOpen";
   const selectModelClose = "selectModelClose";
-  const listingDetailsInput = "listingDetailsInput";
+  const reservationModelClose = "reservationModelClose";
   const [modelQuestion, setModelQuestion] = useState({
     checkBox: false,
     reservations: false,
@@ -180,12 +233,34 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
         ...modelQuestion,
         select: false,
       });
+    } else if (type === reservationModelClose) {
+      setModelQuestion({
+        ...modelQuestion,
+        reservations: false,
+      });
+    }
+  };
+
+  const questionaListModelOpenHndle = (e, type, data) => {
+    e.preventDefault();
+    if (type === reservationModelOpen) {
+      setModelQuestion({
+        ...modelQuestion,
+        reservations: true,
+        CloseType: reservationModelClose,
+        data,
+      });
     }
   };
 
   const modelSubmitBtn = (data) => {
     const { index, section } = data?.data;
-    const amenitesText = amenitesQuestion?.[section];
+    const amenitesApiResDataUpdateCheck =
+      questionaireToSend?.questionnaire?.Amenities[section][0]?.response_text;
+    const amenitesText =
+      amenitesApiResDataUpdateCheck && amenitesApiResDataUpdateCheck.length > 0
+        ? amenitesQuestion?.[section][0]
+        : amenitesQuestion?.[section];
     const amenitesHide = amenitesHideForReservations?.[section];
     const updatedQuestionaire = structuredClone(questionaireToSend);
     updatedQuestionaire.questionnaire.Amenities[section][index].response_text =
@@ -195,6 +270,56 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
     ].hide_for_reservations = [JSON.stringify(amenitesHide)];
     setQuestionaireToSend(updatedQuestionaire);
   };
+  const modelSubmitBtnListExtras = (modelData) => {
+    const { data, hideGetArray, textAreaInput } = modelData;
+    const { index, interFaceInput, section, question_type } = data;
+    const updatedQuestionaire = structuredClone(questionaireToSend);
+    if (question_type === "select") {
+      updatedQuestionaire.questionnaire[interFaceInput][section][
+        index
+      ].hide_for_reservations = JSON.stringify(hideGetArray);
+      updatedQuestionaire.questionnaire[interFaceInput][section][
+        index
+      ].response_text = textAreaInput;
+    } else {
+      updatedQuestionaire.questionnaire[interFaceInput][section][
+        index
+      ].hide_for_reservations = JSON.stringify(hideGetArray);
+    }
+    setQuestionaireToSend(updatedQuestionaire);
+  };
+
+  ///
+  const [nextFormActive, setNextFormActive] = useState("");
+  const [prevesActive, setPrevesActive] = useState("");
+  const updateQuestionaireStatus =
+    store?.updateQuestionnaireReducer?.updateQuestionnaire?.status;
+  const updateQuestionaireLoading = store?.updateQuestionnaireReducer?.loading;
+  const updateQuestionnaireMessage =
+    store?.updateQuestionnaireReducer?.updateQuestionnaire?.data?.message;
+  useEffect(() => {
+    let x = section_order?.findIndex((ele) => ele == InterFaceQuestion);
+    const oldOption = section_order[x - 1];
+    const nextOption = section_order[x + 1];
+    setPrevesActive(oldOption);
+    setNextFormActive(nextOption);
+  }, [InterFaceQuestion]);
+  useEffect(() => {
+    if (updateQuestionaireStatus === 200) {
+      if (nextFormActive !== undefined) {
+        dispatch(getQuestionnaireActions(getLocalStorageNameKey));
+        prntFuntionHeaderActive(nextFormActive);
+      } else {
+        navigate("/properties");
+      }
+      dispatch(updateQuestionnaireEmptyActions());
+      ToastHandle(updateQuestionnaireMessage, "success");
+    }
+  }, [updateQuestionaireStatus]);
+  
+  useEffect(() => {
+    dispatch(getQuestionnaireActions(getLocalStorageNameKey));
+  }, []);
 
   return (
     <form>
@@ -205,7 +330,6 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
           return (
             <>
               <h1 className="text-white mt-5 fs-4 fw-bold mb-3">
-                {/* {ameniti} */}
                 {inputHeadingName}
               </h1>
               <div className="row">
@@ -220,40 +344,45 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                   const placeholder_text = input?.placeholder_text;
                   const response_text = input?.response_text;
                   const hide_for_reservations = input?.hide_for_reservations;
+                  const hideForListingDetailExtrs =
+                    hide_for_reservations?.length > 0
+                      ? hide_for_reservations !== "CURRENT" &&
+                        hide_for_reservations
+                      : "[]";
                   const response_option = input?.response_option;
                   const response_options = input?.response_options;
-                  const questionUpdateInputdataSendOnchange = {
+                  const listingAllData = {
                     section: inputHeadingName,
                     interFaceInput: InterFaceQuestion,
                     index: inputIndex,
+                    hideForReservations: hideForListingDetailExtrs,
+                    response_text,
+                    question_type,
                   };
-                  const modelOpenAllDataGetAndSendListing = {
-                    listingAllData: {
-                      sections: inputHeadingName,
-                      indexs: inputIndex,
-                      conponentCheck: listingDetailsInput,
-                      hideForReservations: hide_for_reservations,
-                      response_option,
-                      interFaceInput: InterFaceQuestion,
-                    },
+                  const ActivePencilIconListExtras = () => {
+                    let covertToStringArray =
+                      hideForListingDetailExtrs !== ""
+                        ? JSON.parse(hideForListingDetailExtrs).length > 0
+                          ? "#ffc107"
+                          : "#146EF5"
+                        : "#146EF5";
+                    return covertToStringArray;
                   };
                   return (
-                    //   <>inputt</>
                     <>
                       {question_type === short_answer ? (
                         <>
                           <div className="col-6 mt-3">
                             <label className="text-white">
-                              {/* dfdfdfdf */}
                               {question_text}
                               <span>
                                 <button
                                   className="bg-none p-0 border-0 w-auto ms-2"
                                   onClick={(e) => {
-                                    questionModelOpenHndl(
+                                    questionaListModelOpenHndle(
                                       e,
                                       reservationModelOpen,
-                                      modelOpenAllDataGetAndSendListing
+                                      listingAllData
                                     );
                                   }}
                                 >
@@ -266,7 +395,7 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                   >
                                     <path
                                       d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                      fill="#146EF5"
+                                      fill={ActivePencilIconListExtras()}
                                     ></path>
                                   </svg>
                                 </button>
@@ -278,10 +407,7 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                 type="text"
                                 value={response_text}
                                 onChange={(e) => {
-                                  inputOnChangeHndle(
-                                    e,
-                                    questionUpdateInputdataSendOnchange
-                                  );
+                                  inputOnChangeHndle(e, listingAllData);
                                 }}
                               />
                             </div>
@@ -297,10 +423,10 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                   <button
                                     className="bg-none p-0 border-0 w-auto ms-2"
                                     onClick={(e) => {
-                                      questionModelOpenHndl(
+                                      questionaListModelOpenHndle(
                                         e,
-                                        selectModelOpen,
-                                        modelOpenAllDataGetAndSendListing
+                                        reservationModelOpen,
+                                        listingAllData
                                       );
                                     }}
                                   >
@@ -313,7 +439,7 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                     >
                                       <path
                                         d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                        fill="#146EF5"
+                                        fill={ActivePencilIconListExtras()}
                                       ></path>
                                     </svg>
                                   </button>
@@ -322,12 +448,9 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                               <select
                                 class="form-select form-control"
                                 aria-label="Default select example"
-                                value={response_text}
+                                value={response_option}
                                 onChange={(e) => {
-                                  inputOnChangeHndle(
-                                    e,
-                                    questionUpdateInputdataSendOnchange
-                                  );
+                                  inputOnChangeHndle(e, listingAllData);
                                 }}
                               >
                                 {options?.map((select) => {
@@ -358,17 +481,17 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                     {options?.map((options, indexOptions) => {
                                       const amenitTextRes = response_text?.map(
                                         (option) => {
-                                          return option[indexOptions];
+                                          return option[indexOptions] !==
+                                            undefined
+                                            ? option[indexOptions]
+                                            : "";
                                         }
                                       );
                                       const ameniteHide =
                                         hide_for_reservations?.map((hide) => {
                                           const hideForResrvationsRes =
-                                            JSON.parse(hide);
-                                          console.log(
-                                            hideForResrvationsRes,
-                                            "hkkkhide"
-                                          );
+                                            hide !== "" ? JSON.parse(hide) : "";
+
                                           return hideForResrvationsRes[
                                             indexOptions
                                           ];
@@ -407,11 +530,11 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                                   );
                                                 }}
                                               />
-                                              <label className="form-check-label">
+                                              <label className="form-check-label ">
                                                 {options}
                                               </label>
                                               <button
-                                                className="bg-none p-0 border-0"
+                                                className="bg-none p-0 border-0 "
                                                 onClick={(e) => {
                                                   questionModelOpenHndl(
                                                     e,
@@ -430,7 +553,18 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                                 >
                                                   <path
                                                     d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                                    fill="#146EF5"
+                                                    fill={
+                                                      (ameniteHide[0] !==
+                                                        undefined &&
+                                                        ameniteHide[0].length >
+                                                          0) ||
+                                                      (amenitTextRes[0] !==
+                                                        undefined &&
+                                                        amenitTextRes[0]
+                                                          .length > 0)
+                                                        ? "#ffc107"
+                                                        : "#146EF5"
+                                                    }
                                                   ></path>
                                                 </svg>
                                               </button>
@@ -452,7 +586,16 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                               <label className="text-white">
                                 {question_text}
                                 <span>
-                                  <button className="bg-none p-0 border-0 w-auto ms-2">
+                                  <button
+                                    className="bg-none p-0 border-0 w-auto ms-2"
+                                    onClick={(e) => {
+                                      questionaListModelOpenHndle(
+                                        e,
+                                        reservationModelOpen,
+                                        listingAllData
+                                      );
+                                    }}
+                                  >
                                     <svg
                                       width="18"
                                       height="18"
@@ -462,7 +605,7 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                     >
                                       <path
                                         d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                        fill="#146EF5"
+                                        fill={ActivePencilIconListExtras()}
                                       ></path>
                                     </svg>
                                   </button>
@@ -472,7 +615,10 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
                                 <textarea
                                   className="bg-dark form-control"
                                   type="text"
-                                  // value={response_text}
+                                  value={response_text}
+                                  onChange={(e) => {
+                                    inputOnChangeHndle(e, listingAllData);
+                                  }}
                                 />
                               </div>
                             </div>
@@ -489,20 +635,25 @@ const QuestionnaireForm = ({ InterFaceQuestion }) => {
           );
         })}
         <div className="d-flex justify-content-around my-5">
-          <button class="btn btn-primary">Previous</button>
+          <button
+            class="btn btn-primary"
+            onClick={() => prntFuntionHeaderActive(prevesActive)}
+          >
+            Previous
+          </button>
           <button
             class="border_theme_btn previous btn btn-primary"
             onClick={(e) => questionnaireSubmitHndle(e)}
           >
-            Save & Next
-            {/* {!updateQuestionaireLoading ? <>Save & Next</> : <Loader />} */}
+            {/* Save & Next */}
+            {!updateQuestionaireLoading ? <>Save & Next</> : <Loader />}
           </button>
         </div>{" "}
       </div>
       <ReservationsStageModel
         show={modelQuestion}
         handleClose={questionModelCloseHndl}
-        modelSubmitBtn={modelSubmitBtn}
+        modelSubmitBtnListExtras={modelSubmitBtnListExtras}
       />
       <SelectModelNote
         show={modelQuestion}

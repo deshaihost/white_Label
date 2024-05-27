@@ -175,7 +175,7 @@ const updateQuestionnaireReducer = (
         updateQuestionnaire: action.payload,
         loading: false,
       };
-    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+    case AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_EMPTY_SUCCESS:
       return UPDATE_QUESTIONNAIRE_INITIAL_STATE;
     default:
       return state;

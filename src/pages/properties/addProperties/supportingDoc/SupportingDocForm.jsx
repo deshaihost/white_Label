@@ -101,7 +101,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   
 
   const redrectcomponent = () => {
-    prntFuntionHeaderActive(id !== undefined && "listingDetails");
+    prntFuntionHeaderActive('Listing Details');
   };
 
   const go_to_next_page = async () => {
