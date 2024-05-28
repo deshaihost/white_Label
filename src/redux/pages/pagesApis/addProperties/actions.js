@@ -35,6 +35,11 @@ export const updateQuestionnaireActions = (data) => ({
     data,
 });
 
+export const updateQuestionnaireEmptyActions = (data) => ({
+    type: AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_EMPTY_FIRST,
+    data,
+});
+
 export const supportingDocumentPostActions = (data) => ({
     type: AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_FIRST,
     data,

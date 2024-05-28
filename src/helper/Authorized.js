@@ -30,12 +30,18 @@ export const GetquestionnaireFunction = () => {
   const getLocalStorageNameKey = getLocalStorageData?.nameKey;
   const apiQuestionnaireData =
     store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
+  console.log(apiQuestionnaireData, "1010101010");
   const apiQuestionnaireLoading = store?.getQuestionnaireReducer?.loading;
   const { questionnaire, metadata } = apiQuestionnaireData
     ? apiQuestionnaireData
     : [];
   const questionnaireApi = questionnaire ? questionnaire : [];
-  let dataQuestionnaire = { questionnaireApi, apiQuestionnaireLoading,metadata,apiQuestionnaireData
+  let dataQuestionnaire = {
+    questionnaireApi,
+    apiQuestionnaireLoading,
+    metadata,
+    apiQuestionnaireData,
+    questionnaire,
   };
 
   useEffect(() => {

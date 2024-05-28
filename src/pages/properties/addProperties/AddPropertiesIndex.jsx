@@ -8,9 +8,12 @@ import AmenitiesForm from "./amenities/AmenitiesForm";
 import ExtrasForm from "./extras/ExtrasForm";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet";
-import { nameKey } from "../../../helper/Authorized";
+import { GetquestionnaireFunction, nameKey } from "../../../helper/Authorized";
 import QuestionnaireInput from "./allQuestionnaireInput/QuestionnaireInput";
 const AddPropertiesIndex = () => {
+  const ExtrasFormCall = GetquestionnaireFunction();
+  const { metadata } = ExtrasFormCall ? ExtrasFormCall : [];
+  const { section_order } = metadata ? metadata : [];
   const basics = "Basics";
   const supportingDoc = "External Resources";
   const listingDetails = "Listing Details";
@@ -18,6 +21,23 @@ const AddPropertiesIndex = () => {
   const extras = "Extras";
   const nameKeyGet = nameKey();
   const propertyName = nameKeyGet?.nameKey;
+
+  const activeComponent = (activePoint) => {
+    return (
+      <>
+        {section_order?.map((section) => {
+          if (section === activePoint) {
+            return (
+              <QuestionnaireInput
+                prntFuntionHeaderActive={mainHandleHeaderActive}
+                interFaceActiveQuestionnarie={propertiesInterFace}
+              />
+            );
+          }
+        })}
+      </>
+    );
+  };
 
   const [addPropertiesIndexConditions, setPropertiesConditions] = useState({
     progressPoint: 20,
@@ -28,6 +48,7 @@ const AddPropertiesIndex = () => {
 
   const mainHandleHeaderActive = (type) => {
     const typeString = type.trim();
+    activeComponent(type)
     if (typeString === basics.trim()) {
       setPropertiesConditions({
         progressPoint: 20,
@@ -85,23 +106,8 @@ const AddPropertiesIndex = () => {
               <SupportingDocForm
                 prntFuntionHeaderActive={mainHandleHeaderActive}
               />
-            ) : propertiesInterFace === listingDetails ? (
-              <QuestionnaireInput
-                prntFuntionHeaderActive={mainHandleHeaderActive}
-                interFaceActiveQuestionnarie={propertiesInterFace}
-              />
-            ) : propertiesInterFace === amenities ? (
-              <QuestionnaireInput
-                prntFuntionHeaderActive={mainHandleHeaderActive}
-                interFaceActiveQuestionnarie={propertiesInterFace}
-              />
-            ) : propertiesInterFace === extras ? (
-              <QuestionnaireInput
-                prntFuntionHeaderActive={mainHandleHeaderActive}
-                interFaceActiveQuestionnarie={propertiesInterFace}
-              />
             ) : (
-              ""
+              <>{activeComponent(propertiesInterFace)}</>
             )}
           </div>
         </div>

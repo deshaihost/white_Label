@@ -6,9 +6,7 @@ const AddPropertiesHeader = (props) => {
   const { id } = useParams();
   const { propertiesTypes, prntFuntionHeaderActive, propertyName } = props;
   const ExtrasFormCall = GetquestionnaireFunction();
-  const {  metadata } = ExtrasFormCall
-    ? ExtrasFormCall
-    : [];
+  const { metadata } = ExtrasFormCall ? ExtrasFormCall : [];
   const { section_order } = metadata ? metadata : [];
   const headerSection = section_order ? section_order : [];
   const [sectionOrder, setSectionOrder] = useState([]);
@@ -20,10 +18,9 @@ const AddPropertiesHeader = (props) => {
       return newOrder;
     });
   };
-  const {
-    progressPoint,
-    propertieShowInterFace
-  } = propertiesTypes ? propertiesTypes : [];
+  const { progressPoint, propertieShowInterFace } = propertiesTypes
+    ? propertiesTypes
+    : [];
   const isFirstRun = useRef(true);
 
   useEffect(() => {
@@ -57,11 +54,13 @@ const AddPropertiesHeader = (props) => {
               return (
                 <>
                   <div
-                    className={propertieShowInterFace.trim()===sections.trim() && "text-primary"}
+                    className={
+                      propertieShowInterFace.trim() === sections.trim() &&
+                      "text-primary"
+                    }
                     onClick={() => {
-                      prntFuntionHeaderActive(
-                        id !== undefined && sections
-                      );
+                      id !== undefined &&
+                        prntFuntionHeaderActive(id !== undefined && sections);
                     }}
                   >
                     <div>
