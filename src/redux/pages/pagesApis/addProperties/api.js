@@ -30,7 +30,6 @@ function deleteListIntegrationPropertiesEndPoint(params: any): any {
 
 function updateQuestionnaireEndPoint(params: any): any {
   const { data } = params;
-  console.log(data,'datadatadatadatadatadatadata',data?.nameKey?.nameKey,data?.formeData,'000000')
   return api.update(
     `${URL.UPDATE_QUESTIONNAIRE}/${data?.nameKey?.nameKey}/update_questionnaire`,
     data?.formeData

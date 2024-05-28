@@ -5,7 +5,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { nameKey, useSelectorUseDispatch } from "../../../../helper/Authorized";
 import {
   removeSupportingDocsActions,
-  stateEmptyActions,
+  removeSupportingDocsStateEmptyActions,
 } from "../../../../redux/actions";
 import { FullScreenLoader } from "../../../../helper/Loader";
 import { GoArrowUpRight } from "react-icons/go";
@@ -50,14 +50,13 @@ const PopupModal = ({
   useEffect(() => {
     if (removeSupportingDocsStatus === 200) {
       ToastHandle("File deleted successfully", "success");
-      dispatch(stateEmptyActions());
+      dispatch(removeSupportingDocsStateEmptyActions());
       deleteResAfterPreviousDocCall();
     } else if (removeSupportingDocsStatus === 500) {
       ToastHandle("500 Internal Server Error", "danger");
-      dispatch(stateEmptyActions());
+      dispatch(removeSupportingDocsStateEmptyActions());
     }
   }, [removeSupportingDocsStatus]);
-
 
   return (
     <div>

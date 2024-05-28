@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   stateEmptyActions,
   updateQuestionnaireActions,
+  updateQuestionnaireEmptyActions,
 } from "../../../../../redux/actions";
 import {
   GetquestionnaireFunction,
@@ -265,8 +266,9 @@ const prentImageOnchangeCheckInput=imageOnchageCheck?.propertyOnchangecheck
     if (updateQuestionaireStatus === 200) {
       if (loadingStatus) {
         ToastHandle(updateQuestionnaireMessage, "success");
-        prntFuntionHeaderActive(id !== undefined && "supportingDoc");
-        dispatch(stateEmptyActions());
+        prntFuntionHeaderActive("External Resources");
+        // dispatch(stateEmptyActions());
+        dispatch(updateQuestionnaireEmptyActions());
         setLoadingStatus(false);
       }
     } else {

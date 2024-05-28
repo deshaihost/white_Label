@@ -20,6 +20,7 @@ const CopyExistingPropertyModel = ({
 }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
+  const QUESTIONNAIRE_KEY = "QUESTIONNAIRE_KEY";
   const createPropertiesName =
     store?.getUserDataReducer?.getUserData?.data?.user?.properties;
   const copyExistingPropertiesStatus =
@@ -54,6 +55,7 @@ const CopyExistingPropertyModel = ({
   useEffect(() => {
     if (copyExistingPropertiesStatus === 200) {
       ToastHandle(copyExistingPropertiesMessage, "success");
+      sessionStorage.removeItem(QUESTIONNAIRE_KEY);
       dispatch(stateEmptyActions());
       handleClose("copyExistingPropertyClose");
       setPropertyCheck(false);

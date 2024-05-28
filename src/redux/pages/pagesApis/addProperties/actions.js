@@ -69,7 +69,9 @@ export const removeSupportingDocsActions = (data) => ({
     data,
 });
 
-
+export const removeSupportingDocsStateEmptyActions = () => ({
+    type: AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_EMPTY_FIRST,
+});
 
 
 

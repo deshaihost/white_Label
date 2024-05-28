@@ -176,6 +176,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const getLocalStorageData = nameKey();
   const getLocalStorageNameKey = getLocalStorageData?.nameKey;
+
   const onSubmit = (data) => {
     data.propertyName = data.propertyName.trim(); // Remove any leading or trailing whitespace, otherwise backend will reject it
     setGetInputNameKey({ nameKey: data.propertyName });
@@ -251,6 +252,7 @@ const BacisInformatioForm = ({ prntFuntionHeaderActive }) => {
       reset({ propertyName: getLocalStorageNameKey });
     }
   }, [getLocalStorageNameKey]);
+
   return (
     <div>
       <div>
