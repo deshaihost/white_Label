@@ -333,7 +333,7 @@ const removeSupportingDocsReducer = (
         removeSupportingDocs: action.payload,
         loading: false,
       };
-    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+    case AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_EMPTY_SUCCESS:
       return REMOVE_SUPPORTING_DOCS_INITIAL_STATE;
     default:
       return state;

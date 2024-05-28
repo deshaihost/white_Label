@@ -23,6 +23,7 @@ import CalenderModel from "./calender/CalenderModel";
 const ListIntegrationProperties = () => {
   const navigate = useNavigate();
   let localStorageKey = "nameKey";
+  const QUESTIONNAIRE_KEY = "QUESTIONNAIRE_KEY";
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
   const [scheduleChanged, setScheduleChanged] = useState(false); // If the user changes the schedule in the calendar, we need to re-render the listings since the current status line might change
@@ -197,6 +198,7 @@ const ListIntegrationProperties = () => {
       );
       localStorage.setItem(localStorageKey, JSON?.stringify(getInputNameKey));
       setGetInputNameKey({ nameKey: "" });
+      sessionStorage.removeItem(QUESTIONNAIRE_KEY);
     }
   }, [propertiesDeleteStatus, getInputNameKey, testPropertyKey]);
   // user that chatBox intigration

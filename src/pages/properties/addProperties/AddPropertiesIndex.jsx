@@ -45,10 +45,11 @@ const AddPropertiesIndex = () => {
   });
   const propertiesInterFace =
     addPropertiesIndexConditions?.propertieShowInterFace;
-
+  const [headerActiveDynimcally, setHeaderActiveDynimacally] = useState("Basics");
   const mainHandleHeaderActive = (type) => {
     const typeString = type.trim();
-    activeComponent(type)
+    setHeaderActiveDynimacally(typeString);
+    activeComponent(typeString);
     if (typeString === basics.trim()) {
       setPropertiesConditions({
         progressPoint: 20,
@@ -93,6 +94,7 @@ const AddPropertiesIndex = () => {
               propertiesTypes={addPropertiesIndexConditions}
               prntFuntionHeaderActive={mainHandleHeaderActive}
               propertyName={propertyName}
+              headerActiveDynimcally={headerActiveDynimcally}
             />
           </div>
         </div>

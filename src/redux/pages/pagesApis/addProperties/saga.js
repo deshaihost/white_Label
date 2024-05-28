@@ -299,6 +299,12 @@ function* removeSupportingDocsFunction(data) {
     });
   }
 }
+function* removeSupportingDocsEmtpyFunction() {
+  yield put({
+    type: AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_EMPTY_SUCCESS,
+    payload: {},
+  });
+}
 
 function* stateEmptyFunction() {
   yield put({
@@ -395,6 +401,12 @@ export function* acctionRemoveSupportingDocs(): any {
     removeSupportingDocsFunction
   );
 }
+export function* acctionRemoveSupportingDocsEmpty(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_EMPTY_FIRST,
+    removeSupportingDocsEmtpyFunction
+  );
+}
 
 function* addPropertiesSaga(): any {
   yield all([
@@ -411,6 +423,7 @@ function* addPropertiesSaga(): any {
     fork(acctionCopyExistingProperty),
     fork(acctionRemoveSupportingDocs),
     fork(acctionStateEmptyUpdateQuestion),
+    fork(acctionRemoveSupportingDocsEmpty)
   ]);
 }
 

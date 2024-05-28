@@ -12,17 +12,25 @@ import { useDispatch, useSelector } from "react-redux";
 import SelectModelNote from "../modelQuestion/SelectModelNote";
 import ReservationsStageModel from "../modelQuestion/ReservationsStageModel";
 import ToastHandle from "../../../../../helper/ToastMessage";
-import Loader from "../../../../../helper/Loader";
+import Loader, { BoxLoader } from "../../../../../helper/Loader";
 import { useNavigate } from "react-router-dom";
 
 const QuestionnaireForm = ({ InterFaceQuestion, prntFuntionHeaderActive }) => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
-  console.log(store);
   const getLocalStorageData = nameKey();
   const navigate = useNavigate();
   const getLocalStorageNameKey = getLocalStorageData?.nameKey;
+  const apiQuestionnaireLoading = store?.getQuestionnaireReducer?.loading;
+
   const ExtrasFormCall = GetquestionnaireFunction();
+  const QUESTIONNAIRE_KEY = "QUESTIONNAIRE_KEY";
+  const sectionStoreQuestionnaireSet = (data) => {
+    sessionStorage.setItem(QUESTIONNAIRE_KEY, JSON.stringify(data));
+  };
+  let questionnaireDataGetSessionStorage =
+    sessionStorage.getItem(QUESTIONNAIRE_KEY);
+  const converJsonForm = JSON.parse(questionnaireDataGetSessionStorage);
   const { apiQuestionnaireData, metadata } = ExtrasFormCall
     ? ExtrasFormCall
     : [];
@@ -30,6 +38,7 @@ const QuestionnaireForm = ({ InterFaceQuestion, prntFuntionHeaderActive }) => {
   const [questionaireToSend, setQuestionaireToSend] = useState(
     structuredClone(apiQuestionnaireData)
   );
+
   const questionnaire = questionaireToSend?.questionnaire;
   const qustionKey = questionnaire[InterFaceQuestion];
   const entriesArray = Object.entries(qustionKey);
@@ -60,6 +69,8 @@ const QuestionnaireForm = ({ InterFaceQuestion, prntFuntionHeaderActive }) => {
         ].response_options = amenitesOldResp;
         // Set the updated questionnaireToSend state
         setQuestionaireToSend(updatedQuestionaire);
+        sectionStoreQuestionnaireSet(updatedQuestionaire);
+
         // return amenitesOldResp;
       } else {
         const ameniteFilter = amenitesApiResDataUpdateCheck?.filter(
@@ -71,6 +82,7 @@ const QuestionnaireForm = ({ InterFaceQuestion, prntFuntionHeaderActive }) => {
         ].response_options = ameniteFilter;
         // Set the updated questionnaireToSend state
         setQuestionaireToSend(updatedQuestionaire);
+        sectionStoreQuestionnaireSet(updatedQuestionaire);
       }
     }
   };
@@ -191,6 +203,7 @@ const QuestionnaireForm = ({ InterFaceQuestion, prntFuntionHeaderActive }) => {
       }
     }
     setQuestionaireToSend(updatedQuestionaire);
+    sectionStoreQuestionnaireSet(updatedQuestionaire);
   };
 
   const questionnaireSubmitHndle = (e) => {
@@ -259,7 +272,7 @@ const QuestionnaireForm = ({ InterFaceQuestion, prntFuntionHeaderActive }) => {
       questionaireToSend?.questionnaire?.Amenities[section][0]?.response_text;
     const amenitesText =
       amenitesApiResDataUpdateCheck && amenitesApiResDataUpdateCheck.length > 0
-        ? amenitesQuestion?.[section][0]
+        ? amenitesApiResDataUpdateCheck[0]
         : amenitesQuestion?.[section];
     const amenitesHide = amenitesHideForReservations?.[section];
     const updatedQuestionaire = structuredClone(questionaireToSend);
@@ -269,6 +282,7 @@ const QuestionnaireForm = ({ InterFaceQuestion, prntFuntionHeaderActive }) => {
       index
     ].hide_for_reservations = [JSON.stringify(amenitesHide)];
     setQuestionaireToSend(updatedQuestionaire);
+    sectionStoreQuestionnaireSet(updatedQuestionaire);
   };
   const modelSubmitBtnListExtras = (modelData) => {
     const { data, hideGetArray, textAreaInput } = modelData;
@@ -287,6 +301,7 @@ const QuestionnaireForm = ({ InterFaceQuestion, prntFuntionHeaderActive }) => {
       ].hide_for_reservations = JSON.stringify(hideGetArray);
     }
     setQuestionaireToSend(updatedQuestionaire);
+    sectionStoreQuestionnaireSet(updatedQuestionaire);
   };
 
   ///
@@ -307,362 +322,400 @@ const QuestionnaireForm = ({ InterFaceQuestion, prntFuntionHeaderActive }) => {
   useEffect(() => {
     if (updateQuestionaireStatus === 200) {
       if (nextFormActive !== undefined) {
-        dispatch(getQuestionnaireActions(getLocalStorageNameKey));
         prntFuntionHeaderActive(nextFormActive);
       } else {
         navigate("/properties");
+        sessionStorage.removeItem(QUESTIONNAIRE_KEY);
       }
       dispatch(updateQuestionnaireEmptyActions());
       ToastHandle(updateQuestionnaireMessage, "success");
     }
   }, [updateQuestionaireStatus]);
-  
+
   useEffect(() => {
-    dispatch(getQuestionnaireActions(getLocalStorageNameKey));
+    if (converJsonForm !== null) {
+      setQuestionaireToSend(structuredClone(converJsonForm));
+    }
   }, []);
 
   return (
-    <form>
-      <div>
-        {formattedArray?.map((allQuestionKeyValue) => {
-          const inputHeadingName = allQuestionKeyValue?.key;
-          const AllInput = allQuestionKeyValue?.value;
-          return (
-            <>
-              <h1 className="text-white mt-5 fs-4 fw-bold mb-3">
-                {inputHeadingName}
-              </h1>
-              <div className="row">
-                {AllInput?.map((input, inputIndex) => {
-                  const question_type = input?.question_type;
-                  const short_answer = "short_answer";
-                  const select = "select";
-                  const checkbox_group = "checkbox_group";
-                  const long_answer = "long_answer";
-                  const options = input?.options;
-                  const question_text = input?.question_text;
-                  const placeholder_text = input?.placeholder_text;
-                  const response_text = input?.response_text;
-                  const hide_for_reservations = input?.hide_for_reservations;
-                  const hideForListingDetailExtrs =
-                    hide_for_reservations?.length > 0
-                      ? hide_for_reservations !== "CURRENT" &&
-                        hide_for_reservations
-                      : "[]";
-                  const response_option = input?.response_option;
-                  const response_options = input?.response_options;
-                  const listingAllData = {
-                    section: inputHeadingName,
-                    interFaceInput: InterFaceQuestion,
-                    index: inputIndex,
-                    hideForReservations: hideForListingDetailExtrs,
-                    response_text,
-                    question_type,
-                  };
-                  const ActivePencilIconListExtras = () => {
-                    let covertToStringArray =
-                      hideForListingDetailExtrs !== ""
-                        ? JSON.parse(hideForListingDetailExtrs).length > 0
-                          ? "#ffc107"
-                          : "#146EF5"
-                        : "#146EF5";
-                    return covertToStringArray;
-                  };
-                  return (
-                    <>
-                      {question_type === short_answer ? (
-                        <>
-                          <div className="col-6 mt-3">
-                            <label className="text-white">
-                              {question_text}
-                              <span>
-                                <button
-                                  className="bg-none p-0 border-0 w-auto ms-2"
-                                  onClick={(e) => {
-                                    questionaListModelOpenHndle(
-                                      e,
-                                      reservationModelOpen,
-                                      listingAllData
-                                    );
-                                  }}
-                                >
-                                  <svg
-                                    width="18"
-                                    height="18"
-                                    viewBox="0 0 18 18"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                      fill={ActivePencilIconListExtras()}
-                                    ></path>
-                                  </svg>
-                                </button>
-                              </span>
-                            </label>
-                            <div className="">
-                              <input
-                                className="bg-dark form-control"
-                                type="text"
-                                value={response_text}
-                                onChange={(e) => {
-                                  inputOnChangeHndle(e, listingAllData);
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </>
-                      ) : question_type === select ? (
-                        <>
-                          {
-                            <div className="col-6 mt-3">
-                              <label className="text-white">
-                                {question_text}{" "}
-                                <span>
-                                  <button
-                                    className="bg-none p-0 border-0 w-auto ms-2"
-                                    onClick={(e) => {
-                                      questionaListModelOpenHndle(
-                                        e,
-                                        reservationModelOpen,
-                                        listingAllData
-                                      );
-                                    }}
-                                  >
-                                    <svg
-                                      width="18"
-                                      height="18"
-                                      viewBox="0 0 18 18"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                        fill={ActivePencilIconListExtras()}
-                                      ></path>
-                                    </svg>
-                                  </button>
-                                </span>
-                              </label>
-                              <select
-                                class="form-select form-control"
-                                aria-label="Default select example"
-                                value={response_option}
-                                onChange={(e) => {
-                                  inputOnChangeHndle(e, listingAllData);
-                                }}
-                              >
-                                {options?.map((select) => {
-                                  return (
-                                    <>
-                                      <option value={select}>
-                                        {select !== "" ? select : "Select"}
-                                      </option>
-                                    </>
-                                  );
-                                })}
-                              </select>
-                            </div>
-                          }
-                        </>
-                      ) : question_type === checkbox_group ? (
-                        <>
-                          <div className="row">
-                            <div className="col-lg-12">
-                              <div>
-                                <div className="col-12">
-                                  <div>
-                                    <label className="text-white">
-                                      {placeholder_text}
-                                    </label>
-                                  </div>
-                                  <ul className="amenties-list">
-                                    {options?.map((options, indexOptions) => {
-                                      const amenitTextRes = response_text?.map(
-                                        (option) => {
-                                          return option[indexOptions] !==
-                                            undefined
-                                            ? option[indexOptions]
-                                            : "";
-                                        }
-                                      );
-                                      const ameniteHide =
-                                        hide_for_reservations?.map((hide) => {
-                                          const hideForResrvationsRes =
-                                            hide !== "" ? JSON.parse(hide) : "";
+    <>
+      {!apiQuestionnaireLoading ? (
+        <>
+          <form>
+            <div>
+              {formattedArray?.map((allQuestionKeyValue) => {
+                const inputHeadingName = allQuestionKeyValue?.key;
+                const AllInput = allQuestionKeyValue?.value;
+                return (
+                  <>
+                    <h1 className="text-white mt-5 fs-4 fw-bold mb-3">
+                      {inputHeadingName}
+                    </h1>
+                    <div className="row">
+                      {AllInput?.map((input, inputIndex) => {
+                        const question_type = input?.question_type;
+                        const short_answer = "short_answer";
+                        const select = "select";
+                        const checkbox_group = "checkbox_group";
+                        const long_answer = "long_answer";
+                        const options = input?.options;
+                        const question_text = input?.question_text;
+                        const placeholder_text = input?.placeholder_text;
+                        const response_text = input?.response_text;
+                        const hide_for_reservations =
+                          input?.hide_for_reservations;
 
-                                          return hideForResrvationsRes[
-                                            indexOptions
-                                          ];
-                                        });
-                                      const amenitesObjec = {
-                                        section: inputHeadingName,
-                                        interFaceInput: InterFaceQuestion,
-                                        index: inputIndex,
-                                        currentValue: options,
-                                        indexOptions,
-                                        response_text: amenitTextRes[0],
-                                        hide_for_reservations: ameniteHide[0],
-                                      };
-                                      return (
-                                        <>
-                                          <li className="amenties-list-item">
-                                            <div
-                                              className={
-                                                response_options.includes(
-                                                  options
-                                                )
-                                                  ? "form-checkbox bg-light text-dark"
-                                                  : "form-checkbox "
-                                              }
-                                            >
-                                              <input
-                                                type="checkbox"
-                                                className="form-check-input"
-                                                checked={response_options.includes(
-                                                  options
-                                                )}
-                                                onChange={(e) => {
-                                                  AmenitesMainComponentFun(
-                                                    e,
-                                                    amenitesObjec
-                                                  );
-                                                }}
-                                              />
-                                              <label className="form-check-label ">
-                                                {options}
-                                              </label>
-                                              <button
-                                                className="bg-none p-0 border-0 "
-                                                onClick={(e) => {
-                                                  questionModelOpenHndl(
-                                                    e,
-                                                    true,
-                                                    selectModelOpen,
-                                                    amenitesObjec
-                                                  );
-                                                }}
-                                              >
-                                                <svg
-                                                  width="18"
-                                                  height="18"
-                                                  viewBox="0 0 18 18"
-                                                  fill="none"
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                  <path
-                                                    d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                                    fill={
-                                                      (ameniteHide[0] !==
-                                                        undefined &&
-                                                        ameniteHide[0].length >
-                                                          0) ||
-                                                      (amenitTextRes[0] !==
-                                                        undefined &&
-                                                        amenitTextRes[0]
-                                                          .length > 0)
-                                                        ? "#ffc107"
-                                                        : "#146EF5"
-                                                    }
-                                                  ></path>
-                                                </svg>
-                                              </button>
-                                            </div>
-                                          </li>
-                                        </>
-                                      );
-                                    })}
-                                  </ul>
+                        const hideForListingDetailExtrs =
+                          hide_for_reservations?.length > 0
+                            ? hide_for_reservations !== "CURRENT"
+                              ? hide_for_reservations !== "FUTURE"
+                                ? hide_for_reservations !==
+                                  "FUTURE,INQUIRY/PAST,CURRENT"
+                                  ? hide_for_reservations !== "INQUIRY/PAST"
+                                    ? hide_for_reservations
+                                    : "[]"
+                                  : "[]"
+                                : "[]"
+                              : "[]"
+                            : "[]";
+                        const response_option = input?.response_option;
+                        const response_options = input?.response_options;
+                        const listingAllData = {
+                          section: inputHeadingName,
+                          interFaceInput: InterFaceQuestion,
+                          index: inputIndex,
+                          hideForReservations: hideForListingDetailExtrs,
+                          response_text,
+                          question_type,
+                        };
+                        const ActivePencilIconListExtras = () => {
+                          let covertToStringArray =
+                            hideForListingDetailExtrs !== ""
+                              ? JSON.parse(hideForListingDetailExtrs).length > 0
+                                ? "#ffc107"
+                                : "#146EF5"
+                              : "#146EF5";
+                          return covertToStringArray;
+                        };
+                        return (
+                          <>
+                            {question_type === short_answer ? (
+                              <>
+                                <div className="col-6 mt-3">
+                                  <label className="text-white">
+                                    {question_text}
+                                    <span>
+                                      <button
+                                        className="bg-none p-0 border-0 w-auto ms-2"
+                                        onClick={(e) => {
+                                          questionaListModelOpenHndle(
+                                            e,
+                                            reservationModelOpen,
+                                            listingAllData
+                                          );
+                                        }}
+                                      >
+                                        <svg
+                                          width="18"
+                                          height="18"
+                                          viewBox="0 0 18 18"
+                                          fill="none"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                          <path
+                                            d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
+                                            fill={ActivePencilIconListExtras()}
+                                          ></path>
+                                        </svg>
+                                      </button>
+                                    </span>
+                                  </label>
+                                  <div className="">
+                                    <input
+                                      className="bg-dark form-control"
+                                      type="text"
+                                      value={response_text}
+                                      onChange={(e) => {
+                                        inputOnChangeHndle(e, listingAllData);
+                                      }}
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      ) : question_type === long_answer ? (
-                        <>
-                          <div className="row">
-                            <div className="col-12 mt-4 form-design">
-                              <label className="text-white">
-                                {question_text}
-                                <span>
-                                  <button
-                                    className="bg-none p-0 border-0 w-auto ms-2"
-                                    onClick={(e) => {
-                                      questionaListModelOpenHndle(
-                                        e,
-                                        reservationModelOpen,
-                                        listingAllData
-                                      );
-                                    }}
-                                  >
-                                    <svg
-                                      width="18"
-                                      height="18"
-                                      viewBox="0 0 18 18"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
+                              </>
+                            ) : question_type === select ? (
+                              <>
+                                {
+                                  <div className="col-6 mt-3">
+                                    <label className="text-white">
+                                      {question_text}{" "}
+                                      <span>
+                                        <button
+                                          className="bg-none p-0 border-0 w-auto ms-2"
+                                          onClick={(e) => {
+                                            questionaListModelOpenHndle(
+                                              e,
+                                              reservationModelOpen,
+                                              listingAllData
+                                            );
+                                          }}
+                                        >
+                                          <svg
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 18 18"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                          >
+                                            <path
+                                              d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
+                                              fill={ActivePencilIconListExtras()}
+                                            ></path>
+                                          </svg>
+                                        </button>
+                                      </span>
+                                    </label>
+                                    <select
+                                      class="form-select form-control"
+                                      aria-label="Default select example"
+                                      value={response_option}
+                                      onChange={(e) => {
+                                        inputOnChangeHndle(e, listingAllData);
+                                      }}
                                     >
-                                      <path
-                                        d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-                                        fill={ActivePencilIconListExtras()}
-                                      ></path>
-                                    </svg>
-                                  </button>
-                                </span>
-                              </label>
-                              <div className="">
-                                <textarea
-                                  className="bg-dark form-control"
-                                  type="text"
-                                  value={response_text}
-                                  onChange={(e) => {
-                                    inputOnChangeHndle(e, listingAllData);
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  );
-                })}
-              </div>
-            </>
-          );
-        })}
-        <div className="d-flex justify-content-around my-5">
-          <button
-            class="btn btn-primary"
-            onClick={() => prntFuntionHeaderActive(prevesActive)}
-          >
-            Previous
-          </button>
-          <button
-            class="border_theme_btn previous btn btn-primary"
-            onClick={(e) => questionnaireSubmitHndle(e)}
-          >
-            {/* Save & Next */}
-            {!updateQuestionaireLoading ? <>Save & Next</> : <Loader />}
-          </button>
-        </div>{" "}
-      </div>
-      <ReservationsStageModel
-        show={modelQuestion}
-        handleClose={questionModelCloseHndl}
-        modelSubmitBtnListExtras={modelSubmitBtnListExtras}
-      />
-      <SelectModelNote
-        show={modelQuestion}
-        handleClose={questionModelCloseHndl}
-        modelSubmitBtn={modelSubmitBtn}
-        prentOnChangeTextHndl={(e, data) => childInputOnchangeText(e, data)}
-        prentOnchangeHideRes={(e, data) => childInputOnchangeHideRes(e, data)}
-      />
-    </form>
+                                      {options?.map((select) => {
+                                        return (
+                                          <>
+                                            <option value={select}>
+                                              {select !== ""
+                                                ? select
+                                                : "Select"}
+                                            </option>
+                                          </>
+                                        );
+                                      })}
+                                    </select>
+                                  </div>
+                                }
+                              </>
+                            ) : question_type === checkbox_group ? (
+                              <>
+                                <div className="row">
+                                  <div className="col-lg-12">
+                                    <div>
+                                      <div className="col-12">
+                                        <div>
+                                          <label className="text-white">
+                                            {placeholder_text}
+                                          </label>
+                                        </div>
+                                        <ul className="amenties-list">
+                                          {options?.map(
+                                            (options, indexOptions) => {
+                                              const amenitTextRes =
+                                                response_text?.map((option) => {
+                                                  return option[
+                                                    indexOptions
+                                                  ] !== undefined
+                                                    ? option[indexOptions]
+                                                    : "";
+                                                });
+                                              const ameniteHide =
+                                                hide_for_reservations?.map(
+                                                  (hide) => {
+                                                    const hideForResrvationsRes =
+                                                      hide !== ""
+                                                        ? hide_for_reservations?.length ===
+                                                          1
+                                                          ? JSON.parse(hide)
+                                                          : ""
+                                                        : "";
+
+                                                    return hideForResrvationsRes[
+                                                      indexOptions
+                                                    ];
+                                                  }
+                                                );
+                                              const amenitesObjec = {
+                                                section: inputHeadingName,
+                                                interFaceInput:
+                                                  InterFaceQuestion,
+                                                index: inputIndex,
+                                                currentValue: options,
+                                                indexOptions,
+                                                response_text: amenitTextRes[0],
+                                                hide_for_reservations:
+                                                  ameniteHide[0],
+                                              };
+                                              return (
+                                                <>
+                                                  <li className="amenties-list-item">
+                                                    <div
+                                                      className={
+                                                        response_options.includes(
+                                                          options
+                                                        )
+                                                          ? "form-checkbox bg-light text-dark"
+                                                          : "form-checkbox "
+                                                      }
+                                                    >
+                                                      <input
+                                                        type="checkbox"
+                                                        className="form-check-input"
+                                                        checked={response_options.includes(
+                                                          options
+                                                        )}
+                                                        onChange={(e) => {
+                                                          AmenitesMainComponentFun(
+                                                            e,
+                                                            amenitesObjec
+                                                          );
+                                                        }}
+                                                      />
+                                                      <label className="form-check-label ">
+                                                        {options}
+                                                      </label>
+                                                      <button
+                                                        className="bg-none p-0 border-0 "
+                                                        onClick={(e) => {
+                                                          questionModelOpenHndl(
+                                                            e,
+                                                            true,
+                                                            selectModelOpen,
+                                                            amenitesObjec
+                                                          );
+                                                        }}
+                                                      >
+                                                        <svg
+                                                          width="18"
+                                                          height="18"
+                                                          viewBox="0 0 18 18"
+                                                          fill="none"
+                                                          xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                          <path
+                                                            d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
+                                                            fill={
+                                                              (ameniteHide[0] !==
+                                                                undefined &&
+                                                                ameniteHide[0]
+                                                                  .length >
+                                                                  0) ||
+                                                              (amenitTextRes[0] !==
+                                                                undefined &&
+                                                                amenitTextRes[0]
+                                                                  .length > 0)
+                                                                ? "#ffc107"
+                                                                : "#146EF5"
+                                                            }
+                                                          ></path>
+                                                        </svg>
+                                                      </button>
+                                                    </div>
+                                                  </li>
+                                                </>
+                                              );
+                                            }
+                                          )}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                            ) : question_type === long_answer ? (
+                              <>
+                                <div className="row">
+                                  <div className="col-12 mt-4 form-design">
+                                    <label className="text-white">
+                                      {question_text}
+                                      <span>
+                                        <button
+                                          className="bg-none p-0 border-0 w-auto ms-2"
+                                          onClick={(e) => {
+                                            questionaListModelOpenHndle(
+                                              e,
+                                              reservationModelOpen,
+                                              listingAllData
+                                            );
+                                          }}
+                                        >
+                                          <svg
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 18 18"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                          >
+                                            <path
+                                              d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
+                                              fill={ActivePencilIconListExtras()}
+                                            ></path>
+                                          </svg>
+                                        </button>
+                                      </span>
+                                    </label>
+                                    <div className="">
+                                      <textarea
+                                        className="bg-dark form-control"
+                                        type="text"
+                                        value={response_text}
+                                        onChange={(e) => {
+                                          inputOnChangeHndle(e, listingAllData);
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        );
+                      })}
+                    </div>
+                  </>
+                );
+              })}
+              <div className="d-flex justify-content-around my-5">
+                <button
+                  class="btn btn-primary"
+                  onClick={() => prntFuntionHeaderActive(prevesActive)}
+                >
+                  Previous
+                </button>
+                <button
+                  class="border_theme_btn previous btn btn-primary"
+                  onClick={(e) => questionnaireSubmitHndle(e)}
+                >
+                  {/* Save & Next */}
+                  {!updateQuestionaireLoading ? <>Save & Next</> : <Loader />}
+                </button>
+              </div>{" "}
+            </div>
+            <ReservationsStageModel
+              show={modelQuestion}
+              handleClose={questionModelCloseHndl}
+              modelSubmitBtnListExtras={modelSubmitBtnListExtras}
+            />
+            <SelectModelNote
+              show={modelQuestion}
+              handleClose={questionModelCloseHndl}
+              modelSubmitBtn={modelSubmitBtn}
+              prentOnChangeTextHndl={(e, data) =>
+                childInputOnchangeText(e, data)
+              }
+              prentOnchangeHideRes={(e, data) =>
+                childInputOnchangeHideRes(e, data)
+              }
+            />
+          </form>
+        </>
+      ) : (
+        <BoxLoader />
+      )}
+    </>
   );
 };
 
