@@ -125,8 +125,8 @@ const Essentials = () => {
                       : essentialValue > 10 && essentialValue < 21
                       ? 8
                       : 7}
-                  </strong>
-                  /property)
+                  </strong>{" "}
+                  / add'l property)
                 </span>
               </div>
             </div>
@@ -220,8 +220,8 @@ const Essentials = () => {
                       : worksValue > 10 && worksValue < 21
                       ? 15
                       : 10}
-                  </strong>
-                  /property)
+                  </strong>{" "}
+                  / add'l property)
                 </span>
               </div>
             </div>

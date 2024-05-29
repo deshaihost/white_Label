@@ -155,7 +155,7 @@ const Properties = () => {
       <div className="account-main">
         <div className="container">
           <div className="banner-heading">
-            <h2>My HostBuddy</h2>
+            {/* <h2>My HostBuddy</h2> */}
           </div>
           <div className="row">
             <div className="col-lg-4">
