@@ -109,6 +109,9 @@ const SetupGuide = () => {
                             </ul>
                           </li>
                         </ol>
+
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/uxzAcDGMaCg?si=Hc3sWHqdclU9F8qc" title="Property Profile YouTube video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/6GUYt9iKc8E?si=_dzfqiPs9blicFE4" title="PMS Integrations YouTube video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         
                       </div>
 
@@ -121,6 +124,9 @@ const SetupGuide = () => {
                           <li>Ask away! Observe HostBuddy’s responses to a variety of questions.</li>
                           <li>If HostBuddy is lacking sufficient information, head back to the Properties page and edit your property information to include what is needed. Explore how providing different information will impact your HostBuddy’s responses, and ensure it is responding just how you like it! Additionally, you’ll notice there is a thumbs up/down icon next to each response. Click this icon to provide feedback regarding the responses. This feature provides an opportunity for the technical team at HostBuddy AI to collect feedback for improving your HostBuddy. If there are responses that fall short, which you are having trouble fixing, please contact our team at info@HostBuddy.ai and provide the property name, a screenshot, and an example of your ideal host response. We will reach back out with either a recommendation for how to fix the issue, or a request to meet to discuss more nuanced requirements.</li>
                         </ol>
+
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/WH0GhJOHMDE?si=cd3Uy6VsIMLbmjbY" title="Testing Property YouTube video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
                       </div>
 
                       <div className="step-box section" id="step4">
@@ -141,6 +147,10 @@ const SetupGuide = () => {
                         <ul style={{ marginBottom: '0px' }}>
                           <li><em>Note: There is one toggle button for each property, and one master toggle button. These buttons control whether or not HostBuddy is following the schedules you have created. The “STOP” button will pause all scheduling, and HostBuddy will remain inactive until the button is clicked again. When unclicked, HostBuddy will follow the schedule. HostBuddy will remain off until it is scheduled to be active based on the statuses you’ve added to your schedule or calendar.</em></li>
                         </ul>
+
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/JLqXXVLKQZA?si=4tjwnSojA4NLV742" title="Go Live Works YouTube video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/_JVjYN4r_3A?si=AUwvE_JP52fApByx" title="Go Live Essentials YouTube video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerPolicy='strict-origin-when-cross-origin' allowFullScreen></iframe>
+
                       </div>
 
                       <div className="step-box section" id="step5">
@@ -152,6 +162,8 @@ const SetupGuide = () => {
                           <li>Sit back and relax! You now have state of the art technology doing the heavy lifting for you. Welcome to the future of hosting!</li>
                         </ol>
                       </div>
+
+                      <iframe width="560" height="315" src="https://www.youtube.com/embed/v6-ha6G-Csc?si=KyJLXQ1v4KCr7l8O" title="Insights YouTube video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerPolicy='strict-origin-when-cross-origin' allowFullScreen></iframe>
 
                     </div>
                   </div>

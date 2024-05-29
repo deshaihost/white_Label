@@ -49,7 +49,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4><strong>Integrate</strong> Into Your Existing Systems</h4>
-                                <p>Connect a PMS account to give Hostbuddy access to property details and real-time guest information, and to allow HostBuddy to see and respond to guest messages over your existing communication channels. HostBuddy can integrate with most major property management softwares on the market. See our FAQ page for the full list.</p>
+                                <p>Connect a PMS account to give HostBuddy access to property details and real-time guest information, and to allow HostBuddy to see and respond to guest messages over your existing communication channels. HostBuddy can integrate with most major property management softwares on the market. See our FAQ page for the full list.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
