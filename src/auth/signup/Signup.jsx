@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Container from "react-bootstrap/Container";
-import AuthImage from "../../public/img/Sign_Up_Page.png";
+import AuthImage from "../../public/img/Sign_Up_Page.jpg";
 import Logo from "../../public/img/logo_footer.png";
 import { Link } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -308,7 +308,7 @@ const Signup = () => {
                       {...register("phone", {
                         pattern: /^[0-9]{10}$/,
                       })}
-                      placeholder="Phone..."
+                      placeholder="Phone (optional) ..."
                       maxLength="10"
                     />
                   </div>
