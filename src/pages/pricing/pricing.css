@@ -11,7 +11,7 @@
   margin: 0 auto 45px;
 }
 
-.pricing .pricing-heading h2 {
+.pricing .pricing-heading h1, .pricing .pricing-heading h2 {
   color: #fff;
   text-align: center;
   font-family: "Samsung Sharp Sans Bold";
@@ -50,7 +50,7 @@
   z-index: 1;
 }
 
-.started .started-content h2 {
+.started .started-content h1, .started .started-content h2 {
   color: #fff;
   text-align: center;
   font-family: "Samsung Sharp Sans Bold";
@@ -78,7 +78,7 @@ a.explore-link {
 }
 
 @media only screen and (max-width: 1199px) {
-  .pricing .pricing-heading h2 {
+  .pricing .pricing-heading h1, .pricing .pricing-heading h2 {
     font-size: 36px;
     line-height: 40px;
   }
@@ -89,7 +89,7 @@ a.explore-link {
     padding: 50px 0;
   }
 
-  .pricing .pricing-heading h2 {
+  .pricing .pricing-heading h1, .pricing .pricing-heading h2 {
     font-size: 32px;
     line-height: 40px;
     margin-bottom: 10px;
@@ -101,7 +101,7 @@ a.explore-link {
 }
 
 @media only screen and (max-width: 767px) {
-  .pricing .pricing-heading h2 {
+  .pricing .pricing-heading h1, .pricing .pricing-heading h2 {
     font-size: 22px;
     line-height: 30px;
   }

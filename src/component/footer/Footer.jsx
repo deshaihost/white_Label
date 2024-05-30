@@ -8,6 +8,7 @@ import FooterLogo from "../../public/img/logo_footer.png";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import "./footer.css";
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -71,6 +72,12 @@ const Footer = () => {
                 <p className="links">
                   Headquartered in San Diego, CA, USA
                 </p>
+                <div className="social-media-links">
+                  <a className="social-link" href="https://www.instagram.com/hostbuddy_ai" target="_blank" rel="noreferrer"><FaInstagram /></a>
+                  <a className="social-link" href="https://www.linkedin.com/company/99139157" target="_blank" rel="noreferrer"><FaLinkedin /></a>
+                  <a className="social-link" href="https://www.youtube.com/@hostbuddyai" target="_blank" rel="noreferrer"><FaYoutube /></a>
+                  <a className="social-link" href="https://www.facebook.com/profile.php?id=61556285228319" target="_blank" rel="noreferrer"><FaFacebook /></a>
+                </div>
               </div>
             </MDBCol>
           </MDBRow>

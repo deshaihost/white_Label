@@ -28,7 +28,8 @@ const MeetHostBoddy = () => {
   return (
     <div className="meet-buddy">
       <Helmet>
-        <title>Meet HostBuddy – HostBuddy</title>
+        <title>Meet HostBuddy – HostBuddy AI</title>
+        <link rel="canonical" href="https://www.hostbuddy.ai/meet-hostbuddy" />
       </Helmet>
       <div className="meet-buddy-container">
         <MeetBanner urlData={urlData} />

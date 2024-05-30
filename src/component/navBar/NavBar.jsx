@@ -75,7 +75,7 @@ const NavBar = () => {
         <Navbar expand="lg" className="bg-body-tertiary header-container">
           <Navbar.Brand>
             <NavLink exact to="/">
-              <img src={LogoNavBar} />
+              <img src={LogoNavBar} alt="HostBuddy AI Logo" />
             </NavLink>
           </Navbar.Brand>
           <div className="header-icons-list">

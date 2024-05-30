@@ -29,11 +29,11 @@
     background: transparent;
 } */
 
-.banner .banner-container .heading h2 {
+.banner .banner-container .heading h1 {
   position: relative;
 }
 
-.banner .banner-container .heading h2::after {
+.banner .banner-container .heading h1::after {
   content: "";
   display: inline-block;
   width: 37px;

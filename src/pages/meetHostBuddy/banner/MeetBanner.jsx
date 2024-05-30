@@ -154,7 +154,7 @@ const MeetBanner = (props) => {
     <div className="meet-banner">
       <Container>
         <div className="banner-heading">
-          <h2>
+          <h1>
             {" "}
             {isPropertyChat ? (
               <>
@@ -167,7 +167,7 @@ const MeetBanner = (props) => {
             ) : (
               "Meet HostBuddy"
             )}
-          </h2>
+          </h1>
           {!isPropertyChat && (
             <p>
               Try asking Hostbuddy your most commonly received guest questions, and watch it handle them with ease. Its responses here are based on the details of a fictional property, but you’ll be able to seamlessly tailor it to your own!

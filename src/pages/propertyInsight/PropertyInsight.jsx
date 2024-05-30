@@ -80,7 +80,7 @@ const PropertyInsight = () => {
   return (
     <>
       <Helmet>
-        <title>Insights</title>
+        <title>Insights - HostBuddy AI</title>
       </Helmet>
       ;
       <div className="account-main">

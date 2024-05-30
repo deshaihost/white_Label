@@ -77,6 +77,10 @@ footer.footer .footer-container {
     font-family: inherit !important;
 }
 
+.footer .social-link {
+    margin-right: 10px;
+}
+
 @media only screen and (max-width: 767px) {
     .footer .col-md-3 .links-heading, .footer .links-heading {
         line-height: 26px;

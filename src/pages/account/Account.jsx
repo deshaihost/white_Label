@@ -157,8 +157,8 @@ const Account = () => {
   return (
     <div className="account-main">
       <Helmet>
-    <title>Account</title>
-  </Helmet>
+        <title>Account - HostBuddy AI</title>
+      </Helmet>
       <div className="container">
         <div className="banner-heading">
           <h2>My HostBuddy</h2>

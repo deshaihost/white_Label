@@ -40,7 +40,7 @@ a {
   text-decoration: none;
 }
 
-.heading h2 {
+.heading h1, .heading h2 {
   color: #fff;
   font-family: "Samsung Sharp Sans Bold";
   font-size: 45px;
@@ -54,7 +54,7 @@ a {
   text-align: center;
 }
 
-.heading h2 strong {
+.heading h1 strong, .heading h2 strong {
   font-weight: 700;
   color: #146ef5;
 }
@@ -157,7 +157,7 @@ input[type="checkbox"] {
   text-align: center;
 }
 
-.banner-heading h2 {
+.banner-heading h1, .banner-heading h2 {
   color: #fff;
   text-align: center;
   font-family: "Samsung Sharp Sans Bold";
@@ -628,14 +628,14 @@ textarea.form-control {
     font-size: 15px;
   }
 
-  .banner-heading h2 {
+  .banner-heading h1, .banner-heading h2 {
     font-size: 36px;
     line-height: 40px;
   }
 }
 
 @media only screen and (max-width: 991px) {
-  .heading h2 {
+  .heading h1, .heading h2 {
     font-size: 36px;
     line-height: 45px;
   }
@@ -644,7 +644,7 @@ textarea.form-control {
     margin-bottom: 25px;
   }
 
-  .banner-heading h2 {
+  .banner-heading h1, .banner-heading h2 {
     font-size: 32px;
     line-height: 40px;
     margin-bottom: 10px;
@@ -652,7 +652,7 @@ textarea.form-control {
 }
 
 @media only screen and (max-width: 767px) {
-  .heading h2 {
+  .heading h1, .heading h2 {
     font-size: 27px;
     line-height: 42px;
   }
@@ -665,7 +665,7 @@ textarea.form-control {
     padding: 10px 30px;
   }
 
-  .banner-heading h2 {
+  .banner-heading h1, .banner-heading h2 {
     font-size: 22px;
     line-height: 30px;
   }
@@ -680,7 +680,12 @@ textarea.form-control {
 }
 
 @media only screen and (max-width: 575px) {
-  .heading h2 {
+  .heading h1, .heading h2 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .heading h1 {
     font-size: 22px;
     line-height: 30px;
   }

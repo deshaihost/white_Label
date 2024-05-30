@@ -132,7 +132,8 @@ const Signup = () => {
   return (
     <div className="signup auth">
       <Helmet>
-        <title>Sign Up – HostBuddy</title>
+        <title>Sign Up – HostBuddy AI</title>
+        <link rel="canonical" href="https://www.hostbuddy.ai/signup" />
       </Helmet>
       <Container>
         <div className="row">

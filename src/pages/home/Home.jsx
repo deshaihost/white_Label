@@ -9,7 +9,8 @@ const Home = () => {
   return (
     <div className='home'>
       <Helmet>
-        <title>HostBuddy</title>
+        <title>HostBuddy AI</title>
+        <link rel="canonical" href="https://www.hostbuddy.ai/" />
       </Helmet>
       <Banner />
       <Works />
