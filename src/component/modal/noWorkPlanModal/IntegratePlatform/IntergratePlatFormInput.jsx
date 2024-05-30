@@ -39,7 +39,7 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
   useEffect(() => {
     if (getCarlyLinkStatus === 200) {
       ToastHandle(getCarlyLinkMessage, "success");
-    } else if (getCarlyLinkStatus === 500) {
+    } else {
       ToastHandle(getCalryLinkError, "danger");
       dispatch(stateEmptyActions());
     }

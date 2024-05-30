@@ -9,10 +9,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { BoxLoader } from "../../../helper/Loader";
 function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
   const store = useSelector((state) => state);
-  const checkPmsNotEmpty =
-    store?.pmsIntegrationGetReducer?.pmsIntegrationData?.data?.integrations;
+  const checkPmsNotEmpty = store?.pmsIntegrationGetReducer?.pmsIntegrationData?.data?.integrations;
+  const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription
   const pmsIntegrationLoading = store?.pmsIntegrationGetReducer?.loading;
   const dispatch = useDispatch();
+
+  const subscription_plan = subscription_data?.plan;
+  const isTheWorksPlan = subscription_plan === "The Works";
 
   useEffect(() => {
     if (showNoPlan) dispatch(getPMSIntegrationActions());
@@ -30,18 +33,22 @@ function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
         <hr />
         {!pmsIntegrationLoading ? (
           <>
-            {checkPmsNotEmpty !== "" ? (
+            {isTheWorksPlan ? (
               <IntegratePlatformSelect handleNoPlanClose={handleNoPlanClose} />
             ) : (
               <div className="upgrade-plan-box">
-                <img src={NoPlanImg} alt="no-plan" />
-                <p>
-                  You are not on The Works plan, Please upgrade plan to access this
-                  feature{" "}
+                {/* <img src={NoPlanImg} alt="no-plan" /> */}
+                <p style={{ fontSize: '1.1rem', lineHeight: '1.5' }}>
+                  You are not on The Works plan. Please upgrade to this plan to access this feature.{" "}
                 </p>
+                <p style={{ fontSize: '1.1rem', lineHeight: '1.5' }}>
+                  If you have not yet chosen a subscription plan, select "Add Property" to choose your plan and begin your trial.{" "}
+                </p>
+                {/*
                 <Link to="/" className="bg_theme_btn manage-subscription">
                   Upgrade Plan
                 </Link>
+                */}
               </div>
             )}
           </>

@@ -73,6 +73,10 @@ const SetupGuide = () => {
                           </li>
                           <li>Once you continue, you will be directed to our Stripe payment portal. Please enter in your payment information and click submit, which will bring you back to the Properties page.</li>
                         </ol>
+
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/swg5HR2uWqo?si=KRjQNN-5nKAZ0Oel" title="Getting Started YouTube video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <div style={{ height: '20px' }}></div>
+
                         <h6 style={{ color: 'white' }}>Connecting your PMS (“The Works” Users)</h6>
                         <p>If you’ve selected the works plan, now is a great time to connect your PMS!</p>
                         <ol>
@@ -88,6 +92,9 @@ const SetupGuide = () => {
                             </ul>
                           </li>
                         </ol>
+
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/6GUYt9iKc8E?si=_dzfqiPs9blicFE4" title="PMS Integrations YouTube video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <div style={{ height: '20px' }}></div>
 
                         <h6 style={{ color: 'white' }}>Customizing Properties</h6>
                         <ol>
@@ -111,7 +118,6 @@ const SetupGuide = () => {
                         </ol>
 
                         <iframe width="560" height="315" src="https://www.youtube.com/embed/uxzAcDGMaCg?si=Hc3sWHqdclU9F8qc" title="Property Profile YouTube video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/6GUYt9iKc8E?si=_dzfqiPs9blicFE4" title="PMS Integrations YouTube video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         
                       </div>
 
