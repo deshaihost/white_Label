@@ -33,7 +33,8 @@ const PrivacyPolicy = () => {
        <div>
       <div className="account-main">
         <Helmet>
-          <title>Privacy Policy</title>
+          <title>Privacy Policy - HostBuddy AI</title>
+          <link rel="canonical" href="https://www.hostbuddy.ai/privacy-policy" />
         </Helmet>
         <div className="container">
           <div className="banner-heading">

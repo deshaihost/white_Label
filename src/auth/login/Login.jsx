@@ -61,7 +61,8 @@ const Login = () => {
   return (
     <div className="login auth">
       <Helmet>
-        <title>Login – HostBuddy</title>
+        <title>Login – HostBuddy AI</title>
+        <link rel="canonical" href="https://www.hostbuddy.ai/login" />
       </Helmet>
       <Container>
         <div className="row">

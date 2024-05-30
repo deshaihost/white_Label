@@ -8,11 +8,12 @@ function Faqs() {
     return (
         <section className="faqs">
             <Helmet>
-                <title>FAQs – HostBuddy</title>
+                <title>FAQs – HostBuddy AI</title>
+                <link rel="canonical" href="https://www.hostbuddy.ai/faqs" />
             </Helmet>
             <Container>
                 <div className="banner-heading">
-                    <h2>Frequently Asked Questions</h2>
+                    <h1>Frequently Asked Questions</h1>
                 </div>
                 <div className="banner-container">
                     <Accordion defaultActiveKey="0">

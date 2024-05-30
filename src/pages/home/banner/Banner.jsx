@@ -13,7 +13,7 @@ const Banner = () => {
                 <div className="banner-container">
                     <div className="banner-content">
                         <div className="heading heading-center" style={{ width: '75%', margin: '0 auto' }}>
-                        <h2>Short Term Rental Messaging <strong>On Autopilot</strong></h2>
+                        <h1>Short Term Rental Messaging <strong>On Autopilot</strong></h1>
                         </div>
                         <p>Welcome to the Future of Hosting</p>
                         <Link to='/pricing' className="link-btn outline-btn">Start 2 Week Free Trial</Link>

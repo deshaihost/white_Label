@@ -13,7 +13,7 @@ const TestProperty = () => {
     <div>
         <div className="meet-buddy">
       <Helmet>
-        <title>HostBuddy - Property Chat</title>
+        <title>Property Chat - HostBuddy AI</title>
       </Helmet>
       <div className="meet-buddy-container">
         <MeetBanner urlData={urlData} />

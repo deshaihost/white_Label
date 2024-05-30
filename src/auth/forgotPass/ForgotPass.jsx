@@ -47,7 +47,8 @@ const ForgotPass = () => {
   return (
     <div className="forgot-pass auth">
       <Helmet>
-        <title>Forgot Password – HostBuddy</title>
+        <title>Forgot Password – HostBuddy AI</title>
+        <link rel="canonical" href="https://www.hostbuddy.ai/forgot" />
       </Helmet>
       <Container>
         <div className="row">

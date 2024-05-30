@@ -30,7 +30,8 @@ const SchedulingWalkthrough = () => {
     <div>
       <div className="account-main">
         <Helmet>
-          <title>Hostbuddy Calendar Guide</title>
+          <title>Calendar Guide - HostBuddy AI</title>
+          <link rel="canonical" href="https://www.hostbuddy.ai/scheduling-walkthrough" />
         </Helmet>
         <div className="container">
           <div className="banner-heading">

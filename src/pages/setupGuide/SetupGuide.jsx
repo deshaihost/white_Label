@@ -31,7 +31,7 @@ const SetupGuide = () => {
   return (
     <div className="account-main">
       <Helmet>
-    <title>Set Up Guide</title>
+    <title>Set Up Guide - HostBuddy AI</title>
   </Helmet>
       <div className="container">
         <div className="banner-heading">

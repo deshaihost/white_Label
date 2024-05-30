@@ -162,7 +162,7 @@ const Dashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Dashboard</title>
+        <title>Dashboard - HostBuddy AI</title>
       </Helmet>
 
       {propertiesConversationLoading && <FullScreenLoader />}

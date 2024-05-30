@@ -30,7 +30,8 @@ const TermsofService = () => {
     <div>
       <div className="account-main">
         <Helmet>
-          <title>Terms of Service</title>
+          <title>Terms of Service - HostBuddy AI</title>
+          <link rel="canonical" href="https://www.hostbuddy.ai/termsof-service" />
         </Helmet>
         <div className="container">
           <div className="banner-heading">

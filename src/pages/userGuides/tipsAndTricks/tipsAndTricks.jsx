@@ -30,7 +30,8 @@ const TipsAndTricks = () => {
     <div>
       <div className="account-main">
         <Helmet>
-          <title>Hostbuddy Tips And Tricks</title>
+          <title>Tips And Tricks - HostBuddy AI</title>
+          <link rel="canonical" href="https://www.hostbuddy.ai/tips-and-tricks" />
         </Helmet>
         <div className="container">
           <div className="banner-heading">

@@ -10,11 +10,12 @@ const Pricing = () => {
   return (
     <section className='pricing'>
       <Helmet>
-        <title>Pricing – HostBuddy</title>
+        <title>Pricing – HostBuddy AI</title>
+        <link rel="canonical" href="https://www.hostbuddy.ai/pricing" />
       </Helmet>
       <Container>
         <div className="pricing-heading">
-          <h2>Pricing</h2>
+          <h1>Pricing</h1>
         </div>
         <Essentials />
         <Features />

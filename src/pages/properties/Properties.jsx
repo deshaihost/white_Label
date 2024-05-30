@@ -149,7 +149,7 @@ const Properties = () => {
   return (
     <>
       <Helmet>
-        <title>Properties</title>
+        <title>Properties - HostBuddy AI</title>
       </Helmet>
       ;
       <div className="account-main">
