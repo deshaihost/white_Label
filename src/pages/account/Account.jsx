@@ -47,6 +47,7 @@ const Account = () => {
     store?.updateAccountUpdatePasswordReducer?.updateAccountUpdatePassword?.message;
 
   const [passwordFieldsShow, setPasswordFielsShow] = useState(false);
+  const [changePassBtnShow, setChangePassBtnShow] = useState(true);
 
   const password = useRef({});
   password.current = watch("newPassword", "");
@@ -54,6 +55,7 @@ const Account = () => {
   const passwordFieldsShowHndle = (e) => {
     e.preventDefault();
     setPasswordFielsShow(!passwordFieldsShow);
+    setChangePassBtnShow(false);
   };
 
   const onSubmit = (data) => {
@@ -386,15 +388,14 @@ const Account = () => {
                   )}
                   <div className="row">
                     <div className="col text-center">
-                      <button
-                        type="submit"
-                        className="bg_theme_btn show_password_fields"
-                        onClick={(e) => {
-                          passwordFieldsShowHndle(e);
-                        }}
-                      >
-                        Change Password
-                      </button>
+                      {changePassBtnShow && (
+                        <button type="submit" className="bg_theme_btn show_password_fields" onClick={(e) => {
+                            passwordFieldsShowHndle(e);
+                          }}
+                        >
+                          Change Password
+                        </button>
+                      )}
                       <button
                         type="submit"
                         className="bg_theme_btn update_user_info"
