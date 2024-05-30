@@ -30,6 +30,7 @@ import TipsAndTricks from "../pages/userGuides/tipsAndTricks/tipsAndTricks";
 import TestingQuestions from "../pages/userGuides/testingQuestions/testingQuestions";
 import ConfirmYourEmail from "../pages/confirmEmail/confirmYourEmail";
 import EmailConfirmationAction from "../pages/confirmEmail/emailConfirmationAction";
+import ResetPass from "../auth/resetPass/resetPass";
 
 const Routing = () => {
   const location = useLocation();
@@ -93,6 +94,7 @@ const Routing = () => {
     <div className="routes">
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
+        location.pathname !== "/reset-password" &&
         location.pathname !== "/forgot" && <NavBar />}
       <ScrollToTop />
       <Routes>
@@ -110,6 +112,7 @@ const Routing = () => {
         <Route path="/testing-questions" element={<TestingQuestions />}></Route>
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
         <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
+        <Route path="/reset-password" element={<ResetPass />}></Route>
         <Route path="*" element={
             <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" />
           }

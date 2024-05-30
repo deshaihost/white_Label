@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Container from "react-bootstrap/Container";
-import AuthImage from "../../public/img/Sign_Up_Page.png";
+import AuthImage from "../../public/img/Sign_Up_Page.jpg";
 import Logo from "../../public/img/logo_footer.png";
 import { Link } from "react-router-dom";
 import "../auth.css";
@@ -101,7 +101,7 @@ const ForgotPass = () => {
                   )}
                   <div className="input-container">
                     <PrimaryButton
-                      text= {!forgetPasswordLoading ? "Get Password Reset Token " : <Loader />}
+                      text= {!forgetPasswordLoading ? "Send Password Reset Link" : <Loader />}
                       additionalClass="w-100"
                     />
                   </div>
