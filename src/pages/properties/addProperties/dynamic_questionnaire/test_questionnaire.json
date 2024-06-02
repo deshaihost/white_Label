@@ -1,0 +1,727 @@
+{
+  "metadata": {
+   "reservation_stages": [
+    "INQUIRY/PAST",
+    "FUTURE",
+    "CURRENT"
+   ],
+   "section_order": [
+    "Basics",
+    "Listing Details",
+    "Amenities",
+    "Extras"
+   ],
+   "subsection_order": {
+    "Amenities": [
+     "Indoor",
+     "Outdoor",
+     "Family",
+     "More",
+     "Rules and Services"
+    ],
+    "Basics": [
+     "Location"
+    ],
+    "Extras": [
+     "Additional Information"
+    ],
+    "Listing Details": [
+     "Booking",
+     "Check-in and Check-out",
+     "Details"
+    ]
+   }
+  },
+  "questionnaire": {
+   "Amenities": {
+    "Family": [
+     {
+      "hide_for_reservations": [],
+      "options": [
+       "Baby bath",
+       "Baby monitor",
+       "Babysitter recommendations",
+       "Bathtub",
+       "Changing table",
+       "Children books & toys",
+       "Children dinnerware",
+       "Fireplace guards",
+       "Game console",
+       "Outlet covers",
+       "Pack n Play or travel crib",
+       "Room darkening shades",
+       "Stair gates",
+       "Table corner guards",
+       "Window guards"
+      ],
+      "placeholder_text": "Add any additional details about this selection that you would like Hostbuddy to know.",
+      "question_type": "checkbox_group",
+      "response_options": [
+       "Bathtub",
+       "Room darkening shades"
+      ],
+      "response_text": [
+       "",
+       ""
+      ]
+     }
+    ],
+    "Indoor": [
+     {
+      "hide_for_reservations": [],
+      "options": [
+       "TV",
+       "Air Conditioning",
+       "Heating",
+       "WiFi",
+       "Ethernet connection",
+       "Washer",
+       "Dryer",
+       "Fireplace",
+       "Single level home",
+       "Cat on the property",
+       "Dog on the property",
+       "Other pets on property",
+       "Smoke detector",
+       "Fire extinguisher",
+       "Deadbolt lock",
+       "Outdoor lighting",
+       "Essentials",
+       "Baby high chair",
+       "CD/DVD player",
+       "Board games",
+       "Ceiling fan",
+       "Ventilation fan",
+       "Hair dryer",
+       "Crockery and cutlery",
+       "Pots and pans",
+       "Oven",
+       "Microwave",
+       "Water kettle",
+       "Coffee maker",
+       "Dishwasher",
+       "Toaster",
+       "Fridge",
+       "Dining table",
+       "Alarm system",
+       "Desk",
+       "Desk chair",
+       "Computer monitor",
+       "Printer",
+       "Safe box",
+       "Closet/drawers",
+       "Iron",
+       "Shampoo",
+       "Conditioner",
+       "Body wash",
+       "Buzzer",
+       "First aid kit",
+       "Safety card",
+       "Hangers",
+       "Laptop friendly",
+       "Stove",
+       "Linens provided",
+       "Towels provided",
+       "Hot water",
+       "Cooking basics",
+       "Air filter",
+       "Enhanced cleaning",
+       "Disinfectants used on surfaces",
+       "Baking sheet",
+       "Bidet",
+       "Blender",
+       "Cleaning products available",
+       "Drying rack for clothing",
+       "Exercise equipment",
+       "Extra pillows and blankets",
+       "Freezer",
+       "Mini fridge",
+       "Ping pong table",
+       "Pocket WiFi",
+       "Portable fans",
+       "Rain shower",
+       "Record player",
+       "Rice maker",
+       "Sound system",
+       "Trash compactor",
+       "Wine glasses",
+       "Portable fans",
+       "Rain shower"
+      ],
+      "placeholder_text": "Add any additional details about this selection that you would like Hostbuddy to know.",
+      "question_type": "checkbox_group",
+      "response_options": [
+       "TV",
+       "Air Conditioning",
+       "Heating",
+       "Washer",
+       "Dryer",
+       "Smoke detector",
+       "Fire extinguisher",
+       "Essentials",
+       "Hair dryer",
+       "Oven",
+       "Water kettle",
+       "Coffee maker",
+       "Dishwasher",
+       "Toaster",
+       "Fridge",
+       "Dining table",
+       "Iron",
+       "Shampoo",
+       "Conditioner",
+       "First aid kit",
+       "Hangers",
+       "Laptop friendly",
+       "Stove",
+       "Hot water",
+       "Cooking basics",
+       "Baking sheet",
+       "Freezer",
+       "Wine glasses"
+      ],
+      "response_text": [
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ]
+     }
+    ],
+    "More": [
+     {
+      "hide_for_reservations": [
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ],
+      "options": [
+       "Wheelchair accessible",
+       "Elevator",
+       "Gym",
+       "Pool table",
+       "Piano",
+       "Breakfast included",
+       "Doorman",
+       "Carbon monoxide detector",
+       "Lake access",
+       "Beach front",
+       "Water front",
+       "Ski-in/Ski-out",
+       "Contactless check-in",
+       "Arcade games",
+       "Batting cage",
+       "Books and reading material",
+       "Bowling alley",
+       "Climbing wall",
+       "Laser tag",
+       "Life size games",
+       "Mini golf",
+       "Movie theater",
+       "Skate ramp",
+       "Theme room",
+       "Laundromat nearby",
+       "Resort access",
+       "Single Level",
+       "Crockery Cutlery",
+       "Barbeque Utensils",
+       "Body Soap",
+       "Shower Gel",
+       "Jacuzzi",
+       "Coffee",
+       "Microwave Oven",
+       "Wardrobe",
+       "Check In Option",
+       "Kitchen",
+       "Cleaning Products",
+       "Paid On Premises Parking",
+       "Office",
+       "Linens",
+       "Internet Wifi"
+      ],
+      "placeholder_text": "Add any additional details about this selection that you would like Hostbuddy to know.",
+      "question_type": "checkbox_group",
+      "response_options": [
+       "Elevator",
+       "Carbon monoxide detector",
+       "Single Level",
+       "Crockery Cutlery",
+       "Barbeque Utensils",
+       "Body Soap",
+       "Shower Gel",
+       "Coffee",
+       "Microwave Oven",
+       "Wardrobe",
+       "Check In Option",
+       "Kitchen",
+       "Cleaning Products",
+       "Paid On Premises Parking",
+       "Office",
+       "Linens",
+       "Internet Wifi"
+      ],
+      "response_text": [
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "smartlock",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "Wifi router is not located in the unit, the host needs to reset the router if the wifi is down."
+      ]
+     }
+    ],
+    "Outdoor": [
+     {
+      "hide_for_reservations": [],
+      "options": [
+       "Pool",
+       "Fenced yard",
+       "Mosquito net",
+       "Surveillance",
+       "Hot tub",
+       "Free parking on premises",
+       "Free parking on street",
+       "Paid parking off premises",
+       "Paid parking on premises",
+       "EV car charger",
+       "Barbecue",
+       "Barbecue utensils",
+       "Garden",
+       "Deck/patio",
+       "Private entrance",
+       "Beach essentials",
+       "Bikes",
+       "Boat slip",
+       "Fire pit",
+       "Hammock",
+       "Kayak",
+       "Outdoor kitchen",
+       "Outdoor seating"
+      ],
+      "placeholder_text": "Add any additional details about this selection that you would like Hostbuddy to know.",
+      "question_type": "checkbox_group",
+      "response_options": [
+       "Barbecue",
+       "Deck/patio",
+       "Outdoor seating"
+      ],
+      "response_text": [
+       "",
+       "",
+       ""
+      ]
+     }
+    ],
+    "Rules and Services": [
+     {
+      "hide_for_reservations": [],
+      "options": [
+       "Pets not allowed",
+       "Smoking not allowed?",
+       "Children not allowed",
+       "Infants not allowed",
+       "Event friendly"
+      ],
+      "placeholder_text": "Add any additional details about this selection that you would like Hostbuddy to know.",
+      "question_type": "checkbox_group",
+      "response_options": [],
+      "response_text": []
+     }
+    ]
+   },
+   "Basics": {
+    "Location": [
+     {
+      "hide_for_reservations": "",
+      "options": [
+       "",
+       "House",
+       "Cottage",
+       "Condo",
+       "Villa",
+       "Chalet",
+       "Cabin",
+       "Studio",
+       "Room",
+       "Apartment",
+       "Hotel",
+       "Hostel",
+       "Lodge",
+       "Townhouse",
+       "Duplex",
+       "Triplex",
+       "Fourplex",
+       "Bungalow",
+       "Farmhouse",
+       "Boat"
+      ],
+      "question_text": "Property Type",
+      "question_type": "select",
+      "response_option": "Apartment",
+      "response_text": null
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 123 Main Street",
+      "question_text": "Street Address",
+      "question_type": "short_answer",
+      "response_text": "715 15th Street"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 123",
+      "question_text": "Unit Number",
+      "question_type": "short_answer",
+      "response_text": "Unit 401"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. San Diego",
+      "question_text": "City",
+      "question_type": "short_answer",
+      "response_text": "San Diego"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. CA",
+      "question_text": "State",
+      "question_type": "short_answer",
+      "response_text": "CA"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 12345",
+      "question_text": "Area Code",
+      "question_type": "short_answer",
+      "response_text": "92101"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. USA",
+      "question_text": "Country",
+      "question_type": "short_answer",
+      "response_text": "USA"
+     }
+    ]
+   },
+   "Extras": {
+    "Additional Information": [
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. The property was built in 1946 and has unique Spanish architecture. I decorated it myself, and I use it as a summer home for my family.",
+      "question_text": "Describe any noteworthy property features not explained above",
+      "question_type": "long_answer",
+      "response_text": "Recommended places to visit:\nPuesto at the Headquarters (Gaslamp) - A modern taco restaurant just outside Seaport Village, known for its classic tacos and vibrant outdoor patio. (789 W Harbor Dr Suite 155)\n\nMorning Glory (Little Italy) - Famous for its brunch, featuring a vibrant gold and pink interior and a variety of pancakes and eggs benedict. (550 W Date St Suite #C)\n\nUnderbelly Ramen (Little Italy) - Offers a taste of Tokyo with traditional ramen dishes and Japanese beers and whiskey. (750 W Fir St #101)\n\nHerb & Wood (Little Italy) - Popular for its innovative menu and large, vibrant dining space, perfect for groups or intimate diners. (2210 Kettner Blvd)\n\nNeighborhood & Noble Experiment (Gaslamp) - Features hearty dishes and a hidden speakeasy known for its eclectic cocktails. (777 G St)\n\nJuniper & Ivy (Little Italy) - Offers a unique dining experience with a seasonal menu and comfort food in a 5-star vibe. (228 Kettner Blvd)\n\nKettner Exchange (Little Italy) - Blends Asian and European cuisine in a social, trendy setting, transitioning easily from dinner to drinks. (2001 Kettner Blvd)\n\nLionfish (Gaslamp) - Known for its seafood options and sustainable fish selections in a modern, upscale atmosphere. (435 Fifth Ave)\n\nNolita Hall (Little Italy) - A unique venue with tasty sharing plates and a flight tracker board for plane enthusiasts. (2305 India St)\n\nMabel's Gone Fishing - A Spanish-inspired spot in North Park for an upscale night with a seafood-forward menu.\n\nValle - Focuses on contemporary Mexican food with a seasonal menu of Baja cuisine in Oceanside.\n\nMarket Restaurant & Bar - Known for its fresh and inventive menu, ideal for a special night out with meat-forward dishes.\n\nBlackmarket Bakery is a great coffee shop that is walking distance."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "Add any information you'd like to provide your chatbot. Examples: What to do if a guest shows up and the unit is not cleaned, if something is broken upon arrival, if a guest accidentally breaks something, if a guest requests a refund, etc.",
+      "question_text": "Describe any important instructions not explained above",
+      "question_type": "long_answer",
+      "response_text": "If AC is showing errors, the drain pan may need to be emptied. Here is a link showing how to do it: https://youtube.com/shorts/HkyDuJcp7UA?feature=share - If guest prefers, the host can coordinate sending someone when they are back online.\nHere is how to use white noise machines: https://youtube.com/shorts/G06qZDtDwHU?feature=share\nHere is how to use blinds: https://youtu.be/DPubZ7Mr5N8?si=yC-f_j7fWEFzWlaD\nLink for how to use thermostat: https://youtube.com/shorts/BbGa4n8YBzc?si=BgO7PcgfvrN0czC4"
+     }
+    ]
+   },
+   "Listing Details": {
+    "Booking": [
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Airbnb, VRBO, Booking.com, etc.",
+      "question_text": "Where is your property listed?",
+      "question_type": "short_answer",
+      "response_text": "AirBnB, VRBO, Booking.com, Direct Booking and Google. "
+     },
+     {
+      "hide_for_reservations": "",
+      "options": [
+       "",
+       "Flexible",
+       "Moderate",
+       "Firm",
+       "Strict",
+       "Super Strict 30 Days",
+       "Super Strict 60 Days"
+      ],
+      "question_text": "If you're listed on Airbnb, what is your cancellation policy?",
+      "question_type": "select",
+      "response_option": "Firm",
+      "response_text": null
+     },
+     {
+      "hide_for_reservations": "",
+      "options": [
+       "",
+       "Strict",
+       "Firm",
+       "Moderate",
+       "Relaxed",
+       "No Refund"
+      ],
+      "question_text": "If you're listed on VRBO, what is your cancellation policy?",
+      "question_type": "select",
+      "response_option": "Moderate",
+      "response_text": null
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Yes, we have a website for direct bookings. The URL is: ___",
+      "question_text": "Do you offer direct bookings?",
+      "question_type": "short_answer",
+      "response_text": "Yes, we do on our Select Stays website which can be searched online."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Please contact the host directly at 222-222-2222",
+      "question_text": "How can guests change or cancel their direct booking?",
+      "question_type": "short_answer",
+      "response_text": "They will need approval when the host is back online."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 50% at time of booking, 50% 30 days before check-in",
+      "question_text": "For bookings outside of Airbnb, is the full balance charged to guests at the time of booking?",
+      "question_type": "short_answer",
+      "response_text": "50% at time of booking. 50% due before check in. We also have a security deposit that will need to be paid before they arrive."
+     },
+     {
+      "hide_for_reservations": "",
+      "options": [
+       "",
+       "1 month",
+       "3 months",
+       "6 months",
+       "9 months",
+       "12 months",
+       "18 months",
+       "24 months"
+      ],
+      "question_text": "How far in advance can guests book?",
+      "question_type": "select",
+      "response_option": "9 months",
+      "response_text": null
+     }
+    ],
+    "Check-in and Check-out": [
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Monday to Friday 8am - 8pm, Saturday and Sunday 9am-9pm",
+      "question_text": "What hours are you available to support guests?",
+      "question_type": "short_answer",
+      "response_text": "Everyday 7am-10pm"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. any time after 3pm",
+      "question_text": "Check-In Time",
+      "question_type": "short_answer",
+      "response_text": "Any time after 4pm."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 11am",
+      "question_text": "Check-Out Time",
+      "question_type": "short_answer",
+      "response_text": "10am. This is not flexible."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. From University Ave, take a left onto Main St and go straight for 1 mile. The property will be on your left. Look for the '123' sign on the house.",
+      "question_text": "How to find the property",
+      "question_type": "long_answer",
+      "response_text": "It is located on the corner of 15th Street and G Street. GPS coordinates are 32.712969, -117.150329"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Yes. There are 2 free designated spots in the alley.",
+      "question_text": "Is parking provided?",
+      "question_type": "short_answer",
+      "response_text": "We have parking available by reservation at $20 per night. We have limited spaces and they are only available to be reserved directly with the host. The host will need to check availability when the host is back online. If a guest asks to reserve, you should gather the nights they would like to reserve and how many vehicles they are interested in parking in the lot. "
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. There is a public parking garage on 1st St. Rates are around $20/night.",
+      "question_text": "Where is the closest parking area for additional vehicles?",
+      "question_type": "short_answer",
+      "response_text": "If the guest does not reserve with us, the best option for daily/overnight parking is 849 10th Ave (about 0.4 miles, or a 9 minute walk from the apartment). Rates are always changing depending on the time of year and local events. As far as street parking, there are mostly 1 and 2 hour limits on 15th and G Streets, "
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Enter the door code provided and open the door. The door will automatically lock when closed.",
+      "question_text": "How to access the property",
+      "question_type": "long_answer",
+      "response_text": "The unit is located on the 4th floor of the building. Unit door code is the last four digits of the guest\u2019s phone number. Entrance on 15th street door code is 17106. Back door is 174871#. You should always clarify which door a particular guest is trying to open."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "Backup key location, backup code, etc.",
+      "question_text": "Backup Access",
+      "question_type": "long_answer",
+      "response_text": "Only to be provided if the guest states that the door code is not working. Always confirm they are at the correct unit prior to providing backup lockbox code. There is a backup lockbox located on the railing closest to the unit door. The code is 1619. This contains a physical key which will allow them to manually unlock the door."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g The lockbox can be hard to pull open. It might require some force.",
+      "question_text": "Access Troubleshooting",
+      "question_type": "long_answer",
+      "response_text": "For the unit door, the guest needs to tap the lock interface with their palm prior to entering code. If the lock interface does not light up, it may be out of battery and they will need to use the backup key in the lockbox."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Yes, but only if requested in advance and if there is no other booking on the same day",
+      "question_text": "Do you allow early check-in or late check-out?",
+      "question_type": "short_answer",
+      "response_text": "For early check-in, the answer should always be that they can drop their bags off early (any time after 12pm) if they\u2019d like and stay if they find the unit is clean when they arrive. The host will need to check the schedule when they\u2019re back online, but we are unable to guarantee an early check-in if there is a guest checking out on the same day. If the guest has not yet booked and is inquiring about late check-out, the answer is no. We do not allow late checkouts if requested on the day of checkout. If requested the night before, you can tell the guest it\u2019s highly unlikely but we can get back to them around 9-9:30am the next morning (the host needs to check the cleaner\u2019s schedule) with a potential short extension (max up to 11am), but no guarantees. If requested several days in advance you can tell them to check back in with us the day before they check out so we can check with the cleaning team, but no guarantees of late checkout. "
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. There is a dumpster in the alley",
+      "question_text": "Where is trash placed?",
+      "question_type": "short_answer",
+      "response_text": "Trash is located in the parking lot. When exiting the building, they will turn left and it will be in the covered trash enclosure. There may be a lock on the dumpster which can be opened with code 1298. The black door code to re-enter the building is Back door is 174871#. Here is a video that can be sent to guests: https://www.youtube.com/shorts/s0_ZELQBAm4"
+     }
+    ],
+    "Details": [
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 2 nights",
+      "question_text": "Minimum Stay",
+      "question_type": "short_answer",
+      "response_text": "2 nights"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 30 nights",
+      "question_text": "Maximum Stay",
+      "question_type": "short_answer",
+      "response_text": "No Maximum"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 18",
+      "question_text": "Minimum Guest Age",
+      "question_type": "short_answer",
+      "response_text": "18"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 4 maximum. There is a $25 fee per guest over quantity 2.",
+      "question_text": "Maximum Number of Guests",
+      "question_type": "short_answer",
+      "response_text": "4. 2 can fit on the sofa bed and 2 can fit on the bed."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 750 SF",
+      "question_text": "Property Size",
+      "question_type": "short_answer",
+      "response_text": "700 Square Feet"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 2",
+      "question_text": "Number of Floors",
+      "question_type": "short_answer",
+      "response_text": "1"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Master bedroom with 1 king bed, second bedroom with 1 queen bed, and third bedroom with 2 twin beds",
+      "question_text": "Describe each bedroom and sleeping arrangement",
+      "question_type": "long_answer",
+      "response_text": " One bedroom apartment with separation from kitchen, 1 bathroom. King size bed and one sofa bed located in the living room. Extra sheets and bedding for sofa bed are located in the hallway closet."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 1 pullout couch in the living room",
+      "question_text": "Additional Sleeping Arrangements",
+      "question_type": "short_answer",
+      "response_text": "1 pullout couch in the living room"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. 1 private bathroom in the master bedroom and 1 bathroom in the hallway",
+      "question_text": "Number of Bathrooms and Layout",
+      "question_type": "short_answer",
+      "response_text": "1 Full Bathroom. Has a shower and tub combination."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Main Street WiFi",
+      "question_text": "WiFi Network",
+      "question_type": "short_answer",
+      "response_text": "Select Stays"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Rental123!",
+      "question_text": "WiFi Password",
+      "question_type": "short_answer",
+      "response_text": "Haveagreatstay!"
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. Adorable and private apartment located in one of the best neighborhoods. It is only a 10-15 minute drive to the airport",
+      "question_text": "Describe the property",
+      "question_type": "long_answer",
+      "response_text": "One bedroom apartment located in Downtown San Diego. It is close to nightlife, airport, Petco Park, and other major city attractions."
+     },
+     {
+      "hide_for_reservations": "",
+      "placeholder_text": "e.g. The neighborhood is filled with great restaurants and bars. It is very walkable and welcoming. ",
+      "question_text": "Describe the neighborhood",
+      "question_type": "long_answer",
+      "response_text": "The neighborhood is East Village. It is located a block away from Punch Bowl Social and across the street from a Smart and Final grocery store."
+     }
+    ]
+   }
+  }
+ }

@@ -20,6 +20,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import AddPropertiesIndex from "../pages/properties/addProperties/AddPropertiesIndex";
+import QuestionnairePage from "../pages/properties/addProperties/dynamic_questionnaire/complete_questionnaire";
 // import { ParamsGet } from "../helper/Authorized";
 import CopyChatBotLink from "../pages/copyChatbotLink/CopyChatBotLink";
 import TestProperty from "../pages/testProperty/TestProperty";
@@ -162,6 +163,12 @@ const Routing = () => {
         <Route path="/add-properties" element={
             <ProtectedRoute>
               <AddPropertiesIndex />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/edit-property/:property_name" element={
+            <ProtectedRoute>
+              <QuestionnairePage />
             </ProtectedRoute>
           }
         />
