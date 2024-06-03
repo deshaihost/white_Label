@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { BoxLoader } from "../../../../helper/Loader";
 import axios from "axios";
 import PencilIconModal from "./PencilIconModal";
+import ExternalResourcesForm from "./ExternalResources/ExternalResourcesForm";
 
 
 // Code for the entire questionnaire page, including the header and all sections, including Basics and External Resources
@@ -20,7 +21,8 @@ const QuestionnairePage = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
-  const questionnaire_section_names = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire?.metadata?.section_order
+  const section_order_data = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire?.metadata?.section_order
+  const questionnaire_section_names = section_order_data ? [...section_order_data.slice(0, 1), "External Resources", ...section_order_data.slice(1)] : []; // Always add "External Resources" as the second section
 
   const [selectedSection, setSelectedSection] = useState("Basics");
   const [questionnairePostLoading, setQuestionnairePostLoading] = useState(false);
@@ -29,10 +31,11 @@ const QuestionnairePage = () => {
   const [dataForModal, setDataForModal] = useState({}); // data to be passed to the pencil icon modal
   const [doTriggeredSave, setDoTriggeredSave] = useState(false); // Set this to trigger a save
 
-  // Get the questionnaire data from the API, if we don't have it already. Should run once, immediately when the page loads
+  // Get the questionnaire data from the API. Should run once, immediately when the page loads
   useEffect(() => {
     if (property_name) {
-      if (!apiQuestionnaireData) { dispatch(getQuestionnaireActions(property_name)); }
+      dispatch(getQuestionnaireActions(property_name));
+      return () => { dispatch(stateEmptyActions("getQuestionnaire")); } // Clear the state when the component unmounts
     }
   }, [property_name]);
 
@@ -175,7 +178,7 @@ const QuestionnairePage = () => {
       <Container className="py-3">
         {apiQuestionnaireData ? (
           <>
-            {/* Header */}
+            {/* Header, with section names and progress bar */}
             <div className="row">
               <div className="col-lg-8 mx-auto">
                 <hr className="border-secondary" style={{ opacity: "1" }} />
@@ -185,10 +188,14 @@ const QuestionnairePage = () => {
               </div>
             </div>
 
-            {/* Form for questionnaire section (whichever is selected - render one at a time) */}
+            {/* Form for questionnaire section (whichever is selected - render one at a time) and next/prev buttons */}
             <div className="row">
               <div className="col-lg-10 mx-auto mt-5 form_multisteps">
-                <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext}/>
+                {selectedSection !== "External Resources" ? (
+                  <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext}/>
+                ) : (
+                  <ExternalResourcesForm property_name={property_name} handleSaveAndNext={handleSaveAndNext}/>
+                )}
               </div>
             </div>
 

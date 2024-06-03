@@ -3,6 +3,8 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { useParams } from "react-router-dom";
 
 const QuestionnaireHeader = ({ property_name, section_names, selectedSection, setSelectedSection }) => {
+  const progress_percentage = section_names ? (section_names.indexOf(selectedSection) + 1) * (100 / section_names.length) : 0;
+  
   return (
     <div>
       {property_name !== undefined && (
@@ -42,7 +44,7 @@ const QuestionnaireHeader = ({ property_name, section_names, selectedSection, se
             </div>
 
             {/* Arbitrary number of subsequent sections, generated dynamically */}
-            {section_names && section_names.length > 1 && section_names.slice(1).map((section_name) => ( // Skip the first section, which is "Basics"
+            {section_names && section_names.length > 1 && section_names.slice(2).map((section_name) => ( // Skip the first two sections (defined above)
             <div className={selectedSection === section_name ? "text-primary" : ""} onClick={() => { setSelectedSection(section_name); }} >
               <div>
                 <span>
@@ -61,7 +63,7 @@ const QuestionnaireHeader = ({ property_name, section_names, selectedSection, se
       </div>
       <div className="row mb-3">
         <div className="col-7 mx-auto">
-          {<ProgressBar now={10} label={`${10}%`} />}
+          {<ProgressBar now={progress_percentage} label={`${progress_percentage}%`} />}
         </div>
       </div>
     </div>

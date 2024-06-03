@@ -1,49 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useSelectorUseDispatch } from "../../../../helper/Authorized";
-import { nameKey } from "../../../../helper/Authorized";
-import ToastHandle from "../../../../helper/ToastMessage";
-import Loader, { BoxLoader } from "../../../../helper/Loader";
-import { stateEmptyActions } from "../../../../redux/actions";
-import { listIntegrationPropertiesActions } from "../../../../redux/actions";
-import DochideForReservationsModel from "./dochideForReservationsModel/DochideForReservationsModel";
+import { useSelectorUseDispatch } from "../../../../../helper/Authorized";
+import ToastHandle from "../../../../../helper/ToastMessage";
+import Loader, { BoxLoader } from "../../../../../helper/Loader";
+import { stateEmptyActions } from "../../../../../redux/actions";
+import { listIntegrationPropertiesActions } from "../../../../../redux/actions";
+import DochideForReservationsModel from "./DochideForReservationsModel";
 
 import axios from "axios";
 import PopupModal from "./PopupModal";
 
-const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
-  const { id } = useParams();
-
+const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
   const { store, dispatch } = useSelectorUseDispatch();
 
-  const supportingNameKey = nameKey();
   const [showPreviousDoc, setShowPreviousDoc] = useState(false);
   const [showDocHideForResrv, setDocHideForResrv] = useState(false);
-
   const [prevUploadedDoc, setPrevUploadedDoc] = useState([]);
   const [hideForReservation, setHideForReservatin] = useState([]);
-
   const [prevLinkedIntegration, setPrevLinkedIntegration] = useState(null);
-  // const [uploadedDoc, setUploadedDoc] = useState();
   const [uploadedUrl, setUploadedUrl] = useState("");
   const [docUploadIsLoading, setdocUploadIsLoading] = useState(false);
+  const [suppertingInput, setSuppertingInput] = useState({ updateDoc: true, urlToWebPage: false, pmsIntegration: false });
 
-  const [suppertingInput, setSuppertingInput] = useState({
-    updateDoc: true,
-    urlToWebPage: false,
-    pmsIntegration: false,
-  });
   let updateDocN = "updateDoc";
   let urlToWebPageN = "urlToWebPage";
   let pmsIntegrationN = "pmsIntegration";
   const suppertingOnclick = (type) => {
-    if (type === updateDocN) {
-      setSuppertingInput({ updateDoc: true });
-    } else if (type === urlToWebPageN) {
-      setSuppertingInput({ urlToWebPage: true });
-    } else if (type === pmsIntegrationN) {
-      setSuppertingInput({ pmsIntegration: true });
-    }
+    if (type === updateDocN) { setSuppertingInput({ updateDoc: true }); }
+    else if (type === urlToWebPageN) { setSuppertingInput({ urlToWebPage: true }); }
+    else if (type === pmsIntegrationN) { setSuppertingInput({ pmsIntegration: true }); }
   };
   const supportingStatus = suppertingInput?.updateDoc
     ? store?.supportingDocumentPostReducer?.supportingDoc?.status
@@ -64,21 +48,17 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   // list_integration_properties API Logic ------------------------------------------------------------------------------------------
 
   const [hasCalledAPI, setHasCalledAPI] = useState(false); // keep track of whether we've already called the list_integration_properties API. We only ever want to do it once, when the user clicks "PMS Integration"
-  const [selectedIntegrationPropertyId, setSelectedIntegrationPropertyId] =
-    useState(null); // User-selected integration property
+  const [selectedIntegrationPropertyId, setSelectedIntegrationPropertyId] = useState(null); // User-selected integration property
   const [linkIsLoading, setLinkIsLoading] = useState(false);
   const [unlinkIsLoading, setUnlinkIsLoading] = useState(false);
 
-  const integrationPropertyList =
-    store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data
-      ?.properties; // array of integration_property objects; each with "name" and "id" properties
+  const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties; // array of integration_property objects; each with "name" and "id" properties
   const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
 
   // When "PMS Integration" is selected, call API to get the list of integration properties
   useEffect(() => {
     if (!prevLinkedIntegration) {
-      // If already linked to an integration, don't call the API
-      if (suppertingInput.pmsIntegration && !hasCalledAPI) {
+      if (suppertingInput.pmsIntegration && !hasCalledAPI) { // If already linked to an integration, don't call the API
         dispatch(listIntegrationPropertiesActions());
         setHasCalledAPI(true);
       }
@@ -87,72 +67,26 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
   // -------------------------------------------------------------------------------------------------------------------------------
 
-  function isValidURL(url) {
-    // Regular expression to match a period in the middle of the string
-    return /^[^.].+?\..+[^.]$/.test(url);
-  }
-
-  
-
-  const redrectcomponent = () => {
-    prntFuntionHeaderActive(id !== undefined && "listingDetails");
-  };
-
-  const go_to_next_page = async () => {
-    setTimeout(() => {
-      redrectcomponent();
-    }, 500);
-    return;
-  };
+  function isValidURL(url) { return /^[^.].+?\..+[^.]$/.test(url); } // Check if the URL is not empty and has at least one period
 
   const handleUploadUrl = async () => {
-    if (!isValidURL(uploadedUrl)) {
-      redrectcomponent();
-      return;
-    }
+    if (!isValidURL(uploadedUrl)) { return; }
 
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
-
+    const getSessionStorageData = JSON.parse( sessionStorage.getItem("hostBuddy_auth") );
     const token = getSessionStorageData?.token;
 
-    const property = JSON.parse(localStorage.getItem("nameKey"));
-
-    const propertyName = property?.nameKey;
-
-    const urlToSend = {
-      url: uploadedUrl,
-    };
-    // return;
+    const urlToSend = { url: uploadedUrl };
+    
     try {
-      if (token && propertyName) {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
-        };
-        const response = await axios.post(
-          `${baseUrl}/properties/${propertyName}/add_url`,
-          urlToSend,
-          config
-        );
+      if (token && property_name) {
+        const config = { headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY } };
+        const response = await axios.post( `${baseUrl}/properties/${property_name}/add_url`, urlToSend, config );
 
-        if (response.status === 200) {
-          ToastHandle(response?.data?.message, "success");
-          setTimeout(() => {
-            prntFuntionHeaderActive(id !== undefined && "listingDetails");
-          }, 1500);
-        } else {
-          console.log("Error");
-        }
-      } else {
-        alert("Missing Token or propertyName");
-      }
+        if (response.status === 200) { ToastHandle(response?.data?.message, "success"); }
+        else { console.log("Error"); }
+      } else { alert("Missing Token or propertyName"); }
     } catch (error) {
       if (error.status === 400) {
         ToastHandle(error?.data?.error, "danger");
@@ -164,78 +98,66 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
   const [file, setFile] = useState(null);
   const [getDocApiCall, setGetDocApiCall] = useState(false);
+
   const documentUploadMainHndle = async (resrData) => {
+    if (!file) {
+      //console.log("No file uploaded (API call func)");
+      ToastHandle("No file uploaded", "danger"); return;
+    }
+    console.log("File -", file);
+    //console.log("is instance of file -", file instanceof File);
+
     setdocUploadIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
+    const getSessionStorageData = JSON.parse( sessionStorage.getItem("hostBuddy_auth") );
 
     let payload = new FormData();
 
     payload.append("file", file);
     payload.append("hide_for_reservations", JSON.stringify(resrData)); // JSON-style string representing the array of strings, per backend requirement
+    //console.log("Payload -", payload)
+    //console.log("resrData -", resrData)
+    //for (let [key, value] of payload.entries()) {
+    //  console.log(`${key}: ${value}`);
+    //}
 
     const token = getSessionStorageData?.token;
-    const supportingkeyName = supportingNameKey?.nameKey;
 
     try {
-      if (token && supportingkeyName) {
+      if (token && property_name) {
         const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-            "Content-Type": file.type, // Set the Content-Type based on the file type
-            // 'Content-Type': 'multipart/form-data',
-          },
+          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY, "Content-Type": "multipart/form-data" },
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
         };
 
-        const response = await axios.post(
-          `${baseUrl}/properties/${supportingkeyName}/add_file`,
-          payload,
-          config
-        );
-
-        setdocUploadIsLoading(false);
+        const response = await axios.post( `${baseUrl}/properties/${property_name}/add_file`, payload, config );
 
         if (response.status === 200) {
           ToastHandle("File uploaded successfully", "success");
           setDocHideForResrv(false);
           setGetDocApiCall(true);
         } else {
+          ToastHandle(response?.data?.error, "danger");
           console.log("Error", response);
         }
       } else {
-        alert("Missing Token or supportingkeyName");
+        alert("Missing token or property_name");
       }
-    } catch (error) {
-      setdocUploadIsLoading(false);
-      console.error("Error uploading file:", error);
-      ToastHandle(error?.data?.error, "danger");
-    }
+    } catch (error) { }
+    finally { setdocUploadIsLoading(false); }
   };
 
+
   const documentUploadHandle = () => {
-    if (!file) {
-      ToastHandle("No file uploaded", "danger");
-      return;
-    }
-    setDocHideForResrv(true);
+    if (file) { setDocHideForResrv(true); }
+    else { ToastHandle("No file uploaded", "danger"); }
   };
 
   const handleSubmitForm = (e, uploadType) => {
     e.preventDefault();
-    if (uploadType?.urlToWebPage) {
-      handleUploadUrl();
-    } else if (uploadType?.updateDoc) {
-      documentUploadHandle();
-    }
-  };
-
-  const save_and_next = (e) => {
-    e.preventDefault();
-    go_to_next_page();
+    if (uploadType?.urlToWebPage) { handleUploadUrl(); }
+    else if (uploadType?.updateDoc) { documentUploadHandle(); }
   };
 
   const link_integration = async (e, propertyName, integrationPropertyId) => {
@@ -396,35 +318,21 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
   };
   // THIS FUNCTIONALITY USED DOCUMENT DELETE AFTER THAT THIS PREVIOUS UPLOAD DOCUMENT START
   const deleteResAfterPreviousDocCall = () => {
-    previousUploadedDoc(propertyName);
+    previousUploadedDoc(property_name);
   };
 
   // THIS FUNCTIONALITY USED DOCUMENT DELETE AFTER THAT THIS PREVIOUS UPLOAD DOCUMENT END
 
-  const property = JSON.parse(localStorage.getItem("nameKey"));
-  const propertyName = property?.nameKey;
-
   // When the page is loaded, call the GET property API to get the name of any previously linked integration property.
   // TODO: have some functionality to prevent excessive calls, since there are other conditions on this page that also trigger this API call
   useEffect(() => {
-    if (propertyName) {
-      previousUploadedDoc(propertyName);
-    }
-  }, [propertyName]);
+    if (property_name) { previousUploadedDoc(property_name); }
+  }, [property_name]);
 
   const handleShowPopUp = () => {
     setShowPreviousDoc(true);
-    previousUploadedDoc(propertyName)
+    previousUploadedDoc(property_name)
   };
-  useEffect(() => {
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
-    const token = getSessionStorageData?.token;
-    const property = JSON.parse(localStorage.getItem("nameKey"));
-    const propertyName = property?.nameKey;
-    // previousUploadedDoc(propertyName);
-  }, [sessionStorage.getItem("hostBuddy_auth")]);
 
   useEffect(() => {
     if (supportingStatus === 404) {
@@ -438,7 +346,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
 
   useEffect(() => {
     if (getDocApiCall) {
-      previousUploadedDoc(propertyName);
+      previousUploadedDoc(property_name);
       setGetDocApiCall(false);
     }
   }, [getDocApiCall]);
@@ -515,22 +423,12 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                     </label>
                     <div className="d-flex">
                       <div className="col-6 me-4">
-                        <input
-                          type="file"
-                          id="fileInput"
-                          className="form-control"
-                          onChange={(e) => setFile(e.target.files[0])}
-                          // {...register("docx")}
-                        />
+                        <input type="file" id="fileInput" className="form-control" accept=".txt,.docx,.pdf"
+                        onChange={(e) => setFile(e.target.files[0])} />
                       </div>
                       <div className="col-3">
                         {!docUploadIsLoading ? (
-                          <button
-                            className="btn btn-primary"
-                            onClick={(e) =>
-                              handleSubmitForm(e, suppertingInput)
-                            }
-                          >
+                          <button className="btn btn-primary" onClick={(e) => handleSubmitForm(e, suppertingInput) }>
                             {"Submit File"}
                           </button>
                         ) : (
@@ -575,23 +473,13 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                           <div className="col-6 mt-4 ">
                             {unlinkIsLoading ? (
                               <>
-                                <p
-                                  style={{ color: "white", marginTop: "20px" }}
-                                >
+                                <p style={{ color: "white", marginTop: "20px" }} >
                                   Unlinking...
                                 </p>
                                 <BoxLoader />
                               </>
                             ) : (
-                              <button
-                                className="UnlinkPMSButton"
-                                onClick={(e) =>
-                                  unlink_integration(
-                                    e,
-                                    supportingNameKey?.nameKey
-                                  )
-                                }
-                              >
+                              <button className="UnlinkPMSButton" onClick={(e) => unlink_integration( e, property_name ) } >
                                 Unlink
                               </button>
                             )}
@@ -612,11 +500,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                                   id="integration_property_select"
                                   style={{ marginTop: "20px", width: "70%" }}
                                   class="form-select form-control"
-                                  onChange={(e) =>
-                                    setSelectedIntegrationPropertyId(
-                                      e.target.value
-                                    )
-                                  }
+                                  onChange={(e) => setSelectedIntegrationPropertyId( e.target.value )}
                                 >
                                   {integrationPropertyList?.map((property) => {
                                     // Each option shows the integration property name, but uses the integration property ID as the value
@@ -665,11 +549,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                                   <button
                                     className="LinkPMSButton"
                                     onClick={(e) =>
-                                      link_integration(
-                                        e,
-                                        supportingNameKey?.nameKey,
-                                        selectedIntegrationPropertyId
-                                      )
+                                      link_integration( e, property_name, selectedIntegrationPropertyId )
                                     }
                                   >
                                     Link To This Property
@@ -679,9 +559,7 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                           </>
                         ) : (
                           <>
-                            <div className="col-12 mt-4 ">
-                              {/* Vertical spacer */}
-                            </div>
+                            <div className="col-12 mt-4 "> </div> {/* Vertical spacer */}
                             <p style={{ color: "white", marginTop: "20px" }}>
                               Loading integration properties...
                             </p>
@@ -693,17 +571,16 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
                   </>
                 )}
 
-                <div className="col-lg-12 text-center">
-                  <div className="mt-5"></div> {/* vertical spacer */}
-                  {(!(linkIsLoading || unlinkIsLoading || (!prevLinkedIntegration && integrationPropertiesLoading))) && ( // hide Save & Next if loading something - but no need to hide if integrationPropertiesLoading but we're already linked to an integration property
-                    <button
-                      className="btn btn-primary mt-5"
-                      onClick={(e) => save_and_next(e)}
-                    >
-                      {!supportingLoading ? "Save & Next" : <Loader />}
-                    </button>
+                
+                <div style={{marginTop: '6rem', marginBottom: '3rem'}} className="d-flex justify-content-around">
+                  {(!(linkIsLoading || unlinkIsLoading || (!prevLinkedIntegration && integrationPropertiesLoading))) && ( // hide next/prev buttons if loading something - but no need to hide if integrationPropertiesLoading when we're already linked to an integration property
+                    <>
+                      <button className="btn btn-primary" onClick={() => handleSaveAndNext(true)}> &lt; Save & Previous </button>
+                      <button className="border_theme_btn previous" onClick={() => handleSaveAndNext()}> Save & Next &gt; </button>
+                    </>
                   )}
                 </div>
+
               </form>
             </div>
           </div>
@@ -723,10 +600,11 @@ const SupportingDocForm = ({ prntFuntionHeaderActive }) => {
           supportingDocsObj={hideForReservation}
           deleteResAfterPreviousDocCall={deleteResAfterPreviousDocCall}
           previouslyGetApiLoading={previouslyGetApiLoading}
+          property_name={property_name}
         />
       )}
     </>
   );
 };
 
-export default SupportingDocForm;
+export default ExternalResourcesForm;

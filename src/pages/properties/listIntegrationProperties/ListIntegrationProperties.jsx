@@ -192,13 +192,19 @@ const ListIntegrationProperties = () => {
       ToastHandle(propertiesDeleteError, "danger");
       dispatch(stateEmptyActions());
     } else if (getInputNameKey.nameKey !== "") {
-      navigate(
-        "/add-properties/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw"
-      );
-      localStorage.setItem(localStorageKey, JSON?.stringify(getInputNameKey));
+
+      // OLD CODE (navigate to the old questionnaire page, and put the property name in local storage so we can get it)
+      //navigate( "/add-properties/kd6PrMhLpwQrj5C94mscgOtydO8tXjQItEvjr3OUPal03jtMaGvW9PMrwdsxIFuw" );
+      //localStorage.setItem(localStorageKey, JSON?.stringify(getInputNameKey));
+      //setGetInputNameKey({ nameKey: "" });
+
+      // NEW CODE (navigate to the new questionnaire page. No need to put the property name in local storage, since it's now a URL path param)
+      navigate(`/edit-property/${encodeURIComponent(getInputNameKey.nameKey)}`);
       setGetInputNameKey({ nameKey: "" });
     }
   }, [propertiesDeleteStatus, getInputNameKey, testPropertyKey]);
+
+  
   // user that chatBox intigration
   let urlLink = {
     id: "wdsxIFuw",
