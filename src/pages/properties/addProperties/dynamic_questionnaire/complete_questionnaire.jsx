@@ -27,6 +27,7 @@ const QuestionnairePage = () => {
   const [dataToUpdate, setDataToUpdate] = useState(false); // whether there is new data to update to the API
   const [showModal, setShowModal] = useState(false); // pencil icon modal
   const [dataForModal, setDataForModal] = useState({}); // data to be passed to the pencil icon modal
+  const [doTriggeredSave, setDoTriggeredSave] = useState(false); // Set this to trigger a save
 
   // Get the questionnaire data from the API, if we don't have it already. Should run once, immediately when the page loads
   useEffect(() => {
@@ -35,7 +36,9 @@ const QuestionnairePage = () => {
     }
   }, [property_name]);
 
+  // Update questionnaire data to the API
   const update_questionnaire_to_API = async (property_name, questionnaire_data) => {
+    console.log("Updating API");
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setQuestionnairePostLoading(true);
@@ -70,6 +73,7 @@ const QuestionnairePage = () => {
 
   // Triggered save, for when the user explicitly clicks any "Save" button
   const triggerSave = async () => {
+    console.log("Triggered save");
     if (dataToUpdate && property_name && apiQuestionnaireData) { // if dataToUpdate false, don't bother
 
       // If the questionnaire is still updating from another save (i.e. an autosave), busywait for it to finish to avoid concurrent updates
@@ -86,6 +90,14 @@ const QuestionnairePage = () => {
       } else { } // max wait period exceeded. abort
     }
   }
+
+  // Handle triggered save calls. Need to use a UseEffect to ensure dependencies are properly available
+  useEffect(() => {
+    if (dataToUpdate && doTriggeredSave) {
+      setDoTriggeredSave(false);
+      triggerSave();
+    }
+  }, [dataToUpdate, doTriggeredSave]);
 
   // When an input field is changed, update our questionnaire object
   const handleInputComponentChange = (event, sec_name, subsec_name, q_ind, question_type) => {
@@ -117,8 +129,10 @@ const QuestionnairePage = () => {
 
   // When modal data is saved, update our questionnaire object and save to the API
   const handleModalSave = (resStageData, extraNoteData) => {
+    setDataToUpdate(true);
     const { sec_name, subsec_name, q_ind, checkbox_group_option } = dataForModal;
     const question_type = apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].question_type;
+    console.log("ModalSaveData\n-", resStageData, "\n-", extraNoteData, "\n-", subsec_name, "\n-", q_ind, "\n-", checkbox_group_option);
 
     if (question_type === "short_answer" || question_type === "long_answer") {
       apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].hide_for_reservations = JSON.stringify(resStageData);
@@ -128,15 +142,19 @@ const QuestionnairePage = () => {
     } else if (question_type === "checkbox_group") {
       const question = apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind];
       const optionIndex = question.response_options.indexOf(checkbox_group_option);
-      question.hide_for_reservations[optionIndex] = JSON.stringify(resStageData);
-      question.response_text[optionIndex] = extraNoteData;
+      const newHideForReservations = [...question.hide_for_reservations];
+      const newResponseText = [...question.response_text];
+      newHideForReservations[optionIndex] = JSON.stringify(resStageData);
+      newResponseText[optionIndex] = extraNoteData;
+      question.hide_for_reservations = newHideForReservations;
+      question.response_text = newResponseText;
     }
-    triggerSave();
+    setDoTriggeredSave(true);
   }
 
   // Trigger a save, then move to the next section (if there is one) or the previous section (if prev is true, and there is one)
   const handleSaveAndNext = (prev=false) => {
-    triggerSave();
+    setDoTriggeredSave(true);
     const currSectionIndex = questionnaire_section_names.indexOf(selectedSection);
     if (prev && currSectionIndex > 0) { setSelectedSection(questionnaire_section_names[currSectionIndex - 1]); }
     else if (!prev && currSectionIndex < questionnaire_section_names.length - 1) { setSelectedSection(questionnaire_section_names[currSectionIndex + 1]); }

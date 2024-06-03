@@ -6,11 +6,14 @@ const PencilIconModal = ({ show, setShowModal, question_obj, checkbox_group_opti
 
   // Unpack question object, handling the special case for checkbox_group
   let { question_type, question_text, response_text, hide_for_reservations, response_options } = question_obj || {};
+  let hide_for_reservations_data = null;
   if (question_type === "checkbox_group") {
     const optionIndex = response_options.indexOf(checkbox_group_option);
-    hide_for_reservations = hide_for_reservations[optionIndex];
+    hide_for_reservations_data = hide_for_reservations[optionIndex];
     response_text = response_text[optionIndex];
     question_text = checkbox_group_option;
+  } else {
+    hide_for_reservations_data = hide_for_reservations;
   }
 
   // Initialize the reservation stage selections
@@ -26,8 +29,8 @@ const PencilIconModal = ({ show, setShowModal, question_obj, checkbox_group_opti
   // When the modal is opened, populate the textArea and set reservationStageData according to any previous input
   useEffect(() => {
     if (show) {
-      if (hide_for_reservations) {
-        const hiddenStages = hide_for_reservations.replace(/['"\[\] ]/g, '').split(','); // hide_for_reservations is either a json style string or a comma separated list of stages. First remove any quotes, brackets, or spaces, then split by commas
+      if (hide_for_reservations_data) {
+        const hiddenStages = hide_for_reservations_data.replace(/['"\[\] ]/g, '').split(','); // hide_for_reservations_data is either a json style string or a comma separated list of stages. First remove any quotes, brackets, or spaces, then split by commas
         const updatedReservationStageData = { ...reservationStageData };
 
         hiddenStages.forEach(stage => {
@@ -41,11 +44,11 @@ const PencilIconModal = ({ show, setShowModal, question_obj, checkbox_group_opti
       }
       setextraNoteData(response_text || "");
     }
-  }, [hide_for_reservations, show]);
+  }, [hide_for_reservations_data, show]);
 
   // Reset modal variables, to make sure we don't get old data when the modal is opened again
   const modalCleanup = () => {
-    hide_for_reservations = null; // this is important. Otherwise the next time the modal is opened (show set to true), the useEffect might run and set the old hide_for_reservations values
+    hide_for_reservations_data = null; // this is important. Otherwise the next time the modal is opened (show set to true), the useEffect might run and set the old hide_for_reservations_data values
     setReservationStageData(initialReservationStageSelections);
     setextraNoteData("");
   }
@@ -56,8 +59,6 @@ const PencilIconModal = ({ show, setShowModal, question_obj, checkbox_group_opti
     modalCleanup();
     setShowModal(false);
   }
-
-
 
   return (
     <>
