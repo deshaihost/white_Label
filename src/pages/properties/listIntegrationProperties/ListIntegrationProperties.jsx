@@ -141,7 +141,8 @@ const ListIntegrationProperties = () => {
       );
     } else if (findType === dummySubscriptionCount) {
       localStorage.removeItem(localStorageKey)
-      navigate("/add-properties/");
+      //navigate("/add-properties/");
+      navigate("/add-property/");
     }
   };
 

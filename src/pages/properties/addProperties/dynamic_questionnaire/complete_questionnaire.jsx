@@ -8,13 +8,13 @@ import { Helmet } from "react-helmet";
 import QuestionnaireSection from "./questionnaire_section";
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { BoxLoader } from "../../../../helper/Loader";
+import { FullScreenLoader } from "../../../../helper/Loader";
 import axios from "axios";
 import PencilIconModal from "./PencilIconModal";
 import ExternalResourcesForm from "./ExternalResources/ExternalResourcesForm";
 
 
-// Code for the entire questionnaire page, including the header and all sections, including Basics and External Resources
+// Code for the entire questionnaire page, including the header and all sections, including Basics and External Resources.
 const QuestionnairePage = () => {
   const { property_name } = useParams();
 
@@ -176,7 +176,7 @@ const QuestionnairePage = () => {
         <title>Edit Property</title>
       </Helmet>;
       <Container className="py-3">
-        {apiQuestionnaireData ? (
+        {(!property_name) || apiQuestionnaireData ? (
           <>
             {/* Header, with section names and progress bar */}
             <div className="row">
@@ -192,7 +192,7 @@ const QuestionnairePage = () => {
             <div className="row">
               <div className="col-lg-10 mx-auto mt-5 form_multisteps">
                 {selectedSection !== "External Resources" ? (
-                  <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext}/>
+                  <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} property_name={property_name} />
                 ) : (
                   <ExternalResourcesForm property_name={property_name} handleSaveAndNext={handleSaveAndNext}/>
                 )}
@@ -203,7 +203,9 @@ const QuestionnairePage = () => {
             <PencilIconModal show={showModal} setShowModal={setShowModal} question_obj={dataForModal.question_obj} checkbox_group_option={dataForModal.checkbox_group_option} handleModalSave={handleModalSave} />
           </>
         ) : (
-          <BoxLoader />
+          <div style={{ paddingTop: '200px', paddingBottom: '200px' }}>
+            <FullScreenLoader />
+          </div>
         )}
           
       </Container>

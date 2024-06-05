@@ -19,9 +19,7 @@ import SetupGuide from "../pages/setupGuide/SetupGuide";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
-import AddPropertiesIndex from "../pages/properties/addProperties/AddPropertiesIndex";
 import QuestionnairePage from "../pages/properties/addProperties/dynamic_questionnaire/complete_questionnaire";
-// import { ParamsGet } from "../helper/Authorized";
 import CopyChatBotLink from "../pages/copyChatbotLink/CopyChatBotLink";
 import TestProperty from "../pages/testProperty/TestProperty";
 import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";
@@ -32,6 +30,7 @@ import TestingQuestions from "../pages/userGuides/testingQuestions/testingQuesti
 import ConfirmYourEmail from "../pages/confirmEmail/confirmYourEmail";
 import EmailConfirmationAction from "../pages/confirmEmail/emailConfirmationAction";
 import ResetPass from "../auth/resetPass/resetPass";
+import AddPropertyForm from "../pages/properties/addProperties/dynamic_questionnaire/BasicInformationForm/AddPropertyForm";
 
 const Routing = () => {
   const location = useLocation();
@@ -154,15 +153,9 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/add-properties/:id" element={
+        <Route path="/add-property" element={
             <ProtectedRoute>
-              <AddPropertiesIndex />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/add-properties" element={
-            <ProtectedRoute>
-              <AddPropertiesIndex />
+              <AddPropertyForm />
             </ProtectedRoute>
           }
         />
