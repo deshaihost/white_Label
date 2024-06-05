@@ -1,41 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import {
-  getQuestionnaireActions,
-  getUserDataActions,
-  stateEmptyActions,
-} from "../../../../../redux/actions";
+import { getQuestionnaireActions, getUserDataActions, stateEmptyActions } from "../../../../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import Loader from "../../../../../helper/Loader";
 import ToastHandle from "../../../../../helper/ToastMessage";
-import {
-  nameKey,
-} from "../../../../../helper/Authorized";
 
-const CopyExistingPropertyModel = ({
-  handleClose,
-  show,
-  copyExistingPropertyNameGetPrnt,
-}) => {
+const CopyExistingPropertyModel = ({ handleClose, show, copyExistingPropertyNameGetPrnt, curr_property_name }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const createPropertiesName =
-    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const copyExistingPropertiesStatus =
-    store?.copyExistingPropertyReducer?.copyExistingProperty?.status;
-  const copyExistingPropertiesMessage =
-    store?.copyExistingPropertyReducer?.copyExistingProperty?.data?.message;
-  const copyExistingProertiesLoading =
-    store?.copyExistingPropertyReducer?.loading;
-  const getLocalStorageData = nameKey();
-  const getLocalStorageNameKey = getLocalStorageData?.nameKey;
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const [propertyCheck, setPropertyCheck] = useState(false);
+  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const copyExistingPropertiesStatus = store?.copyExistingPropertyReducer?.copyExistingProperty?.status;
+  const copyExistingPropertiesMessage = store?.copyExistingPropertyReducer?.copyExistingProperty?.data?.message;
+  const copyExistingProertiesLoading = store?.copyExistingPropertyReducer?.loading;
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [propertyCheck, setPropertyCheck] = useState(false); // 
   const [propertySelect, setPropertySelect] = useState("");
 
   const onSubmit = (data) => {
@@ -57,18 +36,12 @@ const CopyExistingPropertyModel = ({
       dispatch(stateEmptyActions());
       handleClose("copyExistingPropertyClose");
       setPropertyCheck(false);
-      dispatch(getQuestionnaireActions(getLocalStorageNameKey));
+      dispatch(getQuestionnaireActions(curr_property_name));
     }
   }, [copyExistingPropertiesStatus]);
 
   return (
-    <Modal
-      show={show}
-      size="lg"
-      onHide={() => closeHndle()}
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
+    <Modal show={show} size="lg" onHide={() => closeHndle()} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <h5 className="modal-title">Choose A Source Property</h5>
       </Modal.Header>
@@ -78,9 +51,7 @@ const CopyExistingPropertyModel = ({
             <div className="text-white">
               <div>
                 <h5>
-                  This will overwrite any data previously added to this property
-                  from this form. Files and integrations will not be copied or
-                  overwritten. Would you like to proceed?
+                  This will overwrite any data previously added to this property from this form. Files and integrations will not be copied or overwritten. Proceed?
                 </h5>
               </div>
               <div className="d-flex justify-content-center">
@@ -95,11 +66,7 @@ const CopyExistingPropertyModel = ({
           </>
         ) : (
           <div>
-            <select
-              class="form-select form-control"
-              aria-label="Default select example"
-              {...register("copyExisting")}
-            >
+            <select class="form-select form-control" aria-label="Default select example" {...register("copyExisting")}>
               <option selected hidden value="">
                 -Select Property-
               </option>
@@ -115,14 +82,9 @@ const CopyExistingPropertyModel = ({
             </select>
             <div className="text-center mt-5">
               <button
-                className="mw-auto btn btn-primary text-white border border-primary rounded-pill px-5"
-                onClick={handleSubmit(
-                  (data) => {
-                    onSubmit(data);
-                  },
-                  (err) => {
-                    console.log(err, "ee");
-                  }
+                className="mw-auto btn btn-primary text-white border border-primary rounded-pill px-5" onClick={handleSubmit(
+                  (data) => { onSubmit(data); },
+                  (err) => { }
                 )}
               >
                 Submit
