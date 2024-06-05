@@ -18,6 +18,7 @@ import ToastHandle from "../../helper/ToastMessage";
 import { Helmet } from "react-helmet";
 import { FaCircleCheck } from "react-icons/fa6";
 import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/transcriptsModel/ConverSationtranscriptModel";
+import { Dropdown } from "primereact/dropdown";
 
 const Dashboard = () => {
   const store = useSelector((state) => state);
@@ -29,9 +30,11 @@ const Dashboard = () => {
     : [];
   const userDataLoading = store?.getUserDataReducer?.loading;
   const userDataGetLoading = store?.getUserDataReducer?.loading;
-  const actionItemsConvertationData = store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
+  const actionItemsConvertationData =
+    store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
   const actionItemsCovertationLoading = store?.getActionItemsReducer?.loading;
-
+  const createPropertiesName =
+    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
   const actionItems = actionItemsConvertationData
     ? actionItemsConvertationData
     : [];
@@ -41,22 +44,88 @@ const Dashboard = () => {
     .flatMap((property) =>
       Object.keys(actionItems[property]).map((itemId) => {
         const item = actionItems[property][itemId];
-        
         return {
           ...item,
           property,
           itemId,
           createdAt: item?.items[0]?.created_at,
-          actionItems
+          actionItems,
         };
       })
     )
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
+  // new code
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchPlaceHold, setSearchPlaceHold] = useState("");
+  const handleSearchChange = (event, type) => {
+    if (type === "propertySearch") {
+      setSearchTerm(event);
+      setSearchPlaceHold(event);
+    } else {
+      setSearchTerm(event);
+      setSearchPlaceHold("");
+    }
+  };
+
+  const filteredActionItems = sortedActionItems?.filter((actionItem) => {
+    const { property, guest_name, items } = actionItem;
+    const searchTermLower = searchTerm.toLowerCase();
+    // Check if property or guest_name matches the search term
+    const propertyMatch = property.toLowerCase().includes(searchTermLower);
+    const guestNameMatch = guest_name?.toLowerCase().includes(searchTermLower);
+    // Check if any item's status matches the search term
+    const statusMatch = items.some((item) =>
+      item.status.toLowerCase().includes(searchTermLower)
+    );
+    return propertyMatch || guestNameMatch || statusMatch;
+  });
+
+  // search bar
+  const allPropertyName =
+    createPropertiesName !== undefined ? createPropertiesName : [];
+
+  const selectedTemplate = (option, props) => {
+    if (option) {
+      return (
+        <div className="flex align-items-center defult">
+          <div>{option.name.toLowerCase()}</div>
+        </div>
+      );
+    }
+    return (
+      <span className="search-btn">
+        {searchPlaceHold !== "" ? searchPlaceHold : "Search Property"}
+      </span>
+    );
+  };
+
+  const OptionTemplate = (option) => {
+    return (
+      <div className="flex align-items-center defult">
+        <div>{option.name}</div>
+      </div>
+    );
+  };
+  // new code
+
   // date formate
   function formatDateTime(dateTimeString) {
     const date = new Date(dateTimeString);
-    const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ];
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
 
     const month = months[date.getMonth()];
     const day = date.getDate();
@@ -73,9 +142,12 @@ const Dashboard = () => {
   }
   const { first_name } = userDataGet ? userDataGet : [];
   // this functionality complete convertation
-  const completeActionsItemLoading = store?.completeActionsItemsReducer?.loading;
-  const completeActionsItemStatus = store?.completeActionsItemsReducer?.completeActionsItems?.status;
-  const completeActionsItemMessage = store?.completeActionsItemsReducer?.completeActionsItems?.data?.message;
+  const completeActionsItemLoading =
+    store?.completeActionsItemsReducer?.loading;
+  const completeActionsItemStatus =
+    store?.completeActionsItemsReducer?.completeActionsItems?.status;
+  const completeActionsItemMessage =
+    store?.completeActionsItemsReducer?.completeActionsItems?.data?.message;
 
   const compeletHndle = (itemId, propyName, convrtionId) => {
     dispatch(
@@ -95,11 +167,26 @@ const Dashboard = () => {
   // When user data is loaded, save the payment/subscription information to local storage. We need this information for the warning banner logic (in the NavBar), which should be shown on all portal pages.
   useEffect(() => {
     if (userDataGet) {
-      localStorage.setItem("paymentStatus", userDataGet?.subscription?.payment_standing);
-      localStorage.setItem("servicesExpireDate", userDataGet?.subscription?.services_good_until);
-      localStorage.setItem("numPropertiesAllowed", userDataGet?.subscription?.num_properties_allowed);
-      localStorage.setItem("numPropertiesUsed", Object.keys(userDataGet?.property_data || {}).length);
-      localStorage.setItem("tooManyPropertiesGraceUntil", userDataGet?.subscription?.too_many_properties_grace_until);
+      localStorage.setItem(
+        "paymentStatus",
+        userDataGet?.subscription?.payment_standing
+      );
+      localStorage.setItem(
+        "servicesExpireDate",
+        userDataGet?.subscription?.services_good_until
+      );
+      localStorage.setItem(
+        "numPropertiesAllowed",
+        userDataGet?.subscription?.num_properties_allowed
+      );
+      localStorage.setItem(
+        "numPropertiesUsed",
+        Object.keys(userDataGet?.property_data || {}).length
+      );
+      localStorage.setItem(
+        "tooManyPropertiesGraceUntil",
+        userDataGet?.subscription?.too_many_properties_grace_until
+      );
     }
   }, [userDataGet]);
 
@@ -115,7 +202,6 @@ const Dashboard = () => {
     store?.propertyGetConversationReducer?.propertyGetConversation?.data;
   const propertiesConversationLoading =
     store?.propertyGetConversationReducer?.loading;
-
 
   const conversationCallOnDashboard = (item) => {
     const { propertyName, itemId } = item;
@@ -295,6 +381,84 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
+                        <div className="col-lg-6 mb-3">
+                          <div className="account-box">
+                            {!userDataGetLoading ? (
+                              <>
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M15.3422 0.656793C15.4156 0.730166 15.4662 0.823302 15.4877 0.924871C15.5092 1.02644 15.5007 1.13207 15.4632 1.2289L10.1064 15.1567C10.0684 15.2552 10.0022 15.3404 9.91608 15.4014C9.82992 15.4625 9.72764 15.4967 9.62209 15.4998C9.51653 15.5029 9.41242 15.4747 9.32283 15.4188C9.23325 15.3629 9.16218 15.2818 9.11856 15.1856L6.87831 10.2573L10.1739 6.96072C10.3158 6.80839 10.3931 6.60693 10.3894 6.39876C10.3857 6.19059 10.3014 5.99198 10.1542 5.84476C10.007 5.69754 9.80833 5.61321 9.60016 5.60953C9.39199 5.60586 9.19053 5.68313 9.0382 5.82507L5.74158 9.12059L0.813244 6.88143C0.716785 6.83787 0.635392 6.76671 0.579339 6.67693C0.523286 6.58715 0.495084 6.48278 0.498293 6.37699C0.501503 6.2712 0.535979 6.16873 0.597371 6.08251C0.658763 5.9963 0.74432 5.9302 0.843243 5.89256L14.7711 0.535729C14.8678 0.498525 14.9732 0.49016 15.0746 0.511648C15.176 0.533135 15.2689 0.583553 15.3422 0.656793Z"
+                                    fill="#146EF5"
+                                  ></path>
+                                </svg>
+                                <h4>{allPropertyName?.length}</h4>
+                                <p>Number of Properties</p>
+                              </>
+                            ) : (
+                              <BoxLoader />
+                            )}
+                          </div>
+                        </div>
+                        <div className="col-lg-6 mb-3">
+                          <div className="account-box">
+                            {!userDataGetLoading ? (
+                              <>
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M15.3422 0.656793C15.4156 0.730166 15.4662 0.823302 15.4877 0.924871C15.5092 1.02644 15.5007 1.13207 15.4632 1.2289L10.1064 15.1567C10.0684 15.2552 10.0022 15.3404 9.91608 15.4014C9.82992 15.4625 9.72764 15.4967 9.62209 15.4998C9.51653 15.5029 9.41242 15.4747 9.32283 15.4188C9.23325 15.3629 9.16218 15.2818 9.11856 15.1856L6.87831 10.2573L10.1739 6.96072C10.3158 6.80839 10.3931 6.60693 10.3894 6.39876C10.3857 6.19059 10.3014 5.99198 10.1542 5.84476C10.007 5.69754 9.80833 5.61321 9.60016 5.60953C9.39199 5.60586 9.19053 5.68313 9.0382 5.82507L5.74158 9.12059L0.813244 6.88143C0.716785 6.83787 0.635392 6.76671 0.579339 6.67693C0.523286 6.58715 0.495084 6.48278 0.498293 6.37699C0.501503 6.2712 0.535979 6.16873 0.597371 6.08251C0.658763 5.9963 0.74432 5.9302 0.843243 5.89256L14.7711 0.535729C14.8678 0.498525 14.9732 0.49016 15.0746 0.511648C15.176 0.533135 15.2689 0.583553 15.3422 0.656793Z"
+                                    fill="#146EF5"
+                                  ></path>
+                                </svg>
+                                <h4>0</h4>
+                                <p>Action Items (last 14d)</p>
+                              </>
+                            ) : (
+                              <BoxLoader />
+                            )}
+                          </div>
+                        </div>
+                        <div className="col-lg-6 mb-3">
+                          <div className="account-box">
+                            {!userDataGetLoading ? (
+                              <>
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M15.3422 0.656793C15.4156 0.730166 15.4662 0.823302 15.4877 0.924871C15.5092 1.02644 15.5007 1.13207 15.4632 1.2289L10.1064 15.1567C10.0684 15.2552 10.0022 15.3404 9.91608 15.4014C9.82992 15.4625 9.72764 15.4967 9.62209 15.4998C9.51653 15.5029 9.41242 15.4747 9.32283 15.4188C9.23325 15.3629 9.16218 15.2818 9.11856 15.1856L6.87831 10.2573L10.1739 6.96072C10.3158 6.80839 10.3931 6.60693 10.3894 6.39876C10.3857 6.19059 10.3014 5.99198 10.1542 5.84476C10.007 5.69754 9.80833 5.61321 9.60016 5.60953C9.39199 5.60586 9.19053 5.68313 9.0382 5.82507L5.74158 9.12059L0.813244 6.88143C0.716785 6.83787 0.635392 6.76671 0.579339 6.67693C0.523286 6.58715 0.495084 6.48278 0.498293 6.37699C0.501503 6.2712 0.535979 6.16873 0.597371 6.08251C0.658763 5.9963 0.74432 5.9302 0.843243 5.89256L14.7711 0.535729C14.8678 0.498525 14.9732 0.49016 15.0746 0.511648C15.176 0.533135 15.2689 0.583553 15.3422 0.656793Z"
+                                    fill="#146EF5"
+                                  ></path>
+                                </svg>
+                                <h4>0</h4>
+                                <p>Action Items (last 24h)</p>
+                              </>
+                            ) : (
+                              <BoxLoader />
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="col-lg-4">
@@ -315,65 +479,174 @@ const Dashboard = () => {
                   <div className="row">
                     {!actionItemsCovertationLoading ? (
                       <div className="">
-                        <h3 className="text-white my-3 border-bottom py-3">
-                          ACTION ITEMS
-                        </h3>
+                        <div className="border-bottom text-white my-3  py-3 d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-md-0 gap-2">
+                          <div>
+                            <h4 className="">Action Items</h4>
+                          </div>
+                          <div>
+                            <div className="d-flex flex-wrap flex-md-nowrap justify-content-between gap-2 gap-xl-4">
+                              <div class="form-check">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="flexRadioDefault"
+                                  id="flexRadioDefault1"
+                                  onClick={() => {
+                                    handleSearchChange("Completed");
+                                  }}
+                                />
+                                <label
+                                  class="form-check-label fs-14"
+                                  for="flexRadioDefault1"
+                                >
+                                  Complete
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="flexRadioDefault"
+                                  id="flexRadioDefault2"
+                                  onClick={() => {
+                                    handleSearchChange("Incomplete");
+                                  }}
+                                />
+                                <label
+                                  class="form-check-label fs-14"
+                                  for="flexRadioDefault2"
+                                >
+                                  Incomplete
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="flexRadioDefault"
+                                  id="flexRadioDefault3"
+                                  onClick={() => {
+                                    handleSearchChange("Expired");
+                                  }}
+                                />
+                                <label
+                                  class="form-check-label fs-14"
+                                  for="flexRadioDefault3"
+                                >
+                                  Expired
+                                </label>
+                              </div>
+                              <div>
+                                <i
+                                  class="bi bi-question-circle"
+                                  data-bs-toggle="tooltip"
+                                  data-bs-placement="top"
+                                  title="Action items will automatically expire after 14 days"
+                                ></i>
+                              </div>
+                              <div className="text-white  ">
+                                <Dropdown
+                                  value={searchPlaceHold}
+                                  onChange={(e) =>
+                                    handleSearchChange(
+                                      e.value?.name,
+                                      "propertySearch"
+                                    )
+                                  }
+                                  options={allPropertyName.map(
+                                    (properties) => ({
+                                      name: properties,
+                                    })
+                                  )} // Assuming countries is an array of strings
+                                  optionLabel="name"
+                                  placeholder="Search Property"
+                                  filter
+                                  valueTemplate={selectedTemplate}
+                                  itemTemplate={OptionTemplate}
+                                  className="w-full md:w-14rem search rounded-pill border px-2 fs-14 "
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <div className="table-responsive">
-                          <table class="table text-white action-items-table">
-                            <thead>
-                              <tr>
-                                <th>Date/Time</th>
-                                <th>Property/Guest</th>
-                                <th>Action Item</th>
-                                <th>Review</th>
-                                <th>Complete</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {sortedActionItems.map((actionItem) => {
-                                const { createdAt, property, itemId } =
-                                  actionItem;
-                                const item = actionItem.items[0];
-                                let actionItemSend = {
-                                  propertyName: property,
-                                  itemId,
-                                };
-                                return (
-                                  <tr key={itemId}>
-                                    <td>{formatDateTime(createdAt)}</td>
-                                    <td>{property}</td>
-                                    <td>{item?.item}</td>
-                                    <td className="text-center">
-                                      <span
-                                        className="mainCursor"
-                                        onClick={() => {
-                                          conversationCallOnDashboard(
-                                            actionItemSend
-                                          );
-                                        }}
-                                      >
-                                        <GoArrowUpRight className="text-white fs-6" />
-                                      </span>
-                                    </td>
-                                    <td className="text-center">
-                                      <span
-                                        className="mainCursor"
-                                        onClick={() => {
-                                          compeletHndle(
-                                            item?.id,
-                                            property,
-                                            itemId
-                                          );
-                                        }}
-                                      >
-                                        <FaCircleCheck className="text-primary fs-6" />
-                                      </span>
-                                    </td>
+                          {filteredActionItems?.length > 0 ? (
+                            <>
+                              <table class="table text-white action-items-table">
+                                <thead>
+                                  <tr>
+                                    <th>Date/Time</th>
+                                    <th>Property</th>
+                                    <th>Guest</th>
+                                    <th>Action Item</th>
+                                    <th>Review</th>
+                                    <th>Complete</th>
                                   </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
+                                </thead>
+                                <tbody>
+                                  {filteredActionItems?.map((actionItem) => {
+                                    const { createdAt, property, itemId } =
+                                      actionItem;
+                                    const item = actionItem.items[0];
+                                    let actionItemSend = {
+                                      propertyName: property,
+                                      itemId,
+                                    };
+                                    return (
+                                      <tr key={itemId}>
+                                        <td>{formatDateTime(createdAt)}</td>
+                                        <td>{property}</td>
+                                        <td>
+                                          {actionItem?.guest_name !== null
+                                            ? actionItem?.guest_name
+                                            : "Empty"}
+                                        </td>
+                                        <td className="">
+                                          <div
+                                            className=""
+                                            style={{
+                                              overflowY: "auto",
+                                              height: "50px",
+                                            }}
+                                          >
+                                            {item?.item}
+                                          </div>
+                                        </td>
+                                        <td className="text-center">
+                                          <span
+                                            className="mainCursor"
+                                            onClick={() => {
+                                              conversationCallOnDashboard(
+                                                actionItemSend
+                                              );
+                                            }}
+                                          >
+                                            <GoArrowUpRight className="text-white fs-6" />
+                                          </span>
+                                        </td>
+                                        <td className="text-center">
+                                          <span
+                                            className="mainCursor"
+                                            onClick={() => {
+                                              compeletHndle(
+                                                item?.id,
+                                                property,
+                                                itemId
+                                              );
+                                            }}
+                                          >
+                                            <FaCircleCheck className="text-primary fs-6" />
+                                          </span>
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+                            </>
+                          ) : (
+                            <span className="text-danger d-flex justify-content-center align-items-center">Empty</span>
+                          )}
                         </div>
                       </div>
                     ) : (

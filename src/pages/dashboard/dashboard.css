@@ -217,6 +217,23 @@
   font-weight: 500 !important;
   text-transform: uppercase;
 }
+.search {
+  border: 1px solid #2C389E !important;
+  color: #555454;
+}
+.p-dropdown-panel {
+  background: #fff;
+  padding: 5px;
+  /* height: 300px; */
+}
+
+.p-dropdown-panel .p-dropdown-items li {
+  padding: 5px 0px;
+}
+.p-dropdown-filter-container svg {
+  position: absolute;
+  right: 5px;
+}
 @media only screen and (max-width: 1199px) {
   .account-container {
     border-radius: 10px;
