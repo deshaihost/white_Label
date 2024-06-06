@@ -337,7 +337,7 @@ const Dashboard = () => {
                   <div className="row">
                     <div className="col-lg-9">
                       <div className="row">
-                        <div className="col-lg-4 mb-3">
+                        <div className="col-lg-6 mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
                               <>
@@ -363,7 +363,7 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
-                        <div className="col-lg-4 mb-3">
+                        <div className="col-lg-6 mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
                               <>
@@ -378,6 +378,7 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
+                        {/*
                         <div className="col-lg-4 mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
@@ -391,7 +392,8 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
-                        <div className="col-lg-4 mb-3">
+                        */}
+                        <div className="col-lg-6 mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
                               <>
@@ -404,7 +406,7 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
-                        <div className="col-lg-4 mb-3">
+                        <div className="col-lg-6 mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
                               <>
@@ -417,6 +419,7 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
+                        {/*
                         <div className="col-lg-4  mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
@@ -430,6 +433,7 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
+                        */}
                       </div>
                     </div>
                     <div className="col-lg-3 mb-3 ">
