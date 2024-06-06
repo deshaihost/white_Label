@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Tooltip } from 'react-tooltip';
 import SideBar from "../../component/sideBar/SideBar";
 import GetStartedImg from "../../public/img/getstartedimg.png";
 import { Link } from "react-router-dom";
 import "./dashboard.css";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  PropertyGetConversationsActions,
-  getActionItemsActions,
-  getUserDataActions,
-  putCompleteActionItemActions,
-  stateEmptyActions,
-} from "../../redux/actions";
+import { PropertyGetConversationsActions, getActionItemsActions, getUserDataActions, putCompleteActionItemActions, stateEmptyActions } from "../../redux/actions";
 import { BoxLoader, FullScreenLoader } from "../../helper/Loader";
 import "react-circular-progressbar/dist/styles.css";
 import { GoArrowUpRight } from "react-icons/go";
@@ -55,8 +50,31 @@ const Dashboard = () => {
     )
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
+  // Binary search function. This lets us do below calculation for recently created action items more efficiently
+  const binarySearch = (arr, targetDate) => {
+    let left = 0;
+    let right = arr.length - 1;
+
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      const midDate = new Date(arr[mid].createdAt);
+
+      if (midDate > targetDate) { left = mid + 1; }
+      else if (midDate < targetDate) { right = mid - 1; }
+      else { return mid; }
+    }
+    return left;
+  };
+
+  // Calculate recently created action items, for the statistics tiles
+  const ONE_DAY = 24 * 60 * 60 * 1000;
+  const FOURTEEN_DAYS = 14 * ONE_DAY;
+  const now = Date.now();
+  const actionItemsLast24h = binarySearch(sortedActionItems, new Date(now - ONE_DAY))
+  const actionItemsLast14d = binarySearch(sortedActionItems, new Date(now - FOURTEEN_DAYS));
+
   // new code
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("Incomplete");
   const [searchPlaceHold, setSearchPlaceHold] = useState("");
   const handleSearchChange = (event, type) => {
     if (type === "propertySearch") {
@@ -67,6 +85,14 @@ const Dashboard = () => {
       setSearchPlaceHold("");
     }
   };
+
+  // Check if an action item was created within the last X days, by passing its created_at here
+  function isWithinLastDays(date, days) {
+    const ONE_DAY_IN_MS = 86400000; // 24 * 60 * 60 * 1000
+    const now = Date.now();
+    const pastDate = new Date(date);
+    return now - pastDate <= days * ONE_DAY_IN_MS;
+  }
 
   const filteredActionItems = sortedActionItems?.filter((actionItem) => {
     const { property, guest_name, items } = actionItem;
@@ -112,20 +138,7 @@ const Dashboard = () => {
   // date formate
   function formatDateTime(dateTimeString) {
     const date = new Date(dateTimeString);
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
+    const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 
     const month = months[date.getMonth()];
     const day = date.getDate();
@@ -138,8 +151,10 @@ const Dashboard = () => {
     hours = hours ? hours : 12; // 0 hour should be 12
     minutes = minutes < 10 ? "0" + minutes : minutes;
 
-    return `${month} ${day}, ${year} ${hours}:${minutes}${ampm}`;
+    //return `${month} ${day}, ${year}\n${hours}:${minutes}${ampm}`;
+    return `${month} ${day}\n${hours}:${minutes}${ampm}`;
   }
+  
   const { first_name } = userDataGet ? userDataGet : [];
   // this functionality complete convertation
   const completeActionsItemLoading =
@@ -198,35 +213,27 @@ const Dashboard = () => {
     }
   }, [completeActionsItemStatus]);
   const [converSationId, setConverSationId] = useState("");
-  const propertiesConversationGetData =
-    store?.propertyGetConversationReducer?.propertyGetConversation?.data;
-  const propertiesConversationLoading =
-    store?.propertyGetConversationReducer?.loading;
+  const propertiesConversationGetData = store?.propertyGetConversationReducer?.propertyGetConversation?.data;
+  const propertiesConversationLoading = store?.propertyGetConversationReducer?.loading;
+  const [propertyNameForConversationData, setPropertyNameForConversationData] = useState("");
 
   const conversationCallOnDashboard = (item) => {
     const { propertyName, itemId } = item;
     setConverSationId(itemId);
-    dispatch(
-      PropertyGetConversationsActions({
-        propertyName: propertyName,
-      })
-    );
+    setPropertyNameForConversationData(propertyName);
+    dispatch( PropertyGetConversationsActions({ propertyName: propertyName }) );
   };
-  const [model, setModel] = useState({
-    conversationModel: false,
-    conversationDataSend: "",
-  });
+
+  const [model, setModel] = useState({ conversationModel: false, conversationDataSend: "" });
   const conversationModelOpen = "conversationModelOpen";
   const conversationModelClose = "conversationModelClose";
+
   const handleModelOpen = (type, data) => {
     if (type === conversationModelOpen) {
-      setModel({
-        ...model,
-        conversationModel: true,
-        conversationDataSend: data,
-      });
+      setModel({ ...model, conversationModel: true, conversationDataSend: data });
     }
   };
+
   const handleModelClose = (type) => {
     if (type === conversationModelClose) {
       setModel({ ...model, conversationModel: false });
@@ -237,9 +244,10 @@ const Dashboard = () => {
     if (propertiesConversationGetData !== undefined) {
       if (converSationId !== "") {
         let findConverSationFilter =
-          propertiesConversationGetData?.conversations?.filter(
-            (item) => item?.conversation_id === converSationId
-          );
+           propertiesConversationGetData?.conversations?.filter( (item) => item?.conversation_id === converSationId );
+        if (findConverSationFilter?.[0]) {
+          findConverSationFilter[0].property_name = propertyNameForConversationData;
+        }
         handleModelOpen(conversationModelOpen, findConverSationFilter?.[0]);
       }
     }
@@ -425,7 +433,7 @@ const Dashboard = () => {
                                     fill="#146EF5"
                                   ></path>
                                 </svg>
-                                <h4>0</h4>
+                                <h4>{actionItemsLast14d}</h4>
                                 <p>Action Items (last 14d)</p>
                               </>
                             ) : (
@@ -451,7 +459,7 @@ const Dashboard = () => {
                                     fill="#146EF5"
                                   ></path>
                                 </svg>
-                                <h4>0</h4>
+                                <h4>{actionItemsLast24h}</h4>
                                 <p>Action Items (last 24h)</p>
                               </>
                             ) : (
@@ -486,63 +494,32 @@ const Dashboard = () => {
                           <div>
                             <div className="d-flex flex-wrap flex-md-nowrap justify-content-between gap-2 gap-xl-4">
                               <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="flexRadioDefault"
-                                  id="flexRadioDefault1"
-                                  onClick={() => {
-                                    handleSearchChange("Completed");
-                                  }}
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked={searchTerm === "Incomplete"}
+                                  onClick={() => { handleSearchChange("Incomplete"); }}
                                 />
-                                <label
-                                  class="form-check-label fs-14"
-                                  for="flexRadioDefault1"
-                                >
-                                  Complete
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="flexRadioDefault"
-                                  id="flexRadioDefault2"
-                                  onClick={() => {
-                                    handleSearchChange("Incomplete");
-                                  }}
-                                />
-                                <label
-                                  class="form-check-label fs-14"
-                                  for="flexRadioDefault2"
-                                >
+                                <label class="form-check-label fs-14" for="flexRadioDefault2" >
                                   Incomplete
                                 </label>
                               </div>
                               <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="flexRadioDefault"
-                                  id="flexRadioDefault3"
-                                  onClick={() => {
-                                    handleSearchChange("Expired");
-                                  }}
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={searchTerm === "Completed"}
+                                  onClick={() => { handleSearchChange("Completed"); }}
                                 />
-                                <label
-                                  class="form-check-label fs-14"
-                                  for="flexRadioDefault3"
-                                >
+                                <label class="form-check-label fs-14" for="flexRadioDefault1" >
+                                  Complete
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" checked={searchTerm === "Expired"}
+                                  onClick={() => { handleSearchChange("Expired"); }}
+                                />
+                                <label class="form-check-label fs-14" for="flexRadioDefault3" >
                                   Expired
                                 </label>
                               </div>
                               <div>
-                                <i
-                                  class="bi bi-question-circle"
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title="Action items will automatically expire after 14 days"
-                                ></i>
+                                <i className="bi bi-question-circle" data-tooltip-id="expireTooltip" data-tooltip-content='Incomplete action items are marked "Expired" after 14 days. All action items are permanently deleted after 90 days.'></i>
+                                <Tooltip className="action-item-tooltip" id="expireTooltip" delayShow={0} place="top" effect="solid" />
                               </div>
                               <div className="text-white  ">
                                 <Dropdown
@@ -569,18 +546,16 @@ const Dashboard = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="table-responsive">
+                        <div className="table-responsive" style={{ overflowY: "auto", height: "500px" }}>
                           {filteredActionItems?.length > 0 ? (
                             <>
                               <table class="table text-white action-items-table">
                                 <thead>
                                   <tr>
                                     <th>Date/Time</th>
-                                    <th>Property</th>
-                                    <th>Guest</th>
+                                    <th>Property/Guest</th>
                                     <th>Action Item</th>
-                                    <th>Review</th>
-                                    <th>Complete</th>
+                                    <th>View/Done</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -594,46 +569,25 @@ const Dashboard = () => {
                                     };
                                     return (
                                       <tr key={itemId}>
-                                        <td>{formatDateTime(createdAt)}</td>
-                                        <td>{property}</td>
+                                        <td style={{ whiteSpace: 'pre-line' }}>{formatDateTime(createdAt)}</td> {/* whiteSpace: 'pre-line' preserves the newline between date and time */}
                                         <td>
-                                          {actionItem?.guest_name !== null
-                                            ? actionItem?.guest_name
-                                            : "Empty"}
+                                          {property}
+                                          <br />
+                                          {actionItem?.guest_name !== null ? actionItem?.guest_name : ""}
                                         </td>
                                         <td className="">
-                                          <div
-                                            className=""
-                                            style={{
-                                              overflowY: "auto",
-                                              height: "50px",
-                                            }}
-                                          >
+                                          <div className="">
                                             {item?.item}
                                           </div>
                                         </td>
                                         <td className="text-center">
-                                          <span
-                                            className="mainCursor"
-                                            onClick={() => {
-                                              conversationCallOnDashboard(
-                                                actionItemSend
-                                              );
-                                            }}
+                                          <span className="mainCursor" style={{ marginRight: "10px" }}
+                                            onClick={() => { conversationCallOnDashboard( actionItemSend ); }}
                                           >
                                             <GoArrowUpRight className="text-white fs-6" />
                                           </span>
-                                        </td>
-                                        <td className="text-center">
-                                          <span
-                                            className="mainCursor"
-                                            onClick={() => {
-                                              compeletHndle(
-                                                item?.id,
-                                                property,
-                                                itemId
-                                              );
-                                            }}
+                                          <span className="mainCursor"
+                                            onClick={() => { compeletHndle( item?.id, property, itemId ); }}
                                           >
                                             <FaCircleCheck className="text-primary fs-6" />
                                           </span>
@@ -645,7 +599,7 @@ const Dashboard = () => {
                               </table>
                             </>
                           ) : (
-                            <span className="text-danger d-flex justify-content-center align-items-center">Empty</span>
+                            <span className="text-danger d-flex justify-content-center align-items-center">No Data</span>
                           )}
                         </div>
                       </div>

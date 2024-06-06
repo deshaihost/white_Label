@@ -36,9 +36,9 @@ const SchedulePopupModal = ({
   });
 
   const [checkedSchedule, setCheckedSchedule] = useState({
-    Future: false,
-    Past: false,
-    Current: false,
+    Future: true,
+    Past: true,
+    Current: true,
   });
 
   const [selectedDays, setSelectedDays] = useState([]);

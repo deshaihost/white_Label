@@ -33,9 +33,9 @@ const PopupModal = ({
   });
 
   const [checkedSchedule, setCheckedSchedule] = useState({
-    Future: false,
-    Past: false,
-    Current: false,
+    Future: true,
+    Past: true,
+    Current: true,
   });
 
   //  format date to dd/mm/yyyy format
