@@ -42,19 +42,18 @@ const Dashboard = () => {
 
   // Flatten and sort action items by creation time
   const sortedActionItems = Object.keys(actionItems)
-    .flatMap((property) =>
-      Object.keys(actionItems[property]).map((itemId) => {
-        const item = actionItems[property][itemId];
-        return {
-          ...item,
-          property,
-          itemId,
-          createdAt: item?.items[0]?.created_at,
-          actionItems,
-        };
-      })
-    )
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  .flatMap((property) =>
+    Object.keys(actionItems[property]).flatMap((conversationID) => {
+      const conversation_data = actionItems[property][conversationID];
+      return conversation_data.items.map((item) => ({
+        ...item,
+        guest_name: conversation_data.guest_name,
+        property,
+        conversationID,
+      }));
+    })
+  )
+  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
   // Binary search function. This lets us do below calculation for recently created action items more efficiently
   const binarySearch = (arr, targetDate) => {
@@ -63,7 +62,7 @@ const Dashboard = () => {
 
     while (left <= right) {
       const mid = Math.floor((left + right) / 2);
-      const midDate = new Date(arr[mid].createdAt);
+      const midDate = new Date(arr[mid].created_at);
 
       if (midDate > targetDate) {
         left = mid + 1;
@@ -90,50 +89,26 @@ const Dashboard = () => {
   );
   
   // new code
-  const [searchTerm, setSearchTerm] = useState("Incomplete");
-  const [searchPlaceHold, setSearchPlaceHold] = useState("");
-  const handleSearchChange = (event, type) => {
-    if (type === "propertySearch") {
-      setSearchTerm("Incomplete");
-      setSearchPlaceHold(event);
-    } else {
-      setSearchTerm(event);
-      // setSearchPlaceHold("");
-    }
-  };
+  const [statusFilterVal, setStatusFilterVal] = useState("Incomplete");
+  const [propertySearchVal, setPropertySearchVal] = useState("");
 
-  // Check if an action item was created within the last X days, by passing its created_at here
-  function isWithinLastDays(date, days) {
-    const ONE_DAY_IN_MS = 86400000; // 24 * 60 * 60 * 1000
-    const now = Date.now();
-    const pastDate = new Date(date);
-    return now - pastDate <= days * ONE_DAY_IN_MS;
-  }
-
+  // Get only the action items that match the selected status filter (there must be exactly one active status filter selection)
   const filteredActionItems = sortedActionItems?.filter((actionItem) => {
-    const { property, guest_name, items } = actionItem;
-    const searchTermLower = searchTerm.toLowerCase();
-    // Check if property or guest_name matches the search term
-    const propertyMatch = property.toLowerCase().includes(searchTermLower);
-    const guestNameMatch = guest_name?.toLowerCase().includes(searchTermLower);
-    // Check if any item's status matches the search term
-    const statusMatch = items.some((item) =>
-      item.status.toLowerCase().includes(searchTermLower)
+    const { property, guest_name, status } = actionItem;
+    const statusFilterValLower = statusFilterVal.toLowerCase();
+    return (
+      property.toLowerCase().includes(statusFilterValLower) ||
+      guest_name?.toLowerCase().includes(statusFilterValLower) ||
+      status.toLowerCase().includes(statusFilterValLower)
     );
-    return propertyMatch || guestNameMatch || statusMatch;
   });
 
-  const filteredSearchProperty = filteredActionItems?.filter((SearchPrty) => {
-    const { property, guest_name, items } = SearchPrty;
-    const searchTermLower = searchPlaceHold.toLowerCase();
-    // Check if property or guest_name matches the search term
-    const propertyMatch = property.toLowerCase().includes(searchTermLower);
-    const guestNameMatch = guest_name?.toLowerCase().includes(searchTermLower);
-    // Check if any item's status matches the search term
-    const statusMatch = items.some((item) =>
-      item.status.toLowerCase().includes(searchTermLower)
+  // After above filtering, get only the action items that match the selected property filter (if any is applied)
+  const filteredSearchProperty = filteredActionItems?.filter((actionItem) => {
+    return (
+      propertySearchVal === "" ||
+      actionItem.property.toLowerCase().includes(propertySearchVal.toLowerCase())
     );
-    return propertyMatch || guestNameMatch || statusMatch;
   });
 
   // search bar
@@ -151,7 +126,7 @@ const Dashboard = () => {
     return (
       <span className="search-btn">
         <i class="bi bi-search me-2 text-white"></i>
-        {searchPlaceHold !== "" ? searchPlaceHold : "Search Property"}
+        {propertySearchVal !== "" ? propertySearchVal : "Search Property"}
       </span>
     );
   };
@@ -207,10 +182,10 @@ const Dashboard = () => {
   const completeActionsItemMessage =
     store?.completeActionsItemsReducer?.completeActionsItems?.data?.message;
 
-  const compeletHndle = (itemId, propyName, convrtionId) => {
+  const compeletHndle = (conversationID, propyName, convrtionId) => {
     dispatch(
       putCompleteActionItemActions({
-        action_item_id: itemId,
+        action_item_id: conversationID,
         property_name: propyName,
         conversation_id: convrtionId,
       })
@@ -264,8 +239,8 @@ const Dashboard = () => {
     useState("");
 
   const conversationCallOnDashboard = (item) => {
-    const { propertyName, itemId } = item;
-    setConverSationId(itemId);
+    const { propertyName, conversationID } = item;
+    setConverSationId(conversationID);
     setPropertyNameForConversationData(propertyName);
     dispatch(PropertyGetConversationsActions({ propertyName: propertyName }));
   };
@@ -456,9 +431,9 @@ const Dashboard = () => {
                                   type="radio"
                                   name="flexRadioDefault"
                                   id="flexRadioDefault2"
-                                  checked={searchTerm === "Incomplete"}
+                                  checked={statusFilterVal === "Incomplete"}
                                   onClick={() => {
-                                    handleSearchChange("Incomplete");
+                                    setStatusFilterVal("Incomplete");
                                   }}
                                 />
                                 <label
@@ -474,9 +449,9 @@ const Dashboard = () => {
                                   type="radio"
                                   name="flexRadioDefault"
                                   id="flexRadioDefault1"
-                                  checked={searchTerm === "Completed"}
+                                  checked={statusFilterVal === "Completed"}
                                   onClick={() => {
-                                    handleSearchChange("Completed");
+                                    setStatusFilterVal("Completed");
                                   }}
                                 />
                                 <label
@@ -492,9 +467,9 @@ const Dashboard = () => {
                                   type="radio"
                                   name="flexRadioDefault"
                                   id="flexRadioDefault3"
-                                  checked={searchTerm === "Expired"}
+                                  checked={statusFilterVal === "Expired"}
                                   onClick={() => {
-                                    handleSearchChange("Expired");
+                                    setStatusFilterVal("Expired");
                                   }}
                                 />
                                 <label
@@ -518,12 +493,9 @@ const Dashboard = () => {
                               </div>
                               <div className="text-white  ">
                                 <Dropdown
-                                  value={searchPlaceHold}
+                                  value={propertySearchVal}
                                   onChange={(e) =>
-                                    handleSearchChange(
-                                      e.value?.name,
-                                      "propertySearch"
-                                    )
+                                    setPropertySearchVal( e.value?.name )
                                   }
                                   options={allPropertyName.map(
                                     (properties) => ({
@@ -537,12 +509,12 @@ const Dashboard = () => {
                                   itemTemplate={OptionTemplate}
                                   className="w-full md:w-14rem search rounded-pill border px-2 fs-14 "
                                 />
-                                {searchPlaceHold !== "" && (
+                                {propertySearchVal !== "" && (
                                   <i
                                     class="bi bi-x-circle ms-2"
                                     onClick={() => {
-                                      setSearchPlaceHold("");
-                                      setSearchTerm("Incomplete");
+                                      setPropertySearchVal("");
+                                      setStatusFilterVal("Incomplete");
                                     }}
                                   ></i>
                                 )}
@@ -563,57 +535,35 @@ const Dashboard = () => {
                                     <th>Date/Time</th>
                                     <th>Property/Guest</th>
                                     <th>Action Item</th>
-                                    <th>status</th>
                                     <th>View/Done</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   {filteredSearchProperty?.map((actionItem) => {
-                                    const { createdAt, property, itemId } =
-                                      actionItem;
-                                    const item = actionItem.items[0];
-                                    let actionItemSend = {
-                                      propertyName: property,
-                                      itemId,
-                                    };
+                                    const { id, created_at, property, conversationID, item } = actionItem;
+                                    let actionItemSend = { propertyName: property, conversationID };
                                     return (
-                                      <tr key={itemId}>
-                                        <td style={{ whiteSpace: "pre-line" }}>
-                                          {formatDateTime(createdAt)}
-                                        </td>{" "}
-                                        {/* whiteSpace: 'pre-line' preserves the newline between date and time */}
+                                      <tr key={id}>
+                                        <td style={{ whiteSpace: "pre-line" }}> {/* whiteSpace: 'pre-line' preserves the newline between date and time */}
+                                          {formatDateTime(created_at)}
+                                        </td>
                                         <td>
                                           {property}
                                           <br />
-                                          {actionItem?.guest_name !== null
-                                            ? actionItem?.guest_name
-                                            : ""}
+                                          {actionItem?.guest_name !== null ? actionItem?.guest_name : ""}
                                         </td>
                                         <td className="">
-                                          <div className="">{item?.item}</div>
+                                          <div className="">{item}</div>
                                         </td>
-                                        <td>{item?.status}</td>
                                         <td className="text-center">
-                                          <span
-                                            className="mainCursor"
-                                            style={{ marginRight: "10px" }}
-                                            onClick={() => {
-                                              conversationCallOnDashboard(
-                                                actionItemSend
-                                              );
-                                            }}
+                                          <span className="mainCursor" style={{ marginRight: "10px" }}
+                                            onClick={() => { conversationCallOnDashboard( actionItemSend ); }}
                                           >
                                             <GoArrowUpRight className="text-white fs-6" />
                                           </span>
                                           <span
                                             className="mainCursor"
-                                            onClick={() => {
-                                              compeletHndle(
-                                                item?.id,
-                                                property,
-                                                itemId
-                                              );
-                                            }}
+                                            onClick={() => { compeletHndle( id, property, conversationID ); }}
                                           >
                                             <FaCircleCheck className="text-primary fs-6" />
                                           </span>
