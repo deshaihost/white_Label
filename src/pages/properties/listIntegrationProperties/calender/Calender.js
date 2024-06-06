@@ -14,7 +14,8 @@ const Calendar = ({
   selectedProperty,
   scheduleData,
   date,
-  setScheduleChanged
+  setScheduleChanged,
+  currentMonth,
 }) => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
@@ -29,6 +30,81 @@ const Calendar = ({
 
   const specificDates = scheduleData?.specific_dates;
 
+  // new code
+  // current section
+  const parseMonthYearCurrent = (monthYearStr) => {
+    const [monthStr, yearStr] = monthYearStr.split(" ");
+    const month = new Date(Date.parse(monthStr + " 1, 2022")).getMonth(); // using 2022 to get the correct month index
+    const year = parseInt(yearStr, 10);
+    return { month, year };
+  };
+
+  // Filter function to check if a date is in the specified month and year
+  const filterMonthCurrent = (date, month, year) => {
+    const dateObj = new Date(date);
+    return dateObj.getMonth() === month && dateObj.getFullYear() === year;
+  };
+
+  const monthYearStrCurrent = currentMonth;
+  const { month, year } = parseMonthYearCurrent(monthYearStrCurrent);
+  const filteredDataCurrent = currentStageData?.filter(
+    (dateTime) =>
+      filterMonthCurrent(dateTime?.start, month, year) ||
+      filterMonthCurrent(dateTime?.end, month, year)
+  );
+  // current section
+
+  // future section
+  const parseMonthYearFuture = (monthYearStr) => {
+    const [monthStr, yearStr] = monthYearStr.split(" ");
+    const month = new Date(Date.parse(monthStr + " 1, 2022")).getMonth(); // using 2022 to get the correct month index
+    const year = parseInt(yearStr, 10);
+    return { month, year };
+  };
+
+  // Filter function to check if a date is in the specified month and year
+  const filterMonthFuture = (date, month, year) => {
+    const dateObj = new Date(date);
+    return dateObj.getMonth() === month && dateObj.getFullYear() === year;
+  };
+
+  const monthYearStrFuture = currentMonth;
+  const monthFuture = parseMonthYearFuture(monthYearStrFuture)?.month;
+  const yearFuture = parseMonthYearFuture(monthYearStrFuture)?.year;
+
+  const filteredDataCurrentFuture = futureStageData?.filter(
+    (dateTime) =>
+      filterMonthFuture(dateTime?.start, monthFuture, yearFuture) ||
+      filterMonthFuture(dateTime?.end, monthFuture, yearFuture)
+  );
+  // future section
+
+  // Inquiry/past section
+  const parseMonthYearInquire = (monthYearStr) => {
+    const [monthStr, yearStr] = monthYearStr.split(" ");
+    const month = new Date(Date.parse(monthStr + " 1, 2022")).getMonth(); // using 2022 to get the correct month index
+    const year = parseInt(yearStr, 10);
+    return { month, year };
+  };
+
+  // Filter function to check if a date is in the specified month and year
+  const filterMonthInquire = (date, month, year) => {
+    const dateObj = new Date(date);
+    return dateObj.getMonth() === month && dateObj.getFullYear() === year;
+  };
+
+  const monthYearStrInquire = currentMonth;
+  const monthInquire = parseMonthYearInquire(monthYearStrInquire)?.month;
+  const yearInquire = parseMonthYearInquire(monthYearStrInquire)?.year;
+
+  const filteredDataInquire = pastStageData?.filter(
+    (dateTime) =>
+      filterMonthInquire(dateTime?.start, monthInquire, yearInquire) ||
+      filterMonthInquire(dateTime?.end, monthInquire, yearInquire)
+  );
+  // Inquiry/past section
+
+  // new code
   const scheduledDate = structuredClone(specificDates);
 
   const responseObject = {
@@ -154,20 +230,25 @@ const Calendar = ({
     }
   };
 
-
   const handleSetCalendarAPI = async (dataToSend) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
-    const getSessionStorageData = JSON.parse( sessionStorage.getItem("hostBuddy_auth") );
+    const getSessionStorageData = JSON.parse(
+      sessionStorage.getItem("hostBuddy_auth")
+    );
     const token = getSessionStorageData?.token;
 
     try {
       if (token) {
         const config = {
-          headers: { Authorization:`Bearer ${token}`, "X-API-Key":API_KEY, }
+          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
         };
-        const response = await axios.put( `${baseUrl}/set_datetime_toggle`, dataToSend, config );
+        const response = await axios.put(
+          `${baseUrl}/set_datetime_toggle`,
+          dataToSend,
+          config
+        );
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
@@ -190,17 +271,24 @@ const Calendar = ({
 
   // Clear All Button
   const handleClearAll = () => {
-    const isConfirmed = window.confirm( "Do you want to clear all Status Events for this property? Weekly schedule will not be affected." );
-    if (!isConfirmed) { return; }
+    const isConfirmed = window.confirm(
+      "Do you want to clear all Status Events for this property? Weekly schedule will not be affected."
+    );
+    if (!isConfirmed) {
+      return;
+    }
     const blankScheduleObject = { properties: [selectedProperty], dates: {} };
     handleSetCalendarAPI(blankScheduleObject);
-    
   };
 
   // copy to all property onClickHandle
   const handleCopyToAll = () => {
-    const isConfirmed = window.confirm( "Do you want to Copy this specific date/time scheduling to all properties? Weekly schedules will not be copied or changed." );
-    if (!isConfirmed) { return; }
+    const isConfirmed = window.confirm(
+      "Do you want to Copy this specific date/time scheduling to all properties? Weekly schedules will not be copied or changed."
+    );
+    if (!isConfirmed) {
+      return;
+    }
     handleSetCalendarAPI(copyToAllResponseObject);
   };
 
@@ -218,20 +306,36 @@ const Calendar = ({
 
   // Remove Schedule click
   const handleScheduleDelete = (category, deleteData) => {
-    const isConfirmed = window.confirm( "Do you want to delete this Status Event?" );
-    if (!isConfirmed) { return; }
+    const isConfirmed = window.confirm(
+      "Do you want to delete this Status Event?"
+    );
+    if (!isConfirmed) {
+      return;
+    }
 
     if (category === "CURRENT") {
-      if (deleteData.status === "on") { responseObject.dates[category].on.splice(deleteData.startIndex, 2); }
-      if (deleteData.status === "off") { responseObject.dates[category].off.splice(deleteData.startIndex, 2); }
+      if (deleteData.status === "on") {
+        responseObject.dates[category].on.splice(deleteData.startIndex, 2);
+      }
+      if (deleteData.status === "off") {
+        responseObject.dates[category].off.splice(deleteData.startIndex, 2);
+      }
     }
     if (category === "FUTURE") {
-      if (deleteData.status === "on") { responseObject.dates[category].on.splice(deleteData.startIndex, 2); }
-      if (deleteData.status === "off") { responseObject.dates[category].off.splice(deleteData.startIndex, 2); }
+      if (deleteData.status === "on") {
+        responseObject.dates[category].on.splice(deleteData.startIndex, 2);
+      }
+      if (deleteData.status === "off") {
+        responseObject.dates[category].off.splice(deleteData.startIndex, 2);
+      }
     }
     if (category === "INQUIRY/PAST") {
-      if (deleteData.status === "on") { responseObject.dates[category].on.splice(deleteData.startIndex, 2); }
-      if (deleteData.status === "off") { responseObject.dates[category].off.splice(deleteData.startIndex, 2); }
+      if (deleteData.status === "on") {
+        responseObject.dates[category].on.splice(deleteData.startIndex, 2);
+      }
+      if (deleteData.status === "off") {
+        responseObject.dates[category].off.splice(deleteData.startIndex, 2);
+      }
     }
     handleSetCalendarAPI(responseObject);
   };
@@ -270,7 +374,11 @@ const Calendar = ({
 
   return (
     <>
-      {!scheduleData ? <div className="d-flex w-full justify-content-center"><Loader /></div> : (
+      {!scheduleData ? (
+        <div className="d-flex w-full justify-content-center">
+          <Loader />
+        </div>
+      ) : (
         <>
           <div className="calendar">
             <div className="container">
@@ -297,98 +405,173 @@ const Calendar = ({
                       <div className="main-calendar-card-data">
                         <div className="">
                           {/* Render ON schedules */}
-                          {category === "CURRENT" &&
-                            currentStageData?.map((dateTime, index) => (
-                              <div
-                                key={index}
-                                className="main-calendar-card-data-child"
-                              >
+                          {
+                            category === "CURRENT" &&
+                              filteredDataCurrent?.map((dateTime, index) => (
                                 <div
-                                  className={`main-calendar-data-status ${dateTime?.status === "on"
-                                    ? "bg-success"
-                                    : "bg-danger"
-                                    }`}
+                                  key={index}
+                                  className="main-calendar-card-data-child"
                                 >
-                                  {dateTime?.status}
-                                </div>
-                                <div className="d-flex gap-3 text-center py-4 ps-1">
-                                  <div className="w-50">
-                                    {formatDate(dateTime?.start)}
-                                  </div>
-                                  <div className="w-50">
-                                    {"- "} {formatDate(dateTime?.end)}
-                                  </div>
-                                </div>
-                                <div className="h-100 d-flex flex-column justify-content-between">
-                                  {/* No functionality, so remove the button
-                                  <div className="text-end">
-                                    <FiEdit />
-                                  </div>
-                                  */}
                                   <div
-                                    className="text-end"
-                                    onClick={() =>
-                                      handleScheduleDelete(category, dateTime)
-                                    }
+                                    className={`main-calendar-data-status ${
+                                      dateTime?.status === "on"
+                                        ? "bg-success"
+                                        : "bg-danger"
+                                    }`}
                                   >
-                                    <FaRegTrashCan />
+                                    {dateTime?.status}
+                                  </div>
+                                  <div className="d-flex gap-3 text-center py-4 ps-1">
+                                    <div className="w-50">
+                                      {formatDate(dateTime?.start)}
+                                    </div>
+                                    <div className="w-50">
+                                      {"- "} {formatDate(dateTime?.end)}
+                                    </div>
+                                  </div>
+                                  <div className="h-100 d-flex flex-column justify-content-between">
+                                    <div
+                                      className="text-end"
+                                      onClick={() =>
+                                        handleScheduleDelete(category, dateTime)
+                                      }
+                                    >
+                                      <FaRegTrashCan />
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))
+                            // filteredData?.map((dateTime, index) => (
+                            //   <div
+                            //     key={index}
+                            //     className="main-calendar-card-data-child"
+                            //   >
+                            //     <div
+                            //       className={`main-calendar-data-status ${
+                            //         dateTime?.status === "on"
+                            //           ? "bg-success"
+                            //           : "bg-danger"
+                            //       }`}
+                            //     >
+                            //       {dateTime?.status}
+                            //     </div>
+                            //     <div className="d-flex gap-3 text-center py-4 ps-1">
+                            //       <div className="w-50">
+                            //         {formatDate(dateTime?.start)}
+                            //       </div>
+                            //       <div className="w-50">
+                            //         {"- "} {formatDate(dateTime?.end)}
+                            //       </div>
+                            //     </div>
+                            //     <div className="h-100 d-flex flex-column justify-content-between">
+                            //       <div
+                            //         className="text-end"
+                            //         onClick={() =>
+                            //           handleScheduleDelete(category, dateTime)
+                            //         }
+                            //       >
+                            //         <FaRegTrashCan />
+                            //       </div>
+                            //     </div>
+                            //   </div>
+                            // ))
+                            // currentStageData?.map((dateTime, index) => (
+                            //   <div
+                            //     key={index}
+                            //     className="main-calendar-card-data-child"
+                            //   >
+                            //     <div
+                            //       className={`main-calendar-data-status ${
+                            //         dateTime?.status === "on"
+                            //           ? "bg-success"
+                            //           : "bg-danger"
+                            //       }`}
+                            //     >
+                            //       {dateTime?.status}
+                            //     </div>
+                            //     <div className="d-flex gap-3 text-center py-4 ps-1">
+                            //       <div className="w-50">
+                            //         {formatDate(dateTime?.start)}
+                            //       </div>
+                            //       <div className="w-50">
+                            //         {"- "} {formatDate(dateTime?.end)}
+                            //       </div>
+                            //     </div>
+                            //     <div className="h-100 d-flex flex-column justify-content-between">
+                            //       {/* No functionality, so remove the button
+                            //       <div className="text-end">
+                            //         <FiEdit />
+                            //       </div>
+                            //       */}
+                            //       <div
+                            //         className="text-end"
+                            //         onClick={() =>
+                            //           handleScheduleDelete(category, dateTime)
+                            //         }
+                            //       >
+                            //         <FaRegTrashCan />
+                            //       </div>
+                            //     </div>
+                            //   </div>
+                            // ))
+                          }
 
                           {category === "FUTURE" &&
-                            futureStageData?.map((dateTime, index) => (
-                              <div
-                                key={index}
-                                className="main-calendar-card-data-child"
-                              >
+                            filteredDataCurrentFuture?.map(
+                              (dateTime, index) => (
                                 <div
-                                  className={`main-calendar-data-status ${dateTime?.status === "on"
-                                    ? "bg-success"
-                                    : "bg-danger"
-                                    }`}
+                                  key={index}
+                                  className="main-calendar-card-data-child"
                                 >
-                                  {dateTime?.status}
-                                </div>
-                                <div className="d-flex gap-3 text-center py-4 ps-1">
-                                  <div className="w-50">
-                                    {formatDate(dateTime?.start)}
+                                  <div
+                                    className={`main-calendar-data-status ${
+                                      dateTime?.status === "on"
+                                        ? "bg-success"
+                                        : "bg-danger"
+                                    }`}
+                                  >
+                                    {dateTime?.status}
                                   </div>
-                                  {/* {specificDates[category].on[index + 1] && // Check if there's a corresponding end time */}
-                                  <div className="w-50">
-                                    {"- "} {formatDate(dateTime?.end)}
+                                  <div className="d-flex gap-3 text-center py-4 ps-1">
+                                    <div className="w-50">
+                                      {formatDate(dateTime?.start)}
+                                    </div>
+                                    {/* {specificDates[category].on[index + 1] && // Check if there's a corresponding end time */}
+                                    <div className="w-50">
+                                      {"- "} {formatDate(dateTime?.end)}
+                                    </div>
+                                    {/* } */}
                                   </div>
-                                  {/* } */}
-                                </div>
-                                <div className="h-100 d-flex flex-column justify-content-between">
-                                  {/* No functionality, so remove the button
+                                  <div className="h-100 d-flex flex-column justify-content-between">
+                                    {/* No functionality, so remove the button
                                   <div>
                                     <FiEdit />
                                   </div>
                                   */}
-                                  <div
-                                    onClick={() =>
-                                      handleScheduleDelete(category, dateTime)
-                                    }
-                                  >
-                                    <FaRegTrashCan />
+                                    <div
+                                      onClick={() =>
+                                        handleScheduleDelete(category, dateTime)
+                                      }
+                                    >
+                                      <FaRegTrashCan />
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
+                              )
+                            )}
 
                           {category === "INQUIRY/PAST" &&
-                            pastStageData?.map((dateTime, index) => (
+                            filteredDataInquire?.map((dateTime, index) => (
                               <div
                                 key={index}
                                 className="main-calendar-card-data-child"
                               >
                                 <div
-                                  className={`main-calendar-data-status ${dateTime?.status === "on"
-                                    ? "bg-success"
-                                    : "bg-danger"
-                                    }`}
+                                  className={`main-calendar-data-status ${
+                                    dateTime?.status === "on"
+                                      ? "bg-success"
+                                      : "bg-danger"
+                                  }`}
                                 >
                                   {dateTime?.status}
                                 </div>
@@ -424,14 +607,24 @@ const Calendar = ({
               </div>
             </div>
             <div class="row w-full mt-5 d-flex justify-content-center">
-              <div className="d-flex gap-3" style={{width: '80%'}}>
-                <button className="btn btn-primary form-control" style={{color:'rgb(220, 0, 0)'}} onClick={handleClearAll}>
+              <div className="d-flex gap-3" style={{ width: "80%" }}>
+                <button
+                  className="btn btn-primary form-control"
+                  style={{ color: "rgb(220, 0, 0)" }}
+                  onClick={handleClearAll}
+                >
                   Clear All
                 </button>
-                <button className="btn btn-primary form-control" onClick={handleCopyToAll}>
+                <button
+                  className="btn btn-primary form-control"
+                  onClick={handleCopyToAll}
+                >
                   Copy to All Properties
                 </button>
-                <button className="btn btn-primary form-control" onClick={handleCellClick}>
+                <button
+                  className="btn btn-primary form-control"
+                  onClick={handleCellClick}
+                >
                   Add
                 </button>
               </div>

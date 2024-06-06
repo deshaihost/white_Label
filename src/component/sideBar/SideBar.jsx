@@ -36,7 +36,7 @@ const SideBar = () => {
   };
 
   return (
-    <div className="navigation-links">
+    <div className="navigation-links custom-nav-links">
       <ul>
         <li>
           <Link

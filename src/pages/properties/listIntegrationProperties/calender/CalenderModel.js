@@ -7,11 +7,20 @@ import ScheduleCalender from "../schedule/ScheduleCalender";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 
-const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allProperties, setScheduleChanged }) => {
-  const [monthButton, setMonthButton] = useState( false);
+const CalenderModel = ({
+  selectedProperty,
+  showCalender,
+  setShowCalender,
+  allProperties,
+  setScheduleChanged,
+}) => {
+  const [monthButton, setMonthButton] = useState(false);
   const [scheduleButton, setscheduleButton] = useState(true);
   const [date, setDate] = useState(new Date());
 
+  const currentMonth = `${date.toLocaleString("default", {
+    month: "long",
+  })} ${date.getFullYear()}`;
   const [calendarSchedule, setCalendarSchedule] = useState(null);
   const [timeZone, setTimeZone] = useState(null);
 
@@ -67,13 +76,12 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
 
         setCalendarSchedule(() => response?.data?.schedules);
         setTimeZone(() => response?.data?.time_zone);
-
       } else {
         alert("No Token");
       }
     } catch (error) {
       console.log(error);
-      setCalendarSchedule(() => { });
+      setCalendarSchedule(() => {});
     }
   };
 
@@ -102,14 +110,18 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
               >
                 <div className="d-flex justify-between">
                   <Button
-                    className={`bg-none border-0 shadow-none fs-3 ${scheduleButton && 'invisible'}`}
+                    className={`bg-none border-0 shadow-none fs-3 ${
+                      scheduleButton && "invisible"
+                    }`}
                     onClick={handlePrevMonth}
                   >
                     <FiChevronLeft />
                   </Button>
                   <Button
                     onClick={handleNextMonth}
-                    className={`bg-none border-0 shadow-none fs-3 ${scheduleButton && 'invisible'}`}
+                    className={`bg-none border-0 shadow-none fs-3 ${
+                      scheduleButton && "invisible"
+                    }`}
                   >
                     <FiChevronRight />
                   </Button>
@@ -125,24 +137,25 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
                 {scheduleButton && <h3>Schedule</h3>}
 
                 <div className="d-flex ">
-                  
                   <button
                     type="button"
                     onClick={() => handleButtonToggle("schedule")}
-                    className={`shadow-none btn ${scheduleButton
-                      ? "btn-primary"
-                      : "btn-tranparent border border-primary text-light"
-                      } rounded-0`}
+                    className={`shadow-none btn ${
+                      scheduleButton
+                        ? "btn-primary"
+                        : "btn-tranparent border border-primary text-light"
+                    } rounded-0`}
                   >
                     Schedule
                   </button>
                   <button
                     type="button"
                     onClick={() => handleButtonToggle("month")}
-                    className={`shadow-none btn ${monthButton
-                      ? "btn-primary"
-                      : "btn-tranparent border border-primary text-light"
-                      } rounded-0`}
+                    className={`shadow-none btn ${
+                      monthButton
+                        ? "btn-primary"
+                        : "btn-tranparent border border-primary text-light"
+                    } rounded-0`}
                   >
                     Month
                   </button>
@@ -151,14 +164,41 @@ const CalenderModel = ({ selectedProperty, showCalender, setShowCalender, allPro
             </div>
 
             {monthButton && (
-              <Calendar getScheduleAPI={calenderSchedule} allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} date={date} scheduleData={calendarSchedule} setScheduleChanged={setScheduleChanged} />
+              <Calendar
+                getScheduleAPI={calenderSchedule}
+                allProperties={allProperties}
+                setShowCalender={setShowCalender}
+                selectedProperty={selectedProperty}
+                date={date}
+                scheduleData={calendarSchedule}
+                setScheduleChanged={setScheduleChanged}
+                currentMonth={currentMonth}
+              />
             )}
 
-            {scheduleButton && <ScheduleCalender getScheduleAPI={calenderSchedule} allProperties={allProperties} setShowCalender={setShowCalender} selectedProperty={selectedProperty} scheduleData={calendarSchedule} setScheduleChanged={setScheduleChanged} />}
+            {scheduleButton && (
+              <ScheduleCalender
+                getScheduleAPI={calenderSchedule}
+                allProperties={allProperties}
+                setShowCalender={setShowCalender}
+                selectedProperty={selectedProperty}
+                scheduleData={calendarSchedule}
+                setScheduleChanged={setScheduleChanged}
+              />
+            )}
           </div>
           {timeZone ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
-              <p style={{ color: 'rgb(128, 128, 128)', marginTop: '0px', marginBottom: '40px', textAlign: 'center' }}>Property time zone: {timeZone}</p>
+              <p
+                style={{
+                  color: "rgb(128, 128, 128)",
+                  marginTop: "0px",
+                  marginBottom: "40px",
+                  textAlign: "center",
+                }}
+              >
+                Property time zone: {timeZone}
+              </p>
               {/* <p style={{ color: 'rgb(128, 128, 128)', marginTop: '0px', marginBottom: '40px', textAlign: 'center', fontSize: '0.9em' }}>To update time zone, edit the property's address.</p> */}
             </div>
           ) : null}

@@ -47,8 +47,6 @@ function* loginFunction(data) {
       });
     }
   } catch (error) {
-    console.log(error, "errorerror");
-
     yield put({
       type: LoginActionTypes.LOGIN_ERROR,
       payload: error,

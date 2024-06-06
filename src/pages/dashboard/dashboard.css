@@ -82,7 +82,7 @@
 }
 
 .account-container .account-content > div:not(:last-child) {
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 
 .account-container .account-content .property-status {
@@ -207,19 +207,27 @@
   line-height: 150%;
   width: 100%;
 }
-.action-items-table th, .action-items-table tr, .action-items-table td {
+.action-items-table th,
+.action-items-table tr,
+.action-items-table td {
   border: 0px !important;
   font-size: 16px;
   font-weight: 500 !important;
 }
-.action-items-table thead th{
+.action-items-table thead th {
   font-size: 14px !important;
   font-weight: 500 !important;
   text-transform: uppercase;
+  color: #b5b2b2;
+}
+.action-items-table td {
+  font-size: 13px !important;
+  color: #cdcdcd;
 }
 .search {
-  border: 1px solid #2C389E !important;
+  border: 1px solid #2c389e !important;
   color: #555454;
+  padding: 2px;
 }
 .p-dropdown-panel {
   background: #fff;
@@ -238,6 +246,16 @@
 .p-dropdown-filter-container svg {
   position: absolute;
   right: 5px;
+}
+svg.p-icon.p-dropdown-trigger-icon.p-clickable {
+  display: none;
+}
+.icon-style {
+  padding: 6px 9px 6px 9px;
+  background: rgba(20, 110, 245, 0.2);
+  color: rgb(20, 110, 245);
+  border-radius: 8px;
+  font-size: large;
 }
 @media only screen and (max-width: 1199px) {
   .account-container {
