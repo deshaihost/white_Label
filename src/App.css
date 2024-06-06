@@ -39,6 +39,9 @@ a {
   transition: 0.4s ease-in-out;
   text-decoration: none;
 }
+.fs-14 {
+  font-size: 14px;
+}
 
 .heading h1, .heading h2 {
   color: #fff;
