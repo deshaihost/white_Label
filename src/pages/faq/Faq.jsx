@@ -84,7 +84,7 @@ function Faqs() {
                         <Accordion.Item eventKey="7">
                             <Accordion.Header>I left HostBuddy online for a long time and would love to have a high-level overview of what I missed while I was away!</Accordion.Header>
                             <Accordion.Body>
-                            In your dashboard's “Insights” page, you can view a list of conversations from when you were away. HostBuddy will indicate which conversations may need your attention and which ones were resolved. This feature helps ensure that you can jump right back in to assist guests with reservation changes, required maintenance, and other items that require your intervention.
+                            In your dashboard's “Transcripts” page, you can view a list of conversations from when you were away. HostBuddy will indicate which conversations may need your attention and which ones were resolved. This feature helps ensure that you can jump right back in to assist guests with reservation changes, required maintenance, and other items that require your intervention.
                             </Accordion.Body>
                         </Accordion.Item>
 

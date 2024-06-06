@@ -129,7 +129,7 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/property-insight/:id" element={
+        <Route path="/property-insight" element={
             <ProtectedRoute>
               <PropertyInsight />
             </ProtectedRoute>

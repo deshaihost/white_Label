@@ -56,10 +56,10 @@ const SideBar = () => {
         </li>
         <li>
           <Link
-            to="/property-insight/:id"
-            className={findlocation === "/property-insight/:id" ? "active" : ""}
+            to="/property-insight"
+            className={findlocation === "/property-insight" ? "active" : ""}
           >
-            Insights
+            Transcripts
           </Link>
         </li>
         <li>

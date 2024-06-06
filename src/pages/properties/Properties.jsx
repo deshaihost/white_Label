@@ -231,11 +231,11 @@ const Properties = () => {
                         {`Connected to ${Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)}`}
                       </p>
                       <div className="IntegrationsOptions" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                        <button style={{ fontSize:'0.9em', marginRight:'0px', color: 'blue', background: 'none', border: 'none' }} onClick={() => handleModelOpen("importPropertiesOpen")}>
+                        <button style={{ fontSize:'0.9em', marginRight: '0px', color: '#146EF5', background: 'none', border: 'none' }} onClick={() => handleModelOpen("importPropertiesOpen")}>
                           Import Properties
                         </button>
                         <p style={{ fontSize: '0.9em', color: 'white', marginLeft:'20px', marginRight:'20px' }}>|</p>
-                        <button style={{ fontSize: '0.9em', marginLeft:'0px', color: 'blue', background: 'none', border: 'none' }} onClick={() => handleModelOpen("disconnectIntegrationOpen")}>
+                        <button style={{ fontSize: '0.9em', marginLeft: '0px', color: '#146EF5', background: 'none', border: 'none' }} onClick={() => handleModelOpen("disconnectIntegrationOpen")}>
                           Disconnect
                         </button>
                       </div>

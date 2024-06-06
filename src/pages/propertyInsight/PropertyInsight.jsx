@@ -10,35 +10,20 @@ import {
 import { useSelectorUseDispatch } from "../../helper/Authorized";
 import { PropertyGetConversationsActions } from "../../redux/actions";
 import  {  FullScreenLoader } from "../../helper/Loader";
-import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 const PropertyInsight = () => {
   const { store, dispatch } = useSelectorUseDispatch();
-  const statisticsGetNameByProperty =
-    store?.getPropertyByNameReducer?.getPropertybyName?.data?.property
-      ?.statistics?.num_conversations;
-  const chatBoxUrl = useParams();
-  const completeReviewName = chatBoxUrl?.id;
-  // Check if completeReviewName is ":id"
-  const getCompleteReviewNameUrl =
-    completeReviewName === ":id"
-      ? completeReviewName
-      : JSON.parse(completeReviewName);
-  // If completeReviewName is ":id", set propertyName to empty string, else extract propertyName
-  const propertyName =
-    completeReviewName === ":id" ? "" : getCompleteReviewNameUrl?.propertyName;
-  // const propertyConversationId =
-  //   completeReviewName === ":id" ? "" : getCompleteReviewNameUrl?.itemId;
+  const statisticsGetNameByProperty = store?.getPropertyByNameReducer?.getPropertybyName?.data?.property?.statistics?.num_conversations;
+  const propertyName = ""
   const propertiesConversationGetData = store?.propertyGetConversationReducer?.propertyGetConversation?.data?.conversations;
   const propertiesConversationLoading = store?.propertyGetConversationReducer?.loading;
 
-  const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const userProperties = store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // always use this obj as user properties list, as the "properties" field above is deprecated
+  const userProperties = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
   const userpertieslistName = userProperties ? Object.keys(userProperties)[0] : undefined; // grab any property name from the property_data obj, to use as default
 
-  const [propertySelectName, setPropertySelectName] = useState(completeReviewName === ":id" ? "" : propertyName);
-  const [propertySelectNameView, setPropertySelectNameView] = useState(completeReviewName === ":id" ? "" : propertyName);
+  const [propertySelectName, setPropertySelectName] = useState("");
+  const [propertySelectNameView, setPropertySelectNameView] = useState("");
 
   useEffect(() => {
     dispatch(getUserDataActions());
@@ -80,7 +65,7 @@ const PropertyInsight = () => {
   return (
     <>
       <Helmet>
-        <title>Insights - HostBuddy AI</title>
+        <title>Transcripts - HostBuddy AI</title>
       </Helmet>
       ;
       <div className="account-main">
@@ -96,7 +81,7 @@ const PropertyInsight = () => {
             <div className="col-lg-8">
               <div class="account-container">
                 <div class="account_heading account_heading_white">
-                  <h3 className="text-white">Insights and Records</h3>
+                  <h3 className="text-white">Transcripts</h3>
                   <div class="property_select">
                     {userProperties && Object.keys(userProperties).length > 0 ? (
                       <select id="properies_insight" className="" onChange={(e) => { setPropertySelectName(e.target.value); }}>

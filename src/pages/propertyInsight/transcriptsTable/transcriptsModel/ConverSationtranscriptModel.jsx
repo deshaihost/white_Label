@@ -2,63 +2,58 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 
 const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
-  const { subject, success_rating, channel, conversation_start_time } = prntData
+  let { subject, success_rating, channel, conversation_start_time, property_name } = prntData
     ? prntData
     : [];
+  if (channel === "hostbuddy") { channel = "HostBuddy Chat Link"; }
   const messageData = prntData["messages"];
+
+  function formatDateTime(dateTimeString, showYear=true) {
+    const date = new Date(dateTimeString);
+    const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "pm" : "am";
+
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 hour should be 12
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+
+    if (showYear) { return `${month} ${day}, ${year} ${hours}:${minutes}${ampm}`; }
+    else { return `${month} ${day}, ${hours}:${minutes}${ampm}`; }
+  }
 
   return (
     <div>
-      <Modal
-        show={show}
-        size="lg"
-        onHide={() => handleClose("conversationModelClose")}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
+      <Modal show={show} size="lg" onHide={() => handleClose("conversationModelClose")} aria-labelledby="contained-modal-title-vcenter" centered >
         <Modal.Header closeButton>
           <h5 className="modal-title">Conversation transcript</h5>
         </Modal.Header>
         <Modal.Body>
           <div className="row text-white">
             <div className="col-12">
-              <div className="row ">
-                <div className="col-8">
-                  <div>
-                    <span>Subject</span>:{" "}
-                    <span>
-                      {subject !== undefined ? (
-                        subject
-                      ) : (
-                        <span className="text-danger">TBD</span>
-                      )}
-                    </span>
-                  </div>
-                  <div>
-                    <span>Start Time</span>:{" "}
-                    <span>{conversation_start_time}</span>
-                  </div>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
+              {property_name && <span style={{ margin: '0 8px' }}>{property_name}</span>}
+              {(property_name && subject) && <span style={{ margin: '0 8px' }}>-</span>}
+              {subject && <span style={{ margin: '0 8px' }}>{subject}</span>}
+          </div>
+              <div className="d-flex justify-content-between">
+                <div className="flex-grow-1 text-start" style={{ margin: '0 10px' }}>
+                    <div>
+                        <span>Start Time</span>:{" "}
+                        <span style={{ color: 'rgb(140, 140, 140)' }}>{formatDateTime(conversation_start_time)}</span>
+                    </div>
                 </div>
-                <div className="col-4">
-                  <div>
-                    <span>Rating</span>:{" "}
-                    <span className={
-                      success_rating === "SUCCESSFUL" ? "text-success" :
-                      success_rating === "UNSUCCESSFUL" ? "text-danger" :
-                      "text-white"
-                    }>
-                      {success_rating !== undefined ? (
-                        success_rating
-                      ) : (
-                        <span className="text-danger">TBD</span>
-                      )}
-                    </span>
-                  </div>
-                  <div>
-                    <span>Channel</span>: <span>{channel}</span>
-                  </div>
+                <div className="flex-grow-1 text-end" style={{ margin: '0 10px' }}>
+                    <div>
+                        <span>Source</span>: <span style={{ color: 'rgb(140, 140, 140)' }}>{channel}</span>
+                    </div>
                 </div>
-              </div>
+            </div>
 
               <hr className="headerDivider" />
 
@@ -68,7 +63,7 @@ const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
                     <>
                       <div className="col-3">
                         <div>{messg?.sender ? messg.sender.toUpperCase() : ''}</div>
-                        <div>{messg?.time}</div>
+                        <div style={{ whiteSpace: 'pre-line', color: 'rgb(140, 140, 140)' }}>{formatDateTime(messg?.time, false)}</div>
                       </div>
                       <div className="col-9">
                         <div style={{ whiteSpace: 'pre-wrap' }}>{messg?.text}</div>

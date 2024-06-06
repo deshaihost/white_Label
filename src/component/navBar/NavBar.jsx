@@ -107,8 +107,8 @@ const NavBar = () => {
                   <NavLink exact to="/properties" className="nav-link" activeClassName="active">
                     Properties
                   </NavLink>
-                  <NavLink exact to="/property-insight/:id" className="nav-link" activeClassName="active">
-                    Insights
+                  <NavLink exact to="/property-insight" className="nav-link" activeClassName="active">
+                    Transcripts
                   </NavLink>
                   <NavLink exact to="/account" className="nav-link" activeClassName="active">
                     Account

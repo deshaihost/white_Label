@@ -76,6 +76,7 @@ const SuccessTotalBox = ({
           </div>
         </div>
         */}
+        {/*
         <div className="col-md-6 mb-4">
           <div className="dash-box">
             <div>
@@ -89,6 +90,7 @@ const SuccessTotalBox = ({
             <p>Total conversations for this property</p>
           </div>
         </div>
+        */}
       </div>
     </div>
   );
