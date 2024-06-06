@@ -38,10 +38,10 @@ const SetupGuide = () => {
           <h2>My HostBuddy</h2>
         </div>
         <div className="row">
-          <div className="col-lg-4">
+          <div className="col-lg-2">
             <SideBar />
           </div>
-          <div className="col-lg-8">
+          <div className="col-lg-10">
             <div className="account-container">
               <div className="account_heading">
                 <h3>Setup Guide</h3>

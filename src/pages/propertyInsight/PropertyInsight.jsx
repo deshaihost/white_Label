@@ -75,10 +75,10 @@ const PropertyInsight = () => {
             {/* <p>Manage your profile here </p> */}
           </div>
           <div className="row">
-            <div className="col-lg-4">
+            <div className="col-lg-2">
               <SideBar />
             </div>
-            <div className="col-lg-8">
+            <div className="col-lg-10">
               <div class="account-container">
                 <div class="account_heading account_heading_white">
                   <h3 className="text-white">Transcripts</h3>
