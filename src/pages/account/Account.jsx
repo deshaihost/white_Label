@@ -167,10 +167,10 @@ const Account = () => {
           {/* <p>Manage your profile here </p> */}
         </div>
         <div className="row">
-          <div className="col-lg-4">
+          <div className="col-lg-4 col-xl-4  col-xxl-2">
             <SideBar />
           </div>
-          <div className="col-lg-8">
+          <div className="col-lg-8 col-xl-8 col-xxl-10">
             <div className="account-container">
               <div className="account-content">
               {billingPortalUrlLoading && (
