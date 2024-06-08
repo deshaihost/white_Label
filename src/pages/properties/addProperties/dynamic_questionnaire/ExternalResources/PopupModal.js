@@ -63,10 +63,22 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj, deleteR
                   {Object?.keys(supportingDocsObj)?.map((docName) => {
                     const hideForReservationGet = supportingDocsObj[docName]?.hide_for_reservations;
                     const textUrlGet = supportingDocsObj[docName]?.text_data_url;
+
+                    let docNameToDisplay, isPMSIntegrationData;
+                    if (docName.endsWith("_data") && !docName.includes(".")) { // this is PMS integration data, not a file. But show it with the files anyway, so user can see it's there and view it
+                      docNameToDisplay = docName.replace('_', ' ').toUpperCase() + " (Pulled from PMS integration)";
+                      isPMSIntegrationData = true;
+                    } else {
+                      docNameToDisplay = docName;
+                      isPMSIntegrationData = false;
+                    }
+                    console.log("docNameToDisplay", docNameToDisplay);
+                    console.log("isPMSIntegrationData", isPMSIntegrationData);
+
                     return (
                       <>
                         <tr>
-                          <td>{docName}</td>
+                          <td>{docNameToDisplay}</td>
 
                           <td className="text-center">
                             {hideForReservationGet?.join(", ")}
@@ -75,9 +87,11 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj, deleteR
                             <span className="mainCursor me-3" onClick={() => { openTextHandle(textUrlGet); }} >
                               <GoArrowUpRight className="text-white fs-6" />
                             </span>
-                            <span className="mainCursor" onClick={() => { documentRemoveHandle(docName); }} >
-                              <MdDeleteOutline />
-                            </span>
+                            {!isPMSIntegrationData &&
+                              <span className="mainCursor" onClick={() => { documentRemoveHandle(docName); }} >
+                                <MdDeleteOutline />
+                              </span>
+                            }
                           </td>
                         </tr>
                       </>

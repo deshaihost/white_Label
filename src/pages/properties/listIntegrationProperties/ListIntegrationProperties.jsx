@@ -19,6 +19,7 @@ import { CiCalendar } from "react-icons/ci";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import "react-circular-progressbar/dist/styles.css";
 import CalenderModel from "./calender/CalenderModel";
+import axios from "axios";
 
 const ListIntegrationProperties = () => {
   const navigate = useNavigate();
@@ -71,10 +72,8 @@ const ListIntegrationProperties = () => {
   const chatBoxGetByNameStatus =
     store?.getPropertyByNameReducer?.getPropertybyName?.status;
 
-  const [model, setModel] = useState({
-    webPageUrl: false,
-    supportingDocuments: false,
-  });
+  const [model, setModel] = useState({ webPageUrl: false, supportingDocuments: false });
+  const [regenerateApiLoading, setRegenerateApiLoading] = useState(false);
   let webPageUrlOpen = "webPageUrlOpen";
   let supportingDocumentsOpen = "supportingDocumentsOpen";
   let webPageUrlClose = "webPageUrlClose";
@@ -100,11 +99,32 @@ const ListIntegrationProperties = () => {
     }
   };
 
+  const callRegenerateChatbotLinkAPI = async (property_name) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const dataToSend = { }; // empty body
+    setRegenerateApiLoading(true);
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+
+      const response = await axios.post( `${baseUrl}/properties/${property_name}/regenerate_chatbot_key`, dataToSend, config );
+
+      if (response.status === 200) { ToastHandle("Chat link regenerated", "success"); }
+      else { ToastHandle(response?.data?.error, "danger"); }
+    } catch (error) { ToastHandle(error, "danger"); }
+    finally { setRegenerateApiLoading(false); }
+  }
+
   let editProperty = "editProperty";
   let webPageURLs = "webPageURLs";
   let supportingDocuments = "supportingDocuments";
   let deleteProperty = "deleteProperty";
   let copyChatbotLink = "copyChatbotLink";
+  let regenerateChatbotLink = "regenerateChatbotLink";
   let testProperty = "testProperty";
   let dummySubscriptionCount = "dummySubscriptionCount";
 
@@ -118,16 +138,14 @@ const ListIntegrationProperties = () => {
       handleModelOpen(supportingDocumentsOpen);
     } else if (findType === deleteProperty) {
       dispatch(deleteListIntegrationPropertiesActions(data));
+    } else if (findType === regenerateChatbotLink) {
+      callRegenerateChatbotLinkAPI(data);
     } else if (findType === copyChatbotLink) {
       setChatBox({
         linkCopy: true,
         testingProperty: false,
       });
-      dispatch(
-        getPropertyInsightByNameActions({
-          propertyName: data,
-        })
-      );
+      dispatch( getPropertyInsightByNameActions({ propertyName: data }) );
     } else if (findType === testProperty) {
       setChatBox({
         linkCopy: false,
@@ -367,37 +385,23 @@ const ListIntegrationProperties = () => {
                               </Dropdown.Toggle>
 
                               <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    selectedHandle(editProperty, properties);
-                                  }}
-                                >
+                                <Dropdown.Item onClick={() => { selectedHandle(editProperty, properties); }}>
                                   Edit Property
                                 </Dropdown.Item>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    selectedHandle(deleteProperty, properties);
-                                  }}
-                                >
-                                  Delete Property
+                                <Dropdown.Item onClick={() => { selectedHandle(copyChatbotLink, properties); }}>
+                                  Copy Chatbot Link
                                 </Dropdown.Item>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    selectedHandle(copyChatbotLink, properties);
-                                  }}
-                                >
-                                  <span>Copy Chatbot Link</span>
+                                <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
+                                  Regenerate Chatbot Link
+                                </Dropdown.Item>
+                                <Dropdown.Item onClick={() => { selectedHandle(deleteProperty, properties); }}>
+                                  Delete Property
                                 </Dropdown.Item>
                               </Dropdown.Menu>
                             </Dropdown>
                           </div>
                         </div>
-                        <Button
-                          className="test-property-btn border-0"
-                          onClick={() => {
-                            selectedHandle(testProperty, properties);
-                          }}
-                        >
+                        <Button className="test-property-btn border-0" onClick={() => { selectedHandle(testProperty, properties); }}>
                           Test Property
                         </Button>
                       </div>
