@@ -284,10 +284,12 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
           const propertyData = response.data.property;
           if (propertyData && propertyData.supporting_doc_items) {
             const fileData = propertyData.supporting_doc_items.file_data;
-            if (fileData) {
-              const uploadedDocs = Object.keys(fileData);
+            const integrationData = propertyData.supporting_doc_items.integration_data;
+            const allSupportingDocData = { ...fileData, ...integrationData };
+            if (allSupportingDocData) {
+              const uploadedDocs = Object.keys(allSupportingDocData);
               setPrevUploadedDoc(uploadedDocs);
-              setHideForReservatin(fileData);
+              setHideForReservatin(allSupportingDocData);
             }
           }
           if (
