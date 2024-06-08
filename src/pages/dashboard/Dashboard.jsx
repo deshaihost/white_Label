@@ -238,6 +238,7 @@ const Dashboard = () => {
   const [propertyNameForConversationData, setPropertyNameForConversationData] =
     useState("");
 
+  // When the "view" button is clicked, trigger the GET /conversations API call to get the the selected conversation
   const conversationCallOnDashboard = (item) => {
     const { propertyName, conversationID } = item;
     setConverSationId(conversationID);
@@ -268,6 +269,7 @@ const Dashboard = () => {
     }
   };
 
+  // When conversation data is retrieved from teh API (triggered by "view" button click), open the transcript modal with hte conversation data
   useEffect(() => {
     if (propertiesConversationGetData !== undefined) {
       if (converSationId !== "") {
@@ -364,7 +366,7 @@ const Dashboard = () => {
                               <>
                                 <i class="bi bi-file-text icon-style"></i>
                                 <h4 className="mt-3">{actionItemsLast14d}</h4>
-                                <p>Action Items (last 14h)</p>
+                                <p>Action Items (last 14d)</p>
                               </>
                             ) : (
                               <BoxLoader />
