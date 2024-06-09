@@ -11,12 +11,22 @@ const Features = () => {
             works: true
         },
         {
+            compareTo: 'User-friendly dashboard: Easily manage your HostBuddy',
+            essential: true,
+            works: true
+        },
+        {
             compareTo: 'Fully Customizable',
             essential: true,
             works: true
         },
         {
-            compareTo: 'AI chatbot optimized with GPT-4',
+            compareTo: 'State of the Art Conversational AI',
+            essential: true,
+            works: true
+        },
+        {
+            compareTo: 'Share HostBuddy with your guests using property-specific chat links',
             essential: true,
             works: true
         },
@@ -26,27 +36,17 @@ const Features = () => {
             works: true
         },
         {
-            compareTo: 'HostBuddy Lives in an External Location Sharable to Guests',
-            essential: true,
-            works: true
-        },
-        {
-            compareTo: 'User-friendly dashboard: Easily manage your HostBuddy',
-            essential: true,
-            works: true
-        },
-        {
             compareTo: 'Connected to your guest data',
             essential: false,
             works: true
         },
         {
-            compareTo: 'Assigned Customer Success Manager',
+            compareTo: 'HostBuddy responds directly over PMS & OTA communication channels',
             essential: false,
             works: true
         },
         {
-            compareTo: 'Toggle On/Off Capabilities',
+            compareTo: 'Assigned Customer Success Manager',
             essential: false,
             works: true
         }
