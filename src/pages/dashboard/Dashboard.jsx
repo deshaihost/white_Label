@@ -143,20 +143,7 @@ const Dashboard = () => {
   // date formate
   function formatDateTime(dateTimeString) {
     const date = new Date(dateTimeString);
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
+    const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 
     const month = months[date.getMonth()];
     const day = date.getDate();
@@ -183,13 +170,7 @@ const Dashboard = () => {
     store?.completeActionsItemsReducer?.completeActionsItems?.data?.message;
 
   const compeletHndle = (conversationID, propyName, convrtionId) => {
-    dispatch(
-      putCompleteActionItemActions({
-        action_item_id: conversationID,
-        property_name: propyName,
-        conversation_id: convrtionId,
-      })
-    );
+    dispatch( putCompleteActionItemActions({ action_item_id: conversationID, property_name: propyName, conversation_id: convrtionId }) );
   };
 
   useEffect(() => {
@@ -200,26 +181,11 @@ const Dashboard = () => {
   // When user data is loaded, save the payment/subscription information to local storage. We need this information for the warning banner logic (in the NavBar), which should be shown on all portal pages.
   useEffect(() => {
     if (userDataGet) {
-      localStorage.setItem(
-        "paymentStatus",
-        userDataGet?.subscription?.payment_standing
-      );
-      localStorage.setItem(
-        "servicesExpireDate",
-        userDataGet?.subscription?.services_good_until
-      );
-      localStorage.setItem(
-        "numPropertiesAllowed",
-        userDataGet?.subscription?.num_properties_allowed
-      );
-      localStorage.setItem(
-        "numPropertiesUsed",
-        Object.keys(userDataGet?.property_data || {}).length
-      );
-      localStorage.setItem(
-        "tooManyPropertiesGraceUntil",
-        userDataGet?.subscription?.too_many_properties_grace_until
-      );
+      localStorage.setItem( "paymentStatus", userDataGet?.subscription?.payment_standing );
+      localStorage.setItem( "servicesExpireDate", userDataGet?.subscription?.services_good_until );
+      localStorage.setItem( "numPropertiesAllowed", userDataGet?.subscription?.num_properties_allowed );
+      localStorage.setItem( "numPropertiesUsed", Object.keys(userDataGet?.property_data || {}).length );
+      localStorage.setItem( "tooManyPropertiesGraceUntil", userDataGet?.subscription?.too_many_properties_grace_until );
     }
   }, [userDataGet]);
 
@@ -231,12 +197,9 @@ const Dashboard = () => {
     }
   }, [completeActionsItemStatus]);
   const [converSationId, setConverSationId] = useState("");
-  const propertiesConversationGetData =
-    store?.propertyGetConversationReducer?.propertyGetConversation?.data;
-  const propertiesConversationLoading =
-    store?.propertyGetConversationReducer?.loading;
-  const [propertyNameForConversationData, setPropertyNameForConversationData] =
-    useState("");
+  const propertiesConversationGetData = store?.propertyGetConversationReducer?.propertyGetConversation?.data;
+  const propertiesConversationLoading = store?.propertyGetConversationReducer?.loading;
+  const [propertyNameForConversationData, setPropertyNameForConversationData] = useState("");
 
   // When the "view" button is clicked, trigger the GET /conversations API call to get the the selected conversation
   const conversationCallOnDashboard = (item) => {
@@ -246,20 +209,13 @@ const Dashboard = () => {
     dispatch(PropertyGetConversationsActions({ propertyName: propertyName }));
   };
 
-  const [model, setModel] = useState({
-    conversationModel: false,
-    conversationDataSend: "",
-  });
+  const [model, setModel] = useState({ conversationModel: false, conversationDataSend: "" });
   const conversationModelOpen = "conversationModelOpen";
   const conversationModelClose = "conversationModelClose";
 
   const handleModelOpen = (type, data) => {
     if (type === conversationModelOpen) {
-      setModel({
-        ...model,
-        conversationModel: true,
-        conversationDataSend: data,
-      });
+      setModel({ ...model, conversationModel: true, conversationDataSend: data });
     }
   };
 
@@ -273,13 +229,9 @@ const Dashboard = () => {
   useEffect(() => {
     if (propertiesConversationGetData !== undefined) {
       if (converSationId !== "") {
-        let findConverSationFilter =
-          propertiesConversationGetData?.conversations?.filter(
-            (item) => item?.conversation_id === converSationId
-          );
+        let findConverSationFilter = propertiesConversationGetData?.conversations?.filter( (item) => item?.conversation_id === converSationId );
         if (findConverSationFilter?.[0]) {
-          findConverSationFilter[0].property_name =
-            propertyNameForConversationData;
+          findConverSationFilter[0].property_name = propertyNameForConversationData;
         }
         handleModelOpen(conversationModelOpen, findConverSationFilter?.[0]);
       }

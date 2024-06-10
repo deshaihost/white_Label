@@ -17,9 +17,8 @@ const Discover = () => {
               <strong>Questions?</strong> We're Here To Help!
             </h2>
             <div onClick={() => setModalShow(true)}>
-            <Link  className="link-btn filled-btn">
-              Contact Us
-            </Link>
+            <a href="https://calendly.com/jay-u6bh/30min" className="link-btn filled-btn" style={{ marginRight: '20px' }} target="_blank" rel="noopener noreferrer">Book a Demo</a>
+            <Link  className="link-btn outline-btn"> Contact Us </Link>
             </div>
           </div>
         </div>

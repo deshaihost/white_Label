@@ -16,6 +16,7 @@ const Banner = () => {
                         <h1>Short Term Rental Messaging <strong>On Autopilot</strong></h1>
                         </div>
                         <p>Welcome to the Future of Hosting</p>
+                        <a href="https://calendly.com/jay-u6bh/30min" className="link-btn filled-btn" style={{ marginRight: '20px' }} target="_blank" rel="noopener noreferrer">Book a Demo</a>
                         <Link to='/pricing' className="link-btn outline-btn">Start 2 Week Free Trial</Link>
                     </div>
                     <div className="banner-video">
