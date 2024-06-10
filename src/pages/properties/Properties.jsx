@@ -158,10 +158,10 @@ const Properties = () => {
             {/* <h2>My HostBuddy</h2> */}
           </div>
           <div className="row">
-            <div className="col-lg-4 col-xl-4  col-xxl-2">
+            <div className="col-lg-2 col-xl-2 col-xxl-2">
               <SideBar />
             </div>
-            <div className="col-lg-8 col-xl-8 col-xxl-10">
+            <div className="col-lg-10 col-xl-10 col-xxl-10">
               <div className="account-container">
                 <div className="account_heading">
                   <h3>Properties</h3>
