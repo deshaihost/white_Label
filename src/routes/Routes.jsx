@@ -35,7 +35,7 @@ import AddPropertyForm from "../pages/properties/addProperties/dynamic_questionn
 const Routing = () => {
   const location = useLocation();
 
-  // Add profiling script to the head of the document
+  // Add rb2b profiling script to the head of the document
   useEffect(() => {
     const addScript = () => {
       const script = document.createElement('script');
@@ -76,6 +76,23 @@ const Routing = () => {
       document.head.appendChild(script);
     };
 
+    // Add Google Ads script to the head of the document
+    const addGoogleScript = () => {
+      const script1 = document.createElement('script');
+      script1.async = true;
+      script1.src = "https://www.googletagmanager.com/gtag/js?id=AW-16607279889";
+      document.head.appendChild(script1);
+
+      const script2 = document.createElement('script');
+      script2.innerHTML = `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-16607279889');
+      `;
+      document.head.appendChild(script2);
+    };
+
     // Add the script only if not already present, and only for the front pages (excluding login/register/forgotpass)
     const existingScript = document.getElementById('site-profiling');
     const loadedScript = document.getElementById('profiling-loaded-script');
@@ -84,7 +101,10 @@ const Routing = () => {
       if (!existingScript) {
         addScript();
       }
-    } else { // When the user navigates away from the front pages, remove the script (and the script that it loads)
+      if (!window.dataLayer) { // window.dataLayer is a global array that the Google Tag Manager uses to collect and store data. If window.dataLayer is not defined, it means the Google tracking script has not been added to the page yet. This prevents the Google tracking script from being added multiple times if the useEffect hook runs more than once.
+        addGoogleScript();
+      }
+    } else { // When the user navigates away from the front pages, remove the rb2b script (and the other script that it loads). Don't mess with the google ads script, let it do its thing
       if (existingScript) { existingScript.remove(); }
       if (loadedScript) { loadedScript.remove(); }
     }
