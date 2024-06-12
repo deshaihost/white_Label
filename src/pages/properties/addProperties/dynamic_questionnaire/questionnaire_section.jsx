@@ -7,13 +7,16 @@ import { useSelector } from "react-redux";
 import React from "react";
 
 // Code for the input components in a single section in the dynamic questionnaire (but NOT "Basics" or "Externam Resources")
-const QuestionnaireSection = ({questionnaire_section_name, handleInputComponentChange, handlePencilIconClick, handleSaveAndNext, property_name}) => {
+const QuestionnaireSection = ({questionnaire_section_name, handleInputComponentChange, handlePencilIconClick, handleSaveAndNext, property_name, section_num, num_total_sections}) => {
 
   const store = useSelector((state) => state);
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
 
   const questionnaire_section_data = apiQuestionnaireData.questionnaire[questionnaire_section_name];
   const subsection_order = apiQuestionnaireData.metadata.subsection_order[questionnaire_section_name];
+
+  const is_first_section = section_num === 0;
+  const is_last_section = section_num === num_total_sections - 1;
 
   return (
     <div className="form-design">
@@ -51,8 +54,12 @@ const QuestionnaireSection = ({questionnaire_section_name, handleInputComponentC
       
       {/* Prev and Next buttons */}
       <div className="d-flex justify-content-around my-5">
-        <button className="btn btn-primary" onClick={() => handleSaveAndNext(true)}> &lt; Save & Previous </button>
-        <button className="border_theme_btn previous" onClick={() => handleSaveAndNext()}> Save & Next &gt; </button>
+        <button className="btn btn-primary" onClick={() => handleSaveAndNext(true)}>
+          {is_first_section ? "Save & Exit" : " < Save & Previous"}
+        </button>
+        <button className="border_theme_btn previous" onClick={() => handleSaveAndNext()}>
+          {is_last_section ? "Save & Finish" : "Save & Next >"}
+        </button>
       </div>
 
 
