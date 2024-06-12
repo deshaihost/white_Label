@@ -6,7 +6,7 @@ import { getQuestionnaireActions } from "../../../../redux/actions";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import QuestionnaireSection from "./questionnaire_section";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { FullScreenLoader } from "../../../../helper/Loader";
 import axios from "axios";
@@ -17,6 +17,7 @@ import ExternalResourcesForm from "./ExternalResources/ExternalResourcesForm";
 // Code for the entire questionnaire page, including the header and all sections, including Basics and External Resources.
 const QuestionnairePage = () => {
   const { property_name } = useParams();
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
@@ -30,6 +31,9 @@ const QuestionnairePage = () => {
   const [showModal, setShowModal] = useState(false); // pencil icon modal
   const [dataForModal, setDataForModal] = useState({}); // data to be passed to the pencil icon modal
   const [doTriggeredSave, setDoTriggeredSave] = useState(false); // Set this to trigger a save
+
+  const curr_sec_num = questionnaire_section_names.indexOf(selectedSection);
+  const num_total_sections = questionnaire_section_names.length;
 
   // Get the questionnaire data from the API. Should run once, immediately when the page loads
   useEffect(() => {
@@ -155,12 +159,14 @@ const QuestionnairePage = () => {
     setDoTriggeredSave(true);
   }
 
-  // Trigger a save, then move to the next section (if there is one) or the previous section (if prev is true, and there is one)
+  // Trigger a save, then move to the next section (if there is one) or the previous section (if prev is true, and there is one), or return to properties page
   const handleSaveAndNext = (prev=false) => {
     setDoTriggeredSave(true);
     const currSectionIndex = questionnaire_section_names.indexOf(selectedSection);
-    if (prev && currSectionIndex > 0) { setSelectedSection(questionnaire_section_names[currSectionIndex - 1]); }
+    if (prev && currSectionIndex === 0) { navigate('/properties') }
+    else if (prev && currSectionIndex > 0) { setSelectedSection(questionnaire_section_names[currSectionIndex - 1]); }
     else if (!prev && currSectionIndex < questionnaire_section_names.length - 1) { setSelectedSection(questionnaire_section_names[currSectionIndex + 1]); }
+    else if (!prev && currSectionIndex === questionnaire_section_names.length - 1) { navigate('/properties') }
   }
 
   // When the pencil icon is clicked (in a form component, in a section): render the modal with the corresponding question data
@@ -192,7 +198,7 @@ const QuestionnairePage = () => {
             <div className="row">
               <div className="col-lg-10 mx-auto mt-5 form_multisteps">
                 {selectedSection !== "External Resources" ? (
-                  <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} property_name={property_name} />
+                  <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
                 ) : (
                   <ExternalResourcesForm property_name={property_name} handleSaveAndNext={handleSaveAndNext}/>
                 )}

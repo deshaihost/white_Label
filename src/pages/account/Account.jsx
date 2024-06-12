@@ -131,7 +131,7 @@ const Account = () => {
   const subscriptionClickHandler = (event) => {
     event.preventDefault();
 
-    // Remove local storage data related to subscription, since theu ser may be going to change it. This will re-update next time user goes to dashboard page.
+    // Remove local storage data related to subscription, since the user may be going to change it. This will re-update next time user goes to dashboard page.
     localStorage.removeItem("paymentStatus");
     localStorage.removeItem("servicesExpireDate");
     localStorage.removeItem("numPropertiesAllowed");
