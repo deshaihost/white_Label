@@ -141,7 +141,7 @@ const NavBar = () => {
                 Sign Up
               </Link>
               <Link className="nav-btn nav-btn-outline link-btn filled-btn" to="/login">
-                Login
+                Log In
               </Link>
             </div>
           )}

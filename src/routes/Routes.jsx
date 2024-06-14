@@ -31,6 +31,8 @@ import ConfirmYourEmail from "../pages/confirmEmail/confirmYourEmail";
 import EmailConfirmationAction from "../pages/confirmEmail/emailConfirmationAction";
 import ResetPass from "../auth/resetPass/resetPass";
 import AddPropertyForm from "../pages/properties/addProperties/dynamic_questionnaire/BasicInformationForm/AddPropertyForm";
+import BlogLandingPage from "../blog/blogLanding";
+import BlogArticle from "../blog/blogArticle";
 
 const Routing = () => {
   const location = useLocation();
@@ -133,10 +135,9 @@ const Routing = () => {
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
         <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
         <Route path="/reset-password" element={<ResetPass />}></Route>
-        <Route path="*" element={
-            <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" />
-          }
-        />
+        <Route path="/blog" element={<BlogLandingPage />}></Route>
+        <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
+        <Route path="*" element={ <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" /> } />
         <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />
