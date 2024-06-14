@@ -27,6 +27,28 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title id="title">Hostbuddy AI</title>
+
+    <!-- Google Ads Event snippet, to measure & report actions. -->
+    <script>
+      function gtag_report_conversion(url, action_type, do_redirect=true) {
+        send_to_codes = {
+          'book-a-demo': 'AW-16607279889/xIDQCIPxm7oZEJH2--49',
+          'go-to-checkout': 'AW-16607279889/Pq-ZCIbxm7oZEJH2--49'
+        };
+        var send_to = send_to_codes[action_type];
+        
+        var callback = function () {
+          if (do_redirect && typeof(url) != 'undefined') {
+            window.location = url;
+          }
+        };
+        gtag('event', 'conversion', { 'send_to': send_to, 'event_callback': callback });
+        return false;
+      }
+    </script>
+  
+
+
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

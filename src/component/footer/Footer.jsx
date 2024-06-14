@@ -67,7 +67,10 @@ const Footer = () => {
               <div className="footer-links">
                 <h6 className=" fw-bold mb-4 links-heading">Contact</h6>
                 <p className="links">
-                  <a style={{ display: 'inline-block', marginBottom: '10px' }} className="text-reset" href="https://calendly.com/sam-hostbuddy/30min" target="_blank" rel="noopener noreferrer"> Book a Demo </a>
+                  <a style={{ display: 'inline-block', marginBottom: '10px' }} className="text-reset" href="https://calendly.com/sam-hostbuddy/30min" target="_blank" rel="noopener noreferrer" onClick={(e) => {
+                      e.preventDefault(); // Don't go to the link (we do that in gtag_report_conversion) - but we keep the href for accessibility and presumably SEO
+                      window.gtag_report_conversion('https://calendly.com/jay-u6bh/30min', 'book-a-demo');
+                  }}> Book a Demo </a>
                 </p>
                 <p className="links">
                   Email: info@hostbuddy.ai

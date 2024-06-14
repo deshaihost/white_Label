@@ -5,6 +5,7 @@ import ErrorMessageShow from "../../../helper/ErrorMessageShow";
 import AddNewPropertyModal from "../addNewPropertyModal/AddNewPropertyModal";
 import { useState } from "react";
 
+// Shown when user clicks "Add property" if they have no active subscription. Asks user to select a plan and number of properties to add, with Submit button which opens a confirmation modal (AddNewPropertyModal)
 function AddPropertyModal({ handleClose, show, subscription_data }) {
   const {
     register,
@@ -59,14 +60,9 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                 <div className="membership-list">
                   <div className="form-design mt-3 text-start">
                     <label htmlFor="">
-                      Choose How Many Properties Want To Add
+                      Choose How Many Properties To Add
                     </label>
-                    <input
-                      type="number"
-                      name="num-of-properties"
-                      id="num-of-properties"
-                      placeholder="Enter or select"
-                      className="form-control pricing_range"
+                    <input type="number" name="num-of-properties" id="num-of-properties" placeholder="Enter or select" className="form-control pricing_range"
                       {...register("num_properties", {
                         required: true,
                         max: 100,
