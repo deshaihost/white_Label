@@ -99,6 +99,20 @@
 }
 
 @media only screen and (max-width: 767px) {
+
+  .banner .banner-container .banner-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .banner .banner-container .link-btn {
+    margin-bottom: 20px;
+    margin-right: 0 !important; /* Forces override of inline style */
+    width: 80%;
+    max-width: 300px;
+  }
+
   .banner .banner-container .banner-video::before {
     top: 20px;
     width: 120px;
