@@ -16,7 +16,12 @@ const Banner = () => {
                         <h1>Short Term Rental Messaging <strong>On Autopilot</strong></h1>
                         </div>
                         <p>Welcome to the Future of Hosting</p>
-                        <a href="https://calendly.com/jay-u6bh/30min" className="link-btn filled-btn" style={{ marginRight: '20px' }} target="_blank" rel="noopener noreferrer">Book a Demo</a>
+                        <a href="https://calendly.com/jay-u6bh/30min" className="link-btn filled-btn" style={{ marginRight: '20px' }} target="_blank" rel="noopener noreferrer" onClick={(e) => {
+                            e.preventDefault(); // Don't go to the link (we do that in gtag_report_conversion) - but we keep the href for accessibility and presumably SEO
+                            window.gtag_report_conversion('https://calendly.com/jay-u6bh/30min', 'book-a-demo');
+                        }}>
+                            Book a Demo
+                        </a>
                         <Link to='/pricing' className="link-btn outline-btn">Start 2 Week Free Trial</Link>
                     </div>
                     <div className="banner-video">

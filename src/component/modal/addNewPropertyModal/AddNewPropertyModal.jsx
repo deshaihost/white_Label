@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { postCreateCheckoutSessionActions } from "../../../redux/pages/pagesApis/actions";
 import { stateEmptyActions } from "../../../redux/actions";
 import Loader from "../../../helper/Loader";
+
+// Shown when user clicks "Confirm" in AddPropertyModal. Asks user to confirm they want to add properties, and directs them to Stripe payment portal to complete registration payment
 function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -21,6 +23,7 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
   const confirmHandle = () => {
     if (plantPring?.yourPlan !== "") {
       if (plantPring?.TotalProperties !== "") {
+        window.gtag_report_conversion(null, 'go-to-checkout', false); // Report the checkout start to Google Ads
         dispatch(
           postCreateCheckoutSessionActions({
             subscription_plan: plantPring?.yourPlan,
