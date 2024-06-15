@@ -633,7 +633,7 @@ textarea.form-control {
 
   .banner-heading h1, .banner-heading h2 {
     font-size: 36px;
-    line-height: 40px;
+    line-height: 42px;
   }
 }
 
@@ -648,15 +648,15 @@ textarea.form-control {
   }
 
   .banner-heading h1, .banner-heading h2 {
-    font-size: 32px;
-    line-height: 40px;
+    font-size: 34px;
+    line-height: 42px;
     margin-bottom: 10px;
   }
 }
 
 @media only screen and (max-width: 767px) {
   .heading h1, .heading h2 {
-    font-size: 27px;
+    font-size: 34px;
     line-height: 42px;
   }
 
@@ -669,8 +669,8 @@ textarea.form-control {
   }
 
   .banner-heading h1, .banner-heading h2 {
-    font-size: 22px;
-    line-height: 30px;
+    font-size: 34px;
+    line-height: 42px;
   }
 
   .banner-heading p {
@@ -684,13 +684,13 @@ textarea.form-control {
 
 @media only screen and (max-width: 575px) {
   .heading h1, .heading h2 {
-    font-size: 22px;
-    line-height: 30px;
+    font-size: 34px;
+    line-height: 42px;
   }
 
   .heading h1 {
-    font-size: 22px;
-    line-height: 30px;
+    font-size: 34px;
+    line-height: 42px;
   }
 
   .expendable_search {

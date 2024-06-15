@@ -22,10 +22,10 @@ const Banner = () => {
                         }}>
                             Book a Demo
                         </a>
-                        <Link to='/pricing' className="link-btn outline-btn">Start 2 Week Free Trial</Link>
+                        <Link to='/pricing' className="link-btn outline-btn">Get Started For Free</Link>
                     </div>
                     <div className="banner-video">
-                        <video autoPlay loop muted poster={videoImgBackup}>
+                        <video autoPlay loop muted playsInline poster={videoImgBackup}>
                             <source src={chatVideo} type="video/mp4" />
                             Your browser does not support HTML video.
                         </video>
