@@ -16,7 +16,7 @@ const DemoVideoSection = () => {
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <iframe width="800" height="450" src="https://www.youtube.com/embed/D1lyGfAmLGw?si=whXHB82qimvnE6W9" title="Hostbuddy AI Demo Video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <iframe width="900" height="506" src="https://www.youtube.com/embed/D1lyGfAmLGw?si=whXHB82qimvnE6W9&rel=0" title="Hostbuddy AI Demo Video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; speaker; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
                 </div>
                 
             </Container>
