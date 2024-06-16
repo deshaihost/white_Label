@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import './banner.css';
 import { Link } from "react-router-dom";
+import BookDemoModal from "../../../component/bookDemoModal";
 
 import chatVideo from '../../../public/img/home/chat_video.mp4';
 import videoImgBackup from '../../../public/img/home/video_img.jpg';
 
 const Banner = () => {
+    const [demoModalShow, setDemoModalShow] = useState(false);
+
     return(
         <section className="banner">
             <Container>
@@ -16,9 +19,9 @@ const Banner = () => {
                         <h1>Short Term Rental Messaging <strong>On Autopilot</strong></h1>
                         </div>
                         <p>Welcome to the Future of Hosting</p>
-                        <a href="https://calendly.com/jay-u6bh/30min" className="link-btn filled-btn" style={{ marginRight: '20px' }} target="_blank" rel="noopener noreferrer" onClick={(e) => {
-                            e.preventDefault(); // Don't go to the link (we do that in gtag_report_conversion) - but we keep the href for accessibility and presumably SEO
-                            window.gtag_report_conversion('https://calendly.com/jay-u6bh/30min', 'book-a-demo');
+                        <a className="link-btn filled-btn" style={{ cursor: 'pointer', marginRight: '20px' }} target="_blank" rel="noopener noreferrer" onClick={(e) => {
+                            e.preventDefault(); // Don't go to any link - open the modal
+                            setDemoModalShow(true);
                         }}>
                             Book a Demo
                         </a>
@@ -32,6 +35,7 @@ const Banner = () => {
                     </div>
                 </div>
             </Container>
+            <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} />
         </section>
     )
 }

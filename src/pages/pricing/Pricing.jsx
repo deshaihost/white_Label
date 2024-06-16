@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import './pricing.css';
 import Essentials from './essentials/Essentials';
 import Features from './features/Features';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import BookDemoModal from '../../component/bookDemoModal';
 
 const Pricing = () => {
+  const [demoModalShow, setDemoModalShow] = useState(false);
+
   return (
     <section className='pricing'>
       <Helmet>
@@ -31,9 +34,9 @@ const Pricing = () => {
               </Link>
             </div>
             <div>
-              <a className='explore-link' href="https://calendly.com/sam-hostbuddy/30min" target="_blank" rel="noopener noreferrer" onClick={(e) => {
-                  e.preventDefault(); // Don't go to the link (we do that in gtag_report_conversion) - but we keep the href for accessibility and presumably SEO
-                  window.gtag_report_conversion('https://calendly.com/jay-u6bh/30min', 'book-a-demo');
+              <a style={{ cursor:"pointer" }}className='explore-link' target="_blank" rel="noopener noreferrer" onClick={(e) => {
+                  e.preventDefault(); // Don't go to the link - just open the modal
+                  setDemoModalShow(true);
               }}>
                 Book a Demo
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="13" viewBox="0 0 14 13" fill="none">
@@ -44,6 +47,7 @@ const Pricing = () => {
           </div>
         </div>
       </Container>
+      <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} />
     </section>
   )
 }

@@ -12,6 +12,7 @@ import { FullScreenLoader } from "../../../../helper/Loader";
 import axios from "axios";
 import PencilIconModal from "./PencilIconModal";
 import ExternalResourcesForm from "./ExternalResources/ExternalResourcesForm";
+import { set } from "react-hook-form";
 
 
 // Code for the entire questionnaire page, including the header and all sections, including Basics and External Resources.
@@ -27,10 +28,13 @@ const QuestionnairePage = () => {
 
   const [selectedSection, setSelectedSection] = useState("Basics");
   const [questionnairePostLoading, setQuestionnairePostLoading] = useState(false);
+  const [triggeredSaveLoading, setTriggeredSaveLoading] = useState(false);
   const [dataToUpdate, setDataToUpdate] = useState(false); // whether there is new data to update to the API
   const [showModal, setShowModal] = useState(false); // pencil icon modal
   const [dataForModal, setDataForModal] = useState({}); // data to be passed to the pencil icon modal
   const [doTriggeredSave, setDoTriggeredSave] = useState(false); // Set this to trigger a save
+  const [triggeredSaveComplete, setTriggeredSaveComplete] = useState(false); // Set this to false after a triggered save is complete
+  const [navigateToProperties, setNavigateToProperties] = useState(false); // Set this to redirect to properties page
 
   const curr_sec_num = questionnaire_section_names.indexOf(selectedSection);
   const num_total_sections = questionnaire_section_names.length;
@@ -45,7 +49,7 @@ const QuestionnairePage = () => {
 
   // Update questionnaire data to the API
   const update_questionnaire_to_API = async (property_name, questionnaire_data) => {
-    console.log("Updating API");
+    //console.log("Updating API");
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setQuestionnairePostLoading(true);
@@ -71,7 +75,7 @@ const QuestionnairePage = () => {
         if (dataToUpdate && property_name && apiQuestionnaireData) {
           setDataToUpdate(false);
           update_questionnaire_to_API(property_name, {questionnaire:apiQuestionnaireData});
-          console.log("Auto update triggered", property_name, apiQuestionnaireData);
+          //console.log("Auto update triggered", property_name, apiQuestionnaireData);
         }
       }
     }, 10000);
@@ -80,7 +84,8 @@ const QuestionnairePage = () => {
 
   // Triggered save, for when the user explicitly clicks any "Save" button
   const triggerSave = async () => {
-    console.log("Triggered save");
+    //console.log("Triggered save");
+    setTriggeredSaveLoading(true);
     if (dataToUpdate && property_name && apiQuestionnaireData) { // if dataToUpdate false, don't bother
 
       // If the questionnaire is still updating from another save (i.e. an autosave), busywait for it to finish to avoid concurrent updates
@@ -96,13 +101,34 @@ const QuestionnairePage = () => {
         if (api_resp_status === 200) { setDataToUpdate(false); }
       } else { } // max wait period exceeded. abort
     }
+    setTriggeredSaveLoading(false);
+    setTriggeredSaveComplete(true);
   }
+
+  // Clear the triggered save complete flag after a second (of it being set)
+  useEffect(() => {
+    if (triggeredSaveComplete) {
+      const timeout = setTimeout(() => { setTriggeredSaveComplete(false); }, 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [triggeredSaveComplete]);
+
+  // Redirect to properties page when navigateToProperties is set, and the triggered save is complete
+  useEffect(() => {
+    if (navigateToProperties && triggeredSaveComplete) {
+      navigate('/properties');
+    }
+  }, [navigateToProperties, triggeredSaveComplete]);
 
   // Handle triggered save calls. Need to use a UseEffect to ensure dependencies are properly available
   useEffect(() => {
     if (dataToUpdate && doTriggeredSave) {
       setDoTriggeredSave(false);
       triggerSave();
+    }
+    else if (doTriggeredSave) {
+      setTriggeredSaveComplete(true);
+      setDoTriggeredSave(false);
     }
   }, [dataToUpdate, doTriggeredSave]);
 
@@ -139,7 +165,7 @@ const QuestionnairePage = () => {
     setDataToUpdate(true);
     const { sec_name, subsec_name, q_ind, checkbox_group_option } = dataForModal;
     const question_type = apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].question_type;
-    console.log("ModalSaveData\n-", resStageData, "\n-", extraNoteData, "\n-", subsec_name, "\n-", q_ind, "\n-", checkbox_group_option);
+    //console.log("ModalSaveData\n-", resStageData, "\n-", extraNoteData, "\n-", subsec_name, "\n-", q_ind, "\n-", checkbox_group_option);
 
     if (question_type === "short_answer" || question_type === "long_answer") {
       apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].hide_for_reservations = JSON.stringify(resStageData);
@@ -163,10 +189,10 @@ const QuestionnairePage = () => {
   const handleSaveAndNext = (prev=false) => {
     setDoTriggeredSave(true);
     const currSectionIndex = questionnaire_section_names.indexOf(selectedSection);
-    if (prev && currSectionIndex === 0) { navigate('/properties') }
+    if (prev && currSectionIndex === 0) { setNavigateToProperties(true); }
     else if (prev && currSectionIndex > 0) { setSelectedSection(questionnaire_section_names[currSectionIndex - 1]); }
     else if (!prev && currSectionIndex < questionnaire_section_names.length - 1) { setSelectedSection(questionnaire_section_names[currSectionIndex + 1]); }
-    else if (!prev && currSectionIndex === questionnaire_section_names.length - 1) { navigate('/properties') }
+    else if (!prev && currSectionIndex === questionnaire_section_names.length - 1) { setNavigateToProperties(true); }
   }
 
   // When the pencil icon is clicked (in a form component, in a section): render the modal with the corresponding question data
@@ -198,7 +224,7 @@ const QuestionnairePage = () => {
             <div className="row">
               <div className="col-lg-10 mx-auto mt-5 form_multisteps">
                 {selectedSection !== "External Resources" ? (
-                  <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
+                  <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
                 ) : (
                   <ExternalResourcesForm property_name={property_name} handleSaveAndNext={handleSaveAndNext}/>
                 )}

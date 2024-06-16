@@ -179,10 +179,8 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
     try {
       if (token) {
         const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
+          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
         };
 
         const jsonPayload = {
@@ -200,13 +198,12 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
           setPrevLinkedIntegration(integrationPropertyName);
           setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
         } else {
-          ToastHandle(response.data.error, "danger");
+          ToastHandle(response?.data?.error, "danger");
         }
       } else {
         alert("No Token");
       }
     } catch (error) {
-      console.error("Error linking integration:", error);
       ToastHandle("Error linking integration", "danger");
     } finally {
       setLinkIsLoading(false);
@@ -498,38 +495,20 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
                             </div>
                             <div class="property_select">
                               {integrationPropertyList?.length > 0 ? (
-                                <select
-                                  id="integration_property_select"
-                                  style={{ marginTop: "20px", width: "70%" }}
-                                  class="form-select form-control"
-                                  onChange={(e) => setSelectedIntegrationPropertyId( e.target.value )}
-                                >
+                                <select id="integration_property_select" style={{ marginTop: "20px", width: "70%" }} class="form-select form-control" onChange={(e) => setSelectedIntegrationPropertyId( e.target.value )} >
+                                  <option value="" disabled selected>Click to select property...</option>
                                   {integrationPropertyList?.map((property) => {
                                     // Each option shows the integration property name, but uses the integration property ID as the value
                                     return (
-                                      <option
-                                        key={property.id}
-                                        value={property.id}
-                                      >
+                                      <option key={property.id} value={property.id}>
                                         {property.name}
                                       </option>
                                     );
                                   })}
                                 </select>
                               ) : (
-                                <div
-                                  style={{
-                                    color: "white",
-                                    marginTop: "20px",
-                                    wordWrap: "break-word",
-                                    width: "100%",
-                                  }}
-                                >
-                                  User account does not have a PMS integration.
-                                  Connect your account to a PMS from the
-                                  Properties page first, then you can this
-                                  property to a property listing on the
-                                  integration account here.
+                                <div style={{ color: "white", marginTop: "20px", wordWrap: "break-word", width: "100%" }}>
+                                  User account does not have a PMS integration. Connect your account to a PMS from the Properties page first, then you can this property to a property listing on the integration account here.
                                 </div>
                               )}
                             </div>
@@ -537,23 +516,11 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
                               {integrationPropertyList?.length > 0 &&
                                 (linkIsLoading ? (
                                   <>
-                                    <p
-                                      style={{
-                                        color: "white",
-                                        marginTop: "20px",
-                                      }}
-                                    >
-                                      Linking...
-                                    </p>
+                                    <p style={{ color: "white", marginTop: "20px" }}> Linking... </p>
                                     <BoxLoader />
                                   </>
                                 ) : (
-                                  <button
-                                    className="LinkPMSButton"
-                                    onClick={(e) =>
-                                      link_integration( e, property_name, selectedIntegrationPropertyId )
-                                    }
-                                  >
+                                  <button className="LinkPMSButton" onClick={(e) => link_integration( e, property_name, selectedIntegrationPropertyId )} >
                                     Link To This Property
                                   </button>
                                 ))}

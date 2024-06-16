@@ -5,9 +5,10 @@ import CheckboxGroupComponent from "./form_components/checkbox_group";
 import BasicInformationForm from "./BasicInformationForm/BasicInformationForm";
 import { useSelector } from "react-redux";
 import React from "react";
+import Loader from "../../../../helper/Loader";
 
 // Code for the input components in a single section in the dynamic questionnaire (but NOT "Basics" or "Externam Resources")
-const QuestionnaireSection = ({questionnaire_section_name, handleInputComponentChange, handlePencilIconClick, handleSaveAndNext, property_name, section_num, num_total_sections}) => {
+const QuestionnaireSection = ({questionnaire_section_name, handleInputComponentChange, handlePencilIconClick, handleSaveAndNext, triggeredSaveLoading, property_name, section_num, num_total_sections}) => {
 
   const store = useSelector((state) => state);
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
@@ -54,12 +55,18 @@ const QuestionnaireSection = ({questionnaire_section_name, handleInputComponentC
       
       {/* Prev and Next buttons */}
       <div className="d-flex justify-content-around my-5">
-        <button className="btn btn-primary" onClick={() => handleSaveAndNext(true)}>
-          {is_first_section ? "Save & Exit" : " < Save & Previous"}
-        </button>
-        <button className="border_theme_btn previous" onClick={() => handleSaveAndNext()}>
-          {is_last_section ? "Save & Finish" : "Save & Next >"}
-        </button>
+        {triggeredSaveLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <button className="btn btn-primary" onClick={() => handleSaveAndNext(true)}>
+              {is_first_section ? "Save & Exit" : " < Save & Previous"}
+            </button>
+            <button className="border_theme_btn previous" onClick={() => handleSaveAndNext()}>
+              {is_last_section ? "Save & Finish" : "Save & Next >"}
+            </button>
+          </>
+        )}
       </div>
 
 
