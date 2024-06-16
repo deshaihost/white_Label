@@ -3,9 +3,11 @@ import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./discover.css";
 import ContactUs from "./contactUs/ContactUs";
+import BookDemoModal from "../../../component/bookDemoModal";
 
 const Discover = () => {
-    const [modalShow, setModalShow] = useState(false);
+    const [contactModalShow, setContactModalShow] = useState(false);
+    const [demoModalShow, setDemoModalShow] = useState(false);
 
   return (
     <section className="discover">
@@ -16,17 +18,18 @@ const Discover = () => {
             <h2>
               <strong>Questions?</strong> We're Here To Help!
             </h2>
-            <div onClick={() => setModalShow(true)}>
-            <a href="https://calendly.com/jay-u6bh/30min" className="link-btn filled-btn" style={{ marginRight: '20px' }} target="_blank" rel="noopener noreferrer" onClick={(e) => {
-                e.preventDefault(); // Don't go to the link (we do that in gtag_report_conversion) - but we keep the href for accessibility and presumably SEO
-                window.gtag_report_conversion('https://calendly.com/jay-u6bh/30min', 'book-a-demo');
-            }}>Book a Demo</a>
-            <Link  className="link-btn outline-btn"> Contact Us </Link>
+            <div>
+              <a className="link-btn filled-btn" style={{ cursor: "pointer", marginRight: '20px' }} target="_blank" rel="noopener noreferrer" onClick={(e) => {
+                  e.preventDefault(); // Don't go to any link - just open the modal
+                  setDemoModalShow(true);
+              }}>Book a Demo</a>
+              <Link className="link-btn outline-btn" onClick={() => setContactModalShow(true)}> Contact Us </Link>
             </div>
           </div>
         </div>
       </Container>
-      <ContactUs show={modalShow} onHide={() => setModalShow(false)} />
+      <ContactUs show={contactModalShow} onHide={() => setContactModalShow(false)} />
+      <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} />
     </section>
   );
 };

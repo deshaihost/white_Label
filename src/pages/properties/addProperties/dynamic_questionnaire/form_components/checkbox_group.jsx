@@ -27,7 +27,7 @@ const CheckboxGroupComponent = ({ question_object, sec_name, subsec_name, q_ind,
 
   // When our question data changes, update someResStageIsSelected so the pencil icon color can update
   useEffect(() => {
-    console.log('updating someResStageIsSelected')
+    //console.log('updating someResStageIsSelected')
     const newSomeResStageIsSelected = options.map((option, index) => {
       const optionIndexInResponseOptions = response_options.indexOf(option);
       if (optionIndexInResponseOptions !== -1) {
