@@ -29,14 +29,14 @@ const Pricing = () => {
             <h3>The Essentials</h3>
             <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="6" bestPricePlan={false}/>
             <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="5" bestPricePlan={false}/>
-            <NewPricingTiles num_props_range="50-99" monthlyPricePerProp="4" bestPricePlan={false}/>
+            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="4" bestPricePlan={false}/>
             <h4>100+ properties - <button className="contact-us-button" onClick={() => setContactModalShow(true)}>Contact Us</button></h4>
           </div>
           <div className="col-12 col-lg-6 works-pricing-boxes">
             <h3>The Works</h3>
             <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="12" bestPricePlan={true}/>
             <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="10" bestPricePlan={true}/>
-            <NewPricingTiles num_props_range="50-99" monthlyPricePerProp="8" bestPricePlan={true}/>
+            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="8" bestPricePlan={true}/>
             <h4>100+ properties - <button className="contact-us-button" onClick={() => setContactModalShow(true)}>Contact Us</button></h4>
           </div>
         </div>
