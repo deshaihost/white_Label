@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./essentials.css";
+import "../essentials.css";
 import { Link } from "react-router-dom";
 import Authorized from "../../../helper/Authorized";
 
@@ -199,6 +199,7 @@ const Essentials = () => {
                 <div style={{ height: '6px' }}></div> {/* vertical spacer */}
                 <h5>
                   <sup>$</sup>
+                  {/*
                   <strong>
                     {worksValue < 6
                       ? worksValue * 20
@@ -209,19 +210,31 @@ const Essentials = () => {
                       : (5 * 20) + (5 * 18) + (10 * 15) + ((worksValue - 20) * 10)}
                   </strong>
                   /<sub>Month</sub>
+                  */}
+                  <strong>
+                    {(
+                      worksValue <= 10
+                        ? 12
+                        : ((10 * 12) + ((worksValue - 10) * 10)) / worksValue
+                    ).toFixed(2)}
+                  </strong>
+                  /<sub>Month</sub>
                 </h5>
                 <span>
-                  ($
-                  <strong>
-                    {worksValue < 6
-                      ? 20
-                      : worksValue > 5 && worksValue < 11
-                      ? 18
-                      : worksValue > 10 && worksValue < 21
-                      ? 15
-                      : 10}
-                  </strong>{" "}
-                  / add'l property)
+                  {/*
+                    ($
+                    <strong>
+                      {worksValue < 6
+                        ? 20
+                        : worksValue > 5 && worksValue < 11
+                        ? 18
+                        : worksValue > 10 && worksValue < 21
+                        ? 15
+                        : 10}
+                    </strong>{" "}
+                    / add'l property)
+                  */}
+                  per property
                 </span>
               </div>
             </div>
