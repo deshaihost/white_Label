@@ -8,6 +8,7 @@ import { ErrorMessageKey } from "../../../../helper/ErrorMessageKey";
 import axios from "axios";
 
 
+// This is the modal that opens when the user clicks "Contact Us" - originally just on the Meet HostBuddy page, now also on the Pricing page
 const ContactUs = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
