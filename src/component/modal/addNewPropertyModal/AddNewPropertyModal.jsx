@@ -9,26 +9,16 @@ import Loader from "../../../helper/Loader";
 function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const striteUrlGet =
-    store?.postcreateCheckoutSessionReducer?.createCheckoutSessionUrl?.data
-      ?.checkout_session_url;
+  const striteUrlGet = store?.postcreateCheckoutSessionReducer?.createCheckoutSessionUrl?.data?.checkout_session_url;
   const striteUrlLoading = store?.postcreateCheckoutSessionReducer?.loading;
-  const [plantPring, setPlantPrint] = useState({
-    yourPlan: "",
-    TotalProperties: "",
-    PricePerProperty: "",
-    proratedCost: "",
-  });
+  const [plantPring, setPlantPrint] = useState({ yourPlan: "", TotalProperties: "", PricePerProperty: "", proratedCost: "" });
 
   const confirmHandle = () => {
     if (plantPring?.yourPlan !== "") {
       if (plantPring?.TotalProperties !== "") {
-        window.gtag_report_conversion(null, 'go-to-checkout', false); // Report the checkout start to Google Ads
+        window.gtag_report_conversion('go-to-checkout'); // Report the checkout start to Google Ads
         dispatch(
-          postCreateCheckoutSessionActions({
-            subscription_plan: plantPring?.yourPlan,
-            num_properties: JSON.parse(plantPring?.TotalProperties),
-          })
+          postCreateCheckoutSessionActions({ subscription_plan: plantPring?.yourPlan, num_properties: JSON.parse(plantPring?.TotalProperties) })
         );
       }
     }
@@ -50,6 +40,7 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
     }
   }, [planModelDataSend]);
 
+  // Once the Stripe checkout URL is received, redirect the user to it
   useEffect(() => {
     if (striteUrlGet !== undefined) {
       dispatch(stateEmptyActions());
