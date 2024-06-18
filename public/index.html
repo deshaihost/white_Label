@@ -30,7 +30,8 @@
 
     <!-- Google Ads Event snippet, to measure & report actions. -->
     <script>
-      function gtag_report_conversion(url, action_type, do_redirect=true) {
+      function gtag_report_conversion(action_type) {
+      //function gtag_report_conversion(url, action_type, do_redirect=true) {
         send_to_codes = {
           'book-a-demo': 'AW-16607279889/xIDQCIPxm7oZEJH2--49',
           'go-to-checkout': 'AW-16607279889/Pq-ZCIbxm7oZEJH2--49'
@@ -38,8 +39,10 @@
         var send_to = send_to_codes[action_type];
         
         var callback = function () {
-          if (do_redirect && typeof(url) != 'undefined') {
-            window.location = url;
+          if (false) { // update: don't handle redirect here, since browsers don't seem to like it. Just report the conversion, and handle any redirect in the calling function.
+          //if (do_redirect && typeof(url) != 'undefined') {
+            // window.location = url; // Original Google code
+            // window.open(url, '_blank'); // Open in new tab - also less likely to be blocked by popup blockers //update: this didn't help.
           }
         };
         gtag('event', 'conversion', { 'send_to': send_to, 'event_callback': callback });

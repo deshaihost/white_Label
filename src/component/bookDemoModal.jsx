@@ -10,6 +10,7 @@ import axios from "axios";
 
 const BookDemoModal = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showBackupLink, setShowBackupLink] = useState(false);
 
   const all_demo_URLs = {'Sam':'https://calendly.com/jay-u6bh/30min', 'Jay':'https://calendly.com/sam-hostbuddy/30min'};
   const randomly_selected_demo_person = Object.keys(all_demo_URLs)[Math.floor(Math.random() * Object.keys(all_demo_URLs).length)];
@@ -38,7 +39,13 @@ const BookDemoModal = (props) => {
   const onSubmit = (data) => {
     callSubmitApi(data);
     setIsSubmitted(true);
-    window.gtag_report_conversion(randomly_selected_demo_URL, 'book-a-demo');
+    window.gtag_report_conversion('book-a-demo');
+    setTimeout(() => {
+      window.location.href = randomly_selected_demo_URL;
+    }, 1000);  // Wait for 1 second, to try to give gtag_report_conversion a chance to fire
+    setTimeout(() => {
+      setShowBackupLink(true);
+    }, 3000);  // Show backup link after 3 seconds, in case the user isn't automatically redirected (might happen with ad / popup blockers)
   };
 
   return (
@@ -51,7 +58,12 @@ const BookDemoModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         {isSubmitted ? (
+          <>
           <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>Thanks! Redirecting...</p>
+          {showBackupLink && (
+            <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>If you are not redirected, please click <a href={randomly_selected_demo_URL} target="_blank" rel="noopener noreferrer">here</a>.</p>
+          )}
+          </>
         ) : (
           <Form onSubmit={handleSubmit(
             (data) => { onSubmit(data); },

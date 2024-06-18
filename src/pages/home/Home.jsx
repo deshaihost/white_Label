@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Banner from './banner/Banner';
 import Features from './features/Features';
 import Works from './works/Works';
@@ -7,6 +7,31 @@ import DemoVideoSection from './demoVideoSection/demoVideoSection';
 import { Helmet } from 'react-helmet';
 
 const Home = () => {
+  const [loadDemoVideo, setLoadDemoVideo] = useState(false);
+  const worksRef = useRef(null);
+  const demoVideoRef = useRef(null);
+
+  useEffect(() => {
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !loadDemoVideo) {
+            setLoadDemoVideo(true);
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.25 }); // Load the demo video when 25% of an observed section has been scrolled into view
+
+      if (worksRef.current) { observer.observe(worksRef.current); } // Observe the "How It Works" section, so we can load the vid early when the user is scrolling down on their way to it
+      if (demoVideoRef.current) { observer.observe(demoVideoRef.current); } // Also observe the demo video section itself, in case the user somehow jumps to it & skips "how it works" section
+      return () => observer.disconnect();
+
+    } else {
+      setLoadDemoVideo(true); // if for some reason the browser doesn't support IntersectionObserver, just load the video right away
+    }
+  }, []);
+
+
   return (
     <div className='home'>
       <Helmet>
@@ -14,10 +39,9 @@ const Home = () => {
         <link rel="canonical" href="https://www.hostbuddy.ai/" />
       </Helmet>
       <Banner />
-      <Works />
-      <DemoVideoSection />
+      <div ref={worksRef}><Works /></div>
       <Features />
-      <div style={{ height: '100px' }} /> {/* Vertical spacer */}
+      <div ref={demoVideoRef}><DemoVideoSection load={loadDemoVideo} /></div>
       <Plans />
     </div>
   )

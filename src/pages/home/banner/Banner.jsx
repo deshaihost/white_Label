@@ -35,7 +35,7 @@ const Banner = () => {
                     </div>
                 </div>
             </Container>
-            <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} />
+            {demoModalShow && <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} />}
         </section>
     )
 }

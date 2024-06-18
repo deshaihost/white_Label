@@ -95,7 +95,7 @@ const Footer = () => {
           <p>©2024 by HostBuddy AI.</p>
         </div>
       </Container>
-      <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} />
+      {demoModalShow && <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} />}
     </MDBFooter>
   );
 };
