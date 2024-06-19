@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import './features.css';
+import Accordion from 'react-bootstrap/Accordion';
 
+/*
 import FeatureIconOne from '../../../public/img/home/feature_icon1.png';
 import FeatureIconTwo from '../../../public/img/home/feature_icon2.png';
 import FeatureIconThree from '../../../public/img/home/feature_icon3.png';
 import FeatureIconFour from '../../../public/img/home/feature_iconnew1.png';
-
 import ComputerBrainImg from '../../../public/img/home/intelligence.png';
 import ControlToggleImg from '../../../public/img/home/host_control_toggle.png';
 import EditPropertyImg from '../../../public/img/home/Property_customization.png';
 import transcriptsPanel from '../../../public/img/home/actionItems_and_transcripts.png';
+*/
 
-import Accordion from 'react-bootstrap/Accordion';
+const FeatureIconOne = 'https://hostbuddylb.com/home/feature_icon1.png';
+const FeatureIconTwo = 'https://hostbuddylb.com/home/feature_icon2.png';
+const FeatureIconThree = 'https://hostbuddylb.com/home/feature_icon3.png';
+const FeatureIconFour = 'https://hostbuddylb.com/home/feature_iconnew1.png';
+
+const ComputerBrainImg = 'https://hostbuddylb.com/home/intelligence.png';
+const ControlToggleImg = 'https://hostbuddylb.com/home/host_control_toggle.png';
+const EditPropertyImg = 'https://hostbuddylb.com/home/Property_customization.png';
+const transcriptsPanel = 'https://hostbuddylb.com/home/actionItems_and_transcripts.png';
 
 const Features = () => {
     const [activeKey, setActiveKey] = useState("0");
