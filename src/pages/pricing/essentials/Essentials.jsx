@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../essentials.css";
+import "./essentials.css";
 import { Link } from "react-router-dom";
 import Authorized from "../../../helper/Authorized";
 

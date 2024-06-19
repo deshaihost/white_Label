@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import './pricing.css';
-import Essentials from './essentials/Essentials';
 import Features from './features/Features';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';

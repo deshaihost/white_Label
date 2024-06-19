@@ -9,10 +9,10 @@ import PropertyWithAmenitiesImg from 'https://hostbuddylb.com/home/property_with
 import lateNightBot from 'https://hostbuddylb.com/home/empty_desk_night.png';
 */
 
-const AssistantImg = 'https://hostbuddylb.com/home/assistant.png';
-const IntegrationsImg = 'https://hostbuddylb.com/home/integrations_works_crop.png';
-const PropertyWithAmenitiesImg = 'https://hostbuddylb.com/home/property_with_amenities.jpeg';
-const lateNightBot = 'https://hostbuddylb.com/home/empty_desk_night.png';
+const AssistantImg = 'https://hostbuddylb.com/home/assistant.webp';
+const IntegrationsImg = 'https://hostbuddylb.com/home/integrations_works_crop.webp';
+const PropertyWithAmenitiesImg = 'https://hostbuddylb.com/home/property_with_amenities.webp';
+const lateNightBot = 'https://hostbuddylb.com/home/empty_desk_night.webp';
 
 const Works = () => {
     return(
