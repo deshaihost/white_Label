@@ -14,7 +14,7 @@ import videoImgBackup from '../../../public/img/home/video_img.jpg';
 const chatVideoHLSPlaylist = 'https://hostbuddylb.com/home/chat_video/HLS/chat_video_master.m3u8'
 const chatVideoMP4av1 = 'https://hostbuddylb.com/home/chat_video/chat_video_30fps_av1.mp4';
 const chatVideoMP4 = 'https://hostbuddylb.com/home/chat_video/chat_video_30fps.mp4';
-const VideoImgbackup = 'https://hostbuddylb.com/home/chat_video/video_img.jpg';
+const VideoImgbackup = 'https://hostbuddylb.com/home/chat_video/video_img.webp';
 
 const Banner = () => {
     const [demoModalShow, setDemoModalShow] = useState(false);
