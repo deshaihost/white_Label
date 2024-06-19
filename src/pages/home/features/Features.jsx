@@ -14,15 +14,15 @@ import EditPropertyImg from '../../../public/img/home/Property_customization.png
 import transcriptsPanel from '../../../public/img/home/actionItems_and_transcripts.png';
 */
 
-const FeatureIconOne = 'https://hostbuddylb.com/home/feature_icon1.png';
-const FeatureIconTwo = 'https://hostbuddylb.com/home/feature_icon2.png';
-const FeatureIconThree = 'https://hostbuddylb.com/home/feature_icon3.png';
+const FeatureIconOne = 'https://hostbuddylb.com/home/feature_icon1.webp';
+const FeatureIconTwo = 'https://hostbuddylb.com/home/feature_icon2.webp';
+const FeatureIconThree = 'https://hostbuddylb.com/home/feature_icon3.webp';
 const FeatureIconFour = 'https://hostbuddylb.com/home/feature_iconnew1.png';
 
-const ComputerBrainImg = 'https://hostbuddylb.com/home/intelligence.png';
-const ControlToggleImg = 'https://hostbuddylb.com/home/host_control_toggle.png';
-const EditPropertyImg = 'https://hostbuddylb.com/home/Property_customization.png';
-const transcriptsPanel = 'https://hostbuddylb.com/home/actionItems_and_transcripts.png';
+const ComputerBrainImg = 'https://hostbuddylb.com/home/intelligence.webp';
+const ControlToggleImg = 'https://hostbuddylb.com/home/host_control_toggle.webp';
+const EditPropertyImg = 'https://hostbuddylb.com/home/Property_customization.webp';
+const transcriptsPanel = 'https://hostbuddylb.com/home/actionItems_and_transcripts.webp';
 
 const Features = () => {
     const [activeKey, setActiveKey] = useState("0");
