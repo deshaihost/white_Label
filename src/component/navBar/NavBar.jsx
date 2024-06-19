@@ -53,8 +53,6 @@ const NavBar = () => {
     } else if (numPropertiesUsed > numPropertiesAllowed) {
       const expiryDate = parseDate(tooManyPropertiesGraceUntil);
       const currentDate = new Date(Date.now());
-      console.log("expiryDate: ", expiryDate)
-      console.log("currentDate: ", currentDate)
       const diffTime = Math.abs(expiryDate - currentDate); // time remaining, in milliseconds
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // time remaining, in full days
       if (expiryDate > currentDate) { // User has too many properties, but still has grace period before services are paused

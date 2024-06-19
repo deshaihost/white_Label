@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Container from 'react-bootstrap/Container';
 import './banner.css';
 import { Link } from "react-router-dom";
 import BookDemoModal from "../../../component/bookDemoModal";
+import HLSVideoPlayer from './HLSVideoPlayer';
 
+/*
 import chatVideo from '../../../public/img/home/chat_video.mp4';
 import videoImgBackup from '../../../public/img/home/video_img.jpg';
+*/
+
+//const chatVideo = 'https://hostbuddylb.com/home/chat_video.mp4';
+const chatVideoHLSPlaylist = 'https://hostbuddylb.com/home/chat_video/HLS/chat_video_master.m3u8'
+const chatVideoMP4av1 = 'https://hostbuddylb.com/home/chat_video/chat_video_30fps_av1.mp4';
+const chatVideoMP4 = 'https://hostbuddylb.com/home/chat_video/chat_video_30fps.mp4';
+const VideoImgbackup = 'https://hostbuddylb.com/home/chat_video/video_img.jpg';
 
 const Banner = () => {
     const [demoModalShow, setDemoModalShow] = useState(false);
@@ -28,10 +37,7 @@ const Banner = () => {
                         <Link to='/pricing' className="link-btn outline-btn">Get Started For Free</Link>
                     </div>
                     <div className="banner-video">
-                        <video autoPlay loop muted playsInline poster={videoImgBackup}>
-                            <source src={chatVideo} type="video/mp4" />
-                            Your browser does not support HTML video.
-                        </video>
+                        <HLSVideoPlayer src={chatVideoHLSPlaylist} mp4Backupav1={chatVideoMP4av1} mp4Backuph264={chatVideoMP4} ImgBackup={VideoImgbackup} />
                     </div>
                 </div>
             </Container>

@@ -2,10 +2,17 @@ import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import './works.css';
 
-import AssistantImg from '../../../public/img/home/assistant.png';
-import IntegrationsImg from '../../../public/img/home/integrations_works_crop.png';
-import PropertyWithAmenitiesImg from '../../../public/img/home/property_with_amenities.jpeg';
-import lateNightBot from '../../../public/img/home/empty_desk_night.png';
+/*
+import AssistantImg from 'https://hostbuddylb.com/home/assistant.png';
+import IntegrationsImg from 'https://hostbuddylb.com/home/integrations_works_crop.png';
+import PropertyWithAmenitiesImg from 'https://hostbuddylb.com/home/property_with_amenities.jpeg';
+import lateNightBot from 'https://hostbuddylb.com/home/empty_desk_night.png';
+*/
+
+const AssistantImg = 'https://hostbuddylb.com/home/assistant.png';
+const IntegrationsImg = 'https://hostbuddylb.com/home/integrations_works_crop.png';
+const PropertyWithAmenitiesImg = 'https://hostbuddylb.com/home/property_with_amenities.jpeg';
+const lateNightBot = 'https://hostbuddylb.com/home/empty_desk_night.png';
 
 const Works = () => {
     return(
