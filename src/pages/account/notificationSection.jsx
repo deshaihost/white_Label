@@ -13,11 +13,11 @@ const AccountNotificationSection = () => {
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
-
+  
   // Get the user's contact information from the API response, but only take emails/phones with confirmed=true
   let user_contact_options = Object.entries(userDataGet?.contact_information || {}).reduce((acc, [key, value]) => {
     acc[key] = Object.entries(value).reduce((acc2, [key2, value2]) => {
-      if (value2.confirmed) {
+      if (!('last_confirmation_sent' in value2)) { // contact is defined to be confirmed if and only if this key is not present
         acc2[key2] = value2;
       }
       return acc2;
@@ -154,8 +154,6 @@ if (userDataGet?.email) {
       setRecipients(newRecipients);
     }
 
-    // Populate email & phone number options
-
   }, [userDataGet]);
 
 
@@ -234,12 +232,12 @@ if (userDataGet?.email) {
                   <input type="text" id={`Time${index}`} name="time" className="form-control disabled-input" value={recipient.timing === 'hourly' ? 'Hourly, On The Hour' : recipient.timing === 'immediate' ? 'Immediately' : '[Please select Timing first]'} disabled />
                 )}
               </div>
-
-              <span className="d-flex justify-content-center">
-                <Link to="#" style={{marginTop:'20px', color:'red', textAlign:'center'}} className="text-link" onClick={() => removeRecipient(index)}>Remove Recipient</Link>
-              </span>
-
             </div>
+
+            <span className="d-flex justify-content-center">
+              <Link to="#" style={{marginTop:'20px', color:'red', textAlign:'center'}} className="text-link" onClick={() => removeRecipient(index)}>Remove Recipient</Link>
+            </span>
+
           </div>
         ))}
 
