@@ -23,6 +23,37 @@
     padding: 22px 40px;
 }
 
+
+
+.account-container .account-navbar .col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.account-container .account-navbar .nav-option {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px; /* Increase the font size */
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif; /* Modern font */
+    cursor: pointer;
+}
+
+.account-container .account-navbar .nav-option:hover {
+    color: #ccc;
+}
+
+.account-container .account-navbar .nav-option.selected {
+    box-shadow: 0px -0px 10px 3px rgba(0, 0, 255, 1);
+}
+
+
+
+
+
+
 .account-container .account-content {
     padding: 30px 40px;
 }
@@ -45,6 +76,10 @@
     margin-top: 20px;
 }
 
+.account-container .account-content h6 {
+    color: white;
+}
+
 .account-container .account-content .disabled-input {
     color: grey;
   }
@@ -61,6 +96,14 @@
     color: white;
     margin-bottom: 30px;
     font-size: 16px;
+}
+
+.account-container .account-content .confirmation_code_input input {
+    border: 1px solid white;
+    color: white;
+    width: 100px;
+    padding: 2px 10px;
+    margin-right: 10px;
 }
 
 .account-container .account-content .recipient {
