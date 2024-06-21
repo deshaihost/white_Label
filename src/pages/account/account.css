@@ -14,6 +14,10 @@
     background: #000212;
 }
 
+.account-container hr {
+    margin-bottom: 0;
+}
+
 .account-container > div:not(:last-child) {
     border-bottom: 1px solid #2C389E;
     padding: 22px 40px;
@@ -21,6 +25,61 @@
 
 .account-container .account-content {
     padding: 30px 40px;
+}
+
+.account-container .account-content h3 {
+    color: white;
+    text-align: center;
+    margin: 30px 0;
+}
+
+.account-container .account-content h4 {
+    color: white;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.account-container .account-content h5 {
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.account-container .account-content .disabled-input {
+    color: grey;
+  }
+
+.account-container .account-content .warning-text {
+    color: rgb(255, 165, 0);
+}
+
+.account-container .account-content .grey-text {
+    color: #AAA;
+}
+
+.account-container .account-content p {
+    color: white;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.account-container .account-content .recipient {
+    border: 1px solid #2C389E;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 35px;
+    box-shadow: 2px -2px 15px 1px rgba(255, 255, 255, 0.25);
+}
+
+.account-container .account-content .in-section-divider {
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+}
+
+.account-container .account-content link {
+    margin-top:'10px';
+    text-align:'center';
 }
 
 .account-container .account-content form label {
