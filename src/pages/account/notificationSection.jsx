@@ -13,27 +13,29 @@ const AccountNotificationSection = () => {
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
-  
-  // Get the user's contact information from the API response, but only take emails/phones with confirmed=true
-  let user_contact_options = Object.entries(userDataGet?.contact_information || {}).reduce((acc, [key, value]) => {
-    acc[key] = Object.entries(value).reduce((acc2, [key2, value2]) => {
-      if (!('last_confirmation_sent' in value2)) { // contact is defined to be confirmed if and only if this key is not present
-        acc2[key2] = value2;
-      }
-      return acc2;
-    }, {});
+
+  // Initialize user_contact_options with all possible contact channels set to empty objects
+  let all_possible_contact_channels = ['email', 'phone'];
+  let user_contact_options = all_possible_contact_channels.reduce((acc, channel) => {
+    acc[channel] = {};
     return acc;
   }, {});
+  
+  // Populate user_contact_options with the user's contact information from the API response, but only take emails/phones with confirmed=true
+  Object.entries(userDataGet?.contact_information || {}).forEach(([key, value]) => {
+    if (all_possible_contact_channels.includes(key)) {
+      user_contact_options[key] = Object.entries(value).reduce((acc, [key2, value2]) => {
+        if (!('last_confirmation_sent' in value2)) { // contact is defined to be confirmed if and only if this key is not present
+          acc[key2] = value2;
+        }
+        return acc;
+      }, {});
+    }
+  });
 
   // Add the user account's primary email address to the email addresses in contact_options
 if (userDataGet?.email) {
-  user_contact_options = {
-    ...user_contact_options,
-    email: {
-      ...user_contact_options.email,
-      [userDataGet?.email]: {}
-    }
-  };
+  user_contact_options = { ...user_contact_options, email: { ...user_contact_options.email, [userDataGet?.email]: {} } };
 }
   
   const [updateNotifSettingsApi, setUpdateNotifSettingsApi] = useState(false);
@@ -168,8 +170,8 @@ if (userDataGet?.email) {
   return (
     <div className="account-content location-section">
       <h3>Notification Settings</h3>
-      <p style={{marginLeft:"10px"}}>If your contact information is not showing up here, add it in the "User Information" section and make sure it is confirmed.</p>
-      {!time_zone_name && <p style={{marginLeft:"10px"}}><span className="warning-text">You have not set a time zone for your account.</span> Set your time zone in "Location / Region Settings" in order to use daily notifications.</p>}
+      <p style={{marginLeft:"10px"}}>If your contact information is not showing up here, add it in the "Contact" section and make sure it is confirmed.</p>
+      {!time_zone_name && <p style={{marginLeft:"10px"}}><span className="warning-text">You have not set a time zone for your account.</span> Set your time zone in "Region" Settings in order to use daily notifications.</p>}
 
       <form action="">
 
@@ -178,7 +180,7 @@ if (userDataGet?.email) {
         <p style={{marginLeft:"10px"}}>Get notifications when HostBuddy detects a new action item for the host in a guest conversation. Receive your notifications immediately, or get them all at the end of the hour or at a certain time of day.</p>
         
 
-        {recipients.length === 0 && <p><span className="grey-text">No recipients added. This notification will not be sent.</span></p>}
+        {recipients.length === 0 && <p style={{marginLeft:"10px"}}><span className="grey-text">No recipients added. This notification will not be sent.</span></p>}
         {recipients.map((recipient, index) => (
           <div className="recipient" key={index}>
             <div className="row">
@@ -192,6 +194,7 @@ if (userDataGet?.email) {
                 <select id={`Channel${index}`} name="channel" className="form-control" value={recipient.channel} onChange={e => handleInputChange(e, index)}>
                   <option value="">-- Please select --</option>
                   <option value="email">Email</option>
+                  {/* <option value="sms">Text message (SMS)</option> */}
                 </select>
               </div>
 

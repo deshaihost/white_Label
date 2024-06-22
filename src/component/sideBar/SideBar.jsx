@@ -9,6 +9,8 @@ const SideBar = () => {
   const location = useLocation();
   const findlocation = location?.pathname;
   const [logoutLoader, setLogoutLoader] = useState(false);
+
+
   const logoutHandle = async () => {
     try {
       setLogoutLoader(true);
@@ -21,8 +23,10 @@ const SideBar = () => {
       const refreshToken = getSessionStorageData?.refreshToken;
       // Define the request headers
       const headers = {
-        Authorization: `Bearer ${refreshToken}`,
+        Authorization: `Bearer ${refreshToken}`
       };
+
+      /*
       const response = await axios.post(logoutUrl, {}, { headers });
       if (response.status === 200) {
         localStorage.clear();
@@ -30,9 +34,19 @@ const SideBar = () => {
         setLogoutLoader(false);
         navigate("/login");
       }
+      */
+
+      // Instead of above, just call the API and continue. Don't wait for it, we don't care about the result
+      axios.post(logoutUrl, {}, { headers });
+      localStorage.clear();
+      sessionStorage.removeItem("hostBuddy_auth");
+      setLogoutLoader(false);
+      navigate("/login");
+      
     } catch (error) {
       console.error(error);
     }
+
   };
 
   return (
