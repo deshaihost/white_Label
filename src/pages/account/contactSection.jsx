@@ -12,19 +12,6 @@ const AccountContactSection = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
-  const time_zone_name = userDataGet?.user_region?.time_zone_name;
-  let user_contact_options = userDataGet?.contact_information;
-
-  // Add the user account's primary email address to the email addresses in contact_options
-if (userDataGet?.email) {
-  user_contact_options = {
-    ...user_contact_options,
-    email: {
-      ...user_contact_options.email,
-      [userDataGet?.email]: {}
-    }
-  };
-}
   
   const [confCodeSending, setConfCodeSending] = useState(false);
   const [codeConfirming, setCodeConfirming] = useState(false);
@@ -127,7 +114,6 @@ if (userDataGet?.email) {
     const updatedNewContacts = {...newContacts};
     updatedNewContacts[section][name] = value;
     setNewContacts(updatedNewContacts);
-    console.log(newContacts)
   };
 
 
@@ -139,7 +125,6 @@ if (userDataGet?.email) {
 
 
   const addContact = async (name, type, address) => {
-    console.log('nta', name, type, address)
     const responseCode = await addNewContact(type, name, address);
     if (responseCode === 200) {
       dispatch(getUserDataActions()); // update our data from the API
@@ -191,8 +176,8 @@ if (userDataGet?.email) {
             updatedContacts.push({ type:contactType, name:contact_name, address:contact, confirmed:isConfirmed });
           }
         }
-        setContacts(updatedContacts);
       }
+      setContacts(updatedContacts);
     }
   }, [userDataGet]);
 
@@ -279,7 +264,7 @@ if (userDataGet?.email) {
             )}
 
             {Object.keys(newContacts[section] || {}).length === 0 &&
-              <span className="d-flex justify-content-center" style={{ marginTop:'10px', marginBottom:'70px' }}>
+              <span className="d-flex justify-content-center" style={{ marginTop:'30px', marginBottom:'70px' }}>
                 <Link to="#" className="text-link" onClick={() => showAddFields(section)}>+ Add {contact_sections[section].singular}</Link>
               </span>
             }
