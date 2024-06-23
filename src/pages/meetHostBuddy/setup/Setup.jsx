@@ -4,11 +4,20 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './setup.css';
-import SetupImgOne from '../../../public/img/MeetHostbuddy/signup_form.png';
-import SetupImgTwo from '../../../public/img/MeetHostbuddy/Property_customization.png';
-import SetupImgThree from '../../../public/img/MeetHostbuddy/hostbuddy_convo.png';
-import SetupImgFour from '../../../public/img/MeetHostbuddy/connect.png';
-import SetupImgFive from '../../../public/img/MeetHostbuddy/relax.png';
+
+/*
+import SetupImgOne from '../../../public/img/meet-hostbuddy/signup_form.png';
+import SetupImgTwo from '../../../public/img/meet-hostbuddy/Property_customization.png';
+import SetupImgThree from '../../../public/img/meet-hostbuddy/hostbuddy_convo.png';
+import SetupImgFour from '../../../public/img/meet-hostbuddy/connect.png';
+import SetupImgFive from '../../../public/img/meet-hostbuddy/relax.png';
+*/
+
+const SetupImgOne = 'https://hostbuddylb.com/meet-hostbuddy/signup_form.webp';
+const SetupImgTwo = 'https://hostbuddylb.com/meet-hostbuddy/Property_customization.webp';
+const SetupImgThree = 'https://hostbuddylb.com/meet-hostbuddy/hostbuddy_convo.webp';
+const SetupImgFour = 'https://hostbuddylb.com/meet-hostbuddy/connect.webp';
+const SetupImgFive = 'https://hostbuddylb.com/meet-hostbuddy/relax.webp';
 
 const Setup = () => {
     const [currentItem, setCurrentItem] = useState(1);

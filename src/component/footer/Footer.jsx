@@ -4,12 +4,14 @@ import {
   MDBRow,
   MDBCol,
 } from "mdb-react-ui-kit";
-import FooterLogo from "../../public/img/logo_footer.png";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import "./footer.css";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from 'react-icons/fa';
 import BookDemoModal from '../bookDemoModal';
+
+// import FooterLogo from "../../public/img/logo_footer.png";
+const FooterLogo = 'https://hostbuddylb.com/logo/logo_footer.webp';
 
 const Footer = () => {
   const [demoModalShow, setDemoModalShow] = useState(false);

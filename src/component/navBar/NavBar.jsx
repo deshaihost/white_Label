@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Alert } from 'react-bootstrap';
-import LogoNavBar from "../../helper/staticImage/logoNavBar.svg";
 import "./NavBar.css";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Authorized from "../../helper/Authorized";
+
+// import LogoNavBar from "../../helper/staticImage/logoNavBar.svg";
+const LogoNavBar = 'https://hostbuddylb.com/logo/logoNavBar.svg';
+
+
 const NavBar = () => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];

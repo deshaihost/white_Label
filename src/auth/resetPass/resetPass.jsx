@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from 'axios';
 import Container from "react-bootstrap/Container";
 import AuthImage from "../../public/img/Sign_Up_Page.jpg";
-import Logo from "../../public/img/logo_footer.png";
 import { Link } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import PrimaryButton from "../../component/button/button";
@@ -15,6 +14,8 @@ import ErrorMessageShow from "../../helper/ErrorMessageShow";
 import { ErrorMessageKey } from "../../helper/ErrorMessageKey";
 import { useLocation, useNavigate } from "react-router-dom";
 
+//import Logo from "../../public/img/logo_footer.png";
+const Logo = 'https://hostbuddylb.com/logo/logo_footer.webp';
 
 const ResetPass = () => {
   const navigate = useNavigate();
