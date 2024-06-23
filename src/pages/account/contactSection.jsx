@@ -118,7 +118,6 @@ const AccountContactSection = () => {
 
 
   const showAddFields = (section) => {
-    //setNewContacts({...newContacts, [section]:{ type:'', name:'', address:'', confirmed:false }});
     let updatedNewContacts = {...newContacts, [section]:{ type:'', name:'', address:'', confirmed:false }};
     setNewContacts(updatedNewContacts);
   };
@@ -193,46 +192,50 @@ const AccountContactSection = () => {
             <h4>{contact_sections[section].title}</h4>
 
             {/* Existing contact information */}
-            {contacts.map((contact, index) => (
-              contact.type === section && (
-                <div className="row align-items-center" style={{margin:"0"}}>
-                  <div className="col"> <h6>{contact.name}</h6> </div>
-                  <div className="col"> <h6>{contact.address}</h6> </div>
-                  <div className="col"> <h6>{contact.confirmed ? <h6 className="grey-text">Confirmed</h6> : <h6 className="warning-text">Not Confirmed</h6> }</h6> </div>
-                  <div className="col">
-                    {!contact.confirmed &&
-                      (codeSentFor !== contact.address ? (
-                        <span className="d-flex justify-content-center">
-                          <Link to="#" style={{fontSize:"1rem", lineHeight:'1.2', margin:'0'}} className="text-link" onClick={() => sendConfirmationCode(index)}>Get Confirmation Code</Link>
-                        </span>
-                      ) : (
-                        <>
-                          {!confCodeSending ? (
-                            <div className="row confirmation_code_input" style={{margin:"0"}}>
-                              <div className="col-12">
-                                <label htmlFor="confCode">Enter Code</label>
-                              </div>
-                              <div className="col d-flex">
-                                <input type="text" id="confCode" name="code" value={confirmationCode} onChange={e => setConfirmationCode(e.target.value)} />
-                                <span>
-                                  {!codeConfirming ? (
-                                    <Link to="#" style={{fontSize:"1rem", lineHeight:'1.2', margin:'0'}} className="text-link" onClick={() => submitConfirmationCode(index)}>Submit</Link>
-                                  ) : (
-                                    <Loader />
-                                  )}
-                                </span>
-                              </div>
-                            </div>
+            <table className="table">
+              <tbody>
+                {contacts.map((contact, index) => (
+                  contact.type === section && (
+                    <tr key={index}>
+                      <td><h6>{contact.name}</h6> </td>
+                      <td><h6>{contact.address}</h6> </td>
+                      <td><h6>{contact.confirmed ? <h6 className="grey-text">Confirmed</h6> : <h6 className="warning-text">Not Confirmed</h6> }</h6> </td>
+                      <td>
+                        {!contact.confirmed &&
+                          (codeSentFor !== contact.address ? (
+                            <span className="d-flex justify-content-center">
+                              <Link to="#" style={{fontSize:"1rem", lineHeight:'1.2', margin:'0'}} className="text-link" onClick={() => sendConfirmationCode(index)}>Get Confirmation Code</Link>
+                            </span>
                           ) : (
-                            <Loader />
-                          )}
-                        </>
-                      ))
-                    }
-                  </div>
-                </div>
-              )
-            ))}
+                            <>
+                              {!confCodeSending ? (
+                                <div className="row confirmation_code_input" style={{margin:"0"}}>
+                                  <div className="col-12">
+                                    <label htmlFor="confCode">Enter Code</label>
+                                  </div>
+                                  <div className="col d-flex">
+                                    <input type="text" id="confCode" name="code" value={confirmationCode} onChange={e => setConfirmationCode(e.target.value)} />
+                                    <span>
+                                      {!codeConfirming ? (
+                                        <Link to="#" style={{fontSize:"1rem", lineHeight:'1.2', margin:'0'}} className="text-link" onClick={() => submitConfirmationCode(index)}>Submit</Link>
+                                      ) : (
+                                        <Loader />
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <Loader />
+                              )}
+                            </>
+                          ))
+                        }
+                      </td>
+                    </tr>
+                  )
+                ))}
+              </tbody>
+            </table>
 
 
             {Object.keys(newContacts[section] || {}).length > 0 && (
