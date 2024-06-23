@@ -6,6 +6,7 @@ import ToastHandle from "../../helper/ToastMessage";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions, stateEmptyActions } from "../../redux/actions";
+import { set } from "react-hook-form";
 
 // Location & Time Zone Section of account page
 const AccountNotificationSection = () => {
@@ -40,6 +41,8 @@ if (userDataGet?.email) {
   
   const [updateNotifSettingsApi, setUpdateNotifSettingsApi] = useState(false);
   const [recipients, setRecipients] = useState([{ firstName: '', channel: '', RecipientAddress: '', timing: '', time: '' }]);
+  const [newRecipient, setNewRecipient] = useState({});
+  const [triggerApiUpdate, setTriggerApiUpdate] = useState(false);
 
 
   const callUpdateNotifSettingsApi = async (settingsData) => {
@@ -69,6 +72,7 @@ if (userDataGet?.email) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    /*
     // Validate that all fields are filled out for each recipient
     for (let i = 0; i < recipients.length; i++) {
       const recipient = recipients[i];
@@ -105,19 +109,66 @@ if (userDataGet?.email) {
       dispatch(stateEmptyActions());
       dispatch(getUserDataActions()); // Update our record of user data with the new region data we just added to the database
     }
+    */
   };
 
 
-  const handleInputChange = (event, index) => {
+  const showNewRecipientFields = () => {
+    setNewRecipient({ firstName: '', channel: '', RecipientAddress: '', timing: '', time: '' });
+  };
+
+
+  const handleInputChange = (event) => {
     const { name, value } = event.target;
-    const newRecipients = [...recipients];
-    newRecipients[index][name] = value;
-    setRecipients(newRecipients);
+    const updatedNewRecipient = { ...newRecipient, [name]: value };
+    setNewRecipient(updatedNewRecipient);
   };
 
 
-  const addRecipient = () => {
-    setRecipients([...recipients, { firstName: '', channel: '', RecipientAddress: '', timing: '', time: '' }]);
+  const updateDataToApi = async (data) => {
+    // Structure the data to be sent to the API
+    // {'notification_settings': { 'action_items': {
+    //      'immediate': {<email_or_sms#>: {'type':'<email_or_sms>', 'name':<firstName>}, ...},
+    //      'hourly': {<email_or_sms#>: {'type':'<email_or_sms>', 'name':<firstName>}, ...},
+    //      'daily': {<email_or_sms#>: {'type':'<email_or_sms>', 'time_of_day':'<HH:MM>', 'name':<firstName>}, ...} }}}
+    let notificationSettings = {
+      'notification_settings': {
+        'action_items': {
+          'immediate': {}, 'hourly': {}, 'daily': {}
+        }
+      }
+    };
+    recipients.forEach((recipient, index) => {
+      let recipientData = { 'type': recipient.channel, 'name': recipient.firstName };
+      if (recipient.timing === 'daily') { recipientData['time_of_day'] = recipient.time; }
+      notificationSettings.notification_settings.action_items[recipient.timing][recipient.RecipientAddress] = recipientData;
+    });
+
+    // Call the API to update the notification settings
+    const apiResponseCode = await callUpdateNotifSettingsApi(notificationSettings);
+    if (apiResponseCode === 200) {
+      dispatch(stateEmptyActions());
+      dispatch(getUserDataActions()); // Update our record of user data with the new region data we just added to the database
+    }
+  };
+
+
+  const addRecipient = async () => {
+    // Validate that all fields are filled out for each recipient
+    if (
+      !newRecipient.firstName || !newRecipient.channel || !newRecipient.RecipientAddress || !newRecipient.timing ||
+      (newRecipient.timing === 'daily' && !newRecipient.time))
+    {
+      ToastHandle('Please fill all fields for recipient', 'danger');
+      return;
+    }
+
+    // Add the new recipient, and clear the new recipient form fields
+    setRecipients([...recipients, newRecipient]);
+    setNewRecipient({});
+
+    // Update to API
+    setTriggerApiUpdate(true);
   };
 
 
@@ -125,7 +176,17 @@ if (userDataGet?.email) {
     const newRecipients = [...recipients];
     newRecipients.splice(index, 1);
     setRecipients(newRecipients);
+    setTriggerApiUpdate(true);
   };
+
+
+  // When triggerApiUpdate is set, update the data to the API
+  useEffect(() => {
+    if (triggerApiUpdate) {
+      updateDataToApi();
+      setTriggerApiUpdate(false);
+    }
+  }, [triggerApiUpdate]);
 
 
   // Fetch user data on page load, to populate "userDataGet"
@@ -166,6 +227,16 @@ if (userDataGet?.email) {
   }, [user_email_addr]);
   */
 
+  function convertTimeTo12HourFormat(time) {
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours, 10);
+    const minute = parseInt(minutes, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const convertedHour = hour % 12 || 12;
+  
+    return `${convertedHour}:${minutes.padStart(2, '0')} ${ampm}`;
+  }
+
 
   return (
     <div className="account-content location-section">
@@ -181,29 +252,43 @@ if (userDataGet?.email) {
         
 
         {recipients.length === 0 && <p style={{marginLeft:"10px"}}><span className="grey-text">No recipients added. This notification will not be sent.</span></p>}
-        {recipients.map((recipient, index) => (
-          <div className="recipient" key={index}>
+        <table className="table">
+          <tbody>
+            {recipients.map((recipient, index) => (
+              <tr key={index}>
+                <td><h6>{recipient.firstName}</h6></td>
+                <td><h6>{recipient.channel}</h6></td>
+                <td><h6>{recipient.RecipientAddress}</h6></td>
+                <td><h6>{recipient.timing === 'daily' ? `${recipient.timing}, ${convertTimeTo12HourFormat(recipient.time)}` : recipient.timing}</h6></td>
+                <td><h6 style={{color:"red"}}className="clickable-text" onClick={() => removeRecipient(index)}>Remove</h6></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {Object.keys(newRecipient || {}).length > 0 &&
+          <div className="recipient" key="recipientInput">
             <div className="row">
               <div className="col input_group">
-                <label htmlFor={`FirstName${index}`}>Recipient First Name</label>
-                <input type="text" id={`FirstName${index}`} name="firstName" className="form-control" value={recipient.firstName} onChange={e => handleInputChange(e, index)} />
+                <label htmlFor="FirstName">Recipient First Name</label>
+                <input type="text" id="FirstName" name="firstName" className="form-control" value={newRecipient.firstName} onChange={e => handleInputChange(e)} />
               </div>
 
               <div className="col input_group">
-                <label htmlFor={`Channel${index}`}>Channel</label>
-                <select id={`Channel${index}`} name="channel" className="form-control" value={recipient.channel} onChange={e => handleInputChange(e, index)}>
+                <label htmlFor={"Channel"}>Channel</label>
+                <select id={"Channel"} name="channel" className="form-control" value={newRecipient.channel} onChange={e => handleInputChange(e)}>
                   <option value="">-- Please select --</option>
                   <option value="email">Email</option>
                   {/* <option value="sms">Text message (SMS)</option> */}
                 </select>
               </div>
 
-              {recipient.channel && (
+              {newRecipient.channel && (
                 <div className="col input_group">
-                  <label htmlFor={`RecipientAddress${index}`}>{recipient.channel === 'email' ? 'Email Address' : 'Phone Number'}</label>
-                  <select id={`RecipientAddress${index}`} name="RecipientAddress" className="form-control" value={recipient.RecipientAddress} onChange={e => handleInputChange(e, index)}>
+                  <label htmlFor={"RecipientAddress"}>{newRecipient.channel === 'email' ? 'Email Address' : 'Phone Number'}</label>
+                  <select id={"RecipientAddress"} name="RecipientAddress" className="form-control" value={newRecipient.RecipientAddress} onChange={e => handleInputChange(e)}>
                     <option value="">-- Please select --</option>
-                    {recipient.channel === 'email' ? (
+                    {newRecipient.channel === 'email' ? (
                       Object.keys(user_contact_options.email).map(email => (
                         <option key={email} value={email}>{email}</option>
                       ))
@@ -219,8 +304,8 @@ if (userDataGet?.email) {
 
             <div className="row" style={{marginTop:'20px'}}>
               <div className="col input_group">
-                <label htmlFor={`Timing${index}`}>Timing</label>
-                <select id={`Timing${index}`} name="timing" className="form-control" value={recipient.timing} onChange={e => handleInputChange(e, index)}>
+                <label htmlFor={"Timing"}>Timing</label>
+                <select id={"Timing"} name="timing" className="form-control" value={newRecipient.timing} onChange={e => handleInputChange(e)}>
                   <option value="">-- Please select --</option>
                   <option value="immediate">Immediate</option>
                   <option value="hourly">Hourly</option>
@@ -228,33 +313,27 @@ if (userDataGet?.email) {
                 </select>
               </div>
               <div className="col input_group">
-                <label htmlFor={`Time${index}`}>Receive Notification At:</label>
-                {recipient.timing === 'daily' ? (
-                  <input type="time" id={`Time${index}`} name="time" className="form-control" value={recipient.time} onChange={e => handleInputChange(e, index)} />
+                <label htmlFor={"Time"}>Receive Notification At:</label>
+                {newRecipient.timing === 'daily' ? (
+                  <input type="time" id={"Time"} name="time" className="form-control" value={newRecipient.time} onChange={e => handleInputChange(e)} />
                 ) : (
-                  <input type="text" id={`Time${index}`} name="time" className="form-control disabled-input" value={recipient.timing === 'hourly' ? 'Hourly, On The Hour' : recipient.timing === 'immediate' ? 'Immediately' : '[Please select Timing first]'} disabled />
+                  <input type="text" id={"Time"} name="time" className="form-control disabled-input" value={newRecipient.timing === 'hourly' ? 'Hourly, On The Hour' : newRecipient.timing === 'immediate' ? 'Immediately' : '[Please select Timing first]'} disabled />
                 )}
               </div>
             </div>
 
             <span className="d-flex justify-content-center">
-              <Link to="#" style={{marginTop:'20px', color:'red', textAlign:'center'}} className="text-link" onClick={() => removeRecipient(index)}>Remove Recipient</Link>
+              <Link to="#" style={{marginTop:'20px', textAlign:'center'}} className="text-link" onClick={() => addRecipient()}>Submit</Link>
             </span>
 
           </div>
-        ))}
+        }
 
-        <span className="d-flex justify-content-center" style={{ marginTop:'20px', marginBottom:'20px' }}>
-          <Link to="#" className="text-link" onClick={addRecipient}>{recipients.length === 0 ? "+ Add A Notifications Recipient" : "+ Add Another Recipient"}</Link>
-        </span>
-
-        <div className="row">
-          <div className="col text-center">
-            <button type="submit" className="bg_theme_btn update_user_info" onClick={(event) => handleSubmit(event)}>
-              {!updateNotifSettingsApi ? <>Update</> : <Loader />}
-            </button>
-          </div>
-        </div>
+        {Object.keys(newRecipient || {}).length === 0 &&
+          <span className="d-flex justify-content-center" style={{ marginTop:'20px', marginBottom:'20px' }}>
+            <Link to="#" className="text-link" onClick={showNewRecipientFields}>{recipients.length === 0 ? "+ Add A Notifications Recipient" : "+ Add Another Recipient"}</Link>
+          </span>
+        }
 
       </form>
     </div>

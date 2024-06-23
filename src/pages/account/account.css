@@ -92,6 +92,11 @@
     color: #AAA;
 }
 
+.account-container .account-content .clickable-text {
+    color: rgb(0, 121, 247);
+    cursor: pointer;
+}
+
 .account-container .account-content p {
     color: white;
     margin-bottom: 30px;

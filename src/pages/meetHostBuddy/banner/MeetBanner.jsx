@@ -1,17 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./meetBanner.css";
 import Message from "./messages/Messages";
-import HouseImg from "../../../public/img/house-img.png";
 import { Container, ToastHeader } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { chatBoxAIActions, getSessionIdActions } from "../../../redux/pages/meetHostBuddy/actions";
 import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
 import Loader from "../../../helper/Loader";
-import {  nameKey } from "../../../helper/Authorized";
+import { nameKey } from "../../../helper/Authorized";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
+
+//import HouseImg from "../../../public/img/house-img.png";
+const HouseImg = "https://hostbuddylb.com/meet-hostbuddy/house-img.webp";
+
+
 const MeetBanner = (props) => {
   const { urlData } = props;
   const { chatbot_key, property_name, user_type } = urlData ? urlData : {};
