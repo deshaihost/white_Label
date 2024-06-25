@@ -1,11 +1,12 @@
 import React from 'react';
-import jayProfileImg from '../../public/img/blog/jay_profile.jpeg';
-import thumbnailImg from '../../public/img/blog/5_best_PMS_6-13/Thumbnail.jpg';
-import hostawayImg from '../../public/img/blog/5_best_PMS_6-13/hostaway.jpg';
-import lodgifyImg from '../../public/img/blog/5_best_PMS_6-13/Lodgify.png';
-import hostfullyImg from '../../public/img/blog/5_best_PMS_6-13/Hostfully.png';
-import hospitableImg from '../../public/img/blog/5_best_PMS_6-13/Hospitable.png';
-import guestyImg from '../../public/img/blog/5_best_PMS_6-13/Guesty.png';
+
+const jayProfileImg = "https://storage.googleapis.com/frontend_media/blog/jay_profile.webp";
+const thumbnailImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Thumbnail.webp";
+const hostawayImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/hostaway.webp";
+const lodgifyImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Lodgify.webp";
+const hostfullyImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Hostfully.webp";
+const hospitableImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Hospitable.webp";
+const guestyImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Guesty.webp";
 
 
 const Sidebar = () => {

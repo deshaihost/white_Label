@@ -1,3 +1,7 @@
+.pricing-tile {
+    max-width: 250px;
+}
+
 .pricing-tile .pricing-plan-box {
     border-radius: 30px;
     border: 1px solid #000633;
@@ -38,10 +42,22 @@
 .pricing-tile .pricing-plan-box .pricing-bar-box {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: center;
 }
 
-.pricing-tile .pricing-plan-box .pricing-bar-box .left-side-text h5 strong {
+.pricing .left-side-text {
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%; /* Adjust this based on the height of your NewPricingTiles components */
+}
+
+.pricing .pricing-plan-box .left-side-text {
+    display: none;
+}
+
+.pricing .left-side-text h5 strong {
     color: #FFF;
     font-family: 'Samsung Sharp Sans Bold';
     font-size: 40px;
@@ -51,7 +67,7 @@
     margin-right: 10px;
 }
 
-.pricing-tile .pricing-plan-box .pricing-bar-box .left-side-text h5 {
+.pricing .left-side-text h5 {
     color: #CCC;
     font-family: 'Samsung Sharp Sans Bold';
     font-size: 30px;
@@ -71,10 +87,17 @@
     margin: 0;
 }
 
-.pricing-tile .pricing-plan-box .pricing-bar-box .price-plan h5 sup {
+.pricing-tile .pricing-plan-box .pricing-bar-box .price-plan h5 sup {/* dollar sgn */
     font-weight: 500;
     top: -12px;
     margin-right: 3px;
+}
+
+.pricing-tile .pricing-plan-box .pricing-bar-box .price-plan .cents { /* cents, also h5 sup */
+    font-weight: 500;
+    top: -20px;
+    margin-right: 3px;
+    font-size: 21px;
 }
 
 .pricing-tile .pricing-plan-box .pricing-bar-box .price-plan h5 sub {
@@ -101,23 +124,22 @@
     display: table;
 }
 
-.pricing-tile .best-price-plan {
-    border: 2px solid #146EF5;
-}
-
 .pricing-tile .lower-price-plan {
     border: 2px solid #555;
+}
+
+.pricing-tile .mid-price-plan {
+    border: 2px solid #5A6A9A; /* Less bold blue */
+}
+
+.pricing-tile .best-price-plan {
+    border: 2px solid #146EF5; /* bold blue */
 }
 
 @media only screen and (max-width: 1199px) {
 
     .pricing-tile .pricing-plan-box .pricing-bar-box .pricing-bar {
         width: calc(100% - 135px);
-    }
-
-    .pricing-tile .pricing-plan-box .pricing-bar-box .price-plan h5 {
-        font-size: 30px;
-        line-height: 37px;
     }
 
     .pricing-tile .pricing-plan-box .pricing-bar-box .price-plan h5 sup {
@@ -128,6 +150,28 @@
     .pricing-tile .pricing-plan-box .pricing-bar-box .price-plan h5 sub, .pricing-tile .pricing-plan-box .pricing-bar-box .price-plan span {
         font-size: 13px;
     }
+
+    .pricing .property-labels {
+        display: none !important;
+    }
+
+    .pricing .price-plans-column{
+        flex: 0 0 auto;
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    .pricing .pricing-plan-box .left-side-text {
+        display: block;
+    }
+
+    .pricing-tile {
+        max-width: 100%;
+    }
+
+    .pricing-tile .pricing-plan-box .pricing-bar-box {
+        justify-content: space-between;
+    }
 }
 
 @media only screen and (max-width: 991px) {
@@ -136,7 +180,7 @@
     }
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 420px) {
     .pricing-tile .pricing-plan-box {
         border-radius: 15px;
         padding: 20px;

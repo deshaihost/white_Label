@@ -3,35 +3,36 @@ import "../newPricingTiles.css";
 import { Link } from "react-router-dom";
 import Authorized from "../../../helper/Authorized";
 
-const NewPricingTiles = ( {num_props_range, bestPricePlan, monthlyPricePerProp} ) => {
+
+// This component represents a single pricing tile in the new format.
+const NewPricingTiles = ( {num_props_range, priceTier, monthlyPricePerProp, cents} ) => {
 
   return (
     <div className="pricing-tile">
-      <div className="col-lg-12">
-        <div className={`pricing-plan-box ${bestPricePlan ? 'best-price-plan' : 'lower-price-plan'}`}>
-          <div className="pricing-bar-box">
+      <div className={`pricing-plan-box ${priceTier === 1 ? 'lower-price-plan' : priceTier === 2 ? 'mid-price-plan' : 'best-price-plan'}`}>
+        <div className="pricing-bar-box">
 
-            {/* Left side text, e.g. "1-10 Properties" */}
-            <div className="left-side-text">
-              <h5><strong>{num_props_range}</strong> Properties</h5>
-            </div>
+          {/* Left side text, e.g. "1-10 Properties". This only appears for small/medium screens. For large screens, it's located outside the box. */}
+          <div className="left-side-text">
+            <h5><strong>{num_props_range}</strong> Properties</h5>
+          </div>
 
-            {/* Right side text, e.g. "2 weeks free, then $12/Month per property" */}
-            <div className="price-plan">
-              <span>
-                2 weeks free, then
-              </span>
-              <h5>
-                <sup>$</sup>
-                <strong>
-                  {monthlyPricePerProp}
-                </strong>
-                /<sub>Month</sub>
-              </h5>
-              <span>
-                per property
-              </span>
-            </div>
+          {/* Right side text, e.g. "2 weeks free, then $12/Month per property" */}
+          <div className="price-plan">
+            <span>
+              2 weeks free, then
+            </span>
+            <h5>
+              <sup>$</sup>
+              <strong>
+                {monthlyPricePerProp}
+              </strong>
+              {cents && <sup className="cents">.{cents}</sup>}
+              /<sub>Month</sub>
+            </h5>
+            <span>
+              per property
+            </span>
           </div>
         </div>
       </div>

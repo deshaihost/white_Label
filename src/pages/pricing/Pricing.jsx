@@ -24,20 +24,37 @@ const Pricing = () => {
         </div>
 
         <div className="row all-pricing-information">
-          <div className="col-12 col-lg-6 mb-4 mb-lg-0">
+          <div className="col d-flex flex-column justify-content-center align-items-start property-labels">
+            <div style={{ height: '100px' }}></div> {/* Vertical spacer, to account for the  */}
+            <div className="left-side-text d-flex align-items-center">
+              <h5><strong>1-10</strong> Properties</h5>
+            </div>
+            <div className="left-side-text d-flex align-items-center">
+              <h5><strong>11-50</strong> Properties</h5>
+            </div>
+            <div className="left-side-text d-flex align-items-center">
+              <h5><strong>51-99</strong> Properties</h5>
+            </div>
+          </div>
+          <div className="col price-plans-column">
             <h3>The Essentials</h3>
-            <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="6" bestPricePlan={false}/>
-            <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="5" bestPricePlan={false}/>
-            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="4" bestPricePlan={false}/>
-            <h4>100+ properties - <button className="contact-us-button" onClick={() => setContactModalShow(true)}>Contact Us</button></h4>
+            <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="2" cents="50" priceTier={1}/>
+            <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="2" priceTier={1}/>
+            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="1" cents="50" priceTier={1}/>
           </div>
-          <div className="col-12 col-lg-6 works-pricing-boxes">
+          <div className="col price-plans-column">
             <h3>The Works</h3>
-            <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="12" bestPricePlan={true}/>
-            <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="10" bestPricePlan={true}/>
-            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="8" bestPricePlan={true}/>
-            <h4>100+ properties - <button className="contact-us-button" onClick={() => setContactModalShow(true)}>Contact Us</button></h4>
+            <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="5" priceTier={2}/>
+            <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="4" priceTier={2}/>
+            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="3" cents="50" priceTier={2}/>
           </div>
+          <div className="col price-plans-column">
+            <h3>The Works Unlimited</h3>
+            <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="7" priceTier={3}/>
+            <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="6" priceTier={3}/>
+            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="5" priceTier={3}/>
+          </div>
+          <h4 style={{marginTop:"20px"}}>100+ properties - <button className="contact-us-button" onClick={() => setContactModalShow(true)}>Contact Us</button></h4>
         </div>
 
         <Features />

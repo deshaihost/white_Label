@@ -1,7 +1,7 @@
 import React from 'react';
 import './blog.css';
-import five_best_thumbnail from '../public/img/blog/5_best_PMS_6-13/Thumbnail.jpg';
-import AiBrainImg from '../public/img/blog/intelligence.png';
+
+const five_best_thumbnail = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Thumbnail_small.webp";
 
 const BlogLandingPage = () => {
 
