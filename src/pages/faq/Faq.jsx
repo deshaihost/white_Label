@@ -96,9 +96,13 @@ function Faqs() {
                         </Accordion.Item>
 
                         <Accordion.Item eventKey="9">
-                            <Accordion.Header>I would like HostBuddy to be more involved in my team's day-to-day operations. Do you have plans to add integrations with Slack, text messaging, or other communication platforms that would allow HostBuddy to update necessary team members about issues that need support?</Accordion.Header>
+                            <Accordion.Header>Can HostBuddy send direct updates to me and my team members about issues that need support?</Accordion.Header>
                             <Accordion.Body>
-                            We are currently developing HostBuddy’s capabilities to facilitate open communication between guests, HostBuddy, and your team. This enhancement is underway, and we would love to hear your thoughts on which integrations we should support when the feature is completed. Please send us an email to help integrate HostBuddy more into your business at info@hostbuddy.ai.
+                            Yes, HostBuddy can send you notifications about important events - for example, when a new action item has been detected in a conversation that requires your attention. You can configure these notifications in your account, set your preferred timing, and send to multiple recipients if desired.
+                            <br /><br />
+                            We currently support sending notifications via email. Support for SMS, WhatsApp, and Slack notifications are in the works and coming very soon.
+                            <br /><br />
+                            We would love to hear your thoughts on which integrations you'd like to see support for. Please send us an email to help integrate HostBuddy more into your business at info@hostbuddy.ai.
                             </Accordion.Body>
                         </Accordion.Item>
 

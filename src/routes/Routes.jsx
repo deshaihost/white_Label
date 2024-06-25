@@ -95,16 +95,18 @@ const Routing = () => {
       document.head.appendChild(script2);
     };
 
-    // Add the script only if not already present, and only for the front pages (excluding login/register/forgotpass)
+    // Add the scripts to the head of the document
     const existingScript = document.getElementById('site-profiling');
     const loadedScript = document.getElementById('profiling-loaded-script');
+    if (!window.dataLayer) { // window.dataLayer is a global array that the Google Tag Manager uses to collect and store data. If window.dataLayer is not defined, it means the Google tracking script has not been added to the page yet. This prevents the Google tracking script from being added multiple times if the useEffect hook runs more than once.
+      addGoogleScript(); // add regardless of what page we're on. We need this in the user portal so we can report conversions during checkout
+    }
+
+    // Add the rb2b script only if not already present, and only for the front pages (excluding login/register/forgotpass/changepass)
     const pathnames_to_profile = ["/", "/pricing", "/meet-hostbuddy", "/faqs", "/privacy-policy", "/termsof-service", "/scheduling-walkthrough", "/tips-and-tricks", "/testing-questions"];
     if (pathnames_to_profile.includes(location.pathname)) {
       if (!existingScript) {
         addScript();
-      }
-      if (!window.dataLayer) { // window.dataLayer is a global array that the Google Tag Manager uses to collect and store data. If window.dataLayer is not defined, it means the Google tracking script has not been added to the page yet. This prevents the Google tracking script from being added multiple times if the useEffect hook runs more than once.
-        addGoogleScript();
       }
     } else { // When the user navigates away from the front pages, remove the rb2b script (and the other script that it loads). Don't mess with the google ads script, let it do its thing
       if (existingScript) { existingScript.remove(); }
