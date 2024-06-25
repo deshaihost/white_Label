@@ -77,7 +77,7 @@ const Features = () => {
                                     {/* <p>Features in The Works Plan</p>  */}
                                 </th>
                                 <th>
-                                    <h3>The Works Unlimited</h3>
+                                    <h3>The Works<br/>Unlimited</h3>
                                     {/* <p>Features in The Works Unlimted Plan</p>  */}
                                 </th>
                             </tr>
