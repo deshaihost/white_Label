@@ -69,6 +69,10 @@
     text-align: left;
 }
 
+.features .features-list table td {
+    text-align: center; /* center the check/x image */
+}
+
 .features .features-list table td h5 {
     margin: 0;
     color: #B3B3B3;
@@ -77,6 +81,7 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    text-align: left;
 }
 
 .features .features-list table td:not(:first-child) {
@@ -93,6 +98,12 @@
     border-color: transparent;
 }
 
+.features .features-list table tbody p {
+    color: #FFF;
+    font-size: 16px;
+    text-align: center;
+}
+
 @media only screen and (max-width: 991px) {
     .features .features-list table th, .features .features-list table td {
         padding: 15px 0;
@@ -104,6 +115,10 @@
     }
 
     .features .features-list table td h5 {
+        font-size: 15px;
+    }
+
+    .features .features-list table tbody p {
         font-size: 15px;
     }
 
