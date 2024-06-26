@@ -2,7 +2,7 @@ import React from 'react';
 import './blog.css';
 
 const five_best_thumbnail = "https://hostbuddylb.com/blog/5_best_PMS_6-13/Thumbnail_small.webp";
-const automate_str_thumbnail = "https://hostbuddylb.com/blog/thumbnail.webp";
+const automate_str_thumbnail = "https://hostbuddylb.com/blog/automate_str_6-25/thumbnail.webp";
 
 const BlogLandingPage = () => {
 
