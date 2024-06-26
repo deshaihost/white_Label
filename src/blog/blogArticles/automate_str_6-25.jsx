@@ -1,15 +1,12 @@
 import React from 'react';
 import { BlogArticleSidebar, BlogArticleHeader } from '../blogArticleComponents';
 import { Link } from 'react-router-dom';
-import AutomateCleaning from "../../assests/images/Automate Cleaning.jpg"
-import AutomateGuestAcess from "../../assests/images/Automate Guest Access.jpg"
-import Dynamicpricing from "../../assests/images/dyanmic-pricing.png"
-import Autocoummunication from "../../assests/images/Automate Guest Communication.png"
 
-const thumbnailImg = "https://hostbuddylb.com/blog/thumbnail.webp";
+const thumbnailImg = "https://hostbuddylb.com/blog/automate_str_6-25/thumbnail.webp";
 const smartLockImg = "https://hostbuddylb.com/blog/automate_str_6-25/smartLock.jpg";
 const HostBuddyImg = "https://hostbuddylb.com/blog/automate_str_6-25/HostBuddy_logo.webp";
 const TurnoImg = "https://hostbuddylb.com/blog/automate_str_6-25/turno-banner.webp";
+const PriceLabsImg = "https://hostbuddylb.com/blog/automate_str_6-25/pricelabs_dynamic_pricing.webp";
 
 const sideBarContents = [
   { id: "connect-PMS", name: "Connect PMS" },
@@ -35,8 +32,7 @@ const FiveBestPMS = () => {
           </p>
           <div id="connect-PMS">
             <h2>1. Connect a PMS</h2>
-            <p>A Property Management System (PMS) is the cornerstone of any automated short term rental business. It centralizes operations, from bookings to guest communication, making your life significantly easier. Systems like Hostaway, Lodgify, Hostfully, Hospitable, and Guesty all provide essential property management features at different price points. Please read our article on the <Link to="https://www.hostbuddy.ai/blog/5_best_PMS_6-13">5 Best Property Management Software of 2024 (Updated)</Link>  for a detailed breakdown of our favorite PMS’. PMS’ combine all booking channels (Airbnb, VRBO, Booking.com, etc.) into one system to make management super easy. If you have more than one property, I would strongly recommend using a PMS.
-            </p>
+            <p>A Property Management System (PMS) is the cornerstone of any automated short term rental business. It centralizes operations, from bookings to guest communication, making your life significantly easier. Systems like Hostaway, Lodgify, Hostfully, Hospitable, and Guesty all provide essential property management features at different price points. Please read our article on the <Link to="https://www.hostbuddy.ai/blog/5_best_PMS_6-13">5 Best Property Management Software of 2024 (Updated)</Link>  for a detailed breakdown of our favorite PMS’. PMS’ combine all booking channels (Airbnb, VRBO, Booking.com, etc.) into one system to make management super easy. If you have more than one property, I would strongly recommend using a PMS.</p>
             <ul className='mt-1'>
               <li><strong>Unified Calendar:</strong> Manage bookings from all channels on one centralized calendar. Offer your property on a multitude of different channels without worrying about double bookings or managing multiple inboxes.
               </li>
@@ -58,7 +54,7 @@ const FiveBestPMS = () => {
           </div>
           <div id="set-dynamic-pricing">
             <h2>3.Set Up Dynamic Pricing</h2>
-            <img src={Dynamicpricing} className="blog-article-image" />
+            <img src={PriceLabsImg} className="blog-article-image" />
             <p>If you’re still manually adjusting pricing, this is your sign to STOP. Dynamic pricing tools like <Link to="https://hello.pricelabs.co/">Pricelabs</Link> help you optimize your rental rates based on market demand, local events, and seasonal trends. This ensures you maximize your revenue and stay competitive. Pricelabs is the best dynamic pricing tool in my opinion, and it pays for itself over and over again, trust me.</p>
             <ul>
               <li><strong>Maximize Revenue:</strong> Adjust prices in real-time to reflect market conditions and demand.</li>
@@ -69,12 +65,8 @@ const FiveBestPMS = () => {
           </div>
           <div id="auto-cleaning">
             <h2>4. Automate Cleaning</h2>
-            <img src={AutomateCleaning} className="blog-article-image" />
-            <p>Keeping your properties clean and ready for new guests is crucial. Missing a cleaning can result in complete loss of revenue and potential penalties from booking channels.
-              Platforms like <Link to="https://turno.com/">Turno</Link> automate the scheduling and management of your cleaning team, ensuring consistency and quality. Turno integrates directly with your PMS to make cleaning scheduling effortless.
-              There are two separate apps for cleaners and hosts available in the App Store or Google Play, making it super easy to manage on the go. Cleaners may accept whichever projects they’d like, and booking changes are automatically
-              reflected in the Turno calendar. Certain PMS’ like <Link to="https://www.hostfully.com/">Hostfully</Link> provide free Turno subscriptions for being a customer!
-            </p>
+            <img src={TurnoImg} className="blog-article-image" />
+            <p>Keeping your properties clean and ready for new guests is crucial. Missing a cleaning can result in complete loss of revenue and potential penalties from booking channels. Platforms like <Link to="https://turno.com/">Turno</Link> automate the scheduling and management of your cleaning team, ensuring consistency and quality. Turno integrates directly with your PMS to make cleaning scheduling effortless. There are two separate apps for cleaners and hosts available in the App Store or Google Play, making it super easy to manage on the go. Cleaners may accept whichever projects they’d like, and booking changes are automatically reflected in the Turno calendar. Certain PMS’ like <Link to="https://www.hostfully.com/">Hostfully</Link> provide free Turno subscriptions for being a customer!</p>
             <ul>
               <li><strong>Automated Scheduling:</strong> Sync cleaning schedules with bookings automatically.</li>
               <li><strong>Quality Control: </strong> Use checklists and receive reports from cleaners to ensure high standards.</li>
@@ -83,7 +75,7 @@ const FiveBestPMS = () => {
           </div>
           <div id="auto-guest-access">
             <h2>5. Automate Guest Access</h2>
-            <img src={AutomateGuestAcess} className="blog-article-image" />
+            <img src={smartLockImg} className="blog-article-image" />
             <p>There are many options to consider when installing Smart Locks for your short term rentals. If possible, it’s safest and most efficient to install keyless entry systems instead of keyed entry. The two best options I’ve found are the:
             </p>
             <p className='mt-2'>1. Yale door locks with Z-wave compatibility:</p>
@@ -96,17 +88,13 @@ const FiveBestPMS = () => {
             </ol>
             <p>2. Igloohome Locks:</p>
             <ol type='a'>
-              <li><Link to="https://www.igloohome.co/en-US">Igloohome </Link>was one of the first lock systems to integrate with Airbnb, and has its own app for creating automated messages for guests with access codes. For keyless entry, they provide their <Link to="https://www.amazon.com/Igloohome-Smart-Electronic-Deadbolt-Built/dp/B07D2HQW3K/ref=sr_1_1_pp?crid=C7FGPBQ6Q5TN&dib=eyJ2IjoiMSJ9.S9jov5NCmMAedrHmh2Acq4NsJLZCOMLQ9geEIoPAVTyc8IDICmIqs5OOfuEWbORnh-4Da9h4aQw1796OYq2DD4IDQCN45ietWKUesLWYULJql0-we0zlMLs2jJKFQhpRUmemEz2reHwcSXCEXaKh-Q.olMDFZYk31uuiwleMezWnva4-YDnmc50tTLPSX6-z7g&dib_tag=se&keywords=igloohome+deadbolt&qid=1718677776&sprefix=igloohome+deadbol%2Caps%2C139&sr=8-1">deadbolt lock</Link>,
-                which pairs to their <Link to="https://www.amazon.com/igloohome-Control-remotely-Anywhere-Anytime/dp/B09YD6CKGF/ref=sr_1_8?crid=C7FGPBQ6Q5TN&dib=eyJ2IjoiMSJ9.S9jov5NCmMAedrHmh2Acq4NsJLZCOMLQ9geEIoPAVTyc8IDICmIqs5OOfuEWbORnh-4Da9h4aQw1796OYq2DD4IDQCN45ietWKUesLWYULJql0-we0zlMLs2jJKFQhpRUmemEz2reHwcSXCEXaKh-Q.olMDFZYk31uuiwleMezWnva4-YDnmc50tTLPSX6-z7g&dib_tag=se&keywords=igloohome+deadbolt&qid=1718677776&sprefix=igloohome+deadbol%2Caps%2C139&sr=8-8">bridge device</Link> that connects to the internet. From here, you can again use Jervis Systems to automate your guest access codes. This is a little more simple of a process in my opinion and comes at a cheaper price point. Since I have not performed long term testing on these locks,
-                Amazon product reviews are a good place to read customer experiences.
-              </li>
-              <li>Igloohome also provides lockboxes that will generate random codes and send to your Airbnb guests. Keep in mind that these lockboxes do not currently support code creation and automated messaging for booking channels other than Airbnb.
-              </li>
+              <li><Link to="https://www.igloohome.co/en-US">Igloohome </Link>was one of the first lock systems to integrate with Airbnb, and has its own app for creating automated messages for guests with access codes. For keyless entry, they provide their <Link to="https://www.amazon.com/Igloohome-Smart-Electronic-Deadbolt-Built/dp/B07D2HQW3K/ref=sr_1_1_pp?crid=C7FGPBQ6Q5TN&dib=eyJ2IjoiMSJ9.S9jov5NCmMAedrHmh2Acq4NsJLZCOMLQ9geEIoPAVTyc8IDICmIqs5OOfuEWbORnh-4Da9h4aQw1796OYq2DD4IDQCN45ietWKUesLWYULJql0-we0zlMLs2jJKFQhpRUmemEz2reHwcSXCEXaKh-Q.olMDFZYk31uuiwleMezWnva4-YDnmc50tTLPSX6-z7g&dib_tag=se&keywords=igloohome+deadbolt&qid=1718677776&sprefix=igloohome+deadbol%2Caps%2C139&sr=8-1">deadbolt lock</Link>, which pairs to their <Link to="https://www.amazon.com/igloohome-Control-remotely-Anywhere-Anytime/dp/B09YD6CKGF/ref=sr_1_8?crid=C7FGPBQ6Q5TN&dib=eyJ2IjoiMSJ9.S9jov5NCmMAedrHmh2Acq4NsJLZCOMLQ9geEIoPAVTyc8IDICmIqs5OOfuEWbORnh-4Da9h4aQw1796OYq2DD4IDQCN45ietWKUesLWYULJql0-we0zlMLs2jJKFQhpRUmemEz2reHwcSXCEXaKh-Q.olMDFZYk31uuiwleMezWnva4-YDnmc50tTLPSX6-z7g&dib_tag=se&keywords=igloohome+deadbolt&qid=1718677776&sprefix=igloohome+deadbol%2Caps%2C139&sr=8-8">bridge device</Link> that connects to the internet. From here, you can again use Jervis Systems to automate your guest access codes. This is a little more simple of a process in my opinion and comes at a cheaper price point. Since I have not performed long term testing on these locks, Amazon product reviews are a good place to read customer experiences.</li>
+              <li>Igloohome also provides lockboxes that will generate random codes and send to your Airbnb guests. Keep in mind that these lockboxes do not currently support code creation and automated messaging for booking channels other than Airbnb.</li>
             </ol>
           </div>
           <div id="auto-guest-communication">
             <h2>6. Automate Guest Communication</h2>
-            <img src={Autocoummunication}  className="blog-article-image" />
+            <img src={HostBuddyImg}  className="blog-article-image" />
             <p>Effective and timely communication is essential for maintaining high guest satisfaction. One missed message and you could be forced to pay out hefty refunds to guests for access issues or delayed responses. Tools like <Link to="https://www.hostbuddy.ai/">HostBuddy AI</Link> can handle all guest communication so you don’t have to.
               HostBuddy is designed by a team of superhosts to provide the most exceptional support to short term rental guests. It works by pulling guest and listing data directly from your PMS, and responding to guests through your PMS inbox. It does not sound like AI, can be customized as much as you’d like,
               and scheduled for whenever you need it. Plus, it’s extremely affordable compared to human-operated guest support.
@@ -116,20 +104,15 @@ const FiveBestPMS = () => {
               <li><strong>PMS Integration:</strong> Integrates with all major PMS’ for a seamless setup process.</li>
               <li><strong>Endless Customization:</strong> Perfectly tailor HostBuddy’s responses to your properties with limitless customization options.</li>
               <li><strong>24/7 Scheduling:</strong> Choose which hours to activate HostBuddy by scheduling it for specific days of the week, or certain days of the year.</li>
-              <li><strong>Conversation Reporting:</strong> With AI-powered conversation reporting, HostBuddy will track conversations and let you know what needs additional attention from the host.
-              </li>
-              <li><strong>14 Day Free Trial:</strong><Link to="https://www.hostbuddy.ai/signup"> Free trial</Link> offered to all new customers.
-              </li>
-              <li><strong>Low Pricing:</strong> Hosts can take advantage of this new technology while <Link to="https://www.hostbuddy.ai/pricing">prices</Link> are at an all time low. As more hosts begin to implement AI into their businesses, prices for these services will likely increase.
-              </li>
+              <li><strong>Conversation Reporting:</strong> With AI-powered conversation reporting, HostBuddy will track conversations and let you know what needs additional attention from the host.</li>
+              <li><strong>14 Day Free Trial:</strong><Link to="https://www.hostbuddy.ai/signup"> Free trial</Link> offered to all new customers.</li>
+              <li><strong>Low Pricing:</strong> Hosts can take advantage of this new technology while <Link to="https://www.hostbuddy.ai/pricing">prices</Link> are at an all time low. As more hosts begin to implement AI into their businesses, prices for these services will likely increase.</li>
             </ol>
             <p><Link to="https://youtu.be/D1lyGfAmLGw">https://youtu.be/D1lyGfAmLGw</Link></p>
           </div>
           <div id="hire-virtual-assistants">
             <h2>7. Hire Virtual Assistants</h2>
-            <p>Virtual assistants (VA’s) can handle a variety of tasks, from listing creation to operations management, freeing up your time to focus on growth. VA’s can even handle guest communication, but at a much higher cost than using AI.
-              For this reason, I prefer to use my VA’s for daytime hours only to coordinate maintenance, order supplies, and complete administrative tasks for my business. If you’re looking for a VA, make sure you define your expectations clearly, and post your job on sites like <Link to="https://www.upwork.com/">Upwork</Link>. If you’ve never used a VA before, I’m sure you’ll be surprised at how affordable they can be.
-            </p>
+            <p>Virtual assistants (VA’s) can handle a variety of tasks, from listing creation to operations management, freeing up your time to focus on growth. VA’s can even handle guest communication, but at a much higher cost than using AI. For this reason, I prefer to use my VA’s for daytime hours only to coordinate maintenance, order supplies, and complete administrative tasks for my business. If you’re looking for a VA, make sure you define your expectations clearly, and post your job on sites like <Link to="https://www.upwork.com/">Upwork</Link>. If you’ve never used a VA before, I’m sure you’ll be surprised at how affordable they can be.</p>
             <ol>
               <li><strong>Operational Support:</strong> Delegate routine tasks like maintenance coordination and inventory management.</li>
               <li><strong>Cost-Effective:</strong> Access skilled professionals without the overhead of full-time employees.</li>
@@ -138,16 +121,12 @@ const FiveBestPMS = () => {
           </div>
           <div id="track-expenses">
             <h2>8. Track Expenses</h2>
-            <p className='mb-5'>Accurate expense tracking is vital for managing your rental business’s finances. QuickBooks is a popular option that integrates with your bank accounts to automatically import transactions, allowing you to categorize expenses, track income, generate invoices, and produce financial reports in real-time.
-            </p>
-            <p>From personal experience, it can be quite time consuming to categorize your expenses in Quickbooks, especially when you have hundreds of transactions every month. New companies like <Link to="https://zonesage.com/">ZoneSage</Link> are tailored specifically for short term rentals in order to save hosts time and money.
-              ZoneSage makes expense tracking super easy by automatically categorizing your expenses using STR-specific categorization. They even offer tax write-off tracking, and detailed business insights to optimize your cashflow.
-              The product will release on July 30th for paying customers, and hosts can sign up for their waitlist by visiting their <Link to="https://zonesage.com/">website</Link>.</p>
+            <p className='mb-5'>Accurate expense tracking is vital for managing your rental business’s finances. QuickBooks is a popular option that integrates with your bank accounts to automatically import transactions, allowing you to categorize expenses, track income, generate invoices, and produce financial reports in real-time.</p>
+            <p>From personal experience, it can be quite time consuming to categorize your expenses in Quickbooks, especially when you have hundreds of transactions every month. New companies like <Link to="https://zonesage.com/">ZoneSage</Link> are tailored specifically for short term rentals in order to save hosts time and money. ZoneSage makes expense tracking super easy by automatically categorizing your expenses using STR-specific categorization. They even offer tax write-off tracking, and detailed business insights to optimize your cashflow. The product will release on July 30th for paying customers, and hosts can sign up for their waitlist by visiting their <Link to="https://zonesage.com/">website</Link>.</p>
           </div>
           <div id="conclusion">
             <h2>Conclusion</h2>
-            <p className='mb-3'>In the STR space, guest experience is everything. These tools will help automate your business while maintaining (and even improving) your hospitality. As a host myself, I know how hard it is to let go of the control you have on your business. When it comes to creating a successful business, it’s incredibly important to offload as many tasks as possible in order to focus on growth. The short term rental business model is incredibly scalable, so allow your business to flourish by getting out of your own way and considering automation. By leveraging the right tools and strategies, you can transform your operations, elevate guest satisfaction, and achieve a level of success you never thought possible.
-            </p>
+            <p className='mb-3'>In the STR space, guest experience is everything. These tools will help automate your business while maintaining (and even improving) your hospitality. As a host myself, I know how hard it is to let go of the control you have on your business. When it comes to creating a successful business, it’s incredibly important to offload as many tasks as possible in order to focus on growth. The short term rental business model is incredibly scalable, so allow your business to flourish by getting out of your own way and considering automation. By leveraging the right tools and strategies, you can transform your operations, elevate guest satisfaction, and achieve a level of success you never thought possible.</p>
             <p>What automation strategies have you found most effective for your short term rental business? Share your experiences in the comments below!</p>
           </div>
         </div>
