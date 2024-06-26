@@ -1,17 +1,9 @@
 import React from 'react';
 
-const thumbnailImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Thumbnail.webp";
-const hostawayImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/hostaway.webp";
-const lodgifyImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Lodgify.webp";
-const hostfullyImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Hostfully.webp";
-const hospitableImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Hospitable.webp";
-const guestyImg = "https://storage.googleapis.com/frontend_media/blog/5_best_PMS_6-13/Guesty.webp";
-
 const author_profiles = {
-  "Jay Ullrich": "https://storage.googleapis.com/frontend_media/blog/jay_profile.webp",
-  "Sam": "https://storage.googleapis.com/frontend_media/blog/sam_profile.webp"
+  "Jay Ullrich": "https://hostbuddylb.com/blog/jay_profile.webp",
+  "Sam": "https://hostbuddylb.com/blog/sam_profile.webp"
 }
-
 
 export const BlogArticleSidebar = ({contents}) => {
   return (
@@ -22,6 +14,8 @@ export const BlogArticleSidebar = ({contents}) => {
           <li key={index}><a href={`#${content.id}`}>{content.name}</a></li>
         ))}
       </ul>
+      <hr/>
+      <a href="/blog" className="return-to-blog">&lt; More Articles</a>
     </div>
   );
 };
