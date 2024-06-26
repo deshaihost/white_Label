@@ -6,25 +6,19 @@ import WrongImg from '../../../public/img/wrong_check.png';
 const Features = () => {
     const featurePlans = [
         {
-            compareTo: 'Owner Portal',
-            essential: true,
-            works: true,
-            unlimited: true
-        },
-        {
             compareTo: 'User-friendly dashboard: Easily manage your HostBuddy',
             essential: true,
             works: true,
             unlimited: true
         },
         {
-            compareTo: 'Fully Customizable',
+            compareTo: 'Fully customizable: Tailor HostBuddy to your properties',
             essential: true,
             works: true,
             unlimited: true
         },
         {
-            compareTo: 'State of the Art Conversational AI',
+            compareTo: 'State of the art conversational AI',
             essential: true,
             works: true,
             unlimited: true
@@ -36,7 +30,7 @@ const Features = () => {
             unlimited: true
         },
         {
-            compareTo: 'Integration to Property Management Software',
+            compareTo: 'Integration to Property Management Software (PMS)',
             essential: false,
             works: true,
             unlimited: true
@@ -86,7 +80,7 @@ const Features = () => {
                             {featurePlans?.map((data, i) => {
                                 return(
                                     <tr key={i}>
-                                        {i === 7 ? (
+                                        {i === 6 ? (
                                             <>
                                                 <td><h5>{data.compareTo}</h5></td>
                                                 <td><img src={data.essential === true ? CheckImg : WrongImg} alt='check-img' /></td>
