@@ -1,24 +1,19 @@
-
 /* Blog Landing Page */
-
 .blog-landing-page {
   min-height: 500px;
   padding: 20px;
   background-color: white;
 }
-
 .blog-landing-page-title {
   text-align: center;
   color: #333; /* Dark grey text for the title */
 }
-
 .blog-tiles {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 20px;
   padding: 20px;
 }
-
 .blog-tile {
   text-decoration: none; /* Removing underline from links */
   color: inherit; /* Inherits color from parent */
@@ -31,7 +26,6 @@
   align-items: center;
   text-align: center;
 }
-
 /* FYI: important to consider the aspect ratio of the image container, as all images must fit in this container (they won't be cropped, but may be shrunk so the whole image fits) */
 /* Container width is determined by grid-template-columns in .blog-tiles (whatever that px number, minus the tile padding is the minimum width. May be larger depending on window size) */
 /* Container height is determined by height in .blog-tile-image-container below. Make sure the ratio between width and height is a desirable aspect ratio for images */
@@ -43,43 +37,40 @@
   align-items: center;
   margin-bottom: 15px;
 }
-
 .blog-tile-image {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
 }
-
 .blog-tile:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Add a shadow on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow on hover */
 }
-
 .blog-tile-title {
   font-size: 20px;
   color: #222 !important; /* Ensure text color stays consistent */
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
 }
-
+.blog-tile-date {
+  font-size: 18px;
+  color: #444 !important;
+  margin-bottom: 8px;
+}
 .blog-tile-description {
   font-size: 16px;
   color: #666 !important;
 }
 
-
-
 /* Blog Article Content */
-
 .blog-article {
   padding: 20px 80px;
   background-color: white;
 }
-
 .blog-article-sidebar-and-content {
   display: flex;
   align-items: flex-start;
+  margin-bottom: 70px;
 }
-
 .sidebar {
   margin-top: 20px;
   flex-shrink: 0;
@@ -90,41 +81,33 @@
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
-
 .sidebar h2 {
   margin-bottom: 20px;
   color: #333; /* Dark grey */
   font-size: 1.5em;
 }
-
 .sidebar ul {
   list-style-type: none; /* Remove bullet points */
   padding-left: 0; /* Remove default padding */
 }
-
 .sidebar ul li {
   margin: 5px 0;
 }
-
 .sidebar ul li a {
-  color: #007BFF; /* Blue */
+  color: #007bff; /* Blue */
   text-decoration: none; /* Remove underline */
 }
-
 .sidebar ul li a:hover {
   text-decoration: underline; /* Add underline on hover */
 }
-
 .blog-article-page .blog-article-content {
   flex-grow: 1; /* This will make the content take up the remaining space */
 }
-
 .blog-article-page .blog-article-content {
   font-family: Arial, sans-serif;
   padding: 20px;
   line-height: 1.6;
 }
-
 .blog-article-page .blog-article-header-banner {
   color: black;
   text-align: center;
@@ -137,7 +120,6 @@
   background-color: rgb(240, 248, 255); /* Light bluish grey */
   border-radius: 25px;
 }
-
 .blog-article-page .blog-article-header-banner .blog-article-header-image {
   display: block;
   width: 100%;
@@ -145,7 +127,6 @@
   max-width: 600px;
   margin: 20px auto;
 }
-
 .blog-article-header-info {
   display: flex;
   justify-content: center;
@@ -153,31 +134,26 @@
   width: 100%;
   margin-top: 5px;
 }
-
 .blog-article-header-info p {
   color: black;
   font-size: 1em;
   margin: 0 15px;
 }
-
 .blog-article-header-info .author-img {
   width: 40px;
   height: 40px;
   border-radius: 50%; /* This will make the image appear as a circle */
   margin-right: 5px;
 }
-
 .blog-article-content {
   font-family: "Samsung Sharp Sans Medium";
 }
-
 .blog-article-content h1 {
   color: black;
   font-weight: bold;
   font-size: 2.5em;
   text-align: center;
 }
-
 .blog-article-content h2 {
   color: black;
   font-weight: bold;
@@ -197,6 +173,10 @@
 
 .blog-article-content p {
   color: black;
+  font-size: 1em;
+}
+
+.blog-article-content a {
   font-size: 1em;
 }
 
@@ -224,11 +204,11 @@
 }
 
 .blog-article-content ul li {
-  list-style-type: disc /* Add bullet points to unordered list items */
+  list-style-type: disc; /* Add bullet points to unordered list items */
 }
 
 .blog-article-content ol li {
-  list-style-type: decimal /* Add numbers to ordered list items */
+  list-style-type: decimal; /* Add numbers to ordered list items */
 }
 
 .blog-article-content .blog-article-image {
@@ -238,3 +218,37 @@
   max-width: 600px;
   margin: 20px auto;
 }
+
+/* 26 june 2024 */
+.custom-blog ol li {
+  list-style-type: inherit;
+}
+@media screen and (max-width: 991px) {
+  .blog-article {
+    padding: 20px;
+  }
+  .blog-article-content h2 {
+    font-size: 1.5em;
+  }
+  .blog-article-content h3 {
+    font-size: 1.2em;
+  }
+  .blog-article-header-banner h1 {
+    font-size: 25px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .blog-article-header-banner h1 {
+    font-size: 22px;
+  }
+  .blog-article-sidebar-and-content {
+    flex-direction: column;
+  }
+  .blog-article-page .blog-article-content {
+    padding: 20px 0px;
+  }
+  .blog-article-sidebar-and-content .sidebar {
+    width: 100%;
+  }
+}
+/* 26 june 2024 */
