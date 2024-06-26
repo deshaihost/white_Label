@@ -5,7 +5,7 @@ const author_profiles = {
   "Sam": "https://hostbuddylb.com/blog/sam_profile.webp"
 }
 
-export const BlogArticleSidebar = ({contents}) => {
+export const BlogArticleSidebar = ({ contents }) => {
   return (
     <div className="sidebar">
       <h2>Contents</h2>
@@ -14,18 +14,18 @@ export const BlogArticleSidebar = ({contents}) => {
           <li key={index}><a href={`#${content.id}`}>{content.name}</a></li>
         ))}
       </ul>
-      <hr/>
+      <hr />
       <a href="/blog" className="return-to-blog">&lt; More Articles</a>
     </div>
   );
 };
 
-export const BlogArticleHeader = ({title, author, date, headerImage}) => {
+export const BlogArticleHeader = ({ title, author, date, headerImage }) => {
   return (
     <>
       <div className="blog-article-header-banner">
         <h1>{title}</h1>
-        <div className="blog-article-header-info">
+        <div className="blog-article-header-info flex-wrap">
           <p className="author"> <img src={author_profiles[author]} alt="Author Profile Img" className="author-img" />{author}</p>
           <p className="date">{date}</p>
         </div>
