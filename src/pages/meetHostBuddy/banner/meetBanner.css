@@ -4,6 +4,13 @@
     padding: 60px 0 100px;
 }
 
+.meet-banner a {
+    display: block;
+    margin: 20px auto;
+    font-size: 18px;
+    text-align: center;
+}
+
 .chatbot {
     display: flex;
     flex-direction: column;
@@ -160,8 +167,13 @@
 .chatbot .input-container button svg {
     max-width: 19px;
 }
+
 .chat-send{
     cursor: not-allowed!important;
+}
+
+.meet-banner #house-image-mobile {
+    display: none;
 }
 
 @keyframes msgsent {
@@ -189,12 +201,21 @@
 
 @media only screen and (max-width: 991px) {
 
-    .meet-banner #house-image {
+    .meet-banner #house-image-desktop {
+        display: none;
+    }
+
+    .meet-banner #house-image-mobile {
+        display: block;
         margin-bottom: 20px;
     }
 
     .meet-banner {
         padding: 50px 0;
+    }
+
+    .meet-banner .house-img {
+        margin-top: 30px;
     }
 }
 

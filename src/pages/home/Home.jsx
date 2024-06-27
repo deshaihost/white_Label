@@ -4,6 +4,7 @@ import Features from './features/Features';
 import Works from './works/Works';
 import Plans from './plans/Plans';
 import DemoVideoSection from './demoVideoSection/demoVideoSection';
+import TryItOutCTA from './tryItOut/tryItOut';
 import { Helmet } from 'react-helmet';
 
 const Home = () => {
@@ -40,6 +41,7 @@ const Home = () => {
       </Helmet>
       <Banner />
       <div ref={worksRef}><Works /></div>
+      <TryItOutCTA />
       <Features />
       <div ref={demoVideoRef}><DemoVideoSection load={loadDemoVideo} /></div>
       <Plans />

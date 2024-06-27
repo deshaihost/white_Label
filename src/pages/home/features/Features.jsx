@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import './features.css';
 import Accordion from 'react-bootstrap/Accordion';
+import { Link } from 'react-router-dom';
 
 /*
 import FeatureIconOne from '../../../public/img/home/feature_icon1.png';
@@ -49,7 +50,9 @@ const Features = () => {
                                         Industry Leading AI Technology
                                     </Accordion.Header>
                                     <Accordion.Body>
-                                        HostBuddy is built using the most advanced conversational AI available today, which we’ve further optimized to perfect its performance in supporting guests at short-term rentals. Our committed team works relentlessly to stay at the forefront as AI technology advances, ensuring you and your guests receive the highest level of service.
+                                        HostBuddy is built using the most advanced conversational AI available today, which we’ve further perfected for short-term rental guest messaging. <Link to='/meet-hostbuddy'>See for yourself!</Link>
+                                        <br /><br />
+                                        Our committed team works relentlessly to stay at the forefront as AI technology advances, ensuring you and your guests receive the highest level of service.
                                     </Accordion.Body>
                                     <div className='animate-line'></div>
                                 </Accordion.Item>

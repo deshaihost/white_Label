@@ -140,6 +140,11 @@
     width: 100%;
 }
 
+.features .features-content a {
+    font-family: "DM Sans", sans-serif;
+    font-size: 16px;
+}
+
 @keyframes line {
     0% {
         width: 7%;
