@@ -56,7 +56,10 @@ const MeetBanner = (props) => {
     setInputValue("");
   };
 
-  // message feedback model functionality
+  // When the user navigates to this page, make sure it's scrolled to the top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Initial messages
   useEffect(() => {
