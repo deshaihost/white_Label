@@ -40,9 +40,11 @@ if (userDataGet?.email) {
 }
   
   const [updateNotifSettingsApi, setUpdateNotifSettingsApi] = useState(false);
-  const [recipients, setRecipients] = useState([{ firstName: '', channel: '', RecipientAddress: '', timing: '', time: '' }]);
+  const [recipients, setRecipients] = useState([]); // Populates as: [{ firstName:'...', channel:'...', RecipientAddress:'...', timing:'...', time:'...' }, ...]
   const [newRecipient, setNewRecipient] = useState({});
   const [triggerApiUpdate, setTriggerApiUpdate] = useState(false);
+
+  const consent_bad = (newRecipient.channel === 'sms' && !newRecipient.consent_checked);
 
 
   const callUpdateNotifSettingsApi = async (settingsData) => {
@@ -114,13 +116,14 @@ if (userDataGet?.email) {
 
 
   const showNewRecipientFields = () => {
-    setNewRecipient({ firstName: '', channel: '', RecipientAddress: '', timing: '', time: '' });
+    setNewRecipient({ firstName: '', channel: '', RecipientAddress: '', timing: '', time: '', consent_checked: false });
   };
 
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    const updatedNewRecipient = { ...newRecipient, [name]: value };
+    const { name, value, type, checked } = event.target;
+    const inputValue = type === 'checkbox' ? checked : value;
+    const updatedNewRecipient = { ...newRecipient, [name]: inputValue };
     setNewRecipient(updatedNewRecipient);
   };
 
@@ -201,20 +204,22 @@ if (userDataGet?.email) {
     // Update the state of the form fields
     if (userDataGet?.notification_settings) {
       let newRecipients = [];
-      const actionItems = userDataGet.notification_settings.action_items;
-      for (let timing in actionItems) {
-        for (let recipient in actionItems[timing]) {
-          let newRecipient = {
-            firstName: actionItems[timing][recipient].name,
-            channel: actionItems[timing][recipient].type,
-            RecipientAddress: recipient,
-            timing: timing,
-            time: actionItems[timing][recipient].time_of_day ? actionItems[timing][recipient].time_of_day : ''
-          };
-          newRecipients.push(newRecipient);
+      const actionItems = userDataGet.notification_settings?.action_items;
+      if (actionItems) {
+        for (let timing in actionItems) {
+          for (let recipient in actionItems[timing]) {
+            let newRecipient = {
+              firstName: actionItems[timing][recipient].name,
+              channel: actionItems[timing][recipient].type,
+              RecipientAddress: recipient,
+              timing: timing,
+              time: actionItems[timing][recipient].time_of_day ? actionItems[timing][recipient].time_of_day : ''
+            };
+            newRecipients.push(newRecipient);
+          }
         }
+        setRecipients(newRecipients);
       }
-      setRecipients(newRecipients);
     }
 
   }, [userDataGet]);
@@ -279,7 +284,7 @@ if (userDataGet?.email) {
                 <select id={"Channel"} name="channel" className="form-control" value={newRecipient.channel} onChange={e => handleInputChange(e)}>
                   <option value="">-- Please select --</option>
                   <option value="email">Email</option>
-                  {/* <option value="sms">Text message (SMS)</option> */}
+                  <option value="sms">Text message (SMS)</option>
                 </select>
               </div>
 
@@ -322,8 +327,21 @@ if (userDataGet?.email) {
               </div>
             </div>
 
+            {newRecipient.channel === 'sms' && (
+              <div className="row" style={{marginTop:'20px'}}>
+                <div className="checkbox-container">
+                <input className="form-check-input" type="checkbox" id={"Consent"} name="consent_checked" value={newRecipient.consent_checked} onChange={e => handleInputChange(e)} style={{width:"32px"}}/>
+                  <label htmlFor={"Consent"}>I consent to receiving account notifications for "Action Items" via text message (SMS), at the selected phone number, at the specified timing.</label>
+                </div>
+              </div>
+            )}
+
             <span className="d-flex justify-content-center">
-              <Link to="#" style={{marginTop:'20px', textAlign:'center'}} className="text-link" onClick={() => addRecipient()}>Submit</Link>
+              <Link to="#" className="text-link" style={{marginTop:'20px', textAlign:'center',
+                pointerEvents: consent_bad ? 'none' : 'auto', // Disables pointer events if consent_checked is false for SMS
+                opacity: consent_bad ? '0.5' : '1' // Change opacity to appear not clickable if consent_checked is false for SMS
+              }} onClick={() => {if (!consent_bad) { addRecipient(); }}}>Submit</Link>
+                
             </span>
 
           </div>
