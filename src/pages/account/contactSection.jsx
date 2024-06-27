@@ -21,8 +21,8 @@ const AccountContactSection = () => {
   const [codeSentFor, setCodeSentFor] = useState(""); // This is the contact that the code was sent for, if any
 
   // Define the different sections of contact information. Will need to manually update this as we add new contact types
-  //const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'phone':{'title':'Phone Numbers', 'singular':'Phone Number'}};
   const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}};
+  //const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'phone':{'title':'Phone Numbers', 'singular':'Phone Number'}};
   const initialState = Object.keys(contact_sections).reduce((acc, key) => {
     acc[key] = {};
     return acc;
@@ -74,7 +74,8 @@ const AccountContactSection = () => {
       setConfCodeSending(false);
       return response.status;
     }
-    catch (error) { ToastHandle(error, "danger"); }
+    //catch (error) { ToastHandle("Unable to send confirmation code", "danger"); } //!!!
+    catch (error) {  }
     finally { setConfCodeSending(false); }
   }
 
@@ -89,7 +90,7 @@ const AccountContactSection = () => {
     try {
       const config = {
         headers: { "X-API-Key": API_KEY },
-        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+        //validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
 
       const response = await axios.post( `${baseUrl}/confirm_contact`, dataToSend, config );
@@ -99,7 +100,7 @@ const AccountContactSection = () => {
       setCodeConfirming(false);
       return response.status;
     }
-    catch (error) { ToastHandle(error, "danger"); }
+    catch (error) { ToastHandle("Unable to confirm contact", "danger"); }
     finally { setCodeConfirming(false); }
   }
 
@@ -111,23 +112,29 @@ const AccountContactSection = () => {
 
 
   const handleInputChange = (event, section) => {
-    const { name, value } = event.target;
+    const { name, type, checked, value } = event.target;
+    const isCheckbox = type === 'checkbox';
     const updatedNewContacts = {...newContacts};
-    updatedNewContacts[section][name] = value;
+    updatedNewContacts[section][name] = isCheckbox ? checked : value;
     setNewContacts(updatedNewContacts);
   };
 
 
   const showAddFields = (section) => {
     let updatedNewContacts = {...newContacts, [section]:{ type:'', name:'', address:'', confirmed:false }};
+    if (section === 'phone') { updatedNewContacts[section].consent_checked = false; }
     setNewContacts(updatedNewContacts);
   };
 
 
   const addContact = async (name, type, address) => {
-    const responseCode = await addNewContact(type, name, address);
-    if (responseCode === 200) {
-      dispatch(getUserDataActions()); // update our data from the API
+    if (!name || !address) { ToastHandle("Please fill all fields", "danger"); }
+    else {
+      const responseCode = await addNewContact(type, name, address);
+      if (responseCode === 200) {
+        dispatch(getUserDataActions()); // update our data from the API
+        setNewContacts(initialState); // reset the newContacts state
+      }
     }
   };
 
@@ -140,7 +147,7 @@ const AccountContactSection = () => {
   const sendConfirmationCode = async (index) => {
     setCodeSentFor(contacts[index].address);
     const responseCode = await callSendCodeAPI(contacts[index].type, contacts[index].address);
-    if (responseCode != 200) { setCodeSentFor(""); }
+    //if (responseCode != 200) { setCodeSentFor(""); } //!!!
   };
 
 
@@ -255,9 +262,29 @@ const AccountContactSection = () => {
                     </div>
                   </div>
 
+                  <div className="d-flex justify-content-center">
+                    {section === 'phone' && (
+                      <div className="checkbox-container">
+                        <input type="checkbox" className="form-check-input" id={`consent${index}`} name="consent_checked" value={newContacts?.[section]?.consent_checked} onChange={e => handleInputChange(e, section)} />
+                        <label className="form-check-label" htmlFor={`consent${index}`}>I consent to receive a one-time verification code at this number.</label>
+                      </div>
+                    )}
+                  </div>
+
                   <span className="d-flex justify-content-center">
                     {!newContactAdding ? (
-                      <Link to="#" style={{marginTop:'20px', textAlign:'center'}} className="text-link" onClick={() => addContact(newContacts?.[section]?.name, section, newContacts?.[section]?.address)}>Submit</Link>
+                      <Link to="#" className="text-link" style={{ marginTop: '20px',  textAlign: 'center',
+                        pointerEvents: newContacts?.[section]?.consent_checked ? 'auto' : 'none', // Disables pointer events if consent_checked is false
+                        opacity: newContacts?.[section]?.consent_checked ? 1 : 0.5, // Change opacity to appear not clickable if consent_checked is false
+                      }} 
+                      onClick={() => {
+                        if (newContacts?.[section]?.consent_checked) { // consent must be checked to allow submit
+                          addContact(newContacts?.[section]?.name, section, newContacts?.[section]?.address);
+                        }
+                      }}
+                    >
+                      Submit
+                    </Link>
                     ) : (
                       <Loader />
                     )}

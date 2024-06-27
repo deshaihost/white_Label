@@ -152,30 +152,11 @@ const Signup = () => {
               </Link>
               <div className="auth-form">
                 <h2>Try HostBuddy Today!</h2>
-                <p>
-                  Already have an account? <Link to="/login">Sign in here</Link>
-                </p>
-                <form
-                  action=""
-                  onSubmit={handleSubmit(
-                    (data) => {
-                      onSubmit(data);
-                    },
-                    (err) => {
-                      console.log(err, "ee");
-                    }
-                  )}
+                <p>Already have an account? <Link to="/login">Sign in here</Link></p>
+                <form action="" onSubmit={handleSubmit( (data) => { onSubmit(data); } )}
                 >
                   <div className="input-container">
-                    <input
-                      type="text"
-                      {...register("firstName", { required: true })}
-                      placeholder="First Name..."
-                      value={inputSpaceValidation?.firstName}
-                      onInput={(e) => {
-                        firstNameSpaceHandle(e);
-                      }}
-                    />
+                    <input type="text" {...register("firstName", { required: true })} placeholder="First Name..." value={inputSpaceValidation?.firstName} onInput={(e) => { firstNameSpaceHandle(e); }}/>
                   </div>
                   {errors.firstName?.type === "required" && (
                     <>
@@ -183,13 +164,7 @@ const Signup = () => {
                     </>
                   )}
                   <div className="input-container">
-                    <input
-                      type="text"
-                      {...register("lastName", { required: true })}
-                      placeholder="Last Name..."
-                      value={inputSpaceValidation?.lastName}
-                      onInput={(e) => { lastNameSpaceHandle(e) }}
-                    />
+                    <input type="text" {...register("lastName", { required: true })} placeholder="Last Name..." value={inputSpaceValidation?.lastName} onInput={(e) => { lastNameSpaceHandle(e) }}/>
                   </div>
                   {errors.lastName?.type === "required" && (
                     <>
@@ -199,16 +174,10 @@ const Signup = () => {
                     </>
                   )}
                   <div className="input-container">
-                    <input
-                      type="text"
-                      {...register("email", {
+                    <input type="text" placeholder="Email..." {...register("email", {
                         required: true,
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: `${ErrorMessageKey.INVALID_EMAIL_ADDRESS}`,
-                        },
+                        pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: `${ErrorMessageKey.INVALID_EMAIL_ADDRESS}` },
                       })}
-                      placeholder="Email..."
                     />
                   </div>
                   {errors.email?.type === "required" && (
@@ -223,39 +192,21 @@ const Signup = () => {
                   )}
                   <div className="input-container">
                     <div className="password-box">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Password..."
-                        {...register("newPassword", {
-                          required: true,
-                          pattern: {
-                            value:
-                              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_=+-]).{8,30}$/,
+                      <input type={showPassword ? "text" : "password"} placeholder="Password..."
+                        {...register("newPassword", { required: true, pattern: {
+                            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_=+-]).{8,30}$/,
                             message: `${ErrorMessageKey.MIX_IT_UP_USE_A_COMBINATION_OF_UPPERCASE_AND_LOWERCASE_LETTERS_SPECIAL_CHARACTERS_IN_YOUR}`,
                           },
-                          minLength: {
-                            value: 8,
-                            message: `${ErrorMessageKey.PASSWORD_MUST_BE_AT_LEAST_8_CHARACTER_LONG}`,
-                          },
-                          maxLength: 30,
+                          minLength: { value: 8, message: `${ErrorMessageKey.PASSWORD_MUST_BE_AT_LEAST_8_CHARACTER_LONG}` }, maxLength: 30
                         })}
                       />
-                      <button
-                        type="button"
-                        className="eye-btn"
-                        onClick={() => {
-                          setShowPassword(!showPassword);
-                        }}
-                        style={{ cursor: "pointer" }}
-                      >
+                      <button type="button" className="eye-btn" style={{ cursor: "pointer" }} onClick={() => { setShowPassword(!showPassword); }}>
                         {!showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                       </button>
                     </div>
                     {errors?.newPassword?.type === "required" && (
                       <>
-                        {ErrorMessageShow(
-                          ErrorMessageKey.PLEASE_ENTER_YOUR_PASSWORD
-                        )}
+                        {ErrorMessageShow( ErrorMessageKey.PLEASE_ENTER_YOUR_PASSWORD )}
                       </>
                     )}
                     {errors?.newPassword?.type === "pattern" && (
@@ -264,36 +215,17 @@ const Signup = () => {
                     {errors?.newPassword?.type === "minLength" && (
                       <>{ErrorMessageShow(errors?.newPassword?.message)}</>
                     )}
-                    <p className="password-criteria">
-                      Password should have special characters like $,@,%,! and
-                      minimum 8 length.
-                    </p>
+                    <p className="password-criteria">Password should have special characters like $,@,%,! and minimum 8 length.</p>
                   </div>
                   <div className="input-container">
                     <div className="password-box">
-                      <input
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Confirm Password..."
-                        {...register("confirmPassword", {
-                          required: true,
-                          validate: (value) =>
-                            value === password.current ||
-                            ErrorMessageKey.PASSWORD_DOESNT_MATCH,
+                      <input type={showConfirmPassword ? "text" : "password"} placeholder="Confirm Password..."
+                        {...register("confirmPassword", { required: true, validate: (value) =>
+                            value === password.current || ErrorMessageKey.PASSWORD_DOESNT_MATCH,
                         })}
                       />
-                      <button
-                        type="button"
-                        className="eye-btn"
-                        onClick={() => {
-                          setShowConfirmPassword(!showConfirmPassword);
-                        }}
-                        style={{ cursor: "pointer" }}
-                      >
-                        {!showConfirmPassword ? (
-                          <FaRegEye />
-                        ) : (
-                          <FaRegEyeSlash />
-                        )}
+                      <button type="button" className="eye-btn" style={{ cursor: "pointer" }} onClick={() => { setShowConfirmPassword(!showConfirmPassword); }}>
+                        {!showConfirmPassword ? ( <FaRegEye /> ) : ( <FaRegEyeSlash /> )}
                       </button>
                     </div>
                     {errors?.confirmPassword?.type === "required" && (
@@ -305,33 +237,17 @@ const Signup = () => {
                       <>{ErrorMessageShow(errors?.confirmPassword?.message)}</>
                     )}
                   </div>
-                  <div className="input-container">
-                    <input
-                      type="text"
-                      {...register("phone", {
-                        pattern: /^[0-9]{10}$/,
-                      })}
-                      placeholder="Phone (optional) ..."
-                      maxLength="10"
-                    />
+                  <div className="input-container" style={{display:"none"}}>
+                    <input type="text" {...register("phone", { pattern: /^[0-9]{10}$/, })} placeholder="Phone (optional) ..." maxLength="10" />
                   </div>
-                  {errors.phone?.type === "required" && (
-                    <>{ErrorMessageShow("Please enter your phone number")}</>
-                  )}
                   {errors.phone?.type === "pattern" && (
                     <>{ErrorMessageShow("Please enter a valid phone number")}</>
                   )}
                   <div className="input-container">
-                    <PrimaryButton
-                      text={!registerLoading ? "Register" : <Loader />}
-                      additionalClass="w-100"
-                      disableType={registerLoading}
-                    />
+                    <PrimaryButton text={!registerLoading ? "Register" : <Loader />} additionalClass="w-100" disableType={registerLoading}/>
                   </div>
                   {loginLoading && (
-                    <div className="text-center border pill text-success py-2">
-                      Redirecting...
-                    </div>
+                    <div className="text-center border pill text-success py-2">Redirecting...</div>
                   )}
                 </form>
               </div>
