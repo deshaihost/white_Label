@@ -21,8 +21,8 @@ const AccountContactSection = () => {
   const [codeSentFor, setCodeSentFor] = useState(""); // This is the contact that the code was sent for, if any
 
   // Define the different sections of contact information. Will need to manually update this as we add new contact types
-  //const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}};
-  const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'phone':{'title':'Phone Numbers', 'singular':'Phone Number'}};
+  const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}};
+  //const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'phone':{'title':'Phone Numbers', 'singular':'Phone Number'}};
   const initialState = Object.keys(contact_sections).reduce((acc, key) => {
     acc[key] = {};
     return acc;

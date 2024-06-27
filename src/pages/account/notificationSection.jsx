@@ -284,7 +284,7 @@ if (userDataGet?.email) {
                 <select id={"Channel"} name="channel" className="form-control" value={newRecipient.channel} onChange={e => handleInputChange(e)}>
                   <option value="">-- Please select --</option>
                   <option value="email">Email</option>
-                  <option value="sms">Text message (SMS)</option>
+                  {/* <option value="sms">Text message (SMS)</option> */}
                 </select>
               </div>
 
