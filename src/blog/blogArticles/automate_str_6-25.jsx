@@ -46,7 +46,7 @@ const FiveBestPMS = () => {
             <p>Efficient communication is key to a great guest experience. By using a PMS, you can automate scheduled messages to all channels, saving you time and ensuring guests receive important information when they need it. Here are the messages I’d recommend automating:
             </p>
             <ul>
-              <li><strong>Booking Confirmation:</strong> As soon as a guest books, thank them for the reservation and let them know you’re excited for their arrival.n Don’t forget to let them know when to expect the full check-in details!</li>
+              <li><strong>Booking Confirmation:</strong> As soon as a guest books, thank them for the reservation and let them know you’re excited for their arrival. Don’t forget to let them know when to expect the full check-in details!</li>
               <li><strong>Pre-Arrival:</strong> On the morning of check-in, send the full instructions and local recommendations to your guests, along with any access codes.</li>
               <li><strong>Check-Out Reminders:</strong> On the morning of check-out, remind your guests of the check-out time and any specific procedures to follow before they leave.</li>
               <li><strong>Review Reminders:</strong> Several days after your guests check out, send a kind message asking them to share their positive experience in a review.</li>

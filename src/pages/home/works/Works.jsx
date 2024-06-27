@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import './works.css';
+import { Link } from 'react-router-dom';
 
 /*
 import AssistantImg from 'https://hostbuddylb.com/home/assistant.png';
@@ -44,7 +45,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4><strong>Automate</strong> Your Guest Communications</h4>
-                                <p>HostBuddy AI was created by hosts, for hosts, and aims to alleviate the stress of hosting. With HostBuddy, you can automate the demanding responsibilities of guest communication, allowing you to relax knowing your guests are well taken care of.</p>
+                                <p>Created by hosts, for hosts, HostBuddy is the leading AI messaging software for short term rental hosts. HostBuddy lets you automate the demanding responsibilities of guest communication, allowing you to relax knowing your guests are well taken care of.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -56,7 +57,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h4><strong>Integrate</strong> Into Your Existing Systems</h4>
-                                <p>Connect a PMS account to give HostBuddy access to property details and real-time guest information, and to let HostBuddy see and respond to guest messages over your existing communication channels. HostBuddy can integrate with most major property management softwares on the market. See our FAQ page for the full list.</p>
+                                <p>Connect a PMS account to give HostBuddy access to property details and real-time guest information, and to let HostBuddy see and respond to guest messages over your existing communication channels. HostBuddy can integrate with most major property management softwares on the market - <Link to='/faq'>See the full list.</Link></p>
                             </div>
                         </div>
                         <div className="col-lg-6">

@@ -130,6 +130,11 @@
     object-fit: cover;
 }
 
+.works .works-container a {
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+}
+
 @media only screen and (min-width: 991px) {
     .works .works-container .row:nth-child(odd) .col-lg-6:nth-child(1) {
         order: 2;
@@ -162,6 +167,10 @@
     .works .works-container .row p {
         font-size: 16px;
         margin-bottom: 15px;
+    }
+
+    .works .works-container a {
+        font-size: 16px;
     }
 
     .works .works-container .row img {

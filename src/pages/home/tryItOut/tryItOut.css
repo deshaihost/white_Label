@@ -1,0 +1,114 @@
+.try-it-out {
+  padding: 70px 0 50px;
+}
+
+.try-it-out .try-it-out-box {
+  border-radius: 30px;
+  border: 1px solid #146EF5;
+  padding: 30px 55px;
+  height: 100%;
+  width: 80%;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically if there's extra space */
+  text-align: center; /* Ensure text is centered */
+  place-content: center;
+  display: flex;
+  box-shadow: 0px 0px 10px 0px #FFF; /* offset-x | offset-y | blur-radius | spread-radius | color */
+  margin: auto;
+}
+
+.try-it-out .try-it-out-box h3 {
+  background: var(--Blue, linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #FFF;
+  font-family: 'Samsung Sharp Sans Bold';
+  font-size: 45px;
+  font-style: normal;
+  line-height: 50px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.try-it-out .try-it-out-box p {
+  color: #DDD;
+  font-family: 'Samsung Sharp Sans Medium';
+  font-size: 18px;
+  font-style: normal;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.try-it-out .try-it-out-box h3 strong {
+  color: #146EF5;
+  font-weight: 500;
+}
+
+.try-it-out .try-it-out-box a {
+  font-size: 24px;
+  font-family: "Samsung Sharp Sans Bold";
+  transition: transform 0.3s ease; /* Smooth transition for the transform */
+}
+
+.try-it-out .try-it-out-box a:hover {
+  transform: translateY(-3px); /* Move up slightly on hover */
+}
+
+@media only screen and (max-width: 991px) {
+  .try-it-out {
+    padding: 25px 0 30px;
+  }
+
+  .try-it-out .try-it-out-box {
+    padding: 20px;
+    border-radius: 10px;
+    width: 85%;
+  }
+  
+  .try-it-out .try-it-out-box h3 {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+
+  .try-it-out .try-it-out-box p {
+    font-size: 16px;
+  }
+  
+}
+
+@media only screen and (max-width: 767px) {
+  .try-it-out {
+    padding: 25px 0 30px;
+  }
+
+  .try-it-out .try-it-out-box {
+    margin-top: 20px;
+    height: auto;
+    width: 90%;
+  }
+
+  .try-it-out .try-it-out-box h3 {
+    font-size: 35px;
+  }
+
+  .try-it-out .try-it-out-box p {
+    font-size: 16px;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+
+  .try-it-out .try-it-out-box h3 {
+    font-size: 32px;
+  }
+
+  .try-it-out .try-it-out-box {
+    width: 95%;
+  }
+
+  .try-it-out .try-it-out-box a {
+    font-size: 21px;
+  }
+}

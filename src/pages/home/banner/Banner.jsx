@@ -34,7 +34,7 @@ const Banner = () => {
                         }}>
                             Book a Demo
                         </a>
-                        <Link to='/pricing' className="link-btn outline-btn">Get Started For Free</Link>
+                        <Link to='/signup' className="link-btn outline-btn">Get Started For Free</Link>
                     </div>
                     <div className="banner-video">
                         <HLSVideoPlayer src={chatVideoHLSPlaylist} mp4Backupav1={chatVideoMP4av1} mp4Backuph264={chatVideoMP4} ImgBackup={VideoImgbackup} />

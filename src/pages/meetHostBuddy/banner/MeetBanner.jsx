@@ -33,15 +33,12 @@ const MeetBanner = (props) => {
 
   const statusResp = store?.chatBoxAIReducer?.chatBoxAI?.status;
   const updateMessageRespLoading = store?.chatBoxAIReducer?.loading;
+
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const messagesEndRef = useRef(null);
+  const [showImgMobile, setShowImgMobile] = useState(false);
 
-  // Should be false always, since property chat is now handled in its own file
-  const isPropertyChat =
-    chatbot_key !== undefined &&
-    property_name !== undefined &&
-    user_type !== undefined;
+  const messagesEndRef = useRef(null);
 
   // Event handler for key press in the input field
   const handleKeyPress = (e) => {
@@ -122,42 +119,18 @@ const MeetBanner = (props) => {
     <div className="meet-banner">
       <Container>
         <div className="banner-heading">
-          <h1>
-            {" "}
-            {isPropertyChat ? (
-              <>
-                {(testPropetyName !== "") ? ((copyChatBotName !== undefined) ? copyChatBotName : testPropetyName) : "Empty"}
-              </>
-            ) : (
-              "Meet HostBuddy"
-            )}
-          </h1>
-          {!isPropertyChat && (
-            <p>
-              Try asking Hostbuddy your most commonly received guest questions, and watch it handle them with ease. Its responses here are based on the details of a fictional property, but you’ll be able to seamlessly tailor it to your own!
-            </p>
-          )}
-          {isPropertyChat ? (
-            <Link to="/properties" className="link-btn filled-btn">
-              Back
-            </Link>
-          ) : (
-            <div></div>
-            /*<Link to="/" className="link-btn filled-btn">
-              Learn More
-            </Link>*/
-          )}
+          <h1>Meet HostBuddy</h1>
+          <p>Try asking Hostbuddy your most commonly received guest questions, and watch it handle them with ease. Its responses here are based on the details of a fictional property, but you’ll be able to seamlessly tailor it to your own!</p>
+          {/* <Link to="/" className="link-btn filled-btn"> Learn More </Link> */}
         </div>
         <div className="row">
-          {!isPropertyChat && (
-            <div className="col-lg-5" id="house-image">
-              <div className="house-img">
-                <img src={HouseImg} alt="house-img" className="img-fluid" />
-              </div>
+          <div className="col-lg-5" id="house-image-desktop">
+            <div className="house-img">
+              <img src={HouseImg} alt="house-img" className="img-fluid" />
             </div>
-          )}
+          </div>
 
-          <div className={isPropertyChat ? "col-lg-12" : "col-lg-7"}>
+          <div className="col-lg-7">
             <div className="chatbot">
               <div className="message-list" ref={messageListRef}>
                 {messages?.map((message, index) => {
@@ -185,6 +158,20 @@ const MeetBanner = (props) => {
               </div>
             </div>
           </div>
+
+
+          <div id="house-image-mobile">
+            {!showImgMobile &&
+              <Link to="#" onClick={() => setShowImgMobile(true)}>Show Fictional Property</Link>
+            }
+
+            {showImgMobile &&
+              <div className="house-img">
+                <img src={HouseImg} alt="house-img" className="img-fluid" />
+              </div>
+            }
+          </div>
+
         </div>
         <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
       </Container>

@@ -35,7 +35,7 @@ const MeetHostBoddy = () => {
         <MeetBanner urlData={urlData} />
         {urlData === undefined && (
           <>
-            <Setup />
+            {/* <Setup /> */}
             <Discover />
           </>
         )}
