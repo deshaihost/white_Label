@@ -100,13 +100,16 @@ const PrivacyPolicy = () => {
                           </p>
                           <ul>
                             <li>
-                              a. Property Management Software Partners: If you choose to integrate your Hostbuddy AI account with external property management software, we may share necessary personal data to facilitate seamless synchronization and operation between platforms.
+                              a. Property Management Software Partners: If you choose to integrate your Hostbuddy AI account with external property management software, we may share necessary account data to facilitate seamless synchronization and operation between platforms.
                             </li>
                             <li>
-                              b. Guests: Information exchanged through our AI software may inadvertently be shared with connected property management software partners as part of their data collection processes. However, we take measures to minimize such occurrences and safeguard your privacy.
+                              b. Guests: Information that you enter on our platform for a given property, is accessible to guests at that property via chat with our AI chatbot, if the chatbot is provided and configured for guests at the property.
                             </li>
                             <li>
                               c. Legal Requirements: In compliance with US law, we may be obligated to share personal data in response to lawful requests or legal proceedings, prioritizing transparency and adherence to regulatory requirements.
+                            </li>
+                            <li>
+                              d. Phone numbers: HostBuddy AI respects your privacy and does not share your phone number with any third parties or platforms under any circumstances, unless required by law.
                             </li>
                           </ul>
                         </div>
