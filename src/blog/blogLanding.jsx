@@ -1,5 +1,6 @@
 import React from 'react';
 import './blog.css';
+import { Helmet } from 'react-helmet';
 
 const five_best_thumbnail = "https://hostbuddylb.com/blog/5_best_PMS_6-13/Thumbnail_small.webp";
 const automate_str_thumbnail = "https://hostbuddylb.com/blog/automate_str_6-25/thumbnail.webp";
@@ -12,21 +13,26 @@ const BlogLandingPage = () => {
     ];
 
     return (
-      <div className="blog-landing-page">
-        <h1 className="blog-landing-page-title">HostBuddy AI - Blog</h1>
-        <div className="blog-tiles">
-          {articles.map(article => (
-            <a href={`/blog/${article.id}`} key={article.id} className="blog-tile">
-              <div className="blog-tile-image-container">
-                <img src={article.img} alt={article.title} className="blog-tile-image" />
-              </div>
-              <h2 className="blog-tile-title">{article.title}</h2>
-              <p className="blog-tile-date">{article.date}</p>
-              <p className="blog-tile-description">{article.description}</p>
-            </a>
-          ))}
+      <>
+        <Helmet>
+          <meta name="description" content="Discover game-changing STR strategies, from smart home tech to AI-powered software. Your go-to resource for short-term rental innovation and success." />
+        </Helmet>
+        <div className="blog-landing-page">
+          <h1 className="blog-landing-page-title">HostBuddy AI - Blog</h1>
+          <div className="blog-tiles">
+            {articles.map(article => (
+              <a href={`/blog/${article.id}`} key={article.id} className="blog-tile">
+                <div className="blog-tile-image-container">
+                  <img src={article.img} alt={article.title} className="blog-tile-image" />
+                </div>
+                <h2 className="blog-tile-title">{article.title}</h2>
+                <p className="blog-tile-date">{article.date}</p>
+                <p className="blog-tile-description">{article.description}</p>
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
+      </>
     );
 };
 

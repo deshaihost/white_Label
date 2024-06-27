@@ -80,12 +80,19 @@ const Features = () => {
                             {featurePlans?.map((data, i) => {
                                 return(
                                     <tr key={i}>
-                                        {i === 6 ? (
+                                        {i === 3 ? (
+                                            <>
+                                                <td><h5>{data.compareTo}</h5></td>
+                                                <td><img src={data.essential === true ? CheckImg : WrongImg} alt='check-img' /><p className='unlimited-text'>Unlimited</p></td>
+                                                <td><img src={data.works === true ? CheckImg : WrongImg} alt='check-img' /><p className='unlimited-text'>Unlimited</p></td>
+                                                <td><img src={data.unlimited === true ? CheckImg : WrongImg} alt='check-img' /><p className='unlimited-text'>Unlimited</p></td>
+                                            </>
+                                        ) : i === 6 ? (
                                             <>
                                                 <td><h5>{data.compareTo}</h5></td>
                                                 <td><img src={data.essential === true ? CheckImg : WrongImg} alt='check-img' /></td>
                                                 <td><p style={{color: 'rgb(255, 165, 0)'}}>Up To<br/>12h/day</p></td>
-                                                <td><img src={data.unlimited === true ? CheckImg : WrongImg} alt='check-img' /><p>Unlimited</p></td>
+                                                <td><img src={data.unlimited === true ? CheckImg : WrongImg} alt='check-img' /><p className='unlimited-text'>Unlimited</p></td>
                                             </>
                                         ) : (
                                             <>
