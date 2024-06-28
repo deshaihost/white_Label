@@ -74,8 +74,7 @@ const AccountContactSection = () => {
       setConfCodeSending(false);
       return response.status;
     }
-    //catch (error) { ToastHandle("Unable to send confirmation code", "danger"); } //!!!
-    catch (error) {  }
+    catch (error) { ToastHandle("Unable to send confirmation code", "danger"); }
     finally { setConfCodeSending(false); }
   }
 
@@ -147,7 +146,7 @@ const AccountContactSection = () => {
   const sendConfirmationCode = async (index) => {
     setCodeSentFor(contacts[index].address);
     const responseCode = await callSendCodeAPI(contacts[index].type, contacts[index].address);
-    //if (responseCode != 200) { setCodeSentFor(""); } //!!!
+    if (responseCode != 200) { setCodeSentFor(""); }
   };
 
 
