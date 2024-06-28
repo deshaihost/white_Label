@@ -18,7 +18,7 @@ button.primary-button {
 }
 
 button.primary-button:hover {
-    background: transparent;
+    background: rgba(20, 110, 245, 0.5); /* 50% transparency */
     color: #146EF5;
 }
 

@@ -34,6 +34,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [emailEntered, setEmailEntered] = useState("");
+  const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
 
   const {
     register,
@@ -153,8 +154,8 @@ const Signup = () => {
               <div className="auth-form">
                 <h2>Try HostBuddy Today!</h2>
                 <p>Already have an account? <Link to="/login">Sign in here</Link></p>
-                <form action="" onSubmit={handleSubmit( (data) => { onSubmit(data); } )}
-                >
+                <form action="" onSubmit={handleSubmit( (data) => { onSubmit(data); } )}>
+
                   <div className="input-container">
                     <input type="text" {...register("firstName", { required: true })} placeholder="First Name..." value={inputSpaceValidation?.firstName} onInput={(e) => { firstNameSpaceHandle(e); }}/>
                   </div>
@@ -163,6 +164,7 @@ const Signup = () => {
                       {ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_NAME)}
                     </>
                   )}
+
                   <div className="input-container">
                     <input type="text" {...register("lastName", { required: true })} placeholder="Last Name..." value={inputSpaceValidation?.lastName} onInput={(e) => { lastNameSpaceHandle(e) }}/>
                   </div>
@@ -173,6 +175,7 @@ const Signup = () => {
                       )}
                     </>
                   )}
+
                   <div className="input-container">
                     <input type="text" placeholder="Email..." {...register("email", {
                         required: true,
@@ -190,6 +193,7 @@ const Signup = () => {
                   {errors.email?.type === "pattern" && (
                     <>{ErrorMessageShow(errors.email?.message)}</>
                   )}
+
                   <div className="input-container">
                     <div className="password-box">
                       <input type={showPassword ? "text" : "password"} placeholder="Password..."
@@ -217,6 +221,7 @@ const Signup = () => {
                     )}
                     <p className="password-criteria">Password should have special characters like $,@,%,! and minimum 8 length.</p>
                   </div>
+
                   <div className="input-container">
                     <div className="password-box">
                       <input type={showConfirmPassword ? "text" : "password"} placeholder="Confirm Password..."
@@ -237,20 +242,36 @@ const Signup = () => {
                       <>{ErrorMessageShow(errors?.confirmPassword?.message)}</>
                     )}
                   </div>
+
                   <div className="input-container" style={{display:"none"}}>
                     <input type="text" {...register("phone", { pattern: /^[0-9]{10}$/, })} placeholder="Phone (optional) ..." maxLength="10" />
                   </div>
                   {errors.phone?.type === "pattern" && (
                     <>{ErrorMessageShow("Please enter a valid phone number")}</>
                   )}
+
+                  <div className="input-container footer-auth">
+                    <label>
+                      <input type="checkbox" checked={hasAgreedToTerms} onChange={(e) => setHasAgreedToTerms(e.target.checked)}/>
+                      I agree to the{" "}<a href="/termsof-service" target="_blank">Terms of Service</a>{" "}and{" "}<a href="/privacy-policy" target="_blank">Privacy Policy</a>.
+                    </label>
+                  </div>
+
                   <div className="input-container">
-                    <PrimaryButton text={!registerLoading ? "Register" : <Loader />} additionalClass="w-100" disableType={registerLoading}/>
+                    <PrimaryButton
+                      text={!registerLoading ? "Register" : <Loader />}
+                      additionalClass={`w-100 ${!hasAgreedToTerms ? 'btn-disabled' : ''}`}
+                      disableType={registerLoading || !hasAgreedToTerms}
+                      style={{ opacity: hasAgreedToTerms ? 1 : 0.5, pointerEvents: hasAgreedToTerms ? 'auto' : 'none' }}
+                    />
                   </div>
                   {loginLoading && (
                     <div className="text-center border pill text-success py-2">Redirecting...</div>
                   )}
                 </form>
               </div>
+
+              {/*
               <div className="footer-auth">
                 <div>
                   By continuing, you agree to the{" "}
@@ -258,6 +279,8 @@ const Signup = () => {
                   <a href="/privacy-policy" target="_blank">Privacy Policy</a>
                 </div>
               </div>
+              */}
+
             </div>
           </div>
         </div>

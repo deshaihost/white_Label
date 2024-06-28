@@ -141,7 +141,17 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.auth .auth-content .footer-auth label {
+  display: flex;
+  align-items: center; /* This aligns the checkbox and the label text vertically */
+}
+
+.auth .auth-content .footer-auth label a {
+  margin: 0 4px;
 }
 
 .auth .auth-img {

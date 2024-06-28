@@ -1,12 +1,13 @@
 import React from "react";
 import "./button.css";
 
-const PrimaryButton = ({ onClick, text, additionalClass, disableType }) => {
+const PrimaryButton = ({ onClick, text, additionalClass, disableType, style }) => {
   return (
     <button
       className={`primary-button button-global ${additionalClass}`}
       disabled={disableType ? true : false}
       onClick={onClick}
+      style={style}
     >
       {text}
     </button>

@@ -38,16 +38,14 @@ const Pricing = () => {
           <div style={{ height: '25px' }}></div> {/* Vertical spacer */}
           <h3>The Works</h3>
           <ul>
-            <li>State of the art AI, tailored to your properties.</li>
+            <li>Everything in The Essentials, plus:</li>
             <li><strong>Connect a PMS account</strong> to give HostBuddy access to property details and real-time guest information, and to let HostBuddy see and respond to guest messages over your existing communication channels.</li>
             <li>Schedule the times of day/week for HostBuddy to automatically respond to guests, up to a maximum of 12 hours per day.</li>
           </ul>
           <div style={{ height: '25px' }}></div> {/* Vertical spacer */}
           <h3>The Works Unlimited</h3>
           <ul>
-            <li>State of the art AI, tailored to your properties.</li>
-            <li><strong>Connect a PMS account</strong> to give HostBuddy access to property details and real-time guest information, and to let HostBuddy see and respond to guest messages over your existing communication channels.</li>
-            <li>Schedule the times of day/week for HostBuddy to automatically respond to guests, <strong>with no daily limit.</strong></li>
+            <li>Everything in The Works, with <strong>no daily limit</strong> on the number of hours HostBuddy can automatically respond to guests.</li>
           </ul>
         </div>
 
