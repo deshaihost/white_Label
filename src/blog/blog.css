@@ -8,6 +8,15 @@
   text-align: center;
   color: #333; /* Dark grey text for the title */
 }
+#landing-page-description {
+  color: #333;
+  font-size: 18px;
+  line-height: 1.5;
+  max-width: 80%;
+  margin: 20px auto;
+  text-align: center;
+  display: block;
+}
 .blog-tiles {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -264,6 +273,9 @@
   }
 }
 @media screen and (max-width: 540px) {
+  #landing-page-description {
+    max-width: 90%;
+  }
   .blog-tiles {
     grid-template-columns: 100%;
     padding: 20px 0px;

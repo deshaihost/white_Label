@@ -44,7 +44,7 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h4><strong>Automate</strong> Your Guest Communications</h4>
+                                <h3><strong>Automate</strong> Your Guest Communications</h3>
                                 <p>Created by hosts, for hosts, HostBuddy is the leading AI messaging software for short term rental hosts. HostBuddy lets you automate the demanding responsibilities of guest communication, allowing you to relax knowing your guests are well taken care of.</p>
                             </div>
                         </div>
@@ -56,7 +56,7 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h4><strong>Integrate</strong> Into Your Existing Systems</h4>
+                                <h3><strong>Integrate</strong> Into Your Existing Systems</h3>
                                 <p>Connect a PMS account to give HostBuddy access to property details and real-time guest information, and to let HostBuddy see and respond to guest messages over your existing communication channels. HostBuddy can integrate with most major property management softwares on the market - <Link to='/faqs'>See the full list.</Link></p>
                             </div>
                         </div>
@@ -68,7 +68,7 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h4>Tailor To <strong>Your Specifications</strong></h4>
+                                <h3>Tailor To <strong>Your Specifications</strong></h3>
                                 <p>Our interface makes it easy for you to provide property information, troubleshooting instructions, or any other relevant details for HostBuddy to use in supporting guests. Our easy-to-follow setup guide will have your application ready to go live quickly and effortlessly.</p>
                             </div>
                         </div>
@@ -80,7 +80,7 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h4><strong>Schedule</strong> To Your Needs</h4>
+                                <h3><strong>Schedule</strong> To Your Needs</h3>
                                 <p>Think of HostBuddy as the most dedicated employee you could have. Available anytime you need support, HostBuddy can be scheduled to fit your specific coverage needs. Say goodbye to lockouts, late-night messages, and issue troubleshooting—HostBuddy will take it from here.</p>
                             </div>
                         </div>

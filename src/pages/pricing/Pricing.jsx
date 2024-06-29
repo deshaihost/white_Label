@@ -45,7 +45,7 @@ const Pricing = () => {
           <div style={{ height: '25px' }}></div> {/* Vertical spacer */}
           <h3>The Works Unlimited</h3>
           <ul>
-            <li>Everything in The Works, with <strong>no daily limit</strong> on the number of hours HostBuddy can automatically respond to guests.</li>
+            <li>Everything in The Works, with <strong>no daily limit</strong> on the hours HostBuddy can automatically respond to guests.</li>
           </ul>
         </div>
 
@@ -92,7 +92,7 @@ const Pricing = () => {
             <h3>The Works Unlimited</h3>
             <div className="pricing-plans-descriptions-md-sm">
               <ul>
-                <li>Everything in The Works, with <strong>no daily limit</strong> on the number of hours HostBuddy can automatically respond to guests.</li>
+                <li>Everything in The Works, with <strong>no daily limit</strong> on the hours HostBuddy can automatically respond to guests.</li>
               </ul>
             </div>
             <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="7" priceTier={3}/>
@@ -105,9 +105,9 @@ const Pricing = () => {
         <Features />
         <div className="started">
           <div className="started-content">
-            <h2>Get Started today!</h2>
-            <p>Sign up today to get a 2 week free trial.</p>
-            <div style={{ marginBottom: '15px' }}>
+          <h3>Get Started Today!</h3>
+            <p>Sign up now to get a 2 week free trial.</p>
+            <div style={{ marginBottom: '10px' }}>
               <Link className='explore-link' to="/signup">Start Your trial Today 
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="13" viewBox="0 0 14 13" fill="none">
                     <path d="M13.0303 7.03033C13.3232 6.73744 13.3232 6.26256 13.0303 5.96967L8.25736 1.1967C7.96447 0.903806 7.48959 0.903806 7.1967 1.1967C6.90381 1.48959 6.90381 1.96447 7.1967 2.25736L11.4393 6.5L7.1967 10.7426C6.90381 11.0355 6.90381 11.5104 7.1967 11.8033C7.48959 12.0962 7.96447 12.0962 8.25736 11.8033L13.0303 7.03033ZM0.5 7.25H12.5V5.75H0.5V7.25Z" fill="#146EF5"></path>

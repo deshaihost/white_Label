@@ -77,7 +77,7 @@
     margin-bottom: 80px;
 }
 
-.works .works-container .row h4 {
+.works .works-container .row h3 {
     font-family: 'Samsung Sharp Sans Bold';
     font-size: 35px;
     font-style: normal;
@@ -89,21 +89,21 @@
     margin-bottom: 10px;
 }
 
-.works .works-container .row:nth-child(1) h4 strong, .works .works-container .row:nth-child(4) h4 strong {
+.works .works-container .row:nth-child(1) h3 strong, .works .works-container .row:nth-child(4) h3 strong {
     background: var(--Blue, linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%));
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.works .works-container .row:nth-child(2) h4 strong {
+.works .works-container .row:nth-child(2) h3 strong {
     background: linear-gradient(180deg, #C274FF 1.92%, #9214F5 119.23%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.works .works-container .row:nth-child(3) h4 strong {
+.works .works-container .row:nth-child(3) h3 strong {
     background: linear-gradient(180deg, #64FFEC 1.92%, #14F5DA 119.23%);
     background-clip: text;
     -webkit-background-clip: text;
@@ -159,7 +159,7 @@
         height: 100px;
     }
 
-    .works .works-container .row h4  {
+    .works .works-container .row h3  {
         font-size: 27px;
         line-height: 35px;
     }
@@ -203,7 +203,7 @@
         top: -115px;
     }
 
-    .works .works-container .row h4  {
+    .works .works-container .row h3  {
         font-size: 20px;
         line-height: 28px;
     }
