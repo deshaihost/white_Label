@@ -103,9 +103,9 @@
   position: relative;
   border-radius: 30px;
   border: 1px solid #146ef5;
-  background: linear-gradient(180deg, #000426 0%, #00031a 100%);
+  box-shadow: 0px 0px 20px 2px #FFF; /* offset-x | offset-y | blur-radius | spread-radius | color */
   max-width: 790px;
-  padding: 90px 0;
+  padding: 60px 0;
   text-align: center;
   margin: auto;
 }
@@ -117,27 +117,33 @@
   z-index: 1;
 }
 
-.started .started-content h1, .started .started-content h2 {
-  color: #fff;
-  text-align: center;
-  font-family: "Samsung Sharp Sans Bold";
-  font-size: 20px;
+.started .started-content h1, .started .started-content h3 {
+  background: var(--Blue, linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #FFF;
+  font-family: 'Samsung Sharp Sans Bold';
+  font-size: 45px;
   font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  margin-bottom: 14px;
+  line-height: 50px;
+  margin-bottom: 20px;
+  width: 100%;
 }
 
 .started .started-content p {
-  color: #ccc;
-  text-align: center;
-  font-family: "DM Sans", sans-serif;
-  font-size: 15px;
+  color: #DDD;
+  font-family: 'Samsung Sharp Sans Medium';
+  font-size: 18px;
   font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-  letter-spacing: -0.3px;
   margin-bottom: 25px;
+  width: 100%;
+}
+
+.started .started-content a {
+  font-size: 20px;
+  font-family: "Samsung Sharp Sans Bold";
+  transition: transform 0.3s ease; /* Smooth transition for the transform */
 }
 
 a.explore-link {
@@ -174,6 +180,12 @@ a.explore-link {
   .started {
     padding: 40px;
   }
+
+  .started .started-content h1, .started .started-content h3 {
+    font-size: 40px;
+    line-height: 45px;
+    margin-bottom: 20px;
+  }
 }
 
 @media only screen and (max-width: 767px) {
@@ -184,5 +196,18 @@ a.explore-link {
 
   .pricing .works-pricing-boxes {
     margin-top: 40px;
+  }
+
+  .started .started-content h3 {
+    font-size: 35px;
+    line-height: 40px;
+  }
+
+  .started .started-content p {
+    font-size: 16px;
+  }
+
+  .started .started-content a {
+    font-size: 18px;
   }
 }

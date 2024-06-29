@@ -19,13 +19,14 @@ const BlogLandingPage = () => {
         </Helmet>
         <div className="blog-landing-page">
           <h1 className="blog-landing-page-title">HostBuddy AI - Blog</h1>
+          <h2 id='landing-page-description'>Discover game-changing STR strategies, from smart home tech to AI-powered software. Your go-to resource for short-term rental innovation and success.</h2>
           <div className="blog-tiles">
             {articles.map(article => (
               <a href={`/blog/${article.id}`} key={article.id} className="blog-tile">
                 <div className="blog-tile-image-container">
                   <img src={article.img} alt={article.title} className="blog-tile-image" />
                 </div>
-                <h2 className="blog-tile-title">{article.title}</h2>
+                <h3 className="blog-tile-title">{article.title}</h3>
                 <p className="blog-tile-date">{article.date}</p>
                 <p className="blog-tile-description">{article.description}</p>
               </a>

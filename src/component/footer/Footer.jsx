@@ -36,24 +36,19 @@ const Footer = () => {
               <div className="footer-links">
                 <h6 className=" fw-bold mb-4 links-heading">Quick links</h6>
                 <p className="links">
-                  <Link to="/" className="text-reset">
-                    Home
-                  </Link>
+                  <Link to="/" className="text-reset">Home</Link>
                 </p>
                 <p className="links">
-                  <Link to="/meet-hostbuddy" className="text-reset">
-                    Meet HostBuddy
-                  </Link>
+                  <Link to="/meet-hostbuddy" className="text-reset">Meet HostBuddy</Link>
                 </p>
                 <p className="links">
-                  <Link to="/pricing" className="text-reset">
-                    Pricing
-                  </Link>
+                  <Link to="/pricing" className="text-reset">Pricing</Link>
                 </p>
                 <p className="links">
-                  <Link to="/faqs" className="text-reset">
-                    FAQs
-                  </Link>
+                  <Link to="/faqs" className="text-reset">FAQs</Link>
+                </p>
+                <p className="links">
+                  <Link to="/blog" className="text-reset">Blog</Link>
                 </p>
               </div>
             </MDBCol>

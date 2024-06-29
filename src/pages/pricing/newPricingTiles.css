@@ -74,7 +74,7 @@
     font-style: normal;
     font-weight: 700;
     line-height: 40px;
-    margin: 0;
+    margin: 0 10px 0 0; /* 10px minimum gap between left side and right side. Split let side into 2 lines if this is compromised */
 }
 
 .pricing-tile .pricing-plan-box .pricing-bar-box .price-plan h5 {
