@@ -358,8 +358,6 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
             <div>
               <h5 className="text-white fw-bold mb-3 fs-4">
                 Integrate external resources here
-                {/* Upload documents
-              Previous Documents */}
               </h5>
             </div>
             <div className="row">
@@ -381,17 +379,8 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
                 </div>
                 <div class="old-docs mt-2" onClick={handleShowPopUp}>
                   <a href="javascript:void(0);">
-                    <svg
-                      width="17"
-                      height="20"
-                      viewBox="0 0 17 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M11.6875 2H2.125V18H14.875V5H11.6875V2ZM2.125 0H12.75L17 4V18C17 18.5304 16.7761 19.0391 16.3776 19.4142C15.9791 19.7893 15.4386 20 14.875 20H2.125C1.56141 20 1.02091 19.7893 0.622398 19.4142C0.223883 19.0391 0 18.5304 0 18V2C0 1.46957 0.223883 0.960859 0.622398 0.585786C1.02091 0.210714 1.56141 0 2.125 0ZM4.25 9H12.75V11H4.25V9ZM4.25 13H12.75V15H4.25V13Z"
-                        fill="#146EF5"
-                      ></path>
+                    <svg width="17" height="20" viewBox="0 0 17 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="#146EF5" d="M11.6875 2H2.125V18H14.875V5H11.6875V2ZM2.125 0H12.75L17 4V18C17 18.5304 16.7761 19.0391 16.3776 19.4142C15.9791 19.7893 15.4386 20 14.875 20H2.125C1.56141 20 1.02091 19.7893 0.622398 19.4142C0.223883 19.0391 0 18.5304 0 18V2C0 1.46957 0.223883 0.960859 0.622398 0.585786C1.02091 0.210714 1.56141 0 2.125 0ZM4.25 9H12.75V11H4.25V9ZM4.25 13H12.75V15H4.25V13Z"></path>
                     </svg>
                     Previous Documents
                   </a>

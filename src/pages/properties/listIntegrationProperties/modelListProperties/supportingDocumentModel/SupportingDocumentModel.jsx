@@ -15,7 +15,7 @@ const SupportingDocumentModel = ({ handleShow, handleClose }) => {
           <div className="text-center text-white">
             <h3>Property Documents</h3>
             <div className="text-danger border mt-5 ">
-              You do not added any url to this property.
+              You have not added any url data to this property.
             </div>
           </div>
         </Modal.Body>

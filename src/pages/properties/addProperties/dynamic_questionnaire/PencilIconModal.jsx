@@ -74,8 +74,17 @@ const PencilIconModal = ({ show, setShowModal, question_obj, checkbox_group_opti
             {["select", "checkbox_group"].includes(question_type) && (
               <textarea className="form-control" name={question_text} id="" cols="30" rows="10" placeholder="Enter note here..." value={extraNoteData} onChange={(e) => setextraNoteData(e.target.value)}></textarea>
             )}
-            <hr style={{ borderTop: "0px solid #0078F0" }} />
-            <label>Information from this question will only be provided to guests at the selected (blue) reservation stages. You can de-select stages below to prevent HostBuddy from sharing this information with those guests.</label>
+            <hr style={{ borderTop: "2px solid #0078F0" }} />
+            <label>You can de-select reservation stages below to prevent HostBuddy from sharing this information with guests in those stages.</label>
+            <label style={{ marginBottom:'20px', marginTop:'20px' }}>
+              With this selection, HostBuddy
+              { Object.values(reservationStageData).every(stage => !stage) ? <> can share this information with <span style={{ fontSize:'15px', color:'rgb(0, 190, 0)' }}>all guests</span> for this property.</> :
+                Object.values(reservationStageData).every(stage => stage) ? <> <span style={{ fontSize:'15px', color:'rgb(220, 0, 0)' }}>cannot</span> share this information with <span style={{ fontSize:'15px', color: 'rgb(220, 0, 0)' }}>any guests</span>.</> :
+                Object.values(reservationStageData).filter(stage => stage).length === 1 ? <> cannot share this information with <span style={{ fontSize:'15px', color: 'rgb(220, 0, 0)' }}>{Object.keys(reservationStageData).find(stage => reservationStageData[stage])}</span> guests.</> :
+                Object.values(reservationStageData).filter(stage => stage).length === 2 ? <> cannot share this information with <span style={{ fontSize:'15px', color: 'rgb(220, 0, 0)' }}>{Object.keys(reservationStageData).filter(stage => reservationStageData[stage])[0]}</span> {" or "}<span style={{ fontSize:'15px', color: 'rgb(220, 0, 0)' }}>{Object.keys(reservationStageData).filter(stage => reservationStageData[stage])[1]}</span> guests.</> :
+                <> cannot share this information with <span style={{ fontSize:'15px', color: 'rgb(220, 0, 0)' }}>any guests</span>.</>
+              }
+            </label>
 
             <div className=" d-flex justify-content-between mt-3">
 
