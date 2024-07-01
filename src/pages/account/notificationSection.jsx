@@ -16,7 +16,7 @@ const AccountNotificationSection = () => {
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
 
   // Initialize user_contact_options with all possible contact channels set to empty objects
-  let all_possible_contact_channels = ['email', 'phone'];
+  let all_possible_contact_channels = ['email', 'phone', 'slack'];
   let user_contact_options = all_possible_contact_channels.reduce((acc, channel) => {
     acc[channel] = {};
     return acc;
@@ -35,9 +35,9 @@ const AccountNotificationSection = () => {
   });
 
   // Add the user account's primary email address to the email addresses in contact_options
-if (userDataGet?.email) {
-  user_contact_options = { ...user_contact_options, email: { ...user_contact_options.email, [userDataGet?.email]: {} } };
-}
+  if (userDataGet?.email) {
+    user_contact_options = { ...user_contact_options, email: { ...user_contact_options.email, [userDataGet?.email]: {} } };
+  }
   
   const [updateNotifSettingsApi, setUpdateNotifSettingsApi] = useState(false);
   const [recipients, setRecipients] = useState([]); // Populates as: [{ firstName:'...', channel:'...', RecipientAddress:'...', timing:'...', time:'...' }, ...]
@@ -68,57 +68,11 @@ if (userDataGet?.email) {
     }
     catch (error) { ToastHandle(error, "danger"); }
     finally { setUpdateNotifSettingsApi(false); }
-  }
-
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    /*
-    // Validate that all fields are filled out for each recipient
-    for (let i = 0; i < recipients.length; i++) {
-      const recipient = recipients[i];
-      if (
-        !recipient.firstName || !recipient.channel || !recipient.RecipientAddress || !recipient.timing ||
-        (recipient.timing === 'daily' && !recipient.time))
-      {
-        ToastHandle('Fields missing for one or more recipients. Please fill all fields or remove the recipient.', 'danger');
-        return;
-      }
-    }
-
-    // Structure the data to be sent to the API
-    // {'notification_settings': { 'action_items': {
-    //      'immediate': {<email_or_sms#>: {'type':'<email_or_sms>', 'name':<firstName>}, ...},
-    //      'hourly': {<email_or_sms#>: {'type':'<email_or_sms>', 'name':<firstName>}, ...},
-    //      'daily': {<email_or_sms#>: {'type':'<email_or_sms>', 'time_of_day':'<HH:MM>', 'name':<firstName>}, ...} }}}
-    let notificationSettings = {
-      'notification_settings': {
-        'action_items': {
-          'immediate': {}, 'hourly': {}, 'daily': {}
-        }
-      }
-    };
-    recipients.forEach((recipient, index) => {
-      let recipientData = { 'type': recipient.channel, 'name': recipient.firstName };
-      if (recipient.timing === 'daily') { recipientData['time_of_day'] = recipient.time; }
-      notificationSettings.notification_settings.action_items[recipient.timing][recipient.RecipientAddress] = recipientData;
-    });
-
-    // Call the API to update the notification settings
-    const apiResponseCode = await callUpdateNotifSettingsApi(notificationSettings);
-    if (apiResponseCode === 200) {
-      dispatch(stateEmptyActions());
-      dispatch(getUserDataActions()); // Update our record of user data with the new region data we just added to the database
-    }
-    */
   };
-
 
   const showNewRecipientFields = () => {
     setNewRecipient({ firstName: '', channel: '', RecipientAddress: '', timing: '', time: '', consent_checked: false });
   };
-
 
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -126,7 +80,6 @@ if (userDataGet?.email) {
     const updatedNewRecipient = { ...newRecipient, [name]: inputValue };
     setNewRecipient(updatedNewRecipient);
   };
-
 
   const updateDataToApi = async (data) => {
     // Structure the data to be sent to the API
@@ -155,7 +108,6 @@ if (userDataGet?.email) {
     }
   };
 
-
   const addRecipient = async () => {
     // Validate that all fields are filled out for each recipient
     if (
@@ -174,7 +126,6 @@ if (userDataGet?.email) {
     setTriggerApiUpdate(true);
   };
 
-
   const removeRecipient = (index) => {
     const newRecipients = [...recipients];
     newRecipients.splice(index, 1);
@@ -182,6 +133,31 @@ if (userDataGet?.email) {
     setTriggerApiUpdate(true);
   };
 
+  function getLabel(channel) {
+    switch (channel) {
+      case 'email': return 'Email Address';
+      case 'phone': return 'Phone Number';
+      case 'slack': return 'Slack Channel';
+      default: return 'Contact Information';
+    }
+  }
+
+  const renderOptions = () => {
+    if (newRecipient.channel === 'email') {
+      return Object.keys(user_contact_options.email).map(email_addr => (
+        <option key={email_addr} value={email_addr}>{email_addr}</option>
+      ));
+    } else if (newRecipient.channel === 'phone') {
+      return Object.keys(user_contact_options.phone).map(phone_num => (
+        <option key={phone_num} value={phone_num}>{phone_num}</option>
+      ));
+    } else if (newRecipient.channel === 'slack') {
+      return Object.keys(user_contact_options.slack).map(slack_id => {
+        const channel_name = user_contact_options.slack[slack_id].channel;
+        return <option key={slack_id} value={slack_id}>{`${slack_id} ${channel_name}`}</option>;
+      });
+    }
+  };
 
   // When triggerApiUpdate is set, update the data to the API
   useEffect(() => {
@@ -191,12 +167,10 @@ if (userDataGet?.email) {
     }
   }, [triggerApiUpdate]);
 
-
   // Fetch user data on page load, to populate "userDataGet"
   useEffect(() => {
     dispatch(getUserDataActions());
   }, []);
-
 
   // when userDataGet populates, update the state of the form fields and the phone/email options
   useEffect(() => {
@@ -253,7 +227,7 @@ if (userDataGet?.email) {
 
         <hr className="in-section-divider" />
         <h4>Action Items</h4>
-        <p style={{marginLeft:"10px"}}>Get notifications when HostBuddy detects a new action item for the host in a guest conversation. Receive your notifications immediately, or get them all at the end of the hour or at a certain time of day.</p>
+        <p style={{marginLeft:"10px"}}>Get notifications when HostBuddy detects a new action item for the host in a guest conversation. Receive your notifications immediately, or get them all at the end of the hour, or at a certain time each day.</p>
         
 
         {recipients.length === 0 && <p style={{marginLeft:"10px"}}><span className="grey-text">No recipients added. This notification will not be sent.</span></p>}
@@ -284,24 +258,17 @@ if (userDataGet?.email) {
                 <select id={"Channel"} name="channel" className="form-control" value={newRecipient.channel} onChange={e => handleInputChange(e)}>
                   <option value="">-- Please select --</option>
                   <option value="email">Email</option>
+                  <option value="slack">Slack</option>
                   {/* <option value="sms">Text message (SMS)</option> */}
                 </select>
               </div>
 
               {newRecipient.channel && (
                 <div className="col input_group">
-                  <label htmlFor={"RecipientAddress"}>{newRecipient.channel === 'email' ? 'Email Address' : 'Phone Number'}</label>
+                  <label htmlFor={"RecipientAddress"}>{getLabel(newRecipient.channel)}</label>
                   <select id={"RecipientAddress"} name="RecipientAddress" className="form-control" value={newRecipient.RecipientAddress} onChange={e => handleInputChange(e)}>
                     <option value="">-- Please select --</option>
-                    {newRecipient.channel === 'email' ? (
-                      Object.keys(user_contact_options.email).map(email => (
-                        <option key={email} value={email}>{email}</option>
-                      ))
-                    ) : (
-                      Object.keys(user_contact_options.phone).map(phone => (
-                        <option key={phone} value={phone}>{phone}</option>
-                      ))
-                    )}
+                    {renderOptions()}
                   </select>
                 </div>
               )}

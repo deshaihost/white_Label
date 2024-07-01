@@ -164,12 +164,11 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/account" element={
-            <ProtectedRoute>
-              <Account />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/account/:section?" element={
+          <ProtectedRoute>
+            <Account />
+          </ProtectedRoute>
+        }/>
         <Route path="/setup-guide" element={
             <ProtectedRoute>
               <SetupGuide />
