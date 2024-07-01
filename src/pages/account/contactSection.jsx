@@ -98,8 +98,7 @@ const AccountContactSection = () => {
         setSlackOauthCode(""); // reset the slackOauthCode state
         dispatch(getUserDataActions()); // update our data from the API
       }
-      //else { ToastHandle(response?.data?.error, "danger"); }
-      else { console.log('API Response', response); }
+      else { ToastHandle(response?.data?.error, "danger"); }
       return response.status;
     }
     catch (error) { ToastHandle("Unable to complete Slack OAuth", "danger"); }
@@ -345,7 +344,8 @@ const AccountContactSection = () => {
               </>
             )}
 
-            {Object.keys(newContacts[section] || {}).length === 0 &&
+            {/* Add new contact information button for this section. Only allow one new contact to be added at a time for the section. Also don't show for Slack if a Slack account is already connected */}
+            {Object.keys(newContacts[section] || {}).length === 0 && !(section==='slack' && contacts.some(contact => contact.type === 'slack')) &&
               <span className="d-flex justify-content-center" style={{ marginTop:'30px', marginBottom:'70px' }}>
                 <Link to="#" className="text-link" onClick={() => showAddFields(section)}>+ Add {contact_sections[section].singular}</Link>
               </span>
