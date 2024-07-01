@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import "./account.css";
 import Loader, { FullScreenLoader } from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
@@ -11,6 +11,7 @@ import { getUserDataActions, stateEmptyActions } from "../../redux/actions";
 const AccountContactSection = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
+  const location = useLocation();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   
   const [confCodeSending, setConfCodeSending] = useState(false);
@@ -19,9 +20,11 @@ const AccountContactSection = () => {
   const [contacts, setContacts] = useState([{ type:'', name:'', address:'', confirmed:false }]); // All prev added contacts from the API. Populated on page load in the UseEffect
   const [confirmationCode, setConfirmationCode] = useState(""); // This is the user's input for confirmation code
   const [codeSentFor, setCodeSentFor] = useState(""); // This is the contact that the code was sent for, if any
+  const [slackOauthCode, setSlackOauthCode] = useState(""); // Code received from Slack OAuth as part of the OAuth flow
 
   // Define the different sections of contact information. Will need to manually update this as we add new contact types
-  const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}};
+  //const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}};
+  const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'slack':{'title':'Slack Accounts', 'singular':'Slack Account'}};
   //const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'phone':{'title':'Phone Numbers', 'singular':'Phone Number'}};
   const initialState = Object.keys(contact_sections).reduce((acc, key) => {
     acc[key] = {};
@@ -53,7 +56,6 @@ const AccountContactSection = () => {
     finally { setNewContactAdding(false); }
   }
 
-
   // Send confirmation code to the user's address, which they then need to go confirm
   const callSendCodeAPI = async (contact_type, contact_address) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -78,8 +80,32 @@ const AccountContactSection = () => {
     finally { setConfCodeSending(false); }
   }
 
+  const completeOauthAPI = async (code) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const dataToSend = { code };
 
-  // Sobmit the confirmation code to the API to complete confirmation
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+
+      const response = await axios.post( `${baseUrl}/complete_slack_oauth`, dataToSend, config );
+
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        setSlackOauthCode(""); // reset the slackOauthCode state
+        dispatch(getUserDataActions()); // update our data from the API
+      }
+      //else { ToastHandle(response?.data?.error, "danger"); }
+      else { console.log('API Response', response); }
+      return response.status;
+    }
+    catch (error) { ToastHandle("Unable to complete Slack OAuth", "danger"); }
+  }
+
+  // Submit the confirmation code to the API to complete confirmation
   const callConfirmContactAPI = async (contact_type, contact_address, confirmation_code) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -103,12 +129,10 @@ const AccountContactSection = () => {
     finally { setCodeConfirming(false); }
   }
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
   };
-
 
   const handleInputChange = (event, section) => {
     const { name, type, checked, value } = event.target;
@@ -118,13 +142,11 @@ const AccountContactSection = () => {
     setNewContacts(updatedNewContacts);
   };
 
-
   const showAddFields = (section) => {
     let updatedNewContacts = {...newContacts, [section]:{ type:'', name:'', address:'', confirmed:false }};
     if (section === 'phone') { updatedNewContacts[section].consent_checked = false; }
     setNewContacts(updatedNewContacts);
   };
-
 
   const addContact = async (name, type, address) => {
     if (!name || !address) { ToastHandle("Please fill all fields", "danger"); }
@@ -137,10 +159,8 @@ const AccountContactSection = () => {
     }
   };
 
-
   const removeContact = (index) => {
   };
-
 
   // Send the code to the user's address, which they then need to go confirm
   const sendConfirmationCode = async (index) => {
@@ -148,7 +168,6 @@ const AccountContactSection = () => {
     const responseCode = await callSendCodeAPI(contacts[index].type, contacts[index].address);
     if (responseCode != 200) { setCodeSentFor(""); }
   };
-
 
   // Submit the confirmation code to the API to complete confirmation
   const submitConfirmationCode = async (index) => {
@@ -160,12 +179,10 @@ const AccountContactSection = () => {
     }
   };
 
-
   // Fetch user data on page load, to populate "userDataGet"
   useEffect(() => {
     dispatch(getUserDataActions());
   }, []);
-
 
   // when userDataGet populates, populate the previous contacts data
   useEffect(() => {
@@ -186,6 +203,23 @@ const AccountContactSection = () => {
       setContacts(updatedContacts);
     }
   }, [userDataGet]);
+
+  // If this is a redirect from Slack OAuth, get the code from the URL
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const code = queryParams.get("code");
+    if (code) { setSlackOauthCode(code); }
+  }, [location]);
+
+  // If we have a Slack OAuth code (and therefore user is in the process of authorizing Slack), call the API to complete the OAuth
+  // Also show the Add Contact form for Slack, where a loader will be displayed
+  useEffect(() => {
+    if (slackOauthCode) {
+      setNewContacts({ slack:{ name:'', address:'' } });
+      completeOauthAPI(slackOauthCode);
+    }
+  }, [slackOauthCode]);
+
 
   return (
     <div className="account-content location-section">
@@ -244,52 +278,70 @@ const AccountContactSection = () => {
               </tbody>
             </table>
 
-
+            {/* Add new contact information, within a given section */}
             {Object.keys(newContacts[section] || {}).length > 0 && (
               <>
-                {/*contacts.section.length === 0 && <p><span className="grey-text">No {contact_sections[section].singular} Added.</span></p>*/}
-                <div className="recipient" style={{marginTop:"20px"}} key={index}>
-                  <div className="row">
-                    <div className="col input_group">
-                      <label htmlFor={`name${index}`}>Name</label>
-                      <input type="text" id={`name${index}`} name="name" className="form-control" value={newContacts?.[section]?.name} onChange={e => handleInputChange(e, section)} />
-                    </div>
-
-                    <div className="col input_group">
-                      <label htmlFor={`address${index}`}>{contact_sections[section].singular}</label>
-                      <input type="text" id={`address${index}`} name="address" className="form-control" value={newContacts?.[section]?.address} onChange={e => handleInputChange(e, section)} />
-                    </div>
-                  </div>
-
-                  <div className="d-flex justify-content-center">
-                    {section === 'phone' && (
-                      <div className="checkbox-container">
-                        <input type="checkbox" className="form-check-input" id={`consent${index}`} name="consent_checked" value={newContacts?.[section]?.consent_checked} onChange={e => handleInputChange(e, section)} />
-                        <label className="form-check-label" htmlFor={`consent${index}`}>I consent to receive a one-time verification code at this number.</label>
+                {section === 'slack' ? (
+                  <div className="recipient" style={{marginTop:"20px"}} key={index}>
+                    {slackOauthCode ? (
+                      <div className="slack-container">
+                        <p>We're adding HostBuddy AI to your Slack account. Please wait...</p>
+                        <Loader />
+                      </div>
+                    ) : (
+                      <div className="slack-container">
+                        <p>Click the button below to add HostBuddy AI to your Slack account.</p>
+                        <a id="slack-button" href="https://slack.com/oauth/v2/authorize?scope=incoming-webhook%2Cchannels%3Aread%2Cchat%3Awrite&amp;redirect_uri=https%3A%2F%2Fhostbuddy.ai%2Faccount%2Fcontact&amp;client_id=6640565127554.7377267101792"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.8 122.8"><path d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9zm6.5 0c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z" fill="#e01e5a"></path><path d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2zm0 6.5c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z" fill="#36c5f0"></path><path d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2zm-6.5 0c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C64.7 5.8 70.5 0 77.6 0s12.9 5.8 12.9 12.9v32.3z" fill="#2eb67d"></path><path d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-12.9-5.8-12.9-12.9V97h12.9zm0-6.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z" fill="#ecb22e"></path></svg>Add to Slack</a>
                       </div>
                     )}
                   </div>
+                ) : (
+                  <>
+                    {/*contacts.section.length === 0 && <p><span className="grey-text">No {contact_sections[section].singular} Added.</span></p>*/}
+                    <div className="recipient" style={{marginTop:"20px"}} key={index}>
+                      <div className="row">
+                        <div className="col input_group">
+                          <label htmlFor={`name${index}`}>Name</label>
+                          <input type="text" id={`name${index}`} name="name" className="form-control" value={newContacts?.[section]?.name} onChange={e => handleInputChange(e, section)} />
+                        </div>
 
-                  <span className="d-flex justify-content-center">
-                    {!newContactAdding ? (
-                      <Link to="#" className="text-link" style={{ marginTop: '20px',  textAlign: 'center',
-                        pointerEvents: newContacts?.[section]?.consent_checked ? 'auto' : 'none', // Disables pointer events if consent_checked is false
-                        opacity: newContacts?.[section]?.consent_checked ? 1 : 0.5, // Change opacity to appear not clickable if consent_checked is false
-                      }} 
-                      onClick={() => {
-                        if (newContacts?.[section]?.consent_checked) { // consent must be checked to allow submit
-                          addContact(newContacts?.[section]?.name, section, newContacts?.[section]?.address);
-                        }
-                      }}
-                    >
-                      Submit
-                    </Link>
-                    ) : (
-                      <Loader />
-                    )}
-                  </span>
+                        <div className="col input_group">
+                          <label htmlFor={`address${index}`}>{contact_sections[section].singular}</label>
+                          <input type="text" id={`address${index}`} name="address" className="form-control" value={newContacts?.[section]?.address} onChange={e => handleInputChange(e, section)} />
+                        </div>
+                      </div>
 
-                </div>
+                      <div className="d-flex justify-content-center">
+                        {section === 'phone' && (
+                          <div className="checkbox-container">
+                            <input type="checkbox" className="form-check-input" id={`consent${index}`} name="consent_checked" value={newContacts?.[section]?.consent_checked} onChange={e => handleInputChange(e, section)} />
+                            <label className="form-check-label" htmlFor={`consent${index}`}>I consent to receive a one-time verification code at this number.</label>
+                          </div>
+                        )}
+                      </div>
+
+                      <span className="d-flex justify-content-center">
+                        {!newContactAdding ? (
+                          <Link to="#" className="text-link" style={{ marginTop: '20px',  textAlign: 'center',
+                            pointerEvents: newContacts?.[section]?.consent_checked ? 'auto' : 'none', // Disables pointer events if consent_checked is false
+                            opacity: newContacts?.[section]?.consent_checked ? 1 : 0.5, // Change opacity to appear not clickable if consent_checked is false
+                          }} 
+                          onClick={() => {
+                            if (newContacts?.[section]?.consent_checked) { // consent must be checked to allow submit
+                              addContact(newContacts?.[section]?.name, section, newContacts?.[section]?.address);
+                            }
+                          }}
+                        >
+                          Submit
+                        </Link>
+                        ) : (
+                          <Loader />
+                        )}
+                      </span>
+
+                    </div>
+                  </>
+                )}
               </>
             )}
 

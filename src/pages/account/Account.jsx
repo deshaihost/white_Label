@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import SideBar from "../../component/sideBar/SideBar";
 import "./account.css";
 import { Helmet } from "react-helmet";
@@ -11,7 +12,14 @@ import AccountNotificationSection from "./notificationSection";
 
 const Account = () => {
   const [selectedSection, setSelectedSection] = useState('UserInformation');
+  const location = useLocation();
 
+  // If the URL points to "/contact", go to the contact section. This is necessary for handling oauth, e.g. when connecting Slack
+  useEffect(() => {
+    const path = location.pathname.split('/').pop();
+    const section = path === 'contact' ? 'Contact' : 'UserInformation'; // Default to UserInformation
+    setSelectedSection(section);
+  }, [location.pathname]);
 
   return (
     <div className="account-main">
