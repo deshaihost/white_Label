@@ -16,7 +16,7 @@ const AccountNotificationSection = () => {
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
 
   // Initialize user_contact_options with all possible contact channels set to empty objects
-  let all_possible_contact_channels = ['email', 'phone', 'slack'];
+  let all_possible_contact_channels = ['email', 'sms', 'slack'];
   let user_contact_options = all_possible_contact_channels.reduce((acc, channel) => {
     acc[channel] = {};
     return acc;
@@ -136,7 +136,7 @@ const AccountNotificationSection = () => {
   function getLabel(channel) {
     switch (channel) {
       case 'email': return 'Email Address';
-      case 'phone': return 'Phone Number';
+      case 'sms': return 'Phone Number';
       case 'slack': return 'Slack Channel';
       default: return 'Contact Information';
     }
@@ -147,8 +147,8 @@ const AccountNotificationSection = () => {
       return Object.keys(user_contact_options.email).map(email_addr => (
         <option key={email_addr} value={email_addr}>{email_addr}</option>
       ));
-    } else if (newRecipient.channel === 'phone') {
-      return Object.keys(user_contact_options.phone).map(phone_num => (
+    } else if (newRecipient.channel === 'sms') {
+      return Object.keys(user_contact_options.sms).map(phone_num => (
         <option key={phone_num} value={phone_num}>{phone_num}</option>
       ));
     } else if (newRecipient.channel === 'slack') {
@@ -258,8 +258,8 @@ const AccountNotificationSection = () => {
                 <select id={"Channel"} name="channel" className="form-control" value={newRecipient.channel} onChange={e => handleInputChange(e)}>
                   <option value="">-- Please select --</option>
                   <option value="email">Email</option>
+                  <option value="sms">Text message (SMS)</option>
                   <option value="slack">Slack</option>
-                  {/* <option value="sms">Text message (SMS)</option> */}
                 </select>
               </div>
 

@@ -23,9 +23,7 @@ const AccountContactSection = () => {
   const [slackOauthCode, setSlackOauthCode] = useState(""); // Code received from Slack OAuth as part of the OAuth flow
 
   // Define the different sections of contact information. Will need to manually update this as we add new contact types
-  //const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}};
-  const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'slack':{'title':'Slack Accounts', 'singular':'Slack Account'}};
-  //const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'phone':{'title':'Phone Numbers', 'singular':'Phone Number'}};
+  const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'sms':{'title':'Phone Numbers', 'singular':'Phone Number'}, 'slack':{'title':'Slack Accounts', 'singular':'Slack Account'}};
   const initialState = Object.keys(contact_sections).reduce((acc, key) => {
     acc[key] = {};
     return acc;
@@ -98,8 +96,7 @@ const AccountContactSection = () => {
         setSlackOauthCode(""); // reset the slackOauthCode state
         dispatch(getUserDataActions()); // update our data from the API
       }
-      //else { ToastHandle(response?.data?.error, "danger"); }
-      else { console.log('API Response', response); }
+      else { ToastHandle(response?.data?.error, "danger"); }
       return response.status;
     }
     catch (error) { ToastHandle("Unable to complete Slack OAuth", "danger"); }
@@ -129,10 +126,25 @@ const AccountContactSection = () => {
     finally { setCodeConfirming(false); }
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const callDeleteContactAPI = async (contact_type, contact_address) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const params = new URLSearchParams({ contact_type, contact_information: contact_address }).toString();
 
-  };
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+
+      const response = await axios.delete(`${baseUrl}/delete_contact?${params}`, config);
+
+      if (response.status === 200) { ToastHandle(response.data.message, "success"); }
+      else { ToastHandle(response?.data?.error, "danger"); }
+      return response.status;
+    }
+    catch (error) { ToastHandle("Unable to delete contact", "danger"); }
+  }
 
   const handleInputChange = (event, section) => {
     const { name, type, checked, value } = event.target;
@@ -144,12 +156,18 @@ const AccountContactSection = () => {
 
   const showAddFields = (section) => {
     let updatedNewContacts = {...newContacts, [section]:{ type:'', name:'', address:'', confirmed:false }};
-    if (section === 'phone') { updatedNewContacts[section].consent_checked = false; }
+    if (section === 'sms') { updatedNewContacts[section].consent_checked = false; }
     setNewContacts(updatedNewContacts);
   };
 
   const addContact = async (name, type, address) => {
+    if (type === 'sms') { address = address.replace(/[^\d+]/g, ''); } // remove all non-numeric characters except "+"
+
     if (!name || !address) { ToastHandle("Please fill all fields", "danger"); }
+    else if (type === 'sms' && !address.match(/^\+[0-9]{1,3}[0-9]{10}$/)) {
+      ToastHandle('Please enter a valid phone number, starting with "+" and including country code.', "danger");
+      return;
+    }
     else {
       const responseCode = await addNewContact(type, name, address);
       if (responseCode === 200) {
@@ -159,7 +177,11 @@ const AccountContactSection = () => {
     }
   };
 
-  const removeContact = (index) => {
+  const removeContact = async (index) => {
+    const responseCode = await callDeleteContactAPI(contacts[index].type, contacts[index].address);
+    if (responseCode === 200) {
+      dispatch(getUserDataActions()); // update our data from the API
+    }
   };
 
   // Send the code to the user's address, which they then need to go confirm
@@ -272,6 +294,11 @@ const AccountContactSection = () => {
                           ))
                         }
                       </td>
+                      <td>
+                        <span className="d-flex justify-content-center">
+                          <Link to="#" style={{color:"red", fontSize:"1rem", lineHeight:'1.2', margin:'0'}} className="text-link" onClick={() => removeContact(index)}>Delete</Link>
+                        </span>
+                      </td>
                     </tr>
                   )
                 ))}
@@ -305,14 +332,21 @@ const AccountContactSection = () => {
                           <input type="text" id={`name${index}`} name="name" className="form-control" value={newContacts?.[section]?.name} onChange={e => handleInputChange(e, section)} />
                         </div>
 
-                        <div className="col input_group">
-                          <label htmlFor={`address${index}`}>{contact_sections[section].singular}</label>
-                          <input type="text" id={`address${index}`} name="address" className="form-control" value={newContacts?.[section]?.address} onChange={e => handleInputChange(e, section)} />
-                        </div>
+                        {section === 'sms' ? (
+                          <div className="col input_group">
+                            <label htmlFor={`address${index}`}>{contact_sections[section].singular}</label>
+                            <input type="tel" id={`address${index}`} name="address" className="form-control" value={newContacts?.[section]?.address} onChange={e => handleInputChange(e, section)} placeholder="+12345678901"/>
+                          </div>
+                        ) : (
+                          <div className="col input_group">
+                            <label htmlFor={`address${index}`}>{contact_sections[section].singular}</label>
+                            <input type="text" id={`address${index}`} name="address" className="form-control" value={newContacts?.[section]?.address} onChange={e => handleInputChange(e, section)} />
+                          </div>
+                        )}
                       </div>
 
                       <div className="d-flex justify-content-center">
-                        {section === 'phone' && (
+                        {section === 'sms' && (
                           <div className="checkbox-container">
                             <input type="checkbox" className="form-check-input" id={`consent${index}`} name="consent_checked" value={newContacts?.[section]?.consent_checked} onChange={e => handleInputChange(e, section)} />
                             <label className="form-check-label" htmlFor={`consent${index}`}>I consent to receive a one-time verification code at this number.</label>
@@ -345,7 +379,8 @@ const AccountContactSection = () => {
               </>
             )}
 
-            {Object.keys(newContacts[section] || {}).length === 0 &&
+            {/* Add new contact information button for this section. Only allow one new contact to be added at a time for the section. Also don't show for Slack if a Slack account is already connected */}
+            {Object.keys(newContacts[section] || {}).length === 0 && !(section==='slack' && contacts.some(contact => contact.type === 'slack')) &&
               <span className="d-flex justify-content-center" style={{ marginTop:'30px', marginBottom:'70px' }}>
                 <Link to="#" className="text-link" onClick={() => showAddFields(section)}>+ Add {contact_sections[section].singular}</Link>
               </span>

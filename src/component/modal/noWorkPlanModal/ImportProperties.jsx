@@ -18,13 +18,13 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
   const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties
   const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
 
-  // When this modal is loaded, call API to get the list of integration properties
+  // When this modal is opened, call API to get the list of integration properties
   useEffect(() => {
-    if (!hasCalledAPI) {
-      dispatch(listIntegrationPropertiesActions());
-      setHasCalledAPI(true);
-    }
-  }, []);
+      if (showNoPlan && !hasCalledAPI) {
+        dispatch(listIntegrationPropertiesActions());
+        setHasCalledAPI(true);
+      }
+  }, [showNoPlan]);
 
   const [checkBox, setCheckBox] = useState({});
 
@@ -81,60 +81,48 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
 
   
   return (
-    <Modal
-      show={showNoPlan}
-      size="md"
-      onHide={() => { if (!importLoading) { handleNoPlanClose("importPropertiesClose"); } }}
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
+    <Modal show={showNoPlan} size="md" onHide={() => { if (!importLoading) { handleNoPlanClose("importPropertiesClose"); } }} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Body>
         <h3 className="text-white text-center mb-4 fw-bold fs-4">Import Properties from Integration</h3>
         <hr />
         {!integrationPropertiesLoading ? (
-          <>
-            <div id="integrate_form1">
-              <div className="row form-design">
-                <div className="col-12 mt-3">
-                  {integrationPropertyList?.map((integrationPropObj, index) => (
-                    <div className="form-check custom_checkbox mb-3" key={index}>
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="flexRadioDefault"
-                        id={`flexRadioDefault${index}`}
-                        value={integrationPropObj.name}
-                        checked={checkBox?.hasOwnProperty(integrationPropObj.name)}
-                        onChange={() => { SelectItem(integrationPropObj.name, integrationPropObj.id); }}
-                      />
-                      <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>
-                        {integrationPropObj.name}
-                      </label>
-                    </div>
-                  ))}
+          integrationPropertyList && integrationPropertyList.length > 0 ? (
+            <>
+              <div id="integrate_form1">
+                <div className="row form-design">
+                  <div className="col-12 mt-3">
+                    {integrationPropertyList?.map((integrationPropObj, index) => (
+                      <div className="form-check custom_checkbox mb-3" key={index}>
+                        <input className="form-check-input" type="checkbox" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={integrationPropObj.name}
+                          checked={checkBox?.hasOwnProperty(integrationPropObj.name)} onChange={() => { SelectItem(integrationPropObj.name, integrationPropObj.id); }}
+                        />
+                        <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>{integrationPropObj.name}</label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="row form-design mt-1">
+                  <div className="col-12 text-center">
+                    {!importLoading ? (
+                      <button className="btn btn-primary px-5" onClick={executeImport}>Import These Properties</button>
+                    ) : (
+                      <div>
+                        <p style={{ color: 'white' }}>Importing. Please be patient, this may take a few minutes...</p>
+                        <BoxLoader />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="row form-design mt-1">
-                <div className="col-12 text-center">
-                  {!importLoading ? (
-                    <button
-                      className="btn btn-primary px-5"
-                      onClick={executeImport}
-                    >
-                      Import These Properties
-                    </button>
-                  ) : (
-                    <div>
-                      <p style={{ color: 'white' }}>Importing. Please be patient, this may take a few minutes...</p>
-                      <BoxLoader />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </>
+            </>
+          ) : (
+            <p style={{ color: 'white', textAlign: 'center' }}>No PMS properties available for import. You may need to adjust the properties settings within your PMS to make your property information available to HostBuddy.</p>
+          )
         ) : (
-          <BoxLoader />
+          <>
+            <p style={{ color: 'white', textAlign: 'center' }}>Loading properties from your PMS...</p>
+            <BoxLoader />
+          </>
         )}
       </Modal.Body>
     </Modal>
