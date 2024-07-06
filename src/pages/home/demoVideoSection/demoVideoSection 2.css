@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+@font-face {
+    font-family: 'Samsung Sharp Sans Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Samsung Sharp Sans Regular'), url('../../../../public/samsungsharpsans.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'Samsung Sharp Sans Medium';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Samsung Sharp Sans Medium'), url('../../../../public/samsungsharpsans-medium.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'Samsung Sharp Sans Bold';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Samsung Sharp Sans Bold'), url('../../../../public/samsungsharpsans-bold.woff') format('woff');
+}
+
+.demoSection {
+    padding: 20px 0 70px;
+    position: relative;
+    z-index: 1;
+}
+
+.demoSection h3 {
+    color: #146EF5;
+    text-align: center;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 50px;
+}
+
+.demoSection .heading {
+    margin-bottom: 50px;
+}
+
+.demoSection .heading h2 {
+    margin-bottom: 30px;
+    font-size: 35px;
+}
+
+@keyframes line {
+    0% {
+        width: 7%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .demoSection .heading h2 {
+        font-size: 27px;
+        line-height: 38px;
+    }
+
+    .demoSection .demoSection-img {
+        margin-top: 30px;
+        height: auto;
+    }
+
+    .demoSection {
+        padding: 40px 0;
+    }
+
+    .demoSection .heading {
+        margin-bottom: 30px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+
+    .demoSection h3 {
+        line-height: 38px;
+        font-size: 16px;
+    }
+
+    .demoSection .demoSection-img {
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .demoSection {
+        padding: 30px 0;
+    }
+
+    .demoSection .heading h2 {
+        font-size: 20px;
+        line-height: 28px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .demoSection .heading {
+        margin-bottom: 20px;
+    }
+}
