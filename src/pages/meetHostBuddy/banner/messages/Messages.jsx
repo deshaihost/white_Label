@@ -1,13 +1,10 @@
 import React from "react";
-import BotImg from "../../../../public/img/hostbuddy_icon_white.png";
+import BotImg from "../../../../public/img/logo/logoGraphicOnlySquare.png";
 import UserImg from "../../../../public/img/userimg2.png";
 import Loader from "../../../../helper/Loader";
 
 function Message({ key, text, sender, feedBckModelOpen, feedBackDataGet }) {
   const { response, message_id } = text ? text : {};
-  const { typeThumbs, messageId, conversationId } = feedBackDataGet
-    ? feedBackDataGet
-    : [];
   const use_loader = sender === "bot" && !response && !message_id
   console.log("use_loader", use_loader)
   return (
@@ -17,39 +14,6 @@ function Message({ key, text, sender, feedBckModelOpen, feedBackDataGet }) {
           <img src={BotImg} className="bot-img" alt="bot-img" />
         )}
         <p>{use_loader ? <Loader /> : (sender === "bot" ? <>{response}</> : <>{text}</>)}</p>
-        {/* {sender === "bot" && (
-          <div className=" py-3">
-            <span>
-              {typeThumbs === "up"?<>{messageId === message_id?<>
-                <i
-                className="bi bi-hand-thumbs-up text-danger mainCursor"
-                onClick={() => feedBckModelOpen("up", message_id)}
-              ></i>
-              
-              </>:<i
-                className="bi bi-hand-thumbs-up text-white mainCursor"
-                onClick={() => feedBckModelOpen("up", message_id)}
-              ></i>}</>:<i
-                className="bi bi-hand-thumbs-up text-white mainCursor"
-                onClick={() => feedBckModelOpen("up", message_id)}
-              ></i>}
-            </span>
-            <span>
-            {typeThumbs === "down"?<>{messageId === message_id?<>
-              <i
-              className="bi bi-hand-thumbs-down text-danger mainCursor"
-              onClick={() => feedBckModelOpen("down", message_id)}
-            ></i>
-            </>:<i
-              className="bi bi-hand-thumbs-down text-white mainCursor"
-              onClick={() => feedBckModelOpen("down", message_id)}
-            ></i>}</>:<i
-              className="bi bi-hand-thumbs-down text-white mainCursor"
-              onClick={() => feedBckModelOpen("down", message_id)}
-            ></i>}
-            </span>
-          </div>
-        )} */}
         {sender === "user" && (
           <img src={UserImg} className="user-img" alt="user-img" />
         )}
