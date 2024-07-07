@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { chatBoxAIActions, getSessionIdActions } from "../../../redux/pages/meetHostBuddy/actions";
 import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
 import Loader from "../../../helper/Loader";
-import { nameKey } from "../../../helper/Authorized";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
@@ -21,8 +20,6 @@ const MeetBanner = (props) => {
   const { chatbot_key, property_name, user_type } = urlData ? urlData : {};
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const getName = nameKey();
-  const testPropetyName = getName?.nameKey;
   const copyChatBotName = urlData?.property_name;
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
   const getMessageResp = store?.getSessionIdReducer?.sessionId?.data?.initial_message;
@@ -123,7 +120,7 @@ const MeetBanner = (props) => {
       <Container>
         <div className="banner-heading">
           <h1>Meet HostBuddy</h1>
-          <p>Try asking Hostbuddy your most commonly received guest questions, and watch it handle them with ease. Its responses here are based on the details of a fictional property, but you’ll be able to seamlessly tailor it to your own!</p>
+          <p>Try asking HostBuddy your most commonly received guest questions, and watch it handle them with ease. Its responses here are based on the details of a fictional property, but you’ll be able to seamlessly tailor it to your own!</p>
           {/* <Link to="/" className="link-btn filled-btn"> Learn More </Link> */}
         </div>
         <div className="row">
