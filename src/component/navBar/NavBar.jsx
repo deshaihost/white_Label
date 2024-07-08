@@ -48,27 +48,10 @@ const NavBar = () => {
       const diffTime = Math.abs(expiryDate - currentDate); // time remaining, in milliseconds
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // time remaining, in full days
 
-      if (expiryDate > currentDate) {
-        // Payment standing is bad, but user still has grace period before services are paused
-        return (
-          <Alert variant="danger">
-            {" "}
-            Your last subscription payment didn't go through. Please click on
-            "Subscription" in your <Link to="/account">Account page</Link> to
-            update your payment info. Otherwise, your services will be paused in{" "}
-            {diffDays} days.{" "}
-          </Alert>
-        );
-      } else {
-        // Payment standing is bad, and grace period is over. Services have been paused.
-        return (
-          <Alert variant="danger">
-            {" "}
-            Your last subscription payment didn't go through and your services
-            have been paused. Please click on "Subscription" in your{" "}
-            <Link to="/account">Account page</Link> to update your payment info.{" "}
-          </Alert>
-        );
+      if (expiryDate > currentDate) { // Payment standing is bad, but user still has grace period before services are paused
+        return ( <Alert variant="danger">{" "}Your last subscription payment didn't go through. Please click on "Subscription" in your <Link to="/account">Account page</Link> to update your payment info. Otherwise, your services will be paused in{" "}{diffDays} days.{" "}</Alert> );
+      } else { // Payment standing is bad, and grace period is over. Services have been paused.
+        return (<Alert variant="danger">{" "}Your last subscription payment didn't go through and your services have been paused. Please click on "Subscription" in your{" "} <Link to="/account">Account page</Link> to update your payment info.{" "}</Alert>);
       }
     } else if (numPropertiesUsed > numPropertiesAllowed) {
       const expiryDate = parseDate(tooManyPropertiesGraceUntil);
