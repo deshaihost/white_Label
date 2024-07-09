@@ -11,6 +11,18 @@
     text-align: center;
 }
 
+p strong {
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    background: linear-gradient(180deg, #AA6DFE 1.92%, #8B5FCF 119.23%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+  }
+
 .chatbot {
     display: flex;
     flex-direction: column;
@@ -84,7 +96,6 @@
     max-width: 400px;
     white-space: pre-wrap;
     word-wrap: break-word;
-    
 }
 
 .message.user p {
