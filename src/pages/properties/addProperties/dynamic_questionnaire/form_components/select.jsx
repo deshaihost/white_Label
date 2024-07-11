@@ -12,7 +12,7 @@ const SelectComponent = ({ question_object, sec_name, subsec_name, q_ind, handle
   const field_id = `${sec_name}_${subsec_name}_${q_ind}`;
   
   return (
-      <div className="col-6 mt-3">
+      <div className="col-6 mt-3" key={field_id}>
         <label className="text-white">
           {question_text}
           <PencilIcon sec_name={sec_name} subsec_name={subsec_name} q_ind={q_ind} handlePencilIconClick={handlePencilIconClick} someResStageIsSelected={someResStageIsSelected}/>
