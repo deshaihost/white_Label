@@ -11,7 +11,6 @@ import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
 
-//import HouseImg from "../../../public/img/house-img.png";
 const HouseImg = "https://hostbuddylb.com/meet-hostbuddy/house-img.webp";
 
 

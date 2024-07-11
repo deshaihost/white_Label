@@ -42,7 +42,7 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
     <>
       <Modal show={show} size="lg" onHide={() => handleClose("addPropertyClose")} aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
-          <h5 className="modal-title">Add Properties</h5>
+          <h5 className="modal-title">Subscribe</h5>
         </Modal.Header>
         <Modal.Body>
           {subscription_data?.num_properties_allowed == 0 || subscription_data?.num_properties_allowed === undefined ? (

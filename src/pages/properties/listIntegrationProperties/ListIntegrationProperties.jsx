@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  deleteListIntegrationPropertiesActions,
-  getPropertyInsightByNameActions,
-  getUserDataActions,
-  stateEmptyActions,
-  toggleChatbotoNoFFPutActions,
-} from "../../../redux/actions";
+import { deleteListIntegrationPropertiesActions, getPropertyInsightByNameActions, getUserDataActions, stateEmptyActions, toggleChatbotoNoFFPutActions } from "../../../redux/actions";
 import "./Listintigrationproperties.css";
 import dummyPropertyImg from "../../../public/img/dummyPropertyImg.png";
 import { useSelectorUseDispatch } from "../../../helper/Authorized";
@@ -14,6 +8,7 @@ import  { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
 import { useNavigate } from "react-router-dom";
 import WebPageUrlModel from "./modelListProperties/webPageUrlModel/WebPageUrlModel";
 import SupportingDocumentModel from "./modelListProperties/supportingDocumentModel/SupportingDocumentModel";
+import UnlockPropertiesModal from "../../../component/modal/unlockPropertiesModal/unlockPropertiesModal";
 import { Button, Dropdown } from "react-bootstrap";
 import { CiCalendar } from "react-icons/ci";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
@@ -27,10 +22,7 @@ const ListIntegrationProperties = () => {
   const [getInputNameKey, setGetInputNameKey] = useState({ nameKey: "" });
   const [testPropertyKey, setTestPropertyKey] = useState({ nameKey: "" });
   const [scheduleChanged, setScheduleChanged] = useState(false); // If the user changes the schedule in the calendar, we need to re-render the listings since the current status line might change
-  const [chatBox, setChatBox] = useState({
-    linkCopy: false,
-    testingProperty: false,
-  });
+  const [chatBox, setChatBox] = useState({linkCopy: false, testingProperty: false});
 
   const [showCalender, setShowCalender] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState("");
@@ -38,41 +30,33 @@ const ListIntegrationProperties = () => {
   const { store, dispatch } = useSelectorUseDispatch();
   const userDataGetLoading = store?.getUserDataReducer?.loading;
   const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const PropertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
+
+  const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
   const createPropertiesSubscriptionAllowed = store?.getUserDataReducer?.getUserData?.data?.user?.subscription?.num_properties_allowed;
   const propertyCheckSubscription = createPropertiesSubscriptionAllowed - (createPropertiesName?.length || 0);
   const dummyArraySubscriptionAllowed = [];
+  const numPropsAlreadyUnlocked = PropertiesExtraData ? Object.values(PropertiesExtraData).filter(property => !property.hasOwnProperty('is_locked')).length : 0;
+  const numPropsStillLocked = PropertiesExtraData ? Object.values(PropertiesExtraData).filter(property => property.hasOwnProperty('is_locked')).length : 0;
+  const remainingUnlocksAllowed = createPropertiesSubscriptionAllowed - numPropsAlreadyUnlocked;
+  const subscription_active = (subscription_data?.num_properties_allowed == 0 || subscription_data?.num_properties_allowed == undefined) ? false : true;
 
   for (let i = 0; i < propertyCheckSubscription; i++) {
-    // Your code logic inside the loop goes here
     dummyArraySubscriptionAllowed.push(i);
   }
 
-  const PropertiesExtraData =
-    store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // The "property_data" field of the get_user_data API return is an object with thumbnail_image and toggle_status for each property
-
-  const propertiesDeleteMessage =
-    store?.deleteListIntegrationPropertiesReducer
-      ?.deleteListIntegrationProperties?.data?.message;
-  const propertiesDeleteError =
-    store?.deleteListIntegrationPropertiesReducer
-      ?.deleteListIntegrationProperties?.data?.error;
-  const propertiesDeleteStatus =
-    store?.deleteListIntegrationPropertiesReducer
-      ?.deleteListIntegrationProperties?.status;
-  const propertiesDeleteLoading =
-    store?.deleteListIntegrationPropertiesReducer?.loading;
-  const chatBoxGetByNameData =
-    store?.getPropertyByNameReducer?.getPropertybyName?.data?.property;
-  const { chatbot_key, property_name } = chatBoxGetByNameData
-    ? chatBoxGetByNameData
-    : [];
+  const propertiesDeleteMessage =store?.deleteListIntegrationPropertiesReducer?.deleteListIntegrationProperties?.data?.message;
+  const propertiesDeleteError = store?.deleteListIntegrationPropertiesReducer?.deleteListIntegrationProperties?.data?.error;
+  const propertiesDeleteStatus = store?.deleteListIntegrationPropertiesReducer?.deleteListIntegrationProperties?.status;
+  const propertiesDeleteLoading = store?.deleteListIntegrationPropertiesReducer?.loading;
+  const chatBoxGetByNameData = store?.getPropertyByNameReducer?.getPropertybyName?.data?.property;
+  const { chatbot_key, property_name } = chatBoxGetByNameData ? chatBoxGetByNameData : [];
   const chatBoxGetByNameLoading = store?.getPropertyByNameReducer?.loading;
-  const chatBoxGetByNameError =
-    store?.getPropertyByNameReducer?.getPropertybyName?.data?.error;
-  const chatBoxGetByNameStatus =
-    store?.getPropertyByNameReducer?.getPropertybyName?.status;
+  const chatBoxGetByNameError = store?.getPropertyByNameReducer?.getPropertybyName?.data?.error;
+  const chatBoxGetByNameStatus = store?.getPropertyByNameReducer?.getPropertybyName?.status;
 
-  const [model, setModel] = useState({ webPageUrl: false, supportingDocuments: false });
+  const [model, setModel] = useState({ webPageUrl:false, supportingDocuments:false, unlockProperty:false });
+  const [propertiesToUnlock, setPropertiesToUnlock] = useState([]);
   const [regenerateApiLoading, setRegenerateApiLoading] = useState(false);
   let webPageUrlOpen = "webPageUrlOpen";
   let supportingDocumentsOpen = "supportingDocumentsOpen";
@@ -89,6 +73,8 @@ const ListIntegrationProperties = () => {
       setModel({ ...model, webPageUrl: true });
     } else if (type === supportingDocumentsOpen) {
       setModel({ ...model, supportingDocuments: true });
+    } else if (type === "UnlockProperty") {
+      setModel({ ...model, unlockProperty: true });
     }
   };
   const handleModelClose = (type) => {
@@ -96,6 +82,8 @@ const ListIntegrationProperties = () => {
       setModel({ ...model, webPageUrl: false });
     } else if (type === supportingDocumentsClose) {
       setModel({ ...model, supportingDocuments: false });
+    } else {
+      setModel({ webPageUrl: false, supportingDocuments: false, unlockProperty: false });
     }
   };
 
@@ -136,6 +124,9 @@ const ListIntegrationProperties = () => {
       handleModelOpen(webPageUrlOpen);
     } else if (findType === supportingDocuments) {
       handleModelOpen(supportingDocumentsOpen);
+    } else if (findType === "UnlockProperty") {
+      setPropertiesToUnlock(data);
+      handleModelOpen("UnlockProperty");
     } else if (findType === deleteProperty) {
       dispatch(deleteListIntegrationPropertiesActions(data));
     } else if (findType === regenerateChatbotLink) {
@@ -159,7 +150,6 @@ const ListIntegrationProperties = () => {
       );
     } else if (findType === dummySubscriptionCount) {
       localStorage.removeItem(localStorageKey)
-      //navigate("/add-properties/");
       navigate("/add-property/");
     }
   };
@@ -172,11 +162,9 @@ const ListIntegrationProperties = () => {
   const toggleChatBotHndle = (type, id) => {
     if (type) {
       setToggleOnOff("on");
-      // setToggleActive(true);
       setChatBoxIndex(id);
     } else {
       setToggleOnOff("FORCED_OFF");
-      // setToggleActive(false);
       setChatBoxIndex(id);
     }
   };
@@ -191,12 +179,7 @@ const ListIntegrationProperties = () => {
 
   useEffect(() => {
     if (toggleOnOff !== "") {
-      dispatch(
-        toggleChatbotoNoFFPutActions({
-          properties: [createPropertiesName[chatBoxIndex]],
-          state: toggleOnOff,
-        })
-      );
+      dispatch( toggleChatbotoNoFFPutActions({ properties: [createPropertiesName[chatBoxIndex]], state: toggleOnOff }) );
       setToggleOnOff("");
     }
   }, [toggleOnOff]);
@@ -255,14 +238,7 @@ const ListIntegrationProperties = () => {
         copyToClipboard(urlToCopy);
 
         ToastHandle("Link copied", "success");
-        // setCopyLinkSetData({
-        //   chatBotKey: chatbot_key,
-        //   propertyName: property_name,
-        // });
-        setChatBox({
-          linkCopy: false,
-          testingProperty: false,
-        });
+        setChatBox({ linkCopy: false, testingProperty: false });
         dispatch(stateEmptyActions());
         return;
       } else if (chatBox?.testingProperty) {
@@ -296,6 +272,7 @@ const ListIntegrationProperties = () => {
         <>
           {createPropertiesName?.map((properties, index) => {
             let PropertStop = PropertiesExtraData?.[properties]?.toggle_status;
+            let is_locked = PropertiesExtraData?.[properties]?.hasOwnProperty('is_locked') ?? false;
             return (
               <>
                 <div className="row">
@@ -303,84 +280,62 @@ const ListIntegrationProperties = () => {
                     <div className="d-flex gap-1 align-items-center justify-content-between property_lisiting mb-4">
                       <div className="d-flex gap-1 align-items-center property_listing_item">
                         <div className="img-with-title">
-                          <img
-                            src={
-                              PropertiesExtraData?.[properties]
-                                ?.thumbnail_image || dummyPropertyImg
-                            }
-                            alt=""
-                          />
+                          <img src={PropertiesExtraData?.[properties]?.thumbnail_image || dummyPropertyImg} alt=""/>
                         </div>
                         <div className="property_listing_detail">
                           <div className="property-detail">
                             <h4 style={{fontWeight:'bold', fontSize: '1.3em'}}>{properties}</h4>
-                            <div className="d-flex gap-2">
-                              {PropertStop === "FORCED_OFF" ? (
-                                <>
-                                  {" "}
-                                  <button
-                                    className="bg-danger text-white rounded-pill border-danger btn border"
-                                    style={{ padding: '4px 12px', fontSize: '0.8em' }}
-                                    onClick={(e) => {
-                                      toggleChatBotHndle(true, index);
-                                    }}
-                                  >
-                                    STOPPED
-                                  </button>
-                                </>
-                              ) : (
-                                <>
-                                  <button
-                                    className="bg-dark text-primary border-primary btn border rounded-pill"
-                                    style={{ padding: '4px 12px', fontSize: '0.8em' }}
-                                    onClick={(e) => {
-                                      toggleChatBotHndle(false, index);
-                                    }}
-                                  >
-                                    STOP
-                                  </button>
-                                </>
-                              )}
+                            {!is_locked && (
+                              <div className="d-flex gap-2">
+                                {PropertStop === "FORCED_OFF" ? (
+                                  <>
+                                    {" "}
+                                    <button className="bg-danger text-white rounded-pill border-danger btn border" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(true, index);}}>
+                                      STOPPED
+                                    </button>
+                                  </>
+                                ) : (
+                                  <>
+                                    <button className="bg-dark text-primary border-primary btn border rounded-pill" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(false, index);}}>
+                                      STOP
+                                    </button>
+                                  </>
+                                )}
 
-                              <Button
-                                onClick={() =>
-                                  handleCalenderModalOpen(properties)
-                                }
-                                className="border-0 shadow-none bg-none p-0 fs-5"
-                              >
-                                <CiCalendar className="text-primary" />
-                              </Button>
-                            </div>
-                            <h6 style={{ marginTop:'13px', color: 'rgb(135,135,135)', fontSize:'0.84em', fontWeight:'normal' }}>
-                              {PropertiesExtraData?.[properties]?.status_statement.split(' ').map((word, index) => 
-                                <React.Fragment key={index}>
-                                  {word === 'RESPONDING' ? <span style={{ color: 'rgb(0,200,0)' }}>{word}</span> :
-                                  word === 'OFF' ? <span style={{ color: 'rgb(255,0,0)' }}>{word}</span> :
-                                  word}
-                                  {' '}
-                                </React.Fragment>
-                              )}
-                            </h6>
+                                <Button className="border-0 shadow-none bg-none p-0 fs-5" onClick={() => handleCalenderModalOpen(properties)}>
+                                  <CiCalendar className="text-primary" />
+                                </Button>
+                              </div>
+                            )}
+                            {is_locked ? (
+                              <h6 style={{ marginTop:'13px', color: 'rgb(135,135,135)', fontSize:'0.84em', fontWeight:'normal' }}>
+                                This property is locked.{' '}
+                                <button className="text-primary border-0 bg-none p-0" onClick={() => { selectedHandle("UnlockProperty", [properties]); }}>Unlock it</button>
+                                {' '}to access options for responding to guests.
+                              </h6>
+                            ) : (
+                              <h6 style={{ marginTop:'13px', color: 'rgb(135,135,135)', fontSize:'0.84em', fontWeight:'normal' }}>
+                                {PropertiesExtraData?.[properties]?.status_statement.split(' ').map((word, index) => 
+                                  <React.Fragment key={index}>
+                                    {word === 'RESPONDING' ? <span style={{ color: 'rgb(0,200,0)' }}>{word}</span> :
+                                    word === 'OFF' ? <span style={{ color: 'rgb(255,0,0)' }}>{word}</span> :
+                                    word}
+                                    {' '}
+                                  </React.Fragment>
+                                )}
+                              </h6>
+                            )}
                           </div>
                         </div>
                       </div>
                       <div className="property_listing_btn">
                         <div className="d-flex">
-                          <Button
-                            className="property-edit-btn"
-                            onClick={() => {
-                              selectedHandle(editProperty, properties);
-                            }}
-                          >
+                          <Button className="property-edit-btn" onClick={() => {selectedHandle(editProperty, properties);}}>
                             <i class="bi bi-pen"></i>
                           </Button>
                           <div>
                             <Dropdown className="property-dropdown">
-                              <Dropdown.Toggle
-                                className=""
-                                id="dropdown-button-drop-down-centered"
-                                drop="down-centered"
-                              >
+                              <Dropdown.Toggle className="" id="dropdown-button-drop-down-centered" drop="down-centered">
                                 <HiOutlineDotsHorizontal />
                               </Dropdown.Toggle>
 
@@ -388,12 +343,16 @@ const ListIntegrationProperties = () => {
                                 <Dropdown.Item onClick={() => { selectedHandle(editProperty, properties); }}>
                                   Edit Property
                                 </Dropdown.Item>
-                                <Dropdown.Item onClick={() => { selectedHandle(copyChatbotLink, properties); }}>
-                                  Copy Chatbot Link
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
-                                  Regenerate Chatbot Link
-                                </Dropdown.Item>
+                                {!is_locked &&
+                                  <>
+                                    <Dropdown.Item onClick={() => { selectedHandle(copyChatbotLink, properties); }}>
+                                      Copy Chatbot Link
+                                    </Dropdown.Item>
+                                    <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
+                                      Regenerate Chatbot Link
+                                    </Dropdown.Item>
+                                  </>
+                                }
                                 <Dropdown.Item onClick={() => { selectedHandle(deleteProperty, properties); }}>
                                   Delete Property
                                 </Dropdown.Item>
@@ -411,72 +370,41 @@ const ListIntegrationProperties = () => {
               </>
             );
           })}
-          {dummyArraySubscriptionAllowed?.map((properties, index) => {
-            return (
-              <>
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="d-flex gap-1 align-items-center justify-content-between property_lisiting mb-4">
-                      <div className="d-flex gap-1 align-items-center property_listing_item">
-                        <div className="img-with-title">
-                          <img
-                            src={
-                              PropertiesExtraData?.[properties]
-                                ?.thumbnail_image || dummyPropertyImg
-                            }
-                            alt=""
-                          />
-                        </div>
-                        <div className="property_listing_detail">
-                          <div className="property-detail">
-                            <h4>----</h4>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="property_listing_btn">
-                        <div className="d-flex">
-                          <Button
-                            className="property-edit-btn"
-                            onClick={() => {
-                              selectedHandle(
-                                dummySubscriptionCount,
-                                properties
-                              );
-                            }}
-                          >
-                            <i class="bi bi-pen"></i>
-                          </Button>
-                        </div>
-                      </div>
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="d-flex gap-1 align-items-center justify-content-between property_lisiting mb-4">
+                <div className="d-flex gap-1 align-items-center property_listing_item">
+                  <div className="img-with-title">
+                    <img src={dummyPropertyImg} alt=""/>
+                  </div>
+                  <div className="property_listing_detail">
+                    <div className="property-detail">
+                      <h4 style={{ color: 'rgb(128, 128, 128)', fontStyle: 'italic' }}>Add New Property</h4>
                     </div>
                   </div>
                 </div>
-              </>
-            );
-          })}
+                <div className="property_listing_btn">
+                  <div className="d-flex">
+                    <Button className="property-edit-btn" onClick={() => { selectedHandle( dummySubscriptionCount, null ); }}>
+                      <i class="bi bi-pen"></i>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </>
       ) : (
         <BoxLoader />
       )}
       <div>
-        <WebPageUrlModel
-          handleShow={model.webPageUrl}
-          handleClose={handleModelClose}
-        />
-        <SupportingDocumentModel
-          handleShow={model.supportingDocuments}
-          handleClose={handleModelClose}
-        />
+        <WebPageUrlModel handleShow={model.webPageUrl} handleClose={handleModelClose}/>
+        <SupportingDocumentModel handleShow={model.supportingDocuments} handleClose={handleModelClose}/>
       </div>
       {showCalender && (
-        <CalenderModel
-          selectedProperty={selectedProperty}
-          showCalender={showCalender}
-          setShowCalender={setShowCalender}
-          allProperties={allProperties}
-          setScheduleChanged={setScheduleChanged}
-        />
+        <CalenderModel selectedProperty={selectedProperty} showCalender={showCalender} setShowCalender={setShowCalender} allProperties={allProperties} setScheduleChanged={setScheduleChanged}/>
       )}
+      <UnlockPropertiesModal property_names={propertiesToUnlock} subscription_active={subscription_active} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} modalShow={model.unlockProperty} handleClose={handleModelClose} setPropertiesChanged={setScheduleChanged}/>
     </div>
   );
 };
