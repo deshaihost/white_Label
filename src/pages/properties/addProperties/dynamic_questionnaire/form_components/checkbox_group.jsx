@@ -57,7 +57,7 @@ const CheckboxGroupComponent = ({ question_object, sec_name, subsec_name, q_ind,
             //const someResStageIsSelected = hide_for_reservations[option_index] !== undefined && hide_for_reservations[option_index] && hide_for_reservations[option_index] !== '[]';
             return (
               <li className="amenties-list-item">
-                <div className={ checkboxStatuses[option_index] ? "form-checkbox bg-light text-dark" : "form-checkbox" }>
+                <div className={ checkboxStatuses[option_index] ? "form-checkbox bg-light text-dark" : "form-checkbox" } key={`${field_id_prefix}_${option_index}`}>
                   <input className="form-check-input" type="checkbox" value={option} checked={checkboxStatuses[option_index]} id={`${field_id_prefix}_${option_index}`}
                   onChange={(e) => handleCheckboxClick(e, sec_name, subsec_name, q_ind, option_index)}/>
                   <label className="form-check-label" onClick={() => {} } 

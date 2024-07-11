@@ -10,7 +10,7 @@ const LongAnswerComponent = ({ question_object, sec_name, subsec_name, q_ind, ha
   const field_id = `${sec_name}_${subsec_name}_${q_ind}`;
 
   return (
-    <div className="col-12 mt-4 form-design">
+    <div className="col-12 mt-4 form-design" key={field_id}>
       <label className="text-white">
         {question_text}
         <PencilIcon sec_name={sec_name} subsec_name={subsec_name} q_ind={q_ind} handlePencilIconClick={handlePencilIconClick} someResStageIsSelected={someResStageIsSelected}/>
