@@ -7,7 +7,10 @@ import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
 import DisconnectIntegration from "./removeIntegrationsModel/DisconnectIntegration";
 import ImportPropertiesModal from "../../component/modal/noWorkPlanModal/ImportProperties";
 import { Helmet } from "react-helmet";
-import { getUserDataActions, toggleChatbotoNoFFPutActions } from "../../redux/actions";
+import {
+  getUserDataActions,
+  toggleChatbotoNoFFPutActions,
+} from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { stateEmptyActions } from "../../redux/actions";
 import { FullScreenLoader } from "../../helper/Loader";
@@ -15,13 +18,16 @@ import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrati
 import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
 import UnlockPropertiesModal from "../../component/modal/unlockPropertiesModal/unlockPropertiesModal";
+import CopyToPropertiesModalDynamically from "../../helper/copyToPropertiesModal/CopyToPropertiesModalDynamically";
 
 const Properties = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const gotoBillingPortalCheckPaymentStatus = store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
-  const gotoBillingPortalcheckPaymentLoading = store?.gotoBillingPortalPostReducer?.loading;
-  const [model, setModel] = useState({ addProperty: false, pmsIntegration: false, removeIntegration: false, billingPortal: false, importProperties: false, unlockProperties: false });
+  const gotoBillingPortalCheckPaymentStatus =
+    store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
+  const gotoBillingPortalcheckPaymentLoading =
+    store?.gotoBillingPortalPostReducer?.loading;
+  // const [model, setModel] = useState({ addProperty: false, pmsIntegration: false, removeIntegration: false, billingPortal: false, importProperties: false, unlockProperties: false });
   const [newPropertiesAdded, setNewPropertiesAdded] = useState(false); // called by ImportPropertiesModal when properties are imported, to trigger a re-render of the property list
   const [propertyConditionCheck, setPropertyConditionCheck] = useState(false);
   const [unlockPropertyNames, setUnlockPropertyNames] = useState([]); // array of property names to unlock
@@ -58,32 +64,63 @@ const Properties = () => {
     } else if (type === "importPropertiesClose") {
       setModel({ ...model, importProperties: false });
     } else {
-      setModel({ addProperty: false, pmsIntegration: false, removeIntegration: false, billingPortal: false, importProperties: false, unlockProperties: false });
+      setModel({
+        addProperty: false,
+        pmsIntegration: false,
+        removeIntegration: false,
+        billingPortal: false,
+        importProperties: false,
+        unlockProperties: false,
+      });
     }
   };
   // toggle chatbot
-  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const propertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user?.property_data? store?.getUserDataReducer?.getUserData?.data?.user?.property_data : {};
-  const intergrationsMain = store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
-  const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription
+  const createPropertiesName =
+    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const propertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user
+    ?.property_data
+    ? store?.getUserDataReducer?.getUserData?.data?.user?.property_data
+    : {};
+  const intergrationsMain =
+    store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
+  const subscription_data =
+    store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
   const intergrations = intergrationsMain ? intergrationsMain : [];
-  const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
+  const toggleChatMessage =
+    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
-  const toggleChatStatus = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
+  const toggleChatStatus =
+    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
 
-  const createPropertiesSubscriptionAllowed = store?.getUserDataReducer?.getUserData?.data?.user?.subscription?.num_properties_allowed;
-  const propertyNamesStillLocked = propertiesExtraData ? Object.entries(propertiesExtraData).filter(([_, value]) => value.is_locked).map(([key, _]) => key) : [];
-  const numPropsAlreadyUnlocked = Object.keys(propertiesExtraData).length - propertyNamesStillLocked.length;
+  const createPropertiesSubscriptionAllowed =
+    store?.getUserDataReducer?.getUserData?.data?.user?.subscription
+      ?.num_properties_allowed;
+  const propertyNamesStillLocked = propertiesExtraData
+    ? Object.entries(propertiesExtraData)
+        .filter(([_, value]) => value.is_locked)
+        .map(([key, _]) => key)
+    : [];
+  const numPropsAlreadyUnlocked =
+    Object.keys(propertiesExtraData).length - propertyNamesStillLocked.length;
   const numPropsStillLocked = propertyNamesStillLocked.length;
-  const remainingUnlocksAllowed = createPropertiesSubscriptionAllowed - numPropsAlreadyUnlocked;
+  const remainingUnlocksAllowed =
+    createPropertiesSubscriptionAllowed - numPropsAlreadyUnlocked;
 
   const [toggleOnOff, setToggleOnOff] = useState("");
 
-  const anyPropertyNotForcedOff = propertiesExtraData ? Object?.values(propertiesExtraData)?.some((property) => property?.toggle_status !== "FORCED_OFF") : [];
+  const anyPropertyNotForcedOff = propertiesExtraData
+    ? Object?.values(propertiesExtraData)?.some(
+        (property) => property?.toggle_status !== "FORCED_OFF"
+      )
+    : [];
 
   const toggleChatBotHndle = (type) => {
-    if (type) { setToggleOnOff("on"); } // trigger the API call
-    else { setToggleOnOff("FORCED_OFF"); }
+    if (type) {
+      setToggleOnOff("on");
+    } // trigger the API call
+    else {
+      setToggleOnOff("FORCED_OFF");
+    }
   };
 
   const handleUnlockAllClick = () => {
@@ -138,11 +175,35 @@ const Properties = () => {
   // Whenever the user's subscription data or property data changes, update this information in local storage to ensure we're rendeting the subscription warning banner with correct information
   useEffect(() => {
     localStorage.setItem("paymentStatus", subscription_data?.payment_standing);
-    localStorage.setItem("servicesExpireDate", subscription_data?.services_good_until);
-    localStorage.setItem("numPropertiesAllowed", subscription_data?.num_properties_allowed);
-    localStorage.setItem("numPropertiesUsed", Object.keys(propertiesExtraData || {}).length);
-    localStorage.setItem("tooManyPropertiesGraceUntil", subscription_data?.too_many_properties_grace_until);
+    localStorage.setItem(
+      "servicesExpireDate",
+      subscription_data?.services_good_until
+    );
+    localStorage.setItem(
+      "numPropertiesAllowed",
+      subscription_data?.num_properties_allowed
+    );
+    localStorage.setItem(
+      "numPropertiesUsed",
+      Object.keys(propertiesExtraData || {}).length
+    );
+    localStorage.setItem(
+      "tooManyPropertiesGraceUntil",
+      subscription_data?.too_many_properties_grace_until
+    );
   }, [subscription_data, propertiesExtraData]);
+
+  // copy to properties model funcationality
+  const [model, setModel] = useState({ copyToProperties: false });
+  const [commonDynamicallyState, setCommonDynamicallyState] = useState(null);
+  const headingDynamicallyNameChange = "Copy To Properties";
+
+  const saveButtonMain = () => {};
+
+  const dynamicallyDataGetInChildComponent = (data) => {
+    setCommonDynamicallyState(data);
+  };
+  // copy to properties model funcationality
 
   return (
     <>
@@ -152,9 +213,7 @@ const Properties = () => {
       ;
       <div className="account-main">
         <div className="container">
-          <div className="banner-heading">
-            {/* <h2>My HostBuddy</h2> */}
-          </div>
+          <div className="banner-heading">{/* <h2>My HostBuddy</h2> */}</div>
           <div className="row">
             <div className="col-lg-2 col-xl-2 col-xxl-2">
               <SideBar />
@@ -164,50 +223,134 @@ const Properties = () => {
                 <div className="account_heading">
                   <h3>Properties</h3>
                   <div className="property-heading-right">
-                    {propertiesExtraData && Object.keys(propertiesExtraData).length > 0 && (
-                      <>
-                        <p>HostBuddy Status</p>
-                        {toggleChatLoading && <FullScreenLoader />}
-                        {!anyPropertyNotForcedOff ? (
-                          <button className="bg-danger text-white rounded-pill border-danger btn border" onClick={(e) => {toggleChatBotHndle(true);}}>
-                            ALL STOPPED
-                          </button>
-                        ) : (
-                          <button className="bg-dark text-primary border-primary btn border rounded-pill" onClick={(e) => { toggleChatBotHndle(false); }}>
-                            STOP ALL
-                          </button>
-                        )}
-                      </>
-                    )}
+                    {propertiesExtraData &&
+                      Object.keys(propertiesExtraData).length > 0 && (
+                        <>
+                          <p>HostBuddy Status</p>
+                          {toggleChatLoading && <FullScreenLoader />}
+                          {!anyPropertyNotForcedOff ? (
+                            <button
+                              className="bg-danger text-white rounded-pill border-danger btn border"
+                              onClick={(e) => {
+                                toggleChatBotHndle(true);
+                              }}
+                            >
+                              ALL STOPPED
+                            </button>
+                          ) : (
+                            <button
+                              className="bg-dark text-primary border-primary btn border rounded-pill"
+                              onClick={(e) => {
+                                toggleChatBotHndle(false);
+                              }}
+                            >
+                              STOP ALL
+                            </button>
+                          )}
+                        </>
+                      )}
                   </div>
                 </div>
-                <div className="addproperty_links text-center" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {numPropsStillLocked > 0 && remainingUnlocksAllowed >= numPropsStillLocked &&
-                    <button type="button" className="shadow-none border-0" onClick={() => { handleUnlockAllClick(); }}>
-                      Unlock All Properties
-                    </button>
-                  }
-                  {subscription_data?.num_properties_allowed == 0 || subscription_data?.num_properties_allowed === undefined && (
-                    <button type="button" className="shadow-none border-0" onClick={() => { handleModelOpen("addPropertyOpen"); }}>Subscribe</button>
-                  )}
-                  {intergrations &&
-                  Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key). Capitalize the first letter of the integration.
-                  <>
-                    <div className="ConnectedStatement" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <p style={{ color: 'white' }}>
-                        {`Connected to ${Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)}`}
-                      </p>
-                      <div className="IntegrationsOptions" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                        <button style={{ fontSize:'0.9em', marginRight: '0px', color: '#146EF5', background: 'none', border: 'none' }} onClick={() => handleModelOpen("importPropertiesOpen")}>
-                          Import Properties
-                        </button>
-                        <p style={{ fontSize: '0.9em', color: 'white', marginLeft:'20px', marginRight:'20px' }}>|</p>
-                        <button style={{ fontSize: '0.9em', marginLeft: '0px', color: '#146EF5', background: 'none', border: 'none' }} onClick={() => handleModelOpen("disconnectIntegrationOpen")}>
-                          Disconnect
-                        </button>
+                <div
+                  className="addproperty_links text-center"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {numPropsStillLocked > 0 &&
+                    remainingUnlocksAllowed >= numPropsStillLocked && (
+                      <button
+                        type="button"
+                        className="shadow-none border-0"
+                        onClick={() => {
+                          handleUnlockAllClick();
+                        }}
+                      >
+                        Unlock All Properties
+                      </button>
+                    )}
+                  {subscription_data?.num_properties_allowed == 0 ||
+                    (subscription_data?.num_properties_allowed ===
+                      undefined && (
+                      <button
+                        type="button"
+                        className="shadow-none border-0"
+                        onClick={() => {
+                          handleModelOpen("addPropertyOpen");
+                        }}
+                      >
+                        Subscribe
+                      </button>
+                    ))}
+                  {intergrations && Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key). Capitalize the first letter of the integration.
+                    <>
+                      <div
+                        className="ConnectedStatement"
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <p style={{ color: "white" }}>
+                          {`Connected to ${
+                            Object.keys(intergrations)[0]
+                              .charAt(0)
+                              .toUpperCase() +
+                            Object.keys(intergrations)[0].slice(1)
+                          }`}
+                        </p>
+                        <div
+                          className="IntegrationsOptions"
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <button
+                            style={{
+                              fontSize: "0.9em",
+                              marginRight: "0px",
+                              color: "#146EF5",
+                              background: "none",
+                              border: "none",
+                            }}
+                            onClick={() =>
+                              handleModelOpen("importPropertiesOpen")
+                            }
+                          >
+                            Import Properties
+                          </button>
+                          <p
+                            style={{
+                              fontSize: "0.9em",
+                              color: "white",
+                              marginLeft: "20px",
+                              marginRight: "20px",
+                            }}
+                          >
+                            |
+                          </p>
+                          <button
+                            style={{
+                              fontSize: "0.9em",
+                              marginLeft: "0px",
+                              color: "#146EF5",
+                              background: "none",
+                              border: "none",
+                            }}
+                            onClick={() =>
+                              handleModelOpen("disconnectIntegrationOpen")
+                            }
+                          >
+                            Disconnect
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </>
+                    </>
                   ) : (
                     <button
                       className="shadow-none border-0"
@@ -235,13 +378,56 @@ const Properties = () => {
           </div>
         </div>
       </div>
-      <BillingPortalModel handleClose={handleModelClose} show={model?.billingPortal}/>
-      <AddPropertyModal handleClose={handleModelClose} show={model?.addProperty} subscription_data={subscription_data}/>
-      <NoWorkPlanModal handleNoPlanClose={handleModelClose} showNoPlan={model?.pmsIntegration}/>
-      <RemoveIntegrations handleNoPlanClose={handleModelClose} showNoPlan={model?.removeIntegration}/>
-      <DisconnectIntegration handleNoPlanClose={handleModelClose} showNoPlan={model?.disconnectIntegration}/>
-      <ImportPropertiesModal handleNoPlanClose={handleModelClose} showNoPlan={model?.importProperties} setNewPropertiesAdded={setNewPropertiesAdded}/>
-      <UnlockPropertiesModal handleClose={handleModelClose} modalShow={model?.unlockProperties} property_names={unlockPropertyNames} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} setPropertiesChanged={setNewPropertiesAdded}/>
+      <button
+        onClick={() => {
+          setModel({ copyToProperties: true });
+        }}
+      >
+        Model Open
+      </button>
+      <CopyToPropertiesModalDynamically
+        headingDynamicallyNameChange={headingDynamicallyNameChange}
+        saveButtonMain={saveButtonMain}
+        dynamicallyDataGetInChildComponent={dynamicallyDataGetInChildComponent}
+        show={model?.copyToProperties}
+        modelClose={() => {
+          setModel({ copyToProperties: false });
+        }}
+      />
+      <BillingPortalModel
+        handleClose={handleModelClose}
+        show={model?.billingPortal}
+      />
+      <AddPropertyModal
+        handleClose={handleModelClose}
+        show={model?.addProperty}
+        subscription_data={subscription_data}
+      />
+      <NoWorkPlanModal
+        handleNoPlanClose={handleModelClose}
+        showNoPlan={model?.pmsIntegration}
+      />
+      <RemoveIntegrations
+        handleNoPlanClose={handleModelClose}
+        showNoPlan={model?.removeIntegration}
+      />
+      <DisconnectIntegration
+        handleNoPlanClose={handleModelClose}
+        showNoPlan={model?.disconnectIntegration}
+      />
+      <ImportPropertiesModal
+        handleNoPlanClose={handleModelClose}
+        showNoPlan={model?.importProperties}
+        setNewPropertiesAdded={setNewPropertiesAdded}
+      />
+      <UnlockPropertiesModal
+        handleClose={handleModelClose}
+        modalShow={model?.unlockProperties}
+        property_names={unlockPropertyNames}
+        remaining_unlocks_allowed={remainingUnlocksAllowed}
+        remaining_locked_properties={numPropsStillLocked}
+        setPropertiesChanged={setNewPropertiesAdded}
+      />
     </>
   );
 };
