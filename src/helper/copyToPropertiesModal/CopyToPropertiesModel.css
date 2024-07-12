@@ -1,0 +1,72 @@
+/* .custom-select .css-3w2yfm-ValueContainer .css-1p3m7a8-multiValue {
+    background: transparent;
+    color: #fff !important;
+}
+.custom-select .css-3w2yfm-ValueContainer .css-1p3m7a8-multiValue .css-wsp0cs-MultiValueGeneric {
+    color: #fff;
+}  */
+.custom-select .css-13cymwt-control:focus,
+.css-t3ipsp-control{
+    min-height: auto !important;
+    height: auto !important;
+} 
+.custom-select .css-13cymwt-control option{
+    background:red;
+} 
+button.select-btn {
+    text-align: right;
+    float: right;
+    background: transparent;
+    border-color: #fff;
+    color: #fff;
+    font-size: 12px;
+    padding: 0;
+    border-width: 0px 0px 1px 0px;
+}
+.custom-select .css-13cymwt-control {
+    border-radius: 80px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #0a1a44 !important;
+    color: #fff;
+    font-family: "Samsung Sharp Sans Medium";
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;   
+    /* min-height: 56px; */
+    height: auto !important;
+    overflow: hidden !important;
+   
+}
+.custom-model-ui .cs-select-option select{
+    /* border-radius: 5px !important; */
+    /* height: 44px; */
+    /* padding: 5px 15px; */
+}
+.cs-select-option select:focus{
+    border-color:#2468ff;
+    box-shadow: none;
+}
+button.save-btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+.custom-select .css-13cymwt-control .css-1jqq78o-placeholder{
+    color:#fff;
+}
+.property_Custom_Select .css-12a83d4-MultiValueRemove svg{
+    color: grey;
+}
+.property_Custom_Select .css-12a83d4-MultiValueRemove:hover svg{
+    color: red;
+}
+.property_Custom_Select .css-1p3m7a8-multiValue{
+    line-height: 150% !important;
+}
+.property_Custom_Select .css-t3ipsp-control{
+    overflow: hidden !important;
+}
