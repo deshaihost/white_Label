@@ -1,0 +1,203 @@
+import React, { useEffect, useState } from "react";
+import { useSelectorUseDispatch } from "../../../../helper/Authorized";
+import ToastHandle from "../../../../helper/ToastMessage";
+import Loader, { BoxLoader } from "../../../../helper/Loader";
+import { stateEmptyActions } from "../../../../redux/actions";
+import { listIntegrationPropertiesActions } from "../../../../redux/actions";
+import DochideForReservationsModel from "./DochideForReservationsModel";
+
+import axios from "axios";
+import PopupModal from "./PopupModal";
+
+const DocumentForm = ({ property_name }) => {
+  const { store, dispatch } = useSelectorUseDispatch();
+
+  const [showPreviousDoc, setShowPreviousDoc] = useState(false);
+  const [showDocHideForResrv, setDocHideForResrv] = useState(false);
+  const [prevUploadedDoc, setPrevUploadedDoc] = useState([]);
+  const [hideForReservation, setHideForReservatin] = useState([]);
+  const [docUploadIsLoading, setdocUploadIsLoading] = useState(false);
+  const supportingStatus = store?.supportingDocumentPostReducer?.supportingDoc?.status
+  const supportingUrlMessage = store?.supportingDocumentPostReducer?.supportingDoc?.data?.error
+
+  const [file, setFile] = useState(null);
+  const [getDocApiCall, setGetDocApiCall] = useState(false);
+
+  const documentUploadMainHndle = async (resrData) => {
+    if (!file) { ToastHandle("No file uploaded", "danger"); return; }
+
+    setdocUploadIsLoading(true);
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const getSessionStorageData = JSON.parse( sessionStorage.getItem("hostBuddy_auth") );
+
+    let payload = new FormData();
+
+    payload.append("file", file);
+    payload.append("hide_for_reservations", JSON.stringify(resrData)); // JSON-style string representing the array of strings, per backend requirement
+
+    const token = getSessionStorageData?.token;
+
+    try {
+      if (token && property_name) {
+        const config = {
+          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY, "Content-Type": "multipart/form-data" },
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+        };
+
+        const response = await axios.post( `${baseUrl}/properties/${property_name}/add_file`, payload, config );
+
+        if (response.status === 200) {
+          ToastHandle("File uploaded successfully", "success");
+          setDocHideForResrv(false);
+          setGetDocApiCall(true);
+        } else {
+          ToastHandle(response?.data?.error, "danger");
+          console.log("Error", response);
+        }
+      } else {
+        alert("Missing token or property_name");
+      }
+    } catch (error) { }
+    finally { setdocUploadIsLoading(false); }
+  };
+
+
+  const documentUploadHandle = () => {
+    if (file) { setDocHideForResrv(true); }
+    else { ToastHandle("No file uploaded", "danger"); }
+  };
+
+  const handleSubmitForm = (e) => {
+    e.preventDefault();
+    documentUploadHandle();
+  };
+
+  // Call the get property API to get the list of previously uploaded documents, and the name of any previously linked integration property
+  const [previouslyGetApiLoading, setPreviousGetApiLoading] = useState(false);
+  const previousUploadedDoc = async (propertyName) => {
+    setPreviousGetApiLoading(true);
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+    const token = getSessionStorageData?.token;
+
+    try {
+      if (token) {
+        const config = {
+          headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+        };
+        const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
+
+        if (response.status === 200) {
+          setPreviousGetApiLoading(false);
+
+          const propertyData = response.data.property;
+          if (propertyData && propertyData.supporting_doc_items) {
+            const fileData = propertyData.supporting_doc_items.file_data;
+            const integrationData = propertyData.supporting_doc_items.integration_data;
+            const allSupportingDocData = { ...fileData, ...integrationData };
+            if (allSupportingDocData) {
+              const uploadedDocs = Object.keys(allSupportingDocData);
+              setPrevUploadedDoc(uploadedDocs);
+              setHideForReservatin(allSupportingDocData);
+            }
+          }
+        } else { setPreviousGetApiLoading(false); }
+      } else { setPreviousGetApiLoading(false); }
+    } catch (error) { setPreviousGetApiLoading(false); }
+  };
+
+  // THIS FUNCTIONALITY USED DOCUMENT DELETE AFTER THAT THIS PREVIOUS UPLOAD DOCUMENT
+  const deleteResAfterPreviousDocCall = () => {
+    previousUploadedDoc(property_name);
+  };
+
+  // When the page is loaded, call the GET property API to get the name of any previously uploaded documents
+  // TODO: have some functionality to prevent excessive calls, since there are other conditions on this page that also trigger this API call
+  useEffect(() => {
+    if (property_name) { previousUploadedDoc(property_name); }
+  }, [property_name]);
+
+  const handleShowPopUp = () => {
+    setShowPreviousDoc(true);
+    previousUploadedDoc(property_name)
+  };
+
+  useEffect(() => {
+    if (supportingStatus === 404) {
+      ToastHandle(supportingUrlMessage, "danger");
+      dispatch(stateEmptyActions());
+    } else if (supportingStatus === 400) {
+      ToastHandle(supportingUrlMessage, "danger");
+      dispatch(stateEmptyActions());
+    }
+  }, [supportingStatus]);
+
+  useEffect(() => {
+    if (getDocApiCall) {
+      previousUploadedDoc(property_name);
+      setGetDocApiCall(false);
+    }
+  }, [getDocApiCall]);
+
+  return (
+    <>
+      <div>
+        <div className="row">
+          <div className="col-12 form-design">
+            <div className="row">
+              
+              <form>
+                <h1 className="text-white mb-3 fs-4 fw-bold">Property Documents</h1>
+
+                <div class="old-docs mt-2" onClick={handleShowPopUp}>
+                  <a href="javascript:void(0);">
+                    <svg width="17" height="20" viewBox="0 0 17 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="#146EF5" d="M11.6875 2H2.125V18H14.875V5H11.6875V2ZM2.125 0H12.75L17 4V18C17 18.5304 16.7761 19.0391 16.3776 19.4142C15.9791 19.7893 15.4386 20 14.875 20H2.125C1.56141 20 1.02091 19.7893 0.622398 19.4142C0.223883 19.0391 0 18.5304 0 18V2C0 1.46957 0.223883 0.960859 0.622398 0.585786C1.02091 0.210714 1.56141 0 2.125 0ZM4.25 9H12.75V11H4.25V9ZM4.25 13H12.75V15H4.25V13Z"></path>
+                    </svg>
+                    Previous Documents
+                  </a>
+                </div>
+
+                <div className="col-12 mt-4 ">
+                  <label className="text-white">
+                    Documents <span>(.txt, .docx, .pdf supported)</span>
+                  </label>
+                  <div className="d-flex">
+                    <div className="col-6 me-4">
+                      <input type="file" id="fileInput" className="form-control" accept=".txt,.docx,.pdf"
+                      onChange={(e) => setFile(e.target.files[0])} />
+                    </div>
+                    <div className="col-3">
+                      {!docUploadIsLoading ? (
+                        <button className="btn btn-primary" onClick={(e) => handleSubmitForm(e) }>
+                          {"Submit File"}
+                        </button>
+                      ) : (
+                        <>
+                          <span style={{ color: "white" }}>
+                            Submitting...
+                          </span>
+                          <BoxLoader />
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <DochideForReservationsModel show={showDocHideForResrv} setShow={setDocHideForResrv} documentUploadMainHndle={documentUploadMainHndle} btnLoading={docUploadIsLoading}/>
+      {showPreviousDoc && (
+        <PopupModal show={showPreviousDoc} setShow={setShowPreviousDoc} prevUploadedDoc={prevUploadedDoc} supportingDocsObj={hideForReservation} deleteResAfterPreviousDocCall={deleteResAfterPreviousDocCall} previouslyGetApiLoading={previouslyGetApiLoading} property_name={property_name}/>
+      )}
+    </>
+  );
+};
+
+export default DocumentForm;

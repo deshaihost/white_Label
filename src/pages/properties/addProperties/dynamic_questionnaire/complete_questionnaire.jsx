@@ -6,6 +6,7 @@ import { getQuestionnaireActions } from "../../../../redux/actions";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import QuestionnaireSection from "./questionnaire_section";
+import QuestionnaireFirstPage from "./questionnaire_first_page";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { FullScreenLoader } from "../../../../helper/Loader";
@@ -224,7 +225,11 @@ const QuestionnairePage = () => {
             <div className="row">
               <div className="col-lg-10 mx-auto mt-5 form_multisteps">
                 {selectedSection !== "External Resources" ? (
-                  <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
+                  selectedSection === "Basics" ? (
+                    <QuestionnaireFirstPage questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
+                  ) : (
+                    <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
+                  )
                 ) : (
                   <ExternalResourcesForm property_name={property_name} handleSaveAndNext={handleSaveAndNext}/>
                 )}
