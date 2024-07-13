@@ -116,7 +116,7 @@ const BasicInformationForm = ({ property_name }) => {
   return (
     <div>
       <div>
-        <h3 className="text-white fw-bold mb-3 fs-4">Basic Information</h3>
+        <h3 className="text-white fw-bold mb-3 fs-4">Property Name & Thumbnail</h3>
       </div>
       <div className="row">
         <div className="col-12 mx-auto form-design">

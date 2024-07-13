@@ -13,7 +13,6 @@ import { FullScreenLoader } from "../../../../helper/Loader";
 import axios from "axios";
 import PencilIconModal from "./PencilIconModal";
 import ExternalResourcesForm from "./ExternalResources/ExternalResourcesForm";
-import { set } from "react-hook-form";
 
 
 // Code for the entire questionnaire page, including the header and all sections, including Basics and External Resources.
@@ -25,9 +24,9 @@ const QuestionnairePage = () => {
   const store = useSelector((state) => state);
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
   const section_order_data = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire?.metadata?.section_order
-  const questionnaire_section_names = section_order_data ? [...section_order_data.slice(0, 1), "External Resources", ...section_order_data.slice(1)] : []; // Always add "External Resources" as the second section
+  const questionnaire_section_names = ["Resources", ...(section_order_data || [])];
 
-  const [selectedSection, setSelectedSection] = useState("Basics");
+  const [selectedSection, setSelectedSection] = useState("Resources");
   const [questionnairePostLoading, setQuestionnairePostLoading] = useState(false);
   const [triggeredSaveLoading, setTriggeredSaveLoading] = useState(false);
   const [dataToUpdate, setDataToUpdate] = useState(false); // whether there is new data to update to the API
@@ -225,7 +224,7 @@ const QuestionnairePage = () => {
             <div className="row">
               <div className="col-lg-10 mx-auto mt-5 form_multisteps">
                 {selectedSection !== "External Resources" ? (
-                  selectedSection === "Basics" ? (
+                  selectedSection === "Resources" ? (
                     <QuestionnaireFirstPage questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
                   ) : (
                     <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />

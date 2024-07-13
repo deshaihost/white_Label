@@ -22,13 +22,6 @@ const QuestionnaireSection = ({questionnaire_section_name, handleInputComponentC
   return (
     <div className="form-design">
 
-      {/* Property name & thumbnail image fields (if section is Basics) */}
-      {questionnaire_section_name === 'Basics' && (
-        <div>
-          <BasicInformationForm property_name={property_name} />
-        </div>
-      )}
-
       {/* Form for this questionnaire section (map thru each subsection & question) */}
       {questionnaire_section_data && subsection_order.map((subsectionName) => {
         const subsection = questionnaire_section_data[subsectionName];

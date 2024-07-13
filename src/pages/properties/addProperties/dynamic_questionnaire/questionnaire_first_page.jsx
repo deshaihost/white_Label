@@ -25,7 +25,7 @@ const QuestionnaireFirstPage = ({questionnaire_section_name, handleInputComponen
     <div className="form-design">
 
       {/* Property name & thumbnail image fields (if section is Basics) */}
-      {questionnaire_section_name === 'Basics' && (
+      {questionnaire_section_name === 'Resources' && (
         <div>
           <BasicInformationForm property_name={property_name} />
         </div>

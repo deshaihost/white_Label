@@ -17,6 +17,7 @@ const DocumentForm = ({ property_name }) => {
   const [prevUploadedDoc, setPrevUploadedDoc] = useState([]);
   const [hideForReservation, setHideForReservatin] = useState([]);
   const [docUploadIsLoading, setdocUploadIsLoading] = useState(false);
+  const [showDocUploadFields, setShowDocUploadFields] = useState(false);
   const supportingStatus = store?.supportingDocumentPostReducer?.supportingDoc?.status
   const supportingUrlMessage = store?.supportingDocumentPostReducer?.supportingDoc?.data?.error
 
@@ -157,35 +158,41 @@ const DocumentForm = ({ property_name }) => {
                     <svg width="17" height="20" viewBox="0 0 17 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path fill="#146EF5" d="M11.6875 2H2.125V18H14.875V5H11.6875V2ZM2.125 0H12.75L17 4V18C17 18.5304 16.7761 19.0391 16.3776 19.4142C15.9791 19.7893 15.4386 20 14.875 20H2.125C1.56141 20 1.02091 19.7893 0.622398 19.4142C0.223883 19.0391 0 18.5304 0 18V2C0 1.46957 0.223883 0.960859 0.622398 0.585786C1.02091 0.210714 1.56141 0 2.125 0ZM4.25 9H12.75V11H4.25V9ZM4.25 13H12.75V15H4.25V13Z"></path>
                     </svg>
-                    Previous Documents
+                    View Uploaded Documents
                   </a>
                 </div>
 
-                <div className="col-12 mt-4 ">
-                  <label className="text-white">
-                    Documents <span>(.txt, .docx, .pdf supported)</span>
-                  </label>
-                  <div className="d-flex">
-                    <div className="col-6 me-4">
-                      <input type="file" id="fileInput" className="form-control" accept=".txt,.docx,.pdf"
-                      onChange={(e) => setFile(e.target.files[0])} />
-                    </div>
-                    <div className="col-3">
-                      {!docUploadIsLoading ? (
-                        <button className="btn btn-primary" onClick={(e) => handleSubmitForm(e) }>
-                          {"Submit File"}
-                        </button>
-                      ) : (
-                        <>
-                          <span style={{ color: "white" }}>
-                            Submitting...
-                          </span>
-                          <BoxLoader />
-                        </>
-                      )}
+                {showDocUploadFields ? (
+                  <div className="col-12 mt-4 ">
+                    <label className="text-white">
+                      Documents <span>(.txt, .docx, .pdf supported)</span>
+                    </label>
+                    <div className="d-flex">
+                      <div className="col-6 me-4">
+                        <input type="file" id="fileInput" className="form-control" accept=".txt,.docx,.pdf"
+                        onChange={(e) => setFile(e.target.files[0])} />
+                      </div>
+                      <div className="col-3">
+                        {!docUploadIsLoading ? (
+                          <button className="btn btn-primary" onClick={(e) => handleSubmitForm(e) }>
+                            {"Submit File"}
+                          </button>
+                        ) : (
+                          <>
+                            <span style={{ color: "white" }}>
+                              Submitting...
+                            </span>
+                            <BoxLoader />
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div class="old-docs mt-2" onClick={() => setShowDocUploadFields(true)}>
+                    <a href="javascript:void(0);">+ Upload New Document</a>
+                  </div>
+                )}
 
               </form>
             </div>

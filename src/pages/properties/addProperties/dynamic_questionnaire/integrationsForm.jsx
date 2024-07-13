@@ -66,12 +66,15 @@ const IntegrationsForm = ({ property_name }) => {
 
   const unlink_integration = async (e, propertyName) => {
     e.preventDefault();
+
+    // Browser onfirmation dialog
+    const isConfirmed = window.confirm("Are you sure you want to unlink this integration?");
+    if (!isConfirmed) { return; }
+
     setUnlinkIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
+    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
     const token = getSessionStorageData?.token;
 
     try {
@@ -159,7 +162,7 @@ const IntegrationsForm = ({ property_name }) => {
                             <BoxLoader />
                           </>
                         ) : (
-                          <button style={{ background:'none', color:'rgb(220, 42, 42)', border:'none', textDecoration:'underline', cursor:'pointer', width:'auto', padding:'0', marginLeft:'10px' }} onClick={(e) => unlink_integration(e, property_name)}>
+                          <button style={{ background:'none', color:'#AAA', border:'none', cursor:'pointer', textDecoration:'underline', width:'auto', padding:'0', marginLeft:'10px' }} onClick={(e) => unlink_integration(e, property_name)}>
                             (Unlink)
                           </button>
                         )}
@@ -219,10 +222,8 @@ const IntegrationsForm = ({ property_name }) => {
               ) : (
                 <>
                   <div className="col-12 mt-4 "> </div> {/* Vertical spacer */}
-                  <p style={{ color: "white", marginTop: "20px" }}>
-                    Loading PMS integration information...
-                  </p>
-                  <BoxLoader />
+                  <p style={{ color: "white", marginTop: "20px" }}>Loading PMS integration information...</p>
+                  {/* <BoxLoader /> */}
                 </>
               )}
             </form>
