@@ -2,7 +2,6 @@ import SelectComponent from "./form_components/select";
 import ShortAnswerComponent from "./form_components/short_answer";
 import LongAnswerComponent from "./form_components/long_answer";
 import CheckboxGroupComponent from "./form_components/checkbox_group";
-import BasicInformationForm from "./BasicInformationForm/BasicInformationForm";
 import { useSelector } from "react-redux";
 import React from "react";
 import Loader from "../../../../helper/Loader";

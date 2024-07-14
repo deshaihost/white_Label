@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useSelectorUseDispatch } from "../../../../helper/Authorized";
-import ToastHandle from "../../../../helper/ToastMessage";
-import Loader, { BoxLoader } from "../../../../helper/Loader";
-import { stateEmptyActions } from "../../../../redux/actions";
+import { useSelectorUseDispatch } from "../../../../../helper/Authorized";
+import ToastHandle from "../../../../../helper/ToastMessage";
+import Loader, { BoxLoader } from "../../../../../helper/Loader";
 
 import axios from "axios";
 
-const IntegrationsForm = ({ property_name }) => {
+const IntegrationsForm = ({ property_name, apiPropertyData }) => {
   const { store, dispatch } = useSelectorUseDispatch();
 
   const [prevLinkedIntegration, setPrevLinkedIntegration] = useState(null);
@@ -17,13 +16,49 @@ const IntegrationsForm = ({ property_name }) => {
   const [selectedIntegrationPropertyId, setSelectedIntegrationPropertyId] = useState(null); // User-selected integration property
   const [linkIsLoading, setLinkIsLoading] = useState(false);
   const [unlinkIsLoading, setUnlinkIsLoading] = useState(false);
+  const [integrationPropertyList, setIntegrationPropertiesList] = useState([]);
+  const [integrationPropertiesLoading, setIntegrationPropertiesLoading] = useState(true);
 
-  const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties; // array of integration_property objects; each with "name" and "id" properties
-  const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
+  //const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties; // array of integration_property objects; each with "name" and "id" properties
+  //const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
+
+  const callListIntegrationPropertiesAPI = async () => {
+    setIntegrationPropertiesLoading(true);
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+    const token = getSessionStorageData?.token;
+
+    try {
+      if (token) {
+        const config = {
+          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+        };
+
+        const response = await axios.get(`${baseUrl}/list_integration_properties`, config);
+
+        if (response.status === 200) {
+          setIntegrationPropertiesList(response.data.properties); //list of dicts with "name" and "id" properties
+        } else { ToastHandle(response?.data?.error, "danger"); }
+      }
+    } catch (error) { ToastHandle("Error listing integration properties", "danger"); }
+    finally { setIntegrationPropertiesLoading(false); }
+  };
+
+  // On page load, call the list_integration_properties API. TODO: check user get first, and only call if user has a PMS integration - or make the user click something on this page to trigger the call
+  useEffect(() => {
+    callListIntegrationPropertiesAPI();
+  }, []);
 
   // -------------------------------------------------------------------------------------------------------------------------------
 
-  const [getDocApiCall, setGetDocApiCall] = useState(false);
+  // When apiPropertyData populates (from parent), update prevLinkedIntegration
+  useEffect(() => {
+    if (apiPropertyData) {
+      setPrevLinkedIntegration(apiPropertyData?.integration?.integration_property_name);
+    }
+  }, [apiPropertyData]);
 
   const link_integration = async (e, propertyName, integrationPropertyId) => {
     e.preventDefault();
@@ -98,48 +133,6 @@ const IntegrationsForm = ({ property_name }) => {
     }
   };
 
-  // Call the get property API to get the list of previously uploaded documents, and the name of any previously linked integration property
-  const [previouslyGetApiLoading, setPreviousGetApiLoading] = useState(false);
-  const previousUploadedDoc = async (propertyName) => {
-    setPreviousGetApiLoading(true);
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
-
-    try {
-      if (token) {
-        const config = {
-          headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
-        const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
-
-        if (response.status === 200) {
-          setPreviousGetApiLoading(false);
-
-          const propertyData = response.data.property;
-          if (propertyData && propertyData?.integration?.integration_property_name) {
-            setPrevLinkedIntegration(propertyData?.integration?.integration_property_name);
-          }
-        } else { setPreviousGetApiLoading(false); }
-      } else { setPreviousGetApiLoading(false); }
-    } catch (error) { setPreviousGetApiLoading(false); }
-  };
-
-  // When the page is loaded, call the GET property API to get the name of any previously linked integration property.
-  // TODO: have some functionality to prevent excessive calls, since there are other conditions on this page that also trigger this API call
-  useEffect(() => {
-    if (property_name) { previousUploadedDoc(property_name); }
-  }, [property_name]);
-
-  useEffect(() => {
-    if (getDocApiCall) {
-      previousUploadedDoc(property_name);
-      setGetDocApiCall(false);
-    }
-  }, [getDocApiCall]);
-
   return (
     <>
       <div>
@@ -147,26 +140,26 @@ const IntegrationsForm = ({ property_name }) => {
           <div className="col-12 form-design">
             <form>
               <h1 className="text-white mb-3 fs-4 fw-bold">PMS Integration</h1>
-              {previouslyGetApiLoading === false ? (
+              {apiPropertyData != null ? (
                 prevLinkedIntegration ? ( // If already linked to an integration property: show the name of the linked integration property and option to unlink
                   <>
-                      <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                        <p style={{ color: "white", margin: 0 }}>
-                          Linked to property: {prevLinkedIntegration}
-                        </p>
-                        {unlinkIsLoading ? (
-                          <>
-                            <p style={{ color: "white", marginLeft: '10px' }} >
-                              Unlinking...
-                            </p>
-                            <BoxLoader />
-                          </>
-                        ) : (
-                          <button style={{ background:'none', color:'#AAA', border:'none', cursor:'pointer', textDecoration:'underline', width:'auto', padding:'0', marginLeft:'10px' }} onClick={(e) => unlink_integration(e, property_name)}>
-                            (Unlink)
-                          </button>
-                        )}
-                      </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginTop: '10px' }}>
+                      <p style={{ color: "white", margin: 0 }}>
+                        Linked to PMS property: {prevLinkedIntegration}
+                      </p>
+                      {unlinkIsLoading ? (
+                        <>
+                          <p style={{ color: "white", marginLeft: '10px' }} >
+                            Unlinking...
+                          </p>
+                          <BoxLoader />
+                        </>
+                      ) : (
+                        <button style={{ background:'none', color:'#AAA', border:'none', marginTop:'5px', cursor:'pointer', textDecoration:'underline', width:'auto', padding:'0' }} onClick={(e) => unlink_integration(e, property_name)}>
+                          (Unlink)
+                        </button>
+                      )}
+                    </div>
                   </>
                 ) : (
                   // If not linked to n integration property: show a select with the list of integration properties (pulled from the backend API)
@@ -190,11 +183,11 @@ const IntegrationsForm = ({ property_name }) => {
                             </select>
                           ) : (
                             <div style={{ color: "white", marginTop: "20px", wordWrap: "break-word", width: "100%" }}>
-                              User account does not have a PMS integration. Connect your account to a PMS from the Properties page first, then you can this property to a property listing on the integration account here.
+                              User account does not have a PMS integration. Connect your account to a PMS from the Properties page.
                             </div>
                           )}
                         </div>
-                        <div className="col-4 mt-4 ">
+                        <div className="col-12 mt-4 ">
                           {integrationPropertyList?.length > 0 &&
                             (linkIsLoading ? (
                               <>
@@ -202,7 +195,7 @@ const IntegrationsForm = ({ property_name }) => {
                                 <BoxLoader />
                               </>
                             ) : (
-                              <button className="LinkPMSButton" onClick={(e) => link_integration( e, property_name, selectedIntegrationPropertyId )} >
+                              <button className="LinkPMSButton" style={{maxWidth:'300px'}} onClick={(e) => link_integration( e, property_name, selectedIntegrationPropertyId )} >
                                 Link To This Property
                               </button>
                             ))}
@@ -212,7 +205,7 @@ const IntegrationsForm = ({ property_name }) => {
                       <>
                         <div className="col-12 mt-4 "> </div> {/* Vertical spacer */}
                         <p style={{ color: "white", marginTop: "20px" }}>
-                          Loading integration properties...
+                          Loading PMS properties...
                         </p>
                         <BoxLoader />
                       </>

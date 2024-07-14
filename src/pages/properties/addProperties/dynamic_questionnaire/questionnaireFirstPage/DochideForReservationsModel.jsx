@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import Loader from "../../../../helper/Loader";
+import Loader from "../../../../../helper/Loader";
 
 const DochideForReservationsModel = ({ show, setShow, documentUploadMainHndle, btnLoading }) => {
   const hideForReservationDefault = ["CURRENT", "FUTURE", "INQUIRY/PAST"];

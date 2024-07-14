@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-import ToastHandle from "../../../../helper/ToastMessage";
+import ToastHandle from "../../../../../helper/ToastMessage";
 import { MdDeleteOutline } from "react-icons/md";
-import { useSelectorUseDispatch } from "../../../../helper/Authorized";
-import { removeSupportingDocsActions, stateEmptyActions } from "../../../../redux/actions";
-import { FullScreenLoader } from "../../../../helper/Loader";
+import { useSelectorUseDispatch } from "../../../../../helper/Authorized";
+import { removeSupportingDocsActions, stateEmptyActions } from "../../../../../redux/actions";
+import { FullScreenLoader } from "../../../../../helper/Loader";
 import { GoArrowUpRight } from "react-icons/go";
 
-const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj, deleteResAfterPreviousDocCall, previouslyGetApiLoading, property_name }) => {
+const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj, deleteResAfterPreviousDocCall, property_name }) => {
   const [data, setData] = useState([]);
   const { store, dispatch } = useSelectorUseDispatch();
   const removeSupportingDocsStatus = store?.removeSupportingDocsReducer?.removeSupportingDocs?.status;
@@ -41,7 +41,7 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj, deleteR
     <div>
       <Modal show={show} size="lg" onHide={() => setShow(false)} centered aria-labelledby="contained-modal-title-vcenter" >
         <Modal.Body>
-          {previouslyGetApiLoading && <FullScreenLoader />}
+          {/*previouslyGetApiLoading && <FullScreenLoader />*/}
           {removeSupportingDocsLoading && <FullScreenLoader />}
           <div className="6">
             <h5 className="text-white text-center">
