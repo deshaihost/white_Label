@@ -10,13 +10,10 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
   const { type } = PmsIntegrationData ? PmsIntegrationData : [];
   const store = useSelector((state) => state);
   const getCarlyLinkStatus = store?.getCalryLinkReducer?.getCalryLing?.status;
-  const getCarlyLink =
-    store?.getCalryLinkReducer?.getCalryLing?.data?.calry_link;
+  const getCarlyLink = store?.getCalryLinkReducer?.getCalryLing?.data?.calry_link;
   const getCalryLinkLoading = store?.getCalryLinkReducer?.loading;
-  const getCarlyLinkMessage =
-    store?.getCalryLinkReducer?.getCalryLing?.data?.message;
-  const getCalryLinkError =
-    store?.getCalryLinkReducer?.getCalryLing?.data?.error;
+  const getCarlyLinkMessage = store?.getCalryLinkReducer?.getCalryLing?.data?.message;
+  const getCalryLinkError = store?.getCalryLinkReducer?.getCalryLing?.data?.error;
 
   const goToCarlyLinkHndle = () => {
     const baseUrl = getCarlyLink;
@@ -40,8 +37,10 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
     if (getCarlyLinkStatus === 200) {
       ToastHandle(getCarlyLinkMessage, "success");
     } else {
+      /*
       ToastHandle(getCalryLinkError, "danger");
       dispatch(stateEmptyActions());
+      */
     }
   }, [getCarlyLinkStatus]);
 
