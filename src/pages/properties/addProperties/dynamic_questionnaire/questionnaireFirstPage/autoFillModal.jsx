@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import "../questionnaire.css";
 import Loader, { BoxLoader } from "../../../../../helper/Loader";
+import { getQuestionnaireActions } from "../../../../../redux/actions";
 
 const AutoFillModal = ({ handleClose, show, apiPropertyData }) => {
-  const store = useSelector((state) => state);
-  const [propertyCheck, setPropertyCheck] = useState(false);
+  const dispatch = useDispatch();
+
   const [integrationSources, setIntegrationSources] = useState([]);
   const [fileSources, setFileSources] = useState([]);
   const [sources, setSources] = useState([ { id: 'source1', name: 'Source 1' }, { id: 'source2', name: 'Source 2' }, { id: 'source3', name: 'Source 3' } ]);
@@ -41,8 +42,7 @@ const AutoFillModal = ({ handleClose, show, apiPropertyData }) => {
   };
 
   const closeHndle = () => {
-    setPropertyCheck(false);
-    handleClose("copyExistingPropertyClose");
+    handleClose(autoFillApiLoading);
   };
 
   const callAutoFillApi = async () => {
@@ -63,7 +63,8 @@ const AutoFillModal = ({ handleClose, show, apiPropertyData }) => {
 
         if (response.status === 200) {
           ToastHandle("Auto-fill completed successfully", "success");
-          closeHndle();
+          dispatch(getQuestionnaireActions(propertyName)); // GET the updated questionnaire - mainly so that it populates in the "HostBuddy Knowledge Base" section
+          closeHndle(false);
         } else { ToastHandle(response?.data?.error, "danger"); }
       }
     } catch (error) { ToastHandle("An error occurred during auto-fill", "danger"); }
@@ -71,7 +72,7 @@ const AutoFillModal = ({ handleClose, show, apiPropertyData }) => {
   };
 
   return (
-    <Modal show={show} size="lg" onHide={() => closeHndle()} aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal show={show} size="lg" onHide={() => closeHndle(autoFillApiLoading)} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <h5 className="modal-title">Auto-Fill Property Details</h5>
       </Modal.Header>

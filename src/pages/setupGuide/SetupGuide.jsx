@@ -2,8 +2,13 @@ import React, { useState, useEffect } from 'react'
 import SideBar from '../../component/sideBar/SideBar';
 import './setupguide.css';
 import { Helmet } from 'react-helmet';
+import Authorized from '../../helper/Authorized';
 
 const SetupGuide = () => {
+
+  const getAuthToken = Authorized();
+  const { token } = getAuthToken ? getAuthToken : {};
+
   const [activeLink, setActiveLink] = useState('');
   const handleClickScroll = (id) => {
     const element = document.getElementById(id);
@@ -38,9 +43,11 @@ const SetupGuide = () => {
           <h2>My HostBuddy</h2>
         </div>
         <div className="row">
-          <div className="col-lg-2 col-xl-2 col-xxl-2">
-            <SideBar />
-          </div>
+          {token !== undefined && ( // user logged in
+            <div className="col-lg-2 col-xl-2 col-xxl-2">
+              <SideBar />
+            </div>
+          )}
           <div className="col-lg-10 col-xl-10 col-xxl-10">
             <div className="account-container">
               <div className="account_heading">

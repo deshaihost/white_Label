@@ -14,6 +14,12 @@ const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, proper
   const [showCopyExistingPropModal, setShowCopyExistingPropModal] = useState(false);
   const [showAutoFillModal, setShowAutoFillModal] = useState(false);
 
+  const handleAutoFillModalClose = (autoFillApiLoading) => {
+    if (!autoFillApiLoading) {
+      setShowAutoFillModal(false);
+    };
+  };
+
   return (
     <div className="form-design questionnaire-first-page">
 
@@ -65,7 +71,7 @@ const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, proper
         )}
       </div>
 
-      <AutoFillModal show={showAutoFillModal} handleClose={() => setShowAutoFillModal(false)} apiPropertyData={apiPropertyData} />
+      <AutoFillModal show={showAutoFillModal} handleClose={handleAutoFillModalClose} apiPropertyData={apiPropertyData} />
       <CopyExistingPropertyModel show={showCopyExistingPropModal} curr_property_name={property_name} handleClose={() => setShowCopyExistingPropModal(false)} />
     </div>
   );
