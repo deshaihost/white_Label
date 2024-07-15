@@ -40,9 +40,9 @@ const IntegrationsForm = ({ property_name, apiPropertyData }) => {
 
         if (response.status === 200) {
           setIntegrationPropertiesList(response.data.properties); //list of dicts with "name" and "id" properties
-        } else { ToastHandle(response?.data?.error, "danger"); }
+        } else {  }
       }
-    } catch (error) { ToastHandle("Error listing integration properties", "danger"); }
+    } catch (error) {  }
     finally { setIntegrationPropertiesLoading(false); }
   };
 
