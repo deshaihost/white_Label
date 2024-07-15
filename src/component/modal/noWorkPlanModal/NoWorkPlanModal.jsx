@@ -34,7 +34,7 @@ function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
         <hr />
         {!pmsIntegrationLoading ? (
           <>
-            {isTheWorksPlan ? (
+            {true ? (
               <IntegratePlatformSelect handleNoPlanClose={handleNoPlanClose} />
             ) : (
               <div className="upgrade-plan-box">
