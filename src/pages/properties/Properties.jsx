@@ -257,19 +257,11 @@ const Properties = () => {
                         Unlock All Properties
                       </button>
                     )}
-                  {subscription_data?.num_properties_allowed == 0 ||
-                    (subscription_data?.num_properties_allowed ===
-                      undefined && (
-                      <button
-                        type="button"
-                        className="shadow-none border-0"
-                        onClick={() => {
-                          handleModelOpen("addPropertyOpen");
-                        }}
-                      >
-                        Subscribe
-                      </button>
-                    ))}
+                  {(subscription_data?.num_properties_allowed == 0 || subscription_data?.num_properties_allowed === undefined) && (
+                    <button type="button" className="shadow-none border-0" onClick={() => { handleModelOpen("addPropertyOpen"); }}>
+                      Subscribe
+                    </button>
+                  )}
                   {intergrations && Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key). Capitalize the first letter of the integration.
                     <>
                       <div
