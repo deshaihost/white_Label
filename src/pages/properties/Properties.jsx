@@ -18,16 +18,14 @@ import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrati
 import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
 import UnlockPropertiesModal from "../../component/modal/unlockPropertiesModal/unlockPropertiesModal";
-import CopyToPropertiesModalDynamically from "../../helper/copyToPropertiesModal/CopyToPropertiesModalDynamically";
+import CopyToPropertiesModal from "../../helper/copyToPropertiesModal/CopyToPropertiesModal";
 
 const Properties = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const gotoBillingPortalCheckPaymentStatus =
-    store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
-  const gotoBillingPortalcheckPaymentLoading =
-    store?.gotoBillingPortalPostReducer?.loading;
-  // const [model, setModel] = useState({ addProperty: false, pmsIntegration: false, removeIntegration: false, billingPortal: false, importProperties: false, unlockProperties: false });
+  const gotoBillingPortalCheckPaymentStatus = store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
+  const gotoBillingPortalcheckPaymentLoading = store?.gotoBillingPortalPostReducer?.loading;
+  const [model, setModel] = useState({ addProperty: false, pmsIntegration: false, removeIntegration: false, billingPortal: false, importProperties: false, unlockProperties: false });
   const [newPropertiesAdded, setNewPropertiesAdded] = useState(false); // called by ImportPropertiesModal when properties are imported, to trigger a re-render of the property list
   const [propertyConditionCheck, setPropertyConditionCheck] = useState(false);
   const [unlockPropertyNames, setUnlockPropertyNames] = useState([]); // array of property names to unlock
@@ -192,18 +190,6 @@ const Properties = () => {
       subscription_data?.too_many_properties_grace_until
     );
   }, [subscription_data, propertiesExtraData]);
-
-  // copy to properties model funcationality
-  const [model, setModel] = useState({ copyToProperties: false });
-  const [commonDynamicallyState, setCommonDynamicallyState] = useState(null);
-  const headingDynamicallyNameChange = "Copy To Properties";
-
-  const saveButtonMain = () => {};
-
-  const dynamicallyDataGetInChildComponent = (data) => {
-    setCommonDynamicallyState(data);
-  };
-  // copy to properties model funcationality
 
   return (
     <>
@@ -378,56 +364,13 @@ const Properties = () => {
           </div>
         </div>
       </div>
-      <button
-        onClick={() => {
-          setModel({ copyToProperties: true });
-        }}
-      >
-        Model Open
-      </button>
-      <CopyToPropertiesModalDynamically
-        headingDynamicallyNameChange={headingDynamicallyNameChange}
-        saveButtonMain={saveButtonMain}
-        dynamicallyDataGetInChildComponent={dynamicallyDataGetInChildComponent}
-        show={model?.copyToProperties}
-        modelClose={() => {
-          setModel({ copyToProperties: false });
-        }}
-      />
-      <BillingPortalModel
-        handleClose={handleModelClose}
-        show={model?.billingPortal}
-      />
-      <AddPropertyModal
-        handleClose={handleModelClose}
-        show={model?.addProperty}
-        subscription_data={subscription_data}
-      />
-      <NoWorkPlanModal
-        handleNoPlanClose={handleModelClose}
-        showNoPlan={model?.pmsIntegration}
-      />
-      <RemoveIntegrations
-        handleNoPlanClose={handleModelClose}
-        showNoPlan={model?.removeIntegration}
-      />
-      <DisconnectIntegration
-        handleNoPlanClose={handleModelClose}
-        showNoPlan={model?.disconnectIntegration}
-      />
-      <ImportPropertiesModal
-        handleNoPlanClose={handleModelClose}
-        showNoPlan={model?.importProperties}
-        setNewPropertiesAdded={setNewPropertiesAdded}
-      />
-      <UnlockPropertiesModal
-        handleClose={handleModelClose}
-        modalShow={model?.unlockProperties}
-        property_names={unlockPropertyNames}
-        remaining_unlocks_allowed={remainingUnlocksAllowed}
-        remaining_locked_properties={numPropsStillLocked}
-        setPropertiesChanged={setNewPropertiesAdded}
-      />
+      <BillingPortalModel handleClose={handleModelClose} show={model?.billingPortal}/>
+      <AddPropertyModal handleClose={handleModelClose} show={model?.addProperty} subscription_data={subscription_data}/>
+      <NoWorkPlanModal handleNoPlanClose={handleModelClose} showNoPlan={model?.pmsIntegration}/>
+      <RemoveIntegrations handleNoPlanClose={handleModelClose} showNoPlan={model?.removeIntegration}/>
+      <DisconnectIntegration handleNoPlanClose={handleModelClose} showNoPlan={model?.disconnectIntegration}/>
+      <ImportPropertiesModal handleNoPlanClose={handleModelClose} showNoPlan={model?.importProperties} setNewPropertiesAdded={setNewPropertiesAdded}/>
+      <UnlockPropertiesModal handleClose={handleModelClose} modalShow={model?.unlockProperties} property_names={unlockPropertyNames} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} setPropertiesChanged={setNewPropertiesAdded}/>
     </>
   );
 };

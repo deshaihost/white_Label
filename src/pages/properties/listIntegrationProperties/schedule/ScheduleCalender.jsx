@@ -1,31 +1,18 @@
 import React, { useState } from "react";
 import "./ScheduleCalendar.css";
 import SchedulePopupModal from "../popupmodal/SchedulePopupModal";
+import CopyToPropertiesModal from "../../../../helper/copyToPropertiesModal/CopyToPropertiesModal";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
 import ToastHandle from "../../../../helper/ToastMessage";
 import Loader from "../../../../helper/Loader";
 import axios from "axios";
 
-const daysOfWeek = [
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
-  "sunday",
-];
+const daysOfWeek = [ "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ];
 
-const ScheduleCalender = ({
-  getScheduleAPI,
-  allProperties,
-  setShowCalender,
-  selectedProperty,
-  scheduleData,
-  setScheduleChanged
-}) => {
+const ScheduleCalender = ({ getScheduleAPI, allProperties, setShowCalender, selectedProperty, scheduleData, setScheduleChanged }) => {
   const [show, setShow] = useState(false);
+  const [showCopyToPropertiesModal, setShowCopyToPropertiesModal] = useState(false);
   const [selectedTime, setSelectedTime] = useState({});
 
   // if (!scheduleData) {
@@ -48,17 +35,6 @@ const ScheduleCalender = ({
     schedules: scheduledDate,
   };
 
-
-  // const daysOfWeek = [
-  //   "monday",
-  //   "tuesday",
-  //   "wednesday",
-  //   "thursday",
-  //   "friday",
-  //   "saturday",
-  //   "sunday",
-  // ];
-
   const handleAddClick = () => {
     setShow(true);
   }
@@ -69,25 +45,16 @@ const ScheduleCalender = ({
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
+    const getSessionStorageData = JSON.parse( sessionStorage.getItem("hostBuddy_auth") );
 
     const token = getSessionStorageData?.token;
 
     try {
       if (token) {
         const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
+          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
         };
-        const response = await axios.put(
-          `${baseUrl}/set_recurring_schedule`,
-          dataToSend,
-          config
-        );
+        const response = await axios.put( `${baseUrl}/set_recurring_schedule`, dataToSend, config );
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
@@ -110,23 +77,16 @@ const ScheduleCalender = ({
 
   const handleRemoveSchedule = (deleteData) => {
 
-    const isConfirmed = window.confirm(
-      "Do you want to delete this Status Event?"
-    );
-    if (!isConfirmed) {
-      return;
-    }
+    const isConfirmed = window.confirm( "Do you want to delete this Status Event?" );
+    if (!isConfirmed) { return; }
 
     if (!deleteData.scheduleStage || !deleteData.day || !deleteData.startTime || !deleteData.endTime || deleteData.startIndex === undefined || deleteData.endIndex === undefined) {
       console.log("data inside if: ", deleteData)
       ToastHandle("Something went wrong here", "danger");
       return;
     }
-
     responseObject.schedules[deleteData.scheduleStage][deleteData.day].splice(deleteData.startIndex, 2);
-
     handleCalenderScheduleAPI(responseObject);
-
   }
 
   // copy to all property onClickHandle
@@ -318,8 +278,13 @@ const ScheduleCalender = ({
               <button onClick={handleClearAll} className="btn btn-primary form-control" style={{color:'rgb(220, 0, 0)'}}>
                 Clear All
               </button>
+              {/*
               <button onClick={handleCopyToAll} className="btn btn-primary form-control">
                 Copy to All Properties
+              </button>
+              */}
+              <button onClick={() => setShowCopyToPropertiesModal(true)} className="btn btn-primary form-control">
+                Copy to Other Properties
               </button>
               <button className="btn btn-primary form-control" onClick={handleAddClick}>
                 Add
@@ -331,18 +296,9 @@ const ScheduleCalender = ({
       )}
 
       {show && (
-        <SchedulePopupModal
-          show={show}
-          setShow={setShow}
-          selectedTime={selectedTime}
-          setselectedTime={setSelectedTime}
-          responseObject={responseObject}
-          setShowCalender={setShowCalender}
-          getScheduleAPI={getScheduleAPI}
-          selectedProperty={selectedProperty}
-          setScheduleChanged={setScheduleChanged}
-        />
+        <SchedulePopupModal show={show} setShow={setShow} selectedTime={selectedTime} setselectedTime={setSelectedTime} responseObject={responseObject} setShowCalender={setShowCalender} getScheduleAPI={getScheduleAPI} selectedProperty={selectedProperty} setScheduleChanged={setScheduleChanged}/>
       )}
+      <CopyToPropertiesModal show={showCopyToPropertiesModal} setShow={setShowCopyToPropertiesModal} schedule={scheduledDate}/>
     </>
   );
 };
