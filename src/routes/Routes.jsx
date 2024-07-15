@@ -137,6 +137,7 @@ const Routing = () => {
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
         <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
         <Route path="/reset-password" element={<ResetPass />}></Route>
+        <Route path="/setup-guide" element={<SetupGuide />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
         <Route path="*" element={ <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" /> } />
@@ -169,12 +170,6 @@ const Routing = () => {
             <Account />
           </ProtectedRoute>
         }/>
-        <Route path="/setup-guide" element={
-            <ProtectedRoute>
-              <SetupGuide />
-            </ProtectedRoute>
-          }
-        />
         <Route path="/add-property" element={
             <ProtectedRoute>
               <AddPropertyForm />

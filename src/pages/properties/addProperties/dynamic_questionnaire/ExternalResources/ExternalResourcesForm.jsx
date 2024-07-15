@@ -29,21 +29,9 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
     else if (type === urlToWebPageN) { setSuppertingInput({ urlToWebPage: true }); }
     else if (type === pmsIntegrationN) { setSuppertingInput({ pmsIntegration: true }); }
   };
-  const supportingStatus = suppertingInput?.updateDoc
-    ? store?.supportingDocumentPostReducer?.supportingDoc?.status
-    : suppertingInput?.urlToWebPage
-    ? store?.supportingUrlPostReducer?.supportingUrl?.status
-    : "";
-  const supportingUrlMessage = suppertingInput?.updateDoc
-    ? store?.supportingDocumentPostReducer?.supportingDoc?.data?.error
-    : suppertingInput?.urlToWebPage
-    ? store?.supportingUrlPostReducer?.supportingUrl?.data?.error
-    : "";
-  const supportingLoading = suppertingInput?.updateDoc
-    ? store?.supportingDocumentPostReducer?.loading
-    : suppertingInput?.urlToWebPage
-    ? store?.supportingUrlPostReducer?.loading
-    : "";
+  const supportingStatus = suppertingInput?.updateDoc ? store?.supportingDocumentPostReducer?.supportingDoc?.status : suppertingInput?.urlToWebPage ? store?.supportingUrlPostReducer?.supportingUrl?.status : "";
+  const supportingUrlMessage = suppertingInput?.updateDoc ? store?.supportingDocumentPostReducer?.supportingDoc?.data?.error : suppertingInput?.urlToWebPage ? store?.supportingUrlPostReducer?.supportingUrl?.data?.error : "";
+  const supportingLoading = suppertingInput?.updateDoc ? store?.supportingDocumentPostReducer?.loading : suppertingInput?.urlToWebPage ? store?.supportingUrlPostReducer?.loading : "";
 
   // list_integration_properties API Logic ------------------------------------------------------------------------------------------
 
@@ -100,12 +88,7 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
   const [getDocApiCall, setGetDocApiCall] = useState(false);
 
   const documentUploadMainHndle = async (resrData) => {
-    if (!file) {
-      //console.log("No file uploaded (API call func)");
-      ToastHandle("No file uploaded", "danger"); return;
-    }
-    console.log("File -", file);
-    //console.log("is instance of file -", file instanceof File);
+    if (!file) { ToastHandle("No file uploaded", "danger"); return; }
 
     setdocUploadIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -116,11 +99,6 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
 
     payload.append("file", file);
     payload.append("hide_for_reservations", JSON.stringify(resrData)); // JSON-style string representing the array of strings, per backend requirement
-    //console.log("Payload -", payload)
-    //console.log("resrData -", resrData)
-    //for (let [key, value] of payload.entries()) {
-    //  console.log(`${key}: ${value}`);
-    //}
 
     const token = getSessionStorageData?.token;
 
@@ -165,15 +143,11 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
     setLinkIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
+    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
     const token = getSessionStorageData?.token;
 
     // Get the integrationPropertyName from the integrationPropertyId
-    const selectedIntegrationProperty = integrationPropertyList.find(
-      (property) => property.id === integrationPropertyId
-    );
+    const selectedIntegrationProperty = integrationPropertyList.find((property) => property.id === integrationPropertyId);
     const integrationPropertyName = selectedIntegrationProperty?.name;
 
     try {
@@ -183,15 +157,8 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
           validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
         };
 
-        const jsonPayload = {
-          platform_property_id: integrationPropertyId,
-          platform_property_name: integrationPropertyName,
-        };
-        const response = await axios.post(
-          `${baseUrl}/properties/${propertyName}/link_to_integration`,
-          jsonPayload,
-          config
-        );
+        const jsonPayload = { platform_property_id: integrationPropertyId, platform_property_name: integrationPropertyName };
+        const response = await axios.post(`${baseUrl}/properties/${propertyName}/link_to_integration`, jsonPayload, config);
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
@@ -251,29 +218,22 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
     }
   };
 
-  // Call the backend API to get the list of previously uploaded documents, and the name of any previously linked integration property
+  // Call the get property API to get the list of previously uploaded documents, and the name of any previously linked integration property
   const [previouslyGetApiLoading, setPreviousGetApiLoading] = useState(false);
   const previousUploadedDoc = async (propertyName) => {
     setPreviousGetApiLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
+    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
     const token = getSessionStorageData?.token;
 
     try {
       if (token) {
         const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
+          headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
         };
-        const response = await axios.get(
-          `${baseUrl}/properties/${propertyName}`,
-          config
-        );
+        const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
 
         if (response.status === 200) {
           setPreviousGetApiLoading(false);
@@ -289,38 +249,18 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
               setHideForReservatin(allSupportingDocData);
             }
           }
-          if (
-            propertyData &&
-            propertyData?.integration?.integration_property_name
-          ) {
-            setPrevLinkedIntegration(
-              propertyData?.integration?.integration_property_name
-            );
+          if (propertyData && propertyData?.integration?.integration_property_name          ) {
+            setPrevLinkedIntegration(propertyData?.integration?.integration_property_name);
           }
-        } else {
-          // Handle non-200 status
-          setPreviousGetApiLoading(false);
-
-          console.log("Received non-200 status:", response.status);
-        }
-      } else {
-        setPreviousGetApiLoading(false);
-
-        alert("No Token");
-      }
-    } catch (error) {
-      // Handle error
-      setPreviousGetApiLoading(false);
-
-      console.log("Error:", error);
-    }
+        } else { setPreviousGetApiLoading(false); }
+      } else { setPreviousGetApiLoading(false); }
+    } catch (error) { setPreviousGetApiLoading(false); }
   };
-  // THIS FUNCTIONALITY USED DOCUMENT DELETE AFTER THAT THIS PREVIOUS UPLOAD DOCUMENT START
+
+  // THIS FUNCTIONALITY USED DOCUMENT DELETE AFTER THAT THIS PREVIOUS UPLOAD DOCUMENT
   const deleteResAfterPreviousDocCall = () => {
     previousUploadedDoc(property_name);
   };
-
-  // THIS FUNCTIONALITY USED DOCUMENT DELETE AFTER THAT THIS PREVIOUS UPLOAD DOCUMENT END
 
   // When the page is loaded, call the GET property API to get the name of any previously linked integration property.
   // TODO: have some functionality to prevent excessive calls, since there are other conditions on this page that also trigger this API call
@@ -363,16 +303,7 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
             <div className="row">
               <div className="col-4 mt-3">
                 <div class="form-check custom_checkbox">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="flexRadioDefault"
-                    id="flexRadioDefault1"
-                    checked={suppertingInput?.updateDoc}
-                    onClick={() => {
-                      suppertingOnclick(updateDocN);
-                    }}
-                  />
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={suppertingInput?.updateDoc} onClick={() => {suppertingOnclick(updateDocN);}}/>
                   <label class="form-check-label" for="flexRadioDefault1">
                     Upload documents
                   </label>
@@ -388,16 +319,7 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
               </div>
               <div className="col-4 mt-3">
                 <div class="form-check custom_checkbox">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="flexRadioDefault"
-                    id="flexRadioDefault3"
-                    onClick={() => {
-                      suppertingOnclick(pmsIntegrationN);
-                    }}
-                    checked={suppertingInput?.pmsIntegration}
-                  />
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" onClick={() => {suppertingOnclick(pmsIntegrationN);}} checked={suppertingInput?.pmsIntegration}/>
                   <label class="form-check-label" for="flexRadioDefault3">
                     PMS Integration
                   </label>
@@ -436,14 +358,7 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
                   <div className="col-12 mt-4 ">
                     <label className="text-white">Enter URL</label>
                     <div className="">
-                      <input
-                        className="bg-dark form-control"
-                        type="text"
-                        // {...register("url")}
-                        value={uploadedUrl}
-                        onChange={(e) => setUploadedUrl(e.target.value)}
-                        placeholder="Eg.example.com"
-                      />
+                      <input className="bg-dark form-control" type="text" value={uploadedUrl} onChange={(e) => setUploadedUrl(e.target.value)} placeholder="Eg.example.com" />
                     </div>
                   </div>
                 )}
@@ -544,22 +459,9 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
           </div>
         </div>
       </div>
-      <DochideForReservationsModel
-        show={showDocHideForResrv}
-        setShow={setDocHideForResrv}
-        documentUploadMainHndle={documentUploadMainHndle}
-        btnLoading={docUploadIsLoading}
-      />
+      <DochideForReservationsModel show={showDocHideForResrv} setShow={setDocHideForResrv} documentUploadMainHndle={documentUploadMainHndle} btnLoading={docUploadIsLoading}/>
       {showPreviousDoc && (
-        <PopupModal
-          show={showPreviousDoc}
-          setShow={setShowPreviousDoc}
-          prevUploadedDoc={prevUploadedDoc}
-          supportingDocsObj={hideForReservation}
-          deleteResAfterPreviousDocCall={deleteResAfterPreviousDocCall}
-          previouslyGetApiLoading={previouslyGetApiLoading}
-          property_name={property_name}
-        />
+        <PopupModal show={showPreviousDoc} setShow={setShowPreviousDoc} prevUploadedDoc={prevUploadedDoc} supportingDocsObj={hideForReservation} deleteResAfterPreviousDocCall={deleteResAfterPreviousDocCall} previouslyGetApiLoading={previouslyGetApiLoading} property_name={property_name}/>
       )}
     </>
   );

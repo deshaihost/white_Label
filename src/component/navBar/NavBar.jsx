@@ -12,7 +12,7 @@ const LogoNavBar = "https://hostbuddylb.com/logo/logoNavBar.svg";
 
 const NavBar = () => {
   const getAuthToken = Authorized();
-  const { token } = getAuthToken ? getAuthToken : [];
+  const { token } = getAuthToken ? getAuthToken : {};
   const localstorageDataGet = localStorage.getItem("chatBoxId");
 
   useEffect(() => {
@@ -157,40 +157,16 @@ const NavBar = () => {
                 </>
               ) : (
                 <>
-                  <NavLink
-                    exact
-                    to="/"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  <NavLink exact to="/" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Home
                   </NavLink>
-                  <NavLink
-                    exact
-                    to="/meet-hostbuddy"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  <NavLink exact to="/meet-hostbuddy" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Meet HostBuddy
                   </NavLink>
-                  <NavLink
-                    exact
-                    to="/pricing"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  <NavLink exact to="/pricing" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Pricing
                   </NavLink>
-                  <NavLink
-                    exact
-                    to="/faqs"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  <NavLink exact to="/faqs" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     FAQs
                   </NavLink>
                 </>
@@ -199,17 +175,10 @@ const NavBar = () => {
           </Navbar.Collapse>
           {token === undefined && (
             <div className="nav-buttons">
-              <Link
-                className="nav-btn nav-btn-primary link-btn outline-btn"
-                to="/signup"
-                style={{ marginRight: 10 }}
-              >
+              <Link className="nav-btn nav-btn-primary link-btn outline-btn" to="/signup" style={{ marginRight: 10 }}>
                 Sign Up
               </Link>
-              <Link
-                className="nav-btn nav-btn-outline link-btn filled-btn"
-                to="/login"
-              >
+              <Link className="nav-btn nav-btn-outline link-btn filled-btn" to="/login">
                 Log In
               </Link>
             </div>

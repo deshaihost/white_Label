@@ -18,21 +18,8 @@ const QuestionnaireHeader = ({ property_name, section_names, selectedSection, se
         <div col="12">
           <div className="form_top_steps d-flex justify-content-around">
 
-            {/* First section, "Basics" */}
-            <div className={selectedSection === "Basics" ? "text-primary" : ""} onClick={() => { setSelectedSection("Basics"); }} >
-              <div>
-                <span>
-                  <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" >
-                    <path fill="#146EF5" d="M48.2128 32.5493C51.8003 31.7909 55.2128 32.0243 58.3337 32.9576V29.1659C58.3337 27.3284 57.4587 25.6076 56.0003 24.4993L38.5003 11.3743C37.4887 10.6214 36.2613 10.2148 35.0003 10.2148C33.7393 10.2148 32.5119 10.6214 31.5003 11.3743L14.0003 24.4993C12.542 25.6076 11.667 27.3284 11.667 29.1659V55.4159C11.667 58.6243 14.292 61.2493 17.5003 61.2493H34.067C32.1701 57.3061 31.6071 52.853 32.4628 48.5618C33.9795 40.6284 40.3087 34.2409 48.2128 32.5493Z" ></path>
-                    <path fill="#146EF5" d="M52.5003 37.916C44.4503 37.916 37.917 44.4493 37.917 52.4993C37.917 60.5493 44.4503 67.0827 52.5003 67.0827C60.5503 67.0827 67.0837 60.5493 67.0837 52.4993C67.0837 44.4493 60.5503 37.916 52.5003 37.916ZM61.2503 53.9577H53.9587V61.2493H51.042V53.9577H43.7503V51.041H51.042V43.7493H53.9587V51.041H61.2503V53.9577Z" ></path>
-                  </svg>
-                </span>
-              </div>
-              <h2>Basics</h2>
-            </div>
-
-            {/* Second section, "External Resources" */}
-            <div className={selectedSection === "External Resources" ? "text-primary" : ""} onClick={() => { setSelectedSection("External Resources"); }} >
+            {/* First section, "Resources" */}
+            <div className={selectedSection === "Resources" ? "text-primary" : ""} onClick={() => { setSelectedSection("Resources"); }} >
               <div>
                 <span>
                   <svg width="71" height="71" viewBox="0 0 71 71" fill="none" xmlns="http://www.w3.org/2000/svg" >
@@ -40,22 +27,22 @@ const QuestionnaireHeader = ({ property_name, section_names, selectedSection, se
                   </svg>
                 </span>
               </div>
-              <h2>External Resources</h2>
+              <h2>Resources</h2>
             </div>
 
             {/* Arbitrary number of subsequent sections, generated dynamically */}
-            {section_names && section_names.length > 1 && section_names.slice(2).map((section_name) => ( // Skip the first two sections (defined above)
-            <div className={selectedSection === section_name ? "text-primary" : ""} onClick={() => { setSelectedSection(section_name); }} >
-              <div>
-                <span>
-                  <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" >
-                    <path fill="#146EF5" d="M48.2128 32.5493C51.8003 31.7909 55.2128 32.0243 58.3337 32.9576V29.1659C58.3337 27.3284 57.4587 25.6076 56.0003 24.4993L38.5003 11.3743C37.4887 10.6214 36.2613 10.2148 35.0003 10.2148C33.7393 10.2148 32.5119 10.6214 31.5003 11.3743L14.0003 24.4993C12.542 25.6076 11.667 27.3284 11.667 29.1659V55.4159C11.667 58.6243 14.292 61.2493 17.5003 61.2493H34.067C32.1701 57.3061 31.6071 52.853 32.4628 48.5618C33.9795 40.6284 40.3087 34.2409 48.2128 32.5493Z" ></path>
-                    <path fill="#146EF5" d="M52.5003 37.916C44.4503 37.916 37.917 44.4493 37.917 52.4993C37.917 60.5493 44.4503 67.0827 52.5003 67.0827C60.5503 67.0827 67.0837 60.5493 67.0837 52.4993C67.0837 44.4493 60.5503 37.916 52.5003 37.916ZM61.2503 53.9577H53.9587V61.2493H51.042V53.9577H43.7503V51.041H51.042V43.7493H53.9587V51.041H61.2503V53.9577Z" ></path>
-                  </svg>
-                </span>
+            {section_names && section_names.length > 1 && section_names.slice(1).map((section_name) => ( // Skip the first section (defined above)
+              <div className={selectedSection === section_name ? "text-primary" : ""} onClick={() => { setSelectedSection(section_name); }} >
+                <div>
+                  <span>
+                    <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                      <path fill="#146EF5" d="M48.2128 32.5493C51.8003 31.7909 55.2128 32.0243 58.3337 32.9576V29.1659C58.3337 27.3284 57.4587 25.6076 56.0003 24.4993L38.5003 11.3743C37.4887 10.6214 36.2613 10.2148 35.0003 10.2148C33.7393 10.2148 32.5119 10.6214 31.5003 11.3743L14.0003 24.4993C12.542 25.6076 11.667 27.3284 11.667 29.1659V55.4159C11.667 58.6243 14.292 61.2493 17.5003 61.2493H34.067C32.1701 57.3061 31.6071 52.853 32.4628 48.5618C33.9795 40.6284 40.3087 34.2409 48.2128 32.5493Z" ></path>
+                      <path fill="#146EF5" d="M52.5003 37.916C44.4503 37.916 37.917 44.4493 37.917 52.4993C37.917 60.5493 44.4503 67.0827 52.5003 67.0827C60.5503 67.0827 67.0837 60.5493 67.0837 52.4993C67.0837 44.4493 60.5503 37.916 52.5003 37.916ZM61.2503 53.9577H53.9587V61.2493H51.042V53.9577H43.7503V51.041H51.042V43.7493H53.9587V51.041H61.2503V53.9577Z" ></path>
+                    </svg>
+                  </span>
+                </div>
+                <h2>{section_name}</h2>
               </div>
-              <h2>{section_name}</h2>
-            </div>
           ))}
 
           </div>

@@ -2,7 +2,6 @@ import SelectComponent from "./form_components/select";
 import ShortAnswerComponent from "./form_components/short_answer";
 import LongAnswerComponent from "./form_components/long_answer";
 import CheckboxGroupComponent from "./form_components/checkbox_group";
-import BasicInformationForm from "./BasicInformationForm/BasicInformationForm";
 import { useSelector } from "react-redux";
 import React from "react";
 import Loader from "../../../../helper/Loader";
@@ -21,13 +20,6 @@ const QuestionnaireSection = ({questionnaire_section_name, handleInputComponentC
 
   return (
     <div className="form-design">
-
-      {/* Property name & thumbnail image fields (if section is Basics) */}
-      {questionnaire_section_name === 'Basics' && (
-        <div>
-          <BasicInformationForm property_name={property_name} />
-        </div>
-      )}
 
       {/* Form for this questionnaire section (map thru each subsection & question) */}
       {questionnaire_section_data && subsection_order.map((subsectionName) => {
