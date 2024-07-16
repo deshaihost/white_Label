@@ -77,6 +77,10 @@ const BasicInformationForm = ({ property_name }) => {
       dispatch(stateEmptyActions());
       navigate(`/edit-property/${encodeURIComponent(propertyName)}`);
 
+    } else if (propertiesAddStatus === 400) {
+      ToastHandle(propertiesAddMessage, "danger");
+      dispatch(stateEmptyActions());
+
     } else if (propertiesAddStatus === 402) {
       ToastHandle(propertiesAddMessage, "danger");
       dispatch(stateEmptyActions());
