@@ -90,9 +90,11 @@ span.calendar-schedule-button {
 .current-status {
   background: #30ff30;
 }
-
 .inquery-status {
   background: #fff;
+}
+.placeholder-status {
+  opacity: 0;
 }
 .calender-table-status {
   width: 13px;
@@ -131,6 +133,7 @@ span.calendar-schedule-button {
 .off-all-day {
   display: none;
 }
+
 @media screen and (max-width:1440px) {
   .calendar-timeline {
     gap: 50px;
