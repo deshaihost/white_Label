@@ -42,6 +42,9 @@ a {
 .fs-14 {
   font-size: 14px;
 }
+.bg-black{
+  background: #000;
+}
 
 .heading h1, .heading h2 {
   color: #fff;

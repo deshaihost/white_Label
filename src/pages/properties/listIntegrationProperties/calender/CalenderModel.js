@@ -189,12 +189,9 @@ const CalenderModel = ({
           </div>
           {timeZone ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
-              <p
+              <p className="text-center mb-3"
                 style={{
                   color: "rgb(128, 128, 128)",
-                  marginTop: "0px",
-                  marginBottom: "40px",
-                  textAlign: "center",
                 }}
               >
                 Property time zone: {timeZone}
