@@ -16,6 +16,7 @@ import PropertyInsight from "../pages/propertyInsight/PropertyInsight";
 import Subscription from "../pages/subscription/Subscription";
 import Account from "../pages/account/Account";
 import SetupGuide from "../pages/setupGuide/SetupGuide";
+import HostawaySetup from "../pages/setupGuide/HostawaySetup";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
@@ -138,6 +139,7 @@ const Routing = () => {
         <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
         <Route path="/reset-password" element={<ResetPass />}></Route>
         <Route path="/setup-guide" element={<SetupGuide />}></Route>
+        <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
         <Route path="*" element={ <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" /> } />
