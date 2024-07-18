@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import Loader from "../../../../../helper/Loader";
+import { useSelector, useDispatch } from "react-redux";
+import { pullConversationDataActions } from "../../../../../redux/actions";
+import Loader, {BoxLoader} from "../../../../../helper/Loader";
 import "../questionnaire.css";
 
 
 const HostBuddyKnowledgeBase = ({apiPropertyData, questionnaireData}) => {
+  const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
+  const apiPullConversationsData = store?.pullConversationDataReducer?.loadingProperties; // list of properties that are currently being pulled
 
   const [integrationPlatform, setIntegrationPlatform] = useState(null);
   const [documents, setDocuments] = useState([]);
@@ -41,6 +44,10 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, questionnaireData}) => {
       setFormHasData(foundFormData);
     }
   }, [apiQuestionnaireData]);
+
+  const handlePullConversationsClick = () => {
+    dispatch(pullConversationDataActions(apiPropertyData?.property_name));
+  };
       
 
   return (
@@ -53,9 +60,30 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, questionnaireData}) => {
           <>
             <h5 className="text-confirmed">Property details and availability</h5>
             <h5 className="text-confirmed">Guest and Reservation Data</h5>
+            {apiPropertyData?.supporting_doc_items?.conversation_data ? (
+              <h5 className="text-neutral">Past Conversations <small className="text-negative">(not used)</small></h5>
+            ) : (
+              ((!apiPullConversationsData || !apiPullConversationsData.includes(apiPropertyData?.property_name)) ? (
+                <h5 className="text-negative">Past conversations not pulled <span onClick={handlePullConversationsClick}>(Pull from PMS)</span></h5>
+              ) : (
+                <>
+                  <div className="loader-text-container">
+                    <BoxLoader />
+                    <h5 className="text-negative">Past conversations being pulled (this may take a few minutes...)</h5>
+                  </div>
+                </>
+              ))
+            )}
           </>
         ) : (
-          <h5 className="text-negative">Property not linked to PMS</h5>
+          <>
+            <h5 className="text-negative">Property not linked to PMS</h5>
+            {!apiPullConversationsData || !apiPullConversationsData.includes(apiPropertyData?.property_name) ? (
+              <button className="text-negative" onClick={handlePullConversationsClick}>Pull Conversations</button>
+            ) : (
+              <Loader />
+            )}
+          </>
         )}
         <h4>Property Documents</h4>
         {documents.length > 0 ? (

@@ -3,6 +3,7 @@ import { AddPropertiesActionTypes } from "./constants";
 import {
   postPropertiesEndPoint,
   getQuestionnaireEndPoint,
+  pullConversationDataEndPoint,
   goToBillingPortalPostEndPoint,
   updateQuestionnaireEndPoint,
   listIntegrationPropertiesEndPoint,
@@ -143,6 +144,40 @@ function* getQuestionnaireFunction(data) {
     yield put({
       type: AddPropertiesActionTypes.GET_QUESTIONNAIRE_ERROR,
       payload: error,
+    });
+  }
+}
+
+function* resetQuestionnaireStateFunction(data) {
+  yield put({
+    type: AddPropertiesActionTypes.GET_QUESTIONNAIRE_RESET,
+    payload: {},
+  });
+}
+
+
+function* pullConversationDataFunction(data) {
+  try {
+    yield put({
+      type: AddPropertiesActionTypes.PULL_CONVERSATION_DATA_LOADING,
+      payload: {property_name: data.data},
+    });
+    const response = yield call(pullConversationDataEndPoint, data);
+    if (response.status === 200) {
+      yield put({
+        type: AddPropertiesActionTypes.PULL_CONVERSATION_DATA_SUCCESS,
+        payload: { data:response.data, status:response.status, property_name:data.data },
+      });
+    } else {
+      yield put({
+        type: AddPropertiesActionTypes.PULL_CONVERSATION_DATA_ERROR,
+        payload: { ...response.data, property_name: data.data },
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: AddPropertiesActionTypes.PULL_CONVERSATION_DATA_ERROR,
+      payload: {error:error, property_name: data.data},
     });
   }
 }
@@ -325,6 +360,20 @@ export function* acctionGetQuestionnaire(): any {
   );
 }
 
+export function* acctionResetQuestionnaireState(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.GET_QUESTIONNAIRE_RESET,
+    resetQuestionnaireStateFunction
+  );
+}
+
+export function* acctionPullConversationData(): any {
+  yield takeEvery(
+    AddPropertiesActionTypes.PULL_CONVERSATION_DATA_FIRST,
+    pullConversationDataFunction
+  );
+}
+
 export function* acctionListIntegrationProperties(): any {
   yield takeEvery(
     AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_FIRST,
@@ -385,6 +434,7 @@ function* addPropertiesSaga(): any {
     fork(acctionStateEmpty),
     fork(acctionPostProperties),
     fork(acctionGetQuestionnaire),
+    fork(acctionPullConversationData),
     fork(acctionGoToBillingPortalPost),
     fork(acctionUpdateQuestionnaire),
     fork(acctionListIntegrationProperties),

@@ -2,7 +2,7 @@ import React, { useState, useEffect} from "react";
 import "../AddProperty.css";
 import QuestionnaireHeader from "./questionnaire_header";
 import { stateEmptyActions, updateQuestionnaireActions } from "../../../../redux/actions";
-import { getQuestionnaireActions } from "../../../../redux/actions";
+import { getQuestionnaireActions, resetQuestionnaireStateActions } from "../../../../redux/actions";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import QuestionnaireSection from "./questionnaire_section";

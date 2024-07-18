@@ -12,6 +12,7 @@ const AutoFillModal = ({ handleClose, show, apiPropertyData }) => {
 
   const [integrationSources, setIntegrationSources] = useState([]);
   const [fileSources, setFileSources] = useState([]);
+  const [conversationDataSources, setConversationDataSources] = useState([]);
   const [sources, setSources] = useState([ { id: 'source1', name: 'Source 1' }, { id: 'source2', name: 'Source 2' }, { id: 'source3', name: 'Source 3' } ]);
   const [selectedSources, setSelectedSources] = useState(sources.map(source => source.id)); // all selected by default
   const [propertyName, setPropertyName] = useState(null);
@@ -22,10 +23,12 @@ const AutoFillModal = ({ handleClose, show, apiPropertyData }) => {
     if (apiPropertyData) {
       const integrationSources = Object.keys(apiPropertyData.supporting_doc_items?.integration_data || {}); // should just be one if an integration is linked, or none otherwise
       const fileSources = Object.keys(apiPropertyData?.supporting_doc_items?.file_data || {});
-      const allSources = [...integrationSources, ...fileSources];
+      const conversationDataSources = apiPropertyData?.supporting_doc_items?.conversation_data?.months && Object.keys(apiPropertyData.supporting_doc_items.conversation_data.months).length > 0 ? ["Conversation history"] : [];
+      const allSources = [...integrationSources, ...conversationDataSources, ...fileSources];
       setSources(allSources.map(source => ({ id: source, name: source })));
       setFileSources(fileSources);
       setIntegrationSources(integrationSources);
+      setConversationDataSources(conversationDataSources);
       setSelectedSources(allSources);
       setPropertyName(apiPropertyData.property_name);
     }
@@ -58,7 +61,7 @@ const AutoFillModal = ({ handleClose, show, apiPropertyData }) => {
           headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
           validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
         };
-        const json_body = { 'docs_to_use':{'integration_data':integrationSources, 'file_data':fileSources} };
+        const json_body = { 'docs_to_use':{'integration_data':integrationSources, 'file_data':fileSources, 'conversation_data':conversationDataSources} };
         const response = await axios.post(`${baseUrl}/properties/${propertyName}/auto_fill_questionnaire`, json_body, config);
 
         if (response.status === 200) {

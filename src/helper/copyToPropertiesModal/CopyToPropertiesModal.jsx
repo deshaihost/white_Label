@@ -8,7 +8,7 @@ import ToastHandle from "../ToastMessage";
 import Loader, { BoxLoader } from "../Loader";
 
 const CopyToPropertiesModal = (props) => {
-  const { show, setShow, schedule, curr_timezone } = props;
+  const { show, setShow, schedule, scheduleType, curr_timezone } = props;
   const store = useSelector((state) => state);
 
   const property_data = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
@@ -39,7 +39,15 @@ const CopyToPropertiesModal = (props) => {
     const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
     const token = getSessionStorageData?.token;
 
-    const data_to_send = { properties:selectedProperties.map(obj => obj.value), schedules:schedule, copyToLocalTime:selectedTimeZone === "actual", currTimeZoneName:currTimeZone };
+    let data_to_send;
+    let endpoint_url;
+    if (scheduleType === "schedule") {
+      data_to_send = { properties:selectedProperties.map(obj => obj.value), schedules:schedule, copyToLocalTime:selectedTimeZone === "actual", currTimeZoneName:currTimeZone };
+      endpoint_url = `${baseUrl}/set_recurring_schedule`
+    } else if (scheduleType === "month") {
+      data_to_send = { properties:selectedProperties.map(obj => obj.value), dates:schedule, copyToLocalTime:selectedTimeZone === "actual", currTimeZoneName:currTimeZone };
+      endpoint_url = `${baseUrl}/set_datetime_toggle`
+    }
 
     try {
       if (token) {
@@ -48,7 +56,7 @@ const CopyToPropertiesModal = (props) => {
           validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
         };
 
-        const response = await axios.put(`${baseUrl}/set_recurring_schedule`, data_to_send, config);
+        const response = await axios.put(endpoint_url, data_to_send, config);
 
         if (response.status === 200) {
           ToastHandle("Schedule copied successfully", "success");

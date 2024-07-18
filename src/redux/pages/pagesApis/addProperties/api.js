@@ -19,6 +19,11 @@ function getQuestionnaireEndPoint(params: any): any {
   return api.get(`${URL.GET_QUESTIONNAIRE}/${data}/get_questionnaire`);
 }
 
+function pullConversationDataEndPoint(params: any): any {
+  const { data } = params;
+  return api.create(`${URL.PULL_CONVERSATION_DATA}/${data}/pull_conversation_history`, {});
+}
+
 function listIntegrationPropertiesEndPoint(params: any): any {
   return api.get(`${URL.LIST_INTEGRATION_PROPERTIES}`);
 }
@@ -72,6 +77,7 @@ function removeSupportingDocsEndPoint(params: any): any {
 export {
   postPropertiesEndPoint,
   getQuestionnaireEndPoint,
+  pullConversationDataEndPoint,
   goToBillingPortalPostEndPoint,
   updateQuestionnaireEndPoint,
   listIntegrationPropertiesEndPoint,
