@@ -48,14 +48,14 @@ export const groupTimeRangesMonthly = (scheduleObj) => {
   // For each reservation stage, create an array of its time ranges as strings (e.g. "on 07/20/2024 09:00-07/22/2024 17:00")
   let timeRangeStrings = {};
   for (let stage in scheduleObj) {
+    let allTimeRanges = []
     for (let offOrOn in scheduleObj[stage]) {
-      let allTimeRanges = []
       for (let i = 0; i < scheduleObj[stage][offOrOn].length; i += 2) {
         let timeRange = offOrOn.toLowerCase() + " " + scheduleObj[stage][offOrOn][i] + "-" + scheduleObj[stage][offOrOn][i + 1];
         allTimeRanges.push(timeRange);
       }
-      timeRangeStrings[stage] = allTimeRanges;
     }
+    timeRangeStrings[stage] = allTimeRanges;
   }
 
   // For each time range string, determine which reservation stages share it, and add it in groupedTimeRanges
