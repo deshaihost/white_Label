@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PopupModal from "../popupmodal/PopupModal";
+import CopyToPropertiesModal from "../../../../helper/copyToPropertiesModal/CopyToPropertiesModal";
 import { groupTimeRangesMonthly } from "../helper/combineResStages";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
@@ -7,9 +8,10 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import Loader from "../../../../helper/Loader";
 import { FaRegEdit } from "react-icons/fa";
 
-const Calendar = ({ getScheduleAPI, allProperties, setShowCalender, selectedProperty, scheduleData, date, setScheduleChanged, currentMonth }) => {
+const Calendar = ({ getScheduleAPI, allProperties, setShowCalender, selectedProperty, scheduleData, date, setScheduleChanged, currentMonth, propTimeZone }) => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
+  const [showCopyToPropertiesModal, setShowCopyToPropertiesModal] = useState(false);
   const [commonArray, setCommonArray] = useState([]); // [{ status:"on"/"off", start:"07/20/2024 14:00", end:"07/22/2024 08:00", startIndex:2, endIndex:3, resStage:<reservation_stage> }, ...]
 
   // common section
@@ -336,23 +338,13 @@ const Calendar = ({ getScheduleAPI, allProperties, setShowCalender, selectedProp
             </div>
             <div class="row w-full mt-5 mb-3 d-flex justify-content-center">
               <div className="d-flex gap-3 flex-wrap flex-md-nowrap" style={{ width: "80%" }}>
-                <button
-                  className="btn btn-primary form-control"
-                  style={{ color: "rgb(220, 0, 0)" }}
-                  onClick={handleClearAll}
-                >
+                <button className="btn btn-primary form-control" style={{ color: "rgb(220, 0, 0)" }} onClick={handleClearAll}>
                   Clear All
                 </button>
-                <button
-                  className="btn btn-primary form-control"
-                  onClick={handleCopyToAll}
-                >
-                  Copy to All Properties
+                <button className="btn btn-primary form-control" onClick={() => setShowCopyToPropertiesModal(true)}>
+                  Copy to Other Properties
                 </button>
-                <button
-                  className="btn btn-primary form-control"
-                  onClick={handleCellClick}
-                >
+                <button className="btn btn-primary form-control" onClick={handleCellClick}>
                   Add
                 </button>
               </div>
@@ -362,18 +354,9 @@ const Calendar = ({ getScheduleAPI, allProperties, setShowCalender, selectedProp
       )}
 
       {show && (
-        <PopupModal
-          show={show}
-          setShow={setShow}
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          responseObject={responseObject}
-          setShowCalender={setShowCalender}
-          getScheduleAPI={getScheduleAPI}
-          selectedProperty={selectedProperty}
-          setScheduleChanged={setScheduleChanged}
-        />
+        <PopupModal show={show} setShow={setShow} selectedDate={selectedDate} setSelectedDate={setSelectedDate} responseObject={responseObject} setShowCalender={setShowCalender} getScheduleAPI={getScheduleAPI} selectedProperty={selectedProperty} setScheduleChanged={setScheduleChanged}/>
       )}
+      <CopyToPropertiesModal show={showCopyToPropertiesModal} setShow={setShowCopyToPropertiesModal} schedule={scheduledDate} scheduleType="month" curr_timezone={propTimeZone} />
     </>
   );
 };

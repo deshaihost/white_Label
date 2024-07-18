@@ -9,6 +9,10 @@ const GET_QUESTIONNAIRE_INITIAL_STATE = {
   getQuestionnaire: [],
   loading: false,
 };
+const PULL_CONVERSATION_DATA_INITIAL_STATE = {
+  loadingProperties: [], // list of properties that are actively being pulled
+  loading: false,
+};
 
 const LIST_INTEGRATION_PROPERTIES_INITIAL_STATE = {
   listIntegrationProperties: [],
@@ -99,6 +103,31 @@ const getQuestionnaireReducer = (
       };
     case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
       return POST_PROPERTIES_INITIAL_STATE;
+    default:
+      return state;
+  }
+};
+
+const pullConversationDataReducer = (state = PULL_CONVERSATION_DATA_INITIAL_STATE, action) => {
+  switch (action.type) {
+    case AddPropertiesActionTypes.PULL_CONVERSATION_DATA_LOADING:
+      return {
+        loadingProperties: [...state.loadingProperties, action.payload.property_name], //action.payload is the name of the property being pulled
+        loading: true,
+      };
+    case AddPropertiesActionTypes.PULL_CONVERSATION_DATA_SUCCESS:
+      return {
+        loadingProperties: state.loadingProperties.filter(property => property !== action.payload.property_name), // Remove property name from loading list
+        loading: false,
+      };
+    case AddPropertiesActionTypes.PULL_CONVERSATION_DATA_ERROR:
+      return {
+        loadingProperties: state.loadingProperties.filter(property => property !== action.payload.property_name), // Remove property name from loading list
+        loading: false,
+      };
+    case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
+      ; // don't clear this when state is emptied
+      //return PULL_CONVERSATION_DATA_INITIAL_STATE;
     default:
       return state;
   }
@@ -344,6 +373,7 @@ const removeSupportingDocsReducer = (
 export {
   postPropertiesReducer,
   getQuestionnaireReducer,
+  pullConversationDataReducer,
   gotoBillingPortalPostReducer,
   updateQuestionnaireReducer,
   listIntegrationPropertiesReducer,

@@ -173,6 +173,7 @@ const CalenderModel = ({
                 scheduleData={calendarSchedule}
                 setScheduleChanged={setScheduleChanged}
                 currentMonth={currentMonth}
+                propTimeZone={timeZone}
               />
             )}
 
@@ -184,6 +185,7 @@ const CalenderModel = ({
                 selectedProperty={selectedProperty}
                 scheduleData={calendarSchedule}
                 setScheduleChanged={setScheduleChanged}
+                
               />
             )}
           </div>

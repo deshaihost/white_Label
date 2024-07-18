@@ -11,7 +11,7 @@ import axios from "axios";
 
 const daysOfWeek = [ "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ];
 
-const ScheduleCalender = ({ getScheduleAPI, allProperties, setShowCalender, selectedProperty, scheduleData, setScheduleChanged }) => {
+const ScheduleCalender = ({ getScheduleAPI, allProperties, setShowCalender, selectedProperty, scheduleData, setScheduleChanged, propTimeZone }) => {
   const [show, setShow] = useState(false);
   const [showCopyToPropertiesModal, setShowCopyToPropertiesModal] = useState(false);
   const [selectedTime, setSelectedTime] = useState({});
@@ -322,7 +322,7 @@ const ScheduleCalender = ({ getScheduleAPI, allProperties, setShowCalender, sele
       {show && (
         <SchedulePopupModal show={show} setShow={setShow} selectedTime={selectedTime} setselectedTime={setSelectedTime} responseObject={responseObject} setShowCalender={setShowCalender} getScheduleAPI={getScheduleAPI} selectedProperty={selectedProperty} setScheduleChanged={setScheduleChanged}/>
       )}
-      <CopyToPropertiesModal show={showCopyToPropertiesModal} setShow={setShowCopyToPropertiesModal} schedule={scheduledDate}/>
+      <CopyToPropertiesModal show={showCopyToPropertiesModal} setShow={setShowCopyToPropertiesModal} schedule={scheduledDate} scheduleType="schedule" curr_timezone={propTimeZone} />
     </>
   );
 };
