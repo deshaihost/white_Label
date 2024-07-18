@@ -10,10 +10,19 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, questionnaireData}) => {
   const store = useSelector((state) => state);
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
   const apiPullConversationsData = store?.pullConversationDataReducer?.loadingProperties; // list of properties that are currently being pulled
+  const apiPullConversationsDataSuccess = store?.pullConversationDataReducer?.successfulProperties; // list of properties that have been successfully pulled
 
   const [integrationPlatform, setIntegrationPlatform] = useState(null);
   const [documents, setDocuments] = useState([]);
   const [formHasData, setFormHasData] = useState(false);
+  const [pullConversationsSuccess, setPullConversationsSuccess] = useState(false);
+
+  // When apiPullConversationsDataSuccess fires, update pullConversationsSuccess if the property is in the list
+  useEffect(() => {
+    if (apiPullConversationsDataSuccess && apiPullConversationsDataSuccess.includes(apiPropertyData?.property_name)) {
+      setPullConversationsSuccess(true);
+    }
+  }, [apiPullConversationsDataSuccess]);
 
   // When apiPropertyData populates, get relevant data from it
   useEffect(() => {
@@ -60,7 +69,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, questionnaireData}) => {
           <>
             <h5 className="text-confirmed">Property details and availability</h5>
             <h5 className="text-confirmed">Guest and Reservation Data</h5>
-            {apiPropertyData?.supporting_doc_items?.conversation_data ? (
+            {(pullConversationsSuccess || apiPropertyData?.supporting_doc_items?.conversation_data) ? (
               <h5 className="text-neutral">Past Conversations <small className="text-negative">(not used)</small></h5>
             ) : (
               ((!apiPullConversationsData || !apiPullConversationsData.includes(apiPropertyData?.property_name)) ? (
@@ -76,14 +85,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, questionnaireData}) => {
             )}
           </>
         ) : (
-          <>
-            <h5 className="text-negative">Property not linked to PMS</h5>
-            {!apiPullConversationsData || !apiPullConversationsData.includes(apiPropertyData?.property_name) ? (
-              <button className="text-negative" onClick={handlePullConversationsClick}>Pull Conversations</button>
-            ) : (
-              <Loader />
-            )}
-          </>
+          <h5 className="text-negative">Property not linked to PMS</h5>
         )}
         <h4>Property Documents</h4>
         {documents.length > 0 ? (

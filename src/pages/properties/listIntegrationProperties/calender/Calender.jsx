@@ -71,17 +71,17 @@ const Calendar = ({ getScheduleAPI, allProperties, setShowCalender, selectedProp
   const combineSchedules = () => {
     if (specificDates) {
       let commonArrayGet = [];
-      categoryListArray?.map((category) => {
-        specificDates[category]?.on?.forEach((item, index) => {
+      categoryListArray?.map((resStage) => {
+        specificDates[resStage]?.on?.forEach((item, index) => {
           if (index % 2 === 0) {
-            let obj = { status:"on", start:item, end:specificDates[category].on[index + 1], startIndex:index, endIndex:index + 1, resStage:category };
+            let obj = { status:"on", start:item, end:specificDates[resStage].on[index + 1], startIndex:index, endIndex:index + 1, resStage:resStage };
             commonArrayGet.push(obj);
           }
         });
 
-        specificDates[category]?.off?.forEach((item, index) => {
+        specificDates[resStage]?.off?.forEach((item, index) => {
           if (index % 2 === 0) {
-            let obj = { status:"off", start:item, end:specificDates[category].off[index + 1], startIndex:index, endIndex:index + 1, resStage:category };
+            let obj = { status:"off", start:item, end:specificDates[resStage].off[index + 1], startIndex:index, endIndex:index + 1, resStage:resStage };
             commonArrayGet.push(obj);
           }
         });
@@ -121,7 +121,6 @@ const Calendar = ({ getScheduleAPI, allProperties, setShowCalender, selectedProp
         getScheduleAPI(selectedProperty);
       }
     } catch (error) {
-      console.log(error);
       ToastHandle(error?.data?.error, "danger");
       getScheduleAPI(selectedProperty);
     }
@@ -164,7 +163,6 @@ const Calendar = ({ getScheduleAPI, allProperties, setShowCalender, selectedProp
 
   // Remove Schedule click
   const handleScheduleDelete = (category, deleteData) => {
-    console.log(category, deleteData, "category, deleteData");
     const isConfirmed = window.confirm("Do you want to delete this Status Event?");
     if (!isConfirmed) {
       return;
@@ -252,7 +250,7 @@ const Calendar = ({ getScheduleAPI, allProperties, setShowCalender, selectedProp
                                     (resStagesForThisTimeRange.length > 0) && (
                                       <div key={index} className="calendar-month-schedule border border-primary my-3 rounded-pill px-3 bg-black">
                                         <div className={`main-calendar-data-status`}>
-                                          {status}
+                                          {status.toUpperCase() == "ON" ? <span style={{ color: "rgb(0, 190, 0)" }}>{status}</span> : <span style={{ color: "rgb(190, 0, 0)" }}>{status}</span>}
                                         </div>
                                         <div>
                                           <div>From</div>
@@ -329,9 +327,9 @@ const Calendar = ({ getScheduleAPI, allProperties, setShowCalender, selectedProp
                       </div>
                     </div>
                   ) : (
-                    <span className="text-danger d-flex justify-content-center">
-                      Empty
-                    </span>
+                    <div style={{height: "400px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+                      <span style={{color: "#AAA"}}>No dates added</span>
+                    </div>
                   )}
                 </div>
               </div>

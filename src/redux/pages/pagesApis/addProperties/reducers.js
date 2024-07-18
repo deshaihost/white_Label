@@ -11,6 +11,7 @@ const GET_QUESTIONNAIRE_INITIAL_STATE = {
 };
 const PULL_CONVERSATION_DATA_INITIAL_STATE = {
   loadingProperties: [], // list of properties that are actively being pulled
+  successfulProperties: [], // list of properties that have been successfully pulled
   loading: false,
 };
 
@@ -113,16 +114,19 @@ const pullConversationDataReducer = (state = PULL_CONVERSATION_DATA_INITIAL_STAT
     case AddPropertiesActionTypes.PULL_CONVERSATION_DATA_LOADING:
       return {
         loadingProperties: [...state.loadingProperties, action.payload.property_name], //action.payload is the name of the property being pulled
+        successfulProperties: state.successfulProperties,
         loading: true,
       };
     case AddPropertiesActionTypes.PULL_CONVERSATION_DATA_SUCCESS:
       return {
         loadingProperties: state.loadingProperties.filter(property => property !== action.payload.property_name), // Remove property name from loading list
+        successfulProperties: [...state.successfulProperties, action.payload.property_name], // Add property name to successful list
         loading: false,
       };
     case AddPropertiesActionTypes.PULL_CONVERSATION_DATA_ERROR:
       return {
         loadingProperties: state.loadingProperties.filter(property => property !== action.payload.property_name), // Remove property name from loading list
+        successfulProperties: state.successfulProperties,
         loading: false,
       };
     case StateEmtpyActionTypes.STATE_EMPTY_SUCCESS:
