@@ -116,7 +116,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
               </div>
             </>
           ) : (
-            <p style={{ color: 'white', textAlign: 'center' }}>No PMS properties available for import. You may need to adjust the properties settings within your PMS to make your property information available to HostBuddy.</p>
+            <p style={{ color: 'white', textAlign: 'center' }}>Your PMS properties are not yet available for import. If you just connected your PMS, please allow up to 30 minutes for data sync to complete.</p>
           )
         ) : (
           <>
