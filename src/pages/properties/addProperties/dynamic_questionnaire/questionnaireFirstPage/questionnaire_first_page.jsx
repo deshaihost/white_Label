@@ -9,7 +9,7 @@ import Loader from "../../../../../helper/Loader";
 import "../questionnaire.css";
 
 // Code for the first page of the questionnaire
-const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, property_name, apiPropertyData, questionnaireData}) => {
+const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, property_name, apiPropertyData, setApiPropertyData}) => {
 
   const [showCopyExistingPropModal, setShowCopyExistingPropModal] = useState(false);
   const [showAutoFillModal, setShowAutoFillModal] = useState(false);
@@ -40,7 +40,7 @@ const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, proper
       <div style={{ marginBottom: '70px' }}></div> {/* Spacer */}
 
       {/* HostBuddy Knowledge Base */}
-      <HostBuddyKnowledgeBase apiPropertyData={apiPropertyData}/>
+      <HostBuddyKnowledgeBase apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData}/>
       <div style={{ marginBottom: '90px' }}></div> {/* Spacer */}
       
 

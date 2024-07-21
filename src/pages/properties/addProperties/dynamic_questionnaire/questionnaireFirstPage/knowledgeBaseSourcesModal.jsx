@@ -1,0 +1,168 @@
+import React, { useEffect, useState } from "react";
+import { Modal } from "react-bootstrap";
+import axios from "axios";
+import ToastHandle from "../../../../../helper/ToastMessage";
+import "../questionnaire.css";
+import Loader, { BoxLoader } from "../../../../../helper/Loader";
+
+const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, integrationDataKey, setApiPropertyData }) => {
+  const [apiLoading, setApiLoading] = useState(false);
+  const [sourceAndSelectionData, setSourceAndSelectionData] = useState({});
+
+  // As soon as we get the source data, put it in the useState
+  useEffect(() => {
+    setSourceAndSelectionData(sources);
+  }, [sources]);
+
+  const handleCheckboxChange = (section, sourceId, isChecked) => {
+    const updatedSourceAndSelectionData = { ...sourceAndSelectionData };
+    updatedSourceAndSelectionData[section][sourceId].use_for_knowledge_base = isChecked;
+    setSourceAndSelectionData(updatedSourceAndSelectionData);
+  };
+
+  const closeHndle = () => {
+    handleClose();
+  };
+
+  // Used to refresh property data after the user has updated the knowledge base settings, so changes can reflect in the knowledge base section
+  const getPropertyDataFromAPI = async (propertyName) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+    const token = getSessionStorageData?.token;
+
+    try {
+      if (token) {
+        const config = {
+          headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+        };
+        const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
+
+        if (response.status === 200) {
+          setApiPropertyData(response.data.property);
+        } else {  }
+      } else {  }
+    } catch (error) {  }
+  };
+
+  const callSetKnowledgeBaseApi = async () => {
+    setApiLoading(true);
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+    const token = getSessionStorageData?.token;
+
+    try {
+      if (token) {
+        const config = {
+          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+        };
+
+        // construct the json body to send
+        const json_body = { 'docs_to_use': { } };
+        if ('integration_data' in sourceAndSelectionData['PMS Integration']) {
+          json_body['docs_to_use']['integration_data'] = {[integrationDataKey]: sourceAndSelectionData['PMS Integration']['integration_data'].use_for_knowledge_base};
+          json_body['docs_to_use']['guest_data'] = sourceAndSelectionData['PMS Integration']['guest_data'].use_for_knowledge_base;
+          if ('conversation_data' in sourceAndSelectionData['PMS Integration']) {
+            json_body['docs_to_use']['conversation_data'] = {};
+            if (sourceAndSelectionData['PMS Integration']['conversation_data'].use_for_knowledge_base) {
+              json_body['docs_to_use']['conversation_data']['num_months_to_use'] = 6;
+            } else {
+              json_body['docs_to_use']['conversation_data']['num_months_to_use'] = 0;
+            }
+          }
+        }
+        if (Object.keys(sourceAndSelectionData['Property Documents']).length > 0) {
+          json_body['docs_to_use']['file_data'] = {};
+          Object.keys(sourceAndSelectionData['Property Documents']).forEach(file_name => {
+            json_body['docs_to_use']['file_data'][file_name] = sourceAndSelectionData['Property Documents'][file_name].use_for_knowledge_base;
+          });
+        }
+        json_body['docs_to_use']['questionnaire'] = sourceAndSelectionData['Property Profile']['Property Profile'].use_for_knowledge_base;
+
+        const response = await axios.put(`${baseUrl}/properties/${propertyName}/set_knowledge_base`, json_body, config);
+
+        if (response.status === 200) {
+          ToastHandle(response.data.message, "success");
+          getPropertyDataFromAPI(propertyName);
+          closeHndle();
+        } else { ToastHandle(response?.data?.error, "danger"); }
+      }
+    } catch (error) { ToastHandle("Sorry, an error occurred", "danger"); }
+    finally { setApiLoading(false); }
+  };
+
+  return (
+    <Modal show={show} size="lg" onHide={() => closeHndle()} aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal.Header closeButton>
+        <h5 className="modal-title">Manage knowledge Base</h5>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="auto-fill-modal text-white">
+          <div>
+            <div className="text-center">
+              <p>Choose what information HostBuddy can access directly.</p>
+              <p>For better manageability of data and more efficient processing, it is recommended to use property documents and past conversations only for auto-fill, and leave them un-checked here.</p>
+            </div>
+            <hr style={{width: "90%", margin: "0 auto"}}/>
+
+            {Object.keys(sourceAndSelectionData).map((section) => (
+              <>
+                <h4>{section}</h4>
+                {Object.keys(sourceAndSelectionData[section]).length > 0 ? (
+                  <div className="sources-container">
+                    {Object.keys(sourceAndSelectionData[section]).map((source) => (
+                      <div key={source.id}>
+                        {section === "Property Profile" ? (
+                          <>
+                            <input className="form-check-input" type="checkbox" value={sourceAndSelectionData[section][source].id} id={sourceAndSelectionData[section][source].id} checked onChange={(e) => e.preventDefault()} style={{opacity: 0.5}} disabled/>
+                            <label className="form-check-label" htmlFor={sourceAndSelectionData[section][source].id} style={{opacity: 1}}>
+                              {sourceAndSelectionData[section][source].label}
+                            </label>
+                          </>
+                        ) : (
+                          <>
+                            <input className="form-check-input" type="checkbox" value={sourceAndSelectionData[section][source].id} id={sourceAndSelectionData[section][source].id} checked={sourceAndSelectionData[section][source].use_for_knowledge_base} onChange={(e) => handleCheckboxChange(section, sourceAndSelectionData[section][source].id, e.target.checked)}/>
+                            <label className="form-check-label" htmlFor={sourceAndSelectionData[section][source].id}>
+                              {sourceAndSelectionData[section][source].label}
+                              {sourceAndSelectionData[section][source].id === 'conversation_data' &&
+                                <>
+                                  {" "}
+                                  <span>(not recommended)</span>
+                                </>
+                              }
+                            </label>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <p style={{margin:"0", fontSize:"16px", color:"#AAA", fontStyle:"italic"}}>No {section.toLowerCase()} added</p>
+                  </div>
+                )}
+              </>
+            ))}
+            
+            {!apiLoading ? (
+              <div className="text-center">
+                <button className="mw-auto btn btn-primary text-white border border-primary rounded-pill px-5 mt-3" onClick={() => callSetKnowledgeBaseApi()}>
+                  Save
+                </button>
+              </div>
+              ) : (
+              <div className="text-center">
+                <Loader />
+              </div>
+            )}
+          </div>
+        </div>
+      </Modal.Body>
+    </Modal>
+  );
+};
+
+export default KnowledgeBaseSourcesModal;

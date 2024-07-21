@@ -26,6 +26,18 @@
   margin-bottom: 30px;
 }
 
+.auto-fill-modal h4 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  text-align: center;
+  color: #AAA;
+}
+
+.auto-fill-modal label span {
+  color: #AAA;
+}
+
 .auto-fill-modal {
   display: flex;
   flex-direction: column;

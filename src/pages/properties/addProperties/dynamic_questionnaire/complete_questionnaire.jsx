@@ -254,7 +254,7 @@ const QuestionnairePage = () => {
               <div className="col-lg-10 mx-auto mt-5 form_multisteps">
                 {selectedSection !== "External Resources" ? (
                   selectedSection === "Resources" ? (
-                    <QuestionnaireFirstPage handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} apiPropertyData={apiPropertyData}/>
+                    <QuestionnaireFirstPage handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData}/>
                   ) : (
                     <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
                   )
