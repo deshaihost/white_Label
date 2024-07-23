@@ -7,6 +7,7 @@ import { removeSupportingDocsActions, stateEmptyActions } from "../../../../../r
 import { FullScreenLoader } from "../../../../../helper/Loader";
 import { GoArrowUpRight } from "react-icons/go";
 
+// Modal for previously uploaded documents
 const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj, deleteResAfterPreviousDocCall, property_name }) => {
   const [data, setData] = useState([]);
   const { store, dispatch } = useSelectorUseDispatch();

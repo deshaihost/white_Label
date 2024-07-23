@@ -93,6 +93,7 @@ const IntegrationsForm = ({ property_name, apiPropertyData }) => {
         alert("No Token");
       }
     } catch (error) {
+      console.error("Error linking integration:", error);
       ToastHandle("Error linking integration", "danger");
     } finally {
       setLinkIsLoading(false);

@@ -357,11 +357,11 @@ const AccountContactSection = () => {
                       <span className="d-flex justify-content-center">
                         {!newContactAdding ? (
                           <Link to="#" className="text-link" style={{ marginTop: '20px',  textAlign: 'center',
-                            pointerEvents: newContacts?.[section]?.consent_checked ? 'auto' : 'none', // Disables pointer events if consent_checked is false
-                            opacity: newContacts?.[section]?.consent_checked ? 1 : 0.5, // Change opacity to appear not clickable if consent_checked is false
+                            pointerEvents: !(section === 'sms' && !newContacts?.[section]?.consent_checked) ? 'auto' : 'none', // Disables pointer events if consent_checked is false
+                            opacity: !(section === 'sms' && !newContacts?.[section]?.consent_checked) ? 1 : 0.5, // Change opacity to appear not clickable if consent_checked is false
                           }} 
                           onClick={() => {
-                            if (newContacts?.[section]?.consent_checked) { // consent must be checked to allow submit
+                            if ( !(section === 'sms' && !newContacts?.[section]?.consent_checked) ) { // consent must be checked to allow submit
                               addContact(newContacts?.[section]?.name, section, newContacts?.[section]?.address);
                             }
                           }}
