@@ -15,22 +15,11 @@ const MeetBanner = (props) => {
   const { chatbot_key } = urlData ? urlData : {};
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  //const chatBoxUrl = ParamsGet();
-  //const getName = nameKey();
-  //const testPropetyName = getName?.nameKey;
-  //const copyChatBotName = urlData?.property_name;
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
-  const getMessageResp =
-    store?.getSessionIdReducer?.sessionId?.data?.initial_message;
+  const getMessageResp = store?.getSessionIdReducer?.sessionId?.data?.initial_message;
   const getMessageRespId = store?.getSessionIdReducer?.sessionId?.data?.session_id;
   const getPropertyName = store?.getSessionIdReducer?.sessionId?.data?.property_name;
-  let FirstMessageRespo = {
-    response: getMessageResp,
-    message_id: getMessageRespId,
-  };
-  // const getMessageResp =
-  //   store?.getSessionIdReducer?.sessionId?.data?.initial_message;
-  // const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data?.response;
+  let FirstMessageRespo = { response: getMessageResp, message_id: getMessageRespId };
   const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data;
 
   const statusResp = store?.chatBoxAIReducer?.chatBoxAI?.status;
@@ -121,7 +110,6 @@ const MeetBanner = (props) => {
 
   // feed back functionality
   const [feedBackModelOpen, setFeedBackModelOpen] = useState(false);
-  // const [feedBackIconActive, setFeedBackIconActive] = useState("");
   const [feedBackDataGet, setFeedBackDataGet] = useState({
     typeThumbs: "",
     conversationId: "",
@@ -129,15 +117,7 @@ const MeetBanner = (props) => {
     propertyName: "",
   });
   const feedBckModelOpenHndle = (type, messId) => {
-    // setFeedBackIconActive(messId);
-    setFeedBackDataGet({
-      ...feedBackDataGet,
-      typeThumbs: type,
-      conversationId: sessionId?.session_id,
-      messageId: messId,
-      propertyName: getPropertyName,
-    });
-
+    setFeedBackDataGet({ ...feedBackDataGet, typeThumbs: type, conversationId: sessionId?.session_id, messageId: messId, propertyName: getPropertyName });
     setFeedBackModelOpen(true);
   };
   const messgFeedBckClose = () => {
