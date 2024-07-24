@@ -19,19 +19,13 @@ function Message({ key, text, sender, feedBckModelOpen, feedBackDataGet }) {
         {sender === "bot" && (
           <div className=" py-3">
             <span>
-              {typeThumbs === "up"?<>{messageId === message_id?<>
-                <i
-                className="bi bi-hand-thumbs-up text-danger mainCursor"
-                onClick={() => feedBckModelOpen("up", message_id)}
-              ></i>
-              
-              </>:<i
-                className="bi bi-hand-thumbs-up text-white mainCursor"
-                onClick={() => feedBckModelOpen("up", message_id)}
-              ></i>}</>:<i
-                className="bi bi-hand-thumbs-up text-white mainCursor"
-                onClick={() => feedBckModelOpen("up", message_id)}
-              ></i>}
+              {typeThumbs === "up"?
+                <>{messageId === message_id?
+                  <i className="bi bi-hand-thumbs-up text-success mainCursor" onClick={() => feedBckModelOpen("up", message_id)}></i>
+                  :
+                  <i className="bi bi-hand-thumbs-up text-white mainCursor" onClick={() => feedBckModelOpen("up", message_id)}></i>}
+                </>
+              : <i className="bi bi-hand-thumbs-up text-white mainCursor" onClick={() => feedBckModelOpen("up", message_id)}></i>}
             </span>
             <span>
             {typeThumbs === "down"?<>{messageId === message_id?<>
