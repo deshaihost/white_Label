@@ -148,8 +148,8 @@ const NavBar = () => {
                   <NavLink exact to="/property-insight" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Transcripts
                   </NavLink>
-                  <NavLink exact to="/account" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
-                    Account
+                  <NavLink exact to="/setting" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                    Setting
                   </NavLink>
                   <NavLink exact to="/setup-guide" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Setup Guide
