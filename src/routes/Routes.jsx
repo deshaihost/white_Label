@@ -106,7 +106,7 @@ const Routing = () => {
     // Add the rb2b script only if not already present, and only for the front pages (excluding login/register/forgotpass/changepass)
     const pathnames_to_profile = ["/", "/pricing", "/meet-hostbuddy", "/faqs", "/privacy-policy", "/termsof-service", "/scheduling-walkthrough", "/tips-and-tricks", "/testing-questions"];
     if (pathnames_to_profile.includes(location.pathname)) {
-      if (!existingScript) {
+      if (!existingScript && false) { // script adding DISABLED
         addScript();
       }
     } else { // When the user navigates away from the front pages, remove the rb2b script (and the other script that it loads). Don't mess with the google ads script, let it do its thing
