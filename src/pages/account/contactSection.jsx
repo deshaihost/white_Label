@@ -245,29 +245,29 @@ const AccountContactSection = () => {
 
   return (
     <div className="account-content location-section">
-      <h3>Contact Information</h3>
+      <h5 className="mb-2">Contact</h5>
 
       <form action="">
 
         {Object.keys(contact_sections).map((section, index) => (
           <>
-            <hr className="in-section-divider" />
-            <h4>{contact_sections[section].title}</h4>
+            {/* <hr className="in-section-divider" /> */}
+            <h4 className="fs-14 mb-2">{contact_sections[section].title}</h4>
 
             {/* Existing contact information */}
             <table className="table">
               <tbody>
                 {contacts.map((contact, index) => (
                   contact.type === section && (
-                    <tr key={index}>
-                      <td><h6>{contact.name}</h6> </td>
-                      <td><h6>{contact.address}</h6> </td>
-                      <td><h6>{contact.confirmed ? <h6 className="grey-text">Confirmed</h6> : <h6 className="warning-text">Not Confirmed</h6> }</h6> </td>
+                    <tr  key={index}>
+                      <td><h6 className="fs-14 text-white m-0">{contact.name}</h6> </td>
+                      <td><h6 className="fs-14 text-white m-0">{contact.address}</h6> </td>
+                      <td><h6 className="fs-14 m-0">{contact.confirmed ? <h6 className="grey-text fs-14 m-0">Confirmed</h6> : <h6 className="warning-text fs-14 m-0">Not Confirmed</h6> }</h6> </td>
                       <td>
                         {!contact.confirmed &&
                           (codeSentFor !== contact.address ? (
-                            <span className="d-flex justify-content-center">
-                              <Link to="#" style={{fontSize:"1rem", lineHeight:'1.2', margin:'0'}} className="text-link" onClick={() => sendConfirmationCode(index)}>Get Confirmation Code</Link>
+                            <span className="d-flex justify-content-center mb-0">
+                              <Link to="#" style={{fontSize:"1rem", lineHeight:'1.2', margin:'0'}} className="text-link fs-14" onClick={() => sendConfirmationCode(index)}>Get Confirmation Code</Link>
                             </span>
                           ) : (
                             <>
@@ -381,7 +381,9 @@ const AccountContactSection = () => {
 
             {/* Add new contact information button for this section. Only allow one new contact to be added at a time for the section. Also don't show for Slack if a Slack account is already connected */}
             {Object.keys(newContacts[section] || {}).length === 0 && !(section==='slack' && contacts.some(contact => contact.type === 'slack')) &&
-              <span className="d-flex justify-content-center" style={{ marginTop:'30px', marginBottom:'70px' }}>
+              <span className="d-flex justify-content-center" style={{ marginTop:'30px', 
+              // marginBottom:'70px'
+               }}>
                 <Link to="#" className="text-link" onClick={() => showAddFields(section)}>+ Add {contact_sections[section].singular}</Link>
               </span>
             }

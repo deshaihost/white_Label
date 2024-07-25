@@ -12,6 +12,7 @@ import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import AccountRegionSection from "./regionSection";
 import AccountNotificationSection from "./notificationSection";
+import Location from "./Location";
 
 
 const UserInformationSection = () => {
@@ -113,7 +114,7 @@ const UserInformationSection = () => {
   return (
     <div className="account-content">
 
-      <h3>User Information</h3>
+      <h5 className="mb-3">Account</h5>
 
       {billingPortalUrlLoading && (
         <div className="text-end">
@@ -268,13 +269,13 @@ const UserInformationSection = () => {
           </>
         )}
         <div className="row">
-          <div className="col text-center">
+          <div className="col-lg-10 col-12 text-center d-lg-flex align-items-center justify-content-center gap-3">
             {changePassBtnShow && (
               <button type="submit" className="bg_theme_btn show_password_fields" onClick={(e) => { passwordFieldsShowHndle(e); }}>
                 Change Password
               </button>
             )}
-            <button type="submit" className="bg_theme_btn update_user_info" onClick={() => handleSubmit(data => onSubmit(data))}>
+            <button type="submit" className="bg_theme_btn update_user_info ms-0 ms-lg-3" onClick={() => handleSubmit(data => onSubmit(data))}>
               {!updateUserDataLoading ? <>Save</> : <Loader />}
             </button>
           </div>
@@ -283,6 +284,7 @@ const UserInformationSection = () => {
       <span className="d-flex justify-content-center" style={{ marginTop: '10px' }}>
         <Link to="#" className="text-link" onClick={subscriptionClickHandler}>Subscription</Link>
       </span>
+      <Location/>
     </div>
   );
 };

@@ -78,10 +78,10 @@ const SideBar = () => {
         </li>
         <li>
           <Link
-            to="/account"
-            className={findlocation === "/account" ? "active" : ""}
+            to="/setting"
+            className={findlocation === "/setting" ? "active" : ""}
           >
-            Account
+            Setting
           </Link>
         </li>
         <li>

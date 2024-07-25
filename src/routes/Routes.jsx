@@ -34,6 +34,8 @@ import ResetPass from "../auth/resetPass/resetPass";
 import AddPropertyForm from "../pages/properties/addProperties/dynamic_questionnaire/BasicInformationForm/AddPropertyForm";
 import BlogLandingPage from "../blog/blogLanding";
 import BlogArticle from "../blog/blogArticle";
+//----
+import SettingIndex from "../pages/settings/SettingIndex";
 
 const Routing = () => {
   const location = useLocation();
@@ -167,9 +169,10 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/account/:section?" element={
+        <Route path="/setting/:section?" element={
           <ProtectedRoute>
-            <Account />
+            {/* <Account /> */}
+            <SettingIndex/>
           </ProtectedRoute>
         }/>
         <Route path="/add-property" element={
