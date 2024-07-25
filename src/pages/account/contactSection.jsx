@@ -255,6 +255,7 @@ const AccountContactSection = () => {
             <h4 className="fs-14 mb-2">{contact_sections[section].title}</h4>
 
             {/* Existing contact information */}
+            <div className="table-responsive">
             <table className="table">
               <tbody>
                 {contacts.map((contact, index) => (
@@ -304,6 +305,7 @@ const AccountContactSection = () => {
                 ))}
               </tbody>
             </table>
+            </div>
 
             {/* Add new contact information, within a given section */}
             {Object.keys(newContacts[section] || {}).length > 0 && (

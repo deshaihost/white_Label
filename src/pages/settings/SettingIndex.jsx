@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import './SettingIndex.css'
+import "./SettingIndex.css";
 import SettingSideBarIndex from "./settingSideBar/SettingSideBarIndex";
 import AdvancedSettingsIndex from "./settingContants/advancedSettings/AdvancedSettingsIndex";
 import SubscriptionIndex from "./settingContants/subscription/SubscriptionIndex";
@@ -42,23 +42,26 @@ const SettingIndex = () => {
                   />
                 }
               </div>
-              <div className="setting_tab_data">
-                <div className="border border-primary p-3 " style={{borderRadius:'20px'}}>
-                {interFaceTypes?.account === interFaceSettings && (
-                  <UserInformationSection />
-                )}
-                {interFaceTypes?.contact === interFaceSettings && (
-                  <AccountContactSection />
-                )}
-                {interFaceTypes?.notification === interFaceSettings && (
-                  <AccountNotificationSection />
-                )}
-                {interFaceTypes?.advancedSettings === interFaceSettings && (
-                  <AdvancedSettingsIndex />
-                )}
-                {interFaceTypes?.subscription === interFaceSettings && (
-                  <SubscriptionIndex />
-                )}
+              <div
+                className="setting_tab_data border border-primary p-3 "
+                style={{ borderRadius: "20px" }}
+              >
+                <div className=" setting_tab_data_inner">
+                  {interFaceTypes?.account === interFaceSettings && (
+                    <UserInformationSection />
+                  )}
+                  {interFaceTypes?.contact === interFaceSettings && (
+                    <AccountContactSection />
+                  )}
+                  {interFaceTypes?.notification === interFaceSettings && (
+                    <AccountNotificationSection />
+                  )}
+                  {interFaceTypes?.advancedSettings === interFaceSettings && (
+                    <AdvancedSettingsIndex />
+                  )}
+                  {interFaceTypes?.subscription === interFaceSettings && (
+                    <SubscriptionIndex />
+                  )}
                 </div>
               </div>
             </div>
