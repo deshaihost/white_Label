@@ -7,31 +7,16 @@
 .account-main form > div:not(:last-child) {
     margin-bottom: 15px;
 }
-.account-container {
-    height: 100%;
-    border-radius: 30px;
-    border: 1px solid #2C389E;
-    background: #000212;
-}
-
-.account-container hr {
-    margin-bottom: 0;
-}
-
-.account-container > div:not(:last-child) {
-    border-bottom: 1px solid #2C389E;
-    padding: 22px 40px;
-}
 
 
 
-.account-container .account-navbar .col {
+ .account-navbar .col {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.account-container .account-navbar .nav-option {
+ .account-navbar .nav-option {
     background: none;
     border: none;
     color: white;
@@ -41,11 +26,11 @@
     cursor: pointer;
 }
 
-.account-container .account-navbar .nav-option:hover {
+ .account-navbar .nav-option:hover {
     color: #ccc;
 }
 
-.account-container .account-navbar .nav-option.selected {
+ .account-navbar .nav-option.selected {
     box-shadow: 0px -0px 10px 3px rgba(0, 0, 255, 1);
 }
 
@@ -54,56 +39,57 @@
 
 
 
-.account-container .account-content {
+ .account-content {
     padding: 30px 40px;
 }
 
-.account-container .account-content h3 {
+ .account-content h3 {
     color: white;
     text-align: center;
-    margin: 30px 0;
+    margin: 10px 0;
 }
 
-.account-container .account-content h4 {
+ .account-content h4 {
     color: white;
     margin-top: 20px;
     margin-bottom: 38px;
+    font-size: 20px;
 }
 
-.account-container .account-content h5 {
+ .account-content h5 {
     color: white;
     text-align: center;
     margin-top: 20px;
 }
 
-.account-container .account-content h6 {
+ .account-content h6 {
     color: white;
 }
 
-.account-container .account-content .disabled-input {
+ .account-content .disabled-input {
     color: grey;
   }
 
-.account-container .account-content .warning-text {
+ .account-content .warning-text {
     color: rgb(255, 165, 0);
 }
 
-.account-container .account-content .grey-text {
+ .account-content .grey-text {
     color: #AAA;
 }
 
-.account-container .account-content .clickable-text {
+ .account-content .clickable-text {
     color: rgb(0, 121, 247);
     cursor: pointer;
 }
 
-.account-container .account-content p {
+ .account-content p {
     color: white;
     margin-bottom: 30px;
     font-size: 16px;
 }
 
-.account-container .account-content .confirmation_code_input input {
+ .account-content .confirmation_code_input input {
     border: 1px solid white;
     color: white;
     width: 100px;
@@ -111,7 +97,7 @@
     margin-right: 10px;
 }
 
-.account-container .account-content .recipient {
+ .account-content .recipient {
     border: 1px solid #2C389E;
     padding: 20px;
     border-radius: 15px;
@@ -119,18 +105,18 @@
     box-shadow: 2px -2px 15px 1px rgba(255, 255, 255, 0.25);
 }
 
-.account-container .account-content .in-section-divider {
+ .account-content .in-section-divider {
     border-color: white;
     border-style: solid;
     border-width: 2px;
 }
 
-.account-container .account-content link {
+ .account-content link {
     margin-top:'10px';
     text-align:'center';
 }
 
-.account-container .account-content form label {
+ .account-content form label {
     color: #FFF;
     font-family: 'Samsung Sharp Sans Medium';
     font-size: 15px;
@@ -139,17 +125,17 @@
     line-height: 150%;
 }
 
-.account-container .account-content form label:not(.form-floating label) {
+ .account-content form label:not(.form-floating label) {
     margin-bottom: 5px;
 }
 
-.account-container .account-content form input {
+ .account-content form input {
     border-radius: 80px;
     border: 1px solid rgba(255, 255, 255, 0.20);
     background: #000212;
 }
 
-.account-container .checkbox-container {
+ .checkbox-container {
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
@@ -159,7 +145,7 @@
     width: 80%;
 }
 
-.account-container .account-content .checkbox-container .form-check-input {
+ .account-content .checkbox-container .form-check-input {
     width: 20px;
     height: 20px;
     border: 3px solid white;
@@ -167,12 +153,12 @@
     border-radius: 50%;
 }
 
-.account-container .account-content .checkbox-container label {
+ .account-content .checkbox-container label {
     margin-top: 2px; /* Align the text label with the checkbox */
     font-size: 16px;
 }
 
-.account-container .account-content .slack-container {
+ .account-content .slack-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -204,15 +190,7 @@
 
 
 @media only screen and (max-width: 1199px) {
-    .account-container {
-        border-radius: 10px;
-    }
-
-    .account-container > div:not(:last-child) {
-        padding: 18px 20px;
-    }
-
-    .account-container .account-content {
+     .account-content {
         padding: 25px 20px;
     }
 
@@ -222,14 +200,7 @@
 }
 
 @media only screen and (max-width: 991px) {
-    .account-container .account-content .get-started {
+     .account-content .get-started {
         margin-top: 20px;
-    }
-}
-
-@media only screen and (max-width: 767px) {
-    .account-container > div:not(:last-child),
-    .account-container .account-content {
-        padding: 15px;
     }
 }
