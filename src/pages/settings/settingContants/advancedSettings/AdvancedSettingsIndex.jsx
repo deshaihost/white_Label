@@ -162,7 +162,7 @@ const AdvancedSettingsIndex = () => {
           <Form.Check type="radio" aria-label="radio 1" name="group1" label="Defer to host" value="defer to host" checked={currentSettingsData.defer_behavior === 'defer to host'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
         </div>
         <div className="col-lg-8">
-          <p className="fs-12 text-muted">Ex. "...the host will get back to you..."</p>
+          <p className="fs-12 text-muted">Ex. "...the host will assist once they're back online..."</p>
         </div>
       </div>
       <div className="row mt-1">
@@ -170,7 +170,7 @@ const AdvancedSettingsIndex = () => {
         <Form.Check type="radio" aria-label="radio 2" name="group1" label="Defer to team" value="defer to team" checked={currentSettingsData.defer_behavior === 'defer to team'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
         </div>
         <div className="col-lg-8">
-          <p className="fs-12 text-muted">Ex. "...I'll check with the team and we'll get back to you..."</p>
+          <p className="fs-12 text-muted">Ex. "...I'll have to check with the team..."</p>
         </div>
       </div>
       <div className="row mt-1">
