@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import SideBar from "../../component/sideBar/SideBar";
 import "./account.css";
 import { useForm } from "react-hook-form";
 import { ErrorMessageKey } from "../../helper/ErrorMessageKey";
@@ -16,9 +15,6 @@ import Loader, { FullScreenLoader } from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import AccountRegionSection from "./regionSection";
-import AccountNotificationSection from "./notificationSection";
-import Location from "./Location";
 
 const UserInformationSection = () => {
   const store = useSelector((state) => state);
@@ -150,7 +146,7 @@ const UserInformationSection = () => {
 
   return (
     <div className="account-content">
-      <h5 className="mb-3">Account</h5>
+      <h3 className="mb-3">Account</h3>
 
       {billingPortalUrlLoading && (
         <div className="text-end">
@@ -167,24 +163,14 @@ const UserInformationSection = () => {
         <div className="row">
           <div className="col-lg-6 input_group mb-3 mb-lg-0">
             <label htmlFor="">First Name</label>
-            <input
-              type="text"
-              name="firstname"
-              className="form-control"
-              {...register("firstName")}
-            />
+            <input type="text" name="firstname" className="form-control" {...register("firstName")}/>
             {errors.firstName?.type === "required" && (
               <>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_NAME)}</>
             )}
           </div>
           <div className="col-lg-6 input_group">
             <label htmlFor="">Last Name</label>
-            <input
-              type="text"
-              name="lastname"
-              className="form-control"
-              {...register("lastName")}
-            />
+            <input type="text" name="lastname" className="form-control" {...register("lastName")}/>
             {errors.lastName?.type === "required" && (
               <>
                 {ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_LAST_NAME)}
@@ -195,37 +181,21 @@ const UserInformationSection = () => {
         <div className="row">
           <div className="col-lg-6 input_group  mb-3 mb-lg-0">
             <label htmlFor="">Phone Number</label>
-            <input
-              type="tel"
-              name="phonenumber"
-              className="form-control"
-              maxLength="10"
-              {...register("phone", { pattern: /^[0-9]{10}$/ })}
-            />
+            <input type="tel" name="phonenumber" className="form-control" maxLength="10" {...register("phone", { pattern: /^[0-9]{10}$/ })}/>
             {errors.phone?.type === "required" && (
               <>
-                {ErrorMessageShow(
-                  ErrorMessageKey.PLEASE_ENTER_YOUR_PHONE_NUMBER
-                )}
+                {ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_PHONE_NUMBER)}
               </>
             )}
             {errors.phone?.type === "pattern" && (
               <>
-                {ErrorMessageShow(
-                  ErrorMessageKey.PLEASE_ENTER_A_VALID_PHONE_NUMBER
-                )}
+                {ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_A_VALID_PHONE_NUMBER)}
               </>
             )}
           </div>
           <div className="col-lg-6 input_group">
             <label htmlFor="">Email</label>
-            <input
-              type="email"
-              name="email"
-              className="form-control"
-              disabled
-              {...register("email")}
-            />
+            <input type="email" name="email" className="form-control" disabled {...register("email")}/>
           </div>
         </div>
         {passwordFieldsShow && (
@@ -328,37 +298,30 @@ const UserInformationSection = () => {
           </>
         )}
         <div className="row">
-          <div className="col-lg-10 col-12 text-center d-lg-flex align-items-center justify-content-center gap-3">
+          <div className="col-12 text-center d-lg-flex align-items-center justify-content-center gap-3 mt-3">
             {changePassBtnShow && (
-              <button
-                type="submit"
-                className="bg_theme_btn show_password_fields"
-                onClick={(e) => {
-                  passwordFieldsShowHndle(e);
-                }}
-              >
-                Change Password
-              </button>
+              <div style={{ width: "320px" }} className="d-flex justify-content-end">
+                <button type="submit" className="bg_theme_btn show_password_fields" onClick={(e) => {passwordFieldsShowHndle(e);}}>
+                  Change Password
+                </button>
+              </div>
             )}
-            <button
-              type="submit"
-              className="bg_theme_btn update_user_info ms-0 ms-lg-3"
-              onClick={() => handleSubmit((data) => onSubmit(data))}
-            >
-              {!updateUserDataLoading ? <>Save</> : <Loader />}
-            </button>
+            <div style={{ width: "320px" }} className="d-flex justify-content-start">
+              <button type="submit" className="bg_theme_btn update_user_info ms-0 ms-lg-3" onClick={() => handleSubmit((data) => onSubmit(data))}>
+                {!updateUserDataLoading ? <>Save</> : <Loader />}
+              </button>
+            </div>
           </div>
         </div>
       </form>
-      <span
-        className="d-flex justify-content-center"
-        style={{ marginTop: "10px" }}
-      >
+
+      {/*
+      <span className="d-flex justify-content-center" style={{ marginTop: "10px" }}>
         <Link to="#" className="text-link" onClick={subscriptionClickHandler}>
           Subscription
         </Link>
       </span>
-      <Location />
+      */}
     </div>
   );
 };

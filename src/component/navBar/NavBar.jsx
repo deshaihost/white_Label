@@ -149,7 +149,7 @@ const NavBar = () => {
                     Transcripts
                   </NavLink>
                   <NavLink exact to="/setting" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
-                    Setting
+                    Settings
                   </NavLink>
                   <NavLink exact to="/setup-guide" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Setup Guide

@@ -274,7 +274,7 @@ const AccountNotificationSection = () => {
 
   return (
     <div className="account-content location-section">
-      <h5 className="mb-2">Notification Settings</h5>
+      <h3 className="mb-4">Notification Settings</h3>
       <p style={{ marginLeft: "10px" }} className="fs-14">
         If your contact information is not showing up here, add it in the
         "Contact" section and make sure it is confirmed.
@@ -489,12 +489,10 @@ const AccountNotificationSection = () => {
           >
             <Link
               to="#"
-              className="text-link fs-14"
+              className="text-link"
               onClick={showNewRecipientFields}
             >
-              {recipients.length === 0
-                ? "+ Add A Notifications Recipient"
-                : "+ Add Another Recipient"}
+              {recipients.length === 0 ? "+ Add A Notifications Recipient" : "+ Add Another Recipient"}
             </Link>
           </span>
         )}

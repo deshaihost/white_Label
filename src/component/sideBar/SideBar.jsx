@@ -81,7 +81,7 @@ const SideBar = () => {
             to="/setting"
             className={findlocation === "/setting" ? "active" : ""}
           >
-            Setting
+            Settings
           </Link>
         </li>
         <li>
