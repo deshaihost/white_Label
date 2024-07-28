@@ -115,9 +115,11 @@ const MeetBanner = (props) => {
     conversationId: "",
     messageId: "",
     propertyName: "",
+    botMsg: "",
+    precedingGuestMsg: ""
   });
-  const feedBckModelOpenHndle = (type, messId) => {
-    setFeedBackDataGet({ ...feedBackDataGet, typeThumbs: type, conversationId: sessionId?.session_id, messageId: messId, propertyName: getPropertyName });
+  const feedBckModelOpenHndle = (type, messId, botMsg, precedingGuestMsg) => {
+    setFeedBackDataGet({ ...feedBackDataGet, typeThumbs:type, conversationId:sessionId?.session_id, messageId:messId, propertyName:getPropertyName, botMsg:botMsg, precedingGuestMsg:precedingGuestMsg });
     setFeedBackModelOpen(true);
   };
   const messgFeedBckClose = () => {
@@ -143,9 +145,7 @@ const MeetBanner = (props) => {
               <div className="message-list" ref={messageListRef}>
                 {messages?.map((message, index) => {
                   return (
-                    <>
-                      <Message key={index} text={message.text} sender={message.sender} feedBckModelOpen={feedBckModelOpenHndle} feedBackDataGet={feedBackDataGet}/>
-                    </>
+                    <Message key={index} text={message.text} sender={message.sender} feedBckModelOpen={feedBckModelOpenHndle} feedBackDataGet={feedBackDataGet} prevMsgText={messages[index - 1]?.text} />
                   );
                 })}
                 {updateMessageRespLoading && <Loader />}

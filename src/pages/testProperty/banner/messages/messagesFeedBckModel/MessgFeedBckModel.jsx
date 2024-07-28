@@ -6,14 +6,14 @@ import ToastHandle from "../../../../../helper/ToastMessage";
 import { Link } from "react-router-dom";
 const MessgFeedBckModel = ({ show, handleClose, feedBackDataGet }) => {
   const dispatch = useDispatch();
-  const { typeThumbs, messageId, conversationId, propertyName } = feedBackDataGet ? feedBackDataGet : [];
+  const { typeThumbs, messageId, conversationId, propertyName, botMsg, precedingGuestMsg } = feedBackDataGet ? feedBackDataGet : [];
 
   const [feedBackInput, setFeedBackInput] = useState("");
   const [feedBackThanks, setFeedBackThanks] = useState(false);
   const feedBackMainHndl = () => {
     if (feedBackInput !== "") {
-      let FeedBackData = { conversation_id: conversationId, message_id: messageId, thumbs: typeThumbs, text: feedBackInput };
-      dispatch( messageFeedBackActions({ propertyNm: propertyName, FeedBackData }) );
+      let FeedBackData = { conversation_id:conversationId, message_id:messageId, thumbs:typeThumbs, text:feedBackInput, bot_message:botMsg, guest_message:precedingGuestMsg };
+      dispatch( messageFeedBackActions({ propertyNm:propertyName, FeedBackData }) );
       setFeedBackThanks(true);
     } else {
       ToastHandle("Enter your FeedBack", "danger");
