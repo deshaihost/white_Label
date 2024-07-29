@@ -10,6 +10,9 @@ import Loader from "../../../helper/Loader";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
+import JustificationModal from "./messages/justificationModal/justificationModal";
+
+
 const MeetBanner = (props) => {
   const { urlData } = props;
   const { chatbot_key } = urlData ? urlData : {};
@@ -26,6 +29,8 @@ const MeetBanner = (props) => {
   const updateMessageRespLoading = store?.chatBoxAIReducer?.loading;
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [showJustificationModal, setShowJustificationModal] = useState(false);
+  const [justificationText, setJustificationText] = useState("");
   const messagesEndRef = useRef(null);
 
   // const messagesContainerRef = useRef(null);
@@ -118,13 +123,22 @@ const MeetBanner = (props) => {
     botMsg: "",
     precedingGuestMsg: ""
   });
+
   const feedBckModelOpenHndle = (type, messId, botMsg, precedingGuestMsg) => {
     setFeedBackDataGet({ ...feedBackDataGet, typeThumbs:type, conversationId:sessionId?.session_id, messageId:messId, propertyName:getPropertyName, botMsg:botMsg, precedingGuestMsg:precedingGuestMsg });
     setFeedBackModelOpen(true);
   };
+
   const messgFeedBckClose = () => {
     setFeedBackModelOpen(false);
   };
+
+  const handleJustificationClick = (e, justificationText) => {
+    e.preventDefault();
+    setShowJustificationModal(true);
+    setJustificationText(justificationText);
+  };
+
 
   return (
     <div className="meet-banner">
@@ -145,7 +159,7 @@ const MeetBanner = (props) => {
               <div className="message-list" ref={messageListRef}>
                 {messages?.map((message, index) => {
                   return (
-                    <Message key={index} text={message.text} sender={message.sender} feedBckModelOpen={feedBckModelOpenHndle} feedBackDataGet={feedBackDataGet} prevMsgText={messages[index - 1]?.text} />
+                    <Message key={index} text={message.text} sender={message.sender} feedBckModelOpen={feedBckModelOpenHndle} handleJustificationClick={handleJustificationClick} feedBackDataGet={feedBackDataGet} prevMsgText={messages[index - 1]?.text} isInitialMessage={index <= 1} />
                   );
                 })}
                 {updateMessageRespLoading && <Loader />}
@@ -168,6 +182,7 @@ const MeetBanner = (props) => {
           </div>
         </div>
         <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
+        <JustificationModal show={showJustificationModal} handleClose={() => setShowJustificationModal(false)} propertyName={getPropertyName} justification={justificationText}/>
       </Container>
     </div>
   );
