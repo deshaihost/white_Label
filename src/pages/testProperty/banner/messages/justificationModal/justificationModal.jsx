@@ -14,14 +14,14 @@ const JustificationModal = ({ show, handleClose, propertyName, justification }) 
   return (
     <Modal show={show} size="lg" onHide={() => closeFeedBackModel()} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <h5 className="modal-title">Where did this response come from?</h5>
+        <h5 className="modal-title">Hey HostBuddy, where did this response come from?</h5>
       </Modal.Header>
       <Modal.Body>
         <div className="justification-modal">
           <div className="justification-block">
             <div className="justification-block" style={{ display:'flex', alignItems:'center' }}>
               <img src={logo} alt="Logo" style={{ marginRight:'30px', height:'50px' }} />
-              <p className="text-white" style={{ marginTop:'30px', marginBottom:'30px', fontSize:'18px', textAlign:'left' }}>"{justification}"</p>
+              <p className="text-white" style={{ marginTop:'30px', marginBottom:'30px', fontSize:'18px', textAlign:'left' }}>{justification}</p>
             </div>
           </div>
           <hr/>
