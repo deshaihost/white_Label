@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Banner from './banner/Banner';
+import Introduction from './introduction/introduction';
 import Features from './features/Features';
 import Works from './works/Works';
 import Plans from './plans/Plans';
@@ -40,6 +41,7 @@ const Home = () => {
         <link rel="canonical" href="https://www.hostbuddy.ai/" />
       </Helmet>
       <Banner />
+      <Introduction />
       <div ref={worksRef}><Works /></div>
       <TryItOutCTA />
       <Features />
