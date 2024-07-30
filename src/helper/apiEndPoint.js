@@ -13,6 +13,7 @@ export const GET_AVAIL_INTEGRATIONS = "/get_avail_integrations";
 export const REMOVE_INTEGRATION = "/remove_integration";
 export const POST_PROPERTIES = "/properties";
 export const GET_QUESTIONNAIRE = "/properties";
+export const PULL_CONVERSATION_DATA = "/properties";
 export const UPDATE_QUESTIONNAIRE = "/properties";
 export const GO_TO_BILLING_PORTAL = "/go_to_billing_portal";
 export const LIST_INTEGRATION_PROPERTIES = "/list_integration_properties";

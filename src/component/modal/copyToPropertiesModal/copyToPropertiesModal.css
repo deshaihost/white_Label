@@ -1,0 +1,18 @@
+.copy-to-properties-modal hr {
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #e5e5e5;
+}
+
+.copy-to-properties-modal p {
+  color: white;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.copy-to-properties-modal button {
+  border-radius: 25px;
+  margin: 0 auto;
+  display: block;
+  padding: 10px 25px;
+}

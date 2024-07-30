@@ -78,8 +78,8 @@ const AccountRegionSection = () => {
 
   return (
     <div className="account-content location-section">
-      <h3>Location / Region Settings</h3>
-      <p style={{marginLeft:"10px"}}>This information is used to determine your time zone and other regional configuration. You must add sufficient information to determine your time zone before enabling certain features, such as daily notifications.</p>
+      <h5>Location / Region Settings</h5>
+      <p style={{marginLeft:"10px", textAlign:"center", fontSize:"15px"}}>This information is used to determine your time zone and other regional configuration. You must add sufficient information to determine your time zone before enabling certain features, such as daily notifications.</p>
 
       <form action="">
         <div className="row">

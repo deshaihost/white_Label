@@ -42,8 +42,15 @@ a {
 .fs-14 {
   font-size: 14px;
 }
+.fs-12 {
+  font-size: 12px;
+}
+.bg-black {
+  background: #000;
+}
 
-.heading h1, .heading h2 {
+.heading h1,
+.heading h2 {
   color: #fff;
   font-family: "Samsung Sharp Sans Bold";
   font-size: 45px;
@@ -57,7 +64,8 @@ a {
   text-align: center;
 }
 
-.heading h1 strong, .heading h2 strong {
+.heading h1 strong,
+.heading h2 strong {
   font-weight: 700;
   color: #146ef5;
 }
@@ -160,7 +168,8 @@ input[type="checkbox"] {
   text-align: center;
 }
 
-.banner-heading h1, .banner-heading h2 {
+.banner-heading h1,
+.banner-heading h2 {
   color: #fff;
   text-align: center;
   font-family: "Samsung Sharp Sans Bold";
@@ -400,7 +409,7 @@ textarea.form-control {
 }
 
 .css-13cymwt-control,
-.css-t3ipsp-control{
+.css-t3ipsp-control {
   border-radius: 80px !important;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: #0a1a44 !important;
@@ -506,8 +515,9 @@ textarea.form-control {
   max-width: 320px;
   transition: all 0.5s ease-in-out;
 }
+
 .form-design button:hover {
-  background: none;
+  background: rgba(20, 110, 245, 0.4); /* 50% transparent background */
   color: #146ef5;
 }
 
@@ -618,10 +628,10 @@ textarea.form-control {
 .vertical-space-20px {
   margin-top: 20px;
 }
-.mainCursor{
+.mainCursor {
   cursor: pointer;
 }
-.display-none{
+.display-none {
   display: none;
 }
 
@@ -631,14 +641,16 @@ textarea.form-control {
     font-size: 15px;
   }
 
-  .banner-heading h1, .banner-heading h2 {
+  .banner-heading h1,
+  .banner-heading h2 {
     font-size: 36px;
     line-height: 42px;
   }
 }
 
 @media only screen and (max-width: 991px) {
-  .heading h1, .heading h2 {
+  .heading h1,
+  .heading h2 {
     font-size: 36px;
     line-height: 45px;
   }
@@ -647,7 +659,8 @@ textarea.form-control {
     margin-bottom: 25px;
   }
 
-  .banner-heading h1, .banner-heading h2 {
+  .banner-heading h1,
+  .banner-heading h2 {
     font-size: 34px;
     line-height: 42px;
     margin-bottom: 10px;
@@ -655,7 +668,8 @@ textarea.form-control {
 }
 
 @media only screen and (max-width: 767px) {
-  .heading h1, .heading h2 {
+  .heading h1,
+  .heading h2 {
     font-size: 34px;
     line-height: 42px;
   }
@@ -668,7 +682,8 @@ textarea.form-control {
     padding: 10px 30px;
   }
 
-  .banner-heading h1, .banner-heading h2 {
+  .banner-heading h1,
+  .banner-heading h2 {
     font-size: 34px;
     line-height: 42px;
   }
@@ -683,7 +698,8 @@ textarea.form-control {
 }
 
 @media only screen and (max-width: 575px) {
-  .heading h1, .heading h2 {
+  .heading h1,
+  .heading h2 {
     font-size: 34px;
     line-height: 42px;
   }

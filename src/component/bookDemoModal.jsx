@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ErrorMessageShow from "../helper/ErrorMessageShow";
 import { ErrorMessageKey } from "../helper/ErrorMessageKey";
 import axios from "axios";
@@ -11,15 +11,20 @@ import axios from "axios";
 const BookDemoModal = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showBackupLink, setShowBackupLink] = useState(false);
+  const [randomlySelectedDemoPerson, setRandomlySelectedDemoPerson] = useState({});
 
-  const all_demo_URLs = {'Sam':'https://calendly.com/jay-u6bh/30min', 'Jay':'https://calendly.com/sam-hostbuddy/30min'};
-  const randomly_selected_demo_person = Object.keys(all_demo_URLs)[Math.floor(Math.random() * Object.keys(all_demo_URLs).length)];
-  const randomly_selected_demo_URL = all_demo_URLs[randomly_selected_demo_person];
+  // Once, on page load, randomly select the demo person
+  useEffect(() => {
+    const all_demo_URLs = {'Sam':'https://calendly.com/sam-hostbuddy/30min', 'Jay':'https://calendly.com/jay-u6bh/30min'};
+    const randomly_selected_demo_person = Object.keys(all_demo_URLs)[Math.floor(Math.random() * Object.keys(all_demo_URLs).length)];
+    const randomly_selected_demo_URL = all_demo_URLs[randomly_selected_demo_person];
+    setRandomlySelectedDemoPerson({person: randomly_selected_demo_person, url: randomly_selected_demo_URL});
+  }, []);
 
   const callSubmitApi = async (dataToSend) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    dataToSend.message = "Demo Requested with " + randomly_selected_demo_person;
+    dataToSend.message = "Demo Requested with " + randomlySelectedDemoPerson.person;
 
     try {
       const config = {
@@ -41,8 +46,8 @@ const BookDemoModal = (props) => {
     setIsSubmitted(true);
     window.gtag_report_conversion('book-a-demo');
     setTimeout(() => {
-      window.location.href = randomly_selected_demo_URL;
-    }, 1000);  // Wait for 1 second, to try to give gtag_report_conversion a chance to fire
+      window.open(randomlySelectedDemoPerson.url, '_blank');
+    }, 300);  // Wait a lil, to try to give gtag_report_conversion a chance to fire
     setTimeout(() => {
       setShowBackupLink(true);
     }, 3000);  // Show backup link after 3 seconds, in case the user isn't automatically redirected (might happen with ad / popup blockers)
@@ -61,7 +66,7 @@ const BookDemoModal = (props) => {
           <>
           <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>Thanks! Redirecting...</p>
           {showBackupLink && (
-            <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>If you are not redirected, please click <a href={randomly_selected_demo_URL} target="_blank" rel="noopener noreferrer">here</a>.</p>
+            <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>If you are not redirected, please click <a href={randomlySelectedDemoPerson.url} target="_blank" rel="noopener noreferrer">here</a>.</p>
           )}
           </>
         ) : (
@@ -92,15 +97,6 @@ const BookDemoModal = (props) => {
                 <>{ErrorMessageShow(errors.email?.message)}</>
               )}
             </div>
-            <div className="input-group">
-              <Form.Control type="text" {...register("phone", { required: false })} maxLength="25" />
-              <Form.Label>Phone (optional)</Form.Label>
-            </div>
-            {errors.phone?.type === "pattern" && (
-              <>
-                {ErrorMessageShow( ErrorMessageKey.PLEASE_ENTER_A_VALID_PHONE_NUMBER )}
-              </>
-            )}
             <div className="text-center">
               <Button type="submit" className="bg_theme_btn" style={{ marginTop: '20px' }}> Continue... </Button>
             </div>

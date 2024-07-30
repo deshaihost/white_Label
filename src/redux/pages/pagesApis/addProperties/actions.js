@@ -20,6 +20,15 @@ export const getQuestionnaireActions = (data) => ({
     data,
 });
 
+export const resetQuestionnaireStateActions = () => ({
+    type: AddPropertiesActionTypes.GET_QUESTIONNAIRE_RESET,
+});
+
+export const pullConversationDataActions = (data) => ({
+    type: AddPropertiesActionTypes.PULL_CONVERSATION_DATA_FIRST,
+    data,
+});
+
 export const listIntegrationPropertiesActions = (data) => ({
     type: AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_FIRST,
     data

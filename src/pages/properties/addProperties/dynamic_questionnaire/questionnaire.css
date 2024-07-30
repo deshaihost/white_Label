@@ -1,0 +1,160 @@
+.questionnaire-first-page .auto-fill-btn {
+  border-radius: 20px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  max-width: 380px;
+}
+
+.questionnaire-first-page .underline-btn {
+  color: #146EF5;
+  font-family: 'Samsung Sharp Sans Medium';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration-line: underline;
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+
+.document-form .doc-upload-btn {
+  padding: 13px 20px;
+}
+
+.auto-fill-modal p {
+  margin-bottom: 30px;
+}
+
+.auto-fill-modal h4 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  text-align: center;
+  color: #AAA;
+}
+
+.auto-fill-modal label span {
+  color: #AAA;
+}
+
+.auto-fill-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auto-fill-modal .sources-container {
+  display: flex;
+  flex-direction: column;
+  width: fit-content; /* apparently this is not supported on all browsers */
+  margin: 0 auto 25px auto;
+}
+
+.auto-fill-modal .sources-container .form-check-input {
+  background-color: white;
+  margin-right: 8px;
+}
+
+.auto-fill-modal .sources-container .form-check-input:checked {
+  background-color: blue;
+  border-color: blue;
+}
+
+.hostbuddy-knowledge-base {
+  text-align: center;
+}
+
+.knowledge-base-content {
+  display: inline-block;
+  text-align: left;
+  margin: 0 auto;
+  padding: 25px 20px;
+  border: 1px solid #146EF5;
+  border-radius: 15px;
+  width: 600px;
+}
+
+.knowledge-base-content .pms-connected-text {
+  text-align: right;
+  margin-bottom: -20px;
+  color: #146EF5;
+}
+
+.hostbuddy-knowledge-base h3 {
+  margin-bottom: 20px;
+  padding: 10px 30px;
+  text-align: center;
+}
+
+.hostbuddy-knowledge-base h4 {
+  font-size: 20px;
+  margin-top: 25px;
+  margin-bottom: 12px;
+}
+
+.hostbuddy-knowledge-base h5 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  margin-left: 30px;
+}
+
+.hostbuddy-knowledge-base h5 small {
+  font-size: 16px;
+}
+
+.hostbuddy-knowledge-base .text-confirmed {
+  color: rgba(70, 200, 70, 1);
+}
+
+.hostbuddy-knowledge-base .text-negative {
+  color: #AAA;
+  font-style: italic;
+}
+
+.hostbuddy-knowledge-base .text-confirmed::before {
+  content: "\2022";
+  font-size: 70px;
+  line-height: 0px;
+  vertical-align: -12px;
+  color: rgb(0, 180, 0);
+  margin-right: 8px;
+}
+
+.hostbuddy-knowledge-base .text-neutral::before {
+  content: "\2022";
+  font-size: 70px;
+  line-height: 0px;
+  vertical-align: -12px;
+  color: #777;
+  margin-right: 8px;
+}
+
+/* unfilled circle - but it's a little uneven
+.hostbuddy-knowledge-base .text-neutral::before {
+  content: "\25CB";
+  font-size: 20px;
+  line-height: 0px;
+  color: #AAA;
+  margin-right: 12px;
+  margin-left: 4px;
+}
+*/
+
+.hostbuddy-knowledge-base .text-neutral {
+  color: #AAA;
+}
+
+.hostbuddy-knowledge-base span {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 5px;
+  font-style: normal; /* Removes italicization */
+}
+
+.loader-text-container {
+  display: flex; /* Enables Flexbox layout */
+  align-items: center; /* Vertically centers the loader and text */
+  gap: 10px; /* Adds some space between the loader and the text */
+}

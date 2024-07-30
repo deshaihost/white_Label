@@ -16,6 +16,7 @@ import PropertyInsight from "../pages/propertyInsight/PropertyInsight";
 import Subscription from "../pages/subscription/Subscription";
 import Account from "../pages/account/Account";
 import SetupGuide from "../pages/setupGuide/SetupGuide";
+import HostawaySetup from "../pages/setupGuide/HostawaySetup";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
@@ -33,6 +34,8 @@ import ResetPass from "../auth/resetPass/resetPass";
 import AddPropertyForm from "../pages/properties/addProperties/dynamic_questionnaire/BasicInformationForm/AddPropertyForm";
 import BlogLandingPage from "../blog/blogLanding";
 import BlogArticle from "../blog/blogArticle";
+//----
+import SettingIndex from "../pages/settings/SettingIndex";
 
 const Routing = () => {
   const location = useLocation();
@@ -105,7 +108,7 @@ const Routing = () => {
     // Add the rb2b script only if not already present, and only for the front pages (excluding login/register/forgotpass/changepass)
     const pathnames_to_profile = ["/", "/pricing", "/meet-hostbuddy", "/faqs", "/privacy-policy", "/termsof-service", "/scheduling-walkthrough", "/tips-and-tricks", "/testing-questions"];
     if (pathnames_to_profile.includes(location.pathname)) {
-      if (!existingScript) {
+      if (!existingScript && false) { // script adding DISABLED
         addScript();
       }
     } else { // When the user navigates away from the front pages, remove the rb2b script (and the other script that it loads). Don't mess with the google ads script, let it do its thing
@@ -137,6 +140,8 @@ const Routing = () => {
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
         <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
         <Route path="/reset-password" element={<ResetPass />}></Route>
+        <Route path="/setup-guide" element={<SetupGuide />}></Route>
+        <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
         <Route path="*" element={ <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" /> } />
@@ -164,17 +169,12 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/account/:section?" element={
+        <Route path="/setting/:section?" element={
           <ProtectedRoute>
-            <Account />
+            {/* <Account /> */}
+            <SettingIndex/>
           </ProtectedRoute>
         }/>
-        <Route path="/setup-guide" element={
-            <ProtectedRoute>
-              <SetupGuide />
-            </ProtectedRoute>
-          }
-        />
         <Route path="/add-property" element={
             <ProtectedRoute>
               <AddPropertyForm />

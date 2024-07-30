@@ -93,16 +93,10 @@ const PopupModal = ({
     try {
       if (token) {
         const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
+          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
         };
-        const response = await axios.put(
-          `${baseUrl}/set_datetime_toggle`,
-          dataToSend,
-          config
-        );
+        const response = await axios.put( `${baseUrl}/set_datetime_toggle`, dataToSend, config);
 
         // setCalendarSchedule(() => response?.data?.schedule);
         if (response.status === 200) {
@@ -111,18 +105,11 @@ const PopupModal = ({
 
           setTimeout(() => {
             setShow(false);
-            // setShowCalender(false);
           }, 1500);
 
           getScheduleAPI(selectedProperty);
         } else {
-          ToastHandle("Something went wrong", "danger");
-          setTimeout(() => {
-            setShow(false);
-            setShowCalender(false);
-          }, 1500);
-
-          getScheduleAPI(selectedProperty);
+          ToastHandle(response?.data?.error, "danger");
         }
       } else {
         ToastHandle("No Token", "danger");
@@ -133,13 +120,7 @@ const PopupModal = ({
         getScheduleAPI(selectedProperty);
       }
     } catch (error) {
-      console.log(error);
       ToastHandle(error?.data?.error, "danger");
-      /* Leave the windows open so the user can correct the error and resubmit
-      setTimeout(() => {
-        setShow(false);
-        setShowCalender(false);
-      }, 1500); */
       getScheduleAPI(selectedProperty);
     }
     setSubmit(false);
@@ -156,11 +137,7 @@ const PopupModal = ({
       return;
     }
 
-    if (
-      !checkedSchedule.Current &&
-      !checkedSchedule.Future &&
-      !checkedSchedule.Past
-    ) {
+    if (!checkedSchedule.Current && !checkedSchedule.Future && !checkedSchedule.Past) {
       ToastHandle("Please select at least one reservation stage", "danger");
       return;
     }
@@ -253,53 +230,20 @@ const PopupModal = ({
 
             <div className="6 d-flex justify-content-between">
               <div class="col text-center">
-                <input
-                  type="checkbox"
-                  checked={checkedSchedule.Future}
-                  onChange={(e) => handleOnChange(e, "Future")}
-                  className="btn-check"
-                  id="future"
-                  autocomplete="off"
-                />
-                <label
-                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "" : "btn-unselected"
-                    }`}
-                  for="future"
-                >
+                <input type="checkbox" checked={checkedSchedule.Future} onChange={(e) => handleOnChange(e, "Future")} className="btn-check" id="future" autocomplete="off"/>
+                <label className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "" : "btn-unselected"}`} for="future">
                   Future
                 </label>
               </div>
               <div class="col text-center">
-                <input
-                  type="checkbox"
-                  checked={checkedSchedule.Past}
-                  onChange={(e) => handleOnChange(e, "Past")}
-                  className="btn-check"
-                  id="past"
-                  autocomplete="off"
-                />
-                <label
-                  className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "" : "btn-unselected"
-                    }`}
-                  for="past"
-                >
+                <input type="checkbox" checked={checkedSchedule.Past} onChange={(e) => handleOnChange(e, "Past")} className="btn-check" id="past" autocomplete="off"/>
+                <label className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "" : "btn-unselected" }`} for="past">
                   Inquiry/Past
                 </label>
               </div>
               <div class="col text-center">
-                <input
-                  type="checkbox"
-                  checked={checkedSchedule.Current}
-                  onChange={(e) => handleOnChange(e, "Current")}
-                  className="btn-check"
-                  id="current"
-                  autocomplete="off"
-                />
-                <label
-                  className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "" : "btn-unselected"
-                    }`}
-                  for="current"
-                >
+                <input type="checkbox" checked={checkedSchedule.Current} onChange={(e) => handleOnChange(e, "Current")} className="btn-check" id="current" autocomplete="off"/>
+                <label className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "" : "btn-unselected" }`} for="current">
                   Current
                 </label>
               </div>
@@ -310,13 +254,7 @@ const PopupModal = ({
               <div className="col">
                 <div>
                   <label>Status</label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    style={{ backgroundColor: "#0A1A44", color: "#fff" }}
-                    className="form-control"
-                    value={data.status}
-                    onChange={handleStatusChange}
-                  >
+                  <Form.Select aria-label="Default select example" style={{ backgroundColor: "#0A1A44", color: "#fff" }} className="form-control" value={data.status} onChange={handleStatusChange}>
                     <option value="">Select Status</option>
                     <option value="on">ON</option>
                     <option value="off">OFF</option>
@@ -328,26 +266,12 @@ const PopupModal = ({
             <div className="d-flex row">
               <div className="col">
                 <label>Start Date:</label>
-                <input
-                  type="date"
-                  name="stdate"
-                  id="startDate"
-                  className="form-control"
-                  value={data.startDate}
-                  onChange={handleInputChange}
-                />
+                <input type="date" name="stdate" id="startDate" className="form-control" value={data.startDate} onChange={handleInputChange}/>
               </div>
 
               <div class="col">
                 <label>End Date:</label>
-                <input
-                  type="date"
-                  name="etdate"
-                  id="endDate"
-                  className="form-control"
-                  value={data.endDate}
-                  onChange={handleInputChange}
-                />
+                <input type="date" name="etdate" id="endDate" className="form-control" value={data.endDate} onChange={handleInputChange}/>
               </div>
             </div>
 

@@ -245,29 +245,30 @@ const AccountContactSection = () => {
 
   return (
     <div className="account-content location-section">
-      <h3>Contact Information</h3>
+      <h3 className="mb-5">Contact Information</h3>
 
       <form action="">
 
         {Object.keys(contact_sections).map((section, index) => (
           <>
-            <hr className="in-section-divider" />
-            <h4>{contact_sections[section].title}</h4>
+            {/* <hr className="in-section-divider" /> */}
+            <h4 className="fs-14 mb-4">{contact_sections[section].title}</h4>
 
             {/* Existing contact information */}
+            <div className="table-responsive">
             <table className="table">
               <tbody>
                 {contacts.map((contact, index) => (
                   contact.type === section && (
-                    <tr key={index}>
-                      <td><h6>{contact.name}</h6> </td>
-                      <td><h6>{contact.address}</h6> </td>
-                      <td><h6>{contact.confirmed ? <h6 className="grey-text">Confirmed</h6> : <h6 className="warning-text">Not Confirmed</h6> }</h6> </td>
+                    <tr  key={index}>
+                      <td><h6 className="fs-14 text-white m-0">{contact.name}</h6> </td>
+                      <td><h6 className="fs-14 text-white m-0">{contact.address}</h6> </td>
+                      <td><h6 className="fs-14 m-0">{contact.confirmed ? <h6 className="grey-text fs-14 m-0">Confirmed</h6> : <h6 className="warning-text fs-14 m-0">Not Confirmed</h6> }</h6> </td>
                       <td>
                         {!contact.confirmed &&
                           (codeSentFor !== contact.address ? (
-                            <span className="d-flex justify-content-center">
-                              <Link to="#" style={{fontSize:"1rem", lineHeight:'1.2', margin:'0'}} className="text-link" onClick={() => sendConfirmationCode(index)}>Get Confirmation Code</Link>
+                            <span className="d-flex justify-content-center mb-0">
+                              <Link to="#" className="text-link fs-14" onClick={() => sendConfirmationCode(index)}>Send Code</Link>
                             </span>
                           ) : (
                             <>
@@ -304,6 +305,7 @@ const AccountContactSection = () => {
                 ))}
               </tbody>
             </table>
+            </div>
 
             {/* Add new contact information, within a given section */}
             {Object.keys(newContacts[section] || {}).length > 0 && (
@@ -318,7 +320,7 @@ const AccountContactSection = () => {
                     ) : (
                       <div className="slack-container">
                         <p>Click the button below to add HostBuddy AI to your Slack account.</p>
-                        <a id="slack-button" href="https://slack.com/oauth/v2/authorize?scope=incoming-webhook%2Cchannels%3Aread%2Cchat%3Awrite&amp;redirect_uri=https%3A%2F%2Fhostbuddy.ai%2Faccount%2Fcontact&amp;client_id=6640565127554.7377267101792"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.8 122.8"><path d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9zm6.5 0c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z" fill="#e01e5a"></path><path d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2zm0 6.5c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z" fill="#36c5f0"></path><path d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2zm-6.5 0c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C64.7 5.8 70.5 0 77.6 0s12.9 5.8 12.9 12.9v32.3z" fill="#2eb67d"></path><path d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-12.9-5.8-12.9-12.9V97h12.9zm0-6.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z" fill="#ecb22e"></path></svg>Add to Slack</a>
+                        <a id="slack-button" href="https://slack.com/oauth/v2/authorize?scope=incoming-webhook%2Cchannels%3Aread%2Cchat%3Awrite&amp;redirect_uri=https%3A%2F%2Fhostbuddy.ai%2Fsetting%2Fcontact&amp;client_id=6640565127554.7377267101792"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.8 122.8"><path d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9zm6.5 0c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z" fill="#e01e5a"></path><path d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2zm0 6.5c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z" fill="#36c5f0"></path><path d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2zm-6.5 0c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C64.7 5.8 70.5 0 77.6 0s12.9 5.8 12.9 12.9v32.3z" fill="#2eb67d"></path><path d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-12.9-5.8-12.9-12.9V97h12.9zm0-6.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z" fill="#ecb22e"></path></svg>Add to Slack</a>
                       </div>
                     )}
                   </div>
@@ -357,11 +359,11 @@ const AccountContactSection = () => {
                       <span className="d-flex justify-content-center">
                         {!newContactAdding ? (
                           <Link to="#" className="text-link" style={{ marginTop: '20px',  textAlign: 'center',
-                            pointerEvents: newContacts?.[section]?.consent_checked ? 'auto' : 'none', // Disables pointer events if consent_checked is false
-                            opacity: newContacts?.[section]?.consent_checked ? 1 : 0.5, // Change opacity to appear not clickable if consent_checked is false
+                            pointerEvents: !(section === 'sms' && !newContacts?.[section]?.consent_checked) ? 'auto' : 'none', // Disables pointer events if consent_checked is false
+                            opacity: !(section === 'sms' && !newContacts?.[section]?.consent_checked) ? 1 : 0.5, // Change opacity to appear not clickable if consent_checked is false
                           }} 
                           onClick={() => {
-                            if (newContacts?.[section]?.consent_checked) { // consent must be checked to allow submit
+                            if ( !(section === 'sms' && !newContacts?.[section]?.consent_checked) ) { // consent must be checked to allow submit
                               addContact(newContacts?.[section]?.name, section, newContacts?.[section]?.address);
                             }
                           }}
@@ -381,7 +383,7 @@ const AccountContactSection = () => {
 
             {/* Add new contact information button for this section. Only allow one new contact to be added at a time for the section. Also don't show for Slack if a Slack account is already connected */}
             {Object.keys(newContacts[section] || {}).length === 0 && !(section==='slack' && contacts.some(contact => contact.type === 'slack')) &&
-              <span className="d-flex justify-content-center" style={{ marginTop:'30px', marginBottom:'70px' }}>
+              <span className="d-flex justify-content-center" style={{ marginTop:'10px', marginBottom:'70px'}}>
                 <Link to="#" className="text-link" onClick={() => showAddFields(section)}>+ Add {contact_sections[section].singular}</Link>
               </span>
             }

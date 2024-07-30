@@ -10,13 +10,10 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
   const { type } = PmsIntegrationData ? PmsIntegrationData : [];
   const store = useSelector((state) => state);
   const getCarlyLinkStatus = store?.getCalryLinkReducer?.getCalryLing?.status;
-  const getCarlyLink =
-    store?.getCalryLinkReducer?.getCalryLing?.data?.calry_link;
+  const getCarlyLink = store?.getCalryLinkReducer?.getCalryLing?.data?.calry_link;
   const getCalryLinkLoading = store?.getCalryLinkReducer?.loading;
-  const getCarlyLinkMessage =
-    store?.getCalryLinkReducer?.getCalryLing?.data?.message;
-  const getCalryLinkError =
-    store?.getCalryLinkReducer?.getCalryLing?.data?.error;
+  const getCarlyLinkMessage = store?.getCalryLinkReducer?.getCalryLing?.data?.message;
+  const getCalryLinkError = store?.getCalryLinkReducer?.getCalryLing?.data?.error;
 
   const goToCarlyLinkHndle = () => {
     const baseUrl = getCarlyLink;
@@ -40,8 +37,10 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
     if (getCarlyLinkStatus === 200) {
       ToastHandle(getCarlyLinkMessage, "success");
     } else {
+      /*
       ToastHandle(getCalryLinkError, "danger");
       dispatch(stateEmptyActions());
+      */
     }
   }, [getCarlyLinkStatus]);
 
@@ -52,8 +51,7 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
           {getCarlyLink !== undefined ? (
             <div className="text-white">
               <p style={{ fontSize: '1em', marginBottom: '20px' }}>
-                To connect your PMS, you will be redirected to our partner Calry to securely
-                enter your account information and complete the integration.
+                To connect your PMS, you will be redirected to our partner Calry to securely enter your account information and complete the integration.
               </p>
               <div className="d-flex justify-content-center">
                 <span>Calry link</span> : {" "}

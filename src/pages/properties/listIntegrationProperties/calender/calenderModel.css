@@ -6,10 +6,10 @@
   width: 100%;
 }
 
-.calendar {
+/* .calendar {
   height: 613px;
   overflow-y: auto;
-}
+} */
 
 .calenderHeader {
   padding: 30px 50px !important;
@@ -89,7 +89,7 @@
 .main-calendar-data-status {
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   color: #fff;
   text-align: center;
   text-transform: uppercase;
@@ -109,7 +109,25 @@ button.btn.btn-primary.form-control:hover,
   outline: none !important;
   box-shadow: none !important;
 }
-
+.calendar-month-schedule{
+  display: grid;
+  grid-template-columns: 50px auto 90px auto auto;
+  gap: 50px;
+} 
+.calendar-month-table-data{
+  max-height: 346px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+.calendar-month-table-data::-webkit-scrollbar {
+  width: 3px;
+}
+@media screen and (max-width:1200px){
+  .calendar-month-schedule {
+    gap: 15px;
+    grid-template-columns: auto auto auto auto auto;
+}
+}
 @media screen and (max-width: 991px) {
   .custom-calendar-modal .modal-dialog {
     max-width: 700px;
@@ -121,9 +139,9 @@ button.btn.btn-primary.form-control:hover,
     min-height: 70px;
   }
 
-  .calendar {
+  /* .calendar {
     height: 465px;
-  }
+  } */
 
   .calendar tr td,
   .calendar tr th {
@@ -169,6 +187,9 @@ button.btn.btn-primary.form-control:hover,
 
   .calendar {
     height: 100%;
-    max-height: 280px;
+    /* max-height: 280px; */
   }
+  .calendar-month-schedule {
+    font-size: 12px;
+}
 }

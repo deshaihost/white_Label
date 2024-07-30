@@ -2,17 +2,17 @@ import React, { useState, useEffect} from "react";
 import "../AddProperty.css";
 import QuestionnaireHeader from "./questionnaire_header";
 import { stateEmptyActions, updateQuestionnaireActions } from "../../../../redux/actions";
-import { getQuestionnaireActions } from "../../../../redux/actions";
+import { getQuestionnaireActions, resetQuestionnaireStateActions } from "../../../../redux/actions";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import QuestionnaireSection from "./questionnaire_section";
+import QuestionnaireFirstPage from "./questionnaireFirstPage/questionnaire_first_page";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { FullScreenLoader } from "../../../../helper/Loader";
 import axios from "axios";
 import PencilIconModal from "./PencilIconModal";
 import ExternalResourcesForm from "./ExternalResources/ExternalResourcesForm";
-import { set } from "react-hook-form";
 
 
 // Code for the entire questionnaire page, including the header and all sections, including Basics and External Resources.
@@ -24,9 +24,9 @@ const QuestionnairePage = () => {
   const store = useSelector((state) => state);
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
   const section_order_data = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire?.metadata?.section_order
-  const questionnaire_section_names = section_order_data ? [...section_order_data.slice(0, 1), "External Resources", ...section_order_data.slice(1)] : []; // Always add "External Resources" as the second section
+  const questionnaire_section_names = ["Resources", ...(section_order_data || [])];
 
-  const [selectedSection, setSelectedSection] = useState("Basics");
+  const [selectedSection, setSelectedSection] = useState("Resources");
   const [questionnairePostLoading, setQuestionnairePostLoading] = useState(false);
   const [triggeredSaveLoading, setTriggeredSaveLoading] = useState(false);
   const [dataToUpdate, setDataToUpdate] = useState(false); // whether there is new data to update to the API
@@ -35,6 +35,7 @@ const QuestionnairePage = () => {
   const [doTriggeredSave, setDoTriggeredSave] = useState(false); // Set this to trigger a save
   const [triggeredSaveComplete, setTriggeredSaveComplete] = useState(false); // Set this to false after a triggered save is complete
   const [navigateToProperties, setNavigateToProperties] = useState(false); // Set this to redirect to properties page
+  const [apiPropertyData, setApiPropertyData] = useState(null);
 
   const curr_sec_num = questionnaire_section_names.indexOf(selectedSection);
   const num_total_sections = questionnaire_section_names.length;
@@ -46,6 +47,28 @@ const QuestionnairePage = () => {
       return () => { dispatch(stateEmptyActions("getQuestionnaire")); } // Clear the state when the component unmounts
     }
   }, [property_name]);
+
+  // Get property data from the API. Should run once, immediately when the page loads
+  const getPropertyDataFromAPI = async (propertyName) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+    const token = getSessionStorageData?.token;
+
+    try {
+      if (token) {
+        const config = {
+          headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+        };
+        const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
+
+        if (response.status === 200) {
+          setApiPropertyData(response.data.property);
+        } else {  }
+      } else {  }
+    } catch (error) {  }
+  };
 
   // Update questionnaire data to the API
   const update_questionnaire_to_API = async (property_name, questionnaire_data) => {
@@ -65,8 +88,14 @@ const QuestionnairePage = () => {
       return response.status;
     } catch (error) {  } //ToastHandle(error, "danger");
     finally { setQuestionnairePostLoading(false); }
-    return -1;
   }
+
+  // On page load, get the property data from the API, if we have the property name and not done already
+  useEffect(() => {
+    if (property_name && !apiPropertyData) {
+      getPropertyDataFromAPI(property_name);
+    }
+  }, [property_name, apiPropertyData]);
 
   // Auto save. Every 10 seconds, if there's changed form data, send the questionnaire to the API
   useEffect(() => {
@@ -224,7 +253,11 @@ const QuestionnairePage = () => {
             <div className="row">
               <div className="col-lg-10 mx-auto mt-5 form_multisteps">
                 {selectedSection !== "External Resources" ? (
-                  <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
+                  selectedSection === "Resources" ? (
+                    <QuestionnaireFirstPage handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData}/>
+                  ) : (
+                    <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
+                  )
                 ) : (
                   <ExternalResourcesForm property_name={property_name} handleSaveAndNext={handleSaveAndNext}/>
                 )}

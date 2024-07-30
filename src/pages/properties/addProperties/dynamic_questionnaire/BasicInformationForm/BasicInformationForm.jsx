@@ -69,32 +69,6 @@ const BasicInformationForm = ({ property_name }) => {
     add_thumbnail_image_API_call(propertyName, uploadedFile);
   };
 
-  // copy existing property hanlde
-  const [model, setModel] = useState({ copyExistingProperty: false });
-  let copyExistingPropertyOpen = "copyExistingPropertyOpen";
-  let copyExistingPropertyClose = "copyExistingPropertyClose";
-  const handleModelOpen = (type) => {
-    if (type === copyExistingPropertyOpen) {
-      setModel({ ...model, copyExistingProperty: true });
-    }
-  };
-  const handleModelClose = (type) => {
-    if (type === copyExistingPropertyClose) {
-      setModel({ ...model, copyExistingProperty: false });
-    }
-  };
-
-  const copyExistingPropertyHndle = (e) => {
-    e.preventDefault();
-    handleModelOpen(copyExistingPropertyOpen);
-  };
-
-  const copyExistingPropertyNameGetChild = (name) => {
-    if (name?.copyExisting !== "") {
-      dispatch( copyExistingPropertyActions({ newPropertyNm: property_name, oldPropertyNm: name?.copyExisting }) );
-    }
-  };
-
   // When a new property is created successfully, upload the thumbnail image to the newly created property (if included) then navigate to the next page
   useEffect(() => {
     if (propertiesAddStatus === 200) {
@@ -102,6 +76,10 @@ const BasicInformationForm = ({ property_name }) => {
       add_thumbnail_image_API_call(propertyName, uploadedFile);
       dispatch(stateEmptyActions());
       navigate(`/edit-property/${encodeURIComponent(propertyName)}`);
+
+    } else if (propertiesAddStatus === 400) {
+      ToastHandle(propertiesAddMessage, "danger");
+      dispatch(stateEmptyActions());
 
     } else if (propertiesAddStatus === 402) {
       ToastHandle(propertiesAddMessage, "danger");
@@ -116,7 +94,7 @@ const BasicInformationForm = ({ property_name }) => {
   return (
     <div>
       <div>
-        <h3 className="text-white fw-bold mb-3 fs-4">Basic Information</h3>
+        <h3 className="text-white fw-bold mb-3 fs-4">Property Name & Thumbnail</h3>
       </div>
       <div className="row">
         <div className="col-12 mx-auto form-design">
@@ -154,17 +132,6 @@ const BasicInformationForm = ({ property_name }) => {
                 </div>
               </div>
             )}
-
-            {/* "Copy Existing Property" button (only if editing existing property) */}
-            {property_name && (
-              <div className="addproperty_links text-center">
-                <div className="d-flex justify-content-center mt-2">
-                  <button className="shadow-none border-0 mt-3 font-weight-bold" onClick={(e) => { copyExistingPropertyHndle(e); }} >
-                    Copy Data From Other Property
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Save & Next button, only shown if adding a property */}
@@ -178,8 +145,6 @@ const BasicInformationForm = ({ property_name }) => {
               </div>
             </div>
           )}
-
-          <CopyExistingPropertyModel handleClose={handleModelClose} show={model?.copyExistingProperty} copyExistingPropertyNameGetPrnt={copyExistingPropertyNameGetChild} curr_property_name={property_name} />
         </div>
       </div>
     </div>

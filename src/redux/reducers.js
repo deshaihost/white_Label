@@ -23,6 +23,7 @@ import {
 import {
   postPropertiesReducer,
   getQuestionnaireReducer,
+  pullConversationDataReducer,
   gotoBillingPortalPostReducer,
   updateQuestionnaireReducer,
   listIntegrationPropertiesReducer,
@@ -50,6 +51,7 @@ export default (combineReducers({
   removeIntegrationReducer,
   postPropertiesReducer,
   getQuestionnaireReducer,
+  pullConversationDataReducer,
   gotoBillingPortalPostReducer,
   updateQuestionnaireReducer,
   listIntegrationPropertiesReducer,

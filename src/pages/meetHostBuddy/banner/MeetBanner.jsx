@@ -11,7 +11,6 @@ import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
 
-//import HouseImg from "../../../public/img/house-img.png";
 const HouseImg = "https://hostbuddylb.com/meet-hostbuddy/house-img.webp";
 
 
@@ -121,6 +120,7 @@ const MeetBanner = (props) => {
         <div className="banner-heading">
           <h1>Meet HostBuddy</h1>
           <p>Try asking HostBuddy your most commonly received guest questions, and watch it handle them with ease. Its responses here are based on the details of a fictional property, but you’ll be able to seamlessly tailor it to your own!</p>
+          <p style={{marginTop:"18px"}}>Easily <strong>connect your PMS</strong> to allow HostBuddy to respond to guest messages over your existing communication channels.</p>
           {/* <Link to="/" className="link-btn filled-btn"> Learn More </Link> */}
         </div>
         <div className="row">

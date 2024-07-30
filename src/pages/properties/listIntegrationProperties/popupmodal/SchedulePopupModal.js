@@ -90,10 +90,8 @@ const SchedulePopupModal = ({
     try {
       if (token) {
         const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
+          headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
+          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
         };
         const response = await axios.put(
           `${baseUrl}/set_recurring_schedule`,
@@ -110,12 +108,7 @@ const SchedulePopupModal = ({
           }, 1500);
           getScheduleAPI(selectedProperty);
         } else {
-          ToastHandle("Something went wrong", "danger");
-          setTimeout(() => {
-            setShow(false);
-            setShowCalender(false);
-          }, 1500);
-          getScheduleAPI(selectedProperty);
+          ToastHandle(response.data.error, "danger");
         }
       } else {
         ToastHandle("No Token", "danger");
