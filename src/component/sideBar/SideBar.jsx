@@ -93,6 +93,14 @@ const SideBar = () => {
           </Link>
         </li>
         <li>
+          <Link
+            to="/get-started"
+            className={findlocation === "/getstarted" ? "active" : ""}
+          >
+            Get Started
+          </Link>
+        </li>
+        <li>
           {!logoutLoader ? (
             <Link
               onClick={() => {

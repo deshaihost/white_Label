@@ -34,6 +34,7 @@ import ResetPass from "../auth/resetPass/resetPass";
 import AddPropertyForm from "../pages/properties/addProperties/dynamic_questionnaire/BasicInformationForm/AddPropertyForm";
 import BlogLandingPage from "../blog/blogLanding";
 import BlogArticle from "../blog/blogArticle";
+import GetStarted from "../pages/getStarted/GetStarted";
 //----
 import SettingIndex from "../pages/settings/SettingIndex";
 
@@ -141,6 +142,7 @@ const Routing = () => {
         <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
         <Route path="/reset-password" element={<ResetPass />}></Route>
         <Route path="/setup-guide" element={<SetupGuide />}></Route>
+        <Route path="/getstarted" element={<GetStarted />}></Route>
         <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
