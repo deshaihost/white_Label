@@ -117,7 +117,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h3><strong>Stay Informed</strong> With Updates From HostBuddy</h3>
-                                <p>HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention so you can see what’s important at a glance. Receive these updates through text, email, or Slack integration to stay in the loop.</p>
+                                <p>HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention so you can see what’s important at a glance. You can receive these updates through text, email, or Slack integration to stay in the loop.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
