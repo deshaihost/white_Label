@@ -15,6 +15,18 @@ const IntegrationsImg = 'https://hostbuddylb.com/home/integrations_works_crop.we
 const PropertyWithAmenitiesImg = 'https://hostbuddylb.com/home/property_with_amenities.webp';
 const lateNightBot = 'https://hostbuddylb.com/home/empty_desk_night.webp';
 
+const cleaningManagement = 'https://storage.googleapis.com/frontend_media/new-home-test/Cleaning%20Management%20Software%20Integrations%20(coming%20soon).jpg';
+const stayInCharge = 'https://storage.googleapis.com/frontend_media/new-home-test/GuestRelay%20for%20Hosts%20(coming%20soon).png';
+const teamSpecific = 'https://storage.googleapis.com/frontend_media/new-home-test/Team%20Specific%20Notifications%20(coming%20soon).png';
+const vacantNight = 'https://storage.googleapis.com/frontend_media/new-home-test/Vacant%20Night%20Upsells%20(coming%20soon).png';
+const stayInformed = 'https://storage.googleapis.com/frontend_media/new-home-test/Stay%20Informed.png';
+const schedule = 'https://storage.googleapis.com/frontend_media/new-home-test/Schedule%20Based%20On%20Your%20Needs%20(1).png';
+const groundedResponses = lateNightBot;
+const unlimitedTesting = 'https://storage.googleapis.com/frontend_media/new-home-test/Test%20Before%20You%20Subscribe.png';
+const robustCustomization = 'https://storage.googleapis.com/frontend_media/new-home-test/Customized%20Representation.png';
+const seamlessPropertySetup = 'https://storage.googleapis.com/frontend_media/new-home-test/Seamless%20Property%20Setup.png';
+const industryLeadingAI = 'https://storage.googleapis.com/frontend_media/new-home-test/Industry%20Leading%20AI.png';
+
 const Works = () => {
     return(
         <section className='works'>
@@ -49,7 +61,7 @@ const Works = () => {
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={lateNightBot} alt='works-img' />
+                            <img src={industryLeadingAI} alt='works-img' />
                         </div>
                     </div>
 
@@ -57,11 +69,11 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h3><strong>Seamless</strong> Property Setup with Autofill</h3>
-                                <p>Set up each property in minutes by simply connecting your property management system. HostBuddy does the legwork for you by extracting information from existing welcome documents, listing information, past conversations, or any other available resources to automatically create an organized database used to support your guests.</p>
+                                <p>Set up all your properties in minutes by simply connecting your property management system. HostBuddy does the legwork for you by extracting information from existing welcome documents, listing information, past conversations, or any other available resources to automatically create an organized database used to support your guests.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={IntegrationsImg} alt='works-img' />
+                            <img src={seamlessPropertySetup} alt='works-img' />
                         </div>
                     </div>
 
@@ -69,23 +81,23 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h3><strong>Unlimited</strong> Testing</h3>
-                                <p>No subscription is required to set up your properties with HostBuddy. Once you have completed onboarding, you can thoroughly test responses directly from your dashboard prior to hiring HostBuddy to support your guests. This ensures that you are satisfied with responses before even beginning your 2 week trial period.</p>
+                                <p>Set up your properties and simulate test messages without a subscription. Test as much as you'd like before even beginning your free trial.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={PropertyWithAmenitiesImg} alt='works-img' />
+                            <img src={unlimitedTesting} alt='works-img' />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3><strong>Stay Informed</strong> With Updates From HostBuddy</h3>
-                                <p>HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention on the dashboard, so you can see what’s important at a glance. You can easily receive these updates through text, email, and our Slack integration by setting up notifications in your account settings.</p>
+                                <h3><strong>Grounded</strong> Responses</h3>
+                                <p>Don’t stress about hallucinations - HostBuddy is meticulously designed to respond based only on your property details, and can explain each response to ensure transparency.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={AssistantImg} alt='works-img' />
+                            <img src={groundedResponses} alt='works-img' />
                         </div>
                     </div>
 
@@ -97,19 +109,31 @@ const Works = () => {
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={AssistantImg} alt='works-img' />
+                            <img src={schedule} alt='works-img' />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3><strong>Customized</strong> Representation</h3>
-                                <p>With advanced customization options, HostBuddy can be tailored to fit the needs of your business, no matter how complicated they may be. HostBuddy is capable of mirroring your tone and handling emergency situations based on your preferences.</p>
+                                <h3><strong>Stay Informed</strong> With Updates From HostBuddy</h3>
+                                <p>HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention so you can see what’s important at a glance. Receive these updates through text, email, or Slack integration to stay in the loop.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={AssistantImg} alt='works-img' />
+                            <img src={stayInformed} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
+                                <h3><strong>Robust</strong> Customization</h3>
+                                <p>With advanced customization options, HostBuddy is designed for maximum flexibility to fit the needs of your business, no matter how complicated they may be. You can set behavior and tone to your likings, and you're always in full control of HostBuddy's knowledge base.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={robustCustomization} alt='works-img' />
                         </div>
                     </div>
 
@@ -118,24 +142,24 @@ const Works = () => {
                             <div className="works-content">
                                 <h3><strong>Team Specific</strong> Notifications</h3>
                                 <h4>(coming soon)</h4>
-                                <p>Seeking the ability to have HostBuddy send action items directly to certain members of your team? Using advanced categorization of issues, HostBuddy can send requests for support directly to teams involved in operations, cleaning or maintenance.</p>
+                                <p>Seeking the ability to have HostBuddy send action items directly to certain members of your team? Using advanced categorization, HostBuddy can identify issues and send requests for support directly to operations, cleaning or maintenance teams depending on the nature of the issue.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={AssistantImg} alt='works-img' />
+                            <img src={teamSpecific} alt='works-img' />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3><strong>Guest Relay</strong> For Hosts</h3>
+                                <h3>Stay <strong>In Charge</strong></h3>
                                 <h4>(coming soon)</h4>
-                                <p>Respond directly to HostBuddy for action item resolution. Provide status updates, decisions, and information for situations that require your feedback through your notification channels, allowing HostBuddy to communicate on your behalf.</p>
+                                <p>HostBuddy will notify you when a guest message requires action or decision making beyond its capability. Respond directly to the notification to make the final call, and HostBuddy will send the appropriate response based on your guidance.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={AssistantImg} alt='works-img' />
+                            <img src={stayInCharge} alt='works-img' />
                         </div>
                     </div>
 
@@ -148,7 +172,20 @@ const Works = () => {
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={AssistantImg} alt='works-img' />
+                            <img src={vacantNight} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
+                                <h3>Cleaning Management Software <strong>Integrations</strong></h3>
+                                <h4>(coming soon)</h4>
+                                <p>Keep HostBuddy informed about when your properties are ready for check-in. Pull updates directly from your cleaning management systems to allow for early check-ins when they are available.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={cleaningManagement} alt='works-img' />
                         </div>
                     </div>
 

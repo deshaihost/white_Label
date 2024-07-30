@@ -44,7 +44,7 @@ const Home = () => {
       <Introduction />
       <div ref={worksRef}><Works /></div>
       <TryItOutCTA />
-      <Features />
+      {/* <Features /> */}
       <div ref={demoVideoRef}><DemoVideoSection load={loadDemoVideo} /></div>
       <Plans />
     </div>
