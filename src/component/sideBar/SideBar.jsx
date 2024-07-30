@@ -10,7 +10,6 @@ const SideBar = () => {
   const findlocation = location?.pathname;
   const [logoutLoader, setLogoutLoader] = useState(false);
 
-
   const logoutHandle = async () => {
     try {
       setLogoutLoader(true);
@@ -23,7 +22,7 @@ const SideBar = () => {
       const refreshToken = getSessionStorageData?.refreshToken;
       // Define the request headers
       const headers = {
-        Authorization: `Bearer ${refreshToken}`
+        Authorization: `Bearer ${refreshToken}`,
       };
 
       /*
@@ -42,11 +41,9 @@ const SideBar = () => {
       sessionStorage.removeItem("hostBuddy_auth");
       setLogoutLoader(false);
       navigate("/login");
-      
     } catch (error) {
       console.error(error);
     }
-
   };
 
   return (
@@ -94,7 +91,7 @@ const SideBar = () => {
         </li>
         <li>
           <Link
-            to="/get-started"
+            to="/getstarted"
             className={findlocation === "/getstarted" ? "active" : ""}
           >
             Get Started
