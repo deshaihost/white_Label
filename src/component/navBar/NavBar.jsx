@@ -45,7 +45,7 @@ const NavBar = () => {
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // time remaining, in full days
 
       if (expiryDate > currentDate) { // Payment standing is bad, but user still has grace period before services are paused
-        return ( <Alert variant="danger">{" "}Your last subscription payment didn't go through. Please click on "Subscription" in your <Link to="/account">Account page</Link> to update your payment info. Otherwise, your services will be paused in{" "}{diffDays} days.{" "}</Alert> );
+        return (<Alert variant="danger">{" "}Your last subscription payment didn't go through. Please click on "Subscription" in your <Link to="/account">Account page</Link> to update your payment info. Otherwise, your services will be paused in{" "}{diffDays} days.{" "}</Alert>);
       } else { // Payment standing is bad, and grace period is over. Services have been paused.
         return (<Alert variant="danger">{" "}Your last subscription payment didn't go through and your services have been paused. Please click on "Subscription" in your{" "} <Link to="/account">Account page</Link> to update your payment info.{" "}</Alert>);
       }
@@ -139,6 +139,9 @@ const NavBar = () => {
             <Nav>
               {token !== undefined ? (
                 <>
+                  <NavLink exact to="/getstarted" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                    Get Started
+                  </NavLink>
                   <NavLink exact to="/dashboard" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Dashboard
                   </NavLink>

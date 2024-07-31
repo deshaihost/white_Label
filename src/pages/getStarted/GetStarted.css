@@ -1,0 +1,67 @@
+.get_started {
+  letter-spacing: 1px;
+}
+
+.get_started .welcome_steps {
+  display: grid;
+  gap: 40px;
+}
+
+.get_started .welcome_steps a {
+  width: fit-content;
+  margin-left: auto;
+}
+
+.get_started .step_odd {
+  grid-template-columns: 500px 1fr;
+  margin-bottom: 70px;
+}
+
+.get_started .step_even {
+  grid-template-columns: 1fr 500px;
+  margin-bottom: 70px;
+}
+
+.get_started img {
+  margin: auto 0;
+}
+
+.get_started .get_started_featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 100px;
+  row-gap: 80px;
+}
+
+.get_started .link-title {
+  width: fit-content;
+}
+
+.get_started .link_card_box {
+  min-height: 185px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.get_started .link_card_box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px #FFF;
+  transition: transform 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+  .get_started .get_started_featured {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 0px;
+    row-gap: 20px;
+  }
+
+  .get_started .step_odd {
+    grid-template-columns: 1fr;
+  }
+
+  .get_started .step_even {
+    grid-template-columns: 1fr;
+  }
+}
