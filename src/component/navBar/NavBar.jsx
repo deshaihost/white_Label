@@ -139,6 +139,9 @@ const NavBar = () => {
             <Nav>
               {token !== undefined ? (
                 <>
+                  <NavLink exact to="/getstarted" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                    Get Started
+                  </NavLink>
                   <NavLink exact to="/dashboard" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Dashboard
                   </NavLink>
@@ -153,9 +156,6 @@ const NavBar = () => {
                   </NavLink>
                   <NavLink exact to="/setup-guide" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Setup Guide
-                  </NavLink>
-                  <NavLink exact to="/getstarted" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
-                    Get Started
                   </NavLink>
                 </>
               ) : (

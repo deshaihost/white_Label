@@ -50,60 +50,38 @@ const SideBar = () => {
     <div className="navigation-links custom-nav-links">
       <ul>
         <li>
-          <Link
-            to="/dashboard"
-            className={findlocation === "/dashboard" ? "active" : ""}
-          >
-            Dashboard
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/properties"
-            className={findlocation === "/properties" ? "active" : ""}
-          >
-            Properties
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/property-insight"
-            className={findlocation === "/property-insight" ? "active" : ""}
-          >
-            Transcripts
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/setting"
-            className={findlocation === "/setting" ? "active" : ""}
-          >
-            Settings
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/setup-guide"
-            className={findlocation === "/setup-guide" ? "active" : ""}
-          >
-            Setup Guide
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/getstarted"
-            className={findlocation === "/getstarted" ? "active" : ""}
-          >
+          <Link to="/getstarted" className={findlocation === "/getstarted" ? "active" : ""}>
             Get Started
           </Link>
         </li>
         <li>
+          <Link to="/dashboard" className={findlocation === "/dashboard" ? "active" : ""}>
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <Link to="/properties" className={findlocation === "/properties" ? "active" : ""}>
+            Properties
+          </Link>
+        </li>
+        <li>
+          <Link to="/property-insight" className={findlocation === "/property-insight" ? "active" : ""}>
+            Transcripts
+          </Link>
+        </li>
+        <li>
+          <Link to="/setting" className={findlocation === "/setting" ? "active" : ""}>
+            Settings
+          </Link>
+        </li>
+        <li>
+          <Link to="/setup-guide" className={findlocation === "/setup-guide" ? "active" : ""}>
+            Setup Guide
+          </Link>
+        </li>
+        <li>
           {!logoutLoader ? (
-            <Link
-              onClick={() => {
-                logoutHandle("logout");
-              }}
-            >
+            <Link onClick={() => {logoutHandle("logout");}}>
               Log out
             </Link>
           ) : (
