@@ -12,7 +12,9 @@ default_settings = {
     'message_signature_enabled': False,
     'defer_behavior': 'defer to team',   // 1) 'contact host' - tell the guest to contact the host at their personal number or some other channel; 2) 'defer to team' - “will check with team and get back to you later”; 3) 'defer to host' - “the host will get back to you”; 4) 'embody host' - “I don’t have that information right now / am not able to do that right now, will check and get back to you later”; 5) 'do not respond'
     'reveal_ai': 'only if asked',   // 'only if asked' or 'never'
-    'match_host_tone': False
+    'match_host_tone': False,
+    'min_message_delay_minutes': 0, // int, 0-7
+    'max_message_delay_minutes': 0  // int, 0-7
 }
 */
 
@@ -29,6 +31,12 @@ const AdvancedSettingsIndex = () => {
 
   // Set a particular field in the current settings
   const setSetting = (key, value) => {
+    if (key === 'min_message_delay_minutes' || key === 'max_message_delay_minutes') {
+      value = parseInt(value);
+      if (value < 0 || value > 7) {
+        return
+      }
+    }
     setCurrentSettingsData({ ...currentSettingsData, [key]: value });
   }
 
@@ -150,10 +158,8 @@ const AdvancedSettingsIndex = () => {
       </div>
       <div className="row mt-2">
         <div className="col-lg-12">
-          <div className="">
-            <label className="fs-5">Defer Behavior</label>
-            <p className="settings-label">How should HostBuddy respond when it's not able to resolve the guest's issue?</p>
-          </div>
+          <label className="fs-5">Defer Behavior</label>
+          <p className="settings-label">How should HostBuddy respond when it's not able to resolve the guest's issue?</p>
         </div>
       </div>
 
@@ -167,7 +173,7 @@ const AdvancedSettingsIndex = () => {
       </div>
       <div className="row mt-1">
         <div className="col-lg-3">
-        <Form.Check type="radio" aria-label="radio 2" name="group1" label="Defer to team" value="defer to team" checked={currentSettingsData.defer_behavior === 'defer to team'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
+          <Form.Check type="radio" aria-label="radio 2" name="group1" label="Defer to team" value="defer to team" checked={currentSettingsData.defer_behavior === 'defer to team'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
         </div>
         <div className="col-lg-8">
           <p className="fs-12 text-muted">Ex. "...I'll have to check with the team..."</p>
@@ -197,11 +203,9 @@ const AdvancedSettingsIndex = () => {
 
       <div className="row mt-5">
         <div className="col-lg-11">
-          <div className="">
-            <label className="fs-5">Direct Contact</label>
-            <p className="settings-label mb-2">If added, HostBuddy will provide this information to guests in the event of an emergency requiring immediate attention</p>
-            <input className="form-control" placeholder="ex. John Doe, (888-123-4567)" value={currentSettingsData.emergency_contact_instructions} onChange={(e) => setSetting('emergency_contact_instructions', e.target.value)}/>
-          </div>
+          <label className="fs-5">Direct Contact</label>
+          <p className="settings-label mb-2">If added, HostBuddy will provide this information to guests in the event of an emergency requiring immediate attention</p>
+          <input className="form-control" placeholder="ex. John Doe, (888-123-4567)" value={currentSettingsData.emergency_contact_instructions} onChange={(e) => setSetting('emergency_contact_instructions', e.target.value)}/>
         </div>
       </div>
 
@@ -218,13 +222,26 @@ const AdvancedSettingsIndex = () => {
 
       <div className="row mt-5">
         <div className="col-lg-11">
-          <label className="fs-5">Al Transparency</label>
+          <label className="fs-5">AI Transparency</label>
           <p className="settings-label mb-2">Can HostBuddy communicate that it is an AI assistant?</p>
-          <div className="">
-            <Form.Check type="radio" aria-label="radio1" name="group2" label="Only if directly asked" value="only if asked" checked={currentSettingsData.reveal_ai === 'only if asked'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
-          </div>
-          <div className="">
-            <Form.Check type="radio" aria-label="radio2" name="group2" label="Never" value="never" checked={currentSettingsData.reveal_ai === 'never'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
+          <Form.Check type="radio" aria-label="radio1" name="group2" label="Only if directly asked" value="only if asked" checked={currentSettingsData.reveal_ai === 'only if asked'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
+          <Form.Check type="radio" aria-label="radio2" name="group2" label="Never" value="never" checked={currentSettingsData.reveal_ai === 'never'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
+        </div>
+      </div>
+
+      <div className="row mt-5">
+        <div className="col-lg-11">
+          <label className="fs-5">Message Delay</label>
+          <p className="settings-label mb-2">HostBuddy will delay its response to guests by a (random) number of minutes within this range. To have HostBuddy simply respond as quickly as possible, set min and max delay to 0. Max allowed is 7 minutes.</p>
+          <div className="row">
+            <div className="col-lg-2">
+              <label className="fs-6">Min. Delay</label>
+              <input type="number" className="form-control" placeholder="0 mins" value={currentSettingsData.min_message_delay_minutes} onChange={(e) => setSetting('min_message_delay_minutes', e.target.value)}/>
+            </div>
+            <div className="col-lg-2">
+              <label className="fs-6">Max. Delay</label>
+              <input type="number" className="form-control" placeholder="0 mins" value={currentSettingsData.max_message_delay_minutes} onChange={(e) => setSetting('max_message_delay_minutes', e.target.value)}/>
+            </div>
           </div>
         </div>
       </div>
