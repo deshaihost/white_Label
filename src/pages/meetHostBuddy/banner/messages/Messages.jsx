@@ -6,7 +6,6 @@ import Loader from "../../../../helper/Loader";
 function Message({ key, text, sender, feedBckModelOpen, feedBackDataGet }) {
   const { response, message_id } = text ? text : {};
   const use_loader = sender === "bot" && !response && !message_id
-  console.log("use_loader", use_loader)
   return (
     <div>
       <div className={`message ${sender}`}>
