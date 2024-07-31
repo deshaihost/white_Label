@@ -31,7 +31,7 @@ const EmailConfirmationAction = () => {
 
         if (response.status === 200) {
             ToastHandle(response.data.message, "success");
-            const userData = { // this is how the data is saved in the login logic. Most of these fields are gibberish, but copy them anyway just to be safe
+            const userData = { // this is how the data is saved in the login logic. Most of these fields are gibberish and surely unused, but copy them anyway just to be safe
                 data: "userData", id: 1, password: "test", lastName: "User", role: "userRole",
                 token: response.data.access_token, refreshToken: response.data.refresh_token,
             };
@@ -61,7 +61,7 @@ const EmailConfirmationAction = () => {
   // After the confirmation is successful, redirect to the dashboard
   useEffect(() => {
     if (confirmSuccessful) {
-        navigate('/dashboard');
+        navigate('/getstarted');
         dispatch(stateEmptyActions());
     }
   }, [confirmSuccessful]);

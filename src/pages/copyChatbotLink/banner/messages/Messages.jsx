@@ -9,7 +9,6 @@ function Message({  text, sender, feedBckModelOpen, feedBackDataGet }) {
     ? feedBackDataGet
     : [];
   const use_loader = sender === "bot" && !response && !message_id
-  console.log("use_loader", use_loader)
   return (
     <div>
       <div className={`message ${sender}`}>

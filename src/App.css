@@ -45,6 +45,9 @@ a {
 .fs-12 {
   font-size: 12px;
 }
+.rounded-15 {
+  border-radius: 15px !important;
+}
 .bg-black {
   background: #000;
 }
