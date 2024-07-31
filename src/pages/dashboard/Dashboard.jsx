@@ -364,7 +364,7 @@ const Dashboard = () => {
                               Explore how to set up and get started with
                               HostBuddy
                             </p>
-                            <Link to="/getstarted">Get Started</Link>
+                            <Link to="/setup-guide">Get Started</Link>
                           </div>
                         </div>
                       </div>
