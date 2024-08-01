@@ -3,29 +3,21 @@ import Container from 'react-bootstrap/Container';
 import './works.css';
 import { Link } from 'react-router-dom';
 
-/*
-import AssistantImg from 'https://hostbuddylb.com/home/assistant.png';
-import IntegrationsImg from 'https://hostbuddylb.com/home/integrations_works_crop.png';
-import PropertyWithAmenitiesImg from 'https://hostbuddylb.com/home/property_with_amenities.jpeg';
-import lateNightBot from 'https://hostbuddylb.com/home/empty_desk_night.png';
-*/
-
 const AssistantImg = 'https://hostbuddylb.com/home/assistant.webp';
 const IntegrationsImg = 'https://hostbuddylb.com/home/integrations_works_crop.webp';
 const PropertyWithAmenitiesImg = 'https://hostbuddylb.com/home/property_with_amenities.webp';
 const lateNightBot = 'https://hostbuddylb.com/home/empty_desk_night.webp';
 
-const cleaningManagement = 'https://storage.googleapis.com/frontend_media/new-home-test/Cleaning%20Management%20Software%20Integrations%20(coming%20soon).jpg';
-const stayInCharge = 'https://storage.googleapis.com/frontend_media/new-home-test/GuestRelay%20for%20Hosts%20(coming%20soon).png';
-const teamSpecific = 'https://storage.googleapis.com/frontend_media/new-home-test/Team%20Specific%20Notifications%20(coming%20soon).png';
-const vacantNight = 'https://storage.googleapis.com/frontend_media/new-home-test/Vacant%20Night%20Upsells%20(coming%20soon).png';
-const stayInformed = 'https://storage.googleapis.com/frontend_media/new-home-test/Stay%20Informed.png';
-const schedule = 'https://storage.googleapis.com/frontend_media/new-home-test/Schedule%20Based%20On%20Your%20Needs%20(1).png';
-const groundedResponses = lateNightBot;
-const unlimitedTesting = 'https://storage.googleapis.com/frontend_media/new-home-test/Test%20Before%20You%20Subscribe.png';
-const robustCustomization = 'https://storage.googleapis.com/frontend_media/new-home-test/Customized%20Representation.png';
-const seamlessPropertySetup = 'https://storage.googleapis.com/frontend_media/new-home-test/Seamless%20Property%20Setup.png';
-const industryLeadingAI = 'https://storage.googleapis.com/frontend_media/new-home-test/Industry%20Leading%20AI.png';
+const cleaningManagement = 'https://storage.googleapis.com/frontend_media/home-new/Cleaning%20Management%20Software%20Integrations%20(coming%20soon).webp';
+const stayInCharge = 'https://storage.googleapis.com/frontend_media/home-new/stay%20in%20control.webp';
+const teamSpecific = 'https://storage.googleapis.com/frontend_media/home-new/Team%20Specific%20Notifications%20(coming%20soon).webp';
+const vacantNight = 'https://storage.googleapis.com/frontend_media/home-new/Vacant%20Night%20Upsells%20(coming%20soon).webp';
+const stayInformed = 'https://storage.googleapis.com/frontend_media/home-new/Stay%20Informed.webp';
+const schedule = 'https://storage.googleapis.com/frontend_media/home-new/Schedule%20Based%20On%20Your%20Needs%20(1).webp';
+const unlimitedTesting = 'https://storage.googleapis.com/frontend_media/home-new/Test%20Before%20You%20Subscribe.webp';
+const robustCustomization = 'https://storage.googleapis.com/frontend_media/home-new/Customized%20Representation.webp';
+const seamlessPropertySetup = 'https://storage.googleapis.com/frontend_media/home-new/Seamless%20Property%20Setup.webp';
+const industryLeadingAI = 'https://storage.googleapis.com/frontend_media/home-new/Industry%20Leading%20AI.webp';
 
 const Works = () => {
     return(
@@ -61,7 +53,7 @@ const Works = () => {
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={industryLeadingAI} alt='works-img' />
+                            <img src={lateNightBot} alt='works-img' />
                         </div>
                     </div>
 
@@ -89,6 +81,7 @@ const Works = () => {
                         </div>
                     </div>
 
+                    {/*
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
@@ -100,6 +93,7 @@ const Works = () => {
                             <img src={groundedResponses} alt='works-img' />
                         </div>
                     </div>
+                    */}
 
                     <div className="row">
                         <div className="col-lg-6">
@@ -153,7 +147,7 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3>Stay <strong>In Charge</strong></h3>
+                                <h3><strong>Directed</strong> Responses</h3>
                                 <h4>(coming soon)</h4>
                                 <p>HostBuddy will notify you when a guest message requires action or decision making beyond its capability. Respond directly to the notification to make the final call, and HostBuddy will send the appropriate response based on your guidance.</p>
                             </div>
@@ -163,6 +157,7 @@ const Works = () => {
                         </div>
                     </div>
 
+                    {/*
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
@@ -175,6 +170,7 @@ const Works = () => {
                             <img src={vacantNight} alt='works-img' />
                         </div>
                     </div>
+                    */}
 
                     <div className="row">
                         <div className="col-lg-6">
