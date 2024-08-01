@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Container from "react-bootstrap/Container";
-import AuthImage from "../../public/img/Sign_Up_Page.jpg";
 import { Link } from "react-router-dom";
 import "../auth.css";
 import PrimaryButton from "../../component/button/button";
@@ -14,6 +13,7 @@ import ToastHandle from "../../helper/ToastMessage";
 
 //import Logo from "../../public/img/logo_footer.png";
 const Logo = 'https://hostbuddylb.com/logo/logo_footer.webp';
+const AuthImage = 'https://hostbuddylb.com/home-new/_Signup.webp';
 
 const ForgotPass = () => {
   const store = useSelector((state) => state);

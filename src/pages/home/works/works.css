@@ -89,21 +89,30 @@
     margin-bottom: 10px;
 }
 
-.works .works-container .row:nth-child(1) h3 strong, .works .works-container .row:nth-child(4) h3 strong {
+.works .works-container .row h4 {
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 20px;
+    font-style: normal;
+    color: #AAA;
+    margin-top: -8px;
+    margin-bottom: 5px;
+}
+
+.works .works-container .row:nth-child(3n+1) h3 strong, .works .works-container .row:nth-child(4) h3 strong {
     background: var(--Blue, linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%));
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.works .works-container .row:nth-child(2) h3 strong {
+.works .works-container .row:nth-child(3n+2) h3 strong {
     background: linear-gradient(180deg, #C274FF 1.92%, #9214F5 119.23%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.works .works-container .row:nth-child(3) h3 strong {
+.works .works-container .row:nth-child(3n) h3 strong {
     background: linear-gradient(180deg, #64FFEC 1.92%, #14F5DA 119.23%);
     background-clip: text;
     -webkit-background-clip: text;
@@ -162,6 +171,10 @@
     .works .works-container .row h3  {
         font-size: 27px;
         line-height: 35px;
+    }
+
+    .works .works-container .row h4 {
+        font-size: 16px;
     }
 
     .works .works-container .row p {
