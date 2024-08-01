@@ -118,12 +118,9 @@ const Essentials = () => {
                 <span>
                   ($
                   <strong>
-                    {essentialValue < 6
-                      ? 10
-                      : essentialValue > 5 && essentialValue < 11
-                      ? 9
-                      : essentialValue > 10 && essentialValue < 21
-                      ? 8
+                    {essentialValue < 6 ? 10
+                      : essentialValue > 5 && essentialValue < 11 ? 9
+                      : essentialValue > 10 && essentialValue < 21 ? 8
                       : 7}
                   </strong>{" "}
                   / add'l property)
