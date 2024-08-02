@@ -67,11 +67,14 @@ const Footer = () => {
               <div className="footer-links">
                 <h6 className=" fw-bold mb-4 links-heading">Contact</h6>
                 <p className="links">
-                  <a style={{ display: 'inline-block', cursor: 'pointer', marginBottom: '10px' }} className="text-reset" target="_blank" rel="noopener noreferrer" onClick={(e) => {
-                      e.preventDefault(); // Don't go to any link - just open the modal
-                      setDemoModalShow(true);
+                  <a style={{ display: 'inline-block', cursor: 'pointer', marginBottom: '10px' }} className="text-reset mb-0" target="_blank" rel="noopener noreferrer" onClick={(e) => {
+                    e.preventDefault(); // Don't go to any link - just open the modal
+                    setDemoModalShow(true);
                   }}> Book a Demo </a>
                 </p>
+                <Link to="/become-an-affiliate" className="links">
+                  Become an Affiliate</Link>
+
                 <p className="links">
                   Email: info@hostbuddy.ai
                 </p>
