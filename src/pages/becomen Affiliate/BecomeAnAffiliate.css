@@ -1,0 +1,107 @@
+.affilate h1 {
+  font-size: 78px;
+}
+.affilate h5 {
+  font-size: 50px;
+}
+.custom-sections p {
+  font-size: 22px;
+}
+.custom-sections p strong {
+  -webkit-text-fill-color: inherit;
+}
+.emp-btn {
+  background-color: #fff;
+  border: 5px solid #0d6efd;
+  border-radius: 10px;
+  padding: 20px 12px;
+  font-size: 25px;
+  font-weight: bold;
+}
+img.affi-logo {
+  width: 32%;
+}
+
+.earn-commision h1 {
+  font-size: 48px;
+}
+.bg-section {
+  background: #146ef5;
+  width: 80px;
+  height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+}
+.become-affilate h1 {
+  font-size: 50px;
+}
+.bg-section p {
+  font-size: 50px !important;
+}
+.display-btn-new {
+  display: block;
+}
+.display-btn {
+  display: none;
+}
+@media screen and (max-width: 991px) {
+  .affilate h1 {
+    font-size: 38px;
+  }
+  .earn-commision h1 {
+    font-size: 38px;
+  }
+  .become-affilate h1 {
+    font-size: 38px;
+  }
+  .affilate h5 {
+    font-size: 30px;
+  }
+  .custom-sections p {
+    font-size: 16px;
+  }
+  .emp-btn {
+    font-size: 16px !important;
+  }
+  .bg-section p {
+    font-size: 35px !important;
+  }
+  .custom-grid h3 {
+    font-size: 25px !important;
+  }
+  .custom-sections img {
+    width: 100% !important;
+  }
+}
+@media screen and (max-width: 767px) {
+  .affilate h1 {
+    font-size: 28px;
+  }
+  .affilate h5 {
+    font-size: 22px;
+  }
+  .earn-commision h1,
+  .become-affilate h1 {
+    font-size: 35px;
+  }
+  .bg-section p {
+    font-size: 30px !important;
+  }
+  .custom-grid h3 {
+    font-size: 20px !important;
+  }
+  .custom-order-1 {
+    order: 1;
+  }
+  .custom-order-2 {
+    order: 2;
+  }
+  .display-btn-new {
+    display: none;
+  }
+  .display-btn {
+    display: block;
+  }
+}
