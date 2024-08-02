@@ -35,6 +35,7 @@ import AddPropertyForm from "../pages/properties/addProperties/dynamic_questionn
 import BlogLandingPage from "../blog/blogLanding";
 import BlogArticle from "../blog/blogArticle";
 import GetStarted from "../pages/getStarted/GetStarted";
+import BecomeAnAffiliate from "../pages/becomen Affiliate/BecomeAnAffiliate";
 //----
 import SettingIndex from "../pages/settings/SettingIndex";
 
@@ -146,48 +147,49 @@ const Routing = () => {
         <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
-        <Route path="*" element={ <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" /> } />
+        <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />}></Route>
+        <Route path="*" element={<ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" />} />
         <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
         />
         <Route path="/properties" element={
-            <ProtectedRoute>
-              <Properties />
-            </ProtectedRoute>
-          }
+          <ProtectedRoute>
+            <Properties />
+          </ProtectedRoute>
+        }
         />
         <Route path="/property-insight" element={
-            <ProtectedRoute>
-              <PropertyInsight />
-            </ProtectedRoute>
-          }
+          <ProtectedRoute>
+            <PropertyInsight />
+          </ProtectedRoute>
+        }
         />
         <Route path="/subscription" element={
-            <ProtectedRoute>
-              <Subscription />
-            </ProtectedRoute>
-          }
+          <ProtectedRoute>
+            <Subscription />
+          </ProtectedRoute>
+        }
         />
         <Route path="/setting/:section?" element={
           <ProtectedRoute>
             {/* <Account /> */}
-            <SettingIndex/>
+            <SettingIndex />
           </ProtectedRoute>
-        }/>
+        } />
         <Route path="/add-property" element={
-            <ProtectedRoute>
-              <AddPropertyForm />
-            </ProtectedRoute>
-          }
+          <ProtectedRoute>
+            <AddPropertyForm />
+          </ProtectedRoute>
+        }
         />
         <Route path="/edit-property/:property_name" element={
-            <ProtectedRoute>
-              <QuestionnairePage />
-            </ProtectedRoute>
-          }
+          <ProtectedRoute>
+            <QuestionnairePage />
+          </ProtectedRoute>
+        }
         />
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
