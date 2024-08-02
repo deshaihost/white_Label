@@ -10,7 +10,7 @@ import PopupModal from "./PopupModal";
 
 import "../questionnaire.css";
 
-const DocumentForm = ({ property_name, apiPropertyData }) => {
+const DocumentForm = ({ property_name, apiPropertyData, getPropertyDataFromAPI }) => {
   const { store, dispatch } = useSelectorUseDispatch();
 
   const [showPreviousDoc, setShowPreviousDoc] = useState(false);
@@ -70,15 +70,17 @@ const DocumentForm = ({ property_name, apiPropertyData }) => {
         if (response.status === 200) {
           ToastHandle("File uploaded successfully", "success");
           setDocHideForResrv(false);
-          setGetDocApiCall(true);
+          //setGetDocApiCall(true);
+          getPropertyDataFromAPI(property_name); // to refresh the knowledge base window and the options in auto fill
         } else {
           ToastHandle(response?.data?.error, "danger");
-          console.log("Error", response);
         }
       } else {
         alert("Missing token or property_name");
       }
-    } catch (error) { }
+    } catch (error) {
+      ToastHandle("Sorry, we were unable to process that file.", "danger");
+    }
     finally { setdocUploadIsLoading(false); }
   };
 
@@ -94,6 +96,7 @@ const DocumentForm = ({ property_name, apiPropertyData }) => {
   };
 
   // Call the get property API to get the list of previously uploaded documents, and the name of any previously linked integration property
+  /*
   const getPropertyDataFromAPI = async (propertyName) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -126,6 +129,7 @@ const DocumentForm = ({ property_name, apiPropertyData }) => {
       } else {  }
     } catch (error) {  }
   };
+  */
 
   // After deleting a document, call GET property to refresh the list
   const deleteResAfterPreviousDocCall = () => {

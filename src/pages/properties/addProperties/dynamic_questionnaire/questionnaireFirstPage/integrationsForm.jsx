@@ -5,11 +5,10 @@ import Loader, { BoxLoader } from "../../../../../helper/Loader";
 
 import axios from "axios";
 
-const IntegrationsForm = ({ property_name, apiPropertyData }) => {
+const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromAPI }) => {
   const { store, dispatch } = useSelectorUseDispatch();
 
   const [prevLinkedIntegration, setPrevLinkedIntegration] = useState(null);
-  const [suppertingInput, setSuppertingInput] = useState({ updateDoc: true, urlToWebPage: false, pmsIntegration: false });
 
   // list_integration_properties API Logic ------------------------------------------------------------------------------------------
 
@@ -18,6 +17,7 @@ const IntegrationsForm = ({ property_name, apiPropertyData }) => {
   const [unlinkIsLoading, setUnlinkIsLoading] = useState(false);
   const [integrationPropertyList, setIntegrationPropertiesList] = useState([]);
   const [integrationPropertiesLoading, setIntegrationPropertiesLoading] = useState(true);
+  const [listIntegrationPropertiesHasBeenCalled, setListIntegrationPropertiesHasBeenCalled] = useState(false);
 
   //const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties; // array of integration_property objects; each with "name" and "id" properties
   //const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
@@ -46,10 +46,15 @@ const IntegrationsForm = ({ property_name, apiPropertyData }) => {
     finally { setIntegrationPropertiesLoading(false); }
   };
 
-  // On page load, call the list_integration_properties API. TODO: check user get first, and only call if user has a PMS integration - or make the user click something on this page to trigger the call
+  // On page load, call the list_integration_properties API.
   useEffect(() => {
-    callListIntegrationPropertiesAPI();
-  }, []);
+    if (!listIntegrationPropertiesHasBeenCalled) {
+      if (!apiPropertyData.hasOwnProperty('calry_property_id')) { // if the property is not already linked
+        callListIntegrationPropertiesAPI();
+        setListIntegrationPropertiesHasBeenCalled(true);
+      }
+    }
+  }, [apiPropertyData]);
 
   // -------------------------------------------------------------------------------------------------------------------------------
 
@@ -84,8 +89,7 @@ const IntegrationsForm = ({ property_name, apiPropertyData }) => {
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
-          setPrevLinkedIntegration(integrationPropertyName);
-          setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
+          getPropertyDataFromAPI(propertyName);
         } else {
           ToastHandle(response?.data?.error, "danger");
         }
@@ -122,8 +126,7 @@ const IntegrationsForm = ({ property_name, apiPropertyData }) => {
 
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
-          setPrevLinkedIntegration(null);
-          setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
+          getPropertyDataFromAPI(propertyName);
         } else { ToastHandle(response.data.error, "danger"); }
       }
     } catch (error) {

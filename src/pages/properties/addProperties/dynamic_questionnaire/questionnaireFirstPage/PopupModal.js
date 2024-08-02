@@ -15,7 +15,9 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj, deleteR
   const removeSupportingDocsLoading = store?.removeSupportingDocsReducer?.loading;
 
   const documentRemoveHandle = (docName) => {
-    dispatch( removeSupportingDocsActions({ newPropertyNm: property_name, doc_name: docName }) );
+    if (window.confirm("Are you sure you want to delete this document?")) {
+      dispatch( removeSupportingDocsActions({ newPropertyNm: property_name, doc_name: docName }) );
+    }
   };
 
   const openTextHandle = (textUrlGet) => {
@@ -29,7 +31,7 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj, deleteR
   useEffect(() => {
     if (removeSupportingDocsStatus === 200) {
       ToastHandle("File deleted successfully", "success");
-      dispatch(stateEmptyActions());
+      //dispatch(stateEmptyActions());
       deleteResAfterPreviousDocCall();
     } else if (removeSupportingDocsStatus === 500) {
       ToastHandle("500 Internal Server Error", "danger");

@@ -1,32 +1,31 @@
-#integrate_form1 .custom_checkbox {
-  background: #000426 !important;
-}
-#integrate_form1 .custom_checkbox {
-  height: 74px;
+#integrate_form1 .custom_checkbox { /* this is the entire tile for each listed property */
+  min-height: 74px;
   border-radius: 20px;
   border: 2px solid #146ef5;
-  background: linear-gradient(180deg, #000426 0%, #00031a 100%);
+  background: #000426 !important;
   padding: 20px 22px;
   padding-left: 67px;
 }
-#integrate_form1 .custom_checkbox .form-check-input {
+
+#integrate_form1 .custom_checkbox .form-check-input { /* this is the checkbox */
   border: 2px solid #146ef5;
   background-color: #000426;
   width: 28px;
   height: 28px;
   margin-left: -40px;
-  float: none;
   display: inline-block;
   vertical-align: middle;
 }
-#integrate_form1 .custom_checkbox .form-check-input:checked {
+
+#integrate_form1 .custom_checkbox .form-check-input:checked { /* this is the checked checkbox */
   background: #146ef5;
   border: 4px solid #000420;
   box-shadow: 0 0 0 2px #146ef5 !important;
   width: 28px;
   height: 28px;
 }
-#integrate_form1 .custom_checkbox label {
+
+#integrate_form1 .custom_checkbox label { /* this is the text next to the checkbox */
   color: #fff;
   text-align: left;
   font-size: 18px;
