@@ -9,7 +9,7 @@ import Loader from "../../../../../helper/Loader";
 import "../questionnaire.css";
 
 // Code for the first page of the questionnaire
-const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, property_name, apiPropertyData, setApiPropertyData}) => {
+const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, property_name, apiPropertyData, setApiPropertyData, getPropertyDataFromAPI}) => {
 
   const [showCopyExistingPropModal, setShowCopyExistingPropModal] = useState(false);
   const [showAutoFillModal, setShowAutoFillModal] = useState(false);
@@ -30,17 +30,17 @@ const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, proper
       {/* PMS Integration & document stuff */}
       <div className="row">
         <div className="col-6">
-        <IntegrationsForm property_name={property_name} apiPropertyData={apiPropertyData}/>
+        <IntegrationsForm property_name={property_name} apiPropertyData={apiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
         </div>
 
         <div className="col-6">
-        <DocumentForm property_name={property_name} apiPropertyData={apiPropertyData}/>
+        <DocumentForm property_name={property_name} apiPropertyData={apiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
         </div>
       </div>
       <div style={{ marginBottom: '70px' }}></div> {/* Spacer */}
 
       {/* HostBuddy Knowledge Base */}
-      <HostBuddyKnowledgeBase apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData}/>
+      <HostBuddyKnowledgeBase apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI} property_name={property_name}/>
       <div style={{ marginBottom: '90px' }}></div> {/* Spacer */}
       
 

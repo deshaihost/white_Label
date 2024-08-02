@@ -6,7 +6,7 @@ import KnowledgeBaseSourcesModal from "./knowledgeBaseSourcesModal";
 import "../questionnaire.css";
 
 
-const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData}) => {
+const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropertyDataFromAPI, property_name}) => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
@@ -28,6 +28,13 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData}) => {
       setPullConversationsSuccess(true);
     }
   }, [apiPullConversationsDataSuccess]);
+
+  // When conversation data is successfully pulled, call getPropertyDataFromAPI so that the "past conversations" option populates in the auto-fill modal
+  useEffect(() => {
+    if (pullConversationsSuccess) {
+      getPropertyDataFromAPI(property_name);
+    }
+  }, [pullConversationsSuccess]);
 
   // When apiPropertyData populates, get relevant data from it
   useEffect(() => {
@@ -134,7 +141,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData}) => {
               !((section === 'Past conversations' && !convo_data_has_been_pulled)) && (
                 (integrationData[integration_categories[section]]?.use_for_knowledge_base ? (
                   (integrationData[integration_categories[section]]?.months ? (
-                    <h5 className="text-confirmed" key={index}>{section} <small className="text-neutral">(last {integrationData[integration_categories[section]]?.months} months)</small></h5>
+                    <h5 className="text-confirmed" key={index}>{section} <small style={{color:'#AAA'}}>(last {integrationData[integration_categories[section]]?.months} months)</small></h5>
                   ) : (
                     <h5 className="text-confirmed" key={index}>{section}</h5>
                   ))
@@ -151,7 +158,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData}) => {
                 <>
                   <div className="loader-text-container">
                     <BoxLoader />
-                    <h5 className="text-negative">Past conversations being pulled (this may take a few minutes...)</h5>
+                    <h5 className="text-negative">Past conversations being pulled (this may take a minute or two...)</h5>
                   </div>
                 </>
               ))
