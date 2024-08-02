@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import './BecomeAnAffiliate'
 import "./BecomeAnAffiliate.css"
 import { Col, Container, Row } from 'react-bootstrap'
-import Affilateimg from "../../public/img/affilated-program.png"
-import LOGO from "../../public/img/logo/logo_footer.png"
-import Earn from "../../public/img/Commision.png"
-import BecomeAff from "../../public/img/earn-affilate.png"
 import ContactUs from "../testProperty/discover/contactUs/ContactUs";
+
+const LOGO = 'https://hostbuddylb.com/logo/logo_footer.webp';
+const Earn = 'https://hostbuddylb.com/becomeAnAffiliate/Commision.webp';
+const BecomeAff = 'https://hostbuddylb.com/becomeAnAffiliate/earn-affilate.webp';
+const Affilateimg = 'https://hostbuddylb.com/becomeAnAffiliate/affilate-program.webp';
 
 const BecomeAnAffiliate = () => {
     const [modalShow, setModalShow] = useState(false);
@@ -23,7 +24,7 @@ const BecomeAnAffiliate = () => {
                                 <p className='text-white fw-normal'>
                                     <strong className='text-white '>Cutting-Edge Technology: </strong>
                                     Offer your community access to the most advanced Al solution for short-term rental hosts.</p>
-                                <p className='text-white fw-bold my-5 '>Earn Commission on Each Sale</p>
+                                <p className='text-white fw-bold my-5 '><strong>Earn Commission on Each Sale</strong></p>
                                 <p className='text-white fw-normal  mb-5'>
                                     <strong className='text-white'>Recurring Revenue: </strong>
                                     Benefit from ongoing subscriptions and earn more beyond the initial sale.</p>
@@ -55,7 +56,7 @@ const BecomeAnAffiliate = () => {
                                     <strong className='text-white'>Marketing Collateral: </strong>
                                     Access templated content for social media and email marketing.</p>
                                 <p className='text-white fw-normal my-5'>
-                                    <strong className='text-white'>Collaborative Content Creation:</strong>
+                                    <strong className='text-white'>Collaborative Content Creation: </strong>
                                     Partner with us for webinars, guest blog posts, and more.</p>
                                 <p className='text-white fw-bold'>Early Feature Access</p>
                                 <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn'>EARN 20% COMMISSION</button>
@@ -84,7 +85,7 @@ const BecomeAnAffiliate = () => {
                                         <div className='bg-section'>
                                             <p className=''>2</p>
                                         </div>
-                                        <h3 className='text-white fs-2'>Share your s</h3>
+                                        <h3 className='text-white fs-2'>Share your code</h3>
 
                                     </div>
                                     <div className='d-flex custom-grid gap-4 align-items-center'>
