@@ -104,7 +104,9 @@ const AdvancedSettingsIndex = () => {
 
   // On page load, call the API to get the settings
   useEffect(() => {
-    callGetSettingsApi();
+    if (Object.keys(settingsApiData).length === 0) {
+      callGetSettingsApi();
+    }
   }, []);
 
 
@@ -114,7 +116,7 @@ const AdvancedSettingsIndex = () => {
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
         <h3>Conversation Settings</h3>
         <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
-          <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings}>
+          <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
             Save Settings
           </Button>
           <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example">
@@ -248,7 +250,7 @@ const AdvancedSettingsIndex = () => {
 
       <div className="row mt-4">
         <div className="col-lg-12 text-center">
-          <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings}>
+          <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
             Save Settings
           </Button>
         </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "./SettingIndex.css";
 import SettingSideBarIndex from "./settingSideBar/SettingSideBarIndex";
 import AdvancedSettingsIndex from "./settingContants/advancedSettings/AdvancedSettingsIndex";
+import UpsellsIndex from './settingContants/upsells/upsells';
 import SubscriptionIndex from "./settingContants/subscription/SubscriptionIndex";
 import { Helmet } from "react-helmet";
 import SideBar from "../../component/sideBar/SideBar";
@@ -15,7 +16,7 @@ const SettingIndex = () => {
   const { section } = useParams();
   const [interFaceSettings, setInterFaceSettings] = useState("account");
 
-  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"conversation-preferences", subscription:"subscription" };
+  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"conversation-preferences", upsells:"upsells", subscription:"subscription" };
 
   // Get the path param (if passed) and set the active tab
   useEffect(() => {
@@ -60,6 +61,9 @@ const SettingIndex = () => {
                   )}
                   {interFaceTypes?.conversationSettings === interFaceSettings && (
                     <AdvancedSettingsIndex />
+                  )}
+                  {interFaceTypes?.upsells === interFaceSettings && (
+                    <UpsellsIndex />
                   )}
                   {interFaceTypes?.subscription === interFaceSettings && (
                     <SubscriptionIndex />
