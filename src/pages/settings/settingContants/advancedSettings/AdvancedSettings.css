@@ -1,5 +1,5 @@
 /* Custom switch styling */
-.custom-switch .form-check-input {
+.conversation-settings .custom-switch .form-check-input {
   width: 36px; /* slightly smaller width */
   height: 18px; /* slightly smaller height */
   background-color: #ccc; /* default grey background when off */
@@ -12,11 +12,11 @@
   transition: background-color 0.3s;
 }
 
-.custom-switch .form-check-input:checked {
+.conversation-settings .custom-switch .form-check-input:checked {
   background-color: #045ce9; /* color when switch is on */
 }
 
-.custom-switch .form-check-input::before {
+.conversation-settings .custom-switch .form-check-input::before {
   content: '';
   position: absolute;
   width: 12px; /* smaller knob width */
@@ -28,17 +28,17 @@
   transition: transform 0.3s;
 }
 
-.custom-switch .form-check-input:checked::before {
+.conversation-settings .custom-switch .form-check-input:checked::before {
   transform: translateX(18px); /* move the knob to the right when on */
 }
 
 /* Adjust the vertical alignment */
-.custom-switch .form-check-input::before {
+.conversation-settings .custom-switch .form-check-input::before {
   top: 50%; /* position at the vertical center */
   transform: translateY(-50%); /* adjust to center the knob */
 }
 
-.custom-switch .form-check-input:checked::before {
+.conversation-settings .custom-switch .form-check-input:checked::before {
   transform: translate(18px, -50%); /* move the knob to the right and center it */
 }
 

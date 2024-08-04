@@ -45,13 +45,13 @@ const BecomeAnAffiliate = () => {
                         <Row className="mt-3 align-items-center px-2 md-px-0">
                             <Col md={5} className='pe-md-5  text-center'>
                                 <img className='w-75' src={Earn} />
-                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn-new'>EARN 20% COMMISSION</button></Col>
+                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn-new'>EARN COMMISSION</button></Col>
                             <Col md={7} className=' ps-md-5 pt-3 pt-md-0 '>
                                 <h1 className='text-uppercase fw-normal text-white mb-5'>HOSTBUDDY AI WILL PROVIDE:</h1>
                                 <p className='text-white fw-bold'>Unique Discount Code For Your Audience</p>
                                 <p className='text-white fw-normal my-5'>
-                                    <strong className='text-white'>20% Revenue Share: </strong>
-                                    Earn 20% of the revenue from all orders placed with your code.</p>
+                                    <strong className='text-white'>Revenue Share: </strong>
+                                    Earn revenue from all orders placed with your code.</p>
                                 <p className='text-white fw-normal '>
                                     <strong className='text-white'>Marketing Collateral: </strong>
                                     Access templated content for social media and email marketing.</p>
@@ -59,7 +59,7 @@ const BecomeAnAffiliate = () => {
                                     <strong className='text-white'>Collaborative Content Creation: </strong>
                                     Partner with us for webinars, guest blog posts, and more.</p>
                                 <p className='text-white fw-bold'>Early Feature Access</p>
-                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn'>EARN 20% COMMISSION</button>
+                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn'>EARN COMMISSION</button>
                             </Col>
 
                         </Row>

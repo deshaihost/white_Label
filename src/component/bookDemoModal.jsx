@@ -16,7 +16,8 @@ const BookDemoModal = (props) => {
   // Once, on page load, randomly select the demo person
   useEffect(() => {
     const all_demo_URLs = {'Sam':'https://calendly.com/sam-hostbuddy/30min', 'Jay':'https://calendly.com/jay-u6bh/30min'};
-    const randomly_selected_demo_person = Object.keys(all_demo_URLs)[Math.floor(Math.random() * Object.keys(all_demo_URLs).length)];
+    //const randomly_selected_demo_person = Object.keys(all_demo_URLs)[Math.floor(Math.random() * Object.keys(all_demo_URLs).length)];
+    const randomly_selected_demo_person = 'Sam';  // Always choose Sam
     const randomly_selected_demo_URL = all_demo_URLs[randomly_selected_demo_person];
     setRandomlySelectedDemoPerson({person: randomly_selected_demo_person, url: randomly_selected_demo_URL});
   }, []);
