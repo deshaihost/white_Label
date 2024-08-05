@@ -47,7 +47,8 @@ const Home = () => {
         <link rel="canonical" href="https://www.hostbuddy.ai/" />
       </Helmet>
       <Banner />
-      <Introduction />
+      {/* <Introduction /> */}
+      <WelcomeSection />
       <div ref={worksRef}>
         <Works />
       </div>
@@ -57,9 +58,6 @@ const Home = () => {
         <DemoVideoSection load={loadDemoVideo} />
       </div>
       <Plans />
-      <div>
-        <WelcomeSection />
-      </div>
     </div>
   );
 };

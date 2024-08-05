@@ -4,9 +4,10 @@ import Container from "react-bootstrap/Container";
 import Review1 from "../../../public/img/home/host.png";
 import Review2 from "../../../public/img/home/host1.png";
 import Review3 from "../../../public/img/home/host2.png";
-import Author from "../../../public/img/home/author1.jpg";
-import Author1 from "../../../public/img/home/author2.png";
-import Author2 from "../../../public/img/home/author.jpg";
+
+const Author = 'https://hostbuddylb.com/home/introduction/author1.webp';
+const Author1 = 'https://hostbuddylb.com/home/introduction/author2.webp';
+const Author2 = 'https://hostbuddylb.com/home/introduction/author.webp';
 
 const welcomeBoxesData = [
   {
@@ -47,8 +48,12 @@ const WelcomeSection = () => {
             </div>
             <div className="col-md-2">
               <div className="review-box1">
-                <img src={Review1} className="mb-3" alt="Review 1" />
-                <img src={Review2} alt="Review 2" />
+              <a href="https://www.capterra.com/p/10021407/HostBuddy-AI/reviews/">
+                <img border="0" src="https://brand-assets.capterra.com/badge/148baf12-c098-4f51-bdba-c64e3851fb73.svg" />
+              </a>
+              <a href="null" style={{ marginTop: "10px", display: "inline-block" }}>
+                <img border="0" src="https://brand-assets.softwareadvice.com/badge/762c7552-7655-4a9c-8612-0b9774480a07.png" />
+              </a>
               </div>
             </div>
             <div className="col-md-8">
@@ -70,7 +75,9 @@ const WelcomeSection = () => {
             </div>
             <div className="col-md-2">
               <div className="review-box2">
-                <img src={Review3} alt="Review 3" />
+                <a href="https://www.getapp.com/hospitality-travel-software/a/hostbuddy-ai/reviews/">
+                  <img border="0" src="https://brand-assets.getapp.com/badge/67d347a1-edef-4ac3-9150-8815443510fc.png" />
+                </a>
               </div>
             </div>
           </div>
