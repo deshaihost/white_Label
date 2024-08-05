@@ -4,6 +4,11 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./upsells.css";
+import { BoxLoader } from "../../../../helper/Loader";
+
+import { FaPhoneAlt, FaArrowUp, FaTimes, FaExternalLinkAlt } from "react-icons/fa";
+import { HiBellAlert } from "react-icons/hi2";
+import { LiaCogSolid } from "react-icons/lia";
 
 /*
 default_settings = {
@@ -27,6 +32,8 @@ const UpsellsIndex = () => {
 
   const [getSettingsLoading, setGetSettingsLoading] = useState(false);
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
+  const [getUpcomingMessagesLoading, setGetUpcomingMessagesLoading] = useState(false);
+  const [upcomingMessagesData, setUpcomingMessagesData] = useState([]);
   const [settingsApiData, setSettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
   const [currentSettingsData, setCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
   const [selectedConfig, setSelectedConfig] = useState("default"); // The currently selected config. All users have a "default" config
@@ -53,6 +60,63 @@ const UpsellsIndex = () => {
     }
 
     setCurrentSettingsData({ ...currentSettingsData, [key]: value });
+  }
+
+
+  // Format date range
+  // e.g. input startDate='2024-08-16', endDate='2024-08-18' => output 'Aug 16 - Aug 18'
+  // e.g. input startDate='2024-08-16', endDate='2024-08-16' => output 'Aug 16'
+  const formatDateRange = (startDate, endDate) => {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  
+    const parseDate = (dateString) => {
+      const [year, month, day] = dateString.split('-').map(Number);
+      return new Date(Date.UTC(year, month - 1, day));
+    };
+  
+    const formatDate = (date, includeYear = false) => {
+      const month = monthNames[date.getUTCMonth()];
+      const day = date.getUTCDate();
+      const year = date.getUTCFullYear();
+      return includeYear ? `${month} ${day}, ${year}` : `${month} ${day}`;
+    };
+  
+    const start = parseDate(startDate);
+    const end = parseDate(endDate);
+  
+    const startFormatted = formatDate(start, start.getUTCFullYear() !== end.getUTCFullYear());
+    const endFormatted = formatDate(end, start.getUTCFullYear() !== end.getUTCFullYear());
+  
+    if (startFormatted === endFormatted) {
+      return startFormatted;
+    } else {
+      return `${startFormatted} - ${endFormatted}`;
+    }
+  };
+
+
+  // Format datetime
+  // e.g. input datetime='2024-08-15 13:00' => output 'Aug 15, 1:00 PM'
+  const formatDateTime = (datetime) => {
+    const [datePart, timePart] = datetime.split(' ');
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hour, minute] = timePart.split(':').map(Number);
+  
+    const date = new Date(Date.UTC(year, month - 1, day, hour, minute));
+  
+    const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' };
+    return date.toLocaleDateString('en-US', options);
+  };
+
+  // Truncate a string to num_chars
+  // e.g. input string='Hello, world!', num_chars=5 => output 'Hello...'
+  // e.g. input string='Hello', num_chars=5 => output 'Hello'
+  const truncateString = (string, num_chars) => {
+    if (string.length > num_chars) {
+      return string.slice(0, num_chars) + '...';
+    } else {
+      return string;
+    }
   }
 
 
@@ -96,7 +160,7 @@ const UpsellsIndex = () => {
       }
       else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) {
-      ToastHandle("An error occurred", "danger");
+      
     } finally {
       setGetSettingsLoading(false);
     }
@@ -123,23 +187,51 @@ const UpsellsIndex = () => {
       }
       else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) {
-      ToastHandle("An error occurred", "danger");
+      
     } finally {
       setSetSettingsLoading(false);
     }
   }
 
 
-  // On save button click, call the API to save the settings
-  const handleSaveSettings = () => {
-    callSaveSettingsApi();
+  // Call the API to get the upcoming messages
+  const callGetUpcomingMessagesApi = async (regenerate) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setGetUpcomingMessagesLoading(true);
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+
+      const response = await axios.get(`${baseUrl}/get_upcoming_messages?regenerate=${regenerate}`, config);
+
+      if (response.status === 200) {
+        setUpcomingMessagesData(response?.data?.upcoming_messages);
+      }
+      else { ToastHandle(response?.data?.error, "danger"); }
+    } catch (error) {
+      
+    } finally {
+      setGetUpcomingMessagesLoading(false);
+    }
   }
 
 
-  // On page load, call the API to get the settings
+  // On save button click, call the API to save the settings. Once saved, refresh the upcoming messages, regenerated with the new settings
+  const handleSaveSettings = async () => {
+    await callSaveSettingsApi();
+    callGetUpcomingMessagesApi(true);
+  }
+
+
+  // On page load, call the API to get the settings and any upcoming messages
   useEffect(() => {
     if (Object.keys(settingsApiData).length === 0) {
       callGetSettingsApi();
+      callGetUpcomingMessagesApi(false);
     }
   }, []);
 
@@ -300,6 +392,64 @@ const UpsellsIndex = () => {
           </Button>
         </div>
       </div>
+
+      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
+
+      <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
+      <p className="settings-label text-center">Showing the next 10</p>
+
+      <div className="col-12 mt-4">
+        <div className="upcoming-messages">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Sending at</th>
+                <th>Property</th>
+                <th>Guest</th>
+                <th>For vacant night(s)</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            {!getUpcomingMessagesLoading ? (
+              upcomingMessagesData && upcomingMessagesData.length > 0 ? (
+                <tbody>
+                  {upcomingMessagesData.slice(0, 10).map((message, index) => ( // only show the first 20
+                    <tr key={index}>
+                      <td>{formatDateTime(message.time_to_send)}</td>
+                      <td>{truncateString(message.property_name, 25)}</td>
+                      <td>{truncateString(message.guest_first_name, 20)}</td>
+                      <td>{formatDateRange(message.start_date, message.end_date)}</td>
+                      <td>Waiting to send</td>
+                      <td>
+                        <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px' }} onClick={() => console.log('View message')} />
+                        <FaTimes style={{ color: 'red' }} onClick={() => console.log('Cancel message')} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <tbody>
+                  <tr>
+                    <td colSpan="6" className="text-center">No upcoming messages</td>
+                  </tr>
+                </tbody>
+              )
+            ) : (
+              <tbody>
+                <tr>
+                  <td colSpan="6" className="text-center">
+                    <BoxLoader />
+                  </td>
+                </tr>
+              </tbody>
+            )}
+          </table>
+        </div>
+      </div>
+
+
+      
     </div>
   );
 };

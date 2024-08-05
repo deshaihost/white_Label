@@ -93,3 +93,10 @@
   background-color: #f0f0f0;
 }
 
+.upsells-settings .table thead th {
+  color: #AAA;
+}
+
+.upsells-settings .table tbody td {
+  color: white;
+}
