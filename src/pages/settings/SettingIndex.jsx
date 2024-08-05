@@ -28,7 +28,7 @@ const SettingIndex = () => {
   return (
     <div className="account-main">
       <Helmet>
-        <title>Setting - HostBuddy AI</title>
+        <title>Settings - HostBuddy AI</title>
       </Helmet>
       <div className="container">
         <div className="banner-heading" style={{margin:"0"}}>
