@@ -100,3 +100,27 @@
 .upsells-settings .table tbody td {
   color: white;
 }
+
+.upsells-settings .clickable-div {
+  cursor: pointer;
+  border: 1px solid #045ce9;
+  border-radius: 15px;
+  padding: 15px 10px;
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effects */
+  position: relative;
+}
+
+.upsells-settings .clickable-div:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+}
+
+.upsells-settings .clickable-div::after {
+  content: '➔';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #045ce9;
+}
