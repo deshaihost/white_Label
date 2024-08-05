@@ -1,14 +1,11 @@
 import React from "react";
-import { Button, Form } from "react-bootstrap";
 import {useState, useEffect} from "react";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./upsells.css";
-import { BoxLoader } from "../../../../helper/Loader";
 
-import { FaPhoneAlt, FaArrowUp, FaTimes, FaExternalLinkAlt } from "react-icons/fa";
-import { HiBellAlert } from "react-icons/hi2";
-import { LiaCogSolid } from "react-icons/lia";
+import PostStayUpsells from "./postStayUpsells";
+import PreStayUpsells from "./preStayUpsells";
 
 /*
 default_settings = {
@@ -30,120 +27,26 @@ default_settings = {
 const UpsellsIndex = () => {
 
 
-  const [getSettingsLoading, setGetSettingsLoading] = useState(false);
-  const [setSettingsLoading, setSetSettingsLoading] = useState(false);
-  const [getUpcomingMessagesLoading, setGetUpcomingMessagesLoading] = useState(false);
-  const [upcomingMessagesData, setUpcomingMessagesData] = useState([]);
-  const [settingsApiData, setSettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
-  const [currentSettingsData, setCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
-  const [selectedConfig, setSelectedConfig] = useState("default"); // The currently selected config. All users have a "default" config
+  const [selectedSection, setSelectedSection] = useState("index");
+  const [preStaySettingsApiData, setPreStaySettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
+  const [preStayCurrentSettingsData, setPreStayCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
+  const [getPreStaySettingsLoading, setGetPreStaySettingsLoading] = useState(false);
+  const [postStaySettingsApiData, setPostStaySettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
+  const [postStayCurrentSettingsData, setPostStayCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
+  const [getPostStaySettingsLoading, setGetPostStaySettingsLoading] = useState(false);
 
-  const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available', 'before_or_after':'Before or after'};
-
-
-  // Set a particular field in the current settings
-  const setSetting = (key, value) => {
-
-    // Only accept valid values for certain fields
-    if (key === 'days_before_check_out' || key === 'days_before_check_in') {
-      value = parseInt(value);
-      if (value < 0 || value > 30) { return }
-    } else if (key === 'discount_percentage') {
-      value = parseInt(value);
-      if (value < 0 || value > 100) { return }
-    } else if (key === 'discount_absolute') {
-      value = parseInt(value);
-      if (value < 0) { return }
-    } else if (key === 'number_of_nights_criteria') {
-      value = parseInt(value);
-      if (value < 1 || value > 30) { return }
-    }
-
-    setCurrentSettingsData({ ...currentSettingsData, [key]: value });
-  }
-
-
-  // Format date range
-  // e.g. input startDate='2024-08-16', endDate='2024-08-18' => output 'Aug 16 - Aug 18'
-  // e.g. input startDate='2024-08-16', endDate='2024-08-16' => output 'Aug 16'
-  const formatDateRange = (startDate, endDate) => {
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  
-    const parseDate = (dateString) => {
-      const [year, month, day] = dateString.split('-').map(Number);
-      return new Date(Date.UTC(year, month - 1, day));
-    };
-  
-    const formatDate = (date, includeYear = false) => {
-      const month = monthNames[date.getUTCMonth()];
-      const day = date.getUTCDate();
-      const year = date.getUTCFullYear();
-      return includeYear ? `${month} ${day}, ${year}` : `${month} ${day}`;
-    };
-  
-    const start = parseDate(startDate);
-    const end = parseDate(endDate);
-  
-    const startFormatted = formatDate(start, start.getUTCFullYear() !== end.getUTCFullYear());
-    const endFormatted = formatDate(end, start.getUTCFullYear() !== end.getUTCFullYear());
-  
-    if (startFormatted === endFormatted) {
-      return startFormatted;
-    } else {
-      return `${startFormatted} - ${endFormatted}`;
-    }
-  };
-
-
-  // Format datetime
-  // e.g. input datetime='2024-08-15 13:00' => output 'Aug 15, 1:00 PM'
-  const formatDateTime = (datetime) => {
-    const [datePart, timePart] = datetime.split(' ');
-    const [year, month, day] = datePart.split('-').map(Number);
-    const [hour, minute] = timePart.split(':').map(Number);
-  
-    const date = new Date(Date.UTC(year, month - 1, day, hour, minute));
-  
-    const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' };
-    return date.toLocaleDateString('en-US', options);
-  };
-
-  // Truncate a string to num_chars
-  // e.g. input string='Hello, world!', num_chars=5 => output 'Hello...'
-  // e.g. input string='Hello', num_chars=5 => output 'Hello'
-  const truncateString = (string, num_chars) => {
-    if (string.length > num_chars) {
-      return string.slice(0, num_chars) + '...';
-    } else {
-      return string;
-    }
-  }
-
-
-  // Handle click on a variable to insert it into the message textarea
-  const insertVariableAtCursor = (variable) => {
-    const textarea = document.getElementById('upsellMessage');
-    const startPos = textarea.selectionStart;
-    const endPos = textarea.selectionEnd;
-    const textBefore = textarea.value.substring(0, startPos);
-    const textAfter = textarea.value.substring(endPos, textarea.value.length);
-  
-    const newText = textBefore + variable + textAfter;
-    setSetting('upsell_message', newText);
-  
-    // Set the cursor position after the inserted variable
-    setTimeout(() => {
-      textarea.selectionStart = textarea.selectionEnd = startPos + variable.length;
-      textarea.focus();
-    }, 0);
-  };
+  const [preStayUpcomingMessagesData, setPreStayUpcomingMessagesData] = useState([]);
+  const [postStayUpcomingMessagesData, setPostStayUpcomingMessagesData] = useState([]);
+  const [getPreStayUpcomingMessagesLoading, setGetPreStayUpcomingMessagesLoading] = useState(false);
+  const [getPostStayUpcomingMessagesLoading, setGetPostStayUpcomingMessagesLoading] = useState(false);
 
 
   // Call the API to get all the user's settings
-  const callGetSettingsApi = async () => {
+  const callGetSettingsApi = async (upsell_type) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    setGetSettingsLoading(true);
+    if (upsell_type === 'pre_stay') { setGetPreStaySettingsLoading(true); }
+    else if (upsell_type === 'post_stay') { setGetPostStaySettingsLoading(true); }
   
     try {
       const config = {
@@ -151,54 +54,35 @@ const UpsellsIndex = () => {
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
   
-      const response = await axios.get( `${baseUrl}/get_vacant_night_settings`, config );
+      const response = await axios.get( `${baseUrl}/get_upsell_settings?upsell_type=${upsell_type}`, config );
   
-      if (response.status === 200) {
-        setGetSettingsLoading(false);
-        setSettingsApiData(response?.data?.vacant_night_settings);
-        setCurrentSettingsData(response?.data?.vacant_night_settings?.default);
+      if (response.status === 200 && response?.data?.upsell_settings) {
+        if (upsell_type === 'pre_stay') {
+          setGetPreStaySettingsLoading(false);
+          setPreStaySettingsApiData(response?.data?.upsell_settings);
+          setPreStayCurrentSettingsData(response?.data?.upsell_settings?.default);
+        } else if (upsell_type === 'post_stay') {
+          setGetPostStaySettingsLoading(false);
+          setPostStaySettingsApiData(response?.data?.upsell_settings);
+          setPostStayCurrentSettingsData(response?.data?.upsell_settings?.default);
+        }
       }
-      else { ToastHandle(response?.data?.error, "danger"); }
+      else { }
     } catch (error) {
       
     } finally {
-      setGetSettingsLoading(false);
-    }
-  }
-
-
-  // Call the API to save the user's settings. This only handles default settings.
-  // TODO: add support for saving different settings for different properties. Might want to change the backend API to just accept all the configs at once and save everything, instead of saving one at a time.
-  const callSaveSettingsApi = async () => {
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    setSetSettingsLoading(true);
-
-    try {
-      const config = {
-        headers: { "X-API-Key": API_KEY },
-        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-      };
-
-      const response = await axios.put( `${baseUrl}/set_vacant_night_settings`, { name:'default', settings:currentSettingsData }, config );
-
-      if (response.status === 200) {
-        ToastHandle("Settings saved successfully", "success");
-      }
-      else { ToastHandle(response?.data?.error, "danger"); }
-    } catch (error) {
-      
-    } finally {
-      setSetSettingsLoading(false);
+      if (upsell_type === 'pre_stay') { setGetPreStaySettingsLoading(false); }
+      else if (upsell_type === 'post_stay') { setGetPostStaySettingsLoading(false); }
     }
   }
 
 
   // Call the API to get the upcoming messages
-  const callGetUpcomingMessagesApi = async (regenerate) => {
+  const callGetUpcomingMessagesApi = async (regenerate, upsell_type) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    setGetUpcomingMessagesLoading(true);
+    if (upsell_type === 'pre_stay') { setGetPreStayUpcomingMessagesLoading(true); }
+    else if (upsell_type === 'post_stay') { setGetPostStayUpcomingMessagesLoading(true); }
 
     try {
       const config = {
@@ -206,251 +90,113 @@ const UpsellsIndex = () => {
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
 
-      const response = await axios.get(`${baseUrl}/get_upcoming_messages?regenerate=${regenerate}`, config);
+      const response = await axios.get(`${baseUrl}/get_upcoming_messages?upsell_type=${upsell_type}&regenerate=${regenerate}`, config);
 
       if (response.status === 200) {
-        setUpcomingMessagesData(response?.data?.upcoming_messages);
+        if (upsell_type === 'pre_stay') { setPreStayUpcomingMessagesData(response?.data?.upcoming_messages); }
+        else if (upsell_type === 'post_stay') { setPostStayUpcomingMessagesData(response?.data?.upcoming_messages); }
       }
       else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) {
       
     } finally {
-      setGetUpcomingMessagesLoading(false);
+      if (upsell_type === 'pre_stay') { setGetPreStayUpcomingMessagesLoading(false); }
+      else if (upsell_type === 'post_stay') { setGetPostStayUpcomingMessagesLoading(false); }
     }
   }
-
-
-  // On save button click, call the API to save the settings. Once saved, refresh the upcoming messages, regenerated with the new settings
-  const handleSaveSettings = async () => {
-    await callSaveSettingsApi();
-    callGetUpcomingMessagesApi(true);
-  }
-
-
-  // On page load, call the API to get the settings and any upcoming messages
-  useEffect(() => {
-    if (Object.keys(settingsApiData).length === 0) {
-      callGetSettingsApi();
-      callGetUpcomingMessagesApi(false);
-    }
-  }, []);
-
 
 
   return (
-    <div className="upsells-settings">
-      <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-        <h3>Vacant Night Upsells</h3>
-        <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
-          <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-            Save Settings
-          </Button>
-          <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example">
-            {Object.keys(settingsApiData).map((key, index) => (
-              <option key={index} value={key}>{key}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+    <>
+      {selectedSection === "preStayUpsells" && (
+        <PreStayUpsells setSection={setSelectedSection} settingsApiData={preStaySettingsApiData} setSettingsApiData={setPreStaySettingsApiData} currentSettingsData={preStayCurrentSettingsData} setCurrentSettingsData={setPreStayCurrentSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPreStaySettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPreStayUpcomingMessagesLoading} upcomingMessagesData={preStayUpcomingMessagesData} />
+      )}
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
-
-      <div className="row mt-4">
-        <div className="col-lg-8">
-          <div className="d-flex align-items-center gap-5 mb-1">
-            <label className="fs-5">Enable Vacant Night Upsells</label>
-            <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked)}/>
-          </div>
-        </div>
-      </div>
-
-      <div className="row mt-4">
-        <div className="col-lg-11 col-12">
-          <label className="fs-5">Number of Nights to Consider</label>
-          <p className="settings-label">The maximum number of consecutive vacant nights that will trigger an upsell message.</p>
-          <div className="d-flex align-items-center gap-1 mt-1">
-            <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value)}/>
-          </div>
-        </div>
-      </div>
+      {selectedSection === "postStayUpsells" && (
+        <PostStayUpsells setSection={setSelectedSection} settingsApiData={postStaySettingsApiData} setSettingsApiData={setPostStaySettingsApiData} currentSettingsData={postStayCurrentSettingsData} setCurrentSettingsData={setPostStayCurrentSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPostStaySettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPostStayUpcomingMessagesLoading} upcomingMessagesData={postStayUpcomingMessagesData} />
+      )}
       
-      <div className="row mt-5">
-        <div className="col-lg-12">
-          <label className="fs-5">Upsell Behavior</label>
-          <p className="settings-label">Vacant nights are present between two reservations. Should HostBuddy send the offer to the reservation before or after the vacant night? (If you choose "Both", HostBuddy will only send the second offer if the first is declined).</p>
-        </div>
-      </div>
-
-      <div className="row mt-2">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 1" name="group1" label="Send to the reservation before" value="before" checked={currentSettingsData.send_to_which_reservation === 'before'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      <div className="row mt-1">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 2" name="group1" label="Send to the reservation after" value="after" checked={currentSettingsData.send_to_which_reservation === 'after'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      <div className="row mt-1">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 3" name="group1" label="Both: Send to the reservation before first" value="both before first" checked={currentSettingsData.send_to_which_reservation === 'both before first'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      <div className="row mt-1">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 4" name="group1" label="Both: Send to the reservation after first" value="both after first" checked={currentSettingsData.send_to_which_reservation === 'both after first'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-
-      <div className="row mt-5">
-        <div className="col-lg-11 col-12">
-          <label className="fs-5">Upsell Timing</label>
-          <p className="settings-label mb-2">When should HostBuddy send the upsell message when there is a vacant night?</p>
-          <div className="row">
-            <label className="fs-6 mt-1">For reservations before a vacant night, send the message:</label>
+      {selectedSection === "index" && (
+        <div className="upsells-settings">
+          <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
+            <h3>Upsells</h3>
           </div>
-          <div className="row mt-1">
-            <div className="col-lg-2 col-4">
-              <input type="number" className="form-control" value={currentSettingsData.days_before_check_out} onChange={(e) => setSetting('days_before_check_out', e.target.value)}/>
-            </div>
-            <div className="col-lg-3 col-4" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>days before guest check-out, at</label>
-            </div>
-            <div className="col-lg-3 col-4">
-              <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_before_check_out} onChange={(e) => setSetting('time_before_check_out', e.target.value)}/>
+
+          <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
+
+          <div className="row mt-4 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("postStayUpsells")}>
+            <div className="col-lg-11 col-12">
+              <label className="fs-5">Post-stay Gap Night</label>
+              <p className="settings-label">Send an offer for the guest to depart later, before check in.</p>
             </div>
           </div>
-          <div className="row mt-3">
-            <label className="fs-6">For reservations after a vacant night, send the message:</label>
-          </div>
-          <div className="row mt-1">
-            <div className="col-lg-2 col-4">
-              <input type="number" className="form-control" value={currentSettingsData.days_before_check_in} onChange={(e) => setSetting('days_before_check_in', e.target.value)}/>
-            </div>
-            <div className="col-lg-3 col-4" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>days before guest check-in, at</label>
-            </div>
-            <div className="col-lg-3 col-4">
-              <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_before_check_in} onChange={(e) => setSetting('time_before_check_in', e.target.value)}/>
+
+          <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("preStayUpsells")}>
+            <div className="col-lg-11 col-12">
+              <label className="fs-5">Pre-stay Gap Night</label>
+              <p className="settings-label">Send an offer for the guest to arrive earlier.</p>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="row mt-5">
-        <div className="col-lg-11 col-12">
-          <label className="fs-5">Discount Amount</label>
-          <p className="settings-label">The discount amount to offer in the upsell message.</p>
-          <div className="d-flex flex-column gap-2 mt-1">
-            <div className="d-flex align-items-center gap-2">
-              <Form.Check type="radio" name="discount_type" label="Use percentage:" checked={currentSettingsData.discount_type === 'percentage'} onChange={() => setSetting('discount_type', 'percentage')}/>
-              <div className="d-flex align-items-center gap-1">
-                <input type="number" className="form-control" style={{width: '100px'}} value={currentSettingsData.discount_percentage} onChange={(e) => setSetting('discount_percentage', e.target.value)} disabled={currentSettingsData.discount_type !== 'percentage'}/>
-                <label className="fs-6">%</label>
-              </div>
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <Form.Check type="radio" name="discount_type" label="Use absolute discount:" checked={currentSettingsData.discount_type === 'absolute'} onChange={() => setSetting('discount_type', 'absolute')}/>
-              <input type="number" className="form-control" style={{width: '100px'}} value={currentSettingsData.discount_absolute} onChange={(e) => setSetting('discount_absolute', e.target.value)} disabled={currentSettingsData.discount_type !== 'absolute'}/>
-              <label className="fs-6">per night</label>
-            </div>
-          </div>
-        </div>
-      </div>
+          {/*
+          <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
+          <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
+          <p className="settings-label text-center">Showing the next 10</p>
 
-      <h3 className="available-variables-heading mt-5 text-center">Upsell Message</h3>
-
-      <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
-        <div className="available-variables-section">
-        <label className="fs-5">Available Variables</label>
-        <p className="settings-label">Use these to make sure your message is fully tailored to each reservation. Click to add to your upsell message.</p>
-          <div className="available-variables mt-3">
-            {Object.keys(variables).map((key, index) => (
-              <span key={index} className="variable" onClick={() => insertVariableAtCursor(`[[${key}]]`)}>{variables[key]}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="row mt-4 justify-content-center">
-        <div className="col-lg-11">
-          <div className="d-flex align-items-center justify-content-center gap-5">
-            <label className="fs-5">Message</label>
-          </div>
-          <div className="d-flex justify-content-center">
-            <textarea id="upsellMessage" className="form-control setting-textarea" value={currentSettingsData.upsell_message} onChange={(e) => setSetting('upsell_message', e.target.value)} />
-          </div>
-        </div>
-      </div>
-
-      <div className="row mt-5">
-        <div className="col-lg-12 text-center">
-          <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-            Save Settings
-          </Button>
-        </div>
-      </div>
-
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
-
-      <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
-      <p className="settings-label text-center">Showing the next 10</p>
-
-      <div className="col-12 mt-4">
-        <div className="upcoming-messages">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Sending at</th>
-                <th>Property</th>
-                <th>Guest</th>
-                <th>For vacant night(s)</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            {!getUpcomingMessagesLoading ? (
-              upcomingMessagesData && upcomingMessagesData.length > 0 ? (
-                <tbody>
-                  {upcomingMessagesData.slice(0, 10).map((message, index) => ( // only show the first 20
-                    <tr key={index}>
-                      <td>{formatDateTime(message.time_to_send)}</td>
-                      <td>{truncateString(message.property_name, 25)}</td>
-                      <td>{truncateString(message.guest_first_name, 20)}</td>
-                      <td>{formatDateRange(message.start_date, message.end_date)}</td>
-                      <td>Waiting to send</td>
-                      <td>
-                        <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px' }} onClick={() => console.log('View message')} />
-                        <FaTimes style={{ color: 'red' }} onClick={() => console.log('Cancel message')} />
+          <div className="col-12 mt-4">
+            <div className="upcoming-messages">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Sending at</th>
+                    <th>Property</th>
+                    <th>Guest</th>
+                    <th>For vacant night(s)</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                {!getUpcomingMessagesLoading ? (
+                  upcomingMessagesData && upcomingMessagesData.length > 0 ? (
+                    <tbody>
+                      {upcomingMessagesData.slice(0, 10).map((message, index) => ( // only show the first 20
+                        <tr key={index}>
+                          <td>{formatDateTime(message.time_to_send)}</td>
+                          <td>{truncateString(message.property_name, 25)}</td>
+                          <td>{truncateString(message.guest_first_name, 20)}</td>
+                          <td>{formatDateRange(message.start_date, message.end_date)}</td>
+                          <td>Waiting to send</td>
+                          <td>
+                            <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px' }} onClick={() => console.log('View message')} />
+                            <FaTimes style={{ color: 'red' }} onClick={() => console.log('Cancel message')} />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  ) : (
+                    <tbody>
+                      <tr>
+                        <td colSpan="6" className="text-center">No upcoming messages</td>
+                      </tr>
+                    </tbody>
+                  )
+                ) : (
+                  <tbody>
+                    <tr>
+                      <td colSpan="6" className="text-center">
+                        <BoxLoader />
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              ) : (
-                <tbody>
-                  <tr>
-                    <td colSpan="6" className="text-center">No upcoming messages</td>
-                  </tr>
-                </tbody>
-              )
-            ) : (
-              <tbody>
-                <tr>
-                  <td colSpan="6" className="text-center">
-                    <BoxLoader />
-                  </td>
-                </tr>
-              </tbody>
-            )}
-          </table>
+                  </tbody>
+                )}
+              </table>
+            </div>
+          </div>
+          */}
         </div>
-      </div>
-
-
-      
-    </div>
+      )}
+    </>
   );
 };
 
