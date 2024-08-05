@@ -1,0 +1,123 @@
+.welcome-sec {
+  padding-bottom: 50px;
+}
+.review-text p,
+.welcome p {
+  color: #ccc;
+  font-family: "DM Sans", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.36px;
+  max-width: 800px;
+  text-align: center;
+}
+.review-box1 img {
+  border-radius: 10px;
+}
+.welcome-boxes {
+  margin-top: 50px;
+  padding: 30px 0px;
+  background: radial-gradient(
+    circle,
+    rgba(11, 45, 96, 1) 0%,
+    rgba(1, 4, 21, 1) 73%
+  );
+  box-shadow: 0px 0px 10px #000;
+}
+.welcome h4 {
+  color: #fff;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.author-img {
+  width: 50px;
+  height: 50px;
+}
+
+.author-img img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.author-detail p {
+  text-align: left;
+}
+.welcome-text p {
+  min-height: 200px;
+}
+.welcome {
+  border: 3px solid #146ef5;
+  border-radius: 20px;
+  padding: 20px;
+  background: radial-gradient(
+    circle,
+    rgba(11, 45, 96, 1) 0%,
+    rgba(1, 4, 21, 1) 73%
+  );
+}
+
+.author-detail h5 {
+  color: #fff;
+  font-size: 17px;
+  margin-bottom: 0;
+  font-family: "Samsung Sharp Sans Medium";
+}
+
+.author-detail p {
+  font-weight: 400;
+  color: #fff;
+  font-size: 16px;
+  font-family: "DM Sans";
+}
+.review-text h2 {
+  display: none;
+}
+@media screen and (max-width: 1199px) {
+  .welcome {
+    height: 400px;
+  }
+  .welcome-text p {
+    min-height: 240px;
+  }
+}
+@media screen and (max-width: 991px) {
+  .welcome-boxes {
+    row-gap: 20px;
+    margin-top: 30px;
+  }
+  .welcome {
+    height: unset;
+  }
+  .welcome-text p {
+    min-height: 200px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .review-text h2 {
+    display: block;
+  }
+  .top-head {
+    display: none;
+  }
+  .review-box1,
+  .review-box2 {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .review-text {
+    margin: 25px 0px;
+  }
+}
