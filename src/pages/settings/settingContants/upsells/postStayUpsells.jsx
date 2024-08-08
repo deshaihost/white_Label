@@ -36,7 +36,8 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
   const [messageModalMainText, setMessageModalMainText] = useState("");
   const [showMessageModal, setShowMessageModal] = useState(false);
 
-  const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available', 'before_or_after':'Before or after'};
+  //const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available', 'before_or_after':'Before or after'};
+  const variables = {'guest_name':'Guest name', 'discount_percentage':'Discount percentage', 'num_days_available':'Number of days available'};
 
 
   // Set a particular field in the current settings
@@ -272,7 +273,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
       <div className="row mt-4">
         <div className="col-lg-11 col-12">
           <label className="fs-5">Number of Nights to Consider</label>
-          <p className="settings-label">HostBuddy will send a message each time it detects a set of vacant nights equal to or less than this number.</p>
+          <p className="settings-label">HostBuddy will send a message each time it detects vacant nights equal to or less than this number.</p>
           <div className="d-flex align-items-center gap-1 mt-1">
             <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value)}/>
           </div>
