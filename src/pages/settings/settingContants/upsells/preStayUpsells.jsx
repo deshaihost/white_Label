@@ -5,6 +5,7 @@ import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./upsells.css";
 import { BoxLoader } from "../../../../helper/Loader";
+import UpsellMessageModal from "./upsellMessageModal";
 
 import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
@@ -29,7 +30,12 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
 
 
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
+  const [cancelMessageLoading, setCancelMessageLoading] = useState("");
   const [selectedConfig, setSelectedConfig] = useState("default"); // The currently selected config. All users have a "default" config
+  const [messageModalHeaderText, setMessageModalHeaderText] = useState("");
+  const [messageModalTopText, setMessageModalTopText] = useState("");
+  const [messageModalMainText, setMessageModalMainText] = useState("");
+  const [showMessageModal, setShowMessageModal] = useState(false);
 
   const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available'};
 
@@ -59,11 +65,21 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
   // Format date range
   // e.g. input startDate='2024-08-16', endDate='2024-08-18' => output 'Aug 16 - Aug 18'
   // e.g. input startDate='2024-08-16', endDate='2024-08-16' => output 'Aug 16'
+  // e.g. input startDate='08-16-24', endDate='08-18-24' => output 'Aug 16 - Aug 18'
   const formatDateRange = (startDate, endDate) => {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   
     const parseDate = (dateString) => {
-      const [year, month, day] = dateString.split('-').map(Number);
+      let year, month, day;
+      if (dateString.includes('-')) {
+        const parts = dateString.split('-').map(Number);
+        if (parts[0] > 31) { // Assuming format is YYYY-MM-DD
+          [year, month, day] = parts;
+        } else { // Assuming format is MM-DD-YY
+          [month, day, year] = parts;
+          year += 2000; // Assuming 21st century for two-digit years
+        }
+      }
       return new Date(Date.UTC(year, month - 1, day));
     };
   
@@ -106,7 +122,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
   // e.g. input string='Hello', num_chars=5 => output 'Hello'
   const truncateString = (string, num_chars) => {
     if (string.length > num_chars) {
-      return string.slice(0, num_chars) + '...';
+      return string.slice(0, num_chars-3) + '...';
     } else {
       return string;
     }
@@ -159,11 +175,54 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
   }
 
 
+  // Call the API to cancel an upsell message
+  const callCancelMessageApi = async (propertyName, guestKey) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setCancelMessageLoading(guestKey);
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const body_data = { property_name:propertyName, guest_key:guestKey, upsell_type:'pre_stay' };
+      const response = await axios.put( `${baseUrl}/cancel_upcoming_message`, body_data, config );
+
+      if (response.status === 200) {
+        ToastHandle("Message cancelled successfully", "success");
+        callGetUpcomingMessagesApi(false, 'pre_stay');
+      }
+      else { ToastHandle(response?.data?.error, "danger"); }
+    } catch (error) {
+      ToastHandle('Internal server error', "danger");
+    } finally {
+      setCancelMessageLoading("");
+    }
+  }
+
+
   const handleReturn = (e) => {
     e.preventDefault();
     setSection("index");
   }
 
+
+  const handleOpenMessageModal = (message) => {
+    const headerText = `Message for ${message.guest_first_name} (${formatDateRange(message.guest_check_in, message.guest_check_out)}) at ${formatDateTime(message.time_to_send)}`;
+    const newMessageModalContent = message.message
+    const first_line = `At ${message.property_name}, vacant night(s) ${formatDateRange(message.start_date, message.end_date)}`;
+
+    setMessageModalMainText(newMessageModalContent);
+    setMessageModalTopText(first_line);
+    setMessageModalHeaderText(headerText);
+    setShowMessageModal(true);
+  }
+
+
+  const handleCancelMessage = (message) => {
+    callCancelMessageApi(message.property_name, message.guest_key);
+  }
 
 
   // On save button click, call the API to save the settings. Once saved, refresh the upcoming messages, regenerated with the new settings
@@ -205,7 +264,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
       <div className="row mt-4">
         <div className="col-lg-8">
           <div className="d-flex align-items-center gap-5 mb-1">
-            <label className="fs-5">Enable Vacant Night Upsells</label>
+            <label className="fs-5">Enable Pre Stay Upsells</label>
             <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked)}/>
           </div>
         </div>
@@ -214,7 +273,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
       <div className="row mt-4">
         <div className="col-lg-11 col-12">
           <label className="fs-5">Number of Nights to Consider</label>
-          <p className="settings-label">The maximum number of consecutive vacant nights that will trigger an upsell message.</p>
+          <p className="settings-label">HostBuddy will send a message each time it detects a set of vacant nights equal to or less than this number.</p>
           <div className="d-flex align-items-center gap-1 mt-1">
             <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value)}/>
           </div>
@@ -254,7 +313,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
           <label className="fs-5">Upsell Timing</label>
-          <p className="settings-label mb-2">When should HostBuddy send the upsell message when there is a vacant night?</p>
+          <p className="settings-label mb-2">When should HostBuddy send the upsell message?</p>
           {/*
           <div className="row">
             <label className="fs-6 mt-1">For reservations before a vacant night, send the message:</label>
@@ -296,7 +355,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
           <p className="settings-label">The discount amount to offer in the upsell message.</p>
           <div className="d-flex flex-column gap-2 mt-1">
             <div className="d-flex align-items-center gap-2">
-              <Form.Check type="radio" name="discount_type" label="Use percentage:" checked={currentSettingsData.discount_type === 'percentage'} onChange={() => setSetting('discount_type', 'percentage')}/>
+              <Form.Check type="radio" name="discount_type" label="Percentage:" checked={currentSettingsData.discount_type === 'percentage'} onChange={() => setSetting('discount_type', 'percentage')}/>
               <div className="d-flex align-items-center gap-1">
                 <input type="number" className="form-control" style={{width: '100px'}} value={currentSettingsData.discount_percentage} onChange={(e) => setSetting('discount_percentage', e.target.value)} disabled={currentSettingsData.discount_type !== 'percentage'}/>
                 <label className="fs-6">%</label>
@@ -319,8 +378,8 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
 
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
         <div className="available-variables-section">
-        <label className="fs-5">Available Variables</label>
-        <p className="settings-label">Use these to make sure your message is fully tailored to each reservation. Click to add to your upsell message.</p>
+        <label className="fs-5">Variables</label>
+        <p className="settings-label">Click to add custom variables to your upsell message. These variables will change to match the data for each reservation.</p>
           <div className="available-variables mt-3">
             {Object.keys(variables).map((key, index) => (
               <span key={index} className="variable" onClick={() => insertVariableAtCursor(`[[${key}]]`)}>{variables[key]}</span>
@@ -361,7 +420,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
                 <th>Sending at</th>
                 <th>Property</th>
                 <th>Guest</th>
-                <th>For vacant night(s)</th>
+                <th>Vacant night</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -373,12 +432,18 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
                     <tr key={index}>
                       <td>{formatDateTime(message.time_to_send)}</td>
                       <td>{truncateString(message.property_name, 25)}</td>
-                      <td>{truncateString(message.guest_first_name, 20)}</td>
+                      <td>{`${truncateString(message.guest_first_name, 13)} (${formatDateRange(message.guest_check_in, message.guest_check_out)})`}</td>
                       <td>{formatDateRange(message.start_date, message.end_date)}</td>
                       <td>Waiting to send</td>
                       <td>
-                        <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px' }} onClick={() => console.log('View message')} />
-                        <FaTimes style={{ color: 'red' }} onClick={() => console.log('Cancel message')} />
+                        {cancelMessageLoading !== message.guest_key ? (
+                          <>
+                            <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px', cursor:'pointer' }} onClick={() => handleOpenMessageModal(message)} />
+                            <FaTimes style={{ color:'red', cursor:'pointer' }} onClick={() => handleCancelMessage(message)} />
+                          </>
+                          ) : (
+                            <BoxLoader />
+                          )}
                       </td>
                     </tr>
                   ))}
@@ -402,9 +467,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
           </table>
         </div>
       </div>
-
-
-      
+      <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} />
     </div>
   );
 };

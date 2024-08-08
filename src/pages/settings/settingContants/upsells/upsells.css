@@ -98,6 +98,7 @@
 }
 
 .upsells-settings .table tbody td {
+  font-size: 14px;
   color: white;
 }
 
@@ -123,4 +124,10 @@
   transform: translateY(-50%);
   font-size: 16px;
   color: #045ce9;
+}
+
+.upsell-message-modal p {
+  font-size: 18px;
+  margin-bottom: 25px;
+  color: white;
 }

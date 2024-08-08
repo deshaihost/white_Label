@@ -80,7 +80,7 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                           <br/><br/>
                           Make HostBuddy available to your guests 24/7 by sharing a property-specific URL, where they can access their HostBuddy chat window.
                           <br/><br/>
-                          PMS integration and messaging not supported.</h6>
+                          PMS messaging not supported.</h6>
                         </>
                       ) : subscriptionPlan === "The Works" ? (
                         <>

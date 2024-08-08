@@ -33,7 +33,7 @@ const Pricing = () => {
           <ul>
             <li>State of the art AI, tailored to your properties.</li>
             <li>Make HostBuddy available to your guests 24/7 by sharing a property-specific URL, where they can access their HostBuddy chat window.</li>
-            <li>PMS integration and messaging not supported.</li>
+            <li>PMS messaging not supported.</li>
           </ul>
           <div style={{ height: '25px' }}></div> {/* Vertical spacer */}
           <h3>The Works</h3>
@@ -68,7 +68,7 @@ const Pricing = () => {
               <ul>
                 <li>State of the art AI, tailored to your properties.</li>
                 <li>Make HostBuddy available to your guests 24/7 by sharing a property-specific URL, where they can access their HostBuddy chat window.</li>
-                <li>PMS integration and messaging not supported.</li>
+                <li>PMS messaging not supported.</li>
               </ul>
             </div>
             <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="2" cents="50" priceTier={1}/>
