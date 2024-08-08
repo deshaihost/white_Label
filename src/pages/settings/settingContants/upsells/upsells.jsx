@@ -127,7 +127,7 @@ const UpsellsIndex = () => {
           <div className="row mt-4 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("postStayUpsells")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Post-stay Gap Night</label>
-              <p className="settings-label">Send an offer for the guest to extend their stay.</p>
+              <p className="settings-label">Send an offer for the guest to depart later.</p>
             </div>
           </div>
 
