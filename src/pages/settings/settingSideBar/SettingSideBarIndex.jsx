@@ -40,14 +40,12 @@ const SettingSideBarIndex = (props) => {
         </h6>
       </div>
 
-      {/*
       <div className={`px-2 py-2 setting-tab-link ${activeTab === upsells && "active"}`} onClick={() => changeHndl(upsells)}>
         <h6 className="d-flex align-items-center gap-2 m-0" style={{ cursor: 'pointer' }}>
           <FaArrowUp />
           Upsells
         </h6>
       </div>
-      */}
 
       <div className={`px-2 py-2 setting-tab-link ${activeTab === subscription && "active"}`} onClick={() => changeHndl(subscription)}>
         <h6 className="d-flex align-items-center gap-2 m-0" style={{ cursor: 'pointer' }}>

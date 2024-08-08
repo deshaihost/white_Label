@@ -134,6 +134,18 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
+                                <h3>Vacant Night <strong>Upsells</strong></h3>
+                                <p>Have HostBuddy pay for itself by offering your guests extension discounts for vacant nights created by minimum stay requirements. Alternatively, impress your guests with early check-ins and late checkouts on days that cannot be booked.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={vacantNight} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
                                 <h3><strong>Team Specific</strong> Notifications</h3>
                                 <h4>(coming soon)</h4>
                                 <p>Seeking the ability to have HostBuddy send action items directly to certain members of your team? Using advanced categorization, HostBuddy can identify issues and send requests for support directly to operations, cleaning or maintenance teams depending on the nature of the issue.</p>
@@ -156,21 +168,6 @@ const Works = () => {
                             <img src={stayInCharge} alt='works-img' />
                         </div>
                     </div>
-
-                    {/*
-                    <div className="row">
-                        <div className="col-lg-6">
-                            <div className="works-content">
-                                <h3>Vacant Night <strong>Upsells</strong></h3>
-                                <h4>(coming soon)</h4>
-                                <p>Have HostBuddy pay for itself by offering your guests extension discounts for vacant nights created by minimum stay requirements. Alternatively, impress your guests with early check-ins and late checkouts on days that cannot be booked.</p>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <img src={vacantNight} alt='works-img' />
-                        </div>
-                    </div>
-                    */}
 
                     <div className="row">
                         <div className="col-lg-6">

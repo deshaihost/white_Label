@@ -4,7 +4,7 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./upsells.css";
-import { BoxLoader } from "../../../../helper/Loader";
+import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
 import UpsellMessageModal from "./upsellMessageModal";
 
 import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
@@ -221,7 +221,10 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
 
 
   const handleCancelMessage = (message) => {
-    callCancelMessageApi(message.property_name, message.guest_key);
+    const userConfirmed = window.confirm("Are you sure you want to cancel this message?");
+    if (userConfirmed) {
+      callCancelMessageApi(message.property_name, message.guest_key);
+    }
   }
 
 
@@ -244,6 +247,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
 
   return (
     <div className="upsells-settings">
+      {getSettingsLoading ? <FullScreenLoader /> : null}
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
         <h3>Post Stay Upsells</h3>
         <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
@@ -273,7 +277,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
       <div className="row mt-4">
         <div className="col-lg-11 col-12">
           <label className="fs-5">Number of Nights to Consider</label>
-          <p className="settings-label">HostBuddy will send a message each time it detects vacant nights equal to or less than this number.</p>
+          <p className="settings-label">HostBuddy will send a message each time there are vacant nights equal to or less than this number.</p>
           <div className="d-flex align-items-center gap-1 mt-1">
             <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value)}/>
           </div>
@@ -421,7 +425,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
                 <th>Property</th>
                 <th>Guest</th>
                 <th>Vacant night</th>
-                <th>Status</th>
+                {/* <th>Status</th> tbh there's no need for this, since current implementation only shows "waiting to send" messages to the user */}
                 <th>Action</th>
               </tr>
             </thead>
@@ -434,7 +438,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
                       <td>{truncateString(message.property_name, 25)}</td>
                       <td>{`${truncateString(message.guest_first_name, 13)} (${formatDateRange(message.guest_check_in, message.guest_check_out)})`}</td>
                       <td>{formatDateRange(message.start_date, message.end_date)}</td>
-                      <td>Waiting to send</td>
+                      {/* <td>Waiting to send</td> We could get the actual status of the message (message.status). But current implementation only shows messages with status "scheduled" */}
                       <td>
                         {cancelMessageLoading !== message.guest_key ? (
                           <>
