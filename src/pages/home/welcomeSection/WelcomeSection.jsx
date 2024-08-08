@@ -12,7 +12,7 @@ const Author2 = 'https://hostbuddylb.com/home/introduction/author.webp';
 const welcomeBoxesData = [
   {
     title: "This Software is my Sleeping Pill",
-    text: "HostBuddy solved my problem of having to reiterate the same proprietary information to every Airbnb guest, allowing for my workload to focus more on the growth of the company.",
+    text: "HostBuddy solved my problem of having to reiterate the same property information to every guest, allowing for my workload to focus more on the growth of the company.",
     authorImg: Author,
     authorName: "Grant M.",
     authorDetails: "WestBound Rentals | 26 Listings",
