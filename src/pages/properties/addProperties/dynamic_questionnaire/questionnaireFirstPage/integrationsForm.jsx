@@ -48,10 +48,12 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
 
   // On page load, call the list_integration_properties API.
   useEffect(() => {
-    if (!listIntegrationPropertiesHasBeenCalled) {
-      if (!apiPropertyData.hasOwnProperty('calry_property_id')) { // if the property is not already linked
-        callListIntegrationPropertiesAPI();
-        setListIntegrationPropertiesHasBeenCalled(true);
+    if (apiPropertyData) {
+      if (!listIntegrationPropertiesHasBeenCalled) {
+        if (!apiPropertyData.hasOwnProperty('calry_property_id')) { // if the property is not already linked
+          callListIntegrationPropertiesAPI();
+          setListIntegrationPropertiesHasBeenCalled(true);
+        }
       }
     }
   }, [apiPropertyData]);
