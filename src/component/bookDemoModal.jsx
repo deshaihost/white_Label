@@ -26,6 +26,9 @@ const BookDemoModal = (props) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     dataToSend.message = "Demo Requested with " + randomlySelectedDemoPerson.person;
+    if (!dataToSend.source) dataToSend.source = "[Not provided]";
+    dataToSend.message += "\nHow did you hear about us: " + dataToSend.source;
+    delete dataToSend.source;
 
     try {
       const config = {
@@ -71,36 +74,31 @@ const BookDemoModal = (props) => {
           )}
           </>
         ) : (
-          <Form onSubmit={handleSubmit(
-            (data) => { onSubmit(data); },
-            (err) => { console.log(err, "ee"); }
-          )}
-          >
+          <Form onSubmit={handleSubmit((data) => { onSubmit(data); })}>
+
             <div className="input-group">
               <Form.Control type="text" {...register("name", { required: false })} maxLength="100"/>
               <Form.Label>Name</Form.Label>
             </div>
+
             <div className="my-3">
               <div className=" input-group">
-                <Form.Control type="text" {...register("email", { required: true, pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: `${ErrorMessageKey?.INVALID_EMAIL_ADDRESS}`,
-                    },
-                  })}
-                />
-
+                <Form.Control type="text" {...register("email", { required: true, pattern: {value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: `${ErrorMessageKey?.INVALID_EMAIL_ADDRESS}`}})}/>
                 <Form.Label>Email</Form.Label>
               </div>
-              {errors.email?.type === "required" && (
-                <>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_EMAIL)}</>
-              )}
-              {errors.email?.type === "pattern" && (
-                <>{ErrorMessageShow(errors.email?.message)}</>
-              )}
+              {errors.email?.type === "required" && (<>{ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_EMAIL)}</>)}
+              {errors.email?.type === "pattern" && (<>{ErrorMessageShow(errors.email?.message)}</>)}
             </div>
+
+            <div className="input-group">
+              <Form.Control type="text" {...register("source", { required: false })} maxLength="500"/>
+              <Form.Label>How did you hear about us? (optional)</Form.Label>
+            </div>
+
             <div className="text-center">
               <Button type="submit" className="bg_theme_btn" style={{ marginTop: '20px' }}> Continue... </Button>
             </div>
+
           </Form>
         )}
       </Modal.Body>
