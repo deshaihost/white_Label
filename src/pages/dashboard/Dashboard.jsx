@@ -434,7 +434,7 @@ const Dashboard = () => {
                                   <i
                                     className="bi bi-question-circle ms-2"
                                     data-tooltip-id="expireTooltip"
-                                    data-tooltip-content='Incomplete action items are marked "Expired" after 14 days. All action items are permanently deleted after 90 days.'
+                                    data-tooltip-content='Incomplete action items are marked "Expired" after 14 days. All action items are permanently deleted after 60 days.'
                                   ></i>
                                   <Tooltip
                                     className="action-item-tooltip"
