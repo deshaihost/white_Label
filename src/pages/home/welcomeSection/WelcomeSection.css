@@ -1,8 +1,8 @@
 .welcome-sec {
   padding-bottom: 50px;
 }
-.review-text p,
-.welcome p {
+
+.review-text p, .welcome p {
   color: #ccc;
   font-family: "DM Sans", sans-serif;
   font-size: 18px;
@@ -13,9 +13,11 @@
   max-width: 800px;
   text-align: center;
 }
+
 .review-box1 img {
   border-radius: 10px;
 }
+
 .welcome-boxes {
   margin-top: 50px;
   padding: 30px 0px;
@@ -26,6 +28,7 @@
   );
   box-shadow: 0px 0px 10px #000;
 }
+
 .welcome h4 {
   color: #fff;
   font-family: "Samsung Sharp Sans Bold";
@@ -34,6 +37,7 @@
   text-align: center;
   margin-bottom: 10px;
 }
+
 .author-img {
   width: 50px;
   height: 50px;
@@ -50,9 +54,7 @@
 .author-detail p {
   text-align: left;
 }
-.welcome-text p {
-  min-height: 200px;
-}
+
 .welcome {
   border: 3px solid #146ef5;
   border-radius: 20px;
@@ -84,9 +86,6 @@
   .welcome {
     height: 400px;
   }
-  .welcome-text p {
-    min-height: 240px;
-  }
 }
 @media screen and (max-width: 991px) {
   .welcome-boxes {
@@ -95,9 +94,6 @@
   }
   .welcome {
     height: unset;
-  }
-  .welcome-text p {
-    min-height: 200px;
   }
 }
 
@@ -108,8 +104,7 @@
   .top-head {
     display: none;
   }
-  .review-box1,
-  .review-box2 {
+  .review-box1, .review-box2 {
     text-align: center;
     display: flex;
     justify-content: center;
@@ -119,5 +114,8 @@
   }
   .review-text {
     margin: 25px 0px;
+  }
+  .review-box1 img {
+    max-width: 200px;
   }
 }

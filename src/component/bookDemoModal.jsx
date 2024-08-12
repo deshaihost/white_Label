@@ -92,11 +92,11 @@ const BookDemoModal = (props) => {
 
             <div className="input-group">
               <Form.Control type="text" {...register("source", { required: false })} maxLength="500"/>
-              <Form.Label>How did you hear about us? (optional)</Form.Label>
+              <Form.Label>How did you hear about us?</Form.Label>
             </div>
 
             <div className="text-center">
-              <Button type="submit" className="bg_theme_btn" style={{ marginTop: '20px' }}> Continue... </Button>
+              <Button type="submit" className="bg_theme_btn" style={{ marginTop: '20px' }}>Continue...</Button>
             </div>
 
           </Form>

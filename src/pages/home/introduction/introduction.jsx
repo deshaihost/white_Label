@@ -12,7 +12,7 @@ const Introduction = () => {
     return(
         <section className='introduction'>
             <div className="introduction-heading">
-                <h2>Welcome to <strong>HostBuddy AI</strong></h2>
+                <h2>The Global Choice for <strong>AI-Powered Guest Messaging</strong></h2>
             </div>
 
             <div className="introduction-content">
