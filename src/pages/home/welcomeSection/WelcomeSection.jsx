@@ -41,9 +41,7 @@ const WelcomeSection = () => {
           <div className="row align-items-center">
             <div className="col-sm-12 top-head">
               <div className="introduction-heading">
-                <h2>
-                  Welcome to <strong>HostBuddy AI</strong>
-                </h2>
+                <h2>The Global Choice for <strong>AI-Powered Guest Messaging</strong></h2>
               </div>
             </div>
             <div className="col-md-2">
@@ -58,9 +56,7 @@ const WelcomeSection = () => {
             </div>
             <div className="col-md-8">
               <div className="review-text text-center introduction-heading">
-                <h2>
-                  Welcome to <strong>HostBuddy AI</strong>
-                </h2>
+                <h2>The Global Choice for <strong>AI-Powered Guest Messaging</strong></h2>
                 <p>
                   Created by hosts, for hosts, HostBuddy AI is the leading
                   messaging automation software in the short-term rental
@@ -74,7 +70,7 @@ const WelcomeSection = () => {
               </div>
             </div>
             <div className="col-md-2">
-              <div className="review-box2">
+              <div className="review-box1">
                 <a href="https://www.getapp.com/hospitality-travel-software/a/hostbuddy-ai/reviews/">
                   <img border="0" src="https://brand-assets.getapp.com/badge/67d347a1-edef-4ac3-9150-8815443510fc.png" />
                 </a>
@@ -89,7 +85,7 @@ const WelcomeSection = () => {
                     <h4>{box.title}</h4>
                     <p>{box.text}</p>
                   </div>
-                  <div className="welcome-author d-flex align-items-center gap-3">
+                  <div className="welcome-author d-flex align-items-center gap-3 mt-3">
                     <div className="author-img">
                       <img src={box.authorImg} alt={`${box.authorName}`} />
                     </div>
