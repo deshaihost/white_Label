@@ -25,10 +25,13 @@ const Properties = () => {
   const dispatch = useDispatch();
   const gotoBillingPortalCheckPaymentStatus = store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
   const gotoBillingPortalcheckPaymentLoading = store?.gotoBillingPortalPostReducer?.loading;
+
   const [model, setModel] = useState({ addProperty: false, pmsIntegration: false, removeIntegration: false, billingPortal: false, importProperties: false, unlockProperties: false });
   const [newPropertiesAdded, setNewPropertiesAdded] = useState(false); // called by ImportPropertiesModal when properties are imported, to trigger a re-render of the property list
   const [propertyConditionCheck, setPropertyConditionCheck] = useState(false);
   const [unlockPropertyNames, setUnlockPropertyNames] = useState([]); // array of property names to unlock
+
+
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {
       // Billing portal logic is behaving strangely, so removed. Just open the add property modal.
@@ -73,44 +76,32 @@ const Properties = () => {
     }
   };
   // toggle chatbot
-  const createPropertiesName =
-    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const propertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user
-    ?.property_data
-    ? store?.getUserDataReducer?.getUserData?.data?.user?.property_data
-    : {};
-  const intergrationsMain =
-    store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
-  const subscription_data =
-    store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
+  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const propertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user?.property_data ? store?.getUserDataReducer?.getUserData?.data?.user?.property_data : {};
+  const intergrationsMain = store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
+  const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
   const intergrations = intergrationsMain ? intergrationsMain : [];
-  const toggleChatMessage =
-    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
+  const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
-  const toggleChatStatus =
-    store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
+  const toggleChatStatus = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
 
-  const createPropertiesSubscriptionAllowed =
-    store?.getUserDataReducer?.getUserData?.data?.user?.subscription
-      ?.num_properties_allowed;
+  const createPropertiesSubscriptionAllowed = store?.getUserDataReducer?.getUserData?.data?.user?.subscription?.num_properties_allowed;
   const propertyNamesStillLocked = propertiesExtraData
     ? Object.entries(propertiesExtraData)
         .filter(([_, value]) => value.is_locked)
         .map(([key, _]) => key)
     : [];
-  const numPropsAlreadyUnlocked =
-    Object.keys(propertiesExtraData).length - propertyNamesStillLocked.length;
+  const numPropsAlreadyUnlocked = Object.keys(propertiesExtraData).length - propertyNamesStillLocked.length;
   const numPropsStillLocked = propertyNamesStillLocked.length;
-  const remainingUnlocksAllowed =
-    createPropertiesSubscriptionAllowed - numPropsAlreadyUnlocked;
+  const remainingUnlocksAllowed = createPropertiesSubscriptionAllowed - numPropsAlreadyUnlocked;
+
+  // Get information about the status of the subscription // removed - this has been moved to the UnlockPropertiesModal component
+  //const paymentGoodUntilDate = new Date(subscription_data?.payment_good_until);
+  //const isOnFreeTrial = (subscription_data?.payment_standing === "good" && paymentGoodUntilDate > new Date() && (!subscription_data?.payment_collected || subscription_data?.payment_collected == 0));
 
   const [toggleOnOff, setToggleOnOff] = useState("");
 
-  const anyPropertyNotForcedOff = propertiesExtraData
-    ? Object?.values(propertiesExtraData)?.some(
-        (property) => property?.toggle_status !== "FORCED_OFF"
-      )
-    : [];
+  const anyPropertyNotForcedOff = propertiesExtraData ? Object?.values(propertiesExtraData)?.some((property) => property?.toggle_status !== "FORCED_OFF") : [];
 
   const toggleChatBotHndle = (type) => {
     if (type) {
