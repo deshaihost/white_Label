@@ -10,10 +10,16 @@ const UpsellMessageModal = ({ headerText, bodyTopText, bodyMainText, show, handl
         <h5 className="modal-title">{headerText}</h5>
       </Modal.Header>
       <Modal.Body>
-        <div className="upsell-message-modal">
-          <p className="text-center">{bodyTopText}</p>
-          <hr />
-          <p>{bodyMainText}</p>
+        <div className="upsell-message-modal text-center">
+          {bodyTopText ? (
+            <>
+              <p className="text-center">{bodyTopText}</p>
+              <hr style={{ borderTopWidth: '2px', borderTopColor: 'blue', borderTopStyle: 'solid' }} />
+            </>
+          ) : null}
+          {bodyMainText.split('\n').map((line, index) => (
+            <p key={index}>{line}</p>
+          ))}
         </div>
       </Modal.Body>
     </Modal>
