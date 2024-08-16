@@ -5,58 +5,49 @@ import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./upsells.css";
 import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
-import UpsellMessageModal from "./upsellMessageModal";
+//import UpsellMessageModal from "./upsellMessageModal";
+import ConversationTranscriptModal from "./ConversationTranscriptModal";
 
 import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
 /*
 default_settings = {
   'enabled': false,
-  'number_of_nights_criteria': 1,
-  'send_to_which_reservation': 'both before first', // 'before', 'after', 'both before first', 'both after first'
-  'days_before_check_out': 1,
-  'time_before_check_out': '12:00',
-  'days_before_check_in': 1,
-  'time_before_check_in': '12:00',
-  'discount_type': 'percentage', // 'percentage', 'absolute'
-  'discount_percentage': 10,
-  'discount_absolute': 10,
-  'upsell_message': "Hi [[guest_name]], we have [[num_days_available]] that opened up right [[before_or_after]] your reservation. If you're interested, I'd like to offer these nights to you at a [[discount_percentage]]% discount. Let me know if you'd like to add these nights to your stay!"
+  'days_after_check_out': 0,
+  'time_of_day': '14:00',
+  'criteria': 'neutral', // 'always', 'neutral', 'positive'
+  'upsell_message': "Hi [[guest_name]],\n\n I hope you enjoyed your stay! If you have a moment, I’d greatly appreciate it if you could leave us a positive review. It really helps us out and ensures we can keep providing the best experience for our guests.\n\nThank you again for choosing us for your stay!\n\nBest regards"
 }
 */
 
 
-const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, currentSettingsData, setCurrentSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData}) => {
+const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, currentSettingsData, setCurrentSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData}) => {
 
 
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
   const [cancelMessageLoading, setCancelMessageLoading] = useState("");
   const [selectedConfig, setSelectedConfig] = useState("default"); // The currently selected config. All users have a "default" config
+
+  const [conversationModalData, setConversationModalData] = useState({});
+  const [showConversationModal, setShowConversationModal] = useState(false);
+
+  // Unused
   const [messageModalHeaderText, setMessageModalHeaderText] = useState("");
   const [messageModalTopText, setMessageModalTopText] = useState("");
   const [messageModalMainText, setMessageModalMainText] = useState("");
   const [showMessageModal, setShowMessageModal] = useState(false);
 
   //const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available'};
-  const variables = {'guest_name':'Guest name', 'discount_percentage':'Discount percentage', 'num_days_available':'Number of days available'};
+  const variables = {'guest_name':'Guest name'};
 
 
   // Set a particular field in the current settings
   const setSetting = (key, value) => {
 
     // Only accept valid values for certain fields
-    if (key === 'days_before_check_out' || key === 'days_before_check_in') {
+    if (key === 'days_after_check_out') {
       value = parseInt(value);
       if (value < 0 || value > 30) { return }
-    } else if (key === 'discount_percentage') {
-      value = parseInt(value);
-      if (value < 0 || value > 100) { return }
-    } else if (key === 'discount_absolute') {
-      value = parseInt(value);
-      if (value < 0) { return }
-    } else if (key === 'number_of_nights_criteria') {
-      value = parseInt(value);
-      if (value < 1 || value > 30) { return }
     }
 
     setCurrentSettingsData({ ...currentSettingsData, [key]: value });
@@ -161,7 +152,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
         headers: { "X-API-Key": API_KEY },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
-      const body_data = { name:'default', settings:currentSettingsData, upsell_type:'pre_stay' };
+      const body_data = { name:'default', settings:currentSettingsData, upsell_type:'review_upsell' };
       const response = await axios.put( `${baseUrl}/set_upsell_settings`, body_data, config );
 
       if (response.status === 200) {
@@ -187,12 +178,12 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
         headers: { "X-API-Key": API_KEY },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
-      const body_data = { property_name:propertyName, guest_key:guestKey, upsell_type:'pre_stay' };
+      const body_data = { property_name:propertyName, guest_key:guestKey, upsell_type:'review_upsell' };
       const response = await axios.put( `${baseUrl}/cancel_upcoming_message`, body_data, config );
 
       if (response.status === 200) {
         ToastHandle("Message cancelled successfully", "success");
-        callGetUpcomingMessagesApi(false, 'pre_stay');
+        callGetUpcomingMessagesApi(false, 'review_upsell');
       }
       else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) {
@@ -208,16 +199,28 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
     setSection("index");
   }
 
-
+  // Unused
   const handleOpenMessageModal = (message) => {
     const headerText = `Message for ${message.guest_first_name} (${formatDateRange(message.guest_check_in, message.guest_check_out)}) at ${formatDateTime(message.time_to_send)}`;
     const newMessageModalContent = message.message
-    const first_line = `At ${message.property_name}, vacant night(s) ${formatDateRange(message.start_date, message.end_date)}`;
+    let first_line = "";
+
+    if ('start_date' in message && 'end_date' in message) { 
+      first_line = `At ${message.property_name}, vacant night(s) ${formatDateRange(message.start_date, message.end_date)}`;
+    } else {
+      first_line = `At ${message.property_name}`;
+    }
 
     setMessageModalMainText(newMessageModalContent);
     setMessageModalTopText(first_line);
     setMessageModalHeaderText(headerText);
     setShowMessageModal(true);
+  }
+
+
+  const handleOpenConversationModal = (message) => {
+    setConversationModalData({'conversationId':message.conversation_id, 'propertyName':message.property_name});
+    setShowConversationModal(true);
   }
 
 
@@ -232,15 +235,15 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
   // On save button click, call the API to save the settings. Once saved, refresh the upcoming messages, regenerated with the new settings
   const handleSaveSettings = async () => {
     await callSaveSettingsApi();
-    callGetUpcomingMessagesApi(true, 'pre_stay');
+    callGetUpcomingMessagesApi(true, 'review_upsell');
   }
 
 
   // On page load, call the API to get the settings and any upcoming messages
   useEffect(() => {
     if (Object.keys(settingsApiData).length === 0) {
-      callGetSettingsApi('pre_stay');
-      callGetUpcomingMessagesApi(false, 'pre_stay');
+      callGetSettingsApi('review_upsell');
+      callGetUpcomingMessagesApi(false, 'review_upsell');
     }
   }, []);
 
@@ -250,7 +253,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
     <div className="upsells-settings">
       {getSettingsLoading ? <FullScreenLoader /> : null}
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-        <h3>Pre Stay Gap Night</h3>
+        <h3>Post-Stay Review Request</h3>
         <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
           <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
             Save Settings
@@ -264,7 +267,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
       </div>
       <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
       <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
-        <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked after vacant night, offering them an early check-in or a discount to extend their stay. You can customize the message and parameters.</p>
+        <p className="settings-label">HostBuddy can detect the sentiment of a guest's stay by analyzing their conversation with you. Based on this sentiment, you can have a message sent to the guest asking for a review. You can customize the message and the criteria for when is sent.</p>
       </div>
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
@@ -272,123 +275,53 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
       <div className="row mt-4">
         <div className="col-lg-8">
           <div className="d-flex align-items-center gap-5 mb-1">
-            <label className="fs-5">Enable Pre Stay Upsells</label>
+            <label className="fs-5">Enable Post Stay Review Requests</label>
             <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked)}/>
           </div>
-          <p className="settings-label">You currently have pre-stay upsells {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
+          <p className="settings-label">You currently have post-stay review requests {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
         </div>
       </div>
 
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
-          <label className="fs-5">Number of Nights to Consider</label>
-          <p className="settings-label">HostBuddy will send a message each time there are vacant nights equal to or less than this number.</p>
+          <label className="fs-5">Criteria</label>
+          <p className="settings-label">Should HostBuddy send the message for all stays, or only if the sentiment was detected to be positive or neutral?</p>
           <div className="d-flex align-items-center gap-1 mt-1">
-            <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value)}/>
-          </div>
-        </div>
-      </div>
-      
-      {/*
-      <div className="row mt-5">
-        <div className="col-lg-12">
-          <label className="fs-5">Upsell Behavior</label>
-          <p className="settings-label">Vacant nights are present between two reservations. Should HostBuddy send the offer to the reservation before or after the vacant night? (If you choose "Both", HostBuddy will only send the second offer if the first is declined).</p>
-        </div>
-      </div>
-
-      <div className="row mt-2">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 1" name="group1" label="Send to the reservation before" value="before" checked={currentSettingsData.send_to_which_reservation === 'before'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      <div className="row mt-1">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 2" name="group1" label="Send to the reservation after" value="after" checked={currentSettingsData.send_to_which_reservation === 'after'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      <div className="row mt-1">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 3" name="group1" label="Both: Send to the reservation before first" value="both before first" checked={currentSettingsData.send_to_which_reservation === 'both before first'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      <div className="row mt-1">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 4" name="group1" label="Both: Send to the reservation after first" value="both after first" checked={currentSettingsData.send_to_which_reservation === 'both after first'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      */}
-
-      <div className="row mt-5">
-        <div className="col-lg-11 col-12">
-          <label className="fs-5">Upsell Timing</label>
-          <p className="settings-label mb-2">When should HostBuddy send the upsell message?</p>
-          {/*
-          <div className="row">
-            <label className="fs-6 mt-1">For reservations before a vacant night, send the message:</label>
-          </div>
-          <div className="row mt-1">
-            <div className="col-lg-2 col-4">
-              <input type="number" className="form-control" value={currentSettingsData.days_before_check_out} onChange={(e) => setSetting('days_before_check_out', e.target.value)}/>
-            </div>
-            <div className="col-lg-3 col-4" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>days before guest check-out, at</label>
-            </div>
-            <div className="col-lg-3 col-4">
-              <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_before_check_out} onChange={(e) => setSetting('time_before_check_out', e.target.value)}/>
-            </div>
-          </div>
-          */}
-          {/*
-          <div className="row mt-3">
-            <label className="fs-6">For reservations after a vacant night, send the message:</label>
-          </div>
-          */}
-          <div className="row mt-1">
-            <div className="col-lg-2 col-4">
-              <input type="number" className="form-control" value={currentSettingsData.days_before_check_in} onChange={(e) => setSetting('days_before_check_in', e.target.value)}/>
-            </div>
-            <div className="col-lg-3 col-4" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>days before guest check-in, at</label>
-            </div>
-            <div className="col-lg-3 col-4">
-              <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_before_check_in} onChange={(e) => setSetting('time_before_check_in', e.target.value)}/>
-            </div>
+            <select style={{width:'300px'}} className="form-control" value={currentSettingsData.criteria} onChange={(e) => setSetting('criteria', e.target.value)}>
+              <option value="always">For all stays</option>
+              <option value="neutral">Only if the stay was neutral or positive</option>
+              <option value="positive">Only if the stay was positive</option>
+            </select>
           </div>
         </div>
       </div>
 
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
-          <label className="fs-5">Discount Amount</label>
-          <p className="settings-label">The discount amount to offer in the upsell message.</p>
-          <div className="d-flex flex-column gap-2 mt-1">
-            <div className="d-flex align-items-center gap-2">
-              <Form.Check type="radio" name="discount_type" label="Percentage:" checked={currentSettingsData.discount_type === 'percentage'} onChange={() => setSetting('discount_type', 'percentage')}/>
-              <div className="d-flex align-items-center gap-1">
-                <input type="number" className="form-control" style={{width: '100px'}} value={currentSettingsData.discount_percentage} onChange={(e) => setSetting('discount_percentage', e.target.value)} disabled={currentSettingsData.discount_type !== 'percentage'}/>
-                <label className="fs-6">%</label>
-              </div>
+          <label className="fs-5">Request Timing</label>
+          <p className="settings-label mb-2">When should HostBuddy send the message?</p>
+          <div className="row mt-1">
+            <div className="col-lg-2 col-4">
+              <input type="number" className="form-control" value={currentSettingsData.days_after_check_out} onChange={(e) => setSetting('days_after_check_out', e.target.value)}/>
             </div>
-            {/*
-            <div className="d-flex align-items-center gap-2">
-              <Form.Check type="radio" name="discount_type" label="Use absolute discount:" checked={currentSettingsData.discount_type === 'absolute'} onChange={() => setSetting('discount_type', 'absolute')}/>
-              <input type="number" className="form-control" style={{width: '100px'}} value={currentSettingsData.discount_absolute} onChange={(e) => setSetting('discount_absolute', e.target.value)} disabled={currentSettingsData.discount_type !== 'absolute'}/>
-              <label className="fs-6">per night</label>
+            <div className="col-lg-3 col-4" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>days after guest check-out, at</label>
             </div>
-            */}
+            <div className="col-lg-3 col-4">
+              <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_of_day} onChange={(e) => setSetting('time_of_day', e.target.value)}/>
+            </div>
           </div>
         </div>
       </div>
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
-      <h3 className="available-variables-heading mt-5 text-center">Upsell Message</h3>
+      <h3 className="available-variables-heading mt-5 text-center">Request Message</h3>
 
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
         <div className="available-variables-section">
         <label className="fs-5">Variables</label>
-        <p className="settings-label">Click to add custom variables to your upsell message. These variables will change to match the data for each reservation.</p>
+        <p className="settings-label">Click to add custom variables to your request message. These variables will change to match the data for each reservation.</p>
           <div className="available-variables mt-3">
             {Object.keys(variables).map((key, index) => (
               <span key={index} className="variable" onClick={() => insertVariableAtCursor(`[[${key}]]`)}>{variables[key]}</span>
@@ -419,11 +352,11 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
-      <p className="settings-label text-center">Showing the next 10</p>
+      <p className="settings-label text-center">Showing the next 20.</p>
       {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have pre-stay upsells <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay review requests <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time if the guest's sentiment meets your sleected criteria.</p>
       ) : (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have pre-stay upsells <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay review requests <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
       )}
 
       <div className="col-12 mt-4">
@@ -434,7 +367,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
                 <th>Sending at</th>
                 <th>Property</th>
                 <th>Guest</th>
-                <th>Vacant night</th>
+                <th>Sentiment</th>
                 {/* <th>Status</th> tbh there's no need for this, since current implementation only shows "waiting to send" messages to the user */}
                 <th>Action</th>
               </tr>
@@ -442,17 +375,25 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
             {!getUpcomingMessagesLoading ? (
               upcomingMessagesData && upcomingMessagesData.length > 0 ? (
                 <tbody>
-                  {upcomingMessagesData.slice(0, 10).map((message, index) => ( // only show the first 20
+                  {upcomingMessagesData.slice(0, 20).map((message, index) => ( // only show the first 20
                     <tr key={index}>
                       <td>{formatDateTime(message.time_to_send)}</td>
                       <td>{truncateString(message.property_name, 25)}</td>
                       <td>{`${truncateString(message.guest_first_name, 13)} (${formatDateRange(message.guest_check_in, message.guest_check_out)})`}</td>
-                      <td>{formatDateRange(message.start_date, message.end_date)}</td>
                       {/* <td>Waiting to send</td> We could get the actual status of the message (message.status). But current implementation only shows messages with status "scheduled" */}
+                      <td style={{ 
+                        color: message.sentiment === 'positive' ? 'rgb(0, 128, 0)' : 
+                              message.sentiment === 'negative' ? 'rgb(225, 0, 0)' : 
+                              'rgb(178, 178, 178)'
+                      }}>
+                        {['positive', 'negative', 'neutral'].includes(message.sentiment) && (
+                          message.sentiment
+                        )}
+                      </td>
                       <td>
                         {cancelMessageLoading !== message.guest_key ? (
                           <>
-                            <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px', cursor:'pointer' }} onClick={() => handleOpenMessageModal(message)} />
+                            <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px', cursor:'pointer' }} onClick={() => handleOpenConversationModal(message)} />
                             <FaTimes style={{ color:'red', cursor:'pointer' }} onClick={() => handleCancelMessage(message)} />
                           </>
                           ) : (
@@ -481,9 +422,9 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
           </table>
         </div>
       </div>
-      <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} />
+      <ConversationTranscriptModal handleClose={() => setShowConversationModal(false)} show={showConversationModal} modalData={conversationModalData}/>
     </div>
   );
 };
 
-export default PreStayUpsells;
+export default ReviewUpsells;

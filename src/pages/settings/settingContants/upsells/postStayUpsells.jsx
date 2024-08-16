@@ -249,7 +249,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
     <div className="upsells-settings">
       {getSettingsLoading ? <FullScreenLoader /> : null}
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-        <h3>Post Stay Upsells</h3>
+        <h3>Post Stay Gap Night</h3>
         <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
           <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
             Save Settings
@@ -262,6 +262,9 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
         </div>
       </div>
       <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
+      <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
+        <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked before vacant night, offering them a late check-out or a discount to extend their stay. You can customize the message and parameters.</p>
+      </div>
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
 
@@ -271,13 +274,14 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
             <label className="fs-5">Enable Post Stay Upsells</label>
             <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked)}/>
           </div>
+          <p className="settings-label">You currently have post-stay upsells {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
         </div>
       </div>
 
-      <div className="row mt-4">
+      <div className="row mt-5">
         <div className="col-lg-11 col-12">
           <label className="fs-5">Number of Nights to Consider</label>
-          <p className="settings-label">HostBuddy will send a message each time there are vacant nights equal to or less than this number.</p>
+          <p className="settings-label">HostBuddy will send a message each time there are this many consecutive vacant nights or fewer.</p>
           <div className="d-flex align-items-center gap-1 mt-1">
             <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value)}/>
           </div>
@@ -415,6 +419,11 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
 
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
       <p className="settings-label text-center">Showing the next 10</p>
+      {currentSettingsData.enabled ? (
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay upsells <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
+      ) : (
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay upsells <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
+      )}
 
       <div className="col-12 mt-4">
         <div className="upcoming-messages">

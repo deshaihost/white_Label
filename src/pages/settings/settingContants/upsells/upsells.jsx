@@ -6,6 +6,7 @@ import "./upsells.css";
 
 import PostStayUpsells from "./postStayUpsells";
 import PreStayUpsells from "./preStayUpsells";
+import ReviewUpsells from "./reviewUpsells";
 
 /*
 default_settings = {
@@ -28,17 +29,25 @@ const UpsellsIndex = () => {
 
 
   const [selectedSection, setSelectedSection] = useState("index");
+
   const [preStaySettingsApiData, setPreStaySettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
   const [preStayCurrentSettingsData, setPreStayCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
   const [getPreStaySettingsLoading, setGetPreStaySettingsLoading] = useState(false);
+
   const [postStaySettingsApiData, setPostStaySettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
   const [postStayCurrentSettingsData, setPostStayCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
   const [getPostStaySettingsLoading, setGetPostStaySettingsLoading] = useState(false);
 
+  const [reviewSettingsApiData, setReviewSettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
+  const [reviewCurrentSettingsData, setReviewCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
+  const [getReviewSettingsLoading, setGetReviewSettingsLoading] = useState(false);
+
   const [preStayUpcomingMessagesData, setPreStayUpcomingMessagesData] = useState([]);
   const [postStayUpcomingMessagesData, setPostStayUpcomingMessagesData] = useState([]);
+  const [reviewUpcomingMessagesData, setReviewUpcomingMessagesData] = useState([]);
   const [getPreStayUpcomingMessagesLoading, setGetPreStayUpcomingMessagesLoading] = useState(false);
   const [getPostStayUpcomingMessagesLoading, setGetPostStayUpcomingMessagesLoading] = useState(false);
+  const [getReviewUpcomingMessagesLoading, setGetReviewUpcomingMessagesLoading] = useState(false);
 
 
   // Call the API to get all the user's settings
@@ -47,6 +56,7 @@ const UpsellsIndex = () => {
     const API_KEY = process.env.REACT_APP_API_KEY;
     if (upsell_type === 'pre_stay') { setGetPreStaySettingsLoading(true); }
     else if (upsell_type === 'post_stay') { setGetPostStaySettingsLoading(true); }
+    else if (upsell_type === 'review_upsell') { setGetReviewSettingsLoading(true); }
   
     try {
       const config = {
@@ -65,6 +75,10 @@ const UpsellsIndex = () => {
           setGetPostStaySettingsLoading(false);
           setPostStaySettingsApiData(response?.data?.upsell_settings);
           setPostStayCurrentSettingsData(response?.data?.upsell_settings?.default);
+        } else if (upsell_type === 'review_upsell') {
+          setGetReviewSettingsLoading(false);
+          setReviewSettingsApiData(response?.data?.upsell_settings);
+          setReviewCurrentSettingsData(response?.data?.upsell_settings?.default);
         }
       }
       else { }
@@ -83,6 +97,7 @@ const UpsellsIndex = () => {
     const API_KEY = process.env.REACT_APP_API_KEY;
     if (upsell_type === 'pre_stay') { setGetPreStayUpcomingMessagesLoading(true); }
     else if (upsell_type === 'post_stay') { setGetPostStayUpcomingMessagesLoading(true); }
+    else if (upsell_type === 'review_upsell') { setGetReviewUpcomingMessagesLoading(true); }
 
     try {
       const config = {
@@ -95,6 +110,7 @@ const UpsellsIndex = () => {
       if (response.status === 200) {
         if (upsell_type === 'pre_stay') { setPreStayUpcomingMessagesData(response?.data?.upcoming_messages); }
         else if (upsell_type === 'post_stay') { setPostStayUpcomingMessagesData(response?.data?.upcoming_messages); }
+        else if (upsell_type === 'review_upsell') { setReviewUpcomingMessagesData(response?.data?.upcoming_messages); }
       }
       else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) {
@@ -102,6 +118,7 @@ const UpsellsIndex = () => {
     } finally {
       if (upsell_type === 'pre_stay') { setGetPreStayUpcomingMessagesLoading(false); }
       else if (upsell_type === 'post_stay') { setGetPostStayUpcomingMessagesLoading(false); }
+      else if (upsell_type === 'review_upsell') { setGetReviewUpcomingMessagesLoading(false); }
     }
   }
 
@@ -115,26 +132,40 @@ const UpsellsIndex = () => {
       {selectedSection === "postStayUpsells" && (
         <PostStayUpsells setSection={setSelectedSection} settingsApiData={postStaySettingsApiData} setSettingsApiData={setPostStaySettingsApiData} currentSettingsData={postStayCurrentSettingsData} setCurrentSettingsData={setPostStayCurrentSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPostStaySettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPostStayUpcomingMessagesLoading} upcomingMessagesData={postStayUpcomingMessagesData} />
       )}
+
+      {selectedSection === "reviewUpsells" && (
+        <ReviewUpsells setSection={setSelectedSection} settingsApiData={reviewSettingsApiData} setSettingsApiData={setReviewSettingsApiData} currentSettingsData={reviewCurrentSettingsData} setCurrentSettingsData={setReviewCurrentSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getReviewSettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getReviewUpcomingMessagesLoading} upcomingMessagesData={reviewUpcomingMessagesData} />
+      )}
       
       {selectedSection === "index" && (
         <div className="upsells-settings">
           <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
             <h3>Upsells</h3>
           </div>
+          <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
+            <p className="settings-label">Intelligent, context-aware proactive messaging. Drive sales, get positive reviews, and increase guest satisfaction.</p>
+          </div>
 
-          <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
+          <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-1"/>
 
           <div className="row mt-4 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("postStayUpsells")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Post-stay Gap Night</label>
-              <p className="settings-label">Send an offer for the guest to depart later.</p>
+              <p className="settings-label">Send your guests an offer to depart later when there's a vacant night after their stay.</p>
             </div>
           </div>
 
           <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("preStayUpsells")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Pre-stay Gap Night</label>
-              <p className="settings-label">Send an offer for the guest to arrive earlier.</p>
+              <p className="settings-label">Send your guests an offer to arrive earlier when there's a vacant night before their stay.</p>
+            </div>
+          </div>
+
+          <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("reviewUpsells")}>
+            <div className="col-lg-11 col-12">
+              <label className="fs-5">Post-Stay Review</label>
+              <p className="settings-label">Send a message to your guests whose stay went well, asking them to leave a positive review.</p>
             </div>
           </div>
 

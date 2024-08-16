@@ -4,6 +4,7 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./AdvancedSettings.css";
+import { FullScreenLoader } from "../../../../helper/Loader";
 
 /*
 default_settings = {
@@ -113,6 +114,7 @@ const AdvancedSettingsIndex = () => {
 
   return (
     <div className="conversation-settings">
+      {getSettingsLoading ? <FullScreenLoader /> : null}
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
         <h3>Conversation Settings</h3>
         <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
