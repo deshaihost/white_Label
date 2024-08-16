@@ -271,6 +271,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
             <label className="fs-5">Enable Post Stay Upsells</label>
             <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked)}/>
           </div>
+          <p className="settings-label">You currently have post-stay upsells {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
         </div>
       </div>
 
@@ -415,6 +416,11 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curre
 
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
       <p className="settings-label text-center">Showing the next 10</p>
+      {currentSettingsData.enabled ? (
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay upsells <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
+      ) : (
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay upsells <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
+      )}
 
       <div className="col-12 mt-4">
         <div className="upcoming-messages">

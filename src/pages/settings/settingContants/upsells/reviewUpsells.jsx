@@ -5,7 +5,8 @@ import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./upsells.css";
 import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
-import UpsellMessageModal from "./upsellMessageModal";
+//import UpsellMessageModal from "./upsellMessageModal";
+import ConversationTranscriptModal from "./ConversationTranscriptModal";
 
 import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
@@ -26,6 +27,11 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
   const [cancelMessageLoading, setCancelMessageLoading] = useState("");
   const [selectedConfig, setSelectedConfig] = useState("default"); // The currently selected config. All users have a "default" config
+
+  const [conversationModalData, setConversationModalData] = useState({});
+  const [showConversationModal, setShowConversationModal] = useState(false);
+
+  // Unused
   const [messageModalHeaderText, setMessageModalHeaderText] = useState("");
   const [messageModalTopText, setMessageModalTopText] = useState("");
   const [messageModalMainText, setMessageModalMainText] = useState("");
@@ -193,7 +199,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
     setSection("index");
   }
 
-
+  // Unused
   const handleOpenMessageModal = (message) => {
     const headerText = `Message for ${message.guest_first_name} (${formatDateRange(message.guest_check_in, message.guest_check_out)}) at ${formatDateTime(message.time_to_send)}`;
     const newMessageModalContent = message.message
@@ -209,6 +215,12 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
     setMessageModalTopText(first_line);
     setMessageModalHeaderText(headerText);
     setShowMessageModal(true);
+  }
+
+
+  const handleOpenConversationModal = (message) => {
+    setConversationModalData({'conversationId':message.conversation_id, 'propertyName':message.property_name});
+    setShowConversationModal(true);
   }
 
 
@@ -241,7 +253,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
     <div className="upsells-settings">
       {getSettingsLoading ? <FullScreenLoader /> : null}
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-        <h3>Post-Stay Review Upsells</h3>
+        <h3>Post-Stay Review Request</h3>
         <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
           <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
             Save Settings
@@ -260,20 +272,21 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
       <div className="row mt-4">
         <div className="col-lg-8">
           <div className="d-flex align-items-center gap-5 mb-1">
-            <label className="fs-5">Enable Post Stay Review Upsells</label>
+            <label className="fs-5">Enable Post Stay Review Requests</label>
             <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked)}/>
           </div>
+          <p className="settings-label">You currently have post-stay review requests {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
         </div>
       </div>
 
-      <div className="row mt-4">
+      <div className="row mt-5">
         <div className="col-lg-11 col-12">
           <label className="fs-5">Criteria</label>
           <p className="settings-label">Should HostBuddy send the message for all stays, or only if the sentiment was detected to be positive or neutral?</p>
           <div className="d-flex align-items-center gap-1 mt-1">
             <select style={{width:'300px'}} className="form-control" value={currentSettingsData.criteria} onChange={(e) => setSetting('criteria', e.target.value)}>
               <option value="always">For all stays</option>
-              <option value="neutral">If the stay was neutral or positive</option>
+              <option value="neutral">Only if the stay was neutral or positive</option>
               <option value="positive">Only if the stay was positive</option>
             </select>
           </div>
@@ -282,7 +295,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
 
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
-          <label className="fs-5">Upsell Timing</label>
+          <label className="fs-5">Request Timing</label>
           <p className="settings-label mb-2">When should HostBuddy send the message?</p>
           <div className="row mt-1">
             <div className="col-lg-2 col-4">
@@ -300,12 +313,12 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
-      <h3 className="available-variables-heading mt-5 text-center">Upsell Message</h3>
+      <h3 className="available-variables-heading mt-5 text-center">Request Message</h3>
 
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
         <div className="available-variables-section">
         <label className="fs-5">Variables</label>
-        <p className="settings-label">Click to add custom variables to your upsell message. These variables will change to match the data for each reservation.</p>
+        <p className="settings-label">Click to add custom variables to your request message. These variables will change to match the data for each reservation.</p>
           <div className="available-variables mt-3">
             {Object.keys(variables).map((key, index) => (
               <span key={index} className="variable" onClick={() => insertVariableAtCursor(`[[${key}]]`)}>{variables[key]}</span>
@@ -337,7 +350,12 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
 
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
       <p className="settings-label text-center">Showing the next 20.</p>
-      <p style={{marginTop:'10px'}} className="settings-label text-center">Sentiment is analyzed at message send time, so some of the messages shown here may not be sent if they do not meet the sentiment criteria.</p>
+      <p style={{marginTop:'10px'}} className="settings-label text-center">Sentiment is analyzed at message send time, so some of the messages shown here may not be sent if they don't meet the sentiment criteria.</p>
+      {currentSettingsData.enabled ? (
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay review requests <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time if the guest's sentiment meets your sleected criteria.</p>
+      ) : (
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay review requests <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
+      )}
 
       <div className="col-12 mt-4">
         <div className="upcoming-messages">
@@ -347,6 +365,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
                 <th>Sending at</th>
                 <th>Property</th>
                 <th>Guest</th>
+                <th>Sentiment</th>
                 {/* <th>Status</th> tbh there's no need for this, since current implementation only shows "waiting to send" messages to the user */}
                 <th>Action</th>
               </tr>
@@ -360,10 +379,19 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
                       <td>{truncateString(message.property_name, 25)}</td>
                       <td>{`${truncateString(message.guest_first_name, 13)} (${formatDateRange(message.guest_check_in, message.guest_check_out)})`}</td>
                       {/* <td>Waiting to send</td> We could get the actual status of the message (message.status). But current implementation only shows messages with status "scheduled" */}
+                      <td style={{ 
+                        color: message.sentiment === 'positive' ? 'rgb(0, 128, 0)' : 
+                              message.sentiment === 'negative' ? 'rgb(225, 0, 0)' : 
+                              'rgb(178, 178, 178)'
+                      }}>
+                        {['positive', 'negative', 'neutral'].includes(message.sentiment) && (
+                          message.sentiment
+                        )}
+                      </td>
                       <td>
                         {cancelMessageLoading !== message.guest_key ? (
                           <>
-                            <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px', cursor:'pointer' }} onClick={() => handleOpenMessageModal(message)} />
+                            <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px', cursor:'pointer' }} onClick={() => handleOpenConversationModal(message)} />
                             <FaTimes style={{ color:'red', cursor:'pointer' }} onClick={() => handleCancelMessage(message)} />
                           </>
                           ) : (
@@ -392,7 +420,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
           </table>
         </div>
       </div>
-      <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} />
+      <ConversationTranscriptModal handleClose={() => setShowConversationModal(false)} show={showConversationModal} modalData={conversationModalData}/>
     </div>
   );
 };

@@ -2,7 +2,7 @@
 .upsells-settings .custom-switch .form-check-input {
   width: 36px; /* slightly smaller width */
   height: 18px; /* slightly smaller height */
-  background-color: #ccc; /* default grey background when off */
+  background-color: #999; /* default grey background when off */
   border-radius: 18px; /* circular borders for the slider */
   position: relative;
   appearance: none;

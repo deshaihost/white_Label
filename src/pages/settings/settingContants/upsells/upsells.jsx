@@ -148,21 +148,21 @@ const UpsellsIndex = () => {
           <div className="row mt-4 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("postStayUpsells")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Post-stay Gap Night</label>
-              <p className="settings-label">Send an offer for the guest to depart later.</p>
+              <p className="settings-label">Send an offer for the guest to depart later when vacant nights are present.</p>
             </div>
           </div>
 
           <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("preStayUpsells")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Pre-stay Gap Night</label>
-              <p className="settings-label">Send an offer for the guest to arrive earlier.</p>
+              <p className="settings-label">Send an offer for the guest to arrive earlier when vacant nights are present.</p>
             </div>
           </div>
 
           <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("reviewUpsells")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Post-Stay Review</label>
-              <p className="settings-label">If the guest's stay went well, send them a message asking them to leave a positive review.</p>
+              <p className="settings-label">Send guests a message asking them to leave a positive review if their stay went well.</p>
             </div>
           </div>
 
