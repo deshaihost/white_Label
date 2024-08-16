@@ -5,6 +5,7 @@
 .get_started .welcome_steps {
   display: grid;
   gap: 40px;
+  box-shadow: 0 4px 18px 0px rgba(255, 255, 255, 0.5);
 }
 
 .get_started .welcome_steps a {
@@ -20,6 +21,11 @@
 .get_started .step_even {
   grid-template-columns: 1fr 500px;
   margin-bottom: 70px;
+}
+
+.get_started h3 strong {
+  font-weight: 700;
+  color: #146ef5;
 }
 
 .get_started img {
@@ -40,13 +46,20 @@
 .get_started .link_card_box {
   min-height: 185px;
   position: relative;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s;
+  box-shadow: 0 4px 18px 0px rgba(255, 255, 255, 0.5);
 }
 
 .get_started .link_card_box:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 8px #FFF;
-  transition: transform 0.3s ease;
+  box-shadow: 0 4px 18px 10px rgba(255, 255, 255, 0.5);
+}
+
+.get_started .more-coming-soon-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 185px;
 }
 
 @media screen and (max-width: 768px) {

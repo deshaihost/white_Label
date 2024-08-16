@@ -165,7 +165,7 @@ const UpsellsIndex = () => {
           <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("reviewUpsells")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Post-Stay Review</label>
-              <p className="settings-label">Send a message to your guests whose stay went well, asking them to leave a positive review.</p>
+              <p className="settings-label">Send a message to your guests who had a positive experience, asking them to leave a review.</p>
             </div>
           </div>
 

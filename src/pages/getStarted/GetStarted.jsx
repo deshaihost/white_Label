@@ -12,23 +12,29 @@ const step5img = 'https://hostbuddylb.com/get-started/5.%20Schedule.webp';
 
 const featureData = [
   {
-    title: "Get Connected",
+    title: "Customize HostBuddy's Behavior",
     description: "HostBuddy intelligently identifies issues and action items, and can notify your team through various channels.",
     link: "/setup-guide",
   },
   {
-    title: "Guest Relay for Hosts",
-    description: "HostBuddy will check with you when it has identified a matter that requires your attention. Instruct HostBuddy how to respond, directly from the notification.",
+    title: "Get Notified",
+    description: "HostBuddy intelligently identifies issues and action items, and can notify your team through various channels.",
     link: "/setup-guide",
   },
   {
     title: "Vacant Night Upsells",
-    description: "See how HostBuddy can pay for itself by proactively offering your guests extension discounts for vacant nights created by minimum stay requirements.",
+    description: "See how HostBuddy can pay for itself by proactively offering your guests extension discounts when there are vacant nights between bookings.",
     link: "/setup-guide",
   },
   {
-    title: "Test and Optimize HostBuddy's responses",
-    description: "Best practices for iteratively testing and improving HostBuddy's responses for your property, ensuring every potential issue is covered.",
+    title: "Smart Review Requests",
+    description: "HostBuddy can detect the sentiment of a guest's stay, and automatically send review requests to guests who had a positive experience.",
+    link: "/setup-guide",
+  },
+  {
+    title: "Optimize HostBuddy's responses",
+    // description: "Best practices for iteratively testing and improving HostBuddy's responses for your property, ensuring every potential issue is covered.",
+    description: "Ensure every potential issue is covered using these best practices for structuring and improving the knowledge base.",
     link: "/setup-guide",
   },
 ];
@@ -66,7 +72,7 @@ const GetStarted = () => {
                   <p className="text-white fs-6 fw-bold mb-5">If you’ve connected your PMS, select “Import Properties”, then choose which listings you’d like to import into HostBuddy. Property details and live guest data will be automatically imported from your PMS.</p>
                   <p className="text-white fs-6 fw-bold mb-3">If you haven’t connected a PMS, add a property by clicking the pen icon next to the blank listing.</p>
                   <Link to="/properties" className=" d-flex justify-content-end align-items-center gap-1 properties_link border-primary border-bottom mt-auto">
-                    Let's Go
+                    Add Some Properties
                     <FaArrowRightLong />
                   </Link>
                 </div>
@@ -121,17 +127,17 @@ const GetStarted = () => {
 
           </Row>
           <Row className="">
-            <Col lg={12}>
-              <h3 className="text-center fw-bold text-white fs-1 mb-4">That's it!</h3>
-              <p className="mb-3 text-center fw-bold text-white fs-6">You now have state of the art technology doing the heavy lifting for you. Welcome to the future of hosting!</p>
+            <Col lg={10} className="mx-auto">
+              {/* <h3 className="text-center fw-bold text-white fs-1 mb-4">That's it!</h3> */}
+              <p className="mb-3 text-center fw-bold text-white fs-5">You now have state of the art technology doing the heavy lifting for you. Welcome to the future of hosting!</p>
             </Col>
             <div style={{height: "150px"}}></div>
           </Row>
-
           {/*
-          <Row className="my-5">
-            <Col lg={12}>
-              <h3 className="text-center fw-bold text-white fs-1 mb-4">Get started with HostBuddy's features</h3>
+          <Row>
+            <Col lg={12} className="mx-auto">
+              <h3 className="text-center fw-bold text-white fs-1 mb-4">Explore <strong>HostBuddy's Features</strong></h3>
+              <p className="mb-3 text-center fw-bold text-white fs-6">HostBuddy is packed with features that make it easy for you to automate your short term rental business. Read on to learn how to make the most of your AI companion.</p>
             </Col>
             <Col lg={12} className="mb-3 mb-md-5 mt-5">
               <div className="get_started_featured">
@@ -146,6 +152,9 @@ const GetStarted = () => {
                     </span>
                   </Link>
                 ))}
+                <div className="more-coming-soon-box">
+                  <p style={{ fontSize: '24px', color: 'rgb(128, 128, 128)' }}>More coming soon!</p>
+                </div>
               </div>
             </Col>
           </Row>
