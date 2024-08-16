@@ -266,6 +266,9 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
         </div>
       </div>
       <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
+      <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
+        <p className="settings-label">HostBuddy can detect the sentiment of a guest's stay by analyzing their conversation with you. Based on this sentiment, you can have a message sent to the guest asking for a review. You can customize the message and the criteria for when is sent.</p>
+      </div>
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
 
@@ -350,7 +353,6 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
 
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
       <p className="settings-label text-center">Showing the next 20.</p>
-      <p style={{marginTop:'10px'}} className="settings-label text-center">Sentiment is analyzed at message send time, so some of the messages shown here may not be sent if they don't meet the sentiment criteria.</p>
       {currentSettingsData.enabled ? (
         <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay review requests <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time if the guest's sentiment meets your sleected criteria.</p>
       ) : (

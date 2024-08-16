@@ -250,7 +250,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
     <div className="upsells-settings">
       {getSettingsLoading ? <FullScreenLoader /> : null}
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-        <h3>Pre Stay Upsells</h3>
+        <h3>Pre Stay Gap Night</h3>
         <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
           <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
             Save Settings
@@ -263,6 +263,9 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
         </div>
       </div>
       <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
+      <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
+        <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked after vacant night, offering them an early check-in or a discount to extend their stay. You can customize the message and parameters.</p>
+      </div>
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
 
@@ -276,7 +279,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
         </div>
       </div>
 
-      <div className="row mt-4">
+      <div className="row mt-5">
         <div className="col-lg-11 col-12">
           <label className="fs-5">Number of Nights to Consider</label>
           <p className="settings-label">HostBuddy will send a message each time there are vacant nights equal to or less than this number.</p>

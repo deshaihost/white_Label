@@ -142,27 +142,30 @@ const UpsellsIndex = () => {
           <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
             <h3>Upsells</h3>
           </div>
+          <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
+            <p className="settings-label">Intelligent, context-aware proactive messaging. Drive sales, get positive reviews, and increase guest satisfaction.</p>
+          </div>
 
-          <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
+          <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-1"/>
 
           <div className="row mt-4 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("postStayUpsells")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Post-stay Gap Night</label>
-              <p className="settings-label">Send an offer for the guest to depart later when vacant nights are present.</p>
+              <p className="settings-label">Send your guests an offer to depart later when there's a vacant night after their stay.</p>
             </div>
           </div>
 
           <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("preStayUpsells")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Pre-stay Gap Night</label>
-              <p className="settings-label">Send an offer for the guest to arrive earlier when vacant nights are present.</p>
+              <p className="settings-label">Send your guests an offer to arrive earlier when there's a vacant night before their stay.</p>
             </div>
           </div>
 
           <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("reviewUpsells")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Post-Stay Review</label>
-              <p className="settings-label">Send guests a message asking them to leave a positive review if their stay went well.</p>
+              <p className="settings-label">Send a message to your guests whose stay went well, asking them to leave a positive review.</p>
             </div>
           </div>
 
