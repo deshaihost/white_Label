@@ -30,6 +30,8 @@
 
 .get_started img {
   margin: auto 0;
+  border: 1px solid #CCC;
+  border-radius: 10px;
 }
 
 .get_started .get_started_featured {
