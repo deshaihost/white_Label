@@ -33,7 +33,6 @@ const ConversationTranscriptModal = ({ handleClose, show, modalData }) => {
         setConversationApiData(response?.data?.conversation);
       }
       else {
-        ToastHandle(response?.data?.error, "danger");
         setConversationNotFound(true);
       }
     } catch (error) {

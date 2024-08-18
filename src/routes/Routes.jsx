@@ -27,6 +27,7 @@ import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";
 import TermsofService from "../pages/termsofService/TermsofService";
 import SchedulingWalkthrough from "../pages/userGuides/schedulingWalkthrough/schedulingWalkthrough";
 import TipsAndTricks from "../pages/userGuides/tipsAndTricks/tipsAndTricks";
+import BestPractices from "../pages/userGuides/bestPractices/bestPractices";
 import TestingQuestions from "../pages/userGuides/testingQuestions/testingQuestions";
 import ConfirmYourEmail from "../pages/confirmEmail/confirmYourEmail";
 import EmailConfirmationAction from "../pages/confirmEmail/emailConfirmationAction";
@@ -138,6 +139,7 @@ const Routing = () => {
         <Route path="/termsof-service" element={<TermsofService />}></Route>
         <Route path="/scheduling-walkthrough" element={<SchedulingWalkthrough />}></Route>
         <Route path="/tips-and-tricks" element={<TipsAndTricks />}></Route>
+        <Route path="/best-practices" element={<BestPractices />}></Route>
         <Route path="/testing-questions" element={<TestingQuestions />}></Route>
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
         <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
