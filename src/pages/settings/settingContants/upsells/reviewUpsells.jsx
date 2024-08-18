@@ -5,10 +5,10 @@ import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./upsells.css";
 import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
-//import UpsellMessageModal from "./upsellMessageModal";
+import UpsellMessageModal from "./upsellMessageModal";
 import ConversationTranscriptModal from "./ConversationTranscriptModal";
 
-import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
+import { FaTimes, FaExternalLinkAlt, FaFileAlt } from "react-icons/fa";
 
 /*
 default_settings = {
@@ -31,7 +31,6 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
   const [conversationModalData, setConversationModalData] = useState({});
   const [showConversationModal, setShowConversationModal] = useState(false);
 
-  // Unused
   const [messageModalHeaderText, setMessageModalHeaderText] = useState("");
   const [messageModalTopText, setMessageModalTopText] = useState("");
   const [messageModalMainText, setMessageModalMainText] = useState("");
@@ -199,7 +198,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
     setSection("index");
   }
 
-  // Unused
+
   const handleOpenMessageModal = (message) => {
     const headerText = `Message for ${message.guest_first_name} (${formatDateRange(message.guest_check_in, message.guest_check_out)}) at ${formatDateTime(message.time_to_send)}`;
     const newMessageModalContent = message.message
@@ -354,7 +353,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
       <p className="settings-label text-center">Showing the next 20.</p>
       {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay review requests <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time if the guest's sentiment meets your sleected criteria.</p>
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay review requests <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time for {currentSettingsData.criteria==='always' ? 'all guests' : currentSettingsData.criteria==='neutral' ? 'guests with neutral or positive sentiment' : 'guests with positive sentiment'}.</p>
       ) : (
         <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay review requests <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
       )}
@@ -393,7 +392,8 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
                       <td>
                         {cancelMessageLoading !== message.guest_key ? (
                           <>
-                            <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px', cursor:'pointer' }} onClick={() => handleOpenConversationModal(message)} />
+                            <FaFileAlt style={{ marginRight:'2px', cursor:'pointer' }} onClick={() => handleOpenConversationModal(message)} />
+                            <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px', cursor:'pointer' }} onClick={() => handleOpenMessageModal(message)} />
                             <FaTimes style={{ color:'red', cursor:'pointer' }} onClick={() => handleCancelMessage(message)} />
                           </>
                           ) : (
@@ -423,6 +423,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
         </div>
       </div>
       <ConversationTranscriptModal handleClose={() => setShowConversationModal(false)} show={showConversationModal} modalData={conversationModalData}/>
+      <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} />
     </div>
   );
 };

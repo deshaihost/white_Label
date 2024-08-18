@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 //import { goToBillingportalPostActions } from "../../../../redux/actions";
@@ -12,6 +12,7 @@ const SubscriptionIndex = () => {
   const dispatch = useDispatch();
 
   const [goToBillingPortalLoading, setGoToBillingPortalLoading] = React.useState(false);
+  const [subscriptionNotFound, setSubscriptionNotFound] = useState(false);
 
   const userSubscriptionData = store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
   const subscriptionPlanName = userSubscriptionData?.plan;
@@ -38,17 +39,18 @@ const SubscriptionIndex = () => {
         setGoToBillingPortalLoading(false);
         window.location.assign(response.data.billing_portal_url);
       }
-      else { ToastHandle(response?.data?.error, "danger"); }
+      else {
+        ToastHandle(response?.data?.error, "danger");
+        setSubscriptionNotFound(true);
+      }
     } catch (error) {
       console.log("error:", error);
       ToastHandle("something went wrong", "danger");
+      setSubscriptionNotFound(true);
     } finally {
       setGoToBillingPortalLoading(false);
     }
   };
-
-
-
 
 
   const subscriptionClickHandler = (event) => {
@@ -81,6 +83,12 @@ const SubscriptionIndex = () => {
             </Button>
           ) : (
             <BoxLoader />
+          )}
+          {subscriptionNotFound && (
+            <>
+              <p style={{marginTop:"30px", fontSize:"16px"}}><span style={{color:"rgb(190,0,0)"}}>We were unable to find a subscription for your account.</span> Please note that you must create a subscription (from the Properties page) before accessing your billing portal here.</p>
+              <p style={{marginTop:"15px", fontSize:"16px"}}>If you believe this is in error, please contact us at info@hostbuddy.ai and we will promptly assist with your subscription. We apologize for any inconvenience.</p>
+            </>
           )}
         </>
       ) : (

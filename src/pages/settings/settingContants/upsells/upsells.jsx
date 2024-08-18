@@ -143,7 +143,7 @@ const UpsellsIndex = () => {
             <h3>Upsells</h3>
           </div>
           <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
-            <p className="settings-label">Intelligent, context-aware proactive messaging. Drive sales, get positive reviews, and increase guest satisfaction.</p>
+            <p style={{color:"#CCC"}}>Intelligent, context-aware proactive messaging. Drive sales, get positive reviews, and increase guest satisfaction.</p>
           </div>
 
           <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-1"/>
