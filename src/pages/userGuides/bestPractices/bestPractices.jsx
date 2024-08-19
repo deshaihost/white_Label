@@ -30,7 +30,7 @@ const BestPractices = () => {
         </Helmet>
         <div className="container">
           <div className="banner-heading">
-            <h2>Best Practices</h2>
+            <h2>Perfecting your Knowledge Base</h2>
           </div>
           <div className="row">
             <div className="col-lg-12">
@@ -45,7 +45,7 @@ const BestPractices = () => {
                         
                         <div className="step-box">
                           <h4>Welcome to Hostbuddy AI!</h4>
-                          <p><em>HostBuddy is only as good as the information it has access to. The best way to ensure HostBuddy provides the best possible responses is by ensuring that its knowledge base is as thorough as possible, in addition to being accurate and up-to-date. Here are our best practices for perfecting your knowledge base.</em></p>
+                          <p><em>HostBuddy is only as good as the information it has access to, and you'll get the best possible responses by ensuring that its knowledge base is as thorough as possible, in addition to being accurate and up-to-date. When you add your properties, we automatically pull relevant property information from your integration into HostBuddy's knowledge base. While that will get you up and running, going the extra mile to review and perfect the information you’ve added will ensure that HostBuddy is performing at its best for you. Here are our best practices for perfecting your knowledge base.</em></p>
                         </div>
 
                         <div className="step-box section" id="step1">
@@ -66,6 +66,11 @@ const BestPractices = () => {
                           <p>HostBuddy’s responses are grounded on the information in its knowledge base. If it gives some response that is incorrect, it is generally because of some information in the knowledge base that pointed HostBuddy to the incorrect answer. Use the “Where did this come from?” feature to help you pinpoint the culprit information, then correct or clarify it in the property profile.</p>
                           <p>If HostBuddy is unable to provide sufficient information to resolve a guest’s query around a particular subject, you can add more details about that subject in the property profile.</p>
                           <p>To control HostBuddy’s general behavior, you can adjust your <Link to="/setting/conversation-preferences">conversation preferences</Link>.</p>
+                        </div>
+
+                        <div className="step-box section" id="step3">
+                          <h4>Still not getting the right behavior?</h4>
+                          <p>Ensuring our AI meets the needs of our users is our top priority. If you’re experiencing issues or having trouble getting the responses you’re looking for, please feel free to reach out to us at info@hostbuddy.ai and we’ll get back to you promptly to help.</p>
                         </div>
 
                       </div>
