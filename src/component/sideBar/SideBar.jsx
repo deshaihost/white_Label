@@ -75,11 +75,6 @@ const SideBar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/setup-guide" className={findlocation === "/setup-guide" ? "active" : ""}>
-            Setup Guide
-          </Link>
-        </li>
-        <li>
           {!logoutLoader ? (
             <Link onClick={() => {logoutHandle("logout");}}>
               Log out

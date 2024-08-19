@@ -18,6 +18,7 @@ const unlimitedTesting = 'https://storage.googleapis.com/frontend_media/home-new
 const robustCustomization = 'https://storage.googleapis.com/frontend_media/home-new/Customized%20Representation.webp';
 const seamlessPropertySetup = 'https://storage.googleapis.com/frontend_media/home-new/Seamless%20Property%20Setup.webp';
 const industryLeadingAI = 'https://storage.googleapis.com/frontend_media/home-new/Industry%20Leading%20AI.webp';
+const SmartTemlating = 'https://storage.googleapis.com/frontend_media/home-new/ReviewRequest.webp'
 
 const Works = () => {
     return(
@@ -66,6 +67,30 @@ const Works = () => {
                         </div>
                         <div className="col-lg-6">
                             <img src={seamlessPropertySetup} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
+                                <h3>Guest <strong>Upsells</strong></h3>
+                                <p>Have HostBuddy pay for itself by offering your guests extension discounts for vacant nights created by minimum stay requirements. Impress your guests with early check-ins and late checkout offers. Automatically follow up with guests who have gone silent after sending an inquiry.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={vacantNight} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
+                                <h3><strong>Smart</strong> Templating</h3>
+                                <p>Target the right guests at the right time with intelligent, context-aware templated messages. Automatically send review requests to guests who express positive sentiments about their experience, and skip those who are dissatisfied.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={SmartTemlating} alt='works-img' />
                         </div>
                     </div>
 
@@ -128,18 +153,6 @@ const Works = () => {
                         </div>
                         <div className="col-lg-6">
                             <img src={robustCustomization} alt='works-img' />
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-lg-6">
-                            <div className="works-content">
-                                <h3>Vacant Night <strong>Upsells</strong></h3>
-                                <p>Have HostBuddy pay for itself by offering your guests extension discounts for vacant nights created by minimum stay requirements. Alternatively, impress your guests with early check-ins and late checkouts on days that cannot be booked.</p>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <img src={vacantNight} alt='works-img' />
                         </div>
                     </div>
 

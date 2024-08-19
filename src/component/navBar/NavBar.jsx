@@ -154,9 +154,6 @@ const NavBar = () => {
                   <NavLink exact to="/setting" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Settings
                   </NavLink>
-                  <NavLink exact to="/setup-guide" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
-                    Setup Guide
-                  </NavLink>
                 </>
               ) : (
                 <>
