@@ -73,7 +73,18 @@
 .get_started .color-light-grey {
   color: #CCC;
 }
-
+@media screen and (max-width: 991px) {
+  .get_started .step_even  , .get_started .step_odd{
+   margin-bottom: 30px;
+}
+.get_started .welcome_steps {
+  display: flex;
+  flex-direction: column;
+}
+.get_started .col-lg-12:nth-child(odd) .welcome_steps {
+  flex-direction: column-reverse;
+}
+}
 @media screen and (max-width: 768px) {
   .get_started .get_started_featured {
     display: grid;

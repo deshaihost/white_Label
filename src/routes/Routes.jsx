@@ -37,6 +37,7 @@ import BlogLandingPage from "../blog/blogLanding";
 import BlogArticle from "../blog/blogArticle";
 import GetStarted from "../pages/getStarted/GetStarted";
 import BecomeAnAffiliate from "../pages/becomen Affiliate/BecomeAnAffiliate";
+import SoftwareSolutions from "../pages/SoftwareSolutions/SoftwareSolutions";
 //----
 import SettingIndex from "../pages/settings/SettingIndex";
 
@@ -150,6 +151,7 @@ const Routing = () => {
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
         <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />}></Route>
+        <Route path="/software-solutions" element={<SoftwareSolutions />}></Route>
         <Route path="*" element={<ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" />} />
         <Route path="/dashboard" element={
           <ProtectedRoute>

@@ -73,8 +73,9 @@ const Footer = () => {
                   }}> Book a Demo </a>
                 </p>
                 <Link to="/become-an-affiliate" className="links">
-                  Become an Affiliate</Link>
-
+                  Become an Affiliate</Link><br />
+                <Link to="/software-solutions" className="links">
+                  Software Solutions</Link>
                 <p className="links">
                   Email: info@hostbuddy.ai
                 </p>

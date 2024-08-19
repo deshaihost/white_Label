@@ -19,7 +19,9 @@
   font-weight: bold;
 }
 img.affi-logo {
-  width: 32%;
+  width: 100%;
+  max-width: 414px;
+  display: block;
 }
 
 .earn-commision h1 {
@@ -33,6 +35,7 @@ img.affi-logo {
   align-items: center;
   justify-content: center;
   border-radius: 20px;
+  flex: 0 0 80px;
 }
 .become-affilate h1 {
   font-size: 50px;
@@ -46,36 +49,81 @@ img.affi-logo {
 .display-btn {
   display: none;
 }
+
+/* ================software solution page style start================= */
+
+.main-heading h1 {
+  font-size: 50px;
+}
+.software-inner h5 {
+  font-size: 25px;
+  font-weight: bold;
+  line-height: 35px;
+}
+.software-solution {
+  border-bottom: 1px solid #575859;
+  padding-bottom: 50px;
+}
+.software-points h3 {
+  line-height: 35px;
+  font-size: 22px;
+}
+.BACKED {
+  background: #0d6efd;
+  color: #fff;
+}
+/* ================software solution page style ends================= */
+
+
+@media screen and (max-width: 1024px) {
+  .bg-section {
+    width: 40px;
+    height: 40px;
+    border-radius: 7px;
+    flex: 0 0 40px;
+}
+.bg-section p {
+  font-size: 22px !important;
+}
+.main-heading h1 {
+  font-size: 40px;
+}
+.affilate h5 {
+  font-size: 22px;
+}
+.custom-grid h3 {
+  font-size: 17px !important;
+  line-height: 27px;
+}
+.earn-commision h1 {
+  font-size: 25px;
+}
+}
 @media screen and (max-width: 991px) {
-  .affilate h1 {
-    font-size: 38px;
-  }
-  .earn-commision h1 {
-    font-size: 38px;
-  }
+  .software-solution {
+    border-bottom: 1px solid #575859;
+    padding-bottom: 50px !important;
+    margin-bottom: 50px;
+}
+ 
   .become-affilate h1 {
     font-size: 38px;
   }
-  .affilate h5 {
-    font-size: 30px;
-  }
+  
   .custom-sections p {
     font-size: 16px;
   }
   .emp-btn {
     font-size: 16px !important;
   }
-  .bg-section p {
-    font-size: 35px !important;
-  }
-  .custom-grid h3 {
-    font-size: 25px !important;
-  }
+  
+  
   .custom-sections img {
     width: 100% !important;
   }
 }
 @media screen and (max-width: 767px) {
+
   .affilate h1 {
     font-size: 28px;
   }
