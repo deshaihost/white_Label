@@ -61,8 +61,7 @@ img.affi-logo {
   line-height: 35px;
 }
 .software-solution {
-  border-bottom: 1px solid #575859;
-  padding-bottom: 50px;
+  padding-bottom: 60px;
 }
 .software-points h3 {
   line-height: 35px;
@@ -101,7 +100,6 @@ img.affi-logo {
 }
 @media screen and (max-width: 991px) {
   .software-solution {
-    border-bottom: 1px solid #575859;
     padding-bottom: 50px !important;
     margin-bottom: 50px;
 }
