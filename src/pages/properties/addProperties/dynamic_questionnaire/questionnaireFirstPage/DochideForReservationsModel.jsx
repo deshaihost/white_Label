@@ -4,12 +4,19 @@ import Loader from "../../../../../helper/Loader";
 
 const DochideForReservationsModel = ({ show, setShow, documentUploadMainHndle, btnLoading }) => {
   const hideForReservationDefault = ["CURRENT", "FUTURE", "INQUIRY/PAST"];
-  const [hideGetArray, setHideGetArray] = useState([]);
+  const [hideGetArray, setHideGetArray] = useState([]); // array of stages to hide
+  const [visibleStages, setVisibleStages] = useState(hideForReservationDefault); // array of stages not hidden. Basically the "inverse" of above
 
   // Function to handle button clicks. If item is in hideGetArray, remove it; otherwise, add it
   const handleButtonClick = (item) => {
-    if (hideGetArray.includes(item)) { setHideGetArray(hideGetArray.filter((i) => i !== item)); }
-    else { setHideGetArray([...hideGetArray, item]); }
+    if (hideGetArray.includes(item)) {
+      setHideGetArray(hideGetArray.filter((i) => i !== item));
+      setVisibleStages([...visibleStages, item]);
+    }
+    else {
+      setHideGetArray([...hideGetArray, item]);
+      setVisibleStages(visibleStages.filter((i) => i !== item));
+    }
   };
 
   const mainHandleClose=()=>{
@@ -33,10 +40,10 @@ const DochideForReservationsModel = ({ show, setShow, documentUploadMainHndle, b
 
           <p className="text-center" style={{ color: 'rgb(200, 200, 200)', marginBottom: '30px' }}>
             With this selection, HostBuddy
-            { hideGetArray.length === 0 ? <> can share this document's information with <span style={{ color: 'rgb(0, 180, 0)' }}>all guests</span> for this property.</> :
-              hideGetArray.length === 1 ? <> cannot share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[0]}</span> guests.</> :
-              hideGetArray.length === 2 ? <> cannot share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[0]}</span> or <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[1]}</span> guests.</> :
-              hideGetArray.length === 3 ? <> <span style={{ color: 'rgb(200, 0, 0)' }}>cannot</span> share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>any guests</span>.</>
+            { visibleStages.length === 3 ? <> can share this document's information with <span style={{ color: 'rgb(0, 180, 0)' }}>all guests</span> for this property.</> :
+              visibleStages.length === 2 ? <> can <span style={{ color: 'rgb(205, 95, 0)' }}>ONLY</span> share this document's information with <span style={{ color: 'rgb(205, 95, 0)' }}>{visibleStages[0]}</span> and <span style={{ color: 'rgb(205, 95, 0)' }}>{visibleStages[1]}</span> guests.</> :
+              visibleStages.length === 1 ? <> can <span style={{ color: 'rgb(205, 95, 0)' }}>ONLY</span> share this document's information with <span style={{ color: 'rgb(205, 95, 0)' }}>{visibleStages[0]}</span> guests.</> :
+              visibleStages.length === 0 ? <> <span style={{ color: 'rgb(200, 0, 0)' }}>cannot</span> share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>any guests</span>.</>
               : null
             }
           </p>
