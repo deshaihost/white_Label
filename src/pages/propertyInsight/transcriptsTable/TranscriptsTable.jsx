@@ -1,6 +1,6 @@
 import React, {  useState } from "react";
 import ConverSationtranscriptModel from "./transcriptsModel/ConverSationtranscriptModel";
-const TranscriptsTable = ({ conversationData, propertyConversationId }) => {
+const TranscriptsTable = ({ conversationData, propertyConversationId, propertyName }) => {
   const [model, setModel] = useState({
     conversationModel: false,
     conversationDataSend: "",
@@ -104,9 +104,9 @@ const TranscriptsTable = ({ conversationData, propertyConversationId }) => {
                 </thead>
                 <tbody class="transcript-data-table empty-table-conversation text-white">
                   {conversationData?.map((convers, index) => {
+                    convers.property_name = propertyName;
                     //const timestamp = convers?.conversation_start_time;
-                    const timestamp =
-                      convers?.messages[convers?.messages.length - 1]?.time; // Use the timestamp of the last message in the conversation, instead of convo start time
+                    const timestamp = convers?.messages[convers?.messages.length - 1]?.time; // Use the timestamp of the last message in the conversation, instead of convo start time
                     const formattedDateTime = formatDateAndTime(timestamp);
                     const firstConversationId = convers?.conversation_id;
                     return (

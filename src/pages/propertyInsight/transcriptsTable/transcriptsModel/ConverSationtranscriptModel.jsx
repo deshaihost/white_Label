@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
+import JustificationModal from "../../../testProperty/banner/messages/justificationModal/justificationModal";
 
 const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
   let { subject, success_rating, channel, conversation_start_time, property_name } = prntData
     ? prntData
     : [];
   if (channel === "hostbuddy") { channel = "HostBuddy Chat Link"; }
-  const messageData = prntData?.["messages"] || null; // will be null if the conversation could not be found. This happens for example if we try to click "view" for an action item for a property that has been deleted.
+  const messageData = prntData?.["messages"]?.slice().reverse() || null; // will be null if the conversation could not be found. This happens for example if we try to click "view" for an action item for a property that has been deleted.
+
+  const [showJustificationModal, setShowJustificationModal] = useState(false);
+  const [justificationText, setJustificationText] = useState("");
 
   function formatDateTime(dateTimeString, showYear=true) {
     const date = new Date(dateTimeString);
@@ -26,6 +30,12 @@ const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
     if (showYear) { return `${month} ${day}, ${year} ${hours}:${minutes}${ampm}`; }
     else { return `${month} ${day}, ${hours}:${minutes}${ampm}`; }
   }
+
+  const handleJustificationClick = (e, justificationText) => {
+    e.preventDefault();
+    setShowJustificationModal(true);
+    setJustificationText(justificationText);
+  };
 
   return (
     <div>
@@ -68,6 +78,11 @@ const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
                         </div>
                         <div className="col-9">
                           <div style={{ whiteSpace: 'pre-wrap' }}>{messg?.text}</div>
+                          {messg?.justification && (
+                            <div style={{width:'100%', display:'flex', justifyContent:'center', alignItems:'center', marginTop:'10px'}}>
+                              <a style={{display:'block', margin:'0 auto', marginBottom:'-10px', fontSize:'14px'}} onClick={(e) => handleJustificationClick(e, messg.justification)} href="#">Where did this come from?</a>
+                            </div>
+                          )}
                         </div>
                         <hr className="messageDivider" />
                       </>
@@ -81,6 +96,7 @@ const ConverSationtranscriptModel = ({ handleClose, show, prntData }) => {
           )}
         </Modal.Body>
       </Modal>
+      <JustificationModal show={showJustificationModal} handleClose={() => setShowJustificationModal(false)} propertyName={property_name} justification={justificationText}/>
     </div>
   );
 };

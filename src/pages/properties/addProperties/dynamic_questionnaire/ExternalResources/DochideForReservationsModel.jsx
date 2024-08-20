@@ -34,8 +34,8 @@ const DochideForReservationsModel = ({ show, setShow, documentUploadMainHndle, b
           <p className="text-center" style={{ color: 'rgb(200, 200, 200)', marginBottom: '30px' }}>
             With this selection, HostBuddy
             { hideGetArray.length === 0 ? <> can share this document's information with <span style={{ color: 'rgb(0, 180, 0)' }}>all guests</span> for this property.</> :
-              hideGetArray.length === 1 ? <> cannot share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[0]}</span> guests.</> :
-              hideGetArray.length === 2 ? <> cannot share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[0]}</span> or <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[1]}</span> guests.</> :
+              hideGetArray.length === 1 ? <> <span style={{ color: 'rgb(200, 0, 0)' }}>cannot</span> share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[0]}</span> guests.</> :
+              hideGetArray.length === 2 ? <> <span style={{ color: 'rgb(200, 0, 0)' }}>cannot</span> share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[0]}</span> or <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[1]}</span> guests.</> :
               hideGetArray.length === 3 ? <> <span style={{ color: 'rgb(200, 0, 0)' }}>cannot</span> share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>any guests</span>.</>
               : null
             }

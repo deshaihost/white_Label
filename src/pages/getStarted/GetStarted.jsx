@@ -101,7 +101,7 @@ const GetStarted = () => {
                 <div className="content-container d-flex flex-column">
                   <h3 className="text-white mb-4 fs-4 samsung-bold">4. Try it out!</h3>
                   <p className="fs-6 color-light-grey mb-4">Put HostBuddy to the test by navigating back to the properties page and selecting “Test property” next to the property of your choosing. Ask HostBuddy your most common guest questions and watch it handle them with ease.</p>
-                  <p className="fs-6 color-light-grey mb-3">HostBuddy will always respond based on real data you’ve provided, and you can see more information about each response by selecting “Where did this come from?”. If you feel that HostBuddy is missing data, navigate back to the property profile and add what’s needed!</p>
+                  <p className="fs-6 color-light-grey mb-3">HostBuddy will always respond based on real data you’ve provided, and you can see more information about each response by clicking “Where did this come from?”. If you feel that HostBuddy is missing data, navigate back to the property profile and add what’s needed!</p>
                   <Link to="/properties" className=" d-flex justify-content-end align-items-center gap-1 properties_link border-primary border-bottom mt-auto">
                     Try it out
                     <FaArrowRightLong />

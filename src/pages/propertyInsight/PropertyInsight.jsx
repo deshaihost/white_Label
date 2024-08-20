@@ -110,6 +110,7 @@ const PropertyInsight = () => {
                         <div className="">
                           <TranscriptsTable
                             conversationData={propertiesConversationGetData}
+                            propertyName={propertySelectName}
                             // propertyConversationId={propertyConversationId}
                           />
                         </div>
