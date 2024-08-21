@@ -45,7 +45,7 @@ const BestPractices = () => {
                         
                         <div className="step-box">
                           <h4>Welcome to Hostbuddy AI!</h4>
-                          <p><em>HostBuddy is only as good as the information it has access to, and you'll get the best possible responses by ensuring that its knowledge base is as thorough as possible, in addition to being accurate and up-to-date. When you add your properties, we automatically pull relevant property information from your integration into HostBuddy's knowledge base. While that will get you up and running, going the extra mile to review and perfect the information you’ve added will ensure that HostBuddy is performing at its best for you. Here are our best practices for perfecting your knowledge base.</em></p>
+                          <p><em>HostBuddy is only as good as the information it has access to, and you'll get the best possible responses by ensuring that its knowledge base is acurate, up-to-date, and as thorough as possible. Going the extra mile to review and perfect the information you’ve added will ensure that HostBuddy is performing at its best for you. Here are our best practices for perfecting your knowledge base.</em></p>
                         </div>
 
                         <div className="step-box section" id="step1">
@@ -63,9 +63,15 @@ const BestPractices = () => {
                         <div className="step-box section" id="step3">
                           <h4>3. Test it out!</h4>
                           <p>Iteratively testing is an excellent way to refine and improve how HostBuddy responds to common queries. On the properties page, click “Test Property” next to a property to open a chat window where you can interact with HostBuddy directly, as if you were a guest at that property. Give HostBuddy a challenge! Ask it the types of questions you receive from guests and see how it responds. You can click on “Where did this come from?” under any of HostBuddy’s messages for an explanation of why HostBuddy responded that way, and what specific information in the knowledge base was used to generate that response.</p>
-                          <p>HostBuddy’s responses are grounded on the information in its knowledge base. If it gives some response that is incorrect, it is generally because of some information in the knowledge base that pointed HostBuddy to the incorrect answer. Use the “Where did this come from?” feature to help you pinpoint the culprit information, then correct or clarify it in the property profile.</p>
-                          <p>If HostBuddy is unable to provide sufficient information to resolve a guest’s query around a particular subject, you can add more details about that subject in the property profile.</p>
-                          <p>To control HostBuddy’s general behavior, you can adjust your <Link to="/setting/conversation-preferences">conversation preferences</Link>.</p>
+                          <p>You can then adjust the information in the knowledge base or tweak your <Link to="/setting/conversation-preferences">conversation preferences</Link> to get the responses you’re looking for.</p>
+                        </div>
+
+                        <div className="step-box section" id="step3">
+                          <h4>4. Perfect and Troubleshoot</h4>
+                          <p>HostBuddy’s responses are grounded on the information in its knowledge base. If it gives some response that is incorrect, it is generally because of some information in the knowledge base that pointed HostBuddy to the incorrect answer. If HostBuddy’s response was too generic, vague, or unhelpful, then this is most likely because the key details in the information base that are needed to provide a thorough and helpful response are missing.</p>
+                          <p>If HostBuddy generates a response that isn’t ideal, the best place to start is by using the “Where did this come from?” feature. Whenever HostBuddy generates a message, it also generates a “justification” that explains the basis of the message. The justification is some plain text explaining what information from the knowledge base HostBuddy used to generate the response, and whether key details may be missing. It is a powerful tool that is even used by our engineers to profile and improve HostBuddy’s performance.</p>
+                          <p>In test conversations, you’ll see this option underneath each message bubble from HostBuddy. For live PMS conversations: go to Transcripts, select the property, find the conversation, and scroll to the message you want to investigate. You’ll find the “Where did this come from?” option alongside each HostBuddy message in the conversation transcript.</p>
+                          <p>Once you’ve honed in on the culprit information that led to the imperfect response, you'll know where to add or edit information in the knowledge base to improve HostBuddy’s responses.</p>
                         </div>
 
                         <div className="step-box section" id="step3">
