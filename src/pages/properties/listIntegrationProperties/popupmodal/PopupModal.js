@@ -28,8 +28,8 @@ const PopupModal = ({
     status: "",
     startDate: "",
     endDate: "",
-    startTime: "05:30",
-    endTime: "05:30",
+    startTime: "",
+    endTime: "",
   });
 
   const [checkedSchedule, setCheckedSchedule] = useState({
@@ -131,6 +131,11 @@ const PopupModal = ({
 
     const startSchedule = `${formatDate(data.startDate)} ${data.startTime}`;
     const endSchedule = `${formatDate(data.endDate)} ${data.endTime}`;
+
+    if (!data.startTime || !data.endTime) {
+      ToastHandle("Please enter start and end time", "danger");
+      return;
+    }
 
     if (data.status === "") {
       ToastHandle("Please select status", "danger");

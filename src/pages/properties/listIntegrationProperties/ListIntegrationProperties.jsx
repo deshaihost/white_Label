@@ -128,7 +128,9 @@ const ListIntegrationProperties = () => {
       setPropertiesToUnlock(data);
       handleModelOpen("UnlockProperty");
     } else if (findType === deleteProperty) {
-      dispatch(deleteListIntegrationPropertiesActions(data));
+      if (window.confirm("Are you sure you want to delete this property?")) {
+        dispatch(deleteListIntegrationPropertiesActions(data));
+      }
     } else if (findType === regenerateChatbotLink) {
       callRegenerateChatbotLinkAPI(data);
     } else if (findType === copyChatbotLink) {

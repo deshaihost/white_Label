@@ -48,7 +48,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
       if (integrationDataKeys.length > 0) {
         const firstKey = integrationDataKeys[0];
         const integration_ufkb_val = apiPropertyData?.supporting_doc_items?.integration_data[firstKey]?.use_for_knowledge_base;
-        if (integration_ufkb_val === undefined || integration_ufkb_val === true) {
+        if (integration_ufkb_val === undefined || integration_ufkb_val === true) { // if the key is not present, assume true
           integrationDataToSet['integration_data'] = {'use_for_knowledge_base': true};
         } else {
           integrationDataToSet['integration_data'] = {'use_for_knowledge_base': false};
