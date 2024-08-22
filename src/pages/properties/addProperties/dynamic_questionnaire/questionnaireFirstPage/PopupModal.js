@@ -83,7 +83,7 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj, deleteR
                         <tr>
                           <td>{docNameToDisplay}</td>
 
-                          <td className="text-center" style={{ color: 'rgb(140, 0, 0)' }}>
+                          <td className="text-center">
                             {hideForReservationGet?.join(", ")}
                           </td>
                           <td className="text-center">

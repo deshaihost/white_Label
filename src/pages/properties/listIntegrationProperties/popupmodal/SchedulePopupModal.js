@@ -31,8 +31,8 @@ const SchedulePopupModal = ({
   const [submit, setSubmit] = useState(false);
 
   const [data, setData] = useState({
-    startTime: "05:30",
-    endTime: "05:30",
+    startTime: "",
+    endTime: "",
   });
 
   const [checkedSchedule, setCheckedSchedule] = useState({
@@ -136,6 +136,10 @@ const SchedulePopupModal = ({
 
     const startSchedule = `${data.startTime}`;
     const endSchedule = `${data.endTime}`;
+    if (!startSchedule || !endSchedule) {
+      ToastHandle("Please enter start and end time", "danger");
+      return;
+    }
     if (!checkedSchedule.Current && !checkedSchedule.Future && !checkedSchedule.Past) {
       ToastHandle("Please select at least one reservation stage", "danger");
       return;
