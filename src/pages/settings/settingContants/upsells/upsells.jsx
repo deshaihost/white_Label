@@ -7,6 +7,7 @@ import "./upsells.css";
 import PostStayUpsells from "./postStayUpsells";
 import PreStayUpsells from "./preStayUpsells";
 import ReviewUpsells from "./reviewUpsells";
+import InquiryWinbacks from "./inquiryWinbacks";
 
 /*
 default_settings = {
@@ -42,12 +43,18 @@ const UpsellsIndex = () => {
   const [reviewCurrentSettingsData, setReviewCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
   const [getReviewSettingsLoading, setGetReviewSettingsLoading] = useState(false);
 
+  const [inquiryWinbacksSettingsApiData, setInquiryWinbacksSettingsApiData] = useState({});
+  const [inquiryWinbacksCurrentSettingsData, setInquiryWinbacksCurrentSettingsData] = useState({});
+  const [getInquiryWinbacksSettingsLoading, setGetInquiryWinbacksSettingsLoading] = useState(false);
+
   const [preStayUpcomingMessagesData, setPreStayUpcomingMessagesData] = useState([]);
   const [postStayUpcomingMessagesData, setPostStayUpcomingMessagesData] = useState([]);
   const [reviewUpcomingMessagesData, setReviewUpcomingMessagesData] = useState([]);
+  const [inquiryWinbacksUpcomingMessagesData, setInquiryWinbacksUpcomingMessagesData] = useState([]);
   const [getPreStayUpcomingMessagesLoading, setGetPreStayUpcomingMessagesLoading] = useState(false);
   const [getPostStayUpcomingMessagesLoading, setGetPostStayUpcomingMessagesLoading] = useState(false);
   const [getReviewUpcomingMessagesLoading, setGetReviewUpcomingMessagesLoading] = useState(false);
+  const [getInquiryWinbacksUpcomingMessagesLoading, setGetInquiryWinbacksUpcomingMessagesLoading] = useState(false);
 
 
   // Call the API to get all the user's settings
@@ -79,6 +86,10 @@ const UpsellsIndex = () => {
           setGetReviewSettingsLoading(false);
           setReviewSettingsApiData(response?.data?.upsell_settings);
           setReviewCurrentSettingsData(response?.data?.upsell_settings?.default);
+        } else if (upsell_type === 'inquiry_winback') {
+          setGetInquiryWinbacksSettingsLoading(false);
+          setInquiryWinbacksSettingsApiData(response?.data?.upsell_settings);
+          setInquiryWinbacksCurrentSettingsData(response?.data?.upsell_settings?.default);
         }
       }
       else { }
@@ -87,6 +98,8 @@ const UpsellsIndex = () => {
     } finally {
       if (upsell_type === 'pre_stay') { setGetPreStaySettingsLoading(false); }
       else if (upsell_type === 'post_stay') { setGetPostStaySettingsLoading(false); }
+      else if (upsell_type === 'review_upsell') { setGetReviewSettingsLoading(false); }
+      else if (upsell_type === 'inquiry_winback') { setGetInquiryWinbacksSettingsLoading(false); }
     }
   }
 
@@ -98,6 +111,7 @@ const UpsellsIndex = () => {
     if (upsell_type === 'pre_stay') { setGetPreStayUpcomingMessagesLoading(true); }
     else if (upsell_type === 'post_stay') { setGetPostStayUpcomingMessagesLoading(true); }
     else if (upsell_type === 'review_upsell') { setGetReviewUpcomingMessagesLoading(true); }
+    else if (upsell_type === 'inquiry_winback') { setGetInquiryWinbacksUpcomingMessagesLoading(true); }
 
     try {
       const config = {
@@ -111,6 +125,7 @@ const UpsellsIndex = () => {
         if (upsell_type === 'pre_stay') { setPreStayUpcomingMessagesData(response?.data?.upcoming_messages); }
         else if (upsell_type === 'post_stay') { setPostStayUpcomingMessagesData(response?.data?.upcoming_messages); }
         else if (upsell_type === 'review_upsell') { setReviewUpcomingMessagesData(response?.data?.upcoming_messages); }
+        else if (upsell_type === 'inquiry_winback') { setInquiryWinbacksUpcomingMessagesData(response?.data?.upcoming_messages); }
       }
       else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) {
@@ -119,6 +134,7 @@ const UpsellsIndex = () => {
       if (upsell_type === 'pre_stay') { setGetPreStayUpcomingMessagesLoading(false); }
       else if (upsell_type === 'post_stay') { setGetPostStayUpcomingMessagesLoading(false); }
       else if (upsell_type === 'review_upsell') { setGetReviewUpcomingMessagesLoading(false); }
+      else if (upsell_type === 'inquiry_winback') { setGetInquiryWinbacksUpcomingMessagesLoading(false); }
     }
   }
 
@@ -135,6 +151,10 @@ const UpsellsIndex = () => {
 
       {selectedSection === "reviewUpsells" && (
         <ReviewUpsells setSection={setSelectedSection} settingsApiData={reviewSettingsApiData} setSettingsApiData={setReviewSettingsApiData} currentSettingsData={reviewCurrentSettingsData} setCurrentSettingsData={setReviewCurrentSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getReviewSettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getReviewUpcomingMessagesLoading} upcomingMessagesData={reviewUpcomingMessagesData} />
+      )}
+
+      {selectedSection === "inquiryWinbacks" && (
+        <InquiryWinbacks setSection={setSelectedSection} settingsApiData={inquiryWinbacksSettingsApiData} setSettingsApiData={setInquiryWinbacksSettingsApiData} currentSettingsData={inquiryWinbacksCurrentSettingsData} setCurrentSettingsData={setInquiryWinbacksCurrentSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getInquiryWinbacksSettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getInquiryWinbacksUpcomingMessagesLoading} upcomingMessagesData={inquiryWinbacksUpcomingMessagesData} />
       )}
       
       {selectedSection === "index" && (
@@ -166,6 +186,13 @@ const UpsellsIndex = () => {
             <div className="col-lg-11 col-12">
               <label className="fs-5">Post-Stay Review</label>
               <p className="settings-label">Send a message to your guests who had a positive experience, asking them to leave a review.</p>
+            </div>
+          </div>
+
+          <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("inquiryWinbacks")}>
+            <div className="col-lg-11 col-12">
+              <label className="fs-5">Inquiry Winbacks</label>
+              <p className="settings-label">Send a message following up with guests who inquired but didn't book.</p>
             </div>
           </div>
 
