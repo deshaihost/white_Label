@@ -40,6 +40,7 @@ import BecomeAnAffiliate from "../pages/becomen Affiliate/BecomeAnAffiliate";
 import SoftwareSolutions from "../pages/SoftwareSolutions/SoftwareSolutions";
 //----
 import SettingIndex from "../pages/settings/SettingIndex";
+import InboxIndex from "../pages/inbox/InboxIndex";
 import GetConversationsTest from "../helper/getConversationsTest/getConversationsTest";
 
 const Routing = () => {
@@ -48,9 +49,9 @@ const Routing = () => {
   // Add rb2b profiling script to the head of the document
   useEffect(() => {
     const addScript = () => {
-      const script = document.createElement('script');
-      script.id = 'site-profiling';
-      script.type = 'text/javascript';
+      const script = document.createElement("script");
+      script.id = "site-profiling";
+      script.type = "text/javascript";
       //script.async = true;
       script.innerHTML = `
         !function () {
@@ -88,12 +89,13 @@ const Routing = () => {
 
     // Add Google Ads script to the head of the document
     const addGoogleScript = () => {
-      const script1 = document.createElement('script');
+      const script1 = document.createElement("script");
       script1.async = true;
-      script1.src = "https://www.googletagmanager.com/gtag/js?id=AW-16607279889";
+      script1.src =
+        "https://www.googletagmanager.com/gtag/js?id=AW-16607279889";
       document.head.appendChild(script1);
 
-      const script2 = document.createElement('script');
+      const script2 = document.createElement("script");
       script2.innerHTML = `
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -104,21 +106,38 @@ const Routing = () => {
     };
 
     // Add the scripts to the head of the document
-    const existingScript = document.getElementById('site-profiling');
-    const loadedScript = document.getElementById('profiling-loaded-script');
-    if (!window.dataLayer) { // window.dataLayer is a global array that the Google Tag Manager uses to collect and store data. If window.dataLayer is not defined, it means the Google tracking script has not been added to the page yet. This prevents the Google tracking script from being added multiple times if the useEffect hook runs more than once.
+    const existingScript = document.getElementById("site-profiling");
+    const loadedScript = document.getElementById("profiling-loaded-script");
+    if (!window.dataLayer) {
+      // window.dataLayer is a global array that the Google Tag Manager uses to collect and store data. If window.dataLayer is not defined, it means the Google tracking script has not been added to the page yet. This prevents the Google tracking script from being added multiple times if the useEffect hook runs more than once.
       addGoogleScript(); // add regardless of what page we're on. We need this in the user portal so we can report conversions during checkout
     }
 
     // Add the rb2b script only if not already present, and only for the front pages (excluding login/register/forgotpass/changepass)
-    const pathnames_to_profile = ["/", "/pricing", "/meet-hostbuddy", "/faqs", "/privacy-policy", "/termsof-service", "/scheduling-walkthrough", "/tips-and-tricks", "/testing-questions"];
+    const pathnames_to_profile = [
+      "/",
+      "/pricing",
+      "/meet-hostbuddy",
+      "/faqs",
+      "/privacy-policy",
+      "/termsof-service",
+      "/scheduling-walkthrough",
+      "/tips-and-tricks",
+      "/testing-questions",
+    ];
     if (pathnames_to_profile.includes(location.pathname)) {
-      if (!existingScript && false) { // script adding DISABLED
+      if (!existingScript && false) {
+        // script adding DISABLED
         addScript();
       }
-    } else { // When the user navigates away from the front pages, remove the rb2b script (and the other script that it loads). Don't mess with the google ads script, let it do its thing
-      if (existingScript) { existingScript.remove(); }
-      if (loadedScript) { loadedScript.remove(); }
+    } else {
+      // When the user navigates away from the front pages, remove the rb2b script (and the other script that it loads). Don't mess with the google ads script, let it do its thing
+      if (existingScript) {
+        existingScript.remove();
+      }
+      if (loadedScript) {
+        loadedScript.remove();
+      }
     }
   }, [location.pathname]);
 
@@ -139,67 +158,140 @@ const Routing = () => {
         <Route path="/forgot" element={<ForgotPass />}></Route>
         <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
         <Route path="/termsof-service" element={<TermsofService />}></Route>
-        <Route path="/scheduling-walkthrough" element={<SchedulingWalkthrough />}></Route>
+        <Route
+          path="/scheduling-walkthrough"
+          element={<SchedulingWalkthrough />}
+        ></Route>
         <Route path="/tips-and-tricks" element={<TipsAndTricks />}></Route>
         <Route path="/best-practices" element={<BestPractices />}></Route>
         <Route path="/testing-questions" element={<TestingQuestions />}></Route>
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
-        <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
+        <Route
+          path="/email_confirmation"
+          element={<EmailConfirmationAction />}
+        ></Route>
         <Route path="/reset-password" element={<ResetPass />}></Route>
         <Route path="/setup-guide" element={<SetupGuide />}></Route>
         <Route path="/getstarted" element={<GetStarted />}></Route>
         <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
-        <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />}></Route>
-        <Route path="/software-solutions" element={<SoftwareSolutions />}></Route>
-        <Route path="*" element={<ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" />} />
-        <Route path="/get-conversations-test" element={
-          <ProtectedRoute>
-            <GetConversationsTest />
-          </ProtectedRoute>
-        } />
-        <Route path="/dashboard" element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
+
+        <Route
+          path="/become-an-affiliate"
+          element={<BecomeAnAffiliate />}
+        ></Route>
+        <Route
+          path="/software-solutions"
+          element={<SoftwareSolutions />}
+        ></Route>
+        <Route
+          path="*"
+          element={
+            <ThankError
+              imgSrc={ErrorImg}
+              text="We cannot find the page you’re looking for"
+            />
+          }
+        ></Route>
+
+        <Route
+          path="/become-an-affiliate"
+          element={<BecomeAnAffiliate />}
+        ></Route>
+        <Route
+          path="/software-solutions"
+          element={<SoftwareSolutions />}
+        ></Route>
+        <Route
+          path="*"
+          element={
+            <ThankError
+              imgSrc={ErrorImg}
+              text="We cannot find the page you’re looking for"
+            />
+          }
         />
-        <Route path="/properties" element={
-          <ProtectedRoute>
-            <Properties />
-          </ProtectedRoute>
-        }
+        <Route
+          path="/get-conversations-test"
+          element={
+            <ProtectedRoute>
+              <GetConversationsTest />
+            </ProtectedRoute>
+          }
         />
-        <Route path="/property-insight" element={
-          <ProtectedRoute>
-            <PropertyInsight />
-          </ProtectedRoute>
-        }
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
         />
-        <Route path="/subscription" element={
-          <ProtectedRoute>
-            <Subscription />
-          </ProtectedRoute>
-        }
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
         />
-        <Route path="/setting/:section?" element={
-          <ProtectedRoute>
-            {/* <Account /> */}
-            <SettingIndex />
-          </ProtectedRoute>
-        } />
-        <Route path="/add-property" element={
-          <ProtectedRoute>
-            <AddPropertyForm />
-          </ProtectedRoute>
-        }
+        <Route
+          path="/properties"
+          element={
+            <ProtectedRoute>
+              <Properties />
+            </ProtectedRoute>
+          }
         />
-        <Route path="/edit-property/:property_name" element={
-          <ProtectedRoute>
-            <QuestionnairePage />
-          </ProtectedRoute>
-        }
+        <Route
+          path="/property-insight"
+          element={
+            <ProtectedRoute>
+              <PropertyInsight />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subscription"
+          element={
+            <ProtectedRoute>
+              <Subscription />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/setting/:section?"
+          element={
+            <ProtectedRoute>
+              {/* <Account /> */}
+              <SettingIndex />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-property"
+          element={
+            <ProtectedRoute>
+              <AddPropertyForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-property/:property_name"
+          element={
+            <ProtectedRoute>
+              <QuestionnairePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/inbox"
+          element={
+            <ProtectedRoute>
+              <InboxIndex />
+            </ProtectedRoute>
+          }
         />
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
