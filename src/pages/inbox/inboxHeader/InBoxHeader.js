@@ -1,6 +1,6 @@
 import React from "react";
-
-const InBoxHeader = ({ showInterFace }) => {
+import "./index.css";
+const InBoxHeader = ({ showInterFace, interFaceComponent }) => {
   const labelName = [
     "Indox",
     "Smart Templates",
@@ -9,10 +9,11 @@ const InBoxHeader = ({ showInterFace }) => {
     "Upsells",
   ];
   return (
-    <div>
+    <div className="nab-bar">
       {labelName?.map((label, index) => {
         return (
           <button
+            className={`${interFaceComponent === index ? 'nav-active': ""}`}
             onClick={() => {
               showInterFace(index);
             }}

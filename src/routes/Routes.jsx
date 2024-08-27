@@ -41,6 +41,7 @@ import SoftwareSolutions from "../pages/SoftwareSolutions/SoftwareSolutions";
 //----
 import SettingIndex from "../pages/settings/SettingIndex";
 import InboxIndex from "../pages/inbox/InboxIndex";
+import GetConversationsTest from "../helper/getConversationsTest/getConversationsTest";
 
 const Routing = () => {
   const location = useLocation();
@@ -175,6 +176,7 @@ const Routing = () => {
         <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
+
         <Route
           path="/become-an-affiliate"
           element={<BecomeAnAffiliate />}
@@ -190,6 +192,40 @@ const Routing = () => {
               imgSrc={ErrorImg}
               text="We cannot find the page you’re looking for"
             />
+          }
+        ></Route>
+
+        <Route
+          path="/become-an-affiliate"
+          element={<BecomeAnAffiliate />}
+        ></Route>
+        <Route
+          path="/software-solutions"
+          element={<SoftwareSolutions />}
+        ></Route>
+        <Route
+          path="*"
+          element={
+            <ThankError
+              imgSrc={ErrorImg}
+              text="We cannot find the page you’re looking for"
+            />
+          }
+        />
+        <Route
+          path="/get-conversations-test"
+          element={
+            <ProtectedRoute>
+              <GetConversationsTest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
           }
         />
         <Route
@@ -257,7 +293,6 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
-
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
       </Routes>
