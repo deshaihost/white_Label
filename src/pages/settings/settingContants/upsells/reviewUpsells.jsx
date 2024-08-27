@@ -108,7 +108,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
     return date.toLocaleDateString('en-US', options);
   };
 
-  // Truncate a string to num_chars
+  // Truncate a string to length num_chars
   // e.g. input string='Hello, world!', num_chars=5 => output 'Hello...'
   // e.g. input string='Hello', num_chars=5 => output 'Hello'
   const truncateString = (string, num_chars) => {
