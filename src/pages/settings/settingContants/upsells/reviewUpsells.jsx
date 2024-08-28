@@ -166,7 +166,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
   }
 
 
-  // Call the API to cancel an upsell message
+  // Call the API to cancel an upsell message.
   const callCancelMessageApi = async (propertyName, guestKey) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
