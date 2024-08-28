@@ -5,8 +5,6 @@ import Loader from "../../../../helper/Loader";
 
 function Message({ key, text, sender, feedBckModelOpen, handleJustificationClick, feedBackDataGet, prevMsgText, isInitialMessage }) {
 
-  
-
   const { response, message_id, justification } = text ? text : {};
   const { typeThumbs, messageId,  } = feedBackDataGet ? feedBackDataGet : {};
   const use_loader = sender === "bot" && !response && !message_id

@@ -13,7 +13,7 @@ const callGetConversationsApi = async () => {
     const response = await axios.get( `${baseUrl}/get_all_conversations`, config );
 
     if (response.status === 200) {
-      ToastHandle("Conversations retrieved successfully", "success");
+      // ToastHandle("Conversations retrieved successfully", "success");
     }
     else { ToastHandle(response?.data?.error, "danger"); }
     return response;

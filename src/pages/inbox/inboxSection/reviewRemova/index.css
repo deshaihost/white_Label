@@ -1,0 +1,131 @@
+.review-heading h2 {
+    font-size: 25px;
+    color: #fff;
+    font-weight: 700;
+    font-family: 'Samsung Sharp Sans Medium';
+    margin: 10px 0px 10px 0px;
+}
+.review-table {
+    padding: 0px 50px;
+}
+.review-heading p {
+    font-size: 14px;
+    color: #fff;
+    max-width: 900px;
+    width: 100%;
+    font-family: 'Samsung Sharp Sans Medium';
+    margin-bottom: 10px;
+}
+.review-form {
+    /* text-align: right; */
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    flex-wrap:wrap;
+}
+
+.review-form div {
+    display: flex;
+}
+
+.review-form form {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    color: #B4AFB0;
+    font-size: 14px;
+    font-family: 'Samsung Sharp Sans Medium';
+}
+
+.review-form input {
+    margin-right: 5px;
+}
+.expire i {
+    margin-left: 5px;
+}
+.search-main input {
+    background: transparent;
+    border: 1px solid #146EF5;
+    border-radius: 50px;
+    height: 30px;
+    padding-left: 40px;
+}
+.search-main input::placeholder{
+    
+   color:#B4AFB0;
+    
+}
+.search-main {
+    position: relative;
+}
+.search-main i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left:20px;
+}
+.review-form-heading h3 {
+    font-size: 25px;
+    color: #fff;
+    font-weight: 400;
+    margin-bottom:10px;
+}
+.main-review .table th {
+    color:#B4AFB0;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: 300;
+}
+.main-review .table td{
+    color:#fff;
+    font-size: 14px;
+    font-weight: 300;
+    
+}
+.table {
+    border-color:transparent !important ;
+    border-width: 0px !important;
+}
+.table thead, .table tbody, .table tr, .table th, .table td{
+
+
+    border-color:unset !important;
+    border-width: 0px !important;
+    border-style:unset !important;
+}
+.main-review
+{
+    overflow-y:scroll;
+    max-height: 300px;
+}
+
+@media screen and (max-width:1024px)
+{
+    .review-heading h2, .review-form-heading h3
+    {
+        font-size: 20px;
+    }
+    .main-review .table th {
+        
+        font-size: 14px;
+        
+    }
+    .review-form{
+        padding-bottom:10px;
+    }
+}
+
+@media screen and (max-width:767px)
+{
+    .review-table {
+        padding: 0px 30px;
+    }
+    .review-form form{
+        flex-wrap: wrap;
+        gap:10px;
+    }
+    .review-heading h2, .review-form-heading h3
+    {
+        font-size: 18px;
+    }
+}

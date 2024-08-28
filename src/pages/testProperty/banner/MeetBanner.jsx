@@ -139,7 +139,7 @@ const MeetBanner = (props) => {
     setJustificationText(justificationText);
   };
 
-
+console.log(messages,'propertyTest')
   return (
     <div className="meet-banner">
       <Container>
