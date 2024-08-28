@@ -13,7 +13,7 @@
     font-size: 15px;
 }
 .left-description h2 {
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 600;
     margin-bottom: 10px;
 }
@@ -30,7 +30,7 @@
     font-weight: 500;
 }
 .left-bar {
-    height: calc(100vh - 209px);
+    height: calc(100vh - 167px);
     overflow-y: scroll;
 }
 .left-bar .row {

@@ -6,7 +6,7 @@
     max-width: 100%;
 }
 .main-chat {
-    height: 100vh;
+    height: calc(100vh - 167px);
     padding: 20px 0px;
 }
 .right-side h2 {
@@ -37,4 +37,55 @@
     margin: 0 auto;
     border-bottom: 1px solid rgb(255 255 255 / 10%);
     padding-bottom: 20px;
+}
+.message-list .timing {
+    font-size: 13px;
+    margin-right: 8px;
+    padding-right: 10px;
+    color: #7c88a7;
+}
+.message.user {
+    align-items: center;
+}
+.thunbs {
+    padding-right: 15px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.timing.left-msg {
+    padding-left: 10px;
+    margin-left: 8px;
+}
+.where-did {
+    display: flex;
+    align-items: center;
+    max-width: 400px;
+    margin-left: auto;
+    justify-content: space-between;
+}
+.where-did a {
+    font-size: 15px;
+    color: #146ef5;
+}
+.mesaage-box {
+    margin-bottom: 0px;
+}
+.user.mesaage-box p {
+    background: #ffffff21;
+}
+.message.bot p {
+    background: #060f26;
+}
+.ai-input i {
+    font-size: 29px;
+}
+.ai-input {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.ai-input .input-container {
+    margin: 0px;
 }

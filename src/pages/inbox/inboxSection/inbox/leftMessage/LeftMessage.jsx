@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserDataActions } from "../../../../../redux/actions";
 
 const LeftMessage = ({ messageList, getUserMessage }) => {
+  const store = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  const property_data =
+    store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
+  const allPropertyName =
+    property_data !== undefined ? Object.keys(property_data) : [];
   const { conversations } = messageList ? messageList : [];
   const timeFormat = (timestamp) => {
     const date = new Date(timestamp);
@@ -49,22 +58,26 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
   const [searchActive, setSearchActive] = useState(0);
   const [searchInputShow, setSearchInputShow] = useState(false);
   const searchSection = [
-    { type: "select", label: "All" },
-    { type: "button", label: "Phase" },
+    { type: "select", label: "All", option: allPropertyName },
+    {
+      type: "select",
+      label: "Phase",
+      option: ["Current", "Inquiry", "Future", "Past"],
+    },
     { type: "button", label: "Urgent" },
   ];
   const extractTextFromHTML = (html) => {
     // Create a temporary DOM element to parse HTML
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
-  
     // Extract text content from the DOM element
-    const textContent = tempDiv.textContent || tempDiv.innerText || '';
-  
+    const textContent = tempDiv.textContent || tempDiv.innerText || "";
     // Split the text by newline characters
-    return textContent.split('\n');
+    return textContent.split("\n");
   };
-  
+  useEffect(() => {
+    dispatch(getUserDataActions());
+  }, []);
 
   return (
     <>
@@ -88,7 +101,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
         </div>
         <div className="filter-btns">
           {searchSection?.map((searchItem, index) => {
-            const { type, label } = searchItem;
+            const { type, label, option } = searchItem;
             return (
               <>
                 {type === "select" && (
@@ -96,20 +109,34 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
                     <select
                       name="cars"
                       id="cars"
-                      className={`${searchActive === index && "active"}`}
+                      className={`${
+                        searchActive === index
+                          ? "bg-light text-dark"
+                          : "bg-dark"
+                      } `}
                       onClick={() => setSearchActive(index)}
                     >
-                      <option value="volvo">{label}</option>
-                      <option value="saab">1</option>
-                      <option value="mercedes">2</option>
-                      <option value="audi">3</option>
+                      <>
+                        <option value="" selected>
+                          {label}
+                        </option>
+                        {option?.map((opetion) => {
+                          return (
+                            <>
+                              ;<option value="volvo">{opetion}</option>;
+                            </>
+                          );
+                        })}
+                      </>
                     </select>
                   </>
                 )}
                 {type === "button" && (
                   <span
                     onClick={() => setSearchActive(index)}
-                    className={`${searchActive === index && "active"}`}
+                    className={`${
+                      searchActive === index ? "bg-light text-dark" : "bg-dark"
+                    }`}
                   >
                     {label}
                   </span>
@@ -122,11 +149,15 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
       {conversations?.map((message) => {
         const { guest_name, conversation_start_time } = message;
         const allUserMessage = message?.messages;
-        const currentMessage = message?.messages[0];
-        const { sender, text, time } = currentMessage;
+        const messages = message?.messages; // Assuming message?.messages is an array
+        const lastValue = messages[messages.length - 1];
+        const { sender, text, time } = lastValue;
+        let sliced = text.slice(0, 25);
+        let result = sliced.split().join("…");
         return (
           <div
-            className="row left-inner-tab"
+            style={{ cursor: "pointer" }}
+            className="row left-inner-tab "
             onClick={() => getUserMessage(allUserMessage)}
           >
             <div className="col-lg-3 col-12">
@@ -138,7 +169,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
                 <p>{timeFormat(conversation_start_time)}</p>
               </div>
               <div className="short-des">
-                {sender}: {text?.split("\n")[0]}
+                {sender}: {result}
               </div>
               <div className="date"> {formatDateRange(time)}</div>
             </div>

@@ -298,7 +298,8 @@ const Routing = () => {
       </Routes>
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
-        location.pathname !== "/forgot" && <Footer />}
+        location.pathname !== "/forgot" &&
+        location.pathname !== "/inbox" && <Footer />}
     </div>
   );
 };
