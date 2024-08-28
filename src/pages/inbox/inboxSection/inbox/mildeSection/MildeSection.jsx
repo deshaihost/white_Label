@@ -109,10 +109,9 @@ const MildeSection = ({ allUserMessage }) => {
   useEffect(() => {
     if (allUserMessage) {
       const newMessages = allUserMessage.map((messageList) => {
-        console.log(messageList, "messageList");
         const { sender, text, time } = messageList;
         let timeFormatConvert = timeFormat(time);
-        if (sender === "host") {
+        if (sender === "host" || sender === "hostbuddy") {
           return {
             text: messageList !== undefined ? messageList : "",
             sender: "user",

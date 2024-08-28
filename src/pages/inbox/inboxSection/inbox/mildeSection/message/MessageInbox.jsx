@@ -12,7 +12,6 @@ const MessageInbox = ({
   isInitialMessage,
 }) => {
   const { typeThumbs, messageId } = feedBackDataGet ? feedBackDataGet : {};
-
   const { timeFormatConvert, sendBy } = messageData;
   const messageDetails = messageData?.text;
   const { id, justification, response } = messageDetails;
