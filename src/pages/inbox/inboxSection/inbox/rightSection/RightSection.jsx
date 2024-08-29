@@ -1,21 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import "./index.css";
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
-const RightSection = () => {
+import { formatDateRange } from "../../../../../helper/commonFun";
+import JustificationModal from "../../../../testProperty/banner/messages/justificationModal/justificationModal";
+import { useSelector } from "react-redux";
+const RightSection = ({ rightSectionData }) => {
+  const { arrival_date, departure_date, status, guest_name, sentiment } =
+    rightSectionData ? rightSectionData : [];
+  const [showJustificationModal, setShowJustificationModal] = useState(false);
+  const [justificationText, setJustificationText] = useState(
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+  );
+  const store = useSelector((state) => state);
+  const getPropertyName =
+    store?.getSessionIdReducer?.sessionId?.data?.property_name;
+
   return (
     <div className="right-side">
-      <div className="bordr-cl">
+      <div className="bordr-cl right-title">
         <h2>Reservation</h2>
       </div>
       <div className="row">
         <div className="col-lg-9">
           <div className="guest">
             <span>Past Guest </span>
-            <h2>Jorge</h2>
+            <h2>{guest_name}</h2>
             <p>
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry.{" "}
             </p>
+            <span className="guest_date">
+              {arrival_date && formatDateRange(arrival_date, departure_date)}
+            </span>
           </div>
         </div>
         <div className="col-lg-3 guest-img">
@@ -28,13 +44,13 @@ const RightSection = () => {
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry.{" "}
         </p>
-        <div className="text-center">
-          <span>Manage</span>
+        <div className="text-center" style={{ cursor: "pointer" }}>
+          <button onClick={() => setShowJustificationModal(true)}>Manage</button>
         </div>
       </div>
       <div className="satisfy">
         <h2>Satisfaction</h2>
-        <p className="result"> Positive</p>
+        <p className="result"> {status}</p>
       </div>
       <div className="about">
         <div className="about-inner">
@@ -50,6 +66,12 @@ const RightSection = () => {
           </div>
         </div>
       </div>
+      <JustificationModal
+        show={showJustificationModal}
+        handleClose={() => setShowJustificationModal(false)}
+        propertyName={getPropertyName}
+        justification={justificationText}
+      />
     </div>
   );
 };

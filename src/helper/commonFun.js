@@ -14,3 +14,50 @@ export const timeFormat = (timestamp) => {
   const timeString = `${hours}:${minutesFormatted} ${ampm}`;
   return timeString;
 };
+
+// e.g. formatDateRange("210101_000000", "210103_000000") => "Jan 1-3"
+// e.g. formatDateRange("210101_000000", "210203_000000") => "Jan 1 - Feb 3"
+export function formatDateRange(startDate, endDate) {
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  // Helper function to parse date string
+  function parseDate(dateString) {
+    const datePart = dateString.split("_")[0];
+    const year = parseInt(datePart.slice(0, 2), 10) + 2000; // Assuming year is in the 2000s
+    const month = parseInt(datePart.slice(2, 4), 10) - 1; // Month is 0-indexed
+    const day = parseInt(datePart.slice(4, 6), 10);
+    return new Date(year, month, day);
+  }
+
+  // Parse the start and end dates
+  const start = parseDate(startDate);
+  const end = parseDate(endDate);
+
+  // Get the month and day for both dates
+  const startMonth = monthNames[start.getMonth()];
+  const startDay = start.getDate();
+  const endMonth = monthNames[end.getMonth()];
+  const endDay = end.getDate();
+
+  // Create the formatted date range
+  if (startMonth === endMonth && start.getFullYear() === end.getFullYear()) {
+    return `${startMonth} ${startDay} - ${endDay}`;
+  } else if (start.getFullYear() === end.getFullYear()) {
+    return `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
+  } else {
+    // Handle different years
+    return `${startMonth} ${startDay}, ${start.getFullYear()} - ${endMonth} ${endDay}, ${end.getFullYear()}`;
+  }
+}

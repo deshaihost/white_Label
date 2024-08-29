@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const MessageInbox = ({
   key,
@@ -16,6 +16,7 @@ const MessageInbox = ({
   const messageDetails = messageData?.text;
   const { id, justification, response } = messageDetails;
   const message_id = id ? id : [];
+
   return (
     <div>
       <p>
@@ -122,7 +123,7 @@ const MessageInbox = ({
           )}
         </p>
       </div>
-      <div className="mb-5">
+      <div className="mb-3">
         {sender === "bot" ? (
           <>
             <div className="timing left-msg">Send by {sendBy}</div>

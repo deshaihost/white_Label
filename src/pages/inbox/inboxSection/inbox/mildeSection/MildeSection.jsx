@@ -11,7 +11,8 @@ const MildeSection = ({ allConversationData }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
-  const getPropertyName = store?.getSessionIdReducer?.sessionId?.data?.property_name;
+  const getPropertyName =
+    store?.getSessionIdReducer?.sessionId?.data?.property_name;
 
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -87,7 +88,15 @@ const MildeSection = ({ allConversationData }) => {
     yesterdayDate.setDate(todayDate.getDate() - 1);
 
     // Get the name of the weekday
-    const weekdayNames = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+    const weekdayNames = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
     const weekdayName = weekdayNames[inputDate.getDay()];
 
     // Compare dates
@@ -103,11 +112,8 @@ const MildeSection = ({ allConversationData }) => {
 
   // When we get the API data, populate the messages array and set the generate button functionality
   useEffect(() => {
-    console.log("allConversationData", allConversationData);
-
     // Populate messages
     if (allConversationData?.messages) {
-      console.log("allConversationData.messages", allConversationData.messages);
       const newMessages = allConversationData.messages.map((messageList) => {
         const { sender, text, time } = messageList;
         let timeFormatConvert = timeFormat(time);
@@ -121,14 +127,15 @@ const MildeSection = ({ allConversationData }) => {
       });
       setMessages(newMessages);
     }
-
     // Generate button functionality. Only enable the generate button if the last message is from the guest and we have a pre-generated message ready for it
     if (
       allConversationData?.messages &&
       allConversationData.messages.length > 0 &&
-      allConversationData.messages[allConversationData.messages.length - 1].sender === "guest" &&
+      allConversationData.messages[allConversationData.messages.length - 1]
+        .sender === "guest" &&
       allConversationData.generated_response &&
-      allConversationData.generated_response.for_message === allConversationData.messages[allConversationData.messages.length - 1].id
+      allConversationData.generated_response.for_message ===
+        allConversationData.messages[allConversationData.messages.length - 1].id
     ) {
       setGenerateButtonIsEnabled(true);
       setGenerateButtonText(allConversationData.generated_response.response);
@@ -141,10 +148,16 @@ const MildeSection = ({ allConversationData }) => {
   // Allow the text area to expand vertically as lines are added
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [inputValue]);
+
+  useEffect(() => {
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   return (
     <div className="main-chat">
@@ -173,12 +186,16 @@ const MildeSection = ({ allConversationData }) => {
         </div>
         <div className="ai-input">
           {generateButtonIsEnabled && (
-            <button onClick={() => setInputValue(generateButtonText)} className="generate-button">
+            <button
+              onClick={() => setInputValue(generateButtonText)}
+              className="generate-button"
+            >
               <i className="bi bi-stars"></i>
             </button>
           )}
           <div className="input-container">
-            <textarea
+            <input
+            type="text"
               ref={textareaRef}
               placeholder="Type a message..."
               value={inputValue}
@@ -186,13 +203,22 @@ const MildeSection = ({ allConversationData }) => {
               onKeyDown={handleKeyPress}
               disabled={updateMessageRespLoading ? true : false}
               rows="1"
-              style={{ resize: 'none', overflow: 'auto' }}
+              // style={{ resize: "none", overflow: "auto" }}
             />
           </div>
         </div>
       </div>
-      <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
-      <JustificationModal show={showJustificationModal} handleClose={() => setShowJustificationModal(false)} propertyName={getPropertyName} justification={justificationText}/>
+      <MessgFeedBckModel
+        show={feedBackModelOpen}
+        handleClose={messgFeedBckClose}
+        feedBackDataGet={feedBackDataGet}
+      />
+      <JustificationModal
+        show={showJustificationModal}
+        handleClose={() => setShowJustificationModal(false)}
+        propertyName={getPropertyName}
+        justification={justificationText}
+      />
     </div>
   );
 };

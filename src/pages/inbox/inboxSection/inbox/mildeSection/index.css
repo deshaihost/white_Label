@@ -9,35 +9,7 @@
     height: calc(100vh - 167px);
     padding: 20px 0px;
 }
-.right-side h2 {
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgb(255 255 255 / 10%);
-    padding-bottom: 15px;
-}
-.guest span {
-    font-size: 15px;
-    margin-bottom: 10px;
-    display: inline-block;
-}
 
-.guest h2 {
-    font-size: 18px;
-    padding: 0px;
-    border: 0px;
-}
-.guest p {
-    font-size: 13px;
-    line-height: 23px;
-}
-.right-side .row {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    border-bottom: 1px solid rgb(255 255 255 / 10%);
-    padding-bottom: 20px;
-}
 .message-list .timing {
     font-size: 13px;
     margin-right: 8px;
