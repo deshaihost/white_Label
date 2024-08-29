@@ -34,19 +34,38 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
     return timeString;
   };
 
-  function formatDateRange(dateString) {
-    const monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-    // Parse the date
-    const date = new Date(dateString);
-    // Get the month and day
-    const month = monthNames[date.getMonth()];
-    const day = date.getDate();
+  // e.g. formatDateRange("210101_000000", "210103_000000") => "Jan 1-3"
+  // e.g. formatDateRange("210101_000000", "210203_000000") => "Jan 1 - Feb 3"
+  function formatDateRange(startDate, endDate) {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    // Helper function to parse date string
+    function parseDate(dateString) {
+        const datePart = dateString.split('_')[0];
+        const year = parseInt(datePart.slice(0, 2), 10) + 2000; // Assuming 20xx
+        const month = parseInt(datePart.slice(2, 4), 10) - 1; // Month is 0-indexed
+        const day = parseInt(datePart.slice(4, 6), 10);
+        return new Date(year, month, day);
+    }
+
+    // Parse the start and end dates
+    const start = parseDate(startDate);
+    const end = parseDate(endDate);
+
+    // Get the month and day for both dates
+    const startMonth = monthNames[start.getMonth()];
+    const startDay = start.getDate();
+    const endMonth = monthNames[end.getMonth()];
+    const endDay = end.getDate();
+
     // Create the formatted date range
-    // Adjust the range if needed
-    const startDay = Math.max(day - 12, 1); // Example: assuming range start is 12 days before
-    const endDay = day; // Example: current day as the end
-    return `${month} ${startDay}-${endDay}`;
-  }
+    if (startMonth === endMonth) {
+        return `${startMonth} ${startDay}-${endDay}`;
+    } else {
+        return `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
+    }
+}
+
   const [searchActive, setSearchActive] = useState(0);
   const [searchInputShow, setSearchInputShow] = useState(false);
   const searchSection = [
@@ -127,7 +146,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
         </div>
       </div>
       {conversations?.map((message) => {
-        const { guest_name, conversation_start_time } = message;
+        const { guest_name, arrival_date, departure_date } = message;
         const allDataForConversation = message;
         const messages = message?.messages; // Assuming message?.messages is an array
         const lastValue = messages[messages.length - 1];
@@ -150,7 +169,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
               <div className="short-des">
                 <strong>{sender}:</strong> {result}
               </div>
-              <div className="date"> {formatDateRange(time)}</div>
+              <div className="date"> {formatDateRange(arrival_date, departure_date)}</div>
             </div>
           </div>
         );
