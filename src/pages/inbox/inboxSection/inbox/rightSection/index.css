@@ -1,6 +1,9 @@
+.right-side::-webkit-scrollbar{
+    width: 1px;
+}
 .right-side {
     padding: 20px 0px;
-    height: calc(100vh - 209px);
+    height: calc(100vh - 175px);
     overflow-y: scroll;
 }
 .bordr-cl h2 {
@@ -20,20 +23,26 @@
     padding: 20px 12px;
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
-.issue h3 {
-    font-size: 22px;
+.right-title h2,
+.about-inner h2{
+    font-size: 20px;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 3px;
+}
+.issue h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 3px;
 }
 .issue p {
-    font-size: 13px;
-    line-height: 23px;
+    font-size: 12px;
+    line-height: 1.4;
 }
-.issue span {
+.issue button {
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 10px;
     background: #212529;
-    padding: 10px 20px;
+    padding: 5px 20px;
     border: 1px solid #146ef5;
     border-radius: 28px;
     color: #146ef5;
@@ -43,29 +52,62 @@
 .satisfy h2 {
     border: 0px;
     padding: 0px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 3px;
 }
 .satisfy p.result {
     color: green;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 14px;
+    /* font-weight: 600; */
 }
 .satisfy {
     border-bottom: 0px;
 }
 .about {
     padding-top: 20px;
-    border-top: 5px solid rgb(255 255 255 / 10%);
-}
-.about-inner h2 {
-    border: 0px;
+    border-top: 3px solid rgb(255 255 255 / 10%);
 }
 .user-detail p {
-    font-size: 15px;
-    margin-bottom: 10px;
+    font-size: 12px;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+/* .right-side h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 3px;
+} */
+.guest span {
+    font-size: 12px;
+    margin-bottom: 0px;
+    display: inline-block;
 }
 
+.guest h2 {
+    font-size: 16px;
+    padding: 0px;
+    margin: 3px 0;
+    border: 0px;
+}
+.guest_date,
+.guest p {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #ffffff96;
+}
+.right-side .row {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    border-bottom: 1px solid rgb(255 255 255 / 10%);
+    padding-bottom: 20px;
+}
+.about-inner h2{
+    margin-bottom: 10px;
+}
 /* ==============responsive part start============== */
-@media (max-width: 1599.98px) { 
+/* @media (max-width: 1599.98px) { 
 .right-side h2 , .issue h3{
     font-size: 18px;
    
@@ -74,4 +116,4 @@
     font-size: 15px;
   
 }
-}
+} */
