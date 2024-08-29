@@ -17,21 +17,9 @@ export const timeFormat = (timestamp) => {
 
 // e.g. formatDateRange("210101_000000", "210103_000000") => "Jan 1-3"
 // e.g. formatDateRange("210101_000000", "210203_000000") => "Jan 1 - Feb 3"
-export function formatDateRange(startDate, endDate) {
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+export function formatDateRange(startDate, endDate, showNumNights=false) {
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
   // Helper function to parse date string
   function parseDate(dateString) {
     const datePart = dateString.split("_")[0];
@@ -51,13 +39,21 @@ export function formatDateRange(startDate, endDate) {
   const endMonth = monthNames[end.getMonth()];
   const endDay = end.getDate();
 
+  // Calculate the number of nights
+  const numNights = Math.round((end - start) / (1000 * 60 * 60 * 24));
+
   // Create the formatted date range
+  let formattedDateRange;
   if (startMonth === endMonth && start.getFullYear() === end.getFullYear()) {
-    return `${startMonth} ${startDay} - ${endDay}`;
+    formattedDateRange = `${startMonth} ${startDay} - ${endDay}`;
   } else if (start.getFullYear() === end.getFullYear()) {
-    return `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
-  } else {
-    // Handle different years
-    return `${startMonth} ${startDay}, ${start.getFullYear()} - ${endMonth} ${endDay}, ${end.getFullYear()}`;
+    formattedDateRange = `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
+  } else { // Handle different years
+    formattedDateRange = `${startMonth} ${startDay}, ${start.getFullYear()} - ${endMonth} ${endDay}, ${end.getFullYear()}`;
   }
+
+  // Append the number of nights if showNumNights is true
+  if (showNumNights) {formattedDateRange += ` (${numNights} nights)`;}
+
+  return formattedDateRange;
 }

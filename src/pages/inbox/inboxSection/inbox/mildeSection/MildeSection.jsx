@@ -11,8 +11,6 @@ const MildeSection = ({ allConversationData }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
-  const getPropertyName =
-    store?.getSessionIdReducer?.sessionId?.data?.property_name;
 
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -22,6 +20,7 @@ const MildeSection = ({ allConversationData }) => {
   const [inputValue, setInputValue] = useState("");
   const [generateButtonIsEnabled, setGenerateButtonIsEnabled] = useState(false);
   const [generateButtonText, setGenerateButtonText] = useState("");
+  const [propertyName, setPropertyName] = useState("");
 
   const updateMessageRespLoading = store?.chatBoxAIReducer?.loading;
 
@@ -55,7 +54,7 @@ const MildeSection = ({ allConversationData }) => {
       typeThumbs: type,
       conversationId: sessionId?.session_id,
       messageId: messId,
-      propertyName: getPropertyName,
+      propertyName: propertyName,
       botMsg: botMsg,
       precedingGuestMsg: precedingGuestMsg,
     });
@@ -88,15 +87,7 @@ const MildeSection = ({ allConversationData }) => {
     yesterdayDate.setDate(todayDate.getDate() - 1);
 
     // Get the name of the weekday
-    const weekdayNames = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
+    const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const weekdayName = weekdayNames[inputDate.getDay()];
 
     // Compare dates
@@ -126,16 +117,15 @@ const MildeSection = ({ allConversationData }) => {
         };
       });
       setMessages(newMessages);
+      setPropertyName(allConversationData.property_name);
     }
     // Generate button functionality. Only enable the generate button if the last message is from the guest and we have a pre-generated message ready for it
     if (
       allConversationData?.messages &&
       allConversationData.messages.length > 0 &&
-      allConversationData.messages[allConversationData.messages.length - 1]
-        .sender === "guest" &&
+      allConversationData.messages[allConversationData.messages.length - 1].sender === "guest" &&
       allConversationData.generated_response &&
-      allConversationData.generated_response.for_message ===
-        allConversationData.messages[allConversationData.messages.length - 1].id
+      allConversationData.generated_response.for_message === allConversationData.messages[allConversationData.messages.length - 1].id
     ) {
       setGenerateButtonIsEnabled(true);
       setGenerateButtonText(allConversationData.generated_response.response);
@@ -194,7 +184,7 @@ const MildeSection = ({ allConversationData }) => {
             </button>
           )}
           <div className="input-container">
-            <input
+            <textarea
             type="text"
               ref={textareaRef}
               placeholder="Type a message..."
@@ -203,7 +193,7 @@ const MildeSection = ({ allConversationData }) => {
               onKeyDown={handleKeyPress}
               disabled={updateMessageRespLoading ? true : false}
               rows="1"
-              // style={{ resize: "none", overflow: "auto" }}
+              style={{ resize: "none", overflow: "auto" }}
             />
           </div>
         </div>
@@ -216,7 +206,7 @@ const MildeSection = ({ allConversationData }) => {
       <JustificationModal
         show={showJustificationModal}
         handleClose={() => setShowJustificationModal(false)}
-        propertyName={getPropertyName}
+        propertyName={propertyName}
         justification={justificationText}
       />
     </div>

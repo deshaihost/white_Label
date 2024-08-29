@@ -169,11 +169,11 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
             result = text;
           }
 
-          let propertyNameRlt;
-          if (property_name.length > 10) {
-            propertyNameRlt = property_name.slice(0, 10) + "...";
-          } else {
-            propertyNameRlt = property_name;
+          const reservationDateRange = formatDateRange(arrival_date, departure_date);
+          let datesAndPropertyNameDisplay = `${reservationDateRange} | ${property_name}`;
+
+          if (datesAndPropertyNameDisplay.length > 50) {
+            datesAndPropertyNameDisplay = datesAndPropertyNameDisplay.slice(0, 50) + "...";
           }
 
           return (
@@ -181,20 +181,13 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
               <div>
                 <div
                   style={{ cursor: "pointer" }}
-                  className={`${
-                    activeMessageId === messageIndex && "bg-dark"
-                  } left-inner-tab`}
-                  onClick={() =>
-                    conversationSendMessageHandle(
-                      allDataForConversation,
-                      messageIndex
-                    )
-                  }
+                  className={`${activeMessageId === messageIndex && "bg-dark"} left-inner-tab`}
+                  onClick={() => conversationSendMessageHandle(allDataForConversation, messageIndex)}
                 >
                   <div className="left-description">
                     <div className="d-flex justify-content-between description-item">
                       <h2>
-                        <strong>{propertyNameRlt}</strong>
+                        <strong>{guest_name}</strong>
                       </h2>
                       <p>{timeFormat(time)}</p>
                     </div>
@@ -202,8 +195,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
                       <strong>{sender}:</strong> {result}
                     </div>
                     <div className="date">
-                      {" "}
-                      {formatDateRange(arrival_date, departure_date)}
+                      {datesAndPropertyNameDisplay}
                     </div>
                   </div>
                 </div>

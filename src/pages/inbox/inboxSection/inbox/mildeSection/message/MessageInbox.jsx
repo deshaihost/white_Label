@@ -1,16 +1,6 @@
 import React, { useEffect } from "react";
 
-const MessageInbox = ({
-  key,
-  text,
-  sender,
-  messageData,
-  feedBckModelOpen,
-  handleJustificationClick,
-  feedBackDataGet,
-  prevMsgText,
-  isInitialMessage,
-}) => {
+const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJustificationClick, feedBackDataGet, prevMsgText, isInitialMessage}) => {
   const { typeThumbs, messageId } = feedBackDataGet ? feedBackDataGet : {};
   const { timeFormatConvert, sendBy } = messageData;
   const messageDetails = messageData?.text;
@@ -21,54 +11,25 @@ const MessageInbox = ({
     <div>
       <p>
         {sender === "bot" ? (
-          <>
             <div className="timing left-msg"> {timeFormatConvert}</div>
-          </>
         ) : (
-          <>
             <div className="text-end timing">{timeFormatConvert}</div>
-          </>
         )}
-      </p>{" "}
+      </p>
       <div className={`message ${sender}  mesaage-box`}>
-        {sender === "user" && (
+        {sendBy === "hostbuddy" && (
           <div className=" py-3 thunbs">
             <span>
               {typeThumbs === "up" ? (
                 <>
                   {messageId === message_id ? (
-                    <i
-                      className="bi bi-hand-thumbs-up text-success mainCursor"
-                      onClick={() =>
-                        feedBckModelOpen(
-                          "up",
-                          message_id,
-                          response,
-                          prevMsgText
-                        )
-                      }
-                    ></i>
+                    <i className="bi bi-hand-thumbs-up text-success mainCursor" onClick={() => feedBckModelOpen("up", message_id, response, prevMsgText)}></i>
                   ) : (
-                    <i
-                      className="bi bi-hand-thumbs-up text-white mainCursor"
-                      onClick={() =>
-                        feedBckModelOpen(
-                          "up",
-                          message_id,
-                          response,
-                          prevMsgText
-                        )
-                      }
-                    ></i>
+                    <i className="bi bi-hand-thumbs-up text-white mainCursor" onClick={() => feedBckModelOpen("up", message_id, response, prevMsgText)}></i>
                   )}
                 </>
               ) : (
-                <i
-                  className="bi bi-hand-thumbs-up text-white mainCursor"
-                  onClick={() =>
-                    feedBckModelOpen("up", message_id, response, prevMsgText)
-                  }
-                ></i>
+                <i className="bi bi-hand-thumbs-up text-white mainCursor" onClick={() => feedBckModelOpen("up", message_id, response, prevMsgText)}></i>
               )}
             </span>
             <span>
@@ -76,39 +37,14 @@ const MessageInbox = ({
                 <>
                   {messageId === message_id ? (
                     <>
-                      <i
-                        className="bi bi-hand-thumbs-down text-danger mainCursor"
-                        onClick={() =>
-                          feedBckModelOpen(
-                            "down",
-                            message_id,
-                            response,
-                            prevMsgText
-                          )
-                        }
-                      ></i>
+                      <i className="bi bi-hand-thumbs-down text-danger mainCursor" onClick={() => feedBckModelOpen("down", message_id, response, prevMsgText)}></i>
                     </>
                   ) : (
-                    <i
-                      className="bi bi-hand-thumbs-down text-white mainCursor"
-                      onClick={() =>
-                        feedBckModelOpen(
-                          "down",
-                          message_id,
-                          response,
-                          prevMsgText
-                        )
-                      }
-                    ></i>
+                    <i className="bi bi-hand-thumbs-down text-white mainCursor" onClick={() => feedBckModelOpen("down", message_id, response, prevMsgText)}></i>
                   )}
                 </>
               ) : (
-                <i
-                  className="bi bi-hand-thumbs-down text-white mainCursor"
-                  onClick={() =>
-                    feedBckModelOpen("down", message_id, response, prevMsgText)
-                  }
-                ></i>
+                <i className="bi bi-hand-thumbs-down text-white mainCursor" onClick={() => feedBckModelOpen("down", message_id, response, prevMsgText)}></i>
               )}
             </span>
           </div>
@@ -118,7 +54,7 @@ const MessageInbox = ({
             <>{text}</>
           ) : (
             <>
-              <div> {text}</div>
+              <div>{text}</div>
             </>
           )}
         </p>
@@ -126,26 +62,19 @@ const MessageInbox = ({
       <div className="mb-3">
         {sender === "bot" ? (
           <>
-            <div className="timing left-msg">Send by {sendBy}</div>
+            <div className="timing left-msg">Sent by {sendBy}</div>
           </>
         ) : (
           <>
             <div className="where-did">
               <div>
-                {sender === "user" && !isInitialMessage && (
+                {sendBy === "hostbuddy" && (
                   <div className="link-container ">
-                    <a
-                      href="#"
-                      onClick={(e) =>
-                        handleJustificationClick(e, justification)
-                      }
-                    >
-                      Where did this come from?
-                    </a>
+                    <a href="#" onClick={(e) => handleJustificationClick(e, justification)}>Where did this come from?</a>
                   </div>
                 )}
               </div>
-              <div className="text-end timing">Send by {sendBy}</div>
+              <div className="text-end timing">Sent by {sendBy}</div>
             </div>
           </>
         )}
