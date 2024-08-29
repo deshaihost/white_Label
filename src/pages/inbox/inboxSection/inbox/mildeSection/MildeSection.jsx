@@ -7,17 +7,20 @@ import { timeFormat } from "../../../../../helper/commonFun";
 import MessgFeedBckModel from "../../../../testProperty/banner/messages/messagesFeedBckModel/MessgFeedBckModel";
 import JustificationModal from "../../../../testProperty/banner/messages/justificationModal/justificationModal";
 
-const MildeSection = ({ allUserMessage }) => {
+const MildeSection = ({ allConversationData }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const sessionId = store?.getSessionIdReducer?.sessionId?.data;
-  const getPropertyName =
-    store?.getSessionIdReducer?.sessionId?.data?.property_name;
+  const getPropertyName = store?.getSessionIdReducer?.sessionId?.data?.property_name;
 
-  const [messages, setMessages] = useState([]);
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
+
+  const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [generateButtonIsEnabled, setGenerateButtonIsEnabled] = useState(false);
+  const [generateButtonText, setGenerateButtonText] = useState("");
 
   const updateMessageRespLoading = store?.chatBoxAIReducer?.loading;
 
@@ -84,15 +87,7 @@ const MildeSection = ({ allUserMessage }) => {
     yesterdayDate.setDate(todayDate.getDate() - 1);
 
     // Get the name of the weekday
-    const weekdayNames = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
+    const weekdayNames = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
     const weekdayName = weekdayNames[inputDate.getDay()];
 
     // Compare dates
@@ -106,32 +101,51 @@ const MildeSection = ({ allUserMessage }) => {
     }
   }
 
+  // When we get the API data, populate the messages array and set the generate button functionality
   useEffect(() => {
-    if (allUserMessage) {
-      const newMessages = allUserMessage.map((messageList) => {
+    console.log("allConversationData", allConversationData);
+
+    // Populate messages
+    if (allConversationData?.messages) {
+      console.log("allConversationData.messages", allConversationData.messages);
+      const newMessages = allConversationData.messages.map((messageList) => {
         const { sender, text, time } = messageList;
         let timeFormatConvert = timeFormat(time);
-        if (sender === "host" || sender === "hostbuddy") {
-          return {
-            text: messageList !== undefined ? messageList : "",
-            sender: "user",
-            messageDay: formatRelativeDate(time),
-            sendBy: sender,
-            timeFormatConvert,
-          };
-        } else {
-          return {
-            text: messageList,
-            sender: "bot",
-            messageDay: formatRelativeDate(time),
-            sendBy: sender,
-            timeFormatConvert,
-          };
-        }
+        return {
+          text: messageList !== undefined ? messageList : "",
+          sender: sender === "host" || sender === "hostbuddy" ? "user" : "bot",
+          messageDay: formatRelativeDate(time),
+          sendBy: sender,
+          timeFormatConvert,
+        };
       });
       setMessages(newMessages);
     }
-  }, [allUserMessage]);
+
+    // Generate button functionality. Only enable the generate button if the last message is from the guest and we have a pre-generated message ready for it
+    if (
+      allConversationData?.messages &&
+      allConversationData.messages.length > 0 &&
+      allConversationData.messages[allConversationData.messages.length - 1].sender === "guest" &&
+      allConversationData.generated_response &&
+      allConversationData.generated_response.for_message === allConversationData.messages[allConversationData.messages.length - 1].id
+    ) {
+      setGenerateButtonIsEnabled(true);
+      setGenerateButtonText(allConversationData.generated_response.response);
+    } else {
+      setGenerateButtonIsEnabled(false);
+      setGenerateButtonText("");
+    }
+  }, [allConversationData]);
+
+  // Allow the text area to expand vertically as lines are added
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [inputValue]);
+
   return (
     <div className="main-chat">
       <div className="chatbot">
@@ -158,30 +172,27 @@ const MildeSection = ({ allUserMessage }) => {
           <div ref={messagesEndRef} />
         </div>
         <div className="ai-input">
-          <i class="bi bi-stars"></i>
+          {generateButtonIsEnabled && (
+            <button onClick={() => setInputValue(generateButtonText)} className="generate-button">
+              <i className="bi bi-stars"></i>
+            </button>
+          )}
           <div className="input-container">
-            <input
-              type="text"
+            <textarea
+              ref={textareaRef}
               placeholder="Type a message..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyPress}
               disabled={updateMessageRespLoading ? true : false}
+              rows="1"
+              style={{ resize: 'none', overflow: 'auto' }}
             />
           </div>
         </div>
       </div>
-      <MessgFeedBckModel
-        show={feedBackModelOpen}
-        handleClose={messgFeedBckClose}
-        feedBackDataGet={feedBackDataGet}
-      />
-      <JustificationModal
-        show={showJustificationModal}
-        handleClose={() => setShowJustificationModal(false)}
-        propertyName={getPropertyName}
-        justification={justificationText}
-      />
+      <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
+      <JustificationModal show={showJustificationModal} handleClose={() => setShowJustificationModal(false)} propertyName={getPropertyName} justification={justificationText}/>
     </div>
   );
 };

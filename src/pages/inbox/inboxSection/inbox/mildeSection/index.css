@@ -89,3 +89,26 @@
 .ai-input .input-container {
     margin: 0px;
 }
+
+.main-chat .generate-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-chat .generate-button .bi-stars {
+    color: white;
+    font-size: 35px;
+}
+
+.main-chat .input-container textarea {
+    width: 100%;
+    box-sizing: border-box;
+    resize: none; /* Prevent manual resizing */
+    overflow: auto; /* Hide scrollbars */
+    max-height: 145px;
+  }

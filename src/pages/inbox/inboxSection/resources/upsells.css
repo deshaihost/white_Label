@@ -1,0 +1,133 @@
+/* Custom switch styling */
+.upsells-settings .custom-switch .form-check-input {
+  width: 36px; /* slightly smaller width */
+  height: 18px; /* slightly smaller height */
+  background-color: #999; /* default grey background when off */
+  border-radius: 18px; /* circular borders for the slider */
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upsells-settings .custom-switch .form-check-input:checked {
+  background-color: #045ce9; /* color when switch is on */
+}
+
+.upsells-settings .custom-switch .form-check-input::before {
+  content: '';
+  position: absolute;
+  width: 12px; /* smaller knob width */
+  height: 12px; /* smaller knob height */
+  background-color: white; /* color of the knob */
+  border-radius: 50%; /* round shape of the knob */
+  top: 3px; /* initial position */
+  left: 3px; /* initial position */
+  transition: transform 0.3s;
+}
+
+.upsells-settings .custom-switch .form-check-input:checked::before {
+  transform: translateX(18px); /* move the knob to the right when on */
+}
+
+/* Adjust the vertical alignment */
+.upsells-settings .custom-switch .form-check-input::before {
+  top: 50%; /* position at the vertical center */
+  transform: translateY(-50%); /* adjust to center the knob */
+}
+
+.upsells-settings .custom-switch .form-check-input:checked::before {
+  transform: translate(18px, -50%); /* move the knob to the right and center it */
+}
+
+.upsells-settings input:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.upsells-settings .setting-textarea {
+  height: 180px !important;
+}
+
+.upsells-settings textarea.form-control.setting-textarea:disabled {
+  color: #AAA
+}
+
+.upsells-settings .settings-label {
+  font-size: 14px;
+  color: #BBB;
+  line-height: 18px;
+}
+
+.upsells-settings .available-variables-section {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.upsells-settings .available-variables-heading {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.upsells-settings .available-variables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.upsells-settings .variable {
+  border: 1px solid #045ce9;
+  border-radius: 15px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upsells-settings .variable:hover {
+  background-color: #f0f0f0;
+}
+
+.upsells-settings .table thead th {
+  color: #AAA;
+}
+
+.upsells-settings .table tbody td {
+  font-size: 14px;
+  color: white;
+}
+
+.upsells-settings .clickable-div {
+  cursor: pointer;
+  border: 1px solid #045ce9;
+  border-radius: 15px;
+  padding: 15px 10px;
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effects */
+  position: relative;
+}
+
+.upsells-settings .clickable-div:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+}
+
+.upsells-settings .clickable-div::after {
+  content: '➔';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #045ce9;
+}
+
+.upsell-message-modal p {
+  font-size: 18px;
+  margin-bottom: 25px;
+  color: white;
+}

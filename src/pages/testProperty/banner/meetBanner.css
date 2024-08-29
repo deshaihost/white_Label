@@ -168,7 +168,8 @@
     cursor: pointer;
 }
 
-.chatbot .input-container input {
+.chatbot .input-container input,
+.chatbot .input-container textarea {
     position: relative;
     max-height: 145px;
     width: calc(100% - 75px);

@@ -21,6 +21,9 @@
     font-size: 14px;
     line-height: 24px;
 }
+.left-bar strong {
+    font-family: 'Samsung Sharp Sans Bold';
+}
 .left-description  p {
     font-size: 15px;
 } 

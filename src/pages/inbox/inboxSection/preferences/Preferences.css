@@ -1,0 +1,53 @@
+/* Custom switch styling */
+.conversation-settings-inbox .custom-switch .form-check-input {
+  width: 36px; /* slightly smaller width */
+  height: 18px; /* slightly smaller height */
+  background-color: #ccc; /* default grey background when off */
+  border-radius: 18px; /* circular borders for the slider */
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.conversation-settings-inbox .custom-switch .form-check-input:checked {
+  background-color: #045ce9; /* color when switch is on */
+}
+
+.conversation-settings-inbox .custom-switch .form-check-input::before {
+  content: '';
+  position: absolute;
+  width: 12px; /* smaller knob width */
+  height: 12px; /* smaller knob height */
+  background-color: white; /* color of the knob */
+  border-radius: 50%; /* round shape of the knob */
+  top: 3px; /* initial position */
+  left: 3px; /* initial position */
+  transition: transform 0.3s;
+}
+
+.conversation-settings-inbox .custom-switch .form-check-input:checked::before {
+  transform: translateX(18px); /* move the knob to the right when on */
+}
+
+/* Adjust the vertical alignment */
+.conversation-settings-inbox .custom-switch .form-check-input::before {
+  top: 50%; /* position at the vertical center */
+  transform: translateY(-50%); /* adjust to center the knob */
+}
+
+.conversation-settings-inbox .custom-switch .form-check-input:checked::before {
+  transform: translate(18px, -50%); /* move the knob to the right and center it */
+}
+
+.conversation-settings-inbox textarea.form-control.setting-textarea:disabled {
+  color: #AAA
+}
+
+.conversation-settings-inbox .settings-label {
+  font-size: 14px;
+  color: #BBB;
+  line-height: 18px;
+}

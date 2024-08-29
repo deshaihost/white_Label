@@ -61,10 +61,7 @@ const InboxIndex = () => {
 
   return (
     <div>
-      <InBoxHeader
-        showInterFace={(id) => setInterFaceComponent(id)}
-        interFaceComponent={interFaceComponent}
-      />
+      <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent}/>
       {interFaceComponent === 0 && <Inbox />}
       {interFaceComponent === 1 && <SmartTemplates />}
       {interFaceComponent === 2 && <ReviewRemova />}

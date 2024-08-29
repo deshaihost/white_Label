@@ -13,37 +13,29 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
   const allPropertyName =
     property_data !== undefined ? Object.keys(property_data) : [];
   const { conversations } = messageList ? messageList : [];
+
   const timeFormat = (timestamp) => {
     const date = new Date(timestamp);
-    // Extract hours and minutes
+    
+    // Extract month, day, hours, and minutes
+    const month = date.getMonth() + 1; // Months are zero-based
+    const day = date.getDate();
     let hours = date.getHours();
     const minutes = date.getMinutes();
-    // Determine AM/PM
-    const ampm = hours >= 12 ? "PM" : "AM";
+    const ampm = hours >= 12 ? "PM" : "AM"; // Determine AM/PM
+
     // Convert hours from 24-hour to 12-hour format
     hours = hours % 12;
     hours = hours ? hours : 12; // Hour '0' should be '12'
-    // Format minutes with leading zero if necessary
-    const minutesFormatted = minutes < 10 ? "0" + minutes : minutes;
-    // Create the time string
-    const timeString = `${hours}:${minutesFormatted} ${ampm}`;
+    const minutesFormatted = minutes < 10 ? "0" + minutes : minutes; // Format minutes with leading zero if necessary
+    
+    // Create and return the time string
+    const timeString = `${month}/${day} ${hours}:${minutesFormatted} ${ampm}`;
     return timeString;
   };
+
   function formatDateRange(dateString) {
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
+    const monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     // Parse the date
     const date = new Date(dateString);
     // Get the month and day
@@ -59,11 +51,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
   const [searchInputShow, setSearchInputShow] = useState(false);
   const searchSection = [
     { type: "select", label: "All", option: allPropertyName },
-    {
-      type: "select",
-      label: "Phase",
-      option: ["Current", "Inquiry", "Future", "Past"],
-    },
+    { type: "select", label: "Phase", option: ["Current", "Inquiry", "Future", "Past"] },
     { type: "button", label: "Urgent" },
   ];
   const extractTextFromHTML = (html) => {
@@ -80,7 +68,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
   }, []);
 
   return (
-    <>
+    <div className="left-bar">
       <div className="message-filter">
         <div className="messsage-search d-flex justify-between">
           <h2>Messages</h2>
@@ -106,14 +94,8 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
               <>
                 {type === "select" && (
                   <>
-                    <select
-                      name="cars"
-                      id="cars"
-                      className={`${
-                        searchActive === index
-                          ? "bg-light text-dark"
-                          : "bg-dark"
-                      } `}
+                    <select name="cars" id="cars"
+                      className={`${ searchActive === index ? "bg-light text-dark" : "bg-dark" } `}
                       onClick={() => setSearchActive(index)}
                     >
                       <>
@@ -134,9 +116,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
                 {type === "button" && (
                   <span
                     onClick={() => setSearchActive(index)}
-                    className={`${
-                      searchActive === index ? "bg-light text-dark" : "bg-dark"
-                    }`}
+                    className={`${ searchActive === index ? "bg-light text-dark" : "bg-dark" }`}
                   >
                     {label}
                   </span>
@@ -148,35 +128,34 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
       </div>
       {conversations?.map((message) => {
         const { guest_name, conversation_start_time } = message;
-        const allUserMessage = message?.messages;
+        const allDataForConversation = message;
         const messages = message?.messages; // Assuming message?.messages is an array
         const lastValue = messages[messages.length - 1];
         const { sender, text, time } = lastValue;
-        let sliced = text.slice(0, 25);
-        let result = sliced.split().join("…");
+        let result;
+        if (text.length > 25) { result = text.slice(0,25) + "..."; }
+        else { result = text; }
         return (
-          <div
-            style={{ cursor: "pointer" }}
-            className="row left-inner-tab "
-            onClick={() => getUserMessage(allUserMessage)}
-          >
+          <div style={{ cursor: "pointer" }} className="row left-inner-tab " onClick={() => getUserMessage(allDataForConversation)}>
+            {/* Remove image for now
             <div className="col-lg-3 col-12">
               <img src={dummyPropertyImg} alt="" />
             </div>
-            <div className="col-lg-8 col-12 left-description">
+            */}
+            <div className="col-lg-12 col-12 left-description">
               <div className="d-flex justify-content-between description-item">
-                <h2>{guest_name}</h2>
-                <p>{timeFormat(conversation_start_time)}</p>
+                <h2><strong>{guest_name}</strong></h2>
+                <p>{timeFormat(time)}</p>
               </div>
               <div className="short-des">
-                {sender}: {result}
+                <strong>{sender}:</strong> {result}
               </div>
               <div className="date"> {formatDateRange(time)}</div>
             </div>
           </div>
         );
       })}
-    </>
+    </div>
   );
 };
 
