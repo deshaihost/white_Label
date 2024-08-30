@@ -3,31 +3,24 @@ import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions } from "../../../../../redux/actions";
 import { formatDateRange } from "../../../../../helper/commonFun";
+import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
 
 const LeftMessage = ({ messageList, getUserMessage }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const [selectedSearch, setSelectedSearch] = useState({
-    type: "",
-    textGet: "",
-    search: "",
-  });
+
+  const [selectedSearch, setSelectedSearch] = useState({type: "", textGet: "", search: ""});
   const [activeMessageId, setActiveMessageId] = useState("");
-  const property_data =
-    store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
-  const allPropertyName =
-    property_data !== undefined ? Object.keys(property_data) : [];
+  const [allConversations, setAllConversations] = useState([]);
+
+  // As soon as we get messageList (all conversations), put it in the state
+  useEffect(() => {
+    setAllConversations(messageList);
+  }, [messageList]);
+
+  const property_data = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
+  const allPropertyName = property_data !== undefined ? Object.keys(property_data) : [];
   const conversations = messageList ? messageList : [];
-  const subAdminGetSearchFun = conversations?.filter((messageList) => {
-    const { status, property_name } = messageList;
-    const inputValue =
-      selectedSearch?.textGet?.toLowerCase() ||
-      selectedSearch?.search?.toLowerCase() ||
-      "";
-    const messageStatus = status.toLowerCase().includes(inputValue);
-    const propertyName = property_name.toLowerCase().includes(inputValue);
-    return messageStatus || propertyName;
-  });
 
   const timeFormat = (timestamp) => {
     const date = new Date(timestamp);
@@ -79,15 +72,30 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
     });
   };
 
-  const conversationSendMessageHandle = (data, id) => {
+  // Mark a conversation as opened, in the state and in the API
+  const markConversationAsOpened = (conversationId, propertyName) => {
+    const updatedConversations = allConversations.map((conversation) => {
+      if (conversation.conversation_id === conversationId) {
+        conversation.opened = true;
+      }
+      return conversation;
+    });
+    setAllConversations(updatedConversations);
+    callMarkConversationAsOpenedApi(conversationId, propertyName);
+  };
+
+  const openConversationHandle = (data, id) => {
     getUserMessage(data);
     setActiveMessageId(id);
+    markConversationAsOpened(data.conversation_id, data.property_name);
   };
+
   return (
     <div className="left-bar">
       <div className="message-filter">
         <div className="messsage-search">
           <h2>Messages</h2>
+          {/* Search button
           <div className={`${searchInputShow && "active"} search-form`}>
             <input type="search" name="search" value={selectedSearch?.search} onChange={(e) => {setSelectedSearch({ search: e.target.value });}}/>
             {searchInputShow ? (
@@ -96,7 +104,9 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
               <i class="bi bi-search" onClick={searchCloseHndl}></i>
             )}
           </div>
+          */}
         </div>
+        {/* Filter buttons
         <div className="filter-btns">
           {searchSection?.map((searchItem, index) => {
             const { type, label, option } = searchItem;
@@ -139,11 +149,11 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
             );
           })}
         </div>
+        */}
       </div>
       <div className="left-bar-chat">
-        {subAdminGetSearchFun?.map((message, messageIndex) => {
-          const { property_name, guest_name, arrival_date, departure_date } =
-            message;
+        {allConversations?.map((message, messageIndex) => {
+          const { property_name, guest_name, arrival_date, departure_date, opened } = message;
           const allDataForConversation = message;
           const messages = message?.messages; // Assuming message?.messages is an array
           const lastValue = messages[messages.length - 1];
@@ -168,20 +178,28 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
                 <div
                   style={{ cursor: "pointer" }}
                   className={`${activeMessageId === messageIndex && "bg-dark"} left-inner-tab`}
-                  onClick={() => conversationSendMessageHandle(allDataForConversation, messageIndex)}
+                  onClick={() => openConversationHandle(allDataForConversation, messageIndex)}
                 >
                   <div className="left-description">
                     <div className="d-flex justify-content-between description-item">
                       <h2>
-                        <strong>{guest_name}</strong>
+                        {opened ? guest_name : <strong>{guest_name}</strong>}
                       </h2>
-                      <p>{timeFormat(time)}</p>
+                      <div className="date" style={{margin:"0"}}>
+                        {opened ? timeFormat(time) : <strong>{timeFormat(time)}</strong>}
+                      </div>
                     </div>
                     <div className="short-des">
-                      <strong>{sender}:</strong> {result}
+                    {opened ? (
+                      <>
+                        <strong>{sender}:</strong> {result}
+                      </>
+                    ) : (
+                      <strong>{sender}: {result}</strong>
+                    )}
                     </div>
                     <div className="date">
-                      {datesAndPropertyNameDisplay}
+                      {opened ? datesAndPropertyNameDisplay : <strong>{datesAndPropertyNameDisplay}</strong>}
                     </div>
                   </div>
                 </div>

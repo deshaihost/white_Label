@@ -67,3 +67,24 @@ export const callSendMessageApi = async (message, conversationId, reservationId,
     return { error: "Internal server error" };
   }
 };
+
+
+export const callMarkConversationAsOpenedApi = async (conversationId, propertyName) => {
+  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_KEY;
+
+  try {
+    const config = {
+      headers: { "X-API-Key": API_KEY },
+      validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+    };
+    const body_data = { conversation_id:conversationId, property_name:propertyName }
+    const response = await axios.put( `${baseUrl}/mark_conversation_as_opened`, body_data, config );
+
+    if (response.status === 200) { }
+    else { }
+    return response.data;
+  } catch (error) {
+    return { error: "Internal server error" };
+  }
+}

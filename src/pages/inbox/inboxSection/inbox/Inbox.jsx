@@ -76,10 +76,7 @@ const Inbox = () => {
   return (
     <div className="row text-white">
       <div className="col-lg-3 left-bar">
-        <LeftMessage
-          messageList={conversations}
-          getUserMessage={(data) => setUserMessage(data)}
-        />
+        <LeftMessage messageList={conversations} getUserMessage={(data) => setUserMessage(data)}/>
       </div>
       <div className="col-lg-6">
         <MildeSection allConversationData={userMessage} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />

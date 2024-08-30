@@ -13,10 +13,10 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
         {sender === "bot" ? (
             <div className="timing left-msg">{timeFormatConvert}</div>
         ) : (
-            <div className="text-end timing">{timeFormatConvert}</div>
+            <div className="text-end timing">Sent by {sendBy} | {timeFormatConvert}</div>
         )}
       </p>
-      <div className={`message ${sender}  mesaage-box`}>
+      <div className={`message ${sender} mesaage-box`}>
         {sendBy === "hostbuddy" && (
           <div className=" py-3 thunbs">
             <span>
@@ -60,23 +60,18 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
         </p>
       </div>
       <div className="mb-3">
-        {sender === "bot" ? (
-          <>
-            <div className="timing left-msg">Sent by {sendBy}</div>
-          </>
-        ) : (
-          <>
-            <div className="where-did">
-              <div>
-                {sendBy === "hostbuddy" && (
-                  <div className="link-container ">
-                    <a href="#" onClick={(e) => handleJustificationClick(e, justification)}>Where did this come from?</a>
-                  </div>
-                )}
-              </div>
-              <div className="text-end timing">Sent by {sendBy}</div>
+        {sender != "bot" && (
+          <div className="where-did" style={{ position: 'relative', marginBottom: (sendBy === "hostbuddy" && justification) ? '30px' : '0' }}>
+            <div>
+              {sendBy === "hostbuddy" && justification && (
+                <div className="link-container" style={{ position:'absolute', right:0 }}>
+                  <a href="#" onClick={(e) => handleJustificationClick(e, justification)}>
+                    Where did this come from?
+                  </a>
+                </div>
+              )}
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

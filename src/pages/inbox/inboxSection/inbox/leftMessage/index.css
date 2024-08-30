@@ -42,7 +42,7 @@ width: 1px;
     font-weight: 500;
 }
 .left-bar-chat{
-    height: calc(100vh - 410px);
+    height: calc(100vh - 250px);
     overflow-y: scroll;
 }
 

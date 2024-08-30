@@ -28,13 +28,11 @@ const RightSection = ({ rightSectionData }) => {
         <h2>Reservation</h2>
       </div>
       <div className="row">
-        <div className="col-lg-9">
-          <div className="guest">
-            {statusText && <span>{statusText}</span>}
-            <h2>{guest_name}</h2>
-            <p>{property_name}</p>
-            <p className="guest_date">{arrival_date && formatDateRange(arrival_date, departure_date, true)}</p>
-          </div>
+        <div className="guest">
+          {statusText && <span>{statusText}</span>}
+          <h2>{guest_name}</h2>
+          <p>{property_name}</p>
+          <p className="guest_date">{arrival_date && formatDateRange(arrival_date, departure_date, true)}</p>
         </div>
         {/*
         <div className="col-lg-3 guest-img">
