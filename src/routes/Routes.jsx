@@ -42,6 +42,7 @@ import SoftwareSolutions from "../pages/SoftwareSolutions/SoftwareSolutions";
 import SettingIndex from "../pages/settings/SettingIndex";
 import InboxIndex from "../pages/inbox/InboxIndex";
 import GetConversationsTest from "../helper/getConversationsTest/getConversationsTest";
+import ActionItemsIndex from "../pages/actionItems/ActionItemsIndex";
 
 const Routing = () => {
   const location = useLocation();
@@ -293,6 +294,15 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/action-item"
+          element={
+            <ProtectedRoute>
+              <ActionItemsIndex />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
       </Routes>
