@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import callGetConversationsApi from "./inboxApi";
+import {callGetConversationsApi} from "./inboxApi";
 
 const GetConversationsTest = () => {
   const [conversations, setConversations] = useState(null);

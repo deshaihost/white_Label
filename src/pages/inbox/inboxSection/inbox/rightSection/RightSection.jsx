@@ -2,12 +2,24 @@ import React, { useState } from "react";
 import "./index.css";
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 import { formatDateRange } from "../../../../../helper/commonFun";
-import JustificationModal from "../../../../testProperty/banner/messages/justificationModal/justificationModal";
 const RightSection = ({ rightSectionData }) => {
-  const { arrival_date, departure_date, status, guest_name, sentiment, property_name } = rightSectionData ? rightSectionData : {};
+
+  // Determines what to display for the status section
+  const getStatusText = (status) => {
+    if (status === "inquiry") {
+      return "Inquiry";
+    } else if (["past", "current", "future"].includes(status)) {
+      return `${status.charAt(0).toUpperCase() + status.slice(1)} guest`;
+    } else {
+      return null;
+    }
+  };
+
+  const { arrival_date, departure_date, status, guest_name, sentiment, property_name, action_items } = rightSectionData ? rightSectionData : {};
   let { channel } = rightSectionData || {};
   if (channel) { channel = channel.split(" (")[0]; } // channel e.g. "Airbnb (via Hostfully)". Remove the second part.
   else { channel = ""; }
+  const statusText = getStatusText(status);
 
 
   return (
@@ -18,44 +30,58 @@ const RightSection = ({ rightSectionData }) => {
       <div className="row">
         <div className="col-lg-9">
           <div className="guest">
-            <span>Past Guest </span>
+            {statusText && <span>{statusText}</span>}
             <h2>{guest_name}</h2>
             <p>{property_name}</p>
             <p className="guest_date">{arrival_date && formatDateRange(arrival_date, departure_date, true)}</p>
           </div>
         </div>
+        {/*
         <div className="col-lg-3 guest-img">
           <img src={dummyPropertyImg} alt="" />
         </div>
+        */}
       </div>
       <div className="issue">
-        <h3>Issues</h3>
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+        <h3>Open Issues</h3>
+        {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 ? (
+          action_items.filter(obj => obj.status === "incomplete").map((obj, index) => (
+            <p key={index} style={{ marginBottom: "10px" }}>{obj.item}</p>
+          ))
+        ) : (
+          <p>None</p>
+        )}
         <div style={{ display: "flex", justifyContent: "center", marginTop: "5px" }}>
-          <a href="#" style={{fontSize:"14px"}}>Manage</a>
+          <a href="#" style={{ fontSize: "14px" }}>Manage</a>
         </div>
       </div>
       <div className="satisfy">
         {sentiment && (
           <>
             <h2>Satisfaction</h2>
-            <p className="result" style={{color: sentiment === "positive" ? "rgb(0, 128, 0)" : sentiment === "neutral" ? "#BBB" : "rgb(255, 0, 0)"}}>
+            <p className="result" style={{color: sentiment === "positive" ? "rgb(0, 180, 0)" : sentiment === "negative" ? "rgb(200, 0, 0)" : "#BBB"}}>
               {sentiment}
             </p>
           </>
         )}
       </div>
+      
+      <div className="about about-inner user-detail">
+        <p>Platform Booked: {channel}</p>
+      </div>
+
+      {/* Data not yet available in the API
       <div className="about">
         <div className="about-inner">
-          <h2>About Jorge</h2>
+          <h2>About {guest_name}</h2>
           <div className="user-detail">
             <p>Phone Number: 98765433</p>
             <p>Plateform Booked: {channel}</p>
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-            <p></p>
           </div>
         </div>
       </div>
+      */}
     </div>
   );
 };

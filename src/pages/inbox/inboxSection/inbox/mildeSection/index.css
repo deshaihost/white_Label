@@ -1,6 +1,6 @@
 
 .main-chat .chatbot {
-    height: 77vh;
+    height: 75vh;
 }
 .main-chat .chatbot {
     max-width: 100%;
@@ -83,4 +83,13 @@
     resize: none; /* Prevent manual resizing */
     overflow: auto; /* Hide scrollbars */
     max-height: 145px;
-  }
+}
+
+.main-chat .chat-send-button {
+    padding: 10px 10px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}

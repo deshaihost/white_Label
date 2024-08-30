@@ -11,7 +11,7 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
     <div>
       <p>
         {sender === "bot" ? (
-            <div className="timing left-msg"> {timeFormatConvert}</div>
+            <div className="timing left-msg">{timeFormatConvert}</div>
         ) : (
             <div className="text-end timing">{timeFormatConvert}</div>
         )}

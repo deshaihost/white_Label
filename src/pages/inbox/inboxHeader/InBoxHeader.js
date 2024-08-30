@@ -2,7 +2,7 @@ import React from "react";
 import "./index.css";
 const InBoxHeader = ({ showInterFace, interFaceComponent }) => {
   const labelName = [
-    "Indox",
+    "Inbox",
     "Smart Templates",
     "Review Removal",
     "Preferences",

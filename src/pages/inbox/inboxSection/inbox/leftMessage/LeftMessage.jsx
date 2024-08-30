@@ -17,7 +17,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
     store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
   const allPropertyName =
     property_data !== undefined ? Object.keys(property_data) : [];
-  const { conversations } = messageList ? messageList : [];
+  const conversations = messageList ? messageList : [];
   const subAdminGetSearchFun = conversations?.filter((messageList) => {
     const { status, property_name } = messageList;
     const inputValue =
@@ -89,14 +89,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
         <div className="messsage-search">
           <h2>Messages</h2>
           <div className={`${searchInputShow && "active"} search-form`}>
-            <input
-              type="search"
-              name="search"
-              value={selectedSearch?.search}
-              onChange={(e) => {
-                setSelectedSearch({ search: e.target.value });
-              }}
-            />
+            <input type="search" name="search" value={selectedSearch?.search} onChange={(e) => {setSelectedSearch({ search: e.target.value });}}/>
             {searchInputShow ? (
               <i class="bi bi-x" onClick={searchCloseHndl}></i>
             ) : (
@@ -112,25 +105,18 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
                 {type === "select" && (
                   <>
                     <div className="custom-select">
-                      <select
-                        name="cars"
-                        id="cars"
-                        value={selectedSearch?.textGet}
-                        className={`${
-                          searchActive === index ? "select-active" : "bg-dark"
-                        }`}
-                        onChange={(e) =>
-                          selectedHndle(e.target.value, label, index)
-                        }
+                      <select name="cars" id="cars" value={selectedSearch?.textGet}
+                        className={`${searchActive === index ? "select-active" : "bg-dark"}`}
+                        onChange={(e) => selectedHndle(e.target.value, label, index)}
                       >
                         <>
                           <option value="" selected>
                             {label}
                           </option>
-                          {option?.map((opetion) => {
+                          {option?.map((option) => {
                             return (
                               <>
-                                ;<option value={opetion}>{opetion}</option>;
+                                ;<option value={option}>{option}</option>;
                               </>
                             );
                           })}
