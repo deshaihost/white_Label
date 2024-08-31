@@ -6,9 +6,30 @@ import RightSection from "./rightSection/RightSection";
 import "./inboxIndex.css";
 
 const Inbox = () => {
-  const [conversations, setConversations] = useState(null); // All conversations to be displayed; array of objs
+  const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
   const [error, setError] = useState(null);
   const [userMessage, setUserMessage] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
+
+  // Get the conversations we already have in the format needed to send to the API: { conversationId1: { last_message_time:<last_message_time_utc> }, ... }
+  const getConversationsAlreadyHave = () => {
+    if (conversations) {
+      return conversations.reduce((acc, conversation) => {
+        acc[conversation.conversation_id] = {
+          last_message_time: conversation.last_message_time_utc
+        };
+        return acc;
+      }, {});
+    } else {
+      return {};
+    }
+  };
+
+  // Call the API to get conversations, up to the specified limit, and update the state with the returned data.
+  const fetchConversations = async (limit) => {
+    const conversationsAlreadyHave = getConversationsAlreadyHave();
+    const data = await callGetConversationsApi(limit, conversationsAlreadyHave);
+    if (data?.conversations) { updateConversationsWithApiData(data.conversations); }
+  };
 
   // Sort the conversations array by the most recent message (conversation.messages[-1].time ; format MM/DD/YYYY HH:MM:SS)
   const sortConversationsByMostRecentMessage = (conversations) => {
@@ -20,8 +41,8 @@ const Inbox = () => {
   };
 
   // Given a conversation ID: fetch that convo from the API and update that conversation in the state
-  const updateConversation = async (conversationId, propertyName) => {
-    const updatedConversationData = await callGetSingleConversationApi(conversationId, propertyName);
+  const updateConversation = async (conversationId) => {
+    const updatedConversationData = await callGetSingleConversationApi(conversationId);
     if (updatedConversationData?.conversations && updatedConversationData.conversations.length > 0) {
       const retrievedConversation = updatedConversationData.conversations[0];
       let updatedConversations = conversations.map((conversation) => {
@@ -37,6 +58,19 @@ const Inbox = () => {
         setUserMessage(retrievedConversation);
       }
     }
+  };
+
+  // Update our conversation state with a new list returned by the API. This does NOT call the API: it takes the API data as a parameter.
+  const updateConversationsWithApiData = (apiConversationData) => {
+    let newConversationState = apiConversationData.map(conversation => {
+      if (!conversation.hasOwnProperty('messages')) { // the API data doesn't include messages (or most other fields) for conversations we already have if there are no updates. Get the convo ID, find the convo in our local state, and copy that record over
+        const conversationId = conversation['conversation_id'];
+        const localConversation = conversations.find(conv => conv.conversation_id === conversationId);
+        return localConversation ? localConversation : conversation;
+      }
+      return conversation;
+    });
+    setConversations(newConversationState);
   };
 
   // Add a message to a conversation in our local record (conversations)
@@ -60,23 +94,32 @@ const Inbox = () => {
     }
   };
 
-  // Fetch all conversations on page load
+  // Fetch the first batch of conversations on page load
   useEffect(() => {
-    const fetchConversations = async () => {
-      try {
-        const data = await callGetConversationsApi();
-        setConversations(data?.conversations);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-    fetchConversations();
+    fetchConversations(10);
   }, []);
+
+  // Fetch conversations every 10 seconds to keep the page up-to-date
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const num_existing_convos = conversations.length;
+      fetchConversations(num_existing_convos);
+    }, 10000); // 10000 milliseconds = 10 seconds
+
+    const timeoutId = setTimeout(() => { // Stop auto-updating after the page has been open for 12 hours (43200000 milliseconds = 12 hours)
+      clearInterval(intervalId);
+    }, 43200000);
+
+    return () => { // Cleanup the interval and timeout on component unmount
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
+    };
+  }, [conversations]);
 
   return (
     <div className="row text-white">
       <div className="col-lg-3 left-bar">
-        <LeftMessage messageList={conversations} getUserMessage={(data) => setUserMessage(data)}/>
+        <LeftMessage allConversations={conversations} setAllConversations={setConversations} setSelectedMessage={(data) => setUserMessage(data)} fetchConversations={fetchConversations}/>
       </div>
       <div className="col-lg-6">
         <MildeSection allConversationData={userMessage} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />

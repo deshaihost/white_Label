@@ -2,8 +2,8 @@ import axios from "axios";
 import ToastHandle from "../ToastMessage";
 
 
-// Get all conversations
-export const callGetConversationsApi = async () => {
+// Get all conversations. FYI, this endpoint uses POST type to support more complex queries
+export const callGetConversationsApi = async (limit=null, conversationIdsAlreadyHave={}) => {
   const baseUrl = process.env.REACT_APP_API_ENDPOINT;
   const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -12,7 +12,8 @@ export const callGetConversationsApi = async () => {
       headers: { "X-API-Key": API_KEY },
       validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
     };
-    const response = await axios.get( `${baseUrl}/get_all_conversations`, config );
+    const body_data = { 'query_data': { 'limit':limit, 'conversations_already_have':conversationIdsAlreadyHave } };
+    const response = await axios.post( `${baseUrl}/get_all_conversations`, body_data, config );
 
     if (response.status === 200) { }
     else { ToastHandle(response?.data?.error, "danger"); }
@@ -25,7 +26,7 @@ export const callGetConversationsApi = async () => {
 
 
 // Get a single conversation by ID
-export const callGetSingleConversationApi = async (conversationId, propertyName) => {
+export const callGetSingleConversationApi = async (conversationId) => {
   const baseUrl = process.env.REACT_APP_API_ENDPOINT;
   const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -34,7 +35,8 @@ export const callGetSingleConversationApi = async (conversationId, propertyName)
       headers: { "X-API-Key": API_KEY },
       validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
     };
-    const response = await axios.get( `${baseUrl}/get_all_conversations?property_name=${propertyName}&conversation_id=${conversationId}`, config );
+    const body_data = { 'query_data': { 'conversation_id':conversationId } };
+    const response = await axios.post( `${baseUrl}/get_all_conversations`, body_data, config );
 
     if (response.status === 200) { }
     else { ToastHandle(response?.data?.error, "danger"); }
