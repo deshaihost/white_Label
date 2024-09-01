@@ -29,7 +29,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     const sendMsgResponse = await callSendMessageApi(inputValue, conversation_id, reservation_id, propertyName);
     if (!("error" in sendMsgResponse)) {
       setInputValue("");
-      await updateConversationFromApi(conversation_id, propertyName);
+      await updateConversationFromApi(conversation_id);
     }
     setSendMessageLoading(false);
   };
