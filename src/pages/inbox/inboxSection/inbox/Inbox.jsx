@@ -9,7 +9,7 @@ import "./inboxIndex.css";
 const Inbox = () => {
   const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
   const [error, setError] = useState(null);
-  const [userMessage, setUserMessage] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
+  const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
   const [conversationsNotYetFetched, setConversationsNotYetFetched] = useState(true);
 
   // Get the conversations we already have in the format needed to send to the API: { conversationId1: { last_message_time:<last_message_time_utc> }, ... }
@@ -56,9 +56,9 @@ const Inbox = () => {
       });
       updatedConversations = sortConversationsByMostRecentMessage(updatedConversations);
       setConversations(updatedConversations);
-      // If the conversation to be updated is userMessage (the one currently being viewed), update that too
-      if (userMessage.conversation_id === conversationId) {
-        setUserMessage(retrievedConversation);
+      // If the conversation to be updated is selectedConversation (the one currently being viewed), update that too
+      if (selectedConversation.conversation_id === conversationId) {
+        setSelectedConversation(retrievedConversation);
       }
     }
   };
@@ -86,12 +86,12 @@ const Inbox = () => {
       return conversation;
     });
     setConversations(updatedConversations);
-    // If the conversation to be updated is userMessage (the one currently being viewed), update it
-    if (userMessage.conversation_id === conversationId) {
-      setUserMessage((prevUserMessage) => {
+    // If the conversation to be updated is selectedConversation (the one currently being viewed), update it
+    if (selectedConversation.conversation_id === conversationId) {
+      setSelectedConversation((prevSelectedConversation) => {
         return {
-          ...prevUserMessage,
-          messages: [...prevUserMessage.messages, message],
+          ...prevSelectedConversation,
+          messages: [...prevSelectedConversation.messages, message],
         };
       });
     }
@@ -109,9 +109,9 @@ const Inbox = () => {
       fetchConversations(num_existing_convos);
     }, 10000); // 10000 milliseconds = 10 seconds
 
-    const timeoutId = setTimeout(() => { // Stop auto-updating after the page has been open for 12 hours (43200000 milliseconds = 12 hours)
+    const timeoutId = setTimeout(() => { // Stop auto-updating after the page has been open for 4 hours (14,400,000 milliseconds = 4 hours)
       clearInterval(intervalId);
-    }, 43200000);
+    }, 14400000);
 
     return () => { // Cleanup the interval and timeout on component unmount
       clearInterval(intervalId);
@@ -124,13 +124,13 @@ const Inbox = () => {
       {conversationsNotYetFetched ? <FullScreenLoader /> : null}
       <div className="row text-white">
         <div className="col-lg-3 left-bar">
-          <LeftMessage allConversations={conversations} setAllConversations={setConversations} setSelectedMessage={(data) => setUserMessage(data)} fetchConversations={fetchConversations}/>
+          <LeftMessage allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={(data) => setSelectedConversation(data)} fetchConversations={fetchConversations}/>
         </div>
         <div className="col-lg-6">
-          <MildeSection allConversationData={userMessage} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />
+          <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />
         </div>
         <div className="col-lg-3">
-          <RightSection rightSectionData={userMessage} />
+          <RightSection rightSectionData={selectedConversation} />
         </div>
       </div>
     </>

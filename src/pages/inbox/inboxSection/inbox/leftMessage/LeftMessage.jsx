@@ -6,14 +6,14 @@ import { formatDateRange } from "../../../../../helper/commonFun";
 import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import { BoxLoader } from "../../../../../helper/Loader";
 
-const LeftMessage = ({ allConversations, setAllConversations, setSelectedMessage, fetchConversations }) => {
+const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, fetchConversations }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const containerRef = useRef(null);
 
   const [selectedSearch, setSelectedSearch] = useState({type: "", textGet: "", search: ""});
-  const [activeMessageId, setActiveMessageId] = useState("");
+  const [selectedConversationId, setSelectedConversationId] = useState("");
   const [nextBatchLoading, setNextBatchLoading] = useState(false);
 
   // Load the next batch of conversations. fetchConversations handles excluding conversations we already have, calling the API, and updating the state
@@ -64,15 +64,15 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedMessage
   };
 
   const openConversationHandle = (data, id) => {
-    setSelectedMessage(data);
-    setActiveMessageId(id); // This is used to highlight the selected conversation. FYI - if the conversation updates, the indices change but this is not updated, causing the wrong message to be highlighted. TODO: fix
+    setSelectedConvo(data);
+    setSelectedConversationId(id); // This is used to highlight the selected conversation
     markConversationAsOpened(data.conversation_id, data.property_name);
   };
 
   // As soon as the state populates with conversations, select the first one (if none is selected yet)
   useEffect(() => {
-    if (activeMessageId === "" && allConversations.length > 0) {
-      openConversationHandle(allConversations[0], 0);
+    if (selectedConversationId === "" && allConversations.length > 0) {
+      openConversationHandle(allConversations[0], allConversations[0]?.conversation_id);
     }
   }, [allConversations]);
 
@@ -192,7 +192,7 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedMessage
       </div>
       <div className="left-bar-chat" ref={containerRef}>
         {allConversations?.map((message, messageIndex) => {
-          const { property_name, guest_name, arrival_date, departure_date, opened } = message;
+          const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id } = message;
           const allDataForConversation = message;
           const messages = message?.messages; // Assuming message?.messages is an array
           const lastValue = messages[messages.length - 1];
@@ -214,10 +214,9 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedMessage
           return (
             <>
               <div>
-                <div
-                  style={{ cursor: "pointer" }}
-                  className={`${activeMessageId === messageIndex && "bg-dark"} left-inner-tab`}
-                  onClick={() => openConversationHandle(allDataForConversation, messageIndex)}
+                <div style={{ cursor: "pointer" }}
+                  className={`${conversation_id === selectedConversationId && "bg-dark"} left-inner-tab`}
+                  onClick={() => openConversationHandle(allDataForConversation, conversation_id)}
                 >
                   <div className="left-description">
                     <div className="d-flex justify-content-between description-item">

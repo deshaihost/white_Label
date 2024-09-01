@@ -16,10 +16,13 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   const [conversationData, setConversationData] = useState({});
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [generateButtonIsEnabled, setGenerateButtonIsEnabled] = useState(false);
-  const [generateButtonText, setGenerateButtonText] = useState("");
   const [propertyName, setPropertyName] = useState("");
   const [sendMessageLoading, setSendMessageLoading] = useState(false);
+
+  const [generateButtonIsEnabled, setGenerateButtonIsEnabled] = useState(false);
+  const [generateButtonText, setGenerateButtonText] = useState("");
+  const [generateButtonJustification, setGenerateButtonJustification] = useState("");
+  const [showGenerateJustificationButton, setShowGenerateJustificationButton] = useState(false);
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
@@ -46,6 +49,11 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
         handleSendMessage();
       }
     }
+  };
+
+  const handleGenerateButtonClick = () => {
+    setInputValue(generateButtonText);
+    setShowGenerateJustificationButton(true);
   };
 
   // feed back functionality
@@ -143,10 +151,14 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     ) {
       setGenerateButtonIsEnabled(true);
       setGenerateButtonText(allConversationData.generated_response.response);
+      setGenerateButtonJustification(allConversationData.generated_response.justification);
     } else {
       setGenerateButtonIsEnabled(false);
       setGenerateButtonText("");
     }
+    // Clear the input field
+    setInputValue("");
+    setShowGenerateJustificationButton(false);
   }, [allConversationData]);
 
   // Allow the text area to expand vertically as lines are added
@@ -190,7 +202,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
         </div>
         <div className="ai-input">
           {generateButtonIsEnabled && (
-            <button onClick={() => setInputValue(generateButtonText)} className="generate-button">
+            <button className="generate-button" onClick={handleGenerateButtonClick}>
               <i className="bi bi-stars"></i>
             </button>
           )}
@@ -217,6 +229,13 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
             )}
           </button>
         </div>
+        {showGenerateJustificationButton &&
+          <div className="where-did link-container" style={{ marginRight:"auto" }}>
+            <a href="#" onClick={(e) => handleJustificationClick(e, generateButtonJustification)}>
+              Where did this come from?
+            </a>
+          </div>
+        }
       </div>
       <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
       <JustificationModal show={showJustificationModal} handleClose={() => setShowJustificationModal(false)} propertyName={propertyName} justification={justificationText}/>
