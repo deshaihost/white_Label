@@ -213,6 +213,15 @@ const NavBar = () => {
                   >
                     Inbox
                   </NavLink>
+                  <NavLink
+                    exact
+                    to="/action-item"
+                    className="nav-link"
+                    activeClassName="active"
+                    onClick={handleNavLinkClick}
+                  >
+                    Action Items
+                  </NavLink>
 
                   <NavLink
                     exact

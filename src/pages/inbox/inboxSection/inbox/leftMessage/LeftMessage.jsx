@@ -1,26 +1,83 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions } from "../../../../../redux/actions";
 import { formatDateRange } from "../../../../../helper/commonFun";
 import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
+import { BoxLoader } from "../../../../../helper/Loader";
 
-const LeftMessage = ({ messageList, getUserMessage }) => {
+const LeftMessage = ({ allConversations, setAllConversations, setSelectedMessage, fetchConversations }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
 
+  const containerRef = useRef(null);
+
   const [selectedSearch, setSelectedSearch] = useState({type: "", textGet: "", search: ""});
   const [activeMessageId, setActiveMessageId] = useState("");
-  const [allConversations, setAllConversations] = useState([]);
+  const [nextBatchLoading, setNextBatchLoading] = useState(false);
 
-  // As soon as we get messageList (all conversations), put it in the state
+  // Load the next batch of conversations. fetchConversations handles excluding conversations we already have, calling the API, and updating the state
+  const loadNextBatch = async () => {
+    setNextBatchLoading(true);
+    const num_existing_convos = allConversations.length;
+    await fetchConversations(num_existing_convos + 10);
+    setNextBatchLoading(false);
+  };
+
+  // When loadNextBatch is defined (i.e. component mount), initialize the event listener that tracks scrolling (so we can load more convos whenever the user scrolls to the bottom)
   useEffect(() => {
-    setAllConversations(messageList);
-  }, [messageList]);
+    const handleScroll = () => {
+      if (containerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+        if (scrollTop + clientHeight >= scrollHeight) {
+          loadNextBatch();
+        }
+      }
+    };
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [loadNextBatch]);
+
+  // Mark a conversation as opened, in the state and in the API
+  const markConversationAsOpened = (conversationId, propertyName) => {
+
+    // Make sure the conversation isn't already opened
+    const conversation = allConversations.find(convo => convo.conversation_id === conversationId);
+    if (conversation && conversation.opened) { return; }
+
+    // If it isn't, mark it opened in the state and call the API
+    const updatedConversations = allConversations.map((conversation) => {
+      if (conversation.conversation_id === conversationId) {
+        conversation.opened = true;
+      }
+      return conversation;
+    });
+    setAllConversations(updatedConversations);
+    callMarkConversationAsOpenedApi(conversationId, propertyName);
+  };
+
+  const openConversationHandle = (data, id) => {
+    setSelectedMessage(data);
+    setActiveMessageId(id); // This is used to highlight the selected conversation. FYI - if the conversation updates, the indices change but this is not updated, causing the wrong message to be highlighted. TODO: fix
+    markConversationAsOpened(data.conversation_id, data.property_name);
+  };
+
+  // As soon as the state populates with conversations, select the first one (if none is selected yet)
+  useEffect(() => {
+    if (activeMessageId === "" && allConversations.length > 0) {
+      openConversationHandle(allConversations[0], 0);
+    }
+  }, [allConversations]);
 
   const property_data = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
   const allPropertyName = property_data !== undefined ? Object.keys(property_data) : [];
-  const conversations = messageList ? messageList : [];
 
   const timeFormat = (timestamp) => {
     const date = new Date(timestamp);
@@ -70,24 +127,6 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
       textGet: "",
       search: "",
     });
-  };
-
-  // Mark a conversation as opened, in the state and in the API
-  const markConversationAsOpened = (conversationId, propertyName) => {
-    const updatedConversations = allConversations.map((conversation) => {
-      if (conversation.conversation_id === conversationId) {
-        conversation.opened = true;
-      }
-      return conversation;
-    });
-    setAllConversations(updatedConversations);
-    callMarkConversationAsOpenedApi(conversationId, propertyName);
-  };
-
-  const openConversationHandle = (data, id) => {
-    getUserMessage(data);
-    setActiveMessageId(id);
-    markConversationAsOpened(data.conversation_id, data.property_name);
   };
 
   return (
@@ -151,7 +190,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
         </div>
         */}
       </div>
-      <div className="left-bar-chat">
+      <div className="left-bar-chat" ref={containerRef}>
         {allConversations?.map((message, messageIndex) => {
           const { property_name, guest_name, arrival_date, departure_date, opened } = message;
           const allDataForConversation = message;
@@ -209,6 +248,7 @@ const LeftMessage = ({ messageList, getUserMessage }) => {
           );
         })}
       </div>
+      {nextBatchLoading && <BoxLoader />}
     </div>
   );
 };
