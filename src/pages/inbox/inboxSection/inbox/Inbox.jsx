@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { callGetConversationsApi, callGetSingleConversationApi } from "../../../../helper/getConversationsTest/inboxApi";
+import { FullScreenLoader } from "../../../../helper/Loader";
 import LeftMessage from "./leftMessage/LeftMessage";
 import MildeSection from "./mildeSection/MildeSection";
 import RightSection from "./rightSection/RightSection";
@@ -9,6 +10,7 @@ const Inbox = () => {
   const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
   const [error, setError] = useState(null);
   const [userMessage, setUserMessage] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
+  const [conversationsNotYetFetched, setConversationsNotYetFetched] = useState(true);
 
   // Get the conversations we already have in the format needed to send to the API: { conversationId1: { last_message_time:<last_message_time_utc> }, ... }
   const getConversationsAlreadyHave = () => {
@@ -29,6 +31,7 @@ const Inbox = () => {
     const conversationsAlreadyHave = getConversationsAlreadyHave();
     const data = await callGetConversationsApi(limit, conversationsAlreadyHave);
     if (data?.conversations) { updateConversationsWithApiData(data.conversations); }
+    setConversationsNotYetFetched(false);
   };
 
   // Sort the conversations array by the most recent message (conversation.messages[-1].time ; format MM/DD/YYYY HH:MM:SS)
@@ -117,17 +120,20 @@ const Inbox = () => {
   }, [conversations]);
 
   return (
-    <div className="row text-white">
-      <div className="col-lg-3 left-bar">
-        <LeftMessage allConversations={conversations} setAllConversations={setConversations} setSelectedMessage={(data) => setUserMessage(data)} fetchConversations={fetchConversations}/>
+    <>
+      {conversationsNotYetFetched ? <FullScreenLoader /> : null}
+      <div className="row text-white">
+        <div className="col-lg-3 left-bar">
+          <LeftMessage allConversations={conversations} setAllConversations={setConversations} setSelectedMessage={(data) => setUserMessage(data)} fetchConversations={fetchConversations}/>
+        </div>
+        <div className="col-lg-6">
+          <MildeSection allConversationData={userMessage} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />
+        </div>
+        <div className="col-lg-3">
+          <RightSection rightSectionData={userMessage} />
+        </div>
       </div>
-      <div className="col-lg-6">
-        <MildeSection allConversationData={userMessage} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />
-      </div>
-      <div className="col-lg-3">
-        <RightSection rightSectionData={userMessage} />
-      </div>
-    </div>
+    </>
   );
 };
 

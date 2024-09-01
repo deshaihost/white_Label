@@ -19,7 +19,7 @@ export const callGetConversationsApi = async (limit=null, conversationIdsAlready
     else { ToastHandle(response?.data?.error, "danger"); }
     return response.data;
   } catch (error) {
-    ToastHandle("Internal server error", "danger");
+    //ToastHandle("Internal server error", "danger");
     return { error: "Internal server error" };
   }
 };
