@@ -205,10 +205,10 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
           }
 
           const reservationDateRange = formatDateRange(arrival_date, departure_date);
-          let datesAndPropertyNameDisplay = `${reservationDateRange} | ${property_name}`;
+          let datesAndPropertyNameDisplay = (reservationDateRange ? (`${reservationDateRange} | ${property_name}`) : property_name);
 
-          if (datesAndPropertyNameDisplay.length > 50) {
-            datesAndPropertyNameDisplay = datesAndPropertyNameDisplay.slice(0, 50) + "...";
+          if (datesAndPropertyNameDisplay.length > 40) {
+            datesAndPropertyNameDisplay = datesAndPropertyNameDisplay.slice(0, 40) + "...";
           }
 
           return (

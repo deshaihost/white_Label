@@ -18,6 +18,7 @@ export const timeFormat = (timestamp) => {
 // e.g. formatDateRange("210101_000000", "210103_000000") => "Jan 1-3"
 // e.g. formatDateRange("210101_000000", "210203_000000") => "Jan 1 - Feb 3"
 export function formatDateRange(startDate, endDate, showNumNights=false) {
+  if (!startDate || !endDate) {return null;}
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   // Helper function to parse date string
