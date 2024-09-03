@@ -28,28 +28,29 @@ const ActionsItemsTable = () => {
   const actionItems = actionItemsConvertationData
     ? actionItemsConvertationData
     : [];
-  const allPropertyName =
-    createPropertiesName !== undefined ? createPropertiesName : [];
-  const sortedActionItems = Object.keys(actionItems)
-    .flatMap((property) =>
-      Object.keys(actionItems[property]).flatMap((conversationID) => {
-        const conversation_data = actionItems[property][conversationID];
-        return conversation_data.items.map((item) => ({
-          ...item,
-          guest_name: conversation_data.guest_name,
-          property,
-          conversationID,
-        }));
-      })
-    )
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  const allPropertyName = createPropertiesName !== undefined ? createPropertiesName : [];
+
+  let sortedActionItems = actionItems;
+  if (typeof actionItems === 'object' && !Array.isArray(actionItems)) {
+    sortedActionItems = Object.keys(actionItems)
+      .flatMap((property) =>
+        Object.keys(actionItems[property]).flatMap((conversationID) => {
+          const conversation_data = actionItems[property][conversationID];
+          return conversation_data.items.map((item) => ({
+            ...item,
+            guest_name: conversation_data.guest_name,
+            property,
+            conversationID,
+          }));
+        })
+      )
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  }
 
   const filteredActionItems = sortedActionItems?.filter((actionItem) => {
-    const { property, guest_name, status } = actionItem;
+    const { status } = actionItem;
     const statusFilterValLower = statusFilterVal.toLowerCase();
     return (
-      property.toLowerCase().includes(statusFilterValLower) ||
-      guest_name?.toLowerCase().includes(statusFilterValLower) ||
       status.toLowerCase().includes(statusFilterValLower)
     );
   });
@@ -232,10 +233,10 @@ const ActionsItemsTable = () => {
                 </thead>
                 <tbody>
                   {filteredSearchProperty?.map((actionItem) => {
-                    const { id, created_at, property, conversationID, item } =
+                    const { id, created_at, property_name, conversationID, item } =
                       actionItem;
                     let actionItemSend = {
-                      propertyName: property,
+                      propertyName: property_name,
                       conversationID,
                     };
                     return (
@@ -246,7 +247,7 @@ const ActionsItemsTable = () => {
                           {formatDateTime(created_at)}
                         </td>
                         <td>
-                          {property}
+                          {property_name}
                           <br />
                           {actionItem?.guest_name !== null
                             ? actionItem?.guest_name
@@ -279,7 +280,7 @@ const ActionsItemsTable = () => {
                           <span
                             className="mainCursor"
                             onClick={() => {
-                              compeletHndle(id, property, conversationID);
+                              compeletHndle(id, property_name, conversationID);
                             }}
                           >
                             <i

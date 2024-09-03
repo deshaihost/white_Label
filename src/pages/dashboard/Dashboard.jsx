@@ -40,13 +40,13 @@ const Dashboard = () => {
   let sortedActionItems = actionItems;
   if (typeof actionItems === 'object' && !Array.isArray(actionItems)) {
     sortedActionItems = Object.keys(actionItems)
-    .flatMap((property) =>
-      Object.keys(actionItems[property]).flatMap((conversationID) => {
-        const conversation_data = actionItems[property][conversationID];
+    .flatMap((property_name) =>
+      Object.keys(actionItems[property_name]).flatMap((conversationID) => {
+        const conversation_data = actionItems[property_name][conversationID];
         return conversation_data.items.map((item) => ({
           ...item,
           guest_name: conversation_data.guest_name,
-          property,
+          property_name,
           conversationID,
         }));
       })
@@ -93,11 +93,9 @@ const Dashboard = () => {
 
   // Get only the action items that match the selected status filter (there must be exactly one active status filter selection)
   const filteredActionItems = sortedActionItems?.filter((actionItem) => {
-    const { property_name, guest_name, status } = actionItem;
+    const { status } = actionItem;
     const statusFilterValLower = statusFilterVal.toLowerCase();
     return (
-      property_name.toLowerCase().includes(statusFilterValLower) ||
-      guest_name?.toLowerCase().includes(statusFilterValLower) ||
       status.toLowerCase().includes(statusFilterValLower)
     );
   });
