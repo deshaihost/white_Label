@@ -31,29 +31,28 @@ const Dashboard = () => {
     : [];
   const userDataLoading = store?.getUserDataReducer?.loading;
   const userDataGetLoading = store?.getUserDataReducer?.loading;
-  const actionItemsConvertationData =
-    store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
+  const actionItemsConvertationData = store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
   const actionItemsCovertationLoading = store?.getActionItemsReducer?.loading;
-  const createPropertiesName =
-    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const actionItems = actionItemsConvertationData
-    ? actionItemsConvertationData
-    : [];
+  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
+  const actionItems = actionItemsConvertationData ? actionItemsConvertationData : [];
 
-  // Flatten and sort action items by creation time
-  const sortedActionItems = Object.keys(actionItems)
-  .flatMap((property) =>
-    Object.keys(actionItems[property]).flatMap((conversationID) => {
-      const conversation_data = actionItems[property][conversationID];
-      return conversation_data.items.map((item) => ({
-        ...item,
-        guest_name: conversation_data.guest_name,
-        property,
-        conversationID,
-      }));
-    })
-  )
-  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  // For legacy dict type: flatten and sort action items by creation time (TODO: delete)
+  let sortedActionItems = actionItems;
+  if (typeof actionItems === 'object' && !Array.isArray(actionItems)) {
+    sortedActionItems = Object.keys(actionItems)
+    .flatMap((property) =>
+      Object.keys(actionItems[property]).flatMap((conversationID) => {
+        const conversation_data = actionItems[property][conversationID];
+        return conversation_data.items.map((item) => ({
+          ...item,
+          guest_name: conversation_data.guest_name,
+          property,
+          conversationID,
+        }));
+      })
+    )
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  }
 
   // Binary search function. This lets us do below calculation for recently created action items more efficiently
   const binarySearch = (arr, targetDate) => {
@@ -94,10 +93,10 @@ const Dashboard = () => {
 
   // Get only the action items that match the selected status filter (there must be exactly one active status filter selection)
   const filteredActionItems = sortedActionItems?.filter((actionItem) => {
-    const { property, guest_name, status } = actionItem;
+    const { property_name, guest_name, status } = actionItem;
     const statusFilterValLower = statusFilterVal.toLowerCase();
     return (
-      property.toLowerCase().includes(statusFilterValLower) ||
+      property_name.toLowerCase().includes(statusFilterValLower) ||
       guest_name?.toLowerCase().includes(statusFilterValLower) ||
       status.toLowerCase().includes(statusFilterValLower)
     );
@@ -494,15 +493,15 @@ const Dashboard = () => {
                                 </thead>
                                 <tbody>
                                   {filteredSearchProperty?.map((actionItem) => {
-                                    const { id, created_at, property, conversationID, item } = actionItem;
-                                    let actionItemSend = { propertyName: property, conversationID };
+                                    const { id, created_at, property_name, conversationID, item } = actionItem;
+                                    let actionItemSend = { propertyName: property_name, conversationID };
                                     return (
                                       <tr key={id}>
                                         <td style={{ whiteSpace: "pre-line" }}> {/* whiteSpace: 'pre-line' preserves the newline between date and time */}
                                           {formatDateTime(created_at)}
                                         </td>
                                         <td>
-                                          {property}
+                                          {property_name}
                                           <br />
                                           {actionItem?.guest_name !== null ? actionItem?.guest_name : ""}
                                         </td>
@@ -517,7 +516,7 @@ const Dashboard = () => {
                                           </span>
                                           <span
                                             className="mainCursor"
-                                            onClick={() => { compeletHndle( id, property, conversationID ); }}
+                                            onClick={() => { compeletHndle( id, property_name, conversationID ); }}
                                           >
                                             <FaCircleCheck className="text-primary fs-6" />
                                           </span>
