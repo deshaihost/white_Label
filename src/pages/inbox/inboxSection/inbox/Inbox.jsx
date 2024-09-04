@@ -12,6 +12,9 @@ const Inbox = () => {
   const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
   const [conversationsNotYetFetched, setConversationsNotYetFetched] = useState(true);
 
+  const [urgentFilterIsEnabled, setUrgentFilterIsEnabled] = useState(false);
+  const [propertyFilterValue, setPropertyFilterValue] = useState("");
+
   // Get the conversations we already have in the format needed to send to the API: { conversationId1: { last_message_time:<last_message_time_utc> }, ... }
   const getConversationsAlreadyHave = () => {
     if (conversations) {
@@ -27,9 +30,17 @@ const Inbox = () => {
   };
 
   // Call the API to get conversations, up to the specified limit, and update the state with the returned data.
-  const fetchConversations = async (limit) => {
-    const conversationsAlreadyHave = getConversationsAlreadyHave();
-    const data = await callGetConversationsApi(limit, conversationsAlreadyHave);
+  const fetchConversations = async (limit, reset=false, urgent=false, propertyName="") => {
+    let conversationsAlreadyHave = {};
+    if (reset) { // Clear conversations state
+      conversationsAlreadyHave = {};
+      setConversations([]);
+    }
+    else { // Tell the API which conversations we already have, so we don't need to get them again if they haven't been updated
+      conversationsAlreadyHave = getConversationsAlreadyHave();
+    }
+    
+    const data = await callGetConversationsApi(limit, conversationsAlreadyHave, urgent, propertyName);
     if (data?.conversations) { updateConversationsWithApiData(data.conversations); }
     setConversationsNotYetFetched(false);
   };
@@ -106,7 +117,7 @@ const Inbox = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       const num_existing_convos = conversations.length;
-      fetchConversations(num_existing_convos);
+      fetchConversations(num_existing_convos, false, urgentFilterIsEnabled, propertyFilterValue);
     }, 10000); // 10000 milliseconds = 10 seconds
 
     const timeoutId = setTimeout(() => { // Stop auto-updating after the page has been open for 4 hours (14,400,000 milliseconds = 4 hours)
@@ -124,7 +135,7 @@ const Inbox = () => {
       {conversationsNotYetFetched ? <FullScreenLoader /> : null}
       <div className="row text-white">
         <div className="col-lg-3 left-bar">
-          <LeftMessage allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={(data) => setSelectedConversation(data)} fetchConversations={fetchConversations}/>
+          <LeftMessage allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={(data) => setSelectedConversation(data)} fetchConversations={fetchConversations} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterValue={propertyFilterValue} setPropertyFilterValue={setPropertyFilterValue} />
         </div>
         <div className="col-lg-6">
           <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />

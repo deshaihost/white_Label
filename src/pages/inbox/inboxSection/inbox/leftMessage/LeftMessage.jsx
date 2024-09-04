@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions } from "../../../../../redux/actions";
-import { formatDateRange } from "../../../../../helper/commonFun";
+import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
 import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import { BoxLoader } from "../../../../../helper/Loader";
 
-const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, fetchConversations }) => {
+const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, fetchConversations, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterValue, setPropertyFilterValue }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
 
@@ -15,12 +15,14 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
   const [selectedSearch, setSelectedSearch] = useState({type: "", textGet: "", search: ""});
   const [selectedConversationId, setSelectedConversationId] = useState("");
   const [nextBatchLoading, setNextBatchLoading] = useState(false);
+  
+  const [filterQueryLoading, setFilterQueryLoading] = useState(false);
 
   // Load the next batch of conversations. fetchConversations handles excluding conversations we already have, calling the API, and updating the state
   const loadNextBatch = async () => {
     setNextBatchLoading(true);
     const num_existing_convos = allConversations.length;
-    await fetchConversations(num_existing_convos + 10);
+    await fetchConversations(num_existing_convos+10, false, urgentFilterIsEnabled, propertyFilterValue);
     setNextBatchLoading(false);
   };
 
@@ -29,19 +31,13 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
     const handleScroll = () => {
       if (containerRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-        if (scrollTop + clientHeight >= scrollHeight) {
-          loadNextBatch();
-        }
+        if (scrollTop + clientHeight >= scrollHeight) { loadNextBatch(); }
       }
     };
     const container = containerRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
-    }
+    if (container) { container.addEventListener('scroll', handleScroll); }
     return () => {
-      if (container) {
-        container.removeEventListener('scroll', handleScroll);
-      }
+      if (container) { container.removeEventListener('scroll', handleScroll); }
     };
   }, [loadNextBatch]);
 
@@ -79,34 +75,8 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
   const property_data = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
   const allPropertyName = property_data !== undefined ? Object.keys(property_data) : [];
 
-  const timeFormat = (timestamp) => {
-    const date = new Date(timestamp);
-    // Extract month, day, hours, and minutes
-    const month = date.getMonth() + 1; // Months are zero-based
-    const day = date.getDate();
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM"; // Determine AM/PM
-    // Convert hours from 24-hour to 12-hour format
-    hours = hours % 12;
-    hours = hours ? hours : 12; // Hour '0' should be '12'
-    const minutesFormatted = minutes < 10 ? "0" + minutes : minutes; // Format minutes with leading zero if necessary
-    // Create and return the time string
-    const timeString = `${month}/${day} ${hours}:${minutesFormatted} ${ampm}`;
-    return timeString;
-  };
-
   const [searchActive, setSearchActive] = useState(0);
   const [searchInputShow, setSearchInputShow] = useState(false);
-  const searchSection = [
-    { type: "select", label: "All", option: allPropertyName },
-    {
-      type: "select",
-      label: "Phase",
-      option: ["Current", "Inquiry", "Future", "Past"],
-    },
-    { type: "button", label: "Urgent" },
-  ];
   
   useEffect(() => {
     dispatch(getUserDataActions());
@@ -129,6 +99,29 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
     });
   };
 
+  const handlePropertyFilterChange = async (e) => {
+    if (filterQueryLoading) { return; }
+    const selectedFilterVal = e.target.value;
+    setUrgentFilterIsEnabled(false); // for now, only one filter at a time
+    setFilterQueryLoading(true);
+
+    await fetchConversations(10, true, false, selectedFilterVal);
+
+    setFilterQueryLoading(false);
+    setPropertyFilterValue(selectedFilterVal);
+  };
+
+  const handleUrgentClick = async () => {
+    if (filterQueryLoading) { return; }
+    setPropertyFilterValue(""); // for now, only one filter at a time
+    setFilterQueryLoading(true);
+
+    await fetchConversations(10, true, !urgentFilterIsEnabled, "");
+    
+    setFilterQueryLoading(false);
+    setUrgentFilterIsEnabled(!urgentFilterIsEnabled);
+  }
+
   return (
     <div className="left-bar">
       <div className="message-filter">
@@ -145,118 +138,115 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
           </div>
           */}
         </div>
-        {/* Filter buttons
         <div className="filter-btns">
-          {searchSection?.map((searchItem, index) => {
-            const { type, label, option } = searchItem;
+
+          {/* Properties Select */}
+          <div className="custom-select">
+            <select name="all" id="all" value={propertyFilterValue} className={`${propertyFilterValue ? "select-active" : "bg-dark"}`} onChange={handlePropertyFilterChange}>
+              <option value="" selected>
+                All Properties
+              </option>
+              {allPropertyName?.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Phase Select
+          <div className="custom-select">
+            <select name="phase" id="phase" value={selectedSearch?.textGet}
+              className={`${searchActive === 1 ? "select-active" : "bg-dark"}`}
+              onChange={(e) => selectedHndle(e.target.value, "Phase", 1)}
+            >
+              <option value="" selected>
+                Phase
+              </option>
+              {["Current", "Inquiry", "Future", "Past"].map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+          */}
+
+          {/* Urgent Button */}
+          <span onClick={handleUrgentClick} className={`${urgentFilterIsEnabled ? "bg-light text-dark" : "bg-dark"}`} style={{cursor:"pointer"}}>
+            Urgent
+          </span>
+        </div>
+      </div>
+      {filterQueryLoading ? (<BoxLoader />) : (
+        <div className="left-bar-chat" ref={containerRef}>
+          {allConversations?.map((message, messageIndex) => {
+            const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id } = message;
+            const allDataForConversation = message;
+            const messages = message?.messages; // Assuming message?.messages is an array
+            const lastValue = messages[messages.length - 1];
+            const { sender, text, time } = lastValue;
+            let result;
+            if (text.length > 25) {
+              result = text.slice(0, 25) + "...";
+            } else {
+              result = text;
+            }
+
+            // Based on which of these fields are present (arrival_date, departure_date, property_name): render the appropriate string
+            let datesAndPropertyNameDisplay = "";
+            const reservationDateRange = formatDateRange(arrival_date, departure_date);
+            if (reservationDateRange && property_name) {
+              datesAndPropertyNameDisplay = `${reservationDateRange} | ${property_name}`;
+            } else if (reservationDateRange) {
+              datesAndPropertyNameDisplay = reservationDateRange;
+            } else if (property_name) {
+              datesAndPropertyNameDisplay = property_name;
+            } else {
+              datesAndPropertyNameDisplay = '';
+            }
+
+            if (datesAndPropertyNameDisplay.length > 40) {
+              datesAndPropertyNameDisplay = datesAndPropertyNameDisplay.slice(0, 40) + "...";
+            }
+
             return (
               <>
-                {type === "select" && (
-                  <>
-                    <div className="custom-select">
-                      <select name="cars" id="cars" value={selectedSearch?.textGet}
-                        className={`${searchActive === index ? "select-active" : "bg-dark"}`}
-                        onChange={(e) => selectedHndle(e.target.value, label, index)}
-                      >
-                        <>
-                          <option value="" selected>
-                            {label}
-                          </option>
-                          {option?.map((option) => {
-                            return (
-                              <>
-                                ;<option value={option}>{option}</option>;
-                              </>
-                            );
-                          })}
-                        </>
-                      </select>
-                    </div>
-                  </>
-                )}
-                {type === "button" && (
-                  <span
-                    onClick={() => setSearchActive(index)}
-                    className={`${
-                      searchActive === index ? "bg-light text-dark" : "bg-dark"
-                    }`}
+                <div>
+                  <div style={{ cursor: "pointer" }}
+                    className={`${conversation_id === selectedConversationId && "bg-dark"} left-inner-tab`}
+                    onClick={() => openConversationHandle(allDataForConversation, conversation_id)}
                   >
-                    {label}
-                  </span>
-                )}
+                    <div className="left-description">
+                      <div className="d-flex justify-content-between description-item">
+                        <h2>
+                          {opened ? guest_name : <strong>{guest_name}</strong>}
+                        </h2>
+                        <div className="date" style={{margin:"0"}}>
+                          {opened ? timeFormat(time) : <strong>{timeFormat(time)}</strong>}
+                        </div>
+                      </div>
+                      <div className="short-des">
+                      {opened ? (
+                        <>
+                          <strong>{sender}:</strong> {result}
+                        </>
+                      ) : (
+                        <strong>{sender}: {result}</strong>
+                      )}
+                      </div>
+                      <div className="date">
+                        {opened ? datesAndPropertyNameDisplay : <strong>{datesAndPropertyNameDisplay}</strong>}
+                      </div>
+                    </div>
+                  </div>
+                  <hr />
+                </div>
               </>
             );
           })}
         </div>
-        */}
-      </div>
-      <div className="left-bar-chat" ref={containerRef}>
-        {allConversations?.map((message, messageIndex) => {
-          const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id } = message;
-          const allDataForConversation = message;
-          const messages = message?.messages; // Assuming message?.messages is an array
-          const lastValue = messages[messages.length - 1];
-          const { sender, text, time } = lastValue;
-          let result;
-          if (text.length > 25) {
-            result = text.slice(0, 25) + "...";
-          } else {
-            result = text;
-          }
-
-          // Based on which of these fields are present (arrival_date, departure_date, property_name): render the appropriate string
-          let datesAndPropertyNameDisplay = "";
-          const reservationDateRange = formatDateRange(arrival_date, departure_date);
-          if (reservationDateRange && property_name) {
-            datesAndPropertyNameDisplay = `${reservationDateRange} | ${property_name}`;
-          } else if (reservationDateRange) {
-            datesAndPropertyNameDisplay = reservationDateRange;
-          } else if (property_name) {
-            datesAndPropertyNameDisplay = property_name;
-          } else {
-            datesAndPropertyNameDisplay = '';
-          }
-
-          if (datesAndPropertyNameDisplay.length > 40) {
-            datesAndPropertyNameDisplay = datesAndPropertyNameDisplay.slice(0, 40) + "...";
-          }
-
-          return (
-            <>
-              <div>
-                <div style={{ cursor: "pointer" }}
-                  className={`${conversation_id === selectedConversationId && "bg-dark"} left-inner-tab`}
-                  onClick={() => openConversationHandle(allDataForConversation, conversation_id)}
-                >
-                  <div className="left-description">
-                    <div className="d-flex justify-content-between description-item">
-                      <h2>
-                        {opened ? guest_name : <strong>{guest_name}</strong>}
-                      </h2>
-                      <div className="date" style={{margin:"0"}}>
-                        {opened ? timeFormat(time) : <strong>{timeFormat(time)}</strong>}
-                      </div>
-                    </div>
-                    <div className="short-des">
-                    {opened ? (
-                      <>
-                        <strong>{sender}:</strong> {result}
-                      </>
-                    ) : (
-                      <strong>{sender}: {result}</strong>
-                    )}
-                    </div>
-                    <div className="date">
-                      {opened ? datesAndPropertyNameDisplay : <strong>{datesAndPropertyNameDisplay}</strong>}
-                    </div>
-                  </div>
-                </div>
-                <hr />
-              </div>
-            </>
-          );
-        })}
-      </div>
+      )}
       {nextBatchLoading && <BoxLoader />}
     </div>
   );

@@ -55,7 +55,7 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
               {messageData.attachments
                 .filter(attachment => attachment.type.includes("image"))
                 .map((attachment, index) => (
-                  <img key={index} src={attachment.url} alt="attachment" style={{width:"300px"}}/>
+                  <img key={index} src={attachment.url} alt="attachment" style={{width:"320px"}}/>
                 ))}
             </div>
           )}

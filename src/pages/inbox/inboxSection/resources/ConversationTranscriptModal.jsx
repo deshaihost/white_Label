@@ -25,8 +25,6 @@ const ConversationTranscriptModal = ({ handleClose, show, modalData }) => {
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
       const body_data = { 'query_data': { 'conversation_id':conversationId } };
-      console.log("body_data", body_data);
-      console.log("conversationId", conversationId);
       const response = await axios.post( `${baseUrl}/get_all_conversations`, body_data, config ); // it's a POST endpoint because it handles more complex queries
 
       if (response.status === 200) {

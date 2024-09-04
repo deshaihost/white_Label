@@ -1,22 +1,28 @@
+
+// e.g. timeFormat("240509_114200") => "5/9 11:42 AM"
 export const timeFormat = (timestamp) => {
   const date = new Date(timestamp);
-  // Extract hours and minutes
+
+  // Extract month, day, hours, and minutes
+  const month = date.getMonth() + 1; // Months are zero-based
+  const day = date.getDate();
   let hours = date.getHours();
   const minutes = date.getMinutes();
-  // Determine AM/PM
-  const ampm = hours >= 12 ? "PM" : "AM";
+  const ampm = hours >= 12 ? "PM" : "AM"; // Determine AM/PM
+
   // Convert hours from 24-hour to 12-hour format
   hours = hours % 12;
   hours = hours ? hours : 12; // Hour '0' should be '12'
-  // Format minutes with leading zero if necessary
-  const minutesFormatted = minutes < 10 ? "0" + minutes : minutes;
-  // Create the time string
-  const timeString = `${hours}:${minutesFormatted} ${ampm}`;
+  const minutesFormatted = minutes < 10 ? "0" + minutes : minutes; // Format minutes with leading zero if necessary
+
+  // Create and return the time string
+  const timeString = `${month}/${day} ${hours}:${minutesFormatted} ${ampm}`;
   return timeString;
 };
 
-// e.g. formatDateRange("210101_000000", "210103_000000") => "Jan 1-3"
-// e.g. formatDateRange("210101_000000", "210203_000000") => "Jan 1 - Feb 3"
+
+// e.g. formatDateRange("240101_000000", "240103_000000") => "Jan 1-3"
+// e.g. formatDateRange("240101_000000", "240203_000000") => "Jan 1 - Feb 3"
 export function formatDateRange(startDate, endDate, showNumNights=false) {
   if (!startDate || !endDate) {return null;}
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

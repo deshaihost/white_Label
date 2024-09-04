@@ -5,7 +5,7 @@ import GetStartedImg from "../../public/img/getstartedimg.png";
 import { Link } from "react-router-dom";
 import "./dashboard.css";
 import { useSelector, useDispatch } from "react-redux";
-import { PropertyGetConversationsActions, getActionItemsActions, getUserDataActions, putCompleteActionItemActions, stateEmptyActions } from "../../redux/actions";
+import { getActionItemsActions, getUserDataActions, putCompleteActionItemActions, stateEmptyActions } from "../../redux/actions";
 import { BoxLoader, FullScreenLoader } from "../../helper/Loader";
 import "react-circular-progressbar/dist/styles.css";
 import { GoArrowUpRight } from "react-icons/go";
@@ -185,14 +185,6 @@ const Dashboard = () => {
   const propertiesConversationGetData = store?.propertyGetConversationReducer?.propertyGetConversation?.data;
   const propertiesConversationLoading = store?.propertyGetConversationReducer?.loading;
   const [propertyNameForConversationData, setPropertyNameForConversationData] = useState("");
-
-  // When the "view" button is clicked, trigger the GET /conversations API call to get the the selected conversation
-  const conversationCallOnDashboard = (item) => {
-    const { propertyName, conversationID } = item;
-    setConverSationId(conversationID);
-    setPropertyNameForConversationData(propertyName);
-    dispatch(PropertyGetConversationsActions({ propertyName: propertyName }));
-  };
 
   const [model, setModel] = useState({ conversationModel: false, conversationDataSend: "" });
   const conversationModelOpen = "conversationModelOpen";

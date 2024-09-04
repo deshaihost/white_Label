@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PropertyGetConversationsActions, getUserDataActions } from "../../../redux/actions";
+import { getUserDataActions } from "../../../redux/actions";
 import AdditionalInformationModel from "./additionalInformationModel/AdditionalInformationModel";
 import { Container, Form } from "react-bootstrap";
 import ToastHandle from "../../../helper/ToastMessage";

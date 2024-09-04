@@ -8,7 +8,7 @@ import {
   getUserDataActions,
 } from "../../redux/actions";
 import { useSelectorUseDispatch } from "../../helper/Authorized";
-import { PropertyGetConversationsActions } from "../../redux/actions";
+import { PropertyGetConversationsActions } from "../../redux/actions"; // this funct is deprecated. The API call it makes was replaced by another endpoint to get conversations.
 import  {  FullScreenLoader } from "../../helper/Loader";
 import { Helmet } from "react-helmet";
 

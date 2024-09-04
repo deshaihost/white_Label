@@ -3,7 +3,7 @@ import ToastHandle from "../ToastMessage";
 
 
 // Get all conversations. FYI, this endpoint uses POST type to support more complex queries
-export const callGetConversationsApi = async (limit=null, conversationIdsAlreadyHave={}) => {
+export const callGetConversationsApi = async (limit=null, conversationIdsAlreadyHave={}, urgentOnly=false, propertyName="") => {
   const baseUrl = process.env.REACT_APP_API_ENDPOINT;
   const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -12,7 +12,8 @@ export const callGetConversationsApi = async (limit=null, conversationIdsAlready
       headers: { "X-API-Key": API_KEY },
       validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
     };
-    const body_data = { 'query_data': { 'limit':limit, 'conversations_already_have':conversationIdsAlreadyHave } };
+    const body_data = { 'query_data': { 'limit':limit, 'conversations_already_have':conversationIdsAlreadyHave, 'action_items':urgentOnly } };
+    if (propertyName) { body_data.query_data.property_name = propertyName; }
     const response = await axios.post( `${baseUrl}/get_all_conversations`, body_data, config );
 
     if (response.status === 200) { }
