@@ -204,8 +204,18 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
             result = text;
           }
 
+          // Based on which of these fields are present (arrival_date, departure_date, property_name): render the appropriate string
+          let datesAndPropertyNameDisplay = "";
           const reservationDateRange = formatDateRange(arrival_date, departure_date);
-          let datesAndPropertyNameDisplay = (reservationDateRange ? (`${reservationDateRange} | ${property_name}`) : property_name);
+          if (reservationDateRange && property_name) {
+            datesAndPropertyNameDisplay = `${reservationDateRange} | ${property_name}`;
+          } else if (reservationDateRange) {
+            datesAndPropertyNameDisplay = reservationDateRange;
+          } else if (property_name) {
+            datesAndPropertyNameDisplay = property_name;
+          } else {
+            datesAndPropertyNameDisplay = '';
+          }
 
           if (datesAndPropertyNameDisplay.length > 40) {
             datesAndPropertyNameDisplay = datesAndPropertyNameDisplay.slice(0, 40) + "...";

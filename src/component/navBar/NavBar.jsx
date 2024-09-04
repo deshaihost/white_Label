@@ -177,68 +177,22 @@ const NavBar = () => {
             <Nav>
               {token !== undefined ? (
                 <>
-                  <NavLink
-                    exact
-                    to="/getstarted"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  <NavLink exact to="/getstarted" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Get Started
                   </NavLink>
-                  <NavLink
-                    exact
-                    to="/dashboard"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  <NavLink exact to="/dashboard" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Dashboard
                   </NavLink>
-                  <NavLink
-                    exact
-                    to="/properties"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  <NavLink exact to="/properties" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Properties
                   </NavLink>
-                  <NavLink
-                    exact
-                    to="/inbox"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
-                    Inbox
+                  <NavLink exact to="/inbox" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                    Messaging
                   </NavLink>
-                  <NavLink
-                    exact
-                    to="/action-item"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  <NavLink exact to="/action-item" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Action Items
                   </NavLink>
-
-                  <NavLink
-                    exact
-                    to="/property-insight"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
-                    Transcripts
-                  </NavLink>
-                  <NavLink
-                    exact
-                    to="/setting"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  <NavLink exact to="/setting" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Settings
                   </NavLink>
                 </>

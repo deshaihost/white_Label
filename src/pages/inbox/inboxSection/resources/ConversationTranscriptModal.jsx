@@ -24,13 +24,15 @@ const ConversationTranscriptModal = ({ handleClose, show, modalData }) => {
         headers: { "X-API-Key": API_KEY },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
-
-      const response = await axios.get(`${baseUrl}/properties/${propertyName}/get_conversation?conversation_id=${conversationId}`, config);
+      const body_data = { 'query_data': { 'conversation_id':conversationId } };
+      console.log("body_data", body_data);
+      console.log("conversationId", conversationId);
+      const response = await axios.post( `${baseUrl}/get_all_conversations`, body_data, config ); // it's a POST endpoint because it handles more complex queries
 
       if (response.status === 200) {
         setConversationNotFound(false);
         setConversationTranscriptLoading(false);
-        setConversationApiData(response?.data?.conversation);
+        setConversationApiData(response.data.conversations[0]);
       }
       else {
         setConversationNotFound(true);
@@ -43,10 +45,14 @@ const ConversationTranscriptModal = ({ handleClose, show, modalData }) => {
     }
   }
 
-  // When the modal is opened, call the API to get the conversation transcript
+  // When the modal is opened, call the API to get the conversation transcript, if we don't have it already
   useEffect(() => {
     if (modalData && Object.keys(modalData).length > 0) {
-      callGetConversationsAPI();
+      if (modalData?.conversationApiData) { // conversation API data is being passed into the modal, so no need to call API
+        setConversationApiData(modalData.conversationApiData);
+      } else {
+        callGetConversationsAPI();
+      }
     }
   }, [modalData]);
 

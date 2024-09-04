@@ -105,6 +105,9 @@ input#multi-search1 {
     font-size: 14px;
 }
 
+.action-items-page .table-responsive {
+    min-height: 500px;
+}
 
 @media screen and (max-width:991px)
 {

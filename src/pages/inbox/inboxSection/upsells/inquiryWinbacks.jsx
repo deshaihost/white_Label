@@ -13,7 +13,7 @@ import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 default_settings = {
   'enabled': false,
   'days_after_last_message': 1,
-  'time_of_day': '12:00',
+  'hours_after_last_message': 0,
   'upsell_message': "Hi [[guest_name]], we still have availability in [[city]] from [[date_range]]. We'd love to host you!",
 }
 */
@@ -28,7 +28,10 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, curre
   const [messageModalHeaderText, setMessageModalHeaderText] = useState("");
   const [messageModalTopText, setMessageModalTopText] = useState("");
   const [messageModalMainText, setMessageModalMainText] = useState("");
+  const [statusAndJustificationText, setStatusAndJustificationText] = useState("");
   const [showMessageModal, setShowMessageModal] = useState(false);
+
+  const total_hours_after = currentSettingsData.days_after_last_message * 24 + currentSettingsData.hours_after_last_message;
 
   //const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available'};
   const variables = {'guest_name':'Guest name', 'city':'City', 'date_range':'Inquiry date range', 'property_name':'Property name'};
@@ -41,6 +44,9 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, curre
     if (key === 'days_after_last_message') {
       value = parseInt(value);
       if (value < 0 || value > 30) { return }
+    } else if (key === 'hours_after_last_message') {
+      value = parseInt(value);
+      if (value < 0 || value > 23) { return }
     }
 
     setCurrentSettingsData({ ...currentSettingsData, [key]: value });
@@ -192,11 +198,28 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, curre
     setSection("index");
   }
 
+  // e.g.: "not_sendable" -> "Not Sendable"
+  const readableStatus = (status) => {
+    return status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+
 
   const handleOpenMessageModal = (message) => {
     const headerText = `Message for ${message.guest_first_name} (${formatDateRange(message.guest_check_in, message.guest_check_out)}) at ${formatDateTime(message.time_to_send)}`;
     const newMessageModalContent = message.message
-    const first_line = `At ${message.property_name}, vacant night(s) ${formatDateRange(message.start_date, message.end_date)}`;
+    let first_line = "";
+
+    if ('start_date' in message && 'end_date' in message) { 
+      first_line = `At ${message.property_name}, vacant night(s) ${formatDateRange(message.start_date, message.end_date)}`;
+    } else {
+      first_line = `At ${message.property_name}`;
+    }
+
+    if (message?.status && message?.justification) {
+      setStatusAndJustificationText(`Status: ${readableStatus(message.status)} - ${message.justification}`);
+    } else {
+      setStatusAndJustificationText("");
+    }
 
     setMessageModalMainText(newMessageModalContent);
     setMessageModalTopText(first_line);
@@ -268,14 +291,17 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, curre
           <label className="fs-5">Message Timing</label>
           <p className="settings-label mb-2">How long should HostBuddy wait before following up?</p>
           <div className="row mt-1">
-            <div className="col-lg-2 col-4">
+            <div className="col-lg-2 col-3">
               <input type="number" className="form-control" value={currentSettingsData.days_after_last_message} onChange={(e) => setSetting('days_after_last_message', e.target.value)}/>
             </div>
-            <div className="col-lg-3 col-4" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>days after the last message, at</label>
+            <div className="col-lg-2 col-3" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>days, and</label>
             </div>
-            <div className="col-lg-3 col-4">
-              <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_of_day} onChange={(e) => setSetting('time_of_day', e.target.value)}/>
+            <div className="col-lg-2 col-3">
+              <input type="number" className="form-control" value={currentSettingsData.hours_after_last_message} onChange={(e) => setSetting('hours_after_last_message', e.target.value)}/>
+            </div>
+            <div className="col-lg-3 col-3" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>hours after the last message ({total_hours_after} hours total)</label>
             </div>
           </div>
         </div>
@@ -331,36 +357,40 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, curre
           <table className="table">
             <thead>
               <tr>
-                <th>Sending at</th>
+                <th>Scheduled Send Time</th>
                 <th>Property</th>
                 <th>Guest</th>
-                <th>Date Range</th>
-                {/* <th>Status</th> tbh there's no need for this, since current implementation only shows "waiting to send" messages to the user */}
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             {!getUpcomingMessagesLoading ? (
               upcomingMessagesData && upcomingMessagesData.length > 0 ? (
                 <tbody>
-                  {upcomingMessagesData.slice(0, 10).map((message, index) => ( // only show the first 20
-                    <tr key={index}>
-                      <td>{formatDateTime(message.time_to_send)}</td>
-                      <td>{truncateString(message.property_name, 25)}</td>
-                      <td>{`${truncateString(message.guest_first_name, 13)} (${formatDateRange(message.guest_check_in, message.guest_check_out)})`}</td>
-                      <td>{formatDateRange(message.start_date, message.end_date)}</td>
-                      {/* <td>Waiting to send</td> We could get the actual status of the message (message.status). But current implementation only shows messages with status "scheduled" */}
-                      <td>
-                        {cancelMessageLoading !== message.guest_key ? (
-                          <>
-                            <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px', cursor:'pointer' }} onClick={() => handleOpenMessageModal(message)} />
-                            <FaTimes style={{ color:'red', cursor:'pointer' }} onClick={() => handleCancelMessage(message)} />
-                          </>
-                          ) : (
-                            <BoxLoader />
-                          )}
-                      </td>
-                    </tr>
-                  ))}
+                  {upcomingMessagesData.slice(0, 10).map((message, index) => { // only show the first 20
+                    const { status, time_to_send, property_name, guest_first_name, guest_check_in, guest_check_out } = message;
+                    let status_readable = "";
+                    if (status) { status_readable = readableStatus(status); }
+                    
+                    return (
+                      <tr key={index}>
+                        <td>{formatDateTime(time_to_send)}</td>
+                        <td>{truncateString(property_name, 25)}</td>
+                        <td>{`${truncateString(guest_first_name, 13)} (${formatDateRange(guest_check_in, guest_check_out)})`}</td>
+                        <td>{status_readable}</td>
+                        <td>
+                          {cancelMessageLoading !== message.guest_key ? (
+                            <>
+                              <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px', cursor:'pointer' }} onClick={() => handleOpenMessageModal(message)} />
+                              <FaTimes style={{ color:'red', cursor:'pointer' }} onClick={() => handleCancelMessage(message)} />
+                            </>
+                            ) : (
+                              <BoxLoader />
+                            )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               ) : (
                 <tbody>
@@ -381,7 +411,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, curre
           </table>
         </div>
       </div>
-      <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} />
+      <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} bodyBottomText={statusAndJustificationText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} />
     </div>
   );
 };

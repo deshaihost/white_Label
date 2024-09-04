@@ -136,7 +136,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h3><strong>Stay Informed</strong> With Updates From HostBuddy</h3>
-                                <p>HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention so you can see what’s important at a glance. You can receive these updates through text, email, or Slack integration to stay in the loop.</p>
+                                <p>HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention so you can see what’s important at a glance. Have HostBuddy send action items directly to certain members of your team using advanced categorization. You can receive these updates through text, email, or Slack integration to stay in the loop.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -159,22 +159,8 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3><strong>Team Specific</strong> Notifications</h3>
-                                <h4>(coming soon)</h4>
-                                <p>Seeking the ability to have HostBuddy send action items directly to certain members of your team? Using advanced categorization, HostBuddy can identify issues and send requests for support directly to operations, cleaning or maintenance teams depending on the nature of the issue.</p>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <img src={teamSpecific} alt='works-img' />
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-lg-6">
-                            <div className="works-content">
                                 <h3><strong>Directed</strong> Responses</h3>
-                                <h4>(coming soon)</h4>
-                                <p>HostBuddy will notify you when a guest message requires action or decision making beyond its capability. Respond directly to the notification to make the final call, and HostBuddy will send the appropriate response based on your guidance.</p>
+                                <p>HostBuddy will notify you when a guest message requires action or decision making beyond its capability. Respond directly to the notification to make the final call, and HostBuddy will send the appropriate response to the guest based on your guidance.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">

@@ -5,13 +5,7 @@ import GetStartedImg from "../../public/img/getstartedimg.png";
 import { Link } from "react-router-dom";
 import "./dashboard.css";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  PropertyGetConversationsActions,
-  getActionItemsActions,
-  getUserDataActions,
-  putCompleteActionItemActions,
-  stateEmptyActions,
-} from "../../redux/actions";
+import { PropertyGetConversationsActions, getActionItemsActions, getUserDataActions, putCompleteActionItemActions, stateEmptyActions } from "../../redux/actions";
 import { BoxLoader, FullScreenLoader } from "../../helper/Loader";
 import "react-circular-progressbar/dist/styles.css";
 import { GoArrowUpRight } from "react-icons/go";
@@ -26,9 +20,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const statistics = userDataGet?.statistics?.num_conversations;
-  const { neutral, successful, total, unsuccessful } = statistics
-    ? statistics
-    : [];
+  const { neutral, successful, total, unsuccessful } = statistics ? statistics : [];
   const userDataLoading = store?.getUserDataReducer?.loading;
   const userDataGetLoading = store?.getUserDataReducer?.loading;
   const actionItemsConvertationData = store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
@@ -158,13 +150,9 @@ const Dashboard = () => {
   }
 
   const { first_name } = userDataGet ? userDataGet : [];
-  // this functionality complete convertation
-  const completeActionsItemLoading =
-    store?.completeActionsItemsReducer?.loading;
-  const completeActionsItemStatus =
-    store?.completeActionsItemsReducer?.completeActionsItems?.status;
-  const completeActionsItemMessage =
-    store?.completeActionsItemsReducer?.completeActionsItems?.data?.message;
+  const completeActionsItemLoading = store?.completeActionsItemsReducer?.loading;
+  const completeActionsItemStatus = store?.completeActionsItemsReducer?.completeActionsItems?.status;
+  const completeActionsItemMessage = store?.completeActionsItemsReducer?.completeActionsItems?.data?.message;
 
   const compeletHndle = (conversationID, propyName, convrtionId) => {
     dispatch( putCompleteActionItemActions({ action_item_id: conversationID, property_name: propyName, conversation_id: convrtionId }) );
@@ -357,10 +345,7 @@ const Dashboard = () => {
                         <div className="col-lg-12">
                           <div className="get-started">
                             <img src={GetStartedImg} alt="get-started" />
-                            <p className="pb-2">
-                              Explore how to set up and get started with
-                              HostBuddy
-                            </p>
+                            <p className="pb-2">Explore how to set up and get started with HostBuddy</p>
                             <Link to="/getstarted">Get Started</Link>
                           </div>
                         </div>
@@ -369,115 +354,48 @@ const Dashboard = () => {
                   </div>
                   <div className="row">
                     {!actionItemsCovertationLoading ? (
-                      <div className="">
+                      <>
                         <div className="text-white mt-3 pt-3 pb-1 d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-md-0 gap-2">
                           <div>
-                            <h5 className="">Action Items</h5>
+                            <h5 className="">Incomplete Action Items <small style={{fontSoze:"14px", color:"#AAA"}}>(Most Recent)</small></h5>
                           </div>
-                          <div>
-                            <div className="d-flex flex-wrap flex-md-nowrap justify-content-between gap-2 gap-xl-4">
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="flexRadioDefault"
-                                  id="flexRadioDefault2"
-                                  checked={statusFilterVal === "Incomplete"}
-                                  onClick={() => {
-                                    setStatusFilterVal("Incomplete");
-                                  }}
-                                />
-                                <label
-                                  class="form-check-label fs-14"
-                                  for="flexRadioDefault2"
-                                >
-                                  Incomplete
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="flexRadioDefault"
-                                  id="flexRadioDefault1"
-                                  checked={statusFilterVal === "Completed"}
-                                  onClick={() => {
-                                    setStatusFilterVal("Completed");
-                                  }}
-                                />
-                                <label
-                                  class="form-check-label fs-14"
-                                  for="flexRadioDefault1"
-                                >
-                                  Complete
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="flexRadioDefault"
-                                  id="flexRadioDefault3"
-                                  checked={statusFilterVal === "Expired"}
-                                  onClick={() => {
-                                    setStatusFilterVal("Expired");
-                                  }}
-                                />
-                                <label
-                                  class="form-check-label fs-14"
-                                  for="flexRadioDefault3"
-                                >
-                                  Expired
-                                  <i
-                                    className="bi bi-question-circle ms-2"
-                                    data-tooltip-id="expireTooltip"
-                                    data-tooltip-content='Incomplete action items are marked "Expired" after 14 days. All action items are permanently deleted after 60 days.'
-                                  ></i>
-                                  <Tooltip
-                                    className="action-item-tooltip"
-                                    id="expireTooltip"
-                                    delayShow={0}
-                                    place="top"
-                                    effect="solid"
-                                  />
-                                </label>
-                              </div>
-                              <div className="text-white  ">
-                                <Dropdown
-                                  value={propertySearchVal}
-                                  onChange={(e) =>
-                                    setPropertySearchVal( e.value?.name )
-                                  }
-                                  options={allPropertyName.map(
-                                    (properties) => ({
-                                      name: properties,
-                                    })
-                                  )} // Assuming countries is an array of strings
-                                  optionLabel="name"
-                                  placeholder="Search Property"
-                                  filter
-                                  valueTemplate={selectedTemplate}
-                                  itemTemplate={OptionTemplate}
-                                  className="w-full md:w-14rem search rounded-pill border px-2 fs-14 "
-                                />
-                                {propertySearchVal !== "" && (
-                                  <i
-                                    class="bi bi-x-circle ms-2"
-                                    onClick={() => {
-                                      setPropertySearchVal("");
-                                      setStatusFilterVal("Incomplete");
-                                    }}
-                                  ></i>
-                                )}
-                                {/* <button>Clear</button> */}
-                              </div>
+                          {/*
+                          <div className="d-flex flex-wrap flex-md-nowrap justify-content-between gap-2 gap-xl-4">
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                                checked={statusFilterVal === "Incomplete"}
+                                onClick={() => { setStatusFilterVal("Incomplete"); }}
+                              />
+                              <label class="form-check-label fs-14" for="flexRadioDefault2">
+                                Incomplete
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                                checked={statusFilterVal === "Completed"}
+                                onClick={() => { setStatusFilterVal("Completed"); }}
+                              />
+                              <label class="form-check-label fs-14" for="flexRadioDefault1">
+                                Complete
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3"
+                                checked={statusFilterVal === "Expired"}
+                                onClick={() => { setStatusFilterVal("Expired"); }}
+                              />
+                              <label class="form-check-label fs-14" for="flexRadioDefault3">
+                                Expired
+                                <i className="bi bi-question-circle ms-2" data-tooltip-id="expireTooltip"
+                                  data-tooltip-content='Incomplete action items are marked "Expired" after 14 days. All action items are permanently deleted after 60 days.'
+                                ></i>
+                                <Tooltip className="action-item-tooltip" id="expireTooltip" delayShow={0} place="top" effect="solid"/>
+                              </label>
                             </div>
                           </div>
+                          */}
                         </div>
-                        <div
-                          className="table-responsive"
-                          style={{ overflowY: "auto", height: "500px" }}
-                        >
+                        <div className="table-responsive" style={{ overflowY: "auto", height: "500px" }}>
                           {filteredSearchProperty?.length > 0 ? (
                             <>
                               <table class="table text-white action-items-table">
@@ -486,7 +404,8 @@ const Dashboard = () => {
                                     <th>Date/Time</th>
                                     <th>Property/Guest</th>
                                     <th>Action Item</th>
-                                    <th>View/Done</th>
+                                    {/* <th>View/Done</th> */}
+                                    <th>Complete</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -507,15 +426,12 @@ const Dashboard = () => {
                                           <div className="">{item}</div>
                                         </td>
                                         <td className="text-center">
-                                          <span className="mainCursor" style={{ marginRight: "10px" }}
-                                            onClick={() => { conversationCallOnDashboard( actionItemSend ); }}
-                                          >
+                                          {/*\
+                                          <span className="mainCursor" style={{ marginRight: "10px" }} onClick={() => { conversationCallOnDashboard( actionItemSend ); }}>
                                             <GoArrowUpRight className="text-white fs-6" />
                                           </span>
-                                          <span
-                                            className="mainCursor"
-                                            onClick={() => { compeletHndle( id, property_name, conversationID ); }}
-                                          >
+                                          */}
+                                          <span className="mainCursor" onClick={() => { compeletHndle( id, property_name, conversationID ); }}>
                                             <FaCircleCheck className="text-primary fs-6" />
                                           </span>
                                         </td>
@@ -531,7 +447,7 @@ const Dashboard = () => {
                             </span>
                           )}
                         </div>
-                      </div>
+                      </>
                     ) : (
                       <BoxLoader />
                     )}

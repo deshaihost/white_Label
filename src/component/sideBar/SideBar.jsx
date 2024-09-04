@@ -65,8 +65,8 @@ const SideBar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/property-insight" className={findlocation === "/property-insight" ? "active" : ""}>
-            Transcripts
+          <Link to="/inbox" className={findlocation === "/inbox" ? "active" : ""}>
+            Messaging
           </Link>
         </li>
         <li>

@@ -32,6 +32,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     const sendMsgResponse = await callSendMessageApi(inputValue, conversation_id, reservation_id, propertyName);
     if (!("error" in sendMsgResponse)) {
       setInputValue("");
+      setShowGenerateJustificationButton(false);
       await updateConversationFromApi(conversation_id);
     }
     setSendMessageLoading(false);
@@ -50,6 +51,14 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
       }
     }
   };
+
+  const handleInputFieldChange = (e) => {
+    setInputValue(e.target.value);
+    if (e.target.value.trim() === "") {
+      setShowGenerateJustificationButton(false);
+    }
+  };
+
 
   const handleGenerateButtonClick = () => {
     setInputValue(generateButtonText);
@@ -212,7 +221,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
               ref={textareaRef}
               placeholder="Type a message..."
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={handleInputFieldChange}
               onKeyDown={handleKeyPress}
               rows="1"
               disabled={sendMessageLoading ? true : false}

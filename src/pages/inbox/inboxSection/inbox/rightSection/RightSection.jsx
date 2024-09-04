@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "./index.css";
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 import { formatDateRange } from "../../../../../helper/commonFun";
+import { Link } from "react-router-dom";
+
+
 const RightSection = ({ rightSectionData }) => {
 
   // Determines what to display for the status section
@@ -15,7 +18,7 @@ const RightSection = ({ rightSectionData }) => {
     }
   };
 
-  const { arrival_date, departure_date, status, guest_name, sentiment, property_name, action_items } = rightSectionData ? rightSectionData : {};
+  const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, action_items } = rightSectionData ? rightSectionData : {};
   let { channel } = rightSectionData || {};
   if (channel) { channel = channel.split(" (")[0]; } // channel e.g. "Airbnb (via Hostfully)". Remove the second part.
   else { channel = ""; }
@@ -49,17 +52,22 @@ const RightSection = ({ rightSectionData }) => {
         ) : (
           <p>None</p>
         )}
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "5px" }}>
-          <a href="#" style={{ fontSize: "14px" }}>Manage</a>
-        </div>
+        {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 && (
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "5px" }}>
+            <Link to={`/action-item?property_name=${property_name}`} style={{ fontSize: "14px" }}>Manage</Link>
+          </div>
+        )}
       </div>
       <div className="satisfy">
         {sentiment && (
           <>
             <h2>Satisfaction</h2>
-            <p className="result" style={{color: sentiment === "positive" ? "rgb(0, 180, 0)" : sentiment === "negative" ? "rgb(200, 0, 0)" : "#BBB"}}>
+            <p className="result" style={{ color: sentiment === "positive" ? "rgb(0, 180, 0)" : sentiment === "negative" ? "rgb(200, 0, 0)" : "#BBB" }}>
               {sentiment}
             </p>
+            {sentiment_justification && (
+              <p style={{ fontSize:'12px', marginTop:'3px' }}>{sentiment_justification}</p>
+            )}
           </>
         )}
       </div>

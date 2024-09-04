@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import "./upsells.css";
 
 
-const UpsellMessageModal = ({ headerText, bodyTopText, bodyMainText, show, handleClose }) => {
+const UpsellMessageModal = ({ headerText, bodyTopText, bodyMainText, bodyBottomText, show, handleClose }) => {
   return (
     <Modal show={show} size="lg" onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -20,6 +20,12 @@ const UpsellMessageModal = ({ headerText, bodyTopText, bodyMainText, show, handl
           {bodyMainText.split('\n').map((line, index) => (
             <p key={index}>{line}</p>
           ))}
+          {bodyBottomText ? (
+            <>
+              <hr style={{ borderTopWidth: '2px', borderTopColor: 'blue', borderTopStyle: 'solid' }} />
+              <p style={{fontSize:"16px", color:"#AAA"}} className="text-center">{bodyBottomText}</p>
+            </>
+          ) : null}
         </div>
       </Modal.Body>
     </Modal>

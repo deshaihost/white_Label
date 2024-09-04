@@ -363,7 +363,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, current
           <table className="table">
             <thead>
               <tr>
-                <th>Sending at</th>
+                <th>Scheduled Send Time</th>
                 <th>Property</th>
                 <th>Guest</th>
                 <th>Sentiment</th>
