@@ -50,13 +50,16 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
           </div>
         )}
         <p>
-          {sender === "bot" ? (
-            <>{text}</>
-          ) : (
-            <>
-              <div>{text}</div>
-            </>
+          {messageData?.attachments && messageData?.attachments.length > 0 && (
+            <div className="image-attachment">
+              {messageData.attachments
+                .filter(attachment => attachment.type.includes("image"))
+                .map((attachment, index) => (
+                  <img key={index} src={attachment.url} alt="attachment" style={{width:"300px"}}/>
+                ))}
+            </div>
           )}
+          {text}
         </p>
       </div>
       <div className="mb-3">

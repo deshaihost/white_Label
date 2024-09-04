@@ -136,7 +136,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     // Populate messages
     if (allConversationData?.messages) {
       const newMessages = allConversationData.messages.map((messageList) => {
-        const { sender, text, time } = messageList;
+        const { sender, text, time, attachments } = messageList;
         let timeFormatConvert = timeFormat(time);
         return {
           text: messageList !== undefined ? messageList : "",
@@ -144,6 +144,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           messageDay: formatRelativeDate(time),
           sendBy: sender,
           timeFormatConvert,
+          attachments
         };
       });
       setConversationData(allConversationData);

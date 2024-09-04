@@ -100,10 +100,10 @@ const SmartTemplates = () => {
       {selectedSection === "index" && (
         <div className="upsells-settings">
           <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-            <h3>Upsells</h3>
+            <h3>Smart Templates</h3>
           </div>
           <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
-            <p style={{color:"#CCC"}}>Intelligent, context-aware proactive messaging. Drive sales, get positive reviews, and increase guest satisfaction.</p>
+            <p style={{color:"#CCC"}}>Send templated messages to the right guests at the right time. Use advanced technology to analyze conversations and situations to trigger messaging.</p>
           </div>
 
           <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-1"/>
