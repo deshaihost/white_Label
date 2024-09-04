@@ -39,6 +39,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   };
 
   const handleKeyPress = (e) => {
+    return;
     if (e.key === "Enter" || e.keyCode === 13) {
       if (e.shiftKey) { // Insert a new line when shift+enter is pressed instead of sending the message
         e.preventDefault();
@@ -209,6 +210,9 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           {/* {updateMessageRespLoading && <Loader />} */}
           <div ref={messagesEndRef} />
         </div>
+        <p style={{ textAlign: 'center', fontSize: '14px', color: 'rgb(255, 165, 0)' }}>
+          Inbox is currently in View Only mode. Message sending is not yet supported, and is scheduled for release in early September 2024.
+        </p>
         <div className="ai-input">
           {generateButtonIsEnabled && (
             <button className="generate-button" onClick={handleGenerateButtonClick}>
@@ -224,10 +228,11 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
               onChange={handleInputFieldChange}
               onKeyDown={handleKeyPress}
               rows="1"
-              disabled={sendMessageLoading ? true : false}
+              disabled={true}
               style={{ resize: "none", overflow: "auto" }}
             />
           </div>
+          {/*
           <button onClick={handleSendMessage} className='chat-send-button' disabled={sendMessageLoading ? true : false}>
             {sendMessageLoading ? (
               <img src={loaderGif} width="25" height="25" />
@@ -237,6 +242,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
               </svg>
             )}
           </button>
+          */}
         </div>
         {showGenerateJustificationButton &&
           <div className="where-did link-container" style={{ marginRight:"auto" }}>
