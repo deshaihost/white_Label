@@ -54,7 +54,7 @@ const NavBar = () => {
           <Alert variant="danger">
             {" "}
             Your last subscription payment didn't go through. Please click on
-            "Subscription" in your <Link to="/account">Account page</Link> to
+            "Subscription" in your <Link to="/setting/subscription">Subscription page</Link> to
             update your payment info. Otherwise, your services will be paused in{" "}
             {diffDays} days.{" "}
           </Alert>
@@ -66,7 +66,7 @@ const NavBar = () => {
             {" "}
             Your last subscription payment didn't go through and your services
             have been paused. Please click on "Subscription" in your{" "}
-            <Link to="/account">Account page</Link> to update your payment info.{" "}
+            <Link to="/setting/subscription">Subscription page</Link> to update your payment info.{" "}
           </Alert>
         );
       }
@@ -84,7 +84,7 @@ const NavBar = () => {
               Your account has {numPropertiesUsed} properties, which is greater
               than your current subscription allows ({numPropertiesAllowed}).
               Please reconcile this by clicking on "Subscription" in your{" "}
-              <Link to="/account">Account page</Link> to increase your allowance,
+              <Link to="/setting/subscription">Subscription page</Link> to increase your allowance,
               or by deleting extra properties from the{" "}
               <Link to="/properties">Properties page</Link>. Otherwise, your
               services will be paused in {diffDays} days.{" "}
@@ -99,7 +99,7 @@ const NavBar = () => {
             than your current subscription allows ({numPropertiesAllowed}). Your
             services for this account have been paused. To resume service,
             please click on "Subscription" in your{" "}
-            <Link to="/account">Account page</Link> and ensure all properties
+            <Link to="/setting/subscription">Subscription page</Link> and ensure all properties
             are paid for, or delete extra properties from the{" "}
             <Link to="/properties">Properties page</Link> to match the current
             subscription allowance.{" "}

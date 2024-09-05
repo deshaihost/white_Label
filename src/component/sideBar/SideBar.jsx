@@ -70,6 +70,11 @@ const SideBar = () => {
           </Link>
         </li>
         <li>
+          <Link to="/action-item" className={findlocation === "/action-item" ? "active" : ""}>
+            Action Items
+          </Link>
+        </li>
+        <li>
           <Link to="/setting" className={findlocation === "/setting" ? "active" : ""}>
             Settings
           </Link>

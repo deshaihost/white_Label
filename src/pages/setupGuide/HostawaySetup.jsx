@@ -167,7 +167,7 @@ const HostawaySetup = () => {
 
                         <ol>
                           <li>After going live with HostBuddy, we advise that you closely monitor conversations between your guests and HostBuddy. You can go to the “Action Items” section in your dashboard to review conversations marked as needing attention. You can also visit the transcripts page to review all conversations that HostBuddy has had involvement in.</li>
-                          <li>To enroll in notifications for “Action Items”, navigate to the account page. Here, you can add contacts in the “Contact” tab in the form of email, phone number (for text notifications), and Slack. Once you have added your relevant contact information, you can select the “Notifications” tab to schedule and enroll in notifications.</li>
+                          <li>To enroll in notifications for “Action Items”, navigate to Settings. Here, you can add contacts in the “Contact” tab in the form of email, phone number (for text notifications), and Slack. Once you have added your relevant contact information, you can select the “Notifications” tab to schedule and enroll in notifications.</li>
                           <li>Regularly update each HostBuddy property with missing information, and if you need support, please do not hesitate to reach out to our team. Artificial intelligence is nuanced, and our team is trained to troubleshoot problems that you may encounter.</li>
                           <li>Sit back and relax! You now have state of the art technology doing the heavy lifting for you. Welcome to the future of hosting!</li>
                         </ol>

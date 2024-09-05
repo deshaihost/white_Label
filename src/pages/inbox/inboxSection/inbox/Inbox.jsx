@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { callGetConversationsApi, callGetSingleConversationApi } from "../../../../helper/getConversationsTest/inboxApi";
+import { howManyMinutesAgo } from '../../../../helper/commonFun';
 import { FullScreenLoader } from "../../../../helper/Loader";
 import LeftMessage from "./leftMessage/LeftMessage";
 import MildeSection from "./mildeSection/MildeSection";
@@ -77,12 +78,17 @@ const Inbox = () => {
   // Update our conversation state with a new list returned by the API. This does NOT call the API: it takes the API data as a parameter.
   const updateConversationsWithApiData = (apiConversationData) => {
     let newConversationState = apiConversationData.map(conversation => {
+      const conversationId = conversation['conversation_id'];
       if (!conversation.hasOwnProperty('messages')) { // the API data doesn't include messages (or most other fields) for conversations we already have if there are no updates. Get the convo ID, find the convo in our local state, and copy that record over
-        const conversationId = conversation['conversation_id'];
         const localConversation = conversations.find(conv => conv.conversation_id === conversationId);
         return localConversation ? localConversation : conversation;
       }
-      return conversation;
+      else {
+        if (selectedConversation.conversation_id === conversationId) { // If this updated conversation record is the one currently being viewed, update the selectedConversation state
+          setSelectedConversation(conversation);
+        }
+        return conversation;
+      }
     });
     setConversations(newConversationState);
   };
@@ -135,7 +141,7 @@ const Inbox = () => {
       {conversationsNotYetFetched ? <FullScreenLoader /> : null}
       <div className="row text-white">
         <div className="col-lg-3 left-bar">
-          <LeftMessage allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={(data) => setSelectedConversation(data)} fetchConversations={fetchConversations} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterValue={propertyFilterValue} setPropertyFilterValue={setPropertyFilterValue} />
+          <LeftMessage allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterValue={propertyFilterValue} setPropertyFilterValue={setPropertyFilterValue} />
         </div>
         <div className="col-lg-6">
           <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />

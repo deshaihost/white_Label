@@ -55,12 +55,12 @@ function CopyToPropertiesModal({ property_names, subscription_active, remaining_
             )}
             {remaining_unlocks_allowed == 0 ? (
               subscription_active ? (
-                <p>Your current subscription does not allow you to unlock any more properties. Upgrade your subscription in the <Link to="/account">Account page</Link> to unlock more properties.</p>
+                <p>Your current subscription does not allow you to unlock any more properties. Upgrade your subscription in the <Link to="/setting/subscription">Subscription page</Link> to unlock more properties.</p>
               ) : (
                 <p>You do not have an active subscription. Subscribe to unlock your properties.</p>
               )
             ) : remaining_unlocks_allowed < property_names.length ? (
-              <p>Your subscription only allows you to unlock {remaining_unlocks_allowed} more properties. Upgrade your subscription in the <Link to="/account">Account page</Link> to unlock them all, or return to the properties page to unlock them individually.</p>
+              <p>Your subscription only allows you to unlock {remaining_unlocks_allowed} more properties. Upgrade your subscription in the <Link to="/setting/subscription">Subscription page</Link> to unlock them all, or return to the properties page to unlock them individually.</p>
             ) : (
               <p>Would you like to unlock {property_names.length > 1 ? "these properties" : "this property"}?</p>
             )}

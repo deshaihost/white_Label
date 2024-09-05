@@ -64,3 +64,12 @@ export function formatDateRange(startDate, endDate, showNumNights=false) {
 
   return formattedDateRange;
 }
+
+
+// e.g. howManyMinutesAgo(2024-09-03T05:00:34.234Z) => 5.326...
+export function howManyMinutesAgo(iso_str) {
+  const now = new Date();
+  const past_time = new Date(iso_str);
+  const diff = now - past_time;
+  return diff / 60000; // Convert milliseconds to minutes
+}
