@@ -102,10 +102,9 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
   const handlePropertyFilterChange = async (e) => {
     if (filterQueryLoading) { return; }
     const selectedFilterVal = e.target.value;
-    setUrgentFilterIsEnabled(false); // for now, only one filter at a time
     setFilterQueryLoading(true);
 
-    await fetchConversations(10, true, false, selectedFilterVal);
+    await fetchConversations(10, true, urgentFilterIsEnabled, selectedFilterVal);
 
     setFilterQueryLoading(false);
     setPropertyFilterValue(selectedFilterVal);
@@ -113,10 +112,9 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
 
   const handleUrgentClick = async () => {
     if (filterQueryLoading) { return; }
-    setPropertyFilterValue(""); // for now, only one filter at a time
     setFilterQueryLoading(true);
 
-    await fetchConversations(10, true, !urgentFilterIsEnabled, "");
+    await fetchConversations(10, true, !urgentFilterIsEnabled, propertyFilterValue);
     
     setFilterQueryLoading(false);
     setUrgentFilterIsEnabled(!urgentFilterIsEnabled);

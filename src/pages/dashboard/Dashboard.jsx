@@ -349,7 +349,10 @@ const Dashboard = () => {
                       <>
                         <div className="text-white mt-3 pt-3 pb-1 d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-md-0 gap-2">
                           <div>
-                            <h5 className="">Incomplete Action Items <small style={{fontSoze:"14px", color:"#AAA"}}>(Most Recent)</small></h5>
+                            <h5 className="">Incomplete Action Items <small style={{fontSize:"14px", color:"#AAA"}}>(Most Recent)</small></h5>
+                          </div>
+                          <div>
+                            <Link to={'/action-item'} style={{fontSize:"16px"}}>See All</Link>
                           </div>
                           {/*
                           <div className="d-flex flex-wrap flex-md-nowrap justify-content-between gap-2 gap-xl-4">
