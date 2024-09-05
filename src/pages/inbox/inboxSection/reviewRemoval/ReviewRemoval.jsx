@@ -175,6 +175,7 @@ const ReviewRemoval = () => {
 
   return (
     <div className="review-table">
+      {initialFetchLoading ? <FullScreenLoader /> : null}
       <div className="review-heading">
         <h2>Review Removal</h2>
         <p>HostBuddy compares guest conversations with associated reviews to determine potential review removal opportunities. If HostBuddy determines a review could be removed, it will generate a script for the host to report to the OTA.</p>
@@ -281,9 +282,6 @@ const ReviewRemoval = () => {
       <ViolationModal title={"Review"} bodyMainText={reviewModalText} show={showReviewModal} handleClose={() => setShowReviewModal(false)} />
       <ViolationModal title={"Review Removal Report"} bodyMainText={reportModalText} show={showReportModal} handleClose={() => setShowReportModal(false)} />
       <GenerateReportModal reviewId={reviewIdForGenerateModal} callGenerateReportApi={callGenerateReportApi} showOverwriteWarning={showOverwriteWarning} showFiveStarWarning={showFiveStarWarning} show={showGenerateReportModal} closeModal={() => setShowGenerateReportModal(false)} />
-      <p style={{ textAlign:'center', fontSize:'14px', color:'rgb(255, 165, 0)', marginTop:'20px' }}>
-        Coming Soon (early September 2024)
-      </p>
     </div>
   );
 };
