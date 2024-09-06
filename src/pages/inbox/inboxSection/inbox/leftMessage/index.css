@@ -2,7 +2,7 @@
 width: 1px;
 }
 .left-bar .left-inner-tab {
-    padding: 15px 20px;
+    padding: 15px 10px;
     max-width: 530px;
     margin: 0 auto;
 }
@@ -42,7 +42,7 @@ width: 1px;
     font-weight: 500;
 }
 .left-bar-chat{
-    height: calc(100vh - 300px);
+    height: calc(100vh - 260px);
     overflow-y: scroll;
 }
 
