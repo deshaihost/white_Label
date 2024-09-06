@@ -1,7 +1,9 @@
 
-// e.g. timeFormat("240509_114200") => "5/9 11:42 AM"
+// e.g. timeFormat("05/19/2024 11:42:50") => "5/19 11:42 AM"
+// e.g. timeFormat("05/19/2023 11:42:50") => "5/19/23 11:42 AM" (if the input is more than 1 year ago)
 export const timeFormat = (timestamp) => {
   const date = new Date(timestamp);
+  const now = new Date();
 
   // Extract month, day, hours, and minutes
   const month = date.getMonth() + 1; // Months are zero-based
@@ -15,8 +17,15 @@ export const timeFormat = (timestamp) => {
   hours = hours ? hours : 12; // Hour '0' should be '12'
   const minutesFormatted = minutes < 10 ? "0" + minutes : minutes; // Format minutes with leading zero if necessary
 
+  // Determine if the date is more than 1 year ago
+  const isMoreThanOneYearAgo = now.getFullYear() - date.getFullYear() > 1 ||
+    (now.getFullYear() - date.getFullYear() === 1 && (now.getMonth() > date.getMonth() || (now.getMonth() === date.getMonth() && now.getDate() >= date.getDate())));
+
   // Create and return the time string
-  const timeString = `${month}/${day} ${hours}:${minutesFormatted} ${ampm}`;
+  const timeString = isMoreThanOneYearAgo
+    ? `${month}/${day}/${date.getFullYear().toString().slice(-2)} ${hours}:${minutesFormatted} ${ampm}`
+    : `${month}/${day} ${hours}:${minutesFormatted} ${ampm}`;
+
   return timeString;
 };
 

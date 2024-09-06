@@ -105,6 +105,7 @@ const ReviewRemoval = () => {
 
   // e.g. input "230919_160000" or "230919" -> output "Sep 19, 2023"
   const formatDateString = (dateString) => {
+    if (!dateString) { return ""; }
     const datePart = dateString.split('_')[0];
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   
@@ -185,96 +186,79 @@ const ReviewRemoval = () => {
       </p>
       <div className="table-scroll">
         <div className="review-form">
-          {/*
-            <form>
-              <div>
-                <input type="radio" name="review" value="complete" />
-                <label>Complete</label>
-              </div>
-              <div>
-                <input type="radio" name="review" value="incomplete" />
-                <label>Incomplete</label>
-              </div>
-              <div className="expire">
-                <input type="radio" name="review" value="expire" />
-                <label>
-                  Expired<i class="bi bi-question-circle"></i>
-                </label>
-              </div>
-              <div className="search-main">
-                <input type="search" placeholder="Search" />
-                <i class="bi bi-search"></i>
-              </div>
-            </form>
-          */}
         </div>
         <div className="main-review">
-          
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Reservation Dates</th>
-                <th scope="col">Property</th>
-                <th scope="col">Guest</th>
-                <th scope="col">review summary</th>
-                <th scope="col">Violation</th>
-                <th scope="col" className="text-center">Review</th>
-                <th scope="col" className="text-center">Generate</th>
-                {/* <th scope="col" className="text-center">Complete</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {allReviews.map((review, index) => {
-                console.log('review', review);
-                const { guest, property_name, violation_type, title, description, rating, justification, report, id } = review;
-                const { arrival_date, departure_date, guest_name_first, guest_name_last } = guest;
+          {!allReviews || allReviews.length === 0 ? (
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ color: 'white' }}>No reviews found for this account.</p>
+            </div>
+          ) : (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">Reservation Dates</th>
+                  <th scope="col">Property</th>
+                  <th scope="col">Guest</th>
+                  <th scope="col">review summary</th>
+                  <th scope="col">Violation</th>
+                  <th scope="col" className="text-center">Review</th>
+                  <th scope="col" className="text-center">Generate</th>
+                  {/* <th scope="col" className="text-center">Complete</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {allReviews.map((review, index) => {
+                  console.log('review', review);
+                  const { guest, property_name, violation_type, title, description, rating, justification, report, id } = review;
+                  const { arrival_date, departure_date, guest_name_first, guest_name_last } = guest || {};
 
-                const arrivalDateFormatted = formatDateString(arrival_date);
-                const departureDateFormatted = formatDateString(departure_date);
-                const guestName = `${guest_name_first} ${guest_name_last}`;
+                  const arrivalDateFormatted = formatDateString(arrival_date);
+                  const departureDateFormatted = formatDateString(departure_date);
+                  const guestName = `${guest_name_first || ''} ${guest_name_last || ''}`.trim();
 
-                const reviewTitle = title ? title : description;
-                const reviewSummary = reviewTitle.length > 50 ? reviewTitle.slice(0, 50) + "..." : reviewTitle;
-                const reviewSummaryWithRating = `(${rating} stars) ${reviewSummary}`;
+                  const reviewTitle = title ? title : description;
+                  const reviewSummary = reviewTitle.length > 50 ? reviewTitle.slice(0, 50) + "..." : reviewTitle;
+                  const reviewSummaryWithRating = `(${rating} stars) ${reviewSummary}`;
 
-                return (
-                  <tr key={index}>
-                    <td>{arrivalDateFormatted}<br/>{departureDateFormatted}</td>
-                    <td>{property_name}</td>
-                    <td>{guestName}</td>
-                    <td>{reviewSummaryWithRating}</td>
-                    <td>{reportsGenerating.includes(id) ? (
-                        <BoxLoader />
-                      ) : (
-                        violation_type ? (
-                          <a href="#" style={{fontSize:"16px"}} onClick={(e) => handleShowViolationClick(e, violation_type, justification)}>{violation_type}</a>
-                          ) : (
-                            "--"
-                          ))}
-                    </td>
-                    <td className="text-center">
-                      <i className="bi bi-star-fill" style={{ fontSize:"17px", marginRight:"5px", cursor:"pointer" }} onClick={() => handleShowReviewClick(review)}></i>
-                      {report && (
-                        <i className="bi bi-file-text" style={{ fontSize:"17px", cursor:"pointer" }} onClick={() => handleShowReportClick(report)}></i>
-                      )}
-                    </td>
-                    {/*
-                    <td className="text-center">
-                      <i className="bi bi-check-circle-fill" style={{ fontSize: "15px", color: "#146EF5" }}></i>
-                    </td>
-                    */}
-                    <td className="text-center">
-                      {reportsGenerating.includes(id) ? (
-                        <BoxLoader />
-                      ) : (
-                        <i className="bi bi-gear-fill" style={{ fontSize:"17px", cursor:"pointer" }} onClick={() => handleGenerateReportClick(id, report, rating)}></i>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  return (
+                    <tr key={index}>
+                      <td>{arrivalDateFormatted}<br/>{departureDateFormatted}</td>
+                      <td>{property_name}</td>
+                      <td>{guestName}</td>
+                      <td>{reviewSummaryWithRating}</td>
+                      <td>{reportsGenerating.includes(id) ? (
+                          <BoxLoader />
+                        ) : (
+                          violation_type ? (
+                            <a href="#" style={{fontSize:"16px"}} onClick={(e) => handleShowViolationClick(e, violation_type, justification)}>{violation_type}</a>
+                            ) : (
+                              "--"
+                            ))}
+                      </td>
+                      <td className="text-center">
+                        <i className="bi bi-star-fill" style={{ fontSize:"17px", marginRight:"5px", cursor:"pointer" }} onClick={() => handleShowReviewClick(review)}></i>
+                        {report && (
+                          <i className="bi bi-file-text" style={{ fontSize:"17px", cursor:"pointer" }} onClick={() => handleShowReportClick(report)}></i>
+                        )}
+                      </td>
+                      {/*
+                      <td className="text-center">
+                        <i className="bi bi-check-circle-fill" style={{ fontSize: "15px", color: "#146EF5" }}></i>
+                      </td>
+                      */}
+                      <td className="text-center">
+                        {reportsGenerating.includes(id) ? (
+                          <BoxLoader />
+                        ) : (
+                          <i className="bi bi-gear-fill" style={{ fontSize:"17px", cursor:"pointer" }} onClick={() => handleGenerateReportClick(id, report, rating)}></i>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
         
       </div>
