@@ -17,37 +17,17 @@ const weekDayOptions = [
 ];
 //  ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
-const SchedulePopupModal = ({
-  show,
-  setShow,
-  selectedTime,
-  setselectedTime,
-  responseObject,
-  setShowCalender,
-  getScheduleAPI,
-  selectedProperty,
-  setScheduleChanged
-}) => {
+const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, responseObject, setShowCalender, getScheduleAPI, selectedProperty, setScheduleChanged }) => {
   const [submit, setSubmit] = useState(false);
 
-  const [data, setData] = useState({
-    startTime: "",
-    endTime: "",
-  });
+  const [data, setData] = useState({ startTime: "", endTime: "" });
 
-  const [checkedSchedule, setCheckedSchedule] = useState({
-    Future: true,
-    Past: true,
-    Current: true,
-  });
+  const [checkedSchedule, setCheckedSchedule] = useState({ Future: true, Past: true, Current: true });
 
   const [selectedDays, setSelectedDays] = useState([]);
   // handle time change 
   const handleInputChange = (e) => {
-    setData({
-      ...data,
-      [e.target.id]: e.target.value,
-    });
+    setData({ ...data, [e.target.id]: e.target.value });
   };
 
   // handle select onChange
@@ -211,14 +191,7 @@ const SchedulePopupModal = ({
 
           <div className=" d-flex justify-content-between mt-3">
             <div class="col text-center">
-              <input
-                type="checkbox"
-                checked={checkedSchedule.Future}
-                onChange={(e) => handleOnChange(e, "Future")}
-                className="btn-check"
-                id="future"
-                autocomplete="off"
-              />
+              <input type="checkbox" checked={checkedSchedule.Future} onChange={(e) => handleOnChange(e, "Future")} className="btn-check" id="future" autocomplete="off"/>
               <label
                 className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "" : "btn-unselected"
                   }`}
@@ -228,36 +201,14 @@ const SchedulePopupModal = ({
               </label>
             </div>
             <div class="col text-center">
-              <input
-                type="checkbox"
-                checked={checkedSchedule.Past}
-                onChange={(e) => handleOnChange(e, "Past")}
-                className="btn-check"
-                id="past"
-                autocomplete="off"
-              />
-              <label
-                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "" : "btn-unselected"
-                  }`}
-                for="past"
-              >
+              <input type="checkbox" checked={checkedSchedule.Past} onChange={(e) => handleOnChange(e, "Past")} className="btn-check" id="past" autocomplete="off" />
+              <label for="past" className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "" : "btn-unselected"}`} >
                 Inquiry/Past
               </label>
             </div>
             <div class="col text-center">
-              <input
-                type="checkbox"
-                checked={checkedSchedule.Current}
-                onChange={(e) => handleOnChange(e, "Current")}
-                className="btn-check"
-                id="current"
-                autocomplete="off"
-              />
-              <label
-                className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "" : "btn-unselected"
-                  }`}
-                for="current"
-              >
+              <input type="checkbox" checked={checkedSchedule.Current} onChange={(e) => handleOnChange(e, "Current")} className="btn-check" id="current" autocomplete="off" />
+              <label for="current" className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "" : "btn-unselected"}`} >
                 Current
               </label>
             </div>
@@ -266,38 +217,19 @@ const SchedulePopupModal = ({
             <div class="row py-2">
               <div class="col">
                 <label>Choose Day[s] of Week:</label>
-                <Select 
-                className=""
-                  isMulti
-                  options={weekDayOptions}
-                  value={selectedDays}
-                  onChange={handleDaySelect}
-                  placeholder="--Select--"
-                />
+                <Select isMulti options={weekDayOptions} value={selectedDays} onChange={handleDaySelect} placeholder="--Select--" closeMenuOnSelect={false}/>
               </div>
             </div>
 
             <div class="row py-2">
               <div class="col">
                 <label>Start Time:</label>
-                <input
-                  type="time"
-                  name="st"
-                  id="startTime"
-                  class="form-control"
-                  value={data.startTime}
-                  onChange={handleInputChange}
+                <input type="time" name="st" id="startTime" class="form-control" value={data.startTime} onChange={handleInputChange}
                 />
               </div>
               <div class="col">
                 <label>End Time:</label>
-                <input
-                  type="time"
-                  name="et"
-                  id="endTime"
-                  class="form-control"
-                  value={data.endTime}
-                  onChange={handleInputChange}
+                <input type="time" name="et" id="endTime" class="form-control" value={data.endTime} onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -309,14 +241,7 @@ const SchedulePopupModal = ({
                 </Button>
               </div>
               <div className="col-4 text-center">
-                <input
-                  type="submit"
-                  data-attr-date="once"
-                  className="bg-primary form-control"
-                  value={`${submit ? "Please wait..." : "Apply"}`}
-                  id="submit-single-property"
-                  onClick={handleSchedule}
-                />
+                <input type="submit" data-attr-date="once" className="bg-primary form-control" value={`${submit ? "Please wait..." : "Apply"}`} id="submit-single-property" onClick={handleSchedule} />
               </div>
             </div>
           </div>

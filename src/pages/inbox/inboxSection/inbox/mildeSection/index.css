@@ -88,6 +88,14 @@
     font-size: 35px;
 }
 
+.main-chat .generate-button.greyed-out {
+    cursor: default;
+}
+
+.main-chat .generate-button.greyed-out i {
+    color: #555;
+}
+
 .main-chat .input-container textarea {
     width: 100%;
     box-sizing: border-box;

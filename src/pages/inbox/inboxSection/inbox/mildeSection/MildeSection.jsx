@@ -7,6 +7,7 @@ import { timeFormat } from "../../../../../helper/commonFun";
 import { callSendMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import MessgFeedBckModel from "../../../../testProperty/banner/messages/messagesFeedBckModel/MessgFeedBckModel";
 import JustificationModal from "../../../../testProperty/banner/messages/justificationModal/justificationModal";
+import { Tooltip } from "react-tooltip";
 
 const MildeSection = ({ allConversationData, updateConversationFromApi, updateCovnersationLocal }) => {
   const messageListRef = useRef(null);
@@ -23,6 +24,28 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   const [generateButtonText, setGenerateButtonText] = useState("");
   const [generateButtonJustification, setGenerateButtonJustification] = useState("");
   const [showGenerateJustificationButton, setShowGenerateJustificationButton] = useState(false);
+
+  // Only checks if the second word is 'reacted'. So may not be 1000% accurate, but low stakes use case so fine for now. Can be improved later if needed
+  const lastMessageIsEmojiReact = () => {
+    if (allConversationData?.messages && allConversationData.messages.length > 0) {
+      const lastMessageText = allConversationData.messages[allConversationData.messages.length - 1].text;
+      const words = lastMessageText.split(' ');
+      return words.length > 1 && words[1] === 'reacted';
+    }
+    return false;
+  };
+
+  const getTooltipMessage = () => {
+    if (generateButtonIsEnabled) { return ""; }
+    if (!allConversationData?.messages) { return "AI response not available."; }
+
+    if (allConversationData.messages[allConversationData.messages.length - 1].sender === "guest") {
+      if (lastMessageIsEmojiReact()) { return "AI response is only available when the last message is from the guest."; }
+      else { return "AI response not available. If the message just came in, it may take a moment to prepare."; }
+    } else {
+      return "AI response is only available when the last message is from the guest.";
+    }
+  };
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
@@ -185,6 +208,8 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     }
   }, [messages]);
 
+  const toolTipMessage = getTooltipMessage();
+
   return (
     <div className="main-chat">
       <div className="chatbot">
@@ -211,22 +236,18 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           <div ref={messagesEndRef} />
         </div>
         <div className="ai-input">
-          {generateButtonIsEnabled && (
-            <button className="generate-button" onClick={handleGenerateButtonClick}>
-              <i className="bi bi-stars"></i>
-            </button>
-          )}
+            {generateButtonIsEnabled ? (
+              <button className="generate-button" onClick={handleGenerateButtonClick}>
+                <i className="bi bi-stars"></i>
+              </button>
+            ) : (
+              <button className="generate-button greyed-out" data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>
+                <i className="bi bi-stars"></i>
+              </button>
+            )}
           <div className="input-container">
-            <textarea
-              type="text"
-              ref={textareaRef}
-              placeholder="Type a message..."
-              value={inputValue}
-              onChange={handleInputFieldChange}
-              onKeyDown={handleKeyPress}
-              rows="1"
-              disabled={sendMessageLoading ? true : false}
-              style={{ resize: "none", overflow: "auto" }}
+            <textarea type="text" ref={textareaRef} placeholder="Type a message..." value={inputValue} onChange={handleInputFieldChange}
+              onKeyDown={handleKeyPress} rows="1" disabled={sendMessageLoading ? true : false} style={{resize:'none', overflow:'auto'}}
             />
           </div>
           <button onClick={handleSendMessage} className='chat-send-button' disabled={sendMessageLoading ? true : false}>
@@ -247,6 +268,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           </div>
         }
       </div>
+      <Tooltip className="generate-tooltip" id="aiNotAvailableTooltip" delayShow={0} place="top" effect="solid"/>
       <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
       <JustificationModal show={showJustificationModal} handleClose={() => setShowJustificationModal(false)} propertyName={propertyName} justification={justificationText}/>
     </div>
