@@ -6,6 +6,8 @@ import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
 import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import { BoxLoader } from "../../../../../helper/Loader";
 
+import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
+
 const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, fetchConversations, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterValue, setPropertyFilterValue }) => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -179,16 +181,16 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
       {filterQueryLoading ? (<BoxLoader />) : (
         <div className="left-bar-chat" ref={containerRef}>
           {allConversations?.map((message, messageIndex) => {
-            const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id } = message;
+            const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url } = message;
             const allDataForConversation = message;
             const messages = message?.messages; // Assuming message?.messages is an array
             const lastValue = messages[messages.length - 1];
             const { sender, text, time } = lastValue;
-            let result;
-            if (text.length > 25) {
-              result = text.slice(0, 25) + "...";
+            let shortenedText = text;
+            if (text.length > 50) {
+              shortenedText = text.slice(0, 50) + "...";
             } else {
-              result = text;
+              shortenedText = text;
             }
 
             // Based on which of these fields are present (arrival_date, departure_date, property_name): render the appropriate string
@@ -204,18 +206,23 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
               datesAndPropertyNameDisplay = '';
             }
 
+            /*
             if (datesAndPropertyNameDisplay.length > 40) {
               datesAndPropertyNameDisplay = datesAndPropertyNameDisplay.slice(0, 40) + "...";
             }
+            */
 
             return (
               <>
-                <div>
-                  <div style={{ cursor: "pointer" }}
-                    className={`${conversation_id === selectedConversationId && "bg-dark"} left-inner-tab`}
-                    onClick={() => openConversationHandle(allDataForConversation, conversation_id)}
-                  >
-                    <div className="left-description">
+                <div style={{ cursor: "pointer", overflow: 'hidden', width: '100%' }}
+                  className={`${conversation_id === selectedConversationId && "bg-dark"} left-inner-tab`}
+                  onClick={() => openConversationHandle(allDataForConversation, conversation_id)}
+                >
+                  <div style={{ display:'flex', alignItems:'flex-start', overflow: 'hidden', width: '100%' }}>
+                    <div style={{flexShrink:0}}>
+                      <img src={image_url ? image_url : dummyPropertyImg} alt="Property Thumbnail Image" style={{width:"61px", height:"61px", marginTop:"2px"}}/>
+                    </div>
+                    <div className="left-description" style={{ flex: 1, marginLeft: '10px', overflow: 'hidden' }}>
                       <div className="d-flex justify-content-between description-item">
                         <h2>
                           {opened ? guest_name : <strong>{guest_name}</strong>}
@@ -224,22 +231,22 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
                           {opened ? timeFormat(time) : <strong>{timeFormat(time)}</strong>}
                         </div>
                       </div>
-                      <div className="short-des">
+                      <div className="short-des" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {opened ? (
                         <>
-                          <strong>{sender}:</strong> {result}
+                          <strong>{sender}:</strong> {shortenedText}
                         </>
                       ) : (
-                        <strong>{sender}: {result}</strong>
+                        <strong>{sender}: {shortenedText}</strong>
                       )}
                       </div>
-                      <div className="date">
+                      <div className="date" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {opened ? datesAndPropertyNameDisplay : <strong>{datesAndPropertyNameDisplay}</strong>}
                       </div>
                     </div>
                   </div>
-                  <hr />
                 </div>
+                <hr />
               </>
             );
           })}
