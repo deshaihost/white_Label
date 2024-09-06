@@ -390,58 +390,56 @@ const Dashboard = () => {
                           </div>
                           */}
                         </div>
-                        <div className="table-responsive" style={{ overflowY: "auto", height: "500px" }}>
-                          {filteredSearchProperty?.length > 0 ? (
-                            <>
-                              <table class="table text-white action-items-table">
-                                <thead style={{ background: "#020d29" }}>
-                                  <tr>
-                                    <th>Date/Time</th>
-                                    <th>Property/Guest</th>
-                                    <th>Action Item</th>
-                                    {/* <th>View/Done</th> */}
-                                    <th>Complete</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {filteredSearchProperty?.map((actionItem) => {
-                                    const { id, created_at, property_name, conversationID, item } = actionItem;
-                                    let actionItemSend = { propertyName: property_name, conversationID };
-                                    return (
-                                      <tr key={id}>
-                                        <td style={{ whiteSpace: "pre-line" }}> {/* whiteSpace: 'pre-line' preserves the newline between date and time */}
-                                          {formatDateTime(created_at)}
-                                        </td>
-                                        <td>
-                                          {property_name}
-                                          <br />
-                                          {actionItem?.guest_name !== null ? actionItem?.guest_name : ""}
-                                        </td>
-                                        <td className="">
-                                          <div className="">{item}</div>
-                                        </td>
-                                        <td className="text-center">
-                                          {/*\
-                                          <span className="mainCursor" style={{ marginRight: "10px" }} onClick={() => { conversationCallOnDashboard( actionItemSend ); }}>
-                                            <GoArrowUpRight className="text-white fs-6" />
-                                          </span>
-                                          */}
-                                          <span className="mainCursor" onClick={() => { compeletHndle( id, property_name, conversationID ); }}>
-                                            <FaCircleCheck className="text-primary fs-6" />
-                                          </span>
-                                        </td>
-                                      </tr>
-                                    );
-                                  })}
-                                </tbody>
-                              </table>
-                            </>
-                          ) : (
-                            <span className="text-danger d-flex justify-content-center align-items-center h-100">
-                              No Data
-                            </span>
-                          )}
-                        </div>
+                        {filteredSearchProperty?.length > 0 ? (
+                          <div className="table-responsive" style={{ overflowY: "auto", height: "500px" }}>
+                            <table class="table text-white action-items-table">
+                              <thead style={{ background: "#020d29" }}>
+                                <tr>
+                                  <th>Date/Time</th>
+                                  <th>Property/Guest</th>
+                                  <th>Action Item</th>
+                                  {/* <th>View/Done</th> */}
+                                  <th>Complete</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {filteredSearchProperty?.map((actionItem) => {
+                                  const { id, created_at, property_name, conversationID, item } = actionItem;
+                                  let actionItemSend = { propertyName: property_name, conversationID };
+                                  return (
+                                    <tr key={id}>
+                                      <td style={{ whiteSpace: "pre-line" }}> {/* whiteSpace: 'pre-line' preserves the newline between date and time */}
+                                        {formatDateTime(created_at)}
+                                      </td>
+                                      <td>
+                                        {property_name}
+                                        <br />
+                                        {actionItem?.guest_name !== null ? actionItem?.guest_name : ""}
+                                      </td>
+                                      <td className="">
+                                        <div className="">{item}</div>
+                                      </td>
+                                      <td className="text-center">
+                                        {/*\
+                                        <span className="mainCursor" style={{ marginRight: "10px" }} onClick={() => { conversationCallOnDashboard( actionItemSend ); }}>
+                                          <GoArrowUpRight className="text-white fs-6" />
+                                        </span>
+                                        */}
+                                        <span className="mainCursor" onClick={() => { compeletHndle( id, property_name, conversationID ); }}>
+                                          <FaCircleCheck className="text-primary fs-6" />
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        ) : (
+                          <span className="text-white d-flex justify-content-center align-items-center" style={{height:"50px"}}>
+                            No Incomplete Items
+                          </span>
+                        )}
                       </>
                     ) : (
                       <BoxLoader />

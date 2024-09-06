@@ -4,16 +4,20 @@
   align-items: center;
   padding: 20px 0px;
 }
+
 .action-heading h3 {
     font-size: 25px;
     color: #fff;
 }
+
 .action-select {
   display: flex;
   gap: 10px;
   align-items: center;
   justify-content: end;
+  width: 80%;
 }
+
 .action-select select {
   border: 1px solid #146ef5;
   border-radius: 50px;

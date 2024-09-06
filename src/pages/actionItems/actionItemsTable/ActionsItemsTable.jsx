@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Select from "react-select";
 import { getUserDataActions } from "../../../redux/actions";
 import AdditionalInformationModel from "./additionalInformationModel/AdditionalInformationModel";
 import { Container, Form } from "react-bootstrap";
@@ -11,6 +12,57 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { useLocation } from 'react-router-dom';
 import ConversationTranscriptModal from "../../inbox/inboxSection/resources/ConversationTranscriptModal";
+
+// Custom styles for React Select (property multiple select component)
+const customStyles = {
+  control: (provided) => ({
+    ...provided,
+    border: '1px solid #146ef5',
+    borderRadius: '50px',
+    color: '#fff',
+    fontSize: '14px',
+    fontWeight: '300',
+    backgroundColor: '#212529',
+    display: 'flex',
+    overflowX: 'auto'
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: '#fff'
+  }),
+  multiValue: (provided) => ({
+    ...provided,
+    backgroundColor: '#146ef5',
+    borderRadius: '50px',
+    color: '#fff',
+    display: 'inline-flex'
+  }),
+  multiValueLabel: (provided) => ({
+    ...provided,
+    color: '#fff'
+  }),
+  multiValueRemove: (provided) => ({
+    ...provided,
+    color: '#fff',
+    ':hover': {
+      backgroundColor: '#146ef5',
+      color: '#fff',
+    }
+  }),
+  menuList: (provided) => ({
+    ...provided,
+    maxHeight: '450px'
+  }),
+  option: (provided) => ({
+    ...provided,
+    fontSize: '12px',
+    padding: '5px 10px'
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: '#fff'
+  })
+};
 
 const ActionsItemsTable = () => {
 
@@ -98,9 +150,10 @@ const ActionsItemsTable = () => {
 
   const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
   const allPropertyName = createPropertiesName !== undefined ? createPropertiesName : {};
+  const propertyOptions = Object.keys(allPropertyName).map((key) => ({ value:key, label:key })); // All property options as an array of objects, for the React Select component
 
   const [selectedStatus, setSelectedStatus] = useState("incomplete");
-  const [selectedProperty, setSelectedProperty] = useState("");
+  const [selectedProperties, setSelectedProperties] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   const [converSationId, setConverSationId] = useState("");
@@ -118,7 +171,7 @@ const ActionsItemsTable = () => {
 
   // Apply the property name filter
   let filteredActionItems = actionItems?.filter((actionItem) => {
-    return (selectedProperty === "" || actionItem.property_name.toLowerCase().includes(selectedProperty.toLowerCase()));
+    return (selectedProperties.length === 0 || selectedProperties.some((selectedProperty) => selectedProperty.value === actionItem.property_name));
   });
 
   // Apply the category filter
@@ -158,24 +211,21 @@ const ActionsItemsTable = () => {
     callGetActionItemsApi(e.target.value);
   };
 
+  const handlePropertyChange = (selectedOptions) => {
+    setSelectedProperties(selectedOptions);
+  };
+
   // On page load, get user data and action items
   useEffect(() => {
     dispatch(getUserDataActions());
     callGetActionItemsApi('incomplete');
-
-    // If property name is passed as a query param, set it as the selected property
-    const query = new URLSearchParams(location);
-    const propertyNameQuery = query.get('property_name');
-    if (propertyNameQuery) { setSelectedProperty(propertyNameQuery); }
-    console.log("propertyNameQuery", propertyNameQuery);
   }, []);
 
   // If property name is passed as a query param, set it as the selected property when the param populates
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const propertyNameQuery = query.get('property_name');
-    if (propertyNameQuery) { setSelectedProperty(propertyNameQuery); }
-    console.log("propertyNameQuery", propertyNameQuery);
+    if (propertyNameQuery) { selectedProperties({ value:propertyNameQuery, label:propertyNameQuery }); }
   }, [location.search]);
 
   return (
@@ -208,15 +258,8 @@ const ActionsItemsTable = () => {
                 </select>
               </div>
 
-              <div className="item-select">
-                <select aria-label="Default select example" className="bg-dark form-select" value={selectedProperty} onChange={(e) => setSelectedProperty(e.target.value)}>
-                  <option value="">All Properties</option>
-                  {Object.keys(allPropertyName).map((key) => (
-                    <option key={key} value={key}>
-                      {key}
-                    </option>
-                  ))}
-                </select>
+              <div className="item-select" style={{width:"30%"}}>
+                <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false}/>
               </div>
 
             </div>
