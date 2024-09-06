@@ -175,7 +175,7 @@ const ActionsItemsTable = () => {
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const propertyNameQuery = query.get('property_name');
-    if (propertyNameQuery) { selectedProperties({ value:propertyNameQuery, label:propertyNameQuery }); }
+    if (propertyNameQuery) { setSelectedProperties([{ value: propertyNameQuery, label: propertyNameQuery }]); }
   }, [location.search]);
 
   return (
