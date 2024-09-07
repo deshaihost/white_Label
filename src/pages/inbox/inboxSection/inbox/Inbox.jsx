@@ -7,7 +7,7 @@ import MildeSection from "./mildeSection/MildeSection";
 import RightSection from "./rightSection/RightSection";
 import "./inboxIndex.css";
 
-const Inbox = () => {
+const Inbox = ({allPropertyNamesList}) => {
   const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
   const [error, setError] = useState(null);
   const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
@@ -141,7 +141,7 @@ const Inbox = () => {
       {conversationsNotYetFetched ? <FullScreenLoader /> : null}
       <div className="row text-white">
         <div className="col-lg-3 left-bar">
-          <LeftMessage allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterValue={propertyFilterValue} setPropertyFilterValue={setPropertyFilterValue} />
+          <LeftMessage allPropertyNamesList={allPropertyNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterValue={propertyFilterValue} setPropertyFilterValue={setPropertyFilterValue} />
         </div>
         <div className="col-lg-6">
           <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />

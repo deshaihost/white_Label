@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./index.css";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserDataActions } from "../../../../../redux/actions";
 import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
 import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import { BoxLoader } from "../../../../../helper/Loader";
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 
-const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, fetchConversations, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterValue, setPropertyFilterValue }) => {
-  const store = useSelector((state) => state);
-  const dispatch = useDispatch();
+const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversations, setSelectedConvo, fetchConversations, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterValue, setPropertyFilterValue }) => {
 
   const containerRef = useRef(null);
 
@@ -74,15 +70,8 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
     }
   }, [allConversations]);
 
-  const property_data = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
-  const allPropertyName = property_data !== undefined ? Object.keys(property_data) : [];
-
   const [searchActive, setSearchActive] = useState(0);
   const [searchInputShow, setSearchInputShow] = useState(false);
-  
-  useEffect(() => {
-    dispatch(getUserDataActions());
-  }, []);
 
   const selectedHndle = (value, valueType, valueId) => {
     setSelectedSearch({
@@ -146,7 +135,7 @@ const LeftMessage = ({ allConversations, setAllConversations, setSelectedConvo, 
               <option value="" selected>
                 All Properties
               </option>
-              {allPropertyName?.map((option, index) => (
+              {allPropertyNamesList?.map((option, index) => (
                 <option key={index} value={option}>
                   {option}
                 </option>
