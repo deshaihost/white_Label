@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import Select from "react-select";
 import axios from "axios";
 import ToastHandle from '../../../../helper/ToastMessage';
-import { Container } from "react-bootstrap";
-import { CiSearch } from "react-icons/ci";
 import { BoxLoader, FullScreenLoader } from '../../../../helper/Loader';
 import ViolationModal from './violationModal';
 import GenerateReportModal from './generateReportModal';
 import "./index.css";
-import { set } from 'react-hook-form';
+import customStyles from './selectStyles';
 
-const ReviewRemoval = () => {
+const ReviewRemoval = ({allPropertyNamesList}) => {
 
   const [allReviews, setAllReviews] = useState([]);
   const [reviewsLoading, setReviewsLoading] = useState(true);
@@ -32,8 +31,12 @@ const ReviewRemoval = () => {
 
   const [ratingFilterStatus, setRatingFilterStatus] = useState("4 and below");
   const [violationFilterStatus, setViolationFilterStatus] = useState("");
+  const [selectedProperties, setSelectedProperties] = useState([]);
+  const [propertyListForLastApiCall, setPropertyListForLastApiCall] = useState([]);
 
-  const callGetReviewsApi = async (ratingQuery, violationTypeQuery) => {
+  const propertyOptions = allPropertyNamesList.map((propertyName) => ({ value:propertyName, label:propertyName }));
+
+  const callGetReviewsApi = async (ratingQuery, violationTypeQuery, propertyNamesQuery) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
   
@@ -42,7 +45,7 @@ const ReviewRemoval = () => {
         headers: { "X-API-Key": API_KEY },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
-      const body_data = { 'query_data': { rating:ratingQuery, violation_type:violationTypeQuery, limit:25 } };
+      const body_data = { 'query_data': { rating:ratingQuery, violation_type:violationTypeQuery, property_names:propertyNamesQuery, limit:25 } };
       const response = await axios.post( `${baseUrl}/get_reviews`, body_data, config ); // this is a post request to handle more complex queries
   
       if (response.status === 200) { }
@@ -92,18 +95,19 @@ const ReviewRemoval = () => {
     }
   };
 
-  const fetchReviews = async (ratingQuery, violationTypeQuery) => {
+  const fetchReviews = async (ratingQuery, violationTypeQuery, propertyNamesQuery) => {
     setReviewsLoading(true);
-    const data = await callGetReviewsApi(ratingQuery, violationTypeQuery);
+    const data = await callGetReviewsApi(ratingQuery, violationTypeQuery, propertyNamesQuery);
     if (data && !data.error) {
       setAllReviews(data.reviews || []);
+      setPropertyListForLastApiCall(propertyNamesQuery);
     }
     setReviewsLoading(false);
   };
 
   // When the page loads, fetch the reviews and populate the state
   useEffect(() => {
-    fetchReviews('4 and below', '');
+    fetchReviews('4 and below', '', []);
   }, []);
 
   // e.g. input "230919_160000" or "230919" -> output "Sep 19, 2023"
@@ -176,15 +180,47 @@ const ReviewRemoval = () => {
   }
 
   const handleRatingFilterChange = (e) => {
-    fetchReviews(e.target.value, violationFilterStatus);
+    const currentlySelectedProperties = selectedProperties.map((property) => property.value);
+    fetchReviews(e.target.value, violationFilterStatus, currentlySelectedProperties);
     setRatingFilterStatus(e.target.value);
   }
 
   const handleViolationFilterChange = (e) => {
-    fetchReviews(ratingFilterStatus, e.target.value);
+    const currentlySelectedProperties = selectedProperties.map((property) => property.value);
+    fetchReviews(ratingFilterStatus, e.target.value, currentlySelectedProperties);
     setViolationFilterStatus(e.target.value);
   }
 
+  // Handle new property selected (or removed) in the milti select. Only execute the query if this action represents clearing all property filters - otherwise, don't execute yet
+  const propertyOnChange = (selectedOptions) => {
+    setSelectedProperties(selectedOptions);
+    if (selectedOptions.length === 0 && propertyListForLastApiCall.length > 0) {
+        fetchReviews(ratingFilterStatus, violationFilterStatus, []);
+    }
+  }
+
+  // Called when the property select drop-down menu is closed. Execute the query now, if the selection was changed
+  const handlePropertyFiltersApplied = () => {
+
+    // Utility function to compare two sets for equality
+    const areSetsEqual = (setA, setB) => {
+      if (setA.size !== setB.size) return false;
+      for (let item of setA) {
+        if (!setB.has(item)) return false;
+      }
+      return true;
+    };
+
+    const selectedPropertyNames = selectedProperties.map((property) => property.value);
+    if (selectedPropertyNames.length === 0) { return; } // above funct handles calling the query in this case
+    
+    const selectedPropertySet = new Set(selectedPropertyNames);
+    const lastApiCallPropertySet = new Set(propertyListForLastApiCall);
+
+    if (!areSetsEqual(selectedPropertySet, lastApiCallPropertySet)) { // only call the query if the selected properties have changed
+      fetchReviews(ratingFilterStatus, violationFilterStatus, selectedPropertyNames);
+    }
+  }
 
 
   return (
@@ -223,6 +259,10 @@ const ReviewRemoval = () => {
             <option value="USER REPORTED">USER REPORTED</option>
             <option value="NONE">NONE</option>
           </select>
+        </div>
+
+        <div className="item-select" style={{width:"280px"}}>
+          <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={propertyOnChange} onMenuClose={handlePropertyFiltersApplied} placeholder="All Properties" closeMenuOnSelect={false}/>
         </div>
       </div>
 
