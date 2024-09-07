@@ -12,7 +12,7 @@ import { set } from 'react-hook-form';
 const ReviewRemoval = () => {
 
   const [allReviews, setAllReviews] = useState([]);
-  const [initialFetchLoading, setInitialFetchLoading] = useState(true);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
   const [reportsGenerating, setReportsGenerating] = useState([]);
 
   const [violationModalTopText, setViolationModalTopText] = useState("");
@@ -30,7 +30,10 @@ const ReviewRemoval = () => {
   const [showOverwriteWarning, setShowOverwriteWarning] = useState(false);
   const [showFiveStarWarning, setShowFiveStarWarning] = useState(false);
 
-  const callGetReviewsApi = async () => {
+  const [ratingFilterStatus, setRatingFilterStatus] = useState("4 and below");
+  const [violationFilterStatus, setViolationFilterStatus] = useState("");
+
+  const callGetReviewsApi = async (ratingQuery, violationTypeQuery) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
   
@@ -39,7 +42,8 @@ const ReviewRemoval = () => {
         headers: { "X-API-Key": API_KEY },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
-      const response = await axios.get( `${baseUrl}/get_reviews`, config );
+      const body_data = { 'query_data': { rating:ratingQuery, violation_type:violationTypeQuery, limit:25 } };
+      const response = await axios.post( `${baseUrl}/get_reviews`, body_data, config ); // this is a post request to handle more complex queries
   
       if (response.status === 200) { }
       else { ToastHandle(response?.data?.error, "danger"); }
@@ -88,19 +92,18 @@ const ReviewRemoval = () => {
     }
   };
 
+  const fetchReviews = async (ratingQuery, violationTypeQuery) => {
+    setReviewsLoading(true);
+    const data = await callGetReviewsApi(ratingQuery, violationTypeQuery);
+    if (data && !data.error) {
+      setAllReviews(data.reviews || []);
+    }
+    setReviewsLoading(false);
+  };
 
   // When the page loads, fetch the reviews and populate the state
   useEffect(() => {
-    const fetchReviews = async () => {
-      setInitialFetchLoading(true);
-      const data = await callGetReviewsApi();
-      if (data && !data.error) {
-        setAllReviews(data.reviews || []);
-      }
-      setInitialFetchLoading(false);
-    };
-
-    fetchReviews();
+    fetchReviews('4 and below', '');
   }, []);
 
   // e.g. input "230919_160000" or "230919" -> output "Sep 19, 2023"
@@ -172,11 +175,21 @@ const ReviewRemoval = () => {
     setShowGenerateReportModal(true);
   }
 
+  const handleRatingFilterChange = (e) => {
+    fetchReviews(e.target.value, violationFilterStatus);
+    setRatingFilterStatus(e.target.value);
+  }
+
+  const handleViolationFilterChange = (e) => {
+    fetchReviews(ratingFilterStatus, e.target.value);
+    setViolationFilterStatus(e.target.value);
+  }
+
 
 
   return (
     <div className="review-table">
-      {initialFetchLoading ? <FullScreenLoader /> : null}
+      {reviewsLoading ? <FullScreenLoader /> : null}
       <div className="review-heading">
         <h2>Review Removal</h2>
         <p>HostBuddy compares guest conversations with associated reviews to determine potential review removal opportunities. If HostBuddy determines a review could be removed, it will generate a script for the host to report to the OTA.</p>
@@ -184,13 +197,42 @@ const ReviewRemoval = () => {
       <p style={{ textAlign:'center', fontSize:'14px', color:'rgb(255, 165, 0)', marginTop:'20px', marginBottom:'20px' }}>
         Review removal is currently in beta. Full release is scheduled for September 2024.
       </p>
+
+      <div className="action-select" style={{width:"100%"}}> {/* hijack this class from ActionItemsTable.jsx, for filter component styling */}
+        {/* Disabled until rating fields are fixed
+        <div className="item-select" style={{width:"220px"}}>
+          <select aria-label="Default select example" className="bg-dark form-select" value={ratingFilterStatus} onChange={handleRatingFilterChange} disabled={reviewsLoading}>
+            <option value="">All Ratings</option>
+            <option value="4 and below">4 stars and below</option>
+            <option value="5">5/5</option>
+            <option value="4">4/5</option>
+            <option value="3">3/5</option>
+            <option value="2">2/5</option>
+            <option value="1">1/5</option>
+          </select>
+        </div>
+        */}
+
+        <div className="item-select" style={{width:"220px"}}>
+          <select aria-label="Default select example" className="bg-dark form-select" value={violationFilterStatus} onChange={handleViolationFilterChange} disabled={reviewsLoading}>
+            <option value="">Violation Type (All)</option>
+            <option value="BIASED">BIASED</option>
+            <option value="IRRELEVANT">IRRELEVANT</option>
+            <option value="CONTENT">CONTENT</option>
+            <option value="OTHER">OTHER</option>
+            <option value="USER REPORTED">USER REPORTED</option>
+            <option value="NONE">NONE</option>
+          </select>
+        </div>
+      </div>
+
       <div className="table-scroll">
         <div className="review-form">
         </div>
         <div className="main-review">
           {!allReviews || allReviews.length === 0 ? (
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ color: 'white' }}>No reviews found for this account.</p>
+            <div style={{ textAlign:'center', marginTop:'20px' }}>
+              <p style={{ color: 'white' }}>No matching reviews found for this account.</p>
             </div>
           ) : (
             <table className="table">
@@ -208,7 +250,6 @@ const ReviewRemoval = () => {
               </thead>
               <tbody>
                 {allReviews.map((review, index) => {
-                  console.log('review', review);
                   const { guest, property_name, violation_type, title, description, rating, justification, report, id } = review;
                   const { arrival_date, departure_date, guest_name_first, guest_name_last } = guest || {};
 
