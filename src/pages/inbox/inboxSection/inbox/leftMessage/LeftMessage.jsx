@@ -6,7 +6,7 @@ import { BoxLoader } from "../../../../../helper/Loader";
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 
-const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversations, setSelectedConvo, fetchConversations, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterValue, setPropertyFilterValue }) => {
+const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversations, setSelectedConvo, fetchConversations, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal }) => {
 
   const containerRef = useRef(null);
 
@@ -20,7 +20,7 @@ const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversatio
   const loadNextBatch = async () => {
     setNextBatchLoading(true);
     const num_existing_convos = allConversations.length;
-    await fetchConversations(num_existing_convos+10, false, urgentFilterIsEnabled, propertyFilterValue);
+    await fetchConversations(num_existing_convos+10, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal);
     setNextBatchLoading(false);
   };
 
@@ -95,21 +95,43 @@ const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversatio
     const selectedFilterVal = e.target.value;
     setFilterQueryLoading(true);
 
-    await fetchConversations(10, true, urgentFilterIsEnabled, selectedFilterVal);
+    await fetchConversations(10, true, urgentFilterIsEnabled, selectedFilterVal, phaseFilterVal, fromHostBuddyFilterVal);
 
     setFilterQueryLoading(false);
-    setPropertyFilterValue(selectedFilterVal);
+    setPropertyFilterVal(selectedFilterVal);
   };
 
   const handleUrgentClick = async () => {
     if (filterQueryLoading) { return; }
     setFilterQueryLoading(true);
 
-    await fetchConversations(10, true, !urgentFilterIsEnabled, propertyFilterValue);
+    await fetchConversations(10, true, !urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal);
     
     setFilterQueryLoading(false);
     setUrgentFilterIsEnabled(!urgentFilterIsEnabled);
   }
+
+  const handleFromHostBuddyClick = async () => {
+    if (filterQueryLoading) { return; }
+    setFilterQueryLoading(true);
+
+    await fetchConversations(10, true, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, !fromHostBuddyFilterVal);
+    
+    setFilterQueryLoading(false);
+    setFromHostBuddyFilterVal(!fromHostBuddyFilterVal);
+  }
+
+  const handlePhaseFilterChange = async (e) => {
+    if (filterQueryLoading) { return; }
+    const selectedFilterVal = e.target.value;
+    setFilterQueryLoading(true);
+
+    await fetchConversations(10, true, urgentFilterIsEnabled, propertyFilterVal, selectedFilterVal, fromHostBuddyFilterVal);
+
+    setFilterQueryLoading(false);
+    setPhaseFilterVal(selectedFilterVal);
+  };
+  
 
   return (
     <div className="left-bar">
@@ -131,7 +153,7 @@ const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversatio
 
           {/* Properties Select */}
           <div className="custom-select">
-            <select name="all" id="all" value={propertyFilterValue} className={`${propertyFilterValue ? "select-active" : "bg-dark"}`} onChange={handlePropertyFilterChange}>
+            <select name="all" id="all" value={propertyFilterVal} className={`${propertyFilterVal ? "select-active" : "bg-dark"}`} onChange={handlePropertyFilterChange}>
               <option value="" selected>
                 All Properties
               </option>
@@ -143,28 +165,27 @@ const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversatio
             </select>
           </div>
 
-          {/* Phase Select
+          {/* Phase Select */}
           <div className="custom-select">
-            <select name="phase" id="phase" value={selectedSearch?.textGet}
-              className={`${searchActive === 1 ? "select-active" : "bg-dark"}`}
-              onChange={(e) => selectedHndle(e.target.value, "Phase", 1)}
-            >
-              <option value="" selected>
-                Phase
-              </option>
-              {["Current", "Inquiry", "Future", "Past"].map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
+            <select name="all" id="all" value={phaseFilterVal} className={`${phaseFilterVal ? "select-active" : "bg-dark"}`} onChange={handlePhaseFilterChange} style={{minWidth:"120px"}}>
+              <option value="" selected>All Phases</option>
+                <option value='inquiry'>Inquiry</option>
+                <option value='future'>Future</option>
+                <option value='current'>Current</option>
+                <option value='past'>Past</option>
             </select>
           </div>
-          */}
 
           {/* Urgent Button */}
           <span onClick={handleUrgentClick} className={`${urgentFilterIsEnabled ? "bg-light text-dark" : "bg-dark"}`} style={{cursor:"pointer"}}>
             Urgent
           </span>
+
+          {/* HostBuddy Messages Button */}
+          <span onClick={handleFromHostBuddyClick} className={`${fromHostBuddyFilterVal ? "bg-light text-dark" : "bg-dark"}`} style={{cursor:"pointer"}}>
+            From HostBuddy
+          </span>
+
         </div>
       </div>
       {filterQueryLoading ? (<BoxLoader />) : (
