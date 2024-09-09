@@ -309,9 +309,9 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
                   <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>Generate From Scratch</button>
                 )}
                 {inputValue.trim() !== "" ? (
-                  <button className="generate-menu-item" key='command' onClick={() => handleGenerateOptionSelect('command')}>Refine My Response</button>
+                  <button className="generate-menu-item" key='command' onClick={() => handleGenerateOptionSelect('command')}>Generate From My Instruction</button>
                 ) : (
-                  <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Start typing to instruct HostBuddy how to respond to the guest'}>Refine My Response</button>
+                  <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Start typing to instruct HostBuddy how to message the guest'}>Generate From My Instruction</button>
                 )}
               </div>
             )}
