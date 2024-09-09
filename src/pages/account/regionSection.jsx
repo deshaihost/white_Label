@@ -3,22 +3,18 @@ import "./account.css";
 import Loader, { FullScreenLoader } from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions, stateEmptyActions } from "../../redux/actions";
 
 // Location & Time Zone Section of account page
-const AccountRegionSection = () => {
-  const store = useSelector((state) => state);
-  const dispatch = useDispatch();
-  const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
+const AccountRegionSection = ({ApiUserData, refreshUserData}) => {
   
   const [updateRegionApiLoading, setUpdateRegionApiLoading] = useState(false);
-  const [city, setCity] = useState(userDataGet?.user_region?.city ?? "");
-  const [state, setState] = useState(userDataGet?.user_region?.state ?? "");
-  const [postalCode, setPostalCode] = useState(userDataGet?.user_region?.["Area Code"] ?? "");
-  const [country, setCountry] = useState(userDataGet?.user_region?.country ?? "");
+  const [city, setCity] = useState(ApiUserData?.user_region?.city ?? "");
+  const [state, setState] = useState(ApiUserData?.user_region?.state ?? "");
+  const [postalCode, setPostalCode] = useState(ApiUserData?.user_region?.["Area Code"] ?? "");
+  const [country, setCountry] = useState(ApiUserData?.user_region?.country ?? "");
 
-  const time_zone_name = userDataGet?.user_region?.time_zone_name;
+  const time_zone_name = ApiUserData?.user_region?.time_zone_name;
 
   const callUpdateTimeZoneAPI = async (locationData) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -55,26 +51,20 @@ const AccountRegionSection = () => {
     else {
       const apiResponseCode = await callUpdateTimeZoneAPI(locationData);
       if (apiResponseCode === 200) {
-        dispatch(stateEmptyActions());
-        dispatch(getUserDataActions()); // Update our record of user data with the new region data we just added to the database
+        refreshUserData(); // Update our record of user data with the new region data we just added to the database
       }
     }
   };
 
-  // Fetch user data on page load, to populate "userDataGet"
+  // when ApiUserData populates, update the state of the form fields
   useEffect(() => {
-    dispatch(getUserDataActions());
-  }, []);
-
-  // when userDataGet populates, update the state of the form fields
-  useEffect(() => {
-    if (userDataGet?.user_region) {
-      setCity(userDataGet.user_region.City ?? "");
-      setState(userDataGet.user_region.State ?? "");
-      setPostalCode(userDataGet.user_region["Area Code"] ?? "");
-      setCountry(userDataGet.user_region.Country ?? "");
+    if (ApiUserData?.user_region) {
+      setCity(ApiUserData.user_region.City ?? "");
+      setState(ApiUserData.user_region.State ?? "");
+      setPostalCode(ApiUserData.user_region["Area Code"] ?? "");
+      setCountry(ApiUserData.user_region.Country ?? "");
     }
-  }, [userDataGet]);
+  }, [ApiUserData]);
 
   return (
     <div className="account-content location-section">

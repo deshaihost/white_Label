@@ -250,19 +250,23 @@ const Signup = () => {
                     <>{ErrorMessageShow("Please enter a valid phone number")}</>
                   )}
 
+                  {/*
                   <div className="input-container footer-auth">
                     <label>
                       <input type="checkbox" checked={hasAgreedToTerms} onChange={(e) => setHasAgreedToTerms(e.target.checked)}/>
                       I agree to the{" "}<a href="/termsof-service" target="_blank">Terms of Service</a>{" "}and{" "}<a href="/privacy-policy" target="_blank">Privacy Policy</a>.
                     </label>
                   </div>
+                  */}
 
                   <div className="input-container">
                     <PrimaryButton
                       text={!registerLoading ? "Register" : <Loader />}
-                      additionalClass={`w-100 ${!hasAgreedToTerms ? 'btn-disabled' : ''}`}
-                      disableType={registerLoading || !hasAgreedToTerms}
-                      style={{ opacity: hasAgreedToTerms ? 1 : 0.5, pointerEvents: hasAgreedToTerms ? 'auto' : 'none' }}
+                      //additionalClass={`w-100 ${!hasAgreedToTerms ? 'btn-disabled' : ''}`}
+                      additionalClass={`w-100`}
+                      //disableType={registerLoading || !hasAgreedToTerms}
+                      disableType={registerLoading}
+                      //style={{ opacity: hasAgreedToTerms ? 1 : 0.5, pointerEvents: hasAgreedToTerms ? 'auto' : 'none' }}
                     />
                   </div>
                   {loginLoading && (

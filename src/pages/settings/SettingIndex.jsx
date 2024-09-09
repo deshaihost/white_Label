@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { getUserDataActions } from "../../redux/actions";
 import "./SettingIndex.css";
 import SettingSideBarIndex from "./settingSideBar/SettingSideBarIndex";
 import AdvancedSettingsIndex from "./settingContants/advancedSettings/AdvancedSettingsIndex";
@@ -13,10 +15,21 @@ import AccountNotificationSection from "../account/notificationSection";
 import { Link, useParams } from "react-router-dom";
 
 const SettingIndex = () => {
+  const store = useSelector((state) => state);
+  const dispatch = useDispatch();
   const { section } = useParams();
+
   const [interFaceSettings, setInterFaceSettings] = useState("account");
+  const [userData, setUserData] = useState({});
 
   const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"conversation-preferences", upsells:"upsells", subscription:"subscription" };
+
+  const ApiUserData = store?.getUserDataReducer?.getUserData?.data?.user;
+
+  const refreshUserData = () => {
+    // dispatch(stateEmptyActions());
+    dispatch(getUserDataActions());
+  };
 
   // Get the path param (if passed) and set the active tab
   useEffect(() => {
@@ -24,6 +37,16 @@ const SettingIndex = () => {
       setInterFaceSettings(section);
     }
   }, [section]);
+
+  // On page load, get user data
+  useEffect(() => {
+    dispatch(getUserDataActions());
+  }, []);
+
+  // Make sure we rerender whenever user data is updated
+  useEffect(() => {
+    setUserData(ApiUserData);
+  }, [ApiUserData]);
 
   return (
     <div className="account-main">
@@ -49,8 +72,8 @@ const SettingIndex = () => {
                 <div className="setting_tab_data_inner">
                   {interFaceTypes?.account === interFaceSettings && (
                     <>
-                      <UserInformationSection />
-                      <AccountRegionSection />
+                      <UserInformationSection ApiUserData={userData} refreshUserData={refreshUserData} />
+                      <AccountRegionSection ApiUserData={userData} refreshUserData={refreshUserData} />
                     </>
                   )}
                   {interFaceTypes?.contact === interFaceSettings && (
