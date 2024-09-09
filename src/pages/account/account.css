@@ -292,14 +292,14 @@ input#multi-search {
     width:23%;
 
 }
-.search-icon {
+.account-main .search-icon {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     left: 10px;
     color: #fff;
 }
-.search-option {
+.account-main .search-option {
     position: absolute;
     top: 33px;
     left: 0;
@@ -308,7 +308,7 @@ input#multi-search {
     border-radius: 20px;
 }
 
-.search-option ul li {
+.account-main .search-option ul li {
     color: #fff;
     font-size: 14px;
     margin: 5px 0px;

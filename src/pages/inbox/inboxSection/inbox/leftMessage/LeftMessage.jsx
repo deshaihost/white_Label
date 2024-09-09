@@ -6,13 +6,17 @@ import { BoxLoader } from "../../../../../helper/Loader";
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 
-const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversations, setSelectedConvo, fetchConversations, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal }) => {
+const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal }) => {
 
   const containerRef = useRef(null);
+  const dropdownRef = useRef(null);
 
-  const [selectedSearch, setSelectedSearch] = useState({type: "", textGet: "", search: ""});
   const [selectedConversationId, setSelectedConversationId] = useState("");
   const [nextBatchLoading, setNextBatchLoading] = useState(false);
+
+  const [filteredGuests, setFilteredGuests] = useState([]);
+  const [searchFocus, setSearchFocus] = useState(false);
+  const [guestNameInputVal, setGuestNameInputVal] = useState(""); // currently typed text in the guest name search input
   
   const [filterQueryLoading, setFilterQueryLoading] = useState(false);
 
@@ -20,7 +24,7 @@ const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversatio
   const loadNextBatch = async () => {
     setNextBatchLoading(true);
     const num_existing_convos = allConversations.length;
-    await fetchConversations(num_existing_convos+10, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal);
+    await fetchConversations(num_existing_convos+10, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal);
     setNextBatchLoading(false);
   };
 
@@ -70,32 +74,20 @@ const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversatio
     }
   }, [allConversations]);
 
-  const [searchActive, setSearchActive] = useState(0);
-  const [searchInputShow, setSearchInputShow] = useState(false);
-
-  const selectedHndle = (value, valueType, valueId) => {
-    setSelectedSearch({
-      typeSearch: valueType,
-      textGet: value,
-    });
-    setSearchActive(valueId);
-  };
-
-  const searchCloseHndl = () => {
-    setSearchInputShow(!searchInputShow);
-    setSelectedSearch({
-      type: "",
-      textGet: "",
-      search: "",
-    });
-  };
+  // Add the listener for clicking outside the guest search dropdown (so it can be closed)
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handlePropertyFilterChange = async (e) => {
     if (filterQueryLoading) { return; }
     const selectedFilterVal = e.target.value;
     setFilterQueryLoading(true);
 
-    await fetchConversations(10, true, urgentFilterIsEnabled, selectedFilterVal, phaseFilterVal, fromHostBuddyFilterVal);
+    await fetchConversations(10, true, urgentFilterIsEnabled, selectedFilterVal, phaseFilterVal, fromHostBuddyFilterVal, '');
 
     setFilterQueryLoading(false);
     setPropertyFilterVal(selectedFilterVal);
@@ -105,7 +97,7 @@ const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversatio
     if (filterQueryLoading) { return; }
     setFilterQueryLoading(true);
 
-    await fetchConversations(10, true, !urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal);
+    await fetchConversations(10, true, !urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, '');
     
     setFilterQueryLoading(false);
     setUrgentFilterIsEnabled(!urgentFilterIsEnabled);
@@ -115,7 +107,7 @@ const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversatio
     if (filterQueryLoading) { return; }
     setFilterQueryLoading(true);
 
-    await fetchConversations(10, true, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, !fromHostBuddyFilterVal);
+    await fetchConversations(10, true, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, !fromHostBuddyFilterVal, '');
     
     setFilterQueryLoading(false);
     setFromHostBuddyFilterVal(!fromHostBuddyFilterVal);
@@ -126,30 +118,83 @@ const LeftMessage = ({ allPropertyNamesList, allConversations, setAllConversatio
     const selectedFilterVal = e.target.value;
     setFilterQueryLoading(true);
 
-    await fetchConversations(10, true, urgentFilterIsEnabled, propertyFilterVal, selectedFilterVal, fromHostBuddyFilterVal);
+    await fetchConversations(10, true, urgentFilterIsEnabled, propertyFilterVal, selectedFilterVal, fromHostBuddyFilterVal, '');
 
     setFilterQueryLoading(false);
     setPhaseFilterVal(selectedFilterVal);
   };
-  
+
+  const handleGuestSearchChange = async (e) => {
+    const searchVal = e.target.value;
+    setGuestNameInputVal(searchVal);
+
+    if (searchVal) {
+      const searchValLower = searchVal.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const filtered = allGuestNames.filter(guest =>
+        guest.searchable.startsWith(searchValLower)
+      );
+      console.log('Filtered guests:', filtered);
+      setFilteredGuests(filtered);
+    } else {
+      setFilteredGuests([]);
+      if (guestNameSearchVal) {
+        setGuestNameSearchVal("");
+        setFilterQueryLoading(true);
+        await fetchConversations(10, true, false, '', '', false, '');
+        setFilterQueryLoading(false);
+      }
+    }
+  };
+
+  const handleGuestClick = async (guest) => {
+    setFilterQueryLoading(true);
+    setFilteredGuests([]);
+    setGuestNameSearchVal(guest.name);
+
+    // Clear all other filters. Guest name search overrides everything
+    setPropertyFilterVal("");
+    setPhaseFilterVal("");
+    setUrgentFilterIsEnabled(false);
+    setFromHostBuddyFilterVal(false);
+
+    await fetchConversations(10, true, false, '', '', false, guest.name);
+
+    setFilterQueryLoading(false);
+  };
+
+  const handleClickOutside = (event) => { // Close the dropdown if the user clicks outside of it
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setFilteredGuests([]);
+    }
+  };
 
   return (
     <div className="left-bar">
       <div className="message-filter">
-        <div className="messsage-search">
+        <div className="messsage-search" style={{display:'flex'}}>
           <h2>Messages</h2>
-          {/* Search button
-          <div className={`${searchInputShow && "active"} search-form`}>
-            <input type="search" name="search" value={selectedSearch?.search} onChange={(e) => {setSelectedSearch({ search: e.target.value });}}/>
-            {searchInputShow ? (
-              <i class="bi bi-x" onClick={searchCloseHndl}></i>
-            ) : (
-              <i class="bi bi-search" onClick={searchCloseHndl}></i>
-            )}
-          </div>
-          */}
         </div>
         <div className="filter-btns">
+
+          {/* Guest Search */}
+          {allGuestNames && allGuestNames.length > 0 && (
+            <div className="search-input-wrapper" ref={dropdownRef}>
+              <div className="search-input" style={{ maxWidth: (searchFocus || guestNameInputVal) ? '400px' : '150px' }}>
+                <input type="search" value={guestNameInputVal} onChange={handleGuestSearchChange} placeholder={searchFocus ? "" : "Guest name..."} onFocus={() => setSearchFocus(true)} onBlur={() => setSearchFocus(false)} style={{width:"100%", maxWidth:"100%"}} />
+                {!guestNameInputVal && <i className="bi bi-search search-icon"></i> }
+              </div>
+              {filteredGuests.length > 0 && (
+                <div className="dropdown">
+                  {filteredGuests.map((guest, index) => (
+                    <div key={index} className="dropdown-item" onClick={() => handleGuestClick(guest)}>
+                      <div className="guest-name">{guest.name}</div>
+                      <div className="guest-property">{guest.property}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Properties Select */}
           <div className="custom-select">

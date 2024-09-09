@@ -39,15 +39,10 @@ const Account = () => {
             <div className="account-container">
               <AccountNavBar selectedSection={selectedSection} setSelectedSection={setSelectedSection} />
               
-              
               {selectedSection === 'UserInformation' && <UserInformationSection />}
               {selectedSection === 'Contact' && <AccountContactSection />}
               {selectedSection === 'Region' && <AccountRegionSection />}
               {selectedSection === 'Notifications' && <AccountNotificationSection />}
-
-
-
-
 
             </div>
           </div>

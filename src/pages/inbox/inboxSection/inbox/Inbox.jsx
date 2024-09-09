@@ -7,7 +7,7 @@ import MildeSection from "./mildeSection/MildeSection";
 import RightSection from "./rightSection/RightSection";
 import "./inboxIndex.css";
 
-const Inbox = ({allPropertyNamesList}) => {
+const Inbox = ({allPropertyNamesList, allGuestNamesList}) => {
   const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
   const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
   const [conversationsNotYetFetched, setConversationsNotYetFetched] = useState(true);
@@ -16,6 +16,7 @@ const Inbox = ({allPropertyNamesList}) => {
   const [propertyFilterVal, setPropertyFilterVal] = useState("");
   const [phaseFilterVal, setPhaseFilterVal] = useState("");
   const [fromHostBuddyFilterVal, setFromHostBuddyFilterVal] = useState(false);
+  const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
 
   // Get the conversations we already have in the format needed to send to the API: { conversationId1: { last_message_time:<last_message_time_utc> }, ... }
   const getConversationsAlreadyHave = () => {
@@ -32,7 +33,7 @@ const Inbox = ({allPropertyNamesList}) => {
   };
 
   // Call the API to get conversations, up to the specified limit, and update the state with the returned data.
-  const fetchConversations = async (limit, reset=false, urgent=false, propertyName="", phase="", meetHbOnly=false) => {
+  const fetchConversations = async (limit, reset=false, urgent=false, propertyName="", phase="", meetHbOnly=false, guestName='') => {
     let conversationsAlreadyHave = {};
     if (reset) { // Clear conversations state
       conversationsAlreadyHave = {};
@@ -42,7 +43,7 @@ const Inbox = ({allPropertyNamesList}) => {
       conversationsAlreadyHave = getConversationsAlreadyHave();
     }
     
-    const data = await callGetConversationsApi(limit, conversationsAlreadyHave, urgent, propertyName, phase, meetHbOnly);
+    const data = await callGetConversationsApi(limit, conversationsAlreadyHave, urgent, propertyName, phase, meetHbOnly, guestName);
     if (data?.conversations) { updateConversationsWithApiData(data.conversations); }
     setConversationsNotYetFetched(false);
   };
@@ -125,7 +126,7 @@ const Inbox = ({allPropertyNamesList}) => {
     const intervalId = setInterval(() => {
       const num_existing_convos = conversations.length;
       const num_convos_to_fetch = Math.max(num_existing_convos, 2); // always fetch at least 2 convos, even if we're only looking at one (e.g. due to filter), so if there's simultaneous updates we're more likely to catch it. 2 is still an arbitrary number tbh
-      fetchConversations(num_convos_to_fetch, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal);
+      fetchConversations(num_convos_to_fetch, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal);
     }, 10000); // 10000 milliseconds = 10 seconds
 
     const timeoutId = setTimeout(() => { // Stop auto-updating after the page has been open for 4 hours (14,400,000 milliseconds = 4 hours)
@@ -143,7 +144,7 @@ const Inbox = ({allPropertyNamesList}) => {
       {conversationsNotYetFetched ? <FullScreenLoader /> : null}
       <div className="row text-white">
         <div className="col-lg-3 left-bar">
-          <LeftMessage allPropertyNamesList={allPropertyNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} />
+          <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} />
         </div>
         <div className="col-lg-6">
           <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />
