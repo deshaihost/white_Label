@@ -133,7 +133,6 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
       const filtered = allGuestNames.filter(guest =>
         guest.searchable.startsWith(searchValLower)
       );
-      console.log('Filtered guests:', filtered);
       setFilteredGuests(filtered);
     } else {
       setFilteredGuests([]);

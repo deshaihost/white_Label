@@ -8,11 +8,15 @@ import { callSendMessageApi } from "../../../../../helper/getConversationsTest/i
 import MessgFeedBckModel from "../../../../testProperty/banner/messages/messagesFeedBckModel/MessgFeedBckModel";
 import JustificationModal from "../../../../testProperty/banner/messages/justificationModal/justificationModal";
 import { Tooltip } from "react-tooltip";
+import axios from "axios";
+import ToastHandle from "../../../../../helper/ToastMessage";
 
 const MildeSection = ({ allConversationData, updateConversationFromApi, updateCovnersationLocal }) => {
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
+  const menuRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const [conversationData, setConversationData] = useState({});
   const [messages, setMessages] = useState([]);
@@ -24,6 +28,32 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   const [generateButtonText, setGenerateButtonText] = useState("");
   const [generateButtonJustification, setGenerateButtonJustification] = useState("");
   const [showGenerateJustificationButton, setShowGenerateJustificationButton] = useState(false);
+  const [generateOptionsVisible, setGenerateOptionsVisible] = useState(false);
+  const [generateCommandApiLoading, setGenerateCommandApiLoading] = useState(false);
+
+  const callGenerateFromCommandApi = async (command) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setGenerateCommandApiLoading(true);
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const body_data = { property_name:propertyName, conversation_id:conversationData.conversation_id, command };
+      const response = await axios.post( `${baseUrl}/response_from_command`, body_data, config );
+
+      if (response.status === 200) { }
+      else { ToastHandle(response?.data?.error, "danger"); }
+      return response.data;
+    } catch (error) {
+      ToastHandle("Internal server error", "danger");
+      return { error: "Internal server error" };
+    } finally {
+      setGenerateCommandApiLoading(false);
+    }
+  };
 
   // Only checks if the second word is 'reacted'. So may not be 1000% accurate, but low stakes use case so fine for now. Can be improved later if needed
   const lastMessageIsEmojiReact = () => {
@@ -84,8 +114,23 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
 
 
   const handleGenerateButtonClick = () => {
-    setInputValue(generateButtonText);
-    setShowGenerateJustificationButton(true);
+    if (generateCommandApiLoading) { return; }
+    setGenerateOptionsVisible(!generateOptionsVisible);
+  };
+
+
+  const handleGenerateOptionSelect = async (option) => {
+    setGenerateOptionsVisible(false);
+    if (option === 'scratch') {
+      setInputValue(generateButtonText);
+      setShowGenerateJustificationButton(true);
+    }
+    else if (option === 'command') {
+      const response = await callGenerateFromCommandApi(inputValue);
+      if (!("error" in response)) {
+        setInputValue(response.response);
+      }
+    }
   };
 
   // feed back functionality
@@ -194,6 +239,12 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     setShowGenerateJustificationButton(false);
   }, [allConversationData]);
 
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target) && buttonRef.current && !buttonRef.current.contains(event.target)) {
+      setGenerateOptionsVisible(false);
+    }
+  };
+
   // Allow the text area to expand vertically as lines are added
   useEffect(() => {
     if (textareaRef.current) {
@@ -202,11 +253,20 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     }
   }, [inputValue]);
 
+  // Scroll to the bottom of the message list when the messages are loaded
   useEffect(() => {
     if (messageListRef.current) {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // On component load, add the listeners so we can close the generate button menu when the user clicks outside of it
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const toolTipMessage = getTooltipMessage();
 
@@ -236,22 +296,40 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           <div ref={messagesEndRef} />
         </div>
         <div className="ai-input">
-            {generateButtonIsEnabled ? (
-              <button className="generate-button" onClick={handleGenerateButtonClick}>
-                <i className="bi bi-stars"></i>
-              </button>
-            ) : (
-              <button className="generate-button greyed-out" data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>
-                <i className="bi bi-stars"></i>
-              </button>
+
+          <div className="generate-container">
+            <button ref={buttonRef} className="generate-button" onClick={handleGenerateButtonClick}>
+              <i className="bi bi-stars"></i>
+            </button>
+            {generateOptionsVisible && (
+              <div ref={menuRef} className="generate-menu">
+                {generateButtonIsEnabled ? (
+                  <button className="generate-menu-item" key='scratch' onClick={() => handleGenerateOptionSelect('scratch')}>Generate From Scratch</button>
+                ) : (
+                  <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>Generate From Scratch</button>
+                )}
+                {inputValue.trim() !== "" ? (
+                  <button className="generate-menu-item" key='command' onClick={() => handleGenerateOptionSelect('command')}>Refine My Response</button>
+                ) : (
+                  <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Start typing to instruct HostBuddy how to respond to the guest'}>Refine My Response</button>
+                )}
+              </div>
             )}
+          </div>
+
           <div className="input-container">
             <textarea type="text" ref={textareaRef} placeholder="Type a message..." value={inputValue} onChange={handleInputFieldChange}
-              onKeyDown={handleKeyPress} rows="1" disabled={sendMessageLoading ? true : false} style={{resize:'none', overflow:'auto'}}
+              onKeyDown={handleKeyPress} rows="1" disabled={(generateCommandApiLoading || sendMessageLoading) ? true : false} style={{resize:'none', overflow:'auto'}}
             />
+            {generateCommandApiLoading && (
+              <div className="loader-container">
+                <Loader />
+              </div>
+            )}
           </div>
-          <button onClick={handleSendMessage} className='chat-send-button' disabled={sendMessageLoading ? true : false}>
-            {sendMessageLoading ? (
+
+          <button onClick={handleSendMessage} className='chat-send-button' disabled={(generateCommandApiLoading || sendMessageLoading) ? true : false}>
+            {(sendMessageLoading) ? (
               <img src={loaderGif} width="25" height="25" />
             ) : (
               <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -259,6 +337,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
               </svg>
             )}
           </button>
+
         </div>
         {showGenerateJustificationButton &&
           <div className="where-did link-container" style={{ marginRight:"auto" }}>
