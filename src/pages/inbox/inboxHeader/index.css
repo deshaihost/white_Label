@@ -1,15 +1,18 @@
-.nab-bar button {
+.inbox-nav-bar button {
     background: transparent;
     color: #fff;
     border: 0px;
-    padding: 10px 20px;
+    padding: 5px 20px;
     font-size: 18px;
     font-weight: 500;
 }
-.nab-bar {
-    padding: 15px;
+.inbox-nav-bar {
+    padding: 5px 15px;
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
-.nab-bar button.nav-active {
+.inbox-nav-bar button.nav-active {
     border-top: 3px solid #2A87E8;
+}
+.inbox-nav-bar a {
+    font-size: 16px;
 }

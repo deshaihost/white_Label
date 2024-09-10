@@ -17,8 +17,11 @@ const InboxIndex = () => {
   const [interFaceComponent, setInterFaceComponent] = useState(0);
   const [allGuestNames, setAllGuestNames] = useState({});
 
-  const userPropertiesData = store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // dict, keys are property names. values aren't important here
+  const allUserData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const userPropertiesData = allUserData?.property_data; // dict, keys are property names. values aren't important here
   const allPropertyNamesList = userPropertiesData ? Object.keys(userPropertiesData) : [];
+
+  const showTimeZoneNotif = !allUserData?.user_region;
 
   const callGetGuestNamesApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -63,7 +66,7 @@ const InboxIndex = () => {
 
   return (
     <div className="inbox-container">
-      <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent}/>
+      <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent} showTimeZoneNotif={showTimeZoneNotif}/>
       {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames}/>}
       {interFaceComponent === 1 && <SmartTemplates />}
       {interFaceComponent === 2 && <ReviewRemoval allPropertyNamesList={allPropertyNamesList}/>}
