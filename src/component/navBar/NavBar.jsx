@@ -54,8 +54,9 @@ const NavBar = () => {
           <Alert variant="danger">
             {" "}
             Your last subscription payment didn't go through. Please click on
-            "Subscription" in your <Link to="/setting/subscription">Subscription page</Link> to
-            update your payment info. Otherwise, your services will be paused in{" "}
+            "Subscription" in your{" "}
+            <Link to="/setting/subscription">Subscription page</Link> to update
+            your payment info. Otherwise, your services will be paused in{" "}
             {diffDays} days.{" "}
           </Alert>
         );
@@ -66,7 +67,8 @@ const NavBar = () => {
             {" "}
             Your last subscription payment didn't go through and your services
             have been paused. Please click on "Subscription" in your{" "}
-            <Link to="/setting/subscription">Subscription page</Link> to update your payment info.{" "}
+            <Link to="/setting/subscription">Subscription page</Link> to update
+            your payment info.{" "}
           </Alert>
         );
       }
@@ -111,19 +113,21 @@ const NavBar = () => {
   };
 
   // mobile navbar functionality
+  const [loginIcon, setLoginIcon] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
   const handleToggle = () => {
     setExpanded(!expanded);
+    setLoginIcon(false);
   };
 
   const handleNavLinkClick = () => {
     setExpanded(false);
   };
 
-  const [loginIcon, setLoginIcon] = useState(false);
   const handleToggleLogin = () => {
-    setLoginIcon(!expanded);
+    setLoginIcon(!loginIcon);
+    setExpanded(false);
   };
 
   const handleNavLinkLoginClick = () => {
@@ -145,22 +149,71 @@ const NavBar = () => {
             </NavLink>
           </Navbar.Brand>
           <div className="header-icons-list">
-            <div className="header-icon">
-              <button onClick={handleToggleLogin}>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+            {token === undefined && (
+              <>
+                <Navbar.Toggle
+                  className="header-icon"
+                  aria-controls="navbarSupportedContent"
+                  onClick={handleToggleLogin}
                 >
-                  <path
-                    d="M9.99999 9.99999C12.5783 9.99999 14.6667 7.91166 14.6667 5.33332C14.6667 2.75499 12.5783 0.666656 9.99999 0.666656C7.42166 0.666656 5.33332 2.75499 5.33332 5.33332C5.33332 7.91166 7.42166 9.99999 9.99999 9.99999ZM9.99999 12.3333C6.88499 12.3333 0.666656 13.8967 0.666656 17V19.3333H19.3333V17C19.3333 13.8967 13.115 12.3333 9.99999 12.3333Z"
-                    fill="#146EF5"
-                  ></path>
-                </svg>
-              </button>
-            </div>
+                  {loginIcon ? (
+                    <div className="close-icon">
+                      {" "}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-x-lg"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"></path>
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="header-icon">
+                      <button>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.99999 9.99999C12.5783 9.99999 14.6667 7.91166 14.6667 5.33332C14.6667 2.75499 12.5783 0.666656 9.99999 0.666656C7.42166 0.666656 5.33332 2.75499 5.33332 5.33332C5.33332 7.91166 7.42166 9.99999 9.99999 9.99999ZM9.99999 12.3333C6.88499 12.3333 0.666656 13.8967 0.666656 17V19.3333H19.3333V17C19.3333 13.8967 13.115 12.3333 9.99999 12.3333Z"
+                            fill="#146EF5"
+                          ></path>
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </Navbar.Toggle>
+                {loginIcon && (
+                  <div className="account-detail">
+                    <NavLink
+                      exact
+                      to="/login"
+                      className="nav-link"
+                      activeClassName="active"
+                      onClick={handleNavLinkClick}
+                    >
+                      Login
+                    </NavLink>
+                    <NavLink
+                      exact
+                      to="/signup"
+                      className="nav-link"
+                      activeClassName="active"
+                      onClick={handleNavLinkClick}
+                    >
+                      Signup
+                    </NavLink>
+                  </div>
+                )}
+              </>
+            )}
+
             <Navbar.Toggle
               className="header-icon"
               aria-controls="navbarSupportedContent"
@@ -177,22 +230,58 @@ const NavBar = () => {
             <Nav>
               {token !== undefined ? (
                 <>
-                  <NavLink exact to="/getstarted" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink
+                    exact
+                    to="/getstarted"
+                    className="nav-link"
+                    activeClassName="active"
+                    onClick={handleNavLinkClick}
+                  >
                     Get Started
                   </NavLink>
-                  <NavLink exact to="/dashboard" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink
+                    exact
+                    to="/dashboard"
+                    className="nav-link"
+                    activeClassName="active"
+                    onClick={handleNavLinkClick}
+                  >
                     Dashboard
                   </NavLink>
-                  <NavLink exact to="/properties" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink
+                    exact
+                    to="/properties"
+                    className="nav-link"
+                    activeClassName="active"
+                    onClick={handleNavLinkClick}
+                  >
                     Properties
                   </NavLink>
-                  <NavLink exact to="/inbox" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink
+                    exact
+                    to="/inbox"
+                    className="nav-link"
+                    activeClassName="active"
+                    onClick={handleNavLinkClick}
+                  >
                     Messaging
                   </NavLink>
-                  <NavLink exact to="/action-item" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink
+                    exact
+                    to="/action-item"
+                    className="nav-link"
+                    activeClassName="active"
+                    onClick={handleNavLinkClick}
+                  >
                     Action Items
                   </NavLink>
-                  <NavLink exact to="/setting" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink
+                    exact
+                    to="/setting"
+                    className="nav-link"
+                    activeClassName="active"
+                    onClick={handleNavLinkClick}
+                  >
                     Settings
                   </NavLink>
                 </>
