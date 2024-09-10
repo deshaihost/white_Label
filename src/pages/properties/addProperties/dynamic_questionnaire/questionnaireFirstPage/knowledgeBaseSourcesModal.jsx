@@ -11,7 +11,21 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
 
   // As soon as we get the source data, put it in the useState
   useEffect(() => {
-    setSourceAndSelectionData(sources);
+    // If we have integration data, always have past conversations as an option, whether or not it is in the sources list
+    const new_sources = {
+      ...sources,
+      ...(sources["PMS Integration"] && Object.keys(sources["PMS Integration"]).length > 0 && {
+        "PMS Integration": {
+          ...sources["PMS Integration"],
+          "conversation_data": {
+            label: "Past Conversations",
+            id: "conversation_data",
+            use_for_knowledge_base: sources["PMS Integration"]?.["conversation_data"]?.use_for_knowledge_base ?? false
+          }
+        }
+      })
+    };       
+    setSourceAndSelectionData(new_sources);
   }, [sources]);
 
   const handleCheckboxChange = (section, sourceId, isChecked) => {
@@ -104,7 +118,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
           <div>
             <div className="text-center">
               <p>Choose what information HostBuddy can access directly.</p>
-              <p>For better manageability of data and more efficient processing, it is recommended to use property documents and past conversations only for auto-fill, and leave them un-checked here.</p>
+              {/* <p>For better manageability of data and more efficient processing, it is recommended to use property documents and past conversations only for auto-fill, and leave them un-checked here.</p> */}
             </div>
             <hr style={{width: "90%", margin: "0 auto"}}/>
 
@@ -130,7 +144,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
                               {sourceAndSelectionData[section][source].id === 'conversation_data' &&
                                 <>
                                   {" "}
-                                  <span>(not recommended)</span>
+                                  <span>(last 6 months)</span>
                                 </>
                               }
                             </label>

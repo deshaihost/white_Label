@@ -18,13 +18,12 @@ const weekDayOptions = [
 //  ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
 const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, responseObject, setShowCalender, getScheduleAPI, selectedProperty, setScheduleChanged }) => {
+
   const [submit, setSubmit] = useState(false);
-
   const [data, setData] = useState({ startTime: "", endTime: "" });
-
   const [checkedSchedule, setCheckedSchedule] = useState({ Future: true, Past: true, Current: true });
-
   const [selectedDays, setSelectedDays] = useState([]);
+
   // handle time change 
   const handleInputChange = (e) => {
     setData({ ...data, [e.target.id]: e.target.value });
@@ -38,22 +37,13 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
   // handle Stage button clicks
   const handleOnChange = (e, type) => {
     if (type === "Future") {
-      setCheckedSchedule((prevData) => ({
-        ...prevData,
-        Future: e.target.checked,
-      }));
+      setCheckedSchedule((prevData) => ({ ...prevData, Future: e.target.checked }));
     }
     if (type === "Past") {
-      setCheckedSchedule((prevData) => ({
-        ...prevData,
-        Past: e.target.checked,
-      }));
+      setCheckedSchedule((prevData) => ({ ...prevData, Past: e.target.checked }));
     }
     if (type === "Current") {
-      setCheckedSchedule((prevData) => ({
-        ...prevData,
-        Current: e.target.checked,
-      }));
+      setCheckedSchedule((prevData) => ({ ...prevData, Current: e.target.checked }));
     }
   };
   // to get the schedule to show on the calender
@@ -61,9 +51,7 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
     setSubmit(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
+    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
     const token = getSessionStorageData?.token;
     // return;
 
@@ -73,18 +61,13 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
           headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
           validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
         };
-        const response = await axios.put(
-          `${baseUrl}/set_recurring_schedule`,
-          dataToSend,
-          config
-        );
+        const response = await axios.put( `${baseUrl}/set_recurring_schedule`, dataToSend, config );
         if (response.status === 200) {
           ToastHandle(response.data.message, "success");
           setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
 
           setTimeout(() => {
             setShow(false);
-            // setShowCalender(false);
           }, 1500);
           getScheduleAPI(selectedProperty);
         } else {
@@ -100,12 +83,6 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
       }
     } catch (error) {
       console.log(error);
-      //ToastHandle(error?.data?.error, "danger");
-      /* Leave the windows open so the user can correct the error and resubmit
-      setTimeout(() => {
-        setShow(false);
-        setShowCalender(false);
-      }, 1500); */
       getScheduleAPI(selectedProperty);
     }
     setSubmit(false);
@@ -113,6 +90,7 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
 
   const handleSchedule = (e) => {
     e.preventDefault();
+    let responseObjectToSend = JSON.parse(JSON.stringify(responseObject)); // make a deep copy
 
     const startSchedule = `${data.startTime}`;
     const endSchedule = `${data.endTime}`;
@@ -129,56 +107,49 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
       return;
     }
     if (checkedSchedule.Current) {
-      if (!responseObject.schedules.hasOwnProperty("CURRENT")) {
-        responseObject.schedules["CURRENT"] = {};
+      if (!responseObjectToSend.schedules.hasOwnProperty("CURRENT")) {
+        responseObjectToSend.schedules["CURRENT"] = {};
       }
       selectedDays.forEach((day) => {
-        if (!responseObject.schedules["CURRENT"].hasOwnProperty(day.value)) {
-          responseObject.schedules["CURRENT"][day.value] = [];
+        if (!responseObjectToSend.schedules["CURRENT"].hasOwnProperty(day.value)) {
+          responseObjectToSend.schedules["CURRENT"][day.value] = [];
         }
-        responseObject.schedules["CURRENT"][day.value].push(startSchedule);
-        responseObject.schedules["CURRENT"][day.value].push(endSchedule);
+        responseObjectToSend.schedules["CURRENT"][day.value].push(startSchedule);
+        responseObjectToSend.schedules["CURRENT"][day.value].push(endSchedule);
       });
     }
 
     if (checkedSchedule.Past) {
-      if (!responseObject.schedules.hasOwnProperty("INQUIRY/PAST")) {
-        responseObject.schedules["INQUIRY/PAST"] = {};
+      if (!responseObjectToSend.schedules.hasOwnProperty("INQUIRY/PAST")) {
+        responseObjectToSend.schedules["INQUIRY/PAST"] = {};
       }
       selectedDays.forEach((day) => {
-        if (!responseObject.schedules["INQUIRY/PAST"].hasOwnProperty(day.value)) {
-          responseObject.schedules["INQUIRY/PAST"][day.value] = [];
+        if (!responseObjectToSend.schedules["INQUIRY/PAST"].hasOwnProperty(day.value)) {
+          responseObjectToSend.schedules["INQUIRY/PAST"][day.value] = [];
         }
-        responseObject.schedules["INQUIRY/PAST"][day.value].push(startSchedule);
-        responseObject.schedules["INQUIRY/PAST"][day.value].push(endSchedule);
+        responseObjectToSend.schedules["INQUIRY/PAST"][day.value].push(startSchedule);
+        responseObjectToSend.schedules["INQUIRY/PAST"][day.value].push(endSchedule);
       });
     }
 
     if (checkedSchedule.Future) {
-      if (!responseObject.schedules.hasOwnProperty("FUTURE")) {
-        responseObject.schedules["FUTURE"] = {};
+      if (!responseObjectToSend.schedules.hasOwnProperty("FUTURE")) {
+        responseObjectToSend.schedules["FUTURE"] = {};
       }
       selectedDays.forEach((day) => {
-        if (!responseObject.schedules["FUTURE"].hasOwnProperty(day.value)) {
-          responseObject.schedules["FUTURE"][day.value] = [];
+        if (!responseObjectToSend.schedules["FUTURE"].hasOwnProperty(day.value)) {
+          responseObjectToSend.schedules["FUTURE"][day.value] = [];
         }
-        responseObject.schedules["FUTURE"][day.value].push(startSchedule);
-        responseObject.schedules["FUTURE"][day.value].push(endSchedule);
+        responseObjectToSend.schedules["FUTURE"][day.value].push(startSchedule);
+        responseObjectToSend.schedules["FUTURE"][day.value].push(endSchedule);
       });
     }
 
-
-    addCalenderSchedule(responseObject);
+    addCalenderSchedule(responseObjectToSend);
   };
   return (
     <div>
-      <Modal
-        show={show}
-        size="md"
-        onHide={() => setShow(false)}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
+      <Modal show={show} size="md" onHide={() => setShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Body style={{overflowY:'auto'}}>
           <div className="6">
             <div className="row border-bottom py-3">
@@ -192,11 +163,7 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
           <div className=" d-flex justify-content-between mt-3">
             <div class="col text-center">
               <input type="checkbox" checked={checkedSchedule.Future} onChange={(e) => handleOnChange(e, "Future")} className="btn-check" id="future" autocomplete="off"/>
-              <label
-                className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "" : "btn-unselected"
-                  }`}
-                for="future"
-              >
+              <label for="future" className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "" : "btn-unselected"}`}>
                 Future
               </label>
             </div>
@@ -229,8 +196,7 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
               </div>
               <div class="col">
                 <label>End Time:</label>
-                <input type="time" name="et" id="endTime" class="form-control" value={data.endTime} onChange={handleInputChange}
-                />
+                <input type="time" name="et" id="endTime" class="form-control" value={data.endTime} onChange={handleInputChange}/>
               </div>
             </div>
 

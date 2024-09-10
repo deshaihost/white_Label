@@ -6,6 +6,7 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
   const messageDetails = messageData?.text;
   const { id, justification, response } = messageDetails;
   const message_id = id ? id : [];
+  const sendByFormatted = (sendBy === "hostbuddy" ? "HostBuddy" : sendBy);
 
   return (
     <div>
@@ -13,7 +14,7 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
         {sender === "bot" ? (
             <div className="timing left-msg">{timeFormatConvert}</div>
         ) : (
-            <div className="text-end timing">Sent by {sendBy} | {timeFormatConvert}</div>
+            <div className="text-end timing">Sent by {sendByFormatted} | {timeFormatConvert}</div>
         )}
       </p>
       <div className={`message ${sender} mesaage-box`}>

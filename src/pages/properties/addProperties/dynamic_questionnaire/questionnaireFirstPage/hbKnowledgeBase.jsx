@@ -151,6 +151,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
               )
             ))}
 
+            {/*
             {(!convo_data_has_been_pulled) && (
               ((!apiPullConversationsData || !apiPullConversationsData.includes(apiPropertyData?.property_name)) ? (
                 <h5 className="text-negative">Past conversations not pulled <span onClick={handlePullConversationsClick}>(Pull from PMS)</span></h5>
@@ -163,6 +164,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
                 </>
               ))
             )}
+            */}
           </>
         ) : (
           <h5 className="text-negative">Property not linked to PMS</h5>

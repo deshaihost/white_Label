@@ -63,7 +63,7 @@ const RightSection = ({ rightSectionData }) => {
           <>
             <h2>Satisfaction</h2>
             <p className="result" style={{ color: sentiment === "positive" ? "rgb(0, 180, 0)" : sentiment === "negative" ? "rgb(200, 0, 0)" : "#BBB" }}>
-              {sentiment}
+              {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
             </p>
             {sentiment_justification && (
               <p style={{ fontSize:'12px', marginTop:'3px' }}>{sentiment_justification}</p>
