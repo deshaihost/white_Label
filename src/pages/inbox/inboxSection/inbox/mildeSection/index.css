@@ -1,6 +1,6 @@
 
 .main-chat .chatbot {
-    height: 75vh;
+    height: calc(75vh + 30px);
 }
 .main-chat .chatbot {
     max-width: 100%;
