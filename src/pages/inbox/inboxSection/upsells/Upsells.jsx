@@ -25,21 +25,21 @@ default_settings = {
 */
 
 
-const UpsellsIndex = () => {
+const UpsellsIndex = ({allPropertyNamesList}) => {
 
 
   const [selectedSection, setSelectedSection] = useState("index");
 
-  const [preStaySettingsApiData, setPreStaySettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
-  const [preStayCurrentSettingsData, setPreStayCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
+  const [preStaySettingsApiData, setPreStaySettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings configs
+  const [preStayLocalSettingsData, setPreStayLocalSettingsData] = useState({}); // Live data for what is currently on the UI, for all configs
   const [getPreStaySettingsLoading, setGetPreStaySettingsLoading] = useState(false);
 
-  const [postStaySettingsApiData, setPostStaySettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
-  const [postStayCurrentSettingsData, setPostStayCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
+  const [postStaySettingsApiData, setPostStaySettingsApiData] = useState({});
+  const [postStayLocalSettingsData, setPostStayLocalSettingsData] = useState({});
   const [getPostStaySettingsLoading, setGetPostStaySettingsLoading] = useState(false);
 
   const [inquiryWinbacksSettingsApiData, setInquiryWinbacksSettingsApiData] = useState({});
-  const [inquiryWinbacksCurrentSettingsData, setInquiryWinbacksCurrentSettingsData] = useState({});
+  const [inquiryWinbacksLocalSettingsData, setInquiryWinbacksLocalSettingsData] = useState({});
   const [getInquiryWinbacksSettingsLoading, setGetInquiryWinbacksSettingsLoading] = useState(false);
 
   const [preStayUpcomingMessagesData, setPreStayUpcomingMessagesData] = useState([]);
@@ -70,15 +70,15 @@ const UpsellsIndex = () => {
         if (upsell_type === 'pre_stay') {
           setGetPreStaySettingsLoading(false);
           setPreStaySettingsApiData(response?.data?.upsell_settings);
-          setPreStayCurrentSettingsData(response?.data?.upsell_settings?.default);
+          setPreStayLocalSettingsData(response?.data?.upsell_settings); // Warning: preStaySettingsApiData and preStayLocalSettingsData become shallow copies of each other. Seems not to matter for our use
         } else if (upsell_type === 'post_stay') {
           setGetPostStaySettingsLoading(false);
           setPostStaySettingsApiData(response?.data?.upsell_settings);
-          setPostStayCurrentSettingsData(response?.data?.upsell_settings?.default);
+          setPostStayLocalSettingsData(response?.data?.upsell_settings);
         } else if (upsell_type === 'inquiry_winback') {
           setGetInquiryWinbacksSettingsLoading(false);
           setInquiryWinbacksSettingsApiData(response?.data?.upsell_settings);
-          setInquiryWinbacksCurrentSettingsData(response?.data?.upsell_settings?.default);
+          setInquiryWinbacksLocalSettingsData(response?.data?.upsell_settings);
         }
       }
       else { }
@@ -127,15 +127,15 @@ const UpsellsIndex = () => {
   return (
     <div className="upsells_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "20px"}}>
       {selectedSection === "preStayUpsells" && (
-        <PreStayUpsells setSection={setSelectedSection} settingsApiData={preStaySettingsApiData} setSettingsApiData={setPreStaySettingsApiData} currentSettingsData={preStayCurrentSettingsData} setCurrentSettingsData={setPreStayCurrentSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPreStaySettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPreStayUpcomingMessagesLoading} upcomingMessagesData={preStayUpcomingMessagesData} />
+        <PreStayUpsells setSection={setSelectedSection} settingsApiData={preStaySettingsApiData} setSettingsApiData={setPreStaySettingsApiData} localSettingsData={preStayLocalSettingsData} setLocalSettingsData={setPreStayLocalSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPreStaySettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPreStayUpcomingMessagesLoading} upcomingMessagesData={preStayUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList}/>
       )}
 
       {selectedSection === "postStayUpsells" && (
-        <PostStayUpsells setSection={setSelectedSection} settingsApiData={postStaySettingsApiData} setSettingsApiData={setPostStaySettingsApiData} currentSettingsData={postStayCurrentSettingsData} setCurrentSettingsData={setPostStayCurrentSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPostStaySettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPostStayUpcomingMessagesLoading} upcomingMessagesData={postStayUpcomingMessagesData} />
+        <PostStayUpsells setSection={setSelectedSection} settingsApiData={postStaySettingsApiData} setSettingsApiData={setPostStaySettingsApiData} localSettingsData={postStayLocalSettingsData} setLocalSettingsData={setPostStayLocalSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPostStaySettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPostStayUpcomingMessagesLoading} upcomingMessagesData={postStayUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList}/>
       )}
 
       {selectedSection === "inquiryWinbacks" && (
-        <InquiryWinbacks setSection={setSelectedSection} settingsApiData={inquiryWinbacksSettingsApiData} setSettingsApiData={setInquiryWinbacksSettingsApiData} currentSettingsData={inquiryWinbacksCurrentSettingsData} setCurrentSettingsData={setInquiryWinbacksCurrentSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getInquiryWinbacksSettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getInquiryWinbacksUpcomingMessagesLoading} upcomingMessagesData={inquiryWinbacksUpcomingMessagesData} />
+        <InquiryWinbacks setSection={setSelectedSection} settingsApiData={inquiryWinbacksSettingsApiData} setSettingsApiData={setInquiryWinbacksSettingsApiData} localSettingsData={inquiryWinbacksLocalSettingsData} setLocalSettingsData={setInquiryWinbacksLocalSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getInquiryWinbacksSettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getInquiryWinbacksUpcomingMessagesLoading} upcomingMessagesData={inquiryWinbacksUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList}/>
       )}
       
       {selectedSection === "index" && (
@@ -169,63 +169,6 @@ const UpsellsIndex = () => {
               <p className="settings-label">Send a message following up with guests who inquired but didn't book.</p>
             </div>
           </div>
-
-          {/*
-          <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
-
-          <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
-          <p className="settings-label text-center">Showing the next 10</p>
-
-          <div className="col-12 mt-4">
-            <div className="upcoming-messages">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Sending at</th>
-                    <th>Property</th>
-                    <th>Guest</th>
-                    <th>For vacant night(s)</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                {!getUpcomingMessagesLoading ? (
-                  upcomingMessagesData && upcomingMessagesData.length > 0 ? (
-                    <tbody>
-                      {upcomingMessagesData.slice(0, 10).map((message, index) => ( // only show the first 20
-                        <tr key={index}>
-                          <td>{formatDateTime(message.time_to_send)}</td>
-                          <td>{truncateString(message.property_name, 25)}</td>
-                          <td>{truncateString(message.guest_first_name, 20)}</td>
-                          <td>{formatDateRange(message.start_date, message.end_date)}</td>
-                          <td>Waiting to send</td>
-                          <td>
-                            <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px' }} onClick={() => console.log('View message')} />
-                            <FaTimes style={{ color: 'red' }} onClick={() => console.log('Cancel message')} />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  ) : (
-                    <tbody>
-                      <tr>
-                        <td colSpan="6" className="text-center">No upcoming messages</td>
-                      </tr>
-                    </tbody>
-                  )
-                ) : (
-                  <tbody>
-                    <tr>
-                      <td colSpan="6" className="text-center">
-                        <BoxLoader />
-                      </td>
-                    </tr>
-                  </tbody>
-                )}
-              </table>
-            </div>
-          </div>
-          */}
         </div>
       )}
     </div>
