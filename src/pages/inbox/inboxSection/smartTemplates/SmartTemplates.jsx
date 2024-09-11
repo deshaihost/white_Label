@@ -23,12 +23,12 @@ default_settings = {
 */
 
 
-const SmartTemplates = () => {
+const SmartTemplates = ({allPropertyNamesList}) => {
 
   const [selectedSection, setSelectedSection] = useState("index");
 
   const [reviewSettingsApiData, setReviewSettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
-  const [reviewCurrentSettingsData, setReviewCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
+  const [reviewLocalSettingsData, setReviewLocalSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
   const [getReviewSettingsLoading, setGetReviewSettingsLoading] = useState(false);
 
   const [reviewUpcomingMessagesData, setReviewUpcomingMessagesData] = useState([]);
@@ -53,7 +53,7 @@ const SmartTemplates = () => {
         if (upsell_type === 'review_upsell') {
           setGetReviewSettingsLoading(false);
           setReviewSettingsApiData(response?.data?.upsell_settings);
-          setReviewCurrentSettingsData(response?.data?.upsell_settings?.default);
+          setReviewLocalSettingsData(response?.data?.upsell_settings); // Warning: postStaySettingsApiData and postStayLocalSettingsData become shallow copies of each other. Seems not to matter for our use
         }
       }
       else { }
@@ -94,7 +94,7 @@ const SmartTemplates = () => {
   return (
     <div className="smart_templates_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "20px"}}>
       {selectedSection === "reviewUpsells" && (
-        <ReviewUpsells setSection={setSelectedSection} settingsApiData={reviewSettingsApiData} setSettingsApiData={setReviewSettingsApiData} currentSettingsData={reviewCurrentSettingsData} setCurrentSettingsData={setReviewCurrentSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getReviewSettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getReviewUpcomingMessagesLoading} upcomingMessagesData={reviewUpcomingMessagesData} />
+        <ReviewUpsells setSection={setSelectedSection} settingsApiData={reviewSettingsApiData} setSettingsApiData={setReviewSettingsApiData} localSettingsData={reviewLocalSettingsData} setLocalSettingsData={setReviewLocalSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getReviewSettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getReviewUpcomingMessagesLoading} upcomingMessagesData={reviewUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList} />
       )}
       
       {selectedSection === "index" && (
