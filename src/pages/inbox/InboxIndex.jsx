@@ -21,7 +21,7 @@ const InboxIndex = () => {
   const userPropertiesData = allUserData?.property_data; // dict, keys are property names. values aren't important here
   const allPropertyNamesList = userPropertiesData ? Object.keys(userPropertiesData) : [];
 
-  const showTimeZoneNotif = !allUserData?.user_region;
+  const showTimeZoneNotif = allUserData && !allUserData?.user_region;
 
   const callGetGuestNamesApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -70,7 +70,7 @@ const InboxIndex = () => {
       {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames}/>}
       {interFaceComponent === 1 && <SmartTemplates allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 2 && <ReviewRemoval allPropertyNamesList={allPropertyNamesList}/>}
-      {interFaceComponent === 3 && <Preferences />}
+      {interFaceComponent === 3 && <Preferences allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 4 && <Upsells allPropertyNamesList={allPropertyNamesList}/>}
     </div>
   );
