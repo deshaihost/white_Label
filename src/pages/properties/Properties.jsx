@@ -265,10 +265,10 @@ const Properties = () => {
                       >
                         <p style={{ color: "white" }}>
                           {`Connected to ${
-                            Object.keys(intergrations)[0]
-                              .charAt(0)
-                              .toUpperCase() +
-                            Object.keys(intergrations)[0].slice(1)
+                            Object.keys(intergrations)[0] === "ownerrez"
+                              ? "OwnerRez"
+                              : Object.keys(intergrations)[0].charAt(0).toUpperCase() +
+                                Object.keys(intergrations)[0].slice(1)
                           }`}
                         </p>
                         <div

@@ -112,6 +112,10 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
       
   const integration_categories = {'Property details and availability':'integration_data', 'Guest and reservation data':'guest_data', 'Past conversations':'conversation_data'}
   const convo_data_has_been_pulled = (pullConversationsSuccess || apiPropertyData?.supporting_doc_items?.conversation_data)
+    const integrationPlatformFormatted = integrationPlatform
+    ? integrationPlatform === "ownerrez" ? "OwnerRez"
+      : integrationPlatform.charAt(0).toUpperCase() + integrationPlatform.slice(1)
+    : null;
 
   // Assemble data structure to pass to the modal, indicating which sources are present and whether they're selected for use
   const sourceDataForModal = { 'PMS Integration': {}, 'Property Documents': {}, 'Property Profile': {} };
@@ -133,7 +137,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
     <div className="form-design text-white hostbuddy-knowledge-base">
       <h3>HostBuddy Knowledge Base</h3>
       <div className="knowledge-base-content">
-        {integrationPlatform && (<h5 className="pms-connected-text">{integrationPlatform.charAt(0).toUpperCase() + integrationPlatform.slice(1)} Connected</h5>)}
+        {integrationPlatform && (<h5 className="pms-connected-text">{integrationPlatformFormatted} Connected</h5>)}
         <h4 style={{marginTop:"0"}}>PMS Integration</h4>
         {integrationPlatform ? (
           <>

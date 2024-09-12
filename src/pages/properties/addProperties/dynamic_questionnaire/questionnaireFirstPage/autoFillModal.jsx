@@ -107,7 +107,7 @@ const AutoFillModal = ({ handleClose, show, apiPropertyData }) => {
                   <div key={source.id}>
                     <input className="form-check-input" type="checkbox" value={source.id} id={source.id} checked={selectedSources.includes(source.id)} onChange={(e) => handleCheckboxChange(source.id, e.target.checked)}/>
                     <label className="form-check-label" htmlFor={source.id}>
-                      {source.name}
+                      {(source.name && source.name.toLowerCase() === "ownerrez data") ? "OwnerRez data" : source.name}
                     </label>
                   </div>
                 ))}
