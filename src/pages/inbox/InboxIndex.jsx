@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { getUserDataActions } from "../../redux/actions";
 import InBoxHeader from "./inboxHeader/InBoxHeader";
 import Inbox from "./inboxSection/inbox/Inbox";
@@ -11,6 +12,7 @@ import "./inboxSection/inbox/inboxIndex.css";
 import axios from "axios";
 
 const InboxIndex = () => {
+  const { section } = useParams();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
 
@@ -20,6 +22,7 @@ const InboxIndex = () => {
   const allUserData = store?.getUserDataReducer?.getUserData?.data?.user;
   const userPropertiesData = allUserData?.property_data; // dict, keys are property names. values aren't important here
   const allPropertyNamesList = userPropertiesData ? Object.keys(userPropertiesData) : [];
+  const sectionMapping = { "": 0, "smart-templates": 1, "review-removal": 2, "preferences": 3, "upsells": 4 }; // for URL path params
 
   const showTimeZoneNotif = allUserData && !allUserData?.user_region;
 
@@ -62,6 +65,7 @@ const InboxIndex = () => {
   useEffect(() => {
     dispatch(getUserDataActions()); // So we can have the list of property names for the various dropdowns
     populateGuestNames(); // So we can have the list of guest names for the guest search bar
+    setInterFaceComponent(sectionMapping[section] || 0); // Set the interface component based on the URL path param
   }, []);
 
   return (
