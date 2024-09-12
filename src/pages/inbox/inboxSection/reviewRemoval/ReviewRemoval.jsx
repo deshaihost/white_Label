@@ -296,7 +296,7 @@ const ReviewRemoval = ({allPropertyNamesList}) => {
                   const departureDateFormatted = formatDateString(departure_date);
                   const guestName = `${guest_name_first || ''} ${guest_name_last || ''}`.trim();
 
-                  const reviewTitle = title ? title : description;
+                  const reviewTitle = (title ? title : description) || '[No title]';
                   const reviewSummary = reviewTitle.length > 50 ? reviewTitle.slice(0, 50) + "..." : reviewTitle;
                   const reviewSummaryWithRating = `(${rating} stars) ${reviewSummary}`;
 
