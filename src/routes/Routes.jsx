@@ -287,7 +287,7 @@ const Routing = () => {
           }
         />
         <Route
-          path="/inbox"
+          path="/inbox/:section?"
           element={
             <ProtectedRoute>
               <InboxIndex />
