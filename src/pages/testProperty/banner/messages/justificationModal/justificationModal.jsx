@@ -23,7 +23,7 @@ const JustificationModal = ({ show, handleClose, propertyName, justification }) 
           </div>
           <hr/>
           <p className="text-center" style={{marginTop:"30px", marginBottom:"30px", fontSize:"16px", color:"#999"}}>HostBuddy's responses are based on the information in its knowledge base for this property. If something is missing or incorrect, you can <Link to={`/edit-property/${propertyName}`}>manage the knowledge base or add to the property profile</Link>.</p>
-          <p className="text-center" style={{marginTop:"30px", marginBottom:"30px", fontSize:"16px", color:"#999"}}>You can also adjust your <Link to='/setting/conversation-preferences'>conversation preferences</Link> to change HostBuddy's behavior.</p>
+          <p className="text-center" style={{marginTop:"30px", marginBottom:"30px", fontSize:"16px", color:"#999"}}>You can also adjust your <Link to='/inbox/preferences'>conversation preferences</Link> to change HostBuddy's behavior.</p>
         </div>
       </Modal.Body>
     </Modal>
