@@ -12,18 +12,7 @@ import { FaTimes, FaExternalLinkAlt, FaFileAlt } from "react-icons/fa";
 
 import { formatDateRange, formatDateTime, truncateString, insertVariableAtCursor, setSetting, callSaveSettingsApi, callCancelMessageApi } from "../resources/upsellsFuncts";
 
-/*
-default_settings = {
-  'enabled': false,
-  'days_after_check_out': 0,
-  'time_of_day': '14:00',
-  'criteria': 'neutral', // 'always', 'neutral', 'positive'
-  'upsell_message': "Hi [[guest_name]],\n\n I hope you enjoyed your stay! If you have a moment, I’d greatly appreciate it if you could leave us a positive review. It really helps us out and ensures we can keep providing the best experience for our guests.\n\nThank you again for choosing us for your stay!\n\nBest regards"
-}
-*/
-
-
-const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSettingsData, setLocalSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData, allPropertyNamesList}) => {
+const PostCheckInMessages = ({setSection, settingsApiData, setSettingsApiData, localSettingsData, setLocalSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData, allPropertyNamesList}) => {
 
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
   const [cancelMessageLoading, setCancelMessageLoading] = useState("");
@@ -42,7 +31,6 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
     setLocalSettingsData({ ...localSettingsData, [selectedConfig]: newData });
   };
 
-  //const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available'};
   const variables = {'guest_name':'Guest name'};
 
   const handleReturn = (e) => {
@@ -53,39 +41,29 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
   const handleOpenMessageModal = (message) => {
     const headerText = `Message for ${message.guest_first_name} (${formatDateRange(message.guest_check_in, message.guest_check_out)}) at ${formatDateTime(message.time_to_send)}`;
     const newMessageModalContent = message.message
-    let first_line = "";
-
-    if ('start_date' in message && 'end_date' in message) { 
-      first_line = `At ${message.property_name}, vacant night(s) ${formatDateRange(message.start_date, message.end_date)}`;
-    } else {
-      first_line = `At ${message.property_name}`;
-    }
-
+    let first_line = `At ${message.property_name}`;
     setMessageModalMainText(newMessageModalContent);
     setMessageModalTopText(first_line);
     setMessageModalHeaderText(headerText);
     setShowMessageModal(true);
   }
 
-
   const handleOpenConversationModal = (message) => {
     setConversationModalData({'conversationId':message.conversation_id, 'propertyName':message.property_name});
     setShowConversationModal(true);
   }
 
-
   const handleCancelMessage = (message) => {
     const userConfirmed = window.confirm("Are you sure you want to cancel this message?");
     if (userConfirmed) {
-      callCancelMessageApi(message.property_name, message.guest_key, 'review_upsell', callGetUpcomingMessagesApi, setCancelMessageLoading);
+      callCancelMessageApi(message.property_name, message.guest_key, 'check_in_message', callGetUpcomingMessagesApi, setCancelMessageLoading);
     }
   }
 
-
   // On save button click, call the API to save the settings. Once saved, refresh the upcoming messages, regenerated with the new settings
   const handleSaveSettings = async () => {
-    await callSaveSettingsApi(localSettingsData, 'review_upsell');
-    callGetUpcomingMessagesApi(true, 'review_upsell');
+    await callSaveSettingsApi(localSettingsData, 'check_in_message');
+    callGetUpcomingMessagesApi(true, 'check_in_message');
   }
 
   const handleConfigSelectChange = (e) => {
@@ -106,11 +84,10 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
   // On page load, call the API to get the settings and any upcoming messages
   useEffect(() => {
     if (Object.keys(settingsApiData).length === 0) {
-      callGetSettingsApi('review_upsell');
-      callGetUpcomingMessagesApi(false, 'review_upsell');
+      callGetSettingsApi('check_in_message');
+      callGetUpcomingMessagesApi(false, 'check_in_message');
     }
   }, []);
-
 
   // ------- Property multi select -------
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -178,15 +155,13 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
   }, []);
   // -------------------------------------
 
-
-
   return (
     <div className="upsells-settings">
       {getSettingsLoading ? <FullScreenLoader /> : null}
       
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-start justify-content-between">
         <div>
-          <h3>Post-Stay Review Request</h3>
+          <h3>Post-Check-In Check-In Message</h3>
           <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Smart Templates</a>
         </div>
         <div>
@@ -221,7 +196,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
       </div>
 
       <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
-        <p className="settings-label">HostBuddy can detect the sentiment of a guest's stay by analyzing their conversation with you. Based on this sentiment, you can have a message sent to the guest asking for a review. You can customize the message and the criteria for when is sent.</p>
+        <p className="settings-label">HostBuddy will detect whether or not your guest has messaged you since they've checked in. If they haven't, you can send a message to the guest to check in on them and ensure everything is going well. You can customize the message and the criteria for when it is sent.</p>
       </div>
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
@@ -229,22 +204,22 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
       <div className="row mt-4">
         <div className="col-lg-8">
           <div className="d-flex align-items-center gap-5 mb-1">
-            <label className="fs-5">Enable Post Stay Review Requests</label>
+            <label className="fs-5">Enable Post-Check-In Messages</label>
             <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked, currentSettingsData, setCurrentSettingsData)}/>
           </div>
-          <p className="settings-label">You currently have post-stay review requests {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
+          <p className="settings-label">You currently have post-check-in check-in messages {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
         </div>
       </div>
 
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
-          <label className="fs-5">Criteria</label>
+          <label className="fs-5">Sentiment Criteria</label>
           <p className="settings-label">Should HostBuddy send the message for all stays, or only if the sentiment was detected to be positive or neutral?</p>
           <div className="d-flex align-items-center gap-1 mt-1">
-            <select style={{width:'300px'}} className="form-control" value={currentSettingsData.criteria} onChange={(e) => setSetting('criteria', e.target.value, currentSettingsData, setCurrentSettingsData)}>
+            <select style={{width:'430px'}} className="form-control" value={currentSettingsData.criteria} onChange={(e) => setSetting('criteria', e.target.value, currentSettingsData, setCurrentSettingsData)}>
               <option value="always">For all stays</option>
-              <option value="neutral">Only if the stay was neutral or positive</option>
-              <option value="positive">Only if the stay was positive</option>
+              <option value="neutral">Only if the guest's sentiment is neutral or positive</option>
+              <option value="positive">Only if the guest's sentiment is positive</option>
             </select>
           </div>
         </div>
@@ -252,33 +227,31 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
 
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
-          <label className="fs-5">Request Timing</label>
+          <label className="fs-5">Message Timing</label>
           <p className="settings-label mb-2">When should HostBuddy send the message?</p>
           <div className="row mt-1">
-            <div className="col-lg-2 col-4">
-              <input type="number" className="form-control" value={currentSettingsData.days_after_check_out} onChange={(e) => setSetting('days_after_check_out', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
+            <div style={{width: '100px'}}>
+              <input type="number" className="form-control" value={currentSettingsData.hours_after_check_in} onChange={(e) => setSetting('hours_after_check_in', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
             </div>
-            <div className="col-lg-3 col-4" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>days after guest check-out, at</label>
-            </div>
-            <div className="col-lg-3 col-4">
-              <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_of_day} onChange={(e) => setSetting('time_of_day', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
+            <div className="col-lg-4 col-4" style={{ display: 'flex', alignItems: 'center' }}>
+              <label className="settings-label">hours after scheduled guest check-in</label>
             </div>
           </div>
+          {/* <p className="settings-label mt-2">Note: The message will only be sent if the guest hasn't sent any messages since check-in.</p> */}
         </div>
       </div>
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
-      <h3 className="available-variables-heading mt-5 text-center">Request Message</h3>
+      <h3 className="available-variables-heading mt-5 text-center">Check-In Message</h3>
 
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
         <div className="available-variables-section">
-        <label className="fs-5">Variables</label>
-        <p className="settings-label">Click to add custom variables to your request message. These variables will change to match the data for each reservation.</p>
+          <label className="fs-5">Variables</label>
+          <p className="settings-label">Click to add custom variables to your check-in message. These variables will change to match the data for each reservation.</p>
           <div className="available-variables mt-3">
             {Object.keys(variables).map((key, index) => (
-              <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('upsellMessage'), `[[${key}]]`, currentSettingsData, setCurrentSettingsData)}>{variables[key]}</span>
+              <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('checkInMessage'), `[[${key}]]`, currentSettingsData, setCurrentSettingsData)}>{variables[key]}</span>
             ))}
           </div>
         </div>
@@ -290,7 +263,7 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
             <label className="fs-5">Message</label>
           </div>
           <div className="d-flex justify-content-center">
-            <textarea id="upsellMessage" className="form-control setting-textarea" value={currentSettingsData.upsell_message} onChange={(e) => setSetting('upsell_message', e.target.value, currentSettingsData, setCurrentSettingsData)} />
+            <textarea id="checkInMessage" className="form-control setting-textarea" value={currentSettingsData.check_in_message} onChange={(e) => setSetting('check_in_message', e.target.value, currentSettingsData, setCurrentSettingsData)} />
           </div>
         </div>
       </div>
@@ -308,9 +281,9 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
       <p className="settings-label text-center">Showing the next 20.</p>
       {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay review requests <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time for {currentSettingsData.criteria==='always' ? 'all guests' : currentSettingsData.criteria==='neutral' ? 'guests with neutral or positive sentiment' : 'guests with positive sentiment'}.</p>
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-check-in messages <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time for {currentSettingsData.criteria==='always' ? 'all guests' : currentSettingsData.criteria==='neutral' ? 'guests with neutral or positive sentiment' : 'guests with positive sentiment'}, if they haven't sent any messages since check-in.</p>
       ) : (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay review requests <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-check-in messages <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
       )}
 
       <div className="col-12 mt-4">
@@ -322,7 +295,6 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
                 <th>Property</th>
                 <th>Guest</th>
                 <th>Sentiment</th>
-                {/* <th>Status</th> tbh there's no need for this, since current implementation only shows "waiting to send" messages to the user */}
                 <th>Action</th>
               </tr>
             </thead>
@@ -334,7 +306,6 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
                       <td>{formatDateTime(message.time_to_send)}</td>
                       <td>{truncateString(message.property_name, 25)}</td>
                       <td>{`${truncateString(message.guest_first_name, 13)} (${formatDateRange(message.guest_check_in, message.guest_check_out)})`}</td>
-                      {/* <td>Waiting to send</td> We could get the actual status of the message (message.status). But current implementation only shows messages with status "scheduled" */}
                       <td style={{ 
                         color: message.sentiment === 'positive' ? 'rgb(0, 128, 0)' : 
                               message.sentiment === 'negative' ? 'rgb(225, 0, 0)' : 
@@ -361,14 +332,14 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
               ) : (
                 <tbody>
                   <tr>
-                    <td colSpan="6" className="text-center">No upcoming messages</td>
+                    <td colSpan="5" className="text-center">No upcoming messages</td>
                   </tr>
                 </tbody>
               )
             ) : (
               <tbody>
                 <tr>
-                  <td colSpan="6" className="text-center">
+                  <td colSpan="5" className="text-center">
                     <BoxLoader />
                   </td>
                 </tr>
@@ -383,4 +354,4 @@ const ReviewUpsells = ({setSection, settingsApiData, setSettingsApiData, localSe
   );
 };
 
-export default ReviewUpsells;
+export default PostCheckInMessages;

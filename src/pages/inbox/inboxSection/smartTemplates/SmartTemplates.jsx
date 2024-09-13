@@ -5,22 +5,7 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import "../resources/upsells.css";
 
 import ReviewUpsells from "./reviewUpsells";
-
-/*
-default_settings = {
-  'enabled': false,
-  'number_of_nights_criteria': 1,
-  'send_to_which_reservation': 'both before first', // 'before', 'after', 'both before first', 'both after first'
-  'days_before_check_out': 1,
-  'time_before_check_out': '12:00',
-  'days_before_check_in': 1,
-  'time_before_check_in': '12:00',
-  'discount_type': 'percentage', // 'percentage', 'absolute'
-  'discount_percentage': 10,
-  'discount_absolute': 10,
-  'upsell_message': "Hi [[guest_name]], we have [[num_days_available]] that opened up right [[before_or_after]] your reservation. If you're interested, I'd like to offer these nights to you at a [[discount_percentage]]% discount. Let me know if you'd like to add these nights to your stay!"
-}
-*/
+//import PostCheckInMessages from "./postCheckInMessage";
 
 
 const SmartTemplates = ({allPropertyNamesList}) => {
@@ -31,8 +16,14 @@ const SmartTemplates = ({allPropertyNamesList}) => {
   const [reviewLocalSettingsData, setReviewLocalSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
   const [getReviewSettingsLoading, setGetReviewSettingsLoading] = useState(false);
 
+  const [checkInMessageApiData, setCheckInMessageApiData] = useState({});
+  const [checkInLocalSettingsData, setCheckInLocalSettingsData] = useState({});
+  const [getCheckInSettingsLoading, setGetCheckInSettingsLoading] = useState(false);
+
   const [reviewUpcomingMessagesData, setReviewUpcomingMessagesData] = useState([]);
   const [getReviewUpcomingMessagesLoading, setGetReviewUpcomingMessagesLoading] = useState(false);
+  const [checkInUpcomingMessagesData, setCheckInUpcomingMessagesData] = useState([]);
+  const [getCheckInUpcomingMessagesLoading, setGetCheckInUpcomingMessagesLoading] = useState(false);
 
 
   // Call the API to get all the user's settings
@@ -54,6 +45,10 @@ const SmartTemplates = ({allPropertyNamesList}) => {
           setGetReviewSettingsLoading(false);
           setReviewSettingsApiData(response?.data?.upsell_settings);
           setReviewLocalSettingsData(response?.data?.upsell_settings); // Warning: postStaySettingsApiData and postStayLocalSettingsData become shallow copies of each other. Seems not to matter for our use
+        } else if (upsell_type === 'check_in') {
+          setGetCheckInSettingsLoading(false);
+          setCheckInMessageApiData(response?.data?.upsell_settings);
+          setCheckInLocalSettingsData(response?.data?.upsell_settings);
         }
       }
       else { }
@@ -61,6 +56,7 @@ const SmartTemplates = ({allPropertyNamesList}) => {
       
     } finally {
       if (upsell_type === 'review_upsell') { setGetReviewSettingsLoading(false); }
+      else if (upsell_type === 'check_in') { setGetCheckInSettingsLoading(false); }
     }
   }
 
@@ -70,6 +66,7 @@ const SmartTemplates = ({allPropertyNamesList}) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     if (upsell_type === 'review_upsell') { setGetReviewUpcomingMessagesLoading(true); }
+    else if (upsell_type === 'check_in') { setGetCheckInUpcomingMessagesLoading(true); }
 
     try {
       const config = {
@@ -81,12 +78,14 @@ const SmartTemplates = ({allPropertyNamesList}) => {
 
       if (response.status === 200) {
         if (upsell_type === 'review_upsell') { setReviewUpcomingMessagesData(response?.data?.upcoming_messages); }
+        else if (upsell_type === 'check_in') { setCheckInUpcomingMessagesData(response?.data?.upcoming_messages); }
       }
       else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) {
       
     } finally {
       if (upsell_type === 'review_upsell') { setGetReviewUpcomingMessagesLoading(false); }
+      else if (upsell_type === 'check_in') { setGetCheckInUpcomingMessagesLoading(false); }
     }
   }
 
@@ -96,6 +95,12 @@ const SmartTemplates = ({allPropertyNamesList}) => {
       {selectedSection === "reviewUpsells" && (
         <ReviewUpsells setSection={setSelectedSection} settingsApiData={reviewSettingsApiData} setSettingsApiData={setReviewSettingsApiData} localSettingsData={reviewLocalSettingsData} setLocalSettingsData={setReviewLocalSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getReviewSettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getReviewUpcomingMessagesLoading} upcomingMessagesData={reviewUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList} />
       )}
+
+      {/*
+      {selectedSection === "checkInUpsells" && (
+        <PostCheckInMessages setSection={setSelectedSection} settingsApiData={checkInMessageApiData} setSettingsApiData={setCheckInMessageApiData} localSettingsData={checkInLocalSettingsData} setLocalSettingsData={setCheckInLocalSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getCheckInSettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getCheckInUpcomingMessagesLoading} upcomingMessagesData={checkInUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList} />
+      )}
+      */}
       
       {selectedSection === "index" && (
         <div className="upsells-settings">
@@ -114,6 +119,15 @@ const SmartTemplates = ({allPropertyNamesList}) => {
               <p className="settings-label">Send a message to your guests who had a positive experience, asking them to leave a review.</p>
             </div>
           </div>
+
+          {/*
+          <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("checkInUpsells")}>
+            <div className="col-lg-11 col-12">
+              <label className="fs-5">Post-Check-In Message</label>
+              <p className="settings-label">If your guest hasn't messaged you since they've checked in, send a message to them asking if they're finding everything well.</p>
+            </div>
+          </div>
+          */}
 
           {/*
           <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
