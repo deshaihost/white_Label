@@ -150,13 +150,23 @@ const AccountContactSection = () => {
     const { name, type, checked, value } = event.target;
     const isCheckbox = type === 'checkbox';
     const updatedNewContacts = {...newContacts};
+
+    // Validate phone number format for SMS: only allow user to enter numbers and "+"
+    if (section === 'sms' && name === 'address' && !value.match(/^[0-9+]*$/)) {
+      return;
+    }
+
     updatedNewContacts[section][name] = isCheckbox ? checked : value;
     setNewContacts(updatedNewContacts);
   };
 
   const showAddFields = (section) => {
-    let updatedNewContacts = {...newContacts, [section]:{ type:'', name:'', address:'', confirmed:false }};
-    if (section === 'sms') { updatedNewContacts[section].consent_checked = false; }
+    let updatedNewContacts;
+    if (section === 'sms') {
+      updatedNewContacts = { ...newContacts, [section]: { type: '', name: '', address: '', confirmed: false, consent_checked: false } };
+    } else {
+      updatedNewContacts = { ...newContacts, [section]:{ type:'', name:'', address:'', confirmed:false }};
+    }
     setNewContacts(updatedNewContacts);
   };
 
@@ -178,6 +188,8 @@ const AccountContactSection = () => {
   };
 
   const removeContact = async (index) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this contact?");
+    if (!isConfirmed) { return; }
     const responseCode = await callDeleteContactAPI(contacts[index].type, contacts[index].address);
     if (responseCode === 200) {
       dispatch(getUserDataActions()); // update our data from the API
@@ -295,11 +307,13 @@ const AccountContactSection = () => {
                           ))
                         }
                       </td>
-                      <td>
-                        <span className="d-flex justify-content-center">
-                          <Link to="#" style={{color:"red", fontSize:"1rem", lineHeight:'1.2', margin:'0'}} className="text-link" onClick={() => removeContact(index)}>Delete</Link>
-                        </span>
-                      </td>
+                      {contact.name !== 'Primary Email' && (
+                        <td>
+                          <span className="d-flex justify-content-center">
+                            <Link to="#" style={{color:"red", fontSize:"1rem", lineHeight:'1.2', margin:'0'}} className="text-link" onClick={() => removeContact(index)}>Delete</Link>
+                          </span>
+                        </td>
+                      )}
                     </tr>
                   )
                 ))}
