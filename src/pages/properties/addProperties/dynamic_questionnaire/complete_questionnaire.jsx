@@ -26,10 +26,11 @@ const QuestionnairePage = () => {
   const section_order_data = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire?.metadata?.section_order
   const questionnaire_section_names = ["Resources", ...(section_order_data || [])];
 
+  const [liveQuestionnaireData, setLiveQuestionnaireData] = useState({});
   const [selectedSection, setSelectedSection] = useState("Resources");
   const [questionnairePostLoading, setQuestionnairePostLoading] = useState(false);
   const [triggeredSaveLoading, setTriggeredSaveLoading] = useState(false);
-  const [dataToUpdate, setDataToUpdate] = useState(false); // whether there is new data to update to the API
+  const [dataToUpdate, setDataToUpdate] = useState([]); // Sections that contain modified data to be saved
   const [showModal, setShowModal] = useState(false); // pencil icon modal
   const [dataForModal, setDataForModal] = useState({}); // data to be passed to the pencil icon modal
   const [doTriggeredSave, setDoTriggeredSave] = useState(false); // Set this to trigger a save
@@ -47,6 +48,13 @@ const QuestionnairePage = () => {
       return () => { dispatch(stateEmptyActions("getQuestionnaire")); } // Clear the state when the component unmounts
     }
   }, [property_name]);
+
+  // When the API questionnaire data is available, set it to our local state
+  useEffect(() => {
+    if (apiQuestionnaireData) {
+      setLiveQuestionnaireData(JSON.parse(JSON.stringify(apiQuestionnaireData))); // ensure deep copy
+    }
+  }, [apiQuestionnaireData]);
 
   // Get property data from the API. Should run once, immediately when the page loads
   const getPropertyDataFromAPI = async (propertyName) => {
@@ -72,7 +80,6 @@ const QuestionnairePage = () => {
 
   // Update questionnaire data to the API
   const update_questionnaire_to_API = async (property_name, questionnaire_data) => {
-    //console.log("Updating API");
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setQuestionnairePostLoading(true);
@@ -97,25 +104,28 @@ const QuestionnairePage = () => {
     }
   }, [property_name, apiPropertyData]);
 
-  // Auto save. Every 10 seconds, if there's changed form data, send the questionnaire to the API
+  // Auto save. After form data changes, wait for 3 seconds of no further changes, then save to the API
   useEffect(() => {
     const interval = setInterval(() => {
       if (!questionnairePostLoading) { // Don't auto save if we're still waiting for a response from another save (i.e. a triggered save)
-        if (dataToUpdate && property_name && apiQuestionnaireData) {
-          setDataToUpdate(false);
-          update_questionnaire_to_API(property_name, {questionnaire:apiQuestionnaireData});
-          //console.log("Auto update triggered", property_name, apiQuestionnaireData);
+        if (dataToUpdate.length > 0 && property_name && liveQuestionnaireData) { // Only include the sections in dataToUpdate in questionnaireDataToUpdate
+          let questionnaireDataToUpdate = {questionnaire:{}};
+          dataToUpdate.forEach((section) => {
+            questionnaireDataToUpdate.questionnaire[section] = liveQuestionnaireData.questionnaire[section];
+          });
+          setDataToUpdate([]);
+          update_questionnaire_to_API(property_name, {questionnaire:questionnaireDataToUpdate});
         }
       }
-    }, 10000);
+    }, 3000);
     return () => clearInterval(interval);
-  }, [dataToUpdate, property_name, apiQuestionnaireData]);
+  }, [dataToUpdate, property_name, liveQuestionnaireData, questionnairePostLoading]);
 
   // Triggered save, for when the user explicitly clicks any "Save" button
   const triggerSave = async () => {
     //console.log("Triggered save");
     setTriggeredSaveLoading(true);
-    if (dataToUpdate && property_name && apiQuestionnaireData) { // if dataToUpdate false, don't bother
+    if (dataToUpdate.length > 0 && property_name && liveQuestionnaireData) { // if dataToUpdate false, don't bother
 
       // If the questionnaire is still updating from another save (i.e. an autosave), busywait for it to finish to avoid concurrent updates
       let counter = 0;
@@ -126,8 +136,15 @@ const QuestionnairePage = () => {
       }
 
       if (counter < maxWaitPeriods) {
-        const api_resp_status = await update_questionnaire_to_API(property_name, {questionnaire:apiQuestionnaireData});
-        if (api_resp_status === 200) { setDataToUpdate(false); }
+        let questionnaireDataToUpdate = {questionnaire:{}};
+        dataToUpdate.forEach((section) => {
+          questionnaireDataToUpdate.questionnaire[section] = liveQuestionnaireData.questionnaire[section];
+        });
+        const api_resp_status = await update_questionnaire_to_API(property_name, {questionnaire:questionnaireDataToUpdate});
+        if (api_resp_status === 200) {
+          console.log("Triggered save successful");
+          setDataToUpdate([]);
+        }
       } else { } // max wait period exceeded. abort
     }
     setTriggeredSaveLoading(false);
@@ -151,68 +168,81 @@ const QuestionnairePage = () => {
 
   // Handle triggered save calls. Need to use a UseEffect to ensure dependencies are properly available
   useEffect(() => {
-    if (dataToUpdate && doTriggeredSave) {
-      setDoTriggeredSave(false);
-      triggerSave();
-    }
-    else if (doTriggeredSave) {
-      setTriggeredSaveComplete(true);
-      setDoTriggeredSave(false);
+    if (doTriggeredSave) {
+      if (dataToUpdate.length > 0) {
+        setDoTriggeredSave(false);
+        triggerSave();
+      } else {
+        setTriggeredSaveComplete(true);
+        setDoTriggeredSave(false);
+      }
     }
   }, [dataToUpdate, doTriggeredSave]);
 
   // When an input field is changed, update our questionnaire object
   const handleInputComponentChange = (event, sec_name, subsec_name, q_ind, question_type) => {
-    if (question_type === "short_answer" || question_type === "long_answer") {
-      apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].response_text = event.target.value;
-
-    } else if (question_type === "select") {
-      apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].response_option = event.target.value;
-
-    } else if (question_type === "checkbox_group") {
-      const question = apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind];
-      if (event.target.checked) { // Add our selection to response_options, and a blank string to response_text and hide_for_reservations
-        if (!question.response_options.includes(event.target.value)) {
-          question.response_options.push(event.target.value); 
-          question.response_text.push('');
-          question.hide_for_reservations.push('');
-        }
-      } else { // Remove our selection from response_options, and the corresponding elements from response_text and hide_for_reservations
-        const optionIndex = question.response_options.indexOf(event.target.value);
-        if (optionIndex > -1) {
-          question.response_options = question.response_options.filter((item) => item !== event.target.value);
-          question.response_text.splice(optionIndex, 1);
-          question.hide_for_reservations.splice(optionIndex, 1);
+    setLiveQuestionnaireData((prevData) => {
+      const newData = JSON.parse(JSON.stringify(prevData));
+  
+      if (question_type === "short_answer" || question_type === "long_answer") {
+        newData.questionnaire[sec_name][subsec_name][q_ind].response_text = event.target.value;
+  
+      } else if (question_type === "select") {
+        newData.questionnaire[sec_name][subsec_name][q_ind].response_option = event.target.value;
+  
+      } else if (question_type === "checkbox_group") {
+        const question = newData.questionnaire[sec_name][subsec_name][q_ind];
+        if (event.target.checked) { // Add our selection to response_options, and a blank string to response_text and hide_for_reservations
+          if (!question.response_options.includes(event.target.value)) {
+            question.response_options.push(event.target.value); 
+            question.response_text.push('');
+            question.hide_for_reservations.push('');
+          }
+        } else { // Remove our selection from response_options, and the corresponding elements from response_text and hide_for_reservations
+          const optionIndex = question.response_options.indexOf(event.target.value);
+          if (optionIndex > -1) {
+            question.response_options = question.response_options.filter((item) => item !== event.target.value);
+            question.response_text.splice(optionIndex, 1);
+            question.hide_for_reservations.splice(optionIndex, 1);
+          }
         }
       }
-    }
-    setDataToUpdate(true);
+      return newData;
+    });
+    console.log("Input component changed");
+    setDataToUpdate([...(dataToUpdate || []), sec_name]);
   }
 
   // When modal data is saved, update our questionnaire object and save to the API
   const handleModalSave = (resStageData, extraNoteData) => {
-    setDataToUpdate(true);
     const { sec_name, subsec_name, q_ind, checkbox_group_option } = dataForModal;
-    const question_type = apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].question_type;
-    //console.log("ModalSaveData\n-", resStageData, "\n-", extraNoteData, "\n-", subsec_name, "\n-", q_ind, "\n-", checkbox_group_option);
-
-    if (question_type === "short_answer" || question_type === "long_answer") {
-      apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].hide_for_reservations = JSON.stringify(resStageData);
-    } else if (question_type === "select") {
-      apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].hide_for_reservations = JSON.stringify(resStageData);
-      apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].response_text = extraNoteData;
-    } else if (question_type === "checkbox_group") {
-      const question = apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind];
-      const optionIndex = question.response_options.indexOf(checkbox_group_option);
-      const newHideForReservations = [...question.hide_for_reservations];
-      const newResponseText = [...question.response_text];
-      newHideForReservations[optionIndex] = JSON.stringify(resStageData);
-      newResponseText[optionIndex] = extraNoteData;
-      question.hide_for_reservations = newHideForReservations;
-      question.response_text = newResponseText;
-    }
+    const question_type = liveQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind].question_type;
+    setDataToUpdate([...(dataToUpdate || []), sec_name]); // if this isn't set, then the triggered save funct won't do anything
+  
+    setLiveQuestionnaireData((prevData) => {
+      const newData = JSON.parse(JSON.stringify(prevData)); // Create a deep copy of the previous state
+  
+      if (question_type === "short_answer" || question_type === "long_answer") {
+        newData.questionnaire[sec_name][subsec_name][q_ind].hide_for_reservations = JSON.stringify(resStageData);
+      } else if (question_type === "select") {
+        newData.questionnaire[sec_name][subsec_name][q_ind].hide_for_reservations = JSON.stringify(resStageData);
+        newData.questionnaire[sec_name][subsec_name][q_ind].response_text = extraNoteData;
+      } else if (question_type === "checkbox_group") {
+        const question = newData.questionnaire[sec_name][subsec_name][q_ind];
+        const optionIndex = question.response_options.indexOf(checkbox_group_option);
+        const newHideForReservations = [...question.hide_for_reservations];
+        const newResponseText = [...question.response_text];
+        newHideForReservations[optionIndex] = JSON.stringify(resStageData);
+        newResponseText[optionIndex] = extraNoteData;
+        question.hide_for_reservations = newHideForReservations;
+        question.response_text = newResponseText;
+      }
+  
+      return newData;
+    });
+  
     setDoTriggeredSave(true);
-  }
+  };
 
   // Trigger a save, then move to the next section (if there is one) or the previous section (if prev is true, and there is one), or return to properties page
   const handleSaveAndNext = (prev=false) => {
@@ -226,7 +256,7 @@ const QuestionnairePage = () => {
 
   // When the pencil icon is clicked (in a form component, in a section): render the modal with the corresponding question data
   const handlePencilIconClick = (sec_name, subsec_name, q_ind, checkbox_group_option) => {
-    const question = apiQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind];
+    const question = liveQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind];
     setDataForModal({ question_obj:question, sec_name:sec_name, subsec_name:subsec_name, q_ind:q_ind, checkbox_group_option:checkbox_group_option });
     setShowModal(true);
   }
@@ -237,7 +267,7 @@ const QuestionnairePage = () => {
         <title>Edit Property</title>
       </Helmet>;
       <Container className="py-3">
-        {(!property_name) || apiQuestionnaireData ? (
+        {apiQuestionnaireData ? (
           <>
             {/* Header, with section names and progress bar */}
             <div className="row">
@@ -256,7 +286,7 @@ const QuestionnairePage = () => {
                   selectedSection === "Resources" ? (
                     <QuestionnaireFirstPage handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
                   ) : (
-                    <QuestionnaireSection questionnaire_section_name={selectedSection} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
+                    <QuestionnaireSection questionnaire_section_name={selectedSection} liveQuestionnaireData={liveQuestionnaireData} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
                   )
                 ) : (
                   <ExternalResourcesForm property_name={property_name} handleSaveAndNext={handleSaveAndNext}/>

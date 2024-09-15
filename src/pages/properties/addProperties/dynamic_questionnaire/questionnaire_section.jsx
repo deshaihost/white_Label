@@ -2,18 +2,14 @@ import SelectComponent from "./form_components/select";
 import ShortAnswerComponent from "./form_components/short_answer";
 import LongAnswerComponent from "./form_components/long_answer";
 import CheckboxGroupComponent from "./form_components/checkbox_group";
-import { useSelector } from "react-redux";
 import React from "react";
 import Loader from "../../../../helper/Loader";
 
 // Code for the input components in a single section in the dynamic questionnaire (but NOT "Basics" or "Externam Resources")
-const QuestionnaireSection = ({questionnaire_section_name, handleInputComponentChange, handlePencilIconClick, handleSaveAndNext, triggeredSaveLoading, property_name, section_num, num_total_sections}) => {
+const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData, handleInputComponentChange, handlePencilIconClick, handleSaveAndNext, triggeredSaveLoading, property_name, section_num, num_total_sections}) => {
 
-  const store = useSelector((state) => state);
-  const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
-
-  const questionnaire_section_data = apiQuestionnaireData.questionnaire[questionnaire_section_name];
-  const subsection_order = apiQuestionnaireData.metadata.subsection_order[questionnaire_section_name];
+  const questionnaire_section_data = liveQuestionnaireData.questionnaire[questionnaire_section_name];
+  const subsection_order = liveQuestionnaireData.metadata.subsection_order[questionnaire_section_name];
 
   const is_first_section = section_num === 0;
   const is_last_section = section_num === num_total_sections - 1;
