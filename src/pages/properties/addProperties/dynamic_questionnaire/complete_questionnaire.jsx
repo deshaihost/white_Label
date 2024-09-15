@@ -265,7 +265,7 @@ const QuestionnairePage = () => {
             </div>
 
             {/* Pencil icon modal */}
-            <PencilIconModal show={showModal} setShowModal={setShowModal} question_obj={dataForModal.question_obj} checkbox_group_option={dataForModal.checkbox_group_option} handleModalSave={handleModalSave} />
+            <PencilIconModal show={showModal} setShowModal={setShowModal} question_obj={dataForModal.question_obj} checkbox_group_option={dataForModal.checkbox_group_option} handleModalSave={handleModalSave} sectionName={dataForModal.sec_name} subSectionName={dataForModal.subsec_name} />
           </>
         ) : (
           <div style={{ paddingTop: '200px', paddingBottom: '200px' }}>
