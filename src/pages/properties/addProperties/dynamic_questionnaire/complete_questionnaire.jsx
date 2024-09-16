@@ -142,7 +142,6 @@ const QuestionnairePage = () => {
         });
         const api_resp_status = await update_questionnaire_to_API(property_name, {questionnaire:questionnaireDataToUpdate});
         if (api_resp_status === 200) {
-          console.log("Triggered save successful");
           setDataToUpdate([]);
         }
       } else { } // max wait period exceeded. abort

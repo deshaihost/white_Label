@@ -50,11 +50,13 @@ const InboxIndex = () => {
   const populateGuestNames = async () => {
     const data = await callGetGuestNamesApi();
     if (data?.guest_names) {
+      let idCounter = 1; // So we can give each guest a unique ID
       const transformedGuestNames = Object.entries(data.guest_names).flatMap(([property, names]) =>
         names.map(name => ({
           name: name,
           searchable: name.toLowerCase().replace(/[^a-z0-9]/g, ''),
-          property: property
+          property: property,
+          id_for_react: idCounter++,
         }))
       );
       setAllGuestNames(transformedGuestNames);

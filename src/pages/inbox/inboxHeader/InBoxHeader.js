@@ -9,7 +9,7 @@ const InBoxHeader = ({ showInterFace, interFaceComponent, showTimeZoneNotif }) =
     <div className="inbox-nav-bar">
       {labelName?.map((label, index) => {
         return (
-          <button className={`${interFaceComponent === index ? 'nav-active': ""}`} onClick={() => {showInterFace(index);}}>
+          <button className={`${interFaceComponent === index ? 'nav-active': ""}`} onClick={() => {showInterFace(index);}} key={label}>
             {label}
           </button>
         );

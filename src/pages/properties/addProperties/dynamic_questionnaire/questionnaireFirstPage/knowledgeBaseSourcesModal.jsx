@@ -123,7 +123,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
             <hr style={{width: "90%", margin: "0 auto"}}/>
 
             {Object.keys(sourceAndSelectionData).map((section) => (
-              <>
+              <div key={section}>
                 <h4>{section}</h4>
                 {Object.keys(sourceAndSelectionData[section]).length > 0 ? (
                   <div className="sources-container">
@@ -158,7 +158,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
                     <p style={{margin:"0", fontSize:"16px", color:"#AAA", fontStyle:"italic"}}>No {section.toLowerCase()} added</p>
                   </div>
                 )}
-              </>
+              </div>
             ))}
             
             {!apiLoading ? (

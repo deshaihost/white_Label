@@ -276,9 +276,8 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
         <div className="message-list" ref={messageListRef}>
           {messages?.map((message, index) => {
             return (
-              <>
                 <MessageInbox
-                  key={index}
+                  key={message?.id}
                   text={message.text?.text}
                   sender={message.sender}
                   currentMessageDay={message.messageDay}
@@ -289,7 +288,6 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
                   prevMsgText={messages[index - 1]?.text}
                   isInitialMessage={index <= 1}
                 />
-              </>
             );
           })}
           {/* {updateMessageRespLoading && <Loader />} */}

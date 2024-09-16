@@ -10,13 +10,11 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
 
   return (
     <div>
-      <p>
-        {sender === "bot" ? (
-            <div className="timing left-msg">{timeFormatConvert}</div>
-        ) : (
-            <div className="text-end timing">Sent by {sendByFormatted} | {timeFormatConvert}</div>
-        )}
-      </p>
+      {sender === "bot" ? (
+        <p className="timing left-msg">{timeFormatConvert}</p>
+      ) : (
+        <p className="text-end timing">Sent by {sendByFormatted} | {timeFormatConvert}</p>
+      )}
       <div className={`message ${sender} mesaage-box`}>
         {sendBy === "hostbuddy" && (
           <div className=" py-3 thunbs">

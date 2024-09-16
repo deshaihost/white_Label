@@ -184,8 +184,8 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
               </div>
               {filteredGuests.length > 0 && (
                 <div className="dropdown">
-                  {filteredGuests.map((guest, index) => (
-                    <div key={index} className="dropdown-item" onClick={() => handleGuestClick(guest)}>
+                  {filteredGuests.map((guest) => (
+                    <div key={guest?.id_for_react} className="dropdown-item" onClick={() => handleGuestClick(guest)}>
                       <div className="guest-name">{guest.name}</div>
                       <div className="guest-property">{guest.property}</div>
                     </div>
@@ -198,11 +198,11 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
           {/* Properties Select */}
           <div className="custom-select">
             <select name="all" id="all" value={propertyFilterVal} className={`${propertyFilterVal ? "select-active" : "bg-dark"}`} onChange={handlePropertyFilterChange}>
-              <option value="" selected>
+              <option value="">
                 All Properties
               </option>
               {allPropertyNamesList?.map((option, index) => (
-                <option key={index} value={option}>
+                <option key={option} value={option}>
                   {option}
                 </option>
               ))}
@@ -212,7 +212,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
           {/* Phase Select */}
           <div className="custom-select">
             <select name="all" id="all" value={phaseFilterVal} className={`${phaseFilterVal ? "select-active" : "bg-dark"}`} onChange={handlePhaseFilterChange} style={{minWidth:"120px"}}>
-              <option value="" selected>All Phases</option>
+              <option value="">All Phases</option>
                 <option value='inquiry'>Inquiry</option>
                 <option value='future'>Future</option>
                 <option value='current'>Current</option>
@@ -234,7 +234,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
       </div>
       {filterQueryLoading ? (<BoxLoader />) : (
         <div className="left-bar-chat" ref={containerRef}>
-          {allConversations?.map((message, messageIndex) => {
+          {allConversations?.map((message) => {
             const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url } = message;
             const allDataForConversation = message;
             const messages = message?.messages; // Assuming message?.messages is an array
@@ -267,7 +267,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
             */
 
             return (
-              <>
+              <React.Fragment key={conversation_id}>
                 <div style={{ cursor: "pointer", overflow: 'hidden', width: '100%' }}
                   className={`${conversation_id === selectedConversationId && "bg-dark"} left-inner-tab`}
                   onClick={() => openConversationHandle(allDataForConversation, conversation_id)}
@@ -301,7 +301,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                   </div>
                 </div>
                 <hr />
-              </>
+              </React.Fragment>
             );
           })}
         </div>

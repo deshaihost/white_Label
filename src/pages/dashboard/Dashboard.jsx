@@ -114,7 +114,7 @@ const Dashboard = () => {
     }
     return (
       <span className="search-btn">
-        <i class="bi bi-search me-2 text-white"></i>
+        <i className="bi bi-search me-2 text-white"></i>
         {propertySearchVal !== "" ? propertySearchVal : "Search Property"}
       </span>
     );
@@ -249,7 +249,7 @@ const Dashboard = () => {
                             {!userDataGetLoading ? (
                               <>
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" >
-                                  <path fill-rule="evenodd" clip-rule="evenodd" fill="#146EF5" d="M15.3422 0.656793C15.4156 0.730166 15.4662 0.823302 15.4877 0.924871C15.5092 1.02644 15.5007 1.13207 15.4632 1.2289L10.1064 15.1567C10.0684 15.2552 10.0022 15.3404 9.91608 15.4014C9.82992 15.4625 9.72764 15.4967 9.62209 15.4998C9.51653 15.5029 9.41242 15.4747 9.32283 15.4188C9.23325 15.3629 9.16218 15.2818 9.11856 15.1856L6.87831 10.2573L10.1739 6.96072C10.3158 6.80839 10.3931 6.60693 10.3894 6.39876C10.3857 6.19059 10.3014 5.99198 10.1542 5.84476C10.007 5.69754 9.80833 5.61321 9.60016 5.60953C9.39199 5.60586 9.19053 5.68313 9.0382 5.82507L5.74158 9.12059L0.813244 6.88143C0.716785 6.83787 0.635392 6.76671 0.579339 6.67693C0.523286 6.58715 0.495084 6.48278 0.498293 6.37699C0.501503 6.2712 0.535979 6.16873 0.597371 6.08251C0.658763 5.9963 0.74432 5.9302 0.843243 5.89256L14.7711 0.535729C14.8678 0.498525 14.9732 0.49016 15.0746 0.511648C15.176 0.533135 15.2689 0.583553 15.3422 0.656793Z"></path>
+                                  <path fill="#146EF5" d="M15.3422 0.656793C15.4156 0.730166 15.4662 0.823302 15.4877 0.924871C15.5092 1.02644 15.5007 1.13207 15.4632 1.2289L10.1064 15.1567C10.0684 15.2552 10.0022 15.3404 9.91608 15.4014C9.82992 15.4625 9.72764 15.4967 9.62209 15.4998C9.51653 15.5029 9.41242 15.4747 9.32283 15.4188C9.23325 15.3629 9.16218 15.2818 9.11856 15.1856L6.87831 10.2573L10.1739 6.96072C10.3158 6.80839 10.3931 6.60693 10.3894 6.39876C10.3857 6.19059 10.3014 5.99198 10.1542 5.84476C10.007 5.69754 9.80833 5.61321 9.60016 5.60953C9.39199 5.60586 9.19053 5.68313 9.0382 5.82507L5.74158 9.12059L0.813244 6.88143C0.716785 6.83787 0.635392 6.76671 0.579339 6.67693C0.523286 6.58715 0.495084 6.48278 0.498293 6.37699C0.501503 6.2712 0.535979 6.16873 0.597371 6.08251C0.658763 5.9963 0.74432 5.9302 0.843243 5.89256L14.7711 0.535729C14.8678 0.498525 14.9732 0.49016 15.0746 0.511648C15.176 0.533135 15.2689 0.583553 15.3422 0.656793Z"></path>
                                 </svg>
                                 <h4>{total}</h4>
                                 <p>Total Messages Processed</p>
@@ -263,7 +263,7 @@ const Dashboard = () => {
                           <div className="account-box">
                             {!userDataGetLoading ? (
                               <>
-                                <i class="bi bi-house-door icon-style"></i>
+                                <i className="bi bi-house-door icon-style"></i>
                                 <h4 className="mt-3">
                                   {allPropertyName?.length}
                                 </h4>
@@ -279,7 +279,7 @@ const Dashboard = () => {
                           <div className="account-box">
                             {!userDataGetLoading ? (
                               <>
-                                <i class="bi bi-clock icon-style"></i>
+                                <i className="bi bi-clock icon-style"></i>
                                 <h4 className="mt-3">0</h4>
                                 <p>Total Hosting Time</p>
                               </>
@@ -293,7 +293,7 @@ const Dashboard = () => {
                           <div className="account-box">
                             {!userDataGetLoading ? (
                               <>
-                                <i class="bi bi-file-text icon-style"></i>
+                                <i className="bi bi-file-text icon-style"></i>
                                 <h4 className="mt-3">{actionItemsLast14d}</h4>
                                 <p>Action Items (last 14d)</p>
                               </>
@@ -306,7 +306,7 @@ const Dashboard = () => {
                           <div className="account-box">
                             {!userDataGetLoading ? (
                               <>
-                                <i class="bi bi-file-text icon-style "></i>
+                                <i className="bi bi-file-text icon-style "></i>
                                 <h4 className="mt-3">{actionItemsLast24h}</h4>
                                 <p>Action Items (last 24h)</p>
                               </>
@@ -320,7 +320,7 @@ const Dashboard = () => {
                           <div className="account-box">
                             {!userDataGetLoading ? (
                               <>
-                                <i class="bi bi-people-fill icon-style "></i>
+                                <i className="bi bi-people-fill icon-style "></i>
                                 <h4 className="mt-3">0</h4>
                                 <p>Total Guests Supported</p>
                               </>
@@ -356,30 +356,30 @@ const Dashboard = () => {
                           </div>
                           {/*
                           <div className="d-flex flex-wrap flex-md-nowrap justify-content-between gap-2 gap-xl-4">
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                            <div className="form-check">
+                              <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
                                 checked={statusFilterVal === "Incomplete"}
                                 onClick={() => { setStatusFilterVal("Incomplete"); }}
                               />
-                              <label class="form-check-label fs-14" for="flexRadioDefault2">
+                              <label className="form-check-label fs-14" for="flexRadioDefault2">
                                 Incomplete
                               </label>
                             </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                            <div className="form-check">
+                              <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
                                 checked={statusFilterVal === "Completed"}
                                 onClick={() => { setStatusFilterVal("Completed"); }}
                               />
-                              <label class="form-check-label fs-14" for="flexRadioDefault1">
+                              <label className="form-check-label fs-14" for="flexRadioDefault1">
                                 Complete
                               </label>
                             </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3"
+                            <div className="form-check">
+                              <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3"
                                 checked={statusFilterVal === "Expired"}
                                 onClick={() => { setStatusFilterVal("Expired"); }}
                               />
-                              <label class="form-check-label fs-14" for="flexRadioDefault3">
+                              <label className="form-check-label fs-14" for="flexRadioDefault3">
                                 Expired
                                 <i className="bi bi-question-circle ms-2" data-tooltip-id="expireTooltip"
                                   data-tooltip-content='Incomplete action items are marked "Expired" after 14 days. All action items are permanently deleted after 60 days.'
@@ -392,7 +392,7 @@ const Dashboard = () => {
                         </div>
                         {filteredSearchProperty?.length > 0 ? (
                           <div className="table-responsive" style={{ overflowY: "auto", height: "500px" }}>
-                            <table class="table text-white action-items-table">
+                            <table className="table text-white action-items-table">
                               <thead style={{ background: "#020d29" }}>
                                 <tr>
                                   <th>Date/Time</th>

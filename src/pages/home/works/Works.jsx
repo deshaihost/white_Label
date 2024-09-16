@@ -32,12 +32,12 @@ const Works = () => {
                             <path d="M15.5 12L16.094 14.406L18.5 15L16.094 15.594L15.5 18L14.906 15.594L12.5 15L14.906 14.406L15.5 12Z" fill="url(#paint1_linear_27_486)"></path>
                             <defs>
                                 <linearGradient id="paint0_linear_27_486" x1="9.5" y1="0" x2="9.5" y2="18" gradientUnits="userSpaceOnUse">
-                                    <stop stop-color="#F9FBFF"></stop>
-                                    <stop offset="1" stop-color="#6CA7FF"></stop>
+                                    <stop stopColor="#F9FBFF"></stop>
+                                    <stop offset="1" stopColor="#6CA7FF"></stop>
                                 </linearGradient>
                                 <linearGradient id="paint1_linear_27_486" x1="15.5" y1="12" x2="15.5" y2="18" gradientUnits="userSpaceOnUse">
-                                    <stop stop-color="#F9FBFF"></stop>
-                                    <stop offset="1" stop-color="#6CA7FF"></stop>
+                                    <stop stopColor="#F9FBFF"></stop>
+                                    <stop offset="1" stopColor="#6CA7FF"></stop>
                                 </linearGradient>
                             </defs>
                         </svg>
