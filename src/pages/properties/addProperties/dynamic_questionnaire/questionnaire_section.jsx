@@ -21,23 +21,23 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
       {questionnaire_section_data && subsection_order.map((subsectionName) => {
         const subsection = questionnaire_section_data[subsectionName];
         return (
-          <>
+          <React.Fragment key={subsectionName}>
             <h1 className="text-white mb-3 fs-4 fw-bold">{subsectionName}</h1>
               <div className="row my-3">
                 {subsection && subsection.map((question, index) => {
                   if (question.question_type === 'select') {
-                    return <SelectComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} />;
+                    return <SelectComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} key={index} />;
                   } else if (question.question_type === 'short_answer') {
-                    return <ShortAnswerComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} />;
+                    return <ShortAnswerComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} key={index} />;
                   } else if (question.question_type === 'long_answer') {
-                    return <LongAnswerComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} />;
+                    return <LongAnswerComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} key={index} />;
                   } else if (question.question_type === 'checkbox_group') {
-                    return <CheckboxGroupComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} />;
+                    return <CheckboxGroupComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} key={index} />;
                   }
                 })}
               </div>
             <div style={{ marginBottom: '50px' }}></div>
-          </>
+          </React.Fragment>
         );
       })}
       

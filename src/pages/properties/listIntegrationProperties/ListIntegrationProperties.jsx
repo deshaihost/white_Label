@@ -276,100 +276,98 @@ const ListIntegrationProperties = () => {
             let PropertStop = PropertiesExtraData?.[properties]?.toggle_status;
             let is_locked = PropertiesExtraData?.[properties]?.hasOwnProperty('is_locked') ?? false;
             return (
-              <>
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="d-flex gap-1 align-items-center justify-content-between property_lisiting mb-4">
-                      <div className="d-flex gap-1 align-items-center property_listing_item">
-                        <div className="img-with-title">
-                          <img src={PropertiesExtraData?.[properties]?.thumbnail_image || dummyPropertyImg} alt=""/>
-                        </div>
-                        <div className="property_listing_detail">
-                          <div className="property-detail">
-                            <h4 style={{fontWeight:'bold', fontSize: '1.3em'}}>{properties}</h4>
-                            {!is_locked && (
-                              <div className="d-flex gap-2">
-                                {PropertStop === "FORCED_OFF" ? (
-                                  <>
-                                    {" "}
-                                    <button className="bg-danger text-white rounded-pill border-danger btn border" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(true, index);}}>
-                                      STOPPED
-                                    </button>
-                                  </>
-                                ) : (
-                                  <>
-                                    <button className="bg-dark text-primary border-primary btn border rounded-pill" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(false, index);}}>
-                                      STOP
-                                    </button>
-                                  </>
-                                )}
+              <div className="row" key={properties}>
+                <div className="col-lg-12">
+                  <div className="d-flex gap-1 align-items-center justify-content-between property_lisiting mb-4">
+                    <div className="d-flex gap-1 align-items-center property_listing_item">
+                      <div className="img-with-title">
+                        <img src={PropertiesExtraData?.[properties]?.thumbnail_image || dummyPropertyImg} alt=""/>
+                      </div>
+                      <div className="property_listing_detail">
+                        <div className="property-detail">
+                          <h4 style={{fontWeight:'bold', fontSize: '1.3em'}}>{properties}</h4>
+                          {!is_locked && (
+                            <div className="d-flex gap-2">
+                              {PropertStop === "FORCED_OFF" ? (
+                                <>
+                                  {" "}
+                                  <button className="bg-danger text-white rounded-pill border-danger btn border" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(true, index);}}>
+                                    STOPPED
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <button className="bg-dark text-primary border-primary btn border rounded-pill" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(false, index);}}>
+                                    STOP
+                                  </button>
+                                </>
+                              )}
 
-                                <Button className="border-0 shadow-none bg-none p-0 fs-5" onClick={() => handleCalenderModalOpen(properties)}>
-                                  <CiCalendar className="text-primary" />
-                                </Button>
-                              </div>
-                            )}
-                            {is_locked ? (
-                              <h6 style={{ marginTop:'13px', color: 'rgb(135,135,135)', fontSize:'0.84em', fontWeight:'normal' }}>
-                                This property is locked.{' '}
-                                <button className="text-primary border-0 bg-none p-0" onClick={() => { selectedHandle("UnlockProperty", [properties]); }}>Unlock it</button>
-                                {' '}to access options for responding to guests.
-                              </h6>
-                            ) : (
-                              <h6 style={{ marginTop:'13px', color: 'rgb(135,135,135)', fontSize:'0.84em', fontWeight:'normal' }}>
-                                {PropertiesExtraData?.[properties]?.status_statement.split(' ').map((word, index) => 
-                                  <React.Fragment key={index}>
-                                    {word === 'RESPONDING' ? <span style={{ color: 'rgb(0,200,0)' }}>{word}</span> :
-                                    word === 'OFF' ? <span style={{ color: 'rgb(255,0,0)' }}>{word}</span> :
-                                    word}
-                                    {' '}
-                                  </React.Fragment>
-                                )}
-                              </h6>
-                            )}
-                          </div>
+                              <Button className="border-0 shadow-none bg-none p-0 fs-5" onClick={() => handleCalenderModalOpen(properties)}>
+                                <CiCalendar className="text-primary" />
+                              </Button>
+                            </div>
+                          )}
+                          {is_locked ? (
+                            <h6 style={{ marginTop:'13px', color: 'rgb(135,135,135)', fontSize:'0.84em', fontWeight:'normal' }}>
+                              This property is locked.{' '}
+                              <button className="text-primary border-0 bg-none p-0" onClick={() => { selectedHandle("UnlockProperty", [properties]); }}>Unlock it</button>
+                              {' '}to access options for responding to guests.
+                            </h6>
+                          ) : (
+                            <h6 style={{ marginTop:'13px', color: 'rgb(135,135,135)', fontSize:'0.84em', fontWeight:'normal' }}>
+                              {PropertiesExtraData?.[properties]?.status_statement.split(' ').map((word, index) => 
+                                <React.Fragment key={index}>
+                                  {word === 'RESPONDING' ? <span style={{ color: 'rgb(0,200,0)' }}>{word}</span> :
+                                  word === 'OFF' ? <span style={{ color: 'rgb(255,0,0)' }}>{word}</span> :
+                                  word}
+                                  {' '}
+                                </React.Fragment>
+                              )}
+                            </h6>
+                          )}
                         </div>
                       </div>
-                      <div className="property_listing_btn">
-                        <div className="d-flex">
-                          <Button className="property-edit-btn" onClick={() => {selectedHandle(editProperty, properties);}}>
-                            <i class="bi bi-pen"></i>
-                          </Button>
-                          <div>
-                            <Dropdown className="property-dropdown">
-                              <Dropdown.Toggle className="" id="dropdown-button-drop-down-centered" drop="down-centered">
-                                <HiOutlineDotsHorizontal />
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => { selectedHandle(editProperty, properties); }}>
-                                  Edit Property
-                                </Dropdown.Item>
-                                {!is_locked &&
-                                  <>
-                                    <Dropdown.Item onClick={() => { selectedHandle(copyChatbotLink, properties); }}>
-                                      Copy Chatbot Link
-                                    </Dropdown.Item>
-                                    <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
-                                      Regenerate Chatbot Link
-                                    </Dropdown.Item>
-                                  </>
-                                }
-                                <Dropdown.Item onClick={() => { selectedHandle(deleteProperty, properties); }}>
-                                  Delete Property
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                        <Button className="test-property-btn border-0" onClick={() => { selectedHandle(testProperty, properties); }}>
-                          Test Property
+                    </div>
+                    <div className="property_listing_btn">
+                      <div className="d-flex">
+                        <Button className="property-edit-btn" onClick={() => {selectedHandle(editProperty, properties);}}>
+                          <i class="bi bi-pen"></i>
                         </Button>
+                        <div>
+                          <Dropdown className="property-dropdown">
+                            <Dropdown.Toggle className="" id="dropdown-button-drop-down-centered" drop="down-centered">
+                              <HiOutlineDotsHorizontal />
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              <Dropdown.Item onClick={() => { selectedHandle(editProperty, properties); }}>
+                                Edit Property
+                              </Dropdown.Item>
+                              {!is_locked &&
+                                <>
+                                  <Dropdown.Item onClick={() => { selectedHandle(copyChatbotLink, properties); }}>
+                                    Copy Chatbot Link
+                                  </Dropdown.Item>
+                                  <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
+                                    Regenerate Chatbot Link
+                                  </Dropdown.Item>
+                                </>
+                              }
+                              <Dropdown.Item onClick={() => { selectedHandle(deleteProperty, properties); }}>
+                                Delete Property
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </div>
                       </div>
+                      <Button className="test-property-btn border-0" onClick={() => { selectedHandle(testProperty, properties); }}>
+                        Test Property
+                      </Button>
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
             );
           })}
           <div className="row">

@@ -82,7 +82,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
 
               {/* Generate the reservation stage buttons dynamically */}
               {all_possible_res_stages.map((stage, index) => (
-                <div className="col text-center">
+                <div className="col text-center" key={stage}>
                   <input type="checkbox" checked={reservationStageData[stage]} className="btn-check" id={stage} autoComplete="off" onChange={(e) => {
                     setReservationStageData(prevState => ({ ...prevState, [stage]: e.target.checked }));
                   }}/>
