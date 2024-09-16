@@ -1,0 +1,103 @@
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import './Integrations.css';
+import axios from 'axios';
+
+const ConnectToTurno = () => {
+  const location = useLocation();
+  
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [message, setMessage] = useState('');
+
+  // Call the backend API to complete the OAuth flow
+  const completeTurnoOauth = async (code) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+  
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const body_data = { code };
+  
+      const response = await axios.post(`${baseUrl}/complete_turno_oauth`, body_data, config);
+  
+      if (response.status === 200) {
+        return { success: true, data: response.data };
+      } else {
+        return { success: false, error: response.data?.error || 'Unknown error' };
+      }
+    } catch (error) {
+      return { success:false, error:'Internal server error' };
+    }
+  };
+
+  // When we're redirected back from Turno, complete the OAuth flow
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const code = params.get('code');
+    const returnedState = params.get('state');
+
+    if (code && returnedState) {
+      const storedState = localStorage.getItem('turno_oauth_state');
+
+      if (storedState !== returnedState) {
+        setMessage('ERROR: State Mismatch.');
+      } else {
+        setIsProcessing(true);
+        completeTurnoOauth(code)
+          .then(result => {
+            setIsProcessing(false);
+            if (result.success) {
+              setMessage('Successfully connected to Turno!');
+            } else {
+              setMessage(`Failed to connect to Turno: ${result.error}`);
+            }
+          })
+          .catch(error => {
+            setIsProcessing(false);
+            setMessage('Failed to connect to Turno.');
+            console.error('Error:', error);
+          });
+      }
+    }
+  }, [location.search]);
+
+  const handleConnectClick = () => {
+    // Generate a random state parameter
+    const state = generateRandomString(16);
+    localStorage.setItem('turno_oauth_state', state);
+
+    // Build the authorization URL
+    const clientId = 'YOUR_CLIENT_ID'; // Replace with your actual client ID
+    const redirectUri = 'https://www.hostbuddy.ai/setting/integrations';
+    const authorizationUrl = `https://app.turno.com/v2/oauth/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+
+    // Redirect the user to Turno's authorization endpoint
+    window.location.href = authorizationUrl;
+  };
+
+  // Utility function to generate a random string for the state parameter
+  const generateRandomString = length => {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < length; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+  };
+
+  return (
+    <div className='connect-turno-button'>
+      {isProcessing ? (
+        <p>Processing...</p>
+      ) : message ? (
+        <p>{message}</p>
+      ) : (
+        <button className="connect-button" onClick={handleConnectClick}>Connect to Turno</button>
+      )}
+    </div>
+  );
+};
+
+export default ConnectToTurno;
