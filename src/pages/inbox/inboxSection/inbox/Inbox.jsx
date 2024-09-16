@@ -150,7 +150,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList}) => {
           <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />
         </div>
         <div className="col-lg-3">
-          <RightSection rightSectionData={selectedConversation} />
+          <RightSection rightSectionData={selectedConversation} updateConversationFromApi={updateConversation} />
         </div>
       </div>
     </>

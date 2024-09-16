@@ -1,11 +1,109 @@
 import React, { useState } from "react";
 import "./index.css";
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
-import { formatDateRange } from "../../../../../helper/commonFun";
+import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import ToastHandle from "../../../../../helper/ToastMessage";
+import Loader from "../../../../../helper/Loader";
 
 
-const RightSection = ({ rightSectionData }) => {
+const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
+  const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, action_items, guest_chatbot_status, property_chatbot_status, conversation_id } = rightSectionData ? rightSectionData : {};
+  const until_formatted = guest_chatbot_status?.until_utc == 'indefinitely' ? 'indefinitely' : (guest_chatbot_status?.until_local ? timeFormat(guest_chatbot_status?.until_local) : null);
+  let { channel } = rightSectionData || {};
+
+  const [selectedOption, setSelectedOption] = useState('');
+  const [toggleStatusLoading, setToggleStatusLoading] = useState(false);
+
+  // Calculate end_time_utc based on timing, for toggle conversation status
+  const calculateEndTimeUTC = (timing) => {
+    const now = new Date();
+    switch (timing) {
+      case '15m':
+        now.setMinutes(now.getMinutes() + 15);
+        break;
+      case '1h':
+        now.setHours(now.getHours() + 1);
+        break;
+      case '1d':
+        now.setDate(now.getDate() + 1);
+        break;
+      case 'indefinitely':
+        return 'indefinitely';
+      default:
+        throw new Error('Invalid timing value');
+    }
+    return now.toISOString();
+  };
+
+  const get_current_status = () => {
+    const { until_utc } = guest_chatbot_status || {};
+  
+    // Check to see if a guest status applies
+    if (until_utc) {
+      let currentTime, untilTime;
+      if (until_utc !== 'indefinitely') {
+        currentTime = new Date();
+        untilTime = new Date(until_utc);
+      }
+  
+      if (untilTime > currentTime || until_utc === 'indefinitely') { // a guest status is active
+        if (guest_chatbot_status.status === 'on') { return {'curr_status':'on', source:'guest'}; }
+        else if (guest_chatbot_status.status === 'off') { return {'curr_status':'off', source:'guest'}; }
+        // else: status is probably 'not_specified'. Use property status
+      }
+    }
+
+    // Otherwise, use property status
+    return {'curr_status':property_chatbot_status, source:'property'}
+  };
+
+  const current_status_get = property_chatbot_status ? get_current_status() : null;
+  const { curr_status, source } = current_status_get || {};
+
+  const callSetStatusAPI = async (on_or_off, timing) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setToggleStatusLoading(true);
+  
+    const end_time_utc = calculateEndTimeUTC(timing);
+  
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const body_data = { conversation_id:rightSectionData.conversation_id, status:on_or_off, until_utc:end_time_utc };
+      const response = await axios.put(`${baseUrl}/toggle_conversation_status`, body_data, config);
+  
+      if (response.status === 200) {
+        ToastHandle("Status updated successfully", "success");
+        await updateConversationFromApi(conversation_id); // Call the API to get the updated conversation with the new status. This will trigger re-render
+      } else {
+        ToastHandle(response?.data?.error, "danger");
+      }
+      return response.data;
+    } catch (error) {
+      ToastHandle("Internal server error", "danger");
+      return { error: "Internal server error" };
+    } finally {
+      setToggleStatusLoading(false);
+    }
+  };
+
+  // When the user selects to toggle guest status
+  const handleSelectChange = (event, curr_status) => {
+    const on_or_off = curr_status === 'on' ? 'off' : 'on';
+    callSetStatusAPI(on_or_off, event.target.value);
+  };
+
+  // When the user selects to revert guest status
+  const handleRevertStatus = (e) => {
+    e.preventDefault();
+    callSetStatusAPI('not_specified', 'indefinitely');
+  };
+
 
   // Determines what to display for the status section
   const getStatusText = (status) => {
@@ -18,8 +116,6 @@ const RightSection = ({ rightSectionData }) => {
     }
   };
 
-  const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, action_items } = rightSectionData ? rightSectionData : {};
-  let { channel } = rightSectionData || {};
   if (channel) { channel = channel.split(" (")[0]; } // channel e.g. "Airbnb (via Hostfully)". Remove the second part.
   else { channel = ""; }
   const statusText = getStatusText(status);
@@ -27,22 +123,65 @@ const RightSection = ({ rightSectionData }) => {
 
   return (
     <div className="right-side">
+
       <div className="bordr-cl right-title">
         <h2>Reservation</h2>
       </div>
+
       <div className="row">
+
         <div className="guest">
           {statusText && <span>{statusText}</span>}
           <h2>{guest_name}</h2>
           <p>{property_name}</p>
           <p className="guest_date">{arrival_date && formatDateRange(arrival_date, departure_date, true)}</p>
         </div>
+
         {/*
         <div className="col-lg-3 guest-img">
           <img src={dummyPropertyImg} alt="" />
         </div>
         */}
+
       </div>
+
+      {curr_status && (
+        <div className="toggle">
+          {curr_status === 'on' ? (
+            <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(0,180,0)"}}>RESPONDING</span> to this guest</p>
+          ) : (
+            <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(200,0,0)"}}>NOT RESPONDING</span> to this guest</p>
+          )}
+          {(source=='guest') && (
+            until_formatted === 'indefinitely' ? (
+              <p style={{ fontSize: "12px" }}>Indefinitely</p>
+            ) : (
+              <p style={{ fontSize: "12px" }}>Until {until_formatted}</p>
+            )
+          )}
+
+          {!toggleStatusLoading ? (
+            (source=='property') ? (
+              <select className="select-dropdown" value={selectedOption} onChange={(e) => handleSelectChange(e, curr_status)}>
+                <option value="" disabled>Turn {curr_status === 'on' ? 'off' : 'on'}</option>
+                <option value="15m">For 15 minutes</option>
+                <option value="1h">For 1 hour</option>
+                <option value="1d">For 24 hours</option>
+                <option value="indefinitely">Indefinitely</option>
+              </select>
+            ) : (
+              <div style={{ textAlign: 'center' }}>
+                <a style={{ fontSize: "14px", color: "#0d6efd", cursor: "pointer" }} onClick={handleRevertStatus}>
+                  Turn back {curr_status === 'on' ? 'off' : 'on'}
+                </a>
+              </div>
+            )
+          ) : (
+            <Loader />
+          )}
+        </div>
+      )}
+      
       <div className="issue">
         <h3>Open Issues</h3>
         {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 ? (
@@ -58,6 +197,7 @@ const RightSection = ({ rightSectionData }) => {
           </div>
         )}
       </div>
+
       <div className="satisfy">
         {sentiment && (
           <>
