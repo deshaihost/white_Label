@@ -64,6 +64,11 @@
     rgba(11, 45, 96, 1) 0%,
     rgba(1, 4, 21, 1) 73%
   );
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .author-detail h5 {
@@ -94,6 +99,7 @@
   }
   .welcome {
     height: unset;
+    min-height: 0;
   }
 }
 

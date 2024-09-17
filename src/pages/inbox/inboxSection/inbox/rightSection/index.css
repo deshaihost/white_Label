@@ -32,7 +32,7 @@
 }
 
 .right-side .select-dropdown {
-    color: blue;
+    color: #0d6efd;
     background: none;
     border: none;
     cursor: pointer;
@@ -40,7 +40,7 @@
     padding: 0;
     margin: 0;
     text-decoration: none;
-    width: 80px;
+    width: 90px;
   }
 
 /* --------------------- */

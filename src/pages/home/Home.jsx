@@ -4,7 +4,7 @@ import Introduction from "./introduction/introduction";
 import Features from "./features/Features";
 import Works from "./works/Works";
 import Plans from "./plans/Plans";
-import DemoVideoSection from "./demoVideoSection/demoVideoSection";
+//import DemoVideoSection from "./demoVideoSection/demoVideoSection";
 import TryItOutCTA from "./tryItOut/tryItOut";
 import WelcomeSection from "./welcomeSection/WelcomeSection";
 import { Helmet } from "react-helmet";
@@ -14,6 +14,7 @@ const Home = () => {
   const worksRef = useRef(null);
   const demoVideoRef = useRef(null);
 
+  {/* Removed demo video section for now
   useEffect(() => {
     if ("IntersectionObserver" in window) {
       const observer = new IntersectionObserver(
@@ -39,6 +40,7 @@ const Home = () => {
       setLoadDemoVideo(true); // if for some reason the browser doesn't support IntersectionObserver, just load the video right away
     }
   }, []);
+  */}
 
   return (
     <div className="home">
@@ -54,9 +56,11 @@ const Home = () => {
       </div>
       <TryItOutCTA />
       {/* <Features /> */}
+      {/*
       <div ref={demoVideoRef}>
         <DemoVideoSection load={loadDemoVideo} />
       </div>
+      */}
       <Plans />
     </div>
   );

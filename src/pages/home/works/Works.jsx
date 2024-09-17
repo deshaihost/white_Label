@@ -19,6 +19,9 @@ const robustCustomization = 'https://storage.googleapis.com/frontend_media/home-
 const seamlessPropertySetup = 'https://storage.googleapis.com/frontend_media/home-new/Seamless%20Property%20Setup.webp';
 const industryLeadingAI = 'https://storage.googleapis.com/frontend_media/home-new/Industry%20Leading%20AI.webp';
 const SmartTemlating = 'https://storage.googleapis.com/frontend_media/home-new/ReviewRequest.webp'
+const actionItemsScreen = 'https://storage.googleapis.com/frontend_media/home-new/action_items_screen.webp';
+const inboxScreen = 'https://storage.googleapis.com/frontend_media/home-new/inbox_screen.webp';
+const reviewRemovalScreen = 'https://storage.googleapis.com/frontend_media/home-new/review_removal_screen.webp';
 
 const Works = () => {
     return(
@@ -61,12 +64,36 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
+                                <h3>Schedule Based On <strong>Your Needs</strong></h3>
+                                <p>Think of HostBuddy as the most dedicated employee you could have. Available for automating communication anytime you need support, HostBuddy can be scheduled to fit your specific coverage needs. Say goodbye to lockouts, late-night messages, and issue troubleshooting—HostBuddy will take it from here.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={schedule} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
                                 <h3><strong>Seamless</strong> Property Setup with Autofill</h3>
                                 <p>Set up all your properties in minutes by simply connecting your property management system. HostBuddy does the legwork for you by extracting information from existing welcome documents, listing information, past conversations, or any other available resources to automatically create an organized database used to support your guests.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
                             <img src={seamlessPropertySetup} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
+                                <h3><strong>Smart</strong> Inbox</h3>
+                                <p>Centralize your inbox with HostBuddy to manage all your guest communications in one place. Our smart inbox brings industry-leading AI technology right to your fingertips, allowing you to generate AI responses and view valuable insights into each guest's stay through conversational analysis. Filter messages by urgency, take the wheel when you need to be involved and review HostBuddy conversations all in one place.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={inboxScreen} alt='works-img' />
                         </div>
                     </div>
 
@@ -97,7 +124,31 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3><strong>Unlimited</strong> Testing</h3>
+                                <h3><strong>Stay Informed</strong> With Updates From HostBuddy</h3>
+                                <p>HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention so you can see what’s important at a glance. Have HostBuddy send action items directly to certain members of your team using advanced categorization. You can receive these updates through text, email, or Slack integration to stay in the loop.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={stayInformed} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
+                                <h3><strong>Issue Tracking</strong> and Management</h3>
+                                <p>Use the action items page to track issues requiring attention at your properties. Filter by categories such as maintenance, cleanliness, guest requests, and more to manage your team efficiently. Add notes as you work to resolve issues, and create your own action items to centralize the management of your operations. Mark items as resolved upon completion, and review past items to identify trends.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={actionItemsScreen} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
+                                <h3>Test <strong>Before</strong> You Subscribe</h3>
                                 <p>Set up your properties and simulate test messages without a subscription. Test as much as you'd like before even beginning your free trial.</p>
                             </div>
                         </div>
@@ -123,30 +174,6 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3>Schedule Based On <strong>Your Needs</strong></h3>
-                                <p>Think of HostBuddy as the most dedicated employee you could have. Available anytime you need support, HostBuddy can be scheduled to fit your specific coverage needs. Say goodbye to lockouts, late-night messages, and issue troubleshooting—HostBuddy will take it from here.</p>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <img src={schedule} alt='works-img' />
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-lg-6">
-                            <div className="works-content">
-                                <h3><strong>Stay Informed</strong> With Updates From HostBuddy</h3>
-                                <p>HostBuddy analyzes each conversation, identifies issues and action items, and brings them to your attention so you can see what’s important at a glance. Have HostBuddy send action items directly to certain members of your team using advanced categorization. You can receive these updates through text, email, or Slack integration to stay in the loop.</p>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <img src={stayInformed} alt='works-img' />
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-lg-6">
-                            <div className="works-content">
                                 <h3><strong>Robust</strong> Customization</h3>
                                 <p>With advanced customization options, HostBuddy is designed for maximum flexibility to fit the needs of your business, no matter how complicated they may be. You can set behavior and tone to your likings, and you're always in full control of HostBuddy's knowledge base.</p>
                             </div>
@@ -159,12 +186,24 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3><strong>Directed</strong> Responses</h3>
+                                <h3><strong>Directed Responses</strong> with Slack</h3>
                                 <p>HostBuddy will notify you when a guest message requires action or decision making beyond its capability. Respond directly to the notification to make the final call, and HostBuddy will send the appropriate response to the guest based on your guidance.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
                             <img src={stayInCharge} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
+                                <h3><strong>Review Removal</strong> Support</h3>
+                                <p>Use review analysis to identify which reviews may violate OTA policies and request the removal of less favorable reviews. Generate and send reports written by HostBuddy AI to expedite the review removal process.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={reviewRemovalScreen} alt='works-img' />
                         </div>
                     </div>
 
