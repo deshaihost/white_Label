@@ -90,6 +90,7 @@
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
+
 .sidebar h2 {
   margin-bottom: 20px;
   color: #333; /* Dark grey */
@@ -232,6 +233,27 @@
 .custom-blog ol li {
   list-style-type: inherit;
 }
+
+.button_blog {
+  background: #146ef5;
+  border: 1px solid #146ef5;
+  border-radius: 160px;
+  color: #fff;
+  display: inline-block;
+  font-family: Samsung Sharp Sans Medium;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding: 13px 40px;
+}
+
+.button_blog:hover {
+  transition: 0.4s ease-in-out;
+  background: transparent;
+  color: #146ef5;
+}
+
 @media screen and (max-width: 991px) {
   .blog-article {
     padding: 20px;
@@ -282,3 +304,18 @@
   }
 }
 /* 27 june 2024 */
+
+@media screen and (min-width: 1000px) {
+  .sidebar {
+    margin-top: 20px;
+    flex-shrink: 0;
+    width: 300px;
+    margin-right: 20px;
+    padding: 10px;
+    background-color: #f0f8ff; /* Light bluish grey */
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    position: sticky;
+    top: 5%;
+  }
+}
