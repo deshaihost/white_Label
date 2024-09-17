@@ -85,9 +85,10 @@ export const setSetting = (key, value, currentSettingsData, setCurrentSettingsDa
     if (value < 1 || value > 30) { return }
   } else if (key === 'min_message_delay_minutes' || key === 'max_message_delay_minutes') {
     value = parseInt(value);
-    if (value < 0 || value > 7) {
-      return
-    }
+    if (value < 0 || value > 7) { return }
+  } else if (key === 'minutes_after_property_ready') {
+    value = parseInt(value);
+    if (value < 0 || value > 1440) { return }
   }
 
   setCurrentSettingsData({ ...currentSettingsData, [key]: value });

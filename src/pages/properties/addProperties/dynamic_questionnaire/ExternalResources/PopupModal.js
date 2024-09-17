@@ -72,8 +72,6 @@ const PopupModal = ({ show, setShow, prevUploadedDoc, supportingDocsObj, deleteR
                       docNameToDisplay = docName;
                       isPMSIntegrationData = false;
                     }
-                    console.log("docNameToDisplay", docNameToDisplay);
-                    console.log("isPMSIntegrationData", isPMSIntegrationData);
 
                     return (
                       <>
