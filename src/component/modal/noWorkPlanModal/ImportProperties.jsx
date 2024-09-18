@@ -94,14 +94,25 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
               <div id="integrate_form1">
                 <div className="row form-design">
                   <div className="col-12 mt-3">
-                    {integrationPropertyList?.map((integrationPropObj, index) => (
-                      <div className="form-check custom_checkbox mb-3" key={index}>
-                        <input className="form-check-input" type="checkbox" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={integrationPropObj.name}
-                          checked={checkBox?.hasOwnProperty(integrationPropObj.name)} onChange={() => { SelectItem(integrationPropObj); }}
-                        />
-                        <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>{integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name}</label>
-                      </div>
-                    ))}
+                    {integrationPropertyList?.map((integrationPropObj, index) => {
+                      const propName = integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name;
+                      return (
+                        <div className="form-check custom_checkbox mb-3" key={index}>
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            name="flexRadioDefault"
+                            id={`flexRadioDefault${index}`}
+                            value={propName}
+                            checked={checkBox?.hasOwnProperty(propName)}
+                            onChange={() => { SelectItem(integrationPropObj); }}
+                          />
+                          <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>
+                            {propName}
+                          </label>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
                 <div className="row form-design mt-1">
