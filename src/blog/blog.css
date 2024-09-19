@@ -80,6 +80,11 @@
   align-items: flex-start;
   margin-bottom: 70px;
 }
+
+.sidebar_container{ 
+  width: 100%;
+}
+
 .sidebar {
   margin-top: 20px;
   flex-shrink: 0;
@@ -315,7 +320,15 @@
     background-color: #f0f8ff; /* Light bluish grey */
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+
+  .sidebar_container{
     position: sticky;
-    top: 5%;
+    top: 2%;
+    width: auto;
+  }
+
+  .sidebarCTA {
+    max-width: 300px;
   }
 }
