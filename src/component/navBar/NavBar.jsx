@@ -323,6 +323,15 @@ const NavBar = () => {
                   >
                     FAQs
                   </NavLink>
+                  <NavLink
+                    exact
+                    to="/blog"
+                    className="nav-link"
+                    activeClassName="active"
+                    onClick={handleNavLinkClick}
+                  >
+                    Blog
+                  </NavLink>
                 </>
               )}
             </Nav>
