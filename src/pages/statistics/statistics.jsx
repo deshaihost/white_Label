@@ -1,10 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid2';
+import { useDispatch, useSelector } from "react-redux";
+import { getUserDataActions } from "../../redux/actions";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from 'recharts';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { FullScreenLoader } from '../../helper/Loader';
+import Select from "react-select";
+import customStyles from './selectStyles';
 import './statistics.css';
-import { lineGraphDataSets, histogramDataSets, callGetStatisticsApi, getStatisticsData } from './dataManager';
+import { lineGraphDataSets, histogramDataSets, callGetStatisticsApi, getStatisticsData, formatDateToReadable } from './dataManager';
 
 // Helper hook to get the width of a DOM element
 const useElementWidth = () => {
@@ -190,8 +194,50 @@ const TextTile = ({ title, content, width, height }) => {
 
 
 const StatisticsPage = () => {
-  const [apiStatisticsData, setApiStatisticsData] = useState({});
+  const [rawApiReturn, setRawApiReturn] = useState({}); // The raw data returned by the API
+  const [apiStatisticsData, setApiStatisticsData] = useState({}); // The data structures for the statistics tiles, after populated by the API and formatted in dataManager
   const [dataLoading, setDataLoading] = useState(true);
+  const [selectedProperties, setSelectedProperties] = useState([]);
+  const [showDatePickers, setShowDatePickers] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState('');
+  const [selectedEndDate, setSelectedEndDate] = useState('');
+
+  const dataStartDate = rawApiReturn?.statistics?.start_date
+  const dataEndDate = rawApiReturn?.statistics?.end_date
+  const startDateDisplay = dataStartDate ? formatDateToReadable(dataStartDate) : '';
+  const endDateDisplay = dataEndDate ? formatDateToReadable(dataEndDate) : '';
+
+  // Store/dispatch logic to get the user property names for the multi select
+      const store = useSelector((state) => state);
+      const dispatch = useDispatch();
+
+      const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
+      const allPropertyName = createPropertiesName !== undefined ? createPropertiesName : {};
+      const propertyOptions = Object.keys(allPropertyName).map((key) => ({ value:key, label:key })); // All property options as an array of objects, for the React Select component
+
+      // On page load, get user data and action items
+      useEffect(() => {
+        dispatch(getUserDataActions());
+      }, []);
+
+  const handlePropertyChange = (selectedOptions) => {
+    setSelectedProperties(selectedOptions);
+  }
+
+  const handleApplyFilters = () => {
+    // Assemble the query data based on the current state of the inputs
+    let queryData = {};
+    if (selectedProperties.length > 0) { queryData.property_names = selectedProperties.map(property => property.value); }
+    if (selectedStartDate) { queryData.start_date = selectedStartDate; } // it's already in format yyyy-mm-dd
+    if (selectedEndDate) { queryData.end_date = selectedEndDate; }
+
+    getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading, queryData);
+    setShowDatePickers(false);
+  }
+
+  const handleAdjustDatesClick = () => {
+    setShowDatePickers(!showDatePickers);
+  }
 
   // *** THIS contains the (static) definition of which tiles to render, and in which order *** //
   const messagingTiles = [
@@ -208,7 +254,7 @@ const StatisticsPage = () => {
 
   // When the page loads, fetch the data and populate the charts
   useEffect(() => {
-    getStatisticsData(setApiStatisticsData, setDataLoading);
+    getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading);
   }, []);
 
   const renderTiles = (tiles) => (
@@ -233,12 +279,41 @@ const StatisticsPage = () => {
         <span className="subtitle">By HostBuddy</span>
       </h1>
 
+      <hr/>
+
+      <div className="parameters-section">
+        <div className="parameters-left">
+          <div className="date-info">
+            <p>Showing data from {startDateDisplay} to {endDateDisplay}</p>
+            <p style={{color:'rgb(255, 125, 0)'}}>We could not find data for the entire date range you requested.</p>
+          </div>
+        </div>
+        <div className="parameters-right">
+          <div className="inputs-container">
+            <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false}/>
+            {showDatePickers ? (
+              <>
+                <label className="date-label">Start Date</label>
+                <input type="date" className="date-input" placeholder="Start Date" value={selectedStartDate} onChange={(e) => setSelectedStartDate(e.target.value)} />
+                <label className="date-label">End Date</label>
+                <input type="date" className="date-input" placeholder="End Date" value={selectedEndDate} onChange={(e) => setSelectedEndDate(e.target.value)} />
+              </>
+            ) : (
+              <button className="adjust-dates-button" onClick={handleAdjustDatesClick}>Adjust Dates</button>
+            )}
+          </div>
+          <button className="apply-button" onClick={handleApplyFilters}>Apply</button>
+        </div>
+      </div>
+
+      <hr/>
+
       <h2 className="section-header">Messaging</h2>
       {renderTiles(messagingTiles)}
 
       <h2 className="section-header">Action Items</h2>
       {renderTiles(actionItemsTiles)}
-      
+
     </div>
   );
 };

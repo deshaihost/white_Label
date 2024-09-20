@@ -77,8 +77,16 @@ export const metricDataSets = [
   }
 ];
 
+// YYYY-MM-DD to e.g. 'Sep 9, 2021'
+export const formatDateToReadable = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
+};
+
 // Get the statistics. FYI, this endpoint uses POST type to support more complex queries
-export const callGetStatisticsApi = async () => {
+export const callGetStatisticsApi = async (queryData) => {
   const baseUrl = process.env.REACT_APP_API_ENDPOINT;
   const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -87,7 +95,7 @@ export const callGetStatisticsApi = async () => {
       headers: { "X-API-Key": API_KEY },
       validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
     };
-    const body_data = { };
+    const body_data = {...queryData};
     const response = await axios.post( `${baseUrl}/get_statistics`, body_data, config );
 
     if (response.status === 200) { }
@@ -396,10 +404,11 @@ function convertActionItemsToMetricData(actionItemData) {
 
 
 // Get the statistics from the API, and populate the data structures to be used for the charts
-export const getStatisticsData = async (setApiStatisticsData, setDataLoading) => {
+export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, setDataLoading, queryData={}) => {
   setDataLoading(true);
-  const response = await callGetStatisticsApi();
+  const response = await callGetStatisticsApi(queryData);
   if (response.error) { return { error: response.error }; }
+  setRawApiReturn(response);
   const retrievedStatistics = response?.statistics?.totals;
   const day_by_day_data = response?.statistics?.day_by_day; // this has all the data that's graphable over days
 
