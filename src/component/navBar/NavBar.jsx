@@ -325,6 +325,15 @@ const NavBar = () => {
                   </NavLink>
                   <NavLink
                     exact
+                    to="/about-us"
+                    className="nav-link"
+                    activeClassName="active"
+                    onClick={handleNavLinkClick}
+                  >
+                    About Us
+                  </NavLink>
+                  <NavLink
+                    exact
                     to="/blog"
                     className="nav-link"
                     activeClassName="active"
