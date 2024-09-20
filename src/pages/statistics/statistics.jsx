@@ -225,12 +225,20 @@ const StatisticsPage = () => {
 
   return (
     <div className="statistics-page">
+      
       {dataLoading && <FullScreenLoader />}
-      <h1 className="page-header">HostBuddy Insights</h1>
+
+      <h1 className="page-header">
+        Business Insights
+        <span className="subtitle">By HostBuddy</span>
+      </h1>
+
       <h2 className="section-header">Messaging</h2>
       {renderTiles(messagingTiles)}
+
       <h2 className="section-header">Action Items</h2>
       {renderTiles(actionItemsTiles)}
+      
     </div>
   );
 };

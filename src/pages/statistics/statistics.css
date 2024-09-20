@@ -14,7 +14,6 @@
   cursor: pointer;
 }
 
-
 /* Base container for the whole statistics page */
 .statistics-page {
   padding: 20px; /* Adds padding around the entire page */
@@ -23,10 +22,22 @@
   margin-bottom: 150px;
 }
 
-.statistics-page .page-header {
+.page-header {
   color: white;
   text-align: center;
   margin-top: 20px;
+}
+
+.subtitle {
+  display: block;
+  font-size: 20px;
+  margin-top: 0px;
+}
+
+.statistics-page h1 small {
+  font-size: 20px;
+  margin: 0;
+  line-height: 20px;
 }
 
 .statistics-page .section-header {
