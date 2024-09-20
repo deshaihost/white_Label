@@ -4,12 +4,14 @@ import { Helmet } from 'react-helmet';
 
 const five_best_thumbnail = "https://hostbuddylb.com/blog/5_best_PMS_6-13/Thumbnail_small.webp";
 const automate_str_thumbnail = "https://hostbuddylb.com/blog/automate_str_6-25/thumbnail.webp";
+const ownerRez_pms_partners_thumbnail = "https://i.postimg.cc/gcvVZjjh/owner-Rez-pms-partners-mianimg.webp";
 
 const BlogLandingPage = () => {
 
     const articles = [
       { id:"automate_str_6-25", title:"How to Automate Your Short Term Rental Business", date:"Jun 25, 2024", img:automate_str_thumbnail, description:"STR automation mastery: Uncover tech-driven solutions, AI-powered tools, and clever hacks to minimize effort and maximize returns for your short-term rentals." },
       { id:"5_best_PMS_6-13", title:"5 Best Property Management Software of 2024 (Updated)", date:"Jun 13, 2024", img:five_best_thumbnail, description:"Elevate your STR game with 2024's best management software. Find out which tools offer the latest tech and clever automation for hosts." },
+      { id:"ownerRez_pms_partners", title:"OwnerRez Partners with HostBuddy AI for Advanced Guest Communication", date:"Sept 17, 2024", img:ownerRez_pms_partners_thumbnail, description:"Discover how OwnerRez integrates with HostBuddy AI to deliver automated guest communication, revenue-boosting upsells, and seamless property management." },
     ];
 
     return (

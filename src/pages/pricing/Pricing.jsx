@@ -20,7 +20,19 @@ const Pricing = () => {
   return (
     <section className='pricing'>
       <Helmet>
-        <title>Pricing – HostBuddy AI</title>
+        <title>HostBuddy AI Pricing - Flexible Plans for Short-Term Rentals</title>
+        <meta name="title" content="HostBuddy AI Pricing - Flexible Plans for Short-Term Rentals" />
+        <meta name="description" content="Explore HostBuddy AI pricing plans. Start your 2-week free trial today." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.hostbuddy.ai/pricing" />
+        <meta property="og:title" content="HostBuddy AI Pricing - Flexible Plans for Short-Term Rentals" />
+        <meta property="og:description" content="Explore HostBuddy AI pricing plans. Start your 2-week free trial today." />
+        <meta property="og:image" content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://www.hostbuddy.ai/pricing" />
+        <meta property="twitter:title" content="HostBuddy AI Pricing - Flexible Plans for Short-Term Rentals" />
+        <meta property="twitter:description" content="Explore HostBuddy AI pricing plans. Start your 2-week free trial today." />
+        <meta property="twitter:image" content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png" />
         <link rel="canonical" href="https://www.hostbuddy.ai/pricing" />
       </Helmet>
       <Container>
