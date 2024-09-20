@@ -1,0 +1,128 @@
+/* Tile header styling */
+.tile-header {
+  display: flex;
+  justify-content: space-between; /* Space out title and icon */
+  align-items: center;
+  width: 100%;
+  position: relative; /* To allow for absolute positioning of icon */
+}
+
+/* Styling for the three-dot icon */
+.tile-header .icon-button {
+  color: white; /* Make the icon white */
+  font-size: 28px; /* Make the icon larger */
+  cursor: pointer;
+}
+
+
+/* Base container for the whole statistics page */
+.statistics-page {
+  padding: 20px; /* Adds padding around the entire page */
+  background-color: #000212;
+  min-height: 100vh; /* Ensure the page takes up at least full screen height */
+  margin-bottom: 150px;
+}
+
+.statistics-page .page-header {
+  color: white;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.statistics-page .section-header {
+  color: white;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+/* Style for each individual tile component */
+.statistics-tile {
+  background-color: #020d29;
+  border-radius: 15px;
+  border: 1px solid #2c38ae;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.4);
+  padding: 20px;
+  margin: 10px 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animation for hover effects */
+  display: flex; /* Use flexbox for alignment */
+  flex-direction: column; /* Arrange children vertically */
+  align-items: center; /* Center children horizontally */
+  justify-content: space-between; /* Space out children vertically */
+}
+
+/* Tile hover effect to make it pop */
+.statistics-tile:hover {
+  /* transform: translateY(-5px); /* Move the tile slightly up when hovered */
+  box-shadow: 0 6px 12px rgba(255, 255, 255, 0.15); /* White box shadow */
+}
+
+/* Common header styling for all tiles */
+.statistics-tile h3 {
+  font-size: 1.2em; /* Slightly larger font for the tile headers */
+  color: #EEE;
+  margin-bottom: 10px; /* Space between header and content */
+  text-align: center; /* Center the title text */
+  width: 100%; /* Ensure the title spans the full width */
+}
+
+/* LineGraphTile and HistogramTile specific styling */
+.statistics-tile .recharts-wrapper {
+  margin: 0 auto; /* Center the chart horizontally */
+}
+
+/* Axis label styling for charts */
+.statistics-tile .recharts-cartesian-axis-tick {
+  font-size: 0.9em; /* Slightly smaller font for axis labels */
+  fill: #999; /* axis label color */
+}
+
+/* MetricTile specific styling */
+.metric-tile {
+  text-align: center; /* Center align everything inside the metric tile */
+}
+
+.metric-content {
+  width: 100%;
+}
+
+.metric-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.metric-tile .metric-number {
+  font-size: 35px;
+  color: #2196F3; /* Blue color for the number */
+  font-weight: bold; /* Make the number bold */
+  margin-right: 10px;
+}
+
+.metric-tile .metric-text {
+  font-size: 16px;
+  color: #AAA; /* color for the description */
+  text-align: right;
+}
+
+/* TextTile specific styling */
+.text-tile p {
+  font-size: 1em; /* Regular text size */
+  color: #AAA;
+  line-height: 1.6; /* Line height for better readability */
+  text-align: center; /* Center align the text */
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 768px) {
+  /* For smaller screens, make the tiles take full width */
+  .statistics-tile {
+    margin: 10px 0;
+  }
+}
+
+/* Grid container spacing adjustments */
+.MuiGrid-root {
+  /* Optional: Add extra space between grid items if needed */
+  margin-bottom: 20px; /* Adds extra spacing between rows of tiles */
+}

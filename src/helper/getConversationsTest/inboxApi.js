@@ -20,7 +20,7 @@ export const callGetConversationsApi = async (limit=null, conversationIdsAlready
     const response = await axios.post( `${baseUrl}/get_all_conversations`, body_data, config );
 
     if (response.status === 200) { }
-    else { ToastHandle(response?.data?.error, "danger"); }
+    //else { ToastHandle(response?.data?.error, "danger"); }
     return response.data;
   } catch (error) {
     //ToastHandle("Internal server error", "danger");

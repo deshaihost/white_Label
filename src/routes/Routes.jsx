@@ -18,6 +18,7 @@ import Account from "../pages/account/Account";
 import SetupGuide from "../pages/setupGuide/SetupGuide";
 import HostawaySetup from "../pages/setupGuide/HostawaySetup";
 import Dashboard from "../pages/dashboard/Dashboard";
+import StatisticsPage from "../pages/statistics/statistics";
 import ProtectedRoute from "./ProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import QuestionnairePage from "../pages/properties/addProperties/dynamic_questionnaire/complete_questionnaire";
@@ -234,6 +235,14 @@ const Routing = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/statistics"
+          element={
+            <ProtectedRoute>
+              <StatisticsPage />
             </ProtectedRoute>
           }
         />
