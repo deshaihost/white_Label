@@ -31,16 +31,6 @@
 	<priority>1.0</priority>
 </url>
 <url>
-	<loc>https://www.hostbuddy.ai/forgot</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/property-chat/</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
 	<loc>https://www.hostbuddy.ai/privacy-policy</loc>
 	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
 	<priority>1.0</priority>
@@ -66,57 +56,12 @@
 	<priority>1.0</priority>
 </url>
 <url>
-	<loc>https://www.hostbuddy.ai/testing-questions</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/reset-password</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/blog/5_best_PMS_6-13</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/null</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
 	<loc>https://www.hostbuddy.ai/getstarted</loc>
 	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
 	<priority>1.0</priority>
 </url>
 <url>
-	<loc>https://www.hostbuddy.ai/dashboard</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/properties</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/property-insight</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/setting</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/account</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/blog</loc>
+	<loc>https://www.hostbuddy.ai/blog/*</loc>
 	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
 	<priority>1.0</priority>
 </url>
@@ -131,57 +76,12 @@
 	<priority>1.0</priority>
 </url>
 <url>
-	<loc>https://www.hostbuddy.ai/edit-property/</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/setting/conversation-preferences</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/blog/</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/setting/notifications</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/setting/upsells</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/confirm-email</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/email_confirmation</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
 	<loc>https://www.hostbuddy.ai/setup-guide</loc>
 	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
 	<priority>1.0</priority>
 </url>
 <url>
 	<loc>https://www.hostbuddy.ai/hostaway-setup</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/subscription</loc>
-	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://www.hostbuddy.ai/add-property</loc>
 	<lastmod>2024-08-24T01:38:18+01:00</lastmod>
 	<priority>1.0</priority>
 </url>

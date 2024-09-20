@@ -45,7 +45,19 @@ const Home = () => {
   return (
     <div className="home">
       <Helmet>
-        <title>HostBuddy AI</title>
+        <title>HostBuddy AI - Automate Short-Term Rental Messaging</title>
+        <meta name="title" content="HostBuddy AI - Automate Short-Term Rental Messaging" />
+        <meta name="description" content="HostBuddy AI automates guest communication for short-term rentals, offering seamless property setup, smart templating, and 24/7 support integration." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.hostbuddy.ai/" />
+        <meta property="og:title" content="HostBuddy AI - Automate Short-Term Rental Messaging" />
+        <meta property="og:description" content="HostBuddy AI automates guest communication for short-term rentals, offering seamless property setup, smart templating, and 24/7 support integration." />
+        <meta property="og:image" content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://www.hostbuddy.ai/" />
+        <meta property="twitter:title" content="HostBuddy AI - Automate Short-Term Rental Messaging" />
+        <meta property="twitter:description" content="HostBuddy AI automates guest communication for short-term rentals, offering seamless property setup, smart templating, and 24/7 support integration." />
+        <meta property="twitter:image" content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png" />
         <link rel="canonical" href="https://www.hostbuddy.ai/" />
       </Helmet>
       <Banner />

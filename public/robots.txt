@@ -1,3 +1,25 @@
+
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+
+Allow: /
+Disallow: /forgot
+Disallow: /property-chat/
+Disallow: /testing-questions
+Disallow: /reset-password
+Disallow: /null
+Disallow: /dashboard
+Disallow: /properties
+Disallow: /property-insight
+Disallow: /setting
+Disallow: /account
+Disallow: /edit-property/
+Disallow: /setting/conversation-preferences
+Disallow: /setting/notifications
+Disallow: /setting/upsells
+Disallow: /confirm-email
+Disallow: /email_confirmation
+Disallow: /subscription
+Disallow: /add-property
+
+Sitemap: https://www.hostbuddy.ai/sitemap.xml
