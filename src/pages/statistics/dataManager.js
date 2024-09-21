@@ -80,7 +80,10 @@ export const metricDataSets = [
 // YYYY-MM-DD to e.g. 'Sep 9, 2021'
 export const formatDateToReadable = (dateString) => {
   if (!dateString) return '';
-  const date = new Date(dateString);
+
+  const [year, month, day] = dateString.split('-');
+  const date = new Date(year, month - 1, day); // month is 0-indexed in JavaScript Date
+
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 };
@@ -107,69 +110,125 @@ export const callGetStatisticsApi = async (queryData) => {
   }
 };
 
-// Given guest_message_received_times data from the API, create the data structure for the histograms
-function createMessageTimingData(guest_message_received_times) {
+function createMessageTimingData(guest_message_received_times, startDate, endDate) {
   const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const hoursOfDay = Array.from({ length: 24 }, (_, i) => i.toString()); // Create hours from '0' to '23'
-  
+
   let totalMessagesPerDay = {}; // To keep track of total messages per day
   let totalMessagesAllDays = {}; // To keep track of total messages for each hour across all days
-  
+
   // Initialize totalMessagesAllDays with 0 for all 24 hours
   hoursOfDay.forEach(hour => {
     totalMessagesAllDays[hour] = 0;
   });
 
+  // Initialize totalMessagesPerDay with 0 for all days
+  daysOfWeek.forEach(day => {
+    totalMessagesPerDay[day.toLowerCase()] = 0;
+  });
+
+  // Function to parse date strings as UTC dates
+  function parseDate(dateString) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(Date.UTC(year, month - 1, day));
+  }
+
+  // Parse startDate and endDate as UTC dates
+  const start = parseDate(startDate);
+  const end = parseDate(endDate);
+
+  let totalDays = 0;
+  let weekdayCounts = { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 };
+
+  let currentDate = new Date(start.getTime());
+
+  // Iterate over each day in the date range
+  while (currentDate <= end) {
+    totalDays++;
+    const dayIndex = (currentDate.getUTCDay() + 6) % 7; // Map Sunday (0) to 6, Monday (1) to 0, etc.
+    const dayKey = daysOfWeek[dayIndex].toLowerCase();
+    weekdayCounts[dayKey]++;
+    // Move to the next day
+    currentDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+  }
+
   // Create individual histograms for each day of the week
   const dayHistograms = daysOfWeek.map(day => {
     const dayKey = day.toLowerCase();
-    const messagesPerHour = guest_message_received_times[dayKey];
-    
+    const messagesPerHour = guest_message_received_times[dayKey] || {}; // Ensure we have an object
+
+    // Initialize messagesPerHour for missing hours
+    hoursOfDay.forEach(hour => {
+      if (!messagesPerHour.hasOwnProperty(hour)) {
+        messagesPerHour[hour] = 0;
+      }
+    });
+
     // Sum total messages for this day
     const totalMessages = Object.values(messagesPerHour).reduce((acc, val) => acc + val, 0);
     totalMessagesPerDay[dayKey] = totalMessages;
-    
+
     // Accumulate total messages for each hour across all days
     hoursOfDay.forEach(hour => {
-      totalMessagesAllDays[hour] += messagesPerHour[hour] || 0;
+      totalMessagesAllDays[hour] += messagesPerHour[hour];
     });
-    
-    // Format the data for the histogram
+
+    // Calculate average messages per hour for this day
+    const dayCount = weekdayCounts[dayKey] || 1; // Avoid division by zero
+
     return {
       identifier: day,
-      title: `Messages Distribution on ${day}`,
+      title: `Timing of messsages received on ${day} (average)`,
       data: hoursOfDay.map(hour => ({
         name: hour,
-        value: messagesPerHour[hour] || 0
+        value: parseFloat((messagesPerHour[hour] / dayCount).toFixed(2)) // Average messages per hour for this day
       }))
     };
   });
 
-  // Create the histogram for total messages across all days
+  // Adjust totalMessagesPerDay to average per day
+  Object.keys(totalMessagesPerDay).forEach(dayKey => {
+    const dayCount = weekdayCounts[dayKey] || 1;
+    totalMessagesPerDay[dayKey] = totalMessagesPerDay[dayKey] / dayCount;
+  });
+
+  // Adjust totalMessagesAllDays to average per day
+  const totalDaysAdjusted = totalDays || 1; // Avoid division by zero
+  hoursOfDay.forEach(hour => {
+    totalMessagesAllDays[hour] = totalMessagesAllDays[hour] / totalDaysAdjusted;
+  });
+
+  // Create the histogram for average messages across all days
   const totalHistogram = {
     identifier: 'Total',
-    title: 'Timing of messages received (by hour of day)',
+    title: 'Timing of messages received (by hour of day - average)',
     data: hoursOfDay.map(hour => ({
       name: hour,
-      value: totalMessagesAllDays[hour]
+      value: parseFloat(totalMessagesAllDays[hour].toFixed(2))
     }))
   };
 
-  // Create the histogram for total messages per day of the week
+  // Create the histogram for average messages per day of the week
   const daysOfWeekHistogram = {
     identifier: 'By Weekday',
-    title: 'Timing of messages received (by weekday)',
-    data: daysOfWeek.map(day => ({
-      name: day.charAt(0).toUpperCase() + day.slice(1),
-      value: totalMessagesPerDay[day.toLowerCase()]
-    }))
+    title: 'Timing of messages received (by weekday - average)',
+    data: daysOfWeek.map(day => {
+      const dayKey = day.toLowerCase();
+      return {
+        name: day,
+        value: parseFloat(totalMessagesPerDay[dayKey].toFixed(2))
+      };
+    })
   };
 
   // Combine all histograms
   return [totalHistogram, daysOfWeekHistogram, ...dayHistograms];
 }
 
-// Given host / hostbuddy response times data from the API, create the data structure for the tile taht shows this
+
+
+// Create the data structure for the total messages responded tile, using the response times data.
+// This is NO LONGER USED since the data only includes responses (not all messages) - replaced by below funct which uses the all messages sent data
 function formatResponseTimeData(responseTimes) {
   const { host_response_times, hostbuddy_response_times, not_responded_in_2h } = responseTimes;
 
@@ -206,6 +265,42 @@ function formatResponseTimeData(responseTimes) {
   // Return the final metric data set
   return [messagesProcessedData, responseProportionsData];
 }
+
+// From the total messages sent data: create the data structure for the total messages sent tile
+function formatMessagesSentData(messagesSent) {
+  const { host, hostbuddy } = messagesSent;
+
+  // Calculate total responses
+  const totalResponses = host + hostbuddy;
+  
+  // Calculate proportions
+  const hostProportion = (host / totalResponses) * 100;
+  const hostbuddyProportion = (hostbuddy / totalResponses) * 100;
+
+  // Create the metric data structure for Messages Sent
+  const messagesProcessedData = {
+    identifier: 'Totals',
+    title: 'Messages Sent (Total)',
+    data: [
+      { number: host, text: "By Host" },
+      { number: hostbuddy, text: "By HostBuddy" }
+    ]
+  };
+
+  // Create the metric data structure for Messages Sent Proportions
+  const responseProportionsData = {
+    identifier: 'Percentages',
+    title: 'Messages Sent',
+    data: [
+      { number: `${hostProportion.toFixed(1)}%`, text: "By Host" },
+      { number: `${hostbuddyProportion.toFixed(1)}%`, text: "By HostBuddy" }
+    ]
+  };
+
+  // Return the final metric data set
+  return [messagesProcessedData, responseProportionsData];
+}
+
 
 // Given the same host / hostbuddy response times data as above, create the data structure for the tile that shows host vs hostbuddy response times
 function formatResponseTimes(responseTimes) {
@@ -356,24 +451,28 @@ function convertActionItemsToMetricData(actionItemData) {
   const categories = ['CLEANLINESS', 'GUEST REQUESTS', 'MAINTENANCE', 'RESERVATION CHANGES', 'OTHER/UNKNOWN'];
   
   const categoryMetrics = [];
-  let totalReceived = 0;
-  let totalClosed = 0;
+  let totalReceived = 0; // Total num of action items received in this time range
+  let totalClosedOfReceived = 0; // Total num of action items received in this time range that were ever closed, regardless of when they were closed. This can be no greater than receivedTotal. Used to calculate closure rate
+  let totalClosed = 0; // Total num of action items closed in this time range, regardless of when they were received
 
   // Loop through each category to calculate totals
   categories.forEach(category => {
     let receivedTotal = 0;
+    let closedOfReceivedTotal = 0;
     let closedTotal = 0;
 
     // Sum up action items for each day
     for (const date in actionItemData) {
       receivedTotal += actionItemData[date]['action_items_received'][category];
+      closedOfReceivedTotal += actionItemData[date]['action_items_closed_of_received'][category];
       closedTotal += actionItemData[date]['action_items_closed'][category];
     }
 
     totalReceived += receivedTotal;
+    totalClosedOfReceived += closedOfReceivedTotal;
     totalClosed += closedTotal;
 
-    const closureRate = receivedTotal > 0 ? (closedTotal / receivedTotal * 100).toFixed(1) : 0;
+    const closureRate = receivedTotal > 0 ? (closedOfReceivedTotal / receivedTotal * 100).toFixed(1) : 0;
 
     categoryMetrics.push({
       identifier: category.charAt(0).toUpperCase() + category.slice(1).toLowerCase(),
@@ -387,7 +486,7 @@ function convertActionItemsToMetricData(actionItemData) {
   });
 
   // Calculate overall totals
-  const overallClosureRate = totalReceived > 0 ? (totalClosed / totalReceived * 100).toFixed(1) : 0;
+  const overallClosureRate = totalReceived > 0 ? (totalClosedOfReceived / totalReceived * 100).toFixed(1) : 0;
 
   const totalMetrics = {
     identifier: 'All Categories',
@@ -411,28 +510,42 @@ export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, s
   setRawApiReturn(response);
   const retrievedStatistics = response?.statistics?.totals;
   const day_by_day_data = response?.statistics?.day_by_day; // this has all the data that's graphable over days
+  const startDate = response?.statistics?.start_date;
+  const endDate = response?.statistics?.end_date;
 
-  // Message received timing (bar chart)
-  const messageTimingData = createMessageTimingData(retrievedStatistics.guest_message_received_times);
+  let messageTimingData, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemMetrics, actionItemsReceived, actionItemsClosed;
 
-  // Host / hostbuddy total messages responded (metric tiles)
-  const responseTimesData = { host_response_times:retrievedStatistics.host_response_times, hostbuddy_response_times:retrievedStatistics.hostbuddy_response_times, not_responded_in_2h:retrievedStatistics.not_responded_in_2h };
-  const totalMessagesResponded = formatResponseTimeData(responseTimesData);
+  try { // Message received timing (bar chart)
+    messageTimingData = createMessageTimingData(retrievedStatistics.guest_message_received_times, startDate, endDate);
+  } catch {}
 
-  // Host vs HostBuddy response times (metric tiles)
-  const responseTimes = formatResponseTimes(responseTimesData);
+  try { // Host / hostbuddy total messages responded (metric tiles)
+    const messagesSent = retrievedStatistics.messages_sent;
+    totalMessagesResponded = formatMessagesSentData(messagesSent);
+  } catch {}
 
-  // Sentiment (metric tiles)
-  const sentimentData = retrievedStatistics.sentiment;
-  const sentimentMetrics = formatSentimentData(sentimentData);
+  try { // Host vs HostBuddy response times (metric tiles)
+    const responseTimesData = { host_response_times:retrievedStatistics.host_response_times, hostbuddy_response_times:retrievedStatistics.hostbuddy_response_times, not_responded_in_2h:retrievedStatistics.not_responded_in_2h };
+    responseTimes = formatResponseTimes(responseTimesData);
+  } catch {}
 
-  // Action items received and closed (metric tiles)
-  const actionItemMetrics = convertActionItemsToMetricData(day_by_day_data);
+  try { // Sentiment (metric tiles)
+    const sentimentData = retrievedStatistics.sentiment;
+    sentimentMetrics = formatSentimentData(sentimentData);
+  } catch (error) {}
 
-  // Action items received and closed (line graphs)
-  const actionItemsReceived = formatActionItemGraphData(day_by_day_data, 'action_items_received');
-  const actionItemsClosed = formatActionItemGraphData(day_by_day_data, 'action_items_closed');
+  try { // Action items received and closed (metric tiles)
+    actionItemMetrics = convertActionItemsToMetricData(day_by_day_data);
+  } catch (error) {}
 
-  setApiStatisticsData({ messageTimingData, lineGraphDataSets, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemsReceived, actionItemMetrics, actionItemsClosed });
+  try { // Action items received and closed (bar graphs)
+    actionItemsReceived = formatActionItemGraphData(day_by_day_data, 'action_items_received');
+  } catch (error) {}
+
+  try { // Action items received and closed (bar graphs)
+    actionItemsClosed = formatActionItemGraphData(day_by_day_data, 'action_items_closed');
+  } catch (error) {}
+
+  setApiStatisticsData({ messageTimingData, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemsReceived, actionItemMetrics, actionItemsClosed });
   setDataLoading(false);
 }

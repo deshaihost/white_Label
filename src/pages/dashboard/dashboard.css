@@ -82,7 +82,7 @@
 }
 
 .dashboard-container .account-content > div:not(:last-child) {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .dashboard-container .account-content .property-status {
@@ -155,6 +155,7 @@
   line-height: normal;
   text-decoration-line: underline;
 }
+
 .property_status {
   border-radius: 15px;
   border: 1px solid #2c389e;

@@ -274,21 +274,6 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
-                        {/*
-                        <div className="col-lg-4 mb-3">
-                          <div className="account-box">
-                            {!userDataGetLoading ? (
-                              <>
-                                <i className="bi bi-clock icon-style"></i>
-                                <h4 className="mt-3">0</h4>
-                                <p>Total Hosting Time</p>
-                              </>
-                            ) : (
-                              <BoxLoader />
-                            )}
-                          </div>
-                        </div>
-                        */}
                         <div className="col-lg-6 mb-3">
                           <div className="account-box">
                             {!userDataGetLoading ? (
@@ -315,21 +300,6 @@ const Dashboard = () => {
                             )}
                           </div>
                         </div>
-                        {/*
-                        <div className="col-lg-4  mb-3">
-                          <div className="account-box">
-                            {!userDataGetLoading ? (
-                              <>
-                                <i className="bi bi-people-fill icon-style "></i>
-                                <h4 className="mt-3">0</h4>
-                                <p>Total Guests Supported</p>
-                              </>
-                            ) : (
-                              <BoxLoader />
-                            )}
-                          </div>
-                        </div>
-                        */}
                       </div>
                     </div>
                     <div className="col-lg-3 mb-3 ">
@@ -344,6 +314,11 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
+
+                  <div className='statistics-link' style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Link style={{ margin: '0' }} to='/statistics'>See more statistics</Link>
+                  </div>
+
                   <div className="row">
                     {!actionItemsCovertationLoading ? (
                       <>
@@ -354,41 +329,6 @@ const Dashboard = () => {
                           <div>
                             <Link to={'/action-item'} style={{fontSize:"16px"}}>See All</Link>
                           </div>
-                          {/*
-                          <div className="d-flex flex-wrap flex-md-nowrap justify-content-between gap-2 gap-xl-4">
-                            <div className="form-check">
-                              <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
-                                checked={statusFilterVal === "Incomplete"}
-                                onClick={() => { setStatusFilterVal("Incomplete"); }}
-                              />
-                              <label className="form-check-label fs-14" for="flexRadioDefault2">
-                                Incomplete
-                              </label>
-                            </div>
-                            <div className="form-check">
-                              <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
-                                checked={statusFilterVal === "Completed"}
-                                onClick={() => { setStatusFilterVal("Completed"); }}
-                              />
-                              <label className="form-check-label fs-14" for="flexRadioDefault1">
-                                Complete
-                              </label>
-                            </div>
-                            <div className="form-check">
-                              <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3"
-                                checked={statusFilterVal === "Expired"}
-                                onClick={() => { setStatusFilterVal("Expired"); }}
-                              />
-                              <label className="form-check-label fs-14" for="flexRadioDefault3">
-                                Expired
-                                <i className="bi bi-question-circle ms-2" data-tooltip-id="expireTooltip"
-                                  data-tooltip-content='Incomplete action items are marked "Expired" after 14 days. All action items are permanently deleted after 60 days.'
-                                ></i>
-                                <Tooltip className="action-item-tooltip" id="expireTooltip" delayShow={0} place="top" effect="solid"/>
-                              </label>
-                            </div>
-                          </div>
-                          */}
                         </div>
                         {filteredSearchProperty?.length > 0 ? (
                           <div className="table-responsive" style={{ overflowY: "auto", height: "500px" }}>

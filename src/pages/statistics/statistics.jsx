@@ -156,9 +156,11 @@ const MetricTile = ({ dataSets, width, height }) => {
       <div className="statistics-tile metric-tile" style={{ height }}>
         <div className="tile-header">
           <h3>{dataSets[currentDataSetIndex].title}</h3>
-          <IconButton onClick={handleMenuOpen} className="icon-button">
-            <span style={{ fontSize: '24px' }}>⋮</span>
-          </IconButton>
+          {dataSets && dataSets.length > 1 && (
+            <IconButton onClick={handleMenuOpen} className="icon-button">
+              <span style={{ fontSize: '24px' }}>⋮</span>
+            </IconButton>
+          )}
           <Menu anchorEl={anchorEl} open={open} onClose={() => handleMenuClose()}>
             {dataSets.map((dataset, index) => (
               <MenuItem key={dataset.identifier} selected={index === currentDataSetIndex} onClick={() => handleMenuClose(index)}>
@@ -201,6 +203,7 @@ const StatisticsPage = () => {
   const [showDatePickers, setShowDatePickers] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState('');
   const [selectedEndDate, setSelectedEndDate] = useState('');
+  const [requestedStartDate, setRequestedStartDate] = useState(''); // if the user applied a query with start date, store it here. We compare it to the start date in the API return to see if we were able to fetch it.
 
   const dataStartDate = rawApiReturn?.statistics?.start_date
   const dataEndDate = rawApiReturn?.statistics?.end_date
@@ -228,11 +231,14 @@ const StatisticsPage = () => {
     // Assemble the query data based on the current state of the inputs
     let queryData = {};
     if (selectedProperties.length > 0) { queryData.property_names = selectedProperties.map(property => property.value); }
-    if (selectedStartDate) { queryData.start_date = selectedStartDate; } // it's already in format yyyy-mm-dd
-    if (selectedEndDate) { queryData.end_date = selectedEndDate; }
+    if (selectedEndDate) { queryData.end_date = selectedEndDate; } // it's already in format yyyy-mm-dd
+    if (selectedStartDate) {
+      queryData.start_date = selectedStartDate;
+      setRequestedStartDate(selectedStartDate);
+    }
 
     getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading, queryData);
-    setShowDatePickers(false);
+    if (!selectedEndDate && !selectedStartDate) { setShowDatePickers(false); }
   }
 
   const handleAdjustDatesClick = () => {
@@ -248,8 +254,8 @@ const StatisticsPage = () => {
   ];
 
   const actionItemsTiles = [
-    { component: MetricTile, dataSets: apiStatisticsData?.actionItemMetrics, width: 4, height: "300px" },
-    { component: HistogramTile, dataSets: apiStatisticsData?.actionItemsReceived, width: 8, height: '300px' },
+    { component: MetricTile, dataSets: apiStatisticsData?.actionItemMetrics, width: 3, height: "300px" },
+    { component: HistogramTile, dataSets: apiStatisticsData?.actionItemsReceived, width: 9, height: '300px' },
   ];
 
   // When the page loads, fetch the data and populate the charts
@@ -276,7 +282,7 @@ const StatisticsPage = () => {
 
       <h1 className="page-header">
         Business Insights
-        <span className="subtitle">By HostBuddy</span>
+        <span className="subtitle" style={{color:'#146ef5'}}>By HostBuddy</span>
       </h1>
 
       <hr/>
@@ -285,12 +291,13 @@ const StatisticsPage = () => {
         <div className="parameters-left">
           <div className="date-info">
             <p>Showing data from {startDateDisplay} to {endDateDisplay}</p>
-            <p style={{color:'rgb(255, 125, 0)'}}>We could not find data for the entire date range you requested.</p>
+            {!dataLoading && requestedStartDate && requestedStartDate !== dataStartDate && (
+              <p style={{color:'rgb(255, 125, 0)'}}>We could not find data for the entire date range you requested.</p>
+            )}
           </div>
         </div>
         <div className="parameters-right">
           <div className="inputs-container">
-            <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false}/>
             {showDatePickers ? (
               <>
                 <label className="date-label">Start Date</label>
@@ -301,6 +308,9 @@ const StatisticsPage = () => {
             ) : (
               <button className="adjust-dates-button" onClick={handleAdjustDatesClick}>Adjust Dates</button>
             )}
+          </div>
+          <div className="inputs-container">
+            <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false}/>
           </div>
           <button className="apply-button" onClick={handleApplyFilters}>Apply</button>
         </div>
