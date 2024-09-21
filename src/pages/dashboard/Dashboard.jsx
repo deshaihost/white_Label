@@ -15,6 +15,9 @@ import { FaCircleCheck } from "react-icons/fa6";
 import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/transcriptsModel/ConverSationtranscriptModel";
 import { Dropdown } from "primereact/dropdown";
 
+import { MetricTile, HistogramTile, renderTiles } from "../statistics/statisticsTilesComponents";
+import { getStatisticsData, formatDateToReadable } from "../statistics/dataManager";
+
 const Dashboard = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -27,6 +30,33 @@ const Dashboard = () => {
   const actionItemsCovertationLoading = store?.getActionItemsReducer?.loading;
   const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
   const actionItems = actionItemsConvertationData ? actionItemsConvertationData : [];
+
+
+  // Statistics logic -----------------------------------------------------------------------------------------------
+
+  const [rawApiReturn, setRawApiReturn] = useState({}); // The raw data returned by the API
+  const [apiStatisticsData, setApiStatisticsData] = useState({}); // The data structures for the statistics tiles, after populated by the API and formatted in dataManager
+  const [statisticsDataLoading, setStatisticsDataLoading] = useState(true);
+
+  const dataStartDate = rawApiReturn?.statistics?.start_date
+  const dataEndDate = rawApiReturn?.statistics?.end_date
+  const startDateDisplay = dataStartDate ? formatDateToReadable(dataStartDate) : '';
+  const endDateDisplay = dataEndDate ? formatDateToReadable(dataEndDate) : '';
+
+  // When the page loads, fetch the data and populate the charts
+  useEffect(() => {
+    getStatisticsData(setRawApiReturn, setApiStatisticsData, setStatisticsDataLoading);
+  }, []);
+
+  // *** THIS contains the (static) definition of which tiles to render, and in which order *** //
+  const statisticsTiles = [
+    { component: MetricTile, dataSets: apiStatisticsData?.totalMessagesResponded, width: 4, height: "300px" },
+    { component: MetricTile, dataSets: apiStatisticsData?.responseTimes, width: 4, height: "300px" },
+    { component: MetricTile, dataSets: apiStatisticsData?.sentimentMetrics, width: 4, height: "300px" },
+    { component: HistogramTile, dataSets: apiStatisticsData?.messageTimingData, width: 12, height: '300px' },
+  ];
+
+  // ----------------------------------------------------------------------------------------------------------------
 
   // For legacy dict type: flatten and sort action items by creation time (TODO: delete)
   let sortedActionItems = actionItems;
@@ -242,66 +272,14 @@ const Dashboard = () => {
                 </div>
                 <div className="account-content">
                   <div className="row">
-                    <div className="col-lg-9">
                       <div className="row">
-                        <div className="col-lg-6 mb-3">
-                          <div className="account-box">
-                            {!userDataGetLoading ? (
-                              <>
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" >
-                                  <path fill="#146EF5" d="M15.3422 0.656793C15.4156 0.730166 15.4662 0.823302 15.4877 0.924871C15.5092 1.02644 15.5007 1.13207 15.4632 1.2289L10.1064 15.1567C10.0684 15.2552 10.0022 15.3404 9.91608 15.4014C9.82992 15.4625 9.72764 15.4967 9.62209 15.4998C9.51653 15.5029 9.41242 15.4747 9.32283 15.4188C9.23325 15.3629 9.16218 15.2818 9.11856 15.1856L6.87831 10.2573L10.1739 6.96072C10.3158 6.80839 10.3931 6.60693 10.3894 6.39876C10.3857 6.19059 10.3014 5.99198 10.1542 5.84476C10.007 5.69754 9.80833 5.61321 9.60016 5.60953C9.39199 5.60586 9.19053 5.68313 9.0382 5.82507L5.74158 9.12059L0.813244 6.88143C0.716785 6.83787 0.635392 6.76671 0.579339 6.67693C0.523286 6.58715 0.495084 6.48278 0.498293 6.37699C0.501503 6.2712 0.535979 6.16873 0.597371 6.08251C0.658763 5.9963 0.74432 5.9302 0.843243 5.89256L14.7711 0.535729C14.8678 0.498525 14.9732 0.49016 15.0746 0.511648C15.176 0.533135 15.2689 0.583553 15.3422 0.656793Z"></path>
-                                </svg>
-                                <h4>{total}</h4>
-                                <p>Total Messages Processed</p>
-                              </>
-                            ) : (
-                              <BoxLoader />
-                            )}
-                          </div>
-                        </div>
-                        <div className="col-lg-6 mb-3">
-                          <div className="account-box">
-                            {!userDataGetLoading ? (
-                              <>
-                                <i className="bi bi-house-door icon-style"></i>
-                                <h4 className="mt-3">
-                                  {allPropertyName?.length}
-                                </h4>
-                                <p>Number of Properties</p>
-                              </>
-                            ) : (
-                              <BoxLoader />
-                            )}
-                          </div>
-                        </div>
-                        <div className="col-lg-6 mb-3">
-                          <div className="account-box">
-                            {!userDataGetLoading ? (
-                              <>
-                                <i className="bi bi-file-text icon-style"></i>
-                                <h4 className="mt-3">{actionItemsLast14d}</h4>
-                                <p>Action Items (last 14d)</p>
-                              </>
-                            ) : (
-                              <BoxLoader />
-                            )}
-                          </div>
-                        </div>
-                        <div className="col-lg-6 mb-3">
-                          <div className="account-box">
-                            {!userDataGetLoading ? (
-                              <>
-                                <i className="bi bi-file-text icon-style "></i>
-                                <h4 className="mt-3">{actionItemsLast24h}</h4>
-                                <p>Action Items (last 24h)</p>
-                              </>
-                            ) : (
-                              <BoxLoader />
-                            )}
-                          </div>
-                        </div>
+                        {!statisticsDataLoading ? (
+                          renderTiles(statisticsTiles)
+                        ) : (
+                          <BoxLoader />
+                        )}
                       </div>
-                    </div>
+                    {/* Get started tile
                     <div className="col-lg-3 mb-3 ">
                       <div className="row">
                         <div className="col-lg-12">
@@ -313,11 +291,17 @@ const Dashboard = () => {
                         </div>
                       </div>
                     </div>
+                    */}
                   </div>
 
-                  <div className='statistics-link' style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Link style={{ margin: '0' }} to='/statistics'>See more statistics</Link>
-                  </div>
+                  {!statisticsDataLoading && (
+                    <>
+                      <p style={{textAlign:'center', marginBottom:'5px'}}>Above data from {startDateDisplay} to {endDateDisplay}</p>
+                      <div className='statistics-link' style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Link style={{ margin: '0' }} to='/statistics'>See more statistics</Link>
+                      </div>
+                    </>
+                  )}
 
                   <div className="row">
                     {!actionItemsCovertationLoading ? (
