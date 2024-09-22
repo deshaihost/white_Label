@@ -75,6 +75,11 @@ const SideBar = () => {
           </Link>
         </li>
         <li>
+          <Link to="/statistics" className={findlocation === "/statistics" ? "active" : ""}>
+            Insights
+          </Link>
+        </li>
+        <li>
           <Link to="/setting" className={findlocation === "/setting" ? "active" : ""}>
             Settings
           </Link>

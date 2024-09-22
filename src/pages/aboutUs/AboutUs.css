@@ -1,0 +1,215 @@
+.about-us {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 70px 0px;
+}
+.about-us img {
+    width: 100%;
+    max-width: 70px;
+}
+.about-us h1 {
+    color: #fff;
+    font-size: 40px;
+    font-weight: 600;
+}
+.founder h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 30px;
+}
+.team-outer {
+    padding: 30px;
+    background: radial-gradient(circle, #042954, #042954, #042954, #00193500 95%);
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+    height: 100%;
+
+}
+.team {
+    padding: 20px 30px;
+    border: 1px solid #146ef5;
+    background: #000;
+    border-radius: 15px;
+    height: 100%;
+
+}
+.member-image {
+    position: relative;
+    z-index: 0;
+}
+.member-image {
+    position: relative;
+    z-index: 0;
+    max-width: 250px;
+    margin: 0 auto;
+}
+.member-image img.linkedin {
+    position: absolute;
+    bottom: 0;
+    max-width: 45px;
+    right: 0px;
+    border-radius: 0px !important;
+}
+.member-name h3 {
+    color: #fff;
+    margin: 15px 0px;
+    text-align: center;
+    font-size: 35px;
+    line-height: 40px;
+}
+.member-name p {
+    text-align: center;
+    color: #fff;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+.partner img {
+    width: 100%;
+    max-width: 37px;
+}
+.partner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.partner p {
+    color: #fff;
+    font-size: 15px;
+}
+.member-image img:first-child {
+    border-radius: 10px;
+}
+.founder-desc {
+    padding: 50px 0px;
+}
+.founder-desc {
+    color: #fff;
+}
+.founder-desc h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+.founder-desc p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    margin-bottom: 10px;
+}
+.founder-desc h3 {
+    font-size: 25px;
+    margin: 30px 0px 10px 0px;
+}
+.founder-desc ol li {
+    list-style-type: num;
+    font-size: 16px;
+    line-height: 26px;
+    margin-bottom: 10px;
+}
+.founder-desc ol {
+    margin-top: 20px;
+}
+.founder .row {
+    width: initial !important;
+}
+/* -----responsive part start------- */
+@media (max-width: 1399.98px) { 
+
+    .member-name p {
+        font-size: 15px;
+        line-height: 25px;
+        
+    }
+    .member-name h3 {
+        margin: 12px 0px;
+        font-size: 25px;
+        line-height: 35px;
+    }
+    .partner img {
+        width: 100%;
+        max-width: 30px;
+    }
+    .partner p {
+        font-size: 13px;
+    }
+    .founder-desc h2 {
+        font-size: 30px;
+      
+    }
+    .founder-desc h3 {
+        font-size: 22px;
+      
+    }
+}
+@media (max-width: 1199px) {
+    .team-outer {
+        padding: 20px;
+       
+    } 
+    .member-name h3 {
+      font-size: 20px;
+      margin: 10px 0px 5px 0px;
+    }
+    .partner {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+    .team {
+        padding: 20px 15px;
+        
+    }
+    .member-image img.linkedin {
+        max-width: 30px;
+      
+    }
+    
+}
+@media (max-width: 991px) {
+    .team , .team-outer{
+        height: auto;
+    }
+    .team-outer {
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+    .partner {
+        flex-direction: row;
+        justify-content: center;
+        text-align: center;
+    }
+    .about-us {
+        padding: 50px 0px 30px 0px;
+    }
+    .founder-desc {
+        padding: 30px 0px;
+    }
+    .founder .row .col-lg-4:last-child .team-outer {
+        margin-bottom: 0px;
+    }
+}
+@media (max-width: 767px) {
+    .about-us h1 {
+    font-size: 30px;
+    
+    }
+    .founder h2 {
+         font-size: 25px;
+    }
+    .founder-desc h2 {
+        font-size: 25px;
+    }
+    .about-us {
+        padding: 20px 0px 30px 0px;
+    }
+    .about-us img {
+       max-width: 50px;
+    }
+}

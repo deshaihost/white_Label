@@ -4,6 +4,7 @@ import Home from "../pages/home/Home";
 import Pricing from "../pages/pricing/Pricing";
 import MeetHostBoddy from "../pages/meetHostBuddy/MeetHostBoddy";
 import Faqs from "../pages/faq/Faq";
+//import AboutUs from "../pages/aboutUs";
 import Login from "../auth/login/Login";
 import Signup from "../auth/signup/Signup";
 import NavBar from "../component/navBar/NavBar";
@@ -18,6 +19,7 @@ import Account from "../pages/account/Account";
 import SetupGuide from "../pages/setupGuide/SetupGuide";
 import HostawaySetup from "../pages/setupGuide/HostawaySetup";
 import Dashboard from "../pages/dashboard/Dashboard";
+import StatisticsPage from "../pages/statistics/statistics";
 import ProtectedRoute from "./ProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import QuestionnairePage from "../pages/properties/addProperties/dynamic_questionnaire/complete_questionnaire";
@@ -154,6 +156,7 @@ const Routing = () => {
         <Route path="/pricing" element={<Pricing />}></Route>
         <Route path="/meet-hostbuddy" element={<MeetHostBoddy />}></Route>
         <Route path="/faqs" element={<Faqs />}></Route>
+        {/* <Route path="/about-us" element={<AboutUs />}></Route> */}
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/forgot" element={<ForgotPass />}></Route>
@@ -234,6 +237,14 @@ const Routing = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/statistics"
+          element={
+            <ProtectedRoute>
+              <StatisticsPage />
             </ProtectedRoute>
           }
         />
