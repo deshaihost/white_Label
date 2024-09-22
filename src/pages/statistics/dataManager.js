@@ -77,6 +77,20 @@ export const metricDataSets = [
   }
 ];
 
+// Returns for the message timing data if data is insufficient
+const timingHistoNoData = [
+  {
+    identifier: 'Total',
+    title: 'Timing of messages received (by hour of day - average)',
+    data: [] // this causes the tile to display "No Data"
+  },
+  {
+    identifier: 'By Weekday',
+    title: 'Timing of messages received (by weekday - average)',
+    data: []
+  }
+];
+
 // YYYY-MM-DD to e.g. 'Sep 9, 2021'
 export const formatDateToReadable = (dateString) => {
   if (!dateString) return '';
@@ -111,6 +125,11 @@ export const callGetStatisticsApi = async (queryData) => {
 };
 
 function createMessageTimingData(guest_message_received_times, startDate, endDate) {
+  // If startDate or endDate is not provided, return all zeros
+  if (!startDate || !endDate) {
+    return timingHistoNoData;
+  }
+
   const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const hoursOfDay = Array.from({ length: 24 }, (_, i) => i.toString()); // Create hours from '0' to '23'
 
@@ -346,9 +365,9 @@ function formatSentimentData(sentimentData) {
       identifier: `${category.charAt(0).toUpperCase() + category.slice(1)} Guests`,
       title: `Sentiment for ${category.charAt(0).toUpperCase() + category.slice(1)} Guests`,
       data: [
-        { number: `${positivePercentage}%`, text: 'Positive' },
-        { number: `${neutralPercentage}%`, text: 'Neutral' },
-        { number: `${negativePercentage}%`, text: 'Negative' }
+        { number: isNaN(positivePercentage) ? "0" : `${positivePercentage}%`, text: 'Positive' },
+        { number: isNaN(neutralPercentage) ? "0" : `${neutralPercentage}%`, text: 'Neutral' },
+        { number: isNaN(negativePercentage) ? "0" : `${negativePercentage}%`, text: 'Negative' }
       ]
     };
   }
@@ -372,9 +391,9 @@ function formatSentimentData(sentimentData) {
     identifier: 'All Guests',
     title: 'Guest Sentiment',
     data: [
-      { number: `${positiveAggregatedPercentage}%`, text: 'Positive' },
-      { number: `${neutralAggregatedPercentage}%`, text: 'Neutral' },
-      { number: `${negativeAggregatedPercentage}%`, text: 'Negative' }
+      { number: isNaN(positiveAggregatedPercentage) ? "0" : `${positiveAggregatedPercentage}%`, text: 'Positive' },
+      { number: isNaN(neutralAggregatedPercentage) ? "0" : `${neutralAggregatedPercentage}%`, text: 'Neutral' },
+      { number: isNaN(negativeAggregatedPercentage) ? "0" : `${negativeAggregatedPercentage}%`, text: 'Negative' }
     ]
   };
 

@@ -106,6 +106,8 @@ export const LineGraphTile = ({ dataSets, width, height }) => {
   const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0);
   const open = Boolean(anchorEl);
 
+  const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
+
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -136,14 +138,18 @@ export const LineGraphTile = ({ dataSets, width, height }) => {
             ))}
           </Menu>
         </div>
-        <LineChart width={tileWidth - 40} height={200} data={currentDataSet.data}>
-          {/* Adjust chart width dynamically */}
-          <XAxis dataKey="name" />
-          <YAxis />
-          <CartesianGrid stroke="#eee" strokeDasharray="1 5" />
-          <Tooltip />
-          <Line type="monotone" dataKey="value" stroke="#8884d8" />
-        </LineChart>
+        {currentDataSet.data && currentDataSet.data.length > 0 ? (
+          <LineChart width={tileWidth - 40} height={heightAsInt-80} data={currentDataSet.data}>
+            {/* Adjust chart width dynamically */}
+            <XAxis dataKey="name" />
+            <YAxis />
+            <CartesianGrid stroke="#eee" strokeDasharray="1 5" />
+            <Tooltip />
+            <Line type="monotone" dataKey="value" stroke="#8884d8" />
+          </LineChart>
+        ) : (
+          <p>No data</p>
+        )}
       </div>
     </Grid>
   );
@@ -156,6 +162,8 @@ export const HistogramTile = ({ dataSets, width, height }) => {
   const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0);
   const open = Boolean(anchorEl);
 
+  const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
+
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -186,14 +194,18 @@ export const HistogramTile = ({ dataSets, width, height }) => {
             ))}
           </Menu>
         </div>
-        <BarChart width={tileWidth - 40} height={200} data={currentDataSet.data}>
-          {/* Adjust chart width dynamically */}
-          <XAxis dataKey="name" />
-          <YAxis />
-          <CartesianGrid stroke="#eee" strokeDasharray="1 5" />
-          <Tooltip />
-          <Bar dataKey="value" fill="#2196F3" />
-        </BarChart>
+        {currentDataSet.data && currentDataSet.data.length > 0 ? (
+          <BarChart width={tileWidth - 40} height={heightAsInt-80} data={currentDataSet.data}>
+            {/* Adjust chart width dynamically */}
+            <XAxis dataKey="name" />
+            <YAxis />
+            <CartesianGrid stroke="#eee" strokeDasharray="1 5" />
+            <Tooltip />
+            <Bar dataKey="value" fill="#2196F3" />
+          </BarChart>
+        ) : (
+          <p>No data</p>
+        )}
       </div>
     </Grid>
   );
@@ -238,12 +250,22 @@ export const MetricTile = ({ dataSets, width, height }) => {
           </Menu>
         </div>
         <div className="metric-content">
-          {currentDataSet.map((item, index) => (
-            <div key={index} className="metric-item">
-              <div className="metric-number">{item.number}</div>
-              <div className="metric-text">{item.text}</div>
-            </div>
-          ))}
+          {currentDataSet && currentDataSet.length > 0 ? (
+            currentDataSet.map((item, index) => {
+              const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
+              const useSmallerNumbers = (heightAsInt < currentDataSet.length * 100);
+              console.log(dataSets[0].title, heightAsInt, currentDataSet.length, useSmallerNumbers);
+
+              return (
+                <div key={index} className="metric-item">
+                  <div className="metric-number" style={useSmallerNumbers ? { lineHeight: '1' } : {}}>{item.number}</div>
+                  <div className="metric-text">{item.text}</div>
+                </div>
+              );
+            })
+          ) : (
+          <p>No data</p>
+        )}
         </div>
       </div>
     </Grid>

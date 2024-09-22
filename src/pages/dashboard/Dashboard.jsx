@@ -50,10 +50,10 @@ const Dashboard = () => {
 
   // *** THIS contains the (static) definition of which tiles to render, and in which order *** //
   const statisticsTiles = [
-    { component: MetricTile, dataSets: apiStatisticsData?.totalMessagesResponded, width: 4, height: "300px" },
-    { component: MetricTile, dataSets: apiStatisticsData?.responseTimes, width: 4, height: "300px" },
-    { component: MetricTile, dataSets: apiStatisticsData?.sentimentMetrics, width: 4, height: "300px" },
-    { component: HistogramTile, dataSets: apiStatisticsData?.messageTimingData, width: 12, height: '300px' },
+    { component: MetricTile, dataSets: apiStatisticsData?.totalMessagesResponded, width: 4, height: "240px" },
+    { component: MetricTile, dataSets: apiStatisticsData?.responseTimes, width: 4, height: "240px" },
+    { component: MetricTile, dataSets: apiStatisticsData?.sentimentMetrics, width: 4, height: "240px" },
+    { component: HistogramTile, dataSets: apiStatisticsData?.messageTimingData, width: 12, height: '240px' },
   ];
 
   // ----------------------------------------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getUserDataActions());
-    dispatch(getActionItemsActions());
+    dispatch(getActionItemsActions()); // TODO: limit the number of action items fetched
   }, []);
 
   // When user data is loaded, save the payment/subscription information to local storage. We need this information for the warning banner logic (in the NavBar), which should be shown on all portal pages.
@@ -265,10 +265,12 @@ const Dashboard = () => {
             <div className="col-lg-10 col-xl-10  col-xxl-10">
               <div className="dashboard-container">
                 <div className="account_heading">
-                  <h3>
-                    Welcome to HostBuddy,{" "}
-                    {!userDataLoading && <>{first_name}</>}
-                  </h3>
+                  {first_name ? (
+                    <h3>Welcome to HostBuddy, {!userDataLoading && first_name}</h3>
+                  ) : (
+                    <h3>Welcome to HostBuddy!</h3>
+                  )}
+                  <h4>New to HostBuddy? <Link style={{textDecoration:'underline', marginLeft:'5px'}} to="/getstarted">Get Started</Link></h4>
                 </div>
                 <div className="account-content">
                   <div className="row">
@@ -296,7 +298,9 @@ const Dashboard = () => {
 
                   {!statisticsDataLoading && (
                     <>
-                      <p style={{textAlign:'center', marginBottom:'5px'}}>Above data from {startDateDisplay} to {endDateDisplay}</p>
+                      {startDateDisplay && endDateDisplay && ( 
+                        <p style={{textAlign:'center', marginBottom:'5px'}}>Above data from {startDateDisplay} to {endDateDisplay}</p>
+                      )}
                       <div className='statistics-link' style={{ display: 'flex', justifyContent: 'center' }}>
                         <Link style={{ margin: '0' }} to='/statistics'>See more statistics</Link>
                       </div>
@@ -306,7 +310,7 @@ const Dashboard = () => {
                   <div className="row">
                     {!actionItemsCovertationLoading ? (
                       <>
-                        <div className="text-white mt-3 pt-3 pb-1 d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-md-0 gap-2">
+                        <div className="text-white pb-1 d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-md-0 gap-2">
                           <div>
                             <h5 className="">Incomplete Action Items <small style={{fontSize:"14px", color:"#AAA"}}>(Most Recent)</small></h5>
                           </div>

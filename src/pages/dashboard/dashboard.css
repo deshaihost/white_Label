@@ -41,6 +41,15 @@
   line-height: 150%;
 }
 
+.dashboard-container .account_heading h4 {
+  color: #DDD;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+
 .dashboard-container .account-content {
   padding: 30px 40px;
 }
@@ -82,7 +91,7 @@
 }
 
 .dashboard-container .account-content > div:not(:last-child) {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .dashboard-container .account-content .property-status {

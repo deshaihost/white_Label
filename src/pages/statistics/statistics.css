@@ -138,6 +138,8 @@
   border: 1px solid #2c38ae;
   box-shadow: 0 4px 8px rgba(255, 255, 255, 0.4);
   padding: 20px;
+  padding-bottom: 5px;
+  padding-top: 15px;
   margin: 10px 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animation for hover effects */
   display: flex; /* Use flexbox for alignment */
@@ -159,6 +161,11 @@
   margin-bottom: 10px; /* Space between header and content */
   text-align: center; /* Center the title text */
   width: 100%; /* Ensure the title spans the full width */
+}
+
+.statistics-tile p {
+  color: #CCC;
+  margin: auto 0;
 }
 
 /* LineGraphTile and HistogramTile specific styling */

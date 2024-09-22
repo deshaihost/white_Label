@@ -21,6 +21,7 @@ const StatisticsPage = () => {
   const [selectedEndDate, setSelectedEndDate] = useState('');
   const [requestedStartDate, setRequestedStartDate] = useState(''); // if the user applied a query with start date, store it here. We compare it to the start date in the API return to see if we were able to fetch it.
 
+  const today = new Date().toISOString().split('T')[0]; // to restrict the date picker. A lil inacurrate cause time zone, but fine for now
   const dataStartDate = rawApiReturn?.statistics?.start_date
   const dataEndDate = rawApiReturn?.statistics?.end_date
   const startDateDisplay = dataStartDate ? formatDateToReadable(dataStartDate) : '';
@@ -94,7 +95,11 @@ const StatisticsPage = () => {
       <div className="parameters-section">
         <div className="parameters-left">
           <div className="date-info">
-            <p>Showing data from {startDateDisplay} to {endDateDisplay}</p>
+            {startDateDisplay && endDateDisplay ? (
+              <p>Showing data from {startDateDisplay} to {endDateDisplay}</p>
+            ) : (
+              <p>Data not available yet</p>
+            )}
             {!dataLoading && requestedStartDate && requestedStartDate !== dataStartDate && (
               <p style={{color:'rgb(255, 125, 0)'}}>We could not find data for the entire date range you requested.</p>
             )}
@@ -105,9 +110,9 @@ const StatisticsPage = () => {
             {showDatePickers ? (
               <>
                 <label className="date-label">Start Date</label>
-                <input type="date" className="date-input" placeholder="Start Date" value={selectedStartDate} onChange={(e) => setSelectedStartDate(e.target.value)} />
+                <input type="date" className="date-input" placeholder="Start Date" value={selectedStartDate} onChange={(e) => setSelectedStartDate(e.target.value)} max={today} />
                 <label className="date-label">End Date</label>
-                <input type="date" className="date-input" placeholder="End Date" value={selectedEndDate} onChange={(e) => setSelectedEndDate(e.target.value)} />
+                <input type="date" className="date-input" placeholder="End Date" value={selectedEndDate} onChange={(e) => setSelectedEndDate(e.target.value)} max={today} />
               </>
             ) : (
               <button className="adjust-dates-button" onClick={handleAdjustDatesClick}>Adjust Dates</button>
