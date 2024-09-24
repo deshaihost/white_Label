@@ -22,6 +22,7 @@ const SmartTemlating = 'https://storage.googleapis.com/frontend_media/home-new/R
 const actionItemsScreen = 'https://storage.googleapis.com/frontend_media/home-new/action_items_screen.webp';
 const inboxScreen = 'https://storage.googleapis.com/frontend_media/home-new/inbox_screen.webp';
 const reviewRemovalScreen = 'https://storage.googleapis.com/frontend_media/home-new/review_removal_screen.webp';
+const statistics = 'https://storage.googleapis.com/frontend_media/home-new/statistics.webp';
 
 const Works = () => {
     return(
@@ -180,6 +181,18 @@ const Works = () => {
                         </div>
                         <div className="col-lg-6">
                             <img src={robustCustomization} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
+                                <h3><strong>Business Insights</strong> You've Never Seen Before</h3>
+                                <p>AI-driven analysis of your guest messaging lets you unlock a wealth of new insights into your business. Guest satisfaction levels, message timing, and more are available to you at a glance to help you make data-driven decisions.</p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={statistics} alt='works-img' />
                         </div>
                     </div>
 
