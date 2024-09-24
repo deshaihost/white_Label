@@ -107,9 +107,7 @@ const ScheduleCalender = ({ getScheduleAPI, allProperties, setShowCalender, sele
 
   // copy to all property onClickHandle
   const handleCopyToAll = () => {
-    const isConfirmed = window.confirm(
-      "Do you want to Copy this schedule to all properties? Month schedules will not be copied or changed."
-    );
+    const isConfirmed = window.confirm("Do you want to Copy this schedule to all properties? Month schedules will not be copied or changed.");
     if (!isConfirmed) {
       return;
     }
@@ -118,9 +116,7 @@ const ScheduleCalender = ({ getScheduleAPI, allProperties, setShowCalender, sele
 
   // clear all property onClickHandle
   const handleClearAll = () => {
-    const isConfirmed = window.confirm(
-      "Do you want to clear the weekly schedule for this property? Month schedule will not be affected."
-    );
+    const isConfirmed = window.confirm("Do you want to clear the weekly schedule for this property? Month schedule will not be affected.");
     if (!isConfirmed) {
       return;
     }

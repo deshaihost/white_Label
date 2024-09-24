@@ -7,6 +7,7 @@ import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./Preferences.css";
 import "./SettingIndex.css";
+import SettingsCalender from "./settingsCalendar";
 import { FullScreenLoader } from "../../../../helper/Loader";
 
 /*
@@ -31,6 +32,8 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
   const [localSettingsData, setLocalSettingsData] = useState({}); // Live data for what is currently on the UI, for all settings configs
   const [selectedConfig, setSelectedConfig] = useState("default"); // The currently selected config. All users have a "default" config
 
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+
   const currentSettingsData = localSettingsData?.[selectedConfig] || {};
   const setCurrentSettingsData = (newData) => {
     setLocalSettingsData({ ...localSettingsData, [selectedConfig]: newData });
@@ -45,6 +48,24 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
       }
     }
     setCurrentSettingsData({ ...currentSettingsData, [key]: value });
+  }
+
+  // For each config - if there is no schedule data, initialize it with a default schedule.
+  // Then set this data in the state.
+  const initializeScheduleData = async (apiData) => {
+    const dailySchedules = {monday: ['00:00', '23:59'], tuesday: ['00:00', '23:59'], wednesday: ['00:00', '23:59'], thursday: ['00:00', '23:59'], friday: ['00:00', '23:59'], saturday: ['00:00', '23:59'], sunday: ['00:00', '23:59']};
+  
+    const scheduleDataToSet = {};
+  
+    for (const key in apiData) {
+      if (key !== 'default' && !apiData[key].hasOwnProperty('schedules')) {
+        apiData[key]['schedules'] = structuredClone(dailySchedules);
+      }
+    }
+  
+    console.log("initializeScheduleData", apiData);
+    setSettingsApiData(apiData);
+    setLocalSettingsData(apiData);
   }
 
   // Call the API to get all the user's settings
@@ -63,8 +84,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
   
       if (response.status === 200) {
         setGetSettingsLoading(false);
-        setSettingsApiData(response?.data?.conversation_settings);
-        setLocalSettingsData(response?.data?.conversation_settings);
+        initializeScheduleData(response?.data?.conversation_settings);
       }
       else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) {
@@ -109,7 +129,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
     if (e.target.value === "add") {
       const newConfigName = window.prompt("Enter a name for the new config");
       if (newConfigName) {
-        setLocalSettingsData({ ...localSettingsData, [newConfigName]:settingsApiData.default }); // warning: this is creating a shallow copy of settingsApiData.default
+        const dailySchedules = {monday: ['00:00', '23:59'], tuesday: ['00:00', '23:59'], wednesday: ['00:00', '23:59'], thursday: ['00:00', '23:59'], friday: ['00:00', '23:59'], saturday: ['00:00', '23:59'], sunday: ['00:00', '23:59']};
+        let newConfigSettings = { ...structuredClone(settingsApiData.default), schedules: { ...dailySchedules } };
+        setLocalSettingsData({ ...localSettingsData, [newConfigName]:newConfigSettings });
         setSelectedConfig(newConfigName);
       }
     } else {
@@ -118,6 +140,17 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
       const selectedOptions = selectedProperties.map((propertyName) => ({ value: propertyName, label: propertyName }));
       setSelectedOptions(selectedOptions);
     }
+  }
+
+  const handleScheduleClick = (event) => {
+    event.preventDefault();
+    setShowScheduleModal(true);
+  }
+
+  // Given a new schedule object (from the modal): set it as the schedule for the currently selected config
+  const setScheduleData = (newScheduleData) => {
+    const newSettings = { ...localSettingsData[selectedConfig], schedules:newScheduleData };
+    setCurrentSettingsData(newSettings);
   }
 
   // On page load, call the API to get the settings
@@ -228,6 +261,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                   <div ref={selectRef}>
                     <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
                   </div>
+                  <a href="#" style={{marginTop:'10px', fontSize:'16px', display:'block', textAlign:'center'}} onClick={handleScheduleClick}>Configure Timing</a>
                 </>
               )}
             </div>
@@ -235,7 +269,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
           </div>
         </div>
 
-        <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
+        <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
 
         <div className="row mt-4">
           <div className="col-lg-8">
@@ -346,6 +380,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
           </div>
         </div>
       </div>
+      <SettingsCalender scheduleData={localSettingsData?.[selectedConfig]?.schedules} setScheduleData={setScheduleData} showSchedule={showScheduleModal} setShowSchedule={setShowScheduleModal}/>
     </div>
   );
 };
