@@ -42,9 +42,9 @@ const Pricing = () => {
 
         <div className="pricing-plans-descriptions-lg">
           <h3>HostBuddy Pro</h3>
-          <p><strong>Unlimited access</strong> to HostBuddy's messaging and core automation features.</p>
+          <p><strong>Unlimited access</strong> to HostBuddy's AI messaging and core automation features.</p>
           <ul>
-            <li>State of the art AI guest messaging, connected to your PMS.</li>
+            <li>Automate your guest messaging with state of the art conversational AI, connected to your PMS.</li>
             <li>Leverage additional revenue-driving features: Smart templating, upsells, action items and notifications, review removal support.</li>
             <li>View-only Smart Inbox. View your conversations, review HostBuddy's messages, and see AI-detected action items and sentiment analysis.</li>
           </ul>
@@ -73,10 +73,10 @@ const Pricing = () => {
           <div className="col price-plans-column">
             <h3>HostBuddy Pro</h3>
             <div className="pricing-plans-descriptions-md-sm">
-              <p><strong>Unlimited access</strong> to HostBuddy's messaging and core automation features.</p>
+              <p><strong>Unlimited access</strong> to HostBuddy's AI messaging and core automation features.</p>
               <ul>
-                <li>State of the art AI guest messaging, connected to your PMS.</li>
-                <li>Unlimited access to additional revenue-driving features: Smart templating, upsells, action items and notifications, review removal support.</li>
+                <li>Automate your guest messaging with state of the art conversational AI, connected to your PMS.</li>
+                <li>Leverage additional revenue-driving features: Smart templating, upsells, action items and notifications, review removal support.</li>
                 <li>View-only Smart Inbox. View your conversations, review HostBuddy's messages, and see AI-detected action items and sentiment analysis.</li>
               </ul>
             </div>
