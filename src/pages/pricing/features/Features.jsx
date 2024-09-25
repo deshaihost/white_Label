@@ -6,45 +6,48 @@ import WrongImg from '../../../public/img/wrong_check.png';
 const Features = () => {
     const featurePlans = [
         {
-            compareTo: 'User-friendly dashboard: Easily manage your HostBuddy',
+            compareTo: 'User-friendly dashboard: Easily manage your properties and customize HostBuddy',
             essential: true,
-            works: true,
-            unlimited: true
-        },
-        {
-            compareTo: 'Fully customizable: Tailor HostBuddy to your properties',
-            essential: true,
-            works: true,
             unlimited: true
         },
         {
             compareTo: 'State of the art conversational AI',
             essential: true,
-            works: true,
             unlimited: true
         },
         {
-            compareTo: 'Share HostBuddy with your guests using property-specific chat links',
+            compareTo: 'Fully integrated: Let HostBuddy see and respond to guests over your PMS',
             essential: true,
-            works: true,
             unlimited: true
         },
         {
-            compareTo: 'Integration to Property Management Software (PMS)',
-            essential: false,
-            works: true,
+            compareTo: 'Action item detection and notifications',
+            essential: true,
             unlimited: true
         },
         {
-            compareTo: 'Connected to your guest data',
-            essential: false,
-            works: true,
+            compareTo: 'Smart template messaging and upsells',
+            essential: true,
             unlimited: true
         },
         {
-            compareTo: 'HostBuddy responds directly over PMS & OTA communication channels',
+            compareTo: 'AI-powered review removal support',
+            essential: true,
+            unlimited: true
+        },
+        {
+            compareTo: 'Slack integration with directed responses',
+            essential: true,
+            unlimited: true
+        },
+        {
+            compareTo: 'Smart Inbox: View your conversations, see sentiment, action items, and more',
+            essential: true,
+            unlimited: true
+        },
+        {
+            compareTo: 'AI-driven business intelligence: comprehensive analytics dashboard',
             essential: false,
-            works: true,
             unlimited: true
         }
     ]
@@ -59,20 +62,13 @@ const Features = () => {
                         <thead>
                             <tr>
                                 <th>
-                                    <h3>Compare Plans</h3>
-                                    {/* <p>Find the one that’s right for you</p> */}
+                                    <h3 style={{textAlign:'left'}}>Compare Plans</h3>
                                 </th>
                                 <th>
-                                    <h3>The Essentials</h3>
-                                    {/* <p>Features in The Essentials Plan</p>  */}
+                                    <h3>HostBuddy<br/>Pro</h3>
                                 </th>
                                 <th>
-                                    <h3>The Works</h3>
-                                    {/* <p>Features in The Works Plan</p>  */}
-                                </th>
-                                <th>
-                                    <h3>The Works<br/>Unlimited</h3>
-                                    {/* <p>Features in The Works Unlimted Plan</p>  */}
+                                    <h3>HostBuddy<br/>Elite</h3>
                                 </th>
                             </tr>
                         </thead>
@@ -80,25 +76,17 @@ const Features = () => {
                             {featurePlans?.map((data, i) => {
                                 return(
                                     <tr key={i}>
-                                        {i === 3 ? (
+                                        {i === 7 ? (
                                             <>
                                                 <td><h5>{data.compareTo}</h5></td>
-                                                <td><img src={data.essential === true ? CheckImg : WrongImg} alt='check-img' /><p className='unlimited-text'>Unlimited</p></td>
-                                                <td><img src={data.works === true ? CheckImg : WrongImg} alt='check-img' /><p className='unlimited-text'>Unlimited</p></td>
-                                                <td><img src={data.unlimited === true ? CheckImg : WrongImg} alt='check-img' /><p className='unlimited-text'>Unlimited</p></td>
-                                            </>
-                                        ) : i === 6 ? (
-                                            <>
-                                                <td><h5>{data.compareTo}</h5></td>
-                                                <td><img src={data.essential === true ? CheckImg : WrongImg} alt='check-img' /></td>
-                                                <td><p style={{color: 'rgb(255, 165, 0)'}}>Up To<br/>12h/day</p></td>
-                                                <td><img src={data.unlimited === true ? CheckImg : WrongImg} alt='check-img' /><p className='unlimited-text'>Unlimited</p></td>
+                                                {/* <td><p style={{color: 'rgb(255, 165, 0)'}}>Up To<br/>12h/day</p></td> */}
+                                                <td><p style={{color: 'rgb(255, 165, 0)'}}>View<br/>Only</p></td>
+                                                <td><img src={data.unlimited === true ? CheckImg : WrongImg} alt='check-img' /><p className='unlimited-text'>View and send</p></td>
                                             </>
                                         ) : (
                                             <>
                                                 <td><h5>{data.compareTo}</h5></td>
                                                 <td><img src={data.essential === true ? CheckImg : WrongImg} alt='check-img' /></td>
-                                                <td><img src={data.works === true ? CheckImg : WrongImg} alt='check-img' /></td>
                                                 <td><img src={data.unlimited === true ? CheckImg : WrongImg} alt='check-img' /></td>
                                             </>
                                         )}

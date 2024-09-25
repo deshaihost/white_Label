@@ -75,8 +75,8 @@ const HostawaySetup = () => {
                         <h4>Step 1: Property Onboarding</h4>
                         <p>Below is a step by step guide for onboarding your first property!</p>
 
-                        <h6 style={{ color: 'white' }}>Connecting Hostaway (“The Works” Users)</h6>
-                        <p>If you plan to use either of “The Works” plans, you will start by integrating Hostaway.</p>
+                        <h6 style={{ color: 'white' }}>Connecting Hostaway</h6>
+                        <p>You will start by integrating Hostaway.</p>
                         <ol>
                           <li>Click the “PMS Integration” button on your “Properties” page.</li>
                           <li>Select Hostaway and click “Continue”. You will be redirected to a secure integrations page where you can enter your Hostaway Account ID and API key to connect with HostBuddy.
@@ -143,7 +143,7 @@ const HostawaySetup = () => {
                         <ol>
                           <li>When you are happy with how HostBuddy is performing, you will be able to begin providing access to HostBuddy to your guests. You must subscribe to begin offering actual communication support.</li>
                           <li>Select “Subscribe”<br />
-                          Here you will choose the number of properties you plan to add, along with the plan that you are interested in. The main difference between our packages is that “The Works” has a limit of 12 hours of communication coverage per day, while The Works Unlimited has no limits to coverage.
+                          Here you will choose the number of properties you plan to add, along with the plan that you are interested in.
                             <ul style={{ marginBottom: '0px' }}>
                               <li><em>Please Note: The number of properties you have when you subscribe will be the number of properties you can use for your free trial and intro discount. Be sure to subscribe only when you have the exact number of properties that you would like to use for the trial, as your selection will be final for the trial period. You can of course add more properties later, but they will not qualify for your trial period. Your card will not be charged until your trial period has been completed.</em></li>
                             </ul>

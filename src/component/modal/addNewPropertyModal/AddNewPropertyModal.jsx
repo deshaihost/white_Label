@@ -16,10 +16,10 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
   const confirmHandle = () => {
     if (plantPring?.yourPlan !== "") {
       if (plantPring?.TotalProperties !== "") {
-        try { window.gtag_report_conversion('go-to-checkout'); } // Report the checkout start to Google Ads
-        catch {  } // forget the gtag report, just proceed
+        //try { window.gtag_report_conversion('go-to-checkout'); } // Report the checkout start to Google Ads
+        //catch {  } // forget the gtag report, just proceed
         dispatch(
-          postCreateCheckoutSessionActions({ subscription_plan: plantPring?.yourPlan, num_properties: JSON.parse(plantPring?.TotalProperties) })
+          postCreateCheckoutSessionActions({ subscription_plan:plantPring?.yourPlan, num_properties:JSON.parse(plantPring?.TotalProperties) })
         );
       }
     }

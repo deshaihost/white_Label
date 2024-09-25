@@ -41,23 +41,19 @@ const Pricing = () => {
         </div>
 
         <div className="pricing-plans-descriptions-lg">
-          <h3>The Essentials</h3>
+          <h3>HostBuddy Pro</h3>
+          <p><strong>Unlimited access</strong> to HostBuddy's messaging and core automation features.</p>
           <ul>
-            <li>State of the art AI, tailored to your properties.</li>
-            <li>Make HostBuddy available to your guests 24/7 by sharing a property-specific URL, where they can access their HostBuddy chat window.</li>
-            <li>PMS messaging not supported.</li>
+            <li>State of the art AI guest messaging, connected to your PMS.</li>
+            <li>Leverage additional revenue-driving features: Smart templating, upsells, action items and notifications, review removal support.</li>
+            <li>View-only Smart Inbox. View your conversations, review HostBuddy's messages, and see AI-detected action items and sentiment analysis.</li>
           </ul>
           <div style={{ height: '25px' }}></div> {/* Vertical spacer */}
-          <h3>The Works</h3>
+          <h3>HostBuddy Elite</h3>
+          <p><strong>Your Complete AI Guest Communication Suite.</strong> Everything in Pro, plus:</p>
           <ul>
-            <li>Everything in The Essentials, plus:</li>
-            <li><strong>Connect a PMS account</strong> to give HostBuddy access to property details and real-time guest information, and to let HostBuddy see and respond to guest messages over your existing communication channels.</li>
-            <li>Schedule the times of day/week for HostBuddy to automatically respond to guests, up to a maximum of 12 hours per day.</li>
-          </ul>
-          <div style={{ height: '25px' }}></div> {/* Vertical spacer */}
-          <h3>The Works Unlimited</h3>
-          <ul>
-            <li>Everything in The Works, with <strong>no daily limit</strong> on the hours HostBuddy can automatically respond to guests.</li>
+            <li><strong>Full Functionality Smart Inbox.</strong> Send messages to your guests, and generate AI responses from your command or from scratch to maximize efficiency.</li>
+            <li><strong>AI-Driven Business Intelligence.</strong> Unlock a wealth of new insights into your business with comprehensive analytics. Delve into data on your guest satisfaction rates, message timing, and more.</li>
           </ul>
         </div>
 
@@ -74,42 +70,32 @@ const Pricing = () => {
               <h5><strong>51-99</strong> Properties</h5>
             </div>
           </div>
-          <div className="col price-plans-column" style={{marginTop:"0"}}>
-            <h3>The Essentials</h3>
+          <div className="col price-plans-column">
+            <h3>HostBuddy Pro</h3>
             <div className="pricing-plans-descriptions-md-sm">
+              <p><strong>Unlimited access</strong> to HostBuddy's messaging and core automation features.</p>
               <ul>
-                <li>State of the art AI, tailored to your properties.</li>
-                <li>Make HostBuddy available to your guests 24/7 by sharing a property-specific URL, where they can access their HostBuddy chat window.</li>
-                <li>PMS messaging not supported.</li>
+                <li>State of the art AI guest messaging, connected to your PMS.</li>
+                <li>Unlimited access to additional revenue-driving features: Smart templating, upsells, action items and notifications, review removal support.</li>
+                <li>View-only Smart Inbox. View your conversations, review HostBuddy's messages, and see AI-detected action items and sentiment analysis.</li>
               </ul>
             </div>
-            <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="2" cents="50" priceTier={1}/>
-            <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="2" priceTier={1}/>
-            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="1" cents="50" priceTier={1}/>
+            <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="7" priceTier={2}/>
+            <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="6" priceTier={2}/>
+            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="5" priceTier={2}/>
           </div>
           <div className="col price-plans-column">
-            <h3>The Works</h3>
+            <h3>HostBuddy Elite</h3>
             <div className="pricing-plans-descriptions-md-sm">
+              <p><strong>Your Complete AI Guest Communication Suite.</strong> Everything in Pro, plus:</p>
               <ul>
-                <li>Everything in The Essentials, plus:</li>
-                <li><strong>Connect a PMS account</strong> to give HostBuddy access to property details and real-time guest information, and to let HostBuddy see and respond to guest messages over your existing communication channels.</li>
-                <li>Schedule the times of day/week for HostBuddy to automatically respond to guests, up to a maximum of 12 hours per day.</li>
+                <li><strong>Fully Capable Smart Inbox.</strong> Send messages to your guests, and generate AI responses from your command or from scratch to maximize efficiency.</li>
+                <li><strong>AI-Driven Business Intelligence.</strong> Unlock a wealth of new insights into your business with comprehensive analytics. Delve into data on your guest satisfaction rates, message timing, and more.</li>
               </ul>
             </div>
-            <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="5" priceTier={2}/>
-            <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="4" priceTier={2}/>
-            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="3" cents="50" priceTier={2}/>
-          </div>
-          <div className="col price-plans-column">
-            <h3>The Works Unlimited</h3>
-            <div className="pricing-plans-descriptions-md-sm">
-              <ul>
-                <li>Everything in The Works, with <strong>no daily limit</strong> on the hours HostBuddy can automatically respond to guests.</li>
-              </ul>
-            </div>
-            <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="7" priceTier={3}/>
-            <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="6" priceTier={3}/>
-            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="5" priceTier={3}/>
+            <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="10" priceTier={3}/>
+            <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="8" priceTier={3}/>
+            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="6" priceTier={3}/>
           </div>
           <h4 style={{marginTop:"20px"}}>100+ properties - <button className="contact-us-button" onClick={() => setContactModalShow(true)}>Contact Us</button></h4>
         </div>

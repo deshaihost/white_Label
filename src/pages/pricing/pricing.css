@@ -17,14 +17,19 @@
   padding: 0 15px;
 }
 
-.pricing .pricing-plans-descriptions-lg ul li, .pricing .pricing-plans-descriptions-md-sm ul li {
+.pricing .pricing-plans-descriptions-lg ul li, .pricing .pricing-plans-descriptions-md-sm ul li, .pricing-plans-descriptions-md-sm p, .pricing-plans-descriptions-lg p {
   font-family: "DM Sans", sans-serif;
   font-size: 16px;
   line-height: 20px;
   color: #CCC;
   list-style-type: disc; /* Add bullet points to unordered list items */
-  margin-left: 15px;
   margin-bottom: 8px;
+}
+
+.pricing p strong {
+  color: #CCC;
+  font-weight: bold;
+  font-family: 'Samsung Sharp Sans Bold';
 }
 
 .pricing .pricing-plans-descriptions-lg ul li strong, .pricing .pricing-plans-descriptions-md-sm ul li strong {
@@ -37,6 +42,10 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 15px;
+}
+
+.pricing .pricing-plans-descriptions-lg ul li, .pricing .pricing-plans-descriptions-md-sm ul li {
+  margin-left: 15px;
 }
 
 .pricing .pricing-heading {
