@@ -40,11 +40,10 @@ const BookDemoModal = (props) => {
     dataToSend.message = "Demo Requested with " + randomlySelectedDemoPerson.person;
     if (!dataToSend.source) dataToSend.source = "[Not provided]";
 
-    dataToSend.message += "\nProperty count: " + dataToSend.property_count;
+    dataToSend.message += "\nProperty count: " + dataToSend.propertyCount;
     dataToSend.message += "\nHow did you hear about us: " + dataToSend.source;
 
-    delete dataToSend.source;
-    delete dataToSend.property_count;
+    delete dataToSend.source; // don't send this to the API
 
     try {
       const config = {
