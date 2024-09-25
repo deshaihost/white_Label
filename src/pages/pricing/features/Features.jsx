@@ -6,17 +6,17 @@ import WrongImg from '../../../public/img/wrong_check.png';
 const Features = () => {
     const featurePlans = [
         {
-            compareTo: 'User-friendly dashboard: Easily manage your properties and customize HostBuddy',
-            essential: true,
-            unlimited: true
-        },
-        {
             compareTo: 'Automate guest messaging with state of the art conversational AI',
             essential: true,
             unlimited: true
         },
         {
-            compareTo: 'Fully integrated: Let HostBuddy see and respond to guests over your PMS',
+            compareTo: 'User-friendly dashboard: Easily manage your properties and customize HostBuddy',
+            essential: true,
+            unlimited: true
+        },
+        {
+            compareTo: 'Fully integrated: Let HostBuddy access live data from your PMS to see and respond to guests',
             essential: true,
             unlimited: true
         },
