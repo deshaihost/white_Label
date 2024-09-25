@@ -17,8 +17,6 @@ const SettingsCalender = ({ showSchedule, setShowSchedule, scheduleData, setSche
   const scheduledDate = structuredClone(specificDates);
   const scheduleDefulatArray = ["CURRENT", "FUTURE", "INQUIRY/PAST"];
 
-  console.log("scheduledDate", scheduleData);
-
   // Maintain an obj groupedTimeRanges (based on scheduledDate) that maps each time range to all reservation stages that share it
   let groupedTimeRanges = null;
   //setGroupedTimeRanges(groupTimeRangesWeekly(scheduledDate)); // this causes infinite loop

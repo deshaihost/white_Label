@@ -74,7 +74,7 @@ const SetupGuide = () => {
                           <li>Once you have reviewed this Setup Guide and are ready to onboard your first property, navigate to the properties page in your user portal.</li>
                           <li>Select “Add Property”
                             <ul style={{ marginBottom: '0px' }}>
-                              <li>Select the number of properties you would like to add, along with the plan that you are interested in. The main difference between our packages is that “The Works” allows for PMS integration and “The Essentials” generates a link to HostBuddy that you can send to your guests.</li>
+                              <li>Select the number of properties you would like to add, along with the plan that you are interested in.</li>
                               <li><em>Note: The number of properties you add initially will be the number of properties you can use for your free trial. Be sure to add the exact number of properties that you would like to use for the trial, as your selection will be final when it comes to the trial period. You can of course add more properties later, but they will not qualify for your trial period. Your card will not be charged until your trial period has been completed.</em></li>
                             </ul>
                           </li>

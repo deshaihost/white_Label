@@ -10,6 +10,12 @@
   margin: 0;
 }
 
+.plan-info-box h6 strong {
+  background: linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .plan-info-box h3 {
   font-family: 'Samsung Sharp Sans Bold';
   font-size: 24px;

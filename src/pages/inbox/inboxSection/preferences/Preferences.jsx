@@ -63,7 +63,6 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
       }
     }
   
-    console.log("initializeScheduleData", apiData);
     setSettingsApiData(apiData);
     setLocalSettingsData(apiData);
   }

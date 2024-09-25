@@ -100,7 +100,7 @@ function Faqs() {
                             <Accordion.Body>
                             Yes, HostBuddy can send you notifications about important events - for example, when a new action item has been detected in a conversation that requires your attention. You can configure these notifications in your account, set your preferred timing, and send to multiple recipients if desired.
                             <br /><br />
-                            We currently support sending notifications via email. Support for SMS, WhatsApp, and Slack notifications are in the works and coming very soon.
+                            We currently support sending notifications via email, SMS, and Slack. WhatsApp notifications are in the works and coming very soon.
                             <br /><br />
                             We would love to hear your thoughts on which integrations you'd like to see support for. Please send us an email to help integrate HostBuddy more into your business at info@hostbuddy.ai.
                             </Accordion.Body>
