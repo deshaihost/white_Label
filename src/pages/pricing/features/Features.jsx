@@ -11,7 +11,7 @@ const Features = () => {
             unlimited: true
         },
         {
-            compareTo: 'State of the art conversational AI',
+            compareTo: 'Automate guest messaging with state of the art conversational AI',
             essential: true,
             unlimited: true
         },
