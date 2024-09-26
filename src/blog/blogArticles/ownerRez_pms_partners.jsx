@@ -2,7 +2,7 @@ import React from 'react';
 import { BlogArticleSidebar, BlogArticleHeader } from '../blogArticleComponents';
 import { Helmet } from 'react-helmet';
 
-const thumbnailImg = "https://i.postimg.cc/gcvVZjjh/owner-Rez-pms-partners-mianimg.webp";
+const thumbnailImg = "https://i.postimg.cc/RZhsVfsx/update-owner-Rez-pms-partners-mianimg.webp";
 
 const sideBarContents = [
   { id: "ai-powered", name: "AI-Powered Guest Communication" },
@@ -21,13 +21,13 @@ const ownerRezPmsPartners = () => {
         <meta name="description" content="Discover how OwnerRez integrates with HostBuddy AI to deliver automated guest communication, revenue-boosting upsells, and seamless property management. " />
 
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://metatags.io/" />
+        <meta property="og:url" content="https://i.postimg.cc/gcvVZjjh/owner-Rez-pms-partners-mianimg.webp" />
         <meta property="og:title" content="OwnerRez Partners with HostBuddy AI for Advanced Guest Communication" />
         <meta property="og:description" content="Discover how OwnerRez integrates with HostBuddy AI to deliver automated guest communication, revenue-boosting upsells, and seamless property management. " />
         <meta property="og:image" content="https://i.postimg.cc/gcvVZjjh/owner-Rez-pms-partners-mianimg.webp" />
 
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://metatags.io/" />
+        <meta property="twitter:url" content="https://i.postimg.cc/gcvVZjjh/owner-Rez-pms-partners-mianimg.webp" />
         <meta property="twitter:title" content="OwnerRez Partners with HostBuddy AI for Advanced Guest Communication" />
         <meta property="twitter:description" content="Discover how OwnerRez integrates with HostBuddy AI to deliver automated guest communication, revenue-boosting upsells, and seamless property management. " />
         <meta property="twitter:image" content="https://i.postimg.cc/gcvVZjjh/owner-Rez-pms-partners-mianimg.webp" />

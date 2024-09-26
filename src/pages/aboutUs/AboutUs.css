@@ -116,8 +116,18 @@
 .founder-desc ol {
     margin-top: 20px;
 }
+
 .founder .row {
     width: initial !important;
+}
+
+.why-stand-options {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: normal;
+    background: linear-gradient(180deg, #AA6DFE 1.92%, #8B5FCF 119.23%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 /* -----responsive part start------- */
 @media (max-width: 1399.98px) { 
