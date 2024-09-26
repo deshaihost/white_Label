@@ -259,6 +259,10 @@
   color: #146ef5;
 }
 
+.biggerNumber li::marker{
+  font-size: 24px;
+}
+
 @media screen and (max-width: 991px) {
   .blog-article {
     padding: 20px;

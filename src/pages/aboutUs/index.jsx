@@ -1,14 +1,32 @@
 import React from 'react'
 import './AboutUs.css'
-import Logo from '../../../src/helper/staticImage/HostBuddysmalllogo.png';
-import Jay from '../../../src/helper/staticImage/Jay.png';
-import Linkedin from '../../../src/helper/staticImage/LinkedIn.png';
-import Michael from '../../../src/helper/staticImage/Michael.jpg';
-import Sam from '../../../src/helper/staticImage/Sam.jpg';
+import Logo from '../../../src/helper/staticImage/HostBuddysmalllogo.webp';
+import Jay from '../../../src/helper/staticImage/Jay.webp';
+import Linkedin from '../../../src/helper/staticImage/LinkedIn.webp';
+import Michael from '../../../src/helper/staticImage/Michael.webp';
+import Sam from '../../../src/helper/staticImage/Sam.webp';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import { red } from '@mui/material/colors';
+
 const AboutUs = () => {
     return (
         <div className='container'>
+
+            <Helmet>
+                <title>About Us | Meet the Founders Behind HostBuddy AI</title>
+                <meta name="title" content="About Us | Meet the Founders Behind HostBuddy AI" />
+                <meta name="description" content="Discover the HostBuddy AI team and our mission to revolutionize short-term rentals with innovative AI solutions for hosts." />
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content="About Us | Meet the Founders Behind HostBuddy AI" />
+                <meta property="og:description" content="Discover the HostBuddy AI team and our mission to revolutionize short-term rentals with innovative AI solutions for hosts." />
+                <meta property="og:image" content="https://path-to-your-logo-image.png" />
+                <meta property="twitter:card" content="summary_large_image" />
+                <meta property="twitter:title" content="About Us | Meet the Founders Behind HostBuddy AI" />
+                <meta property="twitter:description" content="Discover the HostBuddy AI team and our mission to revolutionize short-term rentals with innovative AI solutions for hosts." />
+                <meta property="twitter:image" content="https://path-to-your-logo-image.png" />
+                <link rel="canonical" href="https://www.hostbuddy.ai/about-us" />
+            </Helmet>
             <div className='about-us'>
                 <h1>About Us</h1>
                 <img src={Logo} alt="Logo" />
@@ -78,27 +96,26 @@ const AboutUs = () => {
             </div>
             <div className='founder-desc'>
                 <h2>Built by Hosts, for Hosts: The HostBuddy AI Story</h2>
-                <p>In the ever-evolving world of short-term rentals, HostBuddy AI stands as a testament to innovation born from necessity. Our journey is one of passion, perseverance, and a deep understanding of the hosting experience.
-                </p>
+                <p>In the dynamic world of short-term rentals, <a href="https://www.hostbuddy.ai/" target='_blank' rel='noreferrer noopener'>HostBuddy AI</a> stands as a symbol of innovation driven by necessity. Our journey is built on passion, resilience, and an intimate understanding of the hosting experience.</p>
                 <h3>Founders and Visionaries</h3>
-                <p>In 2021, our journey in the STR industry began when Sam and Jay built a management company from the ground up in San Diego. Today, our team proudly oversees 40 units, each showcasing our commitment to efficiency and guest satisfaction.</p>
-                <p>As our business grew, we encountered a significant challenge that resonated with nearly every host we spoke to: the lack of reliable, affordable, 24/7 guest coverage. This widespread issue was more than just an inconvenience; it was a critical gap in the STR industry that demanded attention. It became clear that hosts needed more than just another management tool – they needed a revolutionary approach to guest communication that could transform their operations.</p>
+                <p>In 2021, co-founders <strong>Sam Mayes</strong> and <strong>Jay Ullrich</strong> began their journey in the short-term rental (STR) industry by establishing a management company in San Diego. Today, their team manages over 40 units, consistently delivering operational excellence and guest satisfaction.</p>
+                <p>As the business expanded, one challenge became clear to almost every host they encountered: the absence of reliable, affordable, and continuous 24/7 guest support. This gap in the industry was more than just an inconvenience—it was a problem that demanded a solution. Hosts needed something more than a traditional management tool; they needed a revolutionary approach to guest communication that would transform their operations.</p>
                 <h3>The Birth of HostBuddy AI</h3>
                 <p>In 2023, a pivotal moment arrived. We combined our experiences in STR management with the technical expertise of Michael Boddie, a highly skilled software developer from a prominent tech company. Together, we set out to create what we always wished existed: a truly intelligent, host-centric AI solution.</p>
                 <p>HostBuddy AI isn't just another tech product. It's the culmination of our experiences, frustrations, and aspirations as hosts. We've poured our knowledge of the STR business – every nuance, every pain point – into creating a system that truly understands what hosts need.</p>
                 <h3>Why HostBuddy AI Stands Apart </h3>
                 <ol>
-                    <li><b>Unmatched AI Conversation:</b> Our AI doesn't just respond; it converses like a superhost. It's hospitable, solution-focused, and most importantly, it sounds human.
+                    <li><b className='why-stand-options'>Unmatched AI Conversation:</b> Our AI doesn't just respond; it converses like a superhost. It's hospitable, solution-focused, and most importantly, it sounds human.
                     </li>
-                    <li><b>Host-Centric Features: </b>Every aspect of HostBuddy AI is crafted with hosts in mind. From automated upsells to smart review management, we're constantly innovating to boost your bottom line.</li>
+                    <li><b className='why-stand-options'>Host-Centric Features: </b>Every aspect of HostBuddy AI is crafted with hosts in mind. From automated upsells to smart review management, we're constantly innovating to boost your bottom line.</li>
                     <li>
-                        <b>Affordability Without Compromise:</b> We believe in providing top-tier service without breaking the bank. Our pricing reflects our commitment to making excellence accessible to all hosts.
-                    </li>
-                    <li>
-                        <b>A Team That Understands: </b>We're not just developers; we're active hosts. We live and breathe STR, bringing a level of industry insight that's unparalleled in the software space.
+                        <b className='why-stand-options'>Affordability Without Compromise:</b> We believe in providing top-tier service without breaking the bank. Our pricing reflects our commitment to making excellence accessible to all hosts.
                     </li>
                     <li>
-                        <b>Personalized Support: </b>We work directly with our users, ensuring that HostBuddy AI evolves to meet the real needs of hosts like you.
+                        <b className='why-stand-options'>A Team That Understands: </b>We're not just developers; we're active hosts. We live and breathe STR, bringing a level of industry insight that's unparalleled in the software space.
+                    </li>
+                    <li>
+                        <b className='why-stand-options'>Personalized Support: </b>We work directly with our users, ensuring that HostBuddy AI evolves to meet the real needs of hosts like you.
                     </li>
                 </ol>
                 <h3>Our Vision for the Future</h3>
@@ -106,7 +123,7 @@ const AboutUs = () => {
                 </p>
                 <p>With HostBuddy AI, you're free to focus on what truly matters – creating unforgettable experiences for your guests while maximizing your property's potential.</p>
                 <h3>Join the HostBuddy Revolution</h3>
-                <p>We invite you to be part of this exciting journey. For hosts managing multiple properties and leveraging property management systems, HostBuddy AI is designed to scale with your business, adapt to your unique needs, and consistently deliver results that impact your bottom line.
+                <p>We invite you to <a href="http://localhost:3000/signup" target='_blank' rel='noreferrer noopener'>be part of this exciting journey</a>. For hosts managing multiple properties and leveraging property management systems, HostBuddy AI is designed to scale with your business, adapt to your unique needs, and consistently deliver results that impact your bottom line.
                 </p>
                 <p>Experience the future of hosting – where AI meets genuine hospitality. Let's redefine the short-term rental industry together, one satisfied guest at a time.
                 </p>
