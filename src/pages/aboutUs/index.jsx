@@ -39,13 +39,13 @@ const AboutUs = () => {
                             <div className='team'>
                                 <div className='member-image'>
                                     <img src={Jay} alt="Logo" />
-                                    <Link to="#">
-                                    <img src={Linkedin} alt="Logo" className='linkedin' />
+                                    <Link to="https://www.linkedin.com/in/jaytullrich/" target="_blank" rel="noopener noreferrer">
+                                      <img src={Linkedin} alt="Logo" className='linkedin' />
                                     </Link>
                                 </div>
                                 <div className='member-name'>
                                     <h3>Jay Ullrich</h3>
-                                    <p>40+ Unit STR Porfolio Civil Engineer to STR Exprt</p>
+                                    <p>40+ Unit STR Porfolio<br/>Civil Engineer to STR Expert</p>
                                 </div>
                                 <div className='partner'>
                                     <img src={Logo} alt="Logo" />
@@ -59,13 +59,13 @@ const AboutUs = () => {
                             <div className='team'>
                                 <div className='member-image'>
                                     <img src={Michael} alt="Logo" />
-                                    <Link to="#">
-                                    <img src={Linkedin} alt="Logo" className='linkedin' />
+                                    <Link to="https://www.linkedin.com/in/michael-boddie-9095b6165/" target="_blank" rel="noopener noreferrer">
+                                      <img src={Linkedin} alt="Logo" className='linkedin' />
                                     </Link>
                                 </div>
                                 <div className='member-name'>
                                     <h3>Michael Boddie</h3>
-                                    <p>AI and Machine learning Exprt Former Qualcomm Engineer </p>
+                                    <p>AI and Machine Learning Expert<br/>Former Qualcomm Engineer </p>
                                 </div>
                                 <div className='partner'>
                                     <img src={Logo} alt="Logo" />
@@ -79,15 +79,17 @@ const AboutUs = () => {
                             <div className='team'>
                                 <div className='member-image'>
                                     <img src={Sam} alt="Logo" />
-                                    <Link to="#"><img src={Linkedin} alt="Logo" className='linkedin' /></Link>
+                                    <Link to="https://www.linkedin.com/in/samuel-mayes/" target="_blank" rel="noopener noreferrer">
+                                      <img src={Linkedin} alt="Logo" className='linkedin' />
+                                    </Link>
                                 </div>
                                 <div className='member-name'>
                                     <h3>Sam Mayes</h3>
-                                    <p>40+ Unit STR Porfolio Sales strategist to STR Expert</p>
+                                    <p>40+ Unit STR Porfolio<br/>Sales Strategist to STR Expert</p>
                                 </div>
                                 <div className='partner'>
                                     <img src={Logo} alt="Logo" />
-                                    <p>Product and Customer Exprt</p>
+                                    <p>Product and Customer Success</p>
                                 </div>
                             </div>
                         </div>
