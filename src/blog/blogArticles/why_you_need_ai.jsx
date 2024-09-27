@@ -10,6 +10,7 @@ const sideBarContents = [
   { id: "ways", name: "Best Ways to Use AI in Short-Term Rentals" },
   { id: "case", name: "Airbnb: A Case Study About The Use of AI" },
   { id: "hostbuddy", name: "HostBuddy AI: Transforming Short-Term Rental Management" },
+  { id: "faqs", name: "Frequently Asked Questions" },
 ]
 
 const whyYouNeedAi = () => {
@@ -131,7 +132,7 @@ const whyYouNeedAi = () => {
                         <Accordion.Item eventKey="3">
                             <Accordion.Header as="h3">What software is best for instant messaging with guests in short-term rentals?</Accordion.Header>
                             <Accordion.Body>
-                                <a href='https://www.hostbuddy.ai/' target='_blank' rel='noreferrer noopener'>HostBuddy AI</a> provides automated messaging through advanced AI that offers 24/7 support, integrating seamlessly with platforms like Airbnb and Booking.com. Discover more about the features on our <a href='https://www.hostbuddy.ai/pricing' target='_blank' rel='noreferrer noopener'>plans page</a>.                            
+                                <a href='https://www.hostbuddy.ai/' target='_blank' rel='noreferrer noopener'>HostBuddy AI</a> provides automated messaging through advanced AI that offers 24/7 support, integrating seamlessly with platforms like Airbnb and Booking.com. <br /><br /> Discover more about the features on our <a href='https://www.hostbuddy.ai/pricing' target='_blank' rel='noreferrer noopener'>plans page</a>.                            
                             </Accordion.Body>
                         </Accordion.Item>
 
