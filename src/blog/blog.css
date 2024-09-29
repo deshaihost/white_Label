@@ -263,6 +263,23 @@
   font-size: 24px;
 }
 
+
+/* faqs */
+
+.accordion-item {
+  border-bottom: 2px solid rgba(0, 0, 0, .125); 
+}
+
+.accordion .accordion-collapse .accordion-body {
+  color: black;
+  font-family: "Samsung Sharp Sans Medium";
+}
+
+.accordion-flush .accordion-item .accordion-button {
+  font-size: 17px;
+  font-weight: 600;
+}
+
 @media screen and (max-width: 991px) {
   .blog-article {
     padding: 20px;
