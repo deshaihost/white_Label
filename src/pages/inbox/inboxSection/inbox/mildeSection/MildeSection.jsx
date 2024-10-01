@@ -121,7 +121,6 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     setGenerateOptionsVisible(!generateOptionsVisible);
   };
 
-
   const handleGenerateOptionSelect = async (option) => {
     setGenerateOptionsVisible(false);
     if (option === 'scratch') {
@@ -341,7 +340,6 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
               </svg>
             )}
           </button>
-
         </div>
         {showGenerateJustificationButton &&
           <div className="where-did link-container" style={{ marginRight:"auto" }}>
