@@ -209,13 +209,14 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     // Populate messages
     if (allConversationData?.messages) {
       const newMessages = allConversationData.messages.map((messageList) => {
-        const { sender, text, time, attachments } = messageList;
+        const { sender, text, time, attachments, id } = messageList;
         let timeFormatConvert = timeFormat(time);
         return {
           text: messageList !== undefined ? messageList : "",
           sender: sender === "host" || sender === "hostbuddy" ? "user" : "bot",
           messageDay: formatRelativeDate(time),
           sendBy: sender,
+          id,
           timeFormatConvert,
           attachments
         };
