@@ -22,19 +22,27 @@ const Calendar = ({ getScheduleAPI, allProperties, setShowCalender, selectedProp
     return { month, year };
   };
 
-  // Filter function to check if a date is in the specified month and year
-  const filterMonthCommon = (date, month, year) => {
-    const dateObj = new Date(date);
-    return dateObj.getMonth() === month && dateObj.getFullYear() === year;
+  // Function to get the start and end dates of the specified month and year
+  const getMonthStartEnd = (month, year) => {
+    const startDate = new Date(year, month, 1);
+    const endDate = new Date(year, month + 1, 0, 23, 59, 59, 999); // Last millisecond of the month
+    return { startDate, endDate };
   };
-
+  
+  // Filter function to check if a date range overlaps with the specified month and year
+  const filterMonthCommon = (start, end, month, year) => {
+    const { startDate, endDate } = getMonthStartEnd(month, year);
+    const startObj = new Date(start);
+    const endObj = new Date(end);
+    return (startObj <= endDate && endObj >= startDate);
+  };
+  
   const monthYearStrCommon = currentMonth;
   const monthCommon = parseMonthYearCommon(monthYearStrCommon)?.month;
   const yearCommon = parseMonthYearCommon(monthYearStrCommon)?.year;
   const filteredDataCommon = commonArray?.filter( // filteredDataCommon is commonArray, but filtered to only elements in the current month
     (dateTime) =>
-      filterMonthCommon(dateTime?.start, monthCommon, yearCommon) ||
-      filterMonthCommon(dateTime?.end, monthCommon, yearCommon)
+      filterMonthCommon(dateTime?.start, dateTime?.end, monthCommon, yearCommon)
   );
 
   // time format
