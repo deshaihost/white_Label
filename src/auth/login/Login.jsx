@@ -49,8 +49,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (loginStatus === 401) {
-      ToastHandle(loginMessage, "danger");
+    if (loginStatus === 400 || loginStatus === 401) {
+      ToastHandle('Invalid credentials', "danger");
       dispatch(stateEmptyActions());
     } else if (loginStatus === 200) {
       navigate('/dashboard')

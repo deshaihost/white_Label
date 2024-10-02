@@ -6,8 +6,8 @@ import SettingSideBarIndex from "./settingSideBar/SettingSideBarIndex";
 import AdvancedSettingsIndex from "./settingContants/advancedSettings/AdvancedSettingsIndex";
 import UpsellsIndex from './settingContants/upsells/upsells';
 import SubscriptionIndex from "./settingContants/subscription/SubscriptionIndex";
+//import IntegrationsIndex from "./settingContants/integrations/IntegrationsIndex";
 import { Helmet } from "react-helmet";
-import SideBar from "../../component/sideBar/SideBar";
 import UserInformationSection from "../account/userInformationSection";
 import AccountContactSection from "../account/contactSection";
 import AccountRegionSection from "../account/regionSection";
@@ -22,7 +22,7 @@ const SettingIndex = () => {
   const [interFaceSettings, setInterFaceSettings] = useState("account");
   const [userData, setUserData] = useState({});
 
-  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"conversation-preferences", upsells:"upsells", subscription:"subscription" };
+  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"conversation-preferences", integrations:"integrations", upsells:"upsells", subscription:"subscription" };
 
   const ApiUserData = store?.getUserDataReducer?.getUserData?.data?.user;
 
@@ -88,6 +88,11 @@ const SettingIndex = () => {
                   {interFaceTypes?.upsells === interFaceSettings && (
                     <UpsellsIndex />
                   )}
+                  {/*
+                  {interFaceTypes?.integrations === interFaceSettings && (
+                    <IntegrationsIndex />
+                  )}
+                  */}
                   {interFaceTypes?.subscription === interFaceSettings && (
                     <SubscriptionIndex />
                   )}

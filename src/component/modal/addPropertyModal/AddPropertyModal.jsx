@@ -62,9 +62,8 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                     <label htmlFor="">Select Plan</label>
                     <select id="selected_plan_stripe" name="selected_plan_stripe" className="form-control" onChange={handlePlanChange} value={subscriptionPlan}>
                       <option value="" disabled style={{color: 'rgb(180, 180, 180)'}}>-- Please Select --</option>
-                      <option value="The Essentials">The Essentials</option>
-                      <option value="The Works">The Works</option>
-                      <option value="The Works Unlimited">The Works Unlimited</option>
+                      <option value="HostBuddy Pro">HostBuddy Pro</option>
+                      <option value="HostBuddy Elite">HostBuddy Elite</option>
                     </select>
                   </div>
                   {errors.subscription_plan && (
@@ -74,29 +73,21 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                   {subscriptionPlan && (
                     <div className="plan-info-box">
                       <h3>{subscriptionPlan}</h3>
-                      {subscriptionPlan === "The Essentials" ? (
+                      {subscriptionPlan === "HostBuddy Pro" ? (
                         <>
-                          <h6>State of the art AI, tailored to your properties.
+                          <h6>Unlimited access to HostBuddy's AI messaging and core automation features.
                           <br/><br/>
-                          Make HostBuddy available to your guests 24/7 by sharing a property-specific URL, where they can access their HostBuddy chat window.
+                          Leverage additional revenue-driving features: Smart templating, upsells, action items and notifications, review removal support.
                           <br/><br/>
-                          PMS messaging not supported.</h6>
+                          <span style={{ color: 'rgb(255, 165, 0)' }}>View-only</span> Smart Inbox. View your conversations, review HostBuddy's messages, and see AI-detected action items and sentiment analysis.</h6>
                         </>
-                      ) : subscriptionPlan === "The Works" ? (
+                      ) : subscriptionPlan === "HostBuddy Elite" ? (
                         <>
-                          <h6>State of the art AI, tailored to your properties.
+                          <h6>Your Complete AI Guest Communication Suite. Everything in Pro, plus:
                           <br/><br/>
-                          Connect a PMS account to give HostBuddy access to property details and real-time guest information, and to let HostBuddy see and respond to guest messages over your existing communication channels.
+                          <strong>Full Functionality Smart Inbox.</strong> Send messages to your guests, and generate AI responses from your command or from scratch to maximize efficiency.
                           <br/><br/>
-                          Schedule the times of day/week for HostBuddy to automatically respond to guests, up to a maximum of 12 hours per day.</h6>
-                        </>
-                      ) : subscriptionPlan === "The Works Unlimited" ? (
-                        <>
-                          <h6>State of the art AI, tailored to your properties.
-                          <br/><br/>
-                          Connect a PMS account to give HostBuddy access to property details and real-time guest information, and to let HostBuddy see and respond to guest messages over your existing communication channels.
-                          <br/><br/>
-                          Schedule the times of day/week for HostBuddy to automatically respond to guests, with no daily limit.</h6>
+                          <strong>AI-Driven Business Intelligence.</strong> Unlock a wealth of new insights into your business with comprehensive analytics. Delve into data on your guest satisfaction rates, message timing, and more.</h6>
                         </>
                       ) : null}
                     </div>

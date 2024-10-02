@@ -14,7 +14,7 @@ const featureData = [
   {
     title: "Customize HostBuddy's Behavior",
     description: "See how HostBuddy can be tailored to suit the needs and nuances of your business.",
-    link: "/setting/conversation-preferences",
+    link: "/inbox/preferences",
   },
   {
     title: "Get Notified",
@@ -24,12 +24,12 @@ const featureData = [
   {
     title: "Vacant Night Upsells",
     description: "See how HostBuddy can pay for itself by proactively offering your guests extension discounts when there are vacant nights between bookings.",
-    link: "/setting/upsells",
+    link: "/inbox/upsells",
   },
   {
     title: "Smart Review Requests",
     description: "HostBuddy can detect the sentiment of a guest's stay, and automatically send review requests to guests who had a positive experience.",
-    link: "/setting/upsells",
+    link: "/inbox/smart-templates",
   },
   {
     title: "Optimize HostBuddy's responses",

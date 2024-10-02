@@ -134,7 +134,7 @@
 .works .works-container .row img {
     width: 100%;
     max-width: 585px;
-    height: 356px;
+    max-height: 356px;
     border-radius: 35px;
     object-fit: cover;
 }

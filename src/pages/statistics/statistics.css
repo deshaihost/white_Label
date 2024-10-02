@@ -1,0 +1,231 @@
+/* Tile header styling */
+.tile-header {
+  display: flex;
+  justify-content: space-between; /* Space out title and icon */
+  align-items: center;
+  width: 100%;
+  position: relative; /* To allow for absolute positioning of icon */
+}
+
+/* Styling for the three-dot icon */
+.tile-header .icon-button {
+  color: white; /* Make the icon white */
+  font-size: 28px; /* Make the icon larger */
+  cursor: pointer;
+}
+
+/* Base container for the whole statistics page */
+.statistics-page {
+  padding: 20px; /* Adds padding around the entire page */
+  background-color: #000212;
+  min-height: 100vh; /* Ensure the page takes up at least full screen height */
+  margin-bottom: 150px;
+}
+
+.statistics-page hr {
+  border: none;
+  border-top: 2px solid #2c38ae;
+  margin: 20px 0;
+}
+
+.page-header {
+  color: white;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.subtitle {
+  display: block;
+  font-size: 20px;
+  margin-top: 0px;
+}
+
+.statistics-page .section-header {
+  color: white;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.statistics-page .parameters-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  /* background-color: #CCC; */
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.statistics-page .parameters-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 20px;
+}
+
+.statistics-page .date-info p {
+  margin: 0;
+  font-size: 18px;
+  color: #CCC;
+}
+
+.statistics-page .parameters-right {
+  flex: 1;
+  display: flex;
+  flex-direction: row; /* Change to row */
+  align-items: center; /* Center vertically */
+  gap: 10px;
+  justify-content: flex-end; /* Align items to the right */
+  padding-left: 20px;
+}
+
+.statistics-page .inputs-container {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.statistics-page .custom-select {
+  width: 100%;
+  max-width: 300px; /* Set a maximum width */
+}
+
+.statistics-page .date-label {
+  font-size: 14px;
+  color: #FFF;
+  margin-top: 5px; /* Reduced margin */
+}
+
+.statistics-page .date-input {
+  width: 100%;
+  max-width: 300px; /* Set a maximum width */
+  padding: 8px;
+  border: 1px solid #007bff;
+  border-radius: 20px;
+  margin-top: -2px;
+  background: #333;
+  color: #FFF;
+}
+
+.statistics-page .adjust-dates-button {
+  background: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 5px; /* Reduced margin */
+  text-decoration: none;
+}
+
+.statistics-page .apply-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.statistics-page .apply-button:hover {
+  background-color: #0056b3;
+}
+
+/* Style for each individual tile component */
+.statistics-tile {
+  background-color: #020d29;
+  border-radius: 15px;
+  border: 1px solid #2c38ae;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.4);
+  padding: 20px;
+  padding-bottom: 5px;
+  padding-top: 15px;
+  margin: 10px 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animation for hover effects */
+  display: flex; /* Use flexbox for alignment */
+  flex-direction: column; /* Arrange children vertically */
+  align-items: center; /* Center children horizontally */
+  justify-content: space-between; /* Space out children vertically */
+}
+
+/* Tile hover effect to make it pop */
+.statistics-tile:hover {
+  /* transform: translateY(-5px); /* Move the tile slightly up when hovered */
+  box-shadow: 0 6px 12px rgba(255, 255, 255, 0.15); /* White box shadow */
+}
+
+/* Common header styling for all tiles */
+.statistics-tile h3 {
+  font-size: 1.2em; /* Slightly larger font for the tile headers */
+  color: #EEE;
+  margin-bottom: 10px; /* Space between header and content */
+  text-align: center; /* Center the title text */
+  width: 100%; /* Ensure the title spans the full width */
+}
+
+.statistics-tile p {
+  color: #CCC;
+  margin: auto 0;
+}
+
+/* LineGraphTile and HistogramTile specific styling */
+.statistics-tile .recharts-wrapper {
+  margin: 0 auto; /* Center the chart horizontally */
+}
+
+/* Axis label styling for charts */
+.statistics-tile .recharts-cartesian-axis-tick {
+  font-size: 0.9em; /* Slightly smaller font for axis labels */
+  fill: #999; /* axis label color */
+}
+
+/* MetricTile specific styling */
+.metric-tile {
+  text-align: center; /* Center align everything inside the metric tile */
+}
+
+.metric-content {
+  width: 100%;
+}
+
+.metric-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.metric-tile .metric-number {
+  font-size: 35px;
+  color: #2196F3; /* Blue color for the number */
+  font-weight: bold; /* Make the number bold */
+  margin-right: 10px;
+}
+
+.metric-tile .metric-text {
+  font-size: 16px;
+  color: #AAA; /* color for the description */
+  text-align: right;
+}
+
+/* TextTile specific styling */
+.text-tile p {
+  font-size: 1em; /* Regular text size */
+  color: #AAA;
+  line-height: 1.6; /* Line height for better readability */
+  text-align: center; /* Center align the text */
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 768px) {
+  /* For smaller screens, make the tiles take full width */
+  .statistics-tile {
+    margin: 10px 0;
+  }
+}
+
+/* Grid container spacing adjustments */
+.MuiGrid-root {
+  /* Optional: Add extra space between grid items if needed */
+  margin-bottom: 20px; /* Adds extra spacing between rows of tiles */
+}

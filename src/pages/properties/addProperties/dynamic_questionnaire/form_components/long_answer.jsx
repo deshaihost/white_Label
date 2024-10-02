@@ -2,7 +2,7 @@ import PencilIcon from "./pencil_icon";
 
 const LongAnswerComponent = ({ question_object, sec_name, subsec_name, q_ind, handleInputComponentChange, handlePencilIconClick }) => {
   const question_text = question_object.question_text;
-  const response_text = question_object.response_text;
+  const response_text = question_object?.response_text || '';
   const placeholder_text = question_object.placeholder_text;
   const hide_for_reservations = question_object.hide_for_reservations;
 
@@ -18,7 +18,7 @@ const LongAnswerComponent = ({ question_object, sec_name, subsec_name, q_ind, ha
       <div className="">
         <textarea className="bg-dark form-control" type="text" id={field_id}
           onChange={(e) => handleInputComponentChange(e, sec_name, subsec_name, q_ind, "long_answer")}
-          placeholder={placeholder_text} defaultValue={response_text} />
+          placeholder={placeholder_text} value={response_text} />
       </div>
     </div>
   )

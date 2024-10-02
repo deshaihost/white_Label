@@ -82,7 +82,7 @@ const CopyToPropertiesModal = (props) => {
             <div class="row py-2">
               <div class="col">
                 <label className="fw-normal pb-2">Choose Properties</label>
-                <Select className="custom-select property_Custom_Select" isMulti options={allPropertyNameList} value={selectedProperties} styles={colourStyles} onChange={handleDaySelect} placeholder="--Select--"/>
+                <Select className="custom-select property_Custom_Select" isMulti options={allPropertyNameList} value={selectedProperties} styles={colourStyles} onChange={handleDaySelect} closeMenuOnSelect={false} placeholder="--Select Properties--"/>
               </div>
             </div>
             <div className="select-all-container">

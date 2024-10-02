@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { getUserDataActions } from "../../redux/actions";
 import InBoxHeader from "./inboxHeader/InBoxHeader";
 import Inbox from "./inboxSection/inbox/Inbox";
@@ -11,14 +12,19 @@ import "./inboxSection/inbox/inboxIndex.css";
 import axios from "axios";
 
 const InboxIndex = () => {
+  const { section } = useParams();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const [interFaceComponent, setInterFaceComponent] = useState(0);
   const [allGuestNames, setAllGuestNames] = useState({});
 
-  const userPropertiesData = store?.getUserDataReducer?.getUserData?.data?.user?.property_data; // dict, keys are property names. values aren't important here
+  const allUserData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const userPropertiesData = allUserData?.property_data; // dict, keys are property names. values aren't important here
   const allPropertyNamesList = userPropertiesData ? Object.keys(userPropertiesData) : [];
+  const sectionMapping = { "": 0, "smart-templates": 1, "review-removal": 2, "preferences": 3, "upsells": 4 }; // for URL path params
+
+  const showTimeZoneNotif = allUserData && !allUserData?.user_region;
 
   const callGetGuestNamesApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -44,11 +50,13 @@ const InboxIndex = () => {
   const populateGuestNames = async () => {
     const data = await callGetGuestNamesApi();
     if (data?.guest_names) {
+      let idCounter = 1; // So we can give each guest a unique ID
       const transformedGuestNames = Object.entries(data.guest_names).flatMap(([property, names]) =>
         names.map(name => ({
           name: name,
           searchable: name.toLowerCase().replace(/[^a-z0-9]/g, ''),
-          property: property
+          property: property,
+          id_for_react: idCounter++,
         }))
       );
       setAllGuestNames(transformedGuestNames);
@@ -59,16 +67,17 @@ const InboxIndex = () => {
   useEffect(() => {
     dispatch(getUserDataActions()); // So we can have the list of property names for the various dropdowns
     populateGuestNames(); // So we can have the list of guest names for the guest search bar
+    setInterFaceComponent(sectionMapping[section] || 0); // Set the interface component based on the URL path param
   }, []);
 
   return (
     <div className="inbox-container">
-      <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent}/>
+      <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent} showTimeZoneNotif={showTimeZoneNotif}/>
       {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames}/>}
-      {interFaceComponent === 1 && <SmartTemplates />}
+      {interFaceComponent === 1 && <SmartTemplates allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 2 && <ReviewRemoval allPropertyNamesList={allPropertyNamesList}/>}
-      {interFaceComponent === 3 && <Preferences />}
-      {interFaceComponent === 4 && <Upsells />}
+      {interFaceComponent === 3 && <Preferences allPropertyNamesList={allPropertyNamesList}/>}
+      {interFaceComponent === 4 && <Upsells allPropertyNamesList={allPropertyNamesList}/>}
     </div>
   );
 };

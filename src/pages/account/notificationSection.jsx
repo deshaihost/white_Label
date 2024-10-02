@@ -12,10 +12,6 @@ import { set } from "react-hook-form";
 const AccountNotificationSection = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const createPropertiesName =
-    store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const allPropertyName =
-    createPropertiesName !== undefined ? createPropertiesName : [];
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
 
@@ -275,40 +271,6 @@ const AccountNotificationSection = () => {
 
     return `${convertedHour}:${minutes.padStart(2, "0")} ${ampm}`;
   }
-  // category section
-
-  const categorySection = [
-    "Maintenance",
-    "Guest",
-    "Requests",
-    "Cleanliness",
-    "Reservation Changes",
-  ];
-
-  // category section
-
-  // property search handle
-  const [dropDownSearch, setDropDownSearch] = useState("");
-
-  const categoryGetSearchFun = categorySection?.filter((category) => {
-    const inputValue = dropDownSearch.toLowerCase();
-    return category.toLowerCase().includes(inputValue);
-  });
-  const propertyGetSearchFun = allPropertyName?.filter((propertyName) => {
-    const inputValue = dropDownSearch.toLowerCase();
-    return propertyName.toLowerCase().includes(inputValue);
-  });
-
-  // property search handle
-  const [dropDownShow, setDropDownShow] = useState({
-    inputArow: false,
-    categoryShow: false,
-  });
-
-  useEffect(() => {
-    dispatch(getUserDataActions());
-    // dispatch(getActionItemsActions());
-  }, []);
 
   return (
     <div className="account-content location-section">
@@ -476,116 +438,6 @@ const AccountNotificationSection = () => {
                 )}
               </div>
             </div>
-            <div className="row" style={{ marginTop: "20px" }}>
-              <div className="col multiselector item-select">
-                <div className="multiinputfirst">
-                  <input
-                    type="text"
-                    value="Properties"
-                    onClick={() =>
-                      setDropDownShow({ inputArow: !dropDownShow?.inputArow })
-                    }
-                  />
-                  <div
-                    className="pro-icon1"
-                    onClick={() =>
-                      setDropDownShow({ inputArow: !dropDownShow?.inputArow })
-                    }
-                  >
-                    {dropDownShow?.inputArow ? (
-                      <i class="bi bi-x-lg"></i>
-                    ) : (
-                      <i class="bi bi-chevron-down"></i>
-                    )}
-                  </div>
-                </div>
-                {dropDownShow?.inputArow && (
-                  <>
-                    <div className="search-option">
-                      <div className="search-multi">
-                        <input
-                          type="search"
-                          id="multi-search"
-                          onChange={(e) => setDropDownSearch(e.target.value)}
-                        />
-                        <div className="search-icon">
-                          <i class="bi bi-search"></i>
-                        </div>
-                      </div>
-                      <div className="multioption">
-                        <ul>
-                          <ul>
-                            {propertyGetSearchFun?.map((property) => {
-                              return (
-                                <li>
-                                  <input type="checkbox" />
-                                  {property}
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </ul>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-              <div className="col multiselector item-select">
-                <div className="multiinputfirst">
-                  <input
-                    type="text"
-                    value="Category"
-                    onClick={() =>
-                      setDropDownShow({
-                        categoryShow: !dropDownShow?.categoryShow,
-                      })
-                    }
-                  />
-                  <div
-                    className="pro-icon1"
-                    onClick={() =>
-                      setDropDownShow({
-                        categoryShow: !dropDownShow?.categoryShow,
-                      })
-                    }
-                  >
-                    {dropDownShow?.categoryShow ? (
-                      <i class="bi bi-x-lg"></i>
-                    ) : (
-                      <i class="bi bi-chevron-down"></i>
-                    )}
-                  </div>
-                </div>
-                {dropDownShow?.categoryShow && (
-                  <>
-                    <div className="search-option">
-                      <div className="search-multi">
-                        <input
-                          type="search"
-                          id="multi-search"
-                          onChange={(e) => setDropDownSearch(e.target.value)}
-                        />
-                        <div className="search-icon">
-                          <i class="bi bi-search"></i>
-                        </div>
-                      </div>
-                      <div className="multioption">
-                        <ul>
-                          {categoryGetSearchFun?.map((items) => {
-                            return (
-                              <li>
-                                <input type="checkbox" />
-                                {items}
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
 
             {newRecipient.channel === "sms" && (
               <div className="row" style={{ marginTop: "20px" }}>
@@ -635,10 +487,12 @@ const AccountNotificationSection = () => {
             className="d-flex justify-content-center"
             style={{ marginTop: "20px", marginBottom: "20px" }}
           >
-            <Link to="#" className="text-link" onClick={showNewRecipientFields}>
-              {recipients.length === 0
-                ? "+ Add A Notifications Recipient"
-                : "+ Add Another Recipient"}
+            <Link
+              to="#"
+              className="text-link"
+              onClick={showNewRecipientFields}
+            >
+              {recipients.length === 0 ? "+ Add A Notifications Recipient" : "+ Add Another Recipient"}
             </Link>
           </span>
         )}

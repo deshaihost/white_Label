@@ -63,7 +63,7 @@ const BestPractices = () => {
                         <div className="step-box section" id="step3">
                           <h4>3. Test it out!</h4>
                           <p>Iteratively testing is an excellent way to refine and improve how HostBuddy responds to common queries. On the properties page, click “Test Property” next to a property to open a chat window where you can interact with HostBuddy directly, as if you were a guest at that property. Give HostBuddy a challenge! Ask it the types of questions you receive from guests and see how it responds. You can click on “Where did this come from?” under any of HostBuddy’s messages for an explanation of why HostBuddy responded that way, and what specific information in the knowledge base was used to generate that response.</p>
-                          <p>You can then adjust the information in the knowledge base or tweak your <Link to="/setting/conversation-preferences">conversation preferences</Link> to get the responses you’re looking for.</p>
+                          <p>You can then adjust the information in the knowledge base or tweak your <Link to="/inbox/preferences">conversation preferences</Link> to get the responses you’re looking for.</p>
                         </div>
 
                         <div className="step-box section" id="step3">

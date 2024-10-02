@@ -18,7 +18,7 @@ const ShortAnswerComponent = ({ question_object, sec_name, subsec_name, q_ind, h
       <div className="">
         <input className="bg-dark form-control" type="text" id={field_id}
           onChange={(e) => handleInputComponentChange(e, sec_name, subsec_name, q_ind, "short_answer")}
-          placeholder={placeholder_text} defaultValue={response_text} />
+          placeholder={placeholder_text} value={response_text} />
       </div>
     </div>
   )

@@ -17,14 +17,19 @@
   padding: 0 15px;
 }
 
-.pricing .pricing-plans-descriptions-lg ul li, .pricing .pricing-plans-descriptions-md-sm ul li {
+.pricing .pricing-plans-descriptions-lg ul li, .pricing .pricing-plans-descriptions-md-sm ul li, .pricing-plans-descriptions-md-sm p, .pricing-plans-descriptions-lg p {
   font-family: "DM Sans", sans-serif;
   font-size: 16px;
   line-height: 20px;
   color: #CCC;
   list-style-type: disc; /* Add bullet points to unordered list items */
-  margin-left: 15px;
   margin-bottom: 8px;
+}
+
+.pricing p strong {
+  color: #CCC;
+  font-weight: bold;
+  font-family: 'Samsung Sharp Sans Bold';
 }
 
 .pricing .pricing-plans-descriptions-lg ul li strong, .pricing .pricing-plans-descriptions-md-sm ul li strong {
@@ -37,6 +42,10 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 15px;
+}
+
+.pricing .pricing-plans-descriptions-lg ul li, .pricing .pricing-plans-descriptions-md-sm ul li {
+  margin-left: 15px;
 }
 
 .pricing .pricing-heading {
@@ -131,12 +140,35 @@
   width: 100%;
 }
 
+.started .started-content h1, .started .started-content h4 {
+  background: var(--Blue, linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #FFF;
+  font-family: 'Samsung Sharp Sans Bold';
+  font-size: 25px;
+  font-style: normal;
+  line-height: 25px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
 .started .started-content p {
   color: #DDD;
   font-family: 'Samsung Sharp Sans Medium';
   font-size: 18px;
   font-style: normal;
   margin-bottom: 25px;
+  width: 100%;
+}
+
+.blog-change {
+  color: #DDD;
+  font-family: 'Samsung Sharp Sans Medium';
+  font-size: 13px !important;
+  font-style: normal;
+  margin-bottom: 15px !important;
   width: 100%;
 }
 
@@ -186,6 +218,12 @@ a.explore-link {
     line-height: 45px;
     margin-bottom: 20px;
   }
+
+  .started .started-content h1, .started .started-content h4 {
+    font-size: 20px;
+    line-height: 25px;
+    margin-bottom: 15px;
+  }
 }
 
 @media only screen and (max-width: 767px) {
@@ -205,6 +243,10 @@ a.explore-link {
 
   .started .started-content p {
     font-size: 16px;
+  }
+
+  .blog-change { 
+    font-size: 14px !important;
   }
 
   .started .started-content a {

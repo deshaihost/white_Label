@@ -32,7 +32,7 @@ const QuestionnaireHeader = ({ property_name, section_names, selectedSection, se
 
             {/* Arbitrary number of subsequent sections, generated dynamically */}
             {section_names && section_names.length > 1 && section_names.slice(1).map((section_name) => ( // Skip the first section (defined above)
-              <div className={selectedSection === section_name ? "text-primary" : ""} onClick={() => { setSelectedSection(section_name); }} >
+              <div key={section_name} className={selectedSection === section_name ? "text-primary" : ""} onClick={() => { setSelectedSection(section_name); }} >
                 <div>
                   <span>
                     <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" >

@@ -81,11 +81,9 @@ const CopyExistingPropertyModel = ({ handleClose, show, curr_property_name }) =>
               </option>
               {createPropertiesName?.map((propertiesName, optionIndex) => {
                 return (
-                  <>
-                    <option key={optionIndex} value={propertiesName}>
-                      {propertiesName}
-                    </option>
-                  </>
+                  <option key={propertiesName} value={propertiesName}>
+                    {propertiesName}
+                  </option>
                 );
               })}
             </select>

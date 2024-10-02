@@ -30,6 +30,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   const [showGenerateJustificationButton, setShowGenerateJustificationButton] = useState(false);
   const [generateOptionsVisible, setGenerateOptionsVisible] = useState(false);
   const [generateCommandApiLoading, setGenerateCommandApiLoading] = useState(false);
+  const [assistanceUsed, setAssistanceUsed] = useState(null); // 'command' if the user clicked "generate from command"; 'generate' if the user clicked "generate from scratch"; null if neither, or if the user cleared a generated message
 
   const callGenerateFromCommandApi = async (command) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -82,10 +83,11 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     setSendMessageLoading(true);
 
     const { conversation_id, reservation_id=null } = conversationData; // reservation_id default to null if not present. Sometimes the send operation will still work if it isn't included, so proceed
-    const sendMsgResponse = await callSendMessageApi(inputValue, conversation_id, reservation_id, propertyName);
+    const sendMsgResponse = await callSendMessageApi(inputValue, conversation_id, reservation_id, propertyName, assistanceUsed);
     if (!("error" in sendMsgResponse)) {
       setInputValue("");
       setShowGenerateJustificationButton(false);
+      setAssistanceUsed(null);
       await updateConversationFromApi(conversation_id);
     }
     setSendMessageLoading(false);
@@ -109,6 +111,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     setInputValue(e.target.value);
     if (e.target.value.trim() === "") {
       setShowGenerateJustificationButton(false);
+      setAssistanceUsed(null);
     }
   };
 
@@ -124,11 +127,13 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     if (option === 'scratch') {
       setInputValue(generateButtonText);
       setShowGenerateJustificationButton(true);
+      setAssistanceUsed('generate');
     }
     else if (option === 'command') {
       const response = await callGenerateFromCommandApi(inputValue);
       if (!("error" in response)) {
         setInputValue(response.response);
+        setAssistanceUsed('command');
       }
     }
   };
@@ -204,13 +209,14 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     // Populate messages
     if (allConversationData?.messages) {
       const newMessages = allConversationData.messages.map((messageList) => {
-        const { sender, text, time, attachments } = messageList;
+        const { sender, text, time, attachments, id } = messageList;
         let timeFormatConvert = timeFormat(time);
         return {
           text: messageList !== undefined ? messageList : "",
           sender: sender === "host" || sender === "hostbuddy" ? "user" : "bot",
           messageDay: formatRelativeDate(time),
           sendBy: sender,
+          id,
           timeFormatConvert,
           attachments
         };
@@ -237,6 +243,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     // Clear the input field
     setInputValue("");
     setShowGenerateJustificationButton(false);
+    setAssistanceUsed(null);
   }, [allConversationData]);
 
   const handleClickOutside = (event) => {
@@ -276,9 +283,8 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
         <div className="message-list" ref={messageListRef}>
           {messages?.map((message, index) => {
             return (
-              <>
                 <MessageInbox
-                  key={index}
+                  key={message?.id}
                   text={message.text?.text}
                   sender={message.sender}
                   currentMessageDay={message.messageDay}
@@ -289,7 +295,6 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
                   prevMsgText={messages[index - 1]?.text}
                   isInitialMessage={index <= 1}
                 />
-              </>
             );
           })}
           {/* {updateMessageRespLoading && <Loader />} */}

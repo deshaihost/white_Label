@@ -235,7 +235,7 @@ const ReviewRemoval = ({allPropertyNamesList}) => {
       </p>
 
       <div className="action-select" style={{width:"100%"}}> {/* hijack this class from ActionItemsTable.jsx, for filter component styling */}
-        {/* Disabled until rating fields are fixed
+
         <div className="item-select" style={{width:"220px"}}>
           <select aria-label="Default select example" className="bg-dark form-select" value={ratingFilterStatus} onChange={handleRatingFilterChange} disabled={reviewsLoading}>
             <option value="">All Ratings</option>
@@ -247,7 +247,6 @@ const ReviewRemoval = ({allPropertyNamesList}) => {
             <option value="1">1/5</option>
           </select>
         </div>
-        */}
 
         <div className="item-select" style={{width:"220px"}}>
           <select aria-label="Default select example" className="bg-dark form-select" value={violationFilterStatus} onChange={handleViolationFilterChange} disabled={reviewsLoading}>
@@ -297,7 +296,7 @@ const ReviewRemoval = ({allPropertyNamesList}) => {
                   const departureDateFormatted = formatDateString(departure_date);
                   const guestName = `${guest_name_first || ''} ${guest_name_last || ''}`.trim();
 
-                  const reviewTitle = title ? title : description;
+                  const reviewTitle = (title ? title : description) || '[No title]';
                   const reviewSummary = reviewTitle.length > 50 ? reviewTitle.slice(0, 50) + "..." : reviewTitle;
                   const reviewSummaryWithRating = `(${rating} stars) ${reviewSummary}`;
 

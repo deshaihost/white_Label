@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {  Modal } from "react-bootstrap";
-import ToastHandle from "../../../../helper/ToastMessage";
+import CopyToPropertiesModal from "./copyToPropertiesModal/CopyToPropertiesModal";
 
-const PencilIconModal = ({ show, setShowModal, question_obj, checkbox_group_option, handleModalSave }) => {
+const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSectionName, checkbox_group_option, handleModalSave }) => {
 
   // Unpack question object, handling the special case for checkbox_group
   let { question_type, question_text, response_text, hide_for_reservations, response_options } = question_obj || {};
@@ -22,9 +22,10 @@ const PencilIconModal = ({ show, setShowModal, question_obj, checkbox_group_opti
     obj[stage] = false; // "false" means res stage is not chosen to be hidden. So in the UI, the button will appear as selected (blue background)
     return obj;
   }, {});
-  const [reservationStageData, setReservationStageData] = useState(initialReservationStageSelections);
 
+  const [reservationStageData, setReservationStageData] = useState(initialReservationStageSelections);
   const [extraNoteData, setextraNoteData] = useState("");
+  const [showCopyToPropertiesModal, setShowCopyToPropertiesModal] = useState(false);
 
   // When the modal is opened, populate the textArea and set reservationStageData according to any previous input
   useEffect(() => {
@@ -81,7 +82,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, checkbox_group_opti
 
               {/* Generate the reservation stage buttons dynamically */}
               {all_possible_res_stages.map((stage, index) => (
-                <div className="col text-center">
+                <div className="col text-center" key={stage}>
                   <input type="checkbox" checked={reservationStageData[stage]} className="btn-check" id={stage} autoComplete="off" onChange={(e) => {
                     setReservationStageData(prevState => ({ ...prevState, [stage]: e.target.checked }));
                   }}/>
@@ -99,9 +100,17 @@ const PencilIconModal = ({ show, setShowModal, question_obj, checkbox_group_opti
                 Save
               </button>
             </div>
+
+            <a style={{ color:'#146EF5', textDecoration:'none', display:'block', textAlign:'center', marginTop:'15px', cursor:'pointer' }} onClick={() => setShowCopyToPropertiesModal(true)}>
+              Copy To Other Properties
+            </a>
+
           </div>
         </Modal.Body>
       </Modal>
+      {showCopyToPropertiesModal && (
+        <CopyToPropertiesModal show={showCopyToPropertiesModal} setShow={setShowCopyToPropertiesModal} question_obj={question_obj} sectionName={sectionName} subSectionName={subSectionName} checkbox_group_option={checkbox_group_option} liveTextData={extraNoteData} liveHideForReservationsData={reservationStageData} />
+      )}
     </>
   );
 };

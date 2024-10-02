@@ -25,9 +25,7 @@ const Signup = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data, status } = store?.registerReducer?.register
-    ? store?.registerReducer?.register
-    : [];
+  const { data, status } = store?.registerReducer?.register ? store?.registerReducer?.register : [];
   const registerLoading = store?.registerReducer?.loading;
   const registerUserMessage = store?.registerReducer?.register?.data?.message;
   const registerUserStatus = store?.registerReducer?.register?.status;
@@ -36,20 +34,11 @@ const Signup = () => {
   const [emailEntered, setEmailEntered] = useState("");
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
   const password = useRef({});
   password.current = watch("newPassword", "");
 
-  const [inputData, setInputData] = useState({
-    email: "",
-    password: "",
-  });
+  const [inputData, setInputData] = useState({ email: "", password: "" });
 
   const onSubmit = (data) => {
     setEmailEntered(data.email);
@@ -157,7 +146,7 @@ const Signup = () => {
                 <form action="" onSubmit={handleSubmit( (data) => { onSubmit(data); } )}>
 
                   <div className="input-container">
-                    <input type="text" {...register("firstName", { required: true })} placeholder="First Name..." value={inputSpaceValidation?.firstName} onInput={(e) => { firstNameSpaceHandle(e); }}/>
+                    <input type="text" {...register("firstName", { required: false })} placeholder="First Name..." value={inputSpaceValidation?.firstName} onInput={(e) => { firstNameSpaceHandle(e); }}/>
                   </div>
                   {errors.firstName?.type === "required" && (
                     <>
@@ -166,7 +155,7 @@ const Signup = () => {
                   )}
 
                   <div className="input-container">
-                    <input type="text" {...register("lastName", { required: true })} placeholder="Last Name..." value={inputSpaceValidation?.lastName} onInput={(e) => { lastNameSpaceHandle(e) }}/>
+                    <input type="text" {...register("lastName", { required: false })} placeholder="Last Name..." value={inputSpaceValidation?.lastName} onInput={(e) => { lastNameSpaceHandle(e) }}/>
                   </div>
                   {errors.lastName?.type === "required" && (
                     <>

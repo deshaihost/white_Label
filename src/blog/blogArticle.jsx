@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import FiveBestPMS from './blogArticles/5_best_PMS_6-13';
 import automateStr from './blogArticles/automate_str_6-25';
+import ownerRezPmsPartners from './blogArticles/ownerRez_pms_partners';
+import whyYouNeedAi from './blogArticles/why_you_need_ai';
 
 const BlogArticle = () => {
   const { article_name } = useParams(); // Get the article_name from the path param
@@ -10,6 +12,8 @@ const BlogArticle = () => {
   const name_to_article_mapping = {
     "5_best_PMS_6-13": FiveBestPMS,
     "automate_str_6-25": automateStr,
+    "ownerRez_pms_partners": ownerRezPmsPartners,
+    "why_you_need_ai": whyYouNeedAi,
   };
 
   useEffect(() => {

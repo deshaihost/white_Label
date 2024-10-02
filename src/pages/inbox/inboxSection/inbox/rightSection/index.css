@@ -17,12 +17,34 @@
     padding-bottom: 15px;
     margin-bottom: 15px;
 }
-.issue , .satisfy , .about-inner{
+.issue, .satisfy, .about-inner {
     max-width: 400px;
     margin: 0 auto;
     padding: 20px 12px;
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
+
+/* Messaging status & toggle section */
+
+.right-side .toggle {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+.right-side .select-dropdown {
+    color: #0d6efd;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    width: 90px;
+  }
+
+/* --------------------- */
+
 .right-title h2,
 .about-inner h2{
     font-size: 20px;

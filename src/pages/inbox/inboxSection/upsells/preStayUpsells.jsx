@@ -1,6 +1,8 @@
 import React from "react";
+import Select, { components } from 'react-select';
 import { Button, Form } from "react-bootstrap";
-import {useState, useEffect} from "react";
+import customStyles from "../resources/selectStyles";
+import {useState, useEffect, useRef} from "react";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "../resources/upsells.css";
@@ -8,6 +10,8 @@ import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
 import UpsellMessageModal from "../resources/upsellMessageModal";
 
 import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
+
+import { formatDateRange, formatDateTime, truncateString, insertVariableAtCursor, setSetting, callSaveSettingsApi, callCancelMessageApi } from "../resources/upsellsFuncts";
 
 /*
 default_settings = {
@@ -26,10 +30,9 @@ default_settings = {
 */
 
 
-const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, currentSettingsData, setCurrentSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData}) => {
+const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localSettingsData, setLocalSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData, allPropertyNamesList}) => {
 
 
-  const [setSettingsLoading, setSetSettingsLoading] = useState(false);
   const [cancelMessageLoading, setCancelMessageLoading] = useState("");
   const [selectedConfig, setSelectedConfig] = useState("default"); // The currently selected config. All users have a "default" config
   const [messageModalHeaderText, setMessageModalHeaderText] = useState("");
@@ -37,170 +40,13 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
   const [messageModalMainText, setMessageModalMainText] = useState("");
   const [showMessageModal, setShowMessageModal] = useState(false);
 
+  const currentSettingsData = localSettingsData?.[selectedConfig] || {};
+  const setCurrentSettingsData = (newData) => {
+    setLocalSettingsData({ ...localSettingsData, [selectedConfig]: newData });
+  };
+
   //const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available'};
   const variables = {'guest_name':'Guest name', 'discount_percentage':'Discount percentage', 'num_days_available':'Number of days available'};
-
-
-  // Set a particular field in the current settings
-  const setSetting = (key, value) => {
-
-    // Only accept valid values for certain fields
-    if (key === 'days_before_check_out' || key === 'days_before_check_in') {
-      value = parseInt(value);
-      if (value < 0 || value > 30) { return }
-    } else if (key === 'discount_percentage') {
-      value = parseInt(value);
-      if (value < 0 || value > 100) { return }
-    } else if (key === 'discount_absolute') {
-      value = parseInt(value);
-      if (value < 0) { return }
-    } else if (key === 'number_of_nights_criteria') {
-      value = parseInt(value);
-      if (value < 1 || value > 30) { return }
-    }
-
-    setCurrentSettingsData({ ...currentSettingsData, [key]: value });
-  }
-
-
-  // Format date range
-  // e.g. input startDate='2024-08-16', endDate='2024-08-18' => output 'Aug 16 - Aug 18'
-  // e.g. input startDate='2024-08-16', endDate='2024-08-16' => output 'Aug 16'
-  // e.g. input startDate='08-16-24', endDate='08-18-24' => output 'Aug 16 - Aug 18'
-  const formatDateRange = (startDate, endDate) => {
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  
-    const parseDate = (dateString) => {
-      let year, month, day;
-      if (dateString.includes('-')) {
-        const parts = dateString.split('-').map(Number);
-        if (parts[0] > 31) { // Assuming format is YYYY-MM-DD
-          [year, month, day] = parts;
-        } else { // Assuming format is MM-DD-YY
-          [month, day, year] = parts;
-          year += 2000; // Assuming 21st century for two-digit years
-        }
-      }
-      return new Date(Date.UTC(year, month - 1, day));
-    };
-  
-    const formatDate = (date, includeYear = false) => {
-      const month = monthNames[date.getUTCMonth()];
-      const day = date.getUTCDate();
-      const year = date.getUTCFullYear();
-      return includeYear ? `${month} ${day}, ${year}` : `${month} ${day}`;
-    };
-  
-    const start = parseDate(startDate);
-    const end = parseDate(endDate);
-  
-    const startFormatted = formatDate(start, start.getUTCFullYear() !== end.getUTCFullYear());
-    const endFormatted = formatDate(end, start.getUTCFullYear() !== end.getUTCFullYear());
-  
-    if (startFormatted === endFormatted) {
-      return startFormatted;
-    } else {
-      return `${startFormatted} - ${endFormatted}`;
-    }
-  };
-
-
-  // Format datetime
-  // e.g. input datetime='2024-08-15 13:00' => output 'Aug 15, 1:00 PM'
-  const formatDateTime = (datetime) => {
-    const [datePart, timePart] = datetime.split(' ');
-    const [year, month, day] = datePart.split('-').map(Number);
-    const [hour, minute] = timePart.split(':').map(Number);
-  
-    const date = new Date(Date.UTC(year, month - 1, day, hour, minute));
-  
-    const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' };
-    return date.toLocaleDateString('en-US', options);
-  };
-
-  // Truncate a string to num_chars
-  // e.g. input string='Hello, world!', num_chars=5 => output 'Hello...'
-  // e.g. input string='Hello', num_chars=5 => output 'Hello'
-  const truncateString = (string, num_chars) => {
-    if (string.length > num_chars) {
-      return string.slice(0, num_chars-3) + '...';
-    } else {
-      return string;
-    }
-  }
-
-
-  // Handle click on a variable to insert it into the message textarea
-  const insertVariableAtCursor = (variable) => {
-    const textarea = document.getElementById('upsellMessage');
-    const startPos = textarea.selectionStart;
-    const endPos = textarea.selectionEnd;
-    const textBefore = textarea.value.substring(0, startPos);
-    const textAfter = textarea.value.substring(endPos, textarea.value.length);
-  
-    const newText = textBefore + variable + textAfter;
-    setSetting('upsell_message', newText);
-  
-    // Set the cursor position after the inserted variable
-    setTimeout(() => {
-      textarea.selectionStart = textarea.selectionEnd = startPos + variable.length;
-      textarea.focus();
-    }, 0);
-  };
-
-
-  // Call the API to save the user's settings. This only handles default settings.
-  // TODO: add support for saving different settings for different properties. Might want to change the backend API to just accept all the configs at once and save everything, instead of saving one at a time.
-  const callSaveSettingsApi = async () => {
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    setSetSettingsLoading(true);
-
-    try {
-      const config = {
-        headers: { "X-API-Key": API_KEY },
-        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-      };
-      const body_data = { name:'default', settings:currentSettingsData, upsell_type:'pre_stay' };
-      const response = await axios.put( `${baseUrl}/set_upsell_settings`, body_data, config );
-
-      if (response.status === 200) {
-        ToastHandle("Settings saved successfully", "success");
-      }
-      else { ToastHandle(response?.data?.error, "danger"); }
-    } catch (error) {
-      
-    } finally {
-      setSetSettingsLoading(false);
-    }
-  }
-
-
-  // Call the API to cancel an upsell message
-  const callCancelMessageApi = async (propertyName, guestKey) => {
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    setCancelMessageLoading(guestKey);
-
-    try {
-      const config = {
-        headers: { "X-API-Key": API_KEY },
-        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-      };
-      const body_data = { property_name:propertyName, guest_key:guestKey, upsell_type:'pre_stay' };
-      const response = await axios.put( `${baseUrl}/cancel_upcoming_message`, body_data, config );
-
-      if (response.status === 200) {
-        ToastHandle("Message cancelled successfully", "success");
-        callGetUpcomingMessagesApi(false, 'pre_stay');
-      }
-      else { ToastHandle(response?.data?.error, "danger"); }
-    } catch (error) {
-      ToastHandle('Internal server error', "danger");
-    } finally {
-      setCancelMessageLoading("");
-    }
-  }
 
 
   const handleReturn = (e) => {
@@ -224,15 +70,30 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
   const handleCancelMessage = (message) => {
     const userConfirmed = window.confirm("Are you sure you want to cancel this message?");
     if (userConfirmed) {
-      callCancelMessageApi(message.property_name, message.guest_key);
+      callCancelMessageApi(message.property_name, message.guest_key, 'pre_stay', callGetUpcomingMessagesApi, setCancelMessageLoading);
     }
   }
 
 
   // On save button click, call the API to save the settings. Once saved, refresh the upcoming messages, regenerated with the new settings
   const handleSaveSettings = async () => {
-    await callSaveSettingsApi();
+    await callSaveSettingsApi(localSettingsData, 'pre_stay');
     callGetUpcomingMessagesApi(true, 'pre_stay');
+  }
+
+  const handleConfigSelectChange = (e) => {
+    if (e.target.value === "add") {
+      const newConfigName = window.prompt("Enter a name for the new config");
+      if (newConfigName) {
+        setLocalSettingsData({ ...localSettingsData, [newConfigName]:settingsApiData.default }); // warning: this is creating a shallow copy of settingsApiData.default
+        setSelectedConfig(newConfigName);
+      }
+    } else {
+      setSelectedConfig(e.target.value);
+      const selectedProperties = localSettingsData[e.target.value]?.properties || [];
+      const selectedOptions = selectedProperties.map((propertyName) => ({ value: propertyName, label: propertyName }));
+      setSelectedOptions(selectedOptions);
+    }
   }
 
 
@@ -245,24 +106,114 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
   }, []);
 
 
+  // ------- Property multi select -------
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const selectRef = useRef(null);
+
+  const options = allPropertyNamesList.map((propertyName) => ({ value: propertyName, label: propertyName }));
+
+  const handleChange = (selected) => {
+    setSelectedOptions(selected || []);
+    if (selectedConfig !== "default") { // should always be true, but just to be sure
+      const selectedProperties = selected.map((property) => property.value);
+      const newSettings = { ...localSettingsData[selectedConfig], properties:selectedProperties };
+      setCurrentSettingsData(newSettings);
+    }
+  };
+
+  // Custom ValueContainer to display the number of selected properties
+  const ValueContainer = ({ children, ...props }) => {
+    const { getValue, selectProps } = props;
+    const selectedValues = getValue();
+    const displayText = selectedValues.length > 0 ? `${selectedValues.length} propert${selectedValues.length === 1 ? 'y' : 'ies'}` : '';
+
+    return (
+      <components.ValueContainer {...props}>
+        <div>{displayText}</div>
+        {children}
+      </components.ValueContainer>
+    );
+  };
+
+  // Handle clicks outside the select component
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setMenuIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [selectRef]);
+
+  const handleMouseDown = (event) => {
+    if (selectRef.current && selectRef.current.contains(event.target)) {
+      setMenuIsOpen(true);
+    }
+  };
+
+  const handleMouseUp = (event) => {
+    if (selectRef.current && selectRef.current.contains(event.target)) {
+      setMenuIsOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+  // -------------------------------------
+
+
 
   return (
     <div className="upsells-settings">
       {getSettingsLoading ? <FullScreenLoader /> : null}
-      <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-        <h3>Pre Stay Gap Night</h3>
-        <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
-          <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-            Save Settings
-          </Button>
-          <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example">
-            {Object.keys(settingsApiData).map((key, index) => (
-              <option key={index} value={key}>{key}</option>
-            ))}
-          </select>
+      
+      <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-start justify-content-between">
+        <div>
+          <h3>Pre Stay Gap Night</h3>
+          <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
+        </div>
+        <div>
+          <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
+            <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
+              Save Settings
+            </Button>
+            <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example" value={selectedConfig} onChange={handleConfigSelectChange}>
+              {Object.keys(localSettingsData).map((key, index) => (
+                <option key={index} value={key}>{key}</option>              
+              ))}
+              <option value="add">+ New Config</option>
+            </select>
+          </div>
+
+          <div style={{marginTop:"10px"}}>
+            {selectedConfig === "default" ? (
+              <div style={{maxWidth:"400px"}}>
+                <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p>
+              </div>
+            ) : (
+              <>
+                <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p>
+                <div ref={selectRef}>
+                  <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
+                </div>
+              </>
+            )}
+          </div>
+          
         </div>
       </div>
-      <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
+
       <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
         <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked after vacant night, offering them an early check-in or a discount to extend their stay. You can customize the message and parameters.</p>
       </div>
@@ -273,7 +224,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
         <div className="col-lg-8">
           <div className="d-flex align-items-center gap-5 mb-1">
             <label className="fs-5">Enable Pre Stay Upsells</label>
-            <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked)}/>
+            <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked, currentSettingsData, setCurrentSettingsData)}/>
           </div>
           <p className="settings-label">You currently have pre-stay upsells {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
         </div>
@@ -284,7 +235,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
           <label className="fs-5">Number of Nights to Consider</label>
           <p className="settings-label">HostBuddy will send a message each time there are vacant nights equal to or less than this number.</p>
           <div className="d-flex align-items-center gap-1 mt-1">
-            <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value)}/>
+            <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
           </div>
         </div>
       </div>
@@ -346,13 +297,13 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
           */}
           <div className="row mt-1">
             <div className="col-lg-2 col-4">
-              <input type="number" className="form-control" value={currentSettingsData.days_before_check_in} onChange={(e) => setSetting('days_before_check_in', e.target.value)}/>
+              <input type="number" className="form-control" value={currentSettingsData.days_before_check_in} onChange={(e) => setSetting('days_before_check_in', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
             </div>
             <div className="col-lg-3 col-4" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>days before guest check-in, at</label>
             </div>
             <div className="col-lg-3 col-4">
-              <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_before_check_in} onChange={(e) => setSetting('time_before_check_in', e.target.value)}/>
+              <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_before_check_in} onChange={(e) => setSetting('time_before_check_in', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
             </div>
           </div>
         </div>
@@ -364,9 +315,9 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
           <p className="settings-label">The discount amount to offer in the upsell message.</p>
           <div className="d-flex flex-column gap-2 mt-1">
             <div className="d-flex align-items-center gap-2">
-              <Form.Check type="radio" name="discount_type" label="Percentage:" checked={currentSettingsData.discount_type === 'percentage'} onChange={() => setSetting('discount_type', 'percentage')}/>
+              <Form.Check type="radio" name="discount_type" label="Percentage:" checked={currentSettingsData.discount_type === 'percentage'} onChange={() => setSetting('discount_type', 'percentage', currentSettingsData, setCurrentSettingsData)}/>
               <div className="d-flex align-items-center gap-1">
-                <input type="number" className="form-control" style={{width: '100px'}} value={currentSettingsData.discount_percentage} onChange={(e) => setSetting('discount_percentage', e.target.value)} disabled={currentSettingsData.discount_type !== 'percentage'}/>
+                <input type="number" className="form-control" style={{width: '100px'}} value={currentSettingsData.discount_percentage} onChange={(e) => setSetting('discount_percentage', e.target.value, currentSettingsData, setCurrentSettingsData)} disabled={currentSettingsData.discount_type !== 'percentage'}/>
                 <label className="fs-6">%</label>
               </div>
             </div>
@@ -391,7 +342,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
         <p className="settings-label">Click to add custom variables to your upsell message. These variables will change to match the data for each reservation.</p>
           <div className="available-variables mt-3">
             {Object.keys(variables).map((key, index) => (
-              <span key={index} className="variable" onClick={() => insertVariableAtCursor(`[[${key}]]`)}>{variables[key]}</span>
+              <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('upsellMessage'), `[[${key}]]`, currentSettingsData, setCurrentSettingsData)}>{variables[key]}</span>
             ))}
           </div>
         </div>
@@ -403,7 +354,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
             <label className="fs-5">Message</label>
           </div>
           <div className="d-flex justify-content-center">
-            <textarea id="upsellMessage" className="form-control setting-textarea" value={currentSettingsData.upsell_message} onChange={(e) => setSetting('upsell_message', e.target.value)} />
+            <textarea id="upsellMessage" className="form-control setting-textarea" value={currentSettingsData.upsell_message} onChange={(e) => setSetting('upsell_message', e.target.value, currentSettingsData, setCurrentSettingsData)} />
           </div>
         </div>
       </div>

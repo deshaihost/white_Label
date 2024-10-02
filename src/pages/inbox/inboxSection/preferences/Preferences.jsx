@@ -1,10 +1,13 @@
 import React from "react";
+import Select, { components } from 'react-select';
+import customStyles from "../resources/selectStyles";
 import { Button, Form } from "react-bootstrap";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./Preferences.css";
 import "./SettingIndex.css";
+import SettingsCalender from "./settingsCalendar";
 import { FullScreenLoader } from "../../../../helper/Loader";
 
 /*
@@ -21,15 +24,20 @@ default_settings = {
 */
 
 
-const AdvancedSettingsIndex = () => {
-
+const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
   const [getSettingsLoading, setGetSettingsLoading] = useState(false);
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
-  const [settingsApiData, setSettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
-  const [currentSettingsData, setCurrentSettingsData] = useState({}); // Live data for what is currently on the UI, for only the selected config
+  const [settingsApiData, setSettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings configs
+  const [localSettingsData, setLocalSettingsData] = useState({}); // Live data for what is currently on the UI, for all settings configs
   const [selectedConfig, setSelectedConfig] = useState("default"); // The currently selected config. All users have a "default" config
 
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+
+  const currentSettingsData = localSettingsData?.[selectedConfig] || {};
+  const setCurrentSettingsData = (newData) => {
+    setLocalSettingsData({ ...localSettingsData, [selectedConfig]: newData });
+  };
 
   // Set a particular field in the current settings
   const setSetting = (key, value) => {
@@ -42,6 +50,22 @@ const AdvancedSettingsIndex = () => {
     setCurrentSettingsData({ ...currentSettingsData, [key]: value });
   }
 
+  // For each config - if there is no schedule data, initialize it with a default schedule.
+  // Then set this data in the state.
+  const initializeScheduleData = async (apiData) => {
+    const dailySchedules = {monday: ['00:00', '23:59'], tuesday: ['00:00', '23:59'], wednesday: ['00:00', '23:59'], thursday: ['00:00', '23:59'], friday: ['00:00', '23:59'], saturday: ['00:00', '23:59'], sunday: ['00:00', '23:59']};
+  
+    const scheduleDataToSet = {};
+  
+    for (const key in apiData) {
+      if (key !== 'default' && !apiData[key].hasOwnProperty('schedules')) {
+        apiData[key]['schedules'] = structuredClone(dailySchedules);
+      }
+    }
+  
+    setSettingsApiData(apiData);
+    setLocalSettingsData(apiData);
+  }
 
   // Call the API to get all the user's settings
   const callGetSettingsApi = async () => {
@@ -59,8 +83,7 @@ const AdvancedSettingsIndex = () => {
   
       if (response.status === 200) {
         setGetSettingsLoading(false);
-        setSettingsApiData(response?.data?.conversation_settings);
-        setCurrentSettingsData(response?.data?.conversation_settings?.default);
+        initializeScheduleData(response?.data?.conversation_settings);
       }
       else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) {
@@ -69,7 +92,6 @@ const AdvancedSettingsIndex = () => {
       setGetSettingsLoading(false);
     }
   }
-
 
   // Call the API to save the user's settings. This only handles default settings.
   // TODO: add support for saving different settings for different properties. Might want to change the backend API to just accept all the configs at once and save everything, instead of saving one at a time.
@@ -84,7 +106,7 @@ const AdvancedSettingsIndex = () => {
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
 
-      const response = await axios.put( `${baseUrl}/set_conversation_settings`, { name:'default', settings:currentSettingsData }, config );
+      const response = await axios.put( `${baseUrl}/set_all_conversation_settings`, { settings:localSettingsData }, config );
 
       if (response.status === 200) {
         ToastHandle("Settings saved successfully", "success");
@@ -97,12 +119,38 @@ const AdvancedSettingsIndex = () => {
     }
   }
 
-
   // On save button click, call the API to save the settings
   const handleSaveSettings = () => {
     callSaveSettingsApi();
   }
 
+  const handleConfigSelectChange = (e) => {
+    if (e.target.value === "add") {
+      const newConfigName = window.prompt("Enter a name for the new config");
+      if (newConfigName) {
+        const dailySchedules = {monday: ['00:00', '23:59'], tuesday: ['00:00', '23:59'], wednesday: ['00:00', '23:59'], thursday: ['00:00', '23:59'], friday: ['00:00', '23:59'], saturday: ['00:00', '23:59'], sunday: ['00:00', '23:59']};
+        let newConfigSettings = { ...structuredClone(settingsApiData.default), schedules: { ...dailySchedules } };
+        setLocalSettingsData({ ...localSettingsData, [newConfigName]:newConfigSettings });
+        setSelectedConfig(newConfigName);
+      }
+    } else {
+      setSelectedConfig(e.target.value);
+      const selectedProperties = localSettingsData[e.target.value]?.properties || [];
+      const selectedOptions = selectedProperties.map((propertyName) => ({ value: propertyName, label: propertyName }));
+      setSelectedOptions(selectedOptions);
+    }
+  }
+
+  const handleScheduleClick = (event) => {
+    event.preventDefault();
+    setShowScheduleModal(true);
+  }
+
+  // Given a new schedule object (from the modal): set it as the schedule for the currently selected config
+  const setScheduleData = (newScheduleData) => {
+    const newSettings = { ...localSettingsData[selectedConfig], schedules:newScheduleData };
+    setCurrentSettingsData(newSettings);
+  }
 
   // On page load, call the API to get the settings
   useEffect(() => {
@@ -112,44 +160,115 @@ const AdvancedSettingsIndex = () => {
   }, []);
 
 
+  // ------- Property multi select -------
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const selectRef = useRef(null);
+
+  const options = allPropertyNamesList.map((propertyName) => ({ value: propertyName, label: propertyName }));
+
+  const handleChange = (selected) => {
+    setSelectedOptions(selected || []);
+    if (selectedConfig !== "default") { // should always be true, but just to be sure
+      const selectedProperties = selected.map((property) => property.value);
+      const newSettings = { ...localSettingsData[selectedConfig], properties:selectedProperties };
+      setCurrentSettingsData(newSettings);
+    }
+  };
+
+  // Custom ValueContainer to display the number of selected properties
+  const ValueContainer = ({ children, ...props }) => {
+    const { getValue, selectProps } = props;
+    const selectedValues = getValue();
+    const displayText = selectedValues.length > 0 ? `${selectedValues.length} propert${selectedValues.length === 1 ? 'y' : 'ies'}` : '';
+
+    return (
+      <components.ValueContainer {...props}>
+        <div>{displayText}</div>
+        {children}
+      </components.ValueContainer>
+    );
+  };
+
+  // Handle clicks outside the select component
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setMenuIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [selectRef]);
+
+  const handleMouseDown = (event) => {
+    if (selectRef.current && selectRef.current.contains(event.target)) {
+      setMenuIsOpen(true);
+    }
+  };
+
+  const handleMouseUp = (event) => {
+    if (selectRef.current && selectRef.current.contains(event.target)) {
+      setMenuIsOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+  // -------------------------------------
+
 
   return (
     <div className="setting_index_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "20px"}}>
       <div className="conversation-settings-inbox">
         {getSettingsLoading ? <FullScreenLoader /> : null}
-        <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-          <h3>Conversation Settings</h3>
-          <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
-            <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-              Save Settings
-            </Button>
-            <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example">
-              {Object.keys(settingsApiData).map((key, index) => (
-                <option key={index} value={key}>{key}</option>
-              ))}
-            </select>
+
+        <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-start justify-content-between">
+          <div>
+            <h3>Conversation Settings</h3>
+          </div>
+          <div>
+            <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
+              <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
+                Save Settings
+              </Button>
+              <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example" value={selectedConfig} onChange={handleConfigSelectChange}>
+                {Object.keys(localSettingsData).map((key, index) => (
+                  <option key={index} value={key}>{key}</option>              
+                ))}
+                <option value="add">+ New Config</option>
+              </select>
+            </div>
+
+            <div style={{marginTop:"10px"}}>
+              {selectedConfig === "default" ? (
+                <div style={{maxWidth:"400px"}}>
+                  <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p>
+                </div>
+              ) : (
+                <>
+                  <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p>
+                  <div ref={selectRef}>
+                    <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
+                  </div>
+                  <a href="#" style={{marginTop:'10px', fontSize:'16px', display:'block', textAlign:'center'}} onClick={handleScheduleClick}>Configure Timing</a>
+                </>
+              )}
+            </div>
+            
           </div>
         </div>
 
-        {/* TODO - support different settings for different properties
-        <div className="row mt-4">
-          <div className="col-lg-4">
-            <label className="mb-1 fs-6">Name</label>
-            <input className="form-control border-white fs-14" placeholder="Default setting"/>
-          </div>
-          <div className="col-lg-4">
-            <label className="mb-1 fs-6">Properties</label>
-            <select className="form-control rounded-pill border-white shadow-none fs-14 setting-tab-select" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example">
-              <option selected>Default Setting</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </select>
-          </div>
-        </div>
-        */}
-
-        <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
+        <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
 
         <div className="row mt-4">
           <div className="col-lg-8">
@@ -260,6 +379,7 @@ const AdvancedSettingsIndex = () => {
           </div>
         </div>
       </div>
+      <SettingsCalender scheduleData={localSettingsData?.[selectedConfig]?.schedules} setScheduleData={setScheduleData} showSchedule={showScheduleModal} setShowSchedule={setShowScheduleModal}/>
     </div>
   );
 };
