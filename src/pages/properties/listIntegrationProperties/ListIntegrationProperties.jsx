@@ -281,7 +281,7 @@ const ListIntegrationProperties = () => {
                   <div className="d-flex gap-1 align-items-center justify-content-between property_lisiting mb-4">
                     <div className="d-flex gap-1 align-items-center property_listing_item">
                       <div className="img-with-title">
-                        <img src={PropertiesExtraData?.[properties]?.thumbnail_image || dummyPropertyImg} alt=""/>
+                        <img src={PropertiesExtraData?.[properties]?.thumbnail_image || dummyPropertyImg} alt="" onError={(e) => { e.target.onerror = null; e.target.src = dummyPropertyImg; }}/>
                       </div>
                       <div className="property_listing_detail">
                         <div className="property-detail">
