@@ -274,7 +274,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                 >
                   <div style={{ display:'flex', alignItems:'flex-start', overflow: 'hidden', width: '100%' }}>
                     <div style={{flexShrink:0}}>
-                      <img src={image_url ? image_url : dummyPropertyImg} alt="Property Thumbnail Image" style={{width:"61px", height:"61px", marginTop:"2px"}}/>
+                    <img src={image_url ? image_url : dummyPropertyImg} alt="Property Thumbnail Image" style={{width:"61px", height:"61px", marginTop:"2px"}} onError={(e) => { e.target.onerror = null; e.target.src = dummyPropertyImg; }}/>
                     </div>
                     <div className="left-description" style={{ flex: 1, marginLeft: '10px', overflow: 'hidden' }}>
                       <div className="d-flex justify-content-between description-item">
