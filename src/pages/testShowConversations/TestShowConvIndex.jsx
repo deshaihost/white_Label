@@ -33,11 +33,10 @@ const TestShowConvIndex = () => {
           </div>
           <div className="chat-box">
             {messages?.map((message, index) => {
-              return <TestShowConversations key={index} message={message} />;
+              return <TestShowConversations key={index} message={message} />
             })}
           </div>
           <div>
-            {console.log(userShow !== dynamicThreshold,'userShow !== dynamicThreshold')}
             <p
               className={`arwow next ${
                 userShow !== dynamicThreshold===false && "Show-Icon111"
