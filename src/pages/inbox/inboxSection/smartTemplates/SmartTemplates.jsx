@@ -6,7 +6,7 @@ import "../resources/upsells.css";
 
 import ReviewUpsells from "./reviewUpsells";
 //import PostCheckInMessages from "./postCheckInMessage";
-//import PropertyReadyMessage from "./propertyReadyMessage";
+import PropertyReadyMessage from "./propertyReadyMessage";
 
 
 const SmartTemplates = ({allPropertyNamesList}) => {
@@ -120,11 +120,9 @@ const SmartTemplates = ({allPropertyNamesList}) => {
       )}
       */}
 
-      {/*
       {selectedSection === "propertyReady" && (
         <PropertyReadyMessage setSection={setSelectedSection} settingsApiData={propertyReadyApiData} setSettingsApiData={setPropertyReadyApiData} localSettingsData={propertyReadyLocalData} setLocalSettingsData={setPropertyReadyLocalData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPropertyReadyLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPropertyReadyUpcomingMessagesLoading} upcomingMessagesData={propertyReadyUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList} />
       )}
-      */}
       
       {selectedSection === "index" && (
         <div className="upsells-settings">
@@ -153,14 +151,12 @@ const SmartTemplates = ({allPropertyNamesList}) => {
           </div>
           */}
 
-          {/*
           <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("propertyReady")}>
             <div className="col-lg-11 col-12">
               <label className="fs-5">Property Ready</label>
               <p className="settings-label">Send a message to your guests when their property is ready for check-in.</p>
             </div>
           </div>
-          */}
 
           {/*
           <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
