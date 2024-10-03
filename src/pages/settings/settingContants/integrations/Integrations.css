@@ -52,6 +52,10 @@
   line-height: 18px;
 }
 
+.settings-integrations .grey-text {
+  color: #777;
+}
+
 
 .connect-turno-button .connect-button {
   border: 2px solid blue;
