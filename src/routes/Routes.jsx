@@ -46,6 +46,7 @@ import InboxIndex from "../pages/inbox/InboxIndex";
 import GetConversationsTest from "../helper/getConversationsTest/getConversationsTest";
 import ActionItemsIndex from "../pages/actionItems/ActionItemsIndex";
 import TestShowConvIndex from "../pages/testShowConversations/TestShowConvIndex";
+import AiMessaging from "../pages/aiMessaging/AiMessaging";
 
 const Routing = () => {
   const location = useLocation();
@@ -182,9 +183,13 @@ const Routing = () => {
         <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
-        <Route
+        {/* <Route
           path="/test-show-conversations"
           element={<TestShowConvIndex />}
+        ></Route> */}
+        <Route
+          path="/ai-messaging"
+          element={<AiMessaging />}
         ></Route>
 
         <Route
