@@ -4,6 +4,8 @@ import FiveBestPMS from './blogArticles/5_best_PMS_6-13';
 import automateStr from './blogArticles/automate_str_6-25';
 import ownerRezPmsPartners from './blogArticles/ownerRez_pms_partners';
 import whyYouNeedAi from './blogArticles/why_you_need_ai';
+import hostawayPmsPartners from './blogArticles/hostaway_pms_partners';
+import needVirtualAssistant from './blogArticles/need_virtual_assistant';
 
 const BlogArticle = () => {
   const { article_name } = useParams(); // Get the article_name from the path param
@@ -14,6 +16,8 @@ const BlogArticle = () => {
     "automate_str_6-25": automateStr,
     "ownerRez_pms_partners": ownerRezPmsPartners,
     "why_you_need_ai": whyYouNeedAi,
+    "hostaway_pms_partners" : hostawayPmsPartners,
+    "need_virtual_assistant" : needVirtualAssistant,
   };
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { BlogArticleSidebar, BlogArticleHeader } from '../blogArticleComponents';
 import { Helmet } from 'react-helmet';
 
-const thumbnailImg = "https://hostbuddylb.com/blog/5_best_PMS_6-13/Thumbnail.webp";
+const thumbnailImg = "https://i.postimg.cc/GtkGyqCm/5-Best-Property-Management-Software-of-2024.webp";
 const hostawayImg = "https://hostbuddylb.com/blog/5_best_PMS_6-13/hostaway.webp";
 const lodgifyImg = "https://hostbuddylb.com/blog/5_best_PMS_6-13/Lodgify.webp";
 const hostfullyImg = "https://hostbuddylb.com/blog/5_best_PMS_6-13/Hostfully.webp";

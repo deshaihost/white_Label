@@ -3,7 +3,7 @@ import { BlogArticleSidebar, BlogArticleHeader } from '../blogArticleComponents'
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
-const thumbnailImg = "https://hostbuddylb.com/blog/automate_str_6-25/thumbnail.webp";
+const thumbnailImg = "https://i.postimg.cc/2ym3PYsC/How-to-Automate-Your-Short-Term-Rental-Business.webp";
 const smartLockImg = "https://hostbuddylb.com/blog/automate_str_6-25/smartLock.jpg";
 const HostBuddyImg = "https://hostbuddylb.com/blog/automate_str_6-25/HostBuddy_logo.webp";
 const TurnoImg = "https://hostbuddylb.com/blog/automate_str_6-25/turno-banner.webp";
