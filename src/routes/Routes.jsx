@@ -45,6 +45,8 @@ import SettingIndex from "../pages/settings/SettingIndex";
 import InboxIndex from "../pages/inbox/InboxIndex";
 import GetConversationsTest from "../helper/getConversationsTest/getConversationsTest";
 import ActionItemsIndex from "../pages/actionItems/ActionItemsIndex";
+import TestShowConvIndex from "../pages/testShowConversations/TestShowConvIndex";
+import AiMessaging from "../pages/aiMessaging/AiMessaging";
 
 const Routing = () => {
   const location = useLocation();
@@ -149,7 +151,8 @@ const Routing = () => {
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/reset-password" &&
-        location.pathname !== "/forgot" && <NavBar />}
+        location.pathname !== "/forgot" &&
+        location.pathname !== "/test-show-conversations" && <NavBar />}
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -180,6 +183,14 @@ const Routing = () => {
         <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
+        {/* <Route
+          path="/test-show-conversations"
+          element={<TestShowConvIndex />}
+        ></Route> */}
+        <Route
+          path="/ai-messaging"
+          element={<AiMessaging />}
+        ></Route>
 
         <Route
           path="/become-an-affiliate"
@@ -320,7 +331,8 @@ const Routing = () => {
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/forgot" &&
-        location.pathname !== "/inbox" && <Footer />}
+        location.pathname !== "/inbox" &&
+        location.pathname !== "/test-show-conversations" && <Footer />}
     </div>
   );
 };

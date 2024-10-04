@@ -56,7 +56,7 @@
 .faqs .accordion-item .accordion-body {
     padding: 0;
     padding-top: 20px;
-    color: #CCC;
+    color: #CCC !important;
     leading-trim: both;
     text-edge: cap;
     font-family: 'DM Sans', sans-serif;

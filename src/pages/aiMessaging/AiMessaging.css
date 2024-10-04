@@ -1,0 +1,192 @@
+.unmatched {
+    padding: 50px 0px;
+}
+.unmatched h2 {
+    font-size: 40px;
+    text-align: center;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+.unmatched h2 span {
+    color: #146ef5;
+}
+.unmatched p {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    margin: 0 auto 10px;
+    max-width: 604px;
+}
+.unmatched .row {
+    align-items: center;
+    margin: 0px;
+}
+.trust {
+    padding: 50px 0px;
+}
+.trust h4 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    color: #fff;
+}
+.color-change {
+    color: #91dbff !important;
+}
+.trust h4 {
+    color: #b1abab;
+}
+.icon-boc-con h2 {
+    text-align: left;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+.icon-boc-con {
+    padding-left: 35px;
+    max-width: 550px;
+}
+.icon-img img {
+    max-width: 151px;
+    margin: 0 auto;
+}
+.icon-img {
+    text-align: center;
+}
+.right-icon-side p {
+    margin-left: auto;
+}
+.trust h4 {
+    color: #b1abab;
+    font-size: 25px;
+}
+.unmatched  .icon-boc-con p {
+    font-size: 18px;
+    line-height: 30px;
+    max-width: 410px;
+    margin: inherit;
+}
+.right-icon-side .icon-boc-con {
+    margin-left: auto;
+    text-align: right;
+}
+.right-icon-side .icon-boc-con h2 {
+    text-align: right;
+}
+.right-icon-side .icon-boc-con {
+    padding-left: 0;
+    padding-right: 35px;
+}
+.see-what {
+    padding: 70px 0px 30px 0px;
+    border-bottom: 1px solid #146ef5;
+}
+.see-what p {
+    font-size: 25px;
+    text-align: center;
+    line-height: 32px;
+    color: #b1abab;
+}
+
+
+/* ==============responsive part start============= */
+@media (max-width: 991.98px) { 
+.unmatched h2 {
+    font-size: 39px;
+     margin-bottom: 20px;
+  
+}
+.trust h4 {
+   font-size: 25px;
+    
+}
+.icon-boc-con p {
+    font-size: 18px;
+    line-height: 30px;
+}
+.icon-row {
+    row-gap: 30px;
+}
+.icon-img img {
+    max-width: 100px;
+    margin: 0 auto;
+}
+.icon-img {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.see-what {
+    padding: 50px 0px 30px 0px;
+   
+}
+.unmatched{
+    padding: 50px 0px 50px 0px;
+   
+}
+.icon-boc-con {
+    max-width: 100%;
+  margin-bottom: 20px;
+}
+.icon-boc-con h2 {
+    font-size: 30px;
+   margin-bottom: 10px;
+}
+}
+@media (max-width: 767px) { 
+.right-icon-side .icon-boc-con {
+  
+    padding-right: 0px;
+}
+.right-icon-side {
+    order: 4;
+}
+.mobile-order {
+    order: 3;
+}
+.unmatched h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+.trust {
+    padding: 30px 0px;
+}
+.trust h4 {
+    font-size: 20px;
+}
+.icon-boc-con h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.icon-img img {
+    max-width: 70px;
+    margin: 0 auto;
+}
+.icon-row {
+    row-gap: 10px;
+}
+.see-what p {
+    font-size: 18px;
+    line-height: 30px;
+}
+.see-what, .unmatched{
+    padding: 30px 0px 30px 0px;
+   
+}
+.icon-boc-con, .icon-boc-con h2 {
+    text-align: center !important;
+}
+.icon-boc-con {
+    max-width: 100%;
+    padding: 0px;
+    text-align: center;
+ 
+}
+.icon-boc-con h2 {
+    text-align: center;
+   
+}
+
+}
