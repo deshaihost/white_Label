@@ -5,26 +5,20 @@ import "./AiMessaging.css";
 import Clock from "../../helper/staticImage/clock.webp";
 import TwentyFour from "../../helper/staticImage/24 hours.webp";
 import Money from "../../helper/staticImage/money-bag.webp";
+
+
 const AiMessaging = () => {
   return (
-    <div>
+    <div className="ai-messaging">
       <div className="unmatched">
         <div className="container">
           <h2>
             <span>Unmatched </span>Natural Conversation
           </h2>
-          <div className="row">
-            <div className="col-lg-7 text-center">
-              <p>
-                This is where we excel. HostBuddy Ai has been thoroughly
-                optimized for natural-sounding conversation, critical thinking,
-                effective troubleshooting, and grounded responses and behavior.
-              </p>
-              <p>
-                Simply put: HostBuddy AI is the most advanced AI solution in
-                short-term rentals, achieving a level of performance and trust
-                that is unprecedented in the industry.
-              </p>
+          <div className="row first-section">
+            <div className="col-lg-7">
+              <p>This is where we excel. HostBuddy AI has been thoroughly optimized for natural-sounding conversation, critical thinking, effective troubleshooting, and grounded responses and behavior.</p>
+              <p>Simply put: HostBuddy AI is the most advanced AI solution in short-term rentals, achieving a level of performance and trust that is unprecedented in the industry.</p>
             </div>
             <div className="col-lg-5">
               <img src={NightHouse} alt=" " />
@@ -32,12 +26,10 @@ const AiMessaging = () => {
           </div>
           <div className="trust">
             <h2>
-              <span className="color-change">Proven Trust. </span>Real
-              Benefits.
+              <span className="color-change">Proven Trust. </span>Real Benefits.
             </h2>
             <h4>
-              <span className="color-change">Millions</span> of total property
-              hours covered.
+              <span className="color-change">Millions</span> of total property hours covered.
             </h4>
           </div>
           <div className="row icon-row">
@@ -51,9 +43,7 @@ const AiMessaging = () => {
                 <h2>
                   <span className="color-change">20 hours </span>per day
                 </h2>
-                <p>
-                  Average hours of AI coverage per day for active properties.
-                </p>
+                <p>Average hours of AI coverage per day for active properties.</p>
               </div>
             </div>
             <div className="col-lg-10 col-md-10 text-right right-icon-side">
@@ -76,23 +66,18 @@ const AiMessaging = () => {
             </div>
             <div className="col-lg-10 col-md-10">
               <div className="icon-boc-con">
-                <h2>
-                  Over  <span className="color-change">92% </span>more
-                  cost-effective
-                </h2>
+                <h2>Over  <span className="color-change">92% </span>more cost-effective</h2>
                 <p>Than human coverage</p>
               </div>
             </div>
           </div>
           <div className="see-what">
-            <h2>
-              See what <span>HostBuddy</span> Can Do
-            </h2>
+            <h2>See what <span>HostBuddy</span> Can Do</h2>
             <p>Check out some of HostBuddy's conversations with real guests </p>
           </div>
         </div>
       </div>
-      <TestShowConvIndex />
+      <TestShowConvIndex titles={['Inquiries']}/>
     </div>
   );
 };

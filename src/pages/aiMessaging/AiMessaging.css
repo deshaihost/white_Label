@@ -1,7 +1,7 @@
-.unmatched {
+.ai-messaging .unmatched {
     padding: 50px 0px;
 }
-.unmatched h2 {
+.ai-messaging .unmatched h2 {
     font-size: 40px;
     text-align: center;
     color: #fff;
@@ -9,81 +9,82 @@
     margin-bottom: 20px;
     text-transform: capitalize;
 }
-.unmatched h2 span {
+.ai-messaging .unmatched h2 span {
     color: #146ef5;
 }
-.unmatched p {
-    color: #fff;
-    font-size: 20px;
+.ai-messaging .unmatched p {
+    color: #CCC;
+    font-size: 18px;
     font-weight: 600;
-    line-height: 30px;
     margin: 0 auto 10px;
+}
+.ai-messaging .first-section p {
     max-width: 604px;
 }
-.unmatched .row {
+.ai-messaging .unmatched .row {
     align-items: center;
     margin: 0px;
 }
-.trust {
-    padding: 50px 0px;
+.ai-messaging .trust {
+    padding: 100px 0px 40px 0px;
 }
-.trust h4 {
+.ai-messaging .trust h4 {
     text-align: center;
     font-size: 32px;
     font-weight: 600;
     color: #fff;
 }
-.color-change {
+.ai-messaging .color-change {
     color: #91dbff !important;
 }
-.trust h4 {
+.ai-messaging .trust h4 {
     color: #b1abab;
 }
-.icon-boc-con h2 {
+.ai-messaging .icon-boc-con h2 {
     text-align: left;
     font-size: 30px;
     margin-bottom: 10px;
 }
-.icon-boc-con {
+.ai-messaging .icon-boc-con {
     padding-left: 35px;
     max-width: 550px;
 }
-.icon-img img {
+.ai-messaging .icon-img img {
     max-width: 151px;
     margin: 0 auto;
 }
-.icon-img {
+.ai-messaging .icon-img {
     text-align: center;
 }
-.right-icon-side p {
+.ai-messaging .right-icon-side p {
     margin-left: auto;
 }
-.trust h4 {
+.ai-messaging .trust h4 {
     color: #b1abab;
     font-size: 25px;
 }
-.unmatched  .icon-boc-con p {
+.ai-messaging .unmatched  .icon-boc-con p {
     font-size: 18px;
     line-height: 30px;
     max-width: 410px;
     margin: inherit;
 }
-.right-icon-side .icon-boc-con {
+.ai-messaging .right-icon-side .icon-boc-con {
     margin-left: auto;
     text-align: right;
 }
-.right-icon-side .icon-boc-con h2 {
+.ai-messaging .right-icon-side .icon-boc-con h2 {
     text-align: right;
 }
-.right-icon-side .icon-boc-con {
+.ai-messaging .right-icon-side .icon-boc-con {
     padding-left: 0;
     padding-right: 35px;
 }
-.see-what {
+.ai-messaging .see-what {
     padding: 70px 0px 30px 0px;
     border-bottom: 1px solid #146ef5;
 }
-.see-what p {
+.ai-messaging .see-what p {
     font-size: 25px;
     text-align: center;
     line-height: 32px;
@@ -93,98 +94,98 @@
 
 /* ==============responsive part start============= */
 @media (max-width: 991.98px) { 
-.unmatched h2 {
+.ai-messaging .unmatched h2 {
     font-size: 39px;
      margin-bottom: 20px;
   
 }
-.trust h4 {
+.ai-messaging .trust h4 {
    font-size: 25px;
     
 }
-.icon-boc-con p {
+.ai-messaging .icon-boc-con p {
     font-size: 18px;
     line-height: 30px;
 }
-.icon-row {
+.ai-messaging .icon-row {
     row-gap: 30px;
 }
-.icon-img img {
+.ai-messaging .icon-img img {
     max-width: 100px;
     margin: 0 auto;
 }
-.icon-img {
+.ai-messaging .icon-img {
     text-align: center;
     margin-bottom: 20px;
 }
 
-.see-what {
+.ai-messaging .see-what {
     padding: 50px 0px 30px 0px;
    
 }
-.unmatched{
+.ai-messaging .unmatched{
     padding: 50px 0px 50px 0px;
    
 }
-.icon-boc-con {
+.ai-messaging .icon-boc-con {
     max-width: 100%;
   margin-bottom: 20px;
 }
-.icon-boc-con h2 {
+.ai-messaging .icon-boc-con h2 {
     font-size: 30px;
    margin-bottom: 10px;
 }
 }
 @media (max-width: 767px) { 
-.right-icon-side .icon-boc-con {
+.ai-messaging .right-icon-side .icon-boc-con {
   
     padding-right: 0px;
 }
-.right-icon-side {
+.ai-messaging .right-icon-side {
     order: 4;
 }
-.mobile-order {
+.ai-messaging .mobile-order {
     order: 3;
 }
-.unmatched h2 {
+.ai-messaging .unmatched h2 {
     font-size: 30px;
     margin-bottom: 20px;
 }
-.trust {
+.ai-messaging .trust {
     padding: 30px 0px;
 }
-.trust h4 {
+.ai-messaging .trust h4 {
     font-size: 20px;
 }
-.icon-boc-con h2 {
+.ai-messaging .icon-boc-con h2 {
     font-size: 24px;
     margin-bottom: 10px;
 }
-.icon-img img {
+.ai-messaging .icon-img img {
     max-width: 70px;
     margin: 0 auto;
 }
-.icon-row {
+.ai-messaging .icon-row {
     row-gap: 10px;
 }
-.see-what p {
+.ai-messaging .see-what p {
     font-size: 18px;
     line-height: 30px;
 }
-.see-what, .unmatched{
+.ai-messaging .see-what, .ai-messaging  .unmatched{
     padding: 30px 0px 30px 0px;
    
 }
-.icon-boc-con, .icon-boc-con h2 {
+.ai-messaging .icon-boc-con, .ai-messaging .icon-boc-con h2 {
     text-align: center !important;
 }
-.icon-boc-con {
+.ai-messaging .icon-boc-con {
     max-width: 100%;
     padding: 0px;
     text-align: center;
  
 }
-.icon-boc-con h2 {
+.ai-messaging .icon-boc-con h2 {
     text-align: center;
    
 }
