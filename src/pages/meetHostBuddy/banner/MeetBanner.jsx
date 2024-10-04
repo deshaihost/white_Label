@@ -9,7 +9,6 @@ import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
 import Loader from "../../../helper/Loader";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
-import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
 
 const HouseImg = "https://hostbuddylb.com/meet-hostbuddy/house-img.webp";
 
@@ -104,17 +103,6 @@ const MeetBanner = (props) => {
     }
   }, [messages]);
 
-  // feed back functionality
-  const [feedBackModelOpen, setFeedBackModelOpen] = useState(false);
-  const [feedBackDataGet, setFeedBackDataGet] = useState({ typeThumbs: "", conversationId: "", messageId: "", propertyName: "" });
-  const feedBckModelOpenHndle = (type, messId) => {
-    setFeedBackDataGet({ ...feedBackDataGet, typeThumbs: type, conversationId: sessionId?.session_id, messageId: messId, propertyName: copyChatBotName });
-    setFeedBackModelOpen(true);
-  };
-  const messgFeedBckClose = () => {
-    setFeedBackModelOpen(false);
-  };
-
   console.log(messages,'messagesmessages')
   return (
     <div className="meet-banner">
@@ -138,7 +126,7 @@ const MeetBanner = (props) => {
                 {messages?.map((message, index) => {
                   return (
                     <>
-                      <Message key={index} text={message.text} sender={message.sender} feedBckModelOpen={feedBckModelOpenHndle} feedBackDataGet={feedBackDataGet} />
+                      <Message key={index} text={message.text} sender={message.sender}/>
                     </>
                   );
                 })}
@@ -175,7 +163,6 @@ const MeetBanner = (props) => {
           </div>
 
         </div>
-        <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
       </Container>
     </div>
   );

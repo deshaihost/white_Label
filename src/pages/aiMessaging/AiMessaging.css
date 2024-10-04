@@ -28,6 +28,9 @@
 .ai-messaging .trust {
     padding: 100px 0px 40px 0px;
 }
+.ai-messaging .trust h2 {
+    margin-bottom: 10px;
+}
 .ai-messaging .trust h4 {
     text-align: center;
     font-size: 32px;
@@ -50,7 +53,7 @@
     max-width: 550px;
 }
 .ai-messaging .icon-img img {
-    max-width: 151px;
+    max-width: 130px;
     margin: 0 auto;
 }
 .ai-messaging .icon-img {
@@ -83,6 +86,9 @@
 .ai-messaging .see-what {
     padding: 70px 0px 30px 0px;
     border-bottom: 1px solid #146ef5;
+}
+.ai-messaging .see-what h2 {
+    margin-bottom: 10px;
 }
 .ai-messaging .see-what p {
     font-size: 25px;

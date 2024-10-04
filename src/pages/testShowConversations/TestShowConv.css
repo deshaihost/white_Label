@@ -1,15 +1,16 @@
-.conv-showcase-container .message.subtitle {
+.conv-showcase-container .message.host {
     align-items: center;
     padding: 0;
 }
-.conv-showcase-container .message.title {
+.conv-showcase-container .message.guest {
     padding: 0;
 }
-.conv-showcase-container .message.title p {
+.conv-showcase-container .message.guest p {
     background: #060f26;
     padding: 20px;
+    color: #fff;
 }
-.conv-showcase-container .message.title {
+.conv-showcase-container .message.guest {
     padding: 0;
 }
 
@@ -59,7 +60,7 @@
 .conv-showcase-container .chat-box::-webkit-scrollbar {
     display: none; 
 }
-.conv-showcase-container .main-chat-box .message.subtitle p {
+.conv-showcase-container .main-chat-box .message.host p {
     background: #2e2e2e;
 }
 .conv-showcase-container .chat-box span {
@@ -74,21 +75,28 @@
 .conv-showcase-container .arwow.prev , .conv-showcase-container .main-chat-box .Show-Icon111{
     opacity: 0;
 }
-.conv-showcase-container .message.title p, .conv-showcase-container .message.subtitle  p {
+.conv-showcase-container .message.guest p, .conv-showcase-container .message.host  p {
     font-size: 18px;
     line-height: 30px;
     padding: 13px;
     margin: 0px;
 }
-.conv-showcase-container .message.title {
+.conv-showcase-container .message.guest {
     justify-content: flex-start;
     align-items: flex-start;
     display: inline-flex;
     position: relative;
     animation: msgreceive .3s ease-in forwards;
 }
+.conv-showcase-container .message img {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 100%;
+    object-fit: cover;
+}
 
-.conv-showcase-container .message.subtitle {
+.conv-showcase-container .message.host {
     align-self: flex-end;
     display: inline-flex;
     align-items: flex-start;
@@ -147,7 +155,7 @@
     .conv-showcase-container .chat-box {
         flex: 0 0 85%;
     }
-    .conv-showcase-container .message.title p, .conv-showcase-container .message.subtitle  p {
+    .conv-showcase-container .message.guest p, .conv-showcase-container .message.host  p {
         font-size: 15px;
         line-height: 25px;
         padding: 13px;

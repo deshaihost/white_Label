@@ -43,13 +43,13 @@ const AiMessaging = () => {
                 <h2>
                   <span className="color-change">20 hours </span>per day
                 </h2>
-                <p>Average hours of AI coverage per day for active properties.</p>
+                <p>Average hours of AI coverage per day for our active properties.</p>
               </div>
             </div>
             <div className="col-lg-10 col-md-10 text-right right-icon-side">
               <div className="icon-boc-con">
                 <h2>
-                  <span className="color-change">70%</span> of active users.
+                  <span className="color-change">70%</span> of active users
                 </h2>
                 <p>Schedule AI coverage for 24 hours a day for their properties.</p>
               </div>
@@ -67,7 +67,7 @@ const AiMessaging = () => {
             <div className="col-lg-10 col-md-10">
               <div className="icon-boc-con">
                 <h2>Over  <span className="color-change">92% </span>more cost-effective</h2>
-                <p>Than human coverage</p>
+                <p>Than human coverage.</p>
               </div>
             </div>
           </div>
