@@ -11,7 +11,7 @@ const Plans = () => {
                     <div className="col-md-6">
                         <div className="plan-box">
                             <h3>Discover The <strong>Power</strong> Of HostBuddy</h3>
-                            <Link to='/meet-hostbuddy' className='link-btn filled-btn'>Meet HostBuddy</Link>
+                            <Link to='/ai-messaging' className='link-btn filled-btn'>Learn More</Link>
                         </div>
                     </div>
                     <div className="col-md-6">

@@ -55,6 +55,7 @@ const Works = () => {
                             <div className="works-content">
                                 <h3><strong>Industry-Leading</strong> AI Technology</h3>
                                 <p>HostBuddy is built with effective guest communication at the core of its design, using the most advanced AI available today. It is trained to be conversational, solution-focused, and perhaps most importantly, to sound like a human.</p>
+                                <Link to='/ai-messaging'>Learn More &#8594;</Link>
                             </div>
                         </div>
                         <div className="col-lg-6">

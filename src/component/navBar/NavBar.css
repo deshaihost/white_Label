@@ -144,8 +144,18 @@ header.header {
     width: 100%;
     z-index: 9;
 }
-
-
+@media (max-width: 1399px) { 
+    .nav-buttons .link-btn {
+        font-size: 17px;
+        padding: 10px 25px;
+    }
+}
+@media (max-width: 1199.98px) { 
+    .nav-buttons .link-btn {
+        font-size: 15px;
+        padding: 10px 16px;
+    }
+}
 
 @media only screen and (max-width: 991px) {
     .navbar-collapse:not(.show) {

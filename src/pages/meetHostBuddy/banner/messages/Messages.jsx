@@ -1,7 +1,8 @@
 import React from "react";
-import BotImg from "../../../../public/img/logo/logoGraphicOnlySquare.png";
-import UserImg from "../../../../public/img/userimg2.png";
+import BotImg from "../../../../public/img/logo/logoGraphicOnlySquare.webp";
+import UserImg from "../../../../public/img/userimg2.webp";
 import Loader from "../../../../helper/Loader";
+
 
 function Message({ key, text, sender, feedBckModelOpen, feedBackDataGet }) {
   const { response, message_id } = text ? text : {};
