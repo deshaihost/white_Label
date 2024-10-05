@@ -39,7 +39,7 @@ const ownerRezPmsPartners = () => {
           <BlogArticleSidebar contents={sideBarContents} />
           <div className="blog-article-content">
             <p>We're thrilled to announce our new partnership with <a href='https://www.ownerrez.com/?utm_source=hostbuddyai&utm_medium=website&utm_campaign=hostbuddyai' target='_blank' rel='noreferrer noopener'>OwnerRez</a> Property Management Software, bringing HostBuddy's advanced AI-powered guest communication to the OwnerRez vacation rental management toolkit.</p>
-            <h3>With HostBuddy, OwnerRez users can now:</h3>
+            <h2>With HostBuddy, OwnerRez users can now:</h2>
             <ul>
               <li>Leverage industry-leading AI technology for automated guest communication across all platforms.</li>
               <li>Boost revenue with automated guest upsells for vacant nights and inquiry winbacks.</li>
@@ -83,7 +83,7 @@ const ownerRezPmsPartners = () => {
             </div>
 
             <div id="streamline-operations">
-              <h3>Streamline Operations with Smart Controls</h3>
+              <h2>Streamline Operations with Smart Controls</h2>
               <p>HostBuddy keeps you informed and in control:</p>
               <br />
               <ul>
@@ -98,7 +98,7 @@ const ownerRezPmsPartners = () => {
             </div>
 
             <div id="elite-pms">
-              <h3>OwnerRez is an Elite Property Management System</h3>
+              <h2>OwnerRez is an Elite Property Management System</h2>
               <p>Experience the difference of “Elite.” OwnerRez is internationally recognized as a leader in the vacation rental industry for channel management, CRM, PM, accounting, messaging, and websites.</p>
               <br />
               <p>Integrate with all major vacation rental channels to seamlessly sync availability, rates, rules, and listing content. Get your own modern fast website, process payments directly, manage inquiries, communication, and guest checkout with e-sign renter agreements.</p>
