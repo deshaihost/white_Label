@@ -6,6 +6,8 @@ import Clock from "../../helper/staticImage/clock.webp";
 import TwentyFour from "../../helper/staticImage/24 hours.webp";
 import Money from "../../helper/staticImage/money-bag.webp";
 
+import TryItOutCTA from "../home/tryItOut/tryItOut";
+
 
 const AiMessaging = () => {
   return (
@@ -17,8 +19,8 @@ const AiMessaging = () => {
           </h2>
           <div className="row first-section">
             <div className="col-lg-7">
-              <p>This is where we excel. HostBuddy AI has been thoroughly optimized for natural-sounding conversation, critical thinking, effective troubleshooting, and grounded responses and behavior.</p>
-              <p>Simply put: HostBuddy AI is the most advanced AI solution in short-term rentals, achieving a level of performance and trust that is unprecedented in the industry.</p>
+              <p>HostBuddy's greatest strength is the quality and fluency of its responses. We've spent countless hours optimizing HostBuddy for natural-sounding conversation, critical thinking, effective troubleshooting, and grounded responses and behavior.</p>
+              <p>We pride ourselves in providing the most fluent AI communication in short-term rentals, achieving performance and trust that is unprecedented in the industry.</p>
             </div>
             <div className="col-lg-5">
               <img src={NightHouse} alt=" " />
@@ -77,7 +79,8 @@ const AiMessaging = () => {
           </div>
         </div>
       </div>
-      <TestShowConvIndex titles={['Inquiries']}/>
+      <TestShowConvIndex titles={['24 Hour Troubleshooting', 'Inquiry Handling', 'Smart Deferral']}/>
+      <TryItOutCTA />
     </div>
   );
 };

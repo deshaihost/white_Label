@@ -231,7 +231,7 @@ const ReviewRemoval = ({allPropertyNamesList}) => {
         <p>HostBuddy compares guest conversations with associated reviews to determine potential review removal opportunities. If HostBuddy determines a review could be removed, it will generate a script for the host to report to the OTA.</p>
       </div>
       <p style={{ textAlign:'center', fontSize:'14px', color:'rgb(255, 165, 0)', marginTop:'20px', marginBottom:'20px' }}>
-        Review removal is currently in beta. Full release is scheduled for September 2024.
+        Review removal is currently in beta. Full release is scheduled for October 2024.
       </p>
 
       <div className="action-select" style={{width:"100%"}}> {/* hijack this class from ActionItemsTable.jsx, for filter component styling */}

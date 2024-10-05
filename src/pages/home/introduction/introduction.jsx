@@ -17,6 +17,7 @@ const Introduction = () => {
 
             <div className="introduction-content">
                 <p>Created by hosts, for hosts, HostBuddy AI is the leading messaging automation software in the short-term rental industry. With the ability to communicate with your guests directly through your property management system, HostBuddy AI uses information about your properties to provide quality support to your guests. Host with ease and let HostBuddy handle guest questions, troubleshooting, and issue escalation on your behalf.</p>
+                <Link to='/ai-messaging'>Learn More &#8594;</Link>
             </div>
         </section>
     )
