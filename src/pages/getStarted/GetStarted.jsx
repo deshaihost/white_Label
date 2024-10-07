@@ -53,7 +53,7 @@ const GetStarted = () => {
             </Col>
             
             <Col lg={12}>
-              <div className="border border-primary p-3 p-md-5 rounded-15 welcome_steps step_odd">
+              <div className="border border-primary p-3 p-md-5 rounded-15 welcome_steps step_odd blur-background-top-right">
                 <img src={step1img} className="img-fluid" alt="" />
                 <div className="content-container d-flex flex-column">
                   <h3 className="text-white mb-4 fs-4 samsung-bold">1. Connect your PMS</h3>
@@ -67,7 +67,7 @@ const GetStarted = () => {
             </Col>
 
             <Col lg={12}>
-              <div className="border border-primary p-3 p-md-5 rounded-15 welcome_steps step_even">
+              <div className="border border-primary p-3 p-md-5 rounded-15 welcome_steps step_even blur-background-top-left">
                 <div className="content-container d-flex flex-column">
                   <h3 className="text-white mb-4 fs-4 samsung-bold">2. Add your Properties</h3>
                   <p className="fs-6 color-light-grey mb-4">If you’ve connected your PMS, select “Import Properties”, then choose which listings you’d like to import into HostBuddy. Property details and live guest data will be automatically imported from your PMS.</p>
@@ -82,7 +82,7 @@ const GetStarted = () => {
             </Col>
 
             <Col lg={12}>
-              <div className="border border-primary p-3 p-md-5 rounded-15 welcome_steps step_odd">
+              <div className="border border-primary p-3 p-md-5 rounded-15 welcome_steps step_odd blur-background-top-right">
                 <img src={step3img} className="img-fluid" alt="" />
                 <div className="content-container d-flex flex-column">
                   <h3 className="text-white mb-4 fs-4 samsung-bold">3. Set Knowledge Base (Autofill Property Details)</h3>
@@ -97,7 +97,7 @@ const GetStarted = () => {
             </Col>
 
             <Col lg={12}>
-              <div className="border border-primary p-3 p-md-5 rounded-15 welcome_steps step_even">
+              <div className="border border-primary p-3 p-md-5 rounded-15 welcome_steps step_even blur-background-top-left">
                 <div className="content-container d-flex flex-column">
                   <h3 className="text-white mb-4 fs-4 samsung-bold">4. Try it out!</h3>
                   <p className="fs-6 color-light-grey mb-4">Put HostBuddy to the test by navigating back to the properties page and selecting “Test property” next to the property of your choosing. Ask HostBuddy your most common guest questions and watch it handle them with ease.</p>
@@ -112,7 +112,7 @@ const GetStarted = () => {
             </Col>
 
             <Col lg={12}>
-              <div className="border border-primary p-3 p-md-5 rounded-15 welcome_steps step_odd">
+              <div className="border border-primary p-3 p-md-5 rounded-15 welcome_steps step_odd blur-background-top-right">
                 <img src={step5img} className="img-fluid" alt="" />
                 <div className="content-container d-flex flex-column">
                   <h3 className="text-white mb-4 fs-4 samsung-bold">5. Schedule</h3>

@@ -18,11 +18,13 @@
 .get_started .step_odd {
   grid-template-columns: 500px 1fr;
   margin-bottom: 70px;
+  background: #000212;
 }
 
 .get_started .step_even {
   grid-template-columns: 1fr 500px;
   margin-bottom: 70px;
+  background: #000212;
 }
 
 .get_started h3 strong {

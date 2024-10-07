@@ -303,9 +303,13 @@ const ListIntegrationProperties = () => {
                                 </>
                               )}
 
-                              <Button className="border-0 shadow-none bg-none p-0 fs-5" onClick={() => handleCalenderModalOpen(properties)}>
-                                <CiCalendar className="text-primary" />
+                              <Button className="border-0 shadow-none bg-none p-0 fs-5" onClick={() => handleCalenderModalOpen(properties)} style={{cursor:'pointer'}}>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                  <CiCalendar className="text-primary" />
+                                  <p style={{margin:'2px 0 0 4px', fontSize:'14px', color:'#146ef5', cursor:'pointer'}}>Schedule</p>
+                                </div>
                               </Button>
+
                             </div>
                           )}
                           {is_locked ? (
