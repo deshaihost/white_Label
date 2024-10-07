@@ -109,7 +109,7 @@ const SmartTemplates = ({allPropertyNamesList}) => {
 
 
   return (
-    <div className="smart_templates_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "20px"}}>
+    <div className="smart_templates_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius:"20px", margin:"20px", background:'#000212'}}>
       {selectedSection === "reviewUpsells" && (
         <ReviewUpsells setSection={setSelectedSection} settingsApiData={reviewSettingsApiData} setSettingsApiData={setReviewSettingsApiData} localSettingsData={reviewLocalSettingsData} setLocalSettingsData={setReviewLocalSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getReviewSettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getReviewUpcomingMessagesLoading} upcomingMessagesData={reviewUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList} />
       )}

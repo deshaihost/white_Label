@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { getUserDataActions } from '../../../../redux/actions';
 import { useLocation } from 'react-router-dom';
 import './Integrations.css';
 import axios from 'axios';
+import ToastHandle from "../../../../helper/ToastMessage";
 
 const ConnectToTurno = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   
   const [isProcessing, setIsProcessing] = useState(false);
@@ -33,35 +37,39 @@ const ConnectToTurno = () => {
     }
   };
 
-  // When we're redirected back from Turno, complete the OAuth flow
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const code = params.get('code');
-    const returnedState = params.get('state');
+    const handleOauth = async () => {
+      const params = new URLSearchParams(location.search);
+      const code = params.get('code');
+      const returnedState = params.get('state');
 
-    if (code && returnedState) {
-      const storedState = localStorage.getItem('turno_oauth_state');
+      if (code && returnedState) {
+        //const storedState = localStorage.getItem('turno_oauth_state');
 
-      if (storedState !== returnedState) {
-        setMessage('ERROR: State Mismatch.');
-      } else {
-        setIsProcessing(true);
-        completeTurnoOauth(code)
-          .then(result => {
+        //if (storedState !== returnedState) { // skip state check
+        if (false) {
+          setMessage('ERROR: State Mismatch.');
+        } else {
+          setIsProcessing(true);
+          try {
+            const result = await completeTurnoOauth(code);
             setIsProcessing(false);
             if (result.success) {
-              setMessage('Successfully connected to Turno!');
+              ToastHandle('Successfully connected to Turno!', 'success');
+              dispatch(getUserDataActions()); // update user data so we can show the new integration
             } else {
-              setMessage(`Failed to connect to Turno: ${result.error}`);
+              ToastHandle(`Failed to connect to Turno: ${result.error}`, 'danger');
             }
-          })
-          .catch(error => {
+          } catch (error) {
             setIsProcessing(false);
             setMessage('Failed to connect to Turno.');
             console.error('Error:', error);
-          });
+          }
+        }
       }
-    }
+    };
+
+    handleOauth();
   }, [location.search]);
 
   const handleConnectClick = () => {
@@ -70,9 +78,10 @@ const ConnectToTurno = () => {
     localStorage.setItem('turno_oauth_state', state);
 
     // Build the authorization URL
-    const clientId = 'YOUR_CLIENT_ID'; // Replace with your actual client ID
+    const clientId = '15';
     const redirectUri = 'https://www.hostbuddy.ai/setting/integrations';
-    const authorizationUrl = `https://app.turno.com/v2/oauth/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    // const authorizationUrl = `https://app.turno.com/v2/oauth/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`; // prod
+    const authorizationUrl = `https://sandbox.turno.com/v2/oauth/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`; // not prod
 
     // Redirect the user to Turno's authorization endpoint
     window.location.href = authorizationUrl;

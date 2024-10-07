@@ -90,7 +90,7 @@ const SettingIndex = () => {
                   )}
                   {/*
                   {interFaceTypes?.integrations === interFaceSettings && (
-                    <IntegrationsIndex />
+                    <IntegrationsIndex ApiUserData={userData} />
                   )}
                   */}
                   {interFaceTypes?.subscription === interFaceSettings && (
