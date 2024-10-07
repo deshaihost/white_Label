@@ -55,6 +55,7 @@ const Works = () => {
                             <div className="works-content">
                                 <h3><strong>Industry-Leading</strong> AI Technology</h3>
                                 <p>HostBuddy is built with effective guest communication at the core of its design, using the most advanced AI available today. It is trained to be conversational, solution-focused, and perhaps most importantly, to sound like a human.</p>
+                                <Link to='/ai-messaging'>Learn More &#8594;</Link>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -66,7 +67,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h3>Schedule Based On <strong>Your Needs</strong></h3>
-                                <p>Think of HostBuddy as the most dedicated employee you could have. Available for automating communication anytime you need support, HostBuddy can be scheduled to fit your specific coverage needs. Say goodbye to lockouts, late-night messages, and issue troubleshooting—HostBuddy will take it from here.</p>
+                                <p>For our users: lockouts, late-night messages, and issue troubleshooting are a thing of the past. HostBuddy can be scheduled to fit your specific coverage needs, automating communication anytime you need support.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">

@@ -45,6 +45,8 @@ import SettingIndex from "../pages/settings/SettingIndex";
 import InboxIndex from "../pages/inbox/InboxIndex";
 import GetConversationsTest from "../helper/getConversationsTest/getConversationsTest";
 import ActionItemsIndex from "../pages/actionItems/ActionItemsIndex";
+import TestShowConvIndex from "../pages/testShowConversations/TestShowConvIndex";
+import AiMessaging from "../pages/aiMessaging/AiMessaging";
 
 const Routing = () => {
   const location = useLocation();
@@ -90,12 +92,11 @@ const Routing = () => {
       document.head.appendChild(script);
     };
 
-    // Add Google Ads script to the head of the document
     const addGoogleScript = () => {
       const script1 = document.createElement("script");
       script1.async = true;
-      script1.src =
-        "https://www.googletagmanager.com/gtag/js?id=AW-16607279889";
+      //script1.src = "https://www.googletagmanager.com/gtag/js?id=AW-16607279889";
+      script1.src = "https://www.googletagmanager.com/gtag/js?id=AW-16726426864";
       document.head.appendChild(script1);
 
       const script2 = document.createElement("script");
@@ -103,16 +104,16 @@ const Routing = () => {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'AW-16607279889');
+        gtag('config', 'AW-16726426864');
       `;
+      //gtag('config', 'AW-16607279889');
       document.head.appendChild(script2);
     };
 
     // Add the scripts to the head of the document
     const existingScript = document.getElementById("site-profiling");
     const loadedScript = document.getElementById("profiling-loaded-script");
-    if (!window.dataLayer) {
-      // window.dataLayer is a global array that the Google Tag Manager uses to collect and store data. If window.dataLayer is not defined, it means the Google tracking script has not been added to the page yet. This prevents the Google tracking script from being added multiple times if the useEffect hook runs more than once.
+    if (!window.dataLayer) { // window.dataLayer is a global array that the Google Tag Manager uses to collect and store data. If window.dataLayer is not defined, it means the Google tracking script has not been added to the page yet. This prevents the Google tracking script from being added multiple times if the useEffect hook runs more than once.
       addGoogleScript(); // add regardless of what page we're on. We need this in the user portal so we can report conversions during checkout
     }
 
@@ -129,8 +130,7 @@ const Routing = () => {
       "/testing-questions",
     ];
     if (pathnames_to_profile.includes(location.pathname)) {
-      if (!existingScript && false) {
-        // script adding DISABLED
+      if (!existingScript && false) { // script adding DISABLED
         addScript();
       }
     } else {
@@ -149,7 +149,8 @@ const Routing = () => {
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/reset-password" &&
-        location.pathname !== "/forgot" && <NavBar />}
+        location.pathname !== "/forgot" &&
+        location.pathname !== "/test-show-conversations" && <NavBar />}
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -180,6 +181,14 @@ const Routing = () => {
         <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
+        {/* <Route
+          path="/test-show-conversations"
+          element={<TestShowConvIndex />}
+        ></Route> */}
+        <Route
+          path="/ai-messaging"
+          element={<AiMessaging />}
+        ></Route>
 
         <Route
           path="/become-an-affiliate"
@@ -320,7 +329,8 @@ const Routing = () => {
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/forgot" &&
-        location.pathname !== "/inbox" && <Footer />}
+        location.pathname !== "/inbox" &&
+        location.pathname !== "/test-show-conversations" && <Footer />}
     </div>
   );
 };

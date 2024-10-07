@@ -9,7 +9,6 @@ import { stateEmptyActions } from "../../../redux/stateEmpty/actions";
 import Loader from "../../../helper/Loader";
 import loaderGif from "../../../public/img/new_loader.gif";
 import ToastHandle from "../../../helper/ToastMessage";
-import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
 
 const HouseImg = "https://hostbuddylb.com/meet-hostbuddy/house-img.webp";
 
@@ -104,17 +103,6 @@ const MeetBanner = (props) => {
     }
   }, [messages]);
 
-  // feed back functionality
-  const [feedBackModelOpen, setFeedBackModelOpen] = useState(false);
-  const [feedBackDataGet, setFeedBackDataGet] = useState({ typeThumbs: "", conversationId: "", messageId: "", propertyName: "" });
-  const feedBckModelOpenHndle = (type, messId) => {
-    setFeedBackDataGet({ ...feedBackDataGet, typeThumbs: type, conversationId: sessionId?.session_id, messageId: messId, propertyName: copyChatBotName });
-    setFeedBackModelOpen(true);
-  };
-  const messgFeedBckClose = () => {
-    setFeedBackModelOpen(false);
-  };
-
   console.log(messages,'messagesmessages')
   return (
     <div className="meet-banner">
@@ -123,26 +111,27 @@ const MeetBanner = (props) => {
           <h1>Meet HostBuddy</h1>
           <p>Try asking HostBuddy your most commonly received guest questions, and watch it handle them with ease. Its responses here are based on the details of a fictional property, but you’ll be able to seamlessly tailor it to your own!</p>
           <p style={{marginTop:"18px"}}>Easily <strong>connect your PMS</strong> to allow HostBuddy to respond to guest messages over your existing communication channels.</p>
+          <p style={{marginTop:"18px"}}><Link to='/ai-messaging'>Learn More</Link> about HostBuddy's AI messaging capabilities.</p>
           {/* <Link to="/" className="link-btn filled-btn"> Learn More </Link> */}
         </div>
         <div className="row">
           <div className="col-lg-5" id="house-image-desktop">
-            <div className="house-img">
+            <div className="house-img blur-background-bottom-right">
               <img src={HouseImg} alt="house-img" className="img-fluid" />
             </div>
           </div>
 
           <div className="col-lg-7">
-            <div className="chatbot">
+            <div className="chatbot blur-background-top-right">
               <div className="message-list" ref={messageListRef}>
                 {messages?.map((message, index) => {
                   return (
                     <>
-                      <Message key={index} text={message.text} sender={message.sender} feedBckModelOpen={feedBckModelOpenHndle} feedBackDataGet={feedBackDataGet} />
+                      <Message key={index} text={message.text} sender={message.sender}/>
                     </>
                   );
                 })}
-                {updateMessageRespLoading && <Loader />}
+                {updateMessageRespLoading && <Message key={'bot_thinking_bubble'} sender={'bot'}/>}
                 <div ref={messagesEndRef} />
               </div>
               <div className="input-container">
@@ -163,19 +152,20 @@ const MeetBanner = (props) => {
 
 
           <div id="house-image-mobile">
-            {!showImgMobile &&
-              <Link to="#" onClick={() => setShowImgMobile(true)}>Show Fictional Property</Link>
-            }
+            {!showImgMobile && (
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Link to="#" onClick={() => setShowImgMobile(true)}>Show Fictional Property</Link>
+              </div>
+            )}
 
             {showImgMobile &&
-              <div className="house-img">
+              <div className="house-img blur-background-top-left">
                 <img src={HouseImg} alt="house-img" className="img-fluid" />
               </div>
             }
           </div>
 
         </div>
-        <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
       </Container>
     </div>
   );

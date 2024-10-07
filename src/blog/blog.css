@@ -280,6 +280,13 @@
   font-weight: 600;
 }
 
+.h3_new h3{
+  font-weight: bold;
+  font-size: 1.15em;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
 @media screen and (max-width: 991px) {
   .blog-article {
     padding: 20px;

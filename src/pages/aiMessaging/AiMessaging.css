@@ -1,0 +1,202 @@
+.ai-messaging {
+    margin-bottom: 50px;
+}
+.ai-messaging .unmatched {
+    padding: 50px 0px;
+}
+.ai-messaging .unmatched h2 {
+    font-size: 40px;
+    text-align: center;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+.ai-messaging .unmatched h2 span {
+    color: #146ef5;
+}
+.ai-messaging .unmatched p {
+    color: #FFF;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 auto 10px;
+}
+.ai-messaging .first-section p {
+    max-width: 604px;
+}
+.ai-messaging .unmatched .row {
+    align-items: center;
+    margin: 0px;
+}
+.ai-messaging .trust {
+    padding: 100px 0px 40px 0px;
+}
+.ai-messaging .trust h2 {
+    margin-bottom: 10px;
+}
+.ai-messaging .trust h4 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    color: #fff;
+}
+.ai-messaging .color-change {
+    color: #91dbff !important;
+}
+.ai-messaging .trust h4 {
+    color: #b1abab;
+}
+.ai-messaging .icon-boc-con h2 {
+    text-align: left;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+.ai-messaging .icon-boc-con {
+    padding-left: 35px;
+    max-width: 550px;
+}
+.ai-messaging .icon-img img {
+    max-width: 130px;
+    margin: 0 auto;
+}
+.ai-messaging .icon-img {
+    text-align: center;
+}
+.ai-messaging .right-icon-side p {
+    margin-left: auto;
+}
+.ai-messaging .trust h4 {
+    color: #b1abab;
+    font-size: 25px;
+}
+.ai-messaging .unmatched  .icon-boc-con p {
+    font-size: 18px;
+    line-height: 30px;
+    max-width: 410px;
+    margin: inherit;
+}
+.ai-messaging .right-icon-side .icon-boc-con {
+    margin-left: auto;
+    text-align: right;
+}
+.ai-messaging .right-icon-side .icon-boc-con h2 {
+    text-align: right;
+}
+.ai-messaging .right-icon-side .icon-boc-con {
+    padding-left: 0;
+    padding-right: 35px;
+}
+.ai-messaging .see-what {
+    padding: 70px 0px 30px 0px;
+    border-bottom: 1px solid #146ef5;
+}
+.ai-messaging .see-what h2 {
+    margin-bottom: 10px;
+}
+.ai-messaging .see-what p {
+    font-size: 25px;
+    text-align: center;
+    line-height: 32px;
+    color: #b1abab;
+}
+
+
+/* ==============responsive part start============= */
+@media (max-width: 991.98px) { 
+.ai-messaging .unmatched h2 {
+    font-size: 39px;
+     margin-bottom: 20px;
+  
+}
+.ai-messaging .trust h4 {
+   font-size: 25px;
+    
+}
+.ai-messaging .icon-boc-con p {
+    font-size: 18px;
+    line-height: 30px;
+}
+.ai-messaging .icon-row {
+    row-gap: 30px;
+}
+.ai-messaging .icon-img img {
+    max-width: 100px;
+    margin: 0 auto;
+}
+.ai-messaging .icon-img {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.ai-messaging .see-what {
+    padding: 50px 0px 30px 0px;
+   
+}
+.ai-messaging .unmatched{
+    padding: 50px 0px 50px 0px;
+   
+}
+.ai-messaging .icon-boc-con {
+    max-width: 100%;
+  margin-bottom: 20px;
+}
+.ai-messaging .icon-boc-con h2 {
+    font-size: 30px;
+   margin-bottom: 10px;
+}
+}
+@media (max-width: 767px) { 
+.ai-messaging .right-icon-side .icon-boc-con {
+  
+    padding-right: 0px;
+}
+.ai-messaging .right-icon-side {
+    order: 4;
+}
+.ai-messaging .mobile-order {
+    order: 3;
+}
+.ai-messaging .unmatched h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+.ai-messaging .trust {
+    padding: 30px 0px;
+}
+.ai-messaging .trust h4 {
+    font-size: 20px;
+}
+.ai-messaging .icon-boc-con h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.ai-messaging .icon-img img {
+    max-width: 70px;
+    margin: 0 auto;
+}
+.ai-messaging .icon-row {
+    row-gap: 10px;
+}
+.ai-messaging .see-what p {
+    font-size: 18px;
+    line-height: 30px;
+}
+.ai-messaging .see-what, .ai-messaging  .unmatched{
+    padding: 30px 0px 30px 0px;
+   
+}
+.ai-messaging .icon-boc-con, .ai-messaging .icon-boc-con h2 {
+    text-align: center !important;
+}
+.ai-messaging .icon-boc-con {
+    max-width: 100%;
+    padding: 0px;
+    text-align: center;
+ 
+}
+.ai-messaging .icon-boc-con h2 {
+    text-align: center;
+   
+}
+
+}

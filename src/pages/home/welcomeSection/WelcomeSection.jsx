@@ -1,6 +1,7 @@
 import React from "react";
 import "./WelcomeSection.css";
 import Container from "react-bootstrap/Container";
+import { Link } from "react-router-dom";
 import Review1 from "../../../public/img/home/host.png";
 import Review2 from "../../../public/img/home/host1.png";
 import Review3 from "../../../public/img/home/host2.png";
@@ -57,7 +58,7 @@ const WelcomeSection = () => {
             <div className="col-md-8">
               <div className="review-text text-center introduction-heading">
                 <h2>The Global Choice for <strong>AI-Powered Guest Messaging</strong></h2>
-                <p>
+                <p style={{marginBottom: "10px"}}>
                   Created by hosts, for hosts, HostBuddy AI is the leading
                   messaging automation software in the short-term rental
                   industry. With the ability to communicate with your guests
@@ -67,6 +68,7 @@ const WelcomeSection = () => {
                   handle guest questions, troubleshooting, and issue escalation
                   on your behalf.
                 </p>
+                <Link to='/ai-messaging'>Learn More &#8594;</Link>
               </div>
             </div>
             <div className="col-md-2">

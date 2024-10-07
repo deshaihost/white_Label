@@ -6,7 +6,7 @@ import SettingSideBarIndex from "./settingSideBar/SettingSideBarIndex";
 import AdvancedSettingsIndex from "./settingContants/advancedSettings/AdvancedSettingsIndex";
 import UpsellsIndex from './settingContants/upsells/upsells';
 import SubscriptionIndex from "./settingContants/subscription/SubscriptionIndex";
-import IntegrationsIndex from "./settingContants/integrations/IntegrationsIndex";
+//import IntegrationsIndex from "./settingContants/integrations/IntegrationsIndex";
 import { Helmet } from "react-helmet";
 import UserInformationSection from "../account/userInformationSection";
 import AccountContactSection from "../account/contactSection";
@@ -88,9 +88,11 @@ const SettingIndex = () => {
                   {interFaceTypes?.upsells === interFaceSettings && (
                     <UpsellsIndex />
                   )}
+                  {/*
                   {interFaceTypes?.integrations === interFaceSettings && (
                     <IntegrationsIndex ApiUserData={userData} />
                   )}
+                  */}
                   {interFaceTypes?.subscription === interFaceSettings && (
                     <SubscriptionIndex />
                   )}

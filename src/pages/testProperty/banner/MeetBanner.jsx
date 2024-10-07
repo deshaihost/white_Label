@@ -139,30 +139,31 @@ const MeetBanner = (props) => {
     setJustificationText(justificationText);
   };
 
-console.log(messages,'propertyTest')
   return (
     <div className="meet-banner">
       <Container>
         <div className="banner-heading">
           <h2>
-            {" "}
             {getPropertyName !== undefined ? getPropertyName : ""}
           </h2>
-          <Link style={{width:'200px'}} to="/properties" className="link-btn filled-btn">
+          <Link style={{width:'200px', marginTop:'0'}} to="/properties" className="link-btn filled-btn">
             Back
           </Link>
         </div>
         <div className="row">
 
           <div className="col-lg-12">
-            <div className="chatbot">
+            <div className="chatbot blur-background-top-left blur-background-bottom-right">
               <div className="message-list" ref={messageListRef}>
                 {messages?.map((message, index) => {
                   return (
                     <Message key={index} text={message.text} sender={message.sender} feedBckModelOpen={feedBckModelOpenHndle} handleJustificationClick={handleJustificationClick} feedBackDataGet={feedBackDataGet} prevMsgText={messages[index - 1]?.text} isInitialMessage={index <= 1} />
                   );
                 })}
-                {updateMessageRespLoading && <Loader />}
+                {updateMessageRespLoading && (
+                  // This will show as an animated bubble indicating that the bot is thinking
+                  <Message key={'bot_responding'} sender={'bot'} />
+                )}
                 <div ref={messagesEndRef} />
               </div>
               <div className="input-container">

@@ -2,10 +2,12 @@ import React from 'react';
 import './blog.css';
 import { Helmet } from 'react-helmet';
 
-const five_best_thumbnail = "https://hostbuddylb.com/blog/5_best_PMS_6-13/Thumbnail_small.webp";
-const automate_str_thumbnail = "https://hostbuddylb.com/blog/automate_str_6-25/thumbnail.webp";
+const five_best_thumbnail = "https://i.postimg.cc/GtkGyqCm/5-Best-Property-Management-Software-of-2024.webp";
+const automate_str_thumbnail = "https://i.postimg.cc/2ym3PYsC/How-to-Automate-Your-Short-Term-Rental-Business.webp";
 const ownerRez_pms_partners_thumbnail = "https://i.postimg.cc/RZhsVfsx/update-owner-Rez-pms-partners-mianimg.webp";
 const why_you_need_ai_thumbnail = "https://i.postimg.cc/vB0xB12C/why-you-need-ai-thumbnail.webp";
+const hostaway_pms_partners_thumbnail = "https://i.postimg.cc/GhGkTmKh/Blog-Header-3.webp"
+const need_virtual_assistant_thumbnail = "https://i.postimg.cc/5yPKZ4Xz/Do-I-Need-a-Virtual-Assistant-for-My-Airbnb-Business.webp"
 
 const BlogLandingPage = () => {
 
@@ -14,6 +16,8 @@ const BlogLandingPage = () => {
       { id:"5_best_PMS_6-13", title:"5 Best Property Management Software of 2024 (Updated)", date:"Jun 13, 2024", img:five_best_thumbnail, description:"Elevate your STR game with 2024's best management software. Find out which tools offer the latest tech and clever automation for hosts." },
       { id:"ownerRez_pms_partners", title:"OwnerRez Partners with HostBuddy AI for Advanced Guest Communication", date:"Sept 17, 2024", img:ownerRez_pms_partners_thumbnail, description:"Discover how OwnerRez integrates with HostBuddy AI to deliver automated guest communication, revenue-boosting upsells, and seamless property management." },
       { id:"why_you_need_ai", title:"5 Reasons Why You Need AI For Your STR Business", date:"Sept 25, 2024", img:why_you_need_ai_thumbnail, description:"AI in short-term rentals is making a transformative impact on the industry. Learn how AI can enhance guest experiences, service operations, and optimize revenue." },
+      { id:"hostaway_pms_partners", title:"HostBuddy AI and Hostaway Partner to Transform Rental Management", date:"Oct 01, 2024", img:hostaway_pms_partners_thumbnail, description:"HostBuddy AI partners with Hostaway, revolutionizing vacation rental management with AI-powered guest communication, boosting revenue, and streamlining operations." },
+      { id:"need_virtual_assistant", title:"Do I Need a Virtual Assistant for My Airbnb Business?", date:"Oct 03, 2024", img:need_virtual_assistant_thumbnail, description:"Discover how virtual assistants can streamline your operations, improve guest communication, and manage tasks for better efficiency and growth." },
     ];
 
     return (
