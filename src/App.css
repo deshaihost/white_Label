@@ -638,6 +638,39 @@ textarea.form-control {
   display: none;
 }
 
+/* CSS for the blue blur background */
+.blur-background-top-left, .blur-background-top-right, .blur-background-bottom-left, .blur-background-bottom-right {
+  position: relative;
+}
+.blur-background-top-left::before, .blur-background-top-right::after, .blur-background-bottom-left::before, .blur-background-bottom-right::after {
+  content: "";
+  position: absolute;
+  width: 281.182px;
+  height: 281.182px;
+  border-radius: 281.182px;
+  background: #146ef5;
+  filter: blur(90px);
+  transform: rotate(20.641deg);
+  flex-shrink: 0;
+  z-index: -1; /* Ensure it appears behind the image */
+}
+.blur-background-top-left::before {
+  top: 0;
+  left: 0;
+}
+.blur-background-top-right::after {
+  top: 0;
+  right: 0;
+}
+.blur-background-bottom-left::before {
+  bottom: 0;
+  left: 0;
+}
+.blur-background-bottom-right::after {
+  bottom: 0;
+  right: 0;
+}
+
 @media only screen and (max-width: 1199px) {
   a,
   .link-btn {

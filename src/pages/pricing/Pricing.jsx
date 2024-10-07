@@ -40,7 +40,7 @@ const Pricing = () => {
           <h1>Pricing</h1>
         </div>
 
-        <div className="pricing-plans-descriptions-lg">
+        <div className="pricing-plans-descriptions-lg blur-background-top-right">
           <h3>HostBuddy Pro</h3>
           <p><strong>Unlimited access</strong> to HostBuddy's AI messaging and core automation features.</p>
           <ul>
