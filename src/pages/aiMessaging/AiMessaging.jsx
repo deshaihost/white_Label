@@ -22,7 +22,7 @@ const AiMessaging = () => {
               <p>HostBuddy's greatest strength is the quality and fluency of its responses. We've spent countless hours optimizing HostBuddy for natural-sounding conversation, critical thinking, effective troubleshooting, and grounded responses and behavior.</p>
               <p>We pride ourselves in providing the most fluent AI communication in short-term rentals, achieving performance and trust that is unprecedented in the industry.</p>
             </div>
-            <div className="col-lg-5">
+            <div className="col-lg-5 blur-background-top-left">
               <img src={NightHouse} alt=" " />
             </div>
           </div>

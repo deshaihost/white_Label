@@ -58,11 +58,13 @@ const TestShowConvIndex = ({ titles }) => {
           ) : (
             <div className="arrow-placeholder"></div>
           )}
-          <div className="chat-box">
-            {messages?.map((message, index) => {
-              const displayText = isTranslated && message.translatedText ? message.translatedText : message.text;
-              return <TestShowConversations key={index} message={{ ...message, text: displayText }} />
-            })}
+          <div className="blur-background-top-left blur-background-bottom-right">
+            <div className="chat-box">
+              {messages?.map((message, index) => {
+                const displayText = isTranslated && message.translatedText ? message.translatedText : message.text;
+                return <TestShowConversations key={index} message={{ ...message, text: displayText }} />
+              })}
+            </div>
           </div>
           {filteredData.length > 1 ? (
             <p className="arwow next" onClick={handleNextClick}>

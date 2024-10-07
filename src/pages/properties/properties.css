@@ -15,6 +15,7 @@
     border-radius: 30px;
     border: 1px solid #2C389E;
     background: #000212;
+    box-shadow: 2px 0px 20px 0px rgba(255, 255, 255, 0.5); /* x-offset, y-offset, blur-radius, spread-radius, color */
 }
 
 .account-container .account_heading {

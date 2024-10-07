@@ -116,13 +116,13 @@ const MeetBanner = (props) => {
         </div>
         <div className="row">
           <div className="col-lg-5" id="house-image-desktop">
-            <div className="house-img">
+            <div className="house-img blur-background-bottom-right">
               <img src={HouseImg} alt="house-img" className="img-fluid" />
             </div>
           </div>
 
           <div className="col-lg-7">
-            <div className="chatbot">
+            <div className="chatbot blur-background-top-right">
               <div className="message-list" ref={messageListRef}>
                 {messages?.map((message, index) => {
                   return (
@@ -131,7 +131,7 @@ const MeetBanner = (props) => {
                     </>
                   );
                 })}
-                {updateMessageRespLoading && <Loader />}
+                {updateMessageRespLoading && <Message key={'bot_thinking_bubble'} sender={'bot'}/>}
                 <div ref={messagesEndRef} />
               </div>
               <div className="input-container">
@@ -152,12 +152,14 @@ const MeetBanner = (props) => {
 
 
           <div id="house-image-mobile">
-            {!showImgMobile &&
-              <Link to="#" onClick={() => setShowImgMobile(true)}>Show Fictional Property</Link>
-            }
+            {!showImgMobile && (
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Link to="#" onClick={() => setShowImgMobile(true)}>Show Fictional Property</Link>
+              </div>
+            )}
 
             {showImgMobile &&
-              <div className="house-img">
+              <div className="house-img blur-background-top-left">
                 <img src={HouseImg} alt="house-img" className="img-fluid" />
               </div>
             }
