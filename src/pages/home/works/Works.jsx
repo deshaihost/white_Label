@@ -67,7 +67,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h3>Schedule Based On <strong>Your Needs</strong></h3>
-                                <p>Think of HostBuddy as the most dedicated employee you could have. Available for automating communication anytime you need support, HostBuddy can be scheduled to fit your specific coverage needs. Say goodbye to lockouts, late-night messages, and issue troubleshooting—HostBuddy will take it from here.</p>
+                                <p>For our users: lockouts, late-night messages, and issue troubleshooting are a thing of the past. HostBuddy can be scheduled to fit your specific coverage needs, automating communication anytime you need support.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
