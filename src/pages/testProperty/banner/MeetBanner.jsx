@@ -144,10 +144,9 @@ const MeetBanner = (props) => {
       <Container>
         <div className="banner-heading">
           <h2>
-            {" "}
             {getPropertyName !== undefined ? getPropertyName : ""}
           </h2>
-          <Link style={{width:'200px'}} to="/properties" className="link-btn filled-btn">
+          <Link style={{width:'200px', marginTop:'0'}} to="/properties" className="link-btn filled-btn">
             Back
           </Link>
         </div>
