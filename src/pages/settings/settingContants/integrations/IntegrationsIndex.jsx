@@ -133,49 +133,53 @@ const IntegrationsIndex = (ApiUserData) => {
         )}
       </div>
 
-      <p style={{fontSize:'14px', textAlign:'center', width:'80%', margin:'40px auto auto'}}>
-        Use the table below to link your HostBuddy properties to the corresponding Turno properties. Click "Submit" at the bottom when finished.
-      </p>
+      {turnoUserId && (
+        <>
+          <p style={{fontSize:'14px', textAlign:'center', width:'80%', margin:'40px auto auto'}}>
+            Use the table below to link your HostBuddy properties to the corresponding Turno properties. Click "Submit" at the bottom when finished.
+          </p>
 
-      <table style={{ marginTop:'50px', width:'100%', borderCollapse:'collapse' }}>
-        <thead>
-          <tr>
-            <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>HostBuddy properties</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>Turno properties</th>
-          </tr>
-        </thead>
-        <tbody>
-          {!getTurnoDataIsLoading ? (
-            propertiesList.map((property, index) => (
-              <tr key={index} style={{ height: '40px', borderBottom: '1px solid white' }}>
-                <td style={{ padding: '10px', fontSize: '14px' }}>{property}</td>
-                <td style={{ padding: '10px' }}>
-                  <select value={selectedTurnoProperties[property] || ''} onChange={(e) => handleSelectChange(property, e.target.value)} style={{ width:'100%'}} className={`form-control ${!selectedTurnoProperties[property] ? 'grey-text' : ''}`}>
-                    <option value="">[None selected]</option>
-                    {apiTurnoProperties.map((turnoProperty) => (
-                      <option key={turnoProperty.id} value={turnoProperty.id} disabled={isOptionDisabled(turnoProperty.id, property)}>
-                        {turnoProperty.alias}
-                      </option>
-                    ))}
-                  </select>
-                </td>
+          <table style={{ marginTop:'50px', width:'100%', borderCollapse:'collapse' }}>
+            <thead>
+              <tr>
+                <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>HostBuddy properties</th>
+                <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>Turno properties</th>
               </tr>
-            ))
-          ) : (
-            <Loader />
-          )}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {!getTurnoDataIsLoading ? (
+                propertiesList.map((property, index) => (
+                  <tr key={index} style={{ height: '40px', borderBottom: '1px solid white' }}>
+                    <td style={{ padding: '10px', fontSize: '14px' }}>{property}</td>
+                    <td style={{ padding: '10px' }}>
+                      <select value={selectedTurnoProperties[property] || ''} onChange={(e) => handleSelectChange(property, e.target.value)} style={{ width:'100%'}} className={`form-control ${!selectedTurnoProperties[property] ? 'grey-text' : ''}`}>
+                        <option value="">[None selected]</option>
+                        {apiTurnoProperties.map((turnoProperty) => (
+                          <option key={turnoProperty.id} value={turnoProperty.id} disabled={isOptionDisabled(turnoProperty.id, property)}>
+                            {turnoProperty.alias}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <Loader />
+              )}
+            </tbody>
+          </table>
 
-      <div style={{display:'flex', justifyContent:'center', marginTop:'40px'}}>
-        {!submitIsLoading ? (
-          <button type="button" className="btn btn-primary" style={{borderRadius:'50px', padding:'10px 20px'}} onClick={handleSubmitClick}>
-            Submit
-          </button>
-        ) : (
-          <Loader />
-        )}
-      </div>
+          <div style={{display:'flex', justifyContent:'center', marginTop:'40px'}}>
+            {!submitIsLoading ? (
+              <button type="button" className="btn btn-primary" style={{borderRadius:'50px', padding:'10px 20px'}} onClick={handleSubmitClick}>
+                Submit
+              </button>
+            ) : (
+              <Loader />
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

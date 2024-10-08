@@ -6,7 +6,7 @@ import SettingSideBarIndex from "./settingSideBar/SettingSideBarIndex";
 import AdvancedSettingsIndex from "./settingContants/advancedSettings/AdvancedSettingsIndex";
 import UpsellsIndex from './settingContants/upsells/upsells';
 import SubscriptionIndex from "./settingContants/subscription/SubscriptionIndex";
-//import IntegrationsIndex from "./settingContants/integrations/IntegrationsIndex";
+import IntegrationsIndex from "./settingContants/integrations/IntegrationsIndex";
 import { Helmet } from "react-helmet";
 import UserInformationSection from "../account/userInformationSection";
 import AccountContactSection from "../account/contactSection";
@@ -59,7 +59,7 @@ const SettingIndex = () => {
         </div>
         <div className="row">
           <div className="col-lg-12 col-xl-12 col-xxl-12">
-            <div className="setting_index_tab_grid text-white">
+            <div className="setting_index_tab_grid text-white blur-background-top-right">
               <div className="setting_tab_title">
                 <SettingSideBarIndex interFaceTypes={interFaceTypes} changeHndl={setInterFaceSettings} activeTab={interFaceSettings}/>
                 <div style={{ marginTop: "20px", textAlign: "center" }}>
@@ -88,11 +88,9 @@ const SettingIndex = () => {
                   {interFaceTypes?.upsells === interFaceSettings && (
                     <UpsellsIndex />
                   )}
-                  {/*
                   {interFaceTypes?.integrations === interFaceSettings && (
                     <IntegrationsIndex ApiUserData={userData} />
                   )}
-                  */}
                   {interFaceTypes?.subscription === interFaceSettings && (
                     <SubscriptionIndex />
                   )}

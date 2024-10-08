@@ -52,6 +52,10 @@
   line-height: 18px;
 }
 
+.settings-integrations {
+  padding: 20px;
+}
+
 .settings-integrations .grey-text {
   color: #777;
 }
@@ -69,4 +73,37 @@
 
 .connect-turno-button .connect-button:hover {
   background-color: blue; /* Blue background on hover */
+}
+
+
+.partner-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  height: auto;
+  border: 2px solid #045ce9;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  background-color: #DDD;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.partner-tile:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 4px 8px rgba(0, 0, 200, 0.8);
+}
+
+.partner-logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.partner-tile p {
+  font-size: 16px;
+  color: #333; /* Dark text color */
+  text-align: center;
 }
