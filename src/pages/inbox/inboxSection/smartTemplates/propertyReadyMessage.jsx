@@ -5,6 +5,7 @@ import customStyles from "../resources/selectStyles";
 import {useState, useEffect, useRef} from "react";
 import "../resources/upsells.css";
 import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
+import { Link } from "react-router-dom";
 //import UpsellMessageModal from "../resources/upsellMessageModal";
 //import ConversationTranscriptModal from "../resources/ConversationTranscriptModal";
 
@@ -21,7 +22,7 @@ default_settings = {
 */
 
 
-const PropertyReadyMessage = ({setSection, settingsApiData, setSettingsApiData, localSettingsData, setLocalSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData, allPropertyNamesList}) => {
+const PropertyReadyMessage = ({setSection, settingsApiData, setSettingsApiData, localSettingsData, setLocalSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData, allPropertyNamesList, userHasTurnoAccount}) => {
 
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
   const [cancelMessageLoading, setCancelMessageLoading] = useState("");
@@ -224,68 +225,77 @@ const PropertyReadyMessage = ({setSection, settingsApiData, setSettingsApiData, 
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
 
-      <div className="row mt-4">
-        <div className="col-lg-8">
-          <div className="d-flex align-items-center gap-5 mb-1">
-            <label className="fs-5">Enable Property Ready Messages</label>
-            <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked, currentSettingsData, setCurrentSettingsData)}/>
-          </div>
-          <p className="settings-label">You currently have property ready messages {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
-        </div>
-      </div>
+      {userHasTurnoAccount ? (
+        <>
 
-      <div className="row mt-5">
-        <div className="col-lg-11 col-12">
-          <label className="fs-5">Request Timing</label>
-          <p className="settings-label mb-2">When should HostBuddy send the message?</p>
-          <div className="row mt-1">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <input type="number" className="form-control" value={currentSettingsData.minutes_after_property_ready}
-                onChange={(e) => setSetting('minutes_after_property_ready', e.target.value, currentSettingsData, setCurrentSettingsData)}
-                style={{ width: '100px', marginRight: '10px' }}
-              />
-              <label className="settings-label" style={{ margin: 0 }}>
-                minutes after the property is marked as ready
-              </label>
+          <div className="row mt-4">
+            <div className="col-lg-8">
+              <div className="d-flex align-items-center gap-5 mb-1">
+                <label className="fs-5">Enable Property Ready Messages</label>
+                <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked, currentSettingsData, setCurrentSettingsData)}/>
+              </div>
+              <p className="settings-label">You currently have property ready messages {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
             </div>
           </div>
-        </div>
-      </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
-
-      <h3 className="available-variables-heading mt-5 text-center">Message</h3>
-
-      <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
-        <div className="available-variables-section">
-        <label className="fs-5">Variables</label>
-        <p className="settings-label">Click to add custom variables to your request message. These variables will change to match the data for each reservation.</p>
-          <div className="available-variables mt-3">
-            {Object.keys(variables).map((key, index) => (
-              <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('upsellMessage'), `[[${key}]]`, currentSettingsData, setCurrentSettingsData)}>{variables[key]}</span>
-            ))}
+          <div className="row mt-5">
+            <div className="col-lg-11 col-12">
+              <label className="fs-5">Request Timing</label>
+              <p className="settings-label mb-2">When should HostBuddy send the message?</p>
+              <div className="row mt-1">
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <input type="number" className="form-control" value={currentSettingsData.minutes_after_property_ready}
+                    onChange={(e) => setSetting('minutes_after_property_ready', e.target.value, currentSettingsData, setCurrentSettingsData)}
+                    style={{ width: '100px', marginRight: '10px' }}
+                  />
+                  <label className="settings-label" style={{ margin: 0 }}>
+                    minutes after the property is marked as ready
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="row mt-4 justify-content-center">
-        <div className="col-lg-11">
-          <div className="d-flex align-items-center justify-content-center gap-5">
-            <label className="fs-5">Message</label>
-          </div>
-          <div className="d-flex justify-content-center">
-            <textarea id="upsellMessage" className="form-control setting-textarea" value={currentSettingsData.upsell_message} onChange={(e) => setSetting('upsell_message', e.target.value, currentSettingsData, setCurrentSettingsData)} />
-          </div>
-        </div>
-      </div>
+          <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
-      <div className="row mt-5">
-        <div className="col-lg-12 text-center">
-          <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-            Save Settings
-          </Button>
-        </div>
-      </div>
+          <h3 className="available-variables-heading mt-5 text-center">Message</h3>
+
+          <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
+            <div className="available-variables-section">
+            <label className="fs-5">Variables</label>
+            <p className="settings-label">Click to add custom variables to your request message. These variables will change to match the data for each reservation.</p>
+              <div className="available-variables mt-3">
+                {Object.keys(variables).map((key, index) => (
+                  <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('upsellMessage'), `[[${key}]]`, currentSettingsData, setCurrentSettingsData)}>{variables[key]}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="row mt-4 justify-content-center">
+            <div className="col-lg-11">
+              <div className="d-flex align-items-center justify-content-center gap-5">
+                <label className="fs-5">Message</label>
+              </div>
+              <div className="d-flex justify-content-center">
+                <textarea id="upsellMessage" className="form-control setting-textarea" value={currentSettingsData.upsell_message} onChange={(e) => setSetting('upsell_message', e.target.value, currentSettingsData, setCurrentSettingsData)} />
+              </div>
+            </div>
+          </div>
+
+          <div className="row mt-5">
+            <div className="col-lg-12 text-center">
+              <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
+                Save Settings
+              </Button>
+            </div>
+          </div>
+
+        </>
+      ) : (
+        <p>You need to connect your Turno account to use this feature. You can connect it <Link to="/setting/integrations">here</Link>.</p>
+      )}
+
     </div>
   );
 };
