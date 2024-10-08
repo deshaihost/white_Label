@@ -39,14 +39,12 @@ const SettingSideBarIndex = (props) => {
         </h6>
       </div>
 
-      {/*
       <div className={`px-2 py-2 setting-tab-link ${activeTab === integrations && "active"}`} onClick={() => changeHndl(integrations)}>
         <h6 className="d-flex align-items-center gap-2 m-0" style={{ cursor: 'pointer' }}>
           <FaPlug />
           Integrations
         </h6>
       </div>
-      */}
 
       {/*
       <div className={`px-2 py-2 setting-tab-link ${activeTab === upsells && "active"}`} onClick={() => changeHndl(upsells)}>

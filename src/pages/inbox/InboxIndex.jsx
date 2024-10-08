@@ -74,7 +74,7 @@ const InboxIndex = () => {
     <div className="inbox-container">
       <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent} showTimeZoneNotif={showTimeZoneNotif}/>
       {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames}/>}
-      {interFaceComponent === 1 && <SmartTemplates allPropertyNamesList={allPropertyNamesList}/>}
+      {interFaceComponent === 1 && <SmartTemplates allPropertyNamesList={allPropertyNamesList} userData={allUserData}/>}
       {interFaceComponent === 2 && <ReviewRemoval allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 3 && <Preferences allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 4 && <Upsells allPropertyNamesList={allPropertyNamesList}/>}

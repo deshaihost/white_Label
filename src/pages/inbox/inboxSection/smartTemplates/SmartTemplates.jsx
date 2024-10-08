@@ -6,10 +6,10 @@ import "../resources/upsells.css";
 
 import ReviewUpsells from "./reviewUpsells";
 //import PostCheckInMessages from "./postCheckInMessage";
-//import PropertyReadyMessage from "./propertyReadyMessage";
+import PropertyReadyMessage from "./propertyReadyMessage";
 
 
-const SmartTemplates = ({allPropertyNamesList}) => {
+const SmartTemplates = ({allPropertyNamesList, userData}) => {
 
   const [selectedSection, setSelectedSection] = useState("index");
 
@@ -33,6 +33,7 @@ const SmartTemplates = ({allPropertyNamesList}) => {
   const [propertyReadyUpcomingMessagesData, setPropertyReadyUpcomingMessagesData] = useState([]);
   const [getPropertyReadyUpcomingMessagesLoading, setGetPropertyReadyUpcomingMessagesLoading] = useState(false);
 
+  const userHasTurnoAccount = userData?.turno_user_id ? true : false;
 
   // Call the API to get all the user's settings
   const callGetSettingsApi = async (upsell_type) => {
@@ -120,11 +121,9 @@ const SmartTemplates = ({allPropertyNamesList}) => {
       )}
       */}
 
-      {/*
       {selectedSection === "propertyReady" && (
-        <PropertyReadyMessage setSection={setSelectedSection} settingsApiData={propertyReadyApiData} setSettingsApiData={setPropertyReadyApiData} localSettingsData={propertyReadyLocalData} setLocalSettingsData={setPropertyReadyLocalData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPropertyReadyLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPropertyReadyUpcomingMessagesLoading} upcomingMessagesData={propertyReadyUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList} />
+        <PropertyReadyMessage setSection={setSelectedSection} settingsApiData={propertyReadyApiData} setSettingsApiData={setPropertyReadyApiData} localSettingsData={propertyReadyLocalData} setLocalSettingsData={setPropertyReadyLocalData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPropertyReadyLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPropertyReadyUpcomingMessagesLoading} upcomingMessagesData={propertyReadyUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList} userHasTurnoAccount={userHasTurnoAccount}/>
       )}
-      */}
       
       {selectedSection === "index" && (
         <div className="upsells-settings">
@@ -153,14 +152,15 @@ const SmartTemplates = ({allPropertyNamesList}) => {
           </div>
           */}
 
-          {/*
           <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("propertyReady")}>
             <div className="col-lg-11 col-12">
-              <label className="fs-5">Property Ready</label>
-              <p className="settings-label">Send a message to your guests when their property is ready for check-in.</p>
+              <label className="fs-5">
+                <img src="https://storage.googleapis.com/frontend_media/partners/turno-icon-img-only.svg" alt="Property Ready" style={{width:"30px", marginRight:"10px"}} />
+                Property Ready
+              </label>
+              <p className="settings-label">Send a message to your guests when their property is ready for check-in. Requires a Turno integration.</p>
             </div>
           </div>
-          */}
 
           {/*
           <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
