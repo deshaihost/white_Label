@@ -78,10 +78,10 @@ const ConnectToTurno = () => {
     localStorage.setItem('turno_oauth_state', state);
 
     // Build the authorization URL
-    const clientId = '15';
+    const clientId = '13';
     const redirectUri = 'https://www.hostbuddy.ai/setting/integrations';
-    // const authorizationUrl = `https://app.turno.com/v2/oauth/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`; // prod
-    const authorizationUrl = `https://sandbox.turno.com/v2/oauth/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`; // not prod
+    const authorizationUrl = `https://app.turno.com/v2/oauth/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`; // prod
+    // const authorizationUrl = `https://sandbox.turno.com/v2/oauth/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`; // not prod
 
     // Redirect the user to Turno's authorization endpoint
     window.location.href = authorizationUrl;
@@ -97,14 +97,9 @@ const ConnectToTurno = () => {
   };
 
   return (
-    <div className='connect-turno-button'>
-      {isProcessing ? (
-        <p>Processing...</p>
-      ) : message ? (
-        <p>{message}</p>
-      ) : (
-        <button className="connect-button" onClick={handleConnectClick}>Connect to Turno</button>
-      )}
+    <div className="partner-tile" onClick={handleConnectClick}>
+      <img className="partner-logo" alt="Turno Logo" src="https://storage.googleapis.com/frontend_media/partners/turno-logo-with-text.webp"/>
+      <p>Connecting your Turno account lets you use "Property Ready" in smart templates, so you can send messages to guests when their unit is ready for check-in.</p>
     </div>
   );
 };
