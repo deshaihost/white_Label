@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import IntergratePlatFormInput from "./IntergratePlatFormInput";
 import { useSelector } from "react-redux";
+
 const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
   const store = useSelector((state) => state);
   const pmsIntegrationData = store?.pmsIntegrationGetReducer?.pmsIntegrationData?.data?.integrations;
@@ -13,6 +14,8 @@ const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
         }
       : {}
   );
+
+  console.log('pmsIntegrationData', pmsIntegrationData);
 
   const [checkBox, setCheckBox] = useState(
     integrationsArray.reduce((obj, integration, index) => {

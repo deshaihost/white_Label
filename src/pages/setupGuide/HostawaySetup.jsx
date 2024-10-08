@@ -51,7 +51,7 @@ const HostawaySetup = () => {
             </div>
           )}
           <div className="col-lg-10 col-xl-10 col-xxl-10">
-            <div className="account-container">
+            <div className="account-container blur-background-top-right">
               <div className="account_heading">
                 <h3>Setup Guide</h3>
               </div>
