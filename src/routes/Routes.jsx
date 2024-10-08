@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import Home from "../pages/home/Home";
 import Pricing from "../pages/pricing/Pricing";
@@ -47,6 +47,20 @@ import GetConversationsTest from "../helper/getConversationsTest/getConversation
 import ActionItemsIndex from "../pages/actionItems/ActionItemsIndex";
 import TestShowConvIndex from "../pages/testShowConversations/TestShowConvIndex";
 import AiMessaging from "../pages/aiMessaging/AiMessaging";
+
+// PMS instructions pages
+import PmsInstructionsMain from "../pages/userGuides/pmsInstructions/instructionsMain";
+import GuestyInstructions from "../pages/userGuides/pmsInstructions/guesty";
+import Beds24Instructions from "../pages/userGuides/pmsInstructions/beds24";
+import HostawayInstructions from "../pages/userGuides/pmsInstructions/hostaway";
+import LodgifyInstructions from "../pages/userGuides/pmsInstructions/lodgify";
+import SmoobuInstructions from "../pages/userGuides/pmsInstructions/smoobu";
+import HostifyInstructions from "../pages/userGuides/pmsInstructions/hostify";
+import HospitableInstructions from "../pages/userGuides/pmsInstructions/hospitable";
+import HostfullyInstructions from "../pages/userGuides/pmsInstructions/hostfully";
+import OwnerRezInstructions from "../pages/userGuides/pmsInstructions/ownerrez";
+import BookingSyncInstructions from "../pages/userGuides/pmsInstructions/bookingsync";
+
 
 const Routing = () => {
   const location = useLocation();
@@ -181,6 +195,20 @@ const Routing = () => {
         <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
         <Route path="/blog" element={<BlogLandingPage />}></Route>
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
+
+        <Route path="/pms-instructions" element={<PmsInstructionsMain />} />
+        <Route path="/pms-instructions/guesty" element={<GuestyInstructions />} />
+        <Route path="/pms-instructions/beds24" element={<Beds24Instructions />} />
+        <Route path="/pms-instructions/hostaway" element={<HostawayInstructions />} />
+        <Route path="/pms-instructions/lodgify" element={<LodgifyInstructions />} />
+        <Route path="/pms-instructions/smoobu" element={<SmoobuInstructions />} />
+        <Route path="/pms-instructions/hostify" element={<HostifyInstructions />} />
+        <Route path="/pms-instructions/hospitable" element={<HospitableInstructions />} />
+        <Route path="/pms-instructions/hostfully" element={<HostfullyInstructions />} />
+        <Route path="/pms-instructions/ownerrez" element={<OwnerRezInstructions />} />
+        <Route path="/pms-instructions/bookingsync" element={<BookingSyncInstructions />} />
+
+
         {/* <Route
           path="/test-show-conversations"
           element={<TestShowConvIndex />}

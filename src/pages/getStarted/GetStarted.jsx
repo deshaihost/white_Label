@@ -57,7 +57,8 @@ const GetStarted = () => {
                 <img src={step1img} className="img-fluid" alt="" />
                 <div className="content-container d-flex flex-column">
                   <h3 className="text-white mb-4 fs-4 samsung-bold">1. Connect your PMS</h3>
-                  <p className="fs-6 color-light-grey mb-3">On the properties page, select “PMS Integration” to connect your PMS. If you do not have a PMS, please skip this step.</p>
+                  <p className="fs-6 color-light-grey mb-3">Navigate to the <Link to='/properties'>Properties page</Link>, and select “PMS Integration” to connect your PMS.</p>
+                  <p className="fs-6 color-light-grey mb-3">For step-by-step instructions on how to connect your PMS, check out <a href="/pms-instructions" target="_blank">this page</a>.</p>
                   <Link to="/properties" className="d-flex justify-content-end align-items-center gap-1 properties_link border-primary border-bottom mt-auto">
                     Get Connected
                     <FaArrowRightLong />

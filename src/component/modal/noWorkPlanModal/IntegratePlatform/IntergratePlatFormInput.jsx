@@ -6,6 +6,8 @@ import {
 } from "../../../../redux/actions";
 import ToastHandle from "../../../../helper/ToastMessage";
 import { BoxLoader } from "../../../../helper/Loader";
+
+
 const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
   const { type } = PmsIntegrationData ? PmsIntegrationData : [];
   const store = useSelector((state) => state);
@@ -14,6 +16,8 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
   const getCalryLinkLoading = store?.getCalryLinkReducer?.loading;
   const getCarlyLinkMessage = store?.getCalryLinkReducer?.getCalryLing?.data?.message;
   const getCalryLinkError = store?.getCalryLinkReducer?.getCalryLing?.data?.error;
+
+  const pmsNameForUrl = type ? type.toLowerCase() : "";
 
   const goToCarlyLinkHndle = () => {
     const baseUrl = getCarlyLink;
@@ -49,26 +53,16 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
       {!getCalryLinkLoading ? (
         <>
           {getCarlyLink !== undefined ? (
-            <div className="text-white">
-              <p style={{ fontSize: '1em', marginBottom: '20px' }}>
-                To connect your PMS, you will be redirected to our partner Calry to securely enter your account information and complete the integration.
+            <div className="text-white text-center">
+              <p style={{fontSize:'1em', marginBottom:'20px'}}>
+              <span style={{color:'#146ef5'}} className="mainCursor"
+                onClick={() => {
+                  if (getCarlyLink !== undefined) { goToCarlyLinkHndle(); }
+                }}>
+                CLICK HERE
+              </span> to securely enter your account information and complete the integration.
               </p>
-              <div className="d-flex justify-content-center">
-                <span>Calry link</span> : {" "}
-                <span
-                  className="text-success mainCursor"
-                  style={{ marginLeft: '10px' }}
-                  onClick={() => {
-                    getCarlyLink !== undefined ? (
-                      <>{goToCarlyLinkHndle()}</>
-                    ) : (
-                      <></>
-                    );
-                  }}
-                >
-                  CLICK HERE
-                </span>
-              </div>
+              <p>For specific instructions on how to complete your PMS integration with {pmsNameForUrl}, check out <a href={`/pms-instructions/${type}`} target="_blank">this page</a>.</p>
             </div>
           ) : (
             <>

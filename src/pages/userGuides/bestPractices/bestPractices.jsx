@@ -34,7 +34,7 @@ const BestPractices = () => {
           </div>
           <div className="row">
             <div className="col-lg-12">
-              <div className="account-container">
+              <div className="account-container blur-background-top-right">
                 <div className="account_heading">
                   <h3>Best Practices For Optimizing Your Knowledge Knowledge Base And Responses</h3>
                 </div>

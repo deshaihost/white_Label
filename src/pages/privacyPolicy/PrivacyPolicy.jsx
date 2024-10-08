@@ -45,7 +45,7 @@ const PrivacyPolicy = () => {
               <SideBar />
             </div> */}
             <div className="col-lg-12">
-              <div className="account-container">
+              <div className="account-container blur-background-top-right">
                 <div className="account_heading">
                   <h3>Privacy Policy</h3>
                 </div>

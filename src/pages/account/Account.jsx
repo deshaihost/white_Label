@@ -36,7 +36,7 @@ const Account = () => {
             <SideBar />
           </div>
           <div className="col-lg-10 col-xl-10 col-xxl-10">
-            <div className="account-container">
+            <div className="account-container blur-background-top-right">
               <AccountNavBar selectedSection={selectedSection} setSelectedSection={setSelectedSection} />
               
               {selectedSection === 'UserInformation' && <UserInformationSection />}
