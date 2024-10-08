@@ -5,6 +5,7 @@ import "./AiMessaging.css";
 import Clock from "../../helper/staticImage/clock.webp";
 import TwentyFour from "../../helper/staticImage/24 hours.webp";
 import Money from "../../helper/staticImage/money-bag.webp";
+import { Helmet } from 'react-helmet';
 
 import TryItOutCTA from "../home/tryItOut/tryItOut";
 
@@ -12,11 +13,29 @@ import TryItOutCTA from "../home/tryItOut/tryItOut";
 const AiMessaging = () => {
   return (
     <div className="ai-messaging">
+        <Helmet>
+        <title>HostBuddy AI: Natural AI Conversations for Short-Term Rentals</title>
+        <meta name="title" content="HostBuddy AI: Natural AI Conversations for Short-Term Rentals" />
+        <meta name="description" content="Discover HostBuddy AI's unmatched natural conversation capabilities for short-term rentals. Benefit from 24/7 AI coverage and cost-effective property management." />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="../../helper/staticImage/night-house.webp" />
+        <meta property="og:title" content="HostBuddy AI: Natural AI Conversations for Short-Term Rentals" />
+        <meta property="og:description" content="Discover HostBuddy AI's unmatched natural conversation capabilities for short-term rentals. Benefit from 24/7 AI coverage and cost-effective property management." />
+        <meta property="og:image" content="../../helper/staticImage/night-house.webp" />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="../../helper/staticImage/night-house.webp" />
+        <meta property="twitter:title" content="HostBuddy AI: Natural AI Conversations for Short-Term Rentals" />
+        <meta property="twitter:description" content="Discover HostBuddy AI's unmatched natural conversation capabilities for short-term rentals. Benefit from 24/7 AI coverage and cost-effective property management." />
+        <meta property="twitter:image" content="../../helper/staticImage/night-house.webp" />
+        <link rel="canonical" href="https://www.hostbuddy.ai/ai-messaging" />
+      </Helmet>
       <div className="unmatched">
         <div className="container">
-          <h2>
+          <h1>
             <span>Unmatched </span>Natural Conversation
-          </h2>
+          </h1>
           <div className="row first-section">
             <div className="col-lg-7">
               <p>HostBuddy's greatest strength is the quality and fluency of its responses. We've spent countless hours optimizing HostBuddy for natural-sounding conversation, critical thinking, effective troubleshooting, and grounded responses and behavior.</p>
