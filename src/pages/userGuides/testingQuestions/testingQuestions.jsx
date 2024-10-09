@@ -39,7 +39,7 @@ const TestingQuestions = () => {
           </div>
           <div className="row">
             <div className="col-lg-12">
-              <div className="account-container">
+              <div className="account-container blur-background-top-right">
                 <div className="account_heading">
                   <h3>Hostbuddy Testing Questions</h3>
                 </div>

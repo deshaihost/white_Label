@@ -39,7 +39,7 @@ const SchedulingWalkthrough = () => {
           </div>
           <div className="row">
             <div className="col-lg-12">
-              <div className="account-container">
+              <div className="account-container blur-background-top-right">
                 <div className="account_heading">
                   <h3>Hostbuddy Calendar Guide</h3>
                 </div>

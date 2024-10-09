@@ -30,7 +30,7 @@ function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
       centered
     >
       <Modal.Body>
-        <h3 className="text-white text-center mb-4 fw-bold fs-4">Integrate Platform</h3>
+        <h3 className="text-white text-center mb-4 fw-bold fs-4">Connect Your PMS</h3>
         <hr />
         {!pmsIntegrationLoading ? (
           <>
