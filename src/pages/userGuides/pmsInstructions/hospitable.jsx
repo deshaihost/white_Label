@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 
 const HospitableInstructions = () => {
 
+  const img1 = 'https://hostbuddylb.com/pms-instructions/hospitable/hospitable-1.webp'
+  const img2 = 'https://hostbuddylb.com/pms-instructions/hospitable/hospitable-2.webp'
+
   return (
     <div>
       <div className="account-main">
@@ -30,12 +33,14 @@ const HospitableInstructions = () => {
                         <div className="step-box section" id="step1">
                           <h4>1. Start the Integration Process in HostBuddy AI</h4>
                           <p>Log in to your HostBuddy AI account, and navigate to the <Link to='/properties'>Properties</Link> page. Select <strong>PMS Integration</strong>, choose <strong>Hospitable</strong> from the list of PMS options, and navigate to the Calry link provided.</p>
+                          <img src={img1} alt="Hospitable Integration" />
                         </div>
 
                         <div className="step-box section" id="step2">
                           <h4>2. Get the API Key from Hospitable</h4>
                           <p>Switch over to your Hospitable Account in a new tab. Go to <strong>Apps &gt; API access</strong>, and click on <strong>+ Add new</strong>. Provide a name for the access token and select both <strong>Read</strong> and <strong>Write</strong> permissions.</p>
                           <p>For security, enter your account password when prompted, and then copy the newly generated API token.</p>
+                          <img src={img2} alt="Hospitable Integration" />
                         </div>
 
                         <div className="step-box section" id="step3">
@@ -43,14 +48,8 @@ const HospitableInstructions = () => {
                           <p>Paste the API key into the screen shown in Step 1 in the HostBuddy AI app. Once done successfully, you will be redirected back to HostBuddy AI, and your integration with Hospitable will be complete. You're all set to start using HostBuddy AI with Hospitable!</p>
                         </div>
 
-                        <div className="step-box section" id="step4">
-                          <h4>4. Advanced API Settings (Optional)</h4>
-                          <p>If you need more advanced control over API settings, you can revisit your Hospitable account. Go to <strong>Apps &gt; API access</strong>, and manage the settings there to fit your needs.</p>
-                          <p>Make sure to save any credentials or secrets, as they will only be visible once.</p>
-                        </div>
-
                         <div className="step-box section" id="step5">
-                          <h4>5. Troubleshooting and Support</h4>
+                          <h4>4. Troubleshooting and Support</h4>
                           <p>If you have any questions or need assistance, feel free to reach out to us. We're here to ensure that your integration with Hospitable and HostBuddy AI is smooth and hassle-free.</p>
                           <p>Contact us at support@hostbuddy.ai if you run into any issues.</p>
                         </div>

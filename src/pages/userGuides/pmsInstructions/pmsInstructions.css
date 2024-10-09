@@ -178,6 +178,12 @@
     background: #146EF5;
 }
 
+.guide-steps .step-box img {
+    width: 1000px;
+    max-width: 100%;
+    border-radius: 20px;
+}
+
 @media only screen and (max-width: 1199px) {
     .account-container {
         border-radius: 10px;

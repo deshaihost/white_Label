@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom';
 
 const HostawayInstructions = () => {
 
+  const img1 = 'https://hostbuddylb.com/pms-instructions/hostaway/hostaway-1.webp'
+  const img2 = 'https://hostbuddylb.com/pms-instructions/hostaway/hostaway-2.webp'
+  const img3 = 'https://hostbuddylb.com/pms-instructions/hostaway/hostaway-3.webp'
+  const img4 = 'https://hostbuddylb.com/pms-instructions/hostaway/hostaway-4.webp'
+  const img5 = 'https://hostbuddylb.com/pms-instructions/hostaway/hostaway-5.webp'
+
   return (
     <div>
       <div className="account-main">
@@ -30,6 +36,7 @@ const HostawayInstructions = () => {
                         <div className="step-box section" id="step1">
                           <h4>1. Start the Integration Process in HostBuddy AI</h4>
                           <p>Log in to your HostBuddy AI account, and navigate to the <Link to='/properties'>Properties</Link> page. Select <strong>PMS Integration</strong>, choose <strong>Hostaway</strong> from the list of PMS options, and navigate to the Calry link provided.</p>
+                          <img src={img1} alt="Hostaway Integration" />
                         </div>
 
                         <div className="step-box section" id="step2">
@@ -38,8 +45,12 @@ const HostawayInstructions = () => {
                           <ul>
                             <li>Go to the <strong>Marketplace</strong> within your Hostaway Dashboard.</li>
                             <li>Search for <strong>HostBuddy AI</strong> and click the ‘<strong>Connect/Configure</strong>’ button.</li>
+                            <img src={img2} alt="Hostaway Integration" />
                             <li>This will expand the partner box, and you can click <strong>Connect</strong> again to generate the API Key.</li>
+                            <img src={img3} alt="Hostaway Integration" />
                             <li>Click <strong>Create</strong> to generate the key. Make sure to copy and save it as the API key will only be visible once.</li>
+                            <img src={img4} alt="Hostaway Integration" />
+                            <img src={img5} alt="Hostaway Integration" />
                           </ul>
                         </div>
 
