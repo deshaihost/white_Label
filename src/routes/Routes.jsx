@@ -15,7 +15,7 @@ import ErrorImg from "../public/img/404.png";
 import Properties from "../pages/properties/Properties";
 import PropertyInsight from "../pages/propertyInsight/PropertyInsight";
 import Subscription from "../pages/subscription/Subscription";
-import Account from "../pages/account/Account";
+//import Account from "../pages/account/Account";
 import SetupGuide from "../pages/setupGuide/SetupGuide";
 import HostawaySetup from "../pages/setupGuide/HostawaySetup";
 import Dashboard from "../pages/dashboard/Dashboard";
@@ -45,7 +45,7 @@ import SettingIndex from "../pages/settings/SettingIndex";
 import InboxIndex from "../pages/inbox/InboxIndex";
 import GetConversationsTest from "../helper/getConversationsTest/getConversationsTest";
 import ActionItemsIndex from "../pages/actionItems/ActionItemsIndex";
-import TestShowConvIndex from "../pages/testShowConversations/TestShowConvIndex";
+//import TestShowConvIndex from "../pages/testShowConversations/TestShowConvIndex";
 import AiMessaging from "../pages/aiMessaging/AiMessaging";
 
 // PMS instructions pages
@@ -124,6 +124,30 @@ const Routing = () => {
       document.head.appendChild(script2);
     };
 
+    const addMetaPixelScript = () => {
+      const script = document.createElement("script");
+      script.innerHTML = `
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1057311958941772');
+        fbq('track', 'PageView');
+      `;
+      document.head.appendChild(script);
+
+      const noscript = document.createElement("noscript");
+      noscript.innerHTML = `
+        <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=1057311958941772&ev=PageView&noscript=1"/>
+      `;
+      document.head.appendChild(noscript);
+    };
+
     // Add the scripts to the head of the document
     const existingScript = document.getElementById("site-profiling");
     const loadedScript = document.getElementById("profiling-loaded-script");
@@ -156,6 +180,9 @@ const Routing = () => {
         loadedScript.remove();
       }
     }
+
+    // Add Meta Pixel script to all pages
+    addMetaPixelScript();
   }, [location.pathname]);
 
   return (
