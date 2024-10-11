@@ -20,18 +20,18 @@ const hostawayPmsPartners = () => {
       <Helmet>
         <title>HostBuddy AI Teams Up with Hostaway to Revolutionize Vacation Rental Management</title>
         <meta name="title" content="HostBuddy AI Teams Up with Hostaway to Revolutionize Vacation Rental Management" />
-        <meta name="description" content="Overwhelmed by Airbnb management? Discover how virtual assistants and AI can streamline tasks, boost guest communication, and reduce costs effectively." />
+        <meta name="description" content="Discover how Hostaway's partnership with HostBuddy AI transforms guest communication for short-term rental hosts with AI-powered messaging." />
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://i.postimg.cc/GhGkTmKh/Blog-Header-3.webp" />
         <meta property="og:title" content="HostBuddy AI Teams Up with Hostaway to Revolutionize Vacation Rental Management" />
-        <meta property="og:description" content="Overwhelmed by Airbnb management? Discover how virtual assistants and AI can streamline tasks, boost guest communication, and reduce costs effectively." />
+        <meta property="og:description" content="Discover how Hostaway's partnership with HostBuddy AI transforms guest communication for short-term rental hosts with AI-powered messaging." />
         <meta property="og:image" content="https://i.postimg.cc/GhGkTmKh/Blog-Header-3.webp" />
 
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://i.postimg.cc/GhGkTmKh/Blog-Header-3.webp" />
         <meta property="twitter:title" content="HostBuddy AI Teams Up with Hostaway to Revolutionize Vacation Rental Management" />
-        <meta property="twitter:description" content="Overwhelmed by Airbnb management? Discover how virtual assistants and AI can streamline tasks, boost guest communication, and reduce costs effectively." />
+        <meta property="twitter:description" content="Discover how Hostaway's partnership with HostBuddy AI transforms guest communication for short-term rental hosts with AI-powered messaging." />
         <meta property="twitter:image" content="https://i.postimg.cc/GhGkTmKh/Blog-Header-3.webp" />
         <link rel="canonical" href="https://www.hostbuddy.ai/blog/hostaway_pms_partners" />
       </Helmet>

@@ -1,22 +1,22 @@
 import React from "react";
-import BotImg from "../../../../public/img/hostbuddy_icon_white.png";
+import BotImg from "../../../../public/img/logo/logoGraphicOnlySquare.webp";
 import UserImg from "../../../../public/img/userimg2.png";
-import Loader from "../../../../helper/Loader";
+import TypingIndicator from "../../../../component/chatbotThinkingBubble/typingIndicator";
 
 function Message({  text, sender, feedBckModelOpen, feedBackDataGet }) {
   const { response, message_id } = text ? text : [];
   const { typeThumbs, messageId } = feedBackDataGet
     ? feedBackDataGet
     : [];
-  const use_loader = sender === "bot" && !response && !message_id
+  const useLoader = sender === "bot" && !response && !message_id
   return (
     <div>
       <div className={`message ${sender}`}>
         {sender === "bot" && (
-          <img src={BotImg} className="bot-img" alt="bot-img" />
+          <img src={BotImg} className="bot-img" alt="bot-img"  style={{marginTop:'8px'}}/>
         )}
-        <p>{use_loader ? <Loader /> : (sender === "bot" ? <>{response}</> : <>{text}</>)}</p>
-        {sender === "bot" && (
+        <p>{useLoader ? <TypingIndicator /> : (sender === "bot" ? <>{response}</> : <>{text}</>)}</p>
+        {sender === "bot" && !useLoader && (
           <div className=" py-3">
             <span>
               {typeThumbs === "up"?<>{messageId === message_id?<>

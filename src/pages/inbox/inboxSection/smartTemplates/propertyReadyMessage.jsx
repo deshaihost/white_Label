@@ -220,7 +220,7 @@ const PropertyReadyMessage = ({setSection, settingsApiData, setSettingsApiData, 
       </div>
 
       <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
-        <p className="settings-label">Using a cleaning management software integration, HostBuddy can recognize when a property is and ready for a guest, and send a message to the guest inviting them to come check in.</p>
+        <p className="settings-label">Using a cleaning management software integration, HostBuddy can recognize when a property is cleaned and ready for check-in, and send a message to the guest inviting them to come check in early.</p>
       </div>
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
