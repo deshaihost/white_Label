@@ -1,0 +1,45 @@
+.addition_des .multiselect-container .search-wrapper{
+    padding: 11px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #0a1a44 ;
+}
+.addition_des .multiselect-container .optionListContainer {
+    background: #020d29
+}
+.modal_addition_des_button{
+    max-width: 100%;
+    padding: 13px 0px;
+    display: flex;
+
+}
+.addition_des input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+}
+.addition_des input[type="time"]{
+    position: relative;
+    appearance: none;
+}
+.addition_des input[type="time"]::before {
+    content: "\F293";
+    color: #fff; 
+    position: absolute;
+    right: 27px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; 
+    font-family: 'bootstrap-icons';
+}
+.multiSelectContainer ul{
+    max-height: 125px;
+}
+@media screen and (min-width:1024px){
+    .modal_addition_des_button{
+        max-width: 50%;
+        padding: 13px 30px;
+    }
+}
+@media screen and (max-width:425px){
+    .modal_addition_des_button{
+        display: block !important;
+    }
+}
