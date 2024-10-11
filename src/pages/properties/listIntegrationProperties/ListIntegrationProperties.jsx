@@ -31,6 +31,7 @@ const ListIntegrationProperties = () => {
   const userDataGetLoading = store?.getUserDataReducer?.loading;
   const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
   const PropertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
+  
 
   const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
   const createPropertiesSubscriptionAllowed = store?.getUserDataReducer?.getUserData?.data?.user?.subscription?.num_properties_allowed;

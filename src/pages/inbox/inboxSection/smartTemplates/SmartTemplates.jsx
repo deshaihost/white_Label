@@ -153,7 +153,7 @@ const SmartTemplates = ({ allPropertyNamesList }) => {
 
   return (
     <div
-      className="smart_templates_tab_grid text-white setting_tab_data border border-primary p-3"
+      className="smart_templates_tab_grid text-white setting_tab_data border border-primary py-3 px-5"
       style={{ borderRadius: "20px", margin: "20px", background: "#000212" }}
     >
       {selectedSection === "reviewUpsells" && (
