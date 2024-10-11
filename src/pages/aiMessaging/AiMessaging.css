@@ -4,6 +4,20 @@
 .ai-messaging .unmatched {
     padding: 50px 0px;
 }
+
+.ai-messaging .unmatched h1{
+    color: #fff;
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.ai-messaging .unmatched h1 span {
+    color: #146ef5;
+}
+
 .ai-messaging .unmatched h2 {
     font-size: 40px;
     text-align: center;

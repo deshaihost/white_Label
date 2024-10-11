@@ -19,20 +19,20 @@ const whyYouNeedAi = () => {
       <Helmet>
         <title>5 Reasons Why You Need AI For Your STR Business</title>
         <meta name="title" content="5 Reasons Why You Need AI For Your STR Business" />
-        <meta name="description" content="AI in short-term rentals is making a transformative impact on the industry. Learn how AI can enhance guest experiences, service operations, and optimize revenue." />
+        <meta name="description" content="AI in short-term rentals is making a transformative impact on the industry. Learn how AI can enhance guest experiences and optimize revenue." />
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://i.postimg.cc/vB0xB12C/why-you-need-ai-thumbnail.webp" />
         <meta property="og:title" content="5 Reasons Why You Need AI For Your STR Business" />
-        <meta property="og:description" content="AI in short-term rentals is making a transformative impact on the industry. Learn how AI can enhance guest experiences, service operations, and optimize revenue." />
+        <meta property="og:description" content="AI in short-term rentals is making a transformative impact on the industry. Learn how AI can enhance guest experiences and optimize revenue." />
         <meta property="og:image" content="https://i.postimg.cc/vB0xB12C/why-you-need-ai-thumbnail.webp" />
 
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://i.postimg.cc/vB0xB12C/why-you-need-ai-thumbnail.webp" />
         <meta property="twitter:title" content="5 Reasons Why You Need AI For Your STR Business" />
-        <meta property="twitter:description" content="AI in short-term rentals is making a transformative impact on the industry. Learn how AI can enhance guest experiences, service operations, and optimize revenue." />
+        <meta property="twitter:description" content="AI in short-term rentals is making a transformative impact on the industry. Learn how AI can enhance guest experiences and optimize revenue." />
         <meta property="twitter:image" content="https://i.postimg.cc/vB0xB12C/why-you-need-ai-thumbnail.webp" />
-        <link rel="canonical" href="https://www.hostbuddy.ai/blog/ownerRez_pms_partners" />
+        <link rel="canonical" href="https://www.hostbuddy.ai/blog/why_you_need_ai" />
       </Helmet>
       <div className="blog-article-page">
         <BlogArticleHeader title="5 Reasons Why You Need AI For Your STR Business" author="Jay Ullrich" date="September 25, 2024" headerImage={thumbnailImg} />    

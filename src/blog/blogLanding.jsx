@@ -6,8 +6,9 @@ const five_best_thumbnail = "https://i.postimg.cc/GtkGyqCm/5-Best-Property-Manag
 const automate_str_thumbnail = "https://i.postimg.cc/2ym3PYsC/How-to-Automate-Your-Short-Term-Rental-Business.webp";
 const ownerRez_pms_partners_thumbnail = "https://i.postimg.cc/RZhsVfsx/update-owner-Rez-pms-partners-mianimg.webp";
 const why_you_need_ai_thumbnail = "https://i.postimg.cc/vB0xB12C/why-you-need-ai-thumbnail.webp";
-const hostaway_pms_partners_thumbnail = "https://i.postimg.cc/GhGkTmKh/Blog-Header-3.webp"
-const need_virtual_assistant_thumbnail = "https://i.postimg.cc/5yPKZ4Xz/Do-I-Need-a-Virtual-Assistant-for-My-Airbnb-Business.webp"
+const hostaway_pms_partners_thumbnail = "https://i.postimg.cc/GhGkTmKh/Blog-Header-3.webp";
+const need_virtual_assistant_thumbnail = "https://i.postimg.cc/5yPKZ4Xz/Do-I-Need-a-Virtual-Assistant-for-My-Airbnb-Business.webp";
+const tired_of_negative_reviews_thumbnail = "https://i.postimg.cc/tR8P0GDW/Tired-of-Negative-Reviews-Hostbuddy-AI.webp";
 
 const BlogLandingPage = () => {
 
@@ -18,6 +19,7 @@ const BlogLandingPage = () => {
       { id:"why_you_need_ai", title:"5 Reasons Why You Need AI For Your STR Business", date:"Sept 25, 2024", img:why_you_need_ai_thumbnail, description:"AI in short-term rentals is making a transformative impact on the industry. Learn how AI can enhance guest experiences, service operations, and optimize revenue." },
       { id:"hostaway_pms_partners", title:"HostBuddy AI and Hostaway Partner to Transform Rental Management", date:"Oct 01, 2024", img:hostaway_pms_partners_thumbnail, description:"HostBuddy AI partners with Hostaway, revolutionizing vacation rental management with AI-powered guest communication, boosting revenue, and streamlining operations." },
       { id:"need_virtual_assistant", title:"Do I Need a Virtual Assistant for My Airbnb Business?", date:"Oct 03, 2024", img:need_virtual_assistant_thumbnail, description:"Discover how virtual assistants can streamline your operations, improve guest communication, and manage tasks for better efficiency and growth." },
+      { id:"tired_of_negative_reviews", title:"Tired of Negative Reviews? This AI Tool Helps You Get Them Removed", date:"Oct 08, 2024", img:tired_of_negative_reviews_thumbnail, description:"Learn how HostBuddy AI can help short-term rental hosts manage and remove negative reviews by leveraging AI-powered tools for better guest communication." },
     ];
 
     return (
