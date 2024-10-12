@@ -9,7 +9,7 @@ import SmartTemplateIndex from "./smartTemplateFunctionality/SmartTemplateIndex"
 //import PostCheckInMessages from "./postCheckInMessage";
 import PropertyReadyMessage from "./propertyReadyMessage";
 
-const SmartTemplates = ({ allPropertyNamesList }) => {
+const SmartTemplatesOld = ({ allPropertyNamesList }) => {
   const [selectedSection, setSelectedSection] = useState("index");
 
   const [reviewSettingsApiData, setReviewSettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings config
@@ -152,10 +152,7 @@ const SmartTemplates = ({ allPropertyNamesList }) => {
   };
 
   return (
-    <div
-      className="smart_templates_tab_grid text-white setting_tab_data border border-primary py-3 px-5"
-      style={{ borderRadius: "20px", margin: "20px", background: "#000212" }}
-    >
+    <div className="smart_templates_tab_grid text-white setting_tab_data border border-primary py-3 px-5" style={{ borderRadius: "20px", margin: "20px", background: "#000212" }}>
       {selectedSection === "reviewUpsells" && (
         <ReviewUpsells
           setSection={setSelectedSection}
@@ -301,4 +298,4 @@ const SmartTemplates = ({ allPropertyNamesList }) => {
   );
 };
 
-export default SmartTemplates;
+export default SmartTemplatesOld;

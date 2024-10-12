@@ -32,6 +32,43 @@
 .multiSelectContainer ul{
     max-height: 125px;
 }
+.addition_des .trigger-label {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.smartTemplateAddEdit .nameAndEnableSection {
+    display: flex;
+    align-items: start;
+    width: 100%;
+}
+.smartTemplateAddEdit .enableSection {
+    margin: 20px 0 20px 50px;
+}
+.smartTemplateAddEdit .propertySelectSection {
+    margin-left: auto;
+}
+
+.smartTemplateAddEdit .triggersSection,
+.smartTemplateAddEdit .targetsSection,
+.smartTemplateAddEdit .conditionsSection,
+.smartTemplateAddEdit .propertiesSection {
+    margin: 40px 0 40px 0;
+    border: 1px solid #0d6efd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 8px 0px rgba(255, 255, 255, 0.5); /* parameters: h-shadow v-shadow blur spread color */
+}
+
+.propertySelectSection .clickableLink {
+    display: block;
+    margin: 3px auto 0;
+    font-size: 16px;
+    text-align: center;
+}
+
+
 @media screen and (min-width:1024px){
     .modal_addition_des_button{
         max-width: 50%;
