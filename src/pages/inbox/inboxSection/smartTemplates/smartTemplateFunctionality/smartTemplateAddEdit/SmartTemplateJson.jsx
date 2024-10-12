@@ -273,14 +273,17 @@ export const dataInput = {
   ],
 };
 
-// Create a mapping of type (accessible in the API data structure) to guesttype (displayed in the UI)
+// Create a mapping of type to guesttype and useTriggeredGuest if available
 export const createTypeToGuesttypeMapping = () => {
-  const mapping = {'triggered_guest': 'Triggered Guest'};
+  const mapping = { 'triggered_guest': { guesttype: 'Triggered Guest' } };
 
   const addMapping = (items) => {
     items.forEach(item => {
       if (item.type) {
-        mapping[item.type] = item.guesttype;
+        mapping[item.type] = { guesttype: item.guesttype };
+        if (item.useTriggeredGuest) {
+          mapping[item.type].useTriggeredGuest = item.useTriggeredGuest;
+        }
       }
     });
   };
@@ -291,3 +294,153 @@ export const createTypeToGuesttypeMapping = () => {
 
   return mapping;
 };
+
+// For a smart template obj, get the useTriggeredGuest value for its trigger
+export const getUseTriggeredGuestFromTemplate = (templateObj) => {
+  if (!templateObj || !templateObj.triggers || templateObj.triggers.length === 0) { return null; } // Ensure the object has a valid triggers array
+  const triggerType = templateObj.triggers[0].type; // Get the type from the first trigger (assuming there is at least one trigger)
+  const trigger = dataInput.triggers.find(item => item.type === triggerType); // Find the corresponding trigger in the dataInput.triggers array
+  return trigger ? trigger.useTriggeredGuest || null : null; // If the trigger exists, return the useTriggeredGuest value, otherwise return null
+};
+
+
+// Logic to describe a template in human-readable form --------------------------------------------
+
+export const describeTemplate = (template) => {
+    const triggersDesc = describeTriggers(template.triggers);
+    const targetsDesc = describeTargets(template.targets, template.triggers);
+    const conditionsDesc = describeConditions(template.conditions);
+
+    let result = `${triggersDesc}; ${targetsDesc}`;
+    if (conditionsDesc) {
+        result += `; if ${conditionsDesc}`;
+    }
+    return result;
+}
+
+function describeTriggers(triggers) {
+  return triggers.map(trigger => {
+      const { type, data } = trigger;
+      switch (type) {
+          case 'check_in':
+          case 'check_out':
+              const event = type === 'check_in' ? 'guest checks in' : 'guest checks out';
+              
+              // Special case: if 0 hours and 0 minutes, say "when the guest checks in" or "when the guest checks out"
+              if (data.hours === 0 && data.minutes === 0) {
+                  return `when a ${event}`;
+              }
+              
+              // Otherwise, use the usual time description
+              const timeDesc = formatDuration(data.hours, data.minutes, data.before_or_after);
+              return `${timeDesc} ${event}`;
+          case 'guest_booked':
+              const bookingTimeDesc = formatDuration(data.hours_after, data.minutes_after, 'after');
+              return `${bookingTimeDesc} guest books`;
+          case 'daily':
+              return `every day at ${formatTime(data.time)}`;
+          case 'weekly':
+              const weekdays = data.weekdays.join(', ');
+              return `every week on ${weekdays} at ${formatTime(data.time)}`;
+          case 'monthly':
+              return `every month on day ${data.day_of_month} at ${formatTime(data.time)}`;
+          case 'yearly':
+              const monthNames = [
+                  '', 'January', 'February', 'March', 'April', 'May', 'June',
+                  'July', 'August', 'September', 'October', 'November', 'December'
+              ];
+              return `every year on ${monthNames[data.month]} ${data.day_of_month} at ${formatTime(data.time)}`;
+          case 'cleaning_complete':
+              const cleaningTimeDesc = formatDuration(data.hours_after, data.minutes_after, 'after');
+              return `${cleaningTimeDesc} cleaning is complete`;
+          default:
+              return '';
+      }
+  }).join(' and ');
+}
+
+function describeTargets(targets, triggers) {
+    return 'send to ' + targets.map(target => {
+        const { type, data } = target;
+        switch (type) {
+            case 'all_guests':
+                return 'all guests';
+            case 'guests_checking_in':
+                return formatGuestTiming('guests checking in', data.min_days_from_now, data.max_days_from_now);
+            case 'guests_checking_out':
+                return formatGuestTiming('guests checking out', data.min_days_from_now, data.max_days_from_now);
+            case 'guests_checked_in':
+                return formatGuestTiming('guests that checked in', data.min_days_ago, data.max_days_ago, true);
+            case 'guests_checked_out':
+                return formatGuestTiming('guests that checked out', data.min_days_ago, data.max_days_ago, true);
+            case 'guests_currently_staying':
+                return 'guests currently staying';
+            case 'triggered_guest':
+                // Handle the triggered_guest target type
+                const trigger = triggers[0]; // Assume the first trigger is relevant
+                return `the guest that ${triggerEventDescription(trigger)}`;
+            default:
+                return '';
+        }
+    }).join(' and ');
+}
+
+function triggerEventDescription(trigger) {
+    const { type } = trigger;
+    switch (type) {
+        case 'check_in':
+            return 'is checking in';
+        case 'check_out':
+            return 'is checking out';
+        case 'guest_booked':
+            return 'booked';
+        case 'cleaning_complete':
+            return 'had their cleaning completed';
+        default:
+            return 'triggered the event';
+    }
+}
+
+function describeConditions(conditions) {
+    if (!conditions || conditions.length === 0) {
+        return '';
+    }
+    return conditions.map(condition => {
+        const { type, data } = condition;
+        switch (type) {
+            case 'is_day_of_week':
+                return `it is ${data.weekdays.join(' or ')}`;
+            case 'is_within_time_range':
+                return `the time is between ${formatTime(data.start_time)} and ${formatTime(data.end_time)}`;
+            case 'sentiment':
+                return `sentiment is ${data.criteria.join(' or ')}`;
+            default:
+                return '';
+        }
+    }).join(' and ');
+}
+
+function formatTime(time24) {
+    let [hour, minute] = time24.split(':').map(Number);
+    const ampm = hour >= 12 ? 'pm' : 'am';
+    hour = hour % 12 || 12;
+    return `${hour}:${minute.toString().padStart(2, '0')}${ampm}`;
+}
+
+function formatDuration(hours, minutes, beforeOrAfter) {
+    const timeParts = [];
+    if (hours) timeParts.push(`${hours} hour${hours !== 1 ? 's' : ''}`);
+    if (minutes) timeParts.push(`${minutes} minute${minutes !== 1 ? 's' : ''}`);
+    const timeDesc = timeParts.join(' and ');
+    return `${timeDesc} ${beforeOrAfter}`;
+}
+
+function formatGuestTiming(guestType, minDays, maxDays, ago = false) {
+    if (minDays === 0 && maxDays === 0) {
+        return `${guestType} today`;
+    } else if (minDays === maxDays) {
+        return `${guestType} ${ago ? '' : 'in '}${minDays} day${minDays !== 1 ? 's' : ''}${ago ? ' ago' : ''}`;
+    } else {
+        return `${guestType} ${ago ? '' : 'in '}${minDays} to ${maxDays} days${ago ? ' ago' : ''}`;
+    }
+}

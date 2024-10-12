@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Select, { components } from 'react-select';
 import customStyles from "../../../resources/selectStyles";
 import TriggersTrargetsConditionsModel from "./TriggersTrargetsConditionsModel";
-import { dataInput, createTypeToGuesttypeMapping } from "./SmartTemplateJson";
+import { dataInput, createTypeToGuesttypeMapping, getUseTriggeredGuestFromTemplate, describeTemplate } from "./SmartTemplateJson";
 
 const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, AllDataGetHndle, allPropertyNamesList}) => {
   const { type, smartTemplateData } = addEditSmart;
@@ -13,11 +13,12 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, AllDataGetHndle, 
   const targetsName = "Targets";
   const conditionsName = "Conditions";
   
-  const [allData, setAllData] = useState({ modelShow: false, modelShowType: "", formData: [] });
-  const [triggeredGuestNote, setTriggeredGuestNote] = useState("");
-
   const dataStructurePayload = smartTemplateData?.smartItem ? smartTemplateData?.smartItem : { name:'', is_enabled:false, message:'', properties:[], triggers:[], targets:[], conditions:[] }; // Data structure for just this one template. The structure for all templates is stored in the parent
+
+  const [allData, setAllData] = useState({ modelShow: false, modelShowType: "", formData: [] });
   const [dataStructure, setDataStructure] = useState(dataStructurePayload);
+
+  const triggeredGuestNote = getUseTriggeredGuestFromTemplate(dataStructure); // Get the note for the triggered guest
 
   const nameMapping = createTypeToGuesttypeMapping();
   const variables = {'guest_name':'Guest name'};
@@ -28,7 +29,6 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, AllDataGetHndle, 
     const { typepAddEdit, editIndex } = editAddTypeSubmitHndle || {};
     const newTrigger = { type, data };
     const useTriggeredGuest = !!triggerFormData?.useTriggeredGuest; // useTriggeredGuest is a bool: true iff useTriggeredGuest string is present in triggerFormData
-    useTriggeredGuest && setTriggeredGuestNote(triggerFormData?.useTriggeredGuest);
     
     if (modelShowType === triggerName) {
       setDataStructure((prevData) => {
@@ -218,7 +218,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, AllDataGetHndle, 
               <div className="row">
                 <div className="col-lg-4">
                   <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                    <p className="fs-6">{nameMapping[type]}</p>
+                    <p className="fs-6">{nameMapping[type].guesttype}</p>
                     <div className="d-flex align-items-center gap-3">
                       <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, triggerName)}>
                         Remove
@@ -251,7 +251,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, AllDataGetHndle, 
                 <div className={`col-12 ${type !== 'triggered_guest' ? 'col-lg-4' : ''}`}>
                   <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
                     {type !== 'triggered_guest' ? (
-                      <p className="fs-6">{nameMapping[type]}</p>
+                      <p className="fs-6">{nameMapping[type].guesttype}</p>
                     ) : (
                       <p className="fs-6">Triggered Guest - <span style={{fontSize:"1em", color:'#888', fontSize:'16px'}}>{triggeredGuestNote}</span></p>
                     )}
@@ -290,7 +290,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, AllDataGetHndle, 
               <div className="row">
                 <div className="col-lg-4">
                   <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                    <p className="fs-6">{nameMapping[type]}</p>
+                    <p className="fs-6">{nameMapping[type].guesttype}</p>
                     <div className="d-flex align-items-center gap-3">
                       <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, conditionsName)}>
                         Remove
