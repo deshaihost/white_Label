@@ -7,6 +7,7 @@ import whyYouNeedAi from './blogArticles/why_you_need_ai';
 import hostawayPmsPartners from './blogArticles/hostaway_pms_partners';
 import needVirtualAssistant from './blogArticles/need_virtual_assistant';
 import tiredOfNegativeReviews from './blogArticles/tired_of_negative_reviews';
+import guestyHostbuddyJoin from './blogArticles/guesty_hostbuddy_join';
 
 const BlogArticle = () => {
   const { article_name } = useParams(); // Get the article_name from the path param
@@ -19,7 +20,8 @@ const BlogArticle = () => {
     "why_you_need_ai": whyYouNeedAi,
     "hostaway_pms_partners" : hostawayPmsPartners,
     "need_virtual_assistant" : needVirtualAssistant,
-    "tired_of_negative_reviews" :tiredOfNegativeReviews
+    "tired_of_negative_reviews" :tiredOfNegativeReviews,
+    "guesty_hostbuddy_join" :guestyHostbuddyJoin
   };
 
   useEffect(() => {

@@ -360,3 +360,10 @@
     max-width: 300px;
   }
 }
+
+.blockquote {
+  border-left: 2px solid #606770;
+  box-shadow: none;
+  color: #ebedf0;
+  padding: 0 1rem;
+}
