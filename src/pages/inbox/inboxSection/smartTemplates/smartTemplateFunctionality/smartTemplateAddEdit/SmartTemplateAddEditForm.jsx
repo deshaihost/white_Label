@@ -3,9 +3,10 @@ import Select, { components } from 'react-select';
 import customStyles from "../../../resources/selectStyles";
 import TriggersTrargetsConditionsModel from "./TriggersTrargetsConditionsModel";
 import { dataInput, createTypeToGuesttypeMapping, getUseTriggeredGuestFromTemplate, describeTemplate } from "./SmartTemplateJson";
+import Loader from "../../../../../../helper/Loader";
 
-const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, AllDataGetHndle, allPropertyNamesList}) => {
-  const { type, smartTemplateData } = addEditSmart;
+const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading}) => {
+  const { type, smartTemplateData, description } = addEditSmart;
   const { triggers, targets, conditions } = dataInput;
   const edit = "Edit";
   const add = "Add";
@@ -176,7 +177,11 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, AllDataGetHndle, 
           <p onClick={addEditClose} className="text-primary" style={{cursor: "pointer"}}>&lt; Smart Templates </p>
         </div>
 
-        <button className="bg_theme_btn mb-3" onClick={() => { AllDataGetHndle(dataStructure, type); addEditClose(); }}>Save</button>
+        {!saveTemplateLoading ? (
+          <button className="bg_theme_btn mb-3" onClick={() => { handleSaveTemplate(dataStructure)}}>Save</button>
+        ) : (
+          <Loader />
+        )}
 
       </div>
 
@@ -310,9 +315,13 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, AllDataGetHndle, 
           className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
           onClick={() => setAllData({ modelShow: true, modelShowType: conditionsName, formData: conditions, typepAddEdit: add })}
         >
-          <i className="bi bi-plus fs-3 "></i> Add a Conditions
+          <i className="bi bi-plus fs-3 "></i> Add a Condition
         </button>
       </div>
+
+      {description && description.split(';').map((section, index) => (
+        <p key={index} style={{textAlign:'center'}}>{section.trim()}</p>
+      ))}
 
       <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%'}} />
       
@@ -342,7 +351,11 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, AllDataGetHndle, 
       </div>
 
       <div className="d-flex justify-content-center">
-        <button className="bg_theme_btn mb-3" onClick={() => { AllDataGetHndle(dataStructure, type); addEditClose(); }}>Save Template</button>
+        {!saveTemplateLoading ? (
+          <button className="bg_theme_btn mb-3" onClick={() => { handleSaveTemplate(dataStructure)}}>Save Template</button>
+        ) : (
+          <Loader />
+        )}
       </div>
 
       <TriggersTrargetsConditionsModel show={allData} handleClose={() => setAllData({ modelShow: false, modelShowType: "" }) } submitHndle={submitHndle} />

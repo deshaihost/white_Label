@@ -20,11 +20,11 @@ const AboutUs = () => {
                 <meta property="og:type" content="website" />
                 <meta property="og:title" content="About Us | Meet the Founders Behind HostBuddy AI" />
                 <meta property="og:description" content="Discover the HostBuddy AI team and our mission to revolutionize short-term rentals with innovative AI solutions for hosts." />
-                <meta property="og:image" content="https://path-to-your-logo-image.png" />
+                <meta property="og:image" content="https://hostbuddylb.com/blog/automate_str_6-25/HostBuddy_logo.webp" />
                 <meta property="twitter:card" content="summary_large_image" />
                 <meta property="twitter:title" content="About Us | Meet the Founders Behind HostBuddy AI" />
                 <meta property="twitter:description" content="Discover the HostBuddy AI team and our mission to revolutionize short-term rentals with innovative AI solutions for hosts." />
-                <meta property="twitter:image" content="https://path-to-your-logo-image.png" />
+                <meta property="twitter:image" content="https://hostbuddylb.com/blog/automate_str_6-25/HostBuddy_logo.webp" />
                 <link rel="canonical" href="https://www.hostbuddy.ai/about-us" />
             </Helmet>
             <div className='about-us'>
@@ -98,7 +98,7 @@ const AboutUs = () => {
             </div>
             <div className='founder-desc'>
                 <h2>Built by Hosts, for Hosts: The HostBuddy AI Story</h2>
-                <p>In the dynamic world of short-term rentals, <a href="https://www.hostbuddy.ai/" target='_blank' rel='noreferrer noopener'>HostBuddy AI</a> stands as a symbol of innovation driven by necessity. Our journey is built on passion, resilience, and an intimate understanding of the hosting experience.</p>
+                <p>In the dynamic world of short-term rentals, <a href="/" target='_blank' rel='noreferrer noopener'>HostBuddy AI</a> stands as a symbol of innovation driven by necessity. Our journey is built on passion, resilience, and an intimate understanding of the hosting experience.</p>
                 <h3>Founders and Visionaries</h3>
                 <p>In 2021, co-founders <strong>Sam Mayes</strong> and <strong>Jay Ullrich</strong> began their journey in the short-term rental (STR) industry by establishing a management company in San Diego. Today, their team manages over 40 units, consistently delivering operational excellence and guest satisfaction.</p>
                 <p>As the business expanded, one challenge became clear to almost every host they encountered: the absence of reliable, affordable, and continuous 24/7 guest support. This gap in the industry was more than just an inconvenience—it was a problem that demanded a solution. Hosts needed something more than a traditional management tool; they needed a revolutionary approach to guest communication that would transform their operations.</p>
@@ -125,7 +125,7 @@ const AboutUs = () => {
                 </p>
                 <p>With HostBuddy AI, you're free to focus on what truly matters – creating unforgettable experiences for your guests while maximizing your property's potential.</p>
                 <h3>Join the HostBuddy Revolution</h3>
-                <p>We invite you to <a href="http://localhost:3000/signup" target='_blank' rel='noreferrer noopener'>be part of this exciting journey</a>. For hosts managing multiple properties and leveraging property management systems, HostBuddy AI is designed to scale with your business, adapt to your unique needs, and consistently deliver results that impact your bottom line.
+                <p>We invite you to <a href="/signup" target='_blank' rel='noreferrer noopener'>be part of this exciting journey</a>. For hosts managing multiple properties and leveraging property management systems, HostBuddy AI is designed to scale with your business, adapt to your unique needs, and consistently deliver results that impact your bottom line.
                 </p>
                 <p>Experience the future of hosting – where AI meets genuine hospitality. Let's redefine the short-term rental industry together, one satisfied guest at a time.
                 </p>
