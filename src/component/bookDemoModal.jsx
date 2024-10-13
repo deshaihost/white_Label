@@ -23,10 +23,11 @@ const BookDemoModal = (props) => {
   useEffect(() => {
     const all_demo_URLs = {
       'Sam': 'https://calendly.com/sam-hostbuddy/30min',
-      'Jay': 'https://calendly.com/jay-u6bh/30min'
+      'Jay': 'https://calendly.com/jay-u6bh/30min',
+      'Nick': 'https://calendly.com/nick-hostbuddy/30min'
     }; // Sam group demo is below
     //const randomly_selected_demo_person = Object.keys(all_demo_URLs)[Math.floor(Math.random() * Object.keys(all_demo_URLs).length)];
-    const randomly_selected_demo_person = 'Sam';  // Always choose Sam
+    const randomly_selected_demo_person = 'Nick';  // Always choose Nick
     const randomly_selected_demo_URL = all_demo_URLs[randomly_selected_demo_person];
     setRandomlySelectedDemoPerson({
       person: randomly_selected_demo_person,
@@ -70,8 +71,10 @@ const BookDemoModal = (props) => {
 
     let url = randomlySelectedDemoPerson.url;
 
-    if (parseInt(formData.propertyCount) <= 20) {
-      url = 'https://calendly.com/sam-hostbuddy/hostbuddy-ai-group-demo';
+    if (false) {
+      if (parseInt(formData.propertyCount) <= 20) {
+        url = 'https://calendly.com/sam-hostbuddy/hostbuddy-ai-group-demo';
+      }
     }
 
     setRedirectURL(url);
