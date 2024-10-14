@@ -3,6 +3,7 @@ import SideBar from '../../component/sideBar/SideBar';
 import { Helmet } from 'react-helmet';
 import Authorized from '../../helper/Authorized';
 
+
 const SetupGuide = () => {
 
   const getAuthToken = Authorized();
