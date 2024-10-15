@@ -44,12 +44,52 @@ const PrebuiltTemplatesModal = ({modalShow, handleClose, saveTemplate, saveLoadi
     },
     {
       displayData: {
+        templateName: "Property Ready message",
+        templateDescription: "If your property is cleaned early, send a message to the next guest welcoming them to check in early.",
+      },
+      templateData: {
+        name: "Property Ready message",
+        enabled: false,
+        message: "Hi [[guest_name]], the property is ready for you to check in! We're here if you need anything. Enjoy your stay!",
+        triggers: [
+          {
+            type: "cleaning_complete",
+            data: {
+              before_or_after: "after",
+              hours: 0,
+              minutes: 0
+            }
+          }
+        ],
+        targets: [
+          {
+            type: "guests_checking_in",
+            data: {
+              min_days_from_now: 0,
+              max_days_from_now: 0
+            }
+          }
+        ],
+        conditions: [
+          {
+            type: "is_within_time_range",
+            data: {
+              start_time: "00:00",
+              end_time: "16:00"
+            }
+          }
+        ]
+      }
+    },
+    {
+      displayData: {
         templateName: "Post-check-in welcome message",
         templateDescription: "Send a message to your guests after they check in to welcome them",
       },
       templateData: {
         name: "Post-check-in welcome message",
         enabled: false,
+        ai_context_check: true,
         message: "Hi [[guest_name]], I hope you're finding everything well! If you need anything, don't hesitate to ask. Enjoy your stay!",
         triggers: [
           {

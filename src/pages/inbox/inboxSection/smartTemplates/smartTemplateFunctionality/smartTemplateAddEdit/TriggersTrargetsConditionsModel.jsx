@@ -17,6 +17,8 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle }) => 
   const { type, inputFiled } = inputShow || {};
   const month1to31 = "month1to31";
 
+  const typeToTileMapping = {'Trigger':'Send When', 'Target':'Send To', 'Condition':'Send If'};
+
   const OnchangeHndle = (e, typeForm, onlyUsed) => {
     const { name, value } = e.target;
     if (typeForm === selectInterface) {
@@ -98,7 +100,8 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle }) => 
   return (
     <Modal show={modelShow} size="lg" onHide={closeHndleModel} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <h5 className="modal-title">{typepAddEdit} New {modelShowType}</h5>
+        {/* <h5 className="modal-title">{typepAddEdit} New {modelShowType}</h5> */}
+        <h5 className="modal-title">{typeToTileMapping?.[modelShowType]}</h5>
       </Modal.Header>
       <Modal.Body>
         <div className="addition_des">

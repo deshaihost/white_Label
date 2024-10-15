@@ -16,7 +16,7 @@ const weeksData = [
 export const dataInput = {
   triggers: [
     {
-      guesttype: "Select a trigger...",
+      guesttype: "Choose when to send this message...",
       type: "",
       inputFiled: [],
     },
@@ -175,7 +175,7 @@ export const dataInput = {
   ],
   targets: [
     {
-      guesttype: "Select a target...",
+      guesttype: "Choose which guests will receive this message...",
       type: "",
       inputFiled: [],
     },
@@ -224,7 +224,7 @@ export const dataInput = {
   ],
   conditions: [
     {
-      guesttype: "Select a condition...",
+      guesttype: "Only send the message if...",
       type: "",
       inputFiled: [],
     },
@@ -278,19 +278,21 @@ export const createTypeToGuesttypeMapping = () => {
   const mapping = { 'triggered_guest': { guesttype: 'Triggered Guest' } };
 
   const addMapping = (items) => {
-    items.forEach(item => {
-      if (item.type) {
-        mapping[item.type] = { guesttype: item.guesttype };
-        if (item.useTriggeredGuest) {
-          mapping[item.type].useTriggeredGuest = item.useTriggeredGuest;
+    if (items && Array.isArray(items)) {
+      items.forEach(item => {
+        if (item.type) {
+          mapping[item.type] = { guesttype: item.guesttype };
+          if (item.useTriggeredGuest) {
+            mapping[item.type].useTriggeredGuest = item.useTriggeredGuest;
+          }
         }
-      }
-    });
+      });
+    }
   };
 
-  addMapping(dataInput.triggers);
-  addMapping(dataInput.targets);
-  addMapping(dataInput.conditions);
+  addMapping(dataInput?.triggers);
+  addMapping(dataInput?.targets);
+  addMapping(dataInput?.conditions);
 
   return mapping;
 };

@@ -49,6 +49,10 @@
 .smartTemplateAddEdit .propertySelectSection {
     margin-left: auto;
 }
+.smartTemplateAddEdit .ai-context-appropriate-section {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 
 .smartTemplateAddEdit .triggersSection,
 .smartTemplateAddEdit .targetsSection,
