@@ -6,6 +6,8 @@ import IconTwo from "../../helper/staticImage/icon2.webp";
 import IconThree from "../../helper/staticImage/icon3.webp";
 import IconFour from "../../helper/staticImage/icon4.webp";
 import GetStartConnect from "./model/GetStartConnect";
+import { Link } from "react-router-dom";
+import { FaArrowRightLong } from "react-icons/fa6";
 const step1img =
   "https://hostbuddylb.com/get-started/1.%20Connect%20your%20PMS.webp";
 const step2img =
@@ -83,18 +85,18 @@ const GetStarted = () => {
             </Col>
 
             <div className="new-get row">
-              <div
-                className="col-lg-6 mainCursor"
-                onClick={() =>
-                  setModalShow({
-                    type: true,
-                    interFaceShow: connectYourPMS,
-                    allType,
-                  })
-                }
-              >
-                <div className="px-4 py-3 border border-primary rounded-15 d-flex flex-column link_card_box ">
-                  <div className="icon-con">
+              <div className="col-lg-6 ">
+                <div
+                  className="px-4 py-3 border border-primary rounded-15 d-flex mainCursor flex-column link_card_box "
+                  onClick={() =>
+                    setModalShow({
+                      type: true,
+                      interFaceShow: connectYourPMS,
+                      allType,
+                    })
+                  }
+                >
+                  <div className="icon-con ">
                     <h2>1</h2>
                     <div className="icon-right">
                       <span>Connect your PMS</span>
@@ -103,18 +105,18 @@ const GetStarted = () => {
                   </div>
                 </div>
               </div>
-              <div
-                className="col-lg-6 mainCursor"
-                onClick={() =>
-                  setModalShow({
-                    type: true,
-                    interFaceShow: importYourProperties,
-                    allType,
-                  })
-                }
-              >
-                <div className="px-4 py-3 border border-primary rounded-15 d-flex flex-column link_card_box">
-                  <div className="icon-con">
+              <div className="col-lg-6 ">
+                <div
+                  className="px-4 py-3 border mainCursor border-primary rounded-15 d-flex flex-column link_card_box"
+                  onClick={() =>
+                    setModalShow({
+                      type: true,
+                      interFaceShow: importYourProperties,
+                      allType,
+                    })
+                  }
+                >
+                  <div className="icon-con ">
                     <h2>2</h2>
                     <div className="icon-right">
                       <span>Import your Properties</span>
@@ -123,18 +125,18 @@ const GetStarted = () => {
                   </div>
                 </div>
               </div>
-              <div
-                className="col-lg-6 mainCursor"
-                onClick={() =>
-                  setModalShow({
-                    type: true,
-                    interFaceShow: test,
-                    allType,
-                  })
-                }
-              >
-                <div className="px-4 py-3 border border-primary rounded-15 d-flex flex-column link_card_box">
-                  <div className="icon-con">
+              <div className="col-lg-6 ">
+                <div
+                  className="px-4 py-3 border mainCursor border-primary rounded-15 d-flex flex-column link_card_box"
+                  onClick={() =>
+                    setModalShow({
+                      type: true,
+                      interFaceShow: test,
+                      allType,
+                    })
+                  }
+                >
+                  <div className="icon-con ">
                     <h2>3</h2>
                     <div className="icon-right">
                       <span>Test</span>
@@ -143,17 +145,17 @@ const GetStarted = () => {
                   </div>
                 </div>
               </div>
-              <div
-                className="col-lg-6 mainCursor"
-                onClick={() =>
-                  setModalShow({
-                    type: true,
-                    interFaceShow: goLive,
-                    allType,
-                  })
-                }
-              >
-                <div className="px-4 py-3 border border-primary rounded-15 d-flex flex-column link_card_box ">
+              <div className="col-lg-6 ">
+                <div
+                  className="px-4 py-3 border border-primary mainCursor rounded-15 d-flex flex-column link_card_box "
+                  onClick={() =>
+                    setModalShow({
+                      type: true,
+                      interFaceShow: goLive,
+                      allType,
+                    })
+                  }
+                >
                   <div className="icon-con">
                     <h2>4</h2>
                     <div className="icon-right">
@@ -168,6 +170,42 @@ const GetStarted = () => {
               show={modalShow}
               onHide={() => setModalShow(false)}
             />
+          </Row>
+          <Row style={{ marginTop: "50px", marginBottom: "100px" }}>
+            <Col lg={12} className="mx-auto">
+              <h3 className="text-center fw-bold text-white fs-1 mb-4">
+                Explore <strong>HostBuddy's Features</strong>
+              </h3>
+              {/* <p className="mb-3 text-center fw-bold text-white fs-6">HostBuddy is packed with features that make it easy for you to automate your short term rental business. Read on to learn how to make the most of your AI companion.</p> */}
+              <p className="mb-3 text-center fw-bold text-white fs-6">
+                HostBuddy is packed with features that make it easy for you to
+                automate your short term rental business. Check them out below.
+              </p>
+            </Col>
+            <Col lg={12} className="mb-3 mb-md-5 mt-5">
+              <div className="get_started_featured">
+                {featureData.map((feature, index) => (
+                  <Link
+                    to={feature.link}
+                    key={index}
+                    className="px-4 py-3 border border-primary rounded-15 d-flex flex-column link_card_box"
+                  >
+                    <span className="border-bottom mb-4 border-primary text-primary fs-6 fw-bold link-title">
+                      {feature.title}
+                      <FaArrowRightLong className="ms-1" />
+                    </span>
+                    <span className="text-white fs-6 fw-bold">
+                      {feature.description}
+                    </span>
+                  </Link>
+                ))}
+                <div className="more-coming-soon-box">
+                  <p style={{ fontSize: "24px", color: "rgb(128, 128, 128)" }}>
+                    More coming soon!
+                  </p>
+                </div>
+              </div>
+            </Col>
           </Row>
         </Container>
       </div>

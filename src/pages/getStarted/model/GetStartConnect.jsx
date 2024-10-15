@@ -16,7 +16,6 @@ import { FaArrowRightLong } from "react-icons/fa6";
 const GetStartConnect = ({ show, onHide }) => {
   const { type, allType, interFaceShow } = show || {};
   const { connectYourPMS, importYourProperties, goLive, test } = allType || {};
-  console.log(type, interFaceShow, "propsprops", connectYourPMS);
   const pmsData = [
     "Beds24",
     "BookingSync",
@@ -48,13 +47,6 @@ const GetStartConnect = ({ show, onHide }) => {
                 Integration”.
               </p>
               <img src={ModalTWO} alt="" />
-              {/* <Link
-                to="/properties"
-                className="d-flex justify-content-end align-items-center gap-1 properties_link border-primary border-bottom mt-auto"
-              >
-                Get Connected
-                <FaArrowRightLong />
-              </Link> */}
             </div>
             <div className="my-4">
               <p>
@@ -88,13 +80,6 @@ const GetStartConnect = ({ show, onHide }) => {
                 PMS.
               </p>
               <img src={ModalFIVE} alt="" />
-              {/* <Link
-                to="/properties"
-                className=" d-flex justify-content-end align-items-center gap-1 properties_link border-primary border-bottom mt-auto"
-              >
-                Add your properties
-                <FaArrowRightLong />
-              </Link> */}
             </div>
             <div className="my-4">
               <p>
@@ -114,13 +99,6 @@ const GetStartConnect = ({ show, onHide }) => {
                 continue adding additional information to the property profile.
               </p>
               <img src={ModalSIXB} alt="" />
-              {/* <Link
-                to="/properties"
-                className=" d-flex justify-content-end align-items-center gap-1 properties_link border-primary border-bottom mt-auto"
-              >
-                Let's Go
-                <FaArrowRightLong />
-              </Link> */}
             </div>
           </>
         )}
@@ -140,13 +118,6 @@ const GetStartConnect = ({ show, onHide }) => {
               “Where did this come from?”. If you feel that HostBuddy is missing
               data, navigate back to the property profile and add what’s needed!
             </p>
-            {/* <Link
-              to="/properties"
-              className=" d-flex justify-content-end align-items-center gap-1 properties_link border-primary border-bottom mt-auto"
-            >
-              Try it Out
-              <FaArrowRightLong />
-            </Link> */}
           </div>
         )}
 
