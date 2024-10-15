@@ -50,8 +50,16 @@ const featureData = [
   },
 ];
 
+const connectYourPMS = "connectYourPMS";
+const importYourProperties = "importYourProperties";
+const test = "test";
+const goLive = "goLive";
+const allType = { connectYourPMS, importYourProperties, test, goLive };
 const GetStarted = () => {
-  const [modalShow, setModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState({
+    type: false,
+    interFaceShow: "",
+  });
 
   return (
     <>
@@ -75,7 +83,16 @@ const GetStarted = () => {
             </Col>
 
             <div className="new-get row">
-              <div className="col-lg-6" onClick={() => setModalShow(true)}>
+              <div
+                className="col-lg-6 mainCursor"
+                onClick={() =>
+                  setModalShow({
+                    type: true,
+                    interFaceShow: connectYourPMS,
+                    allType,
+                  })
+                }
+              >
                 <div className="px-4 py-3 border border-primary rounded-15 d-flex flex-column link_card_box ">
                   <div className="icon-con">
                     <h2>1</h2>
@@ -86,7 +103,16 @@ const GetStarted = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6">
+              <div
+                className="col-lg-6 mainCursor"
+                onClick={() =>
+                  setModalShow({
+                    type: true,
+                    interFaceShow: importYourProperties,
+                    allType,
+                  })
+                }
+              >
                 <div className="px-4 py-3 border border-primary rounded-15 d-flex flex-column link_card_box">
                   <div className="icon-con">
                     <h2>2</h2>
@@ -97,7 +123,16 @@ const GetStarted = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6">
+              <div
+                className="col-lg-6 mainCursor"
+                onClick={() =>
+                  setModalShow({
+                    type: true,
+                    interFaceShow: test,
+                    allType,
+                  })
+                }
+              >
                 <div className="px-4 py-3 border border-primary rounded-15 d-flex flex-column link_card_box">
                   <div className="icon-con">
                     <h2>3</h2>
@@ -108,7 +143,16 @@ const GetStarted = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6">
+              <div
+                className="col-lg-6 mainCursor"
+                onClick={() =>
+                  setModalShow({
+                    type: true,
+                    interFaceShow: goLive,
+                    allType,
+                  })
+                }
+              >
                 <div className="px-4 py-3 border border-primary rounded-15 d-flex flex-column link_card_box ">
                   <div className="icon-con">
                     <h2>4</h2>
