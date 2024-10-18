@@ -229,7 +229,7 @@ export const dataInput = {
       inputFiled: [],
     },
     {
-      guesttype: "Weekday",
+      guesttype: "Weekday is...",
       type: "is_day_of_week",
       label: "Only send this message if the trigger fires on the selected day(s) of the week.",
       inputFiled: [
@@ -237,7 +237,7 @@ export const dataInput = {
       ],
     },
     {
-      guesttype: "Time Range",
+      guesttype: "Time is in range...",
       type: "is_within_time_range",
       label: "Only send this message if the trigger fires within the specified range of time of day.",
       inputFiled: [
@@ -246,7 +246,42 @@ export const dataInput = {
       ],
     },
     {
-      guesttype: "Sentiment",
+      guesttype: "Reservation dates contain...",
+      type: "reservation_dates_contain",
+      label: "Only send this message if this date is part of the guest's reservation.",
+      inputFiled: [
+        {
+          type: select,
+          payloadType: "month",
+          label: "This trigger will fire once a year on the selected month and day, at the specified time of day.",
+          inputLabel: [
+            { selectLabel: "Month...", type: "seleter", value: "" },
+            { selectLabel: "January", type: "seleter", value: "january" },
+            { selectLabel: "February", type: "seleter", value: "february" },
+            { selectLabel: "March", type: "seleter", value: "march" },
+            { selectLabel: "April", type: "seleter", value: "april" },
+            { selectLabel: "May", type: "seleter", value: "may" },
+            { selectLabel: "June", type: "seleter", value: "june" },
+            { selectLabel: "July", type: "seleter", value: "july" },
+            { selectLabel: "August", type: "seleter", value: "august" },
+            { selectLabel: "September", type: "seleter", value: "september" },
+            { selectLabel: "October", type: "seleter", value: "october" },
+            { selectLabel: "November", type: "seleter", value: "november" },
+            { selectLabel: "December", type: "seleter", value: "december" }
+          ],
+        },
+        {
+          inputLabel: "Day of month",
+          type: number,
+          min: 1,
+          max: 31,
+          onlyUsed: "month1to31",
+          payloadType: "day_of_month",
+        }
+      ],
+    },
+    {
+      guesttype: "Sentiment is...",
       type: "sentiment",
       label: "Only send this message to a guest if their detected sentiment matches a criteria.",
       inputFiled: [

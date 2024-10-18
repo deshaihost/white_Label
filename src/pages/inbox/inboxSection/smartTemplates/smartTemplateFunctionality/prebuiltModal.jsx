@@ -55,9 +55,8 @@ const PrebuiltTemplatesModal = ({modalShow, handleClose, saveTemplate, saveLoadi
           {
             type: "cleaning_complete",
             data: {
-              before_or_after: "after",
-              hours: 0,
-              minutes: 0
+              hours_after: 0,
+              minutes_after: 0
             }
           }
         ],
@@ -126,23 +125,24 @@ const PrebuiltTemplatesModal = ({modalShow, handleClose, saveTemplate, saveLoadi
         <h5 className="modal-title">Pre-built Templates</h5>
       </Modal.Header>
       <Modal.Body>
-      {prebuiltTemplates?.length > 0 && (
-        prebuiltTemplates?.map((templateItem, templateIndex) => {
-          const { displayData, templateData } = templateItem;
-          const { templateName, templateDescription } = displayData;
-          return (
-            <div className="upsells-settings" key={templateIndex}>
-              <div className="row mt-5 clickable-div" style={{ marginLeft: "0", marginRight: "0" }} onClick={() => handleTemplateClick(templateData)}>
-                <div className="col-lg-11 col-12">
-                  <label className="fs-5">{templateName !== "" ? templateName : <p className="text-danger">Empty</p>}</label>
-                  <p className="settings-label">{templateDescription}</p>
+        <p style={{textAlign:'center', color:'#FFF'}}>Choose a pre-built template to get started quickly.</p>
+        {prebuiltTemplates?.length > 0 && (
+          prebuiltTemplates?.map((templateItem, templateIndex) => {
+            const { displayData, templateData } = templateItem;
+            const { templateName, templateDescription } = displayData;
+            return (
+              <div className="upsells-settings" key={templateIndex}>
+                <div className="row mt-5 clickable-div" style={{ marginLeft: "0", marginRight: "0" }} onClick={() => handleTemplateClick(templateData)}>
+                  <div className="col-lg-11 col-12">
+                    <label className="fs-5">{templateName !== "" ? templateName : <p className="text-danger">Empty</p>}</label>
+                    <p className="settings-label">{templateDescription}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })
-      )}
-      {saveLoading && (<p style={{ marginTop: '20px', color: 'white', textAlign: 'center' }}>Loading...</p>)}
+            );
+          })
+        )}
+        {saveLoading && (<p style={{ marginTop: '20px', color: 'white', textAlign: 'center' }}>Loading...</p>)}
       </Modal.Body>
     </Modal>
   );

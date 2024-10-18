@@ -6,7 +6,7 @@ import { dataInput, createTypeToGuesttypeMapping, getUseTriggeredGuestFromTempla
 import Loader from "../../../../../../helper/Loader";
 
 const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading}) => {
-  const { type, smartTemplateData, description } = addEditSmart;
+  const { type, smartTemplateData } = addEditSmart;
   const { triggers, targets, conditions } = dataInput;
   const edit = "Edit";
   const add = "Add";
@@ -18,11 +18,17 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
   const [allData, setAllData] = useState({ modelShow: false, modelShowType: "", formData: [] });
   const [dataStructure, setDataStructure] = useState(dataStructurePayload);
+  const [templateDescription, setTemplateDesctiption] = useState(describeTemplate(dataStructure));
 
   const triggeredGuestNote = getUseTriggeredGuestFromTemplate(dataStructure); // Get the note for the triggered guest
 
   const nameMapping = createTypeToGuesttypeMapping();
-  const variables = {'guest_name':'Guest name'};
+  const variables = {'guest_name':'Guest name', 'property_name':'Property Name', 'city':'City', 'reservation_start_date':'Reservation Start Date', 'reservation_end_date':'Reservation End Date'}
+
+  // Whenever the data structure changes, update the description
+  useEffect(() => {
+    setTemplateDesctiption(describeTemplate(dataStructure));
+  }, [dataStructure]);
 
   // Modal submit to add a new trigger/target/condition or edit an existing one
   const submitHndle = (getFormData) => {
@@ -321,9 +327,13 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         </button>
       </div>
 
-      {description && description.split(';').map((section, index) => (
-        <p key={index} style={{textAlign:'center'}}>{section.trim()}</p>
-      ))}
+      {templateDescription && templateDescription.split(';').map((section, index, array) => {
+        const capitalizedSection = section.trim().charAt(0).toUpperCase() + section.trim().slice(1); // Capitalize the first letter of each section
+        const sectionWithComma = index < array.length - 1 ? `${capitalizedSection},` : capitalizedSection; // Add a comma to all sections except the last one
+        return (
+          <p key={index} style={{textAlign: 'center'}}>{sectionWithComma}</p>
+        );
+      })}
 
       <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%'}} />
       
