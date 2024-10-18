@@ -4,6 +4,7 @@ import { Modal } from "react-bootstrap";
 
 const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle }) => {
   const { modelShow, modelShowType, formData, editFormData, typepAddEdit, editIndex } = show;
+  console.log(modelShowType);
 
   const [selectGet, setSelectGet] = useState({}); // Selected trigger/target/condition obj from the dataInput json
   const [inputDataGet, setInputDataGet] = useState({});
@@ -17,7 +18,7 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle }) => 
   const { type, inputFiled } = inputShow || {};
   const month1to31 = "month1to31";
 
-  const typeToTileMapping = {'Trigger':'Send When', 'Target':'Send To', 'Condition':'Send If'};
+  const typeToTileMapping = {'Trigger':'Send When', 'Target':'Send To', 'Conditions':'Send If'};
 
   const OnchangeHndle = (e, typeForm, onlyUsed) => {
     const { name, value } = e.target;

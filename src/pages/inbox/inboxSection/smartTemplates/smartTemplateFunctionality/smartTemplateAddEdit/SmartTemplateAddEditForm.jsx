@@ -250,6 +250,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         )}
       </div>
 
+      {/* 
       <div className="targetsSection">
         <p className="fs-5 fw-bold">Send To...</p>
         <p className="fs-14 mt-1 mb-3 text-muted">These are the guests that will receive the message. Your message will be sent to ALL of the guest groups you select here, wherever the conditions are met.</p>
@@ -264,7 +265,6 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                       <p className="fs-6">{nameMapping[type].guesttype}</p>
                     ) : (
                       <>
-                        {/* <p className="fs-6">Triggered Guest - <span style={{fontSize:"1em", color:'#888', fontSize:'16px'}}>{triggeredGuestNote}</span></p> */}
                         <p className="fs-6">{triggeredGuestNote}</p>
                       </>
                     )}
@@ -292,10 +292,11 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
             <i className="bi bi-plus fs-3 "></i> Add a Recipient Group
           </button>
       </div>
+      */}
 
       <div className="conditionsSection">
         <p className="fs-5 fw-bold">Send If...</p>
-        <p className="fs-14 mt-1 mb-3 text-muted">These are the conditions that ALL must be met in order for the message to be sent. If no conditions are added, then the message will be sent to all target guests whenever the trigger fires.</p>
+        <p className="fs-14 mt-1 mb-3 text-muted">These are the conditions that ALL must be met in order for the message to be sent. If no conditions are added, then the message will be sent to all guests whenever the trigger fires.</p>
         {dataStructure?.conditions?.length > 0 &&
           dataStructure?.conditions?.map((conditionsItem, index) => {
             const { type } = conditionsItem;

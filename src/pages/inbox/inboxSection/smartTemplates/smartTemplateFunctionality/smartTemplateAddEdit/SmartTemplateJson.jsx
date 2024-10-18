@@ -14,14 +14,14 @@ const weeksData = [
 ];
 
 export const dataInput = {
-  triggers: [
+  triggers_old_unused: [
     {
       guesttype: "Choose when to send this message...",
       type: "",
       inputFiled: [],
     },
     {
-      guesttype: "When a guest checks in",
+      guesttype: "After guest checks in",
       type: "check_in",
       label: "This trigger will fire at a guest's scheduled check-in time. You can also set it to fire a specific amount of time before or after scheduled check-in.",
       useTriggeredGuest: "Send the message to the guest that is checking in.",
@@ -52,7 +52,7 @@ export const dataInput = {
       ],
     },
     {
-      guesttype: "When a guest checks out",
+      guesttype: "After guest checks out",
       type: "check_out",
       label: "This trigger will fire at a guest's scheduled check-out time. You can also set it to fire a specific amount of time before or after scheduled check-out.",
       useTriggeredGuest: "Send the message to the guest that is checking out.",
@@ -83,7 +83,7 @@ export const dataInput = {
       ],
     },
     {
-      guesttype: "When a guest books",
+      guesttype: "After guest books",
       type: "guest_booked",
       label: "This trigger will fire when a guest books a reservation. You can also set it to fire a specific amount of time after the booking.",
       useTriggeredGuest: "Send the message to the guest that booked the reservation.",
@@ -173,7 +173,139 @@ export const dataInput = {
       ],
     },
   ],
-  targets: [
+  triggers: [
+    {
+      guesttype: "Choose when to send this message...",
+      type: "",
+      inputFiled: [],
+    },
+    {
+      guesttype: "During reservation",
+      type: "during_reservation",
+      label: "Send the message during the guest's reservation, on a specific day and time. Day 1 is the day of check-in.",
+      inputFiled: [
+        { inputLabel: "Day", type: number, payloadType: "day", defaultVal: 1 },
+        { inputLabel: "Time", type: number, payloadType: "time" },
+      ]
+    },
+    {
+      guesttype: "Before reservation",
+      type: "before_reservation",
+      label: "Send the message a number of days before the guest's reservation, at a specific time. \"0 days before\" will send the message on the day of check-in.",
+      inputFiled: [
+        { inputLabel: "Days before", type: number, payloadType: "days_before", defaultVal: 0 },
+        { inputLabel: "Time", type: time, payloadType: "time" },
+      ]
+    },
+    {
+      guesttype: "After reservation",
+      type: "after_reservation",
+      label: "Send the message a number of days after the guest's reservation, at a specific time. \"0 days after\" will send the message on the day of check-out.",
+      inputFiled: [
+        { inputLabel: "Days after", type: number, payloadType: "days_after", defaultVal: 0 },
+        { inputLabel: "Time", type: time, payloadType: "time" },
+      ]
+    },
+    {
+      guesttype: "Before stay ends",
+      type: "before_stay_ends",
+      label: "Send the message a number of days before the guest's stay ends, at a specific time. \"0 days before\" will send the message on the day of check-out.",
+      inputFiled: [
+        { inputLabel: "Days before", type: number, payloadType: "days_before", defaultVal: 0 },
+        { inputLabel: "Time", type: time, payloadType: "time" },
+      ]
+    },
+    {
+      guesttype: "After guest books",
+      type: "guest_booked",
+      label: "Send the message a number of hours and minutes after the guest books.",
+      inputFiled: [
+        { inputLabel: "Hours after booking", type: number, payloadType: "hours_after", defaultVal: 0 },
+        { inputLabel: "Minutes after booking", type: number, payloadType: "minutes_after", defaultVal: 0 },
+      ]
+    },
+    {
+      guesttype: "Daily",
+      type: "daily",
+      inputFiled: [{ inputLabel: "Time", type: time, payloadType: "time" }],
+    },
+    {
+      guesttype: "Weekly",
+      type: "weekly",
+      label: "This trigger will fire every week on the selected days, at the specified time of day.",
+      inputFiled: [
+        {
+          type: multiSelecter,
+          payloadType: "weekdays",
+          inputLabel: weeksData,
+        },
+        { inputLabel: "Time", type: time, payloadType: "time" },
+      ],
+    },
+    {
+      guesttype: "Monthly",
+      type: "monthly",
+      label: "This trigger will fire once a month on the selected day, at the specified time of day.",
+      inputFiled: [
+        {
+          inputLabel: "Day of month",
+          type: number,
+          min: 1,
+          max: 31,
+          onlyUsed: "month1to31",
+          payloadType: "day_of_month",
+        },
+        { inputLabel: "Time", type: time, payloadType: "time" },
+      ],
+    },
+    {
+      guesttype: "Yearly",
+      type: "yearly",
+      inputFiled: [
+        {
+          type: select,
+          payloadType: "month",
+          label: "This trigger will fire once a year on the selected month and day, at the specified time of day.",
+          inputLabel: [
+            { selectLabel: "Month...", type: "seleter", value: "" },
+            { selectLabel: "January", type: "seleter", value: "january" },
+            { selectLabel: "February", type: "seleter", value: "february" },
+            { selectLabel: "March", type: "seleter", value: "march" },
+            { selectLabel: "April", type: "seleter", value: "april" },
+            { selectLabel: "May", type: "seleter", value: "may" },
+            { selectLabel: "June", type: "seleter", value: "june" },
+            { selectLabel: "July", type: "seleter", value: "july" },
+            { selectLabel: "August", type: "seleter", value: "august" },
+            { selectLabel: "September", type: "seleter", value: "september" },
+            { selectLabel: "October", type: "seleter", value: "october" },
+            { selectLabel: "November", type: "seleter", value: "november" },
+            { selectLabel: "December", type: "seleter", value: "december" }
+          ],
+        },
+        {
+          inputLabel: "Day of month",
+          type: number,
+          min: 1,
+          max: 31,
+          onlyUsed: "month1to31",
+          payloadType: "day_of_month",
+        },
+        { inputLabel: "Time", type: time, payloadType: "time" },
+      ],
+    },
+    {
+      guesttype: "After cleaning is complete",
+      type: "cleaning_complete",
+      label: "This trigger will fire when a cleaning project is completed at one of your properties. You can also set it to fire a specific amount of time after the cleaning is completed. Requires a Turno integration.",
+      labelLine2: "This trigger can only send a message to guests associated with the property that the cleaning was completed at.",
+      propertiesMessage: "When this trigger fires, this template will only consider the guests associated with the property that the cleaning was completed at.",
+      inputFiled: [
+        { inputLabel: "Hours after cleaning complete", type: number, payloadType: "hours_after", defaultVal: 0 },
+        { inputLabel: "Minutes after cleaning complete", type: number, payloadType: "minutes_after", defaultVal: 0 },
+      ],
+    },
+  ],
+  targets_old_unused: [
     {
       guesttype: "Choose which guests will receive this message...",
       type: "",
@@ -229,20 +361,67 @@ export const dataInput = {
       inputFiled: [],
     },
     {
+      guesttype: "Reservation phase is...",
+      type: "reservation_phase",
+      label: "Only send this message to guests at the selected reservation stages.",
+      inputFiled: [
+        {
+          type: multiSelecter,
+          payloadType: "phase",
+          inputLabel: [
+            {
+              label: "inquiry",
+              value: "inquiry",
+            },
+            {
+              label: "current",
+              value: "current",
+            },
+            {
+              label: "future",
+              value: "future",
+            },
+            {
+              label: "past",
+              value: "past",
+            }
+          ]
+        }
+      ]
+    },
+    {
       guesttype: "Weekday is...",
       type: "is_day_of_week",
-      label: "Only send this message if the trigger fires on the selected day(s) of the week.",
+      label: "Only send this message if it is the selected day(s) of the week.",
       inputFiled: [
         { type: multiSelecter, payloadType: "weekdays", inputLabel: weeksData }
       ],
     },
     {
-      guesttype: "Time is in range...",
+      guesttype: "Time of day is...",
       type: "is_within_time_range",
-      label: "Only send this message if the trigger fires within the specified range of time of day.",
+      label: "Only send this message if it is between the selected start and end time of day.",
       inputFiled: [
         { inputLabel: "From", type: time, payloadType: "start_time" },
         { inputLabel: "To", type: time, payloadType: "end_time" },
+      ],
+    },
+    {
+      guesttype: "Reservation duration is...",
+      type: "reservation_duration",
+      label: "Only send this message if the guest's reservation is within the selected duration. Specify either min, max, or both.",
+      inputFiled: [
+        { inputLabel: "Min days", type: number, payloadType: "min_days" },
+        { inputLabel: "Max days", type: number, payloadType: "max_days" },
+      ],
+    },
+    {
+      guesttype: "Guest count is...",
+      type: "guest_count",
+      label: "Only send this message if the guest count is within the selected range. Specify either min, max, or both.",
+      inputFiled: [
+        { inputLabel: "Min guests", type: number, payloadType: "min_guests" },
+        { inputLabel: "Max guests", type: number, payloadType: "max_guests" },
       ],
     },
     {
@@ -344,6 +523,7 @@ export const getUseTriggeredGuestFromTemplate = (templateObj) => {
 // Logic to describe a template in human-readable form --------------------------------------------
 
 export const describeTemplate = (template) => {
+    return ''; // Placeholder, until this funct is modified for new structure
     const triggersDesc = describeTriggers(template.triggers);
     const targetsDesc = describeTargets(template.targets, template.triggers);
     const conditionsDesc = describeConditions(template.conditions);
