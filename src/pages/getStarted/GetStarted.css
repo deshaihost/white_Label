@@ -158,54 +158,55 @@
   -moz-box-shadow: 0px 0px 64px -4px rgba(255,255,255,1);
   box-shadow: 0px 0px 64px -4px rgba(255,255,255,1) !important;
 }
-.new-get   {
+.new-get {
   margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.main-modal .modal-content .close {
+.get-started-modal .modal-content .close {
   position: absolute;
   right: 20px;
   top: 10px;
   
 }
-.main-modal  .modal-content {
+.get-started-modal .modal-content {
   position: relative;
   z-index: 0;
 }
-.main-modal  .modal-body h4 {
+.get-started-modal .modal-body h4 {
   font-size: 25px;
   font-weight: 700;
   margin-bottom: 20px;
 }
-.main-modal  .modal-body img {
+.get-started-modal .modal-body img {
   border-radius: 20px;
   border: 3px solid #146ef5;
-  margin: 20px 0px;
-  width: 100%;
-    max-width: 485px;
+  margin: 30px auto;
+  width: 80%;
 }
-.main-modal .modal-footer {
+.get-started-modal .modal-footer {
   padding: 0px;
   border: 0px;
 }
-.main-modal .modal-content {
+.get-started-modal .modal-content {
   border: 3px solid #146ef5;
-  height: 700px;
+  height: 90vh;
   overflow-y: scroll;
 }
 
-.main-modal .modal-content::-webkit-scrollbar {
+.get-started-modal .modal-content::-webkit-scrollbar {
   display: none;
 }
-.main-modal .modal-footer button {
+.get-started-modal .modal-footer button {
   background: transparent;
   padding: 0px;
   margin: 0px;
   border: 0px;
 }
-.main-modal .modal-content .close i {
+.get-started-modal .modal-content .close i {
   font-size: 30px;
 }
-.main-modal .modal-content .close:hover {
+.get-started-modal .modal-content .close:hover {
   background: transparent;
 }
 

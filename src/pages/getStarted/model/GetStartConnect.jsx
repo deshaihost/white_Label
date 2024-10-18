@@ -16,27 +16,10 @@ import { FaArrowRightLong } from "react-icons/fa6";
 const GetStartConnect = ({ show, onHide }) => {
   const { type, allType, interFaceShow } = show || {};
   const { connectYourPMS, importYourProperties, goLive, test } = allType || {};
-  const pmsData = [
-    "Beds24",
-    "BookingSync",
-    "Guesty",
-    "Hospitable",
-    "Hostaway",
-    "Hostfully",
-    "Hostify",
-    "Lodgify",
-    "OwnerRez",
-    "Smoobu",
-  ];
+  const pmsData = ["Beds24", "BookingSync", "Guesty", "Hospitable", "Hostaway", "Hostfully", "Hostify", "Lodgify", "OwnerRez", "Smoobu"];
+
   return (
-    <Modal
-      show={type}
-      onHide={onHide}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-      className="text-white main-modal"
-    >
+    <Modal show={type} onHide={onHide} size="xl" aria-labelledby="contained-modal-title-vcenter" centered className="text-white get-started-modal">
       <Modal.Body>
         {interFaceShow === connectYourPMS && (
           <>
@@ -56,14 +39,7 @@ const GetStartConnect = ({ show, onHide }) => {
               </p>
               <img src={ModalTHREE} alt="" />
               <img src={ModalFOUR} alt="" />
-              <p>
-                Select your PMS below and follow the authorization instructions
-                specific to your PMS. Once finished, return to this page to
-                continue setup!
-              </p>
-              {pmsData?.map((items) => {
-                return <p>{items}</p>;
-              })}
+              <p>For PMS-specific instructions on how to finish linking your account, click <a href="/pms-instructions" target="_blank" rel="noopener noreferrer">here</a>.</p>
             </div>
           </>
         )}
@@ -140,7 +116,7 @@ const GetStartConnect = ({ show, onHide }) => {
             <p>
               Now it’s time to schedule HostBuddy. Click the calendar icon
               underneath the property name. You may now schedule HostBuddy to
-              cover guest communications at whatever hours you choose. You also
+              cover guest communications at whatever hours you choose! You also
               have the option of scheduling HostBuddy for specific days of the
               year.
             </p>

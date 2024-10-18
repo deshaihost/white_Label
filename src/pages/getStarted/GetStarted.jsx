@@ -69,10 +69,7 @@ const GetStarted = () => {
         <Container>
           <Row className="mt-5">
             <Col lg={12}>
-              <h3
-                style={{ marginBottom: "30px", marginTop: "15px" }}
-                className="samsung-bold text-white fs-1"
-              >
+              <h3 style={{ marginBottom: "30px", marginTop: "15px" }} className="samsung-bold text-white fs-1">
                 Welcome to HostBuddy!
               </h3>
               <p className="color-light-grey text-white fs-6">
@@ -88,13 +85,7 @@ const GetStarted = () => {
               <div className="col-lg-6 ">
                 <div
                   className="px-4 py-3 border border-primary rounded-15 d-flex mainCursor flex-column link_card_box "
-                  onClick={() =>
-                    setModalShow({
-                      type: true,
-                      interFaceShow: connectYourPMS,
-                      allType,
-                    })
-                  }
+                  onClick={() => setModalShow({ type: true, interFaceShow: connectYourPMS, allType })}
                 >
                   <div className="icon-con ">
                     <h2>1</h2>
@@ -108,14 +99,7 @@ const GetStarted = () => {
               <div className="col-lg-6 ">
                 <div
                   className="px-4 py-3 border mainCursor border-primary rounded-15 d-flex flex-column link_card_box"
-                  onClick={() =>
-                    setModalShow({
-                      type: true,
-                      interFaceShow: importYourProperties,
-                      allType,
-                    })
-                  }
-                >
+                  onClick={() => setModalShow({ type: true, interFaceShow: importYourProperties, allType})}>
                   <div className="icon-con ">
                     <h2>2</h2>
                     <div className="icon-right">
@@ -128,14 +112,7 @@ const GetStarted = () => {
               <div className="col-lg-6 ">
                 <div
                   className="px-4 py-3 border mainCursor border-primary rounded-15 d-flex flex-column link_card_box"
-                  onClick={() =>
-                    setModalShow({
-                      type: true,
-                      interFaceShow: test,
-                      allType,
-                    })
-                  }
-                >
+                  onClick={() => setModalShow({type: true, interFaceShow: test, allType})}>
                   <div className="icon-con ">
                     <h2>3</h2>
                     <div className="icon-right">
@@ -148,14 +125,7 @@ const GetStarted = () => {
               <div className="col-lg-6 ">
                 <div
                   className="px-4 py-3 border border-primary mainCursor rounded-15 d-flex flex-column link_card_box "
-                  onClick={() =>
-                    setModalShow({
-                      type: true,
-                      interFaceShow: goLive,
-                      allType,
-                    })
-                  }
-                >
+                  onClick={() => setModalShow({type: true, interFaceShow: goLive, allType})}>
                   <div className="icon-con">
                     <h2>4</h2>
                     <div className="icon-right">
@@ -166,20 +136,16 @@ const GetStarted = () => {
                 </div>
               </div>
             </div>
-            <GetStartConnect
-              show={modalShow}
-              onHide={() => setModalShow(false)}
-            />
+            <GetStartConnect show={modalShow} onHide={() => setModalShow(false)}/>
           </Row>
           <Row style={{ marginTop: "50px", marginBottom: "100px" }}>
             <Col lg={12} className="mx-auto">
-              <h3 className="text-center fw-bold text-white fs-1 mb-4">
+              <h3 className="fw-bold text-white fs-1 mb-4">
                 Explore <strong>HostBuddy's Features</strong>
               </h3>
-              {/* <p className="mb-3 text-center fw-bold text-white fs-6">HostBuddy is packed with features that make it easy for you to automate your short term rental business. Read on to learn how to make the most of your AI companion.</p> */}
-              <p className="mb-3 text-center fw-bold text-white fs-6">
-                HostBuddy is packed with features that make it easy for you to
-                automate your short term rental business. Check them out below.
+              {/* <p className="mb-3 fw-bold text-white fs-6">HostBuddy is packed with features that make it easy for you to automate your short term rental business. Read on to learn how to make the most of your AI companion.</p> */}
+              <p className="mb-3 fw-bold text-white fs-6">
+                HostBuddy is packed with features that make it easy for you to automate your short term rental business and drive more revenue. Check them out below.
               </p>
             </Col>
             <Col lg={12} className="mb-3 mb-md-5 mt-5">
