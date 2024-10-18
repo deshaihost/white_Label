@@ -35,6 +35,15 @@ const BookDemoModal = (props) => {
     });
   }, []);
 
+  // Call the meta pixel tracking functionality added to the head in routes.jsx, to track the form submission
+  const trackFormSubmission = () => {
+    try {
+      if (window.fbq) {
+        window.fbq('track', 'Schedule');
+      } else { } // Meta pixel not initialized
+    } catch (error) { }
+  };
+
   const callSubmitApi = async (dataToSend) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -67,7 +76,10 @@ const BookDemoModal = (props) => {
 
     callSubmitApi(formData);
     setIsSubmitted(true);
+    
+    // Track form submission with google ads and meta pixel
     window.gtag_report_conversion('book-a-demo');
+    trackFormSubmission();
 
     let url = randomlySelectedDemoPerson.url;
 
