@@ -9,6 +9,7 @@ const why_you_need_ai_thumbnail = "https://i.postimg.cc/vB0xB12C/why-you-need-ai
 const hostaway_pms_partners_thumbnail = "https://i.postimg.cc/GhGkTmKh/Blog-Header-3.webp";
 const need_virtual_assistant_thumbnail = "https://i.postimg.cc/5yPKZ4Xz/Do-I-Need-a-Virtual-Assistant-for-My-Airbnb-Business.webp";
 const tired_of_negative_reviews_thumbnail = "https://i.postimg.cc/tR8P0GDW/Tired-of-Negative-Reviews-Hostbuddy-AI.webp";
+const guesty_hostbuddy_join_thumbnail = "https://i.postimg.cc/nrwSJpWP/guesty-and-host-Buddy-ai-join-forces-revolutionizing-vacation-rental-management.webp";
 
 const BlogLandingPage = () => {
 
@@ -20,7 +21,10 @@ const BlogLandingPage = () => {
       { id:"hostaway_pms_partners", title:"HostBuddy AI and Hostaway Partner to Transform Rental Management", date:"Oct 01, 2024", img:hostaway_pms_partners_thumbnail, description:"HostBuddy AI partners with Hostaway, revolutionizing vacation rental management with AI-powered guest communication, boosting revenue, and streamlining operations." },
       { id:"need_virtual_assistant", title:"Do I Need a Virtual Assistant for My Airbnb Business?", date:"Oct 03, 2024", img:need_virtual_assistant_thumbnail, description:"Discover how virtual assistants can streamline your operations, improve guest communication, and manage tasks for better efficiency and growth." },
       { id:"tired_of_negative_reviews", title:"Tired of Negative Reviews? This AI Tool Helps You Get Them Removed", date:"Oct 08, 2024", img:tired_of_negative_reviews_thumbnail, description:"Learn how HostBuddy AI can help short-term rental hosts manage and remove negative reviews by leveraging AI-powered tools for better guest communication." },
+      { id:"guesty_hostbuddy_join", title:"Guesty and HostBuddy AI Join Forces: Revolutionizing Vacation Rental Management", date:"Oct 11, 2024", img:guesty_hostbuddy_join_thumbnail, description:"Explore how Guesty and HostBuddy AI boost guest communication and simplify property management." },
     ];
+
+    const reversedArticles = articles.reverse();
 
     return (
       <>
@@ -31,7 +35,7 @@ const BlogLandingPage = () => {
           <h1 className="blog-landing-page-title">HostBuddy AI - Blog</h1>
           <h2 id='landing-page-description'>Discover game-changing STR strategies, from smart home tech to AI-powered software. Your go-to resource for short-term rental innovation and success.</h2>
           <div className="blog-tiles">
-            {articles.map(article => (
+            {reversedArticles.map(article => (
               <a href={`/blog/${article.id}`} key={article.id} className="blog-tile">
                 <div className="blog-tile-image-container">
                   <img src={article.img} alt={article.title} className="blog-tile-image" />

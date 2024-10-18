@@ -92,10 +92,10 @@ const tiredOfNegativeReviews = () => {
                   <Card className='mt-2'>
                     <Card.Header>Pro Tip:</Card.Header>
                     <Card.Body>
-                      <blockquote className="blockquote mb-0">
-                        <footer className="blockquote-footer">
-                        Consider using an AI-powered rental messaging app or Airbnb assistant like <a href="https://www.hostbuddy.ai/" target='_blank' rel='noreferrer noopener'>HostBuddy AI</a> to automate your <a href="https://www.hostbuddy.ai/blog/automate_str_6-25" target='_blank' rel='noreferrer noopener'>short-term rental business</a> and provide 24/7 support. 
-                        </footer>
+                      <blockquote className="mb-0">
+                        <p className='blockquote'>
+                          Consider using an AI-powered rental messaging app or Airbnb assistant like <a href="https://www.hostbuddy.ai/" target='_blank' rel='noreferrer noopener'>HostBuddy AI</a> to automate your <a href="https://www.hostbuddy.ai/blog/automate_str_6-25" target='_blank' rel='noreferrer noopener'>short-term rental business</a> and provide 24/7 support.
+                        </p>
                       </blockquote>
                     </Card.Body>
                   </Card>
