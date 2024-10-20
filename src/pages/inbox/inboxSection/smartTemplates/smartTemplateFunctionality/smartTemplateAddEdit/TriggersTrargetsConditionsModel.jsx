@@ -4,7 +4,6 @@ import { Modal } from "react-bootstrap";
 
 const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle }) => {
   const { modelShow, modelShowType, formData, editFormData, typepAddEdit, editIndex } = show;
-  console.log(modelShowType);
 
   const [selectGet, setSelectGet] = useState({}); // Selected trigger/target/condition obj from the dataInput json
   const [inputDataGet, setInputDataGet] = useState({});
@@ -172,13 +171,20 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle }) => 
                       className="mb-3 multiselect_option"
                       displayValue="label"
                       options={inputLabel}
-                      selectedValues={inputDataGet[payloadType] || []}
-                      onRemove={(selectedList) =>
-                        setInputDataGet({ ...inputDataGet, [payloadType]: selectedList })
+                      selectedValues={
+                        (inputDataGet[payloadType] || []).map(value => { // Convert the selected values to the format expected by the Multiselect component
+                          const label = inputLabel.find(item => item.value === value)?.label || value;
+                          return { label, value };
+                        })
                       }
-                      onSelect={(selectedList) =>
-                        setInputDataGet({ ...inputDataGet, [payloadType]: selectedList })
-                      }
+                      onRemove={(selectedList) => {
+                        const valuesList = selectedList.map(item => item.value);
+                        setInputDataGet({ ...inputDataGet, [payloadType]: valuesList });
+                      }}
+                      onSelect={(selectedList) => { // Extract just the values from the selected items in the Multiselect format
+                        const valuesList = selectedList.map(item => item.value);
+                        setInputDataGet({ ...inputDataGet, [payloadType]: valuesList });
+                      }}
                     />
                   ) : null}
                 </React.Fragment>

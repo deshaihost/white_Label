@@ -4,6 +4,7 @@ import customStyles from "../../../resources/selectStyles";
 import TriggersTrargetsConditionsModel from "./TriggersTrargetsConditionsModel";
 import { dataInput, createTypeToGuesttypeMapping, getUseTriggeredGuestFromTemplate, describeTemplate } from "./SmartTemplateJson";
 import Loader from "../../../../../../helper/Loader";
+import { v4 as uuidv4 } from 'uuid';
 
 const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading}) => {
   const { type, smartTemplateData } = addEditSmart;
@@ -14,7 +15,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   const targetsName = "Targets";
   const conditionsName = "Conditions";
   
-  const dataStructurePayload = smartTemplateData?.smartItem ? smartTemplateData?.smartItem : { name:'', is_enabled:false, message:'', properties:[], triggers:[], targets:[], conditions:[] }; // Data structure for just this one template. The structure for all templates is stored in the parent
+  const dataStructurePayload = smartTemplateData?.smartItem ? smartTemplateData?.smartItem : { id:uuidv4(), name:'', enabled:false, message:'', properties:[], triggers:[], targets:[], conditions:[] }; // Data structure for just this one template. The structure for all templates is stored in the parent
 
   const [allData, setAllData] = useState({ modelShow: false, modelShowType: "", formData: [] });
   const [dataStructure, setDataStructure] = useState(dataStructurePayload);
@@ -37,9 +38,11 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
     const newTrigger = { type, data };
     const useTriggeredGuest = !!triggerFormData?.useTriggeredGuest; // useTriggeredGuest is a bool: true iff useTriggeredGuest string is present in triggerFormData
     
+    // Update the data structure based on the modal type
     if (modelShowType === triggerName) {
       setDataStructure((prevData) => {
-        const updatedTargets = useTriggeredGuest ? [{ type: 'triggered_guest', data: {} }] : prevData.targets.filter(target => target.type !== 'triggered_guest');
+        // const updatedTargets = useTriggeredGuest ? [{ type: 'triggered_guest', data: {} }] : prevData.targets.filter(target => target.type !== 'triggered_guest');
+        const updatedTargets = []; // targets no longer used
         if (typepAddEdit === add) {
           return { ...prevData, triggers: [...prevData.triggers, newTrigger], targets: updatedTargets };
         } else if (typepAddEdit === edit) {
@@ -138,6 +141,12 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
     setDataStructure({ ...dataStructure, properties: allPropertyNamesList }); // Update the data structure
   };
 
+  // When the data structure populates, update the selected options
+  useEffect(() => {
+    const selectedOptions = dataStructure?.properties?.map((property) => ({ value: property, label: property }));
+    setSelectedOptions(selectedOptions);
+  }, [dataStructure]);
+
   // Handle clicks outside the select component
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -203,29 +212,31 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           <p className="d-flex align-items-center gap-5">
             Enable
             <div className="form-check form-switch">
-              <input className="form-check-input" type="checkbox" checked={dataStructure?.is_enabled} onChange={(e) => {setDataStructure({...dataStructure, is_enabled: e.target.checked});}} id="flexSwitchCheckChecked"/>
+              <input className="form-check-input" type="checkbox" checked={dataStructure?.enabled} onChange={(e) => {setDataStructure({...dataStructure, enabled: e.target.checked});}} id="flexSwitchCheckChecked"/>
             </div>
           </p>
           <p className="fs-14 text-muted">
-            You currently have this template <span className={dataStructure?.is_enabled ? "text-success" : "text-danger"}>{dataStructure?.is_enabled ? "enabled" : "disabled"}</span>
+            You currently have this template <span className={dataStructure?.enabled ? "text-success" : "text-danger"}>{dataStructure?.enabled ? "enabled" : "disabled"}</span>
           </p>
         </div>
 
-        <div ref={selectRef} className="propertySelectSection">
+        <div className="propertySelectSection">
           <p style={{fontSize:"14px", textAlign:"center", marginBottom:'2px'}}>Applies to these properties:</p>
-          <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
+          <div ref={selectRef}>
+            <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
+          </div>
           <a href="#" className="clickableLink" onClick={handleSelectAllClick}>Select all</a>
         </div>
       </div>
       
       <div className="triggersSection">
         <p className="fs-5 fw-bold">Send When...</p>
-        <p className="fs-14 mt-1 mb-3 text-muted">These are the events that will cause the message to be sent.</p>
+        <p className="fs-14 mt-1 mb-3 text-muted">This controls when the message will be sent to a guest.</p>
         {dataStructure?.triggers?.length > 0 &&
           dataStructure?.triggers?.map((trigger, index) => {
             const { type } = trigger;
             return (
-              <div className="row">
+              <div className="row" key={index}>
                 <div className="col-lg-4">
                   <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
                     <p className="fs-6">{nameMapping[type].guesttype}</p>
@@ -233,7 +244,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                       <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, triggerName)}>
                         Remove
                       </p>
-                      <p className="text-primary mainCursor fs-6" onClick={() => setAllData({modelShow: true, modelShowType: triggerName, formData: triggers, editFormData: trigger, editIndex: index, typepAddEdit: edit })}>Edit</p>
+                      <p className="text-primary mainCursor fs-6" onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, editFormData:trigger, editIndex:index, typepAddEdit:edit })}>Edit</p>
                     </div>
                   </div>
                 </div>
@@ -258,7 +269,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           dataStructure?.targets?.map((targetsItem, index) => {
             const { type } = targetsItem;
             return (
-              <div className="row">
+              <div className="row" key={index}>
                 <div className={`col-12 ${type !== 'triggered_guest' ? 'col-lg-4' : ''}`}>
                   <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
                     {type !== 'triggered_guest' ? (
@@ -296,12 +307,12 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
       <div className="conditionsSection">
         <p className="fs-5 fw-bold">Send If...</p>
-        <p className="fs-14 mt-1 mb-3 text-muted">These are the conditions that ALL must be met in order for the message to be sent. If no conditions are added, then the message will be sent to all guests whenever the trigger fires.</p>
+        <p className="fs-14 mt-1 mb-3 text-muted">Add conditions to restrict message sending to certain categories of guests. The conditions added ALL must be met for a guest in order for the message to be sent to them.</p>
         {dataStructure?.conditions?.length > 0 &&
           dataStructure?.conditions?.map((conditionsItem, index) => {
             const { type } = conditionsItem;
             return (
-              <div className="row">
+              <div className="row" key={index}>
                 <div className="col-lg-4">
                   <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
                     <p className="fs-6">{nameMapping[type].guesttype}</p>

@@ -185,7 +185,7 @@ export const dataInput = {
       label: "Send the message during the guest's reservation, on a specific day and time. Day 1 is the day of check-in.",
       inputFiled: [
         { inputLabel: "Day", type: number, payloadType: "day", defaultVal: 1 },
-        { inputLabel: "Time", type: number, payloadType: "time" },
+        { inputLabel: "Time", type: time, payloadType: "time" },
       ]
     },
     {
@@ -294,7 +294,7 @@ export const dataInput = {
       ],
     },
     {
-      guesttype: "After cleaning is complete",
+      guesttype: "After pre-stay cleaning is complete",
       type: "cleaning_complete",
       label: "This trigger will fire when a cleaning project is completed at one of your properties. You can also set it to fire a specific amount of time after the cleaning is completed. Requires a Turno integration.",
       labelLine2: "This trigger can only send a message to guests associated with the property that the cleaning was completed at.",
@@ -361,13 +361,13 @@ export const dataInput = {
       inputFiled: [],
     },
     {
-      guesttype: "Reservation phase is...",
-      type: "reservation_phase",
-      label: "Only send this message to guests at the selected reservation stages.",
+      guesttype: "Reservation status is...",
+      type: "reservation_status",
+      label: "Only send this message to guests at the selected reservation statuses.",
       inputFiled: [
         {
           type: multiSelecter,
-          payloadType: "phase",
+          payloadType: "statuses",
           inputLabel: [
             {
               label: "inquiry",
@@ -411,8 +411,8 @@ export const dataInput = {
       type: "reservation_duration",
       label: "Only send this message if the guest's reservation is within the selected duration. Specify either min, max, or both.",
       inputFiled: [
-        { inputLabel: "Min days", type: number, payloadType: "min_days" },
-        { inputLabel: "Max days", type: number, payloadType: "max_days" },
+        { inputLabel: "Min days", type: number, payloadType: "min" },
+        { inputLabel: "Max days", type: number, payloadType: "max" },
       ],
     },
     {
@@ -420,9 +420,27 @@ export const dataInput = {
       type: "guest_count",
       label: "Only send this message if the guest count is within the selected range. Specify either min, max, or both.",
       inputFiled: [
-        { inputLabel: "Min guests", type: number, payloadType: "min_guests" },
-        { inputLabel: "Max guests", type: number, payloadType: "max_guests" },
+        { inputLabel: "Min guests", type: number, payloadType: "min" },
+        { inputLabel: "Max guests", type: number, payloadType: "max" },
       ],
+    },
+    {
+      guesttype: "Check-in day is...",
+      type: "check_in_day",
+      label: "Only send this message if the guest's check-in day is this many days away. Specify either min, max, or both. Specify min 0 and max 0 to require check-in day today.",
+      inputFiled: [
+        { inputLabel: "Min days away", type: number, payloadType: "min_days_from_now", defaultVal: 0 },
+        { inputLabel: "Max days away", type: number, payloadType: "max_days_from_now", defaultVal: 0 },
+      ]
+    },
+    {
+      guesttype: "Check-out day is...",
+      type: "check_out_day",
+      label: "Only send this message if the guest's check-out day is this many days away. Specify either min, max, or both. Specify min 0 and max 0 to require check-out day today.",
+      inputFiled: [
+        { inputLabel: "Min days away", type: number, payloadType: "min_days_from_now", defaultVal: 0 },
+        { inputLabel: "Max days away", type: number, payloadType: "max_days_from_now", defaultVal: 0 },
+      ]
     },
     {
       guesttype: "Reservation dates contain...",

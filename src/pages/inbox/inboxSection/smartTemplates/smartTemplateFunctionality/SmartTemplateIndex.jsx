@@ -35,7 +35,7 @@ const SmartTemplateIndex = ({allPropertyNamesList}) => {
         const data = response.data?.templates || {};
         const dataArray = Object.keys(data).map((key) => ({
           ...data[key],
-          name: key // template name is the key
+          id:key // save the id for each template
         }));
         setSmartAllData(dataArray);
         return true;
@@ -60,8 +60,9 @@ const SmartTemplateIndex = ({allPropertyNamesList}) => {
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
 
-      const templateName = template?.name;
-      const body_data = { template_name:templateName, template_data:template };
+      const template_id = template.id;
+      delete template.id;
+      const body_data = { template_id, template_data:template };
       const response = await axios.post(`${baseUrl}/save_template`, body_data, config);
 
       if (response.status === 200) {
@@ -77,24 +78,56 @@ const SmartTemplateIndex = ({allPropertyNamesList}) => {
     } finally { setSaveTemplateLoading(false); }
   };
 
-  const handleSaveTemplate = async (template) => {
+  // Check for errors that would prevent saving the template
+  const checkForErrors = (dataStructure) => {
+    const errors = [];
+    if (!dataStructure?.name) {
+      errors.push('Please enter a name for the template.'); }
+    if (dataStructure?.name?.length > 100) {
+      errors.push('The name of the template must be less than 100 characters.'); }
+    if (dataStructure?.triggers?.length < 1) {
+      errors.push('"Send When" must have at least one event.'); }
+    if (dataStructure?.message?.length < 1) {
+      errors.push('Please enter a message for the template.'); }
+    if (!dataStructure?.properties || dataStructure?.properties.length < 1) {
+      errors.push('Please select at least one property for the template.'); }
+    return errors;
+  };
+
+  // Check for warnings to alert the user before saving the template
+  const checkForWarnings = (dataStructure) => {
+    const warnings = [];
+    // Add a warning if reservation_status is not one of the conditions - only if daily, weekly, monthly, or yearly trigger being used
+    const reservationStatusCondition = dataStructure?.conditions?.find(condition => condition.type === 'reservation_status');
+    if (!reservationStatusCondition) {
+      const hasDailyWeeklyMonthlyYearlyTrigger = dataStructure?.triggers?.some(trigger => ['daily', 'weekly', 'monthly', 'yearly'].includes(trigger.type));
+      if (hasDailyWeeklyMonthlyYearlyTrigger) {
+        warnings.push('Reservation status is not added as a condition. This means that the message can be sent to guests of any status, including inquiries, past, or cancelled reservations.');
+      }      
+    }
+    return warnings;
+  };
+
+  const handleSaveTemplate = async (template, checkErrorsAndWarnings=true) => {
+    if (checkErrorsAndWarnings) {
+      const errors = checkForErrors(template);
+      if (errors.length > 0) {
+        ToastHandle(errors[0], 'danger');
+        return;
+      }
+      const warnings = checkForWarnings(template);
+      if (warnings.length > 0) {
+        const warningsText = `${warnings.length} warning(s) found: \n${warnings.join(';\n')}\n\nAre you sure you want to save the template?`;
+        if (!window.confirm(warningsText)) {
+          return;
+        }
+      }
+    }
+    // Save the template
     const saveSuccess = await callSaveOneTemplateApi(template);
     if (saveSuccess) {
       setAddEditSmart({type: "", data: ""}) // Return to main page
       await callGetTemplatesApi();
-    }
-  };
-
-
-  // Save a template to the master list of all of them. Will likely replace this with API logic.
-  const AllDataGetHndle = (data, types) => {
-    const { type, index } = types;
-    if (type === add) {
-      setSmartAllData([...smartAllData, data]);
-    } else if (type === edit) {
-      const updatedData = [...smartAllData];
-      updatedData[index] = data;
-      setSmartAllData(updatedData);
     }
   };
 
@@ -145,12 +178,12 @@ const SmartTemplateIndex = ({allPropertyNamesList}) => {
               </button>
             </div>
 
-            <p className='p-2'> Or start from a <a href="#" onClick={() => setShowPrebuiltModal(true)}>pre-built template</a></p>
+            <p className='p-2 mt-2'> Or start from a <a href="#" onClick={() => setShowPrebuiltModal(true)}>pre-built template</a></p>
           </>
         )}
       </div>
 
-      <PrebuiltTemplatesModal modalShow={showPrebuiltModal} handleClose={() => setShowPrebuiltModal(false)} saveTemplate={handleSaveTemplate} saveLoading={saveTemplateLoading} />
+      <PrebuiltTemplatesModal modalShow={showPrebuiltModal} handleClose={() => setShowPrebuiltModal(false)} saveTemplate={handleSaveTemplate} saveLoading={saveTemplateLoading} allPropertyNamesList={structuredClone(allPropertyNamesList)} />
     </>
   );
 };

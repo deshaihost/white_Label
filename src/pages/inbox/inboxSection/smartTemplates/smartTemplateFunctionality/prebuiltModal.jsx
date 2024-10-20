@@ -1,120 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { v4 as uuidv4 } from 'uuid';
 import { Modal } from "react-bootstrap";
 import "./smartTemplate.css";
 import "../../resources/upsells.css"
+import { prebuiltTemplates } from "./preBuiltTemplates";
 
-const PrebuiltTemplatesModal = ({modalShow, handleClose, saveTemplate, saveLoading}) => {
+const PrebuiltTemplatesModal = ({modalShow, handleClose, saveTemplate, saveLoading, allPropertyNamesList}) => {
 
-  // For now: defining the pre-built templates here. TODO: move to a separate file
-  const prebuiltTemplates = [
-    {
-      displayData: {
-        templateName: "Post-stay review request",
-        templateDescription: "Send a message to your guests after their stay if they have a positive sentiment, asking them to leave a review."
-      },
-      templateData: {
-        name: "Post-stay review request",
-        enabled: false,
-        message: "Hi [[guest_name]],\n\n I hope you enjoyed your stay! If you have a moment, I’d greatly appreciate it if you could leave us a review. It really helps us out and ensures we can keep providing the best experience for our guests.\n\nThank you again for choosing us for your stay!\n\nBest regards.",
-        triggers: [
-          {
-            type: "check_out",
-            data: {
-              before_or_after: "after",
-              hours: 4,
-              minutes: 0
-            }
-          }
-        ],
-        targets: [
-          {
-            type: "triggered_guest",
-            data: {}
-          }
-        ],
-        conditions: [
-          {
-            type: "sentiment",
-            data: {
-              criteria: ["positive"]
-            }
-          }
-        ]
-      }
-    },
-    {
-      displayData: {
-        templateName: "Property Ready message",
-        templateDescription: "If your property is cleaned early, send a message to the next guest welcoming them to check in early.",
-      },
-      templateData: {
-        name: "Property Ready message",
-        enabled: false,
-        message: "Hi [[guest_name]], the property is ready for you to check in! We're here if you need anything. Enjoy your stay!",
-        triggers: [
-          {
-            type: "cleaning_complete",
-            data: {
-              hours_after: 0,
-              minutes_after: 0
-            }
-          }
-        ],
-        targets: [
-          {
-            type: "guests_checking_in",
-            data: {
-              min_days_from_now: 0,
-              max_days_from_now: 0
-            }
-          }
-        ],
-        conditions: [
-          {
-            type: "is_within_time_range",
-            data: {
-              start_time: "00:00",
-              end_time: "16:00"
-            }
-          }
-        ]
-      }
-    },
-    {
-      displayData: {
-        templateName: "Post-check-in welcome message",
-        templateDescription: "Send a message to your guests after they check in to welcome them",
-      },
-      templateData: {
-        name: "Post-check-in welcome message",
-        enabled: false,
-        ai_context_check: true,
-        message: "Hi [[guest_name]], I hope you're finding everything well! If you need anything, don't hesitate to ask. Enjoy your stay!",
-        triggers: [
-          {
-            type: "check_in",
-            data: {
-              before_or_after: "after",
-              hours: 1,
-              minutes: 30
-            }
-          }
-        ],
-        targets: [
-          {
-            type: "triggered_guest",
-            data: {}
-          }
-        ],
-        conditions: []
-      }
-    }
-  ];
-
-  // TODO: check if the name of the template being added is the same as an existing, and rename of so. Or maybe when I switch to IDs, this won't be needed
   const handleTemplateClick = async (templateData) => {
     if (!saveLoading) {
-      await saveTemplate(templateData); // TODO: have this funct return success or failure, so we can close the modal only if successful
+      const templateDataWithId = { ...templateData, id:uuidv4(), properties:allPropertyNamesList }; // create a new id for the template, and select all properties by default
+      await saveTemplate(templateDataWithId, false); // TODO: have this funct return success or failure, so we can close the modal only if successful
       handleClose();
     }
   }
