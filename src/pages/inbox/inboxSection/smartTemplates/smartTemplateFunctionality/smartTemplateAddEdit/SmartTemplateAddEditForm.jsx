@@ -6,7 +6,7 @@ import { dataInput, createTypeToGuesttypeMapping, getUseTriggeredGuestFromTempla
 import Loader from "../../../../../../helper/Loader";
 import { v4 as uuidv4 } from 'uuid';
 
-const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading}) => {
+const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading}) => {
   const { type, smartTemplateData } = addEditSmart;
   const { triggers, targets, conditions } = dataInput;
   const edit = "Edit";
@@ -143,6 +143,14 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
     setDataStructure({ ...dataStructure, properties: allPropertyNamesList }); // Update the data structure
   };
 
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
+    const confirmed = window.confirm("Are you sure you want to delete this template?");
+    if (confirmed) {
+      handleDeleteTemplate(dataStructure.id);
+    }
+  };
+
   // When the data structure populates, update the selected options
   useEffect(() => {
     const selectedOptions = dataStructure?.properties?.map((property) => ({ value: property, label: property }));
@@ -191,14 +199,21 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       <div className="d-flex gap-3 flex-wrap align-items-center justify-content-between mb-3">
         <div>
           <h1>{type?.type} Smart Template</h1>
-          <p onClick={addEditClose} className="text-primary" style={{cursor: "pointer"}}>&lt; Smart Templates </p>
+          <p onClick={addEditClose} className="text-primary" style={{ cursor: "pointer" }}>&lt; Smart Templates </p>
         </div>
-
-        {!saveTemplateLoading ? (
-          <button className="bg_theme_btn mb-3" onClick={() => { handleSaveTemplate(dataStructure)}}>Save</button>
-        ) : (
-          <Loader />
-        )}
+      
+        <div className="d-flex flex-column align-items-center">
+          {!saveTemplateLoading ? (
+            <button className="bg_theme_btn mb-3" onClick={() => { handleSaveTemplate(dataStructure); }}>Save</button>
+          ) : (
+            <Loader />
+          )}
+          {!deleteTemplateLoading ? (
+            <a href="#" className="clickableLink" style={{ color: 'rgb(255,0,0)', fontSize: '14px' }} onClick={handleDeleteClick}>Delete Template</a>
+          ) : (
+            <Loader />
+          )}
+        </div>
       </div>
       <p style={{color:'#AAA', fontSize:'16px', textAlign:'left'}}>Smart Templates lets you create highly customized templated messages to suit your exact needs. Choose specific triggers, target recipients, and conditions, and use AI to analyze context to send to the right guests at the right time.</p>
       

@@ -16,6 +16,7 @@ const SmartTemplateIndex = ({allPropertyNamesList}) => {
   const [smartAllData, setSmartAllData] = useState([]);
   const [getTemplatesLoading, setGetTemplatesLoading] = useState(true);
   const [saveTemplateLoading, setSaveTemplateLoading] = useState(false);
+  const [deleteTemplateLoading, setDeleteTemplateLoading] = useState(false);
   const [showPrebuiltModal, setShowPrebuiltModal] = useState(false);
 
   const callGetTemplatesApi = async () => {
@@ -47,6 +48,32 @@ const SmartTemplateIndex = ({allPropertyNamesList}) => {
       ToastHandle('Failed to get template data', 'danger');
       return false;
     } finally { setGetTemplatesLoading(false); }
+  };
+
+  const callDeleteTemplateApi = async (template_id) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setDeleteTemplateLoading(true);
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+
+      const response = await axios.delete(`${baseUrl}/delete_template?template_id=${template_id}`, config);
+
+      if (response.status === 200) {
+        ToastHandle('Template deleted successfully', 'success');
+        return true;
+      } else {
+        ToastHandle('Failed to delete template', 'danger');
+        return false;
+      }
+    } catch (error) {
+      ToastHandle('Failed to delete template', 'danger');
+      return false;
+    } finally { setDeleteTemplateLoading(false); }
   };
 
   const callSaveOneTemplateApi = async (template) => {
@@ -131,6 +158,14 @@ const SmartTemplateIndex = ({allPropertyNamesList}) => {
     }
   };
 
+  const handleDeleteTemplate = async (template_id) => {
+    const deleteSuccess = await callDeleteTemplateApi(template_id);
+    if (deleteSuccess) {
+      setAddEditSmart({type: "", data: ""}) // Return to main page
+      await callGetTemplatesApi();
+    }
+  };
+
   // When the page loads, call the API to get all the templates
   useEffect(() => {
     callGetTemplatesApi();
@@ -140,7 +175,7 @@ const SmartTemplateIndex = ({allPropertyNamesList}) => {
     <>
       <div className="smart_templates_tab_grid text-white setting_tab_data upsells-settings border border-primary blur-background-top-right" style={{ borderRadius:"20px", margin:"40px 60px", background:"#000212" }}>
         {addEditSmart?.type?.type === add || addEditSmart?.type?.type === edit ? (
-          <SmartTemplateAddEditForm addEditSmart={addEditSmart} addEditClose={() => setAddEditSmart({type: "", data: ""})} handleSaveTemplate={handleSaveTemplate} allPropertyNamesList={allPropertyNamesList} saveTemplateLoading={saveTemplateLoading}/>
+          <SmartTemplateAddEditForm addEditSmart={addEditSmart} addEditClose={() => setAddEditSmart({type: "", data: ""})} handleSaveTemplate={handleSaveTemplate} allPropertyNamesList={allPropertyNamesList} saveTemplateLoading={saveTemplateLoading} handleDeleteTemplate={handleDeleteTemplate} deleteTemplateLoading={deleteTemplateLoading} />
         ) : (
           <>
             <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
