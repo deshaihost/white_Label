@@ -164,7 +164,7 @@ const SmartTemplateIndex = ({allPropertyNamesList}) => {
                     >
                       <div className="col-lg-11 col-12">
                         <label className="fs-5">{name !== "" ? name : <p className="text-danger">No Name</p>}</label>
-                        <p className="settings-label">{templateDescription}</p>
+                        <p className="settings-label truncate-text">{templateDescription}</p>
                       </div>
                     </div>
                   );

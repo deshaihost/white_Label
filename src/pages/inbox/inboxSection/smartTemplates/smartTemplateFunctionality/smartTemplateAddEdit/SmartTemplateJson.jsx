@@ -425,6 +425,33 @@ export const dataInput = {
       ],
     },
     {
+      guesttype: "Pet count is...",
+      type: "pet_count",
+      label: "Only send this message if the guest declared a number of pets within the selected range. Specify either min, max, or both.",
+      inputFiled: [
+        { inputLabel: "Min pets", type: number, payloadType: "min" },
+        { inputLabel: "Max pets", type: number, payloadType: "max" },
+      ],
+    },
+    {
+      guesttype: "Child count is...",
+      type: "child_count",
+      label: "Only send this message if the guest declared a number of children within the selected range. Does not include infants. Specify either min, max, or both.",
+      inputFiled: [
+        { inputLabel: "Min children", type: number, payloadType: "min" },
+        { inputLabel: "Max children", type: number, payloadType: "max" },
+      ],
+    },
+    {
+      guesttype: "Infant count is...",
+      type: "infant_count",
+      label: "Only send this message if the guest declared a number of infants within the selected range. Specify either min, max, or both.",
+      inputFiled: [
+        { inputLabel: "Min infants", type: number, payloadType: "min" },
+        { inputLabel: "Max infants", type: number, payloadType: "max" },
+      ],
+    },
+    {
       guesttype: "Check-in day is...",
       type: "check_in_day",
       label: "Only send this message if the guest's check-in day is this many days away. Specify either min, max, or both. Specify min 0 and max 0 to require check-in day today.",
@@ -541,7 +568,9 @@ export const getUseTriggeredGuestFromTemplate = (templateObj) => {
 // Logic to describe a template in human-readable form --------------------------------------------
 
 export const describeTemplate = (template) => {
-    return ''; // Placeholder, until this funct is modified for new structure
+    return template?.message || ''
+    
+    // Below logic describes the template based on its triggers, targets, and conditions. Unused since changing the behavior of the template
     const triggersDesc = describeTriggers(template.triggers);
     const targetsDesc = describeTargets(template.targets, template.triggers);
     const conditionsDesc = describeConditions(template.conditions);
