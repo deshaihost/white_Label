@@ -9,7 +9,6 @@
     color: #fff;
     font-size: 40px;
     font-weight: 700;
-    margin-bottom: 20px;
     text-align: center;
     text-transform: capitalize;
 }
@@ -41,6 +40,10 @@
     font-weight: 600;
     margin: 0 auto 10px;
 }
+.smart-templates-landing a {
+    font-size: 18px;
+    color: #3388ff;
+}
 .smart-templates-landing .first-section p {
     max-width: 604px;
 }
@@ -49,7 +52,7 @@
     margin: 0px;
 }
 .smart-templates-landing .trust {
-    padding: 100px 0px 40px 0px;
+    padding: 80px 0px 40px 0px;
 }
 .smart-templates-landing .trust h2 {
     margin-bottom: 10px;
@@ -63,8 +66,10 @@
 .smart-templates-landing .color-change {
     color: #91dbff !important;
 }
-.smart-templates-landing .trust h4 {
+.smart-templates-landing .unmatched h4 {
+    text-align: center;
     color: #b1abab;
+    margin-bottom: 45px;
 }
 .smart-templates-landing .steps-container {
     display: flex;

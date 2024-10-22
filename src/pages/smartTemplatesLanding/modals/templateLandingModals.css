@@ -1,0 +1,42 @@
+.smt-landing-modal-content .modal-header, .smt-landing-modal-content .modal-body {
+  color: white;
+}
+
+.smt-landing-modal-content .bold-text { /* for the modal title */
+  font-family: "Samsung Sharp Sans Bold", sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.smt-landing-modal-content p {
+  color: white;
+  font-size: 16px;
+}
+
+.smt-landing-modal-content .condition-modal-list p {
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+.smt-landing-modal-content .condition-modal-list p,
+.smt-landing-modal-content .p-header{
+  font-family: "Samsung Sharp Sans Bold", sans-serif;
+  font-weight: bold;
+  color: #3388ff;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+.smt-landing-modal-content ul {
+  font-family: 'Samsung Sharp Sans Medium', sans-serif;
+  font-weight: normal;
+  list-style-type: disc;
+  padding-left: 30px;
+  font-size: 14px;
+}
+
+.smt-landing-modal-content ul li::marker {
+  color: white;
+}
