@@ -225,6 +225,15 @@ export const dataInput = {
       ]
     },
     {
+      guesttype: "After guest cancels",
+      type: "guest_canceled",
+      label: "Send the message a number of hours and minutes after the guest cancels.",
+      inputFiled: [
+        { inputLabel: "Hours after guest cancels", type: number, payloadType: "hours_after", defaultVal: 0 },
+        { inputLabel: "Minutes after guest cancels", type: number, payloadType: "minutes_after", defaultVal: 0 },
+      ]
+    },
+    {
       guesttype: "Daily",
       type: "daily",
       inputFiled: [{ inputLabel: "Time", type: time, payloadType: "time" }],
