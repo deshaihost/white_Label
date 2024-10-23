@@ -254,7 +254,6 @@ export const MetricTile = ({ dataSets, width, height }) => {
             currentDataSet.map((item, index) => {
               const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
               const useSmallerNumbers = (heightAsInt < currentDataSet.length * 100);
-              console.log(dataSets[0].title, heightAsInt, currentDataSet.length, useSmallerNumbers);
 
               return (
                 <div key={index} className="metric-item">

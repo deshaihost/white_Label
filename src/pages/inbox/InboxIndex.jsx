@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { getUserDataActions } from "../../redux/actions";
 import InBoxHeader from "./inboxHeader/InBoxHeader";
 import Inbox from "./inboxSection/inbox/Inbox";
-import SmartTemplates from "./inboxSection/smartTemplates/SmartTemplates";
+import SmartTemplateIndex from "./inboxSection/smartTemplates/smartTemplateFunctionality/SmartTemplateIndex";
 import ReviewRemoval from "./inboxSection/reviewRemoval/ReviewRemoval";
 import Preferences from "./inboxSection/preferences/Preferences";
 import Upsells from "./inboxSection/upsells/Upsells";
@@ -74,7 +74,7 @@ const InboxIndex = () => {
     <div className="inbox-container">
       <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent} showTimeZoneNotif={showTimeZoneNotif}/>
       {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames}/>}
-      {interFaceComponent === 1 && <SmartTemplates allPropertyNamesList={allPropertyNamesList} userData={allUserData}/>}
+      {interFaceComponent === 1 && <SmartTemplateIndex allPropertyNamesList={allPropertyNamesList} userData={allUserData}/>}
       {interFaceComponent === 2 && <ReviewRemoval allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 3 && <Preferences allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 4 && <Upsells allPropertyNamesList={allPropertyNamesList}/>}

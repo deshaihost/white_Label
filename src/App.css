@@ -52,6 +52,7 @@ a {
   background: #000;
 }
 
+
 .heading h1,
 .heading h2 {
   color: #fff;
@@ -123,7 +124,7 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #fff !important;
 }
 
-input[type="checkbox"] {
+.form_multisteps input[type="checkbox"] {
   background: #000212;
 }
 .form-switch .form-check-input {
