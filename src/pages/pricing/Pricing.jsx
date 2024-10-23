@@ -127,7 +127,7 @@ const Pricing = () => {
         </div>
       </Container>
       <ContactUs show={contactModalShow} onHide={() => setContactModalShow(false)} />
-      <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} />
+      <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} sourceMsg='pricing page'/>
     </section>
   )
 }

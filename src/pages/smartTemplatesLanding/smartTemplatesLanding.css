@@ -47,6 +47,9 @@
 .smart-templates-landing .first-section p {
     max-width: 604px;
 }
+.smart-templates-landing .first-section img {
+    border-radius: 20px;
+}
 .smart-templates-landing .unmatched .row {
     align-items: center;
     margin: 0px;
@@ -74,6 +77,7 @@
 .smart-templates-landing .steps-container {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: 80px;
 }
 .smart-templates-landing .icon-boc-con h2 {
     text-align: left;

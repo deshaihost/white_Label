@@ -9,13 +9,13 @@ const Plans = () => {
             <Container>
                 <div className="row">
                     <div className="col-md-6">
-                        <div className="plan-box">
+                        <div className="plan-box blur-background-top-left blur-background-bottom-right">
                             <h3>Discover The <strong>Power</strong> Of HostBuddy</h3>
                             <Link to='/ai-messaging' className='link-btn filled-btn'>Learn More</Link>
                         </div>
                     </div>
                     <div className="col-md-6">
-                        <div className="plan-box">
+                        <div className="plan-box blur-background-top-right">
                             <h3>Explore <strong>Pricing</strong></h3>
                             <Link to='/pricing' className='link-btn outline-btn'>Pricing</Link>
                         </div>    
