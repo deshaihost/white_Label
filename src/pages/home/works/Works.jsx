@@ -83,7 +83,7 @@ const Works = () => {
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={SmartTemlating} alt='works-img' />
+                            <img src={vacantNight} alt='works-img' />
                         </div>
                     </div>
 
@@ -108,18 +108,6 @@ const Works = () => {
                         </div>
                         <div className="col-lg-6">
                             <img src={schedule} alt='works-img' />
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-lg-6">
-                            <div className="works-content">
-                                <h3>Guest <strong>Upsells</strong></h3>
-                                <p>Have HostBuddy pay for itself by offering your guests extension discounts for vacant nights created by minimum stay requirements. Impress your guests with early check-ins and late checkout offers. Automatically follow up with guests who have gone silent after sending an inquiry.</p>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <img src={vacantNight} alt='works-img' />
                         </div>
                     </div>
 
@@ -225,7 +213,6 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h3>Cleaning Management Software <strong>Integrations</strong></h3>
-                                <h4>(coming soon)</h4>
                                 <p>Keep HostBuddy informed about when your properties are ready for check-in. Pull updates directly from your cleaning management systems to allow for early check-ins when they are available.</p>
                             </div>
                         </div>

@@ -34,6 +34,11 @@ const ConditionsModal = ({ show, handleClose }) => {
                 <li style={{listStyleType:'disc', color:'white'}}>[specify min and/or max number of days]</li>
               </ul>
             </p>
+            <p>Booking channel is...
+              <ul>
+                <li style={{listStyleType:'disc', color:'white'}}>Airbnb, Vrbo, Booking.com, Direct, etc.</li>
+              </ul>
+            </p>
             <p>Guest count is...
               <ul>
                 <li style={{listStyleType:'disc', color:'white'}}>[specify min and/or max number of guests]</li>

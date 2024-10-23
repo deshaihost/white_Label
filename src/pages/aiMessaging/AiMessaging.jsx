@@ -13,7 +13,7 @@ import TryItOutCTA from "../home/tryItOut/tryItOut";
 const AiMessaging = () => {
   return (
     <div className="ai-messaging">
-        <Helmet>
+      <Helmet>
         <title>HostBuddy AI: Natural AI Conversations for Short-Term Rentals</title>
         <meta name="title" content="HostBuddy AI: Natural AI Conversations for Short-Term Rentals" />
         <meta name="description" content="Discover HostBuddy AI's unmatched natural conversation capabilities for short-term rentals. Benefit from 24/7 AI coverage and cost-effective property management." />
@@ -42,7 +42,7 @@ const AiMessaging = () => {
               <p>We pride ourselves in providing the most fluent AI communication in short-term rentals, achieving performance and trust that is unprecedented in the industry.</p>
             </div>
             <div className="col-lg-5 blur-background-top-left">
-              <img src={NightHouse} alt=" " />
+              <img style={{borderRadius:'20px'}} src={NightHouse} alt=" " />
             </div>
           </div>
           <div className="trust">
@@ -99,7 +99,7 @@ const AiMessaging = () => {
         </div>
       </div>
       <TestShowConvIndex titles={['24 Hour Troubleshooting', 'Inquiry Handling', 'Smart Deferral']}/>
-      <TryItOutCTA />
+      <TryItOutCTA sourceMsg={'AI messaging landing page'}/>
     </div>
   );
 };

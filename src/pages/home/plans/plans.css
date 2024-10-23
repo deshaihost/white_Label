@@ -12,6 +12,7 @@
     align-items: center;
     place-content: center;
     justify-content: flex-start;
+    background: #000212;
 }
 
 .plans .plan-box h3 {

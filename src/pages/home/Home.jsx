@@ -66,7 +66,7 @@ const Home = () => {
       <div ref={worksRef}>
         <Works />
       </div>
-      <TryItOutCTA />
+      <TryItOutCTA sourceMsg={'Home bage bottom cta'}/>
       {/* <Features /> */}
       {/*
       <div ref={demoVideoRef}>

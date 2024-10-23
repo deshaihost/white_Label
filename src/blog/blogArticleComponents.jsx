@@ -47,7 +47,7 @@ export const BlogArticleSidebar = ({ contents }) => {
           </div>
         </div>
       </div>
-        <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} />
+        <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} sourceMsg='blog cta'/>
     </div>
     </section>
   );

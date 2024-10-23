@@ -101,7 +101,7 @@ const Footer = () => {
           <p>©2024 by HostBuddy AI.</p>
         </div>
       </Container>
-      {demoModalShow && <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} />}
+      {demoModalShow && <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} sourceMsg='footer link'/>}
     </MDBFooter>
   );
 };

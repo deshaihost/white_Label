@@ -6,7 +6,7 @@ import ErrorMessageShow from "../helper/ErrorMessageShow";
 import { ErrorMessageKey } from "../helper/ErrorMessageKey";
 import axios from "axios";
 
-const BookDemoModal = (props) => {
+const BookDemoModal = ({show, onHide, sourceMsg}) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showBackupLink, setShowBackupLink] = useState(false);
   const [randomlySelectedDemoPerson, setRandomlySelectedDemoPerson] = useState({});
@@ -52,6 +52,7 @@ const BookDemoModal = (props) => {
 
     dataToSend.message += "\nProperty count: " + dataToSend.propertyCount;
     dataToSend.message += "\nHow did you hear about us: " + dataToSend.source;
+    if (sourceMsg) dataToSend.message += "\nClick source: " + String(sourceMsg);
 
     delete dataToSend.source; // don't send this to the API
 
@@ -125,7 +126,7 @@ const BookDemoModal = (props) => {
   };
 
   return (
-    <Modal {...props} size="md" aria-labelledby="contained-modal-title-vcenter" centered className="contact-modal">
+    <Modal show={show} onHide={onHide} size="md" aria-labelledby="contained-modal-title-vcenter" centered className="contact-modal">
       <Modal.Header closeButton>
         <div>
           <Modal.Title id="contained-modal-title-vcenter">HostBuddy AI - Book A Demo</Modal.Title>
