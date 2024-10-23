@@ -39,18 +39,18 @@ const SmartTemplatesLanding = () => {
     <div className="smart-templates-landing">
       <Helmet>
         <title>HostBuddy AI: Natural AI Conversations for Short-Term Rentals</title>
-        <meta name="title" content="HostBuddy AI: Natural AI Conversations for Short-Term Rentals" />
+        <meta name="title" content="HostBuddy AI: AI-powered templated messaging for Short-Term Rentals" />
         <meta name="description" content="Discover HostBuddy AI's unmatched natural conversation capabilities for short-term rentals. Benefit from 24/7 AI coverage and cost-effective property management." />
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="../../helper/staticImage/night-house.webp" />
-        <meta property="og:title" content="HostBuddy AI: Natural AI Conversations for Short-Term Rentals" />
+        <meta property="og:title" content="HostBuddy AI: AI-powered templated messaging for Short-Term Rentals" />
         <meta property="og:description" content="Discover HostBuddy AI's unmatched natural conversation capabilities for short-term rentals. Benefit from 24/7 AI coverage and cost-effective property management." />
         <meta property="og:image" content="../../helper/staticImage/night-house.webp" />
 
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="../../helper/staticImage/night-house.webp" />
-        <meta property="twitter:title" content="HostBuddy AI: Natural AI Conversations for Short-Term Rentals" />
+        <meta property="twitter:title" content="HostBuddy AI: AI-powered templated messaging for Short-Term Rentals" />
         <meta property="twitter:description" content="Discover HostBuddy AI's unmatched natural conversation capabilities for short-term rentals. Benefit from 24/7 AI coverage and cost-effective property management." />
         <meta property="twitter:image" content="../../helper/staticImage/night-house.webp" />
         <link rel="canonical" href="https://www.hostbuddy.ai/smart-templates" />
@@ -96,7 +96,8 @@ const SmartTemplatesLanding = () => {
                 <div className="icon-boc-con">
                   <h2>4. Enable <span className="color-change">AI</span></h2>
                   <p>HostBuddy can use AI stop your message from sending if it is not relevant to a guest or not contextually appropriate - for example, if you’re asking a guest to leave a review when they already told you they have.</p>
-                  <p>HostBuddy can also use AI to personalize each message to each guest, making it sound less like a robotic templated message and more like a more friendly, human gesture. <a href="#" onClick={(e) => handleShowModalClick(e, setShowAiExamplesModal)}>See examples</a>.</p>
+                  {/* <p>HostBuddy can also use AI to personalize each message to each guest, making it sound less like a robotic templated message and more like a more friendly, human gesture. <a href="#" onClick={(e) => handleShowModalClick(e, setShowAiExamplesModal)}>See examples</a>.</p> */}
+                  <p>HostBuddy can also use AI to personalize each message to each guest, making it sound less like a robotic templated message and more like a more friendly, human gesture.</p>
                 </div>
               </div>
               <div className="col-lg-5 col-md-5 right-column blur-background-top-left blur-background-bottom-right">
