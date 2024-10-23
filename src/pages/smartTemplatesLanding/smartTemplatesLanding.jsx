@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 
 import SendWhenIfTile from "./sendWhenIfTiles/sendWhenIfTiles";
 import ConditionsModal from "./modals/conditionsModal";
-import AiExamplesModal from "./modals/aiExamplesModal";
+// import AiExamplesModal from "./modals/aiExamplesModal";
 
 
 const SmartTemplatesLanding = () => {
@@ -111,7 +111,7 @@ const SmartTemplatesLanding = () => {
         </div>
       </div>
       <ConditionsModal show={showConditionsModal} handleClose={() => setShowConditionsModal(false)} />
-      <AiExamplesModal show={showAiExamplesModal} handleClose={() => setShowAiExamplesModal(false)} />
+      {/* <AiExamplesModal show={showAiExamplesModal} handleClose={() => setShowAiExamplesModal(false)} /> */}
     </div>
   );
 };

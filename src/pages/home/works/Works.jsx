@@ -66,24 +66,24 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3>Schedule Based On <strong>Your Needs</strong></h3>
-                                <p>For our users: lockouts, late-night messages, and issue troubleshooting are a thing of the past. HostBuddy can be scheduled to fit your specific coverage needs, automating communication anytime you need support.</p>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <img src={schedule} alt='works-img' />
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-lg-6">
-                            <div className="works-content">
                                 <h3><strong>Seamless</strong> Property Setup with Autofill</h3>
                                 <p>Set up all your properties in minutes by simply connecting your property management system. HostBuddy does the legwork for you by extracting information from existing welcome documents, listing information, past conversations, or any other available resources to automatically create an organized database used to support your guests.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
                             <img src={seamlessPropertySetup} alt='works-img' />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="works-content">
+                                <h3>Templated Messages <strong>For Everything</strong></h3>
+                                <p>Automate everything with HostBuddy's ultra robust templated messaging system, enhanced with AI. Target the right guests at the right time to boost guest satisfaction and earn more revenue. <Link to='/smart-templates'>Learn More &#8594;</Link></p>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <img src={SmartTemlating} alt='works-img' />
                         </div>
                     </div>
 
@@ -102,24 +102,24 @@ const Works = () => {
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3>Guest <strong>Upsells</strong></h3>
-                                <p>Have HostBuddy pay for itself by offering your guests extension discounts for vacant nights created by minimum stay requirements. Impress your guests with early check-ins and late checkout offers. Automatically follow up with guests who have gone silent after sending an inquiry.</p>
+                                <h3>Schedule Based On <strong>Your Needs</strong></h3>
+                                <p>Lockouts, late-night messages, and issue troubleshooting are a thing of the past for our users. HostBuddy can be scheduled to fit your specific coverage needs, automating communication anytime you need support.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={vacantNight} alt='works-img' />
+                            <img src={schedule} alt='works-img' />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="works-content">
-                                <h3><strong>Smart</strong> Templating</h3>
-                                <p>Target the right guests at the right time with intelligent, context-aware templated messages. Automatically send review requests to guests who express positive sentiments about their experience, and skip those who are dissatisfied.</p>
+                                <h3>Guest <strong>Upsells</strong></h3>
+                                <p>Have HostBuddy pay for itself by offering your guests extension discounts for vacant nights created by minimum stay requirements. Impress your guests with early check-ins and late checkout offers. Automatically follow up with guests who have gone silent after sending an inquiry.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <img src={SmartTemlating} alt='works-img' />
+                            <img src={vacantNight} alt='works-img' />
                         </div>
                     </div>
 
