@@ -1,0 +1,65 @@
+.send-when-if-tile .tile {
+  border: 2px solid #146ef5;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: #000212;
+  box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.5); /* x-offset | y-offset | blur-radius | spread-radius | color */
+}
+
+.send-when-if-tile .top-content {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.send-when-if-tile .bottom-content {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.send-when-if-tile .title-content {
+  padding: 8px 15px;
+}
+
+.send-when-if-tile .top-content {
+  flex: none; /* Prevents flex-grow */
+}
+
+.send-when-if-tile .bottom-content {
+  flex: none; /* Prevents flex-grow */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.send-when-if-tile .section-title {
+  font-family: "Samsung Sharp Sans Bold";
+  margin: 0;
+  font-size: 1em;
+  font-weight: bold;
+  color: #146ef5;
+}
+
+.send-when-if-tile .tile-title {
+  font-family: "Samsung Sharp Sans Bold";
+  margin: 0;
+  font-size: 1em;
+  font-weight: bold;
+  color: #fff;
+}
+
+.send-when-if-tile .tile-text {
+  font-family: "Samsung Sharp Sans Medium";
+  margin: 0px 0 0 0;
+  font-size: 1em;
+  color: #ffffff;
+}
+
+.send-when-if-tile .tile-divider {
+  width: 100%;
+  border: none;
+  margin: 0;
+  border-top: 2px solid #146ef5;
+  opacity: 1;
+}

@@ -47,6 +47,7 @@ import GetConversationsTest from "../helper/getConversationsTest/getConversation
 import ActionItemsIndex from "../pages/actionItems/ActionItemsIndex";
 //import TestShowConvIndex from "../pages/testShowConversations/TestShowConvIndex";
 import AiMessaging from "../pages/aiMessaging/AiMessaging";
+import SmartTemplatesLanding from "../pages/smartTemplatesLanding/smartTemplatesLanding";
 
 // PMS instructions pages
 import PmsInstructionsMain from "../pages/userGuides/pmsInstructions/instructionsMain";
@@ -235,51 +236,17 @@ const Routing = () => {
         <Route path="/pms-instructions/ownerrez" element={<OwnerRezInstructions />} />
         <Route path="/pms-instructions/bookingsync" element={<BookingSyncInstructions />} />
 
+        <Route path="/ai-messaging" element={<AiMessaging />} />
+        <Route path="/smart-templates" element={<SmartTemplatesLanding />} />
 
-        {/* <Route
-          path="/test-show-conversations"
-          element={<TestShowConvIndex />}
-        ></Route> */}
-        <Route
-          path="/ai-messaging"
-          element={<AiMessaging />}
-        ></Route>
+        <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />} />
+        <Route path="/software-solutions" element={<SoftwareSolutions />} />
+        <Route path="*" element={ <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" /> } />
+        <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />} />
+        <Route path="/software-solutions" element={<SoftwareSolutions />} ></Route>
+        <Route path="*" element={ <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" /> } />
 
-        <Route
-          path="/become-an-affiliate"
-          element={<BecomeAnAffiliate />}
-        ></Route>
-        <Route
-          path="/software-solutions"
-          element={<SoftwareSolutions />}
-        ></Route>
-        <Route
-          path="*"
-          element={
-            <ThankError
-              imgSrc={ErrorImg}
-              text="We cannot find the page you’re looking for"
-            />
-          }
-        ></Route>
-
-        <Route
-          path="/become-an-affiliate"
-          element={<BecomeAnAffiliate />}
-        ></Route>
-        <Route
-          path="/software-solutions"
-          element={<SoftwareSolutions />}
-        ></Route>
-        <Route
-          path="*"
-          element={
-            <ThankError
-              imgSrc={ErrorImg}
-              text="We cannot find the page you’re looking for"
-            />
-          }
-        />
+        
         <Route
           path="/get-conversations-test"
           element={
