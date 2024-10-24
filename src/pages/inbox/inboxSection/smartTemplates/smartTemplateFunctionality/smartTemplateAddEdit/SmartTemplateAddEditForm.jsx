@@ -6,7 +6,7 @@ import { dataInput, createTypeToGuesttypeMapping, getUseTriggeredGuestFromTempla
 import Loader from "../../../../../../helper/Loader";
 import { v4 as uuidv4 } from 'uuid';
 
-const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading}) => {
+const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, turno_user_id}) => {
   const { type, smartTemplateData } = addEditSmart;
   const { triggers, targets, conditions } = dataInput;
   const edit = "Edit";
@@ -433,7 +433,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         )}
       </div>
 
-      <TriggersTrargetsConditionsModel show={allData} handleClose={() => setAllData({ modelShow: false, modelShowType: "" }) } submitHndle={submitHndle} />
+      <TriggersTrargetsConditionsModel show={allData} handleClose={() => setAllData({ modelShow: false, modelShowType: "" }) } submitHndle={submitHndle} turno_user_id={turno_user_id}/>
     </div>
   );
 };

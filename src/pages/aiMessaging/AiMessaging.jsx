@@ -42,7 +42,7 @@ const AiMessaging = () => {
               <p>We pride ourselves in providing the most fluent AI communication in short-term rentals, achieving performance and trust that is unprecedented in the industry.</p>
             </div>
             <div className="col-lg-5 blur-background-top-left">
-              <img style={{borderRadius:'20px'}} src={NightHouse} alt=" " />
+              <img style={{borderRadius:'20px'}} src={NightHouse} alt="A luxury property at night" />
             </div>
           </div>
           <div className="trust">
