@@ -1,8 +1,9 @@
 import Multiselect from "multiselect-react-dropdown";
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle }) => {
+const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno_user_id }) => {
   const { modelShow, modelShowType, formData, editFormData, typepAddEdit, editIndex } = show;
 
   const [selectGet, setSelectGet] = useState({}); // Selected trigger/target/condition obj from the dataInput json
@@ -192,13 +193,18 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle }) => 
             })}
           </>
         </div>
+
+        {!turno_user_id && (type === 'cleaning_complete') && (
+          <p className="settings-label" style={{marginTop:'10px', color:'rgb(255, 165, 0)', fontSize:'16px', textAlign:'center'}}>This event requires a Turno integration. <Link to="/setting/integrations">Click here</Link> to set one up.</p>
+        )}
+
         {inputFiled?.length > 0 ? (
           <>
             <div className="text-center mt-3 gap-3 addition_des_button modal_addition_des_button d-flex md:flex-wrap">
               <button type="submit" className="bg_theme_btn mb-3" onClick={closeHndleModel}>
                 Cancel
               </button>
-              <button type="submit" className="bg_theme_btn mb-3" onClick={onSubmitHndle}>
+              <button type="submit" className="bg_theme_btn mb-3" onClick={onSubmitHndle} disabled={!turno_user_id && (type === 'cleaning_complete')}>
                 Confirm
               </button>
             </div>

@@ -67,7 +67,7 @@ const SmartTemplatesLanding = () => {
           <h4>Supercharged with AI.</h4>
           <div className="row first-section">
             <div className="col-lg-5 blur-background-top-left blur-background-bottom-right">
-              <img src={NightHouse} alt=" " />
+              <img src={NightHouse} alt="A luxury penthouse" />
             </div>
             <div className="col-lg-7">
               <p>HostBuddy provides the most advanced templated messaging support in short-term rentals. Target any subset of your guests by choosing from a multitude of timing options and conditions. Use AI to bring context awareness and a human-like touch to your messages.</p>
