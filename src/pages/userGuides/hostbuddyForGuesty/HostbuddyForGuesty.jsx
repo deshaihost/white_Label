@@ -3,18 +3,20 @@ import "./HostbuddyForGuesty.css"
 import { Link } from "react-router-dom";
 
 const HostbuddyForGuesty = () => {
+
+  const guesty_partner_img = 'https://hostbuddylb.com/misc/guesty_partner_img.webp';
+
   return (
     <div className="container">
       <div className="row">
         <div className="col-sm-12">
+          <h2 style={{ color:'white', textAlign:'center', margin:'60px auto 20px auto', width:'60%' }}>HostBuddy AI: Revolutionizing Guest Communication for Guesty Users</h2>
           <div className="account-container h-auto blur-background-top-right my-5">
             <div class="account_heading">
-              <h3>
-                HostBuddy AI: Revolutionizing Guest Communication for Guesty
-                Users
-              </h3>
+              {/* <h3>HostBuddy AI: Revolutionizing Guest Communication for Guesty Users</h3> */}
             </div>
             <div class="account-content">
+              <img src={guesty_partner_img} alt="guesty-partner" style={{ width:'700px', borderRadius:'20px', display:'block', margin:'10px auto 50px auto' }} />
               <p>
                 HostBuddy AI represents the pinnacle of AI-powered guest
                 communication in the short-term rental industry. Seamlessly
@@ -46,7 +48,7 @@ const HostbuddyForGuesty = () => {
                 <li><b>Sentiment Analysis:</b> Real-time analysis of guest sentiment to preemptively address concerns and enhance satisfaction. </li>
               </ul>
               <p>Experience the future of guest communication with HostBuddy AI. Elevate your short-term rental business, increase guest satisfaction, and drive revenue growth – all while saving time and resources.</p>
-              <Link to="/">Get Started with HostBuddy AI for Guesty</Link>
+              <Link to="/">Learn more about HostBuddy AI</Link>
             </div>
           </div>
         </div>
