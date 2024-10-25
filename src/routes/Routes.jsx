@@ -61,6 +61,7 @@ import HospitableInstructions from "../pages/userGuides/pmsInstructions/hospitab
 import HostfullyInstructions from "../pages/userGuides/pmsInstructions/hostfully";
 import OwnerRezInstructions from "../pages/userGuides/pmsInstructions/ownerrez";
 import BookingSyncInstructions from "../pages/userGuides/pmsInstructions/bookingsync";
+import HostbuddyForGuesty from "../pages/userGuides/hostbuddyForGuesty/HostbuddyForGuesty";
 
 
 const Routing = () => {
@@ -211,6 +212,9 @@ const Routing = () => {
         ></Route>
         <Route path="/tips-and-tricks" element={<TipsAndTricks />}></Route>
         <Route path="/best-practices" element={<BestPractices />}></Route>
+        <Route path="/hostbuddy-for-guesty" element={<HostbuddyForGuesty />}></Route>
+
+        
         <Route path="/testing-questions" element={<TestingQuestions />}></Route>
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
         <Route
