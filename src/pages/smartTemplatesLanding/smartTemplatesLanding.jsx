@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { useLocation } from "react-router-dom";
 import "./smartTemplatesLanding.css";
 import { Helmet } from 'react-helmet';
 import { Link } from "react-router-dom";
@@ -13,6 +14,9 @@ const NightHouse = "https://hostbuddylb.com/new-landing-pages/penthouse-prop.web
 
 
 const SmartTemplatesLanding = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const fromPortal = queryParams.get('portal') === 'true'; // fromPortal true iff param "portal" is true (put when user is redirected here from within the portal). If not specified, defaults to false.
 
   const [showConditionsModal, setShowConditionsModal] = useState(false);
   const [showAiExamplesModal, setShowAiExamplesModal] = useState(false);
@@ -71,7 +75,7 @@ const SmartTemplatesLanding = () => {
             </div>
             <div className="col-lg-7">
               <p>HostBuddy provides the most advanced templated messaging support in short-term rentals. Target any subset of your guests by choosing from a multitude of timing options and conditions. Use AI to bring context awareness and a human-like touch to your messages.</p>
-              <p>Smart Templates makes it easy for you to set up automations that earn you value. Automate strategic upsells that make money, timely check-ins that make your guests feel special, and so much more.</p>
+              <p>Smart Templates makes it easy for you to set up automations that earn you value. Automate strategic upsells that make money, timely check-ins that make your guests feel special, policy reminders, and so much more.</p>
             </div>
           </div>
           <div className="trust">
@@ -116,31 +120,35 @@ const SmartTemplatesLanding = () => {
           </div>
 
           {/* CTA */}
-          <div className="started" style={{padding: '0'}}>
-            <div className="started-content" style={{margin: '20px auto'}}>
-            <h3>Get Started</h3>
-              <p>Automate your guest messaging, satisfy your guests, and make more money.</p>
-              <div style={{ marginBottom: '10px' }}>
-                <a style={{ cursor:"pointer" }}className='explore-link' target="_blank" rel="noopener noreferrer" onClick={(e) => {
-                    e.preventDefault(); // Don't go to the link - just open the modal
-                    setDemoModalShow(true);
-                }}>
-                  Book a Demo
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="13" viewBox="0 0 14 13" fill="none">
-                      <path d="M13.0303 7.03033C13.3232 6.73744 13.3232 6.26256 13.0303 5.96967L8.25736 1.1967C7.96447 0.903806 7.48959 0.903806 7.1967 1.1967C6.90381 1.48959 6.90381 1.96447 7.1967 2.25736L11.4393 6.5L7.1967 10.7426C6.90381 11.0355 6.90381 11.5104 7.1967 11.8033C7.48959 12.0962 7.96447 12.0962 8.25736 11.8033L13.0303 7.03033ZM0.5 7.25H12.5V5.75H0.5V7.25Z" fill="#146EF5"></path>
-                  </svg>
-                </a>
+          {!fromPortal ? ( // CTA for book a demo and explore pricing, if viewed as a landing page
+            <div className="started" style={{padding: '0'}}>
+              <div className="started-content" style={{margin: '20px auto'}}>
+              <h3>Get Started</h3>
+                <p>Automate your guest messaging, satisfy your guests, and make more money.</p>
+                <div style={{ marginBottom: '10px' }}>
+                  <a style={{ cursor:"pointer" }}className='explore-link' target="_blank" rel="noopener noreferrer" onClick={(e) => {
+                      e.preventDefault(); // Don't go to the link - just open the modal
+                      setDemoModalShow(true);
+                  }}>
+                    Book a Demo &rarr;
+                  </a>
+                </div>
+                <div>
+                  <Link className='explore-link' to="/pricing">Explore Pricing &rarr;</Link>
+                </div>
               </div>
-              <div>
-                <Link className='explore-link' to="/pricing">Explore Pricing
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="13" viewBox="0 0 14 13" fill="none">
-                      <path d="M13.0303 7.03033C13.3232 6.73744 13.3232 6.26256 13.0303 5.96967L8.25736 1.1967C7.96447 0.903806 7.48959 0.903806 7.1967 1.1967C6.90381 1.48959 6.90381 1.96447 7.1967 2.25736L11.4393 6.5L7.1967 10.7426C6.90381 11.0355 6.90381 11.5104 7.1967 11.8033C7.48959 12.0962 7.96447 12.0962 8.25736 11.8033L13.0303 7.03033ZM0.5 7.25H12.5V5.75H0.5V7.25Z" fill="#146EF5"></path>
-                  </svg>
-                </Link>
-              </div>
+              <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} sourceMsg='Smart Templates landing page'/>
             </div>
-            <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} sourceMsg='Smart Templates landing page'/>
-          </div>
+          ) : ( // Link to the actual Smart Templates page, if viewed from within the portal
+            <div className="started" style={{padding: '0'}}>
+              <div className="started-content" style={{margin: '20px auto'}}>
+              <h3>Get Started</h3>
+                <p>Create automations, satisfy your guests, and make more money.</p>
+                <Link className='explore-link' to="/inbox/smart-templates">Go to Smart Templates &rarr;</Link>
+              </div>
+              <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} sourceMsg='Smart Templates landing page'/>
+            </div>
+          )}
 
         </div>
       </div>

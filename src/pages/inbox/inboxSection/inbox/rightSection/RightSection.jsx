@@ -199,9 +199,9 @@ const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
       </div>
 
       <div className="satisfy">
-        {sentiment && (
+        <h2>Satisfaction</h2>
+        {sentiment ? (
           <>
-            <h2>Satisfaction</h2>
             <p className="result" style={{ color: sentiment === "positive" ? "rgb(0, 180, 0)" : sentiment === "negative" ? "rgb(200, 0, 0)" : "#BBB" }}>
               {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
             </p>
@@ -209,11 +209,13 @@ const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
               <p style={{ fontSize:'12px', marginTop:'3px' }}>{sentiment_justification}</p>
             )}
           </>
+        ) : (
+          <p style={{ color:"#BBB", fontSize:'16px' }}>No data yet</p>
         )}
       </div>
       
       <div className="about about-inner user-detail">
-        <p>Platform Booked: {channel}</p>
+        <p>Platform Booked: {channel ? channel : '--'}</p>
       </div>
 
       {/* Data not yet available in the API

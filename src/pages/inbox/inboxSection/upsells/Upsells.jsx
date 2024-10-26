@@ -140,11 +140,11 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
       
       {selectedSection === "index" && (
         <div className="upsells-settings">
-          <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
+          <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between blur-background-top-right">
             <h3>Upsells</h3>
           </div>
-          <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
-            <p style={{color:"#CCC"}}>Intelligent, context-aware proactive messaging. Drive sales, get positive reviews, and increase guest satisfaction.</p>
+          <div style={{width:"95%", margin:"20px 5px"}}>
+            <p style={{color:"#CCC", fontSize:'16px'}}>Intelligent automations that help you maximize occupancy and leave less money on the table. Customize your upsell settings and messages to suit your property and guest preferences.</p>
           </div>
 
           <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-1"/>

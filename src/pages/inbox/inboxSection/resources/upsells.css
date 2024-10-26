@@ -107,13 +107,14 @@
   border: 1px solid #045ce9;
   border-radius: 15px;
   padding: 15px 10px;
+  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.5); /* offset-x offset-y blur-radius spread-radius color */
   transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effects */
   position: relative;
 }
 
 .upsells-settings .clickable-div:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 12px 4px rgba(255, 255, 255, 0.5);
 }
 
 .upsells-settings .clickable-div::after {
