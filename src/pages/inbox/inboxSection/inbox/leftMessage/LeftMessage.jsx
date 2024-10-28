@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import "./index.css";
 import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
 import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
@@ -6,7 +7,7 @@ import { BoxLoader } from "../../../../../helper/Loader";
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 
-const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal }) => {
+const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, userHasPMS, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal }) => {
 
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -233,78 +234,96 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
         </div>
       </div>
       {filterQueryLoading ? (<BoxLoader />) : (
-        <div className="left-bar-chat" ref={containerRef}>
-          {allConversations?.map((message) => {
-            const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url } = message;
-            const allDataForConversation = message;
-            const messages = message?.messages; // Assuming message?.messages is an array
-            const lastValue = messages[messages.length - 1];
-            const { sender, text, time } = lastValue;
-            let shortenedText = text;
-            if (text.length > 50) {
-              shortenedText = text.slice(0, 50) + "...";
-            } else {
-              shortenedText = text;
-            }
+        allConversations && allConversations.length ? (
+          <div className="left-bar-chat" ref={containerRef}>
+            {allConversations?.map((message) => {
+              const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url } = message;
+              const allDataForConversation = message;
+              const messages = message?.messages; // Assuming message?.messages is an array
+              const lastValue = messages[messages.length - 1];
+              const { sender, text, time } = lastValue;
+              let shortenedText = text;
+              if (text.length > 50) {
+                shortenedText = text.slice(0, 50) + "...";
+              } else {
+                shortenedText = text;
+              }
 
-            // Based on which of these fields are present (arrival_date, departure_date, property_name): render the appropriate string
-            let datesAndPropertyNameDisplay = "";
-            const reservationDateRange = formatDateRange(arrival_date, departure_date);
-            if (reservationDateRange && property_name) {
-              datesAndPropertyNameDisplay = `${reservationDateRange} | ${property_name}`;
-            } else if (reservationDateRange) {
-              datesAndPropertyNameDisplay = reservationDateRange;
-            } else if (property_name) {
-              datesAndPropertyNameDisplay = property_name;
-            } else {
-              datesAndPropertyNameDisplay = '';
-            }
+              // Based on which of these fields are present (arrival_date, departure_date, property_name): render the appropriate string
+              let datesAndPropertyNameDisplay = "";
+              const reservationDateRange = formatDateRange(arrival_date, departure_date);
+              if (reservationDateRange && property_name) {
+                datesAndPropertyNameDisplay = `${reservationDateRange} | ${property_name}`;
+              } else if (reservationDateRange) {
+                datesAndPropertyNameDisplay = reservationDateRange;
+              } else if (property_name) {
+                datesAndPropertyNameDisplay = property_name;
+              } else {
+                datesAndPropertyNameDisplay = '';
+              }
 
-            /*
-            if (datesAndPropertyNameDisplay.length > 40) {
-              datesAndPropertyNameDisplay = datesAndPropertyNameDisplay.slice(0, 40) + "...";
-            }
-            */
+              /*
+              if (datesAndPropertyNameDisplay.length > 40) {
+                datesAndPropertyNameDisplay = datesAndPropertyNameDisplay.slice(0, 40) + "...";
+              }
+              */
 
-            return (
-              <React.Fragment key={conversation_id}>
-                <div style={{ cursor: "pointer", overflow: 'hidden', width: '100%' }}
-                  className={`${conversation_id === selectedConversationId && "bg-dark"} left-inner-tab`}
-                  onClick={() => openConversationHandle(allDataForConversation, conversation_id)}
-                >
-                  <div style={{ display:'flex', alignItems:'flex-start', overflow: 'hidden', width: '100%' }}>
-                    <div style={{flexShrink:0}}>
-                      <img src={image_url ? image_url : dummyPropertyImg} alt="Property Thumbnail Image" style={{width:"61px", height:"61px", marginTop:"2px"}} onError={(e) => { e.target.onerror = null; e.target.src = dummyPropertyImg; }}/>
-                    </div>
-                    <div className="left-description" style={{ flex: 1, marginLeft: '10px', overflow: 'hidden' }}>
-                      <div className="d-flex justify-content-between description-item">
-                        <h2>
-                          {opened ? guest_name : <strong>{guest_name}</strong>}
-                        </h2>
-                        <div className="date" style={{margin:"0"}}>
-                          {opened ? timeFormat(time) : <strong>{timeFormat(time)}</strong>}
+              return (
+                <React.Fragment key={conversation_id}>
+                  <div style={{ cursor: "pointer", overflow: 'hidden', width: '100%' }}
+                    className={`${conversation_id === selectedConversationId && "bg-dark"} left-inner-tab`}
+                    onClick={() => openConversationHandle(allDataForConversation, conversation_id)}
+                  >
+                    <div style={{ display:'flex', alignItems:'flex-start', overflow: 'hidden', width: '100%' }}>
+                      <div style={{flexShrink:0}}>
+                        <img src={image_url ? image_url : dummyPropertyImg} alt="Property Thumbnail Image" style={{width:"61px", height:"61px", marginTop:"2px"}} onError={(e) => { e.target.onerror = null; e.target.src = dummyPropertyImg; }}/>
+                      </div>
+                      <div className="left-description" style={{ flex: 1, marginLeft: '10px', overflow: 'hidden' }}>
+                        <div className="d-flex justify-content-between description-item">
+                          <h2>
+                            {opened ? guest_name : <strong>{guest_name}</strong>}
+                          </h2>
+                          <div className="date" style={{margin:"0"}}>
+                            {opened ? timeFormat(time) : <strong>{timeFormat(time)}</strong>}
+                          </div>
                         </div>
-                      </div>
-                      <div className="short-des" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {opened ? (
-                        <>
-                          <strong>{sender}:</strong> {shortenedText}
-                        </>
-                      ) : (
-                        <strong>{sender}: {shortenedText}</strong>
-                      )}
-                      </div>
-                      <div className="date" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {opened ? datesAndPropertyNameDisplay : <strong>{datesAndPropertyNameDisplay}</strong>}
+                        <div className="short-des" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {opened ? (
+                          <>
+                            <strong>{sender}:</strong> {shortenedText}
+                          </>
+                        ) : (
+                          <strong>{sender}: {shortenedText}</strong>
+                        )}
+                        </div>
+                        <div className="date" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {opened ? datesAndPropertyNameDisplay : <strong>{datesAndPropertyNameDisplay}</strong>}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <hr />
-              </React.Fragment>
-            );
-          })}
-        </div>
+                  <hr />
+                </React.Fragment>
+              );
+            })}
+          </div>
+        ) : (
+          (fromHostBuddyFilterVal || urgentFilterIsEnabled || propertyFilterVal || phaseFilterVal || guestNameSearchVal) ? (
+            <div className="no-messages" style={{textAlign:'center', margin:'10px auto 0 auto', width:'85%'}}>
+              <p style={{color:'#AAA', fontSize:'16px'}}>No conversations match the selected filters.</p>
+            </div>
+          ) : (
+            userHasPMS ? (
+              <div className="no-messages" style={{textAlign:'center', margin:'10px auto 0 auto', width:'85%'}}>
+                <p style={{color:'#AAA', fontSize:'16px'}}>No conversations found.</p>
+              </div>
+            ) : (
+              <div className="no-messages" style={{textAlign:'center', margin:'10px auto 0 auto', width:'95%'}}>
+                <p style={{color:'#AAA', fontSize:'16px'}}>No conversations found. <Link to="/getstarted">Connecting your PMS</Link> will automatically import your conversations.</p>
+              </div>
+            )
+          )
+        )
       )}
       {nextBatchLoading && <BoxLoader />}
     </div>

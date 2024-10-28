@@ -7,7 +7,7 @@ import MildeSection from "./mildeSection/MildeSection";
 import RightSection from "./rightSection/RightSection";
 import "./inboxIndex.css";
 
-const Inbox = ({allPropertyNamesList, allGuestNamesList}) => {
+const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS}) => {
   const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
   const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
   const [conversationsNotYetFetched, setConversationsNotYetFetched] = useState(true);
@@ -144,7 +144,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList}) => {
       {conversationsNotYetFetched ? <FullScreenLoader /> : null}
       <div className="row text-white">
         <div className="col-lg-3 left-bar">
-          <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} />
+          <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} />
         </div>
         <div className="col-lg-6">
           <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} />

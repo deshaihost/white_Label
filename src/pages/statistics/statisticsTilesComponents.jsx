@@ -148,7 +148,7 @@ export const LineGraphTile = ({ dataSets, width, height }) => {
             <Line type="monotone" dataKey="value" stroke="#8884d8" />
           </LineChart>
         ) : (
-          <p>No data</p>
+          <p>No data yet</p>
         )}
       </div>
     </Grid>
@@ -204,7 +204,7 @@ export const HistogramTile = ({ dataSets, width, height }) => {
             <Bar dataKey="value" fill="#2196F3" />
           </BarChart>
         ) : (
-          <p>No data</p>
+          <p>No data yet</p>
         )}
       </div>
     </Grid>
@@ -263,7 +263,7 @@ export const MetricTile = ({ dataSets, width, height }) => {
               );
             })
           ) : (
-          <p>No data</p>
+          <p>No data yet</p>
         )}
         </div>
       </div>

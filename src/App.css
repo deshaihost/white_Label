@@ -9,6 +9,8 @@ body {
 
 ::-webkit-scrollbar {
   width: 2px;
+  height: 2px; /* for horizontal scroll bar */
+  display: none; /* this hides the scrollbar */
 }
 
 ::-webkit-scrollbar-thumb {

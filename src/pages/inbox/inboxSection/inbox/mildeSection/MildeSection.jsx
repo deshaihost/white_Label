@@ -11,6 +11,8 @@ import { Tooltip } from "react-tooltip";
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
 
+const placeholderImg = 'https://hostbuddylb.com/misc/chatBubbles.webp';
+
 const MildeSection = ({ allConversationData, updateConversationFromApi, updateCovnersationLocal }) => {
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -79,7 +81,8 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   };
 
   const handleSendMessage = async () => {
-    if (inputValue.trim() === "") return;
+    if (inputValue.trim() === "") return; // no message added
+    if (!conversationData?.conversation_id) return; // no conversation selected
     setSendMessageLoading(true);
 
     const { conversation_id, reservation_id=null } = conversationData; // reservation_id default to null if not present. Sometimes the send operation will still work if it isn't included, so proceed
@@ -279,43 +282,60 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   return (
     <div className="main-chat">
       <div className="chatbot">
-        <div className="message-list" ref={messageListRef}>
-          {messages?.map((message, index) => {
-            return (
-                <MessageInbox
-                  key={message?.id}
-                  text={message.text?.text}
-                  sender={message.sender}
-                  currentMessageDay={message.messageDay}
-                  messageData={message}
-                  feedBckModelOpen={feedBckModelOpenHndle}
-                  handleJustificationClick={handleJustificationClick}
-                  feedBackDataGet={feedBackDataGet}
-                  prevMsgText={messages[index - 1]?.text}
-                  isInitialMessage={index <= 1}
-                />
-            );
-          })}
-          {/* {updateMessageRespLoading && <Loader />} */}
-          <div ref={messagesEndRef} />
-        </div>
-        <div className="ai-input">
 
+        {allConversationData && Object.keys(allConversationData).length > 0 ? (
+          <div className="message-list" ref={messageListRef}>
+            {messages?.map((message, index) => {
+              return (
+                  <MessageInbox
+                    key={message?.id}
+                    text={message.text?.text}
+                    sender={message.sender}
+                    currentMessageDay={message.messageDay}
+                    messageData={message}
+                    feedBckModelOpen={feedBckModelOpenHndle}
+                    handleJustificationClick={handleJustificationClick}
+                    feedBackDataGet={feedBackDataGet}
+                    prevMsgText={messages[index - 1]?.text}
+                    isInitialMessage={index <= 1}
+                  />
+              );
+            })}
+            {/* {updateMessageRespLoading && <Loader />} */}
+            <div ref={messagesEndRef} />
+          </div>
+        ) : (
+          <div className="no-messages-placeholder" style={{margin:'auto', justifyContent:'center', alignItems:'center', textAlign:'center'}}>
+            <img src={placeholderImg} alt="Chat bubbles" style={{width:'200px', opacity:0.7}}/>
+            <p style={{ color: '#AAA' }}>No conversation selected</p>
+          </div>
+        )}
+
+        <div className="ai-input">
           <div className="generate-container">
             <button ref={buttonRef} className="generate-button" onClick={handleGenerateButtonClick}>
               <i className="bi bi-stars"></i>
             </button>
             {generateOptionsVisible && (
               <div ref={menuRef} className="generate-menu">
-                {generateButtonIsEnabled ? (
-                  <button className="generate-menu-item" key='scratch' onClick={() => handleGenerateOptionSelect('scratch')}>Generate From Scratch</button>
+                {conversationData?.conversation_id ? (
+                  <>
+                    generateButtonIsEnabled ? (
+                      <button className="generate-menu-item" key='scratch' onClick={() => handleGenerateOptionSelect('scratch')}>Generate From Scratch</button>
+                    ) : (
+                      <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>Generate From Scratch</button>
+                    )
+                    inputValue.trim() !== "" ? (
+                      <button className="generate-menu-item" key='command' onClick={() => handleGenerateOptionSelect('command')}>Generate From My Instruction</button>
+                    ) : (
+                      <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Start typing to instruct HostBuddy how to message the guest'}>Generate From My Instruction</button>
+                    )
+                  </>
                 ) : (
-                  <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>Generate From Scratch</button>
-                )}
-                {inputValue.trim() !== "" ? (
-                  <button className="generate-menu-item" key='command' onClick={() => handleGenerateOptionSelect('command')}>Generate From My Instruction</button>
-                ) : (
-                  <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Start typing to instruct HostBuddy how to message the guest'}>Generate From My Instruction</button>
+                  <>
+                    <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Select a conversation to generate a response'}>Generate From Scratch</button>
+                    <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Select a conversation to instruct HostBuddy how to craft a message for this guest'}>Generate From My Instruction</button>
+                  </>
                 )}
               </div>
             )}

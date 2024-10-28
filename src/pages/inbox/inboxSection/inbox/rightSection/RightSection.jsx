@@ -131,10 +131,16 @@ const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
       <div className="row">
 
         <div className="guest">
-          {statusText && <span>{statusText}</span>}
-          <h2>{guest_name}</h2>
-          <p>{property_name}</p>
-          <p className="guest_date">{arrival_date && formatDateRange(arrival_date, departure_date, true)}</p>
+          {statusText || guest_name || property_name ? (
+            <>
+              {statusText && <span>{statusText}</span>}
+              <h2>{guest_name}</h2>
+              <p>{property_name}</p>
+              <p className="guest_date">{arrival_date && formatDateRange(arrival_date, departure_date, true)}</p>
+            </>
+          ) : (
+            <p>No guest selected</p>
+          )}
         </div>
 
         {/*
@@ -189,7 +195,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
             <p key={index} style={{ marginBottom: "10px" }}>{obj.item}</p>
           ))
         ) : (
-          <p>None</p>
+          <p style={{color:'#BBB'}}>None</p>
         )}
         {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 && (
           <div style={{ display: "flex", justifyContent: "center", marginTop: "5px" }}>
@@ -199,9 +205,9 @@ const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
       </div>
 
       <div className="satisfy">
-        {sentiment && (
+        <h2>Satisfaction</h2>
+        {sentiment ? (
           <>
-            <h2>Satisfaction</h2>
             <p className="result" style={{ color: sentiment === "positive" ? "rgb(0, 180, 0)" : sentiment === "negative" ? "rgb(200, 0, 0)" : "#BBB" }}>
               {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
             </p>
@@ -209,11 +215,13 @@ const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
               <p style={{ fontSize:'12px', marginTop:'3px' }}>{sentiment_justification}</p>
             )}
           </>
+        ) : (
+          <p style={{ color:"#BBB", fontSize:'16px' }}>No data yet</p>
         )}
       </div>
       
       <div className="about about-inner user-detail">
-        <p>Platform Booked: {channel}</p>
+        <p>Platform Booked: {channel ? channel : '--'}</p>
       </div>
 
       {/* Data not yet available in the API

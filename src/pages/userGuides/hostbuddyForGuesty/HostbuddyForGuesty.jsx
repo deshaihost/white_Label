@@ -17,22 +17,7 @@ const HostbuddyForGuesty = () => {
             </div>
             <div class="account-content">
               <img src={guesty_partner_img} alt="guesty-partner" style={{ width:'700px', borderRadius:'20px', display:'block', margin:'10px auto 50px auto' }} />
-              <p>
-                HostBuddy AI represents the pinnacle of AI-powered guest
-                communication in the short-term rental industry. Seamlessly
-                integrated with Guesty, our cutting-edge AI technology delivers
-                unparalleled automation and personalization, setting a new
-                standard for guest interactions. Engineered to emulate human
-                conversation, HostBuddy AI offers nuanced, context-aware
-                responses that guests find indistinguishable from those of a
-                dedicated human concierge. Our AI understands guest sentiment,
-                adapts to individual communication styles, and maintains your
-                brand voice consistently across all interactions. As the most
-                comprehensive AI messaging solution on the market, HostBuddy AI
-                combines advanced features with intuitive usability, making it
-                the all-in-one tool for elevating your guest communication
-                strategy.
-              </p>
+              <p>HostBuddy AI represents the pinnacle of AI-powered guest communication in the short-term rental industry. Seamlessly integrated with Guesty, our cutting-edge AI technology delivers unparalleled automation and personalization, setting a new standard for guest interactions. Engineered to emulate human conversation, HostBuddy AI offers nuanced, context-aware responses that guests find indistinguishable from those of a dedicated human concierge. Our AI understands guest sentiment, adapts to individual communication styles, and maintains your brand voice consistently across all interactions. As the most comprehensive AI messaging solution on the market, HostBuddy AI combines advanced features with intuitive usability, making it the all-in-one tool for elevating your guest communication strategy.</p>
               <h2 className="text-white mb-3">Key Features</h2>
               <ul className="text-white d-flex flex-column ps-5 gap-3 mb-5 list-disc">
                 <li><b>24/7 Automated Responses:</b> Instant, accurate replies to guest inquiries at any time, ensuring no message goes unanswered.</li>

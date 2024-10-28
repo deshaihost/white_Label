@@ -228,11 +228,14 @@ const ReviewRemoval = ({allPropertyNamesList}) => {
       {reviewsLoading ? <FullScreenLoader /> : null}
       <div className="review-heading">
         <h2>Review Removal</h2>
-        <p>HostBuddy compares guest conversations with associated reviews to determine potential review removal opportunities. If HostBuddy determines a review could be removed, it will generate a script for the host to report to the OTA.</p>
+        <p>HostBuddy automatically identifies negative reviews that may be in violation of OTA review policies, using the guest conversation and reservation data as context.</p>
+        <p>For each review identified, HostBuddy generates a report that can be submitted to the OTA to request its removal. You can also have HostBuddy rewrite the report based on your instructions and additional context.</p>
       </div>
-      <p style={{ textAlign:'center', fontSize:'14px', color:'rgb(255, 165, 0)', marginTop:'20px', marginBottom:'20px' }}>
-        Review removal is currently in beta. Full release is scheduled for October 2024.
-      </p>
+      {/*
+        <p style={{ textAlign:'center', fontSize:'14px', color:'rgb(255, 165, 0)', marginTop:'20px', marginBottom:'20px' }}>
+          Review removal is currently in beta. Full release is scheduled for November 2024.
+        </p>
+      */}
 
       <div className="action-select" style={{width:"100%"}}> {/* hijack this class from ActionItemsTable.jsx, for filter component styling */}
 
@@ -270,8 +273,8 @@ const ReviewRemoval = ({allPropertyNamesList}) => {
         </div>
         <div className="main-review">
           {!allReviews || allReviews.length === 0 ? (
-            <div style={{ textAlign:'center', marginTop:'20px' }}>
-              <p style={{ color: 'white' }}>No matching reviews found for this account.</p>
+            <div style={{ textAlign:'center', marginTop:'20px', minHeight:'500px' }}>
+              <p style={{ color: 'white' }}>No reviews found that match the selected filters.</p>
             </div>
           ) : (
             <table className="table">

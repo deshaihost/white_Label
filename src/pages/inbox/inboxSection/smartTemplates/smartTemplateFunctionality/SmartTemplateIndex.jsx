@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import SmartTemplateAddEditForm from "./smartTemplateAddEdit/SmartTemplateAddEditForm";
 import PrebuiltTemplatesModal from "./prebuiltModal";
 import Loader from "../../../../../helper/Loader";
@@ -11,7 +12,7 @@ import { describeTemplate } from "./smartTemplateAddEdit/SmartTemplateJson";
 const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
   const add = "Add";
   const edit = "Edit";
-  const { turno_user_id } = userData;
+  const { turno_user_id } = userData || {};
 
   const [addEditSmart, setAddEditSmart] = useState({type: "", data: ""});
   const [smartAllData, setSmartAllData] = useState([]);
@@ -169,8 +170,8 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
 
   // When the page loads, call the API to get all the templates
   useEffect(() => {
-    callGetTemplatesApi();
-  }, []);
+    if (userData) { callGetTemplatesApi(); }
+  }, [userData]);
 
   return (
     <>
@@ -182,8 +183,9 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
             <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
               <h3>Smart Templates</h3>
             </div>
-            <div style={{ width: "90%", margin: "20px auto", textAlign: "center" }}>
-              <p style={{ color: "#CCC" }}>Send templated messages to the right guests at the right time. Use advanced technology to analyze conversations and situations to trigger messaging.</p>
+            <div style={{width:"95%", margin:"20px 5px"}}>
+              <p style={{color:"#CCC", fontSize:'16px'}}>Highly customizable templated messages that let you contact the right guests at the right time. Automate friendly check-in messages, strategic upsells, policy reminders, and much more. Use AI to add context awareness and a personal touch to each message.</p>
+              <Link to="/smart-templates?portal=true" style={{display:'inline-block', marginTop:'10px'}}>Learn more &rarr;</Link>
             </div>
             <hr style={{ backgroundColor: "white", height: "2px", border: "none" }} className="mt-1"/>
 
