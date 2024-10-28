@@ -8,46 +8,39 @@ import IconFour from "../../helper/staticImage/icon4.webp";
 import GetStartConnect from "./model/GetStartConnect";
 import { Link } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
-const step1img =
-  "https://hostbuddylb.com/get-started/1.%20Connect%20your%20PMS.webp";
-const step2img =
-  "https://hostbuddylb.com/get-started/2.%20Add%20your%20properties.webp";
-const step3img =
-  "https://hostbuddylb.com/get-started/3.%20Set%20Knowledge%20Base.webp";
+const step1img = "https://hostbuddylb.com/get-started/1.%20Connect%20your%20PMS.webp";
+const step2img = "https://hostbuddylb.com/get-started/2.%20Add%20your%20properties.webp";
+const step3img = "https://hostbuddylb.com/get-started/3.%20Set%20Knowledge%20Base.webp";
 const step4img = "https://hostbuddylb.com/get-started/4.%20Try%20it%20out.webp";
 const step5img = "https://hostbuddylb.com/get-started/5.%20Schedule.webp";
 
 const featureData = [
   {
     title: "Customize HostBuddy's Behavior",
-    description:
-      "See how HostBuddy can be tailored to suit the needs and nuances of your business.",
+    description: "See how HostBuddy can be tailored to suit the needs and nuances of your business.",
     link: "/inbox/preferences",
   },
   {
     title: "Get Notified",
-    description:
-      "HostBuddy intelligently identifies issues and action items, and can notify your team through various channels.",
+    description: "HostBuddy intelligently identifies issues and action items, and can notify your team through various channels.",
     link: "/setting/notifications",
   },
   {
-    title: "Vacant Night Upsells",
-    description:
-      "See how HostBuddy can pay for itself by proactively offering your guests extension discounts when there are vacant nights between bookings.",
-    link: "/inbox/upsells",
+    title: "Smart Templates",
+    description: "Leverage HostBuddy's advanced templating system to automate strategic upsells, friendly check-ins, policy reminders, and much more.",
+    //link: "/smart-templates?portal=true", // not sure if we're in the user portal. TODO: dynamically determine whether user is logged in and put the query param if so
+    link: "/smart-templates",
   },
   {
-    title: "Smart Review Requests",
-    description:
-      "HostBuddy can detect the sentiment of a guest's stay, and automatically send review requests to guests who had a positive experience.",
-    link: "/inbox/smart-templates",
+    title: "Vacant Night Upsells",
+    description: "See how HostBuddy can pay for itself by offering your guests extension discounts when there are vacant nights between bookings.",
+    link: "/inbox/upsells",
   },
   {
     title: "Optimize HostBuddy's responses",
     // description: "Best practices for iteratively testing and improving HostBuddy's responses for your property, ensuring every potential issue is covered.",
     // description: "Ensure every potential issue is covered using these best practices for structuring and improving the knowledge base.",
-    description:
-      "A quick guide to best practices for structuring and improving the knowledge base, ensuring every potential issue is covered.",
+    description: "A quick guide to best practices for structuring and improving the knowledge base, ensuring every potential issue is covered.",
     link: "/best-practices",
   },
 ];
@@ -84,8 +77,8 @@ const GetStarted = () => {
             <div className="new-get row">
               <div className="col-lg-6 ">
                 <div
-                  className="px-4 py-3 border border-primary rounded-15 d-flex mainCursor flex-column link_card_box "
-                  onClick={() => setModalShow({ type: true, interFaceShow: connectYourPMS, allType })}
+                  className="px-4 py-3 border border-primary rounded-15 d-flex mainCursor flex-column link_card_box"
+                  onClick={() => setModalShow({ type:true, interFaceShow:connectYourPMS, allType })}
                 >
                   <div className="icon-con ">
                     <h2>1</h2>
@@ -99,7 +92,7 @@ const GetStarted = () => {
               <div className="col-lg-6 ">
                 <div
                   className="px-4 py-3 border mainCursor border-primary rounded-15 d-flex flex-column link_card_box"
-                  onClick={() => setModalShow({ type: true, interFaceShow: importYourProperties, allType})}>
+                  onClick={() => setModalShow({ type:true, interFaceShow:importYourProperties, allType})}>
                   <div className="icon-con ">
                     <h2>2</h2>
                     <div className="icon-right">
@@ -112,7 +105,7 @@ const GetStarted = () => {
               <div className="col-lg-6 ">
                 <div
                   className="px-4 py-3 border mainCursor border-primary rounded-15 d-flex flex-column link_card_box"
-                  onClick={() => setModalShow({type: true, interFaceShow: test, allType})}>
+                  onClick={() => setModalShow({type:true, interFaceShow:test, allType})}>
                   <div className="icon-con ">
                     <h2>3</h2>
                     <div className="icon-right">
@@ -125,7 +118,7 @@ const GetStarted = () => {
               <div className="col-lg-6 ">
                 <div
                   className="px-4 py-3 border border-primary mainCursor rounded-15 d-flex flex-column link_card_box "
-                  onClick={() => setModalShow({type: true, interFaceShow: goLive, allType})}>
+                  onClick={() => setModalShow({type:true, interFaceShow:goLive, allType})}>
                   <div className="icon-con">
                     <h2>4</h2>
                     <div className="icon-right">

@@ -19,12 +19,14 @@ const InboxIndex = () => {
   const [interFaceComponent, setInterFaceComponent] = useState(0);
   const [allGuestNames, setAllGuestNames] = useState({});
 
+  const sectionMapping = { "": 0, "smart-templates": 1, "review-removal": 2, "preferences": 3, "upsells": 4 }; // for URL path params
+
   const allUserData = store?.getUserDataReducer?.getUserData?.data?.user;
   const userPropertiesData = allUserData?.property_data; // dict, keys are property names. values aren't important here
   const allPropertyNamesList = userPropertiesData ? Object.keys(userPropertiesData) : [];
-  const sectionMapping = { "": 0, "smart-templates": 1, "review-removal": 2, "preferences": 3, "upsells": 4 }; // for URL path params
-
   const showTimeZoneNotif = allUserData && !allUserData?.user_region;
+  const userHasPMS = allUserData && allUserData?.calry_integrations && Object.keys(allUserData.calry_integrations).length > 0;
+
 
   const callGetGuestNamesApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -73,7 +75,7 @@ const InboxIndex = () => {
   return (
     <div className="inbox-container">
       <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent} showTimeZoneNotif={showTimeZoneNotif}/>
-      {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames}/>}
+      {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames} userHasPMS={userHasPMS}/>}
       {interFaceComponent === 1 && <SmartTemplateIndex allPropertyNamesList={allPropertyNamesList} userData={allUserData}/>}
       {interFaceComponent === 2 && <ReviewRemoval allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 3 && <Preferences allPropertyNamesList={allPropertyNamesList}/>}

@@ -274,7 +274,7 @@ const ReviewRemoval = ({allPropertyNamesList}) => {
         <div className="main-review">
           {!allReviews || allReviews.length === 0 ? (
             <div style={{ textAlign:'center', marginTop:'20px', minHeight:'500px' }}>
-              <p style={{ color: 'white' }}>No matching reviews found for this account.</p>
+              <p style={{ color: 'white' }}>No reviews found that match the selected filters.</p>
             </div>
           ) : (
             <table className="table">

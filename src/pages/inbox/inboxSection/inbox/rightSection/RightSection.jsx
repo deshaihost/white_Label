@@ -131,10 +131,16 @@ const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
       <div className="row">
 
         <div className="guest">
-          {statusText && <span>{statusText}</span>}
-          <h2>{guest_name}</h2>
-          <p>{property_name}</p>
-          <p className="guest_date">{arrival_date && formatDateRange(arrival_date, departure_date, true)}</p>
+          {statusText || guest_name || property_name ? (
+            <>
+              {statusText && <span>{statusText}</span>}
+              <h2>{guest_name}</h2>
+              <p>{property_name}</p>
+              <p className="guest_date">{arrival_date && formatDateRange(arrival_date, departure_date, true)}</p>
+            </>
+          ) : (
+            <p>No guest selected</p>
+          )}
         </div>
 
         {/*
@@ -189,7 +195,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
             <p key={index} style={{ marginBottom: "10px" }}>{obj.item}</p>
           ))
         ) : (
-          <p>None</p>
+          <p style={{color:'#BBB'}}>None</p>
         )}
         {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 && (
           <div style={{ display: "flex", justifyContent: "center", marginTop: "5px" }}>
