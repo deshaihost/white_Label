@@ -196,6 +196,7 @@ const ActionsItemsTable = () => {
                   <option value="MAINTENANCE">Maintenance</option>
                   <option value="RESERVATION CHANGES">Reservation Changes</option>
                   <option value="GUEST REQUESTS">Guest Requests</option>
+                  <option value="MISSING INFO">Missing Info</option>
                   <option value="OTHER">Other</option>
                 </select>
               </div>
