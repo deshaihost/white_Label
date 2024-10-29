@@ -5,7 +5,6 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import PrimaryButton from "../../component/button/button";
 import "../auth.css";
 import { Helmet } from "react-helmet";
-//new code
 import { useForm } from "react-hook-form";
 import { registerActions } from "../../redux/auth/register/actions";
 import { loginActions } from "../../redux/actions";

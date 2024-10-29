@@ -39,7 +39,9 @@ const SubscriptionIndex = () => {
         setGoToBillingPortalLoading(false);
         window.location.assign(response.data.billing_portal_url);
       }
-      else {
+      else if (response.status == 403) { // 403 means insufficient permission, thrown when a non-admin user tries to access the billing portal
+        ToastHandle(response?.data?.error, "danger");
+      } else {
         ToastHandle(response?.data?.error, "danger");
         setSubscriptionNotFound(true);
       }

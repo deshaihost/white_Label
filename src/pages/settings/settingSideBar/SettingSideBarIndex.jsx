@@ -6,7 +6,7 @@ import { LiaCogSolid } from "react-icons/lia";
 
 const SettingSideBarIndex = (props) => {
   const { interFaceTypes, changeHndl, activeTab } = props;
-  const { account, conversationSettings, integrations, upsells, contact, notifications, subscription } = interFaceTypes;
+  const { account, conversationSettings, integrations, users, upsells, contact, notifications, subscription } = interFaceTypes;
 
   return (
     <div className="border border-primary py-3" style={{ borderRadius:"20px", padding:"10px" }}>
@@ -43,6 +43,13 @@ const SettingSideBarIndex = (props) => {
         <h6 className="d-flex align-items-center gap-2 m-0" style={{ cursor: 'pointer' }}>
           <FaPlug />
           Integrations
+        </h6>
+      </div>
+
+      <div className={`px-2 py-2 setting-tab-link ${ activeTab === users && "active" }`} onClick={() => changeHndl(users)}>
+        <h6 className="d-flex align-items-center gap-2 m-0" style={{ cursor: 'pointer' }}>
+          <FaUserLarge />
+          Users
         </h6>
       </div>
 

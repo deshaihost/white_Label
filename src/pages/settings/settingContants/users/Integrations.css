@@ -1,0 +1,109 @@
+/* Custom switch styling */
+.conversation-settings .custom-switch .form-check-input {
+  width: 36px; /* slightly smaller width */
+  height: 18px; /* slightly smaller height */
+  background-color: #ccc; /* default grey background when off */
+  border-radius: 18px; /* circular borders for the slider */
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.conversation-settings .custom-switch .form-check-input:checked {
+  background-color: #045ce9; /* color when switch is on */
+}
+
+.conversation-settings .custom-switch .form-check-input::before {
+  content: '';
+  position: absolute;
+  width: 12px; /* smaller knob width */
+  height: 12px; /* smaller knob height */
+  background-color: white; /* color of the knob */
+  border-radius: 50%; /* round shape of the knob */
+  top: 3px; /* initial position */
+  left: 3px; /* initial position */
+  transition: transform 0.3s;
+}
+
+.conversation-settings .custom-switch .form-check-input:checked::before {
+  transform: translateX(18px); /* move the knob to the right when on */
+}
+
+/* Adjust the vertical alignment */
+.conversation-settings .custom-switch .form-check-input::before {
+  top: 50%; /* position at the vertical center */
+  transform: translateY(-50%); /* adjust to center the knob */
+}
+
+.conversation-settings .custom-switch .form-check-input:checked::before {
+  transform: translate(18px, -50%); /* move the knob to the right and center it */
+}
+
+.conversation-settings textarea.form-control.setting-textarea:disabled {
+  color: #AAA
+}
+
+.conversation-settings .settings-label {
+  font-size: 14px;
+  color: #BBB;
+  line-height: 18px;
+}
+
+.settings-integrations {
+  padding: 20px;
+}
+
+.settings-integrations .grey-text {
+  color: #777;
+}
+
+
+.connect-turno-button .connect-button {
+  border: 2px solid blue;
+  color: white;
+  background-color: transparent;
+  border-radius: 20px; /* Rounded corners */
+  padding: 10px 20px; /* Padding */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.connect-turno-button .connect-button:hover {
+  background-color: blue; /* Blue background on hover */
+}
+
+
+.partner-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  height: auto;
+  border: 2px solid #045ce9;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  background-color: #DDD;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.partner-tile:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 4px 8px rgba(0, 0, 200, 0.8);
+}
+
+.partner-logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.partner-tile p {
+  font-size: 16px;
+  color: #333; /* Dark text color */
+  text-align: center;
+}
