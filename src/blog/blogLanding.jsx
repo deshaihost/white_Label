@@ -10,6 +10,7 @@ const hostaway_pms_partners_thumbnail = "https://i.postimg.cc/GhGkTmKh/Blog-Head
 const need_virtual_assistant_thumbnail = "https://i.postimg.cc/5yPKZ4Xz/Do-I-Need-a-Virtual-Assistant-for-My-Airbnb-Business.webp";
 const tired_of_negative_reviews_thumbnail = "https://i.postimg.cc/tR8P0GDW/Tired-of-Negative-Reviews-Hostbuddy-AI.webp";
 const guesty_hostbuddy_join_thumbnail = "https://i.postimg.cc/nrwSJpWP/guesty-and-host-Buddy-ai-join-forces-revolutionizing-vacation-rental-management.webp";
+const smart_templates_thumbnail = "https://i.postimg.cc/T3ZgqVyY/smart-templates.webp";
 
 const BlogLandingPage = () => {
 
@@ -22,6 +23,7 @@ const BlogLandingPage = () => {
       { id:"need_virtual_assistant", title:"Do I Need a Virtual Assistant for My Airbnb Business?", date:"Oct 03, 2024", img:need_virtual_assistant_thumbnail, description:"Discover how virtual assistants can streamline your operations, improve guest communication, and manage tasks for better efficiency and growth." },
       { id:"tired_of_negative_reviews", title:"Tired of Negative Reviews? This AI Tool Helps You Get Them Removed", date:"Oct 08, 2024", img:tired_of_negative_reviews_thumbnail, description:"Learn how HostBuddy AI can help short-term rental hosts manage and remove negative reviews by leveraging AI-powered tools for better guest communication." },
       { id:"guesty_hostbuddy_join", title:"Guesty and HostBuddy AI Join Forces: Revolutionizing Vacation Rental Management", date:"Oct 11, 2024", img:guesty_hostbuddy_join_thumbnail, description:"Explore how Guesty and HostBuddy AI boost guest communication and simplify property management." },
+      { id:"smart_templates", title:"Smart Templates: Transform Your Short Term Rental Communication with AI-Powered Automation", date:"Oct 29, 2024", img:smart_templates_thumbnail, description:"Enhance your rental management with HostBuddy AI’s Smart Templates, offering personalized, AI-driven guest communication." },
     ];
 
     const reversedArticles = articles.reverse();
