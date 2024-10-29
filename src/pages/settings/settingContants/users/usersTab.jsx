@@ -5,7 +5,7 @@ import ToastHandle from '../../../../helper/ToastMessage';
 import Loader from '../../../../helper/Loader';
 import axios from 'axios';
 
-const UsersTab = () => {
+const UsersTab = (userData) => {
 
   const [getSubUsersIsLoading, setGetSubUsersIsLoading] = useState(false);
   const [apiSubUsers, setApiSubUsers] = useState([]);
@@ -26,8 +26,6 @@ const UsersTab = () => {
       };
 
       const response = await axios.get(`${baseUrl}/get_sub_users`, config);
-
-      console.log('response', response);
 
       if (response.status === 200) {
         setApiSubUsers(response?.data?.sub_users);
@@ -52,8 +50,6 @@ const UsersTab = () => {
       const body_data = {'email':inviteEmail, 'role':inviteRole};
 
       const response = await axios.post(`${baseUrl}/invite_sub_user`, body_data, config);
-
-      console.log('response', response);
 
       if (response.status === 200) {
         ToastHandle("User invited successfully", "success");
@@ -140,7 +136,7 @@ const UsersTab = () => {
       <p style={{fontSize:'16px', width:'100%', marginTop:'60px'}}>ADMIN users can perform any action on the account, including inviting new users, changing account settings, and updating payment information.</p>
       <p style={{fontSize:'16px', width:'100%', marginTop:'10px'}}>OPERATOR users can perform most actions on the account, including changing general settings. They cannot invite new users or update payment information.</p>
 
-      <InviteModal show={isModalOpen} onClose={() => setIsModalOpen(false)} sendInviteIsLoading={sendInviteIsLoading} handleModalSubmit={handleModalSubmit} email={inviteEmail} setEmail={setInviteEmail} role={inviteRole} setRole={setInviteRole} />
+      <InviteModal show={isModalOpen} onClose={() => setIsModalOpen(false)} userData={userData} sendInviteIsLoading={sendInviteIsLoading} handleModalSubmit={handleModalSubmit} email={inviteEmail} setEmail={setInviteEmail} role={inviteRole} setRole={setInviteRole} />
     </div>
   );
 };

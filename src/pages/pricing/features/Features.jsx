@@ -49,6 +49,11 @@ const Features = () => {
             compareTo: 'AI-driven business intelligence: comprehensive analytics dashboard',
             essential: false,
             unlimited: true
+        },
+        {
+            compareTo: 'Add your team: Invite users to your account and manage permissions',
+            essential: false,
+            unlimited: true
         }
     ]
     return(

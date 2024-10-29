@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { Modal, Button } from 'react-bootstrap';
-import ToastHandle from '../../../../helper/ToastMessage';
+import React from 'react';
+import { Modal } from 'react-bootstrap';
 import Loader from '../../../../helper/Loader';
-import axios from 'axios';
+import { Link } from "react-router-dom";
 
-const InviteModal = ({show, onClose, sendInviteIsLoading, handleModalSubmit, email, role, setEmail, setRole}) => {
+const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalSubmit, email, role, setEmail, setRole}) => {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -13,6 +12,10 @@ const InviteModal = ({show, onClose, sendInviteIsLoading, handleModalSubmit, ema
   const handleRoleChange = (e) => {
     setRole(e.target.value);
   };
+
+  // Only HostBuddy Elite users can add sub-users
+  const subscription_plan = userData?.userData?.subscription?.plan;
+  const userHasPermission = (subscription_plan && (subscription_plan.toLowerCase().includes("elite")));
 
   return (
     <Modal show={show} size="lg" onHide={onClose} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -33,12 +36,23 @@ const InviteModal = ({show, onClose, sendInviteIsLoading, handleModalSubmit, ema
             <option value="operator">Operator</option>
           </select>
 
-          {!sendInviteIsLoading ? (
-            <button className="btn btn-primary" onClick={handleModalSubmit} style={{display:'block', margin:'40px auto 0 auto', borderRadius:'50px', padding:'10px 20px'}}>
-              Send Invite
-            </button>
+          {userHasPermission ? (
+            !sendInviteIsLoading ? (
+              <button className="btn btn-primary" onClick={handleModalSubmit} style={{display:'block', margin:'40px auto 0 auto', borderRadius:'50px', padding:'10px 20px'}}>
+                Send Invite
+              </button>
+            ) : (
+              <Loader />
+            )
           ) : (
-            <Loader />
+            <div style={{ textAlign: 'center', marginTop: '40px' }}>
+              <p style={{ color: 'rgb(255,165,0)', fontSize: '16px' }}>You must be on the Elite plan to invite users.</p>
+              {subscription_plan ? (
+                <Link to="/setting/subscription">Upgrade Your Subscription</Link>
+              ) : (
+                <Link to="/properties">Subscribe</Link>
+              )}
+            </div>
           )}
 
         </div>
