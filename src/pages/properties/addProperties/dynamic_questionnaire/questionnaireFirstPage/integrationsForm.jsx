@@ -77,7 +77,7 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
 
     // Get the integrationPropertyName from the integrationPropertyId
     const selectedIntegrationProperty = integrationPropertyList.find((property) => property.id === integrationPropertyId);
-    const integrationPropertyName = selectedIntegrationProperty?.name;
+    const integrationPropertyName = selectedIntegrationProperty?.internal_name ? selectedIntegrationProperty.internal_name : selectedIntegrationProperty?.name;
 
     try {
       if (token) {
@@ -182,7 +182,7 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
                               {integrationPropertyList?.map((property) => {
                                 return (
                                   <option key={property.id} value={property.id}>
-                                    {property.name}
+                                    {property?.internal_name ? property.internal_name : property?.name}
                                   </option>
                                 );
                               })}

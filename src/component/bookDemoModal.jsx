@@ -82,12 +82,11 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     window.gtag_report_conversion('book-a-demo');
     trackFormSubmission();
 
-    let url = randomlySelectedDemoPerson.url;
+    //let url = randomlySelectedDemoPerson.url;
+    let url = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo'; // big customer demo
 
-    if (false) {
-      if (parseInt(formData.propertyCount) <= 20) {
-        url = 'https://calendly.com/sam-hostbuddy/hostbuddy-ai-group-demo';
-      }
+    if (parseInt(formData.propertyCount) <= 25) {
+      url = 'https://calendly.com/nick-hostbuddy/hostbuddy-ai-group-demo';
     }
 
     setRedirectURL(url);

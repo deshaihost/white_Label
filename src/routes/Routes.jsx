@@ -7,6 +7,7 @@ import Faqs from "../pages/faq/Faq";
 import AboutUs from "../pages/aboutUs";
 import Login from "../auth/login/Login";
 import Signup from "../auth/signup/Signup";
+import InviteSignup from "../auth/inviteSignup/inviteSignup";
 import NavBar from "../component/navBar/NavBar";
 import Footer from "../component/footer/Footer";
 import ForgotPass from "../auth/forgotPass/ForgotPass";
@@ -192,6 +193,7 @@ const Routing = () => {
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/reset-password" &&
+        location.pathname !== "/accept-invitation" &&
         location.pathname !== "/forgot" &&
         location.pathname !== "/test-show-conversations" && <NavBar />}
       <ScrollToTop />
@@ -203,6 +205,7 @@ const Routing = () => {
         <Route path="/about-us" element={<AboutUs />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
+        <Route path="/accept-invitation" element={<InviteSignup />}></Route>
         <Route path="/forgot" element={<ForgotPass />}></Route>
         <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
         <Route path="/termsof-service" element={<TermsofService />}></Route>
@@ -217,10 +220,7 @@ const Routing = () => {
         
         <Route path="/testing-questions" element={<TestingQuestions />}></Route>
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
-        <Route
-          path="/email_confirmation"
-          element={<EmailConfirmationAction />}
-        ></Route>
+        <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
         <Route path="/reset-password" element={<ResetPass />}></Route>
         <Route path="/setup-guide" element={<SetupGuide />}></Route>
         <Route path="/getstarted" element={<GetStarted />}></Route>
@@ -355,6 +355,7 @@ const Routing = () => {
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/forgot" &&
+        location.pathname !== "/accept-invitation" &&
         location.pathname !== "/inbox" &&
         location.pathname !== "/test-show-conversations" && <Footer />}
     </div>
