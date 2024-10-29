@@ -96,7 +96,7 @@ const SettingIndex = () => {
                     <SubscriptionIndex />
                   )}
                   {interFaceTypes?.users === interFaceSettings && (
-                    <UsersTab />
+                    <UsersTab userData={userData}/>
                   )}
                 </div>
               </div>
