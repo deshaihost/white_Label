@@ -1,5 +1,6 @@
 import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
+import { Link } from "react-router-dom";
 import ModalTWO from "../../../helper/staticImage/getStart/2.webp";
 import ModalTHREE from "../../../helper/staticImage/getStart/3a.webp";
 import ModalFOUR from "../../../helper/staticImage/getStart/3b.webp";
@@ -111,13 +112,14 @@ const GetStartConnect = ({ show, onHide }) => {
               you’d like to unlock).
             </p>
             <img src={ModalNINE} alt="" />
-            <p>
+            <p style={{marginBottom:'10px'}}>
               Now it’s time to schedule HostBuddy. Click the calendar icon
               underneath the property name. You may now schedule HostBuddy to
               cover guest communications at whatever hours you choose! You also
               have the option of scheduling HostBuddy for specific days of the
               year.
             </p>
+            <Link to='/schedule-guide'>Learn how to schedule HostBuddy's coverage &rarr;</Link>
             <img src={ModalTEN} alt="" />
             {/* <Link
               to="/properties"
