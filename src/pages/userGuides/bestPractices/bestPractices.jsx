@@ -5,22 +5,7 @@ import { Link } from "react-router-dom";
 
 
 const BestPractices = () => {
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = document.querySelectorAll(".step-box.section");
-      sections.forEach((section) => {
-        const bounding = section.getBoundingClientRect();
-        if (bounding.top <= 20 && bounding.bottom >= 50) {
-          // setActiveLink(section.id);
-        }
-      });
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  
   return (
     <div>
       <div className="account-main">
