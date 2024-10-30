@@ -31,6 +31,9 @@ import TermsofService from "../pages/termsofService/TermsofService";
 import SchedulingWalkthrough from "../pages/userGuides/schedulingWalkthrough/schedulingWalkthrough";
 import TipsAndTricks from "../pages/userGuides/tipsAndTricks/tipsAndTricks";
 import BestPractices from "../pages/userGuides/bestPractices/bestPractices";
+import ScheduleHostBuddy from "../pages/userGuides/scheduleGuide/scheduleGuide";
+import NotificationsGuide from "../pages/userGuides/notificationsGuide/notificationsGuide";
+import CustomizeHostBuddyGuide from "../pages/userGuides/customizeHostBuddyGuide/customizeHostBuddyGuide";
 import TestingQuestions from "../pages/userGuides/testingQuestions/testingQuestions";
 import ConfirmYourEmail from "../pages/confirmEmail/confirmYourEmail";
 import EmailConfirmationAction from "../pages/confirmEmail/emailConfirmationAction";
@@ -215,6 +218,9 @@ const Routing = () => {
         ></Route>
         <Route path="/tips-and-tricks" element={<TipsAndTricks />}></Route>
         <Route path="/best-practices" element={<BestPractices />}></Route>
+        <Route path="/schedule-guide" element={<ScheduleHostBuddy />}></Route>
+        <Route path="/notifications-guide" element={<NotificationsGuide />}></Route>
+        <Route path="/customize-hostbuddy-guide" element={<CustomizeHostBuddyGuide />}></Route>
         <Route path="/hostbuddy-for-guesty" element={<HostbuddyForGuesty />}></Route>
 
         

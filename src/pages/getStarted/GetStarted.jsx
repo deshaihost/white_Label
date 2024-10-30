@@ -16,14 +16,19 @@ const step5img = "https://hostbuddylb.com/get-started/5.%20Schedule.webp";
 
 const featureData = [
   {
+    title: "Schedule HostBuddy",
+    description: "Set HostBuddy's coverage schedule to fit your exact needs.",
+    link: "/schedule-guide",
+  },
+  {
     title: "Customize HostBuddy's Behavior",
     description: "See how HostBuddy can be tailored to suit the needs and nuances of your business.",
-    link: "/inbox/preferences",
+    link: "/customize-hostbuddy-guide",
   },
   {
     title: "Get Notified",
     description: "HostBuddy intelligently identifies issues and action items, and can notify your team through various channels.",
-    link: "/setting/notifications",
+    link: "/notifications-guide",
   },
   {
     title: "Smart Templates",

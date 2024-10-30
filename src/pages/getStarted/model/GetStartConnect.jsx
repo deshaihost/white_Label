@@ -5,14 +5,12 @@ import ModalTHREE from "../../../helper/staticImage/getStart/3a.webp";
 import ModalFOUR from "../../../helper/staticImage/getStart/3b.webp";
 import ModalFIVE from "../../../helper/staticImage/getStart/5.webp";
 import ModalSIX from "../../../helper/staticImage/getStart/6a.webp";
-import ModalSIXB from "../../../helper/staticImage/getStart/6b.png";
+import ModalSIXB from "../../../helper/staticImage/getStart/autoFill.webp";
 import ModalSEVEN from "../../../helper/staticImage/getStart/7.webp";
 import ModalEIGHT from "../../../helper/staticImage/getStart/8.webp";
 import ModalNINE from "../../../helper/staticImage/getStart/9.webp";
 import ModalTEN from "../../../helper/staticImage/getStart/10.webp";
 import ModalELEVEN from "../../../helper/staticImage/getStart/icon2.webp";
-import { Link } from "react-router-dom";
-import { FaArrowRightLong } from "react-icons/fa6";
 const GetStartConnect = ({ show, onHide }) => {
   const { type, allType, interFaceShow } = show || {};
   const { connectYourPMS, importYourProperties, goLive, test } = allType || {};
