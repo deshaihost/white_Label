@@ -193,7 +193,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
       
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-start justify-content-between">
         <div>
-          <h3>Inquiry Winbacks</h3>
+          <h3>Inquiry Follow-Ups</h3>
           <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
         </div>
         <div>
@@ -236,10 +236,10 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
       <div className="row mt-4">
         <div className="col-lg-8">
           <div className="d-flex align-items-center gap-5 mb-1">
-            <label className="fs-5">Enable Inquiry Winbacks</label>
+            <label className="fs-5">Enable Inquiry Follow-Ups</label>
             <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked, currentSettingsData, setCurrentSettingsData)}/>
           </div>
-          <p className="settings-label">You currently have inquiry winbacks {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
+          <p className="settings-label">You currently have inquiry follow-ups {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
         </div>
       </div>
 
@@ -304,9 +304,9 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
       <p className="settings-label text-center">Showing the next 10</p>
       {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry winbacks <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry follow-ups <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
       ) : (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry winbacks <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry follow-ups <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
       )}
 
       <div className="col-12 mt-4">

@@ -73,6 +73,8 @@
   border: 1px solid #146EF5;
   border-radius: 15px;
   width: 600px;
+  background: #000212;
+  box-shadow: 0 0px 14px 0 rgba(255, 255, 255, 0.5); /* offset-x | offset-y | blur-radius | spread-radius | color */
 }
 
 .knowledge-base-content .pms-connected-text {
