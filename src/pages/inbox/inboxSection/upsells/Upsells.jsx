@@ -165,7 +165,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
 
           <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("inquiryWinbacks")}>
             <div className="col-lg-11 col-12">
-              <label className="fs-5">Inquiry Winbacks</label>
+              <label className="fs-5">Inquiry Follow-Ups</label>
               <p className="settings-label">Send a message following up with guests who inquired but didn't book.</p>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import BasicInformationForm from "../BasicInformationForm/BasicInformationForm";
 import IntegrationsForm from "./integrationsForm";
 import DocumentForm from "./documentForm";
-import HostBuddyKnowledgeBase from "./hbKnowledgeBase";
+import HostBuddyKnowledgeBase from "./knowledgeBase/hbKnowledgeBase";
 import CopyExistingPropertyModel from "./CopyExistingPropertyModel";
 import AutoFillModal from "./autoFillModal";
 import React, { useEffect, useState } from "react";

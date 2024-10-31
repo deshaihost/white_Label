@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
-import ToastHandle from "../../../../../helper/ToastMessage";
-import "../questionnaire.css";
-import Loader, { BoxLoader } from "../../../../../helper/Loader";
+import ToastHandle from "../../../../../../helper/ToastMessage";
+import "../../questionnaire.css";
+import Loader, { BoxLoader } from "../../../../../../helper/Loader";
+
+import KnowledgeBasePencil from "./knowledgeBasePencil";
+import ResStageModal from "./resStageModal";
 
 const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, integrationDataKey, setApiPropertyData }) => {
   const [apiLoading, setApiLoading] = useState(false);
   const [sourceAndSelectionData, setSourceAndSelectionData] = useState({});
+  const [showResStageModal, setShowResStageModal] = useState({show:false});
 
   // As soon as we get the source data, put it in the useState
   useEffect(() => {
@@ -20,7 +24,9 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
           "conversation_data": {
             label: "Past Conversations",
             id: "conversation_data",
-            use_for_knowledge_base: sources["PMS Integration"]?.["conversation_data"]?.use_for_knowledge_base ?? false
+            use_for_knowledge_base: sources["PMS Integration"]?.["conversation_data"]?.use_for_knowledge_base ?? false,
+            //hidden_res_stages: sources["PMS Integration"]?.["conversation_data"]?.hidden_res_stages || ['INQUIRY/PAST'] // default to inquiry/past hidden for conversation data
+            hidden_res_stages: sources["PMS Integration"]?.["conversation_data"]?.hidden_res_stages || []
           }
         }
       })
@@ -36,6 +42,12 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
 
   const closeHndle = () => {
     handleClose();
+  };
+
+  const setResStageSelections = (section, sourceId, resStagesArray) => {
+    const updatedSourceAndSelectionData = { ...sourceAndSelectionData };
+    updatedSourceAndSelectionData[section][sourceId].hidden_res_stages = resStagesArray;
+    setSourceAndSelectionData(updatedSourceAndSelectionData);
   };
 
   // Used to refresh property data after the user has updated the knowledge base settings, so changes can reflect in the knowledge base section
@@ -74,24 +86,31 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
           validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
         };
 
-        // construct the json body to send
+        // Construct the JSON body like:
+        // { "docs_to_use": {
+        //     "integration_data": { "hostfully_data":<bool> },
+        //     "guest_data":<bool>,
+        //     "conversation_data": { "num_months_to_use": 6, "hidden_res_stages": ["INQUIRY/PAST", ...] },
+        //     "file_data": { "file_name_1":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] }, "file_name_2":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] }, ... }
+        //  }  } 
         const json_body = { 'docs_to_use': { } };
         if ('integration_data' in sourceAndSelectionData['PMS Integration']) {
           json_body['docs_to_use']['integration_data'] = {[integrationDataKey]: sourceAndSelectionData['PMS Integration']['integration_data'].use_for_knowledge_base};
           json_body['docs_to_use']['guest_data'] = sourceAndSelectionData['PMS Integration']['guest_data'].use_for_knowledge_base;
           if ('conversation_data' in sourceAndSelectionData['PMS Integration']) {
-            json_body['docs_to_use']['conversation_data'] = {};
-            if (sourceAndSelectionData['PMS Integration']['conversation_data'].use_for_knowledge_base) {
-              json_body['docs_to_use']['conversation_data']['num_months_to_use'] = 6;
-            } else {
-              json_body['docs_to_use']['conversation_data']['num_months_to_use'] = 0;
-            }
+            json_body['docs_to_use']['conversation_data'] = {
+              num_months_to_use: sourceAndSelectionData['PMS Integration']['conversation_data'].use_for_knowledge_base ? 6 : 0,
+              hidden_res_stages: sourceAndSelectionData['PMS Integration']['conversation_data'].hidden_res_stages
+            };
           }
         }
         if (Object.keys(sourceAndSelectionData['Property Documents']).length > 0) {
           json_body['docs_to_use']['file_data'] = {};
           Object.keys(sourceAndSelectionData['Property Documents']).forEach(file_name => {
-            json_body['docs_to_use']['file_data'][file_name] = sourceAndSelectionData['Property Documents'][file_name].use_for_knowledge_base;
+            json_body['docs_to_use']['file_data'][file_name] = {
+              use: sourceAndSelectionData['Property Documents'][file_name].use_for_knowledge_base,
+              hidden_res_stages: sourceAndSelectionData['Property Documents'][file_name].hidden_res_stages || []
+            };
           });
         }
         json_body['docs_to_use']['questionnaire'] = sourceAndSelectionData['Property Profile']['Property Profile'].use_for_knowledge_base;
@@ -131,7 +150,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
                       <div key={source.id}>
                         {section === "Property Profile" ? (
                           <>
-                            <input className="form-check-input" type="checkbox" value={sourceAndSelectionData[section][source].id} id={sourceAndSelectionData[section][source].id} checked onChange={(e) => e.preventDefault()} style={{opacity: 0.5}} disabled/>
+                            <input className="form-check-input" type="checkbox" value={sourceAndSelectionData[section][source].id} id={sourceAndSelectionData[section][source].id} checked onChange={(e) => e.preventDefault()} style={{opacity:0.5}} disabled/>
                             <label className="form-check-label" htmlFor={sourceAndSelectionData[section][source].id} style={{opacity: 1}}>
                               {sourceAndSelectionData[section][source].label}
                             </label>
@@ -141,13 +160,9 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
                             <input className="form-check-input" type="checkbox" value={sourceAndSelectionData[section][source].id} id={sourceAndSelectionData[section][source].id} checked={sourceAndSelectionData[section][source].use_for_knowledge_base} onChange={(e) => handleCheckboxChange(section, sourceAndSelectionData[section][source].id, e.target.checked)}/>
                             <label className="form-check-label" htmlFor={sourceAndSelectionData[section][source].id}>
                               {sourceAndSelectionData[section][source].label}
-                              {sourceAndSelectionData[section][source].id === 'conversation_data' &&
-                                <>
-                                  {" "}
-                                  <span>(last 6 months)</span>
-                                </>
-                              }
+                              {sourceAndSelectionData[section][source].id === 'conversation_data' && <span> (last 6 months)</span>}
                             </label>
+                            {!['integration_data', 'guest_data'].includes(sourceAndSelectionData[section][source].id) && <KnowledgeBasePencil handlePencilIconClick={() => setShowResStageModal({show:true, section:section, sourceId:sourceAndSelectionData[section][source].id, hiddenResStages:sourceAndSelectionData[section][source].hidden_res_stages})} someResStageIsHidden={sourceAndSelectionData[section][source].hidden_res_stages.length > 0} />}
                           </>
                         )}
                       </div>
@@ -173,6 +188,8 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
               </div>
             )}
           </div>
+
+          <ResStageModal modalData={showResStageModal} setModalData={setShowResStageModal} handleModalSubmit={setResStageSelections} />
         </div>
       </Modal.Body>
     </Modal>

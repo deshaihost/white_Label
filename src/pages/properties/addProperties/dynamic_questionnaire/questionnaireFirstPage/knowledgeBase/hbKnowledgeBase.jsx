@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { pullConversationDataActions } from "../../../../../redux/actions";
-import Loader, {BoxLoader} from "../../../../../helper/Loader";
+//import { pullConversationDataActions } from "../../../../../../redux/actions"; // From old logic, where pull conversation history was triggered manually
 import KnowledgeBaseSourcesModal from "./knowledgeBaseSourcesModal";
-import "../questionnaire.css";
+import "../../questionnaire.css";
 
 
 const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropertyDataFromAPI, property_name}) => {
@@ -66,18 +65,21 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
 
       // Check if conversation data should be used for the knowledge base, and how many months
       const convo_months = apiPropertyData?.supporting_doc_items?.conversation_data?.knowledge_base_months
+      const convoHiddenResStages = apiPropertyData?.supporting_doc_items?.conversation_data?.hide_for_reservations
       if (convo_months && convo_months > 0) {
-        integrationDataToSet['conversation_data'] = {'use_for_knowledge_base': true, 'months': convo_months};
+        integrationDataToSet['conversation_data'] = {'use_for_knowledge_base':true, 'months':convo_months};
       } else {
-        integrationDataToSet['conversation_data'] = {'use_for_knowledge_base': false, 'months': 0};
+        integrationDataToSet['conversation_data'] = {'use_for_knowledge_base':false, 'months':0};
       }
+      if (convoHiddenResStages) { integrationDataToSet['conversation_data']['hide_for_reservations'] = convoHiddenResStages; }
 
       setIntegrationData(integrationDataToSet);
 
       // Populate information about whether each document is used for the knowledge base
       setDocuments(Object.keys(apiPropertyData?.supporting_doc_items?.file_data || {}).reduce((acc, fileName) => { // { "Doc_1_name": { use_for_knowledge_base: true }, ... }
         acc[fileName] = {
-          use_for_knowledge_base: !(apiPropertyData?.supporting_doc_items?.file_data[fileName]?.use_for_knowledge_base === false)
+          use_for_knowledge_base: !(apiPropertyData?.supporting_doc_items?.file_data[fileName]?.use_for_knowledge_base === false),
+          hide_for_reservations: apiPropertyData?.supporting_doc_items?.file_data[fileName]?.hide_for_reservations || []
         };
         return acc;
       }, {}));
@@ -106,9 +108,11 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
     }
   }, [apiQuestionnaireData]);
 
+  /* Old logic, where pull conversation history was triggered manually
   const handlePullConversationsClick = () => {
     dispatch(pullConversationDataActions(apiPropertyData?.property_name));
   };
+  */
       
   const integration_categories = {'Property details and availability':'integration_data', 'Guest and reservation data':'guest_data', 'Past conversations':'conversation_data'}
   const convo_data_has_been_pulled = (pullConversationsSuccess || apiPropertyData?.supporting_doc_items?.conversation_data)
@@ -125,18 +129,19 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
       'guest_data': {'label':'Guest and reservation data', 'id':'guest_data', 'use_for_knowledge_base':integrationData['guest_data']?.use_for_knowledge_base}
     }
     if (convo_data_has_been_pulled) {
-      sourceDataForModal['PMS Integration']['conversation_data'] = {'label':'Past conversations', 'id':'conversation_data', 'use_for_knowledge_base':integrationData['conversation_data']?.use_for_knowledge_base, 'months':integrationData['conversation_data']?.months}
+      //sourceDataForModal['PMS Integration']['conversation_data'] = {'label':'Past conversations', 'id':'conversation_data', 'use_for_knowledge_base':integrationData['conversation_data']?.use_for_knowledge_base, 'months':integrationData['conversation_data']?.months, 'hidden_res_stages':integrationData['conversation_data']?.hide_for_reservations || ['INQUIRY/PAST']}
+      sourceDataForModal['PMS Integration']['conversation_data'] = {'label':'Past conversations', 'id':'conversation_data', 'use_for_knowledge_base':integrationData['conversation_data']?.use_for_knowledge_base, 'months':integrationData['conversation_data']?.months, 'hidden_res_stages':integrationData['conversation_data']?.hide_for_reservations || []}
     }
   }
   Object.keys(documents).forEach(docName => {
-    sourceDataForModal['Property Documents'][docName] = {'label':docName, 'id':docName, 'use_for_knowledge_base':documents[docName]?.use_for_knowledge_base}
+    sourceDataForModal['Property Documents'][docName] = {'label':docName, 'id':docName, 'use_for_knowledge_base':documents[docName]?.use_for_knowledge_base, 'hidden_res_stages':documents[docName]?.hide_for_reservations || []}
   });
   sourceDataForModal['Property Profile'] = {'Property Profile': {'label':'Property Profile', 'id':'Property Profile', 'use_for_knowledge_base':true}}
 
   return (
     <div className="form-design text-white hostbuddy-knowledge-base">
       <h3>HostBuddy Knowledge Base</h3>
-      <div className="knowledge-base-content">
+      <div className="knowledge-base-content blur-background-top-right">
         {integrationPlatform && (<h5 className="pms-connected-text">{integrationPlatformFormatted} Connected</h5>)}
         <h4 style={{marginTop:"0"}}>PMS Integration</h4>
         {integrationPlatform ? (
