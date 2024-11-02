@@ -18,7 +18,6 @@ import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrati
 import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
 import UnlockPropertiesModal from "../../component/modal/unlockPropertiesModal/unlockPropertiesModal";
-import CopyToPropertiesModal from "../../helper/copyToPropertiesModal/CopyToPropertiesModal";
 
 const Properties = () => {
   const store = useSelector((state) => state);
