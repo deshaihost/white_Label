@@ -11,7 +11,7 @@ import ResStageModal from "./resStageModal";
 const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, integrationDataKey, setApiPropertyData }) => {
   const [apiLoading, setApiLoading] = useState(false);
   const [sourceAndSelectionData, setSourceAndSelectionData] = useState({});
-  const [showResStageModal, setShowResStageModal] = useState({show:false});
+  const [resStageModalData, setResStageModalData] = useState({show:false});
 
   // As soon as we get the source data, put it in the useState
   useEffect(() => {
@@ -162,7 +162,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
                               {sourceAndSelectionData[section][source].label}
                               {sourceAndSelectionData[section][source].id === 'conversation_data' && <span> (last 6 months)</span>}
                             </label>
-                            {!['integration_data', 'guest_data'].includes(sourceAndSelectionData[section][source].id) && <KnowledgeBasePencil handlePencilIconClick={() => setShowResStageModal({show:true, section:section, sourceId:sourceAndSelectionData[section][source].id, hiddenResStages:sourceAndSelectionData[section][source].hidden_res_stages})} someResStageIsHidden={sourceAndSelectionData[section][source].hidden_res_stages.length > 0} />}
+                            {!['integration_data', 'guest_data'].includes(sourceAndSelectionData[section][source].id) && <KnowledgeBasePencil handlePencilIconClick={() => setResStageModalData({show:true, section:section, sourceId:sourceAndSelectionData[section][source].id, hiddenResStages:sourceAndSelectionData[section][source].hidden_res_stages})} someResStageIsHidden={sourceAndSelectionData[section][source].hidden_res_stages.length > 0} />}
                           </>
                         )}
                       </div>
@@ -189,7 +189,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
             )}
           </div>
 
-          <ResStageModal modalData={showResStageModal} setModalData={setShowResStageModal} handleModalSubmit={setResStageSelections} />
+          <ResStageModal modalData={resStageModalData} setModalData={setResStageModalData} handleModalSubmit={setResStageSelections} fileName={resStageModalData.sourceId} propertyName={propertyName} />
         </div>
       </Modal.Body>
     </Modal>

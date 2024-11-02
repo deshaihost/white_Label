@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import Loader from "../../../../../../helper/Loader";
+import CopyToPropertiesModal from "./copyToPropertiesModal/CopyToPropertiesModal";
 
-const ResStageModal = ({modalData, setModalData, handleModalSubmit}) => {
+const ResStageModal = ({modalData, setModalData, handleModalSubmit, fileName, propertyName}) => {
   const hideForReservationDefault = ["CURRENT", "FUTURE", "INQUIRY/PAST"];
+  const [showCopyToPropertiesModal, setShowCopyToPropertiesModal] = useState(false);
   const [hideGetArray, setHideGetArray] = useState([]); // array of stages to hide
   const [visibleStages, setVisibleStages] = useState(hideForReservationDefault); // array of stages not hidden. Basically the "inverse" of above
 
@@ -13,7 +14,6 @@ const ResStageModal = ({modalData, setModalData, handleModalSubmit}) => {
   const handleButtonClick = (item) => {
     let newHideGetArray;
     if (hideGetArray.includes(item)) {
-      //setHideGetArray(hideGetArray.filter((i) => i !== item));
       newHideGetArray = hideGetArray.filter((i) => i !== item);
       setVisibleStages([...visibleStages, item]);
     }
@@ -36,7 +36,7 @@ const ResStageModal = ({modalData, setModalData, handleModalSubmit}) => {
 
   return (
     <div>
-      <Modal show={show} size="lg" onHide={() => setModalData({...modalData, show:false})} centered aria-labelledby="contained-modal-title-vcenter">
+      <Modal show={show} size="lg" onHide={() => setModalData({...modalData, show:false})} centered aria-labelledby="contained-modal-title-vcenter" style={{zIndex: 9055}}>
         <Modal.Body>
 
           <h4 className="text-center" style={{ color: 'white', marginBottom: '20px' }}>Hide For Reservation Stages</h4>
@@ -69,6 +69,14 @@ const ResStageModal = ({modalData, setModalData, handleModalSubmit}) => {
           <button onClick={() => { setModalData({show:false}); }} className="btn btn-primary form-control mt-4 w-auto px-5 mx-auto d-block mb-2">
             Submit
           </button>
+
+          {section === 'Property Documents' && (
+            <span onClick={() => { setShowCopyToPropertiesModal(true); }} style={{ color:'blue', cursor:'pointer', textDecoration:'underline' }} className="mt-4 d-block text-center">
+              Copy this file to other properties
+            </span>
+          )}
+
+          <CopyToPropertiesModal show={showCopyToPropertiesModal} setShow={setShowCopyToPropertiesModal} fileName={fileName} propertyName={propertyName} />
         </Modal.Body>
       </Modal>
     </div>
