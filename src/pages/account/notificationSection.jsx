@@ -57,6 +57,7 @@ const AccountNotificationSection = () => {
   const [newRecipient, setNewRecipient] = useState({});
   const [triggerApiUpdate, setTriggerApiUpdate] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [editingRecipientIndex, setEditingRecipientIndex] = useState(null);
 
   const categoryOptions = [
     { value:'CLEANLINESS', label:'Cleanliness' },
@@ -98,6 +99,7 @@ const AccountNotificationSection = () => {
   const showNewRecipientFields = () => {
     setNewRecipient({ firstName: "", channel: "", RecipientAddress: "", timing: "", time: "", consent_checked: false });
     setSelectedCategories(categoryOptions); // Populate with all category options by default
+    setEditingRecipientIndex(null);
   };
 
   const handleInputChange = (event) => {
@@ -156,8 +158,16 @@ const AccountNotificationSection = () => {
     // Before adding the new recipient, assign categories from selectedCategories
     newRecipient.categories = selectedCategories.map((option) => option.value);
 
+    if (editingRecipientIndex !== null) {
+      const updatedRecipients = [...recipients];
+      updatedRecipients[editingRecipientIndex] = newRecipient;
+      setRecipients(updatedRecipients);
+      setEditingRecipientIndex(null);
+    } else {
+      setRecipients([...recipients, newRecipient]);
+    }
+
     // Add the new recipient and clear form fields
-    setRecipients([...recipients, newRecipient]);
     setNewRecipient({});
     setSelectedCategories([]);
 
@@ -170,6 +180,17 @@ const AccountNotificationSection = () => {
     newRecipients.splice(index, 1);
     setRecipients(newRecipients);
     setTriggerApiUpdate(true);
+  };
+
+  const editRecipient = (index) => {
+    const recipientToEdit = recipients[index];
+    setNewRecipient(recipientToEdit);
+    setSelectedCategories(
+      recipientToEdit.categories.map((category) =>
+        categoryOptions.find((option) => option.value === category)
+      )
+    );
+    setEditingRecipientIndex(index);
   };
 
   function getLabel(channel) {
@@ -309,9 +330,14 @@ const AccountNotificationSection = () => {
                   <Tooltip id={`categories-tooltip-${index}`} place="top" effect="solid" />
                 </td>
                 <td>
-                  <h6 style={{ color: "red" }} className="clickable-text fs-14" onClick={() => removeRecipient(index)}>
-                    Remove
-                  </h6>
+                  <div style={{ display:'flex', alignItems:'center' }}>
+                    <h6 style={{marginRight:'10px'}} className="clickable-text fs-14" onClick={() => editRecipient(index)}>
+                      Edit
+                    </h6>
+                    <h6 style={{color:'red'}} className="clickable-text fs-14" onClick={() => removeRecipient(index)}>
+                      Remove
+                    </h6>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -394,7 +420,7 @@ const AccountNotificationSection = () => {
                   if (!consent_bad) { addRecipient(); }
                 }}
               >
-                Submit
+                {editingRecipientIndex !== null ? "Update" : "Submit"}
               </Link>
             </span>
           </div>
