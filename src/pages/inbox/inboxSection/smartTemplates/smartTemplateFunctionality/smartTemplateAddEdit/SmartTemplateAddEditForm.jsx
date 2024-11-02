@@ -6,6 +6,8 @@ import { dataInput, createTypeToGuesttypeMapping, getUseTriggeredGuestFromTempla
 import Loader from "../../../../../../helper/Loader";
 import { v4 as uuidv4 } from 'uuid';
 
+import MultiSelect from "../../../../../../component/multiSelect/multiSelect";
+
 const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, turno_user_id}) => {
   const { type, smartTemplateData } = addEditSmart;
   const { triggers, targets, conditions } = dataInput;
@@ -113,35 +115,13 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
   // ------- Property multi select (TODO: move this to its own component & file) -------
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [menuIsOpen, setMenuIsOpen] = useState(false);
-  const selectRef = useRef(null);
-
   const options = allPropertyNamesList.map((propertyName) => ({ value: propertyName, label: propertyName }));
 
-  // Custom ValueContainer to display the number of selected properties
-  const ValueContainer = ({ children, ...props }) => {
-    const { getValue, selectProps } = props;
-    const selectedValues = getValue();
-    const displayText = selectedValues.length > 0 ? `${selectedValues.length} propert${selectedValues.length === 1 ? 'y' : 'ies'}` : '';
-
-    return (
-      <components.ValueContainer {...props}>
-        <div>{displayText}</div>
-        {children}
-      </components.ValueContainer>
-    );
-  };
-
-  const handleChange = (selectedOptions) => {
-    setSelectedOptions(selectedOptions); // Update the UI
-    setDataStructure({ ...dataStructure, properties: selectedOptions.map((option) => option.value) }); // Update the data structure
-  };
-
-  const handleSelectAllClick = (e) => {
-    e.preventDefault();
-    setSelectedOptions(options); // Update the UI
-    setDataStructure({ ...dataStructure, properties: allPropertyNamesList }); // Update the data structure
-  };
+  // When the data structure populates, update the selected options
+  useEffect(() => {
+    const selectedOptions = dataStructure?.properties?.map((property) => ({ value: property, label: property }));
+    setSelectedOptions(selectedOptions);
+  }, [dataStructure]);
 
   const handleDeleteClick = (e) => {
     e.preventDefault();
@@ -150,47 +130,6 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       handleDeleteTemplate(dataStructure.id);
     }
   };
-
-  // When the data structure populates, update the selected options
-  useEffect(() => {
-    const selectedOptions = dataStructure?.properties?.map((property) => ({ value: property, label: property }));
-    setSelectedOptions(selectedOptions);
-  }, [dataStructure]);
-
-  // Handle clicks outside the select component
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
-        setMenuIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [selectRef]);
-
-  const handleMouseDown = (event) => {
-    if (selectRef.current && selectRef.current.contains(event.target)) {
-      setMenuIsOpen(true);
-    }
-  };
-
-  const handleMouseUp = (event) => {
-    if (selectRef.current && selectRef.current.contains(event.target)) {
-      setMenuIsOpen(true);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, []);
   // -------------------------------------
 
 
@@ -239,10 +178,16 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
         <div className="propertySelectSection">
           <p style={{fontSize:"14px", textAlign:"center", marginBottom:'2px'}}>Applies to these properties:</p>
-          <div ref={selectRef}>
-            <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
-          </div>
-          <a href="#" className="clickableLink" onClick={handleSelectAllClick}>Select all</a>
+          <MultiSelect
+            options={options}
+            selectedOptions={selectedOptions}
+            setSelectedOptions={(options) => {
+              setSelectedOptions(options); // Update the UI
+              setDataStructure({ ...dataStructure, properties: options.map((option) => option.value) }); // Update the data structure
+            }}
+            placeholder="Select properties..."
+            selectAllText="Select all"
+          />
         </div>
       </div>
       
