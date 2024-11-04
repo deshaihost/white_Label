@@ -11,7 +11,7 @@ import Loader from "../../../../../helper/Loader";
 const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
   const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, action_items, guest_chatbot_status, property_chatbot_status, conversation_id } = rightSectionData ? rightSectionData : {};
   const until_formatted = guest_chatbot_status?.until_utc == 'indefinitely' ? 'indefinitely' : (guest_chatbot_status?.until_local ? timeFormat(guest_chatbot_status?.until_local) : null);
-  let { channel } = rightSectionData || {};
+  let { channel, is_locked } = rightSectionData || {};
 
   const [selectedOption, setSelectedOption] = useState('');
   const [toggleStatusLoading, setToggleStatusLoading] = useState(false);
@@ -143,48 +143,49 @@ const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
           )}
         </div>
 
-        {/*
-        <div className="col-lg-3 guest-img">
-          <img src={dummyPropertyImg} alt="" />
-        </div>
-        */}
-
       </div>
 
-      {curr_status && (
-        <div className="toggle">
-          {curr_status === 'on' ? (
-            <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(0,180,0)"}}>RESPONDING</span> to this guest</p>
-          ) : (
-            <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(200,0,0)"}}>NOT RESPONDING</span> to this guest</p>
-          )}
-          {(source=='guest') && (
-            until_formatted === 'indefinitely' ? (
-              <p style={{ fontSize: "12px" }}>Indefinitely</p>
+      {!is_locked ? (
+        curr_status && (
+          <div className="toggle">
+            {curr_status === 'on' ? (
+              <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(0,180,0)"}}>RESPONDING</span> to this guest</p>
             ) : (
-              <p style={{ fontSize: "12px" }}>Until {until_formatted}</p>
-            )
-          )}
+              <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(200,0,0)"}}>NOT RESPONDING</span> to this guest</p>
+            )}
+            {(source=='guest') && (
+              until_formatted === 'indefinitely' ? (
+                <p style={{ fontSize: "12px" }}>Indefinitely</p>
+              ) : (
+                <p style={{ fontSize: "12px" }}>Until {until_formatted}</p>
+              )
+            )}
 
-          {!toggleStatusLoading ? (
-            (source=='property') ? (
-              <select className="select-dropdown" value={selectedOption} onChange={(e) => handleSelectChange(e, curr_status)}>
-                <option value="" disabled>Turn {curr_status === 'on' ? 'off' : 'on'}</option>
-                <option value="15m">For 15 minutes</option>
-                <option value="1h">For 1 hour</option>
-                <option value="1d">For 24 hours</option>
-                <option value="indefinitely">Indefinitely</option>
-              </select>
+            {!toggleStatusLoading ? (
+              (source=='property') ? (
+                <select className="select-dropdown" value={selectedOption} onChange={(e) => handleSelectChange(e, curr_status)}>
+                  <option value="" disabled>Turn {curr_status === 'on' ? 'off' : 'on'}</option>
+                  <option value="15m">For 15 minutes</option>
+                  <option value="1h">For 1 hour</option>
+                  <option value="1d">For 24 hours</option>
+                  <option value="indefinitely">Indefinitely</option>
+                </select>
+              ) : (
+                <div style={{ textAlign: 'center' }}>
+                  <a style={{ fontSize: "14px", color: "#0d6efd", cursor: "pointer" }} onClick={handleRevertStatus}>
+                    Turn back {curr_status === 'on' ? 'off' : 'on'}
+                  </a>
+                </div>
+              )
             ) : (
-              <div style={{ textAlign: 'center' }}>
-                <a style={{ fontSize: "14px", color: "#0d6efd", cursor: "pointer" }} onClick={handleRevertStatus}>
-                  Turn back {curr_status === 'on' ? 'off' : 'on'}
-                </a>
-              </div>
-            )
-          ) : (
-            <Loader />
-          )}
+              <Loader />
+            )}
+          </div>
+        )
+      ) : (
+        <div className="toggle">
+          <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(200,0,0)"}}>NOT RESPONDING</span> to this guest.</p>
+          <p style={{fontSize:"12px"}}><Link to='/properties' style={{fontSize:"14px"}}>Unlock</Link> this property to start responding.</p>
         </div>
       )}
       

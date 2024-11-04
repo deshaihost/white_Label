@@ -96,6 +96,12 @@ const SubscriptionIndex = () => {
       ) : (
         <p className="mb-2">You are not yet subscribed. Click "Subscribe" on the <Link to='/properties'>Properties page</Link> to start your free trial and get HostBuddy connected to your guests!</p>
       )}
+
+      {(!subscriptionPlanName || !/elite/i.test(subscriptionPlanName)) && ( // don't show this for elite users
+        <p style={{ marginTop: '30px' }}>
+          <a href='/pricing' target="_blank" rel="noopener noreferrer">View our plans</a> and pricing
+        </p>
+      )}
     </div>
   );
 };

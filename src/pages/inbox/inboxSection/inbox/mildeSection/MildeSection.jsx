@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import MessageInbox from "./message/MessageInbox";
 import Loader from "../../../../../helper/Loader";
 import loaderGif from "../../../../../public/img/new_loader.gif";
@@ -13,7 +14,12 @@ import ToastHandle from "../../../../../helper/ToastMessage";
 
 const placeholderImg = 'https://hostbuddylb.com/misc/chatBubbles.webp';
 
-const MildeSection = ({ allConversationData, updateConversationFromApi, updateCovnersationLocal }) => {
+const MildeSection = ({ allConversationData, updateConversationFromApi, updateCovnersationLocal, subscriptionPlan, accountAgeDays }) => {
+  const eliteOrWorksPlan = /elite|works/i.test(subscriptionPlan); // Case-insensitive check for 'elite' or 'works' in the plan name
+  const eliteFeaturesAvailable = /elite/i.test(subscriptionPlan); // Case-insensitive check for 'elite' in the plan name
+  const propertyIsLocked = !!allConversationData?.is_locked;
+  const accountAllowsGenerateButton = (eliteFeaturesAvailable && !propertyIsLocked) || (accountAgeDays && accountAgeDays <= 4); // Generate functionality allowed if user/prop subscription is sufficient, OR if the account is new
+
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -311,64 +317,89 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           </div>
         )}
 
-        <div className="ai-input">
-          <div className="generate-container">
-            <button ref={buttonRef} className="generate-button" onClick={handleGenerateButtonClick}>
-              <i className="bi bi-stars"></i>
-            </button>
-            {generateOptionsVisible && (
-              <div ref={menuRef} className="generate-menu">
-                {conversationData?.conversation_id ? (
-                  <>
-                    {generateButtonIsEnabled ? (
-                      <button className="generate-menu-item" key='scratch' onClick={() => handleGenerateOptionSelect('scratch')}>Generate From Scratch</button>
+        {(eliteOrWorksPlan  || (accountAgeDays && accountAgeDays <= 4)) ? (
+          <>
+            <div className="ai-input">
+              <div className="generate-container">
+                <button ref={buttonRef} className="generate-button" onClick={handleGenerateButtonClick}>
+                  <i className="bi bi-stars"></i>
+                </button>
+                {generateOptionsVisible && (
+                  <div ref={menuRef} className="generate-menu">
+                    {accountAllowsGenerateButton ? (
+                      conversationData?.conversation_id ? (
+                        <>
+                          {generateButtonIsEnabled ? (
+                            <button className="generate-menu-item" key='scratch' onClick={() => handleGenerateOptionSelect('scratch')}>Generate From Scratch</button>
+                          ) : (
+                            <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>Generate From Scratch</button>
+                          )}
+                          {inputValue.trim() !== "" ? (
+                            <button className="generate-menu-item" key='command' onClick={() => handleGenerateOptionSelect('command')}>Generate From My Instruction</button>
+                          ) : (
+                            <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Start typing to instruct HostBuddy how to message the guest'}>Generate From My Instruction</button>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Select a conversation to generate a response'}>Generate From Scratch</button>
+                          <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Select a conversation to instruct HostBuddy how to craft a message for this guest'}>Generate From My Instruction</button>
+                        </>
+                      )
                     ) : (
-                      <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>Generate From Scratch</button>
+                      propertyIsLocked ? (
+                        <>
+                          <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Unlock this property from the Properties page to enable message generation in the inbox'}>Generate From Scratch</button>
+                          <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Unlock this property from the Properties page to enable message generation in the inbox'}>Generate From My Instruction</button>
+                        </>
+                      ) : (
+                        <>
+                          <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Upgrade to HostBuddy Elite to enable message generation in the inbox'}>Generate From Scratch</button>
+                          <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Upgrade to HostBuddy Elite to enable message generation in the inbox'}>Generate From My Instruction</button>
+                        </>
+                      )
                     )}
-                    {inputValue.trim() !== "" ? (
-                      <button className="generate-menu-item" key='command' onClick={() => handleGenerateOptionSelect('command')}>Generate From My Instruction</button>
-                    ) : (
-                      <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Start typing to instruct HostBuddy how to message the guest'}>Generate From My Instruction</button>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Select a conversation to generate a response'}>Generate From Scratch</button>
-                    <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Select a conversation to instruct HostBuddy how to craft a message for this guest'}>Generate From My Instruction</button>
-                  </>
+                  </div>
                 )}
               </div>
-            )}
-          </div>
 
-          <div className="input-container">
-            <textarea type="text" ref={textareaRef} placeholder="Type a message..." value={inputValue} onChange={handleInputFieldChange}
-              onKeyDown={handleKeyPress} rows="1" disabled={(generateCommandApiLoading || sendMessageLoading) ? true : false} style={{resize:'none', overflow:'auto'}}
-            />
-            {generateCommandApiLoading && (
-              <div className="loader-container">
-                <Loader />
+              <div className="input-container">
+                <textarea type="text" ref={textareaRef} placeholder="Type a message..." value={inputValue} onChange={handleInputFieldChange}
+                  onKeyDown={handleKeyPress} rows="1" disabled={(generateCommandApiLoading || sendMessageLoading) ? true : false} style={{resize:'none', overflow:'auto'}}
+                />
+                {generateCommandApiLoading && (
+                  <div className="loader-container">
+                    <Loader />
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <button onClick={handleSendMessage} className='chat-send-button' disabled={(generateCommandApiLoading || sendMessageLoading) ? true : false}>
-            {(sendMessageLoading) ? (
-              <img src={loaderGif} width="25" height="25" />
-            ) : (
-              <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill="white" d="M23.9804 3.58131C24.5564 1.98798 23.0124 0.443978 21.419 1.02131L1.94572 8.06398C0.347048 8.64264 0.153715 10.824 1.62438 11.676L7.84038 15.2746L13.391 9.72398C13.6425 9.4811 13.9793 9.34671 14.3289 9.34975C14.6785 9.35278 15.0129 9.49301 15.2601 9.74022C15.5074 9.98743 15.6476 10.3218 15.6506 10.6714C15.6537 11.021 15.5193 11.3578 15.2764 11.6093L9.72571 17.16L13.3257 23.376C14.1764 24.8466 16.3577 24.652 16.9364 23.0546L23.9804 3.58131Z"></path>
-              </svg>
-            )}
-          </button>
-        </div>
-        {showGenerateJustificationButton &&
-          <div className="where-did link-container" style={{ marginRight:"auto" }}>
-            <a href="#" onClick={(e) => handleJustificationClick(e, generateButtonJustification)}>
-              Where did this come from?
-            </a>
-          </div>
-        }
+              <button onClick={handleSendMessage} className='chat-send-button' disabled={(generateCommandApiLoading || sendMessageLoading) ? true : false}>
+                {(sendMessageLoading) ? (
+                  <img src={loaderGif} width="25" height="25" />
+                ) : (
+                  <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="white" d="M23.9804 3.58131C24.5564 1.98798 23.0124 0.443978 21.419 1.02131L1.94572 8.06398C0.347048 8.64264 0.153715 10.824 1.62438 11.676L7.84038 15.2746L13.391 9.72398C13.6425 9.4811 13.9793 9.34671 14.3289 9.34975C14.6785 9.35278 15.0129 9.49301 15.2601 9.74022C15.5074 9.98743 15.6476 10.3218 15.6506 10.6714C15.6537 11.021 15.5193 11.3578 15.2764 11.6093L9.72571 17.16L13.3257 23.376C14.1764 24.8466 16.3577 24.652 16.9364 23.0546L23.9804 3.58131Z"></path>
+                  </svg>
+                )}
+              </button>
+            </div>
+
+            {showGenerateJustificationButton &&
+              <div className="where-did link-container" style={{ marginRight:"auto" }}>
+                <a href="#" onClick={(e) => handleJustificationClick(e, generateButtonJustification)}>
+                  Where did this come from?
+                </a>
+              </div>
+            }
+          </>
+        ) : (
+          allConversationData && Object.keys(allConversationData).length > 0 && (
+            <p style={{fontSize:'14px', margin:'0 auto'}}>
+              Inbox is in view-only mode. <Link to='/setting/subscription' style={{fontSize:'14px'}}>Upgrade</Link> to generate and send messages.
+            </p>
+          )
+        )}
       </div>
       <Tooltip className="generate-tooltip" id="aiNotAvailableTooltip" delayShow={0} place="top" effect="solid"/>
       <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
