@@ -11,6 +11,7 @@
   padding: 30px 45px;
   position: relative; /* Add this line */
   height: calc(100vh - 100px); /* leave room for the navbar */
+  min-height: 550px;
 }
 
 /* Vertical border between the left and right sections */
@@ -214,4 +215,22 @@
   padding: 8px;
   border-radius: 5px;
   border: 1px solid #ccc;
+}
+
+@media (max-width: 768px) {
+  .workbench {
+    flex-direction: column;
+  }
+  
+  .workbench .left-container,
+  .workbench .right-container {
+    flex: none;
+    width: 100%;
+    padding: 20px;
+    height: auto;
+  }
+  
+  .workbench .left-container::after {
+    content: none;
+  }
 }
