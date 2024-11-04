@@ -10,6 +10,7 @@ import QuestionnaireFirstPage from "./questionnaireFirstPage/questionnaire_first
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { FullScreenLoader } from "../../../../helper/Loader";
+import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
 import PencilIconModal from "./PencilIconModal";
 import ExternalResourcesForm from "./ExternalResources/ExternalResourcesForm";
@@ -38,7 +39,7 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
   const [questionnairePostLoading, setQuestionnairePostLoading] = useState(false);
   const [triggeredSaveLoading, setTriggeredSaveLoading] = useState(false);
   const [dataToUpdate, setDataToUpdate] = useState([]); // Sections that contain modified data to be saved
-  const [showModal, setShowModal] = useState(false); // pencil icon modal
+  const [showPencilModal, setShowPencilModal] = useState(false); // pencil icon modal
   const [dataForModal, setDataForModal] = useState({}); // data to be passed to the pencil icon modal
   const [doTriggeredSave, setDoTriggeredSave] = useState(false); // Set this to trigger a save
   const [triggeredSaveComplete, setTriggeredSaveComplete] = useState(false); // Set this to false after a triggered save is complete
@@ -261,11 +262,31 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
     else if (!prev && currSectionIndex === questionnaire_section_names.length - 1) { setNavigateToProperties(true); }
   }
 
+  const callDeleteQuestionApi = async (sectionName, subSectionName, questionIndex, propertyName) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    try {
+      const config = {
+        headers: {"X-API-Key": API_KEY},
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const body_data = {section_name:sectionName, subsection_name:subSectionName, question_index:questionIndex, property_name:propertyName};
+      const response = await axios.post(`${baseUrl}/delete_questionnaire_question`, body_data, config);
+
+      if (response.status === 200) { 
+        ToastHandle('Successfully deleted question', 'success'); 
+        dispatch(getQuestionnaireActions(propertyName)); // Re-fetch the questionnaire. This should also trigger a re-render
+      }
+      else { ToastHandle(response?.data?.error || 'Failed to delete question', 'danger'); }
+    } catch (error) { ToastHandle('Failed to delete question', 'danger'); }
+  }
+
   // When the pencil icon is clicked (in a form component, in a section): render the modal with the corresponding question data
   const handlePencilIconClick = (sec_name, subsec_name, q_ind, checkbox_group_option) => {
     const question = liveQuestionnaireData.questionnaire[sec_name][subsec_name][q_ind];
     setDataForModal({ question_obj:question, sec_name:sec_name, subsec_name:subsec_name, q_ind:q_ind, checkbox_group_option:checkbox_group_option });
-    setShowModal(true);
+    setShowPencilModal(true);
   }
 
   return (
@@ -303,7 +324,7 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
             </div>
 
             {/* Pencil icon modal */}
-            <PencilIconModal show={showModal} setShowModal={setShowModal} question_obj={dataForModal.question_obj} checkbox_group_option={dataForModal.checkbox_group_option} handleModalSave={handleModalSave} sectionName={dataForModal.sec_name} subSectionName={dataForModal.subsec_name} />
+            <PencilIconModal show={showPencilModal} setShowModal={setShowPencilModal} question_obj={dataForModal.question_obj} checkbox_group_option={dataForModal.checkbox_group_option} handleModalSave={handleModalSave} callDeleteQuestionApi={callDeleteQuestionApi} sectionName={dataForModal.sec_name} subSectionName={dataForModal.subsec_name} questionIndex={dataForModal.q_ind} propertyName={property_name} />
           </>
         ) : (
           <div style={{ paddingTop: '200px', paddingBottom: '200px' }}>

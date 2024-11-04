@@ -13,7 +13,7 @@ import TypingIndicator from '../../../component/chatbotThinkingBubble/typingIndi
 import { FaHome, FaPencilAlt, FaBook, FaCog } from "react-icons/fa";
 import { FaRotateRight } from "react-icons/fa6";
 
-const leo_img = 'https://orbirental-images.s3.amazonaws.com/4ca3b355-c04e-4fb8-a593-e3a50b721d58_604.png';
+import dummyPropertyImg from "../../../public/img/dummyPropertyImg.png";
 
 const Workbench = () => {
   const { property_name } = useParams();
@@ -22,6 +22,8 @@ const Workbench = () => {
   const [reservationStage, setReservationStage] = useState('current');
   const [isPanelOpen, setIsPanelOpen] = useState(false); // State for panel visibility
   const [panelContent, setPanelContent] = useState(null); // State for panel content
+
+  const propertyImg = apiPropertyData?.thumbnail_image?.url
 
   // This can't be factored out of this file because it uses this component's useState hooks
   const getPropertyDataFromAPI = async (propertyName) => {
@@ -179,7 +181,7 @@ const Workbench = () => {
         <div className='right-content'>
           <div className='header-information'>
             <div className='header-content'>
-              <img src={leo_img} alt='dummy property' />
+              <img src={propertyImg || dummyPropertyImg} alt='dummy property' onError={(e) => { e.target.onerror = null; e.target.src = dummyPropertyImg; }} />
               <div className='header-text'>
                 <h2 style={{marginBottom:'5px'}}>{property_name}</h2>
                 {/* <h4 style={{marginBottom:'5px'}}>1281 Broadway, San Diego</h4> */}

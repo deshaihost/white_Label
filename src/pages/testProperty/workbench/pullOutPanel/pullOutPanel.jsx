@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './pullOutPanel.css';
 
 import QuickAdd from './quickAdd';
@@ -7,14 +7,22 @@ import HostBuddyKnowledgeBase from '../../../properties/addProperties/dynamic_qu
 import QuestionnairePage from '../../../properties/addProperties/dynamic_questionnaire/complete_questionnaire';
 
 const PullOutPanel = ({ onClose, content, className, propertyName, apiPropertyData, setApiPropertyData, getPropertyDataFromAPI, setPanelContent }) => {
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
   const handleClose = () => {
+    if (hasUnsavedChanges) {
+      if (!window.confirm('You have unsaved changes. Are you sure you want to close without saving?')) {
+        return;
+      }
+    }
+    setHasUnsavedChanges(false);
     onClose();
   };
 
   const renderContent = () => {
     switch (content) {
       case 'quickAdd':
-        return <QuickAdd propertyName={propertyName} setPanelContent={setPanelContent}/>;
+        return <QuickAdd propertyName={propertyName} setPanelContent={setPanelContent} setHasUnsavedChanges={setHasUnsavedChanges} />;
       case 'editProperty':
         return <QuestionnairePage property_name={propertyName} startAtPage={1}/>; // Questionnaire starts at page 1 (don't show the questionnaire first page)
       case 'viewPrevious':

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {  Modal } from "react-bootstrap";
 import CopyToPropertiesModal from "./copyToPropertiesModal/CopyToPropertiesModal";
 
-const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSectionName, checkbox_group_option, handleModalSave }) => {
+const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSectionName, checkbox_group_option, handleModalSave, callDeleteQuestionApi, questionIndex, propertyName }) => {
 
   // Unpack question object, handling the special case for checkbox_group
   let { question_type, question_text, response_text, hide_for_reservations, response_options } = question_obj || {};
@@ -46,6 +46,15 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
       setextraNoteData(response_text || "");
     }
   }, [hide_for_reservations_data, show]);
+
+  
+
+  const handleDeleteQuestion = () => {
+    if (window.confirm('Are you sure you want to delete this question?')) {
+      callDeleteQuestionApi(sectionName, subSectionName, questionIndex, propertyName);
+      setShowModal(false);
+    }
+  }
 
   // Reset modal variables, to make sure we don't get old data when the modal is opened again
   const modalCleanup = () => {
@@ -104,6 +113,12 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
             <a style={{ color:'#146EF5', textDecoration:'none', display:'block', textAlign:'center', marginTop:'15px', cursor:'pointer' }} onClick={() => setShowCopyToPropertiesModal(true)}>
               Copy To Other Properties
             </a>
+
+            {sectionName=='Extras' && subSectionName=='Custom Fields' && ( // For now, only support deleting the user-added custom questions
+              <a style={{ color:'red', textDecoration:'none', display:'block', textAlign:'center', marginTop:'15px', cursor:'pointer' }} onClick={() => handleDeleteQuestion(true)}>
+                Delete Question
+              </a>
+            )}
 
           </div>
         </Modal.Body>

@@ -5,7 +5,7 @@ import axios from 'axios';
 import ToastHandle from '../../../../helper/ToastMessage';
 import SelectPropertiesModal from './selectPropertiesModal/SelectPropertiesModal';
 
-const QuickAdd = ({propertyName, setPanelContent}) => {
+const QuickAdd = ({ propertyName, setPanelContent, setHasUnsavedChanges }) => {
   const [addToKbLoading, setAddToKbLoading] = useState(false);
   const [label, setLabel] = useState('');
   const [content, setContent] = useState('');
@@ -39,20 +39,24 @@ const QuickAdd = ({propertyName, setPanelContent}) => {
 
   const handleLabelChange = (e) => {
     setLabel(e.target.value);
+    setHasUnsavedChanges(e.target.value.trim() !== '' || content.trim() !== '');
   };
 
   const handleContentChange = (e) => {
     setContent(e.target.value);
+    setHasUnsavedChanges(label.trim() !== '' || e.target.value.trim() !== '');
   };
 
   const handleAddToThisProperty = () => {
     if (!content.trim()) { return; }
     callAddToKbApi([propertyName]);
+    setHasUnsavedChanges(false);
   };
 
   const handleSave = (selectedProperties) => {
     if (!content.trim()) { return; }
     callAddToKbApi(selectedProperties);
+    setHasUnsavedChanges(false);
   };
 
   const handleViewPrevious = () => {
