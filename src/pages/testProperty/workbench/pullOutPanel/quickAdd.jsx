@@ -3,29 +3,38 @@ import './pullOutPanel.css'
 import Loader from '../../../../helper/Loader';
 import axios from 'axios';
 import ToastHandle from '../../../../helper/ToastMessage';
+import SelectPropertiesModal from './selectPropertiesModal/SelectPropertiesModal';
 
-const QuickAdd = ({propertyName}) => {
+const QuickAdd = ({propertyName, setPanelContent}) => {
   const [addToKbLoading, setAddToKbLoading] = useState(false);
   const [label, setLabel] = useState('');
   const [content, setContent] = useState('');
-  const [selectedStages, setSelectedStages] = useState([]);
-  const reservationStages = ["CURRENT", "FUTURE", "INQUIRY/PAST"];
+  const [showSelectPropertiesModal, setShowSelectPropertiesModal] = useState(false);
 
-  const callAddToKbApi = async () => {
+  // Assemble the data in the "questionnaire question" format to be passed to the API, and add the rest of the body data
+  const assembleRequestBody = (properties) => {
+    const question_data = {question_text:label || 'Extra information', response_text:content, question_type:'long_answer', hide_for_reservations:[], placeholder_text:'Type or paste any information about your property that you would like HostBuddy to know.'};
+    const bodyData = {section_name:'Extras', subsection_name:'Custom Fields', question:question_data, properties};
+    return bodyData;
+  };
+
+  const callAddToKbApi = async (properties) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
+    setAddToKbLoading(true);
   
     try {
       const config = {
         headers: {"X-API-Key": API_KEY},
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
-      const bodyData = { label:label, response_text:content };
-      const response = await axios.post(`${baseUrl}/properties/${propertyName}`, bodyData, config);
+      const bodyData = assembleRequestBody(properties);
+      const response = await axios.post(`${baseUrl}/add_questionnaire_question`, bodyData, config);
 
       if (response.status === 200) { ToastHandle('Successfully added to knowledge base', 'success'); }
-      else { ToastHandle(response?.data?.error || 'Failed to add to knowledge base', 'error'); }
-    } catch (error) { ToastHandle('Failed to add to knowledge base', 'error'); }
+      else { ToastHandle(response?.data?.error || 'Failed to add to knowledge base', 'danger'); }
+    } catch (error) { ToastHandle('Failed to add to knowledge base', 'danger'); }
+    finally { setAddToKbLoading(false); }
   }
 
   const handleLabelChange = (e) => {
@@ -35,6 +44,20 @@ const QuickAdd = ({propertyName}) => {
   const handleContentChange = (e) => {
     setContent(e.target.value);
   };
+
+  const handleAddToThisProperty = () => {
+    if (!content.trim()) { return; }
+    callAddToKbApi([propertyName]);
+  };
+
+  const handleSave = (selectedProperties) => {
+    if (!content.trim()) { return; }
+    callAddToKbApi(selectedProperties);
+  };
+
+  const handleViewPrevious = () => {
+    setPanelContent('viewPrevious');
+  }
 
   return (
     <div className="quick-add-container">
@@ -48,10 +71,18 @@ const QuickAdd = ({propertyName}) => {
       <textarea className="quick-add-textarea" placeholder="Enter anything you'd like HostBuddy to know..." value={content} onChange={handleContentChange}/>
 
       <div className="quick-add-buttons-container">
-        <button className="btn btn-primary quick-add-button">Add to this property</button>
-        <button className="btn btn-primary quick-add-button">Add to multiple properties...</button>
+        {!addToKbLoading ? (
+          <>
+            <button className="btn btn-primary quick-add-button" onClick={handleAddToThisProperty}>Add to this property</button>
+            <button className="btn btn-primary quick-add-button" onClick={() => setShowSelectPropertiesModal(true)}>Add to multiple properties...</button>
+          </>
+        ) : (
+          <Loader />
+        )}
       </div>
-      <button className="view-previous-button">View previously added</button>
+      <button className="view-previous-button" onClick={handleViewPrevious}>View previously added</button>
+
+      <SelectPropertiesModal show={showSelectPropertiesModal} setShow={setShowSelectPropertiesModal} currentProperty={propertyName} handleSave={handleSave} />
     </div>
   );
 }

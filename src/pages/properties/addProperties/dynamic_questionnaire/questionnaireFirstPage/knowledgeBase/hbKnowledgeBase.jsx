@@ -5,7 +5,7 @@ import KnowledgeBaseSourcesModal from "./knowledgeBaseSourcesModal";
 import "../../questionnaire.css";
 
 
-const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropertyDataFromAPI, property_name}) => {
+const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropertyDataFromAPI, property_name, forceShowDataAdded}) => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
@@ -195,7 +195,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
         )}
 
         <h4>Property Profile</h4>
-        {formHasData ? (
+        {formHasData || forceShowDataAdded ? (
           <h5 className="text-confirmed">Data entered</h5>
         ) : (
           <h5 className="text-negative">No data entered</h5>

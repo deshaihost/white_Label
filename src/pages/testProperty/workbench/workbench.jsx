@@ -58,6 +58,12 @@ const Workbench = () => {
     getPropertyDataFromAPI(property_name);
   }, [property_name]);
 
+  // Function to jump to the Extras section of the questionnaire - used when the user clicks "View previously uploaded" in quick add
+  const jumpToExtras = () => {
+    setPanelContent('viewPrevious');
+    setIsPanelOpen(true);
+  };
+
 
   // Chat window state & logic ---------------------------------------------------------
   const [messages, setMessages] = useState([]);
@@ -229,7 +235,7 @@ const Workbench = () => {
           </div>
         </div>
       </div>
-      <PullOutPanel onClose={handleClosePanel} content={panelContent} className={isPanelOpen ? 'open' : ''} propertyName={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
+      <PullOutPanel onClose={handleClosePanel} content={panelContent} className={isPanelOpen ? 'open' : ''} propertyName={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI} setPanelContent={setPanelContent}/>
     </div>
   )
 }

@@ -150,7 +150,8 @@
   flex: 1 1 calc(50% - 20px); /* Adjust to fit two buttons per row */
   display: flex;
   align-items: center;
-  gap: 10px; /* Add some space between the icon and the text */
+  gap: 10px;
+  padding-left: 15px;
 }
 
 .workbench .action-content svg {

@@ -61,7 +61,7 @@
 /* Quick Add Styles */
 .quick-add-container {
   text-align: left;
-  width: 100%;
+  width: 860px;
 }
 
 @media (max-width: 860px) { /* 860px is the min width of the panel on larger screens. For smaller screens, make sure it takes up 100%, without expanding beyond the viewport (though it will expand beyond if it has sub-components that necessarily take up more space, which is acceptable */
@@ -82,7 +82,7 @@
 .quick-add-description {
   color: #a0a0a0;
   margin-bottom: 24px;
-  line-height: 1.5;
+  font-size: 16px;
 }
 
 .quick-add-label {
