@@ -3,7 +3,7 @@ import BotImg from "../../../../../public/img/logo/logoGraphicOnlySquare.webp";
 import UserImg from "../../../../../public/img/userimg2.png";
 import TypingIndicator from "../../../../../component/chatbotThinkingBubble/typingIndicator";
 
-function Message({ key, text, sender, feedBckModelOpen, handleJustificationClick, feedBackDataGet, prevMsgText, isInitialMessage }) {
+function Message({ key, text, sender, feedBckModelOpen, handleJustificationClick, feedBackDataGet, prevMsgText, isInitialMessage, isFirstBotMessage, isLastBotMessage }) {
 
   const { response, message_id, justification } = text ? text : {};
   const { typeThumbs, messageId,  } = feedBackDataGet ? feedBackDataGet : {};
@@ -17,7 +17,7 @@ function Message({ key, text, sender, feedBckModelOpen, handleJustificationClick
             <img src={BotImg} className="bot-img" alt="bot-img" style={{marginTop:'8px'}}/>
           )}
           <p>{useLoader ? <TypingIndicator /> : (sender === "bot" ? <>{response}</> : <>{text}</>)}</p>
-          {sender === "bot" && !useLoader && (
+          {sender === "bot" && !useLoader && !isFirstBotMessage && (
             <div className=" py-3">
               <span>
                 {typeThumbs === "up"?
@@ -39,12 +39,12 @@ function Message({ key, text, sender, feedBckModelOpen, handleJustificationClick
               </span>
             </div>
           )}
-          {sender === "user" && (
+          {sender === "user" && false && ( // don't show the user icon
             <img src={UserImg} className="user-img" alt="user-img" />
           )}
         </div>
 
-        {sender === "bot" && !isInitialMessage && !useLoader && (
+        {sender === "bot" && !isInitialMessage && !useLoader && !isLastBotMessage && (
           <div className="link-container">
             <a href="#" onClick={(e) => handleJustificationClick(e, justification)}>Where did this come from?</a>
           </div>

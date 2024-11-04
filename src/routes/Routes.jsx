@@ -354,7 +354,7 @@ const Routing = () => {
         />
 
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
-        <Route path="/workbench/:id" element={<Workbench />}></Route>
+        <Route path="/workbench/:property_name" element={<Workbench />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
       </Routes>
       {location.pathname !== "/login" &&

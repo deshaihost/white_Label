@@ -8,13 +8,12 @@
     align-items: flex-start;
     justify-content: space-between;
     height: calc(100% - 60px);
-    padding: 20px;
     border-radius: 30px;
     border: 1px solid #2C389E;
     background: #000212;
     max-width: 690px;
     margin: auto;
-    padding: 25px;
+    padding: 15px;
     box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.5); /* x-offset, y-offset, blur-radius, spread-radius, color */
 }
 
@@ -23,7 +22,7 @@
     display: flex;
     flex-direction: column;
     margin-top: auto;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     /* overflow-y: auto; */
     overflow-y: scroll;
 
@@ -42,7 +41,7 @@
 }
 
 .workbench .test-property-message-container {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     padding: 10px;
     position: relative;
 }
@@ -98,7 +97,11 @@
     cursor: pointer;
 }
 
-.workbench .message p {
+.workbench .message {
+    max-width: 90%;
+}
+
+.workbench .message p { 
     background: #060F26;
     color: #FFF;
     font-family: 'Samsung Sharp Sans Medium';
@@ -106,7 +109,7 @@
     font-style: normal;
     font-weight: 500;
     line-height: 135%;
-    padding: 20px;
+    padding: 15px; /* this only applies to user messages. For bot messages this is overrided in .message.bot p */
     border-radius: 20px;
     max-width: 400px;
     white-space: pre-wrap;
@@ -139,6 +142,7 @@
 
 .workbench .message.bot p {
     margin-left: 8px;
+    padding: 15px;
 }
 
 .workbench .input-container {

@@ -22,7 +22,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 60%; /* Adjust this value to control panel width */
+  min-width: 860px;
   height: 100%;
   background-color: #000212;
   color: #fff;
@@ -62,6 +62,13 @@
 .quick-add-container {
   text-align: left;
   width: 100%;
+}
+
+@media (max-width: 860px) { /* 860px is the min width of the panel on larger screens. For smaller screens, make sure it takes up 100%, without expanding beyond the viewport (though it will expand beyond if it has sub-components that necessarily take up more space, which is acceptable */
+  .pull-out-panel {
+    min-width: 100%;
+    width: 100%;
+  }
 }
 
 /* --------------- Quick Add --------------- */
@@ -119,4 +126,41 @@
 .quick-add-textarea:focus {
   outline: none;
   border-color: #3a3a4c;
+}
+
+.quick-add-button {
+  padding: 12px 20px;
+  border-radius: 15px;
+  margin: 0; /* Remove the conflicting margin */
+  width: 300px; /* Fixed width for both buttons */
+}
+
+.quick-add-buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px; /* Space between buttons */
+  margin-top: 24px;
+  width: 100%;
+}
+
+.view-previous-button {
+  margin: 12px auto 0;
+  width: fit-content;
+  display: block;
+  color: #0078f0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+
+.view-previous-button:hover {
+  text-decoration: underline;
+}
+
+.btn-unselected {
+  border: 1px solid #0078f0;
+  color: #0078f0;
+  background-color: transparent;
 }

@@ -1,108 +1,35 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./chatWindow.css";
 import Message from "./messages/Messages";
-import { Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { chatBoxAIActions, getSessionIdActions } from "../../../../redux/pages/meetHostBuddy/actions";
-import { stateEmptyActions } from "../../../../redux/stateEmpty/actions";
 import loaderGif from "../../../../public/img/new_loader.gif";
 import ToastHandle from "../../../../helper/ToastMessage";
 import MessgFeedBckModel from "./messages/messagesFeedBckModel/MessgFeedBckModel";
 import JustificationModal from "./messages/justificationModal/justificationModal";
 
 
-const ChatWindow = (props) => {
-  const { urlData } = props;
-  const { chatbot_key } = urlData ? urlData : {};
-  const store = useSelector((state) => state);
-  const dispatch = useDispatch();
-  const sessionId = store?.getSessionIdReducer?.sessionId?.data;
-  const getMessageResp = store?.getSessionIdReducer?.sessionId?.data?.initial_message;
-  const getMessageRespId = store?.getSessionIdReducer?.sessionId?.data?.session_id;
-  const getPropertyName = store?.getSessionIdReducer?.sessionId?.data?.property_name;
-  let FirstMessageRespo = { response: getMessageResp, message_id: getMessageRespId };
-  const updateMessageResp = store?.chatBoxAIReducer?.chatBoxAI?.data;
-
-  const statusResp = store?.chatBoxAIReducer?.chatBoxAI?.status;
-  const updateMessageRespLoading = store?.chatBoxAIReducer?.loading;
-  const [messages, setMessages] = useState([]);
+const ChatWindow = ({property_name, messages, setMessages, sessionId, callSendMessageApi, responseIsLoading}) => {
+  const updateMessageRespLoading = responseIsLoading;
   const [inputValue, setInputValue] = useState("");
   const [showJustificationModal, setShowJustificationModal] = useState(false);
   const [justificationText, setJustificationText] = useState("");
   const messagesEndRef = useRef(null);
 
-  // const messagesContainerRef = useRef(null);
-
   // Event handler for key press in the input field
   const handleKeyPress = (e) => {
     if (e.key === "Enter" || e.keyCode === 13) {
-      handleSendMessage();
+      handleSendMessage(sessionId);
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (sessionId) => {
     if (inputValue.trim() === "") return;
     const userMessage = { text: inputValue, sender: "user" };
-    dispatch(
-      chatBoxAIActions({
-        session_id: sessionId?.session_id,
-        message: inputValue,
-      })
-    );
+    //dispatch(chatBoxAIActions({session_id:sessionId, message:inputValue}));
+    callSendMessageApi(inputValue);
 
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInputValue("");
   };
-
-  // message feedback model functionality
-
-  // Initial messages
-  useEffect(() => {
-    const userMessage = { text: "Hi", sender: "user" };
-    const botMessage = {
-      text: FirstMessageRespo !== undefined ? FirstMessageRespo : "",
-      sender: "bot",
-    };
-    setMessages([userMessage, botMessage]);
-  }, [getMessageResp]);
-
-  const isFirstRun = useRef(true);
-  const initialGeneratedFun = () => {
-    dispatch(
-      getSessionIdActions({
-        action: "hb_meet_hostbuddy_chat_start",
-        textareaValue: "Hi",
-        chatbot_key: chatbot_key,
-        data_host_return: " ",
-        user: "host" //user="host" since we're on the Test Property page, not the Copy Chatbot Link
-      })
-    );
-  };
-
-  useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      if (chatbot_key !== undefined) {
-        initialGeneratedFun();
-      } else if (chatbot_key === undefined) {
-        initialGeneratedFun();
-      }
-    }
-  }, [chatbot_key]);
-
-  useEffect(() => {
-    dispatch(stateEmptyActions());
-    if (statusResp === 200) {
-      const botMessage = {
-        text: updateMessageResp !== undefined ? updateMessageResp : "",
-        sender: "bot",
-      };
-      setMessages((prevMessages) => [...prevMessages, botMessage]);
-    } else if (statusResp == 500) {
-      ToastHandle("Internal Server Error", "danger");
-    }
-  }, [statusResp]);
 
   // When a new message is added, scroll to the bottom of the chat window
   const messageListRef = useRef(null);
@@ -114,17 +41,10 @@ const ChatWindow = (props) => {
 
   // feed back functionality
   const [feedBackModelOpen, setFeedBackModelOpen] = useState(false);
-  const [feedBackDataGet, setFeedBackDataGet] = useState({
-    typeThumbs: "",
-    conversationId: "",
-    messageId: "",
-    propertyName: "",
-    botMsg: "",
-    precedingGuestMsg: ""
-  });
+  const [feedBackDataGet, setFeedBackDataGet] = useState({typeThumbs:"", conversationId:"", messageId:"", propertyName:"", botMsg:"", precedingGuestMsg:""});
 
   const feedBckModelOpenHndle = (type, messId, botMsg, precedingGuestMsg) => {
-    setFeedBackDataGet({ ...feedBackDataGet, typeThumbs:type, conversationId:sessionId?.session_id, messageId:messId, propertyName:getPropertyName, botMsg:botMsg, precedingGuestMsg:precedingGuestMsg });
+    setFeedBackDataGet({ ...feedBackDataGet, typeThumbs:type, conversationId:sessionId, messageId:messId, propertyName:property_name, botMsg:botMsg, precedingGuestMsg:precedingGuestMsg });
     setFeedBackModelOpen(true);
   };
 
@@ -143,8 +63,14 @@ const ChatWindow = (props) => {
       <div className="workbench-chat-window chatbot blur-background-top-left blur-background-bottom-right">
         <div className="message-list" ref={messageListRef}>
           {messages?.map((message, index) => {
+            // Find if this is the last bot message
+            const isLastBotMessage = message.sender === 'bot' && 
+              !messages.slice(index + 1).some(m => m.sender === 'bot');
+              
             return (
-              <Message key={index} text={message.text} sender={message.sender} feedBckModelOpen={feedBckModelOpenHndle} handleJustificationClick={handleJustificationClick} feedBackDataGet={feedBackDataGet} prevMsgText={messages[index - 1]?.text} isInitialMessage={index <= 1} />
+              <Message key={index} text={message.text} sender={message.sender} feedBckModelOpen={feedBckModelOpenHndle} handleJustificationClick={handleJustificationClick} feedBackDataGet={feedBackDataGet} prevMsgText={messages[index - 1]?.text} isInitialMessage={index <= 1}
+                isLastBotMessage={isLastBotMessage} isFirstBotMessage={message.sender === 'bot' && !messages.slice(0, index).some(m => m.sender === 'bot')}
+              />
             );
           })}
           {updateMessageRespLoading && (
@@ -168,7 +94,7 @@ const ChatWindow = (props) => {
         </div>
       </div>
       <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
-      <JustificationModal show={showJustificationModal} handleClose={() => setShowJustificationModal(false)} propertyName={getPropertyName} justification={justificationText}/>
+      <JustificationModal show={showJustificationModal} handleClose={() => setShowJustificationModal(false)} propertyName={property_name} justification={justificationText}/>
     </>
   );
 };

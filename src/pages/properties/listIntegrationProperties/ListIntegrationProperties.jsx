@@ -366,7 +366,12 @@ const ListIntegrationProperties = () => {
                           </Dropdown>
                         </div>
                       </div>
+                      {/*
                       <Button className="test-property-btn border-0" onClick={() => { selectedHandle(testProperty, properties); }}>
+                        Test Property
+                      </Button>
+                      */}
+                      <Button className="test-property-btn border-0" onClick={() => { navigate(`/workbench/${properties}`); }}>
                         Test Property
                       </Button>
                     </div>
