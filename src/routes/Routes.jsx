@@ -26,6 +26,7 @@ import ScrollToTop from "../helper/ScrollToTop";
 import QuestionnairePage from "../pages/properties/addProperties/dynamic_questionnaire/complete_questionnaire";
 import CopyChatBotLink from "../pages/copyChatbotLink/CopyChatBotLink";
 import TestProperty from "../pages/testProperty/TestProperty";
+import Workbench from "../pages/testProperty/workbench/workbench";
 import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";
 import TermsofService from "../pages/termsofService/TermsofService";
 import SchedulingWalkthrough from "../pages/userGuides/schedulingWalkthrough/schedulingWalkthrough";
@@ -212,10 +213,7 @@ const Routing = () => {
         <Route path="/forgot" element={<ForgotPass />}></Route>
         <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
         <Route path="/termsof-service" element={<TermsofService />}></Route>
-        <Route
-          path="/scheduling-walkthrough"
-          element={<SchedulingWalkthrough />}
-        ></Route>
+        <Route path="/scheduling-walkthrough" element={<SchedulingWalkthrough />}></Route>
         <Route path="/tips-and-tricks" element={<TipsAndTricks />}></Route>
         <Route path="/best-practices" element={<BestPractices />}></Route>
         <Route path="/schedule-guide" element={<ScheduleHostBuddy />}></Route>
@@ -356,14 +354,16 @@ const Routing = () => {
         />
 
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
+        <Route path="/workbench/:property_name" element={<Workbench />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
       </Routes>
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/forgot" &&
         location.pathname !== "/accept-invitation" &&
-        location.pathname !== "/inbox" &&
-        location.pathname !== "/test-show-conversations" && <Footer />}
+        !location.pathname.startsWith("/inbox") &&
+        location.pathname !== "/test-show-conversations" &&
+        !location.pathname.startsWith("/workbench/") && <Footer />}
     </div>
   );
 };

@@ -165,7 +165,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const selectRef = useRef(null);
 
-  const options = allPropertyNamesList.map((propertyName) => ({ value: propertyName, label: propertyName }));
+  const options = allPropertyNamesList ? allPropertyNamesList.map((propertyName) => ({ value:propertyName, label:propertyName })) : null;
 
   const handleChange = (selected) => {
     setSelectedOptions(selected || []);
@@ -237,20 +237,23 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <h3>Conversation Settings</h3>
           </div>
           <div>
-            <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
+            <div className={`d-flex flex-wrap flex-md-nowrap gap-4 align-items-center ${!options ? 'justify-content-end' : ''}`}>
               <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
                 Save Settings
               </Button>
-              <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example" value={selectedConfig} onChange={handleConfigSelectChange}>
-                {Object.keys(localSettingsData).map((key, index) => (
-                  <option key={index} value={key}>{key}</option>              
-                ))}
-                <option value="add">+ New Config</option>
-              </select>
+            
+              {options && (
+                <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example" value={selectedConfig} onChange={handleConfigSelectChange}>
+                  {Object.keys(localSettingsData).map((key, index) => (
+                    <option key={index} value={key}>{key}</option>              
+                  ))}
+                  <option value="add">+ New Config</option>
+                </select>
+              )}
             </div>
 
             <div style={{marginTop:"10px"}}>
-              {selectedConfig === "default" ? (
+              {(selectedConfig === "default") || !options ? (
                 <div style={{maxWidth:"400px"}}>
                   <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p>
                 </div>
@@ -359,11 +362,11 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <label className="fs-5">Message Delay</label>
             <p className="settings-label mb-2">HostBuddy will delay its response to guests by a (random) number of minutes within this range. To have HostBuddy simply respond as quickly as possible, set min and max delay to 0. Max allowed is 7 minutes.</p>
             <div className="row">
-              <div className="col-lg-2">
+              <div className="col-lg-3">
                 <label className="fs-6">Min. Delay</label>
                 <input type="number" className="form-control" placeholder="0 mins" value={currentSettingsData.min_message_delay_minutes} onChange={(e) => setSetting('min_message_delay_minutes', e.target.value)}/>
               </div>
-              <div className="col-lg-2">
+              <div className="col-lg-3">
                 <label className="fs-6">Max. Delay</label>
                 <input type="number" className="form-control" placeholder="0 mins" value={currentSettingsData.max_message_delay_minutes} onChange={(e) => setSetting('max_message_delay_minutes', e.target.value)}/>
               </div>

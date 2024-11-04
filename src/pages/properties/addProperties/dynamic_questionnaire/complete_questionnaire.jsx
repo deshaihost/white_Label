@@ -13,21 +13,28 @@ import { FullScreenLoader } from "../../../../helper/Loader";
 import axios from "axios";
 import PencilIconModal from "./PencilIconModal";
 import ExternalResourcesForm from "./ExternalResources/ExternalResourcesForm";
+import { set } from "react-hook-form";
 
 
 // Code for the entire questionnaire page, including the header and all sections, including Basics and External Resources.
-const QuestionnairePage = () => {
-  const { property_name } = useParams();
+const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jumpToSection=null }) => {
+  const { property_name: paramPropertyName } = useParams();
   const navigate = useNavigate();
+  
+  // Use path param first, fall back to prop
+  const property_name = paramPropertyName || propPropertyName;
 
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
   const section_order_data = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire?.metadata?.section_order
-  const questionnaire_section_names = ["Resources", ...(section_order_data || [])];
+
+  let questionnaire_section_names = ["Resources", ...(section_order_data || [])]; // All pages; the first "resources" page plus all those retrieved from the dynamic questionnaire
+  questionnaire_section_names = questionnaire_section_names.slice(startAtPage); // Start at the specified page, and forget the rest
+  const jumpTo = jumpToSection || questionnaire_section_names[0];
 
   const [liveQuestionnaireData, setLiveQuestionnaireData] = useState({});
-  const [selectedSection, setSelectedSection] = useState("Resources");
+  const [selectedSection, setSelectedSection] = useState(jumpTo); // FYI - can be undefined if the questionnaire get hasn't finished yet, since questionnaire_section_names is not yet known
   const [questionnairePostLoading, setQuestionnairePostLoading] = useState(false);
   const [triggeredSaveLoading, setTriggeredSaveLoading] = useState(false);
   const [dataToUpdate, setDataToUpdate] = useState([]); // Sections that contain modified data to be saved
@@ -53,6 +60,7 @@ const QuestionnairePage = () => {
   useEffect(() => {
     if (apiQuestionnaireData) {
       setLiveQuestionnaireData(JSON.parse(JSON.stringify(apiQuestionnaireData))); // ensure deep copy
+      setSelectedSection(jumpTo);
     }
   }, [apiQuestionnaireData]);
 
@@ -264,7 +272,7 @@ const QuestionnairePage = () => {
     <div>
       <Helmet>
         <title>Edit Property</title>
-      </Helmet>;
+      </Helmet>
       <Container className="py-3">
         {apiQuestionnaireData ? (
           <>
@@ -285,7 +293,8 @@ const QuestionnairePage = () => {
                   selectedSection === "Resources" ? (
                     <QuestionnaireFirstPage handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
                   ) : (
-                    <QuestionnaireSection questionnaire_section_name={selectedSection} liveQuestionnaireData={liveQuestionnaireData} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
+                    selectedSection && Object.keys(liveQuestionnaireData).length > 0 &&
+                      <QuestionnaireSection questionnaire_section_name={selectedSection} liveQuestionnaireData={liveQuestionnaireData} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
                   )
                 ) : (
                   <ExternalResourcesForm property_name={property_name} handleSaveAndNext={handleSaveAndNext}/>

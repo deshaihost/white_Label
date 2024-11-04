@@ -5,7 +5,7 @@ import CheckboxGroupComponent from "./form_components/checkbox_group";
 import React from "react";
 import Loader from "../../../../helper/Loader";
 
-// Code for the input components in a single section in the dynamic questionnaire (but NOT "Basics" or "Externam Resources")
+// Code for the input components in a single section in the dynamic questionnaire (but NOT "Basics" or "External Resources")
 const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData, handleInputComponentChange, handlePencilIconClick, handleSaveAndNext, triggeredSaveLoading, property_name, section_num, num_total_sections}) => {
 
   const questionnaire_section_data = liveQuestionnaireData.questionnaire[questionnaire_section_name];
