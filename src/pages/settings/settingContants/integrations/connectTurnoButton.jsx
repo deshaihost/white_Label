@@ -99,7 +99,7 @@ const ConnectToTurno = () => {
   return (
     <div className="partner-tile" onClick={handleConnectClick}>
       <img className="partner-logo" alt="Turno Logo" src="https://storage.googleapis.com/frontend_media/partners/turno-logo-with-text.webp"/>
-      <p>Connecting your Turno account lets you use "Property Ready" in smart templates, so you can send messages to guests when their unit is ready for check-in.</p>
+      <p>Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.</p>
     </div>
   );
 };

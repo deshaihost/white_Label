@@ -1,56 +1,5 @@
-/* Custom switch styling */
-.conversation-settings .custom-switch .form-check-input {
-  width: 36px; /* slightly smaller width */
-  height: 18px; /* slightly smaller height */
-  background-color: #ccc; /* default grey background when off */
-  border-radius: 18px; /* circular borders for the slider */
-  position: relative;
-  appearance: none;
-  -webkit-appearance: none;
-  outline: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.conversation-settings .custom-switch .form-check-input:checked {
-  background-color: #045ce9; /* color when switch is on */
-}
-
-.conversation-settings .custom-switch .form-check-input::before {
-  content: '';
-  position: absolute;
-  width: 12px; /* smaller knob width */
-  height: 12px; /* smaller knob height */
-  background-color: white; /* color of the knob */
-  border-radius: 50%; /* round shape of the knob */
-  top: 3px; /* initial position */
-  left: 3px; /* initial position */
-  transition: transform 0.3s;
-}
-
-.conversation-settings .custom-switch .form-check-input:checked::before {
-  transform: translateX(18px); /* move the knob to the right when on */
-}
-
-/* Adjust the vertical alignment */
-.conversation-settings .custom-switch .form-check-input::before {
-  top: 50%; /* position at the vertical center */
-  transform: translateY(-50%); /* adjust to center the knob */
-}
-
-.conversation-settings .custom-switch .form-check-input:checked::before {
-  transform: translate(18px, -50%); /* move the knob to the right and center it */
-}
-
-.conversation-settings textarea.form-control.setting-textarea:disabled {
-  color: #AAA
-}
-
-.conversation-settings .settings-label {
-  font-size: 14px;
-  color: #BBB;
-  line-height: 18px;
-}
+/* In this file, always include the parent class name (.settings-integrations or .connect-turno-button) to avoid conflicts with other CSS files */
+/* FYI page background is: #000212 */
 
 .settings-integrations {
   padding: 20px;
@@ -75,13 +24,21 @@
   background-color: blue; /* Blue background on hover */
 }
 
+.settings-integrations .tiles-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 30px;
+}
 
-.partner-tile {
+.settings-integrations .partner-tile {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 400px;
+  flex: 0 0 400px; /* Don't grow, don't shrink, stay at 400px */
   height: auto;
   border: 2px solid #045ce9;
   border-radius: 8px;
@@ -91,19 +48,71 @@
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.partner-tile:hover {
+.settings-integrations .partner-tile:hover {
   transform: translateY(-10px);
   box-shadow: 0 4px 8px rgba(0, 0, 200, 0.8);
 }
 
-.partner-logo {
+.settings-integrations .partner-logo {
   width: 100px;
   height: auto;
   margin-bottom: 20px;
 }
 
-.partner-tile p {
+.settings-integrations .partner-tile p {
   font-size: 16px;
   color: #333; /* Dark text color */
   text-align: center;
+}
+
+.settings-integrations .integrations-tabs {
+  display: flex;
+  justify-content: flex-start; /* Left-align the tabs */
+  margin-top: 20px; /* Reduced from 40px since we now have a title */
+}
+
+.settings-integrations .tab-button {
+  background-color: rgb(50, 50, 50);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #6b8aff;  /* Light blue text color */
+}
+
+.settings-integrations .tab-button.active {
+  background-color: rgba(0, 0, 255, 0.2);
+  border-color: #6b8aff;
+  color: #89a4ff;  /* Lighter blue for active state */
+  box-shadow: 0 2px 8px rgba(107, 138, 255, 0.3);
+}
+
+.settings-integrations .tab-button:hover {
+  background-color: rgba(107, 138, 255, 0.15);  /* Slightly blue tinted background */
+  border-color: rgba(107, 138, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(107, 138, 255, 0.2);
+}
+
+.settings-integrations .connected-integrations-section {
+  margin-top: 80px;
+}
+
+.settings-integrations .connected-title {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.settings-integrations .no-integrations-message {
+  color: #AAA;
+  font-size: 16px;
+  text-align: center;
+  padding: 30px;
+  border: 1px dashed #555;
+  border-radius: 8px;
+  margin-top: 20px;
 }
