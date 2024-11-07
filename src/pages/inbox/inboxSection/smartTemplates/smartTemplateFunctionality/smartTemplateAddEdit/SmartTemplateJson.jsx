@@ -162,6 +162,13 @@ export const dataInput = {
       inputFiled: [],
     },
     {
+      guesttype: "Guest has not responded",
+      type: "guest_has_not_responded",
+      label: "Only send this follow-up message if the guest has not responded to the previous message.",
+      inputFiled: [{}], // empty obj placeholder must be added to make the option selectable
+      followUpOnly: true,
+    },
+    {
       guesttype: "Reservation status is...",
       type: "reservation_status",
       label: "Only send this message to guests at the selected reservation statuses.",
@@ -430,7 +437,7 @@ export const minutDataInput = {
       inputFiled: [],
     },
     {
-      guesttype: "Average sound level high",
+      guesttype: "Average sound level is high",
       type: "avg_sound_high",
       label: "Only send this message if Minut detects average sound level is high.",
       inputFiled: [{}] // empty obj placeholder must be added to make the option selectable

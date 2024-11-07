@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno_user_id, minut_user_id }) => {
-  const { modelShow, modelShowType, formData, minutFormData, editFormData, typepAddEdit, editIndex } = show;
+const TriggersTrargetsConditionsModel = (props) => {
+  const { show, handleClose, submitHndle, turno_user_id, minut_user_id } = props;
+  const { modelShow, modelShowType, formData, minutFormData, editFormData, typepAddEdit, editIndex, followUpIndex } = show;
 
   const [selectGet, setSelectGet] = useState({}); // Selected trigger/target/condition obj from the dataInput json
   const [inputDataGet, setInputDataGet] = useState({});
@@ -23,6 +24,19 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
   const typeToMinutBtnMapping = {'Trigger':'triggers', 'Conditions':'conditions', 'Follow-Up Conditions':'conditions'};
 
   const dataToUse = isMinutData ? minutFormData : formData;
+
+  // Filter the data based on whether it's for follow-up conditions or not
+  const filteredData = dataToUse?.filter(item => {
+    if (modelShowType === 'Follow-Up Conditions') {
+      // For follow-ups, show all conditions including followUpOnly ones
+      return true;
+    } else if (modelShowType === 'Conditions') {
+      // For regular conditions, hide followUpOnly ones
+      return !item?.followUpOnly;
+    }
+    // For other types (triggers etc), show everything
+    return true;
+  });
 
   const OnchangeHndle = (e, typeForm, onlyUsed) => {
     const { name, value } = e.target;
@@ -70,7 +84,7 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
   };
 
   const onSubmitHndle = () => {
-    const editAddTypeSubmitHndle = { typepAddEdit, editIndex };
+    const editAddTypeSubmitHndle = { typepAddEdit, editIndex, followUpIndex };
     submitHndle({ type:type, data:inputDataGet, editAddTypeSubmitHndle, modelShowType, triggerFormData:selectGet });
     closeHndleModel();
     setIsMinutData(false); // Reset isMinutData when modal is closed after confirm
@@ -116,7 +130,7 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
         <div className="addition_des">
           <div className='item-select my-3'>
             <select aria-label="Default select example" className="bg-dark form-control form-select text-white" value={selectGet?.type || ""} onChange={(e) => OnchangeHndle(e, selectInterface)}>
-              {dataToUse?.map((item) => {
+              {filteredData?.map((item) => {
                 const { type, guesttype } = item;
                 return (
                   <option value={type} disabled={type === ""} key={type}>
@@ -152,13 +166,7 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
                     </>
                   ) : type === "select" ? (
                     <div className="item-select">
-                      <select
-                        aria-label="Default select example"
-                        className="bg-dark form-select form-control mt-4 text-white"
-                        name={payloadType}
-                        value={inputDataGet[payloadType] || ""}
-                        onChange={(e) => OnchangeHndle(e, selecter)}
-                      >
+                      <select aria-label="Default select example" className="bg-dark form-select form-control mt-4 text-white" name={payloadType} value={inputDataGet[payloadType] || ""} onChange={(e) => OnchangeHndle(e, selecter)}>
                         {inputLabel?.map((item) => {
                           const { value, selectLabel } = item;
                           return (

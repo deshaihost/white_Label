@@ -19,7 +19,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   const conditionsName = "Conditions";
   const followUpConditionsName = "Follow-Up Conditions";
   
-  const dataStructurePayload = smartTemplateData?.smartItem ? smartTemplateData?.smartItem : { id:uuidv4(), name:'', enabled:false, message:'', properties:[], triggers:[], targets:[], conditions:[] }; // Data structure for just this one template. The structure for all templates is stored in the parent
+  const dataStructurePayload = smartTemplateData?.smartItem ? smartTemplateData?.smartItem : { id:uuidv4(), name:'', enabled:false, message:'', properties:[], triggers:[], targets:[], conditions:[], follow_ups: [] }; // Data structure for just this one template. The structure for all templates is stored in the parent
 
   const [allData, setAllData] = useState({ modelShow: false, modelShowType: "", formData: [] });
   const [dataStructure, setDataStructure] = useState(dataStructurePayload);
@@ -37,12 +37,14 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   }, [dataStructure]);
   */
 
+  // State to manage follow-up visibility
+  const [showFollowUps, setShowFollowUps] = useState(dataStructure.follow_ups.length > 0);
+
   // Modal submit to add a new trigger/target/condition or edit an existing one
   const submitHndle = (getFormData) => {
     const { data, type, editAddTypeSubmitHndle, modelShowType, triggerFormData } = getFormData; // triggerFormData is the selected trigger/target/condition obj from the dataInput json
     const { typepAddEdit, editIndex } = editAddTypeSubmitHndle || {};
-    const newTrigger = { type, data };
-    const useTriggeredGuest = !!triggerFormData?.useTriggeredGuest; // useTriggeredGuest is a bool: true iff useTriggeredGuest string is present in triggerFormData
+    const newItem = { type, data };
     
     // Update the data structure based on the modal type
     if (modelShowType === triggerName) {
@@ -50,21 +52,21 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         // const updatedTargets = useTriggeredGuest ? [{ type: 'triggered_guest', data: {} }] : prevData.targets.filter(target => target.type !== 'triggered_guest');
         const updatedTargets = []; // targets no longer used
         if (typepAddEdit === add) {
-          return { ...prevData, triggers: [...prevData.triggers, newTrigger], targets: updatedTargets };
+          return { ...prevData, triggers: [...prevData.triggers, newItem], targets: updatedTargets };
         } else if (typepAddEdit === edit) {
           const updatedTriggers = [...prevData.triggers];
-          if (editIndex >= 0 && editIndex < updatedTriggers.length) { updatedTriggers[editIndex] = newTrigger; }
+          if (editIndex >= 0 && editIndex < updatedTriggers.length) { updatedTriggers[editIndex] = newItem; }
           return { ...prevData, triggers: updatedTriggers, targets: updatedTargets };
         }
       });
     } else if (modelShowType === targetsName) {
       setDataStructure((prevData) => {
         if (typepAddEdit === add) {
-          return { ...prevData, targets: [...prevData.targets, newTrigger] };
+          return { ...prevData, targets: [...prevData.targets, newItem] };
         } else if (typepAddEdit === edit) {
           const updatedTriggers = [...prevData.targets];
           if (editIndex >= 0 && editIndex < updatedTriggers.length) {
-            updatedTriggers[editIndex] = newTrigger;
+            updatedTriggers[editIndex] = newItem;
           }
           return { ...prevData, targets: updatedTriggers };
         }
@@ -72,27 +74,23 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
     } else if (modelShowType === conditionsName) {
       setDataStructure((prevData) => {
         if (typepAddEdit === add) {
-          return { ...prevData, conditions: [...prevData.conditions, newTrigger] };
+          return { ...prevData, conditions: [...prevData.conditions, newItem] };
         } else if (typepAddEdit === edit) {
           const updatedTriggers = [...prevData.conditions];
-          if (editIndex >= 0 && editIndex < updatedTriggers.length) { updatedTriggers[editIndex] = newTrigger; }
+          if (editIndex >= 0 && editIndex < updatedTriggers.length) { updatedTriggers[editIndex] = newItem; }
           return { ...prevData, conditions: updatedTriggers };
         }
       });
     } else if (modelShowType === followUpConditionsName) {
+      const { followUpIndex } = editAddTypeSubmitHndle; // Get the index of the follow-up
       setDataStructure((prevData) => {
+        const updatedFollowUps = [...prevData.follow_ups];
         if (typepAddEdit === add) {
-          const updatedFollowUpConditions = prevData.follow_up_conditions
-            ? [...prevData.follow_up_conditions, newTrigger] // Changed from newCondition to newTrigger
-            : [newTrigger]; // Changed from newCondition to newTrigger
-          return { ...prevData, follow_up_conditions: updatedFollowUpConditions };
+          updatedFollowUps[followUpIndex].conditions.push(newItem);
         } else if (typepAddEdit === edit) {
-          const updatedFollowUpConditions = [...(prevData.follow_up_conditions || [])];
-          if (editIndex >= 0 && editIndex < updatedFollowUpConditions.length) {
-            updatedFollowUpConditions[editIndex] = newTrigger; // Changed from newCondition to newTrigger
-          }
-          return { ...prevData, follow_up_conditions: updatedFollowUpConditions };
+          updatedFollowUps[followUpIndex].conditions[editIndex] = newItem;
         }
+        return { ...prevData, follow_ups: updatedFollowUps };
       });
     }
   };
@@ -154,6 +152,45 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   };
   // -------------------------------------
 
+  // Handle adding a new follow-up
+  const handleAddFollowUp = () => {
+    if (dataStructure.follow_ups.length < 3) {
+      const newFollowUp = {
+        message: '',
+        conditions: [],
+        after_mins: '', // Delay in minutes
+      };
+      const updatedFollowUps = [...dataStructure.follow_ups, newFollowUp];
+      setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
+      setShowFollowUps(true);
+    }
+  };
+
+  // Handle removing a follow-up
+  const handleRemoveFollowUp = (index) => {
+    const confirmed = window.confirm("Are you sure you want to remove this follow-up message?");
+    if (confirmed) {
+      const updatedFollowUps = dataStructure.follow_ups.filter((_, idx) => idx !== index);
+      setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
+      if (updatedFollowUps.length === 0) {
+        setShowFollowUps(false);
+      }
+    }
+  };
+
+  // Handle follow-up message change
+  const handleFollowUpMessageChange = (index, value) => {
+    const updatedFollowUps = [...dataStructure.follow_ups];
+    updatedFollowUps[index].message = value;
+    setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
+  };
+
+  // Handle follow-up delay change
+  const handleFollowUpDelayChange = (index, value) => {
+    const updatedFollowUps = [...dataStructure.follow_ups];
+    updatedFollowUps[index].after_mins = value;
+    setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
+  };
 
   return (
     <div className='smartTemplateAddEdit'>
@@ -294,38 +331,75 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       <div className="mt-4 mb-5">
         <label className="fs-5">Message</label>
         <textarea id="templateMessage" className="form-control setting-textarea" value={dataStructure?.message} onChange={(e) => handleTextAreaChange(e, 'message')} placeholder="Enter your message here..."/>
+        {!showFollowUps && (
+          <button style={{ background: 'none', border: 'none', color: '#146ef5', cursor: 'pointer', margin: '5px auto 0 auto' }} onClick={handleAddFollowUp}>
+            Follow-up...
+          </button>
+        )}
       </div>
 
-      <div className="followUp mt-4 mb-5 px-5 py-4">
-        <label className="fs-5">Follow-Up Message</label>
-        <textarea id="followUpMessage" className="form-control setting-textarea" value={dataStructure?.follow_up_message} onChange={(e) => handleTextAreaChange(e, 'follow_up_message')} placeholder="Enter your message here..." />
+      {showFollowUps && dataStructure.follow_ups.map((followUp, index) => (
+        <div className="followUp px-5 py-4" key={index}>
+          <label className="fs-5">Follow-Up Message {index + 1}</label>
+          <textarea id={`followUpMessage${index}`} className="form-control setting-textarea" value={followUp.message} onChange={(e) => handleFollowUpMessageChange(index, e.target.value)} placeholder="Enter your follow-up message here..." />
 
-        {dataStructure?.follow_up_conditions?.length > 0 && <p className="fs-5 mt-5">Only follow up if...</p> }
-        {dataStructure?.follow_up_conditions?.length > 0 && // Previously added follow-up conditions
-          dataStructure.follow_up_conditions.map((conditionsItem, index) => {
-            const { type } = conditionsItem;
-            return (
-              <div className="col-lg-4 ms-3" key={index}>
-                <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                  <p className="fs-6">{nameMapping[type]?.guesttype}</p>
-                  <div className="d-flex align-items-center gap-3">
-                    <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, followUpConditionsName)}>
-                      Remove
-                    </p>
-                    <p className="text-primary mainCursor fs-6" onClick={() => setAllData({ modelShow:true, modelShowType:followUpConditionsName, formData:conditions, minutFormData:minutConditions, editFormData:conditionsItem, editIndex:index, typepAddEdit:edit })}>
-                      Edit
-                    </p>
+          <div className="d-flex align-items-center mb-3 mt-3">
+            <span className="fs-6 me-2">Send this follow-up</span>
+            <input type="number" className="form-control" style={{ width: '80px' }} value={followUp.after_mins} onChange={(e) => handleFollowUpDelayChange(index, e.target.value)} />
+            <span className="fs-6 ms-2">minutes after the previous message.</span>
+          </div>
+
+          <p className="fs-5 mt-5">Only follow up if...</p>
+          {followUp.conditions.length > 0 ? (
+            followUp.conditions.map((conditionItem, conditionIndex) => {
+              const { type } = conditionItem;
+              return (
+                <div className="col-lg-4 ms-3" key={conditionIndex}>
+                  <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
+                    <p className="fs-6">{nameMapping[type]?.guesttype}</p>
+                    <div className="d-flex align-items-center gap-3">
+                      <p
+                        className="text-danger mainCursor fs-6"
+                        onClick={() => { // Remove condition
+                          const updatedFollowUps = [...dataStructure.follow_ups];
+                          updatedFollowUps[index].conditions = updatedFollowUps[index].conditions.filter((_, idx) => idx !== conditionIndex);
+                          setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
+                        }}
+                      >
+                        Remove
+                      </p>
+                      <p className="text-primary mainCursor fs-6"
+                        onClick={() => setAllData({modelShow:true, modelShowType:followUpConditionsName, formData:conditions, minutFormData:minutConditions, editFormData:conditionItem, editIndex:conditionIndex, typepAddEdit:edit, followUpIndex:index})}
+                      >
+                        Edit
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <p className="fs-6 text-muted">No conditions set. This message will be always sent at the specified time after the first message, regardless of any conditions or guest response.</p>
+          )}
 
-        <button className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center" onClick={() =>
-          setAllData({ modelShow:true, modelShowType:followUpConditionsName, formData:conditions, minutFormData:minutConditions, typepAddEdit:add})}>
-          <i className="bi bi-plus fs-3"></i> {dataStructure?.follow_up_conditions?.length > 0 ? "Add another follow-up condition" : "Add a condition for following up"}
+          <button
+            className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
+            onClick={() => setAllData({ modelShow:true, modelShowType:followUpConditionsName, formData:conditions, minutFormData:minutConditions, typepAddEdit:add, followUpIndex:index })}
+          >
+            <i className="bi bi-plus fs-3"></i> {followUp.conditions.length > 0 ? "Add another follow-up condition" : "Add a condition for following up"}
+          </button>
+
+          <button className="btn btn-link text-danger mt-3" onClick={() => handleRemoveFollowUp(index)}>
+            Remove this follow-up
+          </button>
+        </div>
+      ))}
+
+      {showFollowUps && dataStructure.follow_ups.length < 3 && (
+        <button style={{ background: 'none', border: 'none', color: '#146ef5', cursor: 'pointer', margin: '5px auto 0 auto' }} onClick={handleAddFollowUp}>
+          Add another follow-up...
         </button>
-      </div>
+      )}
 
       <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%'}} />
 
