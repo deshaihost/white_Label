@@ -11,6 +11,7 @@ const need_virtual_assistant_thumbnail = "https://i.postimg.cc/5yPKZ4Xz/Do-I-Nee
 const tired_of_negative_reviews_thumbnail = "https://i.postimg.cc/tR8P0GDW/Tired-of-Negative-Reviews-Hostbuddy-AI.webp";
 const guesty_hostbuddy_join_thumbnail = "https://i.postimg.cc/nrwSJpWP/guesty-and-host-Buddy-ai-join-forces-revolutionizing-vacation-rental-management.webp";
 const smart_templates_thumbnail = "https://i.postimg.cc/T3ZgqVyY/smart-templates.webp";
+const guide_to_vacation_rental_upsells_thumbnail = "https://i.postimg.cc/sxD47dsD/a-happy-vacation-rental-guest.webp";
 
 const BlogLandingPage = () => {
 
@@ -24,6 +25,7 @@ const BlogLandingPage = () => {
       { id:"tired_of_negative_reviews", title:"Tired of Negative Reviews? This AI Tool Helps You Get Them Removed", date:"Oct 08, 2024", img:tired_of_negative_reviews_thumbnail, description:"Learn how HostBuddy AI can help short-term rental hosts manage and remove negative reviews by leveraging AI-powered tools for better guest communication." },
       { id:"guesty_hostbuddy_join", title:"Guesty and HostBuddy AI Join Forces: Revolutionizing Vacation Rental Management", date:"Oct 11, 2024", img:guesty_hostbuddy_join_thumbnail, description:"Explore how Guesty and HostBuddy AI boost guest communication and simplify property management." },
       { id:"smart_templates", title:"Smart Templates: Transform Your Short Term Rental Communication with AI-Powered Automation", date:"Oct 29, 2024", img:smart_templates_thumbnail, description:"Enhance your rental management with HostBuddy AI’s Smart Templates, offering personalized, AI-driven guest communication." },
+      { id:"guide_to_vacation_rental_upsells", title:"The Ultimate Guide to Vacation Rental Upsells: Boost Your Revenue with AI", date:"Nov 06, 2024", img:guide_to_vacation_rental_upsells_thumbnail, description:"Discover how AI-driven upselling strategies can boost your vacation rental revenue and enhance guest experiences with personalized offerings." },
     ];
 
     const reversedArticles = articles.reverse();
