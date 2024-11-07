@@ -12,7 +12,7 @@ import { describeTemplate } from "./smartTemplateAddEdit/SmartTemplateJson";
 const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
   const add = "Add";
   const edit = "Edit";
-  const { turno_user_id } = userData || {};
+  const { turno_user_id, minut_user_id } = userData || {};
 
   const [addEditSmart, setAddEditSmart] = useState({type: "", data: ""});
   const [smartAllData, setSmartAllData] = useState([]);
@@ -177,7 +177,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
     <>
       <div className="smart_templates_tab_grid text-white setting_tab_data upsells-settings border border-primary blur-background-top-right" style={{ borderRadius:"20px", margin:"40px 60px", background:"#000212" }}>
         {addEditSmart?.type?.type === add || addEditSmart?.type?.type === edit ? (
-          <SmartTemplateAddEditForm addEditSmart={addEditSmart} addEditClose={() => setAddEditSmart({type: "", data: ""})} handleSaveTemplate={handleSaveTemplate} allPropertyNamesList={allPropertyNamesList} saveTemplateLoading={saveTemplateLoading} handleDeleteTemplate={handleDeleteTemplate} deleteTemplateLoading={deleteTemplateLoading} turno_user_id={turno_user_id}/>
+          <SmartTemplateAddEditForm addEditSmart={addEditSmart} addEditClose={() => setAddEditSmart({type: "", data: ""})} handleSaveTemplate={handleSaveTemplate} allPropertyNamesList={allPropertyNamesList} saveTemplateLoading={saveTemplateLoading} handleDeleteTemplate={handleDeleteTemplate} deleteTemplateLoading={deleteTemplateLoading} turno_user_id={turno_user_id} minut_user_id={minut_user_id}/>
         ) : (
           <>
             <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
@@ -221,7 +221,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
         )}
       </div>
 
-      <PrebuiltTemplatesModal modalShow={showPrebuiltModal} handleClose={() => setShowPrebuiltModal(false)} saveTemplate={handleSaveTemplate} saveLoading={saveTemplateLoading} allPropertyNamesList={structuredClone(allPropertyNamesList)} turno_user_id={turno_user_id}/>
+      <PrebuiltTemplatesModal modalShow={showPrebuiltModal} handleClose={() => setShowPrebuiltModal(false)} saveTemplate={handleSaveTemplate} saveLoading={saveTemplateLoading} allPropertyNamesList={structuredClone(allPropertyNamesList)} turno_user_id={turno_user_id} minut_user_id={minut_user_id}/>
     </>
   );
 };

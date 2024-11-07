@@ -51,7 +51,7 @@ const IntegrationsIndex = (ApiUserData) => {
             )}
 
             {selectedIntegration === 'Minut' && (
-              <MinutIntegration />
+              <MinutIntegration ApiUserData={ApiUserData} />
             )}
 
             {/* Add similar blocks for additional integrations */}
