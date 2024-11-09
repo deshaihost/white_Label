@@ -18,7 +18,7 @@ const AccountNotificationSection = () => {
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
 
   // Initialize user_contact_options with all possible contact channels set to empty objects
-  let all_possible_contact_channels = ["email", "sms", "slack"];
+  let all_possible_contact_channels = ["email", "sms", "slack", "whatsapp"];
   let user_contact_options = all_possible_contact_channels.reduce(
     (acc, channel) => {
       acc[channel] = {};
@@ -198,6 +198,7 @@ const AccountNotificationSection = () => {
       case "email": return "Email Address";
       case "sms": return "Phone Number";
       case "slack": return "Slack Channel";
+      case "whatsapp": return "WhatsApp Number";
       default: return "Contact Information";
     }
   }
@@ -225,6 +226,12 @@ const AccountNotificationSection = () => {
           >{`${slack_id} ${channel_name}`}</option>
         );
       });
+    } else if (newRecipient.channel === "whatsapp") {
+      return Object.keys(user_contact_options.whatsapp).map((phone_num) => (
+        <option key={phone_num} value={phone_num}>
+          {phone_num}
+        </option>
+      ));
     }
   };
 
@@ -359,6 +366,7 @@ const AccountNotificationSection = () => {
                   <option value="email">Email</option>
                   <option value="sms">Text message (SMS)</option>
                   <option value="slack">Slack</option>
+                  <option value="whatsapp">WhatsApp</option>
                 </select>
               </div>
 

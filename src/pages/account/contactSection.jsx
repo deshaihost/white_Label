@@ -23,7 +23,7 @@ const AccountContactSection = () => {
   const [slackOauthCode, setSlackOauthCode] = useState(""); // Code received from Slack OAuth as part of the OAuth flow
 
   // Define the different sections of contact information. Will need to manually update this as we add new contact types
-  const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'sms':{'title':'Phone Numbers', 'singular':'Phone Number'}, 'slack':{'title':'Slack Accounts', 'singular':'Slack Account'}};
+  const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'sms':{'title':'Phone Numbers', 'singular':'Phone Number'}, 'whatsapp':{'title':'WhatsApp Contacts', 'singular':'WhatsApp Number'}, 'slack':{'title':'Slack Accounts', 'singular':'Slack Account'}};
   const initialState = Object.keys(contact_sections).reduce((acc, key) => {
     acc[key] = {};
     return acc;
@@ -151,8 +151,8 @@ const AccountContactSection = () => {
     const isCheckbox = type === 'checkbox';
     const updatedNewContacts = {...newContacts};
 
-    // Validate phone number format for SMS: only allow user to enter numbers and "+"
-    if (section === 'sms' && name === 'address' && !value.match(/^[0-9+]*$/)) {
+    // Validate phone number format for SMS and WhatsApp: only allow user to enter numbers and "+"
+    if ((section === 'sms' || section === 'whatsapp') && name === 'address' && !value.match(/^[0-9+]*$/)) {
       return;
     }
 
@@ -171,10 +171,10 @@ const AccountContactSection = () => {
   };
 
   const addContact = async (name, type, address) => {
-    if (type === 'sms') { address = address.replace(/[^\d+]/g, ''); } // remove all non-numeric characters except "+"
+    if (type === 'sms' || type === 'whatsapp') { address = address.replace(/[^\d+]/g, ''); } // remove all non-numeric characters except "+"
 
     if (!name || !address) { ToastHandle("Please fill all fields", "danger"); }
-    else if (type === 'sms' && !address.match(/^\+[0-9]{1,3}[0-9]{10}$/)) {
+    else if ((type === 'sms' || type === 'whatsapp') && !address.match(/^\+[0-9]{1,3}[0-9]{10}$/)) {
       ToastHandle('Please enter a valid phone number, starting with "+" and including country code.', "danger");
       return;
     }
@@ -338,6 +338,31 @@ const AccountContactSection = () => {
                       </div>
                     )}
                   </div>
+                ) : section === 'whatsapp' ? (
+                  <>
+                    <div className="recipient" style={{ marginTop: "20px" }} key={index}>
+                      <div className="row">
+                        <div className="col input_group">
+                          <label htmlFor={`name${index}`}>Name</label>
+                          <input type="text" id={`name${index}`} name="name" className="form-control" value={newContacts?.[section]?.name} onChange={e => handleInputChange(e, section)} />
+                        </div>
+                        <div className="col input_group">
+                          <label htmlFor={`address${index}`}>{contact_sections[section].singular}</label>
+                          <input type="tel" id={`address${index}`} name="address" className="form-control" value={newContacts?.[section]?.address} onChange={e => handleInputChange(e, section)} placeholder="+12345678901" />
+                        </div>
+                      </div>
+                      <span className="d-flex justify-content-center">
+                        {!newContactAdding ? (
+                          <Link to="#" className="text-link" style={{ marginTop: '20px', textAlign: 'center' }}
+                            onClick={() => addContact(newContacts?.[section]?.name, section, newContacts?.[section]?.address)}>
+                            Submit
+                          </Link>
+                        ) : (
+                          <Loader />
+                        )}
+                      </span>
+                    </div>
+                  </>
                 ) : (
                   <>
                     {/*contacts.section.length === 0 && <p><span className="grey-text">No {contact_sections[section].singular} Added.</span></p>*/}
