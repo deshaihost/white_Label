@@ -350,22 +350,6 @@ export const minutDataInput = {
       inputFiled: [],
     },
     {
-      guesttype: "Alarm heard",
-      type: "alarm_heard",
-      label: "Send the message upon Minut event: Alarm heard",
-      inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
-      ]
-    },
-    {
-      guesttype: "Average sound level high",
-      type: "avg_sound_high",
-      label: "Send the message upon Minut event: Average sound level high",
-      inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
-      ]
-    },
-    {
       guesttype: "Disturbance first notice",
       type: "disturbance_first_notice",
       label: "Send the message upon Minut event: Disturbance first notice",
@@ -390,6 +374,22 @@ export const minutDataInput = {
       ]
     },
     {
+      guesttype: "Disturbance ended",
+      type: "disturbance_ended",
+      label: "Send the message upon Minut event: Disturbance ended",
+      inputFiled: [
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+      ]
+    },
+    {
+      guesttype: "Disturbance dismissed",
+      type: "disturbance_dismissed",
+      label: "Send the message upon Minut event: Disturbance dismissed",
+      inputFiled: [
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+      ]
+    },
+    {
       guesttype: "Disturbance snoozed",
       type: "disturbance_snoozed",
       label: "Send the message upon Minut event: Disturbance snoozed",
@@ -398,9 +398,26 @@ export const minutDataInput = {
       ]
     },
     {
-      guesttype: "Disturbance ended",
-      type: "disturbance_ended",
-      label: "Send the message upon Minut event: Disturbance ended",
+      guesttype: "Smoking detection: Smoking detected",
+      type: "smoking_detection_smoking_detected",
+      label: "Send the message upon Minut event: Smoking detection: Smoking detected",
+      inputFiled: [
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+      ]
+    },
+    /* Decided not to use below events
+    {
+      guesttype: "Alarm heard",
+      type: "alarm_heard",
+      label: "Send the message upon Minut event: Alarm heard",
+      inputFiled: [
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+      ]
+    },
+    {
+      guesttype: "Average sound level high",
+      type: "avg_sound_high",
+      label: "Send the message upon Minut event: Average sound level high",
       inputFiled: [
         { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
       ]
@@ -414,14 +431,6 @@ export const minutDataInput = {
       ]
     },
     {
-      guesttype: "Smoking detection: Smoking detected",
-      type: "smoking_detection_smoking_detected",
-      label: "Send the message upon Minut event: Smoking detection: Smoking detected",
-      inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
-      ]
-    },
-    {
       guesttype: "Sound level dropped to normal",
       type: "sound_level_dropped_normal",
       label: "Send the message upon Minut event: Sound level dropped to normal",
@@ -429,6 +438,7 @@ export const minutDataInput = {
         { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
       ]
     },
+    */
   ],
   minutConditions: [
     {
@@ -437,9 +447,15 @@ export const minutDataInput = {
       inputFiled: [],
     },
     {
-      guesttype: "Average sound level is high",
-      type: "avg_sound_high",
-      label: "Only send this message if Minut detects average sound level is high.",
+      guesttype: "Disturbance is ongoing",
+      type: "disturbance_ongoing",
+      label: "Only send this message if Minut previously detected a disturbance, which has not been dismissed or detected as ended yet.",
+      inputFiled: [{}] // empty obj placeholder must be added to make the option selectable
+    },
+    {
+      guesttype: "Disturbance IS NOT ongoing",
+      type: "no_disturbance",
+      label: "Only send this message if there is no disturbance detected, or if the previous disturbance has been dismissed or detected as ended.",
       inputFiled: [{}] // empty obj placeholder must be added to make the option selectable
     },
   ],
