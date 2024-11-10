@@ -14,7 +14,7 @@ const ConnectToMinut = () => {
   const [message, setMessage] = useState('');
 
   // Call the backend API to complete the OAuth flow
-  const completeTurnoOauth = async (code) => {
+  const completeMinutOauth = async (code) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
   
@@ -45,18 +45,18 @@ const ConnectToMinut = () => {
       if (code) {
         setIsProcessing(true);
         try {
-          const result = await completeTurnoOauth(code);
-          setIsProcessing(false);
+          const result = await completeMinutOauth(code);
           if (result.success) {
-            ToastHandle('Successfully connected to Turno!', 'success');
+            ToastHandle('Successfully connected to Minut!', 'success');
             dispatch(getUserDataActions()); // update user data so we can show the new integration
           } else {
-            ToastHandle(`Failed to connect to Turno: ${result.error}`, 'danger');
+            ToastHandle(`Failed to connect to Minut: ${result.error}`, 'danger');
           }
         } catch (error) {
-          setIsProcessing(false);
-          setMessage('Failed to connect to Turno.');
+          setMessage('Failed to connect to Minut.');
           console.error('Error:', error);
+        } finally {
+          setIsProcessing(false);
         }
       }
     };
@@ -65,18 +65,20 @@ const ConnectToMinut = () => {
   }, [location.search]);
 
   const handleConnectClick = () => {
+    if (isProcessing) { return; }
+
     // Build the authorization URL
     const clientId = '39ce85e5b969749c';
     const redirectUri = 'https://www.hostbuddy.ai/setting/integrations';
     const authorizationUrl = `https://api.minut.com/v8/oauth/authorize?response_type=code&client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
-    // Redirect the user to Turno's authorization endpoint
+    // Redirect the user to Minut's authorization endpoint
     window.location.href = authorizationUrl;
   };
 
   return (
     <div className="partner-tile" onClick={handleConnectClick}>
-      <img className="partner-logo" alt="Turno Logo" src="https://storage.googleapis.com/frontend_media/partners/minut_logo_text.svg"/>
+      <img className="partner-logo" alt="Minut Logo" src="https://storage.googleapis.com/frontend_media/partners/minut_logo_text.svg"/>
       <p>Connecting your Minut account lets you use Minut events and conditions in Smart Templates, so you can send messages to guests based on activity detected by your Minut device.</p>
     </div>
   );

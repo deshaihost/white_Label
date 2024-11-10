@@ -53,7 +53,6 @@ const ConnectToTurno = () => {
           setIsProcessing(true);
           try {
             const result = await completeTurnoOauth(code);
-            setIsProcessing(false);
             if (result.success) {
               ToastHandle('Successfully connected to Turno!', 'success');
               dispatch(getUserDataActions()); // update user data so we can show the new integration
@@ -61,9 +60,10 @@ const ConnectToTurno = () => {
               ToastHandle(`Failed to connect to Turno: ${result.error}`, 'danger');
             }
           } catch (error) {
-            setIsProcessing(false);
             setMessage('Failed to connect to Turno.');
             console.error('Error:', error);
+          } finally {
+            setIsProcessing(false);
           }
         }
       }
@@ -73,6 +73,8 @@ const ConnectToTurno = () => {
   }, [location.search]);
 
   const handleConnectClick = () => {
+    if (isProcessing) { return; }
+
     // Generate a random state parameter
     const state = generateRandomString(16);
     localStorage.setItem('turno_oauth_state', state);

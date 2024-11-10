@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import Loader from '../../../../helper/Loader';
 import ConnectToTurno from "./connectTurnoButton";
 import ConnectToMinut from './connectMinutButton';
 import TurnoIntegration from './TurnoIntegration';
