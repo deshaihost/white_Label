@@ -9,6 +9,7 @@ import needVirtualAssistant from './blogArticles/need_virtual_assistant';
 import tiredOfNegativeReviews from './blogArticles/tired_of_negative_reviews';
 import guestyHostbuddyJoin from './blogArticles/guesty_hostbuddy_join';
 import smartTemplates from './blogArticles/smart_templates';
+import guideToVacationRentalUpsells from './blogArticles/guide_to_vacation_rental_upsells';
 
 const BlogArticle = () => {
   const { article_name } = useParams(); // Get the article_name from the path param
@@ -23,7 +24,8 @@ const BlogArticle = () => {
     "need_virtual_assistant" : needVirtualAssistant,
     "tired_of_negative_reviews" :tiredOfNegativeReviews,
     "guesty_hostbuddy_join" :guestyHostbuddyJoin,
-    "smart_templates": smartTemplates
+    "smart_templates": smartTemplates,
+    "guide_to_vacation_rental_upsells":guideToVacationRentalUpsells
   };
 
   useEffect(() => {
