@@ -2,22 +2,24 @@ import React, { useState, useRef, useEffect } from "react";
 import Select, { components } from 'react-select';
 import customStyles from "../../../resources/selectStyles";
 import TriggersTrargetsConditionsModel from "./TriggersTrargetsConditionsModel";
-import { dataInput, createTypeToGuesttypeMapping, getUseTriggeredGuestFromTemplate, describeTemplate } from "./SmartTemplateJson";
+import { dataInput, minutDataInput, createTypeToGuesttypeMapping, getUseTriggeredGuestFromTemplate, describeTemplate } from "./SmartTemplateJson";
 import Loader from "../../../../../../helper/Loader";
 import { v4 as uuidv4 } from 'uuid';
 
 import MultiSelect from "../../../../../../component/multiSelect/multiSelect";
 
-const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, turno_user_id}) => {
+const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, turno_user_id, minut_user_id}) => {
   const { type, smartTemplateData } = addEditSmart;
-  const { triggers, targets, conditions } = dataInput;
+  const { triggers, conditions } = dataInput;
+  const { minutTriggers, minutConditions } = minutDataInput;
   const edit = "Edit";
   const add = "Add";
   const triggerName = "Trigger";
   const targetsName = "Targets";
   const conditionsName = "Conditions";
+  const followUpConditionsName = "Follow-Up Conditions";
   
-  const dataStructurePayload = smartTemplateData?.smartItem ? smartTemplateData?.smartItem : { id:uuidv4(), name:'', enabled:false, message:'', properties:[], triggers:[], targets:[], conditions:[] }; // Data structure for just this one template. The structure for all templates is stored in the parent
+  const dataStructurePayload = smartTemplateData?.smartItem ? smartTemplateData?.smartItem : { id:uuidv4(), name:'', enabled:false, message:'', properties:[], triggers:[], targets:[], conditions:[], follow_ups: [] }; // Data structure for just this one template. The structure for all templates is stored in the parent
 
   const [allData, setAllData] = useState({ modelShow: false, modelShowType: "", formData: [] });
   const [dataStructure, setDataStructure] = useState(dataStructurePayload);
@@ -35,12 +37,14 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   }, [dataStructure]);
   */
 
+  // State to manage follow-up visibility
+  const [showFollowUps, setShowFollowUps] = useState(dataStructure.follow_ups.length > 0);
+
   // Modal submit to add a new trigger/target/condition or edit an existing one
   const submitHndle = (getFormData) => {
     const { data, type, editAddTypeSubmitHndle, modelShowType, triggerFormData } = getFormData; // triggerFormData is the selected trigger/target/condition obj from the dataInput json
     const { typepAddEdit, editIndex } = editAddTypeSubmitHndle || {};
-    const newTrigger = { type, data };
-    const useTriggeredGuest = !!triggerFormData?.useTriggeredGuest; // useTriggeredGuest is a bool: true iff useTriggeredGuest string is present in triggerFormData
+    const newItem = { type, data };
     
     // Update the data structure based on the modal type
     if (modelShowType === triggerName) {
@@ -48,21 +52,21 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         // const updatedTargets = useTriggeredGuest ? [{ type: 'triggered_guest', data: {} }] : prevData.targets.filter(target => target.type !== 'triggered_guest');
         const updatedTargets = []; // targets no longer used
         if (typepAddEdit === add) {
-          return { ...prevData, triggers: [...prevData.triggers, newTrigger], targets: updatedTargets };
+          return { ...prevData, triggers: [...prevData.triggers, newItem], targets: updatedTargets };
         } else if (typepAddEdit === edit) {
           const updatedTriggers = [...prevData.triggers];
-          if (editIndex >= 0 && editIndex < updatedTriggers.length) { updatedTriggers[editIndex] = newTrigger; }
+          if (editIndex >= 0 && editIndex < updatedTriggers.length) { updatedTriggers[editIndex] = newItem; }
           return { ...prevData, triggers: updatedTriggers, targets: updatedTargets };
         }
       });
     } else if (modelShowType === targetsName) {
       setDataStructure((prevData) => {
         if (typepAddEdit === add) {
-          return { ...prevData, targets: [...prevData.targets, newTrigger] };
+          return { ...prevData, targets: [...prevData.targets, newItem] };
         } else if (typepAddEdit === edit) {
           const updatedTriggers = [...prevData.targets];
           if (editIndex >= 0 && editIndex < updatedTriggers.length) {
-            updatedTriggers[editIndex] = newTrigger;
+            updatedTriggers[editIndex] = newItem;
           }
           return { ...prevData, targets: updatedTriggers };
         }
@@ -70,12 +74,23 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
     } else if (modelShowType === conditionsName) {
       setDataStructure((prevData) => {
         if (typepAddEdit === add) {
-          return { ...prevData, conditions: [...prevData.conditions, newTrigger] };
+          return { ...prevData, conditions: [...prevData.conditions, newItem] };
         } else if (typepAddEdit === edit) {
           const updatedTriggers = [...prevData.conditions];
-          if (editIndex >= 0 && editIndex < updatedTriggers.length) { updatedTriggers[editIndex] = newTrigger; }
+          if (editIndex >= 0 && editIndex < updatedTriggers.length) { updatedTriggers[editIndex] = newItem; }
           return { ...prevData, conditions: updatedTriggers };
         }
+      });
+    } else if (modelShowType === followUpConditionsName) {
+      const { followUpIndex } = editAddTypeSubmitHndle; // Get the index of the follow-up
+      setDataStructure((prevData) => {
+        const updatedFollowUps = [...prevData.follow_ups];
+        if (typepAddEdit === add) {
+          updatedFollowUps[followUpIndex].conditions.push(newItem);
+        } else if (typepAddEdit === edit) {
+          updatedFollowUps[followUpIndex].conditions[editIndex] = newItem;
+        }
+        return { ...prevData, follow_ups: updatedFollowUps };
       });
     }
   };
@@ -87,6 +102,13 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       setDataStructure((prevData) => ({ ...prevData, targets: prevData.targets.filter((_, id) => id !== index) }));
     } else if (type === conditionsName) {
       setDataStructure((prevData) => ({ ...prevData, conditions: prevData.conditions.filter((_, id) => id !== index) }));
+    } else if (type === followUpConditionsName) {
+      setDataStructure((prevData) => ({
+        ...prevData,
+        follow_up_conditions: (prevData.follow_up_conditions || []).filter(
+          (_, id) => id !== index
+        ),
+      }));
     }
   };
 
@@ -107,11 +129,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
     }, 0);
   };
 
-  const handleTextAreaChange = (e) => {
-    setDataStructure({ ...dataStructure, message: e.target.value });
+  const handleTextAreaChange = (e, field) => {
+    setDataStructure({ ...dataStructure, [field]: e.target.value });
   };
-
-
 
   // ------- Property multi select (TODO: move this to its own component & file) -------
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -132,6 +152,45 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   };
   // -------------------------------------
 
+  // Handle adding a new follow-up
+  const handleAddFollowUp = () => {
+    if (dataStructure.follow_ups.length < 3) {
+      const newFollowUp = {
+        message: '',
+        conditions: [],
+        after_mins: '', // Delay in minutes
+      };
+      const updatedFollowUps = [...dataStructure.follow_ups, newFollowUp];
+      setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
+      setShowFollowUps(true);
+    }
+  };
+
+  // Handle removing a follow-up
+  const handleRemoveFollowUp = (index) => {
+    const confirmed = window.confirm("Are you sure you want to remove this follow-up message?");
+    if (confirmed) {
+      const updatedFollowUps = dataStructure.follow_ups.filter((_, idx) => idx !== index);
+      setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
+      if (updatedFollowUps.length === 0) {
+        setShowFollowUps(false);
+      }
+    }
+  };
+
+  // Handle follow-up message change
+  const handleFollowUpMessageChange = (index, value) => {
+    const updatedFollowUps = [...dataStructure.follow_ups];
+    updatedFollowUps[index].message = value;
+    setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
+  };
+
+  // Handle follow-up delay change
+  const handleFollowUpDelayChange = (index, value) => {
+    const updatedFollowUps = [...dataStructure.follow_ups];
+    updatedFollowUps[index].after_mins = value;
+    setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
+  };
 
   return (
     <div className='smartTemplateAddEdit'>
@@ -198,16 +257,14 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           dataStructure?.triggers?.map((trigger, index) => {
             const { type } = trigger;
             return (
-              <div className="row" key={index}>
-                <div className="col-lg-4">
-                  <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                    <p className="fs-6">{nameMapping[type].guesttype}</p>
-                    <div className="d-flex align-items-center gap-3">
-                      <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, triggerName)}>
-                        Remove
-                      </p>
-                      <p className="text-primary mainCursor fs-6" onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, editFormData:trigger, editIndex:index, typepAddEdit:edit })}>Edit</p>
-                    </div>
+              <div className="col-lg-4" key={index}>
+                <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
+                  <p className="fs-6">{nameMapping[type].guesttype}</p>
+                  <div className="d-flex align-items-center gap-3">
+                    <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, triggerName)}>
+                      Remove
+                    </p>
+                    <p className="text-primary mainCursor fs-6" onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, minutFormData:minutTriggers, editFormData:trigger, editIndex:index, typepAddEdit:edit })}>Edit</p>
                   </div>
                 </div>
               </div>
@@ -216,78 +273,32 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         {dataStructure?.triggers?.length < 1 && ( // For now, only one trigger can be added
           <button
             className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
-            onClick={() => setAllData({modelShow: true, modelShowType: triggerName, formData: triggers, typepAddEdit: add})}
+            onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, minutFormData:minutTriggers, typepAddEdit:add})}
           >
             <i className="bi bi-plus fs-3"></i> Add an Event
           </button>
         )}
       </div>
 
-      {/* 
-      <div className="targetsSection">
-        <p className="fs-5 fw-bold">Send To...</p>
-        <p className="fs-14 mt-1 mb-3 text-muted">These are the guests that will receive the message. Your message will be sent to ALL of the guest groups you select here, wherever the conditions are met.</p>
-        {dataStructure?.targets?.length > 0 &&
-          dataStructure?.targets?.map((targetsItem, index) => {
-            const { type } = targetsItem;
-            return (
-              <div className="row" key={index}>
-                <div className={`col-12 ${type !== 'triggered_guest' ? 'col-lg-4' : ''}`}>
-                  <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                    {type !== 'triggered_guest' ? (
-                      <p className="fs-6">{nameMapping[type].guesttype}</p>
-                    ) : (
-                      <>
-                        <p className="fs-6">{triggeredGuestNote}</p>
-                      </>
-                    )}
-                    {type !== 'triggered_guest' && (
-                      <div className="d-flex align-items-center gap-3">
-                        <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, targetsName)}>
-                          Remove
-                        </p>
-                        <p className="text-primary mainCursor fs-6"
-                          onClick={() => setAllData({ modelShow: true, modelShowType: targetsName, formData: targets, editFormData: targetsItem, editIndex: index, typepAddEdit: edit })}
-                        >
-                          Edit
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-          <button
-            className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
-            onClick={() => setAllData({ modelShow: true, modelShowType: targetsName, formData: targets, typepAddEdit: add })}
-          >
-            <i className="bi bi-plus fs-3 "></i> Add a Recipient Group
-          </button>
-      </div>
-      */}
-
       <div className="conditionsSection">
         <p className="fs-5 fw-bold">Send If...</p>
-        <p className="fs-14 mt-1 mb-3 text-muted">Add conditions to restrict message sending to certain categories of guests. The conditions added ALL must be met for a guest in order for the message to be sent to them.</p>
+        <p className="fs-14 mt-1 mb-3 text-muted">Add conditions to restrict message sending in certain situations, or to certain categories of guests. The conditions added ALL must be met for a guest in order for the message to be sent to them.</p>
         {dataStructure?.conditions?.length > 0 &&
           dataStructure?.conditions?.map((conditionsItem, index) => {
             const { type } = conditionsItem;
             return (
-              <div className="row" key={index}>
-                <div className="col-lg-4">
-                  <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                    <p className="fs-6">{nameMapping[type].guesttype}</p>
-                    <div className="d-flex align-items-center gap-3">
-                      <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, conditionsName)}>
-                        Remove
-                      </p>
-                      <p className="text-primary mainCursor fs-6"
-                        onClick={() => setAllData({modelShow: true, modelShowType: conditionsName, formData: conditions, editFormData: conditionsItem, editIndex: index, typepAddEdit: edit })}
-                      >
-                        Edit
-                      </p>
-                    </div>
+              <div className="col-lg-4" key={index}>
+                <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
+                  <p className="fs-6">{nameMapping[type].guesttype}</p>
+                  <div className="d-flex align-items-center gap-3">
+                    <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, conditionsName)}>
+                      Remove
+                    </p>
+                    <p className="text-primary mainCursor fs-6"
+                      onClick={() => setAllData({modelShow:true, modelShowType:conditionsName, formData:conditions, minutFormData:minutConditions, editFormData:conditionsItem, editIndex:index, typepAddEdit:edit })}
+                    >
+                      Edit
+                    </p>
                   </div>
                 </div>
               </div>
@@ -295,28 +306,18 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           })}
         <button
           className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
-          onClick={() => setAllData({ modelShow: true, modelShowType: conditionsName, formData: conditions, typepAddEdit: add })}
+          onClick={() => setAllData({ modelShow:true, modelShowType:conditionsName, formData:conditions, minutFormData:minutConditions, typepAddEdit:add })}
         >
           <i className="bi bi-plus fs-3 "></i> Add a Condition
         </button>
       </div>
 
-      {/*
-      {templateDescription && templateDescription.split(';').map((section, index, array) => {
-        const capitalizedSection = section.trim().charAt(0).toUpperCase() + section.trim().slice(1); // Capitalize the first letter of each section
-        const sectionWithComma = index < array.length - 1 ? `${capitalizedSection},` : capitalizedSection; // Add a comma to all sections except the last one
-        return (
-          <p key={index} style={{textAlign: 'center'}}>{sectionWithComma}</p>
-        );
-      })}
-      */}
-
       <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%'}} />
       
       <h3 className="available-variables-heading mt-5 text-center">Message</h3>
 
-      <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
-        <div className="available-variables-section">
+      <div className="d-flex flex-wrap flex-md-nowrap gap-2 justify-content-between mt-5">
+        <div className="available-variables-section" style={{justifyContent:'left'}}>
           <label className="fs-5">Variables</label>
           <p className="settings-label">Click to add custom variables to your message. These variables will change to match the data for each reservation.</p>
           <div className="available-variables mt-3">
@@ -327,16 +328,78 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         </div>
       </div>
 
-      <div className="row mt-4 mb-5 justify-content-center">
-        <div className="col-lg-12">
-          <div className="d-flex align-items-center justify-content-center gap-5">
-            <label className="fs-5">Message</label>
-          </div>
-          <div className="d-flex justify-content-center">
-            <textarea id="templateMessage" className="form-control setting-textarea" value={dataStructure?.message} onChange={handleTextAreaChange} placeholder="Enter your message here..."/>
-          </div>
-        </div>
+      <div className="mt-4 mb-5">
+        <label className="fs-5">Message</label>
+        <textarea id="templateMessage" className="form-control setting-textarea" value={dataStructure?.message} onChange={(e) => handleTextAreaChange(e, 'message')} placeholder="Enter your message here..."/>
+        {!showFollowUps && (
+          <button style={{ background: 'none', border: 'none', color: '#146ef5', cursor: 'pointer', margin: '5px auto 0 auto' }} onClick={handleAddFollowUp}>
+            Follow-up...
+          </button>
+        )}
       </div>
+
+      {showFollowUps && dataStructure.follow_ups.map((followUp, index) => (
+        <div className="followUp px-5 py-4" key={index}>
+          <label className="fs-5">Follow-Up Message {index + 1}</label>
+          <textarea id={`followUpMessage${index}`} className="form-control setting-textarea" value={followUp.message} onChange={(e) => handleFollowUpMessageChange(index, e.target.value)} placeholder="Enter your follow-up message here..." />
+
+          <div className="d-flex align-items-center mb-3 mt-3">
+            <span className="fs-6 me-2">Send this follow-up</span>
+            <input type="number" className="form-control" style={{ width: '80px' }} value={followUp.after_mins} onChange={(e) => handleFollowUpDelayChange(index, e.target.value)} />
+            <span className="fs-6 ms-2">minutes after the previous message.</span>
+          </div>
+
+          <p className="fs-5 mt-5">Only follow up if...</p>
+          {followUp.conditions.length > 0 ? (
+            followUp.conditions.map((conditionItem, conditionIndex) => {
+              const { type } = conditionItem;
+              return (
+                <div className="col-lg-4 ms-3" key={conditionIndex}>
+                  <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
+                    <p className="fs-6">{nameMapping[type]?.guesttype}</p>
+                    <div className="d-flex align-items-center gap-3">
+                      <p
+                        className="text-danger mainCursor fs-6"
+                        onClick={() => { // Remove condition
+                          const updatedFollowUps = [...dataStructure.follow_ups];
+                          updatedFollowUps[index].conditions = updatedFollowUps[index].conditions.filter((_, idx) => idx !== conditionIndex);
+                          setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
+                        }}
+                      >
+                        Remove
+                      </p>
+                      <p className="text-primary mainCursor fs-6"
+                        onClick={() => setAllData({modelShow:true, modelShowType:followUpConditionsName, formData:conditions, minutFormData:minutConditions, editFormData:conditionItem, editIndex:conditionIndex, typepAddEdit:edit, followUpIndex:index})}
+                      >
+                        Edit
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p className="fs-6 text-muted">No conditions set. This message will be always sent at the specified time after the first message, regardless of any conditions or guest response.</p>
+          )}
+
+          <button
+            className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
+            onClick={() => setAllData({ modelShow:true, modelShowType:followUpConditionsName, formData:conditions, minutFormData:minutConditions, typepAddEdit:add, followUpIndex:index })}
+          >
+            <i className="bi bi-plus fs-3"></i> {followUp.conditions.length > 0 ? "Add another follow-up condition" : "Add a condition for following up"}
+          </button>
+
+          <button className="btn btn-link text-danger mt-3" onClick={() => handleRemoveFollowUp(index)}>
+            Remove this follow-up
+          </button>
+        </div>
+      ))}
+
+      {showFollowUps && dataStructure.follow_ups.length < 3 && (
+        <button style={{ background: 'none', border: 'none', color: '#146ef5', cursor: 'pointer', margin: '5px auto 0 auto' }} onClick={handleAddFollowUp}>
+          Add another follow-up...
+        </button>
+      )}
 
       <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%'}} />
 
@@ -378,7 +441,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         )}
       </div>
 
-      <TriggersTrargetsConditionsModel show={allData} handleClose={() => setAllData({ modelShow: false, modelShowType: "" }) } submitHndle={submitHndle} turno_user_id={turno_user_id}/>
+      <TriggersTrargetsConditionsModel show={allData} handleClose={() => setAllData({ modelShow: false, modelShowType: "" }) } submitHndle={submitHndle} turno_user_id={turno_user_id} minut_user_id={minut_user_id}/>
     </div>
   );
 };

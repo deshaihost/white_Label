@@ -6,7 +6,7 @@ import "./smartTemplate.css";
 import "../../resources/upsells.css"
 import { prebuiltTemplates } from "./preBuiltTemplates";
 
-const PrebuiltTemplatesModal = ({modalShow, handleClose, saveTemplate, saveLoading, allPropertyNamesList, turno_user_id}) => {
+const PrebuiltTemplatesModal = ({modalShow, handleClose, saveTemplate, saveLoading, allPropertyNamesList, turno_user_id, minut_user_id}) => {
   const navigate = useNavigate();
 
   const handleTemplateClick = async (templateName, templateData) => {

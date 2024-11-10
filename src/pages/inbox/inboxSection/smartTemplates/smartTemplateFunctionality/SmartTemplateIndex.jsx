@@ -12,7 +12,7 @@ import { describeTemplate } from "./smartTemplateAddEdit/SmartTemplateJson";
 const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
   const add = "Add";
   const edit = "Edit";
-  const { turno_user_id } = userData || {};
+  const { turno_user_id, minut_user_id } = userData || {};
 
   const [addEditSmart, setAddEditSmart] = useState({type: "", data: ""});
   const [smartAllData, setSmartAllData] = useState([]);
@@ -112,14 +112,27 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
     const errors = [];
     if (!dataStructure?.name) {
       errors.push('Please enter a name for the template.'); }
-    if (dataStructure?.name?.length > 100) {
-      errors.push('The name of the template must be less than 100 characters.'); }
+    if (dataStructure?.name?.length > 200) {
+      errors.push('The name of the template must be less than 200 characters.'); }
     if (dataStructure?.triggers?.length < 1) {
       errors.push('"Send When" must have at least one event.'); }
     if (dataStructure?.message?.length < 1) {
       errors.push('Please enter a message for the template.'); }
     if (!dataStructure?.properties || dataStructure?.properties.length < 1) {
       errors.push('Please select at least one property for the template.'); }
+    
+    // Check follow-up messages
+    if (dataStructure.follow_ups?.length > 0) {
+      dataStructure.follow_ups.forEach((followUp, index) => {
+        if (!followUp.message || followUp.message.trim().length === 0) {
+          errors.push(`Follow-up message ${index + 1} is empty.`);
+        }
+        if (!followUp.after_mins || followUp.after_mins <= 0) {
+          errors.push(`Please set a valid delay time for follow-up message ${index + 1}.`);
+        }
+      });
+    }
+
     return errors;
   };
 
@@ -177,7 +190,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
     <>
       <div className="smart_templates_tab_grid text-white setting_tab_data upsells-settings border border-primary blur-background-top-right" style={{ borderRadius:"20px", margin:"40px 60px", background:"#000212" }}>
         {addEditSmart?.type?.type === add || addEditSmart?.type?.type === edit ? (
-          <SmartTemplateAddEditForm addEditSmart={addEditSmart} addEditClose={() => setAddEditSmart({type: "", data: ""})} handleSaveTemplate={handleSaveTemplate} allPropertyNamesList={allPropertyNamesList} saveTemplateLoading={saveTemplateLoading} handleDeleteTemplate={handleDeleteTemplate} deleteTemplateLoading={deleteTemplateLoading} turno_user_id={turno_user_id}/>
+          <SmartTemplateAddEditForm addEditSmart={addEditSmart} addEditClose={() => setAddEditSmart({type: "", data: ""})} handleSaveTemplate={handleSaveTemplate} allPropertyNamesList={allPropertyNamesList} saveTemplateLoading={saveTemplateLoading} handleDeleteTemplate={handleDeleteTemplate} deleteTemplateLoading={deleteTemplateLoading} turno_user_id={turno_user_id} minut_user_id={minut_user_id}/>
         ) : (
           <>
             <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
@@ -221,7 +234,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
         )}
       </div>
 
-      <PrebuiltTemplatesModal modalShow={showPrebuiltModal} handleClose={() => setShowPrebuiltModal(false)} saveTemplate={handleSaveTemplate} saveLoading={saveTemplateLoading} allPropertyNamesList={structuredClone(allPropertyNamesList)} turno_user_id={turno_user_id}/>
+      <PrebuiltTemplatesModal modalShow={showPrebuiltModal} handleClose={() => setShowPrebuiltModal(false)} saveTemplate={handleSaveTemplate} saveLoading={saveTemplateLoading} allPropertyNamesList={structuredClone(allPropertyNamesList)} turno_user_id={turno_user_id} minut_user_id={minut_user_id}/>
     </>
   );
 };

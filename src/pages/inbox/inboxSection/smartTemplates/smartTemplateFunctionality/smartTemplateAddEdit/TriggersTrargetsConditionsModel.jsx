@@ -3,13 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno_user_id }) => {
-  const { modelShow, modelShowType, formData, editFormData, typepAddEdit, editIndex } = show;
+const TriggersTrargetsConditionsModel = (props) => {
+  const { show, handleClose, submitHndle, turno_user_id, minut_user_id } = props;
+  const { modelShow, modelShowType, formData, minutFormData, editFormData, typepAddEdit, editIndex, followUpIndex } = show;
 
   const [selectGet, setSelectGet] = useState({}); // Selected trigger/target/condition obj from the dataInput json
   const [inputDataGet, setInputDataGet] = useState({});
   const [label, setLabel] = useState("");
   const [labelLine2, setLabelLine2] = useState("");
+  const [isMinutData, setIsMinutData] = useState(false);
 
   const selectInterface = "selectInterface";
   const selecter = "selecter";
@@ -18,12 +20,29 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
   const { type, inputFiled } = inputShow || {};
   const month1to31 = "month1to31";
 
-  const typeToTileMapping = {'Trigger':'Send When', 'Target':'Send To', 'Conditions':'Send If'};
+  const typeToTileMapping = {'Trigger':'Send When', 'Target':'Send To', 'Conditions':'Send If', 'Follow-Up Conditions':'Follow-Up Condition'};
+  const typeToMinutBtnMapping = {'Trigger':'triggers', 'Conditions':'conditions', 'Follow-Up Conditions':'conditions'};
+
+  const dataToUse = isMinutData ? minutFormData : formData;
+
+  // Filter the data based on whether it's for follow-up conditions or not
+  const filteredData = dataToUse?.filter(item => {
+    if (modelShowType === 'Follow-Up Conditions') {
+      // For follow-ups, show all conditions including followUpOnly ones
+      return true;
+    } else if (modelShowType === 'Conditions') {
+      // For regular conditions, hide followUpOnly ones
+      return !item?.followUpOnly;
+    }
+    // For other types (triggers etc), show everything
+    return true;
+  });
 
   const OnchangeHndle = (e, typeForm, onlyUsed) => {
     const { name, value } = e.target;
     if (typeForm === selectInterface) {
-      const formDataFilter = formData?.filter((item) => item?.type === value);
+      const currentFormData = isMinutData ? minutFormData : formData;
+      const formDataFilter = currentFormData?.filter((item) => item?.type === value);
       const formDataConvert = formDataFilter?.[0] || {}; // Select the first item by default
       setSelectGet(formDataConvert);
       setLabel(formDataConvert?.label || ""); // Set label dynamically if present
@@ -61,19 +80,22 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
     setInputDataGet({});
     setLabel(""); // Reset label when modal is closed
     setLabelLine2(""); // Reset labelLine2 when modal is closed
+    setIsMinutData(false); // Reset isMinutData when modal is closed
   };
 
   const onSubmitHndle = () => {
-    const editAddTypeSubmitHndle = { typepAddEdit, editIndex };
+    const editAddTypeSubmitHndle = { typepAddEdit, editIndex, followUpIndex };
     submitHndle({ type:type, data:inputDataGet, editAddTypeSubmitHndle, modelShowType, triggerFormData:selectGet });
     closeHndleModel();
+    setIsMinutData(false); // Reset isMinutData when modal is closed after confirm
   };
 
   // edit functionality
   const editTypeForm = editFormData?.type;
 
   useEffect(() => {
-    const formDataFilter = formData?.filter((item) => item?.type === editTypeForm);
+    const currentFormData = isMinutData ? minutFormData : formData;
+    const formDataFilter = currentFormData?.filter((item) => item?.type === editTypeForm);
     const formDataConvert = formDataFilter?.[0] || {};
     setLabel(formDataConvert?.label || ""); // Set label when editing if present
     setLabelLine2(formDataConvert?.labelLine2 || ""); // Set labelLine2 when editing if present
@@ -96,7 +118,7 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
       });
       setInputDataGet(defaultInputData);
     }
-  }, [editFormData, formData]);
+  }, [editFormData, formData, isMinutData]);
 
   return (
     <Modal show={modelShow} size="lg" onHide={closeHndleModel} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -106,14 +128,9 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
       </Modal.Header>
       <Modal.Body>
         <div className="addition_des">
-          <div className="item-select my-3">
-            <select
-              aria-label="Default select example"
-              className="bg-dark form-control form-select text-white"
-              value={selectGet?.type || ""}
-              onChange={(e) => OnchangeHndle(e, selectInterface)}
-            >
-              {formData?.map((item) => {
+          <div className='item-select my-3'>
+            <select aria-label="Default select example" className="bg-dark form-control form-select text-white" value={selectGet?.type || ""} onChange={(e) => OnchangeHndle(e, selectInterface)}>
+              {filteredData?.map((item) => {
                 const { type, guesttype } = item;
                 return (
                   <option value={type} disabled={type === ""} key={type}>
@@ -123,6 +140,13 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
               })}
             </select>
           </div>
+          {minut_user_id && (
+            <div style={{ display:'flex', justifyContent:'center' }}>
+              <button onClick={() => setIsMinutData(!isMinutData)} style={{background:'none', border:'none', color:'#146ef5', cursor:'pointer', margin:'0 auto'}}>
+                {isMinutData ? `Standard ${typeToMinutBtnMapping?.[modelShowType]}...` : `Minut ${typeToMinutBtnMapping?.[modelShowType]}...`}
+              </button>
+            </div>
+          )}
 
           {/* Render the label dynamically if it exists */}
           {label && <p className="trigger-label">{label}</p>}
@@ -138,25 +162,11 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
                   {type === "number" || type === "time" ? (
                     <>
                       <label htmlFor="">{inputLabel}</label>
-                      <input
-                        type={type}
-                        className="form-control mb-3"
-                        value={inputDataGet[payloadType] ?? ""}
-                        name={payloadType}
-                        onChange={(e) => OnchangeHndle(e, inputValue, onlyUsed)}
-                        min={min}
-                        max={max}
-                      />
+                      <input type={type} className="form-control mb-3" value={inputDataGet[payloadType] ?? ""} name={payloadType} onChange={(e) => OnchangeHndle(e, inputValue, onlyUsed)} min={min} max={max}/>
                     </>
                   ) : type === "select" ? (
                     <div className="item-select">
-                      <select
-                        aria-label="Default select example"
-                        className="bg-dark form-select form-control mt-4 text-white"
-                        name={payloadType}
-                        value={inputDataGet[payloadType] || ""}
-                        onChange={(e) => OnchangeHndle(e, selecter)}
-                      >
+                      <select aria-label="Default select example" className="bg-dark form-select form-control mt-4 text-white" name={payloadType} value={inputDataGet[payloadType] || ""} onChange={(e) => OnchangeHndle(e, selecter)}>
                         {inputLabel?.map((item) => {
                           const { value, selectLabel } = item;
                           return (
@@ -168,11 +178,7 @@ const TriggersTrargetsConditionsModel = ({ show, handleClose, submitHndle, turno
                       </select>
                     </div>
                   ) : type === "multiSelecter" ? (
-                    <Multiselect
-                      className="mb-3 multiselect_option"
-                      displayValue="label"
-                      options={inputLabel}
-                      selectedValues={
+                    <Multiselect className="mb-3 multiselect_option" displayValue="label" options={inputLabel} selectedValues={
                         (inputDataGet[payloadType] || []).map(value => { // Convert the selected values to the format expected by the Multiselect component
                           const label = inputLabel.find(item => item.value === value)?.label || value;
                           return { label, value };
