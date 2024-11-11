@@ -38,7 +38,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   */
 
   // State to manage follow-up visibility
-  const [showFollowUps, setShowFollowUps] = useState(dataStructure.follow_ups.length > 0);
+  const [showFollowUps, setShowFollowUps] = useState(dataStructure?.follow_ups?.length > 0);
 
   // Modal submit to add a new trigger/target/condition or edit an existing one
   const submitHndle = (getFormData) => {
@@ -154,7 +154,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
   // Handle adding a new follow-up
   const handleAddFollowUp = () => {
-    if (dataStructure.follow_ups.length < 3) {
+    if (dataStructure?.follow_ups?.length < 3) {
       const newFollowUp = {
         message: '',
         conditions: [],
@@ -172,7 +172,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
     if (confirmed) {
       const updatedFollowUps = dataStructure.follow_ups.filter((_, idx) => idx !== index);
       setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
-      if (updatedFollowUps.length === 0) {
+      if (updatedFollowUps?.length === 0) {
         setShowFollowUps(false);
       }
     }
@@ -350,7 +350,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           </div>
 
           <p className="fs-5 mt-5">Only follow up if...</p>
-          {followUp.conditions.length > 0 ? (
+          {followUp?.conditions?.length > 0 ? (
             followUp.conditions.map((conditionItem, conditionIndex) => {
               const { type } = conditionItem;
               return (
@@ -386,7 +386,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
             className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
             onClick={() => setAllData({ modelShow:true, modelShowType:followUpConditionsName, formData:conditions, minutFormData:minutConditions, typepAddEdit:add, followUpIndex:index })}
           >
-            <i className="bi bi-plus fs-3"></i> {followUp.conditions.length > 0 ? "Add another follow-up condition" : "Add a condition for following up"}
+            <i className="bi bi-plus fs-3"></i> {followUp?.conditions?.length > 0 ? "Add another follow-up condition" : "Add a condition for following up"}
           </button>
 
           <button className="btn btn-link text-danger mt-3" onClick={() => handleRemoveFollowUp(index)}>
@@ -395,7 +395,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         </div>
       ))}
 
-      {showFollowUps && dataStructure.follow_ups.length < 3 && (
+      {showFollowUps && dataStructure?.follow_ups?.length < 3 && (
         <button style={{ background: 'none', border: 'none', color: '#146ef5', cursor: 'pointer', margin: '5px auto 0 auto' }} onClick={handleAddFollowUp}>
           Add another follow-up...
         </button>
