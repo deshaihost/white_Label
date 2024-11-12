@@ -27,6 +27,11 @@ const StatisticsPage = () => {
   const startDateDisplay = dataStartDate ? formatDateToReadable(dataStartDate) : '';
   const endDateDisplay = dataEndDate ? formatDateToReadable(dataEndDate) : '';
 
+  const upsellsStartDate = rawApiReturn?.statistics?.upsell_data?.start_date
+  const upsellsEndDate = rawApiReturn?.statistics?.upsell_data?.end_date
+  const upsellsStartDateDisplay = upsellsStartDate ? formatDateToReadable(upsellsStartDate) : '';
+  const upsellsEndDateDisplay = upsellsEndDate ? formatDateToReadable(upsellsEndDate) : '';
+
   // Store/dispatch logic to get the user property names for the multi select
       const store = useSelector((state) => state);
       const dispatch = useDispatch();
@@ -47,6 +52,7 @@ const StatisticsPage = () => {
   const handleApplyFilters = () => {
     // Assemble the query data based on the current state of the inputs
     let queryData = {};
+    queryData.include_upsells = true;
     if (selectedProperties.length > 0) { queryData.property_names = selectedProperties.map(property => property.value); }
     if (selectedEndDate) { queryData.end_date = selectedEndDate; } // it's already in format yyyy-mm-dd
     if (selectedStartDate) {
@@ -75,9 +81,13 @@ const StatisticsPage = () => {
     { component: HistogramTile, dataSets: apiStatisticsData?.actionItemsReceived, width: 9, height: '300px' },
   ];
 
+  const upsellsTiles = [
+    { component: MetricTile, dataSets: apiStatisticsData?.upsellMetrics, width: 4, height: "320px" },
+  ]
+
   // When the page loads, fetch the data and populate the charts
   useEffect(() => {
-    getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading);
+    getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading, {include_upsells:true});
   }, []);
 
   return (
@@ -132,6 +142,12 @@ const StatisticsPage = () => {
 
       <h2 className="section-header">Action Items</h2>
       {renderTiles(actionItemsTiles)}
+
+      <h2 className="section-header">Upsells</h2>
+      {(upsellsStartDate != dataStartDate || upsellsEndDate != dataEndDate) && (
+        <p style={{color:'rgb(255, 125, 0)', marginTop:'-10px', marginBottom:'5px'}}>Showing upsell data from {upsellsStartDateDisplay} to {upsellsEndDateDisplay}</p>
+      )}
+      {renderTiles(upsellsTiles)}
 
     </div>
   );

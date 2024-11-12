@@ -85,7 +85,8 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     //let url = randomlySelectedDemoPerson.url;
     let url = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo'; // big customer demo
 
-    if (parseInt(formData.propertyCount) <= 15) {
+    //if (parseInt(formData.propertyCount) <= 15) {
+    if (false) { // Disable group demo for now
       url = 'https://calendly.com/nick-hostbuddy/hostbuddy-ai-group-demo';
     }
 
