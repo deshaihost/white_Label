@@ -3,7 +3,7 @@
 import axios from "axios";
 import ToastHandle from "../../helper/ToastMessage";
 
-// Sample for how the data should be structured for a the line graph and for a histogram
+// Sample for how the data should be structured for a the line graph, for a histogram, and for a metric tile
 export const lineGraphDataSets = [
   {
     identifier: 'Dataset 1',
@@ -520,6 +520,90 @@ function convertActionItemsToMetricData(actionItemData) {
   return [totalMetrics, ...categoryMetrics];
 }
 
+// Given the upsell data from the API: create the data structure for the metric tiles that show the upsell metrics
+// Given upsell data from the API, create metric tiles showing:
+// - For each upsell type: number of messages sent, number accepted, acceptance rate, and revenue (if available)
+// - A total tile combining all upsells with the same metrics
+// Revenue is only shown if all upsells have the same currency and there is nonzero revenue
+function formatUpsellMetrics(retrievedUpsellsStatistics) {
+  const totals = retrievedUpsellsStatistics.totals;
+  let metricDataSets = [];
+  
+  // Track totals across all upsells for the summary tile
+  let totalMessagesSent = 0;
+  let totalAccepted = 0;
+  let totalRevenue = 0;
+  let totalCurrency = null;
+  let allUpsellsHaveCurrency = true;  // Flag to track if all upsells use the same currency
+
+  // Process each upsell type separately
+  for (const upsellId in totals) {
+    const upsell = totals[upsellId];
+    const { num_messages, num_accepted, source, total_value, currency } = upsell;
+
+    // Accumulate totals for the summary tile
+    totalMessagesSent += num_messages;
+    totalAccepted += num_accepted;
+
+    // Handle revenue calculations and currency consistency checking
+    if (total_value && currency) {
+      totalRevenue += total_value;
+      // Track the first currency we see and ensure all subsequent ones match
+      if (!totalCurrency) {
+        totalCurrency = currency;
+      } else if (totalCurrency !== currency) {
+        allUpsellsHaveCurrency = false;  // Mixed currencies found, can't show total revenue
+      }
+    } else {
+      allUpsellsHaveCurrency = false;  // Missing currency/value, can't show total revenue
+    }
+
+    // Calculate acceptance rate for this upsell type
+    const acceptanceRate = num_messages > 0 ? ((num_accepted / num_messages) * 100).toFixed(1) : "0.0";
+    
+    // Create metric tile data for this upsell type
+    const dataItem = {
+      identifier: source,
+      title: `Upsells - ${source}`,
+      data: [
+        { number: num_messages, text: "Messages sent" },
+        { number: num_accepted, text: "Acceptances detected" },
+        { number: `${acceptanceRate}%`, text: "Detected acceptance rate" }
+      ]
+    };
+
+    // Only add revenue if both value and currency are present
+    if (total_value && currency) {
+      dataItem.data.push({ number: `${total_value.toFixed(2)} ${currency}`, text: "Revenue earned" });
+    }
+
+    metricDataSets.push(dataItem);
+  }
+
+  // Calculate total acceptance rate for summary tile
+  const totalAcceptanceRate = totalMessagesSent > 0 ? ((totalAccepted / totalMessagesSent) * 100).toFixed(1) : "0.0";
+  
+  // Create summary tile showing totals across all upsell types
+  const totalDataItem = {
+    identifier: 'All Upsells',
+    title: 'Upsells - Total',
+    data: [
+      { number: totalMessagesSent, text: "Messages sent" },
+      { number: totalAccepted, text: "Acceptances detected" },
+      { number: `${totalAcceptanceRate}%`, text: "Detected acceptance rate" }
+    ]
+  };
+
+  // Only add total revenue if all upsells use the same currency and there is revenue to show
+  if (allUpsellsHaveCurrency && totalRevenue > 0 && totalCurrency) {
+    totalDataItem.data.push({ number: `${totalRevenue.toFixed(2)} ${totalCurrency}`, text: "Revenue earned" });
+  }
+
+  // Put the summary tile first in the array
+  metricDataSets.unshift(totalDataItem);
+
+  return metricDataSets;
+}
 
 // Get the statistics from the API, and populate the data structures to be used for the charts
 export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, setDataLoading, queryData={}) => {
@@ -532,7 +616,9 @@ export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, s
   const startDate = response?.statistics?.start_date;
   const endDate = response?.statistics?.end_date;
 
-  let messageTimingData, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemMetrics, actionItemsReceived, actionItemsClosed;
+  const retrievedUpsellsStatistics = response?.statistics?.upsell_data;
+
+  let messageTimingData, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemMetrics, actionItemsReceived, actionItemsClosed, upsellMetrics;
 
   try { // Message received timing (bar chart)
     messageTimingData = createMessageTimingData(retrievedStatistics.guest_message_received_times, startDate, endDate);
@@ -565,6 +651,10 @@ export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, s
     actionItemsClosed = formatActionItemGraphData(day_by_day_data, 'action_items_closed');
   } catch (error) {}
 
-  setApiStatisticsData({ messageTimingData, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemsReceived, actionItemMetrics, actionItemsClosed });
+  try { // Upsell tiles: number of upsell messages sent and accepted
+    upsellMetrics = formatUpsellMetrics(retrievedUpsellsStatistics);
+  } catch (error) {}
+
+  setApiStatisticsData({ messageTimingData, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemsReceived, actionItemMetrics, actionItemsClosed, upsellMetrics });
   setDataLoading(false);
 }

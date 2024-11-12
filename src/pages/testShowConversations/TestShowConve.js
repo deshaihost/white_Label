@@ -1,53 +1,5 @@
 const Data = [
   {
-    title: "24 Hour Troubleshooting",
-    description: "HostBuddy is available all hours of the day to intelligently troubleshoot critical guest issues, following your procedures and guidelines.",
-    messages: [
-      {
-        text: "There's a red pickup truck in my parking space!",
-        sender: "guest",
-        timeDate: "6/27 12:03 AM",
-        sendBy: "Guest",
-      },
-      {
-        text: "I paid for parking in advance specifically to avoid this",
-        sender: "guest",
-        timeDate: "6/27 12:03 AM",
-        sendBy: "Guest",
-      },
-      {
-        text: "Hi Emma, I'm sorry about the parking issue! As a temporary solution there is a 24-hour parking lot at 1047 B St, just a three-minute walk away. We will reimburse you for any parking fees. Please let me know if you need further assistance.",
-        sender: "host",
-        timeDate: "6/27 12:04 AM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "ummm I don't feel safe walking around here at night",
-        sender: "guest",
-        timeDate: "6/27 12:06 AM",
-        sendBy: "Guest",
-      },
-      {
-        text: "I understand your concern, Emma. For now, please use parking space #1. Our cleaners use this space in the mornings, so we would be grateful if you could move your car by 10 AM.",
-        sender: "host",
-        timeDate: "6/27 12:07 AM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "Ok. Thank you",
-        sender: "guest",
-        timeDate: "6/27 12:07 AM",
-        sendBy: "Guest",
-      },
-      {
-        text: "You're welcome! Have a great stay.",
-        sender: "host",
-        timeDate: "6/27 12:08 AM",
-        sendBy: "HostBuddy",
-      },
-    ],
-  },
-  {
     title: "Inquiry Handling",
     description: "Equipped with details about your properties, HostBuddy can answer guest inquiries and provide information about your listings. HostBuddy can communicate in any language, right out of the box.",
     messages: [
@@ -110,6 +62,54 @@ const Data = [
     ],
   },
   {
+    title: "24 Hour Troubleshooting",
+    description: "HostBuddy is available all hours of the day to intelligently troubleshoot critical guest issues, following your procedures and guidelines.",
+    messages: [
+      {
+        text: "There's a red pickup truck in my parking space!",
+        sender: "guest",
+        timeDate: "6/27 12:03 AM",
+        sendBy: "Guest",
+      },
+      {
+        text: "I paid for parking in advance specifically to avoid this",
+        sender: "guest",
+        timeDate: "6/27 12:03 AM",
+        sendBy: "Guest",
+      },
+      {
+        text: "Hi Emma, I'm sorry about the parking issue! As a temporary solution there is a 24-hour parking lot at 1047 B St, just a three-minute walk away. We will reimburse you for any parking fees. Please let me know if you need further assistance.",
+        sender: "host",
+        timeDate: "6/27 12:04 AM",
+        sendBy: "HostBuddy",
+      },
+      {
+        text: "ummm I don't feel safe walking around here at night",
+        sender: "guest",
+        timeDate: "6/27 12:06 AM",
+        sendBy: "Guest",
+      },
+      {
+        text: "I understand your concern, Emma. For now, please use parking space #1. Our cleaners use this space in the mornings, so we would be grateful if you could move your car by 10 AM.",
+        sender: "host",
+        timeDate: "6/27 12:07 AM",
+        sendBy: "HostBuddy",
+      },
+      {
+        text: "Ok. Thank you",
+        sender: "guest",
+        timeDate: "6/27 12:07 AM",
+        sendBy: "Guest",
+      },
+      {
+        text: "You're welcome! Have a great stay.",
+        sender: "host",
+        timeDate: "6/27 12:08 AM",
+        sendBy: "HostBuddy",
+      },
+    ],
+  },
+  {
     title: "Smart Deferral",
     description: "HostBuddy understands the limits of its abilities. You can choose from a range of different ways for HostBuddy to handle situations that require human intervention, and you can opt to receive a notification over email, text, or Slack.",
     messages: [
@@ -150,160 +150,7 @@ const Data = [
         sendBy: "HostBuddy",
       }
     ],
-  },
-  {
-    title: "4Issue Troubleshooting",
-    description: "4Hostbuddy can intelligently troubleshoot issues on your behalf based on the property information you provide it.",
-    messages: [
-      {
-        text: "Hello! How can I help you today?",
-        sender: "guest",
-        timeDate: "9/27 5:17 PM",
-        sendBy: "Guest",
-      },
-      {
-        text: "I want to change my account settings.",
-        sender: "host",
-        timeDate: "9/27 5:18 PM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "What specific settings would you like to change?",
-        sender: "guest",
-        timeDate: "9/27 5:19 PM",
-        sendBy: "Guest",
-      },
-      {
-        text: "I want to update my password.",
-        sender: "host",
-        timeDate: "9/27 5:20 PM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "Please provide your current password and the new password you'd like to set.",
-        sender: "guest",
-        timeDate: "9/27 5:21 PM",
-        sendBy: "Guest",
-      },
-      {
-        text: "My current password is 'currentPass123' and my new password will be 'newPass456'.",
-        sender: "host",
-        timeDate: "9/27 5:22 PM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "Your password has been updated successfully. Is there anything else you need help with?",
-        sender: "guest",
-        timeDate: "9/27 5:23 PM",
-        sendBy: "Guest",
-      },
-    ],
-  },
-  {
-    title: "5Issue Troubleshooting",
-    description: "5Hostbuddy can intelligently troubleshoot issues on your behalf based on the property information you provide it.",
-    messages: [
-      {
-        text: "Hi! What assistance do you need today?",
-        sender: "guest",
-        timeDate: "9/27 5:24 PM",
-        sendBy: "Guest",
-      },
-      {
-        text: "I want to report a bug in the application.",
-        sender: "host",
-        timeDate: "9/27 5:25 PM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "I'm sorry to hear that. Can you please describe the issue?",
-        sender: "guest",
-        timeDate: "9/27 5:26 PM",
-        sendBy: "Guest",
-      },
-      {
-        text: "The app crashes every time I try to open it.",
-        translatedText: "I am stupid and I don't know how to use the app.",
-        sender: "host",
-        timeDate: "9/27 5:27 PM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "Thank you for the information. I'll forward this to our technical team immediately.",
-        translatedText: "It's too early for this lemme make my tech nerts deal with you.",
-        sender: "guest",
-        timeDate: "9/27 5:28 PM",
-        sendBy: "Guest",
-      },
-      {
-        text: "I hope it gets fixed soon. Thank you!",
-        sender: "host",
-        timeDate: "9/27 5:29 PM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "You're welcome! We'll keep you updated on the progress.",
-        sender: "guest",
-        timeDate: "9/27 5:30 PM",
-        sendBy: "Guest",
-      },
-    ],
-  },
-  {
-    title: "6Issue Troubleshooting",
-    description: "6Hostbuddy can intelligently troubleshoot issues on your behalf based on the property information you provide it.",
-    messages: [
-      {
-        text: "Good evening! How can I assist you today?",
-        sender: "guest",
-        timeDate: "9/27 5:31 PM",
-        sendBy: "Guest",
-      },
-      {
-        text: "Can you recommend a product for me?",
-        translatedText: "duhhhh idk what to buy",
-        sender: "host",
-        timeDate: "9/27 5:32 PM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "I'd like to hear your thoughts.",
-        sender: "host",
-        timeDate: "9/27 5:32 PM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "Of course! What type of product are you looking for?",
-        sender: "guest",
-        timeDate: "9/27 5:33 PM",
-        sendBy: "Guest",
-      },
-      {
-        text: "I'm looking for a new laptop.",
-        sender: "host",
-        timeDate: "9/27 5:34 PM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "I recommend the XYZ laptop. It's powerful and perfect for both work and gaming!",
-        sender: "guest",
-        timeDate: "9/27 5:35 PM",
-        sendBy: "Guest",
-      },
-      {
-        text: "That sounds great! What are its key features?",
-        sender: "host",
-        timeDate: "9/27 5:36 PM",
-        sendBy: "HostBuddy",
-      },
-      {
-        text: "It has a high-resolution display, fast processing power, and long battery life. Would you like to know more?",
-        sender: "guest",
-        timeDate: "9/27 5:37 PM",
-        sendBy: "Guest",
-      },
-    ],
-  },
+  }
 ];
 
 export default Data;
