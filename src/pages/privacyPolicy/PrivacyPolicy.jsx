@@ -34,7 +34,7 @@ const PrivacyPolicy = () => {
       <div className="account-main">
         <Helmet>
           <title>Privacy Policy - HostBuddy AI</title>
-          <link rel="canonical" href="https://www.hostbuddy.ai/privacy-policy" />
+          <link rel="canonical" href="https://www.HostBuddy.ai/privacy-policy" />
         </Helmet>
         <div className="container">
           <div className="banner-heading">
@@ -54,16 +54,16 @@ const PrivacyPolicy = () => {
                     <div className="col-lg-12">
                       <div className="guide-steps">
                         <div className="step-box">
-                          <h4>Welcome to Hostbuddy AI!</h4>
+                          <h4>Welcome to HostBuddy AI!</h4>
                           <p>
-                            This Privacy Policy outlines the policies and procedures of Hostbuddy AI LLC ("we", "our", or "us") regarding the collection, use, processing, and disclosure of your information on https://hostbuddy.ai (the "website") and the services, tools, or features we offer. This policy is designed to inform our users  (referred to as "users" or "you") about how we handle their personal data.
+                            This Privacy Policy outlines the policies and procedures of HostBuddy AI LLC ("we", "our", or "us") regarding the collection, use, processing, and disclosure of your information on https://HostBuddy.ai (the "website") and the services, tools, or features we offer. This policy is designed to inform our users  (referred to as "users" or "you") about how we handle their personal data.
                           </p>
                         </div>
 
                         <div className="step-box section" id="step1">
                           <h4>1. Collection of Personal Data</h4>
                           <p>
-                            At Hostbuddy AI, we prioritize the protection of your personal data while providing AI communication support services for short-term rental management. To ensure efficient service delivery, we collect specific types of personal data, including:
+                            At HostBuddy AI, we prioritize the protection of your personal data while providing AI communication support services for short-term rental management. To ensure efficient service delivery, we collect specific types of personal data, including:
                           </p>
                           <ul>
                             <li>
@@ -100,7 +100,7 @@ const PrivacyPolicy = () => {
                           </p>
                           <ul>
                             <li>
-                              a. Property Management Software Partners: If you choose to integrate your Hostbuddy AI account with external property management software, we may share necessary account data to facilitate seamless synchronization and operation between platforms.
+                              a. Property Management Software Partners: If you choose to integrate your HostBuddy AI account with external property management software, we may share necessary account data to facilitate seamless synchronization and operation between platforms.
                             </li>
                             <li>
                               b. Guests: Information that you enter on our platform for a given property, is accessible to guests at that property via chat with our AI chatbot, if the chatbot is provided and configured for guests at the property.
@@ -111,11 +111,29 @@ const PrivacyPolicy = () => {
                             <li>
                               d. Phone numbers: HostBuddy AI respects your privacy and does not share your phone number with any third parties or platforms under any circumstances, unless required by law.
                             </li>
+                            <li>
+                              e. Service Providers for Notifications: When you opt in to receive notifications and provide your contact information, we use third-party providers, such as Twilio and SendGrid, to facilitate the delivery of these notifications. These providers are granted access to your information solely for this purpose and are contractually obligated to handle your data securely and in accordance with our privacy standards.
+                            </li>
+                            <li>
+                              f. AI Service Providers: To deliver core functionalities of our service, we may include certain user information in prompts sent via API to third-party AI providers, such as OpenAI or Anthropic, in order to process and respond to your requests accurately. These providers use the information only to generate responses on our behalf and are required to handle all data securely and in compliance with data protection standards. We limit the information shared to only what is necessary to provide the service.
+                            </li>
                           </ul>
                         </div>
 
                         <div className="step-box section" id="step4">
-                          <h4>4. Data Security</h4>
+                          <h4>4. Guest Data</h4>
+                          <ul>
+                            <li>
+                              a. Host Responsibility for Data Sharing: By using our services, hosts confirm that sharing guest data with HostBuddy AI does not violate any applicable agreements, terms, or legal requirements, including those set by third-party platforms (e.g., Airbnb, PMS providers).
+                            </li>
+                            <li>
+                              b. PMS Data Agreement: HostBuddy AI operates under data processing agreements with Property Management Software providers to ensure that guest data is handled in compliance with privacy and data protection standards.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step5">
+                          <h4>5. Data Security</h4>
                           <ul>
                             <li>
                               a. Security Measures: We implement industry-standard security measures to protect your personal data  against unauthorized access, alteration, disclosure, or destruction.
@@ -129,8 +147,8 @@ const PrivacyPolicy = () => {
                           </ul>
                         </div>
 
-                        <div className="step-box section" id="step5">
-                          <h4>5. Data Minimization</h4>
+                        <div className="step-box section" id="step6">
+                          <h4>6. Data Minimization</h4>
                           <ul>
                             <li>
                               a. Minimization Principle: We collect and process only the minimum amount of personal data necessary  to fulfill the purposes outlined in this Privacy Policy.
@@ -141,8 +159,8 @@ const PrivacyPolicy = () => {
                           </ul>
                         </div>
 
-                        <div className="step-box section" id="step6">
-                          <h4>6. Data Accuracy</h4>
+                        <div className="step-box section" id="step7">
+                          <h4>7. Data Accuracy</h4>
                           <ul>
                             <li>
                               a. Accuracy Verification: We take reasonable steps to ensure that personal data we collect and process is  accurate, complete, and up-to-date.
@@ -153,8 +171,8 @@ const PrivacyPolicy = () => {
                           </ul>
                         </div>
 
-                        <div className="step-box section" id="step7">
-                          <h4>7. Data Transfer</h4>
+                        <div className="step-box section" id="step8">
+                          <h4>8. Data Transfer</h4>
                           <ul>
                             <li>
                               a. International Transfers: Your personal data may be transferred to, stored, and processed in countries  outside of your own, where data protection laws may differ. By using our services, you consent to such transfers.
@@ -165,8 +183,8 @@ const PrivacyPolicy = () => {
                           </ul>
                         </div>
 
-                        <div className="step-box section" id="step8">
-                          <h4>8. Children's Privacy</h4>
+                        <div className="step-box section" id="step9">
+                          <h4>9. Children's Privacy</h4>
                           <ul>
                             <li>
                               a. Age Restriction: Our services are not intended for children under the age of 18. We do not knowingly  collect personal data from children under 18. If you are a parent or guardian and believe that your child has provided us with personal data, please contact us to request deletion of that information.
@@ -174,8 +192,8 @@ const PrivacyPolicy = () => {
                           </ul>
                         </div>
 
-                        <div className="step-box section" id="step9">
-                          <h4>9. Data Breach Notification</h4>
+                        <div className="step-box section" id="step10">
+                          <h4>10. Data Breach Notification</h4>
                           <ul>
                             <li>
                               a. Notification Obligation: In the event of a data breach that may compromise the security of your personal data, we will notify you and relevant authorities as required by applicable law.
@@ -183,8 +201,8 @@ const PrivacyPolicy = () => {
                           </ul>
                         </div>
 
-                        <div className="step-box section" id="step10">
-                          <h4>10. Your Rights</h4>
+                        <div className="step-box section" id="step11">
+                          <h4>11. Your Rights</h4>
                           <ul>
                             <li>
                               a. Right to Access: You have the right to request access to your personal data and information about how  it is processed.
@@ -204,8 +222,8 @@ const PrivacyPolicy = () => {
                           </ul>
                         </div>
 
-                        <div className="step-box section" id="step11">
-                          <h4>11. Automated Decision-Making</h4>
+                        <div className="step-box section" id="step12">
+                          <h4>12. Automated Decision-Making</h4>
                           <ul>
                             <li>
                               a. Transparency: If we engage in automated decision-making processes that have legal or significant  effects on you, we will provide information about the logic involved and the potential consequences of such processing.
@@ -213,8 +231,8 @@ const PrivacyPolicy = () => {
                           </ul>
                         </div>
 
-                        <div className="step-box section" id="step12">
-                          <h4>12. Data Retention Policy</h4>
+                        <div className="step-box section" id="step13">
+                          <h4>13. Data Retention Policy</h4>
                           <ul>
                             <li>
                               a. Retention Period: We retain your personal data only for as long as necessary to fulfill the purposes  outlined in this Privacy Policy, unless a longer retention period is required or permitted by law.
@@ -222,11 +240,26 @@ const PrivacyPolicy = () => {
                             <li>
                               b. Criteria for Retention: We consider factors such as the nature and sensitivity of the personal data, the purposes for which it was collected, and legal requirements when determining the appropriate retention period.
                             </li>
+                            <li>
+                              c. Guest Data Retention: Guest data obtained through PMS integration is retained only for the duration necessary to provide the intended services or as directed by the PMS provider. Upon request from the PMS or the host, we will delete or anonymize guest data as required by applicable law.
+                            </li>
                           </ul>
                         </div>
 
-                        <div className="step-box section" id="step13">
-                          <h4>13. Consent Withdrawal</h4>
+                        <div className="step-box section" id="step14">
+                          <h4>14. Guest Data Processing</h4>
+                          <ul>
+                            <li>
+                              a. Purpose Limitation of Guest Data: Guest data obtained through the Property Management Software (PMS) integration is only accessed and processed to provide necessary property management services to the host. HostBuddy AI will not use guest data for any purposes outside the scope of these services.
+                            </li>
+                            <li>
+                              b. Guest Data Subject Rights: HostBuddy AI supports hosts in fulfilling data subject rights for guests, such as access, rectification, and deletion, in compliance with applicable regulations. Hosts or the Property Management Software (PMS) provider may initiate such requests, which we will address promptly to ensure compliance.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="step-box section" id="step15">
+                          <h4>15. Consent Withdrawal</h4>
                           <ul>
                             <li>
                               a. Right to Withdraw Consent: If you have provided consent for the processing of your personal data, you  have the right to withdraw that consent at any time. Withdrawal of consent does not affect the lawfulness  of processing based on consent before its withdrawal.
@@ -234,17 +267,17 @@ const PrivacyPolicy = () => {
                           </ul>
                         </div>
 
-                        <div className="step-box section" id="step14">
-                          <h4>14. Changes to This Privacy Policy</h4>
+                        <div className="step-box section" id="step16">
+                          <h4>16. Changes to This Privacy Policy</h4>
                           <p>
-                            We may update this Privacy Policy to reflect changes to our information practices. Any changes will be  posted on this page, and we encourage users to review it regularly.
+                            We may update this Privacy Policy to reflect changes to our information practices. Any changes will be posted on this page, and we encourage users to review it regularly.
                           </p>
                         </div>
 
-                        <div className="step-box section" id="step15">
-                          <h4>15. Contact Us</h4>
+                        <div className="step-box section" id="step17">
+                          <h4>17. Contact Us</h4>
                           <p>
-                            For any questions about this Privacy Policy or our data practices, please contact us at info@hostbuddy.ai.
+                            For any questions about this Privacy Policy or our data practices, please contact us at info@HostBuddy.ai.
                           </p>
                         </div>
 
