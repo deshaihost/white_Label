@@ -9,6 +9,9 @@ import './workbench.css';
 import hostBuddyLogo from "../../../public/img/logo/logoGraphicOnlySquare.webp";
 import TypingIndicator from '../../../component/chatbotThinkingBubble/typingIndicator';
 
+import { useDispatch, useSelector } from "react-redux";
+import { getUserDataActions } from '../../../redux/actions';
+
 /* Dummy icons for now */
 import { FaHome, FaPencilAlt, FaBook, FaCog } from "react-icons/fa";
 import { FaRotateRight } from "react-icons/fa6";
@@ -24,6 +27,20 @@ const Workbench = () => {
   const [panelContent, setPanelContent] = useState(null); // State for panel content
 
   const propertyImg = apiPropertyData?.thumbnail_image?.url
+
+  // ----- User data / redux store logic -----
+  const dispatch = useDispatch();
+  const store = useSelector((state) => state);
+
+  const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
+  if (!userDataGet) {
+    dispatch(getUserDataActions());
+  }
+
+  const userPropertiesData = userDataGet?.property_data; // dict, keys are property names. values aren't important here
+  const allPropertyNamesList = userPropertiesData ? Object.keys(userPropertiesData) : [];
+  // -----------------------------------------
+
 
   // This can't be factored out of this file because it uses this component's useState hooks
   const getPropertyDataFromAPI = async (propertyName) => {
@@ -59,12 +76,6 @@ const Workbench = () => {
   useEffect(() => {
     getPropertyDataFromAPI(property_name);
   }, [property_name]);
-
-  // Function to jump to the Extras section of the questionnaire - used when the user clicks "View previously uploaded" in quick add
-  const jumpToExtras = () => {
-    setPanelContent('viewPrevious');
-    setIsPanelOpen(true);
-  };
 
 
   // Chat window state & logic ---------------------------------------------------------
@@ -237,7 +248,7 @@ const Workbench = () => {
           </div>
         </div>
       </div>
-      <PullOutPanel onClose={handleClosePanel} content={panelContent} className={isPanelOpen ? 'open' : ''} propertyName={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI} setPanelContent={setPanelContent}/>
+      <PullOutPanel onClose={handleClosePanel} content={panelContent} className={isPanelOpen ? 'open' : ''} propertyName={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI} allPropertyNamesList={allPropertyNamesList} setPanelContent={setPanelContent}/>
     </div>
   )
 }

@@ -6,7 +6,7 @@ import AdvancedSettingsIndex from '../../../inbox/inboxSection/preferences/Prefe
 import HostBuddyKnowledgeBase from '../../../properties/addProperties/dynamic_questionnaire/questionnaireFirstPage/knowledgeBase/hbKnowledgeBase';
 import QuestionnairePage from '../../../properties/addProperties/dynamic_questionnaire/complete_questionnaire';
 
-const PullOutPanel = ({ onClose, content, className, propertyName, apiPropertyData, setApiPropertyData, getPropertyDataFromAPI, setPanelContent }) => {
+const PullOutPanel = ({ onClose, content, className, propertyName, apiPropertyData, setApiPropertyData, getPropertyDataFromAPI, allPropertyNamesList, setPanelContent }) => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const handleClose = () => {
@@ -30,7 +30,7 @@ const PullOutPanel = ({ onClose, content, className, propertyName, apiPropertyDa
       case 'manageSources':
         return <HostBuddyKnowledgeBase property_name={propertyName} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI} forceShowDataAdded={true}/>;
       case 'conversationPreferences':
-        return <AdvancedSettingsIndex />; // TODO: get a list of user properties and pass here as allPropertyNamesList prop
+        return <AdvancedSettingsIndex allPropertyNamesList={allPropertyNamesList}/>;
       default:
         return null;
     }
