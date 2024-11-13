@@ -352,7 +352,7 @@ export const minutDataInput = {
     {
       guesttype: "Disturbance first notice",
       type: "disturbance_first_notice",
-      label: "Send the message upon Minut event: Disturbance first notice",
+      label: "Send the message upon the first notice of a disturbance detected by Minut.",
       inputFiled: [
         { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
       ]
@@ -360,7 +360,7 @@ export const minutDataInput = {
     {
       guesttype: "Disturbance second notice",
       type: "disturbance_second_notice",
-      label: "Send the message upon Minut event: Disturbance second notice",
+      label: "Send the message upon the second notice of a disturbance detected by Minut.",
       inputFiled: [
         { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
       ]
@@ -368,7 +368,7 @@ export const minutDataInput = {
     {
       guesttype: "Disturbance third notice",
       type: "disturbance_third_notice",
-      label: "Send the message upon Minut event: Disturbance third notice",
+      label: "Send the message upon the third notice of a disturbance detected by Minut.",
       inputFiled: [
         { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
       ]
@@ -376,7 +376,7 @@ export const minutDataInput = {
     {
       guesttype: "Disturbance ended",
       type: "disturbance_ended",
-      label: "Send the message upon Minut event: Disturbance ended",
+      label: "Send the message upon the end of a disturbance detected by Minut.",
       inputFiled: [
         { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
       ]
@@ -384,7 +384,7 @@ export const minutDataInput = {
     {
       guesttype: "Disturbance dismissed",
       type: "disturbance_dismissed",
-      label: "Send the message upon Minut event: Disturbance dismissed",
+      label: "Send the message when a minut-detected disturbance is dismissed.",
       inputFiled: [
         { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
       ]
@@ -392,7 +392,7 @@ export const minutDataInput = {
     {
       guesttype: "Disturbance snoozed",
       type: "disturbance_snoozed",
-      label: "Send the message upon Minut event: Disturbance snoozed",
+      label: "Send the message when a minut-detected disturbance is snoozed.",
       inputFiled: [
         { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
       ]
@@ -400,7 +400,7 @@ export const minutDataInput = {
     {
       guesttype: "Smoking detection: Smoking detected",
       type: "smoking_detection_smoking_detected",
-      label: "Send the message upon Minut event: Smoking detection: Smoking detected",
+      label: "Send the message when Minut detects smoking in the property.",
       inputFiled: [
         { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
       ]
