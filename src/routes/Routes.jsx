@@ -220,7 +220,8 @@ const Routing = () => {
         <Route path="/notifications-guide" element={<NotificationsGuide />}></Route>
         <Route path="/customize-hostbuddy-guide" element={<CustomizeHostBuddyGuide />}></Route>
         <Route path="/hostbuddy-for-guesty" element={<HostbuddyForGuesty />}></Route>
-
+        <Route path="/hostbuddy-for-tidy" element={<Home />}></Route>
+        <Route path="/turno" element={<Home />}></Route>
         
         <Route path="/testing-questions" element={<TestingQuestions />}></Route>
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>

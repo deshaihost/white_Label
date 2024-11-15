@@ -106,8 +106,8 @@ const SmartTemplatesLanding = () => {
                 <div className="icon-boc-con">
                   <h2>4. Enable <span className="color-change">AI</span></h2>
                   <p>HostBuddy can use AI stop your message from sending if it is not relevant to a guest or not contextually appropriate - for example, if you’re asking a guest to leave a review when they already told you they have.</p>
-                  {/* <p>HostBuddy can also use AI to personalize each message to each guest, making it sound less like a robotic templated message and more like a more friendly, human gesture. <a href="#" onClick={(e) => handleShowModalClick(e, setShowAiExamplesModal)}>See examples</a>.</p> */}
-                  <p>HostBuddy can also use AI to personalize each message to each guest, making it sound less like a robotic templated message and more like a more friendly, human gesture.</p>
+                  {/* <p>HostBuddy can also use AI to personalize each message to each guest, making it sound less like a robotic templated message and more like a friendly, human gesture. <a href="#" onClick={(e) => handleShowModalClick(e, setShowAiExamplesModal)}>See examples</a>.</p> */}
+                  <p>HostBuddy can also use AI to personalize each message to each guest, making it sound less like a robotic templated message and more like a friendly, human gesture.</p>
                 </div>
               </div>
               <div className="col-lg-5 col-md-5 right-column blur-background-top-left blur-background-bottom-right">

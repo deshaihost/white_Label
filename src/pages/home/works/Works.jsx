@@ -91,7 +91,7 @@ const Works = () => {
                         <div className="col-lg-6">
                             <div className="works-content">
                                 <h3><strong>Smart</strong> Inbox</h3>
-                                <p>Centralize your inbox with HostBuddy to manage all your guest communications in one place. Our smart inbox brings industry-leading AI technology right to your fingertips, allowing you to generate AI responses and view valuable insights into each guest's stay through conversational analysis. Filter messages by urgency, take the wheel when you need to be involved and review HostBuddy conversations all in one place.</p>
+                                <p>Centralize your inbox with HostBuddy to manage all your guest communications in one place. Our smart inbox brings industry-leading AI technology right to your fingertips, allowing you to generate AI responses and view valuable insights into each guest's stay through conversational analysis. Filter messages by urgency, take the wheel when you need to be involved, and review HostBuddy conversations all in one place.</p>
                             </div>
                         </div>
                         <div className="col-lg-6">

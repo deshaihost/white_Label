@@ -79,7 +79,7 @@ const ConnectToMinut = () => {
   return (
     <div className="partner-tile" onClick={handleConnectClick}>
       <img className="partner-logo" alt="Minut Logo" src="https://storage.googleapis.com/frontend_media/partners/minut_logo_text.svg"/>
-      <p>Connecting your Minut account lets you use Minut events and conditions in Smart Templates, so you can send messages to guests based on activity detected by your Minut device.</p>
+      <p>Connect with Minut’s insights platform to automate and personalize guest messaging for noise or occupancy events. streamline your operations, keep your property protected, and enhance guest experience.</p>
     </div>
   );
 };
