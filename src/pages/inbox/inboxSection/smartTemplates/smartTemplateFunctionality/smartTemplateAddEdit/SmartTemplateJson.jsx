@@ -25,7 +25,7 @@ export const dataInput = {
       type: "during_reservation",
       label: "Send the message during the guest's reservation, on a specific day and time. Day 1 is the day of check-in.",
       inputFiled: [
-        { inputLabel: "Day", type: number, payloadType: "day", defaultVal: 1 },
+        { inputLabel: "Day", type: number, payloadType: "day", defaultVal: 1, min: 1, max: 365 },
         { inputLabel: "Time", type: time, payloadType: "time" },
       ]
     },
@@ -34,7 +34,7 @@ export const dataInput = {
       type: "before_reservation",
       label: "Send the message a number of days before the guest's reservation, at a specific time. \"0 days before\" will send the message on the day of check-in.",
       inputFiled: [
-        { inputLabel: "Days before", type: number, payloadType: "days_before", defaultVal: 0 },
+        { inputLabel: "Days before", type: number, payloadType: "days_before", defaultVal: 0, min: 0, max: 365 },
         { inputLabel: "Time", type: time, payloadType: "time" },
       ]
     },
@@ -43,7 +43,7 @@ export const dataInput = {
       type: "after_reservation",
       label: "Send the message a number of days after the guest's reservation, at a specific time. \"0 days after\" will send the message on the day of check-out.",
       inputFiled: [
-        { inputLabel: "Days after", type: number, payloadType: "days_after", defaultVal: 0 },
+        { inputLabel: "Days after", type: number, payloadType: "days_after", defaultVal: 0, min: 0, max: 365 },
         { inputLabel: "Time", type: time, payloadType: "time" },
       ]
     },
@@ -52,7 +52,7 @@ export const dataInput = {
       type: "before_stay_ends",
       label: "Send the message a number of days before the guest's stay ends, at a specific time. \"0 days before\" will send the message on the day of check-out.",
       inputFiled: [
-        { inputLabel: "Days before", type: number, payloadType: "days_before", defaultVal: 0 },
+        { inputLabel: "Days before", type: number, payloadType: "days_before", defaultVal: 0, min: 0, max: 365 },
         { inputLabel: "Time", type: time, payloadType: "time" },
       ]
     },
@@ -61,8 +61,8 @@ export const dataInput = {
       type: "guest_booked",
       label: "Send the message a number of hours and minutes after the guest books.",
       inputFiled: [
-        { inputLabel: "Hours after booking", type: number, payloadType: "hours_after", defaultVal: 0 },
-        { inputLabel: "Minutes after booking", type: number, payloadType: "minutes_after", defaultVal: 0 },
+        { inputLabel: "Hours after booking", type: number, payloadType: "hours_after", defaultVal: 0, min: 0, max: (365*24) },
+        { inputLabel: "Minutes after booking", type: number, payloadType: "minutes_after", defaultVal: 0, min: 0, max: 59 },
       ]
     },
     {
@@ -70,8 +70,8 @@ export const dataInput = {
       type: "guest_canceled",
       label: "Send the message a number of hours and minutes after the guest cancels.",
       inputFiled: [
-        { inputLabel: "Hours after guest cancels", type: number, payloadType: "hours_after", defaultVal: 0 },
-        { inputLabel: "Minutes after guest cancels", type: number, payloadType: "minutes_after", defaultVal: 0 },
+        { inputLabel: "Hours after guest cancels", type: number, payloadType: "hours_after", defaultVal: 0, min: 0, max: (365*24) },
+        { inputLabel: "Minutes after guest cancels", type: number, payloadType: "minutes_after", defaultVal: 0, min: 0, max: 59 },
       ]
     },
     {
@@ -97,14 +97,7 @@ export const dataInput = {
       type: "monthly",
       label: "This trigger will fire once a month on the selected day, at the specified time of day.",
       inputFiled: [
-        {
-          inputLabel: "Day of month",
-          type: number,
-          min: 1,
-          max: 31,
-          onlyUsed: "month1to31",
-          payloadType: "day_of_month",
-        },
+        { inputLabel: "Day of month", type: number, onlyUsed: "month1to31", payloadType: "day_of_month", min: 1, max: 31 },
         { inputLabel: "Time", type: time, payloadType: "time" },
       ],
     },
@@ -132,14 +125,7 @@ export const dataInput = {
             { selectLabel: "December", type: "seleter", value: "december" }
           ],
         },
-        {
-          inputLabel: "Day of month",
-          type: number,
-          min: 1,
-          max: 31,
-          onlyUsed: "month1to31",
-          payloadType: "day_of_month",
-        },
+        { inputLabel: "Day of month", type: number, onlyUsed: "month1to31", payloadType: "day_of_month", min: 1, max: 31 },
         { inputLabel: "Time", type: time, payloadType: "time" },
       ],
     },
@@ -354,7 +340,7 @@ export const minutDataInput = {
       type: "disturbance_first_notice",
       label: "Send the message upon the first notice of a disturbance detected by Minut.",
       inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0, min: 0 }
       ]
     },
     {
@@ -362,7 +348,7 @@ export const minutDataInput = {
       type: "disturbance_second_notice",
       label: "Send the message upon the second notice of a disturbance detected by Minut.",
       inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0, min: 0 }
       ]
     },
     {
@@ -370,7 +356,7 @@ export const minutDataInput = {
       type: "disturbance_third_notice",
       label: "Send the message upon the third notice of a disturbance detected by Minut.",
       inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0, min: 0 }
       ]
     },
     {
@@ -378,7 +364,7 @@ export const minutDataInput = {
       type: "disturbance_ended",
       label: "Send the message upon the end of a disturbance detected by Minut.",
       inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0, min: 0 }
       ]
     },
     {
@@ -386,7 +372,7 @@ export const minutDataInput = {
       type: "disturbance_dismissed",
       label: "Send the message when a minut-detected disturbance is dismissed.",
       inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0, min: 0 }
       ]
     },
     {
@@ -394,7 +380,7 @@ export const minutDataInput = {
       type: "disturbance_snoozed",
       label: "Send the message when a minut-detected disturbance is snoozed.",
       inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0, min: 0 }
       ]
     },
     {
@@ -402,43 +388,9 @@ export const minutDataInput = {
       type: "smoking_detection_smoking_detected",
       label: "Send the message when Minut detects smoking in the property.",
       inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
+        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0, min: 0 }
       ]
-    },
-    /* Decided not to use below events
-    {
-      guesttype: "Alarm heard",
-      type: "alarm_heard",
-      label: "Send the message upon Minut event: Alarm heard",
-      inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
-      ]
-    },
-    {
-      guesttype: "Average sound level high",
-      type: "avg_sound_high",
-      label: "Send the message upon Minut event: Average sound level high",
-      inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
-      ]
-    },
-    {
-      guesttype: "Glassbreak",
-      type: "glassbreak",
-      label: "Send the message upon Minut event: Glassbreak",
-      inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
-      ]
-    },
-    {
-      guesttype: "Sound level dropped to normal",
-      type: "sound_level_dropped_normal",
-      label: "Send the message upon Minut event: Sound level dropped to normal",
-      inputFiled: [
-        { inputLabel: "Minutes after event", type: number, payloadType: "minutes_after", defaultVal: 0 }
-      ]
-    },
-    */
+    }
   ],
   minutConditions: [
     {
