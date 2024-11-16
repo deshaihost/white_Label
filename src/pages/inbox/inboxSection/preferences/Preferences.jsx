@@ -350,10 +350,19 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="row mt-5">
           <div className="col-lg-11">
+            <label className="fs-5">Conversation Closing</label>
+            <p className="settings-label mb-2">Can HostBuddy choose not to respond if it determines that a conversation is at its natural end?</p>
+            <Form.Check type="radio" aria-label="radio1" name="group2" label="Yes, HostBuddy can let conversations close when appropriate" value="can_close" checked={!currentSettingsData?.convo_closing || currentSettingsData.convo_closing === 'can_close'} onChange={(e) => setSetting('convo_closing', e.target.value)}/>
+            <Form.Check type="radio" aria-label="radio2" name="group2" label="No, HostBuddy should always be the last to respond" value="always_respond" checked={currentSettingsData?.convo_closing === 'always_respond'} onChange={(e) => setSetting('convo_closing', e.target.value)}/>
+          </div>
+        </div>
+
+        <div className="row mt-5">
+          <div className="col-lg-11">
             <label className="fs-5">AI Transparency</label>
             <p className="settings-label mb-2">Can HostBuddy communicate that it is an AI assistant?</p>
-            <Form.Check type="radio" aria-label="radio1" name="group2" label="Only if directly asked" value="only if asked" checked={currentSettingsData.reveal_ai === 'only if asked'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
-            <Form.Check type="radio" aria-label="radio2" name="group2" label="Never" value="never" checked={currentSettingsData.reveal_ai === 'never'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
+            <Form.Check type="radio" aria-label="radio1" name="group3" label="Only if directly asked" value="only if asked" checked={currentSettingsData.reveal_ai === 'only if asked'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
+            <Form.Check type="radio" aria-label="radio2" name="group3" label="Never" value="never" checked={currentSettingsData.reveal_ai === 'never'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
           </div>
         </div>
 
