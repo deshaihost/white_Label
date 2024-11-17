@@ -16,14 +16,10 @@ const SideBar = () => {
       const baseUrl = process.env.REACT_APP_API_ENDPOINT;
       const logoutUrl = `${baseUrl}/logout`;
       // Define the refresh token
-      const getSessionStorageData = JSON.parse(
-        sessionStorage.getItem("hostBuddy_auth")
-      );
+      const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
       const refreshToken = getSessionStorageData?.refreshToken;
       // Define the request headers
-      const headers = {
-        Authorization: `Bearer ${refreshToken}`,
-      };
+      const headers = {Authorization: `Bearer ${refreshToken}`};
 
       /*
       const response = await axios.post(logoutUrl, {}, { headers });
