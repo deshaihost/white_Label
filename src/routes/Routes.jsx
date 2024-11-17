@@ -257,22 +257,6 @@ const Routing = () => {
 
         
         <Route
-          path="/get-conversations-test"
-          element={
-            <ProtectedRoute>
-              <GetConversationsTest />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/dashboard"
           element={
             <ProtectedRoute>

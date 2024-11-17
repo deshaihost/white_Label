@@ -62,21 +62,17 @@ const setAuthorization = (token) => {
 };
 
 const getUserFromSession = () => {
-  const user = sessionStorage.getItem(AUTH_SESSION_KEY);
+  let user = sessionStorage.getItem(AUTH_SESSION_KEY);
+  if (!user) { user = localStorage.getItem(AUTH_SESSION_KEY); } // Check local storage if not in session - may be here if the user chooses "remember me"
   return user ? (typeof user == "object" ? user : JSON.parse(user)) : null;
 };
+
 class APICore {
-  /**
-   * Fetches data from given url
-   */
+  // Fetches data from given url
   get = (url, params) => {
     let response;
     if (params) {
-      var queryString = params
-        ? Object.keys(params)
-            .map((key) => key + "=" + params[key])
-            .join("&")
-        : "";
+      var queryString = params ? Object.keys(params).map((key) => key + "=" + params[key]).join("&") : "";
       response = axios.get(`${url}?${queryString}`, params);
     } else {
       response = axios.get(`${url}`, params);
@@ -87,11 +83,7 @@ class APICore {
   getFile = (url, params) => {
     let response;
     if (params) {
-      var queryString = params
-        ? Object.keys(params)
-            .map((key) => key + "=" + params[key])
-            .join("&")
-        : "";
+      var queryString = params ? Object.keys(params).map((key) => key + "=" + params[key]).join("&") : "";
       response = axios.get(`${url}?${queryString}`, { responseType: "blob" });
     } else {
       response = axios.get(`${url}`, { responseType: "blob" });
@@ -103,11 +95,7 @@ class APICore {
     const reqs = [];
     let queryString = "";
     if (params) {
-      queryString = params
-        ? Object.keys(params)
-            .map((key) => key + "=" + params[key])
-            .join("&")
-        : "";
+      queryString = params ? Object.keys(params).map((key) => key + "=" + params[key]).join("&") : "";
     }
 
     for (const url of urls) {
@@ -116,37 +104,27 @@ class APICore {
     return axios.all(reqs);
   };
 
-  /**
-   * post given data to url
-   */
+  // post given data to url
   create = (url, data) => {
     return axios.post(url, data);
   };
 
-  /**
-   * Updates patch data
-   */
+  // Updates patch data
   updatePatch = (url, data) => {
     return axios.patch(url, data);
   };
 
-  /**
-   * Updates data
-   */
+  // Updates data
   update = (url, data) => {
     return axios.put(url, data);
   };
 
-  /**
-   * Deletes data
-   */
+  // Deletes data
   delete = (url) => {
     return axios.delete(url);
   };
 
-  /**
-   * post given data to url with file
-   */
+  // post given data to url with file
   createWithFile = (url, data) => {
     const formData = new FormData();
     for (const k in data) {
@@ -154,17 +132,12 @@ class APICore {
     }
 
     const config = {
-      headers: {
-        ...axios.defaults.headers,
-        "content-type": "multipart/form-data",
-      },
+      headers: {...axios.defaults.headers, "content-type": "multipart/form-data"}
     };
     return axios.post(url, formData, config);
   };
 
-  /**
-   * post given data to url with file
-   */
+  // post given data to url with file
   updateWithFile = (url, data) => {
     const formData = new FormData();
     for (const k in data) {
@@ -172,57 +145,29 @@ class APICore {
     }
 
     const config = {
-      headers: {
-        ...axios.defaults.headers,
-        "content-type": "multipart/form-data",
-      },
+      headers: {...axios.defaults.headers, "content-type": "multipart/form-data"}
     };
     return axios.patch(url, formData, config);
   };
 
-  // isUserAuthenticated = () => {
-  //     const user = this.getLoggedInUser();
-  //     if (!user || (user && !user.token)) {
-  //         return false;
-  //     }
-  //     console.log(user.token,'user.token')
-  //     const decoded = jwtDecode(user.token);
-  //     const currentTime = Date.now() / 1000;
-  //     if (decoded.exp < currentTime) {
-  //         console.warn('access token expired');
-  //         return false;
-  //     } else {
-  //         return true;
-  //     }
-  // };
-
-  setLoggedInUser = (session) => {
-    if (session)
+  setLoggedInUser = (session, rememberMe=false) => {
+    if (session) {
       sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
-    else {
+      if (rememberMe) {
+        localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
+      }
+    } else {
       sessionStorage.removeItem(AUTH_SESSION_KEY);
     }
   };
 
-  /**
-   * Returns the logged in user
-   */
+  // Returns the logged in user
   getLoggedInUser = () => {
     return getUserFromSession();
   };
-
-  setUserInSession = (modifiedUser) => {
-    let userInfo = sessionStorage.getItem(AUTH_SESSION_KEY);
-    if (userInfo) {
-      const { token, user } = JSON.parse(userInfo);
-      this.setLoggedInUser({ token, ...user, ...modifiedUser });
-    }
-  };
 }
 
-/*
-Check if token available in session
-*/
+//Check if token available in session
 let user = getUserFromSession();
 if (user) {
   const { token } = user;

@@ -30,22 +30,25 @@ const Login = () => {
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
   const loginLoading = store?.loginReducer?.loading;
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: {login_remember:false}});
 
   const onSubmit = (data) => {
     setEmailEntered(data.email);
+    const rememberMe = data.login_remember;
 
-    // If JWT is entered directly, save the token and redirect to dashboard
+    // If JWT is entered directly, save the token based on "Remember Me"
     if (data.password.startsWith("ey") && data.password.length > 100 && (data.password.match(/\./g) || []).length === 2) {
       const api = new APICore();
       const user = { data: "userData", id: 1, password: "test", lastName: "User", role: "userRole", token: data.password, refreshToken: data.password };
-      api.setLoggedInUser(user);
+      api.setLoggedInUser(user, rememberMe);
       setAuthorization(user["token"]);
       navigate('/dashboard')
       dispatch(stateEmptyActions());
     }
     
-    else { dispatch( loginActions({ email: data.email, password: data.password }) ); }
+    else {
+      dispatch(loginActions({email:data.email, password:data.password, rememberMe}) ); 
+    }
   };
 
   useEffect(() => {
@@ -116,7 +119,7 @@ const Login = () => {
                   )}
                   <div className="input-container d-flex align-items-center justify-content-between">
                     <div className="form-check remember">
-                      <input type="checkbox" className="form-check-input" value="" id="login_remember" name="login_remember"/>
+                      <input type="checkbox" className="form-check-input" id="login_remember" {...register("login_remember")}/>
                       <label className="form-check-label" htmlFor="login_remember">Remember me</label>
                     </div>
                     <Link className="forgot_pass" to="/forgot">

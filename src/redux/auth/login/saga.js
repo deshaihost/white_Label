@@ -6,13 +6,15 @@ import { APICore, setAuthorization } from "../../../helper/apiCore";
 
 const api = new APICore();
 
-function* loginFunction(data) {
+function* loginFunction(action) {
+  const { rememberMe, ...loginData } = action?.data || {};
+
   try {
     yield put({
       type: LoginActionTypes.LOGIN_LOADING,
       payload: {},
     });
-    const response = yield call(loginEndPoint, data);
+    const response = yield call(loginEndPoint, loginData);
     if (response.status === 200) {
       let access_token = response?.data?.access_token;
       let refresh_token = response?.data?.refresh_token;
@@ -22,10 +24,10 @@ function* loginFunction(data) {
         password: "test",
         lastName: "User",
         role: "userRole",
-        token: access_token,
+        token: access_token, // I believe this is the only prop that's actually used. The rest is just dummy. TODO: delete once confirmed
         refreshToken: refresh_token,
       };
-      api.setLoggedInUser(user);
+      api.setLoggedInUser(user, rememberMe);
       setAuthorization(user["token"]);
       yield put({
         type: LoginActionTypes.LOGIN_SUCCESS,
