@@ -18,6 +18,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [phaseFilterVal, setPhaseFilterVal] = useState("");
   const [fromHostBuddyFilterVal, setFromHostBuddyFilterVal] = useState(false);
   const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
+  const [currentView, setCurrentView] = useState('conversations'); // New state for mobile view
 
   // Get the conversations we already have in the format needed to send to the API: { conversationId1: { last_message_time:<last_message_time_utc> }, ... }
   const getConversationsAlreadyHave = () => {
@@ -132,9 +133,9 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         fetchConversations(num_convos_to_fetch, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal);
       }, isNewAccount ? 10000 : 20000); // 10s for new accounts, 20s for elite users
 
-      const timeoutId = setTimeout(() => { // Stop auto-updating after the page has been open for 4 hours (14,400,000 milliseconds = 4 hours)
+      const timeoutId = setTimeout(() => { // Stop auto-updating after the page has been open for 2 hours (7,200,000 milliseconds = 4 hours)
         clearInterval(intervalId);
-      }, 14400000);
+      }, 7200000);
 
       return () => { // Cleanup the interval and timeout on component unmount
         clearInterval(intervalId);
@@ -147,14 +148,28 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     <div className="inbox-content-container">
       {conversationsNotYetFetched ? <InboxLoader /> : null}
       <div className="row text-white">
-        <div className="col-lg-3 left-bar">
-          <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} />
+        {/* Desktop View */}
+        <div className="d-none d-lg-block col-lg-3 left-bar">
+          <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} setCurrentView={setCurrentView} currentView={currentView}/>
         </div>
-        <div className="col-lg-6">
+        <div className="d-none d-lg-block col-lg-6">
           <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays}/>
         </div>
-        <div className="col-lg-3">
+        <div className="d-none d-lg-block col-lg-3">
           <RightSection rightSectionData={selectedConversation} updateConversationFromApi={updateConversation} />
+        </div>
+
+        {/* Mobile View */}
+        <div className="d-block d-lg-none col-12">
+          {currentView === 'conversations' && (
+            <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} setCurrentView={setCurrentView} currentView={currentView}/>
+          )}
+          {currentView === 'messages' && (
+            <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays} setCurrentView={setCurrentView} />
+          )}
+          {currentView === 'details' && (
+            <RightSection rightSectionData={selectedConversation} updateConversationFromApi={updateConversation} setCurrentView={setCurrentView} />
+          )}
         </div>
       </div>
     </div>

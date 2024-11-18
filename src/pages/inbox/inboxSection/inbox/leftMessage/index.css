@@ -41,10 +41,19 @@ width: 1px;
     margin-top: 5px;
     font-weight: 500;
 }
-.left-bar-chat{
-    height: calc(100vh - 305px);
+
+/* ...existing code... */
+
+.left-bar-chat {
+    height: calc(100vh - 200px); /* Base height when filters are hidden */
     overflow-y: scroll;
 }
+
+.left-bar-chat.filters-visible {
+    height: calc(100vh - 305px); /* Original height when filters are visible */
+}
+
+/* ...existing code... */
 
 .left-bar .row {
     width: 100%;
@@ -219,3 +228,27 @@ width: 1px;
         margin-bottom: 15px;
     }
  }
+
+.message-filter .messsage-search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.messsage-search button {
+  background: transparent;
+  border: 1px solid #146ef5;
+  padding: 5px 10px;
+  font-size: 14px;
+  color: #fff;
+  border-radius: 47px;
+  cursor: pointer;
+}
+
+.messsage-search button.bg-light {
+  background: #fff;
+}
+
+.messsage-search button.text-dark {
+  color: #000;
+}

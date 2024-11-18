@@ -7,7 +7,7 @@ import { BoxLoader } from "../../../../../helper/Loader";
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 
-const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, userHasPMS, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal }) => {
+const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, userHasPMS, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal, setCurrentView, currentView }) => {
 
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -20,6 +20,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
   const [guestNameInputVal, setGuestNameInputVal] = useState(""); // currently typed text in the guest name search input
   
   const [filterQueryLoading, setFilterQueryLoading] = useState(false);
+  const [filtersVisible, setFiltersVisible] = useState(false);
 
   // Load the next batch of conversations. fetchConversations handles excluding conversations we already have, calling the API, and updating the state
   const loadNextBatch = async () => {
@@ -66,14 +67,24 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
     setSelectedConvo(data);
     setSelectedConversationId(id); // This is used to highlight the selected conversation
     markConversationAsOpened(data.conversation_id, data.property_name);
+
+    // On mobile, navigate to messages view
+    if (window.innerWidth < 992) {
+      setCurrentView('messages');
+    }
   };
 
-  // As soon as the state populates with conversations, select the first one (if none is selected yet)
+  // Modify the useEffect that auto-selects the first conversation
   useEffect(() => {
-    if (selectedConversationId === "" && allConversations.length > 0) {
+    // Only auto-select if:
+    // 1. No conversation is selected yet (selectedConversationId is empty)
+    // 2. There are conversations to select from
+    // 3. Either we're on desktop OR we're not coming back from a conversation view
+    const isMobile = window.innerWidth < 992;
+    if (selectedConversationId === "" && allConversations.length > 0 && (!isMobile || currentView !== 'conversations')) {
       openConversationHandle(allConversations[0], allConversations[0]?.conversation_id);
     }
-  }, [allConversations]);
+  }, [allConversations, currentView]);
 
   // Add the listener for clicking outside the guest search dropdown (so it can be closed)
   useEffect(() => {
@@ -171,71 +182,79 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
   return (
     <div className="left-bar">
       <div className="message-filter">
-        <div className="messsage-search" style={{display:'flex'}}>
+        <div className="messsage-search">
           <h2>Messages</h2>
+          <button 
+            onClick={() => setFiltersVisible(!filtersVisible)}
+            className={filtersVisible ? "bg-light text-dark" : ""}
+          >
+            Filters
+          </button>
         </div>
-        <div className="filter-btns">
+        {filtersVisible && (
+          <div className="filter-btns">
 
-          {/* Guest Search */}
-          {allGuestNames && allGuestNames.length > 0 && (
-            <div className="search-input-wrapper" ref={dropdownRef}>
-              <div className="search-input" style={{ maxWidth: (searchFocus || guestNameInputVal) ? '400px' : '150px' }}>
-                <input type="search" value={guestNameInputVal} onChange={handleGuestSearchChange} placeholder={searchFocus ? "" : "Guest name..."} onFocus={() => setSearchFocus(true)} onBlur={() => setSearchFocus(false)} style={{width:"100%", maxWidth:"100%"}} />
-                {!guestNameInputVal && <i className="bi bi-search search-icon"></i> }
-              </div>
-              {filteredGuests.length > 0 && (
-                <div className="dropdown">
-                  {filteredGuests.map((guest) => (
-                    <div key={guest?.id_for_react} className="dropdown-item" onClick={() => handleGuestClick(guest)}>
-                      <div className="guest-name">{guest.name}</div>
-                      <div className="guest-property">{guest.property}</div>
-                    </div>
-                  ))}
+            {/* Guest Search */}
+            {allGuestNames && allGuestNames.length > 0 && (
+              <div className="search-input-wrapper" ref={dropdownRef}>
+                <div className="search-input" style={{ maxWidth: (searchFocus || guestNameInputVal) ? '400px' : '150px' }}>
+                  <input type="search" value={guestNameInputVal} onChange={handleGuestSearchChange} placeholder={searchFocus ? "" : "Guest name..."} onFocus={() => setSearchFocus(true)} onBlur={() => setSearchFocus(false)} style={{width:"100%", maxWidth:"100%"}} />
+                  {!guestNameInputVal && <i className="bi bi-search search-icon"></i> }
                 </div>
-              )}
-            </div>
-          )}
+                {filteredGuests.length > 0 && (
+                  <div className="dropdown">
+                    {filteredGuests.map((guest) => (
+                      <div key={guest?.id_for_react} className="dropdown-item" onClick={() => handleGuestClick(guest)}>
+                        <div className="guest-name">{guest.name}</div>
+                        <div className="guest-property">{guest.property}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
-          {/* Properties Select */}
-          <div className="custom-select">
-            <select name="all" id="all" value={propertyFilterVal} className={`${propertyFilterVal ? "select-active" : "bg-dark"}`} onChange={handlePropertyFilterChange}>
-              <option value="">
-                All Properties
-              </option>
-              {allPropertyNamesList?.map((option, index) => (
-                <option key={option} value={option}>
-                  {option}
+            {/* Properties Select */}
+            <div className="custom-select">
+              <select name="all" id="all" value={propertyFilterVal} className={`${propertyFilterVal ? "select-active" : "bg-dark"}`} onChange={handlePropertyFilterChange}>
+                <option value="">
+                  All Properties
                 </option>
-              ))}
-            </select>
+                {allPropertyNamesList?.map((option, index) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Phase Select */}
+            <div className="custom-select">
+              <select name="all" id="all" value={phaseFilterVal} className={`${phaseFilterVal ? "select-active" : "bg-dark"}`} onChange={handlePhaseFilterChange} style={{minWidth:"120px"}}>
+                <option value="">All Phases</option>
+                  <option value='inquiry'>Inquiry</option>
+                  <option value='future'>Future</option>
+                  <option value='current'>Current</option>
+                  <option value='past'>Past</option>
+              </select>
+            </div>
+
+            {/* Urgent Button */}
+            <span onClick={handleUrgentClick} className={`${urgentFilterIsEnabled ? "bg-light text-dark" : "bg-dark"}`} style={{cursor:"pointer"}}>
+              Urgent
+            </span>
+
+            {/* HostBuddy Messages Button */}
+            <span onClick={handleFromHostBuddyClick} className={`${fromHostBuddyFilterVal ? "bg-light text-dark" : "bg-dark"}`} style={{cursor:"pointer"}}>
+              From HostBuddy
+            </span>
+
           </div>
-
-          {/* Phase Select */}
-          <div className="custom-select">
-            <select name="all" id="all" value={phaseFilterVal} className={`${phaseFilterVal ? "select-active" : "bg-dark"}`} onChange={handlePhaseFilterChange} style={{minWidth:"120px"}}>
-              <option value="">All Phases</option>
-                <option value='inquiry'>Inquiry</option>
-                <option value='future'>Future</option>
-                <option value='current'>Current</option>
-                <option value='past'>Past</option>
-            </select>
-          </div>
-
-          {/* Urgent Button */}
-          <span onClick={handleUrgentClick} className={`${urgentFilterIsEnabled ? "bg-light text-dark" : "bg-dark"}`} style={{cursor:"pointer"}}>
-            Urgent
-          </span>
-
-          {/* HostBuddy Messages Button */}
-          <span onClick={handleFromHostBuddyClick} className={`${fromHostBuddyFilterVal ? "bg-light text-dark" : "bg-dark"}`} style={{cursor:"pointer"}}>
-            From HostBuddy
-          </span>
-
-        </div>
+        )}
       </div>
       {filterQueryLoading ? (<BoxLoader />) : (
         allConversations && allConversations.length ? (
-          <div className="left-bar-chat" ref={containerRef}>
+          <div className={`left-bar-chat ${filtersVisible ? 'filters-visible' : ''}`} ref={containerRef}>
             {allConversations?.map((message) => {
               const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url } = message;
               const allDataForConversation = message;

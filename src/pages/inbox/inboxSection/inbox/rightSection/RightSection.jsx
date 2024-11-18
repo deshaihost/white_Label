@@ -8,7 +8,7 @@ import ToastHandle from "../../../../../helper/ToastMessage";
 import Loader from "../../../../../helper/Loader";
 
 
-const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
+const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentView }) => {
   const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, action_items, guest_chatbot_status, property_chatbot_status, conversation_id } = rightSectionData ? rightSectionData : {};
   const until_formatted = guest_chatbot_status?.until_utc == 'indefinitely' ? 'indefinitely' : (guest_chatbot_status?.until_local ? timeFormat(guest_chatbot_status?.until_local) : null);
   let { channel, is_locked } = rightSectionData || {};
@@ -123,6 +123,12 @@ const RightSection = ({ rightSectionData, updateConversationFromApi }) => {
 
   return (
     <div className="right-side">
+      {/* Mobile Back Button */}
+      <div className="d-block d-lg-none mobile-nav">
+        <button onClick={() => setCurrentView('messages')} className="btn btn-link">
+          Back to Messages
+        </button>
+      </div>
 
       <div className="bordr-cl right-title">
         <h2>Reservation</h2>

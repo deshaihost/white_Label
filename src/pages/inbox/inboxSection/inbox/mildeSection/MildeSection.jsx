@@ -14,7 +14,7 @@ import ToastHandle from "../../../../../helper/ToastMessage";
 
 const placeholderImg = 'https://hostbuddylb.com/misc/chatBubbles.webp';
 
-const MildeSection = ({ allConversationData, updateConversationFromApi, updateCovnersationLocal, subscriptionPlan, accountAgeDays }) => {
+const MildeSection = ({ allConversationData, updateConversationFromApi, updateCovnersationLocal, subscriptionPlan, accountAgeDays, setCurrentView }) => {
   const eliteOrWorksPlan = /elite|works/i.test(subscriptionPlan); // Case-insensitive check for 'elite' or 'works' in the plan name
   const eliteFeaturesAvailable = /elite/i.test(subscriptionPlan); // Case-insensitive check for 'elite' in the plan name
   const propertyIsLocked = !!allConversationData?.is_locked;
@@ -287,8 +287,15 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
 
   return (
     <div className="main-chat">
+      <div className="d-block d-lg-none mobile-nav">
+        <button onClick={() => setCurrentView('conversations')} className="btn btn-link">
+          Back
+        </button>
+        <button onClick={() => setCurrentView('details')} className="btn btn-link">
+          Details
+        </button>
+      </div>
       <div className="chatbot">
-
         {allConversationData && Object.keys(allConversationData).length > 0 ? (
           <div className="message-list" ref={messageListRef}>
             {messages?.map((message, index) => {
