@@ -67,7 +67,7 @@ import HostfullyInstructions from "../pages/userGuides/pmsInstructions/hostfully
 import OwnerRezInstructions from "../pages/userGuides/pmsInstructions/ownerrez";
 import BookingSyncInstructions from "../pages/userGuides/pmsInstructions/bookingsync";
 import HostbuddyForGuesty from "../pages/userGuides/hostbuddyForGuesty/HostbuddyForGuesty";
-
+import Integrations from "../pages/integrations/Integrations";
 
 const Routing = () => {
   const location = useLocation();
@@ -117,7 +117,8 @@ const Routing = () => {
       const script1 = document.createElement("script");
       script1.async = true;
       //script1.src = "https://www.googletagmanager.com/gtag/js?id=AW-16607279889";
-      script1.src = "https://www.googletagmanager.com/gtag/js?id=AW-16726426864";
+      script1.src =
+        "https://www.googletagmanager.com/gtag/js?id=AW-16726426864";
       document.head.appendChild(script1);
 
       const script2 = document.createElement("script");
@@ -158,7 +159,8 @@ const Routing = () => {
     // Add the scripts to the head of the document
     const existingScript = document.getElementById("site-profiling");
     const loadedScript = document.getElementById("profiling-loaded-script");
-    if (!window.dataLayer) { // window.dataLayer is a global array that the Google Tag Manager uses to collect and store data. If window.dataLayer is not defined, it means the Google tracking script has not been added to the page yet. This prevents the Google tracking script from being added multiple times if the useEffect hook runs more than once.
+    if (!window.dataLayer) {
+      // window.dataLayer is a global array that the Google Tag Manager uses to collect and store data. If window.dataLayer is not defined, it means the Google tracking script has not been added to the page yet. This prevents the Google tracking script from being added multiple times if the useEffect hook runs more than once.
       addGoogleScript(); // add regardless of what page we're on. We need this in the user portal so we can report conversions during checkout
     }
 
@@ -175,7 +177,8 @@ const Routing = () => {
       "/testing-questions",
     ];
     if (pathnames_to_profile.includes(location.pathname)) {
-      if (!existingScript && false) { // script adding DISABLED
+      if (!existingScript && false) {
+        // script adding DISABLED
         addScript();
       }
     } else {
@@ -213,19 +216,34 @@ const Routing = () => {
         <Route path="/forgot" element={<ForgotPass />}></Route>
         <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
         <Route path="/termsof-service" element={<TermsofService />}></Route>
-        <Route path="/scheduling-walkthrough" element={<SchedulingWalkthrough />}></Route>
+        <Route
+          path="/scheduling-walkthrough"
+          element={<SchedulingWalkthrough />}
+        ></Route>
         <Route path="/tips-and-tricks" element={<TipsAndTricks />}></Route>
         <Route path="/best-practices" element={<BestPractices />}></Route>
         <Route path="/schedule-guide" element={<ScheduleHostBuddy />}></Route>
-        <Route path="/notifications-guide" element={<NotificationsGuide />}></Route>
-        <Route path="/customize-hostbuddy-guide" element={<CustomizeHostBuddyGuide />}></Route>
-        <Route path="/hostbuddy-for-guesty" element={<HostbuddyForGuesty />}></Route>
+        <Route
+          path="/notifications-guide"
+          element={<NotificationsGuide />}
+        ></Route>
+        <Route
+          path="/customize-hostbuddy-guide"
+          element={<CustomizeHostBuddyGuide />}
+        ></Route>
+        <Route
+          path="/hostbuddy-for-guesty"
+          element={<HostbuddyForGuesty />}
+        ></Route>
         <Route path="/hostbuddy-for-tidy" element={<Home />}></Route>
         <Route path="/turno" element={<Home />}></Route>
-        
+
         <Route path="/testing-questions" element={<TestingQuestions />}></Route>
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
-        <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
+        <Route
+          path="/email_confirmation"
+          element={<EmailConfirmationAction />}
+        ></Route>
         <Route path="/reset-password" element={<ResetPass />}></Route>
         <Route path="/setup-guide" element={<SetupGuide />}></Route>
         <Route path="/getstarted" element={<GetStarted />}></Route>
@@ -234,28 +252,76 @@ const Routing = () => {
         <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
 
         <Route path="/pms-instructions" element={<PmsInstructionsMain />} />
-        <Route path="/pms-instructions/guesty" element={<GuestyInstructions />} />
-        <Route path="/pms-instructions/beds24" element={<Beds24Instructions />} />
-        <Route path="/pms-instructions/hostaway" element={<HostawayInstructions />} />
-        <Route path="/pms-instructions/lodgify" element={<LodgifyInstructions />} />
-        <Route path="/pms-instructions/smoobu" element={<SmoobuInstructions />} />
-        <Route path="/pms-instructions/hostify" element={<HostifyInstructions />} />
-        <Route path="/pms-instructions/hospitable" element={<HospitableInstructions />} />
-        <Route path="/pms-instructions/hostfully" element={<HostfullyInstructions />} />
-        <Route path="/pms-instructions/ownerrez" element={<OwnerRezInstructions />} />
-        <Route path="/pms-instructions/bookingsync" element={<BookingSyncInstructions />} />
+        <Route
+          path="/pms-instructions/guesty"
+          element={<GuestyInstructions />}
+        />
+        <Route
+          path="/pms-instructions/beds24"
+          element={<Beds24Instructions />}
+        />
+        <Route
+          path="/pms-instructions/hostaway"
+          element={<HostawayInstructions />}
+        />
+        <Route
+          path="/pms-instructions/lodgify"
+          element={<LodgifyInstructions />}
+        />
+        <Route
+          path="/pms-instructions/smoobu"
+          element={<SmoobuInstructions />}
+        />
+        <Route
+          path="/pms-instructions/hostify"
+          element={<HostifyInstructions />}
+        />
+        <Route
+          path="/pms-instructions/hospitable"
+          element={<HospitableInstructions />}
+        />
+        <Route
+          path="/pms-instructions/hostfully"
+          element={<HostfullyInstructions />}
+        />
+        <Route
+          path="/pms-instructions/ownerrez"
+          element={<OwnerRezInstructions />}
+        />
+        <Route
+          path="/pms-instructions/bookingsync"
+          element={<BookingSyncInstructions />}
+        />
 
         <Route path="/ai-messaging" element={<AiMessaging />} />
         <Route path="/smart-templates" element={<SmartTemplatesLanding />} />
 
         <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />} />
         <Route path="/software-solutions" element={<SoftwareSolutions />} />
-        <Route path="*" element={ <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" /> } />
+        <Route
+          path="*"
+          element={
+            <ThankError
+              imgSrc={ErrorImg}
+              text="We cannot find the page you’re looking for"
+            />
+          }
+        />
         <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />} />
-        <Route path="/software-solutions" element={<SoftwareSolutions />} ></Route>
-        <Route path="*" element={ <ThankError imgSrc={ErrorImg} text="We cannot find the page you’re looking for" /> } />
+        <Route
+          path="/software-solutions"
+          element={<SoftwareSolutions />}
+        ></Route>
+        <Route
+          path="*"
+          element={
+            <ThankError
+              imgSrc={ErrorImg}
+              text="We cannot find the page you’re looking for"
+            />
+          }
+        />
 
-        
         <Route
           path="/dashboard"
           element={
@@ -337,6 +403,7 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/integrations" element={<Integrations />} />
 
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>

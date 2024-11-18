@@ -1,0 +1,121 @@
+.integrations {
+  padding: 50px 0px;
+}
+.intre-heading h1 {
+  font-size: 30px;
+  font-weight: 500;
+  color: #fff;
+}
+.intre-heading img {
+  width: 100%;
+  max-width: 197px;
+}
+.intre-heading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.intre-content {
+  padding: 50px 0px;
+}
+.intre-content h2 {
+  color: #fff;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.intre-content p {
+  font-size: 15px;
+  color: #fff;
+  line-height: 25px;
+}
+.image-boc-inter {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  background: #fff;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 46px;
+  border: 2px solid #146ef5;
+}
+.image-boc-inter img {
+  width: 100%;
+  max-width: 220px;
+  object-fit: scale-down;
+}
+.inter-box .col-lg-4 {
+  padding-bottom: 30px;
+}
+.image-boc-inter:hover {
+  box-shadow: rgb(255 255 255 / 85%) 0px 0 41px 0px;
+  position: relative;
+  transform: translateY(-5px);
+}
+.software-list h2 {
+  font-size: 18px;
+  color: #fff;
+}
+.software-list {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-top: 50px;
+}
+.software-list button {
+  color: #ffffff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border-radius: 160px;
+  border: 1px solid #146ef5;
+  display: inline-block;
+  padding: 13px 40px;
+  background: transparent;
+  transition: 0.4s ease-in-out;
+  background: #146ef5;
+}
+.software-list button:hover {
+  transition: 0.4s ease-in-out;
+  background: transparent;
+  color: #146ef5;
+}
+
+@media (max-width: 767px) {
+  .image-boc-inter img {
+    max-width: 150px;
+  }
+  .image-boc-inter {
+    height: 150px;
+    border-radius: 29px;
+  }
+  .intre-heading img {
+    width: 100%;
+    max-width: 152px;
+  }
+  .intre-content,
+  .integrations {
+    padding: 30px 0px;
+  }
+  .intre-content h2 {
+    font-size: 20px;
+  }
+  .software-list {
+    padding-top: 20px;
+    flex-wrap: wrap;
+  }
+  .intre-heading h1 {
+    font-size: 25px;
+  }
+  .intre-heading {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 767px) {
+  .inter-box .col-lg-4 {
+    padding-bottom: 20px;
+  }
+}
