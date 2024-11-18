@@ -352,6 +352,9 @@ const NavBar = () => {
                   >
                     FAQs
                   </NavLink>
+
+                  {/* Remove About Us and Blog for now, to save space in the navbar. Will re-add shortly after the navbar is redesigned to accommodate more items */}
+                  {/*
                   <NavLink
                     exact
                     to="/about-us"
@@ -370,6 +373,8 @@ const NavBar = () => {
                   >
                     Blog
                   </NavLink>
+                  */}
+
                 </>
               )}
             </Nav>
