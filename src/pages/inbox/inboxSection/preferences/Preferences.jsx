@@ -18,8 +18,10 @@ default_settings = {
     'defer_behavior': 'defer to team',   // 1) 'contact host' - tell the guest to contact the host at their personal number or some other channel; 2) 'defer to team' - “will check with team and get back to you later”; 3) 'defer to host' - “the host will get back to you”; 4) 'embody host' - “I don’t have that information right now / am not able to do that right now, will check and get back to you later”; 5) 'do not respond'
     'reveal_ai': 'only if asked',   // 'only if asked' or 'never'
     'match_host_tone': False,
-    'min_message_delay_minutes': 0, // int, 0-7
-    'max_message_delay_minutes': 0  // int, 0-7
+    'min_message_delay_minutes': 0, // int, 0-8
+    'max_message_delay_minutes': 0,  // int, 0-8
+    'convo_closing': 'can_close',  // 'can_close' or 'always_respond'
+    'tone_instructions': '',  // optional instructions for customizing tone
 }
 */
 
@@ -43,9 +45,13 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
   const setSetting = (key, value) => {
     if (key === 'min_message_delay_minutes' || key === 'max_message_delay_minutes') {
       value = parseInt(value);
-      if (value < 0 || value > 7) {
+      if (value < 0 || value > 8) {
         return
       }
+    } else if (key === 'tone_instructions' && value.length > 1000) {
+      value = value.substring(0, 1000);
+    } else if (key === 'message_signature' && value.length > 500) {
+      value = value.substring(0, 500);
     }
     setCurrentSettingsData({ ...currentSettingsData, [key]: value });
   }
@@ -344,7 +350,8 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.message_signature_enabled} onChange={(e) => setSetting('message_signature_enabled', e.target.checked)}/>
           </div>
           <p className="settings-label">If enabled, HostBuddy will append this to the end of each of its messages.</p>
-          <textarea className="form-control setting-textarea" placeholder="" rows={1} value={currentSettingsData.message_signature} onChange={(e) => setSetting('message_signature', e.target.value)} disabled={!currentSettingsData.message_signature_enabled}/>
+          <textarea className="form-control setting-textarea" placeholder="" rows={1} value={currentSettingsData.message_signature} onChange={(e) => setSetting('message_signature', e.target.value)} disabled={!currentSettingsData.message_signature_enabled} maxLength={500}/>
+          {/* <small className="text-muted">{(currentSettingsData.message_signature?.length || 0)}/500 characters</small> */}
           </div>
         </div>
 
@@ -369,7 +376,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
         <div className="row mt-5">
           <div className="col-lg-11">
             <label className="fs-5">Message Delay</label>
-            <p className="settings-label mb-2">HostBuddy will delay its response to guests by a (random) number of minutes within this range. To have HostBuddy simply respond as quickly as possible, set min and max delay to 0. Max allowed is 7 minutes.</p>
+            <p className="settings-label mb-2">HostBuddy will delay its response to guests by a (random) number of minutes within this range. To have HostBuddy simply respond as quickly as possible, set min and max delay to 0. Max allowed is 8 minutes.</p>
             <div className="row">
               <div className="col-lg-3">
                 <label className="fs-6">Min. Delay</label>
@@ -383,7 +390,19 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
           </div>
         </div>
 
-        <div className="row mt-4">
+        <div className="row mt-5">
+          <div className="col-lg-11">
+            <div className="d-flex align-items-center gap-5 mt-4">
+            <label className="fs-5">Customize Tone</label>
+          </div>
+          <p className="settings-label">You can customize HostBuddy's responses by adding some instructions here to direct HostBuddy's tone. Make sure to test after you make changes here!</p>
+          <p className="settings-label">HostBuddy is already optimized for friendly, hospitable conversation, so this is completely optional.</p>
+          <textarea className="form-control setting-textarea" placeholder="(Optional) Add instructions to direct HostBuddy's tone..." rows={1} value={currentSettingsData.tone_instructions || ''} onChange={(e) => setSetting('tone_instructions', e.target.value)} maxLength={1000}/>
+          {/* <small className="text-muted">{(currentSettingsData.tone_instructions?.length || 0)}/1000 characters</small> */}
+          </div>
+        </div>
+
+        <div className="row mt-5">
           <div className="col-lg-12 text-center">
             <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
               Save Settings
