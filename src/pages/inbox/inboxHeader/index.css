@@ -5,8 +5,13 @@
     padding: 5px 20px;
     font-size: 18px;
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 .inbox-nav-bar {
+    display: flex;
+    align-items: center;
     padding: 5px 15px;
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
@@ -15,4 +20,29 @@
 }
 .inbox-nav-bar a {
     font-size: 16px;
+}
+
+.nav-icon {
+    font-size: 20px;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .inbox-nav-bar {
+        padding: 0;
+    }
+
+    .inbox-nav-bar button {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 0;
+    }
+
+    .nav-icon {
+        display: block;
+    }
+    
+    .nav-label {
+        display: none;
+    }
 }

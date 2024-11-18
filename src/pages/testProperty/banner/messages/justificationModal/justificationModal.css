@@ -1,0 +1,33 @@
+.justification-content {
+  display: flex;
+  align-items: center;
+}
+
+.justification-logo {
+  margin-right: 30px;
+  height: 50px;
+}
+
+.justification-text {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .justification-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .justification-logo {
+    margin-right: 0;
+    margin-bottom: 10px; /* Reduce the margin-bottom */
+  }
+
+  .justification-text {
+    text-align: center;
+    font-size: 16px;
+  }
+}

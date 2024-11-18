@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-
+import "./justificationModal.css"; // Import the CSS file
 
 const JustificationModal = ({ show, handleClose, propertyName, justification }) => {
   const logo = "https://hostbuddylb.com/logo/logoNoText.png";
@@ -16,9 +16,9 @@ const JustificationModal = ({ show, handleClose, propertyName, justification }) 
       <Modal.Body>
         <div className="justification-modal">
           <div className="justification-block">
-            <div className="justification-block" style={{ display:'flex', alignItems:'center' }}>
-              <img src={logo} alt="Logo" style={{ marginRight:'30px', height:'50px' }} />
-              <p className="text-white" style={{ marginTop:'30px', marginBottom:'30px', fontSize:'18px', textAlign:'left' }}>{justification}</p>
+            <div className="justification-content" style={{ display:'flex', alignItems:'center' }}>
+              <img src={logo} alt="Logo" className="justification-logo" />
+              <p className="text-white justification-text">{justification}</p>
             </div>
           </div>
           <hr/>
