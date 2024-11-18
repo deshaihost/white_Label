@@ -74,7 +74,7 @@ const SmartTemplatesLanding = () => {
               <img src={NightHouse} alt="A luxury penthouse" />
             </div>
             <div className="col-lg-7">
-              <p>HostBuddy provides the most advanced templated messaging support in short-term rentals. Target any subset of your guests by choosing from a multitude of timing options and conditions. Use AI to bring context awareness and a human-like touch to your messages.</p>
+              <p>HostBuddy provides the most advanced templated messaging support in short-term rentals. Target any subset of your guests by choosing from a multitude of timing options and conditions. Use AI to bring context awareness and add a human-like touch to each message.</p>
               <p>Smart Templates makes it easy for you to set up automations that earn you value. Automate strategic upsells that make money, timely check-ins that make your guests feel special, policy reminders, and so much more.</p>
             </div>
           </div>
@@ -124,7 +124,7 @@ const SmartTemplatesLanding = () => {
             <div className="started" style={{padding: '0'}}>
               <div className="started-content" style={{margin: '20px auto'}}>
               <h3>Get Started</h3>
-                <p>Automate your guest messaging, satisfy your guests, and make more money.</p>
+                <p>Automate your messaging, satisfy your guests, and make more money.</p>
                 <div style={{ marginBottom: '10px' }}>
                   <a style={{ cursor:"pointer" }}className='explore-link' target="_blank" rel="noopener noreferrer" onClick={(e) => {
                       e.preventDefault(); // Don't go to the link - just open the modal

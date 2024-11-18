@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { callGetConversationsApi, callGetSingleConversationApi } from "../../../../helper/getConversationsTest/inboxApi";
 import { howManyMinutesAgo } from '../../../../helper/commonFun';
-import { FullScreenLoader } from "../../../../helper/Loader";
+import { FullScreenLoader, InboxLoader } from "../../../../helper/Loader";
 import LeftMessage from "./leftMessage/LeftMessage";
 import MildeSection from "./mildeSection/MildeSection";
 import RightSection from "./rightSection/RightSection";
@@ -144,8 +144,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   }, [conversations, eliteFeaturesAvailable, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal, accountAgeDays]);
 
   return (
-    <>
-      {conversationsNotYetFetched ? <FullScreenLoader /> : null}
+    <div className="inbox-content-container">
+      {conversationsNotYetFetched ? <InboxLoader /> : null}
       <div className="row text-white">
         <div className="col-lg-3 left-bar">
           <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} />
@@ -157,7 +157,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
           <RightSection rightSectionData={selectedConversation} updateConversationFromApi={updateConversation} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import "../auth.css";
 import PrimaryButton from "../../component/button/button";
@@ -10,7 +10,6 @@ import { useForm } from "react-hook-form";
 import { loginActions, stateEmptyActions } from "../../redux/actions";
 import Loader from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
-import { useNavigate } from "react-router-dom";
 import Authorized from "../../helper/Authorized";
 import ErrorMessageShow from "../../helper/ErrorMessageShow";
 import { APICore, setAuthorization } from "../../helper/apiCore";
@@ -23,6 +22,7 @@ const Login = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];
   const [showPassword, setShowPassword] = useState(false);
@@ -56,7 +56,8 @@ const Login = () => {
       ToastHandle('Invalid credentials', "danger");
       dispatch(stateEmptyActions());
     } else if (loginStatus === 200) {
-      navigate('/dashboard')
+      const from = location.state?.from?.pathname || '/dashboard';
+      navigate(from, { replace: true });
       dispatch(stateEmptyActions());
     } else if (loginStatus === 202) { // credentials good, but user hasn't confirmed email yet. Backend will not provide tokens until email is confirmed
       localStorage.setItem('loginEmailEntered', emailEntered); // this nees to be accessible on the confirm-email page
@@ -67,9 +68,8 @@ const Login = () => {
 
   useEffect(() => {
     if (token !== undefined) {
-      navigate('/dashboard')
-    } else {
-      navigate('/login')
+      const from = location.state?.from?.pathname || '/dashboard';
+      navigate(from, { replace: true });
     }
   }, [token])
 
@@ -127,7 +127,7 @@ const Login = () => {
                     </Link>
                   </div>
                   <div className="input-container">
-                    <PrimaryButton text={!loginLoading ? "Login" : <Loader />} additionalClass="w-100"/>
+                    <PrimaryButton text={!loginLoading ? "Log In" : <Loader />} additionalClass="w-100"/>
                   </div>
                 </form>
               </div>

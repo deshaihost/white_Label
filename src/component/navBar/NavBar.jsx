@@ -16,7 +16,7 @@ const NavBar = () => {
   const { token } = getAuthToken ? getAuthToken : {};
 
   // List of paths that should show portal navigation
-  const protectedPaths = ['/dashboard', '/statistics', '/properties', '/property-insight', '/subscription', '/setting', '/add-property', '/edit-property', '/inbox', '/action-item', '/getstarted'];
+  const protectedPaths = ['/dashboard', '/statistics', '/properties', '/test-property', '/workbench', '/property-insight', '/subscription', '/setting', '/add-property', '/edit-property', '/inbox', '/action-item', '/getstarted'];
 
   // Check if current path should show portal navigation
   const isProtectedPath = protectedPaths.some(path => 
@@ -214,11 +214,9 @@ const NavBar = () => {
                   <NavLink exact to="/faqs" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     FAQs
                   </NavLink>
-                  
                   <NavLink exact to="/about-us" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     About Us
                   </NavLink>
-                
                   <NavLink exact to="/blog" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Blog
                   </NavLink>
@@ -226,7 +224,7 @@ const NavBar = () => {
               )}
             </Nav>
           </Navbar.Collapse>
-          {!isProtectedPath && !isConditionalPath && (
+          {(!isProtectedPath || (isConditionalPath && !token)) && (
             <div className="nav-buttons">
               <Link className="nav-btn nav-btn-primary link-btn outline-btn" to="/signup" style={{ marginRight: 10 }}>
                 Sign Up
