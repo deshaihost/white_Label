@@ -16,6 +16,7 @@ import ContactUs from "../meetHostBuddy/discover/contactUs/ContactUs";
 import { Link } from "react-router-dom";
 const Integrations = () => {
   const [contactModalShow, setContactModelShow] = useState(false);
+
   return (
     <div className="integrations">
       <div className="container">
@@ -34,67 +35,104 @@ const Integrations = () => {
         </div>
         <div className="inter-box row">
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href="https://www.guesty.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Guesty} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href="https://www.lodgify.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Lodgify} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href="https://www.hostfully.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Hostfully} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href="https://www.ownerrez.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Ownerrez} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
+
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href="https://www.hostaway.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Hostaway} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href=" https://hospitable.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Hospitable} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href="https://www.smoobu.com/new/en/?sc=GBWEN&ppc_campaign_id=12427800621&ppc_adgroup_id=120843288920&ppc_ad_id=656247802224&ppc_placement&ppc_keyword=smoobu&ppc_extension_id&ppc_target&ppc_target_id=kwd-367069806370&ppc_location=9210541&ppc_device=c&ppc_device_model&ppc_network=g&ppc_matchtype=e&ppc_position&gad_source=1&gclid=Cj0KCQiA6Ou5BhCrARIsAPoTxrDY653fql0I7cQHJo9SDN8EvJdtcww3Q27uRIos38QWmj2cefXO3KMaAmSTEALw_wcB"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Smoobu} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href="https://beds24.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Beds} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href="https://www.bookingsync.com/en/app-center/31"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Booking} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
         </div>
         <div className="intre-content">
@@ -106,18 +144,26 @@ const Integrations = () => {
         </div>
         <div className="inter-box row">
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href="https://www.minut.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Minut} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <Link to="/">
+            <a
+              href="https://turno.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="image-boc-inter">
                 <img src={Turno} alt="" />
               </div>
-            </Link>
+            </a>
           </div>
         </div>
         <div className="software-list">
