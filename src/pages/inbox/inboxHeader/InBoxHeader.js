@@ -14,14 +14,16 @@ const InBoxHeader = ({ showInterFace, interFaceComponent, showTimeZoneNotif }) =
 
   return (
     <div className="inbox-nav-bar">
-      {navItems.map((item, index) => (
-        <button className={`${interFaceComponent === index ? 'nav-active': ""}`} onClick={() => showInterFace(index)} key={item.label}>
-          <span className="nav-icon">{item.icon}</span>
-          <span className="nav-label">{item.label}</span>
-        </button>
-      ))}
+      <div className="nav-buttons-container">
+        {navItems.map((item, index) => (
+          <button className={`${interFaceComponent === index ? 'nav-active': ""}`} onClick={() => showInterFace(index)} key={item.label}>
+            <span className="nav-icon">{item.icon}</span>
+            <span className="nav-label">{item.label}</span>
+          </button>
+        ))}
+      </div>
       {showTimeZoneNotif && (
-        <p style={{fontSize:'16px', color:'rgb(255, 165, 0)', marginLeft:'20px'}}>Set your <Link to="/setting">time zone</Link> to enable all features and ensure accurate data.</p>
+        <p className="timezone-notification">Set your <Link to="/setting">time zone</Link> to enable all features and ensure accurate data.</p>
       )}
     </div>
   );

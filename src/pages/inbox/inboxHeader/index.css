@@ -11,8 +11,8 @@
 }
 .inbox-nav-bar {
     display: flex;
-    align-items: center;
-    padding: 5px 15px;
+    flex-direction: column;
+    padding: 0 15px;
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
 .inbox-nav-bar button.nav-active {
@@ -20,6 +20,18 @@
 }
 .inbox-nav-bar a {
     font-size: 16px;
+}
+
+.nav-buttons-container {
+    display: flex;
+    align-items: center;
+}
+
+.timezone-notification {
+    font-size: 16px;
+    color: rgb(255, 165, 0);
+    padding: 10px 0;
+    margin: 0;
 }
 
 .nav-icon {
@@ -36,6 +48,10 @@
         flex: 1;
         justify-content: center;
         padding: 10px 0;
+    }
+
+    .nav-buttons-container {
+        width: 100%;
     }
 
     .nav-icon {
