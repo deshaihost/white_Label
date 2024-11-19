@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getCalryLinkActions,
@@ -48,6 +48,8 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
     }
   }, [getCarlyLinkStatus]);
 
+  const [earlyAccessRequested, setEarlyAccessRequested] = useState(false);
+
   return (
     <div>
       {!getCalryLinkLoading ? (
@@ -55,29 +57,40 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
           {getCarlyLink !== undefined ? (
             <div className="text-white text-center">
               <p style={{fontSize:'1em', marginBottom:'20px'}}>
-              <span style={{color:'#146ef5'}} className="mainCursor"
-                onClick={() => {
-                  if (getCarlyLink !== undefined) { goToCarlyLinkHndle(); }
-                }}>
+              <span style={{color:'#146ef5'}} className="mainCursor" onClick={() => {if (getCarlyLink !== undefined) { goToCarlyLinkHndle(); }}}>
                 CLICK HERE
               </span> to securely enter your account information and complete the integration.
               </p>
               <p>For specific instructions on how to complete your PMS integration with {pmsNameForUrl}, check out <a href={`/pms-instructions/${type}`} target="_blank">this page</a>.</p>
             </div>
           ) : (
-            <>
-              <span className="text-danger">Failed to create Calry link</span>
-              <div className="row form-design mt-1">
-                <div className="col-12 text-center">
-                  <button
-                    className="btn btn-primary px-5 mt-2"
-                    onClick={()=>handleNoPlanClose('pmsIntegrationClose')}
-                  >
-                    Close
-                  </button>
+            getCarlyLinkStatus === 204 ? (
+              <>
+                <p className="text-white text-center">Support for {pmsNameForUrl} is not yet available, but it's in the works! Click below to request early access, and our team will be in touch with you soon.</p>
+                <div className="row form-design mt-1">
+                  <div className="col-12 text-center">
+                    {earlyAccessRequested ? (
+                      <p className="text-white">Early access requested!</p>
+                    ) : (
+                      <button className="btn btn-primary px-5 mt-2" onClick={() => setEarlyAccessRequested(true)}>
+                        Request Early Access
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </>
+              </>
+            ) : (
+              <>
+                <span className="text-danger">Failed to create Calry link</span>
+                <div className="row form-design mt-1">
+                  <div className="col-12 text-center">
+                    <button className="btn btn-primary px-5 mt-2" onClick={()=>handleNoPlanClose('pmsIntegrationClose')}>
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </>
+            )
           )}
         </>
       ) : (

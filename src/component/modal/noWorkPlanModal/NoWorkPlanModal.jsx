@@ -33,26 +33,7 @@ function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
         <h3 className="text-white text-center mb-4 fw-bold fs-4">Connect Your PMS</h3>
         <hr />
         {!pmsIntegrationLoading ? (
-          <>
-            {true ? (
-              <IntegratePlatformSelect handleNoPlanClose={handleNoPlanClose} />
-            ) : (
-              <div className="upgrade-plan-box">
-                {/* <img src={NoPlanImg} alt="no-plan" /> */}
-                <p style={{ fontSize: '1.1rem', lineHeight: '1.5' }}>
-                  You are not on The Works plan. Please upgrade to this plan to access this feature.{" "}
-                </p>
-                <p style={{ fontSize: '1.1rem', lineHeight: '1.5' }}>
-                  If you have not yet chosen a subscription plan, select "Subscribe" to choose your plan and begin your trial.{" "}
-                </p>
-                {/*
-                <Link to="/" className="bg_theme_btn manage-subscription">
-                  Upgrade Plan
-                </Link>
-                */}
-              </div>
-            )}
-          </>
+          <IntegratePlatformSelect handleNoPlanClose={handleNoPlanClose} />
         ) : (
           <BoxLoader />
         )}

@@ -7,6 +7,10 @@
   padding-left: 67px;
 }
 
+#integrate_form1 .custom_checkbox.additional-option {
+  border-color: #77A; /* greyish blue color */
+}
+
 #integrate_form1 .custom_checkbox .form-check-input { /* this is the checkbox */
   border: 2px solid #146ef5;
   background-color: #000426;
