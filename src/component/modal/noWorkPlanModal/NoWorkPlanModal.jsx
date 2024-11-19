@@ -22,13 +22,7 @@ function NoWorkPlanModal({ handleNoPlanClose, showNoPlan }) {
     if (showNoPlan) dispatch(getPMSIntegrationActions());
   }, [showNoPlan]);
   return (
-    <Modal
-      show={showNoPlan}
-      size="md"
-      onHide={() => handleNoPlanClose("pmsIntegrationClose")}
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
+    <Modal show={showNoPlan} size="md" onHide={() => handleNoPlanClose("pmsIntegrationClose")} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Body>
         <h3 className="text-white text-center mb-4 fw-bold fs-4">Connect Your PMS</h3>
         <hr />

@@ -7,10 +7,17 @@ const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
   const pmsIntegrationData = store?.pmsIntegrationGetReducer?.pmsIntegrationData?.data?.integrations;
   const additionalOptions = [
     { type: "Streamline", data: "streamline" },
+    { type: "LiveRez", data: "liverez" },
+    { type: "Cloudbeds", data: "cloudbeds" },
+    { type: "Uplisting", data: "uplisting" },
     { type: "Track", data: "track" },
+    { type: "Icnea", data: "icnea" },
     { type: "Homhero", data: "homhero" },
-    { type: "Resly", data: "resly" },
     { type: "eviivo", data: "eviivo" },
+    { type: "Resly", data: "resly" },
+    { type: "Hosthub", data: "hosthub" },
+    { type: "Avantio", data: "avantio" },
+    { type: "CiiRus", data: "ciirus" },
   ];
   const integrationsArray = [
     ...Object.keys(pmsIntegrationData || {}),
@@ -70,8 +77,8 @@ const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
             <div className="row form-design">
               <div className="col-12 mt-3">
                 {integrationsArray.map((integration, index) => (
-                  <div className={`form-check custom_checkbox mb-3 ${isAdditionalOption(integration) ? 'additional-option' : ''}`} key={index}>
-                    <input className="form-check-input" type="radio" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={integration} checked={checkBox?.[integration]} onClick={() => {onchangeHandlePms(integration, integration);}}/>
+                  <div className={`form-check custom_checkbox ${isAdditionalOption(integration) ? 'additional-option' : ''}`} key={index} onClick={() => {onchangeHandlePms(integration, integration);}}>
+                    <input className="form-check-input" type="radio" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={integration} checked={checkBox?.[integration]} readOnly />
                     <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>
                       {integration}
                     </label>

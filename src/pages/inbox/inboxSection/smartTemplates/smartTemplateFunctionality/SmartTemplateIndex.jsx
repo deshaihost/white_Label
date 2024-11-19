@@ -207,14 +207,19 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
             ) : (
               smartAllData?.length > 0 && (
                 smartAllData?.map((smartItem, smartIndex) => {
-                  const { name } = smartItem;
+                  const { name, enabled } = smartItem;
                   const templateDescription = describeTemplate(smartItem);
                   return (
                     <div className="row mt-5 clickable-div" style={{ marginLeft: "0", marginRight: "0" }}
                       onClick={() => setAddEditSmart({type:{type:edit, index:smartIndex}, data: "", smartTemplateData:{smartItem}, description:templateDescription})}
                     >
                       <div className="col-lg-11 col-12">
-                        <label className="fs-5">{name !== "" ? name : <p className="text-danger">No Name</p>}</label>
+                        <label className="fs-5 d-flex justify-content-between">
+                          {name !== "" ? name : <p className="text-danger">No Name</p>}
+                          <span className={`template-status ${enabled ? 'enabled' : 'not-enabled'}`}>
+                            {enabled ? 'Enabled' : 'Not enabled'}
+                          </span>
+                        </label>
                         <p className="settings-label truncate-text">{templateDescription}</p>
                       </div>
                     </div>

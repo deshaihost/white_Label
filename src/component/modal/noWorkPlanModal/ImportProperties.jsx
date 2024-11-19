@@ -18,6 +18,12 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
   const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties
   const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
 
+  // Add state for the search term
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Helper function to normalize strings
+  const normalizeString = (str) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
+
   // When this modal is opened, call API to get the list of integration properties
   useEffect(() => {
       if (showNoPlan && !hasCalledAPI) {
@@ -92,27 +98,30 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
           integrationPropertyList && integrationPropertyList.length > 0 ? (
             <>
               <div id="integrate_form1">
+                
+                {/* Search bar */}
+                <input type="text" placeholder="Search properties..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control mb-3"/>
+
                 <div className="row form-design">
                   <div className="col-12 mt-3">
-                    {integrationPropertyList?.map((integrationPropObj, index) => {
-                      const propName = integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name;
-                      return (
-                        <div className="form-check custom_checkbox mb-3" key={index}>
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            name="flexRadioDefault"
-                            id={`flexRadioDefault${index}`}
-                            value={propName}
-                            checked={checkBox?.hasOwnProperty(propName)}
-                            onChange={() => { SelectItem(integrationPropObj); }}
-                          />
-                          <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>
-                            {propName}
-                          </label>
-                        </div>
-                      );
-                    })}
+                    {integrationPropertyList
+                      ?.filter((integrationPropObj) => {
+                        const propName = integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name;
+                        return normalizeString(propName).includes(normalizeString(searchTerm));
+                      })
+                      .map((integrationPropObj, index) => {
+                        const propName = integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name;
+                        return (
+                          <div className="form-check custom_checkbox" key={index} onClick={() => { SelectItem(integrationPropObj); }}>
+                            <input className="form-check-input" type="checkbox" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={propName} checked={checkBox?.hasOwnProperty(propName)} onChange={() => { SelectItem(integrationPropObj); }}
+                              onClick={(e) => e.stopPropagation()} // Prevent the click event from bubbling up to the parent div
+                            />
+                            <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>
+                              {propName}
+                            </label>
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
                 <div className="row form-design mt-1">
