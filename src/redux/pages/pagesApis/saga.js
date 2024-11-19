@@ -181,6 +181,11 @@ function* getCalryLinkFunction(data) {
         type: PagesApisActionTypes.GET_CALRY_LINK_SUCCESS,
         payload: { data: response.data, status: response.status },
       });
+    } else if (response.status === 204) {
+      yield put({
+        type: PagesApisActionTypes.GET_CALRY_LINK_SUCCESS,
+        payload: { data: response.data, status: response.status },
+      });
     } else {
       yield put({
         type: PagesApisActionTypes.GET_CALRY_LINK_ERROR,
