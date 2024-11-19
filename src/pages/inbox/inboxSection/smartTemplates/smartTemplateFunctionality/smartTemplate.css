@@ -79,6 +79,18 @@
     text-overflow: ellipsis;
 }
 
+.template-status {
+    margin-left: auto;
+    font-size: 14px;
+}
+
+.template-status.enabled {
+    color: green;
+}
+
+.template-status.not-enabled {
+    color: red;
+}
 
 @media screen and (min-width:1024px){
     .modal_addition_des_button{
