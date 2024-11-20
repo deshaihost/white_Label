@@ -61,7 +61,8 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
                 CLICK HERE
               </span> to securely enter your account information and complete the integration.
               </p>
-              <p>For specific instructions on how to complete your PMS integration with {pmsNameForUrl}, check out <a href={`/pms-instructions/${type}`} target="_blank">this page</a>.</p>
+              {/* <p>For specific instructions on how to complete your PMS integration with {pmsNameForUrl}, check out <a href={`/pms-instructions/${type}`} target="_blank">this page</a>.</p> */}
+              <p>For specific instructions on how to complete your PMS integration with {type}, check out <a href={`https://userguide.hostbuddy.ai/pms-integration-guides/${pmsNameForUrl}`} target="_blank">this page</a>.</p>
             </div>
           ) : (
             getCarlyLinkStatus === 204 ? (
