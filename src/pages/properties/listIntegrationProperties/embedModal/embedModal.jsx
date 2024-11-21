@@ -25,7 +25,7 @@ const EmbedModal = ({ show, handleClose, chatbotKey }) => {
             <CopyableCode>{`<div id="hostbuddy-embed-target" style="width: 400px; height: 600px;"></div>`}</CopyableCode>
             <p>
               <strong>
-                2: Configuration script. Set your desired parameters to customize the appearance of the chat window, then add this script to the head of your page.
+                2: Configuration script. Set your desired parameters to customize the appearance of the chat window, then add this script in the body of your page, after the above container div.
               </strong>
             </p>
             <CopyableCode>{`<script>
@@ -48,7 +48,7 @@ const EmbedModal = ({ show, handleClose, chatbotKey }) => {
   </script>`}</CopyableCode>
             <p>
               <strong>
-                3: Loader script. Add this script to the head of your page, after the configuration script.
+                3: Loader script. Add this script in the body of your page, after the above configuration script.
               </strong>
             </p>
             <CopyableCode>{`<script src="https://storage.googleapis.com/frontend_media/embedded-chat/loader.js"></script>`}</CopyableCode>
