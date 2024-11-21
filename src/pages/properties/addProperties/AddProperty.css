@@ -73,6 +73,11 @@ ul.amenties-list {
   margin-top: 20px;
 }
 
+
+.amenties-list-item {
+  list-style-type: none;
+}
+
 ul.amenties-list .amenties-list-item .form-checkbox {
   display: inline-flex;
   border-radius: 160px;

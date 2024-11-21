@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import WebPageUrlModel from "./modelListProperties/webPageUrlModel/WebPageUrlModel";
 import SupportingDocumentModel from "./modelListProperties/supportingDocumentModel/SupportingDocumentModel";
 import UnlockPropertiesModal from "../../../component/modal/unlockPropertiesModal/unlockPropertiesModal";
+import EmbedModal from "./embedModal/embedModal";
 import { Button, Dropdown } from "react-bootstrap";
 import { CiCalendar } from "react-icons/ci";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
@@ -59,6 +60,10 @@ const ListIntegrationProperties = () => {
   const [model, setModel] = useState({ webPageUrl:false, supportingDocuments:false, unlockProperty:false });
   const [propertiesToUnlock, setPropertiesToUnlock] = useState([]);
   const [regenerateApiLoading, setRegenerateApiLoading] = useState(false);
+  const [embedModalData, setEmbedModalData] = useState({show:false, chatbotKey:""});
+
+
+
   let webPageUrlOpen = "webPageUrlOpen";
   let supportingDocumentsOpen = "supportingDocumentsOpen";
   let webPageUrlClose = "webPageUrlClose";
@@ -156,6 +161,11 @@ const ListIntegrationProperties = () => {
       navigate("/add-property/");
     }
   };
+
+  const handleEmbedClick = (chatbot_key) => {
+    setEmbedModalData({show:true, chatbotKey:chatbot_key});
+  };
+
 
   // toggle chatBot on/off
 
@@ -276,6 +286,8 @@ const ListIntegrationProperties = () => {
           {createPropertiesName?.map((properties, index) => {
             let PropertStop = PropertiesExtraData?.[properties]?.toggle_status;
             let is_locked = PropertiesExtraData?.[properties]?.hasOwnProperty('is_locked') ?? false;
+            let chatbot_key = PropertiesExtraData?.[properties]?.chatbot_key;
+
             return (
               <div className="row" key={properties}>
                 <div className="col-lg-12">
@@ -351,8 +363,9 @@ const ListIntegrationProperties = () => {
                               </Dropdown.Item>
                               {!is_locked &&
                                 <>
-                                  <Dropdown.Item onClick={() => { selectedHandle(copyChatbotLink, properties); }}>
-                                    Copy Chatbot Link
+                                  {/* <Dropdown.Item onClick={() => { selectedHandle(copyChatbotLink, properties); }}> */}
+                                  <Dropdown.Item onClick={() => { handleEmbedClick(chatbot_key); }}>
+                                    Get Code to Embed
                                   </Dropdown.Item>
                                   <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
                                     Regenerate Chatbot Link
@@ -415,6 +428,7 @@ const ListIntegrationProperties = () => {
         <CalenderModel selectedProperty={selectedProperty} showCalender={showCalender} setShowCalender={setShowCalender} allProperties={allProperties} setScheduleChanged={setScheduleChanged}/>
       )}
       <UnlockPropertiesModal property_names={propertiesToUnlock} subscription_active={subscription_active} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} modalShow={model.unlockProperty} handleClose={handleModelClose} setPropertiesChanged={setScheduleChanged}/>
+      <EmbedModal show={embedModalData.show} handleClose={() => setEmbedModalData({show:false, chatbotKey:""})} chatbotKey={embedModalData.chatbotKey}/>
     </div>
   );
 };

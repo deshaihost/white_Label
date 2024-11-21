@@ -334,23 +334,16 @@ const NavBar = () => {
                   >
                     Integrations
                   </NavLink>
-                  <NavLink
-                    exact
-                    to="/pricing"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  <NavLink exact to="/pricing" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Pricing
                   </NavLink>
-                  <NavLink
-                    exact
-                    to="/faqs"
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={handleNavLinkClick}
-                  >
+                  {/*
+                  <NavLink exact to="/faqs" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     FAQs
+                  </NavLink>
+                  */}
+                  <NavLink exact to="https://userguide.hostbuddy.ai/quick-start/getting-started" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                    Docs
                   </NavLink>
 
                   {/* Remove About Us and Blog for now, to save space in the navbar. Will re-add shortly after the navbar is redesigned to accommodate more items */}

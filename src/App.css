@@ -86,11 +86,6 @@ img {
   max-width: 100%;
 }
 
-ul,
-li {
-  list-style-type: none;
-}
-
 input {
   outline: none;
   box-shadow: none !important;

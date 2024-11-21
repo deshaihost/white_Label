@@ -1,0 +1,80 @@
+.embed-modal-content {
+  max-height: 70vh;
+  overflow-y: auto;
+  color: white;
+}
+
+.embed-modal-content .embed-modal-section {
+  margin-bottom: 60px;
+}
+
+.embed-modal-content h2 {
+  margin-bottom: 30px;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.embed-modal-content p,
+.embed-modal-content li {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: white;
+}
+
+.embed-modal-content pre {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
+  color: #212529; /* Keep code blocks dark text for readability */
+  margin-top: 5px;
+  margin-bottom: 40px;
+}
+
+.embed-modal-content code {
+  font-family: monospace;
+}
+
+.embed-modal-content ol,
+.embed-modal-content ul {
+  margin-left: 1.5rem;
+}
+
+.embed-modal-content li {
+  margin-bottom: 0.5rem;
+}
+
+.copyable-code-container {
+  position: relative;
+}
+
+.copy-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copy-button:hover {
+  opacity: 1;
+}
+
+.copy-button svg {
+  display: block;
+}
+
+.copy-confirm {
+  font-size: 12px;
+  color: #28a745;
+  white-space: nowrap;
+}
