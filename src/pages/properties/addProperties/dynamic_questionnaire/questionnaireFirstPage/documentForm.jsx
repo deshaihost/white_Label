@@ -70,8 +70,9 @@ const DocumentForm = ({ property_name, apiPropertyData, getPropertyDataFromAPI }
         if (response.status === 200) {
           ToastHandle("File uploaded successfully", "success");
           setDocHideForResrv(false);
-          //setGetDocApiCall(true);
           getPropertyDataFromAPI(property_name); // to refresh the knowledge base window and the options in auto fill
+        } else if (response.status === 413) {
+          window.alert("File size is too large (max 5MB). We're working on support for processing large files - but in the meantime, you can upload this information by converting the file (or copying the text) into a .txt file!");
         } else {
           ToastHandle(response?.data?.error, "danger");
         }
@@ -92,6 +93,13 @@ const DocumentForm = ({ property_name, apiPropertyData, getPropertyDataFromAPI }
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
+    
+    // Check file size - 15MB in bytes
+    if (file && file.size > 15 * 1024 * 1024) {
+      window.alert("File size is too large (max 5MB). We're working on support for processing large files - but in the meantime, you can upload this information by converting the file (or copying the text) into a .txt file!");
+      return;
+    }
+    
     documentUploadHandle();
   };
 

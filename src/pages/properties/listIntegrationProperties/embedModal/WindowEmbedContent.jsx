@@ -24,16 +24,16 @@ const WindowEmbedContent = ({ chatbotKey }) => {
     chatbot_key: '${chatbotKey}', // This is the chatbot key for your selected property
 
     // Optional appearance customization
-    userMsgBubbleColor: '#dcf8c6',
-    userMsgTextColor: '#000000',
-    botMsgBubbleColor: '#ffffff',
-    botMsgTextColor: '#000000',
-    chatWindowBackgroundColor: '#e5ddd5',
-    inputBoxBackgroundColor: '#ffffff',
-    inputBarTextColor: '#000000',
-    sendButtonColor: '#0084ff',
-    sendButtonTextColor: '#ffffff',
-    bot_img: 'https://www.hostbuddy.ai/static/media/logoGraphicOnlySquare.3250db87b6a576ab347a.webp'
+    userMsgBubbleColor: '#4a90e2',
+    userMsgTextColor: '#FFF',
+    botMsgBubbleColor: '#2c3e50',
+    botMsgTextColor: '#FFF',
+    chatWindowBackgroundColor: '#1a1a1a',
+    inputBoxBackgroundColor: '#333',
+    inputBarTextColor: '#CCC',
+    sendButtonColor: '#4a90e2',
+    sendButtonTextColor: '#FFF',
+    bot_img: 'https://hostbuddylb.com/logo/logoNoText.webp'
   };
   </script>`}</CopyableCode>
         <p>
@@ -103,25 +103,25 @@ const WindowEmbedContent = ({ chatbotKey }) => {
         </p>
         <CopyableCode>{`window.chatWindowOptions = {
     chatbot_key: '${chatbotKey}',
-    userMsgBubbleColor: '#e3f2fd',
-    botMsgBubbleColor: '#f5f5f5',
-    chatWindowBackgroundColor: '#ffffff'
+    userMsgBubbleColor: '#4a90e2',
+    botMsgBubbleColor: '#2c3e50',
+    chatWindowBackgroundColor: '#1a1a1a',
   };`}</CopyableCode>
         <p>
           <strong>3. Full Customization:</strong>
         </p>
         <CopyableCode>{`window.chatWindowOptions = {
     chatbot_key: '${chatbotKey}',
-    userMsgBubbleColor: '#dcf8c6',
-    userMsgTextColor: '#000000',
-    botMsgBubbleColor: '#ffffff',
-    botMsgTextColor: '#000000',
-    chatWindowBackgroundColor: '#e5ddd5',
-    inputBoxBackgroundColor: '#ffffff',
-    inputBarTextColor: '#000000',
-    sendButtonColor: '#0084ff',
-    sendButtonTextColor: '#ffffff',
-    bot_img: 'https://example.com/bot-avatar.png'  // Optional bot image URL
+    userMsgBubbleColor: '#4a90e2',
+    userMsgTextColor: '#FFF',
+    botMsgBubbleColor: '#2c3e50',
+    botMsgTextColor: '#FFF',
+    chatWindowBackgroundColor: '#1a1a1a',
+    inputBoxBackgroundColor: '#333',
+    inputBarTextColor: '#CCC',
+    sendButtonColor: '#4a90e2',
+    sendButtonTextColor: '#FFF',
+    bot_img: 'https://hostbuddylb.com/logo/logoNoText.webp'
   };`}</CopyableCode>
       </div>
     </div>
