@@ -16,6 +16,7 @@
     "jwt-decode": "^4.0.0",
     "mdb-react-ui-kit": "^7.2.0",
     "multiselect-react-dropdown": "^2.0.25",
+    "pdfjs-dist": "^4.8.69",
     "primereact": "^10.6.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
