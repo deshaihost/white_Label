@@ -78,3 +78,30 @@
   color: #28a745;
   white-space: nowrap;
 }
+
+.embed-modal-tabs {
+  display: flex;
+  margin-bottom: 40px;
+}
+
+.embed-modal-tabs button {
+  flex: 1;
+  padding: 10px;
+  background-color: #121a6e; /* dark blue */
+  color: white;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.embed-modal-tabs button.active {
+  background-color: #3949ab; /* lighter blue */
+}
+
+.embed-modal-tabs button:not(:last-child) {
+  border-right: 1px solid #3949ab;
+}
+
+.embed-modal-tabs button:hover {
+  background-color: #3949ab;
+}
