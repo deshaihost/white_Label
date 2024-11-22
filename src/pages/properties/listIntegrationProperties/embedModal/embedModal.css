@@ -14,6 +14,12 @@
   color: white;
 }
 
+.embed-modal-content h4 {
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  color: white;
+}
+
 .embed-modal-content p,
 .embed-modal-content li {
   font-size: 1rem;
@@ -104,4 +110,24 @@
 
 .embed-modal-tabs button:hover {
   background-color: #3949ab;
+}
+
+.widget-preview-images {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.widget-preview-images img {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+}
+
+.widget-preview-images .image-caption {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #ccc;
 }
