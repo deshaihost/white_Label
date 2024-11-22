@@ -1,11 +1,29 @@
 import React from "react";
 import CopyableCode from "./copyableCode";
 
+const widgetClosedImg = 'https://hostbuddylb.com/embed-doc/widget_closed.webp';
+const widgetOpenImg = 'https://hostbuddylb.com/embed-doc/widget_open.webp';
+
 const WidgetEmbedContent = ({ chatbotKey }) => {
   return (
     <div className="embed-modal-content">
+      <h2>Embed a HostBuddy Popup Chat Widget On Your Website</h2>
       <div className='embed-modal-section' style={{marginTop:'10px'}}>
-        <h2>Copy and paste the following code into your website to embed a HostBuddy chat widget:</h2>
+        <div className="widget-preview-images">
+          <div>
+            <img src={widgetClosedImg} alt="Widget closed" style={{maxWidth: '100%'}} />
+            <p className="image-caption">Widget Closed</p>
+          </div>
+          <div>
+            <img src={widgetOpenImg} alt="Widget open" style={{maxWidth: '100%'}} />
+            <p className="image-caption">Widget Open</p>
+          </div>
+        </div>
+        <p>
+          <h4>
+            Copy and paste the following code into your website:
+          </h4>
+        </p>
         <p>
           <strong>
             1: Configuration script. Add this script in the body of your page, after the above container div. Set your desired parameters to customize the appearance of the chat window.

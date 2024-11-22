@@ -1,12 +1,24 @@
-
 import React from "react";
 import CopyableCode from "./copyableCode";
+
+const windowImg = 'https://hostbuddylb.com/embed-doc/window.webp';
 
 const WindowEmbedContent = ({ chatbotKey }) => {
   return (
     <div className="embed-modal-content">
+      <h2>Embed a HostBuddy Popup Chat Window On Your Website</h2>
       <div className='embed-modal-section' style={{marginTop:'10px'}}>
-        <h2>Copy and paste the following code into your website to embed a HostBuddy chat window:</h2>
+        <div className="widget-preview-images">
+          <div>
+            <img src={windowImg} alt="Chat window" />
+            <p className="image-caption">Chat Window Example</p>
+          </div>
+        </div>
+        <p>
+          <h4>
+            Copy and paste the following code into your website:
+          </h4>
+        </p>
         <p>
           <strong>
             1: Container div. Add this to your page wherever you want the chat window to appear. The chat window will fill the dimensions of this div, so you can adjust the height and width parameters here to control sizing.
