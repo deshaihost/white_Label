@@ -138,7 +138,9 @@ const ListIntegrationProperties = () => {
         dispatch(deleteListIntegrationPropertiesActions(data));
       }
     } else if (findType === regenerateChatbotLink) {
-      callRegenerateChatbotLinkAPI(data);
+      if (window.confirm('WARNING: This will invalidate any existing chat links, embedded chat windows, and embedded widgets for this property. Proceed?')) {
+        callRegenerateChatbotLinkAPI(data);
+      }
     } else if (findType === copyChatbotLink) {
       setChatBox({
         linkCopy: true,
@@ -365,10 +367,10 @@ const ListIntegrationProperties = () => {
                                 <>
                                   {/* <Dropdown.Item onClick={() => { selectedHandle(copyChatbotLink, properties); }}> */}
                                   <Dropdown.Item onClick={() => { handleEmbedClick(chatbot_key); }}>
-                                    Get Code to Embed
+                                    Get Chat Link or Embed
                                   </Dropdown.Item>
                                   <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
-                                    Regenerate Chatbot Link
+                                    Regenerate Chat Link
                                   </Dropdown.Item>
                                 </>
                               }

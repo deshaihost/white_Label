@@ -324,7 +324,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           </div>
         )}
 
-        {(eliteOrWorksPlan  || (accountAgeDays && accountAgeDays <= 4)) ? (
+        {((eliteOrWorksPlan || (accountAgeDays && accountAgeDays <= 4)) && !(conversationData?.channel == 'hostbuddy')) ? (
           <>
             <div className="ai-input">
               <div className="generate-container">
@@ -401,10 +401,14 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
             }
           </>
         ) : (
-          allConversationData && Object.keys(allConversationData).length > 0 && (
-            <p style={{fontSize:'14px', margin:'0 auto'}}>
-              Inbox is in view-only mode. <Link to='/setting/subscription' style={{fontSize:'14px'}}>Upgrade</Link> to generate and send messages.
-            </p>
+          conversationData?.channel == 'hostbuddy' ? ( // chat link / embedded window conversations
+            null
+          ) : (
+            allConversationData && Object.keys(allConversationData).length > 0 && (
+              <p style={{fontSize:'14px', margin:'0 auto'}}>
+                Inbox is in view-only mode. <Link to='/setting/subscription' style={{fontSize:'14px'}}>Upgrade</Link> to generate and send messages.
+              </p>
+            )
           )
         )}
       </div>
