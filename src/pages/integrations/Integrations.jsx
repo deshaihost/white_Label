@@ -13,12 +13,32 @@ import Minut from "../../../src/helper/staticImage/minut.webp";
 import Turno from "../../../src/helper/staticImage/turno.webp";
 import "./Integration.css";
 import ContactUs from "../meetHostBuddy/discover/contactUs/ContactUs";
+import { Helmet } from 'react-helmet';
 
 
 const Integrations = () => {
   const [contactModalShow, setContactModalShow] = useState(false);
 
   return (
+    <>
+      <Helmet>
+        <title>Integrations | AI-Powered STR Tools by HostBuddy</title>
+        <meta name="title" content="Integrations | AI-Powered STR Tools by HostBuddy" />
+        <meta name="description" content="Explore seamless integrations with top Property Management Systems. HostBuddy's AI tools automate guest messaging and simplify short-term rental hosting." />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png" />
+        <meta property="og:title" content="Integrations | AI-Powered STR Tools by HostBuddy" />
+        <meta property="og:description" content="Explore seamless integrations with top Property Management Systems. HostBuddy's AI tools automate guest messaging and simplify short-term rental hosting." />
+        <meta property="og:image" content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png" />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png" />
+        <meta property="twitter:title" content="Integrations | AI-Powered STR Tools by HostBuddy" />
+        <meta property="twitter:description" content="Explore seamless integrations with top Property Management Systems. HostBuddy's AI tools automate guest messaging and simplify short-term rental hosting." />
+        <meta property="twitter:image" content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png" />
+        <link rel="canonical" href="https://www.hostbuddy.ai/integrations" />
+      </Helmet>
     <div className="integrations">
       <div className="container">
         <div className="intre-heading">
@@ -26,8 +46,16 @@ const Integrations = () => {
           <img src={IntiLogo} alt="" />
         </div>
         <div className="intre-content">
+          <h2>Streamlined PMS Integrations</h2>
+          <p>HostBuddy integrates effortlessly with popular Property Management Systems (PMS) such as Guesty, Lodgify, and Hostfully, allowing you to synchronize guest data, reservations, and property details in real-time. By connecting your preferred PMS to HostBuddy, you gain access to a unified dashboard that simplifies operations and reduces manual tasks, enabling you to focus on enhancing guest experiences.</p>
+        </div>
+        <div className="intre-content">
           <h2>Property Management System</h2>
           <p>HostBuddy integrates with your existing property management system (PMS) to access guest, reservation, and property data. This seamless connection enables automated messaging and streamlined operations for an efficient hosting experience.</p>
+        </div>
+        <div className="intre-content">
+          <h2>Maximize Efficiency with AI Automation</h2>
+          <p>Our AI-powered platform revolutionizes the way STR hosts manage their rentals. With 24/7 guest messaging automation, issue troubleshooting, and booking support, HostBuddy reduces your workload while ensuring guest satisfaction. Whether you're managing a single vacation home or multiple properties, our tools adapt to meet your unique hosting needs.</p>
         </div>
         <div className="inter-box row">
           <div className="col-lg-4 col-sm-6">
@@ -92,6 +120,10 @@ const Integrations = () => {
           <h2>Other Software</h2>
           <p>HostBuddy connects to your essential management tools, superchanging your hosting experience.</p>
         </div>
+        <div className="intre-content">
+          <h2>Enhance Guest Experiences</h2>
+          <p>HostBuddy goes beyond basic automation by offering features that elevate your guest experiences. From upselling local experiences and late checkouts to personalized welcome messages, our platform helps you create memorable stays that encourage repeat bookings and positive reviews.</p>
+        </div>
         <div className="inter-box row">
           <div className="col-lg-4 col-sm-6">
             <a
@@ -121,6 +153,8 @@ const Integrations = () => {
       </div>
       <ContactUs show={contactModalShow} onHide={() => setContactModalShow(false)}/>
     </div>
+    </>
+
   );
 };
 
