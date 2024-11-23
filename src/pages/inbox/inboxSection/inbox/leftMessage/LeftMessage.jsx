@@ -256,7 +256,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
         allConversations && allConversations.length ? (
           <div className={`left-bar-chat ${filtersVisible ? 'filters-visible' : ''}`} ref={containerRef}>
             {allConversations?.map((message) => {
-              const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url } = message;
+              const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url, channel } = message;
               const allDataForConversation = message;
               const messages = message?.messages; // Assuming message?.messages is an array
               const lastValue = messages[messages.length - 1];
@@ -300,7 +300,11 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                       <div className="left-description" style={{ flex: 1, marginLeft: '10px', overflow: 'hidden' }}>
                         <div className="d-flex justify-content-between description-item">
                           <h2>
-                            {opened ? guest_name : <strong>{guest_name}</strong>}
+                            {channel != 'hostbuddy' ? (
+                              opened ? guest_name : <strong>{guest_name}</strong>
+                            ) : (
+                              opened ? 'Chat Window' : <strong>Chat Window</strong>
+                            )}
                           </h2>
                           <div className="date" style={{margin:"0"}}>
                             {opened ? timeFormat(time) : <strong>{timeFormat(time)}</strong>}

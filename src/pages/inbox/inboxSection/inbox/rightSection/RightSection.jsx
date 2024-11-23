@@ -116,7 +116,10 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
     }
   };
 
-  if (channel) { channel = channel.split(" (")[0]; } // channel e.g. "Airbnb (via Hostfully)". Remove the second part.
+  if (channel) {
+    channel = channel.split(" (")[0]; // channel e.g. "Airbnb (via Hostfully)". Remove the second part.
+    channel = channel.replace('hostbuddy', 'Chat Window');
+  }
   else { channel = ""; }
   const statusText = getStatusText(status);
 
@@ -151,84 +154,90 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
 
       </div>
 
-      {!is_locked ? (
-        curr_status && (
-          <div className="toggle">
-            {curr_status === 'on' ? (
-              <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(0,180,0)"}}>RESPONDING</span> to this guest</p>
-            ) : (
-              <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(200,0,0)"}}>NOT RESPONDING</span> to this guest</p>
-            )}
-            {(source=='guest') && (
-              until_formatted === 'indefinitely' ? (
-                <p style={{ fontSize: "12px" }}>Indefinitely</p>
+      {!(channel == 'Chat Window') && (
+        !is_locked ? (
+          curr_status && (
+            <div className="toggle">
+              {curr_status === 'on' ? (
+                <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(0,180,0)"}}>RESPONDING</span> to this guest</p>
               ) : (
-                <p style={{ fontSize: "12px" }}>Until {until_formatted}</p>
-              )
-            )}
+                <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(200,0,0)"}}>NOT RESPONDING</span> to this guest</p>
+              )}
+              {(source=='guest') && (
+                until_formatted === 'indefinitely' ? (
+                  <p style={{ fontSize: "12px" }}>Indefinitely</p>
+                ) : (
+                  <p style={{ fontSize: "12px" }}>Until {until_formatted}</p>
+                )
+              )}
 
-            {!toggleStatusLoading ? (
-              (source=='property') ? (
-                <select className="select-dropdown" value={selectedOption} onChange={(e) => handleSelectChange(e, curr_status)}>
-                  <option value="" disabled>Turn {curr_status === 'on' ? 'off' : 'on'}</option>
-                  <option value="15m">For 15 minutes</option>
-                  <option value="1h">For 1 hour</option>
-                  <option value="1d">For 24 hours</option>
-                  <option value="indefinitely">Indefinitely</option>
-                </select>
+              {!toggleStatusLoading ? (
+                (source=='property') ? (
+                  <select className="select-dropdown" value={selectedOption} onChange={(e) => handleSelectChange(e, curr_status)}>
+                    <option value="" disabled>Turn {curr_status === 'on' ? 'off' : 'on'}</option>
+                    <option value="15m">For 15 minutes</option>
+                    <option value="1h">For 1 hour</option>
+                    <option value="1d">For 24 hours</option>
+                    <option value="indefinitely">Indefinitely</option>
+                  </select>
+                ) : (
+                  <div style={{ textAlign: 'center' }}>
+                    <a style={{ fontSize: "14px", color: "#0d6efd", cursor: "pointer" }} onClick={handleRevertStatus}>
+                      Turn back {curr_status === 'on' ? 'off' : 'on'}
+                    </a>
+                  </div>
+                )
               ) : (
-                <div style={{ textAlign: 'center' }}>
-                  <a style={{ fontSize: "14px", color: "#0d6efd", cursor: "pointer" }} onClick={handleRevertStatus}>
-                    Turn back {curr_status === 'on' ? 'off' : 'on'}
-                  </a>
-                </div>
-              )
-            ) : (
-              <Loader />
-            )}
+                <Loader />
+              )}
+            </div>
+          )
+        ) : (
+          <div className="toggle">
+            <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(200,0,0)"}}>NOT RESPONDING</span> to this guest.</p>
+            <p style={{fontSize:"12px"}}><Link to='/properties' style={{fontSize:"14px"}}>Unlock</Link> this property to start responding.</p>
           </div>
         )
-      ) : (
-        <div className="toggle">
-          <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(200,0,0)"}}>NOT RESPONDING</span> to this guest.</p>
-          <p style={{fontSize:"12px"}}><Link to='/properties' style={{fontSize:"14px"}}>Unlock</Link> this property to start responding.</p>
+      )}
+      
+      {!(channel == 'Chat Window') && (
+        <div className="issue">
+          <h3>Open Issues</h3>
+          {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 ? (
+            action_items.filter(obj => obj.status === "incomplete").map((obj, index) => (
+              <p key={index} style={{ marginBottom: "10px" }}>{obj.item}</p>
+            ))
+          ) : (
+            <p style={{color:'#BBB'}}>None</p>
+          )}
+          {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 && (
+            <div style={{ display: "flex", justifyContent: "center", marginTop: "5px" }}>
+              <Link to={`/action-item?property_name=${property_name}`} style={{ fontSize: "14px" }}>Manage</Link>
+            </div>
+          )}
+        </div>
+      )}
+
+      {!(channel == 'Chat Window') && (
+        <div className="satisfy">
+          <h2>Satisfaction</h2>
+          {sentiment ? (
+            <>
+              <p className="result" style={{ color: sentiment === "positive" ? "rgb(0, 180, 0)" : sentiment === "negative" ? "rgb(200, 0, 0)" : "#BBB" }}>
+                {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
+              </p>
+              {sentiment_justification && (
+                <p style={{ fontSize:'12px', marginTop:'3px' }}>{sentiment_justification}</p>
+              )}
+            </>
+          ) : (
+            <p style={{ color:"#BBB", fontSize:'16px' }}>No data yet</p>
+          )}
         </div>
       )}
       
-      <div className="issue">
-        <h3>Open Issues</h3>
-        {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 ? (
-          action_items.filter(obj => obj.status === "incomplete").map((obj, index) => (
-            <p key={index} style={{ marginBottom: "10px" }}>{obj.item}</p>
-          ))
-        ) : (
-          <p style={{color:'#BBB'}}>None</p>
-        )}
-        {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 && (
-          <div style={{ display: "flex", justifyContent: "center", marginTop: "5px" }}>
-            <Link to={`/action-item?property_name=${property_name}`} style={{ fontSize: "14px" }}>Manage</Link>
-          </div>
-        )}
-      </div>
-
-      <div className="satisfy">
-        <h2>Satisfaction</h2>
-        {sentiment ? (
-          <>
-            <p className="result" style={{ color: sentiment === "positive" ? "rgb(0, 180, 0)" : sentiment === "negative" ? "rgb(200, 0, 0)" : "#BBB" }}>
-              {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
-            </p>
-            {sentiment_justification && (
-              <p style={{ fontSize:'12px', marginTop:'3px' }}>{sentiment_justification}</p>
-            )}
-          </>
-        ) : (
-          <p style={{ color:"#BBB", fontSize:'16px' }}>No data yet</p>
-        )}
-      </div>
-      
       <div className="about about-inner user-detail">
-        <p>Platform Booked: {channel ? channel : '--'}</p>
+        <p>Channel: {channel ? channel : '--'}</p>
       </div>
 
       {/* Data not yet available in the API
