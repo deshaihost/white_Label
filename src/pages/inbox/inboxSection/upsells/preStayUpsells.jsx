@@ -214,7 +214,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
         </div>
       </div>
 
-      <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
+      <div style={{width:"90%", margin:"20px 0"}}>
         <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked after vacant night, offering them an early check-in or a discount to extend their stay. You can customize the message and parameters.</p>
       </div>
 
@@ -233,9 +233,16 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
           <label className="fs-5">Number of Nights to Consider</label>
-          <p className="settings-label">HostBuddy will send a message each time there are vacant nights equal to or less than this number.</p>
-          <div className="d-flex align-items-center gap-1 mt-1">
-            <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
+          <p className="settings-label">HostBuddy will send a message each time there is a number of consecutive vacant nights between these values.</p>
+          <div className="d-flex align-items-center gap-3 mt-1">
+            <div className="d-flex align-items-center gap-2">
+              <label className="settings-label">Min:</label>
+              <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.min_number_of_nights_criteria || 1} onChange={(e) => setSetting('min_number_of_nights_criteria', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
+            </div>
+            <div className="d-flex align-items-center gap-2">
+              <label className="settings-label">Max:</label>
+              <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
+            </div>
           </div>
         </div>
       </div>

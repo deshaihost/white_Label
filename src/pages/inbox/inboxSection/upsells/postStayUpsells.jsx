@@ -26,6 +26,8 @@ default_settings = {
   'discount_percentage': 10,
   'discount_absolute': 10,
   'upsell_message': "Hi [[guest_name]], we have [[num_days_available]] that opened up right [[before_or_after]] your reservation. If you're interested, I'd like to offer these nights to you at a [[discount_percentage]]% discount. Let me know if you'd like to add these nights to your stay!"
+  'min_number_of_nights_criteria': 1,
+  'number_of_nights_criteria': 1,  // this becomes the maximum
 }
 */
 
@@ -207,7 +209,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
       </div>
 
-      <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
+      <div style={{width:"90%", margin:"20px 0"}}>
         <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked before vacant night, offering them a late check-out or a discount to extend their stay. You can customize the message and parameters.</p>
       </div>
 
@@ -226,9 +228,16 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
           <label className="fs-5">Number of Nights to Consider</label>
-          <p className="settings-label">HostBuddy will send a message each time there are this many consecutive vacant nights or fewer.</p>
-          <div className="d-flex align-items-center gap-1 mt-1">
-            <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
+          <p className="settings-label">HostBuddy will send a message each time there is a number of consecutive vacant nights between these values.</p>
+          <div className="d-flex align-items-center gap-3 mt-1">
+            <div className="d-flex align-items-center gap-2">
+              <label className="settings-label">Min:</label>
+              <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.min_number_of_nights_criteria || 1} onChange={(e) => setSetting('min_number_of_nights_criteria', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
+            </div>
+            <div className="d-flex align-items-center gap-2">
+              <label className="settings-label">Max:</label>
+              <input style={{width:'100px'}} type="number" className="form-control" value={currentSettingsData.number_of_nights_criteria} onChange={(e) => setSetting('number_of_nights_criteria', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
+            </div>
           </div>
         </div>
       </div>
