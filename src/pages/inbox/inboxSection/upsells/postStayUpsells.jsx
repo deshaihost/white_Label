@@ -16,7 +16,8 @@ import { formatDateRange, formatDateTime, truncateString, insertVariableAtCursor
 /*
 default_settings = {
   'enabled': false,
-  'number_of_nights_criteria': 1,
+  'min_number_of_nights_criteria': 1,
+  'number_of_nights_criteria': 1,  // max
   'send_to_which_reservation': 'both before first', // 'before', 'after', 'both before first', 'both after first'
   'days_before_check_out': 1,
   'time_before_check_out': '12:00',
@@ -26,8 +27,6 @@ default_settings = {
   'discount_percentage': 10,
   'discount_absolute': 10,
   'upsell_message': "Hi [[guest_name]], we have [[num_days_available]] that opened up right [[before_or_after]] your reservation. If you're interested, I'd like to offer these nights to you at a [[discount_percentage]]% discount. Let me know if you'd like to add these nights to your stay!"
-  'min_number_of_nights_criteria': 1,
-  'number_of_nights_criteria': 1,  // this becomes the maximum
 }
 */
 
@@ -46,8 +45,24 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
     setLocalSettingsData({ ...localSettingsData, [selectedConfig]: newData });
   };
 
+  // Determine whether / how to show absolute discount, based on the PMS & the availability of currency
+  const userData = JSON.parse(sessionStorage.getItem("userData")); // assumes that getUserDataActions has been dispatched at some point this session, which populates this session storage item
+  const userPMS = userData?.calry_integrations ? Object.keys(userData.calry_integrations)[0] || null : null;
+
+  const allowDiscountByAmount = (!userPMS || ['ownerrez', 'guesty', 'hostfully', 'hostify', 'hostaway'].includes(userPMS?.toLowerCase())); // these PMSs provide price data for each night (in availability), so we can work with prices here
+  const currency = localSettingsData?.default?.currency;
+
   //const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available', 'before_or_after':'Before or after'};
-  const variables = {'guest_name':'Guest name', 'discount_percentage':'Discount percentage', 'num_days_available':'Number of days available'};
+  const variables = {
+    'guest_name': {label: 'Guest name', example: 'John'},
+    'discount_percentage': {label: 'Discount percentage', example: '30'},
+    'num_days_available': {label: 'Number of nights available', example: '2'}
+  };
+  if (allowDiscountByAmount && currency) {
+    variables['total_discount_amount'] = {label: `Total discount amount (${currency})`, example: '150 USD'};
+    variables['total_before_discount'] = {label: `Total price before discount (${currency})`, example: '500 USD'};
+    variables['total_after_discount'] = {label: `Total price after discount (${currency})`, example: '350 USD'};
+  }
 
   const handleReturn = (e) => {
     e.preventDefault();
@@ -241,46 +256,11 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
           </div>
         </div>
       </div>
-      
-      {/*
-      <div className="row mt-5">
-        <div className="col-lg-12">
-          <label className="fs-5">Upsell Behavior</label>
-          <p className="settings-label">Vacant nights are present between two reservations. Should HostBuddy send the offer to the reservation before or after the vacant night? (If you choose "Both", HostBuddy will only send the second offer if the first is declined).</p>
-        </div>
-      </div>
-
-      <div className="row mt-2">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 1" name="group1" label="Send to the reservation before" value="before" checked={currentSettingsData.send_to_which_reservation === 'before'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      <div className="row mt-1">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 2" name="group1" label="Send to the reservation after" value="after" checked={currentSettingsData.send_to_which_reservation === 'after'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      <div className="row mt-1">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 3" name="group1" label="Both: Send to the reservation before first" value="both before first" checked={currentSettingsData.send_to_which_reservation === 'both before first'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      <div className="row mt-1">
-        <div className="col-12">
-          <Form.Check type="radio" aria-label="radio 4" name="group1" label="Both: Send to the reservation after first" value="both after first" checked={currentSettingsData.send_to_which_reservation === 'both after first'} onChange={(e) => setSetting('send_to_which_reservation', e.target.value)}/>
-        </div>
-      </div>
-      */}
 
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
           <label className="fs-5">Upsell Timing</label>
           <p className="settings-label mb-2">When should HostBuddy send the upsell message?</p>
-          {/*
-          <div className="row">
-            <label className="fs-6 mt-1">For reservations before a vacant night, send the message:</label>
-          </div>
-          */}
           <div className="row mt-1">
             <div className="col-lg-2 col-4">
               <input type="number" className="form-control" value={currentSettingsData.days_before_check_out} onChange={(e) => setSetting('days_before_check_out', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
@@ -292,22 +272,6 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
               <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_before_check_out} onChange={(e) => setSetting('time_before_check_out', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
             </div>
           </div>
-          {/*
-          <div className="row mt-3">
-            <label className="fs-6">For reservations after a vacant night, send the message:</label>
-          </div>
-          <div className="row mt-1">
-            <div className="col-lg-2 col-4">
-              <input type="number" className="form-control" value={currentSettingsData.days_before_check_in} onChange={(e) => setSetting('days_before_check_in', e.target.value)}/>
-            </div>
-            <div className="col-lg-3 col-4" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <label className="settings-label" style={{textAlign:"center", margin:"auto"}}>days before guest check-in, at</label>
-            </div>
-            <div className="col-lg-3 col-4">
-              <input type="time" name="st" id="startTime" class="form-control" value={currentSettingsData.time_before_check_in} onChange={(e) => setSetting('time_before_check_in', e.target.value)}/>
-            </div>
-          </div>
-          */}
         </div>
       </div>
 
@@ -323,13 +287,13 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
                 <label className="fs-6">%</label>
               </div>
             </div>
-            {/*
-            <div className="d-flex align-items-center gap-2">
-              <Form.Check type="radio" name="discount_type" label="Use absolute discount:" checked={currentSettingsData.discount_type === 'absolute'} onChange={() => setSetting('discount_type', 'absolute')}/>
-              <input type="number" className="form-control" style={{width: '100px'}} value={currentSettingsData.discount_absolute} onChange={(e) => setSetting('discount_absolute', e.target.value)} disabled={currentSettingsData.discount_type !== 'absolute'}/>
-              <label className="fs-6">per night</label>
-            </div>
-            */}
+            {allowDiscountByAmount && currency && (
+              <div className="d-flex align-items-center gap-2">
+                <Form.Check type="radio" name="discount_type" label="Absolute:" checked={currentSettingsData.discount_type === 'absolute'} onChange={() => setSetting('discount_type', 'absolute', currentSettingsData, setCurrentSettingsData)}/>
+                <input type="number" className="form-control" style={{width: '100px'}} value={currentSettingsData.discount_absolute} onChange={(e) => setSetting('discount_absolute', e.target.value, currentSettingsData, setCurrentSettingsData)} disabled={currentSettingsData.discount_type !== 'absolute'}/>
+                <label className="fs-6">{currency} per night</label>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -342,9 +306,12 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
         <div className="available-variables-section">
         <label className="fs-5">Variables</label>
         <p className="settings-label">Click to add custom variables to your upsell message. These variables will change to match the data for each reservation.</p>
-          <div className="available-variables mt-3">
+          <div className="available-variables mt-3" style={{width:'90%', margin:'0 auto'}}>
             {Object.keys(variables).map((key, index) => (
-              <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('upsellMessage'), `[[${key}]]`, currentSettingsData, setCurrentSettingsData)}>{variables[key]}</span>
+              <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('upsellMessage'), `[[${key}]]`, currentSettingsData, setCurrentSettingsData)}>
+                <div className="variable-label">{variables[key].label}</div>
+                <div className="variable-example">e.g. "{variables[key].example}"</div>
+              </span>
             ))}
           </div>
         </div>

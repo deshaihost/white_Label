@@ -84,13 +84,26 @@
 .upsells-settings .variable {
   border: 1px solid #045ce9;
   border-radius: 15px;
-  padding: 5px 10px;
+  padding: 8px 12px;
   cursor: pointer;
   transition: background-color 0.3s;
+  text-align: center;
+  min-width: 140px;
 }
 
 .upsells-settings .variable:hover {
-  background-color: #f0f0f0;
+  background-color: rgba(4, 92, 233, 0.4);
+  box-shadow: 0 0 12px 0 rgba(255, 255, 255, 0.8);
+}
+
+.upsells-settings .variable .variable-label {
+  font-size: 14px;
+  margin-bottom: 0px;
+}
+
+.upsells-settings .variable .variable-example {
+  font-size: 12px;
+  color: #AAA;
 }
 
 .upsells-settings .table thead th {
