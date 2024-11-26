@@ -69,20 +69,16 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
   const getPropertyDataFromAPI = async (propertyName) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
 
     try {
-      if (token) {
-        const config = {
-          headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
-        const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
+      const config = {
+        headers: {"X-API-Key": API_KEY},
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
 
-        if (response.status === 200) {
-          setApiPropertyData(response.data.property);
-        } else {  }
+      if (response.status === 200) {
+        setApiPropertyData(response.data.property);
       } else {  }
     } catch (error) {  }
   };

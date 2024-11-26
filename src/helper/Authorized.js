@@ -8,7 +8,14 @@ import axios from 'axios';
 
 // If the user is logged in (i.e. valid & unexpired token), return the token. Otherwise, return null
 const Authorized = () => {
-  const getAuthToken = JSON.parse(localStorage.getItem("hostBuddy_auth")) || JSON.parse(sessionStorage.getItem("hostBuddy_auth")); // Check local storage first (used if user selects "remember me"), then session storage
+  const localAuth = JSON.parse(localStorage.getItem("hostBuddy_auth"));
+  const sessionAuth = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+  const getAuthToken = localAuth || sessionAuth;
+  
+  // If token exists in local but not session storage, copy it to session storage
+  if (localAuth && !sessionAuth) {
+    sessionStorage.setItem("hostBuddy_auth", JSON.stringify(localAuth));
+  }
   
   if (!getAuthToken) return null;
   

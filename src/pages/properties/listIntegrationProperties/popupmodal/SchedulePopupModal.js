@@ -51,35 +51,23 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
     setSubmit(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
-    // return;
 
     try {
-      if (token) {
-        const config = {
-          headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
-        const response = await axios.put( `${baseUrl}/set_recurring_schedule`, dataToSend, config );
-        if (response.status === 200) {
-          ToastHandle(response.data.message, "success");
-          setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
+      const config = {
+        headers: {"X-API-Key": API_KEY},
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const response = await axios.put( `${baseUrl}/set_recurring_schedule`, dataToSend, config );
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
 
-          setTimeout(() => {
-            setShow(false);
-          }, 1500);
-          getScheduleAPI(selectedProperty);
-        } else {
-          ToastHandle(response.data.error, "danger");
-        }
-      } else {
-        ToastHandle("No Token", "danger");
         setTimeout(() => {
           setShow(false);
-          setShowCalender(false);
         }, 1500);
         getScheduleAPI(selectedProperty);
+      } else {
+        ToastHandle(response.data.error, "danger");
       }
     } catch (error) {
       console.log(error);

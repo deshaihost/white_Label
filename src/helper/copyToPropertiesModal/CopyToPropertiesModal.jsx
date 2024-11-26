@@ -36,8 +36,6 @@ const CopyToPropertiesModal = (props) => {
     setCopyToPropertiesLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
 
     let data_to_send;
     let endpoint_url;
@@ -50,19 +48,17 @@ const CopyToPropertiesModal = (props) => {
     }
 
     try {
-      if (token) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
 
-        const response = await axios.put(endpoint_url, data_to_send, config);
+      const response = await axios.put(endpoint_url, data_to_send, config);
 
-        if (response.status === 200) {
-          ToastHandle("Schedule copied successfully", "success");
-          setShow(false);
-        } else { ToastHandle(response?.data?.error, "danger"); }
-      }
+      if (response.status === 200) {
+        ToastHandle("Schedule copied successfully", "success");
+        setShow(false);
+      } else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) { ToastHandle("Error copying schedule", "danger"); }
     finally { setCopyToPropertiesLoading(false); }
   };

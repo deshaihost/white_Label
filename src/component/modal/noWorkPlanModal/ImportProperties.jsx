@@ -49,8 +49,6 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
     setImportLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse( sessionStorage.getItem("hostBuddy_auth") );
-    const token = getSessionStorageData?.token;
 
     // Create a flipped version of the checkBox object, to match the format expected by the API
     const selectedProperties = Object.entries(checkBox).reduce((obj, [name, id]) => {
@@ -59,27 +57,20 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
     }, {});
 
     try {
-      if (token) {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error if non-2xx returned
-        };
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error if non-2xx returned
+      };
 
-        const jsonPayload = { integration_properties: selectedProperties, };
-        const response = await axios.post( `${baseUrl}/bulk_add_from_integration`, jsonPayload, config );
+      const jsonPayload = { integration_properties: selectedProperties, };
+      const response = await axios.post( `${baseUrl}/bulk_add_from_integration`, jsonPayload, config );
 
-        if (response.status === 200) {
-          ToastHandle(response.data.message, "success");
-          setNewPropertiesAdded(true);
-          handleNoPlanClose("importPropertiesClose");
-        } else {
-          ToastHandle(response.data.error, "danger");
-        }
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        setNewPropertiesAdded(true);
+        handleNoPlanClose("importPropertiesClose");
       } else {
-        alert("No Token");
+        ToastHandle(response.data.error, "danger");
       }
     } catch (error) {
       ToastHandle("Error importing integration property", "danger");

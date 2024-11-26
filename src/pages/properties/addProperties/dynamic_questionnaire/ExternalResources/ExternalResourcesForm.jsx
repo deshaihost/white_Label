@@ -62,19 +62,15 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
 
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse( sessionStorage.getItem("hostBuddy_auth") );
-    const token = getSessionStorageData?.token;
 
     const urlToSend = { url: uploadedUrl };
     
     try {
-      if (token && property_name) {
-        const config = { headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY } };
+        const config = { headers: { "X-API-Key": API_KEY } };
         const response = await axios.post( `${baseUrl}/properties/${property_name}/add_url`, urlToSend, config );
 
         if (response.status === 200) { ToastHandle(response?.data?.message, "success"); }
         else { console.log("Error"); }
-      } else { alert("Missing Token or propertyName"); }
     } catch (error) {
       if (error.status === 400) {
         ToastHandle(error?.data?.error, "danger");
@@ -93,34 +89,27 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
     setdocUploadIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse( sessionStorage.getItem("hostBuddy_auth") );
 
     let payload = new FormData();
 
     payload.append("file", file);
     payload.append("hide_for_reservations", JSON.stringify(resrData)); // JSON-style string representing the array of strings, per backend requirement
 
-    const token = getSessionStorageData?.token;
-
     try {
-      if (token && property_name) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY, "Content-Type": "multipart/form-data" },
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
+      const config = {
+        headers: { "X-API-Key":API_KEY, "Content-Type":"multipart/form-data" },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
 
-        const response = await axios.post( `${baseUrl}/properties/${property_name}/add_file`, payload, config );
+      const response = await axios.post( `${baseUrl}/properties/${property_name}/add_file`, payload, config );
 
-        if (response.status === 200) {
-          ToastHandle("File uploaded successfully", "success");
-          setDocHideForResrv(false);
-          setGetDocApiCall(true);
-        } else {
-          ToastHandle(response?.data?.error, "danger");
-          console.log("Error", response);
-        }
+      if (response.status === 200) {
+        ToastHandle("File uploaded successfully", "success");
+        setDocHideForResrv(false);
+        setGetDocApiCall(true);
       } else {
-        alert("Missing token or property_name");
+        ToastHandle(response?.data?.error, "danger");
+        console.log("Error", response);
       }
     } catch (error) { }
     finally { setdocUploadIsLoading(false); }
@@ -143,32 +132,26 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
     setLinkIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
 
     // Get the integrationPropertyName from the integrationPropertyId
     const selectedIntegrationProperty = integrationPropertyList.find((property) => property.id === integrationPropertyId);
     const integrationPropertyName = selectedIntegrationProperty?.name;
 
     try {
-      if (token) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
 
-        const jsonPayload = { platform_property_id: integrationPropertyId, platform_property_name: integrationPropertyName };
-        const response = await axios.post(`${baseUrl}/properties/${propertyName}/link_to_integration`, jsonPayload, config);
+      const jsonPayload = { platform_property_id: integrationPropertyId, platform_property_name: integrationPropertyName };
+      const response = await axios.post(`${baseUrl}/properties/${propertyName}/link_to_integration`, jsonPayload, config);
 
-        if (response.status === 200) {
-          ToastHandle(response.data.message, "success");
-          setPrevLinkedIntegration(integrationPropertyName);
-          setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
-        } else {
-          ToastHandle(response?.data?.error, "danger");
-        }
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        setPrevLinkedIntegration(integrationPropertyName);
+        setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
       } else {
-        alert("No Token");
+        ToastHandle(response?.data?.error, "danger");
       }
     } catch (error) {
       ToastHandle("Error linking integration", "danger");
@@ -182,33 +165,17 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
     setUnlinkIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
-    const token = getSessionStorageData?.token;
 
     try {
-      if (token) {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
-        };
-        const response = await axios.delete(
-          `${baseUrl}/properties/${propertyName}/unlink_from_integration`,
-          config
-        );
+      const config = { headers: { "X-API-Key": API_KEY } };
+      const response = await axios.delete(`${baseUrl}/properties/${propertyName}/unlink_from_integration`, config);
 
-        if (response.status === 200) {
-          ToastHandle(response.data.message, "success");
-          setPrevLinkedIntegration(null);
-          setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
-        } else {
-          ToastHandle(response.data.error, "danger");
-        }
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        setPrevLinkedIntegration(null);
+        setSuppertingInput({ pmsIntegration: true }); // re-render "PMS Integration" section (i.e. re-click the radio button)
       } else {
-        alert("No Token");
+        ToastHandle(response.data.error, "danger");
       }
     } catch (error) {
       console.error("Error unlinking integration:", error);
@@ -224,35 +191,31 @@ const ExternalResourcesForm = ({ property_name, handleSaveAndNext }) => {
     setPreviousGetApiLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
 
     try {
-      if (token) {
-        const config = {
-          headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
-        const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
+      const config = {
+        headers: {"X-API-Key": API_KEY},
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
 
-        if (response.status === 200) {
-          setPreviousGetApiLoading(false);
+      if (response.status === 200) {
+        setPreviousGetApiLoading(false);
 
-          const propertyData = response.data.property;
-          if (propertyData && propertyData.supporting_doc_items) {
-            const fileData = propertyData.supporting_doc_items.file_data;
-            const integrationData = propertyData.supporting_doc_items.integration_data;
-            const allSupportingDocData = { ...fileData, ...integrationData };
-            if (allSupportingDocData) {
-              const uploadedDocs = Object.keys(allSupportingDocData);
-              setPrevUploadedDoc(uploadedDocs);
-              setHideForReservatin(allSupportingDocData);
-            }
+        const propertyData = response.data.property;
+        if (propertyData && propertyData.supporting_doc_items) {
+          const fileData = propertyData.supporting_doc_items.file_data;
+          const integrationData = propertyData.supporting_doc_items.integration_data;
+          const allSupportingDocData = { ...fileData, ...integrationData };
+          if (allSupportingDocData) {
+            const uploadedDocs = Object.keys(allSupportingDocData);
+            setPrevUploadedDoc(uploadedDocs);
+            setHideForReservatin(allSupportingDocData);
           }
-          if (propertyData && propertyData?.integration?.integration_property_name          ) {
-            setPrevLinkedIntegration(propertyData?.integration?.integration_property_name);
-          }
-        } else { setPreviousGetApiLoading(false); }
+        }
+        if (propertyData && propertyData?.integration?.integration_property_name          ) {
+          setPrevLinkedIntegration(propertyData?.integration?.integration_property_name);
+        }
       } else { setPreviousGetApiLoading(false); }
     } catch (error) { setPreviousGetApiLoading(false); }
   };

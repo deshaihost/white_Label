@@ -49,35 +49,28 @@ const DocumentForm = ({ property_name, apiPropertyData, getPropertyDataFromAPI }
     setdocUploadIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse( sessionStorage.getItem("hostBuddy_auth") );
 
     let payload = new FormData();
 
     payload.append("file", file);
     payload.append("hide_for_reservations", JSON.stringify(resrData)); // JSON-style string representing the array of strings, per backend requirement
 
-    const token = getSessionStorageData?.token;
-
     try {
-      if (token && property_name) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY, "Content-Type": "multipart/form-data" },
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
+      const config = {
+        headers: { "X-API-Key": API_KEY, "Content-Type": "multipart/form-data" },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
 
-        const response = await axios.post( `${baseUrl}/properties/${property_name}/add_file`, payload, config );
+      const response = await axios.post( `${baseUrl}/properties/${property_name}/add_file`, payload, config );
 
-        if (response.status === 200) {
-          ToastHandle("File uploaded successfully", "success");
-          setDocHideForResrv(false);
-          getPropertyDataFromAPI(property_name); // to refresh the knowledge base window and the options in auto fill
-        } else if (response.status === 413) {
-          window.alert("File size is too large (max 5MB). We're working on support for processing large files - but in the meantime, you can upload this information by converting the file (or copying the text) into a .txt file!");
-        } else {
-          ToastHandle(response?.data?.error, "danger");
-        }
+      if (response.status === 200) {
+        ToastHandle("File uploaded successfully", "success");
+        setDocHideForResrv(false);
+        getPropertyDataFromAPI(property_name); // to refresh the knowledge base window and the options in auto fill
+      } else if (response.status === 413) {
+        window.alert("File size is too large (max 5MB). We're working on support for processing large files - but in the meantime, you can upload this information by converting the file (or copying the text) into a .txt file!");
       } else {
-        alert("Missing token or property_name");
+        ToastHandle(response?.data?.error, "danger");
       }
     } catch (error) {
       ToastHandle("Sorry, we were unable to process that file.", "danger");

@@ -50,33 +50,18 @@ const ScheduleCalender = ({ getScheduleAPI, allProperties, setShowCalender, sele
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
-
-    const token = getSessionStorageData?.token;
-
     try {
-      if (token) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
-        };
-        const response = await axios.put(
-          `${baseUrl}/set_recurring_schedule`,
-          dataToSend,
-          config
-        );
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+      };
+      const response = await axios.put(`${baseUrl}/set_recurring_schedule`, dataToSend, config);
 
-        if (response.status === 200) {
-          ToastHandle(response.data.message, "success");
-          setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
-          getScheduleAPI(selectedProperty);
-        } else {
-          ToastHandle("Something went wrong", "danger");
-          getScheduleAPI(selectedProperty);
-        }
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        setScheduleChanged(true); // re-render the listings on the Properties page, since current status might be different
+        getScheduleAPI(selectedProperty);
       } else {
-        ToastHandle("No Token", "danger");
+        ToastHandle("Something went wrong", "danger");
         getScheduleAPI(selectedProperty);
       }
     } catch (error) {

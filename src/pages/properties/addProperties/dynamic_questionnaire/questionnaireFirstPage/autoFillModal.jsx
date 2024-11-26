@@ -55,30 +55,26 @@ const AutoFillModal = ({ handleClose, show, apiPropertyData }) => {
     setAutoFillApiLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
 
     try {
-      if (token) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
-        const json_body = {
-          'docs_to_use': {
-            'integration_data': integrationSources.filter(source => selectedSources.includes(source)),
-            'file_data': fileSources.filter(source => selectedSources.includes(source)),
-            'conversation_data': conversationDataSources.filter(source => selectedSources.includes(source))
-          }
-        };
-        const response = await axios.post(`${baseUrl}/properties/${propertyName}/auto_fill_questionnaire`, json_body, config);
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const json_body = {
+        'docs_to_use': {
+          'integration_data': integrationSources.filter(source => selectedSources.includes(source)),
+          'file_data': fileSources.filter(source => selectedSources.includes(source)),
+          'conversation_data': conversationDataSources.filter(source => selectedSources.includes(source))
+        }
+      };
+      const response = await axios.post(`${baseUrl}/properties/${propertyName}/auto_fill_questionnaire`, json_body, config);
 
-        if (response.status === 200) {
-          ToastHandle("Auto-fill completed successfully", "success");
-          dispatch(getQuestionnaireActions(propertyName)); // GET the updated questionnaire - mainly so that it populates in the "HostBuddy Knowledge Base" section
-          closeHndle(false);
-        } else { ToastHandle(response?.data?.error, "danger"); }
-      }
+      if (response.status === 200) {
+        ToastHandle("Auto-fill completed successfully", "success");
+        dispatch(getQuestionnaireActions(propertyName)); // GET the updated questionnaire - mainly so that it populates in the "HostBuddy Knowledge Base" section
+        closeHndle(false);
+      } else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) { ToastHandle("An error occurred during auto-fill", "danger"); }
     finally { setAutoFillApiLoading(false); }
   };
