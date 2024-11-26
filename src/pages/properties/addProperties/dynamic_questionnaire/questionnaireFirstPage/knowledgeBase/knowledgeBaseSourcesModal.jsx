@@ -31,7 +31,16 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
         }
       })
     };       
+    // Initialize hidden_res_stages to empty array where undefined
+    Object.keys(new_sources).forEach(section => {
+      Object.keys(new_sources[section]).forEach(sourceId => {
+        if (new_sources[section][sourceId].hidden_res_stages === undefined) {
+          new_sources[section][sourceId].hidden_res_stages = [];
+        }
+      });
+    });
     setSourceAndSelectionData(new_sources);
+    console.log("new_sources", new_sources);
   }, [sources]);
 
   const handleCheckboxChange = (section, sourceId, isChecked) => {
@@ -89,14 +98,19 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
 
         // Construct the JSON body like:
         // { "docs_to_use": {
-        //     "integration_data": { "hostfully_data":<bool> },
+        //     "integration_data": { "hostfully_data":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] } },
         //     "guest_data":<bool>,
         //     "conversation_data": { "num_months_to_use": 6, "hidden_res_stages": ["INQUIRY/PAST", ...] },
         //     "file_data": { "file_name_1":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] }, "file_name_2":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] }, ... }
         //  }  } 
         const json_body = { 'docs_to_use': { } };
         if ('integration_data' in sourceAndSelectionData['PMS Integration']) {
-          json_body['docs_to_use']['integration_data'] = {[integrationDataKey]: sourceAndSelectionData['PMS Integration']['integration_data'].use_for_knowledge_base};
+          json_body['docs_to_use']['integration_data'] = {
+            [integrationDataKey]: {
+              use: sourceAndSelectionData['PMS Integration']['integration_data'].use_for_knowledge_base,
+              hidden_res_stages: sourceAndSelectionData['PMS Integration']['integration_data'].hidden_res_stages || []
+            }
+          };
           json_body['docs_to_use']['guest_data'] = sourceAndSelectionData['PMS Integration']['guest_data'].use_for_knowledge_base;
           if ('conversation_data' in sourceAndSelectionData['PMS Integration']) {
             json_body['docs_to_use']['conversation_data'] = {
@@ -163,7 +177,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
                               {sourceAndSelectionData[section][source].label}
                               {sourceAndSelectionData[section][source].id === 'conversation_data' && <span> (last 6 months)</span>}
                             </label>
-                            {!['integration_data', 'guest_data', 'availability_data'].includes(sourceAndSelectionData[section][source].id) && <KnowledgeBasePencil handlePencilIconClick={() => setResStageModalData({show:true, section:section, sourceId:sourceAndSelectionData[section][source].id, hiddenResStages:sourceAndSelectionData[section][source].hidden_res_stages})} someResStageIsHidden={sourceAndSelectionData[section][source].hidden_res_stages.length > 0} />}
+                            {!['guest_data', 'availability_data'].includes(sourceAndSelectionData[section][source].id) && <KnowledgeBasePencil handlePencilIconClick={() => setResStageModalData({show:true, section:section, sourceId:sourceAndSelectionData[section][source].id, hiddenResStages:sourceAndSelectionData[section][source].hidden_res_stages})} someResStageIsHidden={sourceAndSelectionData[section][source].hidden_res_stages.length > 0} />}
                           </>
                         )}
                       </div>

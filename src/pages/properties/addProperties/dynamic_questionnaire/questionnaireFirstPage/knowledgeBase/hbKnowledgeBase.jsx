@@ -55,6 +55,10 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
         setIntegrationDataKey(firstKey);
       }
 
+      // Add hidden reservation stages to integration data
+      const integrationHiddenResStages = apiPropertyData?.supporting_doc_items?.integration_data?.[integration_data_key]?.hide_for_reservations
+      integrationDataToSet['integration_data']['hide_for_reservations'] = integrationHiddenResStages || [];
+
       // Check if guest data should be used for the knowledge base
       const guest_ufkb_val = apiPropertyData?.supporting_doc_items?.guest_data?.use_for_knowledge_base
       if (guest_ufkb_val === undefined || guest_ufkb_val === true) {
@@ -134,7 +138,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
   const sourceDataForModal = { 'PMS Integration': {}, 'Property Documents': {}, 'Property Profile': {} };
   if (integrationPlatform) {
     sourceDataForModal['PMS Integration'] = {
-      'integration_data': {'label':'PMS property details', 'id':'integration_data', 'use_for_knowledge_base':integrationData['integration_data']?.use_for_knowledge_base},
+      'integration_data': {'label':'PMS property details', 'id':'integration_data', 'use_for_knowledge_base':integrationData['integration_data']?.use_for_knowledge_base, 'hidden_res_stages':integrationData['integration_data']?.hide_for_reservations || []},
       'availability_data': {'label':availability_label, 'id':'availability_data', 'use_for_knowledge_base':!!integrationData['integration_data']}, // use_for_knowledge_base true if integration_data is present
       'guest_data': {'label':'Guest and reservation data', 'id':'guest_data', 'use_for_knowledge_base':integrationData['guest_data']?.use_for_knowledge_base}
     }
