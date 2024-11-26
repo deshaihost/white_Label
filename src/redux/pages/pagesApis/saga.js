@@ -26,6 +26,12 @@ function* getUserDataFunction(data) {
         type: PagesApisActionTypes.GET_USER_DATA_SUCCESS,
         payload: { data: response.data, status: response.status },
       });
+
+      // Save the most recently fetched user data to the session storage
+      try {
+        sessionStorage.setItem("userData", JSON.stringify(response.data.user));
+      } catch { }
+
     } else {
       yield put({
         type: PagesApisActionTypes.GET_USER_DATA_ERROR,

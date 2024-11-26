@@ -90,9 +90,9 @@ const InboxIndex = () => {
       <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent} showTimeZoneNotif={showTimeZoneNotif}/>
       {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames} userHasPMS={userHasPMS} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays}/>}
       {interFaceComponent === 1 && <SmartTemplateIndex allPropertyNamesList={allPropertyNamesList} userData={allUserData}/>}
-      {interFaceComponent === 2 && <ReviewRemoval allPropertyNamesList={allPropertyNamesList}/>}
-      {interFaceComponent === 3 && <Preferences allPropertyNamesList={allPropertyNamesList}/>}
-      {interFaceComponent === 4 && <Upsells allPropertyNamesList={allPropertyNamesList}/>}
+      {interFaceComponent === 2 && <Preferences allPropertyNamesList={allPropertyNamesList}/>}
+      {interFaceComponent === 3 && <Upsells allPropertyNamesList={allPropertyNamesList}/>}
+      {interFaceComponent === 4 && <ReviewRemoval allPropertyNamesList={allPropertyNamesList}/>}
     </div>
   );
 };
