@@ -25,7 +25,6 @@ const BasicInformationForm = ({ property_name }) => {
   const add_thumbnail_image_API_call = async (propertyName, imgFile) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const token = JSON.parse(sessionStorage.getItem("hostBuddy_auth"))?.token;
     setImgIsUplaoding(true);
 
     if (uploadedFile && uploadedFile.length > 0) {
@@ -34,9 +33,8 @@ const BasicInformationForm = ({ property_name }) => {
       if ( file?.type === "image/jpeg" || file?.type === "image/jpg" || file?.type === "image/png" ) {
         formData?.append("file", file);
         try {
-          if (token) {
             const config = {
-              headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
+              headers: { "X-API-Key": API_KEY },
               validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
             };
             let formData = new FormData();
@@ -44,9 +42,8 @@ const BasicInformationForm = ({ property_name }) => {
             config.headers["Content-Type"] = "multipart/form-data";
 
             const response = await axios.post( `${baseUrl}/properties/${propertyName}/add_thumbnail_image`, formData, config );
-            if (response.status === 200) { }
+            if (response.status === 200) { ToastHandle( "Thumbnail image added successfully", "success" ); }
             else { ToastHandle( `Error adding thumbnail image: ${response?.data?.error}`, "danger" ); }
-          } else { alert("No Token"); }
         } catch (error) { ToastHandle( "500 Internal Server Error", "danger" ); }
         finally { setImgIsUplaoding(false); }
       } else { ToastHandle( "Invalid file type. Must be .jpg, .jpeg, or .png", "danger" ); }

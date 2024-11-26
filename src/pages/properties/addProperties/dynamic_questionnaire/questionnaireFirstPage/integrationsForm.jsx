@@ -26,22 +26,18 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
     setIntegrationPropertiesLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
 
     try {
-      if (token) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
 
-        const response = await axios.get(`${baseUrl}/list_integration_properties`, config);
+      const response = await axios.get(`${baseUrl}/list_integration_properties`, config);
 
-        if (response.status === 200) {
-          setIntegrationPropertiesList(response.data.properties); //list of dicts with "name" and "id" properties
-        } else {  }
-      }
+      if (response.status === 200) {
+        setIntegrationPropertiesList(response.data.properties); //list of dicts with "name" and "id" properties
+      } else {  }
     } catch (error) {  }
     finally { setIntegrationPropertiesLoading(false); }
   };
@@ -72,31 +68,25 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
     setLinkIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
 
     // Get the integrationPropertyName from the integrationPropertyId
     const selectedIntegrationProperty = integrationPropertyList.find((property) => property.id === integrationPropertyId);
     const integrationPropertyName = selectedIntegrationProperty?.internal_name ? selectedIntegrationProperty.internal_name : selectedIntegrationProperty?.name;
 
     try {
-      if (token) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
 
-        const jsonPayload = { platform_property_id: integrationPropertyId, platform_property_name: integrationPropertyName };
-        const response = await axios.post(`${baseUrl}/properties/${propertyName}/link_to_integration`, jsonPayload, config);
+      const jsonPayload = { platform_property_id: integrationPropertyId, platform_property_name: integrationPropertyName };
+      const response = await axios.post(`${baseUrl}/properties/${propertyName}/link_to_integration`, jsonPayload, config);
 
-        if (response.status === 200) {
-          ToastHandle(response.data.message, "success");
-          getPropertyDataFromAPI(propertyName);
-        } else {
-          ToastHandle(response?.data?.error, "danger");
-        }
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        getPropertyDataFromAPI(propertyName);
       } else {
-        alert("No Token");
+        ToastHandle(response?.data?.error, "danger");
       }
     } catch (error) {
       console.error("Error linking integration:", error);
@@ -116,21 +106,17 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
     setUnlinkIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
 
     try {
-      if (token) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
-        };
-        const response = await axios.delete(`${baseUrl}/properties/${propertyName}/unlink_from_integration`, config);
+      const config = {
+        headers: {"X-API-Key": API_KEY},
+      };
+      const response = await axios.delete(`${baseUrl}/properties/${propertyName}/unlink_from_integration`, config);
 
-        if (response.status === 200) {
-          ToastHandle(response.data.message, "success");
-          getPropertyDataFromAPI(propertyName);
-        } else { ToastHandle(response.data.error, "danger"); }
-      }
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        getPropertyDataFromAPI(propertyName);
+      } else { ToastHandle(response.data.error, "danger"); }
     } catch (error) {
       console.error("Error unlinking integration:", error);
       ToastHandle("Error unlinking integration", "danger");

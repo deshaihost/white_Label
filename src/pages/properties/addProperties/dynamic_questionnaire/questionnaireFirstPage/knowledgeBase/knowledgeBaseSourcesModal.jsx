@@ -40,7 +40,6 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
       });
     });
     setSourceAndSelectionData(new_sources);
-    console.log("new_sources", new_sources);
   }, [sources]);
 
   const handleCheckboxChange = (section, sourceId, isChecked) => {
@@ -64,20 +63,16 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
   const getPropertyDataFromAPI = async (propertyName) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
 
     try {
-      if (token) {
-        const config = {
-          headers: {Authorization: `Bearer ${token}`, "X-API-Key": API_KEY},
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
-        const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
+      const config = {
+        headers: {"X-API-Key": API_KEY},
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const response = await axios.get(`${baseUrl}/properties/${propertyName}`, config);
 
-        if (response.status === 200) {
-          setApiPropertyData(response.data.property);
-        } else {  }
+      if (response.status === 200) {
+        setApiPropertyData(response.data.property);
       } else {  }
     } catch (error) {  }
   };
@@ -86,58 +81,54 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
     setApiLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-    const token = getSessionStorageData?.token;
 
     try {
-      if (token) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}`, "X-API-Key": API_KEY },
-          validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
-        };
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
 
-        // Construct the JSON body like:
-        // { "docs_to_use": {
-        //     "integration_data": { "hostfully_data":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] } },
-        //     "guest_data":<bool>,
-        //     "conversation_data": { "num_months_to_use": 6, "hidden_res_stages": ["INQUIRY/PAST", ...] },
-        //     "file_data": { "file_name_1":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] }, "file_name_2":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] }, ... }
-        //  }  } 
-        const json_body = { 'docs_to_use': { } };
-        if ('integration_data' in sourceAndSelectionData['PMS Integration']) {
-          json_body['docs_to_use']['integration_data'] = {
-            [integrationDataKey]: {
-              use: sourceAndSelectionData['PMS Integration']['integration_data'].use_for_knowledge_base,
-              hidden_res_stages: sourceAndSelectionData['PMS Integration']['integration_data'].hidden_res_stages || []
-            }
-          };
-          json_body['docs_to_use']['guest_data'] = sourceAndSelectionData['PMS Integration']['guest_data'].use_for_knowledge_base;
-          if ('conversation_data' in sourceAndSelectionData['PMS Integration']) {
-            json_body['docs_to_use']['conversation_data'] = {
-              num_months_to_use: sourceAndSelectionData['PMS Integration']['conversation_data'].use_for_knowledge_base ? 6 : 0,
-              hidden_res_stages: sourceAndSelectionData['PMS Integration']['conversation_data'].hidden_res_stages
-            };
+      // Construct the JSON body like:
+      // { "docs_to_use": {
+      //     "integration_data": { "hostfully_data":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] } },
+      //     "guest_data":<bool>,
+      //     "conversation_data": { "num_months_to_use": 6, "hidden_res_stages": ["INQUIRY/PAST", ...] },
+      //     "file_data": { "file_name_1":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] }, "file_name_2":{ "use":<bool>, "hidden_res_stages": ["INQUIRY/PAST", ...] }, ... }
+      //  }  } 
+      const json_body = { 'docs_to_use': { } };
+      if ('integration_data' in sourceAndSelectionData['PMS Integration']) {
+        json_body['docs_to_use']['integration_data'] = {
+          [integrationDataKey]: {
+            use: sourceAndSelectionData['PMS Integration']['integration_data'].use_for_knowledge_base,
+            hidden_res_stages: sourceAndSelectionData['PMS Integration']['integration_data'].hidden_res_stages || []
           }
+        };
+        json_body['docs_to_use']['guest_data'] = sourceAndSelectionData['PMS Integration']['guest_data'].use_for_knowledge_base;
+        if ('conversation_data' in sourceAndSelectionData['PMS Integration']) {
+          json_body['docs_to_use']['conversation_data'] = {
+            num_months_to_use: sourceAndSelectionData['PMS Integration']['conversation_data'].use_for_knowledge_base ? 6 : 0,
+            hidden_res_stages: sourceAndSelectionData['PMS Integration']['conversation_data'].hidden_res_stages
+          };
         }
-        if (Object.keys(sourceAndSelectionData['Property Documents']).length > 0) {
-          json_body['docs_to_use']['file_data'] = {};
-          Object.keys(sourceAndSelectionData['Property Documents']).forEach(file_name => {
-            json_body['docs_to_use']['file_data'][file_name] = {
-              use: sourceAndSelectionData['Property Documents'][file_name].use_for_knowledge_base,
-              hidden_res_stages: sourceAndSelectionData['Property Documents'][file_name].hidden_res_stages || []
-            };
-          });
-        }
-        json_body['docs_to_use']['questionnaire'] = sourceAndSelectionData['Property Profile']['Property Profile'].use_for_knowledge_base;
-
-        const response = await axios.put(`${baseUrl}/properties/${propertyName}/set_knowledge_base`, json_body, config);
-
-        if (response.status === 200) {
-          ToastHandle(response.data.message, "success");
-          getPropertyDataFromAPI(propertyName);
-          closeHndle();
-        } else { ToastHandle(response?.data?.error, "danger"); }
       }
+      if (Object.keys(sourceAndSelectionData['Property Documents']).length > 0) {
+        json_body['docs_to_use']['file_data'] = {};
+        Object.keys(sourceAndSelectionData['Property Documents']).forEach(file_name => {
+          json_body['docs_to_use']['file_data'][file_name] = {
+            use: sourceAndSelectionData['Property Documents'][file_name].use_for_knowledge_base,
+            hidden_res_stages: sourceAndSelectionData['Property Documents'][file_name].hidden_res_stages || []
+          };
+        });
+      }
+      json_body['docs_to_use']['questionnaire'] = sourceAndSelectionData['Property Profile']['Property Profile'].use_for_knowledge_base;
+
+      const response = await axios.put(`${baseUrl}/properties/${propertyName}/set_knowledge_base`, json_body, config);
+
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        getPropertyDataFromAPI(propertyName);
+        closeHndle();
+      } else { ToastHandle(response?.data?.error, "danger"); }
     } catch (error) { ToastHandle("Sorry, an error occurred", "danger"); }
     finally { setApiLoading(false); }
   };

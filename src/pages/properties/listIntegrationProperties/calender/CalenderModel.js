@@ -55,30 +55,12 @@ const CalenderModel = ({
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
-    const getSessionStorageData = JSON.parse(
-      sessionStorage.getItem("hostBuddy_auth")
-    );
-
-    const token = getSessionStorageData?.token;
-
     try {
-      if (token) {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-API-Key": API_KEY,
-          },
-        };
-        const response = await axios.get(
-          `${baseUrl}/properties/${propertyName}/get_schedule`,
-          config
-        );
+      const config = {headers: {"X-API-Key": API_KEY}};
+      const response = await axios.get(`${baseUrl}/properties/${propertyName}/get_schedule`, config);
 
-        setCalendarSchedule(() => response?.data?.schedules);
-        setTimeZone(() => response?.data?.time_zone);
-      } else {
-        alert("No Token");
-      }
+      setCalendarSchedule(() => response?.data?.schedules);
+      setTimeZone(() => response?.data?.time_zone);
     } catch (error) {
       console.log(error);
       setCalendarSchedule(() => {});
