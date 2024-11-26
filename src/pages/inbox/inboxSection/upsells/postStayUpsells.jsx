@@ -291,7 +291,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
               <div className="d-flex align-items-center gap-2">
                 <Form.Check type="radio" name="discount_type" label="Absolute:" checked={currentSettingsData.discount_type === 'absolute'} onChange={() => setSetting('discount_type', 'absolute', currentSettingsData, setCurrentSettingsData)}/>
                 <input type="number" className="form-control" style={{width: '100px'}} value={currentSettingsData.discount_absolute} onChange={(e) => setSetting('discount_absolute', e.target.value, currentSettingsData, setCurrentSettingsData)} disabled={currentSettingsData.discount_type !== 'absolute'}/>
-                <label className="fs-6">{currency} per night</label>
+                <label className="fs-6">{currency || ''} per night</label>
               </div>
             )}
           </div>

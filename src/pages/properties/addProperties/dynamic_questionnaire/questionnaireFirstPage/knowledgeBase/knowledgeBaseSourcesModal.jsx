@@ -8,7 +8,7 @@ import Loader, { BoxLoader } from "../../../../../../helper/Loader";
 import KnowledgeBasePencil from "./knowledgeBasePencil";
 import ResStageModal from "./resStageModal";
 
-const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, integrationDataKey, setApiPropertyData }) => {
+const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, integrationDataKey, setApiPropertyData, availability_label }) => {
   const [apiLoading, setApiLoading] = useState(false);
   const [sourceAndSelectionData, setSourceAndSelectionData] = useState({});
   const [resStageModalData, setResStageModalData] = useState({show:false});
@@ -22,7 +22,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
         "PMS Integration": {
           ...sources["PMS Integration"],
           "conversation_data": {
-            label: "Past Conversations",
+            label: "Past conversations",
             id: "conversation_data",
             use_for_knowledge_base: sources["PMS Integration"]?.["conversation_data"]?.use_for_knowledge_base ?? false,
             //hidden_res_stages: sources["PMS Integration"]?.["conversation_data"]?.hidden_res_stages || ['INQUIRY/PAST'] // default to inquiry/past hidden for conversation data
@@ -35,6 +35,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
   }, [sources]);
 
   const handleCheckboxChange = (section, sourceId, isChecked) => {
+    if (sourceId === 'availability_data') { return; } // for now, this can't be unchecked
     const updatedSourceAndSelectionData = { ...sourceAndSelectionData };
     updatedSourceAndSelectionData[section][sourceId].use_for_knowledge_base = isChecked;
     setSourceAndSelectionData(updatedSourceAndSelectionData);
@@ -162,7 +163,7 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
                               {sourceAndSelectionData[section][source].label}
                               {sourceAndSelectionData[section][source].id === 'conversation_data' && <span> (last 6 months)</span>}
                             </label>
-                            {!['integration_data', 'guest_data'].includes(sourceAndSelectionData[section][source].id) && <KnowledgeBasePencil handlePencilIconClick={() => setResStageModalData({show:true, section:section, sourceId:sourceAndSelectionData[section][source].id, hiddenResStages:sourceAndSelectionData[section][source].hidden_res_stages})} someResStageIsHidden={sourceAndSelectionData[section][source].hidden_res_stages.length > 0} />}
+                            {!['integration_data', 'guest_data', 'availability_data'].includes(sourceAndSelectionData[section][source].id) && <KnowledgeBasePencil handlePencilIconClick={() => setResStageModalData({show:true, section:section, sourceId:sourceAndSelectionData[section][source].id, hiddenResStages:sourceAndSelectionData[section][source].hidden_res_stages})} someResStageIsHidden={sourceAndSelectionData[section][source].hidden_res_stages.length > 0} />}
                           </>
                         )}
                       </div>

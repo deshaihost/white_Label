@@ -114,7 +114,16 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
   };
   */
       
-  const integration_categories = {'Property details and availability':'integration_data', 'Guest and reservation data':'guest_data', 'Past conversations':'conversation_data'}
+  //const integration_categories = {'Property details and availability':'integration_data', 'Guest and reservation data':'guest_data', 'Past conversations':'conversation_data'}
+  let integration_categories = {};
+  let availability_label = 'Property availability';
+  if (integrationPlatform && ['ownerrez', 'guesty', 'hostfully', 'hostify', 'hostaway'].includes(integrationPlatform.toLowerCase())) {
+    availability_label = 'Property availability and pricing';
+    integration_categories = {'PMS property details':'integration_data', [availability_label]:'availability_data', 'Guest and reservation data':'guest_data', 'Past conversations':'conversation_data'}
+  } else {
+    integration_categories = {'PMS property details':'integration_data', [availability_label]:'availability_data', 'Guest and reservation data':'guest_data', 'Past conversations':'conversation_data'}
+  }
+
   const convo_data_has_been_pulled = (pullConversationsSuccess || apiPropertyData?.supporting_doc_items?.conversation_data)
     const integrationPlatformFormatted = integrationPlatform
     ? integrationPlatform === "ownerrez" ? "OwnerRez"
@@ -125,7 +134,8 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
   const sourceDataForModal = { 'PMS Integration': {}, 'Property Documents': {}, 'Property Profile': {} };
   if (integrationPlatform) {
     sourceDataForModal['PMS Integration'] = {
-      'integration_data': {'label':'Property details and availability', 'id':'integration_data', 'use_for_knowledge_base':integrationData['integration_data']?.use_for_knowledge_base},
+      'integration_data': {'label':'PMS property details', 'id':'integration_data', 'use_for_knowledge_base':integrationData['integration_data']?.use_for_knowledge_base},
+      'availability_data': {'label':availability_label, 'id':'availability_data', 'use_for_knowledge_base':!!integrationData['integration_data']}, // use_for_knowledge_base true if integration_data is present
       'guest_data': {'label':'Guest and reservation data', 'id':'guest_data', 'use_for_knowledge_base':integrationData['guest_data']?.use_for_knowledge_base}
     }
     if (convo_data_has_been_pulled) {
@@ -148,7 +158,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
           <>
             {Object.keys(integration_categories).map((section, index) => (
               !((section === 'Past conversations' && !convo_data_has_been_pulled)) && (
-                (integrationData[integration_categories[section]]?.use_for_knowledge_base ? (
+                ((integrationData[integration_categories[section]]?.use_for_knowledge_base) || (section == availability_label) ? ( // If the PMS is connected, just show availability as present no matter what, for simplicity
                   (integrationData[integration_categories[section]]?.months ? (
                     <h5 className="text-confirmed" key={index}>{section} <small style={{color:'#AAA'}}>(last {integrationData[integration_categories[section]]?.months} months)</small></h5>
                   ) : (
@@ -207,7 +217,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
           </button>
         </div>
       </div>
-      <KnowledgeBaseSourcesModal show={showManageModal} handleClose={() => setShowManageModal(false)} propertyName={propertyName} sources={sourceDataForModal} integrationDataKey={integration_data_key} setApiPropertyData={setApiPropertyData} />
+      <KnowledgeBaseSourcesModal show={showManageModal} handleClose={() => setShowManageModal(false)} propertyName={propertyName} sources={sourceDataForModal} integrationDataKey={integration_data_key} setApiPropertyData={setApiPropertyData} availability_label={availability_label}/>
     </div>
   );
 
