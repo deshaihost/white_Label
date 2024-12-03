@@ -34,7 +34,7 @@ const minutAlertsIntoInstantAction = () => {
         <meta property="twitter:title" content="Turn Minut Alerts into Instant Action: HostBuddy AI's Game-Changing Integration with Minut" />
         <meta property="twitter:description" content="Discover how HostBuddy AI's integration with Minut revolutionizes short-term rental hosting with real-time alerts and automated guest messaging." />
         <meta property="twitter:image" content="https://i.postimg.cc/hvLQ6vJc/minut-alerts-into-instant-action.webp" />
-        <link rel="canonical" href="https://www.hostbuddy.ai/blog/guesty_hostbuddy_join" />
+        <link rel="canonical" href="https://www.hostbuddy.ai/blog/minut_alerts_into_instant_action" />
       </Helmet>
       <div className="blog-article-page">
         <BlogArticleHeader title="Turn Minut Alerts into Instant Action: HostBuddy AI's Game-Changing Integration with Minut" author="Jay Ullrich" date="December 03, 2024" headerImage={thumbnailImg} />    
