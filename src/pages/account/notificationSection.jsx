@@ -5,7 +5,6 @@ import ToastHandle from "../../helper/ToastMessage";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions, stateEmptyActions } from "../../redux/actions";
-import customStyles from "./selectStyles"; // for the react multi-select
 import { Tooltip } from "react-tooltip";
 
 import MultiSelect from "../../component/multiSelect/multiSelect";
@@ -15,6 +14,7 @@ const AccountNotificationSection = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
+  const propertyNamesList = Object.keys(userDataGet?.property_data || {});
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
 
   // Initialize user_contact_options with all possible contact channels set to empty objects
@@ -57,6 +57,7 @@ const AccountNotificationSection = () => {
   const [newRecipient, setNewRecipient] = useState({});
   const [triggerApiUpdate, setTriggerApiUpdate] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedProperties, setSelectedProperties] = useState([]);
   const [editingRecipientIndex, setEditingRecipientIndex] = useState(null);
 
   const categoryOptions = [
@@ -67,9 +68,11 @@ const AccountNotificationSection = () => {
     { value:'OTHER', label:'Other' }
   ];
 
+  const propertyOptions = propertyNamesList.map((property) => ({ value:property, label:property }));
+
   const consent_bad = newRecipient.channel === "sms" && !newRecipient.consent_checked;
 
-  const callUpdateNotifSettingsApi = async (settingsData) => {
+  const callUpdateNotifSettingsApiNew = async (settingsData) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     const dataToSend = { ...settingsData };
@@ -81,7 +84,7 @@ const AccountNotificationSection = () => {
         validateStatus: function (status) { return status >= 200 && status < 500; }, // don't throw an error for non-2xx responses
       };
 
-      const response = await axios.put( `${baseUrl}/set_notification_settings`, dataToSend, config );
+      const response = await axios.put( `${baseUrl}/set_notifications_settings`, dataToSend, config );
 
       if (response.status === 200) {
         ToastHandle(response.data.message, "success");
@@ -96,9 +99,43 @@ const AccountNotificationSection = () => {
     }
   };
 
+  // For the NEW logic. Old logic uses the notification settings in the user data
+  const callGetNotificationSettingsApi = async () => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; }, // don't throw an error for non-2xx responses
+      };
+
+      const response = await axios.get(`${baseUrl}/get_notification_settings`, config);
+
+      if (response.status === 200) {
+        // Map API field names to component field names
+        const mappedSettings = response.data.notification_settings.map(setting => ({
+          firstName: setting.name,
+          channel: setting.type,
+          RecipientAddress: setting.address,
+          timing: setting.timing,
+          time_of_day: setting.time_of_day,
+          categories: setting.categories || [],
+          properties: setting.properties || []  // Add properties to mapping
+        }));
+        setRecipients(mappedSettings);
+      } else {
+        ToastHandle(response?.data?.error, "danger");
+      }
+    } catch (error) {
+      ToastHandle('An error occurred retrieving your current settings.', "danger");
+    }
+  };
+
   const showNewRecipientFields = () => {
     setNewRecipient({ firstName: "", channel: "", RecipientAddress: "", timing: "", time: "", consent_checked: false });
     setSelectedCategories(categoryOptions); // Populate with all category options by default
+    setSelectedProperties(propertyOptions); // Populate with all property options by default
     setEditingRecipientIndex(null);
   };
 
@@ -113,32 +150,25 @@ const AccountNotificationSection = () => {
     setSelectedCategories(selectedOptions);
   };
 
-  const updateDataToApi = async (data) => {
-    // Structure the data to be sent to the API
-    // {'notification_settings': { 'action_items': {
-    //      'immediate': {<email_or_sms#>: {'type':'<email_or_sms>', 'name':<firstName>, 'categories':[<category1>, <category2>, ...]}, ...},
-    //      'hourly': {<email_or_sms#>: {'type':'<email_or_sms>', 'name':<firstName>, 'categories':[...]}, ...},
-    //      'daily': {<email_or_sms#>: {'type':'<email_or_sms>', 'time_of_day':'<HH:MM>', 'name':<firstName>, 'categories':[...]}, ...} }}}
-    let notificationSettings = {
-      notification_settings: { action_items: { immediate: {}, hourly: {}, daily: {} } },
-    };
-    recipients.forEach((recipient, index) => {
-      let recipientData = {
-        type: recipient.channel,
-        name: recipient.firstName,
-        categories: recipient.categories || [],
-      };
-      if (recipient.timing === "daily") { recipientData["time_of_day"] = recipient.time; }
-      notificationSettings.notification_settings.action_items[recipient.timing][recipient.RecipientAddress] = recipientData;
-    });
+  const updateDataToApiNew = async (data) => {
+    // Structure the data to be sent to the API (much simpler)
+    // [{'type':'<email_or_sms>', 'name':<firstName>, 'categories':[<category1>, <category2>, ...], 'timing':'<immediate/hourly/daily>', 'time_of_day':'<HH:MM>', ...}, ...]
 
-    // Call the API to update the notification settings
-    const apiResponseCode = await callUpdateNotifSettingsApi(
-      notificationSettings
-    );
+    const notification_settings = recipients.map(recipient => ({
+      for: 'action_items',
+      type: recipient.channel,
+      name: recipient.firstName,
+      categories: recipient.categories || [],
+      properties: recipient.properties || [], // Add properties to API payload
+      timing: recipient.timing,
+      address: recipient.RecipientAddress,
+      ...(recipient.timing === 'daily' && { time_of_day: recipient.time || recipient.time_of_day })
+    }));
+
+    const apiResponseCode = await callUpdateNotifSettingsApiNew({ notification_settings });
+
     if (apiResponseCode === 200) {
-      dispatch(stateEmptyActions());
-      dispatch(getUserDataActions()); // Update our record of user data with the new region data we just added to the database
+      callGetNotificationSettingsApi();
     }
   };
 
@@ -155,8 +185,25 @@ const AccountNotificationSection = () => {
       return;
     }
 
+    // Validate categories and properties
+    if (!selectedCategories || selectedCategories.length === 0) {
+      ToastHandle("Please select at least one category", "danger");
+      return;
+    }
+
+    if (!selectedProperties || selectedProperties.length === 0) {
+      ToastHandle("Please select at least one property", "danger");
+      return;
+    }
+
     // Before adding the new recipient, assign categories from selectedCategories
     newRecipient.categories = selectedCategories.map((option) => option.value);
+    newRecipient.properties = selectedProperties.map((option) => option.value); // Add properties
+
+    // Convert time field to time_of_day for API consistency
+    if (newRecipient.timing === 'daily') {
+      newRecipient.time_of_day = newRecipient.time;
+    }
 
     if (editingRecipientIndex !== null) {
       const updatedRecipients = [...recipients];
@@ -170,8 +217,7 @@ const AccountNotificationSection = () => {
     // Add the new recipient and clear form fields
     setNewRecipient({});
     setSelectedCategories([]);
-
-    // Update to API
+    setSelectedProperties([]);
     setTriggerApiUpdate(true);
   };
 
@@ -189,6 +235,11 @@ const AccountNotificationSection = () => {
       recipientToEdit.categories.map((category) =>
         categoryOptions.find((option) => option.value === category)
       )
+    );
+    setSelectedProperties(  // Add properties handling for edit
+      recipientToEdit.properties?.map((property) =>
+        propertyOptions.find((option) => option.value === property)
+      ) || propertyOptions
     );
     setEditingRecipientIndex(index);
   };
@@ -238,7 +289,7 @@ const AccountNotificationSection = () => {
   // When triggerApiUpdate is set, update the data to the API
   useEffect(() => {
     if (triggerApiUpdate) {
-      updateDataToApi();
+      updateDataToApiNew();
       setTriggerApiUpdate(false);
     }
   }, [triggerApiUpdate]);
@@ -246,32 +297,8 @@ const AccountNotificationSection = () => {
   // Fetch user data on page load, to populate "userDataGet"
   useEffect(() => {
     dispatch(getUserDataActions());
+    callGetNotificationSettingsApi();
   }, []);
-
-  // when userDataGet populates, update the state of the form fields and the phone/email options
-  useEffect(() => {
-    // Update the state of the form fields
-    if (userDataGet?.notification_settings) {
-      let newRecipients = [];
-      const actionItems = userDataGet.notification_settings?.action_items;
-      if (actionItems) {
-        for (let timing in actionItems) {
-          for (let recipient in actionItems[timing]) {
-            let newRecipient = {
-              firstName: actionItems[timing][recipient].name,
-              channel: actionItems[timing][recipient].type,
-              RecipientAddress: recipient,
-              timing: timing,
-              time: actionItems[timing][recipient].time_of_day ? actionItems[timing][recipient].time_of_day : "",
-              categories: actionItems[timing][recipient].categories || [],
-            };
-            newRecipients.push(newRecipient);
-          }
-        }
-        setRecipients(newRecipients);
-      }
-    }
-  }, [userDataGet]);
 
   /*
   // When the user's email address is populated from the API call, re-render the page so the email address select shows the right options
@@ -281,6 +308,7 @@ const AccountNotificationSection = () => {
   */
 
   function convertTimeTo12HourFormat(time) {
+    if (!time) { return ""; }
     const [hours, minutes] = time.split(":");
     const hour = parseInt(hours, 10);
     const minute = parseInt(minutes, 10);
@@ -321,7 +349,7 @@ const AccountNotificationSection = () => {
                 <td><h6 className="fs-14">{recipient.RecipientAddress}</h6></td>
                 <td>
                   <h6 className="fs-14">
-                    {recipient.timing === "daily" ? `${recipient.timing}, ${convertTimeTo12HourFormat(recipient.time)}` : recipient.timing}
+                    {recipient.timing === "daily" ? `${recipient.timing}, ${convertTimeTo12HourFormat(recipient.time_of_day)}` : recipient.timing}
                   </h6>
                 </td>
                 <td>
@@ -335,6 +363,18 @@ const AccountNotificationSection = () => {
                     )}
                   </h6>
                   <Tooltip id={`categories-tooltip-${index}`} place="top" effect="solid" />
+                </td>
+                <td>
+                  <h6 className="fs-14">
+                    {recipient.properties?.length ? (
+                      <span data-tooltip-id={`properties-tooltip-${index}`} data-tooltip-content={recipient.properties.join(", ")}>
+                        {`${recipient.properties.length} properties`}
+                      </span>
+                    ) : (
+                      "All properties"
+                    )}
+                  </h6>
+                  <Tooltip id={`properties-tooltip-${index}`} place="top" effect="solid" />
                 </td>
                 <td>
                   <div style={{ display:'flex', alignItems:'center' }}>
@@ -409,6 +449,11 @@ const AccountNotificationSection = () => {
               <div className="col input_group">
                 <label htmlFor="Categories" >Categories</label>
                 <MultiSelect id="Categories" options={categoryOptions} selectedOptions={selectedCategories} setSelectedOptions={setSelectedCategories} placeholder="Select categories..."/>
+              </div>
+
+              <div className="col input_group">
+                <label htmlFor="Properties" >Properties</label>
+                <MultiSelect id="Properties" options={propertyOptions} selectedOptions={selectedProperties} setSelectedOptions={setSelectedProperties} placeholder="Select properties..."/>
               </div>
             </div>
 
