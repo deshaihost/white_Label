@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getCalryLinkActions,
-  stateEmptyActions,
-} from "../../../../redux/actions";
+import {getCalryLinkActions, stateEmptyActions} from "../../../../redux/actions";
 import ToastHandle from "../../../../helper/ToastMessage";
 import { BoxLoader } from "../../../../helper/Loader";
 
@@ -29,11 +26,7 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (type) {
-      dispatch(
-        getCalryLinkActions({
-          platform: type,
-        })
-      );
+      dispatch(getCalryLinkActions({ platform: type.toLowerCase() }));
     }
   }, [type]);
 
@@ -56,13 +49,15 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
         <>
           {getCarlyLink !== undefined ? (
             <div className="text-white text-center">
-              <p style={{fontSize:'1em', marginBottom:'20px'}}>
-              <span style={{color:'#146ef5'}} className="mainCursor" onClick={() => {if (getCarlyLink !== undefined) { goToCarlyLinkHndle(); }}}>
-                CLICK HERE
-              </span> to securely enter your account information and complete the integration.
+              <p>
+                Click below to securely enter your account information and complete the integration.
               </p>
-              {/* <p>For specific instructions on how to complete your PMS integration with {pmsNameForUrl}, check out <a href={`/pms-instructions/${type}`} target="_blank">this page</a>.</p> */}
-              <p>For specific instructions on how to complete your PMS integration with {type}, check out <a href={`https://userguide.hostbuddy.ai/pms-integration-guides/${pmsNameForUrl}`} target="_blank">this page</a>.</p>
+              <button className="btn btn-primary px-5 my-4 rounded-pill" onClick={goToCarlyLinkHndle}>
+                Integrate
+              </button>
+              <p style={{fontSize: '0.9em'}}>
+                For specific instructions on how to complete your PMS integration with {type}, check out <a style={{fontSize: 'inherit'}} href={`https://userguide.hostbuddy.ai/pms-integration-guides/${pmsNameForUrl}`} target="_blank">this page</a>.
+              </p>
             </div>
           ) : (
             getCarlyLinkStatus === 204 ? (

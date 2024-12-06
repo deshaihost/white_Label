@@ -359,6 +359,7 @@
   .sidebarCTA {
     max-width: 300px;
   }
+
 }
 
 .blockquote {
@@ -366,4 +367,8 @@
   box-shadow: none;
   color: #ebedf0;
   padding: 0 1rem;
+}
+
+.custom-space {
+  margin-bottom: 0.5rem;
 }
