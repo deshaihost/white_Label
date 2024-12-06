@@ -68,10 +68,10 @@ const GetStarted = () => {
   // const [modalShow, setModalShow] = useState({type: false, interFaceShow: ""});
 
   const mainTileLinks = {
-    connectYourPMS: "https://userguide.hostbuddy.ai/detailed-setup-instructions/connect-property-management-system",
-    importYourProperties: "https://userguide.hostbuddy.ai/detailed-setup-instructions/import-properties",
-    test: "https://userguide.hostbuddy.ai/detailed-setup-instructions/test-property",
-    goLive: "https://userguide.hostbuddy.ai/detailed-setup-instructions/schedule-hostbuddy",
+    connectYourPMS: "https://userguide.hostbuddy.ai/quick-start/1-connect-your-pms",
+    importYourProperties: "https://userguide.hostbuddy.ai/quick-start/2-import-your-properties",
+    test: "https://userguide.hostbuddy.ai/quick-start/3-test",
+    goLive: "https://userguide.hostbuddy.ai/quick-start/4-go-live",
   }
 
   // Factor out the onClick handler into a function
@@ -90,11 +90,7 @@ const GetStarted = () => {
                 Welcome to HostBuddy!
               </h3>
               <p className="color-light-grey text-white fs-6">
-                Thanks for choosing HostBuddy as your copilot for your
-                short-term rental business! You can add your properties and test
-                HostBuddy as much as you'd like before you begin your
-                subscription. Follow these quick steps and you'll be up and
-                running in no time.
+                Click the tiles below to get up and running in no time!
               </p>
             </Col>
 

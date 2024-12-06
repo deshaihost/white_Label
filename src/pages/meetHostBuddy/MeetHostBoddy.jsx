@@ -3,7 +3,6 @@ import "./meetHostBuddy.css";
 import MeetBanner from "./banner/MeetBanner";
 import Setup from "./setup/Setup";
 import Discover from "./discover/Discover";
-import HostDaddy from "../../component/hostDaddy/hostDaddy";
 import { Helmet } from "react-helmet";
 import { APICore } from "../../helper/apiCore";
 import { useLocation } from 'react-router-dom';
@@ -41,7 +40,6 @@ const MeetHostBoddy = () => {
           </>
         )}
       </div>
-      <HostDaddy />
     </div>
   );
 };

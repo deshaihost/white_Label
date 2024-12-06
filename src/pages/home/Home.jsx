@@ -7,7 +7,6 @@ import Plans from "./plans/Plans";
 //import DemoVideoSection from "./demoVideoSection/demoVideoSection";
 import TryItOutCTA from "./tryItOut/tryItOut";
 import WelcomeSection from "./welcomeSection/WelcomeSection";
-import HostDaddy from "../../component/hostDaddy/hostDaddy";
 import { Helmet } from "react-helmet";
 
 const Home = () => {
@@ -75,7 +74,6 @@ const Home = () => {
       </div>
       */}
       <Plans />
-      <HostDaddy />
     </div>
   );
 };
