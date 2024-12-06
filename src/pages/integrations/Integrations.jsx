@@ -13,7 +13,6 @@ import Minut from "../../../src/helper/staticImage/minut.webp";
 import Turno from "../../../src/helper/staticImage/turno.webp";
 import "./Integration.css";
 import ContactUs from "../meetHostBuddy/discover/contactUs/ContactUs";
-import HostDaddy from "../../component/hostDaddy/hostDaddy";
 import { Helmet } from 'react-helmet';
 
 
@@ -149,7 +148,6 @@ const Integrations = () => {
         </div>
       </div>
       <ContactUs show={contactModalShow} onHide={() => setContactModalShow(false)}/>
-      <HostDaddy />
     </div>
     </>
 

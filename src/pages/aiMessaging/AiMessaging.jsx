@@ -8,7 +8,6 @@ import Money from "../../helper/staticImage/money-bag.webp";
 import { Helmet } from 'react-helmet';
 
 import TryItOutCTA from "../home/tryItOut/tryItOut";
-import HostDaddy from "../../component/hostDaddy/hostDaddy";
 
 
 const AiMessaging = () => {
@@ -101,7 +100,6 @@ const AiMessaging = () => {
       </div>
       <TestShowConvIndex titles={['24 Hour Troubleshooting', 'Inquiry Handling', 'Smart Deferral']}/>
       <TryItOutCTA sourceMsg={'AI messaging landing page'}/>
-      <HostDaddy />
     </div>
   );
 };

@@ -8,7 +8,6 @@ import SendWhenIfTile from "./sendWhenIfTiles/sendWhenIfTiles";
 import ConditionsModal from "./modals/conditionsModal";
 import TriggersModal from "./modals/triggersModal";
 import BookDemoModal from '../../component/bookDemoModal';
-import HostDaddy from "../../component/hostDaddy/hostDaddy";
 
 const NightHouse = "https://hostbuddylb.com/new-landing-pages/penthouse-prop.webp";
 
@@ -154,7 +153,6 @@ const SmartTemplatesLanding = () => {
       </div>
       <ConditionsModal show={showConditionsModal} handleClose={() => setShowConditionsModal(false)} />
       <TriggersModal show={showTriggersModal} handleClose={() => setShowTriggersModal(false)} />
-      <HostDaddy />
     </div>
   );
 };
