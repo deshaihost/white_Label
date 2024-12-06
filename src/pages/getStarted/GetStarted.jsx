@@ -8,6 +8,8 @@ import IconFour from "../../helper/staticImage/icon4.webp";
 // import GetStartConnect from "./model/GetStartConnect";
 import { Link } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
+import HostDaddy from '../../component/hostDaddy/hostDaddy';
+
 const step1img = "https://hostbuddylb.com/get-started/1.%20Connect%20your%20PMS.webp";
 const step2img = "https://hostbuddylb.com/get-started/2.%20Add%20your%20properties.webp";
 const step3img = "https://hostbuddylb.com/get-started/3.%20Set%20Knowledge%20Base.webp";
@@ -190,6 +192,7 @@ const GetStarted = () => {
           </Row>
         </Container>
       </div>
+      <HostDaddy />
     </>
   );
 };

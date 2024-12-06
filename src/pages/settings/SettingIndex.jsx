@@ -14,6 +14,7 @@ import AccountContactSection from "../account/contactSection";
 import AccountRegionSection from "../account/regionSection";
 import AccountNotificationSection from "../account/notificationSection";
 import { Link, useParams } from "react-router-dom";
+import HostDaddy from '../../component/hostDaddy/hostDaddy';
 
 const SettingIndex = () => {
   const store = useSelector((state) => state);
@@ -104,6 +105,7 @@ const SettingIndex = () => {
           </div>
         </div>
       </div>
+      <HostDaddy />
     </div>
   );
 };

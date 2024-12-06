@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet';
 import BookDemoModal from '../../component/bookDemoModal';
 import NewPricingTiles from './newPricingTiles/newPricingTiles';
 import ContactUs from '../meetHostBuddy/discover/contactUs/ContactUs';
+import HostDaddy from '../../component/hostDaddy/hostDaddy';
 
 const Pricing = () => {
   const [demoModalShow, setDemoModalShow] = useState(false);
@@ -128,6 +129,7 @@ const Pricing = () => {
       </Container>
       <ContactUs show={contactModalShow} onHide={() => setContactModalShow(false)} />
       <BookDemoModal show={demoModalShow} onHide={() => setDemoModalShow(false)} sourceMsg='pricing page'/>
+      <HostDaddy />
     </section>
   )
 }

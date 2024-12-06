@@ -18,6 +18,7 @@ import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrati
 import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
 import UnlockPropertiesModal from "../../component/modal/unlockPropertiesModal/unlockPropertiesModal";
+import HostDaddy from "../../component/hostDaddy/hostDaddy";
 
 const Properties = () => {
   const store = useSelector((state) => state);
@@ -353,6 +354,7 @@ const Properties = () => {
       <DisconnectIntegration handleNoPlanClose={handleModelClose} showNoPlan={model?.disconnectIntegration}/>
       <ImportPropertiesModal handleNoPlanClose={handleModelClose} showNoPlan={model?.importProperties} setNewPropertiesAdded={setNewPropertiesAdded}/>
       <UnlockPropertiesModal handleClose={handleModelClose} modalShow={model?.unlockProperties} property_names={unlockPropertyNames} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} setPropertiesChanged={setNewPropertiesAdded}/>
+      <HostDaddy />
     </>
   );
 };

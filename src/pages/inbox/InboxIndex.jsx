@@ -10,6 +10,7 @@ import Preferences from "./inboxSection/preferences/Preferences";
 import Upsells from "./inboxSection/upsells/Upsells";
 import "./inboxSection/inbox/inboxIndex.css";
 import axios from "axios";
+import HostDaddy from "../../component/hostDaddy/hostDaddy";
 
 const InboxIndex = () => {
   const { section } = useParams();
@@ -93,6 +94,7 @@ const InboxIndex = () => {
       {interFaceComponent === 2 && <Preferences allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 3 && <Upsells allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 4 && <ReviewRemoval allPropertyNamesList={allPropertyNamesList}/>}
+      {interFaceComponent != 0 && <HostDaddy />}
     </div>
   );
 };
