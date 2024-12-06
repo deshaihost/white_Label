@@ -1,7 +1,9 @@
 // Site support chatbot, from DocsHound
 import React, { useEffect } from 'react';
+import { DocsHoundChat } from '@docshound/chat-react';
 
 const HostDaddy = () => {
+  /* Non-React version
   useEffect(() => {
     const script = document.createElement('script');
     script.src = "https://userguide.hostbuddy.ai/-/chat.js";
@@ -14,6 +16,8 @@ const HostDaddy = () => {
   }, []);
 
   return <docshound-chat></docshound-chat>;
+  */
+  return <DocsHoundChat src="https://userguide.hostbuddy.ai" />;
 };
 
 export default HostDaddy;

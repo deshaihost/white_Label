@@ -50,8 +50,8 @@ const Integrations = () => {
           <p>HostBuddy integrates effortlessly with popular Property Management Systems (PMS) such as Guesty, Hostaway, and OwnerRez, allowing you to synchronize guest data, reservations, and property details in real-time. This seamless connection enables automated messaging and streamlined operations for an efficient hosting experience.</p>
         </div>
         <div className="intre-content">
-          <h2>Maximize Efficiency with AI Automation</h2>
-          <p>Our AI-powered platform revolutionizes the way STR hosts manage their rentals. With 24/7 guest messaging automation, issue troubleshooting, and booking support, HostBuddy reduces your workload while ensuring guest satisfaction. Whether you're managing a single vacation home or multiple properties, HostBuddy adapts to meet your unique hosting needs.</p>
+          <h2>Maximize Efficiency with AI-Powered Guest Messaging</h2>
+          <p>Our AI-powered platform revolutionizes the way short-term rental hosts manage their rentals. With 24/7 guest messaging automation, issue troubleshooting, and booking support, HostBuddy reduces your workload while ensuring guest satisfaction. Whether you're managing a single vacation home or multiple properties, HostBuddy adapts to meet your unique hosting needs.</p>
         </div>
         <div className="inter-box row">
           <div className="col-lg-4 col-sm-6">
