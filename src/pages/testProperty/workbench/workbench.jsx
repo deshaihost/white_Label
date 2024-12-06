@@ -8,6 +8,7 @@ import axios from 'axios';
 import './workbench.css';
 import hostBuddyLogo from "../../../public/img/logo/logoGraphicOnlySquare.webp";
 import TypingIndicator from '../../../component/chatbotThinkingBubble/typingIndicator';
+import HostDaddy from '../../../component/hostDaddy/hostDaddy';
 
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions } from '../../../redux/actions';
@@ -249,6 +250,7 @@ const Workbench = () => {
         </div>
       </div>
       <PullOutPanel onClose={handleClosePanel} content={panelContent} className={isPanelOpen ? 'open' : ''} propertyName={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI} allPropertyNamesList={allPropertyNamesList} setPanelContent={setPanelContent}/>
+      <HostDaddy />
     </div>
   )
 }

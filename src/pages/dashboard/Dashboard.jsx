@@ -14,6 +14,7 @@ import { Helmet } from "react-helmet";
 import { FaCircleCheck } from "react-icons/fa6";
 import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/transcriptsModel/ConverSationtranscriptModel";
 import { Dropdown } from "primereact/dropdown";
+import HostDaddy from "../../component/hostDaddy/hostDaddy";
 
 import { MetricTile, HistogramTile, renderTiles } from "../statistics/statisticsTilesComponents";
 import { getStatisticsData, formatDateToReadable } from "../statistics/dataManager";
@@ -379,11 +380,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <ConverSationtranscriptModel
-        handleClose={handleModelClose}
-        show={model?.conversationModel}
-        prntData={model?.conversationDataSend}
-      />
+      <ConverSationtranscriptModel handleClose={handleModelClose} show={model?.conversationModel} prntData={model?.conversationDataSend}/>
+      <HostDaddy />
     </>
   );
 };

@@ -13,6 +13,7 @@ import Minut from "../../../src/helper/staticImage/minut.webp";
 import Turno from "../../../src/helper/staticImage/turno.webp";
 import "./Integration.css";
 import ContactUs from "../meetHostBuddy/discover/contactUs/ContactUs";
+import HostDaddy from "../../component/hostDaddy/hostDaddy";
 import { Helmet } from 'react-helmet';
 
 
@@ -47,15 +48,11 @@ const Integrations = () => {
         </div>
         <div className="intre-content">
           <h2>Streamlined PMS Integrations</h2>
-          <p>HostBuddy integrates effortlessly with popular Property Management Systems (PMS) such as Guesty, Lodgify, and Hostfully, allowing you to synchronize guest data, reservations, and property details in real-time. By connecting your preferred PMS to HostBuddy, you gain access to a unified dashboard that simplifies operations and reduces manual tasks, enabling you to focus on enhancing guest experiences.</p>
-        </div>
-        <div className="intre-content">
-          <h2>Property Management System</h2>
-          <p>HostBuddy integrates with your existing property management system (PMS) to access guest, reservation, and property data. This seamless connection enables automated messaging and streamlined operations for an efficient hosting experience.</p>
+          <p>HostBuddy integrates effortlessly with popular Property Management Systems (PMS) such as Guesty, Hostaway, and OwnerRez, allowing you to synchronize guest data, reservations, and property details in real-time. This seamless connection enables automated messaging and streamlined operations for an efficient hosting experience.</p>
         </div>
         <div className="intre-content">
           <h2>Maximize Efficiency with AI Automation</h2>
-          <p>Our AI-powered platform revolutionizes the way STR hosts manage their rentals. With 24/7 guest messaging automation, issue troubleshooting, and booking support, HostBuddy reduces your workload while ensuring guest satisfaction. Whether you're managing a single vacation home or multiple properties, our tools adapt to meet your unique hosting needs.</p>
+          <p>Our AI-powered platform revolutionizes the way STR hosts manage their rentals. With 24/7 guest messaging automation, issue troubleshooting, and booking support, HostBuddy reduces your workload while ensuring guest satisfaction. Whether you're managing a single vacation home or multiple properties, HostBuddy adapts to meet your unique hosting needs.</p>
         </div>
         <div className="inter-box row">
           <div className="col-lg-4 col-sm-6">
@@ -122,7 +119,7 @@ const Integrations = () => {
         </div>
         <div className="intre-content">
           <h2>Enhance Guest Experiences</h2>
-          <p>HostBuddy goes beyond basic automation by offering features that elevate your guest experiences. From upselling local experiences and late checkouts to personalized welcome messages, our platform helps you create memorable stays that encourage repeat bookings and positive reviews.</p>
+          <p>HostBuddy goes beyond basic automation by offering features that elevate your guest experiences. From upselling local experiences and late checkouts to personalized welcome messages, these integrations help you maximize the effectiveness of your automated guest communication.</p>
         </div>
         <div className="inter-box row">
           <div className="col-lg-4 col-sm-6">
@@ -152,6 +149,7 @@ const Integrations = () => {
         </div>
       </div>
       <ContactUs show={contactModalShow} onHide={() => setContactModalShow(false)}/>
+      <HostDaddy />
     </div>
     </>
 
