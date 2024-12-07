@@ -41,6 +41,7 @@
   font-weight: 700;
   line-height: normal;
   margin: 0 !important;
+  pointer-events: none;
 }
 
 #integrate_form1 .custom_checkbox input[type="radio"] {

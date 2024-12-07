@@ -12,7 +12,7 @@ import UnlockPropertiesModal from "../../../component/modal/unlockPropertiesModa
 import EmbedModal from "./embedModal/embedModal";
 import { Button, Dropdown } from "react-bootstrap";
 import { CiCalendar } from "react-icons/ci";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { HiOutlineDotsHorizontal, HiOutlineDotsVertical } from "react-icons/hi";
 import "react-circular-progressbar/dist/styles.css";
 import CalenderModel from "./calender/CalenderModel";
 import axios from "axios";
@@ -304,27 +304,20 @@ const ListIntegrationProperties = () => {
                           {!is_locked && (
                             <div className="d-flex gap-2">
                               {PropertStop === "FORCED_OFF" ? (
-                                <>
-                                  {" "}
-                                  <button className="bg-danger text-white rounded-pill border-danger btn border" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(true, index);}}>
-                                    STOPPED
-                                  </button>
-                                </>
+                                <button className="bg-danger text-white rounded-pill border-danger btn border" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(true, index);}}>
+                                  STOPPED
+                                </button>
                               ) : (
-                                <>
-                                  <button className="bg-dark text-primary border-primary btn border rounded-pill" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(false, index);}}>
-                                    STOP
-                                  </button>
-                                </>
+                                <button className="bg-dark text-primary border-primary btn border rounded-pill" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(false, index);}}>
+                                  STOP
+                                </button>
                               )}
-
                               <Button className="border-0 shadow-none bg-none p-0 fs-5" onClick={() => handleCalenderModalOpen(properties)} style={{cursor:'pointer'}}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                   <CiCalendar className="text-primary" />
                                   <p style={{margin:'2px 0 0 4px', fontSize:'14px', color:'#146ef5', cursor:'pointer'}}>Schedule</p>
                                 </div>
                               </Button>
-
                             </div>
                           )}
                           {is_locked ? (
@@ -348,48 +341,39 @@ const ListIntegrationProperties = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="property_listing_btn">
-                      <div className="d-flex">
-                        <Button className="property-edit-btn" onClick={() => {selectedHandle(editProperty, properties);}}>
-                          <i class="bi bi-pen"></i>
-                        </Button>
-                        <div>
-                          <Dropdown className="property-dropdown">
-                            <Dropdown.Toggle className="" id="dropdown-button-drop-down-centered" drop="down-centered">
-                              <HiOutlineDotsHorizontal />
-                            </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
-                              <Dropdown.Item onClick={() => { selectedHandle(editProperty, properties); }}>
-                                Edit Property
-                              </Dropdown.Item>
-                              {!is_locked &&
-                                <>
-                                  {/* <Dropdown.Item onClick={() => { selectedHandle(copyChatbotLink, properties); }}> */}
-                                  <Dropdown.Item onClick={() => { handleEmbedClick(chatbot_key); }}>
-                                    Get Chat Link or Embed
-                                  </Dropdown.Item>
-                                  <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
-                                    Regenerate Chat Link
-                                  </Dropdown.Item>
-                                </>
-                              }
-                              <Dropdown.Item onClick={() => { selectedHandle(deleteProperty, properties); }}>
-                                Delete Property
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
-                        </div>
-                      </div>
-                      {/*
-                      <Button className="test-property-btn border-0" onClick={() => { selectedHandle(testProperty, properties); }}>
-                        Test Property
+                    <div className="property_listing_btn">
+                      <Button className="property-edit-btn" onClick={() => {selectedHandle(editProperty, properties);}}>
+                        Property Setup
                       </Button>
-                      */}
                       <Button className="test-property-btn border-0" onClick={() => { navigate(`/workbench/${properties}`); }}>
                         Test Property
                       </Button>
                     </div>
+
+                    <Dropdown className="property-dropdown">
+                      <Dropdown.Toggle className="dropdown-toggle-vertical" id="dropdown-button-drop-down-centered">
+                        <HiOutlineDotsVertical />
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => { selectedHandle(editProperty, properties); }}>
+                          Edit Property
+                        </Dropdown.Item>
+                        {!is_locked && (
+                          <>
+                            <Dropdown.Item onClick={() => { handleEmbedClick(chatbot_key); }}>
+                              Get Chat Link or Embed
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
+                              Regenerate Chat Link
+                            </Dropdown.Item>
+                          </>
+                        )}
+                        <Dropdown.Item onClick={() => { selectedHandle(deleteProperty, properties); }}>
+                          Delete Property
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </div>
                 </div>
               </div>
@@ -404,7 +388,7 @@ const ListIntegrationProperties = () => {
                   </div>
                   <div className="property_listing_detail">
                     <div className="property-detail">
-                      <h4 style={{ color: 'rgb(128, 128, 128)', fontStyle: 'italic' }}>Add New Property</h4>
+                      <h4 style={{ color: 'rgb(128, 128, 128)', fontStyle: 'italic' }}>Add New Property (Without PMS)</h4>
                     </div>
                   </div>
                 </div>

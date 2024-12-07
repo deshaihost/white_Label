@@ -20,7 +20,7 @@ const InboxIndex = () => {
   const [interFaceComponent, setInterFaceComponent] = useState(0);
   const [allGuestNames, setAllGuestNames] = useState({});
 
-  const sectionMapping = { "": 0, "smart-templates": 1, "review-removal": 2, "preferences": 3, "upsells": 4 }; // for URL path params
+  const sectionMapping = { "": 0, "smart-templates": 1, "preferences": 2, "upsells": 3, "review-removal": 4, }; // for URL path params
 
   // accountCreatedDate expected in format 'MM/DD/YYYY HH:MM:SS'
   const calculateAccountAgeInDays = (accountCreatedDate) => {

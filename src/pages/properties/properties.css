@@ -61,6 +61,13 @@
     margin-right: 16px;
 }
 
+.addproperty_links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
 .addproperty_links button {
     color: #146EF5;
     font-family: 'Samsung Sharp Sans Medium';
@@ -75,8 +82,84 @@
     border: none;
 }
 
+.unlock-all-button {
+    color: #146EF5;
+    font-family: 'Samsung Sharp Sans Medium';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-decoration-line: underline !important;
+    background: transparent;
+    padding: 0;
+    border: none;
+    margin-top: 20px;
+}
+
 .property_list ul li {
     padding: 20px 0;
+}
+
+.tiles-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.tile {
+  background: #151530;
+  border-radius: 16px;
+  border: 1px solid #2C389E;
+  padding: 15px 10px;
+  width: 350px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: -1px 4px 10px 0px rgba(255, 255, 255, .5); /* offset-x | offset-y | blur-radius | spread-radius | color */
+}
+
+.tile h3 {
+  color: #146EF5;
+  font-family: 'Samsung Sharp Sans Bold';
+  font-size: 18px;
+}
+
+.tile p {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Samsung Sharp Sans Medium';
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.tile:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 2px 20px 5px rgba(255, 255, 255, .5); /* offset-x | offset-y | blur-radius | spread-radius | color */
+}
+
+.ConnectedStatement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.IntegrationsOptions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.IntegrationsOptions button {
+  font-size: 0.9em;
+  margin: 0 10px;
+  color: #146EF5;
+  background: none;
+  border: none;
+}
+
+.IntegrationsOptions p {
+  font-size: 0.9em;
+  color: white;
+  margin: 0 10px;
 }
 
 @media only screen and (max-width: 1199px) {
@@ -92,6 +175,10 @@
         font-size: 18px;
     }
 
+    .tile {
+        width: 300px;
+    }
+
     
 }
 
@@ -103,6 +190,10 @@
     .addproperty_links button {
         font-size: 15px;
         margin: 0 15px;
+    }
+
+    .tile {
+        width: 250px;
     }
 }
 
@@ -122,6 +213,10 @@
 
     .property_list ul li {
         padding: 15px 0;
+    }
+
+    .tile {
+        width: 100%;
     }
 }
 
