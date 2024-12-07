@@ -1,5 +1,5 @@
 // Site support chatbot, from DocsHound
-import React, { useEffect } from 'react';
+import React from 'react';
 import { DocsHoundChat } from '@docshound/chat-react';
 
 const HostDaddy = () => {

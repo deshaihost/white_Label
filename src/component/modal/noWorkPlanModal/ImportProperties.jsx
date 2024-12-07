@@ -83,7 +83,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
   return (
     <Modal show={showNoPlan} size="md" onHide={() => { if (!importLoading) { handleNoPlanClose("importPropertiesClose"); } }} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Body>
-        <h3 className="text-white text-center mb-4 fw-bold fs-4">Import Properties from Integration</h3>
+        <h3 className="text-white text-center mb-4 fw-bold fs-4">Import Properties from PMS</h3>
         <hr />
         {!integrationPropertiesLoading ? (
           integrationPropertyList && integrationPropertyList.length > 0 ? (
@@ -104,9 +104,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
                         const propName = integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name;
                         return (
                           <div className="form-check custom_checkbox" key={index} onClick={() => { SelectItem(integrationPropObj); }}>
-                            <input className="form-check-input" type="checkbox" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={propName} checked={checkBox?.hasOwnProperty(propName)} onChange={() => { SelectItem(integrationPropObj); }}
-                              onClick={(e) => e.stopPropagation()} // Prevent the click event from bubbling up to the parent div
-                            />
+                            <input className="form-check-input" type="checkbox" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={propName} checked={checkBox?.hasOwnProperty(propName)} onChange={() => { SelectItem(integrationPropObj); }} />
                             <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>
                               {propName}
                             </label>

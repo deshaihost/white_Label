@@ -42,17 +42,31 @@
   margin-bottom: 7px;
   color: #fff;
 }
+/*
 .property-edit-btn {
   border-radius: 160px;
-  border: 1px solid #146ef5 !important;
-  margin-right: 12px;
-  color: #146ef5 !important;
-  background: transparent !important;
+  border: 1px solid #1a5fb4 !important;
+  margin-right: 0 !important;
+  color: #fff !important;
+  background: #1a5fb4 !important;
   padding: 4px 20px;
   display: inline-block;
   box-shadow: none !important;
+  transition: all 0.3s ease;
 }
-.property-dropdown .btn {
+.property-edit-btn:hover {
+  background: #0d4899 !important;
+  border-color: #0d4899 !important;
+  transform: translateY(-1px);
+}
+*/
+.property-dropdown {
+  margin-left: auto; /* Aligns the dropdown to the far right */
+  position: absolute; /* Change to absolute */
+  top: 0;
+  right: 0;
+}
+.property-dropdown-old .btn {
   border-radius: 160px;
   border: 1px solid #146ef5 !important;
   margin-right: 12px;
@@ -62,10 +76,13 @@
   display: inline-block;
   box-shadow: none !important;
 }
+/* This is the little down arrow after the vertical "...". Remove this block to show the arrow; keep it to hide the arrow */
+/*
 .property-dropdown .dropdown-toggle::after {
   display: none;
 }
-.test-property-btn {
+*/
+.test-property-btn, .property-edit-btn {
   color: #146ef5;
   font-size: 15px;
   font-style: normal;
@@ -75,8 +92,9 @@
   background: rgba(20, 110, 245, 0.2);
   display: inline-block;
   padding: 9px 20px;
-  margin-top: 25px;
+  margin-top: 0;  /* Remove top margin since we're using gap */
   box-shadow: none !important;
+  border: none;
 }
 .property-dropdown .dropdown-menu.show {
   border-radius: 30px;
@@ -101,6 +119,34 @@
   height: 50px;
   width: 50px;
 }
+
+.dropdown-toggle-vertical {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #fff; /* White color for the icon */
+}
+
+.dropdown-toggle-vertical:hover {
+  background: none !important;
+}
+
+.property_lisiting {
+  position: relative; /* Add this */
+}
+
+.property_listing_item {
+  flex: 1; /* Add this */
+}
+
+.property_listing_btn {
+  display: flex;
+  flex-direction: column;  /* Stack buttons vertically */
+  align-items: flex-end;   /* Right align buttons */
+  gap: 10px;              /* Space between buttons */
+  margin-right: 40px;     /* Space for the vertical dots */
+}
+
 @media screen and (max-width: 767px) {
   .property_lisiting {
     flex-wrap: wrap;
@@ -119,10 +165,11 @@
     margin-top: 0;
   }
   .property_listing_btn {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
+    flex-direction: row;    /* Revert to horizontal on mobile */
+    align-items: center;    /* Center align on mobile */
+    justify-content: flex-end; /* Right align on mobile */
+    width: auto;            /* Remove 100% width */
+    margin-right: 40px;     /* Keep space for dots menu */
   }
   .test-property-btn {
     font-size: 14px;

@@ -53,10 +53,15 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
           integrationDataToSet['integration_data'] = {'use_for_knowledge_base': false};
         }
         setIntegrationDataKey(firstKey);
+      } else {
+        integrationDataToSet['integration_data'] = {'use_for_knowledge_base': true};
       }
 
       // Add hidden reservation stages to integration data
       const integrationHiddenResStages = apiPropertyData?.supporting_doc_items?.integration_data?.[integration_data_key]?.hide_for_reservations
+      if (!integrationDataToSet['integration_data'].hasOwnProperty('hide_for_reservations')) {
+        integrationDataToSet['integration_data']['hide_for_reservations'] = [];
+      }
       integrationDataToSet['integration_data']['hide_for_reservations'] = integrationHiddenResStages || [];
 
       // Check if guest data should be used for the knowledge base
@@ -75,7 +80,10 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
       } else {
         integrationDataToSet['conversation_data'] = {'use_for_knowledge_base':false, 'months':0};
       }
-      if (convoHiddenResStages) { integrationDataToSet['conversation_data']['hide_for_reservations'] = convoHiddenResStages; }
+      if (!integrationDataToSet['conversation_data'].hasOwnProperty('hide_for_reservations')) {
+        integrationDataToSet['conversation_data']['hide_for_reservations'] = [];
+      }
+      integrationDataToSet['conversation_data']['hide_for_reservations'] = convoHiddenResStages || [];
 
       setIntegrationData(integrationDataToSet);
 

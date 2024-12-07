@@ -7,10 +7,7 @@ import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
 import DisconnectIntegration from "./removeIntegrationsModel/DisconnectIntegration";
 import ImportPropertiesModal from "../../component/modal/noWorkPlanModal/ImportProperties";
 import { Helmet } from "react-helmet";
-import {
-  getUserDataActions,
-  toggleChatbotoNoFFPutActions,
-} from "../../redux/actions";
+import {getUserDataActions, toggleChatbotoNoFFPutActions} from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { stateEmptyActions } from "../../redux/actions";
 import { FullScreenLoader } from "../../helper/Loader";
@@ -65,14 +62,7 @@ const Properties = () => {
     } else if (type === "importPropertiesClose") {
       setModel({ ...model, importProperties: false });
     } else {
-      setModel({
-        addProperty: false,
-        pmsIntegration: false,
-        removeIntegration: false,
-        billingPortal: false,
-        importProperties: false,
-        unlockProperties: false,
-      });
+      setModel({addProperty: false, pmsIntegration: false, removeIntegration: false, billingPortal: false, importProperties: false, unlockProperties: false});
     }
   };
   // toggle chatbot
@@ -129,12 +119,7 @@ const Properties = () => {
 
   useEffect(() => {
     if (toggleOnOff !== "") {
-      dispatch(
-        toggleChatbotoNoFFPutActions({
-          properties: createPropertiesName,
-          state: toggleOnOff,
-        })
-      );
+      dispatch(toggleChatbotoNoFFPutActions({properties: createPropertiesName, state: toggleOnOff}));
       setToggleOnOff("");
     }
   }, [toggleOnOff]);
@@ -162,32 +147,21 @@ const Properties = () => {
   ]);
 
   // Whenever the user's subscription data or property data changes, update this information in local storage to ensure we're rendeting the subscription warning banner with correct information
+  /* No longer used
   useEffect(() => {
     localStorage.setItem("paymentStatus", subscription_data?.payment_standing);
-    localStorage.setItem(
-      "servicesExpireDate",
-      subscription_data?.services_good_until
-    );
-    localStorage.setItem(
-      "numPropertiesAllowed",
-      subscription_data?.num_properties_allowed
-    );
-    localStorage.setItem(
-      "numPropertiesUsed",
-      Object.keys(propertiesExtraData || {}).length
-    );
-    localStorage.setItem(
-      "tooManyPropertiesGraceUntil",
-      subscription_data?.too_many_properties_grace_until
-    );
+    localStorage.setItem("servicesExpireDate", subscription_data?.services_good_until);
+    localStorage.setItem("numPropertiesAllowed", subscription_data?.num_properties_allowed);
+    localStorage.setItem("numPropertiesUsed", Object.keys(propertiesExtraData || {}).length);
+    localStorage.setItem("tooManyPropertiesGraceUntil", subscription_data?.too_many_properties_grace_until);
   }, [subscription_data, propertiesExtraData]);
+  */
 
   return (
     <>
       <Helmet>
         <title>Properties - HostBuddy AI</title>
       </Helmet>
-      ;
       <div className="account-main">
         <div className="container">
           <div className="banner-heading">{/* <h2>My HostBuddy</h2> */}</div>
@@ -200,27 +174,18 @@ const Properties = () => {
                 <div className="account_heading">
                   <h3>Properties</h3>
                   <div className="property-heading-right">
-                    {propertiesExtraData &&
-                      Object.keys(propertiesExtraData).length > 0 && (
+                    {propertiesExtraData && intergrations &&
+                     Object.keys(propertiesExtraData).length > 0 &&
+                     Object.keys(intergrations).length > 0 && (
                         <>
                           <p>HostBuddy Status</p>
                           {toggleChatLoading && <FullScreenLoader />}
                           {!anyPropertyNotForcedOff ? (
-                            <button
-                              className="bg-danger text-white rounded-pill border-danger btn border"
-                              onClick={(e) => {
-                                toggleChatBotHndle(true);
-                              }}
-                            >
+                            <button className="bg-danger text-white rounded-pill border-danger btn border" onClick={(e) => {toggleChatBotHndle(true);}}>
                               ALL STOPPED
                             </button>
                           ) : (
-                            <button
-                              className="bg-dark text-primary border-primary btn border rounded-pill"
-                              onClick={(e) => {
-                                toggleChatBotHndle(false);
-                              }}
-                            >
+                            <button className="bg-dark text-primary border-primary btn border rounded-pill" onClick={(e) => {toggleChatBotHndle(false);}}>
                               STOP ALL
                             </button>
                           )}
@@ -230,106 +195,69 @@ const Properties = () => {
                 </div>
                 <div
                   className="addproperty_links text-center"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                  style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                  <div className="tiles-container">
+                    {(!intergrations || Object.keys(intergrations).length === 0) ? (
+                      <div className="tile" onClick={() => handleModelOpen("pmsIntegrationOpen")}>
+                        <h3>Connect Your PMS</h3>
+                        <p>Connect your Property Management Software to import your properties.</p>
+                      </div>
+                    ) : (
+                      <>
+                        {/* Original connected statement layout - kept for reference
+                        <div
+                          className="ConnectedStatement"
+                          style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                          <p style={{ color: "white" }}>
+                            {`Connected to ${
+                              Object.keys(intergrations)[0] === "ownerrez" ? "OwnerRez" :
+                              Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)
+                            }`}
+                          </p>
+                          <div
+                            className="IntegrationsOptions"
+                            style={{display: "flex", flexDirection: "row", justifyContent: "center"}}
+                          >
+                            <button
+                              style={{fontSize: "0.9em", marginRight: "0px", color: "#146EF5", background: "none", border: "none"}}
+                              onClick={() => handleModelOpen("importPropertiesOpen")}
+                            >
+                              Import Properties
+                            </button>
+                            <p
+                              style={{fontSize: "0.9em", color: "white", marginLeft: "20px", marginRight: "20px"}}>
+                              |
+                            </p>
+                            <button
+                              style={{fontSize: "0.9em", marginLeft: "0px", color: "#146EF5", background: "none", border: "none"}}
+                              onClick={() => handleModelOpen("disconnectIntegrationOpen")}
+                            >
+                              Disconnect
+                            </button>
+                          </div>
+                        </div>
+                        */}
+                        <div className="tile" onClick={() => handleModelOpen("importPropertiesOpen")}>
+                          <h3>Import Properties</h3>
+                          <p>Connected to {
+                            Object.keys(intergrations)[0] === "ownerrez" ? "OwnerRez" :
+                            Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)
+                          }. Click to import your properties.</p>
+                        </div>
+                      </>
+                    )}
+                    {(subscription_data?.num_properties_allowed == 0 || subscription_data?.num_properties_allowed === undefined) && (
+                      <div className="tile" onClick={() => handleModelOpen("addPropertyOpen")}>
+                        <h3>Subscribe</h3>
+                        <p>Get HostBuddy plugged in to your guest communication.</p>
+                      </div>
+                    )}
+                  </div>
                   {numPropsStillLocked > 0 &&
                     remainingUnlocksAllowed >= numPropsStillLocked && (
-                      <button
-                        type="button"
-                        className="shadow-none border-0"
-                        onClick={() => {
-                          handleUnlockAllClick();
-                        }}
-                      >
+                      <button type="button" className="unlock-all-button" onClick={() => {handleUnlockAllClick();}}>
                         Unlock All Properties
                       </button>
-                    )}
-                  {(subscription_data?.num_properties_allowed == 0 || subscription_data?.num_properties_allowed === undefined) && (
-                    <button type="button" className="shadow-none border-0" onClick={() => { handleModelOpen("addPropertyOpen"); }}>
-                      Subscribe
-                    </button>
-                  )}
-                  {intergrations && Object.keys(intergrations).length > 0 ? ( // if calry_integrations in user data: show as connected to the integration (it only has one key). Capitalize the first letter of the integration.
-                    <>
-                      <div
-                        className="ConnectedStatement"
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
-                      >
-                        <p style={{ color: "white" }}>
-                          {`Connected to ${
-                            Object.keys(intergrations)[0] === "ownerrez"
-                              ? "OwnerRez"
-                              : Object.keys(intergrations)[0].charAt(0).toUpperCase() +
-                                Object.keys(intergrations)[0].slice(1)
-                          }`}
-                        </p>
-                        <div
-                          className="IntegrationsOptions"
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <button
-                            style={{
-                              fontSize: "0.9em",
-                              marginRight: "0px",
-                              color: "#146EF5",
-                              background: "none",
-                              border: "none",
-                            }}
-                            onClick={() =>
-                              handleModelOpen("importPropertiesOpen")
-                            }
-                          >
-                            Import Properties
-                          </button>
-                          <p
-                            style={{
-                              fontSize: "0.9em",
-                              color: "white",
-                              marginLeft: "20px",
-                              marginRight: "20px",
-                            }}
-                          >
-                            |
-                          </p>
-                          <button
-                            style={{
-                              fontSize: "0.9em",
-                              marginLeft: "0px",
-                              color: "#146EF5",
-                              background: "none",
-                              border: "none",
-                            }}
-                            onClick={() =>
-                              handleModelOpen("disconnectIntegrationOpen")
-                            }
-                          >
-                            Disconnect
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <button
-                      className="shadow-none border-0"
-                      type="button"
-                      onClick={() => {
-                        handleModelOpen("pmsIntegrationOpen");
-                      }}
-                    >
-                      PMS Integration
-                    </button>
                   )}
                 </div>
                 <div className="property_list">
