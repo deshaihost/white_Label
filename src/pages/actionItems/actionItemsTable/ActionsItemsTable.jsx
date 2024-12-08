@@ -148,6 +148,14 @@ const ActionsItemsTable = () => {
     return `${month} ${day}\n${hours}:${minutes}${ampm}`;
   }
 
+  const formatCompletedBy = (completedBy) => {
+    if (!completedBy) return "";
+    if (completedBy === "hostbuddy") return "HostBuddy";
+    if (completedBy === "user") return "User";
+    if (completedBy.startsWith("user:")) return completedBy.split(":")[1];
+    return completedBy;
+  };
+
   const handleOpenConversation = (conversationId, actionItemId, propertyName) => {
     callGetConversationApi(conversationId, actionItemId, propertyName);
   }
@@ -225,6 +233,7 @@ const ActionsItemsTable = () => {
                       <th>Property/Guest</th>
                       <th>Category</th>
                       <th>Action Item</th>
+                      {selectedStatus === "completed" && <th>Completed By</th>}
                       <th>View/Done</th>
                     </tr>
                   </thead>
@@ -247,6 +256,7 @@ const ActionsItemsTable = () => {
                           <td className="">
                             <div className="">{item}</div>
                           </td>
+                          {selectedStatus === "completed" && <td style={{minWidth:'130px'}}>{formatCompletedBy(actionItem?.completed_by)}</td> /* 130px min width makes sure that "completed by" in the th is not split into two lines */}
                           <td className="text-center">
                             {actionItemCompleting === id || getConversationLoading === id ? (
                               <BoxLoader />

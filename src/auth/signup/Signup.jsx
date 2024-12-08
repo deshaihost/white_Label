@@ -140,7 +140,7 @@ const Signup = () => {
                 <img src={Logo} alt="logo" />
               </Link>
               <div className="auth-form">
-                <h2>Try HostBuddy Today!</h2>
+                <h2>Create An Account</h2>
                 <p>Already have an account? <Link to="/login">Sign in here</Link></p>
                 <form action="" onSubmit={handleSubmit( (data) => { onSubmit(data); } )}>
 
