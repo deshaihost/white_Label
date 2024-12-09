@@ -236,7 +236,7 @@ const Minut = () => {
                     <h5>Step 01</h5>
                     <p>
                        Log in to your HostBuddy AI account. Don’t have one?{" "}
-                      <Link to="/signup">Sign up</Link> - it’s easy
+                      <Link to="/signup">Sign up for free</Link> - it’s easy
                     </p>
                   </div>
                 </div>
@@ -272,6 +272,20 @@ const Minut = () => {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="connect-btn">
+              <Link
+                to=""
+                className="connect-btn-link nav-btn nav-btn-outline link-btn filled-btn"
+              >
+                Book Demo
+              </Link>
+              <Link
+                to="/signup"
+                className="btn-link nav-btn nav-btn-primary link-btn outline-btn"
+              >
+                Sign up
+              </Link>
             </div>
           </div>
         </section>
