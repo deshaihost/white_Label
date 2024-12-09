@@ -68,6 +68,7 @@ import OwnerRezInstructions from "../pages/userGuides/pmsInstructions/ownerrez";
 import BookingSyncInstructions from "../pages/userGuides/pmsInstructions/bookingsync";
 import HostbuddyForGuesty from "../pages/userGuides/hostbuddyForGuesty/HostbuddyForGuesty";
 import Integrations from "../pages/integrations/Integrations";
+import Minut from "../pages/minut/Minut";
 
 const Routing = () => {
   const location = useLocation();
@@ -404,6 +405,7 @@ const Routing = () => {
           }
         />
         <Route path="/integrations" element={<Integrations />} />
+        <Route path="/minut" element={<Minut />} />
 
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>
