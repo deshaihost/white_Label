@@ -411,13 +411,14 @@ const Routing = () => {
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
       </Routes>
-      {location.pathname !== "/login" &&
+      { location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/forgot" &&
         location.pathname !== "/accept-invitation" &&
         !location.pathname.startsWith("/inbox") &&
         location.pathname !== "/test-show-conversations" &&
-        !location.pathname.startsWith("/workbench/") && <Footer />}
+        !location.pathname.startsWith("/workbench/") &&
+        !location.pathname.startsWith("/edit-property/") && <Footer />}
     </div>
   );
 };

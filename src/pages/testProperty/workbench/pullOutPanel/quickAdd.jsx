@@ -14,7 +14,7 @@ const QuickAdd = ({ propertyName, setPanelContent, setHasUnsavedChanges }) => {
   // Assemble the data in the "questionnaire question" format to be passed to the API, and add the rest of the body data
   const assembleRequestBody = (properties) => {
     const question_data = {question_text:label || 'Extra information', response_text:content, question_type:'long_answer', hide_for_reservations:[], placeholder_text:'Type or paste any information about your property that you would like HostBuddy to know.'};
-    const bodyData = {section_name:'Extras', subsection_name:'Custom Fields', question:question_data, properties};
+    const bodyData = {section_name:'SOPs', subsection_name:'Other', question:question_data, properties};
     return bodyData;
   };
 
