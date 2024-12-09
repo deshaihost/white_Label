@@ -26,7 +26,7 @@ const PullOutPanel = ({ onClose, content, className, propertyName, apiPropertyDa
       case 'editProperty':
         return <QuestionnairePage property_name={propertyName} startAtPage={1}/>; // Questionnaire starts at page 1 (don't show the questionnaire first page)
       case 'viewPrevious':
-        return <QuestionnairePage property_name={propertyName} startAtPage={1} jumpToSection={'Extras'}/>; // Questionnaire starts at page 1 - user jumps to start viewing the Extras section, where any previous quick-add notes are
+        return <QuestionnairePage property_name={propertyName} startAtPage={1} jumpToSection={'SOPs'} scrollToBottom={true}/>; // Questionnaire starts at page 1 - user jumps to start viewing the Extras section, where any previous quick-add notes are
       case 'manageSources':
         return <HostBuddyKnowledgeBase property_name={propertyName} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI} forceShowDataAdded={true}/>;
       case 'conversationPreferences':

@@ -4,6 +4,7 @@ import Home from "../pages/home/Home";
 import Pricing from "../pages/pricing/Pricing";
 import MeetHostBoddy from "../pages/meetHostBuddy/MeetHostBoddy";
 import Faqs from "../pages/faq/Faq";
+import PropSetupTest from "../pages/faq/propertySetupTest";
 import AboutUs from "../pages/aboutUs";
 import Login from "../auth/login/Login";
 import Signup from "../auth/signup/Signup";
@@ -209,6 +210,7 @@ const Routing = () => {
         <Route path="/pricing" element={<Pricing />}></Route>
         <Route path="/meet-hostbuddy" element={<MeetHostBoddy />}></Route>
         <Route path="/faqs" element={<Faqs />}></Route>
+        <Route path="/pst" element={<PropSetupTest />}></Route>
         <Route path="/about-us" element={<AboutUs />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
@@ -409,13 +411,14 @@ const Routing = () => {
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
       </Routes>
-      {location.pathname !== "/login" &&
+      { location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/forgot" &&
         location.pathname !== "/accept-invitation" &&
         !location.pathname.startsWith("/inbox") &&
         location.pathname !== "/test-show-conversations" &&
-        !location.pathname.startsWith("/workbench/") && <Footer />}
+        !location.pathname.startsWith("/workbench/") &&
+        !location.pathname.startsWith("/edit-property/") && <Footer />}
     </div>
   );
 };

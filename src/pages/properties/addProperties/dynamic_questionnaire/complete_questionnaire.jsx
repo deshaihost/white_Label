@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../AddProperty.css";
 import QuestionnaireHeader from "./questionnaire_header";
 import { stateEmptyActions, updateQuestionnaireActions } from "../../../../redux/actions";
@@ -18,9 +18,10 @@ import { set } from "react-hook-form";
 
 
 // Code for the entire questionnaire page, including the header and all sections, including Basics and External Resources.
-const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jumpToSection=null }) => {
+const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jumpToSection=null, scrollToBottom=false }) => {
   const { property_name: paramPropertyName } = useParams();
   const navigate = useNavigate();
+  const containerRef = useRef(null);
   
   // Use path param first, fall back to prop
   const property_name = paramPropertyName || propPropertyName;
@@ -30,9 +31,15 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
   const section_order_data = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire?.metadata?.section_order
 
+  // If jumpToSection is 'SOPs' but that section doesn't exist: use 'Extras' instead
+  let sectionToJump = jumpToSection;
+  if (section_order_data && sectionToJump === 'SOPs' && !section_order_data.includes('SOPs')) {
+    sectionToJump = 'Extras';
+  }
+
   let questionnaire_section_names = ["Resources", ...(section_order_data || [])]; // All pages; the first "resources" page plus all those retrieved from the dynamic questionnaire
   questionnaire_section_names = questionnaire_section_names.slice(startAtPage); // Start at the specified page, and forget the rest
-  const jumpTo = jumpToSection || questionnaire_section_names[0];
+  const jumpTo = sectionToJump || questionnaire_section_names[0];
 
   const [liveQuestionnaireData, setLiveQuestionnaireData] = useState({});
   const [selectedSection, setSelectedSection] = useState(jumpTo); // FYI - can be undefined if the questionnaire get hasn't finished yet, since questionnaire_section_names is not yet known
@@ -285,8 +292,33 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
     setShowPencilModal(true);
   }
 
+  // Add scroll to bottom effect
+  useEffect(() => {
+    if (scrollToBottom && apiQuestionnaireData) {
+      // Find the closest scrollable parent container
+      const findScrollableParent = (element) => {
+        if (!element) return document.documentElement;
+        
+        const style = window.getComputedStyle(element);
+        const overflowY = style.getPropertyValue('overflow-y');
+        
+        if (overflowY === 'auto' || overflowY === 'scroll') {
+          return element;
+        }
+        
+        return findScrollableParent(element.parentElement);
+      };
+
+      const scrollableContainer = findScrollableParent(containerRef.current);
+      scrollableContainer.scrollTo({
+        top: scrollableContainer.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, [scrollToBottom, apiQuestionnaireData]);
+
   return (
-    <div>
+    <div ref={containerRef}>
       <Helmet>
         <title>Edit Property</title>
       </Helmet>

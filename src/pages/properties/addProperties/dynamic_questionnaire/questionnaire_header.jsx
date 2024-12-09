@@ -3,7 +3,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { useParams } from "react-router-dom";
 
 const QuestionnaireHeader = ({ property_name, section_names, selectedSection, setSelectedSection }) => {
-  const progress_percentage = section_names ? (section_names.indexOf(selectedSection) + 1) * (100 / section_names.length) : 0;
+  const progress_percentage = section_names ? Math.round((section_names.indexOf(selectedSection) + 1) * (100 / section_names.length)) : 0;
   const hasResources = section_names?.includes("Resources");
   
   return (
@@ -53,11 +53,15 @@ const QuestionnaireHeader = ({ property_name, section_names, selectedSection, se
           </div>
         </div>
       </div>
+      
+      {/*
       <div className="row mb-3">
         <div className="col-7 mx-auto">
           {<ProgressBar now={progress_percentage} label={`${progress_percentage}%`} />}
         </div>
       </div>
+      */}
+
     </div>
   );
 };

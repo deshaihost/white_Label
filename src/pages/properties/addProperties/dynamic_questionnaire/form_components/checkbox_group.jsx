@@ -58,7 +58,7 @@ const CheckboxGroupComponent = ({ question_object, sec_name, subsec_name, q_ind,
   return (
     <div className="row ">
       <div className="col-lg-12">
-        <label className="text-white">{placeholder_text} </label>
+        {placeholder_text && <label className="text-white">{placeholder_text}</label>}
         <ul className="amenties-list">
           {options.map((option, option_index) => {
             return (
