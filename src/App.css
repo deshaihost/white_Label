@@ -54,7 +54,6 @@ a {
   background: #000;
 }
 
-
 .heading h1,
 .heading h2 {
   color: #fff;
@@ -637,10 +636,16 @@ textarea.form-control {
 }
 
 /* CSS for the blue blur background */
-.blur-background-top-left, .blur-background-top-right, .blur-background-bottom-left, .blur-background-bottom-right {
+.blur-background-top-left,
+.blur-background-top-right,
+.blur-background-bottom-left,
+.blur-background-bottom-right {
   position: relative;
 }
-.blur-background-top-left::before, .blur-background-top-right::after, .blur-background-bottom-left::before, .blur-background-bottom-right::after {
+.blur-background-top-left::before,
+.blur-background-top-right::after,
+.blur-background-bottom-left::before,
+.blur-background-bottom-right::after {
   content: "";
   position: absolute;
   width: 281.182px;
@@ -667,7 +672,8 @@ textarea.form-control {
   bottom: 0;
   right: 0;
 }
-.smaller-blur::before, .smaller-blur::after {
+.smaller-blur::before,
+.smaller-blur::after {
   width: 200px;
   height: 200px;
   border-radius: 200px;
