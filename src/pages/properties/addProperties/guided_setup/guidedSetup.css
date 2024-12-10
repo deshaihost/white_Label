@@ -1,19 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
 .pst {
-    padding: 110px 0 100px;
+    padding: 70px 150px;
 }
 
-.pst .banner-container {
-    margin: auto;
-    padding: 0 40px;
+.pst .setup-tile {
+  background: #000212;
+  border: 1px solid var(--main-Color, #146EF5);
+  border-radius: 30px;
+  box-shadow: 0 0 15px 0 rgba(255, 255, 255, 0.4);
+  padding: 30px 60px 40px 60px;
+}
+
+.pst h2 {
+  color: #146ef5;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px;
+  margin-bottom: 20px;
 }
 
 .pst .accordion-item {
     border-radius: 15px;
     border: 1px solid var(--main-Color, #146EF5);
     background: linear-gradient(180deg, #000426 0%, #00031A 100%);
-    padding: 20px 15px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Only apply intense shadow on hover when accordion is closed */
+.pst .accordion-item:has(.accordion-button.collapsed):hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+}
+
+/* Less intense shadow for opened accordion */
+.pst .accordion-item:has(.accordion-button:not(.collapsed)) {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .pst .accordion-item.completed {
@@ -22,27 +46,29 @@
 
 .pst .accordion-item.completed .accordion-header .accordion-button::before {
     content: '';
-    background-image: url(../../public/img/Green_check.svg);
+    background-image: url(../../../../public/img/Green_check.svg);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
     width: 16px;
     height: 16px;
     position: absolute;
-    right: 30px;
-    top: 10px;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .pst .accordion-item.completed .accordion-header .accordion-button::after {
-    right: 60px;
+    display: none; /* Hide the arrow for completed items, since it doesn't look good with the checkmark */
 }
 
 .pst .accordion-item:not(:last-child) {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .pst .accordion-item .accordion-header {
     margin-bottom: 0;
+    width: 100%; /* Ensure the header takes full width */
 }
 
 .pst .accordion-item .accordion-header .accordion-button {
@@ -50,7 +76,7 @@
     outline: none;
     word-break: break-word;
     background: transparent;
-    padding: 0;
+    padding: 20px 15px; /* Add padding to the button */
     color: #FFF;
     font-family: 'Samsung Sharp Sans Bold';
     font-size: 18px;
@@ -60,6 +86,7 @@
     justify-content: space-between;
     flex-direction: column;
     align-items: flex-start;
+    width: 100%; /* Ensure button takes full width */
 }
 
 .pst .accordion-item:first-of-type .accordion-button {
@@ -73,23 +100,25 @@
     font-weight: 400;
     color: #CCC;
     margin-top: 5px;
+    max-width: 94%;
+    display: block;
 }
 
 .pst .accordion-item .accordion-header .accordion-button::after {
-    background-image: url(../../public/img/arrow_down.png) !important;
+    background-image: url(../../../../public/img/arrow_down.png) !important;
     background-position: center;
     background-size: contain;
     width: 8.486px;
     height: 5.656px;
     margin-left: 20px;
     position: absolute;
-    right: 0;
-    top: 10px;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .pst .accordion-item .accordion-body {
-    padding: 0;
-    padding-top: 20px;
+    padding: 20px 15px;
     color: #CCC !important;
     leading-trim: both;
     text-edge: cap;
@@ -98,6 +127,10 @@
     font-style: normal;
     font-weight: 400;
     line-height: 150%;
+}
+
+.pst .banner-heading {
+    margin-bottom: 30px;
 }
 
 @media only screen and (max-width: 991px) {
@@ -111,5 +144,14 @@
 
     .pst .accordion-item .accordion-header .accordion-button {
         font-size: 16px;
+        padding: 20px;
+    }
+
+    .pst .accordion-item .accordion-body {
+        padding: 20px;
+    }
+
+    .pst .setup-tile {
+        padding: 20px;
     }
 }

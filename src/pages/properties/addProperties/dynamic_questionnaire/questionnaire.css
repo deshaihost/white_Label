@@ -1,11 +1,12 @@
-.questionnaire-first-page .auto-fill-btn {
+.auto-fill-buttons-container .auto-fill-btn {
   border-radius: 20px;
   padding-top: 25px;
   padding-bottom: 25px;
   max-width: 380px;
 }
 
-.questionnaire-first-page .underline-btn {
+.questionnaire-first-page .underline-btn,
+.auto-fill-buttons-container .underline-btn {
   color: #146EF5;
   font-family: 'Samsung Sharp Sans Medium';
   font-size: 18px;

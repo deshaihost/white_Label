@@ -342,7 +342,7 @@ const NavBar = () => {
                     FAQs
                   </NavLink>
                   */}
-                  <NavLink exact to="https://userguide.hostbuddy.ai/quick-start/getting-started" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink exact to="https://userguide.hostbuddy.ai/quick-start/getting-started" className="nav-link" activeClassName="active" onClick={handleNavLinkClick} target="_blank" rel="noopener noreferrer">
                     Docs
                   </NavLink>
 

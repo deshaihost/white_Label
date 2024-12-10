@@ -72,7 +72,7 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
     }
   }, [apiQuestionnaireData]);
 
-  // Get property data from the API. Should run once, immediately when the page loads
+  // Get property data from the API
   const getPropertyDataFromAPI = async (propertyName) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
