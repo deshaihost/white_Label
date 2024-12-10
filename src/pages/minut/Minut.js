@@ -1,21 +1,38 @@
 import React, { useRef } from "react";
 import "./Minut.css";
-import BannerImage from "../../helper/staticImage/banner-backgound.png";
-import Official from "../../helper/staticImage/banner-official.png";
+import BannerImage from "../../helper/staticImage/banner-backgound.webp";
+import Official from "../../helper/staticImage/banner-official.webp";
 import ListOne from "../../helper/staticImage/listone.png";
 import { Link } from "react-router-dom";
-import Listthree from "../../helper/staticImage/listthree.png";
-import ListTwo from "../../helper/staticImage/listtwo.png";
+import Listthree from "../../helper/staticImage/listthree.webp";
+import ListTwo from "../../helper/staticImage/listtwo.webp";
 import { HiArrowLongRight } from "react-icons/hi2";
+import ShotTerms from "../../helper/staticImage/Short Term Rental Messaging.webp";
+import Template from "../../helper/staticImage/Templated Messages.webp";
 import CardTwo from "../../helper/staticImage/cardtwo (1).png";
 import CardThree from "../../helper/staticImage/cardthree.png";
 import CardFour from "../../helper/staticImage/cardfour.png";
-import LogoCircle from "../../helper/staticImage/logo-circle.png";
+import LogoCircle from "../../helper/staticImage/logo-circle.webp";
 import Cardone from "../../helper/staticImage/cardone.png";
-import UserIcon from "../../helper/staticImage/userimg.png";
-import Circle from "../../helper/staticImage/circle.png";
-import Linking from "../../helper/staticImage/Link.png";
+import UserIcon from "../../helper/staticImage/userimg.webp";
+import Circle from "../../helper/staticImage/circle.webp";
+import Linking from "../../helper/staticImage/Link.webp";
 import ShapeLeft from "../../helper/staticImage/shape.png";
+import Each from "../../helper/staticImage/Tailor each message.webp";
+import AitATailor from "../../helper/staticImage/Use AI to tailor.webp";
+import Allow from "../../helper/staticImage/Allow HostBuddy.webp";
+import Minutlogo from "../../helper/staticImage/minut.webp";
+import Owner from "../../helper/staticImage/owner.webp";
+import Lodgify from "../../helper/staticImage/lodgify.webp";
+import Smily from "../../helper/staticImage/smily.webp";
+import Hostify from "../../helper/staticImage/hostify.webp";
+import Turno from "../../helper/staticImage/turno.webp";
+import Guesty from "../../helper/staticImage/guesty.webp";
+import Hostfully from "../../helper/staticImage/hostfully.webp";
+import Bed from "../../helper/staticImage/beds.webp";
+import Sombhu from "../../helper/staticImage/smoobu.webp";
+import Hostway from "../../helper/staticImage/hostaway.webp";
+import Restly from "../../helper/staticImage/restly.webp";
 
 const Minut = () => {
   const boxRef = useRef(null);
@@ -52,7 +69,7 @@ const Minut = () => {
           <div className="row">
             <div className="col-lg-4 col-md-6">
               <div className="mint-listing-item">
-                <img src={ListOne} alt="logo" />
+                <img src={ShotTerms} alt="logo" />
                 <div className="item-content">
                   <h2>Short Term Rental Messaging On Autopilot</h2>
                   <Link to="/" className="btn-link">
@@ -77,7 +94,7 @@ const Minut = () => {
             </div>
             <div className="col-lg-4 col-md-6">
               <div className="mint-listing-item">
-                <img src={Listthree} alt="logo" />
+                <img src={Template} alt="logo" />
                 <div className="item-content">
                   <h2>Templated Messages For Everything</h2>
                   <Link
@@ -134,7 +151,75 @@ const Minut = () => {
 
       <section className="logo-circle">
         <div className="container">
-          <img src={LogoCircle} alt="" />
+          <div className="relative-logo">
+            <img src={LogoCircle} alt="" className="logo-circle-inner" />
+            <div class="logo-container">
+              <div class="logo logo1">
+                <a href="https://www.minut.com/" target="_blank">
+                  <img src={Minutlogo} alt="Logo 1" />
+                </a>
+              </div>
+              <div class="logo logo2">
+                <a href="https://www.lodgify.com/" target="_blank">
+                  <img src={Lodgify} alt="Logo 2" />
+                </a>
+              </div>
+              <div class="logo logo3">
+                <a href="https://www.ownerrez.com/" target="_blank">
+                  <img src={Owner} alt="Logo 3" />
+                </a>
+              </div>
+              <div class="logo logo4">
+                <a
+                  href="https://www.bookingsync.com/en/app-center/31"
+                  target="_blank"
+                >
+                  <img src={Smily} alt="Logo 4" />
+                </a>
+              </div>
+              <div class="logo logo5">
+                <a href="https://hostify.com/" target="_blank">
+                  <img src={Hostify} alt="Logo 5" />
+                </a>
+              </div>
+              <div class="logo logo6">
+                <a href="https://turno.com/" target="_blank">
+                  <img src={Turno} alt="Logo 6" />
+                </a>
+              </div>
+              <div class="logo logo7">
+                <a href="https://www.guesty.com/" target="_blank">
+                  <img src={Guesty} alt="Logo 7" />
+                </a>
+              </div>
+              <div class="logo logo8">
+                <a href="https://www.hostfully.com/" target="_blank">
+                  <img src={Hostfully} alt="Logo 8" />
+                </a>
+              </div>
+              <div class="logo logo9">
+                <a href="https://beds24.com/" target="_blank">
+                  <img src={Bed} alt="Logo 9" />
+                </a>
+              </div>
+              <div class="logo logo10">
+                <a href="https://www.smoobu.com/new/en/" target="_blank">
+                  <img src={Sombhu} alt="Logo 10" />
+                </a>
+              </div>
+              <div class="logo logo11">
+                <a href="https://www.hostaway.com/" target="_blank">
+                  <img src={Hostway} alt="Logo 11" />
+                </a>
+              </div>
+              <div class="logo logo12">
+                <a href="">
+                  <img src={Restly} alt="Logo 11" />
+                </a>
+              </div>
+            </div>
+          </div>
+
           <div className="logo-content">
             <h2>
               By <span>integrating with HostBuddy</span> Al, users can:
@@ -145,7 +230,7 @@ const Minut = () => {
               <div className="row card-main">
                 <div className="col-lg-5">
                   <div className="card-image">
-                    <img src={Cardone} alt="" />
+                    <img src={Each} alt="" />
                   </div>
                 </div>
                 <div className="col-lg-7">
@@ -163,7 +248,7 @@ const Minut = () => {
               <div className="row card-main">
                 <div className="col-lg-5">
                   <div className="card-image">
-                    <img src={CardTwo} alt="" />
+                    <img src={AitATailor} alt="" />
                   </div>
                 </div>
                 <div className="col-lg-7">
@@ -180,7 +265,7 @@ const Minut = () => {
               <div className="row card-main">
                 <div className="col-lg-5">
                   <div className="card-image">
-                    <img src={CardThree} alt="" />
+                    <img src={Allow} alt="" />
                   </div>
                 </div>
                 <div className="col-lg-7">
@@ -197,7 +282,7 @@ const Minut = () => {
               <div className="row card-main">
                 <div className="col-lg-5">
                   <div className="card-image">
-                    <img src={CardFour} alt="" />
+                    <img src={Listthree} alt="" />
                   </div>
                 </div>
                 <div className="col-lg-7">

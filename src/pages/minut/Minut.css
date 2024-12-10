@@ -47,11 +47,14 @@
 }
 .mint-listing-item {
   background: rgb(255 255 255 / 10%);
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 10px 10px 10px 10px;
 }
 .mint-listing-item img {
   width: 100%;
   border-radius: 10px;
+  height: 310px;
+  object-fit: cover;
+  object-position: top;
 }
 .item-content {
   padding: 24px 10px;
@@ -252,6 +255,134 @@
 .to-get-hostbuddy .connect-btn {
   margin-top: 60px;
 }
+
+.logo1 {
+  position: absolute;
+  left: 12%;
+  top: 17%;
+  transform: translate(-17%, -12%);
+}
+.logo2 {
+  position: absolute;
+  top: 28%;
+  left: 34%;
+  transform: translate(-34%, -28%);
+}
+.logo a {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #fff;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  flex-basis: auto;
+  box-shadow: #146ef5 0px 0px 16.97px 0px;
+}
+.logo a:hover {
+  -webkit-animation: scale-up-center 0.5s cubic-bezier(0.39, 0.575, 0.565, 1)
+    both;
+  animation: scale-up-center 0.5s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+.relative-logo {
+  position: relative;
+  z-index: 0;
+  max-width: 944px;
+  margin: 0 auto;
+}
+.logo img {
+  max-width: 90%;
+  max-height: 90%;
+}
+.logo-container {
+  max-width: 924px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+}
+.logo4 {
+  position: absolute;
+  top: 27%;
+  right: 27%;
+  transform: translate(-27%, -27%);
+}
+.logo3 {
+  position: absolute;
+  left: 50%;
+  top: -17px;
+  transform: translate(-50%, -17px);
+}
+.logo5 {
+  position: absolute;
+  right: 12%;
+  transform: translate(-12%, -10%);
+  top: 10%;
+}
+.logo6 {
+  position: absolute;
+  top: 59%;
+  left: 17%;
+  transform: translate(-17%, -59%);
+}
+.logo7 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.logo8 {
+  position: absolute;
+  top: 59%;
+  right: 12%;
+  transform: translate(-12%, -59%);
+}
+.logo9 {
+  position: absolute;
+  bottom: 30px;
+  left: -4%;
+  transform: translate(-4%, -30px);
+}
+.logo10 {
+  position: absolute;
+  bottom: 20px;
+  left: 30%;
+  transform: translate(-30%, -20px);
+}
+.logo11 {
+  position: absolute;
+  right: 23%;
+  bottom: 20px;
+  transform: translate(-23%, -20px);
+}
+.logo12 {
+  position: absolute;
+  right: -5%;
+  bottom: 30px;
+  transform: translate(-5%, -30px);
+}
+@-webkit-keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
 /*===============Responsive part strats here=================*/
 @media (max-width: 1299.98px) {
   .item-content h2 {
@@ -295,6 +426,12 @@
   }
   section.mint-listing .row {
     row-gap: 20px;
+  }
+}
+@media (max-width: 1024px) {
+  .logo a {
+    width: 60px;
+    height: 60px;
   }
 }
 @media (max-width: 991px) {
@@ -358,6 +495,21 @@
   }
 }
 @media (max-width: 767px) {
+  .logo9 {
+    left: 0;
+    transform: translate(0%, -30px);
+  }
+  .logo12 {
+    right: 0;
+    transform: translate(0%, -30px);
+  }
+  .logo a {
+    width: 50px;
+    height: 50px;
+  }
+  .logo a {
+    box-shadow: #146ef5 0px 0px 8.97px 0px;
+  }
   .logo-circle .row.card-row .row.card-main {
     width: auto;
   }
@@ -380,10 +532,28 @@
   }
 }
 @media (max-width: 575px) {
+  .logo a {
+    width: 30px;
+    height: 31px;
+  }
+  .logo3 {
+    top: 0;
+    transform: translate(-50%, -13px);
+  }
   .banner-mint .banner-image {
     height: 500px;
   }
   .connect-inner {
     padding: 30px 15px;
+  }
+  .logo9 {
+    left: 0;
+    transform: translate(0%, -10px);
+    bottom: 10px;
+  }
+  .logo12 {
+    right: 0;
+    transform: translate(0%, -10px);
+    bottom: 10px;
   }
 }
