@@ -216,7 +216,12 @@ const ListIntegrationProperties = () => {
       //setGetInputNameKey({ nameKey: "" });
 
       // NEW CODE (navigate to the new questionnaire page. No need to put the property name in local storage, since it's now a URL path param)
-      navigate(`/edit-property/${encodeURIComponent(getInputNameKey.nameKey)}`);
+      // If setup_status is present in the property data (assume setup incomplete): navigate to the guided-setup page. Otherwise, nav to the edit-property page
+      if (PropertiesExtraData?.[getInputNameKey.nameKey]?.setup_status) {
+        navigate(`/guided-setup/${encodeURIComponent(getInputNameKey.nameKey)}`);
+      } else {
+        navigate(`/edit-property/${encodeURIComponent(getInputNameKey.nameKey)}`);
+      }
       setGetInputNameKey({ nameKey: "" });
     }
   }, [propertiesDeleteStatus, getInputNameKey, testPropertyKey]);

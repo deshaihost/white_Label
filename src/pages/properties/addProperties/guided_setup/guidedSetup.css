@@ -1,3 +1,5 @@
+/* In this file: always reference the parent class to avoid conflicts with other components */
+
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
 .pst {
@@ -104,6 +106,19 @@
     display: block;
 }
 
+.pst .accordion-item .accordion-header .accordion-button .subtitle.loading {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 24px;
+}
+
+.pst .accordion-item .accordion-header .accordion-button .subtitle.loading .spinner-border {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+}
+
 .pst .accordion-item .accordion-header .accordion-button::after {
     background-image: url(../../../../public/img/arrow_down.png) !important;
     background-position: center;
@@ -129,8 +144,74 @@
     line-height: 150%;
 }
 
+.pst .accordion-content-tile {
+    background: #151530;
+    border: 1px solid #146EF5;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
 .pst .banner-heading {
     margin-bottom: 30px;
+}
+
+.pst .other-content-tile {
+  background: #151530;
+  border: 1px solid #146EF5;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  margin-top: 30px;
+  padding: 20px;
+}
+
+.pst .completion-message {
+    color: white;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.pst .header-information {
+    margin: 0 auto 30px auto;
+}
+
+.pst .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pst .header-content img {
+    height: 110px;
+    max-width: 400px;
+    border-radius: 20px;
+    margin-right: 20px;
+}
+
+.pst .header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.pst .header-text h2 {
+    color: #fff;
+    margin-bottom: 5px;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 36px;
+}
+
+.pst .header-text a {
+    color: #146ef5 !important;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.pst .header-text a:hover {
+    transform: translateY(-2px);
 }
 
 @media only screen and (max-width: 991px) {
@@ -154,4 +235,37 @@
     .pst .setup-tile {
         padding: 20px;
     }
+}
+
+.pst .primary-btn {
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    width: 300px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.pst .primary-btn:hover {
+    background: #0b5ed7;
+}
+
+.pst .underline-btn {
+  color: #146EF5;
+  font-family: 'Samsung Sharp Sans Medium';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration-line: underline;
+  background: transparent;
+  padding: 0;
+  border: none;
+  display: block;
 }
