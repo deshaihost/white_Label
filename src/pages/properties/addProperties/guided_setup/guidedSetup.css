@@ -1,0 +1,271 @@
+/* In this file: always reference the parent class to avoid conflicts with other components */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+.pst {
+    padding: 70px 150px;
+}
+
+.pst .setup-tile {
+  background: #000212;
+  border: 1px solid var(--main-Color, #146EF5);
+  border-radius: 30px;
+  box-shadow: 0 0 15px 0 rgba(255, 255, 255, 0.4);
+  padding: 30px 60px 40px 60px;
+}
+
+.pst h2 {
+  color: #146ef5;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px;
+  margin-bottom: 20px;
+}
+
+.pst .accordion-item {
+    border-radius: 15px;
+    border: 1px solid var(--main-Color, #146EF5);
+    background: linear-gradient(180deg, #000426 0%, #00031A 100%);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Only apply intense shadow on hover when accordion is closed */
+.pst .accordion-item:has(.accordion-button.collapsed):hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+}
+
+/* Less intense shadow for opened accordion */
+.pst .accordion-item:has(.accordion-button:not(.collapsed)) {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.pst .accordion-item.completed {
+    border: 1px solid #4CAF50;
+}
+
+.pst .accordion-item.completed .accordion-header .accordion-button::before {
+    content: '';
+    background-image: url(../../../../public/img/Green_check.svg);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.pst .accordion-item.completed .accordion-header .accordion-button::after {
+    display: none; /* Hide the arrow for completed items, since it doesn't look good with the checkmark */
+}
+
+.pst .accordion-item:not(:last-child) {
+    margin-bottom: 30px;
+}
+
+.pst .accordion-item .accordion-header {
+    margin-bottom: 0;
+    width: 100%; /* Ensure the header takes full width */
+}
+
+.pst .accordion-item .accordion-header .accordion-button {
+    box-shadow: none !important;
+    outline: none;
+    word-break: break-word;
+    background: transparent;
+    padding: 20px 15px; /* Add padding to the button */
+    color: #FFF;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%; /* Ensure button takes full width */
+}
+
+.pst .accordion-item:first-of-type .accordion-button {
+    border-top-left-radius: calc(0.25rem - 1px);
+    border-top-right-radius: calc(0.25rem - 1px);
+}
+
+.pst .accordion-item .accordion-header .accordion-button .subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #CCC;
+    margin-top: 5px;
+    max-width: 94%;
+    display: block;
+}
+
+.pst .accordion-item .accordion-header .accordion-button .subtitle.loading {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 24px;
+}
+
+.pst .accordion-item .accordion-header .accordion-button .subtitle.loading .spinner-border {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+}
+
+.pst .accordion-item .accordion-header .accordion-button::after {
+    background-image: url(../../../../public/img/arrow_down.png) !important;
+    background-position: center;
+    background-size: contain;
+    width: 8.486px;
+    height: 5.656px;
+    margin-left: 20px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.pst .accordion-item .accordion-body {
+    padding: 20px 15px;
+    color: #CCC !important;
+    leading-trim: both;
+    text-edge: cap;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+}
+
+.pst .accordion-content-tile {
+    background: #151530;
+    border: 1px solid #146EF5;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.pst .banner-heading {
+    margin-bottom: 30px;
+}
+
+.pst .other-content-tile {
+  background: #151530;
+  border: 1px solid #146EF5;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  margin-top: 30px;
+  padding: 20px;
+}
+
+.pst .completion-message {
+    color: white;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.pst .header-information {
+    margin: 0 auto 30px auto;
+}
+
+.pst .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pst .header-content img {
+    height: 110px;
+    max-width: 400px;
+    border-radius: 20px;
+    margin-right: 20px;
+}
+
+.pst .header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.pst .header-text h2 {
+    color: #fff;
+    margin-bottom: 5px;
+    font-family: 'Samsung Sharp Sans Bold';
+    font-size: 36px;
+}
+
+.pst .header-text a {
+    color: #146ef5 !important;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.pst .header-text a:hover {
+    transform: translateY(-2px);
+}
+
+@media only screen and (max-width: 991px) {
+    .pst {
+        padding: 50px 0;
+    }
+
+    .pst .accordion-item {
+        padding: 20px;
+    }
+
+    .pst .accordion-item .accordion-header .accordion-button {
+        font-size: 16px;
+        padding: 20px;
+    }
+
+    .pst .accordion-item .accordion-body {
+        padding: 20px;
+    }
+
+    .pst .setup-tile {
+        padding: 20px;
+    }
+}
+
+.pst .primary-btn {
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    width: 300px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.pst .primary-btn:hover {
+    background: #0b5ed7;
+}
+
+.pst .underline-btn {
+  color: #146EF5;
+  font-family: 'Samsung Sharp Sans Medium';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration-line: underline;
+  background: transparent;
+  padding: 0;
+  border: none;
+  display: block;
+}

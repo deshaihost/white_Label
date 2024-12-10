@@ -18,7 +18,7 @@ import { set } from "react-hook-form";
 
 
 // Code for the entire questionnaire page, including the header and all sections, including Basics and External Resources.
-const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jumpToSection=null, scrollToBottom=false }) => {
+const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jumpToSection=null, scrollToBottom=false, exitFunct=null }) => {
   const { property_name: paramPropertyName } = useParams();
   const navigate = useNavigate();
   const containerRef = useRef(null);
@@ -72,7 +72,7 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
     }
   }, [apiQuestionnaireData]);
 
-  // Get property data from the API. Should run once, immediately when the page loads
+  // Get property data from the API
   const getPropertyDataFromAPI = async (propertyName) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -259,10 +259,16 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
   const handleSaveAndNext = (prev=false) => {
     setDoTriggeredSave(true);
     const currSectionIndex = questionnaire_section_names.indexOf(selectedSection);
-    if (prev && currSectionIndex === 0) { setNavigateToProperties(true); }
+    if (prev && currSectionIndex === 0) {
+      if (exitFunct) { exitFunct(); }
+      else { setNavigateToProperties(true); }
+    }
     else if (prev && currSectionIndex > 0) { setSelectedSection(questionnaire_section_names[currSectionIndex - 1]); }
     else if (!prev && currSectionIndex < questionnaire_section_names.length - 1) { setSelectedSection(questionnaire_section_names[currSectionIndex + 1]); }
-    else if (!prev && currSectionIndex === questionnaire_section_names.length - 1) { setNavigateToProperties(true); }
+    else if (!prev && currSectionIndex === questionnaire_section_names.length - 1) {
+      if (exitFunct) { exitFunct(); }
+      else {setNavigateToProperties(true);}
+    }
   }
 
   const callDeleteQuestionApi = async (sectionName, subSectionName, questionIndex, propertyName) => {
@@ -343,7 +349,7 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
                     <QuestionnaireFirstPage handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
                   ) : (
                     selectedSection && Object.keys(liveQuestionnaireData).length > 0 &&
-                      <QuestionnaireSection questionnaire_section_name={selectedSection} liveQuestionnaireData={liveQuestionnaireData} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections} />
+                      <QuestionnaireSection questionnaire_section_name={selectedSection} liveQuestionnaireData={liveQuestionnaireData} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections}/>
                   )
                 ) : (
                   <ExternalResourcesForm property_name={property_name} handleSaveAndNext={handleSaveAndNext}/>

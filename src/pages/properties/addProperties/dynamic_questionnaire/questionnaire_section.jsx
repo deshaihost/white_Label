@@ -16,6 +16,7 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
 
   return (
     <div className="form-design">
+      <p style={{color:'white', marginBottom:'50px', color:'#AAA'}}>All fields are optional, but the more details you provide, the better HostBuddy can serve your guests.</p>
 
       {/* Form for this questionnaire section (map thru each subsection & question) */}
       {questionnaire_section_data && subsection_order.map((subsectionName) => {

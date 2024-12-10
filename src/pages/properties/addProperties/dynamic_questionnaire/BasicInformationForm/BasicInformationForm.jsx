@@ -72,7 +72,8 @@ const BasicInformationForm = ({ property_name }) => {
       ToastHandle("New property created", "success");
       add_thumbnail_image_API_call(propertyName, uploadedFile);
       dispatch(stateEmptyActions());
-      navigate(`/edit-property/${encodeURIComponent(propertyName)}`);
+      //navigate(`/edit-property/${encodeURIComponent(propertyName)}`);
+      navigate(`/guided-setup/${encodeURIComponent(propertyName)}`);
 
     } else if (propertiesAddStatus === 400) {
       ToastHandle(propertiesAddMessage, "danger");
