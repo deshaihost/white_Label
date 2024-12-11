@@ -69,6 +69,7 @@ import OwnerRezInstructions from "../pages/userGuides/pmsInstructions/ownerrez";
 import BookingSyncInstructions from "../pages/userGuides/pmsInstructions/bookingsync";
 import HostbuddyForGuesty from "../pages/userGuides/hostbuddyForGuesty/HostbuddyForGuesty";
 import Integrations from "../pages/integrations/Integrations";
+import Turno from "../pages/turno/Turno";
 
 const Routing = () => {
   const location = useLocation();
@@ -237,7 +238,6 @@ const Routing = () => {
           element={<HostbuddyForGuesty />}
         ></Route>
         <Route path="/hostbuddy-for-tidy" element={<Home />}></Route>
-        <Route path="/turno" element={<Home />}></Route>
 
         <Route path="/testing-questions" element={<TestingQuestions />}></Route>
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
@@ -413,6 +413,7 @@ const Routing = () => {
           }
         />
         <Route path="/integrations" element={<Integrations />} />
+        <Route path="/turno" element={<Turno />} />
 
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>

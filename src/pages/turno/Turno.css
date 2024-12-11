@@ -1,0 +1,559 @@
+.banner-mint .banner-image {
+  width: 100%;
+  position: relative;
+  height: 1000px;
+}
+.banner-mint .container {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.official-mint {
+  background: #ffffff26;
+  border: 1px solid #ffffff40;
+  padding: 12px 49px;
+  border-radius: 20px;
+  max-width: max-content;
+  margin: 0 auto;
+}
+.official-mint p {
+  margin-bottom: 4px;
+  color: #ffff;
+  font-size: 20px;
+  font-weight: 500;
+}
+.official-mint img {
+  width: 100%;
+  max-width: 416px;
+}
+.banner-mint .container h1 {
+  font-size: 45px;
+  font-weight: bold;
+  color: #fff;
+  max-width: 1015px;
+  margin: 54px auto 0 auto;
+  line-height: 55px;
+}
+.banner-mint .container h1 span {
+  color: #41f9e3;
+}
+.banner-mint {
+  position: relative;
+}
+.mint-listing {
+  padding: 0px 0px 84px 0px;
+}
+.mint-listing-item {
+  background: rgb(255 255 255 / 10%);
+  border-radius: 10px 10px 10px 10px;
+}
+.mint-listing-item img {
+  width: 100%;
+  border-radius: 10px;
+  height: 310px;
+  object-fit: cover;
+  object-position: top;
+}
+.item-content {
+  padding: 24px 10px;
+  text-align: center;
+  border: 1px solid rgb(255 255 255 / 15%);
+  border-top: 0px;
+  border-radius: 0px 0px 10px 10px;
+}
+.item-content h2 {
+  color: #fff;
+  font-size: 28px;
+  margin-bottom: 27px;
+  font-weight: 700;
+  line-height: 38px;
+}
+.btn-link {
+  color: #146ef5;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+.btn-link svg {
+  width: 17px;
+  height: 17px;
+}
+.mint-listing .row .col-lg-4 {
+  padding: 0px 19px;
+}
+.connect-mint {
+  padding-bottom: 75px;
+  position: relative;
+}
+.connect-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 72px 95px;
+  border-radius: 25px;
+  border: 3px solid #146ef5;
+  box-shadow: #146ef5 0px 0px 16.97px 0px;
+}
+.connect-inne {
+  text-align: center;
+}
+.connect-inner h2 {
+  color: #fff;
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  line-height: 46px;
+  margin-bottom: 35px;
+}
+.connect-inner p {
+  font-size: 18px;
+  text-align: center;
+  color: #cccccc;
+  line-height: 30px;
+  margin: 0 auto;
+  max-width: 569px;
+}
+.connect-btn {
+  display: flex;
+
+  justify-content: center;
+  gap: 11px;
+  margin-top: 35px;
+}
+.connect-btn a {
+  font-size: 16px;
+  width: 100%;
+  max-width: 272px;
+  text-align: center;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.connect-btn a.btn-link.nav-btn.nav-btn-primary.link-btn.outline-btn {
+  color: #fff;
+}
+.logo-circle img {
+  width: 100%;
+  max-width: 944px;
+  margin: 0 auto;
+  display: block;
+}
+.logo-content h2 {
+  text-align: center;
+  color: #fff;
+  font-size: 45px;
+  line-height: 55px;
+  font-weight: 800;
+  width: 100%;
+  max-width: 718px;
+  margin: 14px auto 48px;
+}
+.logo-content h2 span {
+  color: #146ef5;
+}
+.card-main {
+  padding: 8px 3px;
+  border: 1px solid #0065ff;
+  border-radius: 10px;
+  box-shadow: #146ef54d 0px 0px 50px 0px;
+  background: hsl(0deg 0% 100% / 5%);
+  height: 100%;
+}
+.card-image img {
+  border-radius: 20px;
+  width: 100%;
+}
+.card-content p {
+  color: #cccccc;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 30px;
+  margin: 0px;
+}
+.card-row {
+  row-gap: 20px;
+}
+.connect-mint::before {
+  content: "";
+  position: absolute;
+  right: 0px;
+  width: 380px;
+  height: 819px;
+
+  background: url(../../helper/staticImage/shape-right.png) no-repeat right 20px
+    center;
+  filter: blur(135px);
+  top: -10%;
+  z-index: -1;
+  transform: translateY(-26%);
+}
+.card-main .card-content {
+  padding-top: 32px;
+}
+.to-get-hostbuddy .logo-content h2 {
+  max-width: 791px;
+}
+.to-get-hostbuddy {
+  padding: 114px 0px 60px 0px;
+  position: relative;
+}
+.get-row .card-main {
+  padding: 60px 33px 33px;
+  border-radius: 20px;
+  height: 100%;
+}
+.get-row .card-main img {
+  width: 100%;
+  max-width: 96px;
+  margin: 0 auto;
+  display: block;
+}
+.get-row .card-content h5 {
+  color: #ffff;
+  font-size: 24px;
+  font-weight: 300 !important;
+  font-family: "Samsung Sharp Sans Medium";
+  text-align: center;
+  margin-bottom: 24px;
+}
+.get-row .card-content P {
+  text-align: center;
+  font-size: 18px;
+  line-height: 27px;
+}
+.get-row .card-content p a {
+  text-decoration: underline;
+}
+.get-row .card-content {
+  padding-top: 42px;
+}
+.to-get-hostbuddy::before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  width: 380px;
+  height: 819px;
+
+  background: url(../../helper/staticImage/shape.png) no-repeat left;
+  top: 50%;
+  z-index: -1;
+  transform: translateY(-50%);
+}
+.mint-listing .row {
+  row-gap: 20px;
+  width: auto;
+}
+.connect-btn button.btn-link.nav-btn.nav-btn-primary.link-btn.outline-btn {
+  color: #fff;
+}
+.to-get-hostbuddy .connect-btn {
+  margin-top: 60px;
+}
+
+.logo1 {
+  position: absolute;
+  left: 12%;
+  top: 17%;
+  transform: translate(-17%, -12%);
+}
+.logo2 {
+  position: absolute;
+  top: 28%;
+  left: 34%;
+  transform: translate(-34%, -28%);
+}
+.logo a {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #fff;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  flex-basis: auto;
+  box-shadow: #146ef5 0px 0px 16.97px 0px;
+}
+.logo a:hover {
+  -webkit-animation: scale-up-center 0.5s cubic-bezier(0.39, 0.575, 0.565, 1)
+    both;
+  animation: scale-up-center 0.5s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+.relative-logo {
+  position: relative;
+  z-index: 0;
+  max-width: 944px;
+  margin: 0 auto;
+}
+.logo img {
+  max-width: 90%;
+  max-height: 90%;
+}
+.logo-container {
+  max-width: 924px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+}
+.logo4 {
+  position: absolute;
+  top: 27%;
+  right: 27%;
+  transform: translate(-27%, -27%);
+}
+.logo3 {
+  position: absolute;
+  left: 50%;
+  top: -17px;
+  transform: translate(-50%, -17px);
+}
+.logo5 {
+  position: absolute;
+  right: 12%;
+  transform: translate(-12%, -10%);
+  top: 10%;
+}
+.logo6 {
+  position: absolute;
+  top: 59%;
+  left: 17%;
+  transform: translate(-17%, -59%);
+}
+.logo7 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.logo8 {
+  position: absolute;
+  top: 59%;
+  right: 12%;
+  transform: translate(-12%, -59%);
+}
+.logo9 {
+  position: absolute;
+  bottom: 30px;
+  left: -4%;
+  transform: translate(-4%, -30px);
+}
+.logo10 {
+  position: absolute;
+  bottom: 20px;
+  left: 30%;
+  transform: translate(-30%, -20px);
+}
+.logo11 {
+  position: absolute;
+  right: 23%;
+  bottom: 20px;
+  transform: translate(-23%, -20px);
+}
+.logo12 {
+  position: absolute;
+  right: -5%;
+  bottom: 30px;
+  transform: translate(-5%, -30px);
+}
+@-webkit-keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+/*===============Responsive part strats here=================*/
+@media (max-width: 1299.98px) {
+  .item-content h2 {
+    font-size: 22px;
+  }
+  .logo-content h2 {
+    font-size: 35px;
+    line-height: 45px;
+  }
+  .card-main .card-content {
+    padding-top: 0px;
+  }
+  .routes .row {
+    align-items: center;
+  }
+  .to-get-hostbuddy .row.get-row {
+    align-items: normal;
+  }
+}
+@media (max-width: 1199.98px) {
+  .banner-mint .container h1 {
+    font-size: 35px;
+    line-height: 45px;
+  }
+  .item-content h2 {
+    font-size: 18px;
+    line-height: 27px;
+  }
+  .mint-listing .row .col-lg-4 {
+    padding: 0px 12px;
+  }
+  .connect-inner h2 {
+    font-size: 30px;
+  }
+  .connect-inner {
+    padding: 72px 30px;
+  }
+  .card-content p {
+    font-size: 15px;
+    line-height: 25px;
+  }
+  section.mint-listing .row {
+    row-gap: 20px;
+  }
+}
+@media (max-width: 1024px) {
+  .logo a {
+    width: 60px;
+    height: 60px;
+  }
+}
+@media (max-width: 991px) {
+  .connect-inner {
+    padding: 50px 30px;
+  }
+  .connect-inner h2 {
+    font-size: 25px;
+    line-height: 35px;
+    margin-bottom: 20px;
+  }
+  .logo-content h2 {
+    font-size: 25px;
+    line-height: 45px;
+    max-width: 500px;
+  }
+  .to-get-hostbuddy {
+    padding: 50px 0px 50px 0px;
+    position: relative;
+  }
+  .routes .row {
+    align-items: normal;
+  }
+  .card-main {
+    row-gap: 10px;
+  }
+  .mint-listing {
+    padding: 0px 0px 50px 0px;
+  }
+  .get-row .card-main {
+    padding: 20px;
+  }
+  .get-row .card-main img {
+    width: 100%;
+    max-width: 72px;
+  }
+  .get-row .card-content h5 {
+    margin-top: 24px;
+  }
+  .get-row .card-content P {
+    text-align: center;
+    font-size: 15px;
+    line-height: 25px;
+  }
+  .to-get-hostbuddy .row.get-row {
+    row-gap: 20px;
+  }
+  .banner-mint .container h1 {
+    font-size: 30px;
+    line-height: 45px;
+  }
+  .banner-mint .banner-image {
+    height: 700px;
+    object-fit: cover;
+  }
+  .banner-mint .container {
+    top: 50%;
+  }
+  .official-mint p {
+    font-size: 15px;
+  }
+}
+@media (max-width: 767px) {
+  .logo9 {
+    left: 0;
+    transform: translate(0%, -30px);
+  }
+  .logo12 {
+    right: 0;
+    transform: translate(0%, -30px);
+  }
+  .logo a {
+    width: 50px;
+    height: 50px;
+  }
+  .logo a {
+    box-shadow: #146ef5 0px 0px 8.97px 0px;
+  }
+  .logo-circle .row.card-row .row.card-main {
+    width: auto;
+  }
+  .logo-circle .row.card-row,
+  .to-get-hostbuddy .row.get-row {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .banner-mint .container h1 {
+    font-size: 25px;
+    line-height: 35px;
+    margin-top: 20px;
+  }
+  .to-get-hostbuddy::before,
+  .connect-mint::before {
+    display: none;
+  }
+  .connect-btn {
+    flex-direction: column;
+  }
+}
+@media (max-width: 575px) {
+  .logo a {
+    width: 30px;
+    height: 31px;
+  }
+  .logo3 {
+    top: 0;
+    transform: translate(-50%, -13px);
+  }
+  .banner-mint .banner-image {
+    height: 500px;
+  }
+  .connect-inner {
+    padding: 30px 15px;
+  }
+  .logo9 {
+    left: 0;
+    transform: translate(0%, -10px);
+    bottom: 10px;
+  }
+  .logo12 {
+    right: 0;
+    transform: translate(0%, -10px);
+    bottom: 10px;
+  }
+}
