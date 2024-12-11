@@ -1,23 +1,19 @@
-import React, { useRef } from "react";
-import "./Minut.css";
+import React, { useRef, useState } from "react";
+import "./Turno.css";
 import BannerImage from "../../helper/staticImage/banner-backgound.webp";
 import Official from "../../helper/staticImage/banner-official.webp";
-import ListOne from "../../helper/staticImage/listone.png";
 import { Link } from "react-router-dom";
 import Listthree from "../../helper/staticImage/listthree.webp";
 import ListTwo from "../../helper/staticImage/listtwo.webp";
 import { HiArrowLongRight } from "react-icons/hi2";
+import BookDemoModal from "../../component/bookDemoModal";
+
 import ShotTerms from "../../helper/staticImage/Short Term Rental Messaging.webp";
 import Template from "../../helper/staticImage/Templated Messages.webp";
-import CardTwo from "../../helper/staticImage/cardtwo (1).png";
-import CardThree from "../../helper/staticImage/cardthree.png";
-import CardFour from "../../helper/staticImage/cardfour.png";
 import LogoCircle from "../../helper/staticImage/logo-circle.webp";
-import Cardone from "../../helper/staticImage/cardone.png";
 import UserIcon from "../../helper/staticImage/userimg.webp";
 import Circle from "../../helper/staticImage/circle.webp";
 import Linking from "../../helper/staticImage/Link.webp";
-import ShapeLeft from "../../helper/staticImage/shape.png";
 import Each from "../../helper/staticImage/Tailor each message.webp";
 import AitATailor from "../../helper/staticImage/Use AI to tailor.webp";
 import Allow from "../../helper/staticImage/Allow HostBuddy.webp";
@@ -26,7 +22,7 @@ import Owner from "../../helper/staticImage/owner.webp";
 import Lodgify from "../../helper/staticImage/lodgify.webp";
 import Smily from "../../helper/staticImage/smily.webp";
 import Hostify from "../../helper/staticImage/hostify.webp";
-import Turno from "../../helper/staticImage/turno.webp";
+import TurnoImg from "../../helper/staticImage/turno.webp";
 import Guesty from "../../helper/staticImage/guesty.webp";
 import Hostfully from "../../helper/staticImage/hostfully.webp";
 import Bed from "../../helper/staticImage/beds.webp";
@@ -34,12 +30,14 @@ import Sombhu from "../../helper/staticImage/smoobu.webp";
 import Hostway from "../../helper/staticImage/hostaway.webp";
 import Restly from "../../helper/staticImage/restly.webp";
 
-const Minut = () => {
+const Turno = () => {
   const boxRef = useRef(null);
+  const [demoModalShow, setDemoModalShow] = useState(false);
 
   const scrollToBox = () => {
     boxRef.current.scrollIntoView({ behavior: "smooth" });
   };
+  
   return (
     <div>
       {/* =============Banner section start========= */}
@@ -128,6 +126,10 @@ const Minut = () => {
             <div className="connect-btn">
               <Link
                 to=""
+                onClick={(e) => {
+                  e.preventDefault();
+                  setDemoModalShow(true);
+                }}
                 className="connect-btn-link nav-btn nav-btn-outline link-btn filled-btn"
               >
                 Book Demo
@@ -170,10 +172,7 @@ const Minut = () => {
                 </a>
               </div>
               <div class="logo logo4">
-                <a
-                  href="https://www.bookingsync.com/en/app-center/31"
-                  target="_blank"
-                >
+                <a href="https://www.bookingsync.com/en/app-center/31" target="_blank">
                   <img src={Smily} alt="Logo 4" />
                 </a>
               </div>
@@ -184,7 +183,7 @@ const Minut = () => {
               </div>
               <div class="logo logo6">
                 <a href="https://turno.com/" target="_blank">
-                  <img src={Turno} alt="Logo 6" />
+                  <img src={TurnoImg} alt="Logo 6" />
                 </a>
               </div>
               <div class="logo logo7">
@@ -361,6 +360,10 @@ const Minut = () => {
             <div className="connect-btn">
               <Link
                 to=""
+                onClick={(e) => {
+                  e.preventDefault();
+                  setDemoModalShow(true);
+                }}
                 className="connect-btn-link nav-btn nav-btn-outline link-btn filled-btn"
               >
                 Book Demo
@@ -376,9 +379,16 @@ const Minut = () => {
         </section>
       </div>
 
+      {demoModalShow && (
+        <BookDemoModal 
+          show={demoModalShow} 
+          onHide={() => setDemoModalShow(false)} 
+          sourceMsg='turno page'
+        />
+      )}
       {/* =============To get hostbuddy section end========= */}
     </div>
   );
 };
 
-export default Minut;
+export default Turno;
