@@ -111,6 +111,13 @@ const Integrations = () => {
               </div>
             </a>
           </div>
+          <div className="col-lg-4 col-sm-6">
+            <a href="https://hospitable.com/" target="_blank" rel="noopener noreferrer">
+              <div className="image-boc-inter">
+                <img src={Hospitable} alt="" />
+              </div>
+            </a>
+          </div>
         </div>
         <div className="intre-content">
           <h2>Other Software</h2>
