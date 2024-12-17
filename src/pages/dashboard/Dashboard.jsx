@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Tooltip } from "react-tooltip";
 import SideBar from "../../component/sideBar/SideBar";
-import GetStartedImg from "../../public/img/getstartedimg.png";
 import { Link } from "react-router-dom";
 import "./dashboard.css";
 import { useSelector, useDispatch } from "react-redux";
 import { getActionItemsActions, getUserDataActions, putCompleteActionItemActions, stateEmptyActions } from "../../redux/actions";
 import { BoxLoader, FullScreenLoader } from "../../helper/Loader";
 import "react-circular-progressbar/dist/styles.css";
-import { GoArrowUpRight } from "react-icons/go";
 import ToastHandle from "../../helper/ToastMessage";
 import { Helmet } from "react-helmet";
 import { FaCircleCheck } from "react-icons/fa6";
 import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/transcriptsModel/ConverSationtranscriptModel";
-import { Dropdown } from "primereact/dropdown";
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
 
 import { MetricTile, HistogramTile, renderTiles } from "../statistics/statisticsTilesComponents";
@@ -196,7 +192,7 @@ const Dashboard = () => {
 
   // When user data is loaded, save the payment/subscription information to local storage. We need this information for the warning banner logic (in the NavBar), which should be shown on all portal pages.
   useEffect(() => {
-    if (userDataGet) {
+    if (false && userDataGet) { // not used
       localStorage.setItem( "paymentStatus", userDataGet?.subscription?.payment_standing );
       localStorage.setItem( "servicesExpireDate", userDataGet?.subscription?.services_good_until );
       localStorage.setItem( "numPropertiesAllowed", userDataGet?.subscription?.num_properties_allowed );

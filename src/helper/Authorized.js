@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import { getQuestionnaireActions } from "../redux/actions";
 import { jwtDecode } from 'jwt-decode';
-import { getUserDataActions } from "../redux/actions";
 import axios from 'axios';
 
 // If the user is logged in (i.e. valid & unexpired token), return the token. Otherwise, return null
@@ -70,6 +68,28 @@ export const useSelectorUseDispatch = () => {
 
 let userDataPromise = null;
 
+export const getSubscriptionStatus = (userData) => {
+  if (!userData) return { plan: 'trial_over', props_allowed: 0 };
+
+  // Check for plan name in new format first, then legacy
+  const planName = 'subscr_plan' in userData ? userData.subscr_plan : userData?.subscription?.plan || '';
+
+  if (planName) {
+    const propsAllowed = 'subscr_props_allowed' in userData ? userData.subscr_props_allowed : userData?.subscription?.num_properties_allowed || 0;
+    return { plan: planName, props_allowed: propsAllowed };
+  }
+
+  // Check trial status
+  if ('trial_ends' in userData) {
+    const trialEnds = new Date(userData.trial_ends);
+    if (new Date() < trialEnds) { return { plan: 'trial', props_allowed: 5 }; }
+    return { plan: 'trial_over', props_allowed: 0 };
+  }
+
+  // Legacy user with no plan and no trial
+  return { plan: 'trial_over', props_allowed: 0 };
+};
+
 // Get the most recently fetched user data from session storage. If it doesn't exist, call the API to fetch it.
 // This is useful for when we want to access user data fields that don't really change, so we don't have to call the API every time we need them (e.g. PMS name, date created, etc)
 // FYI, this DOESN'T WORK becuase we're doing the async/await handling incorrectly.
@@ -102,6 +122,7 @@ export const getLastUserDataAsync = async () => {
 };
 
 // Synchronous wrapper that lets us call getLastUserDataAsync() and get the result synchronously
+// FYI, this also DOESN'T WORK and is UNUSED
 export const getLastUserData = () => {
   if (!userDataPromise) {
     userDataPromise = getLastUserDataAsync();

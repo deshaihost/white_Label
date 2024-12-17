@@ -11,6 +11,7 @@ import {getUserDataActions, toggleChatbotoNoFFPutActions} from "../../redux/acti
 import { useDispatch, useSelector } from "react-redux";
 import { stateEmptyActions } from "../../redux/actions";
 import { FullScreenLoader } from "../../helper/Loader";
+import { getSubscriptionStatus } from "../../helper/Authorized";
 import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrationProperties";
 import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
@@ -31,10 +32,7 @@ const Properties = () => {
 
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {
-      // Billing portal logic is behaving strangely, so removed. Just open the add property modal.
       setModel({ ...model, addProperty: true });
-      //dispatch(goToBillingportalPostActions());
-      //setPropertyConditionCheck(true);
     } else if (type === "pmsIntegrationOpen") {
       setModel({ ...model, pmsIntegration: true });
     } else if (type === "removeIntegrationsOpen") {
@@ -66,16 +64,19 @@ const Properties = () => {
     }
   };
   // toggle chatbot
-  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const propertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user?.property_data ? store?.getUserDataReducer?.getUserData?.data?.user?.property_data : {};
-  const intergrationsMain = store?.getUserDataReducer?.getUserData?.data?.user?.calry_integrations;
-  const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
+  const userData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const createPropertiesName = userData?.properties;
+  const propertiesExtraData = userData?.property_data ? userData?.property_data : {};
+  const intergrationsMain = userData?.calry_integrations;
+  //const subscription_data = userData?.subscription;
+  const subscription_data = getSubscriptionStatus(userData); // {plan:<plan_name>, props_allowed:<num_props_allowed>}
   const intergrations = intergrationsMain ? intergrationsMain : [];
   const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
   const toggleChatStatus = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.status;
 
-  const createPropertiesSubscriptionAllowed = store?.getUserDataReducer?.getUserData?.data?.user?.subscription?.num_properties_allowed;
+  //const createPropertiesSubscriptionAllowed = userData?.subscription?.num_properties_allowed;
+  const createPropertiesSubscriptionAllowed = subscription_data?.props_allowed;
   const propertyNamesStillLocked = propertiesExtraData
     ? Object.entries(propertiesExtraData)
         .filter(([_, value]) => value.is_locked)
@@ -246,7 +247,7 @@ const Properties = () => {
                         </div>
                       </>
                     )}
-                    {(subscription_data?.num_properties_allowed == 0 || subscription_data?.num_properties_allowed === undefined) && (
+                    {['trial', 'trial_over', 'canceled'].includes(subscription_data.plan) && (
                       <div className="tile" onClick={() => handleModelOpen("addPropertyOpen")}>
                         <h3>Subscribe</h3>
                         <p>Get HostBuddy plugged in to your guest communication.</p>
@@ -281,7 +282,7 @@ const Properties = () => {
       <RemoveIntegrations handleNoPlanClose={handleModelClose} showNoPlan={model?.removeIntegration}/>
       <DisconnectIntegration handleNoPlanClose={handleModelClose} showNoPlan={model?.disconnectIntegration}/>
       <ImportPropertiesModal handleNoPlanClose={handleModelClose} showNoPlan={model?.importProperties} setNewPropertiesAdded={setNewPropertiesAdded}/>
-      <UnlockPropertiesModal handleClose={handleModelClose} modalShow={model?.unlockProperties} property_names={unlockPropertyNames} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} setPropertiesChanged={setNewPropertiesAdded}/>
+      <UnlockPropertiesModal handleClose={handleModelClose} modalShow={model?.unlockProperties} propertiesToUnlock={unlockPropertyNames} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} setPropertiesChanged={setNewPropertiesAdded}/>
       <HostDaddy />
     </>
   );

@@ -49,7 +49,7 @@ function CopyToPropertiesModal({ property_names, subscription_active, remaining_
           <h3 className="text-white text-center mb-4 fw-bold fs-4">Unlock Properties</h3>
           <hr />
           <div className="copy-to-properties-text">
-            <p>Locked properties are for testing only. You'll need to unlock a property to allow HostBuddy to respond to its guests.</p>
+            <p>Locked properties allow setup and testing only. You'll need to unlock a property to allow HostBuddy to respond to its guests.</p>
             {remaining_unlocks_allowed > 0 && remaining_unlocks_allowed < remaining_locked_properties && (
               <p>Your current subscription allows you to unlock {remaining_unlocks_allowed} more {remaining_unlocks_allowed == 1 ? "property" : "properties"}.</p>
             )}

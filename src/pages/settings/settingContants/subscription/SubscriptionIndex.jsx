@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 //import { goToBillingportalPostActions } from "../../../../redux/actions";
+import { getSubscriptionStatus } from "../../../../helper/Authorized";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
@@ -14,10 +15,13 @@ const SubscriptionIndex = () => {
   const [goToBillingPortalLoading, setGoToBillingPortalLoading] = React.useState(false);
   const [subscriptionNotFound, setSubscriptionNotFound] = useState(false);
 
-  const userSubscriptionData = store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
-  const subscriptionPlanName = userSubscriptionData?.plan;
-  const numPropertiesAllowed = userSubscriptionData?.num_properties_allowed;
-  const paymentGoodUntil = userSubscriptionData?.payment_good_until;
+  const userData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const userSubscriptionData = userData?.subscription;
+  //const subscriptionPlanName = userSubscriptionData?.plan;
+  const userSubscriptionStatus = getSubscriptionStatus(userData);
+  const subscriptionPlanName = userSubscriptionStatus.plan;
+  const numPropertiesAllowed = userSubscriptionStatus.props_allowed;
+  const paymentGoodUntil = userData?.subscr_payment_good_until || userSubscriptionData?.payment_good_until;
   const nextPaymentDate = paymentGoodUntil ? paymentGoodUntil.split(' ')[0] : '';
 
 

@@ -16,6 +16,11 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
     setSubscriptionPlan(event.target.value);
   };
 
+  const handleNumberChange = (e) => {
+    const value = Math.max(1, parseInt(e.target.value) || 1);
+    setNumProperties(value);
+  };
+
   const validateForm = () => {
     let formErrors = {};
     if (!numProperties) { formErrors.num_properties = ErrorMessageKey.THIS_FIELD_REQUIRED; }
@@ -45,7 +50,7 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
           <h5 className="modal-title">Subscribe</h5>
         </Modal.Header>
         <Modal.Body>
-          {subscription_data?.num_properties_allowed == 0 || subscription_data?.num_properties_allowed === undefined ? (
+          {['trial', 'trial_over', 'canceled'].includes(subscription_data.plan) ? ( // user not subscribed - give them the option to subscribe
             <form onSubmit={onSubmit}>
               <div className="upgrade-plan-box plan-box">
                 <div className="membership-list">
@@ -53,7 +58,7 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                     <label htmlFor="">
                       Choose How Many Properties To Add
                     </label>
-                    <input type="number" name="num-of-properties" id="num-of-properties" placeholder="Enter or select" className="form-control pricing_range" value={numProperties} onChange={(e) => setNumProperties(e.target.value)}/>
+                    <input type="number" name="num-of-properties" id="num-of-properties" min="1" placeholder="Enter or select" className="form-control pricing_range" value={numProperties} onChange={handleNumberChange}/>
                     {errors.num_properties && (
                       <>{ErrorMessageShow(errors.num_properties)}</>
                     )}
@@ -99,10 +104,10 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                 </div>
               </div>
             </form>
-          ) : (
+          ) : ( // user is subscribed - show them the option to add a new property
             <div className="d-flex flex-column justify-content-center">
               <p style={{ color: 'white', marginBottom: '20px', textAlign: 'center' }}> 
-                To add a new property, click on the "Edit" button in one of the blank listings below. 
+                To add a new property: import from your PMS below, or click "Edit" in the blank listing at the bottom of the properties list to add without a PMS.
               </p>
               <p style={{ color: 'white', textAlign: 'center' }}> 
                 To add more usable listings, go to "Account" &gt; "Subscription" and purchase more properties for your account.
