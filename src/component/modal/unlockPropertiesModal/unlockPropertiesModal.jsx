@@ -7,22 +7,20 @@ import ToastHandle from "../../../helper/ToastMessage";
 import { BoxLoader } from "../../../helper/Loader";
 import { Link } from "react-router-dom";
 
-function UnlockPropertiesModal({ property_names, subscription_active, remaining_unlocks_allowed, remaining_locked_properties, modalShow, handleClose, setPropertiesChanged }) {
+function UnlockPropertiesModal({ propertiesToUnlock, has_active_subscription, remaining_unlocks_allowed, remaining_locked_properties, modalShow, handleClose, setPropertiesChanged }) {
   const store = useSelector((state) => state);
 
   const [unlockPropertiesLoading, setUnlockPropertiesLoading] = useState(false);
   const [addPropertiesToSubscriptionLoading, setAddPropertiesToSubscriptionLoading] = useState(false);
-  const [freeTrial, setFreeTrial] = useState(false)
 
   // Get information about the status of the subscription
   const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
   const paymentGoodUntilDate = new Date(subscription_data?.payment_good_until);
-  const isOnFreeTrial = (subscription_data?.payment_standing === "good" && paymentGoodUntilDate > new Date() && (!subscription_data?.payment_collected || subscription_data?.payment_collected == 0));
 
-  const callUnlockPropertiesApi = async (property_names) => {
+  const callUnlockPropertiesApi = async (propertiesToUnlock) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const dataToSend = { property_names: property_names };
+    const dataToSend = { property_names: propertiesToUnlock };
     setUnlockPropertiesLoading(true);
 
     try {
@@ -72,7 +70,7 @@ function UnlockPropertiesModal({ property_names, subscription_active, remaining_
   }
 
   const handleUnlockClick = async () => {
-    await callUnlockPropertiesApi(property_names);
+    await callUnlockPropertiesApi(propertiesToUnlock);
     handleClose();
   }
 
@@ -82,17 +80,11 @@ function UnlockPropertiesModal({ property_names, subscription_active, remaining_
       
       if (userConfirmed) {
         await callAddPropertiesToSubscriptionApi(1);
-        await callUnlockPropertiesApi(property_names);
+        await callUnlockPropertiesApi(propertiesToUnlock);
         handleClose();
       }
     }
   }
-
-  useEffect(() => {
-    if (isOnFreeTrial) {
-      setFreeTrial(isOnFreeTrial);
-    }
-  }, [isOnFreeTrial]);
 
 
   return (
@@ -102,24 +94,23 @@ function UnlockPropertiesModal({ property_names, subscription_active, remaining_
           <h3 className="text-white text-center mb-4 fw-bold fs-4">Unlock Properties</h3>
           <hr />
           <div className="unlock-properties-text">
-            <p>Locked properties are for testing only. You'll need to unlock a property to allow HostBuddy to respond to its guests.</p>
+            <p>Locked properties allow setup and testing only. You'll need to unlock a property to allow HostBuddy to respond to its guests.</p>
             {remaining_unlocks_allowed > 0 && remaining_unlocks_allowed < remaining_locked_properties && (
               <p>Your current subscription allows you to unlock {remaining_unlocks_allowed} more {remaining_unlocks_allowed == 1 ? "property" : "properties"}.</p>
             )}
-            {remaining_unlocks_allowed == 0 ? (
-              subscription_active ? (
-                freeTrial ? (
-                  <p>Your current subscription does not allow you to unlock any more properties. Click <a href="#" onClick={() => handleAddToSubscriptionClick()}>here</a> to add a property to your subscription and unlock this listing.</p>
-                ) : (
-                  <p>Your current subscription does not allow you to unlock any more properties. Upgrade your subscription in the <Link to="/setting/subscription">Subscription page</Link> to unlock more properties. isOnFreeTrial: {freeTrial === null ? 'null' : freeTrial === undefined ? 'undefined' : freeTrial === false ? 'false' : freeTrial}</p>
-                )
+            {remaining_unlocks_allowed <= 0 ? (
+              has_active_subscription ? ( // in an ideal world we detect if the user is on a Stripe free trial - and show them the above p tag if they are, and the below if they aren't
+                <>
+                  <p>Your current subscription does not allow you to unlock any more properties. Click <a href="#" onClick={() => handleAddToSubscriptionClick()}>here</a> to add a property to your subscription and unlock this listing.</p> {/* This option lets users add properties during a Stripe free trial without ending the trial */}
+                  <p>Alternatively, you can add properties to your subscription from the <Link to="/setting/subscription">Subscription page</Link> to unlock more properties.</p> {/* If the user changes their property count in the subscription page, it will charge immediately for all the properties, even if they are in a free trial */}
+                </>
               ) : (
-                <p>You do not have an active subscription. Subscribe to unlock your properties.</p>
+                <p>You've reached the limit of properties you can unlock during the trial. Please subscribe to unlock more properties.</p>
               )
-            ) : remaining_unlocks_allowed < property_names.length ? (
+            ) : remaining_unlocks_allowed < propertiesToUnlock.length ? ( // user selected more properties to unlock than they're allowed. *this should never happen* since the "unlock all" button should not appear if the user can't unlock all properties.
               <p>Your subscription only allows you to unlock {remaining_unlocks_allowed} more properties. Upgrade your subscription in the <Link to="/setting/subscription">Subscription page</Link> to unlock them all, or return to the properties page to unlock them individually.</p>
             ) : (
-              <p>Would you like to unlock {property_names.length > 1 ? "these properties" : "this property"}?</p>
+              <p>Would you like to unlock {propertiesToUnlock.length > 1 ? "these properties" : "this property"}?</p>
             )}
           </div>
           {remaining_unlocks_allowed > 0 && (

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getUserDataActions } from "../../redux/actions";
+import { getSubscriptionStatus } from "../../helper/Authorized";
 import InBoxHeader from "./inboxHeader/InBoxHeader";
 import Inbox from "./inboxSection/inbox/Inbox";
 import SmartTemplateIndex from "./inboxSection/smartTemplates/smartTemplateFunctionality/SmartTemplateIndex";
@@ -38,7 +39,8 @@ const InboxIndex = () => {
   const allPropertyNamesList = userPropertiesData ? Object.keys(userPropertiesData) : [];
   const showTimeZoneNotif = allUserData && !allUserData?.user_region;
   const userHasPMS = allUserData && allUserData?.calry_integrations && Object.keys(allUserData.calry_integrations).length > 0;
-  const subscriptionPlan = allUserData?.subscription?.plan || ""; // Full name of the subscription plan, or empty string if no subscription
+  //const subscriptionPlan = allUserData?.subscription?.plan || ""; // Full name of the subscription plan, or empty string if no subscription
+  const subscriptionPlan = getSubscriptionStatus(allUserData).plan; // Full name of the subscription plan, or empty string if no subscription
   const accountCreatedDate = allUserData?.date_created; // 'MM/DD/YYYY HH:MM:SS' (it's in UTC)
   const accountAgeDays = calculateAccountAgeInDays(accountCreatedDate);
 

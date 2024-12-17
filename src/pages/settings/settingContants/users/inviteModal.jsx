@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import Loader from '../../../../helper/Loader';
+import { getSubscriptionStatus } from '../../../../helper/Authorized';
 import { Link } from "react-router-dom";
 
 const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalSubmit, email, role, setEmail, setRole}) => {
@@ -14,7 +15,8 @@ const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalS
   };
 
   // Only HostBuddy Elite users can add sub-users
-  const subscription_plan = userData?.userData?.subscription?.plan;
+  //const subscription_plan = userData?.userData?.subscription?.plan;
+  const subscription_plan = getSubscriptionStatus(userData?.userData).plan;
   const userHasPermission = (subscription_plan && (subscription_plan.toLowerCase().includes("elite")));
 
   return (

@@ -8,7 +8,7 @@ import RightSection from "./rightSection/RightSection";
 import "./inboxIndex.css";
 
 const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptionPlan, accountAgeDays}) => {
-  const eliteFeaturesAvailable = /elite|works/i.test(subscriptionPlan); // Case-insensitive check for 'elite' or 'works' in the plan name
+  const eliteFeaturesAvailable = (/elite|works/i.test(subscriptionPlan) || subscriptionPlan == 'trial') // Case-insensitive check for 'elite' or 'works' in the plan name, OR user is on trial
 
   const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
   const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'

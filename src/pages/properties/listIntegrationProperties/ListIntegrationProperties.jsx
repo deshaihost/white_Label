@@ -5,6 +5,7 @@ import dummyPropertyImg from "../../../public/img/dummyPropertyImg.png";
 import { useSelectorUseDispatch } from "../../../helper/Authorized";
 import ToastHandle from "../../../helper/ToastMessage";
 import  { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
+import { getSubscriptionStatus } from "../../../helper/Authorized";
 import { useNavigate } from "react-router-dom";
 import WebPageUrlModel from "./modelListProperties/webPageUrlModel/WebPageUrlModel";
 import SupportingDocumentModel from "./modelListProperties/supportingDocumentModel/SupportingDocumentModel";
@@ -12,7 +13,7 @@ import UnlockPropertiesModal from "../../../component/modal/unlockPropertiesModa
 import EmbedModal from "./embedModal/embedModal";
 import { Button, Dropdown } from "react-bootstrap";
 import { CiCalendar } from "react-icons/ci";
-import { HiOutlineDotsHorizontal, HiOutlineDotsVertical } from "react-icons/hi";
+import { HiOutlineDotsVertical } from "react-icons/hi";
 import "react-circular-progressbar/dist/styles.css";
 import CalenderModel from "./calender/CalenderModel";
 import axios from "axios";
@@ -30,22 +31,19 @@ const ListIntegrationProperties = () => {
   const [allProperties, setAllProperty] = useState([]);
   const { store, dispatch } = useSelectorUseDispatch();
   const userDataGetLoading = store?.getUserDataReducer?.loading;
-  const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
-  const PropertiesExtraData = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
+  const userData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const createPropertiesName = userData?.properties;
+  const PropertiesExtraData = userData?.property_data;
   
-
-  const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
-  const createPropertiesSubscriptionAllowed = store?.getUserDataReducer?.getUserData?.data?.user?.subscription?.num_properties_allowed;
-  const propertyCheckSubscription = createPropertiesSubscriptionAllowed - (createPropertiesName?.length || 0);
-  const dummyArraySubscriptionAllowed = [];
+  //const subscription_data = userData?.subscription;
+  const subscription_data = getSubscriptionStatus(userData); // {plan:<plan_name>, props_allowed:<num_props_allowed>}
+  //const createPropertiesSubscriptionAllowed = userData?.subscription?.num_properties_allowed;
+  const numPropertiesAllowed = subscription_data?.props_allowed;
   const numPropsAlreadyUnlocked = PropertiesExtraData ? Object.values(PropertiesExtraData).filter(property => !property.hasOwnProperty('is_locked')).length : 0;
   const numPropsStillLocked = PropertiesExtraData ? Object.values(PropertiesExtraData).filter(property => property.hasOwnProperty('is_locked')).length : 0;
-  const remainingUnlocksAllowed = createPropertiesSubscriptionAllowed - numPropsAlreadyUnlocked;
-  const subscription_active = (subscription_data?.num_properties_allowed == 0 || subscription_data?.num_properties_allowed == undefined) ? false : true;
-
-  for (let i = 0; i < propertyCheckSubscription; i++) {
-    dummyArraySubscriptionAllowed.push(i);
-  }
+  const remainingUnlocksAllowed = numPropertiesAllowed - numPropsAlreadyUnlocked;
+  //const has_active_subscription = (numPropertiesAllowed == 0 || numPropertiesAllowed == undefined) ? false : true;
+  const has_active_subscription = !['trial', 'trial_over', 'canceled'].includes(subscription_data.plan);
 
   const propertiesDeleteMessage =store?.deleteListIntegrationPropertiesReducer?.deleteListIntegrationProperties?.data?.message;
   const propertiesDeleteError = store?.deleteListIntegrationPropertiesReducer?.deleteListIntegrationProperties?.data?.error;
@@ -418,7 +416,7 @@ const ListIntegrationProperties = () => {
       {showCalender && (
         <CalenderModel selectedProperty={selectedProperty} showCalender={showCalender} setShowCalender={setShowCalender} allProperties={allProperties} setScheduleChanged={setScheduleChanged}/>
       )}
-      <UnlockPropertiesModal property_names={propertiesToUnlock} subscription_active={subscription_active} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} modalShow={model.unlockProperty} handleClose={handleModelClose} setPropertiesChanged={setScheduleChanged}/>
+      <UnlockPropertiesModal propertiesToUnlock={propertiesToUnlock} has_active_subscription={has_active_subscription} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} modalShow={model.unlockProperty} handleClose={handleModelClose} setPropertiesChanged={setScheduleChanged}/>
       <EmbedModal show={embedModalData.show} handleClose={() => setEmbedModalData({show:false, chatbotKey:""})} chatbotKey={embedModalData.chatbotKey}/>
     </div>
   );

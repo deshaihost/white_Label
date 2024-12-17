@@ -15,10 +15,11 @@ import ToastHandle from "../../../../../helper/ToastMessage";
 const placeholderImg = 'https://hostbuddylb.com/misc/chatBubbles.webp';
 
 const MildeSection = ({ allConversationData, updateConversationFromApi, updateCovnersationLocal, subscriptionPlan, accountAgeDays, setCurrentView }) => {
-  const eliteOrWorksPlan = /elite|works/i.test(subscriptionPlan); // Case-insensitive check for 'elite' or 'works' in the plan name
-  const eliteFeaturesAvailable = /elite/i.test(subscriptionPlan); // Case-insensitive check for 'elite' in the plan name
+  const eliteOrWorksPlan = /elite|works/i.test(subscriptionPlan) || subscriptionPlan == 'trial'; // Case-insensitive check for 'elite' or 'works' in the plan name
+  const eliteFeaturesAvailable = /elite/i.test(subscriptionPlan) || subscriptionPlan == 'trial'; // user subscribed to Elite or is on trial
   const propertyIsLocked = !!allConversationData?.is_locked;
-  const accountAllowsGenerateButton = (eliteFeaturesAvailable && !propertyIsLocked) || (accountAgeDays && accountAgeDays <= 4); // Generate functionality allowed if user/prop subscription is sufficient, OR if the account is new
+  //const accountAllowsGenerateButton = (eliteFeaturesAvailable && !propertyIsLocked) || (accountAgeDays && accountAgeDays <= 4); // Generate functionality allowed if user/prop subscription is sufficient, OR if the account is new
+  const accountAllowsGenerateButton = (eliteFeaturesAvailable && !propertyIsLocked)
 
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -324,7 +325,8 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           </div>
         )}
 
-        {((eliteOrWorksPlan || (accountAgeDays && accountAgeDays <= 4)) && !(conversationData?.channel == 'hostbuddy')) ? (
+        {/* ((eliteOrWorksPlan || (accountAgeDays && accountAgeDays <= 4)) && !(conversationData?.channel == 'hostbuddy')) ? ( // old logic */}
+        {((eliteOrWorksPlan) && !(conversationData?.channel == 'hostbuddy')) ? ( // generate button and message input / send components
           <>
             <div className="ai-input">
               <div className="generate-container">
