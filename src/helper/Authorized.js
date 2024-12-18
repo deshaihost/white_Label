@@ -68,26 +68,46 @@ export const useSelectorUseDispatch = () => {
 
 let userDataPromise = null;
 
+// From the user data: look at all the subscription fields, and compute and return values that the program cares about
 export const getSubscriptionStatus = (userData) => {
-  if (!userData) return { plan: 'trial_over', props_allowed: 0 };
+  if (!userData) return { plan: 'trial_over', props_allowed: 0, status: '' };
 
-  // Check for plan name in new format first, then legacy
+  // Get subscription status
+  const subscrStatus = userData.subscr_status || '';
+
+  // If user has a plan specified
   const planName = 'subscr_plan' in userData ? userData.subscr_plan : userData?.subscription?.plan || '';
 
   if (planName) {
     const propsAllowed = 'subscr_props_allowed' in userData ? userData.subscr_props_allowed : userData?.subscription?.num_properties_allowed || 0;
-    return { plan: planName, props_allowed: propsAllowed };
+    
+    // Check if subscription has ended
+    const subscrEndDate = 'subscr_payment_good_until' in userData ? userData.subscr_payment_good_until : userData?.subscription?.payment_good_until;
+
+    if (subscrEndDate) {
+      const allowedOverdueDays = subscrStatus === 'canceled' ? 0 : 14;
+      const endDate = new Date(subscrEndDate);
+      const now = new Date();
+      
+      if (now > new Date(endDate.getTime() + allowedOverdueDays * 24 * 60 * 60 * 1000)) {
+        return { plan: 'subscription_over', props_allowed: 0, status: subscrStatus };
+      }
+    }
+
+    return { plan: planName, props_allowed: propsAllowed, status: subscrStatus };
   }
 
-  // Check trial status
+  // If no plan name, check if trial applies
   if ('trial_ends' in userData) {
     const trialEnds = new Date(userData.trial_ends);
-    if (new Date() < trialEnds) { return { plan: 'trial', props_allowed: 5 }; }
-    return { plan: 'trial_over', props_allowed: 0 };
+    if (new Date() < trialEnds) {
+      return { plan: 'trial', props_allowed: 10, status: subscrStatus };
+    }
+    return { plan: 'trial_over', props_allowed: 0, status: subscrStatus };
   }
 
   // Legacy user with no plan and no trial
-  return { plan: 'trial_over', props_allowed: 0 };
+  return { plan: 'trial_over', props_allowed: 0, status: subscrStatus };
 };
 
 // Get the most recently fetched user data from session storage. If it doesn't exist, call the API to fetch it.
