@@ -5,6 +5,8 @@ import "./dashboard.css";
 import { useSelector, useDispatch } from "react-redux";
 import { getActionItemsActions, getUserDataActions, putCompleteActionItemActions, stateEmptyActions } from "../../redux/actions";
 import { BoxLoader, FullScreenLoader } from "../../helper/Loader";
+//import AccountNotifBanner from "../../component/accountNotifBanner/accountNotifBanner";
+import SubscriptionBanner from "../../component/accountNotifBanner/subscriptionBanner";
 import "react-circular-progressbar/dist/styles.css";
 import ToastHandle from "../../helper/ToastMessage";
 import { Helmet } from "react-helmet";
@@ -270,28 +272,14 @@ const Dashboard = () => {
                   <h4>New to HostBuddy? <Link style={{textDecoration:'underline', marginLeft:'5px'}} to="/getstarted">Get Started</Link></h4>
                 </div>
                 <div className="account-content">
-                  <div className="row">
-                      <div className="row">
-                        {!statisticsDataLoading ? (
-                          renderTiles(statisticsTiles)
-                        ) : (
-                          <BoxLoader />
-                        )}
-                      </div>
-                    {/* Get started tile
-                    <div className="col-lg-3 mb-3 ">
-                      <div className="row">
-                        <div className="col-lg-12">
-                          <div className="get-started">
-                            <img src={GetStartedImg} alt="get-started" />
-                            <p className="pb-2">Explore how to set up and get started with HostBuddy</p>
-                            <Link to="/getstarted">Get Started</Link>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    */}
-                  </div>
+
+                  <SubscriptionBanner userData={userDataGet} />
+                  
+                  {!statisticsDataLoading ? (
+                    renderTiles(statisticsTiles)
+                  ) : (
+                    <BoxLoader />
+                  )}
 
                   {!statisticsDataLoading && (
                     <>

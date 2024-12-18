@@ -281,7 +281,7 @@ const Properties = () => {
       <NoWorkPlanModal handleNoPlanClose={handleModelClose} showNoPlan={model?.pmsIntegration}/>
       <RemoveIntegrations handleNoPlanClose={handleModelClose} showNoPlan={model?.removeIntegration}/>
       <DisconnectIntegration handleNoPlanClose={handleModelClose} showNoPlan={model?.disconnectIntegration}/>
-      <ImportPropertiesModal handleNoPlanClose={handleModelClose} showNoPlan={model?.importProperties} setNewPropertiesAdded={setNewPropertiesAdded}/>
+      <ImportPropertiesModal handleNoPlanClose={handleModelClose} showNoPlan={model?.importProperties} setNewPropertiesAdded={setNewPropertiesAdded} userData={userData}/>
       <UnlockPropertiesModal handleClose={handleModelClose} modalShow={model?.unlockProperties} propertiesToUnlock={unlockPropertyNames} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} setPropertiesChanged={setNewPropertiesAdded}/>
       <HostDaddy />
     </>
