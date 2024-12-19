@@ -2,7 +2,8 @@
   padding-bottom: 50px;
 }
 
-.review-text p, .welcome p {
+.review-text p,
+.welcome p {
   color: #ccc;
   font-family: "DM Sans", sans-serif;
   font-size: 18px;
@@ -64,7 +65,7 @@
     rgba(11, 45, 96, 1) 0%,
     rgba(1, 4, 21, 1) 73%
   );
-  min-height: 400px;
+  min-height: 350px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -110,7 +111,8 @@
   .top-head {
     display: none;
   }
-  .review-box1, .review-box2 {
+  .review-box1,
+  .review-box2 {
     text-align: center;
     display: flex;
     justify-content: center;
