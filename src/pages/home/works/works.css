@@ -1,223 +1,255 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
 .works {
-    padding: 0 0 50px;
+  padding: 0 0 50px;
 }
 
 .works .works-heading {
-    margin-bottom: -60px;
-    margin-top: -45px;
-    padding: 95px 0;
-    background: linear-gradient(180deg, rgba(20, 110, 245, 0.00) 0%, rgba(20, 110, 245, 0.05) 46.35%, rgba(20, 110, 245, 0.00) 100%);
-    position: relative;
+  margin-bottom: -60px;
+  margin-top: -45px;
+  padding: 95px 0;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 110, 245, 0) 0%,
+    rgba(20, 110, 245, 0.05) 46.35%,
+    rgba(20, 110, 245, 0) 100%
+  );
+  position: relative;
 }
 
 .works .works-heading .container {
-    width: 100%;
-    padding-right: var(--bs-gutter-x, 0.75rem);
-    padding-left: var(--bs-gutter-x, 0.75rem);
-    margin-right: auto;
-    margin-left: auto;
+  width: 100%;
+  padding-right: var(--bs-gutter-x, 0.75rem);
+  padding-left: var(--bs-gutter-x, 0.75rem);
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .works .works-heading h2 {
-    text-align: center;
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 50px;
-    background: linear-gradient(180deg, #F9FBFF 0%, #6CA7FF 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    position: relative;
-    z-index: 1;
+  text-align: center;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px;
+  background: linear-gradient(180deg, #f9fbff 0%, #6ca7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  z-index: 1;
 }
 
 .works .works-heading .speed-circle {
-    width: 100%;
-    height: 165px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 0;
-    overflow: hidden;
+  width: 100%;
+  height: 165px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  overflow: hidden;
 }
 
 .works .works-heading .speed-circle::before {
-    content: '';
-    position: absolute;
-    width: 262px;
-    height: 129px;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -86px;
-    border-radius: 262px;
-    background: #000;
-    filter: blur(75px);
+  content: "";
+  position: absolute;
+  width: 262px;
+  height: 129px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -86px;
+  border-radius: 262px;
+  background: #000;
+  filter: blur(75px);
 }
 
 .works .works-heading .speed-circle::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -61px;
-    width: 160px;
-    height: 80px;
-    background: rgba(20, 110, 245, 0.70);
-    filter: blur(75px);
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -61px;
+  width: 160px;
+  height: 80px;
+  background: rgba(20, 110, 245, 0.7);
+  filter: blur(75px);
 }
 
 .works .works-container {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .works .works-container .row:not(:last-child) {
-    margin-bottom: 80px;
+  margin-bottom: 80px;
 }
 
 .works .works-container .row h3 {
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 35px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 40px;
-    background: linear-gradient(180deg, #FFF 0%, #A3A3A3 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 35px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 40px;
+  background: linear-gradient(180deg, #fff 0%, #a3a3a3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
 }
 
 .works .works-container .row h4 {
-    font-family: 'Samsung Sharp Sans Bold';
-    font-size: 20px;
-    font-style: normal;
-    color: #AAA;
-    margin-top: -8px;
-    margin-bottom: 5px;
+  font-family: "Samsung Sharp Sans Bold";
+  font-size: 20px;
+  font-style: normal;
+  color: #aaa;
+  margin-top: -8px;
+  margin-bottom: 5px;
 }
 
-.works .works-container .row:nth-child(3n+1) h3 strong, .works .works-container .row:nth-child(4) h3 strong {
-    background: var(--Blue, linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%));
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.works .works-container .row:nth-child(3n + 1) h3 strong,
+.works .works-container .row:nth-child(4) h3 strong {
+  background: var(
+    --Blue,
+    linear-gradient(180deg, #6ca7ff 1.92%, #146ef5 119.23%)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.works .works-container .row:nth-child(3n+2) h3 strong {
-    background: linear-gradient(180deg, #C274FF 1.92%, #9214F5 119.23%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.works .works-container .row:nth-child(3n + 2) h3 strong {
+  background: linear-gradient(180deg, #c274ff 1.92%, #9214f5 119.23%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .works .works-container .row:nth-child(3n) h3 strong {
-    background: linear-gradient(180deg, #64FFEC 1.92%, #14F5DA 119.23%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  background: linear-gradient(180deg, #64ffec 1.92%, #14f5da 119.23%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .works .works-container .row p {
-    color: #CCC;
-    font-family: "DM Sans", sans-serif;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 150%;
-    letter-spacing: -0.36px;
-    margin-bottom: 25px;
-    max-width: 528px;
+  color: #ccc;
+  font-family: "DM Sans", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.36px;
+  margin-bottom: 25px;
+  max-width: 528px;
 }
 
 .works .works-container .row img {
-    width: 100%;
-    max-width: 585px;
-    max-height: 356px;
-    border-radius: 35px;
-    object-fit: cover;
+  width: 100%;
+  max-width: 585px;
+  max-height: 356px;
+  border-radius: 35px;
+  object-fit: cover;
 }
 
 .works .works-container a {
-    font-family: "DM Sans", sans-serif;
-    font-size: 18px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 18px;
+}
+.trusted-logo-box {
+  background: #1e1f26;
+  border: 1px solid #fff;
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 20px !important;
+  height: 200px;
+}
+.trusted-logo-box img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  border-radius: 0 !important;
+  object-fit: contain !important;
 }
 
 @media only screen and (min-width: 991px) {
-    .works .works-container .row:nth-child(odd) .col-lg-6:nth-child(1) {
-        order: 2;
-    }
+  .works .works-container .row:nth-child(odd) .col-lg-6:nth-child(1) {
+    order: 2;
+  }
 
-    .works .works-container .row {
-        align-items: center;
-    }
+  .works .works-container .row {
+    align-items: center;
+  }
 }
 
 @media only screen and (max-width: 991px) {
-    .works {
-        padding: 0 0 40px;
-    }
+  .works {
+    padding: 0 0 40px;
+  }
 
-    .works .works-heading {
-        margin: 0;
-        padding: 30px 0;
-    }
+  .works .works-heading {
+    margin: 0;
+    padding: 30px 0;
+  }
 
-    .works .works-heading .speed-circle {
-        height: 100px;
-    }
+  .works .works-heading .speed-circle {
+    height: 100px;
+  }
 
-    .works .works-container .row h3  {
-        font-size: 27px;
-        line-height: 35px;
-    }
+  .works .works-container .row h3 {
+    font-size: 27px;
+    line-height: 35px;
+  }
 
-    .works .works-container .row h4 {
-        font-size: 16px;
-    }
+  .works .works-container .row h4 {
+    font-size: 16px;
+  }
 
-    .works .works-container .row p {
-        font-size: 16px;
-        margin-bottom: 15px;
-    }
+  .works .works-container .row p {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
 
-    .works .works-container a {
-        font-size: 16px;
-    }
+  .works .works-container a {
+    font-size: 16px;
+  }
 
-    .works .works-container .row img {
-        max-width: 100%;
-        height: auto;    
-    }
+  .works .works-container .row img {
+    max-width: 100%;
+    height: auto;
+  }
 
-    .works .works-container .row:not(:last-child) {
-        margin-bottom: 50px;
-    }
+  .works .works-container .row:not(:last-child) {
+    margin-bottom: 50px;
+  }
 }
 
 @media only screen and (max-width: 767px) {
-    .works {
-        padding: 0 0 20px;
-    }
+  .works {
+    padding: 0 0 20px;
+  }
 
-    .works .works-heading {
-        padding: 0 0 20px;
-        background: transparent;
-    }
+  .works .works-heading {
+    padding: 0 0 20px;
+    background: transparent;
+  }
 
-    .works .works-heading .speed-circle {
-        height: 50px;
-        bottom: inherit;
-        top: 0;
-    }
+  .works .works-heading .speed-circle {
+    height: 50px;
+    bottom: inherit;
+    top: 0;
+  }
 
-    .works .works-heading .speed-circle::after {
-        top: -115px;
-    }
+  .works .works-heading .speed-circle::after {
+    top: -115px;
+  }
 
-    .works .works-container .row h3  {
-        font-size: 20px;
-        line-height: 28px;
-    }
+  .works .works-container .row h3 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+@media screen and (max-width: 575px) {
+  .feature-logo-box {
+    flex-direction: column;
+  }
 }

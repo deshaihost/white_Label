@@ -5,10 +5,13 @@ import { Link } from "react-router-dom";
 import Review1 from "../../../public/img/home/host.png";
 import Review2 from "../../../public/img/home/host1.png";
 import Review3 from "../../../public/img/home/host2.png";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
-const Author = 'https://hostbuddylb.com/home/introduction/author1.webp';
-const Author1 = 'https://hostbuddylb.com/home/introduction/author2.webp';
-const Author2 = 'https://hostbuddylb.com/home/introduction/author.webp';
+const Author = "https://hostbuddylb.com/home/introduction/author1.webp";
+const Author1 = "https://hostbuddylb.com/home/introduction/author2.webp";
+const Author2 = "https://hostbuddylb.com/home/introduction/author.webp";
 
 const welcomeBoxesData = [
   {
@@ -32,9 +35,68 @@ const welcomeBoxesData = [
     authorName: "Dylan W.",
     authorDetails: "ZoneSage | 3 Listings",
   },
+  {
+    title: "Incredible AI assistant",
+    text: "My favorite part about HostBuddy AI is how easy it is to set up and use. It can import properties from your PMS and integrating it is an absolute breeze. Its responses are very human-like and it is a great tool to have especially when you are not available to answer messages.",
+    authorImg: Author2,
+    authorName: "Dylan W.",
+    authorDetails: "ZoneSage | 3 Listings",
+  },
+  {
+    title: "Incredible AI assistant",
+    text: "My favorite part about HostBuddy AI is how easy it is to set up and use. It can import properties from your PMS and integrating it is an absolute breeze. Its responses are very human-like and it is a great tool to have especially when you are not available to answer messages.",
+    authorImg: Author2,
+    authorName: "Dylan W.",
+    authorDetails: "ZoneSage | 3 Listings",
+  },
+  {
+    title: "Incredible AI assistant",
+    text: "My favorite part about HostBuddy AI is how easy it is to set up and use. It can import properties from your PMS and integrating it is an absolute breeze. Its responses are very human-like and it is a great tool to have especially when you are not available to answer messages.",
+    authorImg: Author2,
+    authorName: "Dylan W.",
+    authorDetails: "ZoneSage | 3 Listings",
+  },
 ];
 
 const WelcomeSection = () => {
+  var settings = {
+    dots: false,
+    infinite: false,
+    arrows: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    infinite: true,
+    autoplay: true,
+    speed: 2000,
+    autoplaySpeed: 4000,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   return (
     <>
       <section className="welcome-sec">
@@ -42,23 +104,38 @@ const WelcomeSection = () => {
           <div className="row align-items-center">
             <div className="col-sm-12 top-head">
               <div className="introduction-heading">
-                <h2>The Global Choice for <strong>AI-Powered Guest Messaging</strong></h2>
+                <h2>
+                  The Global Choice for{" "}
+                  <strong>AI-Powered Guest Messaging</strong>
+                </h2>
               </div>
             </div>
             <div className="col-md-2">
               <div className="review-box1">
-              <a href="https://www.capterra.com/p/10021407/HostBuddy-AI/reviews/">
-                <img border="0" src="https://brand-assets.capterra.com/badge/148baf12-c098-4f51-bdba-c64e3851fb73.svg" />
-              </a>
-              <a href="null" style={{ marginTop: "10px", display: "inline-block" }}>
-                <img border="0" src="https://brand-assets.softwareadvice.com/badge/762c7552-7655-4a9c-8612-0b9774480a07.png" />
-              </a>
+                <a href="https://www.capterra.com/p/10021407/HostBuddy-AI/reviews/">
+                  <img
+                    border="0"
+                    src="https://brand-assets.capterra.com/badge/148baf12-c098-4f51-bdba-c64e3851fb73.svg"
+                  />
+                </a>
+                <a
+                  href="null"
+                  style={{ marginTop: "10px", display: "inline-block" }}
+                >
+                  <img
+                    border="0"
+                    src="https://brand-assets.softwareadvice.com/badge/762c7552-7655-4a9c-8612-0b9774480a07.png"
+                  />
+                </a>
               </div>
             </div>
             <div className="col-md-8">
               <div className="review-text text-center introduction-heading">
-                <h2>The Global Choice for <strong>AI-Powered Guest Messaging</strong></h2>
-                <p style={{marginBottom: "10px"}}>
+                <h2>
+                  The Global Choice for{" "}
+                  <strong>AI-Powered Guest Messaging</strong>
+                </h2>
+                <p style={{ marginBottom: "10px" }}>
                   Created by hosts, for hosts, HostBuddy AI is the leading
                   messaging automation software in the short-term rental
                   industry. With the ability to communicate with your guests
@@ -68,37 +145,44 @@ const WelcomeSection = () => {
                   handle guest questions, troubleshooting, and issue escalation
                   on your behalf.
                 </p>
-                <Link to='/ai-messaging'>Learn More &#8594;</Link>
+                <Link to="/ai-messaging">Learn More &#8594;</Link>
               </div>
             </div>
             <div className="col-md-2">
               <div className="review-box1">
                 <a href="https://www.getapp.com/hospitality-travel-software/a/hostbuddy-ai/reviews/">
-                  <img border="0" src="https://brand-assets.getapp.com/badge/67d347a1-edef-4ac3-9150-8815443510fc.png" />
+                  <img
+                    border="0"
+                    src="https://brand-assets.getapp.com/badge/67d347a1-edef-4ac3-9150-8815443510fc.png"
+                  />
                 </a>
               </div>
             </div>
           </div>
+        </Container>
+        <Container fluid>
           <div className="row welcome-boxes">
-            {welcomeBoxesData.map((box, index) => (
-              <div className="col-lg-4" key={index}>
-                <div className="welcome">
-                  <div className="welcome-text">
-                    <h4>{box.title}</h4>
-                    <p>{box.text}</p>
-                  </div>
-                  <div className="welcome-author d-flex align-items-center gap-3 mt-3">
-                    <div className="author-img">
-                      <img src={box.authorImg} alt={`${box.authorName}`} />
+            <Slider {...settings}>
+              {welcomeBoxesData.map((box, index) => (
+                <div className="col-lg-12 px-2" key={index}>
+                  <div className="welcome">
+                    <div className="welcome-text">
+                      <h4>{box.title}</h4>
+                      <p>{box.text}</p>
                     </div>
-                    <div className="author-detail">
-                      <h5>{box.authorName}</h5>
-                      <p>{box.authorDetails}</p>
+                    <div className="welcome-author d-flex align-items-center gap-3 mt-3">
+                      <div className="author-img">
+                        <img src={box.authorImg} alt={`${box.authorName}`} />
+                      </div>
+                      <div className="author-detail">
+                        <h5>{box.authorName}</h5>
+                        <p>{box.authorDetails}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </Slider>
           </div>
         </Container>
       </section>
