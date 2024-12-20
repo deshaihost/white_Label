@@ -8,6 +8,7 @@ import Review3 from "../../../public/img/home/host2.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const Author = "https://hostbuddylb.com/home/introduction/author1.webp";
 const Author1 = "https://hostbuddylb.com/home/introduction/author2.webp";
@@ -58,24 +59,52 @@ const welcomeBoxesData = [
   },
 ];
 
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block" }}
+      onClick={onClick}
+    >
+      <FaChevronRight />
+    </div>
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block" }}
+      onClick={onClick}
+    >
+      <FaChevronLeft />
+    </div>
+  );
+}
+
 const WelcomeSection = () => {
   var settings = {
     dots: false,
     infinite: false,
-    arrows: false,
+    arrows: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1,
     initialSlide: 0,
     infinite: true,
     autoplay: true,
     speed: 2000,
     autoplaySpeed: 4000,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 2,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -83,16 +112,9 @@ const WelcomeSection = () => {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          initialSlide: 1,
         },
       },
     ],
@@ -160,7 +182,7 @@ const WelcomeSection = () => {
             </div>
           </div>
         </Container>
-        <Container fluid>
+        <Container>
           <div className="row welcome-boxes">
             <Slider {...settings}>
               {welcomeBoxesData.map((box, index) => (

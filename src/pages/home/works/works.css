@@ -79,7 +79,7 @@
 }
 
 .works .works-container .row:not(:last-child) {
-  margin-bottom: 80px;
+  margin-bottom: 100px;
 }
 
 .works .works-container .row h3 {
@@ -169,6 +169,41 @@
   max-height: 100% !important;
   border-radius: 0 !important;
   object-fit: contain !important;
+}
+.client-img {
+  width: 100px;
+  height: 100px;
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 100px;
+  overflow: hidden;
+  border: 2px solid #146ef5;
+  display: block;
+  margin-bottom: 15px;
+}
+.client-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.client-comment {
+  color: #fff !important;
+  margin-bottom: 20px !important;
+  min-height: 140px;
+  font-style: italic !important;
+  font-size: 20px !important;
+}
+.client-name {
+  color: #fff !important;
+  margin-bottom: 10px !important;
+  font-weight: 500 !important;
+  font-size: 26px !important;
+}
+.client-position {
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  font-family: "DM Sans", sans-serif;
 }
 
 @media only screen and (min-width: 991px) {

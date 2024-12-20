@@ -79,18 +79,17 @@ const statistics =
   "https://storage.googleapis.com/frontend_media/home-new/statistics.webp";
 
 const Works = () => {
-  var settings = {
+  var settingsf = {
     dots: false,
-    infinite: false,
     arrows: false,
-    speed: 500,
+    infinite: true,
     slidesToShow: 5,
     slidesToScroll: 1,
-    initialSlide: 0,
-    infinite: true,
     autoplay: true,
-    speed: 2000,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 0,
+    speed: 8000,
+    cssEase: "linear",
+    infinite: true,
     responsive: [
       {
         breakpoint: 1024,
@@ -113,6 +112,37 @@ const Works = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+  var settings = {
+    dots: false,
+    infinite: false,
+    arrows: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    infinite: true,
+    autoplay: true,
+    speed: 2000,
+    autoplaySpeed: 4000,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
         },
       },
     ],
@@ -201,7 +231,7 @@ const Works = () => {
                     <div>
                       <img
                         src={images}
-                        alt="works-img"
+                        alt="feature-img"
                         className="img-fluid w-100 h-100 mw-100 mh-100 rounded-0"
                       />
                     </div>
@@ -244,7 +274,7 @@ const Works = () => {
             </div>
             <div className="col-lg-12">
               <div>
-                <Slider {...settings}>
+                <Slider {...settingsf}>
                   {imageTrustedLogo?.map((images) => {
                     return (
                       <div className="outline-0 trusted-logo-box">
@@ -261,7 +291,7 @@ const Works = () => {
             </div>
           </div>
 
-          <div className="row">
+          <div className="row pt-4">
             <div className="col-lg-6">
               <div className="works-content">
                 <h3>
@@ -283,33 +313,6 @@ const Works = () => {
               />
             </div>
           </div>
-
-          <div className="row">
-            <div className="col-lg-6">
-              <div className="works-content">
-                <h3>
-                  <strong>Smart</strong> Inbox
-                </h3>
-                <p>
-                  Centralize your inbox with HostBuddy to manage all your guest
-                  communications in one place. Our smart inbox brings
-                  industry-leading AI technology right to your fingertips,
-                  allowing you to generate AI responses and view valuable
-                  insights into each guest's stay through conversational
-                  analysis. Filter messages by urgency, take the wheel when you
-                  need to be involved, and review HostBuddy conversations all in
-                  one place.
-                </p>
-              </div>
-            </div>
-            <div className="col-lg-6">
-              <img
-                className="mw-100 mh-100"
-                src={inboxScreen}
-                alt="works-img"
-              />
-            </div>
-          </div>
           <div className="row align-items-center justify-content-center">
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
@@ -322,7 +325,7 @@ const Works = () => {
                   <span className="fs-6">hours</span>
                 </div>
                 <p className="text-white fs-5 mb-0">
-                  Average hours of AI coverage per user
+                  Average Hours of AI Coverage Per User
                 </p>
               </div>
             </div>
@@ -369,9 +372,36 @@ const Works = () => {
                   <h2 className="fs-2 fw-bold mb-0">92%</h2>
                 </div>
                 <p className="text-white fs-5 mb-0">
-                  More Cost Effetive than Human Coverage
+                  More Cost Effective than Human Coverage
                 </p>
               </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-lg-6">
+              <div className="works-content">
+                <h3>
+                  <strong>Smart</strong> Inbox
+                </h3>
+                <p>
+                  Centralize your inbox with HostBuddy to manage all your guest
+                  communications in one place. Our smart inbox brings
+                  industry-leading AI technology right to your fingertips,
+                  allowing you to generate AI responses and view valuable
+                  insights into each guest's stay through conversational
+                  analysis. Filter messages by urgency, take the wheel when you
+                  need to be involved, and review HostBuddy conversations all in
+                  one place.
+                </p>
+              </div>
+            </div>
+            <div className="col-lg-6">
+              <img
+                className="mw-100 mh-100"
+                src={inboxScreen}
+                alt="works-img"
+              />
             </div>
           </div>
 
@@ -395,6 +425,81 @@ const Works = () => {
                 style={{ objectFit: "contain" }}
                 alt="works-img"
               />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-lg-12">
+              <h2 className="fs-1 fw-bold text-white mb-5 text-center">
+                What the Community is Saying
+              </h2>
+            </div>
+            <div className="col-lg-12">
+              <div className=" testimonial-slider">
+                <Slider {...settings}>
+                  <div className="testimonial-item p-3">
+                    <p className="client-comment">
+                      “This does a lot of stuff! We all want to cut down on
+                      active work time in any business. Add it to your tech
+                      stack!”
+                    </p>
+                    <span className="client-img">
+                      <img
+                        src="https://hostbuddylb.com/home/introduction/author2.webp"
+                        alt=""
+                      />
+                    </span>
+                    <p className="client-name">Avery Carl</p>
+                    <span className="client-position">
+                      3x Best Selling Author, CEO/Founder of The Short Term Shop
+                    </span>
+                  </div>
+                  <div className="testimonial-item  p-3">
+                    <p className="client-comment">
+                      “The AI will remember all the little details about each
+                      individual property and the quirks that it has. That is
+                      game changing.”
+                    </p>
+                    <span className="client-img">
+                      <img
+                        src="https://hostbuddylb.com/home/introduction/author2.webp"
+                        alt=""
+                      />
+                    </span>
+                    <p className="client-name">Jeff Brown</p>
+                    <span className="client-position">Intellihost Founder</span>
+                  </div>
+                  <div className="testimonial-item  p-3">
+                    <p className="client-comment">
+                      “One of the coolest things I’ve seen” “I’m honestly blown
+                      away by all the different things this tool is able to do”
+                    </p>
+                    <span className="client-img">
+                      <img
+                        src="https://hostbuddylb.com/home/introduction/author2.webp"
+                        alt=""
+                      />
+                    </span>
+                    <p className="client-name">Tony Robinson</p>
+                    <span className="client-position">
+                      The Real Estate Robinsons, Bigger Pockets Podcast Host
+                    </span>
+                  </div>
+                  <div className="testimonial-item  p-3">
+                    <p className="client-comment">
+                      “One of the most important tools in your kit for 2025!”
+                    </p>
+                    <span className="client-img">
+                      <img
+                        src="https://hostbuddylb.com/home/introduction/author2.webp"
+                        alt=""
+                      />
+                    </span>
+                    <p className="client-name">Mark Simpson</p>
+                    <span className="client-position">Boostly Founder</span>
+                  </div>
+                </Slider>
+              </div>
             </div>
           </div>
 

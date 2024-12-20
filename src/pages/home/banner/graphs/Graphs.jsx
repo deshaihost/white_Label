@@ -15,24 +15,24 @@ const imageConfig = [
 ];
 
 const Graphs = () => {
-  const [activeImageIndex, setActiveImageIndex] = useState(5);
+  const [activeImageIndex, setActiveImageIndex] = useState(-1);
 
-  //   useEffect(() => {
-  //     let currentIndex = 0;
+  useEffect(() => {
+    let currentIndex = 0;
 
-  //     const intervalId = setInterval(() => {
-  //       setActiveImageIndex(currentIndex);
-  //       currentIndex = (currentIndex + 1) % imageConfig.length;
+    const intervalId = setInterval(() => {
+      setActiveImageIndex(currentIndex);
+      currentIndex = (currentIndex + 1) % imageConfig.length;
 
-  //       if (currentIndex === 0) {
-  //         setTimeout(() => {
-  //           setActiveImageIndex(-1);
-  //         }, 500);
-  //       }
-  //     }, 2000);
+      if (currentIndex === 0) {
+        setTimeout(() => {
+          setActiveImageIndex(-1);
+        }, 500);
+      }
+    }, 2000);
 
-  //     return () => clearInterval(intervalId);
-  //   }, []);
+    return () => clearInterval(intervalId);
+  }, []);
   return (
     <div className="graph-banner">
       {imageConfig.map((image, index) => (
