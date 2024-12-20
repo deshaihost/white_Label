@@ -37,18 +37,6 @@ const Banner = () => {
                   <i class="bi bi-star-fill"></i>
                   <i class="bi bi-star-fill"></i>
                 </span>
-                <p className="text-white fs-6">
-                  This Software is my Sleeping Pill
-                </p>
-              </div>
-              <div className="star-content">
-                <span className="d-flex align-items-center justify-content-center gap-1">
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                </span>
                 <p className="text-white fs-6">HostBuddy works.</p>
               </div>
               <div className="star-content">
@@ -60,6 +48,16 @@ const Banner = () => {
                   <i class="bi bi-star-fill"></i>
                 </span>
                 <p className="text-white fs-6">Incredible AI assistant</p>
+              </div>
+              <div className="star-content">
+                <span className="d-flex align-items-center justify-content-center gap-1">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                </span>
+                <p className="text-white fs-6">My sleeping pill</p>
               </div>
             </div>
             <div

@@ -51,7 +51,7 @@
   display: block;
   width: 353px;
   height: 353px;
-  background: #0065ff;
+  background: #146ef5;
   border-radius: 500px;
   filter: blur(249px);
   position: absolute;
@@ -78,7 +78,7 @@
 .banner .banner-container .rating-part-banner {
   position: relative;
 }
-.banner .banner-container .rating-part-banner::before {
+/* .banner .banner-container .rating-part-banner::before {
   content: "";
   display: inline-block;
   width: 77px;
@@ -88,7 +88,7 @@
   position: absolute;
   top: 30px;
   left: 84px;
-}
+} */
 .star-content {
   z-index: 1;
   position: relative;
