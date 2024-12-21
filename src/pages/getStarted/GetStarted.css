@@ -18,13 +18,13 @@
 .get_started .step_odd {
   grid-template-columns: 500px 1fr;
   margin-bottom: 70px;
-  background: #000212;
+  background: #151530;
 }
 
 .get_started .step_even {
   grid-template-columns: 1fr 500px;
   margin-bottom: 70px;
-  background: #000212;
+  background: #151530;
 }
 
 .get_started h3 strong {
@@ -54,6 +54,7 @@
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s;
   box-shadow: 0 4px 18px 0px rgba(255, 255, 255, 0.5);
+  background: #12122a;
 }
 
 .get_started .link_card_box:hover {
@@ -141,12 +142,11 @@
 }
 .new-get .link_card_box {
   padding: 30px 40px !important;
-}
-.new-get .link_card_box {
   border-width: 2px !important;
   border-radius: 40px !important;
   margin-bottom: 35px;
   max-width: 499px;
+  background: #12122a;
 }
 .new-get .link_card_box:hover {
   -webkit-box-shadow: 0px 0px 64px -4px rgba(255,255,255,1);

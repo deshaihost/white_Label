@@ -101,7 +101,7 @@ export const getSubscriptionStatus = (userData) => {
   if ('trial_ends' in userData) {
     const trialEnds = new Date(userData.trial_ends);
     if (new Date() < trialEnds) {
-      return { plan: 'trial', props_allowed: 10, status: subscrStatus };
+      return { plan: 'trial', props_allowed: 100, status: subscrStatus };
     }
     return { plan: 'trial_over', props_allowed: 0, status: subscrStatus };
   }
