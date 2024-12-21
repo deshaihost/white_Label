@@ -26,7 +26,10 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
   // Add state for the search term
   const [searchTerm, setSearchTerm] = useState('');
   const [maxPropertiesSelected, setMaxPropertiesSelected] = useState(false);
-
+  
+  // Add feature flag to control property limits
+  const ENABLE_PROPERTY_LIMITS = true; // Set this to false to disable property limits
+  
   // Helper function to normalize strings
   const normalizeString = (str) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
 
@@ -40,7 +43,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
 
   // Check if user is at property limit when modal opens
   useEffect(() => {
-    if (showNoPlan && isOnTrial) {
+    if (showNoPlan && isOnTrial && ENABLE_PROPERTY_LIMITS) {
       const currentPropertiesCount = Object.keys(userData?.property_data || {}).length;
       setMaxPropertiesSelected(currentPropertiesCount >= subscriptionData.props_allowed);
     }
@@ -56,17 +59,17 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
     const newCheckBox = { ...checkBox };
     if (newCheckBox[selectedPropName]) { 
       delete newCheckBox[selectedPropName]; 
-      if (isOnTrial && maxPropertiesSelected && Object.keys(newCheckBox).length < numPropertiesRemaining) {
+      if (ENABLE_PROPERTY_LIMITS && isOnTrial && maxPropertiesSelected && Object.keys(newCheckBox).length < numPropertiesRemaining) {
         setMaxPropertiesSelected(false);
       }
     }
     else { 
-      if (isOnTrial && Object.keys(newCheckBox).length >= numPropertiesRemaining) {
+      if (ENABLE_PROPERTY_LIMITS && isOnTrial && Object.keys(newCheckBox).length >= numPropertiesRemaining) {
         setMaxPropertiesSelected(true);
         return;
       }
       newCheckBox[selectedPropName] = selectedPropId; 
-      if (isOnTrial && Object.keys(newCheckBox).length >= numPropertiesRemaining) {
+      if (ENABLE_PROPERTY_LIMITS && isOnTrial && Object.keys(newCheckBox).length >= numPropertiesRemaining) {
         setMaxPropertiesSelected(true);
       }
     }
@@ -123,7 +126,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
 
   return (
     <>
-      {maxPropertiesSelected && ReactDOM.createPortal(
+      {ENABLE_PROPERTY_LIMITS && maxPropertiesSelected && ReactDOM.createPortal(
         <div style={{position: 'fixed', top: '10px', right: '10px', backgroundColor: 'rgb(0, 15, 40)', padding: '10px 20px', borderRadius: '8px', zIndex: 9999, boxShadow: '0 2px 10px rgba(0,0,0,0.3)', border: '1px solid rgb(0, 55, 120)'}}>
           <div style={{color: 'rgb(210, 140, 0)'}}>Max properties selected</div>
           <div style={{color:'white', fontSize:'14px'}}>Up to {subscriptionData?.props_allowed} properties can be added during trial.</div>
@@ -151,7 +154,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
                         })
                         .map((integrationPropObj, index) => {
                           const propName = integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name;
-                          const isDisabled = isOnTrial && !checkBox.hasOwnProperty(propName) && Object.keys(checkBox).length >= numPropertiesRemaining;
+                          const isDisabled = ENABLE_PROPERTY_LIMITS && isOnTrial && !checkBox.hasOwnProperty(propName) && Object.keys(checkBox).length >= numPropertiesRemaining;
                           return (
                             <div className="form-check custom_checkbox" key={index} onClick={() => { if (!isDisabled) SelectItem(integrationPropObj); }}>
                               <input className="form-check-input" type="checkbox" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={propName} checked={checkBox?.hasOwnProperty(propName)} disabled={isDisabled} onChange={() => { }} />

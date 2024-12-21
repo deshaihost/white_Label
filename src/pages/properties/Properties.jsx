@@ -6,6 +6,7 @@ import NoWorkPlanModal from "../../component/modal/noWorkPlanModal/NoWorkPlanMod
 import RemoveIntegrations from "./removeIntegrationsModel/RemoveIntegrations";
 import DisconnectIntegration from "./removeIntegrationsModel/DisconnectIntegration";
 import ImportPropertiesModal from "../../component/modal/noWorkPlanModal/ImportProperties";
+import SubscriptionBanner from "../../component/accountNotifBanner/subscriptionBanner";
 import { Helmet } from "react-helmet";
 import {getUserDataActions, toggleChatbotoNoFFPutActions} from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -166,6 +167,7 @@ const Properties = () => {
       <div className="account-main">
         <div className="container">
           <div className="banner-heading">{/* <h2>My HostBuddy</h2> */}</div>
+            <SubscriptionBanner userData={userData} bottomMargin={'20px'} topMargin={'-30px'} />
           <div className="row">
             <div className="col-lg-2 col-xl-2 col-xxl-2">
               <SideBar />

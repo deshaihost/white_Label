@@ -654,7 +654,7 @@ textarea.form-control {
   background: #146ef5;
   filter: blur(90px);
   flex-shrink: 0;
-  z-index: -1; /* Ensure it appears behind the image */
+  z-index: -10; /* Ensure it appears behind the image */
 }
 .blur-background-top-left::before {
   top: 0;
