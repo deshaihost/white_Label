@@ -26,6 +26,11 @@ import { HiChatBubbleLeftRight } from "react-icons/hi2";
 import { Ri24HoursFill } from "react-icons/ri";
 import { FaRegClock, FaSackDollar } from "react-icons/fa6";
 
+import ClientOne from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client1.webp";
+import ClientTwo from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client2.webp";
+import ClientThree from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client3.webp";
+import ClientFour from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client4.webp";
+
 const imageTrustedLogo = [
   ItemOne,
   ItemTwo,
@@ -116,37 +121,7 @@ const Works = () => {
       },
     ],
   };
-  var settings = {
-    dots: false,
-    infinite: false,
-    arrows: false,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    initialSlide: 0,
-    infinite: true,
-    autoplay: true,
-    speed: 2000,
-    autoplaySpeed: 4000,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          initialSlide: 1,
-        },
-      },
-    ],
-  };
+ 
   return (
     <section className="works">
       {/* <div className="works-heading">
@@ -434,71 +409,72 @@ const Works = () => {
                 What the Community is Saying
               </h2>
             </div>
-            <div className="col-lg-12">
+            <div className="col-lg-3">
               <div className=" testimonial-slider">
-                <Slider {...settings}>
-                  <div className="testimonial-item p-3">
-                    <p className="client-comment">
-                      “This does a lot of stuff! We all want to cut down on
-                      active work time in any business. Add it to your tech
-                      stack!”
-                    </p>
-                    <span className="client-img">
-                      <img
-                        src="https://hostbuddylb.com/home/introduction/author2.webp"
-                        alt=""
-                      />
-                    </span>
-                    <p className="client-name">Avery Carl</p>
-                    <span className="client-position">
-                      3x Best Selling Author, CEO/Founder of The Short Term Shop
-                    </span>
-                  </div>
-                  <div className="testimonial-item  p-3">
+                <div className="testimonial-item p-3">
+                  <p className="client-comment">
+                    “This does a lot of stuff! We all want to cut down on
+                    active work time in any business. Add it to your tech
+                    stack!”
+                  </p>
+                  <span className="client-img">
+                    <img src={ClientOne} alt="" />
+                  </span>
+                  <p className="client-name">Avery Carl</p>
+                  <span className="client-position">
+                    3x Best Selling Author, CEO/Founder of The Short Term Shop
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-3">
+              <div className="testimonial-slider">
+              <div className="testimonial-item  p-3">
                     <p className="client-comment">
                       “The AI will remember all the little details about each
                       individual property and the quirks that it has. That is
                       game changing.”
                     </p>
                     <span className="client-img">
-                      <img
-                        src="https://hostbuddylb.com/home/introduction/author2.webp"
-                        alt=""
-                      />
+                      <img src={ClientTwo} alt="" />
                     </span>
                     <p className="client-name">Jeff Brown</p>
                     <span className="client-position">Intellihost Founder</span>
                   </div>
+              </div>
+            </div>
+            <div className="col-lg-3">
+              <div className=" testimonial-slider">
                   <div className="testimonial-item  p-3">
                     <p className="client-comment">
                       “One of the coolest things I’ve seen” “I’m honestly blown
                       away by all the different things this tool is able to do”
                     </p>
                     <span className="client-img">
-                      <img
-                        src="https://hostbuddylb.com/home/introduction/author2.webp"
-                        alt=""
-                      />
+                      <img src={ClientThree} alt="" />
                     </span>
                     <p className="client-name">Tony Robinson</p>
                     <span className="client-position">
                       The Real Estate Robinsons, Bigger Pockets Podcast Host
                     </span>
                   </div>
+              </div>
+            </div>
+            <div className="col-lg-3">
+              <div className=" testimonial-slider">
                   <div className="testimonial-item  p-3">
                     <p className="client-comment">
                       “One of the most important tools in your kit for 2025!”
                     </p>
                     <span className="client-img">
                       <img
-                        src="https://hostbuddylb.com/home/introduction/author2.webp"
+                        src={ClientFour}
                         alt=""
                       />
                     </span>
                     <p className="client-name">Mark Simpson</p>
                     <span className="client-position">Boostly Founder</span>
                   </div>
-                </Slider>
               </div>
             </div>
           </div>
