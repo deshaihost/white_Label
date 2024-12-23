@@ -9,6 +9,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import Andrew from "../../../helper/staticImage/homePage/Andrew.webp";
+import Maggie from "../../../helper/staticImage/homePage/Maggie.webp";
+import Steve from "../../../helper/staticImage/homePage/Steve.webp";
 
 const Author = "https://hostbuddylb.com/home/introduction/author1.webp";
 const Author1 = "https://hostbuddylb.com/home/introduction/author2.webp";
@@ -16,45 +19,89 @@ const Author2 = "https://hostbuddylb.com/home/introduction/author.webp";
 
 const welcomeBoxesData = [
   {
-    title: "This Software is my Sleeping Pill",
-    text: "HostBuddy solved my problem of having to reiterate the same property information to every guest, allowing for my workload to focus more on the growth of the company.",
-    authorImg: Author,
-    authorName: "Grant M.",
-    authorDetails: "WestBound Rentals | 26 Listings",
+    title: "Far Superior AI",
+    text: (
+      <>
+        We were looking for an AI solution to help reduce the time required to
+        respond to guest inquiries, and Hostbuddy is actually the second
+        service/product we tried. It is
+        <strong> far superior</strong> to the previous AI we tried.
+      </>
+    ),
+    authorImg: Steve,
+    authorName: "Steve A",
+    authorDetails: "Velo Vacation Rentals | 50 listings",
   },
   {
-    title: "HostBuddy works.",
-    text: "HostBuddy has helped make my vacation rental business become more passive since I no longer need to be available for questions and help 24/7.",
+    title: "Guest Messaging, Solved",
+    text: (
+      <>
+        HostBuddy has helped our guests with <strong> troubleshooting </strong>{" "}
+        WiFi, troubleshooting locks, and <strong> reducing confusion</strong>{" "}
+        for entry instructions at properties with multiple units.
+      </>
+    ),
+    authorImg: Andrew,
+    authorName: "Andrew",
+    authorDetails: "Stork STR | 21 listings",
+  },
+  {
+    title: "Highly recommend it!",
+    text: (
+      <>
+        HostBuddy AI has allowed me to <strong> sleep at night</strong>!
+        HostBuddy has given me the peace of mind to turn off my phone at night
+        and rest assured any
+        <strong> guests will be taken care of</strong>. It’s a great,{" "}
+        <strong> inexpensive </strong> tool that allows me to keep expenses low
+        so I can <strong> focus on scaling </strong> my business.
+      </>
+    ),
+    authorImg: Maggie,
+    authorName: "Maggie V",
+    authorDetails: "Everly Vacation Homes | 13 listings",
+  },
+  {
+    title: "This Software is my Sleeping Pill",
+    text: (
+      <>
+        HostBuddy <strong> solved my problem </strong> of having to reiterate
+        the same property information to every guest, allowing for my workload
+        to <strong> focus more on the growth </strong> of the company.
+      </>
+    ),
+    authorImg: Author,
+    authorName: "Grant M",
+    authorDetails: " WestBound Rentals | 26 Listings",
+  },
+  {
+    title: "HostBuddy works",
+    text: (
+      <>
+        HostBuddy has helped make my vacation rental business become{" "}
+        <strong> more passive </strong> since I no longer need to be available
+        for questions and help 24/7.
+      </>
+    ),
     authorImg: Author1,
-    authorName: "Tim U.",
+    authorName: "Tim U",
     authorDetails: "Aztec Getaways | 42 Listings",
   },
   {
     title: "Incredible AI assistant",
-    text: "My favorite part about HostBuddy AI is how easy it is to set up and use. It can import properties from your PMS and integrating it is an absolute breeze. Its responses are very human-like and it is a great tool to have especially when you are not available to answer messages.",
+    text: (
+      <>
+        My favorite part about HostBuddy AI is how{" "}
+        <strong> easy it is to set up </strong> and use. It can import
+        properties from your <strong> PMS </strong> and integrating it is an{" "}
+        <strong> absolute breeze </strong>. Its responses are{" "}
+        <strong> very human-like </strong>
+        and it is a great tool to have especially when you are not available to
+        answer messages.
+      </>
+    ),
     authorImg: Author2,
-    authorName: "Dylan W.",
-    authorDetails: "ZoneSage | 3 Listings",
-  },
-  {
-    title: "Incredible AI assistant",
-    text: "My favorite part about HostBuddy AI is how easy it is to set up and use. It can import properties from your PMS and integrating it is an absolute breeze. Its responses are very human-like and it is a great tool to have especially when you are not available to answer messages.",
-    authorImg: Author2,
-    authorName: "Dylan W.",
-    authorDetails: "ZoneSage | 3 Listings",
-  },
-  {
-    title: "Incredible AI assistant",
-    text: "My favorite part about HostBuddy AI is how easy it is to set up and use. It can import properties from your PMS and integrating it is an absolute breeze. Its responses are very human-like and it is a great tool to have especially when you are not available to answer messages.",
-    authorImg: Author2,
-    authorName: "Dylan W.",
-    authorDetails: "ZoneSage | 3 Listings",
-  },
-  {
-    title: "Incredible AI assistant",
-    text: "My favorite part about HostBuddy AI is how easy it is to set up and use. It can import properties from your PMS and integrating it is an absolute breeze. Its responses are very human-like and it is a great tool to have especially when you are not available to answer messages.",
-    authorImg: Author2,
-    authorName: "Dylan W.",
+    authorName: "Dylan W",
     authorDetails: "ZoneSage | 3 Listings",
   },
 ];
