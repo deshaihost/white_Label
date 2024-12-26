@@ -10,7 +10,7 @@ import "./actionItem.css";
 import axios from "axios";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
 import ConversationTranscriptModal from "../../inbox/inboxSection/resources/ConversationTranscriptModal";
 import customStyles from './selectStyles';
 
@@ -97,6 +97,7 @@ const ActionsItemsTable = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
   const allPropertyName = createPropertiesName !== undefined ? createPropertiesName : {};
@@ -157,7 +158,8 @@ const ActionsItemsTable = () => {
   };
 
   const handleOpenConversation = (conversationId, actionItemId, propertyName) => {
-    callGetConversationApi(conversationId, actionItemId, propertyName);
+    //callGetConversationApi(conversationId, actionItemId, propertyName);
+    navigate(`/inbox?conversationId=${conversationId}`);
   }
 
   const handleComplete = (actionItemId) => {

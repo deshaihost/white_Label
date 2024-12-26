@@ -7,7 +7,7 @@ import MildeSection from "./mildeSection/MildeSection";
 import RightSection from "./rightSection/RightSection";
 import "./inboxIndex.css";
 
-const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptionPlan, accountAgeDays}) => {
+const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptionPlan, accountAgeDays, singleConversationIdFromUrl }) => {
   const eliteFeaturesAvailable = (/elite|works/i.test(subscriptionPlan) || subscriptionPlan == 'trial') // Case-insensitive check for 'elite' or 'works' in the plan name, OR user is on trial
 
   const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
@@ -19,6 +19,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [fromHostBuddyFilterVal, setFromHostBuddyFilterVal] = useState(false);
   const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
   const [currentView, setCurrentView] = useState('conversations'); // New state for mobile view
+  const [allowConvIdQuery, setAllowConvIdQuery] = useState(true);
 
   // Get the conversations we already have in the format needed to send to the API: { conversationId1: { last_message_time:<last_message_time_utc> }, ... }
   const getConversationsAlreadyHave = () => {
@@ -35,7 +36,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   };
 
   // Call the API to get conversations, up to the specified limit, and update the state with the returned data.
-  const fetchConversations = async (limit, reset=false, urgent=false, propertyName="", phase="", meetHbOnly=false, guestName='') => {
+  const fetchConversations = async (limit, reset=false, urgent=false, propertyName="", phase="", meetHbOnly=false, guestName='', useConvIdQuery=true) => {
     let conversationsAlreadyHave = {};
     if (reset) { // Clear conversations state
       conversationsAlreadyHave = {};
@@ -44,8 +45,9 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     else { // Tell the API which conversations we already have, so we don't need to get them again if they haven't been updated
       conversationsAlreadyHave = getConversationsAlreadyHave();
     }
-    
-    const data = await callGetConversationsApi(limit, conversationsAlreadyHave, urgent, propertyName, phase, meetHbOnly, guestName);
+    const conversationId = (allowConvIdQuery && useConvIdQuery) ? (singleConversationIdFromUrl || null) : null;
+
+    const data = await callGetConversationsApi(limit, conversationsAlreadyHave, urgent, propertyName, phase, meetHbOnly, guestName, conversationId);
     if (data?.conversations) { updateConversationsWithApiData(data.conversations); }
     setConversationsNotYetFetched(false);
   };
@@ -79,11 +81,11 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     }
   };
 
-  // Update our conversation state with a new list returned by the API. This does NOT call the API: it takes the API data as a parameter.
+  // Update our conversation state with a new list returned by the API. This does NOT call the API: it takes the API data as a parameter. Also handles detecting when there are no updates from the API and making sure the previous state gets copied over.
   const updateConversationsWithApiData = (apiConversationData) => {
     let newConversationState = apiConversationData.map(conversation => {
       const conversationId = conversation['conversation_id'];
-      if (!conversation.hasOwnProperty('messages')) { // the API data doesn't include messages (or most other fields) for conversations we already have if there are no updates. Get the convo ID, find the convo in our local state, and copy that record over
+      if (!conversation.hasOwnProperty('messages')) { // the API data doesn't include messages (or most other fields) for conversations we already have if there are no updates. Get the convo ID, find the convo in our local state, and copy that old record over into the new state
         const localConversation = conversations.find(conv => conv.conversation_id === conversationId);
         return localConversation ? localConversation : conversation;
       }
@@ -130,6 +132,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       const intervalId = setInterval(() => {
         const num_existing_convos = conversations.length;
         const num_convos_to_fetch = Math.max(num_existing_convos, 2); // always fetch at least 2 convos, even if we're only looking at one (e.g. due to filter), so if there's simultaneous updates we're more likely to catch it. 2 is still an arbitrary number tbh
+        const allowConvIdQuery = (num_existing_convos <= 1); // If we have loaded more convos, then we don't care about the query param anymore
         fetchConversations(num_convos_to_fetch, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal);
       }, isNewAccount ? 10000 : 20000); // 10s for new accounts, 20s for elite users
 
@@ -150,7 +153,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       <div className="row text-white">
         {/* Desktop View */}
         <div className="d-none d-lg-block col-lg-3 left-bar">
-          <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} setCurrentView={setCurrentView} currentView={currentView}/>
+          <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} setCurrentView={setCurrentView} currentView={currentView} setAllowConvIdQuery={setAllowConvIdQuery}/>
         </div>
         <div className="d-none d-lg-block col-lg-6">
           <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays}/>
@@ -162,7 +165,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         {/* Mobile View */}
         <div className="d-block d-lg-none col-12">
           {currentView === 'conversations' && (
-            <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} setCurrentView={setCurrentView} currentView={currentView}/>
+            <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} setCurrentView={setCurrentView} currentView={currentView} setAllowConvIdQuery={setAllowConvIdQuery}/>
           )}
           {currentView === 'messages' && (
             <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays} setCurrentView={setCurrentView} />
