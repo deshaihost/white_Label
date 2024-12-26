@@ -7,7 +7,7 @@ import { BoxLoader } from "../../../../../helper/Loader";
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 
-const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, userHasPMS, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal, setCurrentView, currentView }) => {
+const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, userHasPMS, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal, setCurrentView, currentView, setAllowConvIdQuery }) => {
 
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -24,9 +24,10 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
 
   // Load the next batch of conversations. fetchConversations handles excluding conversations we already have, calling the API, and updating the state
   const loadNextBatch = async () => {
+    setAllowConvIdQuery(false); // once the user decides to load more conversations: we cno longer want to regard the conversationId query param, if one was passed
     setNextBatchLoading(true);
     const num_existing_convos = allConversations.length;
-    await fetchConversations(num_existing_convos+10, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal);
+    await fetchConversations(num_existing_convos+10, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal, false);
     setNextBatchLoading(false);
   };
 
@@ -35,7 +36,9 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
     const handleScroll = () => {
       if (containerRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-        if (scrollTop + clientHeight >= scrollHeight) { loadNextBatch(); }
+        if (scrollTop + clientHeight >= scrollHeight - 5) { // 5px buffer to load just before reaching the bottom
+          loadNextBatch();
+        }
       }
     };
     const container = containerRef.current;
@@ -184,10 +187,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
       <div className="message-filter">
         <div className="messsage-search">
           <h2>Messages</h2>
-          <button 
-            onClick={() => setFiltersVisible(!filtersVisible)}
-            className={filtersVisible ? "bg-light text-dark" : ""}
-          >
+          <button onClick={() => setFiltersVisible(!filtersVisible)} className={filtersVisible ? "bg-light text-dark" : ""}>
             Filters
           </button>
         </div>
@@ -329,6 +329,17 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                 </React.Fragment>
               );
             })}
+            
+            {/* Button to load more conversations (failsafe for auto-load when user scrolls to bottom) - or loader icon if already loading */}
+            {nextBatchLoading ? (
+              <div style={{height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <BoxLoader />
+              </div>
+            ) : (
+              <button className="btn btn-primary" onClick={loadNextBatch} style={{display:'block', margin:'10px auto 0px auto', borderRadius:'50px'}}>
+                Load More
+              </button>
+            )}
           </div>
         ) : (
           (fromHostBuddyFilterVal || urgentFilterIsEnabled || propertyFilterVal || phaseFilterVal || guestNameSearchVal) ? (
@@ -348,7 +359,6 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
           )
         )
       )}
-      {nextBatchLoading && <BoxLoader />}
     </div>
   );
 };

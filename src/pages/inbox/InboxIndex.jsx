@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { getUserDataActions } from "../../redux/actions";
 import { getSubscriptionStatus } from "../../helper/Authorized";
 import InBoxHeader from "./inboxHeader/InBoxHeader";
@@ -15,6 +15,8 @@ import HostDaddy from "../../component/hostDaddy/hostDaddy";
 
 const InboxIndex = () => {
   const { section } = useParams();
+  const [searchParams] = useSearchParams();
+  const conversationIdFromUrl = searchParams.get('conversationId');
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
 
@@ -91,7 +93,7 @@ const InboxIndex = () => {
   return (
     <div className="inbox-container">
       <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent} showTimeZoneNotif={showTimeZoneNotif}/>
-      {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames} userHasPMS={userHasPMS} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays}/>}
+      {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames} userHasPMS={userHasPMS} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays} singleConversationIdFromUrl={conversationIdFromUrl}/>}
       {interFaceComponent === 1 && <SmartTemplateIndex allPropertyNamesList={allPropertyNamesList} userData={allUserData}/>}
       {interFaceComponent === 2 && <Preferences allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent === 3 && <Upsells allPropertyNamesList={allPropertyNamesList}/>}

@@ -3,7 +3,7 @@ import ToastHandle from "../ToastMessage";
 
 
 // Get all conversations. FYI, this endpoint uses POST type to support more complex queries
-export const callGetConversationsApi = async (limit=null, conversationIdsAlreadyHave={}, urgentOnly=false, propertyName="", phase="", meetHbOnly=false, guestName='') => {
+export const callGetConversationsApi = async (limit=null, conversationIdsAlreadyHave={}, urgentOnly=false, propertyName="", phase="", meetHbOnly=false, guestName='', conversationId=null) => {
   const baseUrl = process.env.REACT_APP_API_ENDPOINT;
   const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -17,6 +17,7 @@ export const callGetConversationsApi = async (limit=null, conversationIdsAlready
     if (phase) { body_data.query_data.reservation_phase = phase; }
     if (guestName) { body_data.query_data.guest_name = guestName; }
     if (meetHbOnly) { body_data.query_data.last_message_sender = 'hostbuddy'; }
+    if (conversationId) { body_data.query_data.conversation_id = conversationId; }
     const response = await axios.post( `${baseUrl}/get_all_conversations`, body_data, config );
 
     if (response.status === 200) { }
