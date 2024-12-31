@@ -48,10 +48,7 @@ const Home = () => {
     <div className="home">
       <Helmet>
         <title>HostBuddy AI - Automate Short-Term Rental Messaging</title>
-        <meta
-          name="title"
-          content="HostBuddy AI - Automate Short-Term Rental Messaging"
-        />
+        <meta name="title" content="HostBuddy AI - Automate Short-Term Rental Messaging"/>
         <meta
           name="description"
           content="HostBuddy AI automates guest communication for short-term rentals, offering seamless property setup, smart templating, and 24/7 support integration."
