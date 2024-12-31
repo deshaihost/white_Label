@@ -135,16 +135,14 @@ function SamplePrevArrow(props) {
 const WelcomeSection = () => {
   var settings = {
     dots: false,
-    infinite: false,
+    infinite: true, // Ensures that the slider loops back to the beginning
     arrows: true,
-    speed: 500,
+    speed: 400, // Slide speed of 0.4 seconds (400ms)
     slidesToShow: 3,
     slidesToScroll: 1,
     initialSlide: 0,
-    infinite: true,
     autoplay: true,
-    speed: 2000,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 6000, // Pause for 6 seconds after all slides are visible
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
     responsive: [
@@ -166,6 +164,7 @@ const WelcomeSection = () => {
       },
     ],
   };
+
   return (
     <>
       <section className="welcome-sec">

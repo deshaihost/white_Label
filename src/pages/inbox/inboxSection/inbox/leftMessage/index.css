@@ -46,7 +46,7 @@ width: 1px;
 
 .left-bar-chat {
     height: calc(100vh - 200px); /* Base height when filters are hidden */
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .left-bar-chat.filters-visible {

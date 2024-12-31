@@ -12,6 +12,7 @@
   position: absolute;
   top: -32%;
   right: 0%;
+  z-index: -1;
 }
 .banner::before {
   content: "";
@@ -163,6 +164,10 @@
 }
 
 @media only screen and (max-width: 767px) {
+  section.banner .container {
+    width: 100%;
+    max-width: 100%;
+  }
   .banner .banner-container .banner-content {
     display: flex;
     flex-direction: column;

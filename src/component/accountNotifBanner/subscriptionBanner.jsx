@@ -2,7 +2,8 @@ import { getSubscriptionStatus } from "../../helper/Authorized";
 import AccountNotifBanner from "./accountNotifBanner";
 import { Link } from "react-router-dom";
 
-const SubscriptionBanner = ({ userData }) => {
+const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
+
   if (!userData) { return null; }
   
   const { plan, status } = getSubscriptionStatus(userData);
@@ -19,7 +20,7 @@ const SubscriptionBanner = ({ userData }) => {
     if (daysRemaining > 5) {
       // User is in trial with more than 5 days remaining
       title = 'Free Trial';
-      message = (<>HostBuddy is free for {daysRemaining} more day{daysRemaining !== 1 ? 's' : ''} (up to 10 properties). <Link to="/properties">Subscribe</Link> to ensure continued access when the trial ends.</>);
+      message = (<>HostBuddy is free for {daysRemaining} more day{daysRemaining !== 1 ? 's' : ''}. <Link to="/properties">Subscribe</Link> to ensure continued access when the trial ends.</>);
       theme = 'default';
     } else {
       // User is in trial with 5 or fewer days remaining
@@ -69,7 +70,7 @@ const SubscriptionBanner = ({ userData }) => {
   }
 
   return (
-    <AccountNotifBanner title={title} message={message} theme={theme} />
+    <AccountNotifBanner title={title} message={message} theme={theme} bottomMargin={bottomMargin} topMargin={topMargin}/>
   );
 };
 

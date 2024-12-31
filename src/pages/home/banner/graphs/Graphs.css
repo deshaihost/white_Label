@@ -84,15 +84,15 @@
   }
 }
 @media screen and (max-width: 991px) {
-  .graph-banner {
+  /* .graph-banner {
     position: relative;
     margin-top: 60px;
     margin-bottom: 0px;
     display: flex;
     gap: 20px;
     flex-direction: column;
-  }
-  .graph-banner .image-container {
+  } */
+  /* .graph-banner .image-container {
     position: inherit !important;
     max-width: 100% !important;
     max-height: 100% !important;
@@ -100,5 +100,71 @@
     right: inherit !important;
     top: inherit !important;
     bottom: inherit !important;
+  } */
+}
+
+@media screen and (max-width: 767px) {
+  .graph-banner .image-container:nth-child(1) {
+    width: 100%;
+    height: 100%;
+    top: -91px;
+    z-index: 1;
+  }
+  .graph-banner .image-container:nth-child(3) {
+    right: 0px;
+    width: 56%;
+    top: -58px;
+    z-index: 1;
+  }
+  .graph-banner .image-container:nth-child(4) {
+    max-width: 50%;
+    top: 168px;
+  }
+  .graph-banner .image-container:nth-child(5) {
+    max-width: 50%;
+    top: 248px;
+    right: 0px !important;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .graph-banner .image-container:nth-child(1) {
+    max-width: 40%;
+  }
+  .graph-banner .image-container:nth-child(5) {
+    max-width: 49%;
+    top: 159px;
+  }
+  .graph-banner .image-container:nth-child(4) {
+    max-width: 44%;
+    top: 122px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .graph-banner {
+    position: relative;
+    margin-top: 50px;
+    margin-bottom: 51px;
+  }
+  .image-container {
+    height: auto !important;
+  }
+  .graph-banner .image-container:nth-child(1) {
+    top: -47px;
+  }
+  .graph-banner .image-container:nth-child(3) {
+    top: -14px;
+  }
+}
+@media screen and (max-width: 380px) {
+  .graph-banner .image-container:nth-child(1) {
+    top: -21px;
+  }
+  .graph-banner .image-container:nth-child(3) {
+    top: 20px;
+  }
+  .graph-banner .image-container:nth-child(5) {
+    top: 136px;
   }
 }
