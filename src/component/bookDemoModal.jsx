@@ -1,6 +1,5 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-// Removed import of Form and react-hook-form
 import React, { useState, useEffect } from "react";
 import ErrorMessageShow from "../helper/ErrorMessageShow";
 import { ErrorMessageKey } from "../helper/ErrorMessageKey";
@@ -167,7 +166,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
             <div className="my-3">
               <div className="input-group">
                 <input className="form-control" type="number" value={propertyCount} onChange={(e) => setPropertyCount(e.target.value)}/>
-                <label>Your property count</label>
+                <label>How many properties?</label>
               </div>
               {errors.propertyCount && (
                 <p style={{ color: '#F80', marginTop: '1px', marginLeft: '10px', fontSize: '14px' }}>

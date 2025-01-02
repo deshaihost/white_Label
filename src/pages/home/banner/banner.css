@@ -1,5 +1,31 @@
 .banner {
   padding: 68px 0;
+  position: relative;
+}
+.banner::after {
+  content: "";
+  display: inline-block;
+  width: 928px;
+  height: 100%;
+  background: url(../../../../public/img/hero-bg-line.webp) no-repeat center
+    center;
+  position: absolute;
+  top: -32%;
+  right: 0%;
+  z-index: -1;
+}
+.banner::before {
+  content: "";
+  display: block;
+  width: 387px;
+  height: 387px;
+  background: #146ef5;
+  border-radius: 500px;
+  filter: blur(249px);
+  position: absolute;
+  top: 50%;
+  left: -175px;
+  z-index: 1;
 }
 
 .banner .banner-container {
@@ -17,6 +43,24 @@
   text-align: center;
   margin-bottom: 30px;
 }
+.rating-part-banner i {
+  color: #f9da6b !important;
+  font-size: 18px;
+}
+.bg-shadow {
+  content: "";
+  display: block;
+  width: 353px;
+  height: 353px;
+  background: #146ef5;
+  border-radius: 500px;
+  filter: blur(249px);
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
 
 /* .banner .banner-container a {
     color: #146EF5;
@@ -32,7 +76,24 @@
 .banner .banner-container .heading h1 {
   position: relative;
 }
-
+.banner .banner-container .rating-part-banner {
+  position: relative;
+}
+/* .banner .banner-container .rating-part-banner::before {
+  content: "";
+  display: inline-block;
+  width: 77px;
+  height: 48px;
+  background: url(../../../../public/img/heading-line.webp) no-repeat center
+    center;
+  position: absolute;
+  top: 30px;
+  left: 84px;
+} */
+.star-content {
+  z-index: 1;
+  position: relative;
+}
 .banner .banner-container .heading h1::after {
   content: "";
   display: inline-block;
@@ -91,15 +152,22 @@
 @media only screen and (max-width: 991px) {
   .banner {
     padding: 40px 0;
+    overflow: hidden;
   }
 
   .banner .banner-container .banner-video video {
     height: 397px;
   }
+  .banner .banner-container .rating-part-banner::before {
+    left: -40px;
+  }
 }
 
 @media only screen and (max-width: 767px) {
-
+  section.banner .container {
+    width: 100%;
+    max-width: 100%;
+  }
   .banner .banner-container .banner-content {
     display: flex;
     flex-direction: column;
@@ -133,6 +201,9 @@
   .banner .banner-container p {
     font-size: 16px;
     margin-bottom: 20px;
+  }
+  .banner .banner-container .rating-part-banner::before {
+    left: 0px;
   }
 }
 

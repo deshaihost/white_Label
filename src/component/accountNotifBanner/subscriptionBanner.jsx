@@ -3,6 +3,7 @@ import AccountNotifBanner from "./accountNotifBanner";
 import { Link } from "react-router-dom";
 
 const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
+
   if (!userData) { return null; }
   
   const { plan, status } = getSubscriptionStatus(userData);
