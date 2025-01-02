@@ -30,6 +30,9 @@ import TonyRobinsonPic from "../../../helper/staticImage/homePage/whatTheCommuni
 import MarkSimpsonPic from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client2.webp";
 import AveryCarlPic from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client3.webp";
 import JeffBrownPic from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client4.webp";
+import Jodie from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/Jodie.webp";
+
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const imageTrustedLogo = [
   ItemOne,
@@ -83,23 +86,51 @@ const reviewRemovalScreen =
 const statistics =
   "https://storage.googleapis.com/frontend_media/home-new/statistics.webp";
 
+
+  function SampleNextArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={className}
+        style={{ ...style, display: "block" }}
+        onClick={onClick}
+      >
+        <FaChevronRight />
+      </div>
+    );
+  }
+  
+  function SamplePrevArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={className}
+        style={{ ...style, display: "block" }}
+        onClick={onClick}
+      >
+        <FaChevronLeft />
+      </div>
+    );
+  }
+
 const Works = () => {
   var settingsf = {
     dots: false,
-    arrows: false,
-    infinite: true,
-    slidesToShow: 5,
+    infinite: true, // Ensures that the slider loops back to the beginning
+    arrows: true,
+    speed: 400, // Slide speed of 0.4 seconds (400ms)
+    slidesToShow: 4,
     slidesToScroll: 1,
+    initialSlide: 0,
     autoplay: true,
-    autoplaySpeed: 0,
-    speed: 8000,
-    cssEase: "linear",
-    infinite: true,
+    autoplaySpeed: 6000, // Pause for 6 seconds after all slides are visible
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 2,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -107,16 +138,9 @@ const Works = () => {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          initialSlide: 1,
         },
       },
     ],
@@ -389,7 +413,10 @@ const Works = () => {
                 What the Community is Saying
               </h2>
             </div>
-            <div className="col-lg-3">
+          </div>
+          <div className="row">
+          <div className="col-lg-12">
+              <Slider {...settingsf}>
               <div className=" testimonial-slider">
                 <div className="testimonial-item p-3">
                   <p className="client-comment">
@@ -406,8 +433,6 @@ const Works = () => {
                   </span>
                 </div>
               </div>
-            </div>
-            <div className="col-lg-3">
               <div className="testimonial-slider">
               <div className="testimonial-item  p-3">
                 <p className="client-comment">
@@ -422,8 +447,6 @@ const Works = () => {
                 <span className="client-position">Intellihost Founder</span>
               </div>
               </div>
-            </div>
-            <div className="col-lg-3">
               <div className=" testimonial-slider">
                   <div className="testimonial-item  p-3">
                     <p className="client-comment">
@@ -439,8 +462,6 @@ const Works = () => {
                     </span>
                   </div>
               </div>
-            </div>
-            <div className="col-lg-3">
               <div className=" testimonial-slider">
                   <div className="testimonial-item  p-3">
                     <p className="client-comment">
@@ -456,6 +477,22 @@ const Works = () => {
                     <span className="client-position">Boostly Founder</span>
                   </div>
               </div>
+              <div className=" testimonial-slider">
+                  <div className="testimonial-item  p-3">
+                    <p className="client-comment">
+                      “Everyone talks about how you have to have dynamic pricing as a host - I think everyone should be talking about HostBuddy the same way”
+                    </p>
+                    <span className="client-img">
+                      <img
+                        src={Jodie}
+                        alt=""
+                      />
+                    </span>
+                    <p className="client-name">Jodie Odlin</p>
+                    <span className="client-position">Founder of Hospitable Hosts, Best Selling Author</span>
+                  </div>
+              </div>
+              </Slider>
             </div>
           </div>
 
