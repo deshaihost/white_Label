@@ -12,6 +12,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import Andrew from "../../../helper/staticImage/homePage/Andrew.webp";
 import Maggie from "../../../helper/staticImage/homePage/Maggie.webp";
 import Steve from "../../../helper/staticImage/homePage/Steve.webp";
+import Jodie from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/Jodie.webp";
 
 const Author = "https://hostbuddylb.com/home/introduction/author1.webp";
 const Author1 = "https://hostbuddylb.com/home/introduction/author2.webp";
@@ -107,6 +108,21 @@ const welcomeBoxesData = [
     authorImg: Author2,
     authorName: "Dylan W",
     authorDetails: "ZoneSage | 3 Listings",
+  },
+  {
+    title: "As Essential As Dynamic Pricing",
+    text: (
+      <>
+        <strong> HostBuddy has changed my business and my life. </strong>I have
+        a hundred percent response rate, and my reviews have gone right up in
+        communications. Everyone talks about how you have to have dynamic
+        pricing as a host - I think everyone should be talking about HostBuddy
+        the same way.
+      </>
+    ),
+    authorImg: Jodie,
+    authorName: "Jodie O",
+    authorDetails: "Tetbury Escapes | 15 Listings",
   },
 ];
 
