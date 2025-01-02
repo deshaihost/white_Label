@@ -61,6 +61,7 @@ const welcomeBoxesData = [
     authorName: "Maggie V",
     authorDetails: "Everly Vacation Homes | 13 listings",
   },
+  /*
   {
     title: "This Software is my Sleeping Pill",
     text: (
@@ -74,6 +75,8 @@ const welcomeBoxesData = [
     authorName: "Grant M",
     authorDetails: " WestBound Rentals | 26 Listings",
   },
+  */
+  /*
   {
     title: "HostBuddy works",
     text: (
@@ -87,6 +90,7 @@ const welcomeBoxesData = [
     authorName: "Tim U",
     authorDetails: "Aztec Getaways | 42 Listings",
   },
+  */
   {
     title: "Incredible AI assistant",
     text: (

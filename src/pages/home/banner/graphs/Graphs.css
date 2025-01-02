@@ -144,19 +144,31 @@
 @media screen and (max-width: 480px) {
   .graph-banner {
     position: relative;
-    margin-top: 50px;
-    margin-bottom: 51px;
+    margin-top: 90px;
+    margin-bottom: 110px;
   }
   .image-container {
     height: auto !important;
   }
-  .graph-banner .image-container:nth-child(1) {
-    top: -47px;
+  .graph-banner .image-container:nth-child(1) { /* top left img */
+    top: -70px;
+    left: 5px;
   }
-  .graph-banner .image-container:nth-child(3) {
-    top: -14px;
+  .graph-banner .image-container:nth-child(3) { /* top right img */
+    top: -64px;
+    right: -10px;
+  }
+  .graph-banner .image-container:nth-child(4) { /* bottom left img */
+    max-width: 44%;
+    top: 242px;
+  }
+  .graph-banner .image-container:nth-child(5) { /* bottom right img */
+    max-width: 49%;
+    top: 222px;
+    right: 0px !important;
   }
 }
+/*
 @media screen and (max-width: 380px) {
   .graph-banner .image-container:nth-child(1) {
     top: -21px;
@@ -168,3 +180,4 @@
     top: 136px;
   }
 }
+*/

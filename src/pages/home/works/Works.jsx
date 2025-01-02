@@ -26,10 +26,10 @@ import { HiChatBubbleLeftRight } from "react-icons/hi2";
 import { Ri24HoursFill } from "react-icons/ri";
 import { FaRegClock, FaSackDollar } from "react-icons/fa6";
 
-import ClientOne from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client1.webp";
-import ClientTwo from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client2.webp";
-import ClientThree from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client3.webp";
-import ClientFour from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client4.webp";
+import TonyRobinsonPic from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client1.webp";
+import MarkSimpsonPic from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client2.webp";
+import AveryCarlPic from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client3.webp";
+import JeffBrownPic from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client4.webp";
 
 const imageTrustedLogo = [
   ItemOne,
@@ -189,7 +189,7 @@ const Works = () => {
                 <Link to="/ai-messaging">Learn More &#8594;</Link>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img src={lateNightBot} alt="works-img" />
             </div>
           </div>
@@ -232,7 +232,7 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img
                 src={Seamless}
                 className="img-fluid object-fit-contain"
@@ -241,6 +241,8 @@ const Works = () => {
               />
             </div>
           </div>
+
+          {/*
           <div className="row">
             <div className="col-lg-12">
               <h2 className="fs-1 fw-bold text-white mb-5 text-center">
@@ -265,6 +267,7 @@ const Works = () => {
               </div>
             </div>
           </div>
+          */}
 
           <div className="row pt-4">
             <div className="col-lg-6">
@@ -280,7 +283,7 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img
                 src={TemplatedMessages}
                 style={{ objectFit: "contain" }}
@@ -291,8 +294,8 @@ const Works = () => {
           <div className="row align-items-center justify-content-center">
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
-                className="bg-primary p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px" }}
+                className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
+                style={{borderRadius:"20px", backgroundColor:"#0a287a"}}
               >
                 <FaRegClock className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -300,14 +303,14 @@ const Works = () => {
                   <span className="fs-6">hours</span>
                 </div>
                 <p className="text-white fs-5 mb-0">
-                  Average Hours of AI Coverage Per User
+                  Average Hours of AI Coverage Per Property
                 </p>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
-                className="bg-primary p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px" }}
+                className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
+                style={{borderRadius:"20px", backgroundColor:"#0a287a"}}
               >
                 <HiChatBubbleLeftRight className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -323,13 +326,13 @@ const Works = () => {
             </div>
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
-                className="bg-primary p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px" }}
+                className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
+                style={{borderRadius:"20px", backgroundColor:"#0a287a"}}
               >
                 <Ri24HoursFill className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
                   <h2 className="fs-2 fw-bold mb-0">88%</h2>
-                  <span className="fs-6">of active users</span>
+                  <span className="fs-6">of users</span>
                 </div>
                 <p className="text-white fs-5 mb-0">
                   Schedule AI for 24/7 Coverage
@@ -338,8 +341,8 @@ const Works = () => {
             </div>
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
-                className="bg-primary p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px" }}
+                className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
+                style={{borderRadius:"20px", backgroundColor:"#0a287a"}}
               >
                 <FaSackDollar className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -371,33 +374,10 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img
                 className="mw-100 mh-100"
                 src={inboxScreen}
-                alt="works-img"
-              />
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-lg-6">
-              <div className="works-content">
-                <h3>
-                  Schedule Based On <strong>Your Needs</strong>
-                </h3>
-                <p>
-                  Lockouts, late-night messages, and issue troubleshooting are a
-                  thing of the past for our users. HostBuddy can be scheduled to
-                  fit your specific coverage needs, automating communication
-                  anytime you need support.
-                </p>
-              </div>
-            </div>
-            <div className="col-lg-6">
-              <img
-                src={Schedule}
-                style={{ objectFit: "contain" }}
                 alt="works-img"
               />
             </div>
@@ -418,7 +398,7 @@ const Works = () => {
                     stack!”
                   </p>
                   <span className="client-img">
-                    <img src={ClientOne} alt="" />
+                    <img src={AveryCarlPic} alt="" />
                   </span>
                   <p className="client-name">Avery Carl</p>
                   <span className="client-position">
@@ -430,17 +410,17 @@ const Works = () => {
             <div className="col-lg-3">
               <div className="testimonial-slider">
               <div className="testimonial-item  p-3">
-                    <p className="client-comment">
-                      “The AI will remember all the little details about each
-                      individual property and the quirks that it has. That is
-                      game changing.”
-                    </p>
-                    <span className="client-img">
-                      <img src={ClientTwo} alt="" />
-                    </span>
-                    <p className="client-name">Jeff Brown</p>
-                    <span className="client-position">Intellihost Founder</span>
-                  </div>
+                <p className="client-comment">
+                  “The AI will remember all the little details about each
+                  individual property and the quirks that it has. That is
+                  game changing.”
+                </p>
+                <span className="client-img">
+                  <img src={JeffBrownPic} alt="" />
+                </span>
+                <p className="client-name">Jeff Brown</p>
+                <span className="client-position">Intellihost Founder</span>
+              </div>
               </div>
             </div>
             <div className="col-lg-3">
@@ -451,7 +431,7 @@ const Works = () => {
                       away by all the different things this tool is able to do”
                     </p>
                     <span className="client-img">
-                      <img src={ClientThree} alt="" />
+                      <img src={TonyRobinsonPic} alt="" />
                     </span>
                     <p className="client-name">Tony Robinson</p>
                     <span className="client-position">
@@ -468,7 +448,7 @@ const Works = () => {
                     </p>
                     <span className="client-img">
                       <img
-                        src={ClientFour}
+                        src={MarkSimpsonPic}
                         alt=""
                       />
                     </span>
@@ -476,6 +456,29 @@ const Works = () => {
                     <span className="client-position">Boostly Founder</span>
                   </div>
               </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-lg-6">
+              <div className="works-content">
+                <h3>
+                  Schedule Based On <strong>Your Needs</strong>
+                </h3>
+                <p>
+                  Lockouts, late-night messages, and issue troubleshooting are a
+                  thing of the past for our users. HostBuddy can be scheduled to
+                  fit your specific coverage needs, automating communication
+                  anytime you need support.
+                </p>
+              </div>
+            </div>
+            <div className="col-lg-6 blur-background-top-left">
+              <img
+                src={Schedule}
+                style={{ objectFit: "contain" }}
+                alt="works-img"
+              />
             </div>
           </div>
 
@@ -495,7 +498,7 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img src={stayInformed} alt="works-img" />
             </div>
           </div>
@@ -517,11 +520,12 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img src={actionItemsScreen} alt="works-img" />
             </div>
           </div>
 
+          {/*
           <div className="row">
             <div className="col-lg-6">
               <div className="works-content">
@@ -535,10 +539,11 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img src={unlimitedTesting} alt="works-img" />
             </div>
           </div>
+          */}
 
           {/*
                     <div className="row">
@@ -548,7 +553,7 @@ const Works = () => {
                                 <p>Don’t stress about hallucinations - HostBuddy is meticulously designed to respond based only on your property details, and can explain each response to ensure transparency.</p>
                             </div>
                         </div>
-                        <div className="col-lg-6">
+                        <div className="col-lg-6 blur-background-top-left">
                             <img src={groundedResponses} alt='works-img' />
                         </div>
                     </div>
@@ -569,7 +574,7 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img src={robustCustomization} alt="works-img" />
             </div>
           </div>
@@ -588,7 +593,7 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img src={statistics} alt="works-img" />
             </div>
           </div>
@@ -608,7 +613,7 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img src={stayInCharge} alt="works-img" />
             </div>
           </div>
@@ -627,7 +632,7 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img src={reviewRemovalScreen} alt="works-img" />
             </div>
           </div>
@@ -646,7 +651,7 @@ const Works = () => {
                 </p>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 blur-background-top-left">
               <img src={cleaningManagement} alt="works-img" />
             </div>
           </div>

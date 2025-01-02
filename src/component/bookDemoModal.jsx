@@ -166,7 +166,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
             <div className="my-3">
               <div className="input-group">
                 <input className="form-control" type="number" value={propertyCount} onChange={(e) => setPropertyCount(e.target.value)}/>
-                <label>Your property count</label>
+                <label>How many properties?</label>
               </div>
               {errors.propertyCount && (
                 <p style={{ color: '#F80', marginTop: '1px', marginLeft: '10px', fontSize: '14px' }}>
