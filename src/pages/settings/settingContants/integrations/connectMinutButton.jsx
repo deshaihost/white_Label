@@ -48,7 +48,7 @@ const ConnectToMinut = () => {
           const result = await completeMinutOauth(code);
           if (result.success) {
             ToastHandle('Successfully connected to Minut!', 'success');
-            dispatch(getUserDataActions()); // update user data so we can show the new integration
+            dispatch(getUserDataActions(false)); // update user data so we can show the new integration
           } else {
             ToastHandle(`Failed to connect to Minut: ${result.error}`, 'danger');
           }

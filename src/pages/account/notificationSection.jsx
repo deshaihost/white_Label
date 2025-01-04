@@ -296,7 +296,7 @@ const AccountNotificationSection = () => {
 
   // Fetch user data on page load, to populate "userDataGet"
   useEffect(() => {
-    dispatch(getUserDataActions());
+    dispatch(getUserDataActions(false));
     callGetNotificationSettingsApi();
   }, []);
 

@@ -29,16 +29,16 @@ const Workbench = () => {
 
   const propertyImg = apiPropertyData?.thumbnail_image?.url
 
-  // ----- User data / redux store logic -----
+  // ----- User data / redux store logic. TODO: only call getUserDataActions if the pullout panel is used? (or whatever flow actually requires this data is entered)
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
 
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   if (!userDataGet) {
-    dispatch(getUserDataActions());
+    dispatch(getUserDataActions(false));
   }
 
-  const userPropertiesData = userDataGet?.property_data; // dict, keys are property names. values aren't important here
+  const userPropertiesData = userDataGet?.property_data; // dict, keys are property names. values are empty objs and unused
   const allPropertyNamesList = userPropertiesData ? Object.keys(userPropertiesData) : [];
   // -----------------------------------------
 

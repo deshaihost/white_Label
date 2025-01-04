@@ -55,7 +55,7 @@ const ConnectToTurno = () => {
             const result = await completeTurnoOauth(code);
             if (result.success) {
               ToastHandle('Successfully connected to Turno!', 'success');
-              dispatch(getUserDataActions()); // update user data so we can show the new integration
+              dispatch(getUserDataActions(false)); // update user data so we can show the new integration
             } else {
               ToastHandle(`Failed to connect to Turno: ${result.error}`, 'danger');
             }

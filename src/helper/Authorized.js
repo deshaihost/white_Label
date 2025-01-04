@@ -112,7 +112,7 @@ export const getSubscriptionStatus = (userData) => {
 
 // Get the most recently fetched user data from session storage. If it doesn't exist, call the API to fetch it.
 // This is useful for when we want to access user data fields that don't really change, so we don't have to call the API every time we need them (e.g. PMS name, date created, etc)
-// FYI, this DOESN'T WORK becuase we're doing the async/await handling incorrectly.
+// FYI, this DOESN'T WORK becuase we're doing the async/await handling incorrectly. So currently UNUSED
 export const getLastUserDataAsync = async () => {
   const userDataFromStorage = JSON.parse(sessionStorage.getItem("userData"));
   if (userDataFromStorage) {

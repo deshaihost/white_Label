@@ -36,7 +36,7 @@ const CopyExistingPropertyModel = ({ handleClose, show, curr_property_name }) =>
   };
 
   useEffect(() => {
-    dispatch(getUserDataActions());
+    dispatch(getUserDataActions(false));
   }, []); // TODO: only run this when the user selects "Copy Existing Property"
 
   useEffect(() => {

@@ -5,7 +5,10 @@ const api = new APICore();
 
 function getUserDataEndPoint(params: any): any {
   const { data } = params;
-  return api.get(URL.GET_USER_DATA, data);
+  const queryParam = data?.include_property_data !== undefined 
+    ? `?include_property_data=${data.include_property_data}` 
+    : '';
+  return api.get(`${URL.GET_USER_DATA}${queryParam}`);
 }
 
 function postCreateCheckoutSessionEndPoint(params: any): any {

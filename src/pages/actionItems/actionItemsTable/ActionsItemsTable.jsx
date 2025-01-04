@@ -177,7 +177,7 @@ const ActionsItemsTable = () => {
 
   // On page load, get user data and action items
   useEffect(() => {
-    dispatch(getUserDataActions());
+    dispatch(getUserDataActions(false)); // false - don't need property data, just need the names
     callGetActionItemsApi('incomplete');
   }, []);
 

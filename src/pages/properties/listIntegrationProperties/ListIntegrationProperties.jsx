@@ -29,6 +29,9 @@ const ListIntegrationProperties = () => {
   const [showCalender, setShowCalender] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState("");
   const [allProperties, setAllProperty] = useState([]);
+
+  const [propertyDataIsReady, setPropertyDataIsReady] = useState(false);
+
   const { store, dispatch } = useSelectorUseDispatch();
   const userDataGetLoading = store?.getUserDataReducer?.loading;
   const userData = store?.getUserDataReducer?.getUserData?.data?.user;
@@ -282,11 +285,33 @@ const ListIntegrationProperties = () => {
     dispatch(getUserDataActions());
   }, []);
 
+  // Check to see if property_data has been populated properly (if its keys map to objs that actually have values). If not (i.e. if it wasnt fetched with the last getUserDataActions call), then we'll need to wait for it to re-fetch since the logic on this page depends on this data being there
+  useEffect(() => {
+    if (!userDataGetLoading && PropertiesExtraData) {
+      // Check if at least one property exists and has the required fields
+      const propertyNames = Object.keys(PropertiesExtraData);
+      if (propertyNames.length > 0) {
+        const sampleProperty = PropertiesExtraData[propertyNames[0]];
+        const hasAnyFields = Object.keys(sampleProperty).length > 0;
+        
+        setPropertyDataIsReady(hasAnyFields);
+        
+        // If data isn't properly populated, trigger a re-fetch
+        if (!hasAnyFields) {
+          dispatch(getUserDataActions());
+        }
+      } else {
+        // No properties exist, we can consider the data ready
+        setPropertyDataIsReady(true);
+      }
+    }
+  }, [userDataGetLoading, PropertiesExtraData]);
+
   return (
     <div>
       {chatBoxGetByNameLoading && <FullScreenLoader />}
       {propertiesDeleteLoading && <FullScreenLoader />}
-      {!userDataGetLoading ? (
+      {((!userDataGetLoading) && (propertyDataIsReady)) ? (
         <>
           {createPropertiesName?.map((properties, index) => {
             let PropertStop = PropertiesExtraData?.[properties]?.toggle_status;

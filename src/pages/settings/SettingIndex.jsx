@@ -13,6 +13,7 @@ import UserInformationSection from "../account/userInformationSection";
 import AccountContactSection from "../account/contactSection";
 import AccountRegionSection from "../account/regionSection";
 import AccountNotificationSection from "../account/notificationSection";
+import MessagingChannelsSection from './settingContants/messagingChannels/messagingChannels';
 import { Link, useParams } from "react-router-dom";
 import HostDaddy from '../../component/hostDaddy/hostDaddy';
 
@@ -24,13 +25,13 @@ const SettingIndex = () => {
   const [interFaceSettings, setInterFaceSettings] = useState("account");
   const [userData, setUserData] = useState({});
 
-  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"conversation-preferences", integrations:"integrations", users:"users", upsells:"upsells", subscription:"subscription" };
+  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"conversation-preferences", integrations:"integrations", users:"users", upsells:"upsells", subscription:"subscription", messagingChannels:"messaging-channels" };
 
   const ApiUserData = store?.getUserDataReducer?.getUserData?.data?.user;
 
   const refreshUserData = () => {
     // dispatch(stateEmptyActions());
-    dispatch(getUserDataActions());
+    dispatch(getUserDataActions(false));
   };
 
   // Get the path param (if passed) and set the active tab
@@ -42,7 +43,7 @@ const SettingIndex = () => {
 
   // On page load, get user data
   useEffect(() => {
-    dispatch(getUserDataActions());
+    dispatch(getUserDataActions(false));
   }, []);
 
   // Make sure we rerender whenever user data is updated
@@ -98,6 +99,9 @@ const SettingIndex = () => {
                   )}
                   {interFaceTypes?.users === interFaceSettings && (
                     <UsersTab userData={userData}/>
+                  )}
+                  {interFaceTypes?.messagingChannels === interFaceSettings && (
+                    <MessagingChannelsSection />
                   )}
                 </div>
               </div>

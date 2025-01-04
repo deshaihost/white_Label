@@ -20,12 +20,12 @@ const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
     if (daysRemaining > 5) {
       // User is in trial with more than 5 days remaining
       title = 'Free Trial';
-      message = (<>HostBuddy is free for {daysRemaining} more day{daysRemaining !== 1 ? 's' : ''}. <Link to="/properties">Subscribe</Link> to ensure continued access when the trial ends.</>);
+      message = (<>HostBuddy is free for {daysRemaining} more day{daysRemaining !== 1 ? 's' : ''}. <Link to="/properties">Add your billing</Link> to ensure continued access when the trial ends.</>);
       theme = 'default';
     } else {
       // User is in trial with 5 or fewer days remaining
       title = 'Trial Ending Soon';
-      message = (<>{daysRemaining} day{daysRemaining !== 1 ? 's' : ''} remain{daysRemaining !== 1 ? '' : 's'} in your free trial. <Link to="/properties">Subscribe</Link> to ensure continued access when the trial ends.</>);
+      message = (<>{daysRemaining} day{daysRemaining !== 1 ? 's' : ''} remain{daysRemaining !== 1 ? '' : 's'} in your free trial. <Link to="/properties">Add your billing</Link> to ensure continued access when the trial ends.</>);
       theme = 'warning';
     }
   } else if (plan === 'trial_over') {
