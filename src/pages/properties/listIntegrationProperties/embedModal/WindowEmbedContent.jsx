@@ -6,7 +6,7 @@ const windowImg = 'https://hostbuddylb.com/embed-doc/window.webp';
 const WindowEmbedContent = ({ chatbotKey }) => {
   return (
     <div className="embed-modal-content">
-      <h2>Embed a HostBuddy Popup Chat Window On Your Website</h2>
+      <h2>Embed a HostBuddy Chat Window On Your Website</h2>
       <div className='embed-modal-section' style={{marginTop:'10px'}}>
         <div className="widget-preview-images">
           <div>

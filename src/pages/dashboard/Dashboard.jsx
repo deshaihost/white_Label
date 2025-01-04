@@ -21,10 +21,7 @@ const Dashboard = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
-  const statistics = userDataGet?.statistics?.num_conversations;
-  const { neutral, successful, total, unsuccessful } = statistics ? statistics : [];
   const userDataLoading = store?.getUserDataReducer?.loading;
-  const userDataGetLoading = store?.getUserDataReducer?.loading;
   const actionItemsConvertationData = store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
   const actionItemsCovertationLoading = store?.getActionItemsReducer?.loading;
   const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
@@ -178,7 +175,7 @@ const Dashboard = () => {
     return `${month} ${day}\n${hours}:${minutes}${ampm}`;
   }
 
-  const { first_name } = userDataGet ? userDataGet : [];
+  const { first_name } = userDataGet || {};
   const completeActionsItemLoading = store?.completeActionsItemsReducer?.loading;
   const completeActionsItemStatus = store?.completeActionsItemsReducer?.completeActionsItems?.status;
   const completeActionsItemMessage = store?.completeActionsItemsReducer?.completeActionsItems?.data?.message;
@@ -188,7 +185,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    dispatch(getUserDataActions());
+    dispatch(getUserDataActions(false));
     dispatch(getActionItemsActions()); // TODO: limit the number of action items fetched
   }, []);
 

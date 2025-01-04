@@ -88,14 +88,14 @@ const Location = () => {
   }, [userDataStatus]);
 
   useEffect(() => {
-    dispatch(getUserDataActions());
+    dispatch(getUserDataActions(false));
   }, []);
 
   useEffect(() => {
     if (updateUserStatus === 200) {
       ToastHandle(updateUserMessage, "success");
       dispatch(stateEmptyActions());
-      dispatch(getUserDataActions());
+      dispatch(getUserDataActions(false));
     }
   }, [updateUserStatus]);
 
@@ -104,13 +104,13 @@ const Location = () => {
       reset({ oldPassword: "", newPassword: "", confirmPassword: "" });
       ToastHandle(updatePasswordMessage, "success");
       dispatch(stateEmptyActions());
-      dispatch(getUserDataActions());
+      dispatch(getUserDataActions(false));
     }
     if (updatePasswordStatus === 401) {
       reset({ oldPassword: "", newPassword: "", confirmPassword: "" });
       ToastHandle(updatePasswordErrorMessage, "danger");
       dispatch(stateEmptyActions());
-      dispatch(getUserDataActions());
+      dispatch(getUserDataActions(false));
     }
   }, [updatePasswordStatus]);
 

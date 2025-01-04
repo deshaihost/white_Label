@@ -142,11 +142,7 @@ const Properties = () => {
       dispatch(getUserDataActions());
       dispatch(stateEmptyActions());
     }
-  }, [
-    gotoBillingPortalCheckPaymentStatus,
-    propertyConditionCheck,
-    toggleChatStatus,
-  ]);
+  }, [gotoBillingPortalCheckPaymentStatus, propertyConditionCheck, toggleChatStatus]);
 
   // Whenever the user's subscription data or property data changes, update this information in local storage to ensure we're rendeting the subscription warning banner with correct information
   /* No longer used

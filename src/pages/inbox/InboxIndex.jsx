@@ -37,7 +37,7 @@ const InboxIndex = () => {
 
   // Parse the API-retrieved user data to get info we'll need throughout the inbox and the other tabs
   const allUserData = store?.getUserDataReducer?.getUserData?.data?.user;
-  const userPropertiesData = allUserData?.property_data; // dict, keys are property names. values aren't important here
+  const userPropertiesData = allUserData?.property_data; // dict, keys are property names. values are empty objs (since we use false in the dispatch)
   const allPropertyNamesList = userPropertiesData ? Object.keys(userPropertiesData) : [];
   const showTimeZoneNotif = allUserData && !allUserData?.user_region;
   const userHasPMS = allUserData && allUserData?.calry_integrations && Object.keys(allUserData.calry_integrations).length > 0;
@@ -85,7 +85,7 @@ const InboxIndex = () => {
 
   // On page load, call some APIs
   useEffect(() => {
-    dispatch(getUserDataActions()); // So we can have the list of property names for the various dropdowns
+    dispatch(getUserDataActions(false)); // So we can have the list of property names for the various dropdowns. false because we don't need the property data
     populateGuestNames(); // So we can have the list of guest names for the guest search bar
     setInterFaceComponent(sectionMapping[section] || 0); // Set the interface component based on the URL path param
   }, []);

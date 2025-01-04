@@ -1,9 +1,9 @@
 // @flow
 import { PagesApisActionTypes } from './constants';
 
-export const getUserDataActions = (data) => ({
+export const getUserDataActions = (include_property_data = undefined) => ({
     type: PagesApisActionTypes.GET_USER_DATA_FIRST,
-    data,
+    data: include_property_data !== undefined ? { include_property_data } : {},
 });
 
 export const postCreateCheckoutSessionActions = (data) => ({

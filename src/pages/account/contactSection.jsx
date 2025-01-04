@@ -94,7 +94,7 @@ const AccountContactSection = () => {
       if (response.status === 200) {
         ToastHandle(response.data.message, "success");
         setSlackOauthCode(""); // reset the slackOauthCode state
-        dispatch(getUserDataActions()); // update our data from the API
+        dispatch(getUserDataActions(false)); // update our data from the API
       }
       else { ToastHandle(response?.data?.error, "danger"); }
       return response.status;
@@ -181,7 +181,7 @@ const AccountContactSection = () => {
     else {
       const responseCode = await addNewContact(type, name, address);
       if (responseCode === 200) {
-        dispatch(getUserDataActions()); // update our data from the API
+        dispatch(getUserDataActions(false)); // update our data from the API
         setNewContacts(initialState); // reset the newContacts state
       }
     }
@@ -192,7 +192,7 @@ const AccountContactSection = () => {
     if (!isConfirmed) { return; }
     const responseCode = await callDeleteContactAPI(contacts[index].type, contacts[index].address);
     if (responseCode === 200) {
-      dispatch(getUserDataActions()); // update our data from the API
+      dispatch(getUserDataActions(false)); // update our data from the API
     }
   };
 
@@ -209,13 +209,13 @@ const AccountContactSection = () => {
     if (responseCode === 200) {
       setCodeSentFor(""); // reset the codeSentFor state
       setConfirmationCode(""); // reset the confirmation code input
-      dispatch(getUserDataActions()); // update our data from the API
+      dispatch(getUserDataActions(false)); // update our data from the API
     }
   };
 
   // Fetch user data on page load, to populate "userDataGet"
   useEffect(() => {
-    dispatch(getUserDataActions());
+    dispatch(getUserDataActions(false));
   }, []);
 
   // when userDataGet populates, populate the previous contacts data

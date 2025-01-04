@@ -42,7 +42,7 @@ const StatisticsPage = () => {
 
       // On page load, get user data and action items
       useEffect(() => {
-        dispatch(getUserDataActions());
+        dispatch(getUserDataActions(false));
       }, []);
 
   const handlePropertyChange = (selectedOptions) => {

@@ -26,7 +26,7 @@ const PropertyInsight = () => {
   const [propertySelectNameView, setPropertySelectNameView] = useState("");
 
   useEffect(() => {
-    dispatch(getUserDataActions());
+    dispatch(getUserDataActions(false));
   }, []);
 
   useEffect(() => {
