@@ -101,7 +101,7 @@ const SettingIndex = () => {
                     <UsersTab userData={userData}/>
                   )}
                   {interFaceTypes?.messagingChannels === interFaceSettings && (
-                    <MessagingChannelsSection />
+                    <MessagingChannelsSection ApiUserData={userData} refreshUserData={refreshUserData}/>
                   )}
                 </div>
               </div>

@@ -186,7 +186,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getUserDataActions(false));
-    dispatch(getActionItemsActions()); // TODO: limit the number of action items fetched
+    dispatch(getActionItemsActions(8));
   }, []);
 
   // When user data is loaded, save the payment/subscription information to local storage. We need this information for the warning banner logic (in the NavBar), which should be shown on all portal pages.
@@ -204,7 +204,7 @@ const Dashboard = () => {
     if (completeActionsItemStatus === 200) {
       ToastHandle(completeActionsItemMessage, "success");
       dispatch(stateEmptyActions());
-      dispatch(getActionItemsActions());
+      dispatch(getActionItemsActions(8));
     }
   }, [completeActionsItemStatus]);
   const [converSationId, setConverSationId] = useState("");
