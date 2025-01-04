@@ -40,8 +40,9 @@ function getCalryLinkEndPoint(params: any): any {
 }
 
 function getActionsItemsEndPoint(params: any): any {
-  
-  return api.get(URL.GET_ACTIONS_ITEMS);
+  const { data } = params;
+  const queryParam = data?.limit !== undefined ? `?limit=${data.limit}` : '';
+  return api.get(`${URL.GET_ACTIONS_ITEMS}${queryParam}`);
 }
 
 function removeIntegrationListGetEndPoint(params: any): any {

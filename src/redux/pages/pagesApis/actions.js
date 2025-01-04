@@ -41,9 +41,9 @@ export const removeIntegrationActions = (data) => ({
     data,
 });
 
-export const getActionItemsActions = (data) => ({
+export const getActionItemsActions = (limit = undefined) => ({
     type: PagesApisActionTypes.GET_ACTIONS_ITEMS_FIRST,
-    data,
+    data: limit !== undefined ? { limit } : {},
 });
 
 export const putCompleteActionItemActions = (data) => ({

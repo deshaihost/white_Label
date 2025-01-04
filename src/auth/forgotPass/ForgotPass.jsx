@@ -55,7 +55,7 @@ const ForgotPass = () => {
       <Container>
         <div className="row">
           <div className="col-lg-6">
-            <div className="auth-img">
+            <div className="auth-img blur-background-top-right blur-background-bottom-left">
               <img src={AuthImage} alt="auth-img" />
             </div>
           </div>
