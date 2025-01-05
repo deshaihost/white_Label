@@ -3,8 +3,6 @@ import WhatsAppEmbeddedSignup from "./WhatsAppEmbeddedSignup";
 
 const MessagingChannelsSection = (ApiUserData, refreshUserData) => {
   const registeredWhatsAppNumber = ApiUserData?.ApiUserData?.whatsapp_phone_number || null;
-  console.log('ApiUserData', ApiUserData);
-  console.log('registeredWhatsAppNumber', registeredWhatsAppNumber);
 
   const [signupInProgress, setSignupInProgress] = useState(false);
   const [backendRegisterLoading, setBackendRegisterLoading] = useState(false);

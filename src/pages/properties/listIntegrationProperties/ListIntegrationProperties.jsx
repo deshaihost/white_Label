@@ -61,6 +61,7 @@ const ListIntegrationProperties = () => {
   const [model, setModel] = useState({ webPageUrl:false, supportingDocuments:false, unlockProperty:false });
   const [propertiesToUnlock, setPropertiesToUnlock] = useState([]);
   const [regenerateApiLoading, setRegenerateApiLoading] = useState(false);
+  const [lockPropertyLoading, setLockPropertyLoading] = useState(false);
   const [embedModalData, setEmbedModalData] = useState({show:false, chatbotKey:""});
 
 
@@ -114,10 +115,35 @@ const ListIntegrationProperties = () => {
     finally { setRegenerateApiLoading(false); }
   }
 
+
+  const callLockPropertyApi = async (property_name) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const dataToSend = {'property_names': [property_name]};
+    setLockPropertyLoading(true);
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+
+      const response = await axios.post( `${baseUrl}/lock_properties`, dataToSend, config );
+
+      if (response.status === 200) {
+        ToastHandle("Property locked", "success");
+        dispatch(getUserDataActions());
+      } else { ToastHandle('Failed to lock property', "danger"); }
+    } catch (error) { ToastHandle('An error occurred', "danger"); }
+    finally { setLockPropertyLoading(false); }
+  }
+
+
   let editProperty = "editProperty";
   let webPageURLs = "webPageURLs";
   let supportingDocuments = "supportingDocuments";
   let deleteProperty = "deleteProperty";
+  let lockProperty = "lockProperty";
   let copyChatbotLink = "copyChatbotLink";
   let regenerateChatbotLink = "regenerateChatbotLink";
   let testProperty = "testProperty";
@@ -134,6 +160,10 @@ const ListIntegrationProperties = () => {
     } else if (findType === "UnlockProperty") {
       setPropertiesToUnlock(data);
       handleModelOpen("UnlockProperty");
+    } else if (findType === lockProperty) {
+      if (window.confirm("This will stop all HostBuddy messaging activity and data sync for this property. This property will be removed from your subscription, so you won't be billed for it next cycle. Proceed with locking this property?")) {
+        callLockPropertyApi(data);
+      }
     } else if (findType === deleteProperty) {
       if (window.confirm("Are you sure you want to delete this property?")) {
         dispatch(deleteListIntegrationPropertiesActions(data));
@@ -395,6 +425,15 @@ const ListIntegrationProperties = () => {
                             <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
                               Regenerate Chat Link
                             </Dropdown.Item>
+                            {!lockPropertyLoading ? (
+                              <Dropdown.Item onClick={() => { selectedHandle(lockProperty, properties); }}>
+                                Lock Property
+                              </Dropdown.Item>
+                            ) : (
+                              <Dropdown.Item>
+                                <BoxLoader />
+                              </Dropdown.Item>
+                            )}
                           </>
                         )}
                         <Dropdown.Item onClick={() => { selectedHandle(deleteProperty, properties); }}>

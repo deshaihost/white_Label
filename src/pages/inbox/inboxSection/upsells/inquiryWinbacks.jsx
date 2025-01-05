@@ -40,7 +40,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
     setLocalSettingsData({ ...localSettingsData, [selectedConfig]: newData });
   };
 
-  const total_hours_after = currentSettingsData.days_after_last_message * 24 + currentSettingsData.hours_after_last_message;
+  const total_hours_after = parseInt(currentSettingsData?.days_after_last_message || 0) * 24 + parseInt(currentSettingsData?.hours_after_last_message || 0);
 
   //const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available'};
   const variables = {'guest_name':'Guest name', 'city':'City', 'date_range':'Inquiry date range', 'property_name':'Property name'};
