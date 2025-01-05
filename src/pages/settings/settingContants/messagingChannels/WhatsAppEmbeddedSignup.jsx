@@ -65,32 +65,32 @@ const WhatsAppEmbeddedSignup = ({signupInProgress, setSignupInProgress, backendR
       if (!event.origin.endsWith('facebook.com')) return;
       
       try {
-        console.log('Received message from embedded signup', event.data);
+        //console.log('Received message from embedded signup', event.data);
         const data = JSON.parse(event.data);
         if (data.type === 'WA_EMBEDDED_SIGNUP') {
           // Handle successful completion
           if (data.event === 'FINISH' || data.event === 'FINISH_ONLY_WABA') {
             const {phone_number_id, waba_id} = data.data;
-            console.log('Phone number ID ', phone_number_id, ' WhatsApp business account ID ', waba_id);
+            //console.log('Phone number ID ', phone_number_id, ' WhatsApp business account ID ', waba_id);
             callBackendFinishSignupApi(phoneNumberEntered, phone_number_id, waba_id);
             setSignupInProgress(false);
 
           // Handle cancellation
           } else if (data.event === 'CANCEL') {
             const {current_step} = data.data;
-            console.warn('Cancel at ', current_step);
+            //console.warn('Cancel at ', current_step);
             setSignupInProgress(false);
           
           // Handle errors
           } else if (data.event === 'ERROR') {
             const {error_message} = data.data;
-            console.error('error ', error_message);
+            //console.error('error ', error_message);
             ToastHandle('error: ' + error_message, 'danger');
             setSignupInProgress(false);
           }
         }
       } catch (error) {
-        console.log('Non JSON Responses', event.data);
+        //console.log('Non JSON Responses', event.data);
         setSignupInProgress(false);
       }
     };
