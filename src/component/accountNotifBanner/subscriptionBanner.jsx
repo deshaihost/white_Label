@@ -20,12 +20,12 @@ const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
     if (daysRemaining > 5) {
       // User is in trial with more than 5 days remaining
       title = 'Free Trial';
-      message = (<>HostBuddy is free for {daysRemaining} more day{daysRemaining !== 1 ? 's' : ''}. <Link to="/properties">Add your billing</Link> to ensure continued access when the trial ends.</>);
+      message = (<>HostBuddy is free for {daysRemaining} more day{daysRemaining !== 1 ? 's' : ''}. <Link to="/properties">Add your billing information</Link> to ensure continued access when the trial ends.</>);
       theme = 'default';
     } else {
       // User is in trial with 5 or fewer days remaining
       title = 'Trial Ending Soon';
-      message = (<>{daysRemaining} day{daysRemaining !== 1 ? 's' : ''} remain{daysRemaining !== 1 ? '' : 's'} in your free trial. <Link to="/properties">Add your billing</Link> to ensure continued access when the trial ends.</>);
+      message = (<>{daysRemaining} day{daysRemaining !== 1 ? 's' : ''} remain{daysRemaining !== 1 ? '' : 's'} in your free trial. <Link to="/properties">Add your billing information</Link> to ensure continued access when the trial ends.</>);
       theme = 'warning';
     }
   } else if (plan === 'trial_over') {
@@ -33,7 +33,7 @@ const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
 
     // Free trial has ended, and user has not subscribed
     title = 'Free Trial Ended';
-    message = (<>Your free trial has ended. <Link to="/properties">Subscribe</Link> to continue using HostBuddy.</>);
+    message = (<>Your free trial has ended. <Link to="/properties">Subscribe</Link> to to let HostBuddy communicate with your guests.</>);
     theme = 'warning';
   } else if (status === 'canceled') {
     const subscrEndDate = userData?.subscr_payment_good_until ? new Date(userData.subscr_payment_good_until) : null;
@@ -55,7 +55,7 @@ const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
       theme = 'default';
     }
   } else if (status === 'payment_failed') {
-    const subscrEndDate = userData.subscr_payment_good_until ? new Date(userData.subscr_payment_good_until) : null;
+    const subscrEndDate = userData.subscr_payment_good_until ? new Date(userData.subscr_payment_good_until) : userData?.subscription?.payment_good_until ? new Date(userData.subscription.payment_good_until) : null;
     let daysSinceEnd = 0;
     if (subscrEndDate) {
       daysSinceEnd = Math.ceil((now - subscrEndDate) / (1000 * 60 * 60 * 24));
@@ -63,8 +63,8 @@ const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
 
     // User has a payment failure. Show the same banner with default theme first, then warning after 3 days, then error after 5 days
     title = 'Payment Failed';
-    message = 'Your last subscription payment failed. Please update your payment information and try again to avoid service interruption.';
-    theme = daysSinceEnd < 3 ? 'default' : daysSinceEnd <= 5 ? 'warning' : 'error';
+    message = (<>Your last subscription payment failed. Please <Link to="/setting/subscription">update your payment information</Link> and try again to avoid service interruption.</>);
+    theme = daysSinceEnd < 2 ? 'default' : daysSinceEnd <= 5 ? 'warning' : 'error';
   } else {
     return null;
   }
