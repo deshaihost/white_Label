@@ -372,3 +372,31 @@
 .custom-space {
   margin-bottom: 0.5rem;
 }
+
+.section-with-image {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-with-image-2 {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.image-box {
+  border-radius: 30px;
+}
+
+.section-with-image-box1 {
+  width: 60%;
+}
+
+.section-with-image-box2 {
+  width: 40%;
+}

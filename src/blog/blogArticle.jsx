@@ -10,7 +10,8 @@ import tiredOfNegativeReviews from './blogArticles/tired_of_negative_reviews';
 import guestyHostbuddyJoin from './blogArticles/guesty_hostbuddy_join';
 import smartTemplates from './blogArticles/smart_templates';
 import guideToVacationRentalUpsells from './blogArticles/guide_to_vacation_rental_upsells';
-import minutAlertsIntoInstantAction from "./blogArticles/minut_alerts_into_instant_action"
+import minutAlertsIntoInstantAction from "./blogArticles/minut_alerts_into_instant_action";
+import meetTheCoFounders from './blogArticles/meet_the_co_founders';
 
 const BlogArticle = () => {
   const { article_name } = useParams(); // Get the article_name from the path param
@@ -27,7 +28,8 @@ const BlogArticle = () => {
     "guesty_hostbuddy_join" :guestyHostbuddyJoin,
     "smart_templates": smartTemplates,
     "guide_to_vacation_rental_upsells":guideToVacationRentalUpsells,
-    "minut_alerts_into_instant_action":minutAlertsIntoInstantAction
+    "minut_alerts_into_instant_action":minutAlertsIntoInstantAction,
+    "meet_the_co_founders": meetTheCoFounders
   };
 
   useEffect(() => {

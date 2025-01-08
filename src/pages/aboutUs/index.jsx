@@ -1,10 +1,11 @@
 import React from "react";
 import "./AboutUs.css";
 import Logo from "../../../src/helper/staticImage/HostBuddysmalllogo.webp";
-import Jay from "../../../src/helper/staticImage/Jay.webp";
-import Linkedin from "../../../src/helper/staticImage/LinkedIn.webp";
-import Michael from "../../../src/helper/staticImage/Michael.webp";
-import Sam from "../../../src/helper/staticImage/Sam.webp";
+import Jay from "../../../src/helper/staticImage/Jay-blue.webp";
+// import Linkedin from "../../../src/helper/staticImage/LinkedIn.webp";
+import Linkedin from "../../../src/helper/staticImage/Linkedin-logo-blue-mod.webp";
+import Michael from "../../../src/helper/staticImage/Mike-blue.webp";
+import Sam from "../../../src/helper/staticImage/Sam-blue.webp";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
