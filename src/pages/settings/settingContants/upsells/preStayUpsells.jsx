@@ -56,7 +56,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
       if (value < 0) { return }
     } else if (key === 'number_of_nights_criteria') {
       value = parseInt(value);
-      if (value < 1 || value > 30) { return }
+      if (value < 1 || value > 365) { return }
     }
 
     setCurrentSettingsData({ ...currentSettingsData, [key]: value });

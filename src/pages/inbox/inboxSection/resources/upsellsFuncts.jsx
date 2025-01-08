@@ -82,7 +82,7 @@ export const setSetting = (key, value, currentSettingsData, setCurrentSettingsDa
     if (value < 0) { return }
   } else if (key === 'number_of_nights_criteria') {
     value = parseInt(value);
-    if (value < 1 || value > 30) { return }
+    if (value < 1 || value > 365) { return }
   } else if (key === 'min_message_delay_minutes' || key === 'max_message_delay_minutes') {
     value = parseInt(value);
     if (value < 0 || value > 7) { return }
