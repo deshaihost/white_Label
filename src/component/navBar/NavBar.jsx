@@ -48,76 +48,6 @@ const NavBar = () => {
     return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
   };
 
-  // Warning banner to be shown to user if their payment standing is bad
-  const paymentStatusBanner = () => {
-    if (paymentStatus === "bad") {
-      const expiryDate = parseDate(servicesExpireDate);
-      const currentDate = new Date(Date.now());
-      const diffTime = Math.abs(expiryDate - currentDate); // time remaining, in milliseconds
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // time remaining, in full days
-
-      if (expiryDate > currentDate) {
-        // Payment standing is bad, but user still has grace period before services are paused
-        return (
-          <Alert variant="danger">
-            Your last subscription payment didn't go through. Please click on
-            "Subscription" in your{" "}
-            <Link to="/setting/subscription">Subscription page</Link> to update
-            your payment info. Otherwise, your services will be paused in{" "}
-            {diffDays} days.
-          </Alert>
-        );
-      } else {
-        // Payment standing is bad, and grace period is over. Services have been paused.
-        return (
-          <Alert variant="danger">
-            Your last subscription payment didn't go through and your services
-            have been paused. Please click on "Subscription" in your{" "}
-            <Link to="/setting/subscription">Subscription page</Link> to update
-            your payment info.
-          </Alert>
-        );
-      }
-    } else if (numPropertiesUsed > numPropertiesAllowed) {
-      /* No longer used. Instead, in this case, we'll just lock the extra properties.
-        const expiryDate = parseDate(tooManyPropertiesGraceUntil);
-        const currentDate = new Date(Date.now());
-        const diffTime = Math.abs(expiryDate - currentDate); // time remaining, in milliseconds
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // time remaining, in full days
-        if (expiryDate > currentDate) {
-          // User has too many properties, but still has grace period before services are paused
-          return (
-            <Alert variant="danger">
-              {" "}
-              Your account has {numPropertiesUsed} properties, which is greater
-              than your current subscription allows ({numPropertiesAllowed}).
-              Please reconcile this by clicking on "Subscription" in your{" "}
-              <Link to="/setting/subscription">Subscription page</Link> to increase your allowance,
-              or by deleting extra properties from the{" "}
-              <Link to="/properties">Properties page</Link>. Otherwise, your
-              services will be paused in {diffDays} days.{" "}
-            </Alert>
-          );
-      } else {
-        // User has too many properties, and grace period is over. Services have been paused.
-        return (
-          <Alert variant="danger">
-            {" "}
-            Your account has {numPropertiesUsed} properties, which is greater
-            than your current subscription allows ({numPropertiesAllowed}). Your
-            services for this account have been paused. To resume service,
-            please click on "Subscription" in your{" "}
-            <Link to="/setting/subscription">Subscription page</Link> and ensure all properties
-            are paid for, or delete extra properties from the{" "}
-            <Link to="/properties">Properties page</Link> to match the current
-            subscription allowance.{" "}
-          </Alert>
-        );
-      }
-      */
-    }
-  };
-
   // mobile navbar functionality
   const [loginIcon, setLoginIcon] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -151,7 +81,7 @@ const NavBar = () => {
             </NavLink>
           </Navbar.Brand>
           <div className="header-icons-list">
-            {token === undefined && (
+            {!isProtectedPath && (
               <>
                 <Navbar.Toggle className="header-icon" aria-controls="navbarSupportedContent" onClick={handleToggleLogin}>
                   {loginIcon ? (
@@ -165,10 +95,7 @@ const NavBar = () => {
                     <div className="header-icon">
                       <button>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            fill="#146EF5"
-                            d="M9.99999 9.99999C12.5783 9.99999 14.6667 7.91166 14.6667 5.33332C14.6667 2.75499 12.5783 0.666656 9.99999 0.666656C7.42166 0.666656 5.33332 2.75499 5.33332 5.33332C5.33332 7.91166 7.42166 9.99999 9.99999 9.99999ZM9.99999 12.3333C6.88499 12.3333 0.666656 13.8967 0.666656 17V19.3333H19.3333V17C19.3333 13.8967 13.115 12.3333 9.99999 12.3333Z"
-                          ></path>
+                          <path fill="#146EF5" d="M9.99999 9.99999C12.5783 9.99999 14.6667 7.91166 14.6667 5.33332C14.6667 2.75499 12.5783 0.666656 9.99999 0.666656C7.42166 0.666656 5.33332 2.75499 5.33332 5.33332C5.33332 7.91166 7.42166 9.99999 9.99999 9.99999ZM9.99999 12.3333C6.88499 12.3333 0.666656 13.8967 0.666656 17V19.3333H19.3333V17C19.3333 13.8967 13.115 12.3333 9.99999 12.3333Z"></path>
                         </svg>
                       </button>
                     </div>
@@ -187,11 +114,7 @@ const NavBar = () => {
               </>
             )}
 
-            <Navbar.Toggle
-              className="header-icon"
-              aria-controls="navbarSupportedContent"
-              onClick={handleToggle}
-            >
+            <Navbar.Toggle className="header-icon" aria-controls="navbarSupportedContent" onClick={handleToggle}>
               <button>
                 <span className="toggle-line my-1"></span>
                 <span className="toggle-line my-1"></span>
@@ -270,9 +193,6 @@ const NavBar = () => {
             </div>
           )}
         </Navbar>
-        {(paymentStatus === "bad" ||
-          numPropertiesUsed > numPropertiesAllowed) &&
-          paymentStatusBanner()}
       </Container>
     </header>
   );
