@@ -90,7 +90,7 @@ const MessagingChannelsSection = (ApiUserData, refreshUserData) => {
             </p>
           ) : (
             <p className="fs-14 text-muted">
-              This functionality is scheduled for release in the next few weeks, and cannot be enabled at this time. Stay tuned!
+              This functionality is scheduled for release later this week. To have it enabled for your account, please contact support.
             </p>
           )}
         </div>
