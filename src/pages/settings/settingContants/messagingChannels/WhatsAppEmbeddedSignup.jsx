@@ -40,7 +40,7 @@ const WhatsAppEmbeddedSignup = ({signupInProgress, setSignupInProgress, backendR
 
       const response = await axios.post(`${baseUrl}/complete_whatsapp_signup`, {phone_number, phone_number_id, waba_id}, config);
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         ToastHandle("Successfully completed signup", "success");
         refreshUserData();
       }
