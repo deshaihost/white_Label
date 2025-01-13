@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import WebPageUrlModel from "./modelListProperties/webPageUrlModel/WebPageUrlModel";
 import SupportingDocumentModel from "./modelListProperties/supportingDocumentModel/SupportingDocumentModel";
 import UnlockPropertiesModal from "../../../component/modal/unlockPropertiesModal/unlockPropertiesModal";
+import LockPropertiesModal from "../../../component/modal/lockPropertiesModal/lockPropertiesModal";
 import EmbedModal from "./embedModal/embedModal";
 import { Button, Dropdown } from "react-bootstrap";
 import { CiCalendar } from "react-icons/ci";
@@ -58,11 +59,12 @@ const ListIntegrationProperties = () => {
   const chatBoxGetByNameError = store?.getPropertyByNameReducer?.getPropertybyName?.data?.error;
   const chatBoxGetByNameStatus = store?.getPropertyByNameReducer?.getPropertybyName?.status;
 
-  const [model, setModel] = useState({ webPageUrl:false, supportingDocuments:false, unlockProperty:false });
+  const [model, setModel] = useState({ webPageUrl:false, supportingDocuments:false, unlockProperty:false, lockProperty:false });
   const [propertiesToUnlock, setPropertiesToUnlock] = useState([]);
   const [regenerateApiLoading, setRegenerateApiLoading] = useState(false);
   const [lockPropertyLoading, setLockPropertyLoading] = useState(false);
   const [embedModalData, setEmbedModalData] = useState({show:false, chatbotKey:""});
+  const [propertiesToLock, setPropertiesToLock] = useState([]);
 
 
 
@@ -83,6 +85,8 @@ const ListIntegrationProperties = () => {
       setModel({ ...model, supportingDocuments: true });
     } else if (type === "UnlockProperty") {
       setModel({ ...model, unlockProperty: true });
+    } else if (type === "lockProperty") {
+      setModel({ ...model, lockProperty: true });
     }
   };
   const handleModelClose = (type) => {
@@ -91,7 +95,7 @@ const ListIntegrationProperties = () => {
     } else if (type === supportingDocumentsClose) {
       setModel({ ...model, supportingDocuments: false });
     } else {
-      setModel({ webPageUrl: false, supportingDocuments: false, unlockProperty: false });
+      setModel({ webPageUrl: false, supportingDocuments: false, unlockProperty: false, lockProperty: false });
     }
   };
 
@@ -161,9 +165,8 @@ const ListIntegrationProperties = () => {
       setPropertiesToUnlock(data);
       handleModelOpen("UnlockProperty");
     } else if (findType === lockProperty) {
-      if (window.confirm("This will stop all HostBuddy messaging activity and data sync for this property. This property will be removed from your subscription, so you won't be billed for it next cycle. Proceed with locking this property?")) {
-        callLockPropertyApi(data);
-      }
+      setPropertiesToLock([data]);
+      handleModelOpen("lockProperty");
     } else if (findType === deleteProperty) {
       if (window.confirm("Are you sure you want to delete this property?")) {
         dispatch(deleteListIntegrationPropertiesActions(data));
@@ -482,6 +485,7 @@ const ListIntegrationProperties = () => {
         <CalenderModel selectedProperty={selectedProperty} showCalender={showCalender} setShowCalender={setShowCalender} allProperties={allProperties} setScheduleChanged={setScheduleChanged}/>
       )}
       <UnlockPropertiesModal propertiesToUnlock={propertiesToUnlock} has_active_subscription={has_active_subscription} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} modalShow={model.unlockProperty} handleClose={handleModelClose} setPropertiesChanged={setScheduleChanged}/>
+      <LockPropertiesModal propertiesToLock={propertiesToLock} modalShow={model.lockProperty} handleClose={handleModelClose} setPropertiesChanged={setScheduleChanged}/>
       <EmbedModal show={embedModalData.show} handleClose={() => setEmbedModalData({show:false, chatbotKey:""})} chatbotKey={embedModalData.chatbotKey}/>
     </div>
   );
