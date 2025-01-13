@@ -1,0 +1,51 @@
+.unlock-properties-modal hr {
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #e5e5e5;
+}
+
+.unlock-properties-modal p {
+  color: white;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.unlock-properties-modal button {
+  border-radius: 25px;
+  margin: 0 auto;
+  display: block;
+  padding: 5px 15px;
+}
+
+.lock-properties-modal .button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: 20px;
+}
+
+.lock-properties-modal .lock-button,
+.lock-properties-modal .lock-reduce-button {
+  background: none;
+  color: #007bff;
+  border: none;
+  padding: 0;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.lock-properties-modal .text-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  padding: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.lock-properties-modal .text-button:hover {
+  text-decoration: underline;
+}
