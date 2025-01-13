@@ -231,11 +231,9 @@ const ReviewRemoval = ({allPropertyNamesList}) => {
         <p>HostBuddy automatically identifies negative reviews that may be in violation of OTA review policies, using the guest conversation and reservation data as context.</p>
         <p>For each review identified, HostBuddy generates a report that can be submitted to the OTA to request its removal. You can also have HostBuddy rewrite the report based on your instructions and additional context.</p>
       </div>
-      {/*
-        <p style={{ textAlign:'center', fontSize:'14px', color:'rgb(255, 165, 0)', marginTop:'20px', marginBottom:'20px' }}>
-          Review removal is currently in beta. Full release is scheduled for November 2024.
-        </p>
-      */}
+      <p style={{ textAlign:'center', fontSize:'14px', color:'rgb(255, 165, 0)', marginTop:'20px', marginBottom:'20px' }}>
+        Review removal is currently undergoing improvements, and may not be fully available at this time. Full release is scheduled for February 2025. Stay tuned!
+      </p>
 
       <div className="action-select" style={{width:"100%"}}> {/* hijack this class from ActionItemsTable.jsx, for filter component styling */}
 
