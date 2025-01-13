@@ -220,7 +220,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
 
       {!(channel == 'Chat Window') && (
         <div className="satisfy">
-          <h2>Satisfaction</h2>
+          <h2>Sentiment</h2>
           {sentiment ? (
             <>
               <p className="result" style={{ color: sentiment === "positive" ? "rgb(0, 180, 0)" : sentiment === "negative" ? "rgb(200, 0, 0)" : "#BBB" }}>

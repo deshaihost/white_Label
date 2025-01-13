@@ -81,9 +81,19 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
-    // Create a flipped version of the checkBox object, to match the format expected by the API
+    // Create a transformed version of the checkBox object, handling rooms specially
     const selectedProperties = Object.entries(checkBox).reduce((obj, [name, id]) => {
-      obj[id] = name;
+      // Find the original property data from integrationPropertyList
+      const propertyData = integrationPropertyList.find(p => 
+        (p.internal_name === name || p.name === name) && (p.id === id || p.room_id === id)
+      );
+
+      // For rooms, use room_id as the main id and add property_id under main_property_id. For regular properties, just use the id and name
+      if (propertyData?.is_room) {
+        obj[propertyData.room_id] = {name:name, type:'room', main_property_id:propertyData.id};
+      } else {
+        obj[id] = {name:name, type:'property'};
+      }
       return obj;
     }, {});
 
@@ -93,8 +103,8 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error if non-2xx returned
       };
 
-      const jsonPayload = { integration_properties: selectedProperties, };
-      const response = await axios.post( `${baseUrl}/bulk_add_from_integration`, jsonPayload, config );
+      const jsonPayload = { integration_properties: selectedProperties };
+      const response = await axios.post(`${baseUrl}/bulk_add_from_integration`, jsonPayload, config);
 
       if (response.status === 200) {
         ToastHandle(response.data.message, "success");

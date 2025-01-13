@@ -316,6 +316,7 @@ const ListIntegrationProperties = () => {
   }, []);
 
   // Check to see if property_data has been populated properly (if its keys map to objs that actually have values). If not (i.e. if it wasnt fetched with the last getUserDataActions call), then we'll need to wait for it to re-fetch since the logic on this page depends on this data being there
+  // I don't think this is necessary. I think I wrote this logic when I tried to do the thing where we get user data once and store it in state, but I couldn't get that to work and never implemented it. So below block may be completely unnecessary
   useEffect(() => {
     if (!userDataGetLoading && PropertiesExtraData) {
       // Check if at least one property exists and has the required fields
@@ -328,7 +329,7 @@ const ListIntegrationProperties = () => {
         
         // If data isn't properly populated, trigger a re-fetch
         if (!hasAnyFields) {
-          dispatch(getUserDataActions());
+          //dispatch(getUserDataActions());
         }
       } else {
         // No properties exist, we can consider the data ready
