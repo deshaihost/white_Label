@@ -71,6 +71,7 @@ const Properties = () => {
   const intergrationsMain = userData?.calry_integrations;
   //const subscription_data = userData?.subscription;
   const subscription_data = getSubscriptionStatus(userData); // {plan:<plan_name>, props_allowed:<num_props_allowed>}
+  console.log("subscription_data", subscription_data);
   const intergrations = intergrationsMain ? intergrationsMain : [];
   const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
@@ -245,7 +246,7 @@ const Properties = () => {
                         </div>
                       </>
                     )}
-                    {['trial', 'trial_over', 'canceled'].includes(subscription_data.plan) && (
+                    {(['trial', 'trial_over', 'subscription_over'].includes(subscription_data.plan) || ['canceled'].includes(subscription_data.status)) && (
                       <div className="tile" onClick={() => handleModelOpen("addPropertyOpen")}>
                         <h3>Subscribe</h3>
                         <p>Get HostBuddy plugged in to your guest communication.</p>

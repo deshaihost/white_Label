@@ -50,7 +50,7 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
           <h5 className="modal-title">Subscribe</h5>
         </Modal.Header>
         <Modal.Body>
-          {['trial', 'trial_over', 'canceled'].includes(subscription_data.plan) ? ( // user not subscribed - give them the option to subscribe
+          {(['trial', 'trial_over', 'subscription_over'].includes(subscription_data.plan) || ['canceled'].includes(subscription_data.status)) ? ( // user not subscribed - give them the option to subscribe
             <form onSubmit={onSubmit}>
               <div className="upgrade-plan-box plan-box">
                 <div className="membership-list">
