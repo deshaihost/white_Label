@@ -7,6 +7,7 @@ import Plans from "./plans/Plans";
 //import DemoVideoSection from "./demoVideoSection/demoVideoSection";
 import TryItOutCTA from "./tryItOut/tryItOut";
 import WelcomeSection from "./welcomeSection/WelcomeSection";
+import AccountNotifBanner from "../../component/accountNotifBanner/accountNotifBanner";
 import { Helmet } from "react-helmet";
 
 const Home = () => {
@@ -49,40 +50,22 @@ const Home = () => {
       <Helmet>
         <title>HostBuddy AI - Automate Short-Term Rental Messaging</title>
         <meta name="title" content="HostBuddy AI - Automate Short-Term Rental Messaging"/>
-        <meta
-          name="description"
-          content="HostBuddy AI automates guest communication for short-term rentals, offering seamless property setup, smart templating, and 24/7 support integration."
-        />
+        <meta name="description" content="HostBuddy AI automates guest communication for short-term rentals, offering seamless property setup, smart templating, and 24/7 support integration."/>
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.hostbuddy.ai/" />
-        <meta
-          property="og:title"
-          content="HostBuddy AI - Automate Short-Term Rental Messaging"
-        />
-        <meta
-          property="og:description"
-          content="HostBuddy AI automates guest communication for short-term rentals, offering seamless property setup, smart templating, and 24/7 support integration."
-        />
-        <meta
-          property="og:image"
-          content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png"
-        />
+        <meta property="og:title" content="HostBuddy AI - Automate Short-Term Rental Messaging"/>
+        <meta property="og:description" content="HostBuddy AI automates guest communication for short-term rentals, offering seamless property setup, smart templating, and 24/7 support integration."/>
+        <meta property="og:image" content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png"/>
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://www.hostbuddy.ai/" />
-        <meta
-          property="twitter:title"
-          content="HostBuddy AI - Automate Short-Term Rental Messaging"
-        />
-        <meta
-          property="twitter:description"
-          content="HostBuddy AI automates guest communication for short-term rentals, offering seamless property setup, smart templating, and 24/7 support integration."
-        />
-        <meta
-          property="twitter:image"
-          content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png"
-        />
+        <meta property="twitter:title" content="HostBuddy AI - Automate Short-Term Rental Messaging"/>
+        <meta property="twitter:description" content="HostBuddy AI automates guest communication for short-term rentals, offering seamless property setup, smart templating, and 24/7 support integration."/>
+        <meta property="twitter:image" content="https://i.postimg.cc/05KJThn5/host-buddy-metaimg.png"/>
         <link rel="canonical" href="https://www.hostbuddy.ai/" />
       </Helmet>
+      <div style={{padding:'0 20px', marginTop:'20px'}}>
+        <AccountNotifBanner message={<>Join us on January 21st at 10am EST for our joint webinar with OwnerRez! <a style={{marginLeft:'8px'}} href="https://www.crowdcast.io/c/webinar-ownerrez-hostbuddy-ai-automating-guest-communication-with-ai">Register Now</a></>}/>
+      </div>
       <Banner />
       {/* <Introduction /> */}
       <WelcomeSection />
