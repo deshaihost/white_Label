@@ -13,15 +13,15 @@ import FeFive from "../../../helper/staticImage/homePage/feature-logo/fe-5.webp"
 
 import Seamless from "../../../helper/staticImage/homePage/seamless.webp";
 
-import ItemOne from "../../../helper/staticImage/homePage/trusted-logo/item-1.webp";
-import ItemTwo from "../../../helper/staticImage/homePage/trusted-logo/item-2.webp";
-import ItemThree from "../../../helper/staticImage/homePage/trusted-logo/item-3.webp";
-import ItemFour from "../../../helper/staticImage/homePage/trusted-logo/item-4.webp";
-import ItemFive from "../../../helper/staticImage/homePage/trusted-logo/item-5.webp";
-import ItemSix from "../../../helper/staticImage/homePage/trusted-logo/item-6.webp";
-import ItemSeven from "../../../helper/staticImage/homePage/trusted-logo/item-7.webp";
-import ItemEight from "../../../helper/staticImage/homePage/trusted-logo/item-8.webp";
-import ItemNine from "../../../helper/staticImage/homePage/trusted-logo/item-9.webp";
+import ItemOne from "../../../helper/staticImage/homePage/trusted-logo/itme10.webp";
+import ItemTwo from "../../../helper/staticImage/homePage/trusted-logo/item11.webp";
+import ItemThree from "../../../helper/staticImage/homePage/trusted-logo/item12.webp";
+import ItemFour from "../../../helper/staticImage/homePage/trusted-logo/item13.webp";
+import ItemFive from "../../../helper/staticImage/homePage/trusted-logo/item14.webp";
+import ItemSix from "../../../helper/staticImage/homePage/trusted-logo/item15.webp";
+import ItemSeven from "../../../helper/staticImage/homePage/trusted-logo/item16.webp";
+import ItemEight from "../../../helper/staticImage/homePage/trusted-logo/item17.webp";
+// import ItemNine from "../../../helper/staticImage/homePage/trusted-logo/item-9.webp";
 import { HiChatBubbleLeftRight } from "react-icons/hi2";
 import { Ri24HoursFill } from "react-icons/ri";
 import { FaRegClock, FaSackDollar } from "react-icons/fa6";
@@ -31,7 +31,7 @@ import MarkSimpsonPic from "../../../helper/staticImage/homePage/whatTheCommunit
 import AveryCarlPic from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client3.webp";
 import JeffBrownPic from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/client4.webp";
 import Jodie from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/Jodie.webp";
-
+import Mike from "../../../helper/staticImage/channels4_profile.webp";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const imageTrustedLogo = [
@@ -43,7 +43,7 @@ const imageTrustedLogo = [
   ItemSix,
   ItemSeven,
   ItemEight,
-  ItemNine,
+  // ItemNine,
 ];
 
 const imageFeatureLogo = [FeOne, FeTwo, FeThree, FeFour, FeFive];
@@ -86,32 +86,31 @@ const reviewRemovalScreen =
 const statistics =
   "https://storage.googleapis.com/frontend_media/home-new/statistics.webp";
 
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block" }}
+      onClick={onClick}
+    >
+      <FaChevronRight />
+    </div>
+  );
+}
 
-  function SampleNextArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={className}
-        style={{ ...style, display: "block" }}
-        onClick={onClick}
-      >
-        <FaChevronRight />
-      </div>
-    );
-  }
-  
-  function SamplePrevArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={className}
-        style={{ ...style, display: "block" }}
-        onClick={onClick}
-      >
-        <FaChevronLeft />
-      </div>
-    );
-  }
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block" }}
+      onClick={onClick}
+    >
+      <FaChevronLeft />
+    </div>
+  );
+}
 
 const Works = () => {
   var settingsf = {
@@ -145,7 +144,7 @@ const Works = () => {
       },
     ],
   };
- 
+
   return (
     <section className="works">
       {/* <div className="works-heading">
@@ -265,33 +264,108 @@ const Works = () => {
               />
             </div>
           </div>
-
-          {/*
           <div className="row">
             <div className="col-lg-12">
               <h2 className="fs-1 fw-bold text-white mb-5 text-center">
-                Trusted by leading Property Managers
+                What the Community is Saying
               </h2>
             </div>
+          </div>
+          <div className="row">
             <div className="col-lg-12">
-              <div>
-                <Slider {...settingsf}>
-                  {imageTrustedLogo?.map((images) => {
-                    return (
-                      <div className="outline-0 trusted-logo-box">
-                        <img
-                          src={images}
-                          alt="works-img"
-                          className="img-fluid w-100 h-100"
-                        />
-                      </div>
-                    );
-                  })}
-                </Slider>
-              </div>
+              <Slider {...settingsf}>
+                <div className=" testimonial-slider">
+                  <div className="testimonial-item p-3">
+                    <p className="client-comment">
+                      “This does a lot of stuff! We all want to cut down on
+                      active work time in any business. Add it to your tech
+                      stack!”
+                    </p>
+                    <span className="client-img">
+                      <img src={AveryCarlPic} alt="" />
+                    </span>
+                    <p className="client-name">Avery Carl</p>
+                    <span className="client-position">
+                      3x Best Selling Author, CEO/Founder of The Short Term Shop
+                    </span>
+                  </div>
+                </div>
+                <div className="testimonial-slider">
+                  <div className="testimonial-item  p-3">
+                    <p className="client-comment">
+                      “The AI will remember all the little details about each
+                      individual property and the quirks that it has. That is
+                      game changing.”
+                    </p>
+                    <span className="client-img">
+                      <img src={JeffBrownPic} alt="" />
+                    </span>
+                    <p className="client-name">Jeff Brown</p>
+                    <span className="client-position">Intellihost Founder</span>
+                  </div>
+                </div>
+                <div className=" testimonial-slider">
+                  <div className="testimonial-item  p-3">
+                    <p className="client-comment">
+                      “One of the coolest things I’ve seen” “I’m honestly blown
+                      away by all the different things this tool is able to do”
+                    </p>
+                    <span className="client-img">
+                      <img src={TonyRobinsonPic} alt="" />
+                    </span>
+                    <p className="client-name">Tony Robinson</p>
+                    <span className="client-position">
+                      The Real Estate Robinsons, Bigger Pockets Podcast Host
+                    </span>
+                  </div>
+                </div>
+                <div className=" testimonial-slider">
+                  <div className="testimonial-item  p-3">
+                    <p className="client-comment">
+                      “One of the most important tools in your kit for 2025!”
+                    </p>
+                    <span className="client-img">
+                      <img src={MarkSimpsonPic} alt="" />
+                    </span>
+                    <p className="client-name">Mark Simpson</p>
+                    <span className="client-position">Boostly Founder</span>
+                  </div>
+                </div>
+                <div className=" testimonial-slider">
+                  <div className="testimonial-item  p-3">
+                    <p className="client-comment">
+                      “Everyone talks about how you have to have dynamic pricing
+                      as a host - I think everyone should be talking about
+                      HostBuddy the same way”
+                    </p>
+                    <span className="client-img">
+                      <img src={Jodie} alt="" />
+                    </span>
+                    <p className="client-name">Jodie Odlin</p>
+                    <span className="client-position">
+                      Founder of Hospitable Hosts, Best Selling Author
+                    </span>
+                  </div>
+                </div>
+                <div className=" testimonial-slider">
+                  <div className="testimonial-item  p-3">
+                    <p className="client-comment">
+                      “What HostBuddy is capable of is mind blowing. Whether
+                      you’ve got 1 property or 50, this can get you so much time
+                      back and allow your team to focus more on the hospitality”
+                    </p>
+                    <span className="client-img">
+                      <img src={Mike} alt="" />
+                    </span>
+                    <p className="client-name">Mike Sjogren</p>
+                    <span className="client-position">
+                      STR Investor, Host of the STR Secrets Podcast
+                    </span>
+                  </div>
+                </div>
+              </Slider>
             </div>
           </div>
-          */}
 
           <div className="row pt-4">
             <div className="col-lg-6">
@@ -315,11 +389,35 @@ const Works = () => {
               />
             </div>
           </div>
+          <div className="row">
+            <div className="col-lg-12">
+              <h2 className="fs-1 fw-bold text-white mb-5 text-center">
+                Trusted by Leading Property Managers
+              </h2>
+            </div>
+            <div className="col-lg-12">
+              <div>
+                <Slider {...settingsf}>
+                  {imageTrustedLogo?.map((images) => {
+                    return (
+                      <div className="outline-0 trusted-logo-box mx-auto">
+                        <img
+                          src={images}
+                          alt="works-img"
+                          className="img-fluid w-100 h-100"
+                        />
+                      </div>
+                    );
+                  })}
+                </Slider>
+              </div>
+            </div>
+          </div>
           <div className="row align-items-center justify-content-center">
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{borderRadius:"20px", backgroundColor:"#0a287a"}}
+                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
               >
                 <FaRegClock className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -334,7 +432,7 @@ const Works = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{borderRadius:"20px", backgroundColor:"#0a287a"}}
+                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
               >
                 <HiChatBubbleLeftRight className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -351,7 +449,7 @@ const Works = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{borderRadius:"20px", backgroundColor:"#0a287a"}}
+                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
               >
                 <Ri24HoursFill className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -366,7 +464,7 @@ const Works = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{borderRadius:"20px", backgroundColor:"#0a287a"}}
+                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
               >
                 <FaSackDollar className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -404,95 +502,6 @@ const Works = () => {
                 src={inboxScreen}
                 alt="works-img"
               />
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-lg-12">
-              <h2 className="fs-1 fw-bold text-white mb-5 text-center">
-                What the Community is Saying
-              </h2>
-            </div>
-          </div>
-          <div className="row">
-          <div className="col-lg-12">
-              <Slider {...settingsf}>
-              <div className=" testimonial-slider">
-                <div className="testimonial-item p-3">
-                  <p className="client-comment">
-                    “This does a lot of stuff! We all want to cut down on
-                    active work time in any business. Add it to your tech
-                    stack!”
-                  </p>
-                  <span className="client-img">
-                    <img src={AveryCarlPic} alt="" />
-                  </span>
-                  <p className="client-name">Avery Carl</p>
-                  <span className="client-position">
-                    3x Best Selling Author, CEO/Founder of The Short Term Shop
-                  </span>
-                </div>
-              </div>
-              <div className="testimonial-slider">
-              <div className="testimonial-item  p-3">
-                <p className="client-comment">
-                  “The AI will remember all the little details about each
-                  individual property and the quirks that it has. That is
-                  game changing.”
-                </p>
-                <span className="client-img">
-                  <img src={JeffBrownPic} alt="" />
-                </span>
-                <p className="client-name">Jeff Brown</p>
-                <span className="client-position">Intellihost Founder</span>
-              </div>
-              </div>
-              <div className=" testimonial-slider">
-                  <div className="testimonial-item  p-3">
-                    <p className="client-comment">
-                      “One of the coolest things I’ve seen” “I’m honestly blown
-                      away by all the different things this tool is able to do”
-                    </p>
-                    <span className="client-img">
-                      <img src={TonyRobinsonPic} alt="" />
-                    </span>
-                    <p className="client-name">Tony Robinson</p>
-                    <span className="client-position">
-                      The Real Estate Robinsons, Bigger Pockets Podcast Host
-                    </span>
-                  </div>
-              </div>
-              <div className=" testimonial-slider">
-                  <div className="testimonial-item  p-3">
-                    <p className="client-comment">
-                      “One of the most important tools in your kit for 2025!”
-                    </p>
-                    <span className="client-img">
-                      <img
-                        src={MarkSimpsonPic}
-                        alt=""
-                      />
-                    </span>
-                    <p className="client-name">Mark Simpson</p>
-                    <span className="client-position">Boostly Founder</span>
-                  </div>
-              </div>
-              <div className=" testimonial-slider">
-                  <div className="testimonial-item  p-3">
-                    <p className="client-comment">
-                      “Everyone talks about how you have to have dynamic pricing as a host - I think everyone should be talking about HostBuddy the same way”
-                    </p>
-                    <span className="client-img">
-                      <img
-                        src={Jodie}
-                        alt=""
-                      />
-                    </span>
-                    <p className="client-name">Jodie Odlin</p>
-                    <span className="client-position">Founder of Hospitable Hosts, Best Selling Author</span>
-                  </div>
-              </div>
-              </Slider>
             </div>
           </div>
 

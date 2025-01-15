@@ -13,6 +13,7 @@ const guesty_hostbuddy_join_thumbnail = "https://i.postimg.cc/nrwSJpWP/guesty-an
 const smart_templates_thumbnail = "https://i.postimg.cc/T3ZgqVyY/smart-templates.webp";
 const guide_to_vacation_rental_upsells_thumbnail = "https://i.postimg.cc/sxD47dsD/a-happy-vacation-rental-guest.webp";
 const minut_alerts_into_instant_action_thumbnail = "https://i.postimg.cc/hvLQ6vJc/minut-alerts-into-instant-action.webp"
+const meet_the_co_founders_thumbnail = "https://i.postimg.cc/8sgVdssK/Headshots-blog.webp"
 
 const BlogLandingPage = () => {
 
@@ -28,6 +29,7 @@ const BlogLandingPage = () => {
       { id:"smart_templates", title:"Smart Templates: Transform Your Short Term Rental Communication with AI-Powered Automation", date:"Oct 29, 2024", img:smart_templates_thumbnail, description:"Enhance your rental management with HostBuddy AI’s Smart Templates, offering personalized, AI-driven guest communication." },
       { id:"guide_to_vacation_rental_upsells", title:"The Ultimate Guide to Vacation Rental Upsells: Boost Your Revenue with AI", date:"Nov 06, 2024", img:guide_to_vacation_rental_upsells_thumbnail, description:"Discover how AI-driven upselling strategies can boost your vacation rental revenue and enhance guest experiences with personalized offerings." },
       { id:"minut_alerts_into_instant_action", title:"Turn Minut Alerts into Instant Action: HostBuddy AI's Game-Changing Integration with Minut", date:"Dec 03, 2024", img:minut_alerts_into_instant_action_thumbnail, description:"Streamline hosting with Minut and HostBuddy AI—automated alerts and real-time guest messaging for smarter rental management." },
+      { id:"meet_the_co_founders", title:"Meet the Co-Founders of HostBuddy AI", date:"Jan 08, 2025", img:meet_the_co_founders_thumbnail, description:"Discover the visionaries behind HostBuddy AI—Jay Ullrich, Sam Mayes, and Michael Boddie—redefining the short-term rental industry with cutting-edge technology and innovation." },
     ];
 
     const reversedArticles = articles.reverse();

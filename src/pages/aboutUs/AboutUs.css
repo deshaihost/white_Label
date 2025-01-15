@@ -52,7 +52,7 @@
     bottom: 0;
     max-width: 45px;
     right: 0px;
-    border-radius: 0px !important;
+    border-radius: 10px !important;
 }
 .member-name h3 {
     color: #fff;
@@ -125,7 +125,7 @@
     font-size: 18px;
     font-weight: 700;
     line-height: normal;
-    background: linear-gradient(180deg, #AA6DFE 1.92%, #8B5FCF 119.23%);
+    background: #0d6efd;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
