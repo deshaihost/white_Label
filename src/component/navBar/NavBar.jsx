@@ -16,7 +16,7 @@ const NavBar = () => {
   const { token } = getAuthToken ? getAuthToken : {};
 
   // List of paths that should show portal navigation
-  const protectedPaths = ["/dashboard", "/statistics", "/properties", "/test-property", "/workbench", "/property-insight", "/subscription", "/setting", "/add-property", "/edit-property", "/guided-setup", "/inbox", "/action-item", "/getstarted"];
+  const protectedPaths = ["/dashboard", "/statistics", "/properties", "/test-property", "/workbench", "/property-insight", "/subscription", "/setting", "/add-property", "/edit-property", "/guided-setup", "/inbox", "/action-item", "/getstarted", "/journey"];
 
   // Check if current path should show portal navigation
   const isProtectedPath = protectedPaths.some((path) =>

@@ -71,6 +71,9 @@ import HostbuddyForGuesty from "../pages/userGuides/hostbuddyForGuesty/Hostbuddy
 import Integrations from "../pages/integrations/Integrations";
 import Turno from "../pages/turno/Turno";
 
+// Admin pages
+import CustomerJourney from "../pages/customerJourney/customerJourney";
+
 const Routing = () => {
   const location = useLocation();
 
@@ -409,6 +412,14 @@ const Routing = () => {
           element={
             <ProtectedRoute>
               <ActionItemsIndex />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/journey"
+          element={
+            <ProtectedRoute>
+              <CustomerJourney />
             </ProtectedRoute>
           }
         />

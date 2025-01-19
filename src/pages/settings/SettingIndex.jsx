@@ -28,6 +28,7 @@ const SettingIndex = () => {
   const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"conversation-preferences", integrations:"integrations", users:"users", upsells:"upsells", subscription:"subscription", messagingChannels:"messaging-channels" };
 
   const ApiUserData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const isAdmin = store?.getUserDataReducer?.getUserData?.data?.user?.is_hb_admin;
 
   const refreshUserData = () => {
     // dispatch(stateEmptyActions());
@@ -64,7 +65,7 @@ const SettingIndex = () => {
           <div className="col-lg-12 col-xl-12 col-xxl-12">
             <div className="setting_index_tab_grid text-white blur-background-top-right">
               <div className="setting_tab_title">
-                <SettingSideBarIndex interFaceTypes={interFaceTypes} changeHndl={setInterFaceSettings} activeTab={interFaceSettings}/>
+                <SettingSideBarIndex interFaceTypes={interFaceTypes} changeHndl={setInterFaceSettings} activeTab={interFaceSettings} isAdmin={isAdmin}/>
                 <div style={{ marginTop: "20px", textAlign: "center" }}>
                   <Link to="/dashboard" className="text-link">
                     &lt; Dashboard

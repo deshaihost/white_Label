@@ -42,37 +42,27 @@ const Signup = () => {
   const onSubmit = (data) => {
     setEmailEntered(data.email);
     dispatch(
-      registerActions({ email: data.email, password: data.newPassword, first_name: data.firstName, last_name: data.lastName, phone: data.phone })
+      registerActions({ email:data.email, password:data.newPassword, first_name:data.firstName, last_name:data.lastName, phone:data.phone })
     );
-    setInputData({
-      email: data.email,
-      password: data.newPassword,
-    });
+    setInputData({email: data.email, password:data.newPassword});
   };
+
   // this functionality is space not allow in input
-  const [inputSpaceValidation, setInputSpaceValidation] = useState({
-    firstName: "",
-    lastName: "",
-  });
+  const [inputSpaceValidation, setInputSpaceValidation] = useState({firstName:"", lastName:""});
   const firstNameSpaceHandle = (event) => {
     const trimmedValue = event.target.value.trim();
     const regex = /^[a-zA-Z]*$/;
     if (event.target.value === "" || regex.test(event.target.value)) {
-      setInputSpaceValidation({
-        ...inputSpaceValidation,
-        firstName: trimmedValue,
-      });
+      setInputSpaceValidation({...inputSpaceValidation, firstName: trimmedValue});
       setValue("firstName", trimmedValue);
     }
   };
+
   const lastNameSpaceHandle = (event) => {
     const trimmedValue = event.target.value.trim();
     const regex = /^[a-zA-Z]*$/;
     if (event.target.value === "" || regex.test(event.target.value)) {
-      setInputSpaceValidation({
-        ...inputSpaceValidation,
-        lastName: trimmedValue,
-      });
+      setInputSpaceValidation({...inputSpaceValidation, lastName: trimmedValue});
       setValue("lastName", trimmedValue);
     }
   };
@@ -84,10 +74,7 @@ const Signup = () => {
   const [loginLoading, setLoginLoading] = useState(false);
   const afterRegisterLogin = () => {
     dispatch(
-      loginActions({
-        email: inputData.email,
-        password: inputData.password,
-      })
+      loginActions({email: inputData.email, password: inputData.password})
     );
   };
   
@@ -158,9 +145,7 @@ const Signup = () => {
                   </div>
                   {errors.lastName?.type === "required" && (
                     <>
-                      {ErrorMessageShow(
-                        ErrorMessageKey.PLEASE_ENTER_YOUR_LAST_NAME
-                      )}
+                      {ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_LAST_NAME)}
                     </>
                   )}
 
@@ -173,9 +158,7 @@ const Signup = () => {
                   </div>
                   {errors.email?.type === "required" && (
                     <>
-                      {ErrorMessageShow(
-                        ErrorMessageKey.PLEASE_ENTER_YOUR_EMAIL
-                      )}
+                      {ErrorMessageShow(ErrorMessageKey.PLEASE_ENTER_YOUR_EMAIL)}
                     </>
                   )}
                   {errors.email?.type === "pattern" && (
@@ -186,10 +169,10 @@ const Signup = () => {
                     <div className="password-box">
                       <input type={showPassword ? "text" : "password"} placeholder="Password..."
                         {...register("newPassword", { required: true, pattern: {
-                            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_=+-]).{8,30}$/,
+                            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_=+-]).{8,300}$/,
                             message: `${ErrorMessageKey.MIX_IT_UP_USE_A_COMBINATION_OF_UPPERCASE_AND_LOWERCASE_LETTERS_SPECIAL_CHARACTERS_IN_YOUR}`,
                           },
-                          minLength: { value: 8, message: `${ErrorMessageKey.PASSWORD_MUST_BE_AT_LEAST_8_CHARACTER_LONG}` }, maxLength: 30
+                          minLength: { value: 8, message: `${ErrorMessageKey.PASSWORD_MUST_BE_AT_LEAST_8_CHARACTER_LONG}` }, maxLength: 300
                         })}
                       />
                       <button type="button" className="eye-btn" style={{ cursor: "pointer" }} onClick={() => { setShowPassword(!showPassword); }}>
@@ -206,6 +189,9 @@ const Signup = () => {
                     )}
                     {errors?.newPassword?.type === "minLength" && (
                       <>{ErrorMessageShow(errors?.newPassword?.message)}</>
+                    )}
+                    {errors?.newPassword?.type === "maxLength" && (
+                      <>{ErrorMessageShow("Password is too long.")}</>
                     )}
                     <p className="password-criteria">Password should have special characters like $,@,%,! and minimum 8 length.</p>
                   </div>
@@ -231,30 +217,19 @@ const Signup = () => {
                     )}
                   </div>
 
-                  <div className="input-container" style={{display:"none"}}>
-                    <input type="text" {...register("phone", { pattern: /^[0-9]{10}$/, })} placeholder="Phone (optional) ..." maxLength="10" />
-                  </div>
-                  {errors.phone?.type === "pattern" && (
-                    <>{ErrorMessageShow("Please enter a valid phone number")}</>
-                  )}
-
-                  {/*
                   <div className="input-container footer-auth">
                     <label>
                       <input type="checkbox" checked={hasAgreedToTerms} onChange={(e) => setHasAgreedToTerms(e.target.checked)}/>
                       I agree to the{" "}<a href="/termsof-service" target="_blank">Terms of Service</a>{" "}and{" "}<a href="/privacy-policy" target="_blank">Privacy Policy</a>.
                     </label>
                   </div>
-                  */}
 
                   <div className="input-container">
                     <PrimaryButton
                       text={!registerLoading ? "Register" : <Loader />}
-                      //additionalClass={`w-100 ${!hasAgreedToTerms ? 'btn-disabled' : ''}`}
-                      additionalClass={`w-100`}
-                      //disableType={registerLoading || !hasAgreedToTerms}
-                      disableType={registerLoading}
-                      //style={{ opacity: hasAgreedToTerms ? 1 : 0.5, pointerEvents: hasAgreedToTerms ? 'auto' : 'none' }}
+                      additionalClass={`w-100 ${!hasAgreedToTerms ? 'btn-disabled' : ''}`}
+                      disableType={registerLoading || !hasAgreedToTerms}
+                      style={{ opacity: hasAgreedToTerms ? 1 : 0.5, pointerEvents: hasAgreedToTerms ? 'auto' : 'none' }}
                     />
                   </div>
                   {loginLoading && (
@@ -266,9 +241,7 @@ const Signup = () => {
               {/*
               <div className="footer-auth">
                 <div>
-                  By continuing, you agree to the{" "}
-                  <a href="/termsof-service" target="_blank">Terms of Service</a> and{" "}
-                  <a href="/privacy-policy" target="_blank">Privacy Policy</a>
+                  By continuing, you agree to the <a href="/termsof-service" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>
                 </div>
               </div>
               */}
