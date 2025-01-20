@@ -10,11 +10,11 @@ function Message({  text, sender }) {
     <div>
       <div className={`message ${sender}`}>
         {sender === "bot" && (
-          <img src={BotImg} className="bot-img" alt="bot-img"  style={{marginTop:'8px'}}/>
+          <img src={BotImg} className="bot-img" alt="bot-img"  style={{marginTop:'8px', width:'40px', height:'40px'}}/>
         )}
         <p>{useLoader ? <TypingIndicator /> : (sender === "bot" ? <>{response}</> : <>{text}</>)}</p>
         {sender === "user" && (
-          <img src={UserImg} className="user-img" alt="user-img" />
+          <img src={UserImg} className="user-img" alt="user-img" style={{width:'40px', height:'40px'}}/>
         )}
       </div>
     </div>
