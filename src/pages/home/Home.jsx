@@ -64,7 +64,7 @@ const Home = () => {
         <link rel="canonical" href="https://www.hostbuddy.ai/" />
       </Helmet>
       <div style={{padding:'0 20px', marginTop:'20px'}}>
-        <AccountNotifBanner message={<>Join us on January 21st at 10am EST for our joint webinar with OwnerRez! <a style={{marginLeft:'8px'}} href="https://www.crowdcast.io/c/webinar-ownerrez-hostbuddy-ai-automating-guest-communication-with-ai">Register Now</a></>}/>
+        <AccountNotifBanner message={<>Join us on January 21st at 10am PST for our joint webinar with OwnerRez! <a style={{marginLeft:'8px'}} href="https://www.crowdcast.io/c/webinar-ownerrez-hostbuddy-ai-automating-guest-communication-with-ai">Register Now</a></>}/>
       </div>
       <Banner />
       {/* <Introduction /> */}
