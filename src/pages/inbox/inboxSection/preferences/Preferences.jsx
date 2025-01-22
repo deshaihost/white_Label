@@ -45,7 +45,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
   const setSetting = (key, value) => {
     if (key === 'min_message_delay_minutes' || key === 'max_message_delay_minutes') {
       value = parseInt(value);
-      if (value < 0 || value > 8) {
+      if (value < 0 || value > 720) {
         return
       }
     } else if (key === 'tone_instructions' && value.length > 1000) {
@@ -376,7 +376,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
         <div className="row mt-5">
           <div className="col-lg-11">
             <label className="fs-5">Message Delay</label>
-            <p className="settings-label mb-2">HostBuddy will delay its response to guests by a (random) number of minutes within this range. To have HostBuddy simply respond as quickly as possible, set min and max delay to 0. Max allowed is 8 minutes.</p>
+            <p className="settings-label mb-2">HostBuddy will delay its response to guests by a (random) number of minutes within this range. To have HostBuddy simply respond as quickly as possible, set min and max delay to 0.</p>
             <div className="row">
               <div className="col-lg-3">
                 <label className="fs-6">Min. Delay</label>
