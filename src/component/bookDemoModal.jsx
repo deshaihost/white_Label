@@ -85,10 +85,17 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     let url = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo'; // big customer demo
 
     if (parseInt(formData.propertyCount) <= 15) {
-    //if (false) { // Disable group demo for now
-      //url = 'https://calendly.com/nick-hostbuddy/hostbuddy-ai-group-demo'; // old url
+      url = 'https://calendly.com/nick-hostbuddy/hostbuddy-ai-demo-webinar';
+    } else if (parseInt(formData.propertyCount) <= 34) {
+      url = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo';
+    } else if (parseInt(formData.propertyCount) <= 99) {
+      url = 'https://calendly.com/d/cmyr-2pj-brv/hostbuddy-ai-product-demo';
+    } else if (parseInt(formData.propertyCount) > 99) {
+      url = 'https://calendly.com/sam-hostbuddy/30min';
+    } else { // shouldn't happen
       url = 'https://calendly.com/nick-hostbuddy/hostbuddy-ai-demo-webinar';
     }
+
 
     setRedirectURL(url);
 
