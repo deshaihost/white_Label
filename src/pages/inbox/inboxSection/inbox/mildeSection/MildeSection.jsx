@@ -39,7 +39,32 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   const [showGenerateJustificationButton, setShowGenerateJustificationButton] = useState(false);
   const [generateOptionsVisible, setGenerateOptionsVisible] = useState(false);
   const [generateCommandApiLoading, setGenerateCommandApiLoading] = useState(false);
+  const [generateScratchApiLoading, setGenerateScratchApiLoading] = useState(false);
   const [assistanceUsed, setAssistanceUsed] = useState(null); // 'command' if the user clicked "generate from command"; 'generate' if the user clicked "generate from scratch"; null if neither, or if the user cleared a generated message
+
+  const callGenerateFromScratchApi = async () => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setGenerateScratchApiLoading(true);
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+      const body_data = { property_name:propertyName, conversation_id:conversationData.conversation_id };
+      const response = await axios.post(`${baseUrl}/generate_response`, body_data, config);
+
+      if (response.status === 200) { }
+      else { ToastHandle(response?.data?.error, "danger"); }
+      return response.data;
+    } catch (error) {
+      ToastHandle("Internal server error", "danger");
+      return { error: "Internal server error" };
+    } finally {
+      setGenerateScratchApiLoading(false);
+    }
+  };
 
   const callGenerateFromCommandApi = async (command) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -64,6 +89,27 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
       setGenerateCommandApiLoading(false);
     }
   };
+
+  const handleGenerateFromScratchClick = async () => {
+    if (generateCommandApiLoading || generateScratchApiLoading) { return; }
+    if (generateButtonText) {
+      setInputValue(generateButtonText);
+      setShowGenerateJustificationButton(true);
+      setAssistanceUsed('generate');
+    } else {
+      const response = await callGenerateFromScratchApi();
+      if (!("error" in response) && response?.response) {
+        setInputValue(response.response);
+        if (response?.justification) {
+          setGenerateButtonJustification(response?.justification);
+          setShowGenerateJustificationButton(true);
+        }
+        setAssistanceUsed('generate');
+        setGenerateButtonText(response.response); // in case the user clicks generate again
+      }
+    }
+  };
+    
 
   // Only checks if the second word is 'reacted'. So may not be 1000% accurate, but low stakes use case so fine for now. Can be improved later if needed
   const lastMessageIsEmojiReact = () => {
@@ -127,16 +173,14 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
 
 
   const handleGenerateButtonClick = () => {
-    if (generateCommandApiLoading) { return; }
+    if (generateCommandApiLoading || generateScratchApiLoading) { return; }
     setGenerateOptionsVisible(!generateOptionsVisible);
   };
 
   const handleGenerateOptionSelect = async (option) => {
     setGenerateOptionsVisible(false);
     if (option === 'scratch') {
-      setInputValue(generateButtonText);
-      setShowGenerateJustificationButton(true);
-      setAssistanceUsed('generate');
+      await handleGenerateFromScratchClick();
     }
     else if (option === 'command') {
       const response = await callGenerateFromCommandApi(inputValue);
@@ -238,13 +282,15 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     if (
       allConversationData?.messages &&
       allConversationData.messages.length > 0 &&
-      allConversationData.messages[allConversationData.messages.length - 1].sender === "guest" &&
-      allConversationData.generated_response &&
-      allConversationData.generated_response.for_message === allConversationData.messages[allConversationData.messages.length - 1].id
+      allConversationData.messages[allConversationData.messages.length - 1].sender === "guest"
     ) {
       setGenerateButtonIsEnabled(true);
-      setGenerateButtonText(allConversationData.generated_response.response);
-      setGenerateButtonJustification(allConversationData.generated_response.justification);
+      if (allConversationData.generated_response &&
+          allConversationData.generated_response.for_message === allConversationData.messages[allConversationData.messages.length - 1].id
+      ) {
+        setGenerateButtonText(allConversationData.generated_response.response);
+        setGenerateButtonJustification(allConversationData.generated_response.justification);
+      }
     } else {
       setGenerateButtonIsEnabled(false);
       setGenerateButtonText("");
@@ -374,16 +420,16 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
 
               <div className="input-container">
                 <textarea type="text" ref={textareaRef} placeholder="Type a message..." value={inputValue} onChange={handleInputFieldChange}
-                  onKeyDown={handleKeyPress} rows="1" disabled={(generateCommandApiLoading || sendMessageLoading) ? true : false} style={{resize:'none', overflow:'auto'}}
+                  onKeyDown={handleKeyPress} rows="1" disabled={(generateCommandApiLoading || generateScratchApiLoading || sendMessageLoading) ? true : false} style={{resize:'none', overflow:'auto'}}
                 />
-                {generateCommandApiLoading && (
+                {(generateCommandApiLoading || generateScratchApiLoading) && (
                   <div className="loader-container">
                     <Loader />
                   </div>
                 )}
               </div>
 
-              <button onClick={handleSendMessage} className='chat-send-button' disabled={(generateCommandApiLoading || sendMessageLoading) ? true : false}>
+              <button onClick={handleSendMessage} className='chat-send-button' disabled={(generateCommandApiLoading || generateScratchApiLoading || sendMessageLoading) ? true : false}>
                 {(sendMessageLoading) ? (
                   <img src={loaderGif} width="25" height="25" />
                 ) : (
