@@ -5,7 +5,7 @@ import "./dashboard.css";
 import { useSelector, useDispatch } from "react-redux";
 import { getActionItemsActions, getUserDataActions, putCompleteActionItemActions, stateEmptyActions } from "../../redux/actions";
 import { BoxLoader, FullScreenLoader } from "../../helper/Loader";
-//import AccountNotifBanner from "../../component/accountNotifBanner/accountNotifBanner";
+import AccountNotifBanner from "../../component/accountNotifBanner/accountNotifBanner";
 import SubscriptionBanner from "../../component/accountNotifBanner/subscriptionBanner";
 import "react-circular-progressbar/dist/styles.css";
 import ToastHandle from "../../helper/ToastMessage";
@@ -254,6 +254,14 @@ const Dashboard = () => {
           <div className="banner-heading">
             <h2>My HostBuddy</h2>
           </div>
+
+          {userDataGet?.hospitable_permission_error && (
+            <div style={{marginBottom:'20px'}}>
+              <AccountNotifBanner title='Messaging Permissions Needed' theme='warning' message={<>Your HostBuddy messages aren't going through because your messaging permissions have not been enabled within Hospitable. Follow <a target="_blank" rel="noreferrer" href="https://userguide.hostbuddy.ai/pms-integration-guides/hospitable">these steps</a> to obtain the needed permissions for your account.</>} />
+            </div>
+          )}
+
+
           <div className="row">
             <div className="col-lg-2 col-xl-2  col-xxl-2">
               <SideBar />

@@ -380,7 +380,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
                   <i className="bi bi-stars"></i>
                 </button>
                 {generateOptionsVisible && (
-                  <div ref={menuRef} className="generate-menu">
+                  <div ref={menuRef} className="generate-menu" style={{ zIndex: 1000 }}>
                     {accountAllowsGenerateButton ? (
                       conversationData?.conversation_id ? (
                         <>
