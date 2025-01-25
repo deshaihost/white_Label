@@ -1,12 +1,23 @@
+import React, { useState } from "react";
 import { getSubscriptionStatus } from "../../helper/Authorized";
 import AccountNotifBanner from "./accountNotifBanner";
 import { Link } from "react-router-dom";
 
-const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
+import AddPropertyModal from "../modal/addPropertyModal/AddPropertyModal";
+
+const SubscriptionBanner = ({userData, bottomMargin, topMargin}) => {
+
+  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
+
+  const handleSubscribeClick = (e) => {
+    e.preventDefault();
+    setShowSubscribeModal(true);
+  };
 
   if (!userData) { return null; }
   
-  const { plan, status } = getSubscriptionStatus(userData);
+  const subscription_data = getSubscriptionStatus(userData);
+  const { plan, status } = subscription_data;
   let title = '';
   let message = '';
   let theme = 'default';
@@ -20,12 +31,12 @@ const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
     if (daysRemaining > 5) {
       // User is in trial with more than 5 days remaining
       title = 'Free Trial';
-      message = (<>HostBuddy is free for {daysRemaining} more day{daysRemaining !== 1 ? 's' : ''}. <Link to="/properties">Add your billing information</Link> to ensure continued access when the trial ends.</>);
+      message = (<>HostBuddy is free for {daysRemaining} more day{daysRemaining !== 1 ? 's' : ''}. <a href="#" onClick={handleSubscribeClick}>Add your billing information</a> to ensure continued access when the trial ends.</>);
       theme = 'default';
     } else {
       // User is in trial with 5 or fewer days remaining
       title = 'Trial Ending Soon';
-      message = (<>{daysRemaining} day{daysRemaining !== 1 ? 's' : ''} remain{daysRemaining !== 1 ? '' : 's'} in your free trial. <Link to="/properties">Add your billing information</Link> to ensure continued access when the trial ends.</>);
+      message = (<>{daysRemaining} day{daysRemaining !== 1 ? 's' : ''} remain{daysRemaining !== 1 ? '' : 's'} in your free trial. <a href="#" onClick={handleSubscribeClick}>Add your billing information</a> to ensure continued access when the trial ends.</>);
       theme = 'warning';
     }
   } else if (plan === 'trial_over') {
@@ -33,14 +44,14 @@ const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
 
     // Free trial has ended, and user has not subscribed
     title = 'Free Trial Ended';
-    message = (<>Your free trial has ended. <Link to="/properties">Subscribe</Link> to to let HostBuddy communicate with your guests.</>);
+    message = (<>Your free trial has ended. <a href="#" onClick={handleSubscribeClick}>Subscribe</a> to let HostBuddy communicate with your guests.</>);
     theme = 'warning';
   } else if (status === 'canceled') {
     const subscrEndDate = userData?.subscr_payment_good_until ? new Date(userData.subscr_payment_good_until) : null;
     if (plan === 'subscription_over') {
       // User has canceled and subscription has ended
       title = 'Subscription Ended';
-      message = (<>Your subscription has been canceled and is no longer active. <Link to="/properties">Subscribe</Link> to continue using HostBuddy.</>);
+      message = (<>Your subscription has been canceled and is no longer active. <a href="#" onClick={handleSubscribeClick}>Subscribe</a> to continue using HostBuddy.</>);
       theme = 'default';
     } else if (subscrEndDate && now < subscrEndDate) {
       // User has canceled, and subscription will end in the future
@@ -70,7 +81,10 @@ const SubscriptionBanner = ({ userData, bottomMargin, topMargin}) => {
   }
 
   return (
-    <AccountNotifBanner title={title} message={message} theme={theme} bottomMargin={bottomMargin} topMargin={topMargin}/>
+    <>
+      <AccountNotifBanner title={title} message={message} theme={theme} bottomMargin={bottomMargin} topMargin={topMargin}/>
+      <AddPropertyModal handleClose={() => setShowSubscribeModal(false)} show={showSubscribeModal} subscription_data={subscription_data}/>
+    </>
   );
 };
 
