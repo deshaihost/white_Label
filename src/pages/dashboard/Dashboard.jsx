@@ -27,6 +27,10 @@ const Dashboard = () => {
   const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.properties;
   const actionItems = actionItemsConvertationData ? actionItemsConvertationData : [];
 
+  const hospitableWhReminder = userDataGet?.hospitable_wh_reminder; // date string: "2021-09-30T16:49:56Z"
+  const hospitableWhReminderMoreThan24hAgo = hospitableWhReminder ? (new Date() - new Date(hospitableWhReminder)) > 24*60*60*1000 : false;
+  const integrationAccountId = userDataGet?.calry_integrations ? Object.values(userDataGet.calry_integrations)[0]?.integrationAccountId : null;
+
 
   // Statistics logic -----------------------------------------------------------------------------------------------
 
@@ -261,6 +265,25 @@ const Dashboard = () => {
             </div>
           )}
 
+          {hospitableWhReminder && (
+            <div style={{marginBottom:'20px', marginTop:(userDataGet?.hospitable_permission_error ? '0px' : '-30px')}}>
+              {!hospitableWhReminderMoreThan24hAgo ? (
+                <AccountNotifBanner title='Set Up Your Webhooks In Hospitable' theme='default' message={
+                  <>
+                    If you haven't done so already, you'll need to set up webhooks in your Hospitable account following <a target="_blank" rel="noreferrer" href="https://userguide.hostbuddy.ai/pms-integration-guides/hospitable">these steps</a>. This is needed to ensure your reservation data refreshes in real time.<br /><br />
+                    Your unique listener URL is: <code style={{fontSize:'14px', marginLeft:'4px'}}>https://prod.calry.app/api/v1/listener/hospitable/{integrationAccountId}</code>
+                  </>
+                } />
+              ) : (
+                <AccountNotifBanner title='Set Up Your Webhooks In Hospitable' theme='warning' message={
+                  <>
+                    Follow <a target="_blank" rel="noreferrer" href="https://userguide.hostbuddy.ai/pms-integration-guides/hospitable">these steps</a> to set up webhooks in your Hospitable account. This is needed to ensure your reservation data refreshes in real time.<br /><br />
+                    Your unique listener URL is: <code style={{fontSize:'14px', marginLeft:'4px'}}>https://prod.calry.app/api/v1/listener/hospitable/{integrationAccountId}</code>
+                  </>
+                } />
+              )}
+            </div>
+          )}
 
           <div className="row">
             <div className="col-lg-2 col-xl-2  col-xxl-2">

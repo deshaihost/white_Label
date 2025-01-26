@@ -89,6 +89,10 @@ const Properties = () => {
   const numPropsStillLocked = propertyNamesStillLocked.length;
   const remainingUnlocksAllowed = createPropertiesSubscriptionAllowed - numPropsAlreadyUnlocked;
 
+  const hospitableWhReminder = userData?.hospitable_wh_reminder; // date string: "2021-09-30T16:49:56Z"
+  const hospitableWhReminderMoreThan24hAgo = hospitableWhReminder ? (new Date() - new Date(hospitableWhReminder)) > 24*60*60*1000 : false;
+  const integrationAccountId = userData?.calry_integrations ? Object.values(userData.calry_integrations)[0]?.integrationAccountId : null;
+
   // Get information about the status of the subscription // removed - this has been moved to the UnlockPropertiesModal component
   //const paymentGoodUntilDate = new Date(subscription_data?.payment_good_until);
   //const isOnFreeTrial = (subscription_data?.payment_standing === "good" && paymentGoodUntilDate > new Date() && (!subscription_data?.payment_collected || subscription_data?.payment_collected == 0));
@@ -168,11 +172,31 @@ const Properties = () => {
 
           {userData?.hospitable_permission_error && (
             <div style={{marginBottom:'20px', marginTop:'-30px'}}>
-              <AccountNotifBanner title='Messaging Permissions Needed' theme='warning' message={<>Your HostBuddy messages aren't going through because your messaging permissions have not been enabled within Hospitable. Follow <a target="_blank" rel="noreferrer" href="https://userguide.hostbuddy.ai/pms-integration-guides/hospitable">these steps</a> to obtain the needed permissions for your account.</>} />
+              <AccountNotifBanner title='Messaging Permissions Needed' theme='error' message={<>Your HostBuddy messages aren't going through because your messaging permissions have not been enabled within Hospitable. Follow <a target="_blank" rel="noreferrer" href="https://userguide.hostbuddy.ai/pms-integration-guides/hospitable">these steps</a> to obtain the needed permissions for your account.</>} />
+            </div>
+          )}
+
+          {hospitableWhReminder && (
+            <div style={{marginBottom:'20px', marginTop:(userData?.hospitable_permission_error ? '0px' : '-30px')}}>
+              {!hospitableWhReminderMoreThan24hAgo ? (
+                <AccountNotifBanner title='Set Up Your Webhooks In Hospitable' theme='default' message={
+                  <>
+                    If you haven't done so already, you'll need to set up webhooks in your Hospitable account following <a target="_blank" rel="noreferrer" href="https://userguide.hostbuddy.ai/pms-integration-guides/hospitable">these steps</a>. This is needed to ensure your reservation data refreshes in real time.<br /><br />
+                    Your unique listener URL is: <code style={{fontSize:'14px', marginLeft:'4px'}}>https://prod.calry.app/api/v1/listener/hospitable/{integrationAccountId}</code>
+                  </>
+                } />
+              ) : (
+                <AccountNotifBanner title='Set Up Your Webhooks In Hospitable' theme='warning' message={
+                  <>
+                    Follow <a target="_blank" rel="noreferrer" href="https://userguide.hostbuddy.ai/pms-integration-guides/hospitable">these steps</a> to set up webhooks in your Hospitable account. This is needed to ensure your reservation data refreshes in real time.<br /><br />
+                    Your unique listener URL is: <code style={{fontSize:'14px', marginLeft:'4px'}}>https://prod.calry.app/api/v1/listener/hospitable/{integrationAccountId}</code>
+                  </>
+                } />
+              )}
             </div>
           )}
           
-          <SubscriptionBanner userData={userData} bottomMargin={'20px'} topMargin={userData?.hospitable_permission_error ? '0px' : '-30px'} />
+          <SubscriptionBanner userData={userData} bottomMargin={'20px'} topMargin={(userData?.hospitable_permission_error || hospitableWhReminder) ? '0px' : '-30px'} />
 
           <div className="row">
             <div className="col-lg-2 col-xl-2 col-xxl-2">
