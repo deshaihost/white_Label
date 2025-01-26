@@ -91,7 +91,6 @@ const Properties = () => {
 
   const hospitableWhReminder = userData?.hospitable_wh_reminder; // date string: "2021-09-30T16:49:56Z"
   const hospitableWhReminderMoreThan24hAgo = hospitableWhReminder ? (new Date() - new Date(hospitableWhReminder)) > 24*60*60*1000 : false;
-  console.log('diff', (new Date() - new Date(hospitableWhReminder)))
   const integrationAccountId = userData?.calry_integrations ? Object.values(userData.calry_integrations)[0]?.integrationAccountId : null;
 
   // Get information about the status of the subscription // removed - this has been moved to the UnlockPropertiesModal component
@@ -182,7 +181,7 @@ const Properties = () => {
               {!hospitableWhReminderMoreThan24hAgo ? (
                 <AccountNotifBanner title='Set Up Your Webhooks In Hospitable' theme='default' message={
                   <>
-                    If you haven't done sop already, you'll need to set up webhooks in your Hospitable account following <a target="_blank" rel="noreferrer" href="https://userguide.hostbuddy.ai/pms-integration-guides/hospitable">these steps</a>. This is needed to ensure your reservation data refreshes in real time.<br /><br />
+                    If you haven't done so already, you'll need to set up webhooks in your Hospitable account following <a target="_blank" rel="noreferrer" href="https://userguide.hostbuddy.ai/pms-integration-guides/hospitable">these steps</a>. This is needed to ensure your reservation data refreshes in real time.<br /><br />
                     Your unique listener URL is: <code style={{fontSize:'14px', marginLeft:'4px'}}>https://prod.calry.app/api/v1/listener/hospitable/{integrationAccountId}</code>
                   </>
                 } />
