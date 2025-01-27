@@ -6,6 +6,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import ScheduleCalender from "../schedule/ScheduleCalender";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const CalenderModel = ({
   selectedProperty,
@@ -173,14 +174,10 @@ const CalenderModel = ({
           </div>
           {timeZone ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
-              <p className="text-center mb-3"
-                style={{
-                  color: "rgb(128, 128, 128)",
-                }}
-              >
+              <p className="text-center mb-3" style={{color:"rgb(128, 128, 128)"}}>
                 Property time zone: {timeZone}
               </p>
-              {/* <p style={{ color: 'rgb(128, 128, 128)', marginTop: '0px', marginBottom: '40px', textAlign: 'center', fontSize: '0.9em' }}>To update time zone, edit the property's address.</p> */}
+              <a href='https://userguide.hostbuddy.ai/quick-start/4-go-live' target="_blank" style={{marginBottom:'20px', fontSize:'16px'}}>Learn More About Scheduling</a>
             </div>
           ) : null}
         </Modal.Body>

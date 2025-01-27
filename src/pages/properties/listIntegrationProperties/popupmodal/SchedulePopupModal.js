@@ -135,6 +135,11 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
 
     addCalenderSchedule(responseObjectToSend);
   };
+
+  const handleAllDay = () => {
+    setData(prevData => ({...prevData, startTime:"00:00", endTime:"23:59"}));
+  };
+
   return (
     <div>
       <Modal show={show} size="md" onHide={() => setShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -186,6 +191,9 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
                 <label>End Time:</label>
                 <input type="time" name="et" id="endTime" class="form-control" value={data.endTime} onChange={handleInputChange}/>
               </div>
+              <a href="#" style={{ textAlign:'center', marginTop:'10px' }} onClick={handleAllDay}>
+                Set All Day (24 Hours)
+              </a>
             </div>
 
             <div className="row">
