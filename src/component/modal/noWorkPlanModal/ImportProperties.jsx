@@ -158,19 +158,27 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
                   <div className="row form-design">
                     <div className="col-12 mt-3">
                       {integrationPropertyList
-                        ?.filter((integrationPropObj) => {
-                          const propName = integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name;
-                          return normalizeString(propName).includes(normalizeString(searchTerm));
+                        ?.filter((integrationPropObj) => { // Apply the search filter. Try to match the search term to both the name and internal_name (if available)
+                          const searchTermNormalized = normalizeString(searchTerm);
+                          const nameMatches = integrationPropObj?.name && normalizeString(integrationPropObj.name).includes(searchTermNormalized);
+                          const internalNameMatches = integrationPropObj?.internal_name && normalizeString(integrationPropObj.internal_name).includes(searchTermNormalized);
+                          return nameMatches || internalNameMatches;
                         })
                         .map((integrationPropObj, index) => {
-                          const propName = integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name;
-                          const isDisabled = ENABLE_PROPERTY_LIMITS && isOnTrial && !checkBox.hasOwnProperty(propName) && Object.keys(checkBox).length >= numPropertiesRemaining;
+                          const internalName = integrationPropObj?.internal_name;
+                          const regName = integrationPropObj?.name;
+                          const primaryPropName = internalName ? internalName : regName;
+                          const secondaryPropName = (internalName && regName) ? regName : null;
+                          const isDisabled = ENABLE_PROPERTY_LIMITS && isOnTrial && !checkBox.hasOwnProperty(primaryPropName) && Object.keys(checkBox).length >= numPropertiesRemaining;
                           return (
                             <div className="form-check custom_checkbox" key={index} onClick={() => { if (!isDisabled) SelectItem(integrationPropObj); }}>
-                              <input className="form-check-input" type="checkbox" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={propName} checked={checkBox?.hasOwnProperty(propName)} disabled={isDisabled} onChange={() => { }} />
-                              <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>
-                                {propName}
-                              </label>
+                              <input className="form-check-input" type="checkbox" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={primaryPropName} checked={checkBox?.hasOwnProperty(primaryPropName)} disabled={isDisabled} onChange={() => { }} />
+                              <div>
+                                <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>
+                                  {primaryPropName}
+                                </label>
+                                {secondaryPropName && <label style={{fontSize:'14px', color:'#888'}}>{secondaryPropName}</label>}
+                              </div>
                             </div>
                           );
                         })}
