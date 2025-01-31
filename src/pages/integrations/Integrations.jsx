@@ -7,6 +7,7 @@ import Ownerrez from "../../../src/helper/staticImage/ownerrez.webp";
 import Hostaway from "../../../src/helper/staticImage/hostaway.webp";
 import Hospitable from "../../../src/helper/staticImage/hospitable.webp";
 import Smoobu from "../../../src/helper/staticImage/smoobu.webp";
+import Tokeet from "../../../src/helper/staticImage/tokeet.webp";
 import Beds from "../../../src/helper/staticImage/beds.webp";
 import Booking from "../../../src/helper/staticImage/Booking.webp";
 import Minut from "../../../src/helper/staticImage/minut.webp";
@@ -115,6 +116,13 @@ const Integrations = () => {
             <a href="https://hospitable.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
                 <img src={Hospitable} alt="" />
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-4 col-sm-6">
+            <a href="https://www.tokeet.com/" target="_blank" rel="noopener noreferrer">
+              <div className="image-boc-inter">
+                <img src={Tokeet} alt="" />
               </div>
             </a>
           </div>

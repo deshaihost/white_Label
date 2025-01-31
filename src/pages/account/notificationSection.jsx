@@ -18,7 +18,7 @@ const AccountNotificationSection = () => {
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
 
   // Initialize user_contact_options with all possible contact channels set to empty objects
-  let all_possible_contact_channels = ["email", "sms", "slack", "whatsapp"];
+  let all_possible_contact_channels = ["email", "sms", "slack", "whatsapp", "webhook"];
   let user_contact_options = all_possible_contact_channels.reduce(
     (acc, channel) => {
       acc[channel] = {};
@@ -250,6 +250,7 @@ const AccountNotificationSection = () => {
       case "sms": return "Phone Number";
       case "slack": return "Slack Channel";
       case "whatsapp": return "WhatsApp Number";
+      case "webhook": return "Webhook URL";
       default: return "Contact Information";
     }
   }
@@ -281,6 +282,12 @@ const AccountNotificationSection = () => {
       return Object.keys(user_contact_options.whatsapp).map((phone_num) => (
         <option key={phone_num} value={phone_num}>
           {phone_num}
+        </option>
+      ));
+    } else if (newRecipient.channel === "webhook") {
+      return Object.keys(user_contact_options.webhook).map((webhook_url) => (
+        <option key={webhook_url} value={webhook_url}>
+          {webhook_url}
         </option>
       ));
     }
@@ -407,6 +414,7 @@ const AccountNotificationSection = () => {
                   <option value="sms">Text message (SMS)</option>
                   <option value="slack">Slack</option>
                   <option value="whatsapp">WhatsApp</option>
+                  <option value="webhook">Webhook</option>
                 </select>
               </div>
 
