@@ -12,6 +12,7 @@ import Beds from "../../../src/helper/staticImage/beds.webp";
 import Booking from "../../../src/helper/staticImage/Booking.webp";
 import Minut from "../../../src/helper/staticImage/minut.webp";
 import Turno from "../../../src/helper/staticImage/turno.webp";
+import SearchMyCal from "../../../src/helper/staticImage/searchmycal_logo.webp";
 import "./Integration.css";
 import ContactUs from "../meetHostBuddy/discover/contactUs/ContactUs";
 import { Helmet } from 'react-helmet';
@@ -137,11 +138,7 @@ const Integrations = () => {
         </div>
         <div className="inter-box row">
           <div className="col-lg-4 col-sm-6">
-            <a
-              href="https://www.minut.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://www.minut.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
                 <img src={Minut} alt="" />
               </div>
@@ -151,6 +148,13 @@ const Integrations = () => {
             <a href="https://turno.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
                 <img src={Turno} alt="" />
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-4 col-sm-6">
+            <a href="https://searchmycal.com/" target="_blank" rel="noopener noreferrer">
+              <div className="image-boc-inter">
+                <img src={SearchMyCal} alt="" />
               </div>
             </a>
           </div>
