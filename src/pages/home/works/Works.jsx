@@ -436,7 +436,7 @@ const Works = () => {
               >
                 <HiChatBubbleLeftRight className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
-                  <h2 className="fs-2 fw-bold mb-0">500,000</h2>
+                  <h2 className="fs-2 fw-bold mb-0">1,500,000</h2>
                   <span className="fs-6 ">
                     <i class="bi bi-plus"></i>
                   </span>

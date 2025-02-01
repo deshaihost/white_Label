@@ -10,6 +10,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
   const [showBackupLink, setShowBackupLink] = useState(false);
   const [randomlySelectedDemoPerson, setRandomlySelectedDemoPerson] = useState({});
   const [redirectURL, setRedirectURL] = useState('');
+  const [demoFormData, setDemoFormData] = useState({});
 
   // Form data state variables
   const [name, setName] = useState('');
@@ -17,6 +18,14 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
   const [propertyCount, setPropertyCount] = useState('');
   const [source, setSource] = useState('');
   const [errors, setErrors] = useState({});
+  const [showDemoOptions, setShowDemoOptions] = useState(false);
+
+
+  const groupDemoWebinarLink = 'https://calendly.com/nick-hostbuddy/hostbuddy-ai-demo-webinar';
+  const oneOnOneNickOnlyDemoLink = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo';
+  const oneOnOneNickOrSamDemoLink = 'https://calendly.com/d/cmyr-2pj-brv/hostbuddy-ai-product-demo';
+  const oneOnOneSamOnlyDemoLink = 'https://calendly.com/sam-hostbuddy/30min';
+
 
   // Once, on page load, randomly select the demo person
   useEffect(() => {
@@ -43,7 +52,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     } catch (error) { }
   };
 
-  const callSubmitApi = async (dataToSend) => {
+  const callSubmitApi = async (dataToSend, demoTypeChoice=null) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     dataToSend.message = "Demo Requested with " + randomlySelectedDemoPerson.person;
@@ -52,6 +61,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     dataToSend.message += "\nProperty count: " + dataToSend.propertyCount;
     dataToSend.message += "\nHow did you hear about us: " + dataToSend.source;
     if (sourceMsg) dataToSend.message += "\nClick source: " + String(sourceMsg);
+    if (demoTypeChoice) dataToSend.message += "\nChosen demo type: " + demoTypeChoice;
 
     delete dataToSend.source; // don't send this to the API
 
@@ -69,35 +79,10 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     }
   }
 
-  const onSubmit = (data) => {
-
-    // Don't use "data" at all - use the state variables
-    const formData = { name: name, email: email, propertyCount: propertyCount, source: source };
-
-    callSubmitApi(formData);
-    setIsSubmitted(true);
-    
+  const handleRedirectToDemoLink = (url, chosenDemoType=null) => {
     // Track form submission with google ads and meta pixel
     window.gtag_report_conversion('book-a-demo');
-    trackFormSubmission();
-
-    //let url = randomlySelectedDemoPerson.url;
-    let url = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo'; // big customer demo
-
-    if (parseInt(formData.propertyCount) <= 15) {
-      url = 'https://calendly.com/nick-hostbuddy/hostbuddy-ai-demo-webinar';
-    } else if (parseInt(formData.propertyCount) <= 34) {
-      url = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo';
-    } else if (parseInt(formData.propertyCount) <= 99) {
-      url = 'https://calendly.com/d/cmyr-2pj-brv/hostbuddy-ai-product-demo';
-    } else if (parseInt(formData.propertyCount) > 99) {
-      url = 'https://calendly.com/sam-hostbuddy/30min';
-    } else { // shouldn't happen
-      url = 'https://calendly.com/nick-hostbuddy/hostbuddy-ai-demo-webinar';
-    }
-
-
-    setRedirectURL(url);
+    callSubmitApi(demoFormData, chosenDemoType);
 
     setTimeout(() => {
       window.open(url, '_blank');
@@ -105,7 +90,36 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
 
     setTimeout(() => {
       setShowBackupLink(true);
-    }, 3000);  // Show backup link after 3 seconds, in case the user isn't automatically redirected (might happen with ad / popup blockers)
+    }, 800);  // Show backup link after 3 seconds, in case the user isn't automatically redirected (might happen with ad / popup blockers)
+  };
+
+  const handleMainFormSubmit = (data) => {
+
+    // Don't use "data" at all - use the state variables
+    const formData = { name:name, email:email, propertyCount:propertyCount, source:source };
+
+    setIsSubmitted(true);
+    trackFormSubmission();
+
+    //let url = randomlySelectedDemoPerson.url;
+    let url = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo'; // big customer demo
+
+    if (parseInt(formData.propertyCount) <= 15) { url = groupDemoWebinarLink; }
+    else if (parseInt(formData.propertyCount) <= 34) { url = oneOnOneNickOnlyDemoLink; }
+    else if (parseInt(formData.propertyCount) <= 99) { url = oneOnOneNickOrSamDemoLink; }
+    else if (parseInt(formData.propertyCount) > 99) { url = oneOnOneSamOnlyDemoLink; }
+    else { url = groupDemoWebinarLink; } // shouldn't happen
+
+    setRedirectURL(url);
+    setDemoFormData(formData);
+
+    if (parseInt(formData.propertyCount) <= 15) { // If it's a small fry, just send them to the group demo
+      handleRedirectToDemoLink(url);
+    } else if (parseInt(formData.propertyCount) > 99) { // If it's a big fish, send 'em to Sam, don't let them choose group
+      handleRedirectToDemoLink(oneOnOneSamOnlyDemoLink, '1:1');
+    } else { // If it's a big fish, let them choose between webinar or 1:1
+      setShowDemoOptions(true);
+    }
   };
 
   const handleSubmit = (event) => {
@@ -128,7 +142,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     setErrors(errors);
     if (Object.keys(errors).length === 0) { // No errors, proceed
       const data = { name, email, property_count: propertyCount, source};
-      onSubmit(data);
+      handleMainFormSubmit(data);
     }
   };
 
@@ -137,63 +151,107 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
       <Modal.Header closeButton>
         <div>
           <Modal.Title id="contained-modal-title-vcenter">HostBuddy AI - Book A Demo</Modal.Title>
+          {/*
           <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>
             Please provide your information, then you will be redirected to a Calendly page where you can book a demo with our team.
           </p>
+          */}
         </div>
       </Modal.Header>
       <Modal.Body>
-        {isSubmitted ? (
-          <>
-            <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>Thanks! Redirecting...</p>
-            {showBackupLink && (
-              <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>
-                If you are not redirected, please click <a href={redirectURL} target="_blank" rel="noopener noreferrer">here</a>.
-              </p>
-            )}
-          </>
+        {!showDemoOptions ? (
+          isSubmitted ? (
+            <>
+              <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>Thanks! Redirecting...</p>
+              {showBackupLink && (
+                <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>
+                  If you are not redirected, please click <a href={redirectURL} target="_blank" rel="noopener noreferrer">here</a>.
+                </p>
+              )}
+            </>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <div className="input-group">
+                <input className="form-control" type="text" value={name} onChange={(e) => setName(e.target.value)} maxLength="100"/>
+                <label>Name</label>
+              </div>
+
+              <div className="my-3">
+                <div className="input-group">
+                  <input className="form-control" type="text" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                  <label>Email</label>
+                </div>
+                {errors.email && (
+                  <p style={{ color: '#F80', marginTop: '1px', marginLeft: '10px', fontSize: '14px' }}>
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+
+              <div className="my-3">
+                <div className="input-group">
+                  <input className="form-control" type="number" value={propertyCount} onChange={(e) => setPropertyCount(e.target.value)}/>
+                  <label>How many properties?</label>
+                </div>
+                {errors.propertyCount && (
+                  <p style={{ color: '#F80', marginTop: '1px', marginLeft: '10px', fontSize: '14px' }}>
+                    {errors.propertyCount}
+                  </p>
+                )}
+              </div>
+
+              <div className="input-group">
+                <input className="form-control" type="text" value={source} onChange={(e) => setSource(e.target.value)} maxLength="500"/>
+                <label>How did you hear about us?</label>
+              </div>
+
+              <div className="text-center">
+                <Button type="submit" className="bg_theme_btn" style={{ marginTop: '20px' }}>
+                  Continue...
+                </Button>
+              </div>
+            </form>
+          )
         ) : (
-          <form onSubmit={handleSubmit}>
-            <div className="input-group">
-              <input className="form-control" type="text" value={name} onChange={(e) => setName(e.target.value)} maxLength="100"/>
-              <label>Name</label>
-            </div>
+          <>
+            <h6 style={{fontSize:'20px', color:'white', textAlign:'center', fontWeight:'bold'}}>
+              Select A Demo Type
+            </h6>
 
-            <div className="my-3">
-              <div className="input-group">
-                <input className="form-control" type="text" value={email} onChange={(e) => setEmail(e.target.value)}/>
-                <label>Email</label>
-              </div>
-              {errors.email && (
-                <p style={{ color: '#F80', marginTop: '1px', marginLeft: '10px', fontSize: '14px' }}>
-                  {errors.email}
-                </p>
-              )}
-            </div>
-
-            <div className="my-3">
-              <div className="input-group">
-                <input className="form-control" type="number" value={propertyCount} onChange={(e) => setPropertyCount(e.target.value)}/>
-                <label>How many properties?</label>
-              </div>
-              {errors.propertyCount && (
-                <p style={{ color: '#F80', marginTop: '1px', marginLeft: '10px', fontSize: '14px' }}>
-                  {errors.propertyCount}
-                </p>
-              )}
-            </div>
-
-            <div className="input-group">
-              <input className="form-control" type="text" value={source} onChange={(e) => setSource(e.target.value)} maxLength="500"/>
-              <label>How did you hear about us?</label>
-            </div>
-
+            <p style={{ marginTop: '30px', fontSize: '16px', color: 'white', textAlign: 'center' }}>
+              Live Webinar
+            </p>
             <div className="text-center">
-              <Button type="submit" className="bg_theme_btn" style={{ marginTop: '20px' }}>
-                Continue...
-              </Button>
+              {showBackupLink ? ( // backup = use an a tag in case the browser blocks the window.open for some reason
+                <a href={groupDemoWebinarLink} target="_blank" rel="noopener noreferrer">
+                  <Button className="bg_theme_btn" style={{marginTop:'5px'}}>
+                    Join a Webinar
+                  </Button>
+                </a>
+              ) : (
+                <Button className="bg_theme_btn" onClick={() => handleRedirectToDemoLink(groupDemoWebinarLink, 'Webinar')} style={{marginTop:'5px'}}>
+                  Join a Webinar
+                </Button>
+              )}
             </div>
-          </form>
+
+            <p style={{ marginTop: '35px', fontSize: '16px', color: 'white', textAlign: 'center' }}>
+              1:1 Demo (Limited Availability)
+            </p>
+            <div className="text-center">
+              {showBackupLink ? ( // backup = use an a tag in case the browser blocks the window.open for some reason
+                <a href={oneOnOneNickOnlyDemoLink} target="_blank" rel="noopener noreferrer">
+                  <Button className="bg_theme_btn" style={{marginTop:'5px'}}>
+                    Book a 1:1 Demo
+                  </Button>
+                </a>
+              ) : (
+                <Button className="bg_theme_btn" onClick={() => handleRedirectToDemoLink(redirectURL, '1:1')} style={{marginTop:'5px'}}>
+                  Book a 1:1 Demo
+                </Button>
+              )}
+            </div>
+          </>
         )}
       </Modal.Body>
     </Modal>

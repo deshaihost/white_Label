@@ -54,6 +54,8 @@ window.chatWidgetOptions = {
   inputBarTextColor: '#000000',
   sendButtonColor: '#0084ff',
   sendButtonTextColor: '#ffffff',
+  chatWindowHeaderBackground: '#0084ff',
+  chatWindowHeaderTextColor: '#ffffff',
   bot_img: 'https://hostbuddylb.com/logo/logoNoText.webp'  // Optional
 };
 </script>`}</CopyableCode>
@@ -108,6 +110,8 @@ window.chatWidgetOptions = {
               <li><code>inputBarTextColor</code>: Color of text in input bar</li>
               <li><code>sendButtonColor</code>: Color of the send button</li>
               <li><code>sendButtonTextColor</code>: Color of text on send button</li>
+              <li><code>chatWindowHeaderBackground</code>: Background color of the chat window header bar</li>
+              <li><code>chatWindowHeaderTextColor</code>: Color of the text in the chat window header bar</li>
               <li><code>bot_img</code>: URL of an image to be displayed next to each bot message (optional)</li>
             </ul>
           </li>
