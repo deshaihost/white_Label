@@ -20,6 +20,10 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
   const [errors, setErrors] = useState({});
   const [showDemoOptions, setShowDemoOptions] = useState(false);
 
+  // Synchronize demoFormData with input states
+  useEffect(() => {
+    setDemoFormData({ name, email, propertyCount, source });
+  }, [name, email, propertyCount, source]);
 
   const groupDemoWebinarLink = 'https://calendly.com/nick-hostbuddy/hostbuddy-ai-demo-webinar';
   const oneOnOneNickOnlyDemoLink = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo';
@@ -111,7 +115,6 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     else { url = groupDemoWebinarLink; } // shouldn't happen
 
     setRedirectURL(url);
-    setDemoFormData(formData);
 
     if (parseInt(formData.propertyCount) <= 15) { // If it's a small fry, just send them to the group demo
       handleRedirectToDemoLink(url);
