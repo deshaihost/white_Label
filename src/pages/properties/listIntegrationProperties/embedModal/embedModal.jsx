@@ -26,10 +26,13 @@ const EmbedModal = ({ show, handleClose, chatbotKey }) => {
 
   return (
     <Modal show={show} size="xl" onHide={handleClose} aria-labelledby="embed-modal-title" centered>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton style={{ flexDirection: "column", alignItems: "flex-start" }}>
         <Modal.Title id="embed-modal-title" style={{ color: 'white' }}>
           Embed HostBuddy Into Your Website
         </Modal.Title>
+        <h6 style={{ fontSize:'15px', marginTop:'8px', width:'100%', textAlign:'center', color:'#AAA' }}>
+          Chatbot Key for this property: {chatbotKey}
+        </h6>
       </Modal.Header>
       <Modal.Body>
         <div className="embed-modal-tabs">
