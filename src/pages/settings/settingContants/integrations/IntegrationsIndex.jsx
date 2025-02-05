@@ -3,17 +3,21 @@ import { Link } from "react-router-dom";
 import Loader from '../../../../helper/Loader';
 import ConnectToTurno from "./connectTurnoButton";
 import ConnectToMinut from './connectMinutButton';
+import ConnectToTidy from './connectTidyButton';
 import TurnoIntegration from './TurnoIntegration';
 import MinutIntegration from './MinutIntegration';
+import './Integrations.css';
 
 const IntegrationsIndex = (ApiUserData) => {
   const turnoUserId = Boolean(ApiUserData?.ApiUserData?.turno_user_id);
   const minutUserId = Boolean(ApiUserData?.ApiUserData?.minut_user_id);
+  const tidyUserId = Boolean(ApiUserData?.ApiUserData?.tidy_user_id);
 
   // Identify connected integrations
   const connectedIntegrations = [];
   if (turnoUserId) connectedIntegrations.push('Turno');
   if (minutUserId) connectedIntegrations.push('Minut');
+  if (tidyUserId) connectedIntegrations.push('Tidy');
   // Add more integrations as needed
 
   // State for selected integration tab
@@ -26,6 +30,7 @@ const IntegrationsIndex = (ApiUserData) => {
         <div className="tiles-container">
           {!turnoUserId && <ConnectToTurno />}
           {!minutUserId && <ConnectToMinut />}
+          {!tidyUserId && <ConnectToTidy />}
         </div>
       </div>
 
@@ -36,11 +41,7 @@ const IntegrationsIndex = (ApiUserData) => {
             {/* Render tabs for connected integrations */}
             <div className="integrations-tabs">
               {connectedIntegrations.map((integration) => (
-                <button
-                  key={integration}
-                  className={`tab-button ${selectedIntegration === integration ? 'active' : ''}`}
-                  onClick={() => setSelectedIntegration(integration)}
-                >
+                <button key={integration} className={`tab-button ${selectedIntegration === integration ? 'active' : ''}`} onClick={() => setSelectedIntegration(integration)}>
                   {integration}
                 </button>
               ))}
@@ -53,6 +54,12 @@ const IntegrationsIndex = (ApiUserData) => {
 
             {selectedIntegration === 'Minut' && (
               <MinutIntegration ApiUserData={ApiUserData} />
+            )}
+
+            {selectedIntegration === 'Tidy' && (
+              <div>
+                <h3 style={{marginTop:'40px'}}>Connected to Tidy!</h3>
+              </div>
             )}
 
             {/* Add similar blocks for additional integrations */}
