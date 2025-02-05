@@ -17,6 +17,8 @@ import "./Integration.css";
 import ContactUs from "../meetHostBuddy/discover/contactUs/ContactUs";
 import { Helmet } from 'react-helmet';
 
+const TidyImg = 'https://hostbuddylb.com/partners/tidy_logo_black_text.svg';
+
 
 const Integrations = () => {
   const [contactModalShow, setContactModalShow] = useState(false);
@@ -158,6 +160,13 @@ const Integrations = () => {
               </div>
             </a>
           </div>
+          <div className="col-lg-4 col-sm-6">
+            <a href="https://tidy.com/" target="_blank" rel="noopener noreferrer">
+              <div className="image-boc-inter">
+                <img src={TidyImg} alt="" />
+              </div>
+            </a>
+            </div>
         </div>
         <div className="software-list">
           <h2>Don't see your software listed?</h2>

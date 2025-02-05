@@ -38,13 +38,7 @@ const ContactUs = (props) => {
   };
 
   return (
-    <Modal
-      {...props}
-      size="md"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-      className="contact-modal"
-    >
+    <Modal {...props} size="md" aria-labelledby="contained-modal-title-vcenter" centered className="contact-modal">
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">Contact Us</Modal.Title>
       </Modal.Header>
