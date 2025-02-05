@@ -17,7 +17,7 @@ const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalS
   // Only HostBuddy Elite users can add sub-users
   //const subscription_plan = userData?.userData?.subscription?.plan;
   const subscription_plan = getSubscriptionStatus(userData?.userData).plan;
-  const userHasPermission = (subscription_plan && (subscription_plan.toLowerCase().includes("elite")));
+  const userHasPermission = (subscription_plan && (subscription_plan.toLowerCase().includes("elite") || subscription_plan.toLowerCase() == "trial"));
 
   return (
     <Modal show={show} size="lg" onHide={onClose} aria-labelledby="contained-modal-title-vcenter" centered>
