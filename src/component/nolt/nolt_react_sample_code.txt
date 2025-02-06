@@ -1,0 +1,82 @@
+Sample React code from the Nolt documentation
+
+--------------------------------------------------------------------------------
+
+import { useState, useEffect } from "react";
+
+const BOARD_URL = "https://feedback.nolt.io";
+const SDK_URL = "https://cdn.nolt.io/widgets.js";
+const JWT = "eyJhbGciOiJ...";
+
+// custom hook to load the Nolt SDK 
+const useScript = (url) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let script;
+
+    const onLoad = () => {
+      setIsLoaded(true);
+      script = null;
+    };
+
+    const onError = (error) => {
+      setError(error);
+    };
+
+    if (!isLoaded) {
+      script = document.createElement("script");
+      script.src = url;
+      script.async = true;
+      script.onload = onLoad;
+      script.onerror = onError;
+      document.body.appendChild(script);
+    }
+
+    return () => {
+      if (script) {
+        script.onload = null;
+        script.onerror = null;
+        document.body.removeChild(script);
+      }
+    };
+  }, [url, isLoaded]);
+
+  return { isLoaded, error };
+};
+
+function NoltWidget() {
+  const { isLoaded, error } = useScript(SDK_URL);
+
+  if (error) {
+    console.log(error); // remove this line in production
+    return <div>Script Error</div>;
+  }
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  const { nolt } = window;
+  // Option 1:
+  // Render an <a data-nolt="modal" /> element
+
+  // Option 2:
+  nolt("init", { selector: ".my-css-selector", url: BOARD_URL });
+
+  // Single sign-on
+  nolt("identify", { jwt: JWT });
+
+  return (
+    <div>
+      <a data-nolt="modal" href={BOARD_URL}>
+        Feedback (option 1)
+      </a>
+
+      <button className="my-css-selector">Feedback (option 2)</button>
+    </div>
+  );
+}
+
+export default NoltWidget;
