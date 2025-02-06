@@ -13,6 +13,7 @@ import { Helmet } from "react-helmet";
 import { FaCircleCheck } from "react-icons/fa6";
 import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/transcriptsModel/ConverSationtranscriptModel";
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
+import NoltWidget from "../../component/nolt/nolt";
 
 import { MetricTile, HistogramTile, renderTiles } from "../statistics/statisticsTilesComponents";
 import { getStatisticsData, formatDateToReadable } from "../statistics/dataManager";
@@ -394,6 +395,7 @@ const Dashboard = () => {
       </div>
       <ConverSationtranscriptModel handleClose={handleModelClose} show={model?.conversationModel} prntData={model?.conversationDataSend}/>
       <HostDaddy />
+      <NoltWidget />
     </>
   );
 };

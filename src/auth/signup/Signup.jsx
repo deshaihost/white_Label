@@ -42,9 +42,16 @@ const Signup = () => {
   const onSubmit = (data) => {
     setEmailEntered(data.email);
     dispatch(
-      registerActions({ email:data.email, password:data.newPassword, first_name:data.firstName, last_name:data.lastName, phone:data.phone })
+      registerActions({ 
+        email: data.email, 
+        password: data.newPassword, 
+        first_name: data.firstName, 
+        last_name: data.lastName, 
+        phone: data.phone,
+        hear_about_us: data.hear_about_us // added new field
+      })
     );
-    setInputData({email: data.email, password:data.newPassword});
+    setInputData({email: data.email, password: data.newPassword});
   };
 
   // this functionality is space not allow in input
@@ -215,6 +222,10 @@ const Signup = () => {
                     {errors?.confirmPassword?.type === "validate" && (
                       <>{ErrorMessageShow(errors?.confirmPassword?.message)}</>
                     )}
+                  </div>
+
+                  <div className="input-container">
+                    <input type="text" placeholder="How did you hear about us? ..." {...register("hear_about_us")} />
                   </div>
 
                   <div className="input-container footer-auth">

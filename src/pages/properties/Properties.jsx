@@ -18,6 +18,7 @@ import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
 import UnlockPropertiesModal from "../../component/modal/unlockPropertiesModal/unlockPropertiesModal";
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
+import NoltWidget from "../../component/nolt/nolt";
 
 const Properties = () => {
   const store = useSelector((state) => state);
@@ -314,6 +315,7 @@ const Properties = () => {
       <ImportPropertiesModal handleNoPlanClose={handleModelClose} showNoPlan={model?.importProperties} setNewPropertiesAdded={setNewPropertiesAdded} userData={userData}/>
       <UnlockPropertiesModal handleClose={handleModelClose} modalShow={model?.unlockProperties} propertiesToUnlock={unlockPropertyNames} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} setPropertiesChanged={setNewPropertiesAdded}/>
       <HostDaddy />
+      <NoltWidget />
     </>
   );
 };

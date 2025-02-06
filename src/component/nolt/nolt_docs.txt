@@ -1,0 +1,76 @@
+YOUR ORGANIZATION'S BOARD URL:
+https://hostbuddy-ai.nolt.io
+
+
+------------------------------------------------------------------------------------------------
+Feedback Button
+Paste this code into your website and start collecting feedback. That's it, unless you'd like to explore moreadvanced features.
+
+<a data-nolt="button" href="https://hostbuddy-ai.nolt.io">Feedback</a><script async src="https://cdn.nolt.io/widgets.js"></script>
+
+------------------------------------------------------------------------------------------------
+
+Website widget
+
+We built an embeddable widget you can integrate seamlessly into your website and log in to with single sign-on (SSO), eliminating the need for your existing users to sign in to Nolt to leave feedback. Our single sign-on mechanism means it’s easier than ever for your users to leave feedback and for you to know whom it’s coming from, if you should choose to.
+
+Option 1: Initialize Nolt widget as a modal
+
+Nolt will display your board or roadmap as a modal embedded in your app or web page. Here are a couple of examples:
+
+Modal examples
+To achieve this: paste the snippet below before the </body> tag of your website. Replace the CSS selector placeholder so that it targets the element that should open the modal (on click).
+
+<!-- Nolt library -->
+<script async src="https://cdn.nolt.io/widgets.js"></script>
+<script>window.noltQueue=window.noltQueue||[];function nolt(){noltQueue.push(arguments)}</script>
+
+<script>
+  nolt('init', { 
+    url: 'https://YOUR_BOARD.nolt.io', 
+    selector: '.YOUR-CSS-SELECTOR'
+  });
+</script>
+Option 2: Embed Nolt as an iframe
+
+Feeling adventurous? You can build your own widget or embed Nolt into a web page (without the modal) using an iframe. Here are a couple of examples:
+
+Embed examples
+To embed the full board as an iframe:
+
+You can embed your full board (which includes the board header) by using this URL format:
+
+<iframe src="https://YOUR_BOARD.nolt.io/widget" title="Nolt" />
+Remember to replace YOUR_BOARD with your Nolt subdomain. If you are using a custom domain, replace YOUR_BOARD.nolt.io with your custom domain.
+
+To embed the board without the header:
+
+If you wish to remove the board header when embedding your board or roadmap (for styling purposes), add ?withHeader=false to the end of the URL like this:
+
+<iframe src="https://YOUR_BOARD.nolt.io/widget?withHeader=false" title="Nolt" />
+To use SSO with your iframe:
+
+If you are using SSO and your own iframe, use this link format:
+
+<iframe src="https://YOUR_BOARD.nolt.io/sso/YOUR_JWT?returnUrl=https://YOUR_BOARD.nolt.io/widget" title="Nolt" />
+Remember to replace YOUR_JWT with your JSON web token and replace YOUR_BOARD with your Nolt subdomain (or custom domain).
+
+Option 3: Nolt-branded button
+
+This is the easiest way to integrate Nolt into your website. Copy and paste the following code into the HTML of your website wherever you would like the button to appear and replace https://YOUR_BOARD.nolt.io with your board URL.
+
+<a data-nolt="button" href="https://YOUR_BOARD.nolt.io">Feedback</a>
+<script async src="https://cdn.nolt.io/widgets.js"></script>
+Identify your users with SSO (optional)
+
+Using single sign-on, your existing users can automatically be authenticated to your Nolt widget. This provides a seamless experience for them while informing you who is posting and voting on your board. Learn more
+
+<!-- Nolt library -->
+<script async src="https://cdn.nolt.io/widgets.js"></script>
+<script>window.noltQueue=window.noltQueue||[];function nolt(){noltQueue.push(arguments)}</script>
+    
+<script>
+  nolt('identify', { 
+    jwt: '<THE_JWT_THAT_YOU_GENERATED_FOR_THIS_USER>'
+  });
+</script>
