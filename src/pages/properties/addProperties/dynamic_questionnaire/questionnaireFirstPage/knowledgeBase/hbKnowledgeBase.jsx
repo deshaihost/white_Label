@@ -85,6 +85,11 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
       }
       integrationDataToSet['conversation_data']['hide_for_reservations'] = convoHiddenResStages || [];
 
+      // Retrieve "availability" usage, default true if undefined
+      let availabilityUsage = apiPropertyData?.supporting_doc_items?.availability?.use_for_knowledge_base;
+      if (availabilityUsage === undefined) availabilityUsage = true;
+      integrationDataToSet["availability_data"] = { use_for_knowledge_base: availabilityUsage };
+
       setIntegrationData(integrationDataToSet);
 
       // Populate information about whether each document is used for the knowledge base
@@ -147,7 +152,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
   if (integrationPlatform) {
     sourceDataForModal['PMS Integration'] = {
       'integration_data': {'label':'PMS property details', 'id':'integration_data', 'use_for_knowledge_base':integrationData['integration_data']?.use_for_knowledge_base, 'hidden_res_stages':integrationData['integration_data']?.hide_for_reservations || []},
-      'availability_data': {'label':availability_label, 'id':'availability_data', 'use_for_knowledge_base':!!integrationData['integration_data']}, // use_for_knowledge_base true if integration_data is present
+      'availability_data': {'label':availability_label, 'id':'availability_data', 'use_for_knowledge_base':integrationData["availability_data"]?.use_for_knowledge_base}, // use_for_knowledge_base true if integration_data is present
       'guest_data': {'label':'Guest and reservation data', 'id':'guest_data', 'use_for_knowledge_base':integrationData['guest_data']?.use_for_knowledge_base}
     }
     if (convo_data_has_been_pulled) {
@@ -170,7 +175,7 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
           <>
             {Object.keys(integration_categories).map((section, index) => (
               !((section === 'Past conversations' && !convo_data_has_been_pulled)) && (
-                ((integrationData[integration_categories[section]]?.use_for_knowledge_base) || (section == availability_label) ? ( // If the PMS is connected, just show availability as present no matter what, for simplicity
+                ((integrationData[integration_categories[section]]?.use_for_knowledge_base) ? (
                   (integrationData[integration_categories[section]]?.months ? (
                     <h5 className="text-confirmed" key={index}>{section} <small style={{color:'#AAA'}}>(last {integrationData[integration_categories[section]]?.months} months)</small></h5>
                   ) : (
