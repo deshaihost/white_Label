@@ -43,7 +43,6 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
   }, [sources]);
 
   const handleCheckboxChange = (section, sourceId, isChecked) => {
-    if (sourceId === 'availability_data') { return; } // for now, this can't be unchecked
     const updatedSourceAndSelectionData = { ...sourceAndSelectionData };
     updatedSourceAndSelectionData[section][sourceId].use_for_knowledge_base = isChecked;
     setSourceAndSelectionData(updatedSourceAndSelectionData);
@@ -109,6 +108,10 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
             num_months_to_use: sourceAndSelectionData['PMS Integration']['conversation_data'].use_for_knowledge_base ? 6 : 0,
             hidden_res_stages: sourceAndSelectionData['PMS Integration']['conversation_data'].hidden_res_stages
           };
+        }
+        if ("availability_data" in sourceAndSelectionData["PMS Integration"]) {
+          json_body["docs_to_use"]["availability"] =
+            sourceAndSelectionData["PMS Integration"]["availability_data"].use_for_knowledge_base;
         }
       }
       if (Object.keys(sourceAndSelectionData['Property Documents']).length > 0) {
