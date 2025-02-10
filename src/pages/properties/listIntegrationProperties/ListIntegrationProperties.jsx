@@ -102,7 +102,7 @@ const ListIntegrationProperties = () => {
   const callRegenerateChatbotLinkAPI = async (property_name) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    const dataToSend = { }; // empty body
+    const dataToSend = {'type':'property', 'property_name':property_name};
     setRegenerateApiLoading(true);
 
     try {
@@ -111,7 +111,8 @@ const ListIntegrationProperties = () => {
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
 
-      const response = await axios.post( `${baseUrl}/properties/${property_name}/regenerate_chatbot_key`, dataToSend, config );
+      //const response = await axios.post( `${baseUrl}/properties/${property_name}/regenerate_chatbot_key`, dataToSend, config );
+      const response = await axios.post( `${baseUrl}/regenerate_chatbot_key`, dataToSend, config );
 
       if (response.status === 200) { ToastHandle("Chat link regenerated", "success"); }
       else { ToastHandle(response?.data?.error, "danger"); }

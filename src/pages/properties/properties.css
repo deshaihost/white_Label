@@ -66,20 +66,7 @@
     flex-direction: column;
     align-items: center;
     gap: 30px;
-}
-
-.addproperty_links button {
-    color: #146EF5;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    text-decoration-line: underline !important;
-    margin: 0 30px;
-    background: transparent;
-    padding: 0;
-    border: none;
+    justify-content: center;
 }
 
 .unlock-all-button {
@@ -162,6 +149,25 @@
   margin: 0 10px;
 }
 
+.tabs-container {
+  display: inline-flex;
+  gap: 40px;
+}
+
+.tab-button {
+  color: #146EF5;
+  background: transparent;
+  border: 1px solid #146EF5;
+  border-radius: 30px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  background-color: #146EF5;
+  color: #000212;
+}
+
 @media only screen and (max-width: 1199px) {
     .account-container {
         border-radius: 10px;
@@ -185,11 +191,6 @@
 @media only screen and (max-width: 991px) {
     .banner-heading {
         margin-bottom: 25px;
-    }
-
-    .addproperty_links button {
-        font-size: 15px;
-        margin: 0 15px;
     }
 
     .tile {

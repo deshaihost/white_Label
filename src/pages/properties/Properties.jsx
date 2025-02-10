@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import SideBar from "../../component/sideBar/SideBar";
 import "./properties.css";
 import AddPropertyModal from "../../component/modal/addPropertyModal/AddPropertyModal";
@@ -14,6 +15,7 @@ import { stateEmptyActions } from "../../redux/actions";
 import { FullScreenLoader } from "../../helper/Loader";
 import { getSubscriptionStatus } from "../../helper/Authorized";
 import ListIntegrationProperties from "./listIntegrationProperties/ListIntegrationProperties";
+import MultiPropertiesChat from "./multiPropertiesChat/multiPropertiesChat";
 import ToastHandle from "../../helper/ToastMessage";
 import BillingPortalModel from "./billingPortalModel/BillingPortalModel";
 import UnlockPropertiesModal from "../../component/modal/unlockPropertiesModal/unlockPropertiesModal";
@@ -21,6 +23,7 @@ import HostDaddy from "../../component/hostDaddy/hostDaddy";
 import NoltWidget from "../../component/nolt/nolt";
 
 const Properties = () => {
+  const location = useLocation();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const gotoBillingPortalCheckPaymentStatus = store?.gotoBillingPortalPostReducer?.gotoBillingPortal?.status;
@@ -30,7 +33,7 @@ const Properties = () => {
   const [newPropertiesAdded, setNewPropertiesAdded] = useState(false); // called by ImportPropertiesModal when properties are imported, to trigger a re-render of the property list
   const [propertyConditionCheck, setPropertyConditionCheck] = useState(false);
   const [unlockPropertyNames, setUnlockPropertyNames] = useState([]); // array of property names to unlock
-
+  const [activeTab, setActiveTab] = useState('properties');
 
   const handleModelOpen = (type) => {
     if (type === "addPropertyOpen") {
@@ -161,6 +164,13 @@ const Properties = () => {
   }, [subscription_data, propertiesExtraData]);
   */
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('multi') === 'true') {
+      setActiveTab('chat');
+    }
+  }, [location]);
+
   return (
     <>
       <Helmet>
@@ -226,9 +236,7 @@ const Properties = () => {
                       )}
                   </div>
                 </div>
-                <div
-                  className="addproperty_links text-center"
-                  style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                <div className="addproperty_links text-center">
                   <div className="tiles-container">
                     {(!intergrations || Object.keys(intergrations).length === 0) ? (
                       <div className="tile" onClick={() => handleModelOpen("pmsIntegrationOpen")}>
@@ -293,14 +301,28 @@ const Properties = () => {
                       </button>
                   )}
                 </div>
+
+                {userData?.allow_multiprop ? (
+                  <div className="addproperty_links text-center">
+                    <div className="tabs-container">
+                      <button
+                        className={activeTab === 'properties' ? 'tab-button active' : 'tab-button'}
+                        onClick={() => setActiveTab('properties')}
+                      >
+                        Your Properties
+                      </button>
+                      <button
+                        className={activeTab === 'chat' ? 'tab-button active' : 'tab-button'}
+                        onClick={() => setActiveTab('chat')}
+                      >
+                        Multi-Property Chat
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+
                 <div className="property_list">
-                  <ul>
-                    <li className="not-found px-0">
-                      <div className="">
-                        <ListIntegrationProperties />
-                      </div>
-                    </li>
-                  </ul>
+                  {(userData?.allow_multiprop && activeTab === 'chat') ? <MultiPropertiesChat /> : <ListIntegrationProperties />}
                 </div>
                 <div className="load_more"></div>
               </div>

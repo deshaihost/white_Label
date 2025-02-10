@@ -19,11 +19,11 @@ const NoltWidget = () => {
         position: "fixed",
         bottom: "20px",
         right: "20px",
-        backgroundColor: "#007bff",
+        backgroundColor: "#003f99",
         color: "#fff",
         borderRadius: "9999px", // Pill shape via a large radius
         padding: "8px 16px",   // Reduced padding for smaller widget
-        fontSize: "14px",       // Added fontSize for smaller text
+        fontSize: "13px",       // Added fontSize for smaller text
         textDecoration: "none",
         zIndex: 1000,
         boxShadow: "0 4px 8px rgba(255,255,255,0.3)"

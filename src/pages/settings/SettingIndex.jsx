@@ -12,6 +12,7 @@ import { Helmet } from "react-helmet";
 import UserInformationSection from "../account/userInformationSection";
 import AccountContactSection from "../account/contactSection";
 import AccountRegionSection from "../account/regionSection";
+import DangerZone from '../account/dangerZone';
 import AccountNotificationSection from "../account/notificationSection";
 import MessagingChannelsSection from './settingContants/messagingChannels/messagingChannels';
 import { Link, useParams } from "react-router-dom";
@@ -78,6 +79,7 @@ const SettingIndex = () => {
                     <>
                       <UserInformationSection ApiUserData={userData} refreshUserData={refreshUserData} />
                       <AccountRegionSection ApiUserData={userData} refreshUserData={refreshUserData} />
+                      <DangerZone />
                     </>
                   )}
                   {interFaceTypes?.contact === interFaceSettings && (
