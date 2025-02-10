@@ -1,0 +1,236 @@
+/* ALWAYS reference the parent .workbench class in this file to avoid conflicts with other components */
+
+.workbench {
+  display: flex;
+  position: relative;
+  z-index: 0;
+}
+
+.workbench .left-container {
+  flex: 2;
+  padding: 30px 45px;
+  position: relative; /* Add this line */
+  height: calc(100vh - 100px); /* leave room for the navbar */
+  min-height: 550px;
+}
+
+/* Vertical border between the left and right sections */
+.workbench .left-container::after {
+  content: '';
+  position: absolute;
+  top: 40px;
+  bottom: 40px;
+  right: 0;
+  width: 1px;
+  background-color: #ccc;
+}
+
+.workbench .left-container .reservation-stage-select {
+  color: #0d6efd;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  width: 90px;
+}
+
+.workbench .right-container {
+  flex: 3;
+  padding: 30px 45px;
+  height: calc(100vh - 120px); /* leave room for the Actions section (which is not in this div), and the navbar */
+  min-height: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.workbench .right-container .header-information img {
+  height: 110px;
+  max-width: 200px;
+  border-radius: 20px;
+}
+
+.workbench h2, .workbench h3, .workbench h4, .workbench h6, .workbench p, .workbench li {
+  color: #fff;
+}
+
+.workbench li {
+  list-style-type: disc !important;
+  font-size: 14px;
+  margin-left: 20px;
+}
+
+.workbench a {
+  color: #146ef5 !important;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.workbench a:hover {
+  transform: translateY(-2px);
+}
+
+.workbench .header-content {
+  display: flex;
+  align-items: center;
+}
+
+.workbench .header-content img {
+  margin-right: 20px;
+}
+
+.workbench .header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.workbench .chat-information {
+  margin-top: 40px;
+}
+
+.workbench .chat-information img {
+  height: 48px;
+  margin-top: -5px;
+}
+
+.workbench .chat-information-content {
+  padding: 20px;
+  border: 1px solid #045ce9;
+  border-radius: 15px;
+  margin-top: 15px;
+  box-shadow: 0 0 8px 0 rgba(255, 255, 255, 0.5); /* offset-x | offset-y | blur-radius | spread-radius | color */
+  background: #000212;
+}
+
+.workbench .chat-information h5 {
+  font-family: "Samsung Sharp Sans Bold";
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #146ef5;
+  margin-top: 20px;
+  margin-bottom: 4px;
+}
+
+.workbench .chat-information p {
+  font-size: 14px;
+}
+
+.workbench .actions-section {
+  margin-top: 45px;
+}
+
+.workbench .actions-section h3 {
+  margin-bottom: 10px;
+}
+
+.workbench .actions-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.workbench .clickable-div {
+  border: 1px solid #045ce9;
+  border-radius: 15px;
+  padding: 15px 10px;
+  box-shadow: 0 0 8px 0 rgba(255, 255, 255, 0.5); /* offset-x | offset-y | blur-radius | spread-radius | color */
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effects */
+  cursor: pointer;
+}
+
+.workbench .clickable-div:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0px 15px 8px rgba(255, 255, 255, 0.5);
+}
+
+.workbench .action-content {
+  flex: 1 1 calc(50% - 20px); /* Adjust to fit two buttons per row */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 15px;
+}
+
+.workbench .action-content svg {
+  color: #FFF;
+  flex-shrink: 0; /* Prevent the icon from shrinking */
+}
+
+.workbench .action-content h6 {
+  margin: 0; /* Remove default margin */
+  line-height: 1; /* Ensure the text is vertically centered */
+}
+
+.workbench .right-content {
+  flex-grow: 1;
+}
+
+.workbench .control-section {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  margin-bottom: 20px;
+  justify-content: center; /* Center horizontally */
+}
+
+.workbench .reset-button {
+  display: flex;
+  align-items: center;
+  background-color: #146ef5;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+}
+
+.workbench .reset-button:hover {
+  background-color: #0f5ac1;
+}
+
+.workbench .reset-button svg {
+  margin-right: 5px;
+}
+
+.workbench .reservation-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.workbench .reservation-stage label {
+  display: block;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.workbench .reservation-stage select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+@media (max-width: 768px) {
+  .workbench {
+    flex-direction: column;
+  }
+  
+  .workbench .left-container,
+  .workbench .right-container {
+    flex: none;
+    width: 100%;
+    padding: 20px;
+    height: auto;
+  }
+  
+  .workbench .left-container::after {
+    content: none;
+  }
+}

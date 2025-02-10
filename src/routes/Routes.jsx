@@ -14,6 +14,7 @@ import ForgotPass from "../auth/forgotPass/ForgotPass";
 import ThankError from "../component/thankError/ThankError";
 import ErrorImg from "../public/img/404.png";
 import Properties from "../pages/properties/Properties";
+import EditMultiProperty from "../pages/properties/multiPropertiesChat/editMultiProperty";
 import PropertyInsight from "../pages/propertyInsight/PropertyInsight";
 import Subscription from "../pages/subscription/Subscription";
 //import Account from "../pages/account/Account";
@@ -28,6 +29,7 @@ import GuidedSetup from "../pages/properties/addProperties/guided_setup/guidedSe
 import CopyChatBotLink from "../pages/copyChatbotLink/CopyChatBotLink";
 import TestProperty from "../pages/testProperty/TestProperty";
 import Workbench from "../pages/testProperty/workbench/workbench";
+import WorkbenchMulti from "../pages/testProperty/workbench-multi/workbenchMulti";
 import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";
 import TermsofService from "../pages/termsofService/TermsofService";
 import SchedulingWalkthrough from "../pages/userGuides/schedulingWalkthrough/schedulingWalkthrough";
@@ -351,6 +353,15 @@ const Routing = () => {
           }
         />
         <Route
+          path="/edit-multi-property/:id?"
+          element={
+            <ProtectedRoute>
+              <EditMultiProperty />
+            </ProtectedRoute>
+          }
+        />
+        // ...existing code...
+        <Route
           path="/property-insight"
           element={
             <ProtectedRoute>
@@ -428,6 +439,7 @@ const Routing = () => {
 
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>
+        <Route path="/workbench-multi/:multi_property_id" element={<WorkbenchMulti />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
       </Routes>
       { location.pathname !== "/login" &&
@@ -436,6 +448,7 @@ const Routing = () => {
         location.pathname !== "/accept-invitation" &&
         !location.pathname.startsWith("/inbox") &&
         location.pathname !== "/test-show-conversations" &&
+        !location.pathname.startsWith("/edit-multi-property") &&
         !location.pathname.startsWith("/workbench/") &&
         !location.pathname.startsWith("/edit-property/") && <Footer />}
     </div>
