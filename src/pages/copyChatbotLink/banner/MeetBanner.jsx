@@ -39,10 +39,7 @@ const MeetBanner = (props) => {
     if (inputValue.trim() === "") return;
     const userMessage = { text: inputValue, sender: "user" };
     dispatch(
-      chatBoxAIActions({
-        session_id: sessionId?.session_id,
-        message: inputValue,
-      })
+      chatBoxAIActions({session_id:sessionId?.session_id, message:inputValue, chatbot_key:chatbot_key})
     );
 
     setMessages((prevMessages) => [...prevMessages, userMessage]);

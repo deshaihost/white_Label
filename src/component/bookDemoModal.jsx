@@ -25,8 +25,8 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     setDemoFormData({ name, email, propertyCount, source });
   }, [name, email, propertyCount, source]);
 
-  const groupDemoWebinarLink = 'https://calendly.com/nick-hostbuddy/hostbuddy-ai-demo-webinar';
-  const oneOnOneNickOnlyDemoLink = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo';
+  const groupDemoLink = 'https://calendly.com/hostbuddy-/group-demo';
+  const oneOnOneNickOnlyDemoLink = 'https://calendly.com/d/cm2q-5ht-w5m/hostbuddy-ai-demo';
   const oneOnOneNickOrSamDemoLink = 'https://calendly.com/d/cmyr-2pj-brv/hostbuddy-ai-product-demo';
   const oneOnOneSamOnlyDemoLink = 'https://calendly.com/sam-hostbuddy/30min';
 
@@ -108,11 +108,11 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     //let url = randomlySelectedDemoPerson.url;
     let url = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo'; // big customer demo
 
-    if (parseInt(formData.propertyCount) <= 15) { url = groupDemoWebinarLink; }
+    if (parseInt(formData.propertyCount) <= 15) { url = groupDemoLink; }
     else if (parseInt(formData.propertyCount) <= 34) { url = oneOnOneNickOnlyDemoLink; }
     else if (parseInt(formData.propertyCount) <= 99) { url = oneOnOneNickOrSamDemoLink; }
     else if (parseInt(formData.propertyCount) > 99) { url = oneOnOneSamOnlyDemoLink; }
-    else { url = groupDemoWebinarLink; } // shouldn't happen
+    else { url = groupDemoLink; } // shouldn't happen
 
     setRedirectURL(url);
 
@@ -120,7 +120,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
       handleRedirectToDemoLink(url);
     } else if (parseInt(formData.propertyCount) > 99) { // If it's a big fish, send 'em to Sam, don't let them choose group
       handleRedirectToDemoLink(oneOnOneSamOnlyDemoLink, '1:1');
-    } else { // If it's a big fish, let them choose between webinar or 1:1
+    } else { // If it's a medium fish, let them choose between group or 1:1
       setShowDemoOptions(true);
     }
   };
@@ -222,18 +222,18 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
             </h6>
 
             <p style={{ marginTop: '30px', fontSize: '16px', color: 'white', textAlign: 'center' }}>
-              Live Webinar
+              Group Demo
             </p>
             <div className="text-center">
               {showBackupLink ? ( // backup = use an a tag in case the browser blocks the window.open for some reason
-                <a href={groupDemoWebinarLink} target="_blank" rel="noopener noreferrer">
+                <a href={groupDemoLink} target="_blank" rel="noopener noreferrer">
                   <Button className="bg_theme_btn" style={{marginTop:'5px'}}>
-                    Join a Webinar
+                    Join a Group Demo
                   </Button>
                 </a>
               ) : (
-                <Button className="bg_theme_btn" onClick={() => handleRedirectToDemoLink(groupDemoWebinarLink, 'Webinar')} style={{marginTop:'5px'}}>
-                  Join a Webinar
+                <Button className="bg_theme_btn" onClick={() => handleRedirectToDemoLink(groupDemoLink, 'Group')} style={{marginTop:'5px'}}>
+                  Join a Group Demo
                 </Button>
               )}
             </div>

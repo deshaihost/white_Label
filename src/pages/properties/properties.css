@@ -156,16 +156,23 @@
 
 .tab-button {
   color: #146EF5;
-  background: transparent;
+  background: #151530;
   border: 1px solid #146EF5;
   border-radius: 30px;
   padding: 6px 12px;
   cursor: pointer;
+  box-shadow: 0px 2px 15px rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tab-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 2px 15px rgba(255, 255, 255, 0.4);
 }
 
 .tab-button.active {
   background-color: #146EF5;
-  color: #000212;
+  color: #FFF
 }
 
 @media only screen and (max-width: 1199px) {
