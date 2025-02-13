@@ -18,8 +18,10 @@ const InBoxHeader = ({ showInterFace, interFaceComponent, showTimeZoneNotif }) =
     const userPMS = userData?.calry_integrations ? Object.keys(userData.calry_integrations)[0] || null : null;
     const userEmail = userData?.email;
 
-    if ((!['ownerrez', 'hostfully'].includes(userPMS?.toLowerCase())) || (userEmail === "select@stays.net")) {
-      navItems.push({ label: "Review Removal", icon: <MdReviews /> });
+    if (false) { // Hide review removal tab for now
+      if ((!['ownerrez', 'hostfully'].includes(userPMS?.toLowerCase())) || (userEmail === "select@stays.net")) {
+        navItems.push({ label: "Review Removal", icon: <MdReviews /> });
+      }
     }
   } catch { }
 

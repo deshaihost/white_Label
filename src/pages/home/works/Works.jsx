@@ -664,6 +664,7 @@ const Works = () => {
             </div>
           </div>
 
+          {/*
           <div className="row">
             <div className="col-lg-6">
               <div className="works-content">
@@ -682,6 +683,7 @@ const Works = () => {
               <img src={reviewRemovalScreen} alt="works-img" />
             </div>
           </div>
+          */}
 
           <div className="row">
             <div className="col-lg-6">
