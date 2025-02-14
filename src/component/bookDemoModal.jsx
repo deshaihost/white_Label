@@ -28,7 +28,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
   const groupDemoLink = 'https://calendly.com/hostbuddy-/group-demo';
   const oneOnOneNickOnlyDemoLink = 'https://calendly.com/d/cm2q-5ht-w5m/hostbuddy-ai-demo';
   const oneOnOneNickOrSamDemoLink = 'https://calendly.com/d/cmyr-2pj-brv/hostbuddy-ai-product-demo';
-  const oneOnOneSamOnlyDemoLink = 'https://calendly.com/sam-hostbuddy/30min';
+  const oneOnOneSamOnlyDemoLink = 'https://calendly.com/hostbuddy-ai/sam';
 
 
   // Once, on page load, randomly select the demo person
@@ -41,10 +41,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     //const randomly_selected_demo_person = Object.keys(all_demo_URLs)[Math.floor(Math.random() * Object.keys(all_demo_URLs).length)];
     const randomly_selected_demo_person = 'Nick';  // Always choose Nick
     const randomly_selected_demo_URL = all_demo_URLs[randomly_selected_demo_person];
-    setRandomlySelectedDemoPerson({
-      person: randomly_selected_demo_person,
-      url: randomly_selected_demo_URL
-    });
+    setRandomlySelectedDemoPerson({person:randomly_selected_demo_person, url:randomly_selected_demo_URL});
   }, []);
 
   // Call the meta pixel tracking functionality added to the head in routes.jsx, to track the form submission
