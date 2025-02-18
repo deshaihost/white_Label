@@ -381,10 +381,16 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="row mt-5">
           <div className="col-lg-11">
-            <label className="fs-5">Stop Responding upon Negative Sentiment</label>
+            <div className="d-flex align-items-center gap-5">
+              <label className="fs-5">Stop Responding When Sentiment Turns Negative</label>
+              <div className="d-flex align-items-center gap-2">
+                <Form.Check type="switch" id="negative-sentiment-switch" className="custom-switch" checked={currentSettingsData?.stop_responding_on_negative_sentiment} onChange={(e) => setSetting('stop_responding_on_negative_sentiment', e.target.checked)}/>
+                <span className="switch-label" style={{color: currentSettingsData?.stop_responding_on_negative_sentiment ? 'rgb(0, 180, 0)' : '#888'}}>
+                  {currentSettingsData?.stop_responding_on_negative_sentiment ? 'Enabled' : 'Disabled'}
+                </span>
+              </div>
+            </div>
             <p className="settings-label mb-2">If enabled, HostBuddy will stop responding to a guest and let you take over if their sentiment turns negative. An action item will be generated when this happens - make sure you have <a href='https://userguide.hostbuddy.ai/settings/notifications' target='_blank' style={{color:'#146ef5', fontSize:'14px'}}>notifications set up</a> so you're alerted! If HostBuddy stops responding to a guest, you can re-enable responses on the Inbox page.</p>
-            <Form.Check type="radio" aria-label="radio2" name="group4" label="DISABLE (HostBuddy continues responding to guests that have negative sentiment)" value={false} checked={!currentSettingsData?.stop_responding_on_negative_sentiment} onChange={(e) => setSetting('stop_responding_on_negative_sentiment', false)}/>
-            <Form.Check type="radio" aria-label="radio1" name="group4" label="ENABLE (HostBuddy will STOP RESPONDING to a guest if their sentiment turns negative)" value={true} checked={currentSettingsData?.stop_responding_on_negative_sentiment} onChange={(e) => setSetting('stop_responding_on_negative_sentiment', true)}/>
           </div>
         </div>
 

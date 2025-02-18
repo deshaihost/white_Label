@@ -105,10 +105,10 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     //let url = randomlySelectedDemoPerson.url;
     let url = 'https://calendly.com/d/ckq2-5yb-8f5/hostbuddy-ai-demo'; // big customer demo
 
-    if (parseInt(formData.propertyCount) <= 15) { url = groupDemoLink; }
+    if (parseInt(formData.propertyCount) <= 13) { url = groupDemoLink; }
     else if (parseInt(formData.propertyCount) <= 34) { url = oneOnOneNickOnlyDemoLink; }
-    else if (parseInt(formData.propertyCount) <= 99) { url = oneOnOneNickOrSamDemoLink; }
-    else if (parseInt(formData.propertyCount) > 99) { url = oneOnOneSamOnlyDemoLink; }
+    else if (parseInt(formData.propertyCount) <= 150) { url = oneOnOneNickOrSamDemoLink; }
+    else if (parseInt(formData.propertyCount) > 150) { url = oneOnOneSamOnlyDemoLink; }
     else { url = groupDemoLink; } // shouldn't happen
 
     setRedirectURL(url);
