@@ -42,6 +42,11 @@
   transform: translate(18px, -50%); /* move the knob to the right and center it */
 }
 
+.conversation-settings-inbox .switch-label {
+  font-size: 14px;
+  color: #888;
+}
+
 .conversation-settings-inbox textarea.form-control.setting-textarea:disabled {
   color: #AAA
 }

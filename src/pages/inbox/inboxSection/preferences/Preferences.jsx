@@ -17,6 +17,7 @@ default_settings = {
     'message_signature_enabled': False,
     'defer_behavior': 'defer to team',   // 1) 'contact host' - tell the guest to contact the host at their personal number or some other channel; 2) 'defer to team' - “will check with team and get back to you later”; 3) 'defer to host' - “the host will get back to you”; 4) 'embody host' - “I don’t have that information right now / am not able to do that right now, will check and get back to you later”; 5) 'do not respond'
     'reveal_ai': 'only if asked',   // 'only if asked' or 'never'
+    'stop_responding_on_negative_sentiment': False,
     'match_host_tone': False,
     'min_message_delay_minutes': 0, // int, 0-8
     'max_message_delay_minutes': 0,  // int, 0-8
@@ -346,12 +347,17 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
         <div className="row mt-5">
           <div className="col-lg-11">
             <div className="d-flex align-items-center gap-5 mt-4">
-            <label className="fs-5">Use Signature</label>
-            <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.message_signature_enabled} onChange={(e) => setSetting('message_signature_enabled', e.target.checked)}/>
-          </div>
-          <p className="settings-label">If enabled, HostBuddy will append this to the end of each of its messages.</p>
-          <textarea className="form-control setting-textarea" placeholder="" rows={1} value={currentSettingsData.message_signature} onChange={(e) => setSetting('message_signature', e.target.value)} disabled={!currentSettingsData.message_signature_enabled} maxLength={500}/>
-          {/* <small className="text-muted">{(currentSettingsData.message_signature?.length || 0)}/500 characters</small> */}
+              <label className="fs-5">Use Signature</label>
+              <div className="d-flex align-items-center gap-2">
+                <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.message_signature_enabled} onChange={(e) => setSetting('message_signature_enabled', e.target.checked)}/>
+                <span className="switch-label" style={{color:currentSettingsData.message_signature_enabled ? 'rgb(0, 180, 0)' : '#888'}}>
+                  {currentSettingsData.message_signature_enabled ? 'Enabled' : 'Disabled'}
+                </span>
+              </div>
+            </div>
+            <p className="settings-label">If enabled, HostBuddy will append this to the end of each of its messages.</p>
+            <textarea className="form-control setting-textarea" placeholder="" rows={1} value={currentSettingsData.message_signature} onChange={(e) => setSetting('message_signature', e.target.value)} disabled={!currentSettingsData.message_signature_enabled} maxLength={500}/>
+            {/* <small className="text-muted">{(currentSettingsData.message_signature?.length || 0)}/500 characters</small> */}
           </div>
         </div>
 
@@ -370,6 +376,21 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <p className="settings-label mb-2">Can HostBuddy communicate that it is an AI assistant?</p>
             <Form.Check type="radio" aria-label="radio1" name="group3" label="Only if directly asked" value="only if asked" checked={currentSettingsData.reveal_ai === 'only if asked'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
             <Form.Check type="radio" aria-label="radio2" name="group3" label="Never" value="never" checked={currentSettingsData.reveal_ai === 'never'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
+          </div>
+        </div>
+
+        <div className="row mt-5">
+          <div className="col-lg-11">
+            <div className="d-flex align-items-center gap-5">
+              <label className="fs-5">Stop Responding When Sentiment Turns Negative</label>
+              <div className="d-flex align-items-center gap-2">
+                <Form.Check type="switch" id="negative-sentiment-switch" className="custom-switch" checked={currentSettingsData?.stop_responding_on_negative_sentiment} onChange={(e) => setSetting('stop_responding_on_negative_sentiment', e.target.checked)}/>
+                <span className="switch-label" style={{color: currentSettingsData?.stop_responding_on_negative_sentiment ? 'rgb(0, 180, 0)' : '#888'}}>
+                  {currentSettingsData?.stop_responding_on_negative_sentiment ? 'Enabled' : 'Disabled'}
+                </span>
+              </div>
+            </div>
+            <p className="settings-label mb-2">If enabled, HostBuddy will stop responding to a guest and let you take over if their sentiment turns negative. An action item will be generated when this happens - make sure you have <a href='https://userguide.hostbuddy.ai/settings/notifications' target='_blank' style={{color:'#146ef5', fontSize:'14px'}}>notifications set up</a> so you're alerted! If HostBuddy stops responding to a guest, you can re-enable responses on the Inbox page.</p>
           </div>
         </div>
 
