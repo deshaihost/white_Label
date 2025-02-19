@@ -7,15 +7,11 @@ import ToastHandle from "../../../helper/ToastMessage";
 import { BoxLoader } from "../../../helper/Loader";
 import { Link } from "react-router-dom";
 
-function UnlockPropertiesModal({ propertiesToUnlock, has_active_subscription, remaining_unlocks_allowed, remaining_locked_properties, modalShow, handleClose, setPropertiesChanged }) {
+function UnlockPropertiesModal({ propertiesToUnlock, has_active_subscription, payment_failed, remaining_unlocks_allowed, remaining_locked_properties, modalShow, handleClose, setPropertiesChanged }) {
   const store = useSelector((state) => state);
 
   const [unlockPropertiesLoading, setUnlockPropertiesLoading] = useState(false);
   const [addPropertiesToSubscriptionLoading, setAddPropertiesToSubscriptionLoading] = useState(false);
-
-  // Get information about the status of the subscription
-  const subscription_data = store?.getUserDataReducer?.getUserData?.data?.user?.subscription;
-  const paymentGoodUntilDate = new Date(subscription_data?.payment_good_until);
 
   const callUnlockPropertiesApi = async (propertiesToUnlock) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -99,13 +95,17 @@ function UnlockPropertiesModal({ propertiesToUnlock, has_active_subscription, re
               <p>Your current subscription allows you to unlock {remaining_unlocks_allowed} more {remaining_unlocks_allowed == 1 ? "property" : "properties"}.</p>
             )}
             {remaining_unlocks_allowed <= 0 ? (
-              has_active_subscription ? ( // in an ideal world we detect if the user is on a Stripe free trial - and show them the above p tag if they are, and the below if they aren't
-                <>
-                  <p>Your current subscription does not allow you to unlock any more properties. Click <a href="#" onClick={() => handleAddToSubscriptionClick()}>here</a> to add a property to your subscription and unlock this listing.</p> {/* This option lets users add properties during a Stripe free trial without ending the trial */}
-                  <p>Alternatively, you can add properties to your subscription from the <Link to="/setting/subscription">Subscription page</Link> to unlock more properties.</p> {/* If the user changes their property count in the subscription page, it will charge immediately for all the properties, even if they are in a free trial */}
-                </>
+              payment_failed ? (
+                <p>Your properties are locked because we have not been able to process your subscription payment. Please update your payment method in the <Link to="/setting/subscription">Subscription page</Link> to unlock your properties.</p>
               ) : (
-                <p>You've reached the limit of properties you can unlock during the trial. Please subscribe to unlock more properties.</p>
+                has_active_subscription ? ( // in an ideal world we detect if the user is on a Stripe free trial - and show them the above p tag if they are, and the below if they aren't
+                  <>
+                    <p>Your current subscription does not allow you to unlock any more properties. Click <a href="#" onClick={() => handleAddToSubscriptionClick()}>here</a> to add a property to your subscription and unlock this listing.</p> {/* This option lets users add properties during a Stripe free trial without ending the trial */}
+                    <p>Alternatively, you can add properties to your subscription from the <Link to="/setting/subscription">Subscription page</Link> to unlock more properties.</p> {/* If the user changes their property count in the subscription page, it will charge immediately for all the properties, even if they are in a free trial */}
+                  </>
+                ) : (
+                  <p>You've reached the limit of properties you can unlock during the trial. Please subscribe to unlock more properties.</p>
+                )
               )
             ) : remaining_unlocks_allowed < propertiesToUnlock.length ? ( // user selected more properties to unlock than they're allowed. *this should never happen* since the "unlock all" button should not appear if the user can't unlock all properties.
               <p>Your subscription only allows you to unlock {remaining_unlocks_allowed} more properties. Upgrade your subscription in the <Link to="/setting/subscription">Subscription page</Link> to unlock them all, or return to the properties page to unlock them individually.</p>

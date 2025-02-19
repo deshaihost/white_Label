@@ -48,6 +48,8 @@ const ListIntegrationProperties = () => {
   const remainingUnlocksAllowed = numPropertiesAllowed - numPropsAlreadyUnlocked;
   //const has_active_subscription = (numPropertiesAllowed == 0 || numPropertiesAllowed == undefined) ? false : true;
   const has_active_subscription = !['trial', 'trial_over', 'canceled'].includes(subscription_data.plan);
+  const payment_failed = subscription_data.status === 'payment_failed';
+  console.log('subscription_data:', subscription_data.status, payment_failed);
 
   const propertiesDeleteMessage =store?.deleteListIntegrationPropertiesReducer?.deleteListIntegrationProperties?.data?.message;
   const propertiesDeleteError = store?.deleteListIntegrationPropertiesReducer?.deleteListIntegrationProperties?.data?.error;
@@ -485,7 +487,7 @@ const ListIntegrationProperties = () => {
       {showCalender && (
         <CalenderModel selectedProperty={selectedProperty} showCalender={showCalender} setShowCalender={setShowCalender} allProperties={allProperties} setScheduleChanged={setScheduleChanged}/>
       )}
-      <UnlockPropertiesModal propertiesToUnlock={propertiesToUnlock} has_active_subscription={has_active_subscription} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} modalShow={model.unlockProperty} handleClose={handleModelClose} setPropertiesChanged={setScheduleChanged}/>
+      <UnlockPropertiesModal propertiesToUnlock={propertiesToUnlock} has_active_subscription={has_active_subscription} payment_failed={payment_failed} remaining_unlocks_allowed={remainingUnlocksAllowed} remaining_locked_properties={numPropsStillLocked} modalShow={model.unlockProperty} handleClose={handleModelClose} setPropertiesChanged={setScheduleChanged}/>
       <LockPropertiesModal propertiesToLock={propertiesToLock} modalShow={model.lockProperty} handleClose={handleModelClose} setPropertiesChanged={setScheduleChanged}/>
       <EmbedModal show={embedModalData.show} handleClose={() => setEmbedModalData({show:false, chatbotKey:""})} chatbotKey={embedModalData.chatbotKey}/>
     </div>
