@@ -6,6 +6,7 @@ import Loader from '../../../../helper/Loader';
 import axios from 'axios';
 
 const UsersTab = (userData) => {
+  const mainUserEmail = userData?.userData?.email;
 
   const [getSubUsersIsLoading, setGetSubUsersIsLoading] = useState(false);
   const [apiSubUsers, setApiSubUsers] = useState([]);
@@ -13,6 +14,7 @@ const UsersTab = (userData) => {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState('');
   const [sendInviteIsLoading, setSendInviteIsLoading] = useState(false);
+  const [removingUsers, setRemovingUsers] = useState({});
 
   const callGetSubUsersApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -65,6 +67,34 @@ const UsersTab = (userData) => {
     return false;
   };
 
+  const callRemoveUserApi = async (email) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setRemovingUsers((prev) => ({ ...prev, [email]: true }));
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: (status) => status >= 200 && status < 500
+      };
+      const body_data = { email };
+      const res = await axios.post(`${baseUrl}/remove_sub_user`, body_data, config);
+      if (res.status === 200) {
+        ToastHandle("User removed successfully", "success");
+        callGetSubUsersApi();
+      } else {
+        ToastHandle(res.data.error, "danger");
+      }
+    } catch (error) {
+      ToastHandle("Error removing user", "danger");
+    } finally {
+      setRemovingUsers((prev) => {
+        const newObj = { ...prev };
+        delete newObj[email];
+        return newObj;
+      });
+    }
+  };
+
   // When the page loads, call the API to get sub users
   useEffect(() => {
     callGetSubUsersApi();
@@ -106,6 +136,7 @@ const UsersTab = (userData) => {
             <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>Users</th>
             <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>Role</th>
             <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>Status</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>Manage</th>
           </tr>
         </thead>
         <tbody>
@@ -118,6 +149,19 @@ const UsersTab = (userData) => {
                   <td style={{ padding: '10px', fontSize: '14px' }}>{email}</td>
                   <td style={{ padding: '10px', fontSize: '14px' }}>{role}</td>
                   <td style={{ padding: '10px', fontSize: '14px' }}>{status}</td>
+                  <td style={{ padding: '10px', fontSize: '14px' }}>
+                  {email !== mainUserEmail && (
+                    removingUsers[email] ? <Loader /> : <span style={{ color: 'red', cursor: 'pointer' }} onClick={() => {
+                            if (window.confirm("Are you sure you want to remove this user?")) {
+                              callRemoveUserApi(email);
+                            }
+                          }}
+                        >
+                          Remove
+                        </span>
+                    )
+                  }
+                  </td>
                 </tr>
               );
             })

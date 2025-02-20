@@ -31,7 +31,6 @@ const InviteSignup = () => {
   password.current = watch("newPassword", "");
 
   const { email, invited_by, account_already_exists } = invitationData;
-  console.log(email, ',', invited_by, ',', account_already_exists);
 
   // Get the invite code from the query param
   const location = useLocation();
