@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import ChangePassModal from './changePassModal';
 
-const UserInformationSection = ({ ApiUserData, refreshUserData }) => {
+const UserInformationSection = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -54,6 +54,28 @@ const UserInformationSection = ({ ApiUserData, refreshUserData }) => {
     }
   };
 
+  const callGetAccountInfoApi = async () => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+
+      const response = await axios.get( `${baseUrl}/get_account_info`, config );
+
+      if (response.status === 200) {
+        return response.data;
+      }
+      else { ToastHandle(response?.data?.error, "danger"); }
+    } catch (error) {
+      ToastHandle("Internal server error", "danger");
+      return { error: "Internal server error" };
+    }
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -73,14 +95,17 @@ const UserInformationSection = ({ ApiUserData, refreshUserData }) => {
     setUpdateApiLoading(true);
     if (validate()) {
       let execute_update = true;
-      if (formData.email !== ApiUserData.email) {
+      if (formData.email !== formData.email) {
         execute_update = window.confirm("You are about to change your email address. If you continue, you will need to confirm the new address and use that for future logins, and you won't be able to log in with the old address anymore. Continue?");
       }
 
       if (execute_update) {
         const response = await callUpdateAccountApi();
         if (!(response?.error || response?.email_changed)) {
-          refreshUserData();
+          const data = await callGetAccountInfoApi();
+          if (data && !data.error) {
+            setFormData({firstName: data.first_name, lastName: data.last_name, phone: data.phone, email: data.email});
+          }
         }
       }
     }
@@ -89,11 +114,14 @@ const UserInformationSection = ({ ApiUserData, refreshUserData }) => {
 
   // When the user data is fetched, update the form fields
   useEffect(() => {
-    if (ApiUserData) {
-      const { first_name, last_name, phone, email } = ApiUserData;
-      setFormData({ firstName:first_name, lastName:last_name, phone:phone, email:email });
+    async function fetchUserData() {
+      const data = await callGetAccountInfoApi();
+      if (data && !data.error) {
+        setFormData({firstName: data.first_name, lastName: data.last_name, phone: data.phone, email: data.email});
+      }
     }
-  }, [ApiUserData]);
+    fetchUserData();
+  }, []);
 
   return (
     <div className="account-content">

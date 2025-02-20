@@ -49,7 +49,6 @@ const ListIntegrationProperties = () => {
   //const has_active_subscription = (numPropertiesAllowed == 0 || numPropertiesAllowed == undefined) ? false : true;
   const has_active_subscription = !['trial', 'trial_over', 'canceled'].includes(subscription_data.plan);
   const payment_failed = subscription_data.status === 'payment_failed';
-  console.log('subscription_data:', subscription_data.status, payment_failed);
 
   const propertiesDeleteMessage =store?.deleteListIntegrationPropertiesReducer?.deleteListIntegrationProperties?.data?.message;
   const propertiesDeleteError = store?.deleteListIntegrationPropertiesReducer?.deleteListIntegrationProperties?.data?.error;
