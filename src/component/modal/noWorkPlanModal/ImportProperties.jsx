@@ -12,8 +12,6 @@ import ReactDOM from 'react-dom';
 
 function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewPropertiesAdded, userData }) {
   const { store, dispatch } = useSelectorUseDispatch();
-  const integrationProperties = ["701 1st Ave", "701 2nd Ave", "701 3rd Ave"];
-  const [loadingIntegrationProperties, setLoadingIntegrationProperties] = useState(false);
   const [hasCalledAPI, setHasCalledAPI] = useState(false);
   const [importLoading, setImportLoading] = useState(false);
   const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties
@@ -27,8 +25,8 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
   const [searchTerm, setSearchTerm] = useState('');
   const [maxPropertiesSelected, setMaxPropertiesSelected] = useState(false);
   
-  // Add feature flag to control property limits
-  const ENABLE_PROPERTY_LIMITS = true; // Set this to false to disable property limits
+  // Property limits - prevent user from selecting more properties than their account is allowed to have
+  const ENABLE_PROPERTY_LIMITS = false; // Set this to false to disable property limits
   
   // Helper function to normalize strings
   const normalizeString = (str) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
