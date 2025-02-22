@@ -1,0 +1,40 @@
+.price-slider-container {
+    display: flex;
+    color: white;
+}
+
+.price-slider-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.price-slider-input {
+    width: 50%;
+    font-size: 22px;
+    padding: 10px 20px;
+}
+
+.price-slider-text {
+    color: white;
+}
+
+.price-label {
+    font-family: "Samsung Sharp Sans Bold";
+    margin-bottom: 0.5rem;
+    font-size: 22px;
+    text-align: left;
+}
+
+.price-value {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.per-month {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: normal;
+}

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import BookDemoModal from '../../component/bookDemoModal';
 import NewPricingTiles from './newPricingTiles/newPricingTiles';
+import PriceSlider from './slider/priceSlider';
 import ContactUs from '../meetHostBuddy/discover/contactUs/ContactUs';
 
 const Pricing = () => {
@@ -61,13 +62,13 @@ const Pricing = () => {
           <div className="col d-flex flex-column justify-content-center align-items-start property-labels">
             <div style={{ height: '100px' }}></div> {/* Vertical spacer, to account for the  */}
             <div className="left-side-text d-flex align-items-center">
-              <h5><strong>1-10</strong> Properties</h5>
+              <h5>Properties <strong>1-10</strong></h5>
             </div>
             <div className="left-side-text d-flex align-items-center">
-              <h5><strong>11-50</strong> Properties</h5>
+              <h5>Properties <strong>11-50</strong></h5>
             </div>
             <div className="left-side-text d-flex align-items-center">
-              <h5><strong>51-99</strong> Properties</h5>
+              <h5>Properties <strong>51+</strong></h5>
             </div>
           </div>
           <div className="col price-plans-column">
@@ -82,7 +83,7 @@ const Pricing = () => {
             </div>
             <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="7" priceTier={2}/>
             <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="6" priceTier={2}/>
-            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="5" priceTier={2}/>
+            <NewPricingTiles num_props_range="51+" monthlyPricePerProp="5" priceTier={2}/>
           </div>
           <div className="col price-plans-column">
             <h3>HostBuddy Elite</h3>
@@ -95,12 +96,14 @@ const Pricing = () => {
             </div>
             <NewPricingTiles num_props_range="1-10" monthlyPricePerProp="10" priceTier={3}/>
             <NewPricingTiles num_props_range="11-50" monthlyPricePerProp="8" priceTier={3}/>
-            <NewPricingTiles num_props_range="51-99" monthlyPricePerProp="6" priceTier={3}/>
+            <NewPricingTiles num_props_range="51+" monthlyPricePerProp="6" priceTier={3}/>
           </div>
-          <h4 style={{marginTop:"20px"}}>100+ properties - <button className="contact-us-button" onClick={() => setContactModalShow(true)}>Contact Us</button></h4>
+          {/* <h4 style={{marginTop:"20px"}}>100+ properties - <button className="contact-us-button" onClick={() => setContactModalShow(true)}>Contact Us</button></h4> */}
         </div>
 
+        <PriceSlider />
         <Features />
+
         <div className="started">
           <div className="started-content">
           <h3>Get Started Today!</h3>

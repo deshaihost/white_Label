@@ -12,9 +12,9 @@ const NewPricingTiles = ( {num_props_range, priceTier, monthlyPricePerProp, cent
       <div className={`pricing-plan-box ${priceTier === 1 ? 'lower-price-plan' : priceTier === 2 ? 'mid-price-plan' : 'best-price-plan'}`}>
         <div className="pricing-bar-box">
 
-          {/* Left side text, e.g. "1-10 Properties". This only appears for small/medium screens. For large screens, it's located outside the box. */}
+          {/* Left side text, e.g. "Properties 1-10". This only appears for small/medium screens. For large screens, it's located outside the box. */}
           <div className="left-side-text">
-            <h5><strong>{num_props_range}</strong> Properties</h5>
+            <h5>Properties <strong>{num_props_range}</strong></h5>
           </div>
 
           {/* Right side text, e.g. "2 weeks free, then $12/Month per property" */}
