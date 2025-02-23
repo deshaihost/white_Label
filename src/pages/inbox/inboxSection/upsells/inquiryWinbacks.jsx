@@ -40,6 +40,11 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
     setLocalSettingsData({ ...localSettingsData, [selectedConfig]: newData });
   };
 
+  // Interpret ai_personalization as true if not present
+  if (currentSettingsData.ai_personalization === undefined) {
+    currentSettingsData.ai_personalization = true;
+  }
+
   const total_hours_after = parseInt(currentSettingsData?.days_after_last_message || 0) * 24 + parseInt(currentSettingsData?.hours_after_last_message || 0);
 
   //const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available'};
@@ -301,6 +306,23 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
+      <div className="ai-context-appropriate-section" style={{padding:'10px 50px'}}>
+        <p className="d-flex align-items-center gap-5">
+          Enable AI Personalization
+          <div className="form-check form-switch">
+            <input className="form-check-input" type="checkbox" checked={currentSettingsData?.ai_personalization || false} onChange={(e) => {setSetting('ai_personalization', e.target.checked, currentSettingsData, setCurrentSettingsData);}} id="flexSwitchCheckChecked"/>
+          </div>
+        </p>
+        <p className="fs-14 text-muted">
+          You currently have AI personalization <span className={currentSettingsData?.ai_personalization ? "text-success" : "text-danger"}>{currentSettingsData?.ai_personalization ? "enabled" : "disabled"}</span>.
+        </p>
+        <p className="fs-14 text-muted">
+          If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
+        </p>
+      </div>
+
+      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
+
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
       <p className="settings-label text-center">Showing the next 10</p>
       {currentSettingsData.enabled ? (
@@ -368,7 +390,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
           </table>
         </div>
       </div>
-      <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} bodyBottomText={statusAndJustificationText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} />
+      <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} bodyBottomText={statusAndJustificationText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} ai_personalization={currentSettingsData.ai_personalization}/>
     </div>
   );
 };

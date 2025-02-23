@@ -45,6 +45,11 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
     setLocalSettingsData({ ...localSettingsData, [selectedConfig]: newData });
   };
 
+  // Interpret ai_personalization as true if not present
+  if (currentSettingsData.ai_personalization === undefined) {
+    currentSettingsData.ai_personalization = true;
+  }
+
   // Determine whether / how to show absolute discount, based on the PMS & the availability of currency
   const userData = JSON.parse(sessionStorage.getItem("userData")); // assumes that getUserDataActions has been dispatched at some point this session, which populates this session storage item
   const userPMS = userData?.calry_integrations ? Object.keys(userData.calry_integrations)[0] || null : null;
@@ -328,6 +333,23 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
       </div>
 
+      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
+
+      <div className="ai-context-appropriate-section" style={{padding:'10px 50px'}}>
+        <p className="d-flex align-items-center gap-5">
+          Enable AI Personalization
+          <div className="form-check form-switch">
+            <input className="form-check-input" type="checkbox" checked={currentSettingsData?.ai_personalization || false} onChange={(e) => {setSetting('ai_personalization', e.target.checked, currentSettingsData, setCurrentSettingsData);}} id="flexSwitchCheckChecked"/>
+          </div>
+        </p>
+        <p className="fs-14 text-muted">
+          You currently have AI personalization <span className={currentSettingsData?.ai_personalization ? "text-success" : "text-danger"}>{currentSettingsData?.ai_personalization ? "enabled" : "disabled"}</span>.
+        </p>
+        <p className="fs-14 text-muted">
+          If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
+        </p>
+      </div>
+
       <div className="row mt-5">
         <div className="col-lg-12 text-center">
           <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
@@ -401,7 +423,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
           </table>
         </div>
       </div>
-      <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} />
+      <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} ai_personalization={currentSettingsData.ai_personalization}/>
     </div>
   );
 };
