@@ -28,7 +28,7 @@ const ConnectGmailButton = () => {
       };
       const body_data = { code };
   
-      const response = await axios.post(`${baseUrl}/complete_complete_google_oauth_oauth`, body_data, config);
+      const response = await axios.post(`${baseUrl}/complete_google_oauth`, body_data, config);
   
       if (response.status === 200) {
         return { success: true, data: response.data };
