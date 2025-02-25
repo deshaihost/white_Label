@@ -378,10 +378,9 @@ const Routing = () => {
           }
         />
         <Route
-          path="/setting/:section?"
+          path="/setting/:section?/:subsec?"
           element={
             <ProtectedRoute>
-              {/* <Account /> */}
               <SettingIndex />
             </ProtectedRoute>
           }

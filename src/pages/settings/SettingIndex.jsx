@@ -14,14 +14,14 @@ import AccountContactSection from "../account/contactSection";
 import AccountRegionSection from "../account/regionSection";
 import DangerZone from '../account/dangerZone';
 import AccountNotificationSection from "../account/notificationSection";
-import MessagingChannelsSection from './settingContants/messagingChannels/messagingChannels';
+import MessagingChannels from "./settingContants/messagingChannels/messagingChannels";
 import { Link, useParams } from "react-router-dom";
 import HostDaddy from '../../component/hostDaddy/hostDaddy';
 
 const SettingIndex = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const { section } = useParams();
+  const { section, subsec } = useParams();
 
   const [interFaceSettings, setInterFaceSettings] = useState("account");
   const [userData, setUserData] = useState({});
@@ -104,7 +104,7 @@ const SettingIndex = () => {
                     <UsersTab userData={userData}/>
                   )}
                   {interFaceTypes?.messagingChannels === interFaceSettings && (
-                    <MessagingChannelsSection ApiUserData={userData} refreshUserData={refreshUserData}/>
+                    <MessagingChannels ApiUserData={userData} refreshUserData={refreshUserData} subsec={subsec}/>
                   )}
                 </div>
               </div>
