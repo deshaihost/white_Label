@@ -84,7 +84,7 @@ const ConnectGmailButton = ({ subsec }) => {
     const clientId = '846715585601-e108g2kk85v5oigdcqt97uvvmifut026.apps.googleusercontent.com';
     const redirectUri = encodeURIComponent('https://www.hostbuddy.ai/setting/messaging-channels/gmail');
     const scopes = encodeURIComponent("https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send");
-    const authorizationUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=code&state=${state}`;
+    const authorizationUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=code&state=${state}&access_type=offline&prompt=consent`; // access_type=offline&prompt=consent needed to get a refresh token
 
     // Redirect the user to the authorization page
     window.location.href = authorizationUrl;
