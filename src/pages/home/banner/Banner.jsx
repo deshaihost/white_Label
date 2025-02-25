@@ -84,7 +84,7 @@ const Banner = () => {
             <Link to="/signup" className="link-btn outline-btn">
               Get Started For Free
             </Link>
-            <span className="bg-shadow" style={{zIndex:'-100'}}></span>
+            <span className="bg-shadow"></span>
           </div>
 
           {/* <div className="banner-video">
