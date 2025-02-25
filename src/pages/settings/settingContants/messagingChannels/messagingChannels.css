@@ -1,0 +1,56 @@
+.messaging-channels .channels-tabs {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+.messaging-channels .tab-button {
+  background-color: rgb(50, 50, 50);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 10px 20px;
+  margin: 0 10px 30px 0;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #6b8aff;
+}
+.messaging-channels .tab-button.active {
+  background-color: rgba(0, 0, 255, 0.2);
+  border-color: #6b8aff;
+  color: #89a4ff;
+  box-shadow: 0 2px 8px rgba(107, 138, 255, 0.3);
+}
+.messaging-channels .tab-button:hover {
+  background-color: rgba(107, 138, 255, 0.15);
+  border-color: rgba(107, 138, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(107, 138, 255, 0.2);
+}
+
+.gmail-connect-button {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #3c4043;
+  margin-top: 20px;
+}
+
+.gmail-connect-button:hover {
+  background-color: #f6f6f6;
+  transform: translateY(-1px);
+}
+
+.gmail-connect-button .gmail-logo {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.email-section {
+  padding: 20px;
+}

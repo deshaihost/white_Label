@@ -11,7 +11,6 @@ const ConnectToTurno = () => {
   const location = useLocation();
   
   const [isProcessing, setIsProcessing] = useState(false);
-  const [message, setMessage] = useState('');
 
   // Call the backend API to complete the OAuth flow
   const completeTurnoOauth = async (code) => {
@@ -48,7 +47,7 @@ const ConnectToTurno = () => {
 
         //if (storedState !== returnedState) { // skip state check
         if (false) {
-          setMessage('ERROR: State Mismatch.');
+          ToastHandle('ERROR: State Mismatch.', 'danger');
         } else {
           setIsProcessing(true);
           try {
@@ -60,7 +59,7 @@ const ConnectToTurno = () => {
               ToastHandle(`Failed to connect to Turno: ${result.error}`, 'danger');
             }
           } catch (error) {
-            setMessage('Failed to connect to Turno.');
+            ToastHandle('Failed to connect to Turno.', 'danger');
             console.error('Error:', error);
           } finally {
             setIsProcessing(false);
