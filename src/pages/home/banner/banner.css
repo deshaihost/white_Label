@@ -12,7 +12,7 @@
   position: absolute;
   top: -32%;
   right: 0%;
-  z-index: -1;
+  z-index: -101;
 }
 .banner::before {
   content: "";
