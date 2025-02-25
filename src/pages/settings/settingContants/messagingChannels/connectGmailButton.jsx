@@ -82,7 +82,7 @@ const ConnectGmailButton = ({ subsec }) => {
     // Build the authorization URL
     const clientId = '846715585601-e108g2kk85v5oigdcqt97uvvmifut026.apps.googleusercontent.com';
     const redirectUri = encodeURIComponent('https://www.hostbuddy.ai/setting/messaging-channels/gmail');
-    const scopes = encodeURIComponent("https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send");
+    const scopes = encodeURIComponent("openid email profile https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send");
     const authorizationUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=code&state=${state}`;
 
     // Redirect the user to the authorization page
