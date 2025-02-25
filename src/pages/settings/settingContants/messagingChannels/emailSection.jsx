@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import ConnectGmailButton from "./connectGmailButton";
 import "./messagingChannels.css";
 
-const EmailSection = (ApiUserData, refreshUserData) => {
-  const existingConnectedEmails = ApiUserData?.ApiUserData?.email_senders || [];
+const EmailSection = ({ ApiUserData, refreshUserData, subsec }) => {
+  const existingConnectedEmails = ApiUserData?.email_senders || [];
 
   return (
     <div className="email-section">
@@ -12,7 +12,7 @@ const EmailSection = (ApiUserData, refreshUserData) => {
       {existingConnectedEmails.length > 0 ? (
         <p>You have connected email addresses: {existingConnectedEmails.join(', ')}</p>
       ) : (
-        <ConnectGmailButton />
+        <ConnectGmailButton subsec={subsec} />
       )}
     </div>
   );

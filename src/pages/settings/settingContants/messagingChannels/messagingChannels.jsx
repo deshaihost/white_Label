@@ -26,7 +26,7 @@ const MessagingChannels = ({ ApiUserData, refreshUserData, subsec }) => {
           <WhatsAppSection ApiUserData={ApiUserData} refreshUserData={refreshUserData} />
         )}
         {selectedChannel === 'Email' && (
-          <EmailSection />
+          <EmailSection ApiUserData={ApiUserData} refreshUserData={refreshUserData} subsec={subsec} />
         )}
       </div>
     </div>

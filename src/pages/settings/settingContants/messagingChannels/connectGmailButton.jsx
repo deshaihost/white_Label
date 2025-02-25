@@ -9,7 +9,7 @@ import "./messagingChannels.css";
 
 const gmail_logo = 'https://storage.googleapis.com/frontend_media/partners/Gmail_icon_(2020).svg';
 
-const ConnectGmailButton = () => {
+const ConnectGmailButton = ({ subsec }) => {
   const location = useLocation();
   const dispatch = useDispatch();
 
@@ -42,6 +42,11 @@ const ConnectGmailButton = () => {
 
   useEffect(() => {
     const handleOauth = async () => {
+      // Only process OAuth if we're on the gmail callback route
+      if (subsec !== 'gmail') {
+        return;
+      }
+
       const params = new URLSearchParams(location.search);
       const code = params.get('code');
 
@@ -65,7 +70,7 @@ const ConnectGmailButton = () => {
     };
 
     handleOauth();
-  }, [location.search]);
+  }, [location.search, subsec]);
 
   const handleConnectClick = () => {
     if (isProcessing) { return; }

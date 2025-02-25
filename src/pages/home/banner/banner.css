@@ -12,7 +12,7 @@
   position: absolute;
   top: -32%;
   right: 0%;
-  z-index: -1;
+  z-index: -101;
 }
 .banner::before {
   content: "";
@@ -60,6 +60,7 @@
   left: 0;
   right: 0;
   margin: auto;
+  z-index: -100;
 }
 
 /* .banner .banner-container a {
