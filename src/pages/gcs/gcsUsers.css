@@ -1,12 +1,13 @@
 /* In this file: always reference the parent class to avoid conflicts with other components */
+/* copied from src/pages/properties/addProperties/guided_setup/guidedSetup.css */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
-.pst { /* property setup tiles */
+.gcs-users {
     padding: 70px 150px;
 }
 
-.pst .setup-tile {
+.gcs-users .setup-tile {
   background: #000212;
   border: 1px solid var(--main-Color, #146EF5);
   border-radius: 30px;
@@ -14,7 +15,7 @@
   padding: 30px 60px 40px 60px;
 }
 
-.pst h2 {
+.gcs-users h2 {
   color: #146ef5;
   font-family: "Samsung Sharp Sans Bold";
   font-size: 26px;
@@ -24,7 +25,20 @@
   margin-bottom: 20px;
 }
 
-.pst .accordion-item {
+.gcs-users .description {
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.gcs-users p {
+    color: #fff;
+    font-family: 'Samsung Sharp Sans Medium';
+}
+
+
+.gcs-users .accordion-item {
     border-radius: 15px;
     border: 1px solid var(--main-Color, #146EF5);
     background: linear-gradient(180deg, #000426 0%, #00031A 100%);
@@ -33,22 +47,22 @@
 }
 
 /* Only apply intense shadow on hover when accordion is closed */
-.pst .accordion-item:has(.accordion-button.collapsed):hover {
+.gcs-users .accordion-item:has(.accordion-button.collapsed):hover {
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
 }
 
 /* Less intense shadow for opened accordion */
-.pst .accordion-item:has(.accordion-button:not(.collapsed)) {
+.gcs-users .accordion-item:has(.accordion-button:not(.collapsed)) {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
-.pst .accordion-item.completed {
+.gcs-users .accordion-item.completed {
     border: 1px solid #4CAF50;
 }
 
-.pst .accordion-item.completed .accordion-header .accordion-button::before {
+.gcs-users .accordion-item.completed .accordion-header .accordion-button::before {
     content: '';
-    background-image: url(../../../../public/img/Green_check.svg);
+    background-image: url(../../public/img/Green_check.svg);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -60,20 +74,20 @@
     transform: translateY(-50%);
 }
 
-.pst .accordion-item.completed .accordion-header .accordion-button::after {
+.gcs-users .accordion-item.completed .accordion-header .accordion-button::after {
     display: none; /* Hide the arrow for completed items, since it doesn't look good with the checkmark */
 }
 
-.pst .accordion-item:not(:last-child) {
+.gcs-users .accordion-item:not(:last-child) {
     margin-bottom: 30px;
 }
 
-.pst .accordion-item .accordion-header {
+.gcs-users .accordion-item .accordion-header {
     margin-bottom: 0;
     width: 100%; /* Ensure the header takes full width */
 }
 
-.pst .accordion-item .accordion-header .accordion-button {
+.gcs-users .accordion-item .accordion-header .accordion-button {
     box-shadow: none !important;
     outline: none;
     word-break: break-word;
@@ -91,12 +105,12 @@
     width: 100%; /* Ensure button takes full width */
 }
 
-.pst .accordion-item:first-of-type .accordion-button {
+.gcs-users .accordion-item:first-of-type .accordion-button {
     border-top-left-radius: calc(0.25rem - 1px);
     border-top-right-radius: calc(0.25rem - 1px);
 }
 
-.pst .accordion-item .accordion-header .accordion-button .subtitle {
+.gcs-users .accordion-item .accordion-header .accordion-button .subtitle {
     font-family: 'DM Sans', sans-serif;
     font-size: 14px;
     font-weight: 400;
@@ -106,21 +120,21 @@
     display: block;
 }
 
-.pst .accordion-item .accordion-header .accordion-button .subtitle.loading {
+.gcs-users .accordion-item .accordion-header .accordion-button .subtitle.loading {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     min-height: 24px;
 }
 
-.pst .accordion-item .accordion-header .accordion-button .subtitle.loading .spinner-border {
+.gcs-users .accordion-item .accordion-header .accordion-button .subtitle.loading .spinner-border {
     width: 16px;
     height: 16px;
     border-width: 2px;
 }
 
-.pst .accordion-item .accordion-header .accordion-button::after {
-    background-image: url(../../../../public/img/arrow_down.png) !important;
+.gcs-users .accordion-item .accordion-header .accordion-button::after {
+    background-image: url(../../public/img/arrow_down.png) !important;
     background-position: center;
     background-size: contain;
     width: 8.486px;
@@ -132,7 +146,13 @@
     transform: translateY(-50%);
 }
 
-.pst .accordion-item .accordion-body {
+/* Used for accordion items that are used as links (no dropdown - clicking them takes you somewhere). Rotate the arrow so it's pointing right */
+.gcs-users .accordion-item.accordion-link .accordion-header .accordion-button::after {
+    background-image: url(../../public/img/arrow_down.png) !important;
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+.gcs-users .accordion-item .accordion-body {
     padding: 20px 15px;
     color: #CCC !important;
     leading-trim: both;
@@ -144,7 +164,7 @@
     line-height: 150%;
 }
 
-.pst .accordion-content-tile {
+.gcs-users .accordion-content-tile {
     background: #151530;
     border: 1px solid #146EF5;
     border-radius: 15px;
@@ -154,90 +174,107 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    width: 100%;
 }
 
-.pst .banner-heading {
+.gcs-users .user-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.gcs-users .banner-heading {
     margin-bottom: 30px;
 }
 
-.pst .other-content-tile {
+.gcs-users .other-content-tile {
   background: #151530;
   border: 1px solid #146EF5;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   margin-top: 30px;
   padding: 20px;
+  display: flex;
+  justify-content: center;
 }
 
-.pst .completion-message {
+.gcs-users .completion-message {
     color: white;
     text-align: center;
     font-family: 'DM Sans', sans-serif;
 }
 
-.pst .header-information {
+.gcs-users .header-information {
     margin: 0 auto 30px auto;
 }
 
-.pst .header-content {
+.gcs-users .header-content {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.pst .header-content img {
+.gcs-users .header-content img {
     height: 110px;
     max-width: 400px;
     border-radius: 20px;
     margin-right: 20px;
 }
 
-.pst .header-text {
+.gcs-users .header-text {
     display: flex;
     flex-direction: column;
 }
 
-.pst .header-text h2 {
+.gcs-users .header-text h2 {
     color: #fff;
     margin-bottom: 5px;
     font-family: 'Samsung Sharp Sans Bold';
     font-size: 36px;
 }
 
-.pst .header-text a {
+.gcs-users .header-text a {
     color: #146ef5 !important;
     transition: transform 0.2s;
     cursor: pointer;
 }
 
-.pst .header-text a:hover {
+.gcs-users .header-text a:hover {
     transform: translateY(-2px);
 }
 
 @media only screen and (max-width: 991px) {
-    .pst {
+    .gcs-users {
         padding: 50px 0;
     }
 
-    .pst .accordion-item {
+    .gcs-users .accordion-item {
         padding: 20px;
     }
 
-    .pst .accordion-item .accordion-header .accordion-button {
+    .gcs-users .accordion-item .accordion-header .accordion-button {
         font-size: 16px;
         padding: 20px;
     }
 
-    .pst .accordion-item .accordion-body {
+    .gcs-users .accordion-item .accordion-body {
         padding: 20px;
     }
 
-    .pst .setup-tile {
+    .gcs-users .setup-tile {
         padding: 20px;
+    }
+
+    .gcs-users .user-options {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
     }
 }
 
-.pst .primary-btn {
+.gcs-users .primary-btn {
     background: #0d6efd;
     color: white;
     border: none;
@@ -250,16 +287,17 @@
     transition: background-color 0.3s ease;
     display: block;
     margin-bottom: 10px;
+    text-align: center;
 }
 
-.pst .primary-btn:hover {
+.gcs-users .primary-btn:hover {
     background: #0b5ed7;
 }
 
-.pst .underline-btn {
+.gcs-users .underline-btn {
   color: #146EF5;
   font-family: 'Samsung Sharp Sans Medium';
-  font-size: 18px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -267,5 +305,15 @@
   background: transparent;
   padding: 0;
   border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
   display: block;
+}
+
+.gcs-users .underline-btn:hover {
+  opacity: 0.8;
+}
+
+.gcs-users .underline-btn.danger {
+  color: #ff4d4f;
 }

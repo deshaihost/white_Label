@@ -14,6 +14,7 @@ import ForgotPass from "../auth/forgotPass/ForgotPass";
 import ThankError from "../component/thankError/ThankError";
 import ErrorImg from "../public/img/404.png";
 import Properties from "../pages/properties/Properties";
+import GcsUsers from "../pages/gcs/gcsUsers";
 import EditMultiProperty from "../pages/properties/multiPropertiesChat/editMultiProperty";
 import PropertyInsight from "../pages/propertyInsight/PropertyInsight";
 import Subscription from "../pages/subscription/Subscription";
@@ -433,6 +434,16 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/gcs-users"
+          element={
+            <ProtectedRoute>
+              <GcsUsers />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/integrations" element={<Integrations />} />
         <Route path="/turno" element={<Turno />} />
 

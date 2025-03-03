@@ -30,6 +30,7 @@ const Login = () => {
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
   const loginLoading = store?.loginReducer?.loading;
+  const isGcs = store?.loginReducer?.login?.gcs;
   const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: {login_remember:false}});
 
   const onSubmit = (data) => {
@@ -51,13 +52,18 @@ const Login = () => {
     }
   };
 
+  // When login API returns, check the status and handle accordingly
   useEffect(() => {
     if (loginStatus === 400 || loginStatus === 401) {
       ToastHandle('Invalid credentials', "danger");
       dispatch(stateEmptyActions());
-    } else if (loginStatus === 200) {
-      const from = location.state?.from?.pathname || '/dashboard';
-      navigate(from, { replace: true });
+    } else if (loginStatus === 200) { // success - redirect to dashboard or whatever page user was trying to access
+      if (store?.loginReducer?.login?.gcs) {
+        navigate('/gcs-users');
+      } else {
+        const from = location.state?.from?.pathname || '/dashboard';
+        navigate(from, { replace: true });
+      }
       dispatch(stateEmptyActions());
     } else if (loginStatus === 202) { // credentials good, but user hasn't confirmed email yet. Backend will not provide tokens until email is confirmed
       localStorage.setItem('loginEmailEntered', emailEntered); // this nees to be accessible on the confirm-email page
@@ -66,12 +72,19 @@ const Login = () => {
     }
   }, [loginStatus]);
 
+  // If token is already present, redirect to dashboard or the page user was trying to access without needing to log in
   useEffect(() => {
     if (token !== undefined) {
-      const from = location.state?.from?.pathname || '/dashboard';
-      navigate(from, { replace: true });
+
+      // If this is a GCS user, redirect to the GCS users page no matter what
+      if (getAuthToken?.gcs_access_token) {
+        navigate('/gcs-users');
+      } else {
+        const from = location.state?.from?.pathname || '/dashboard';
+        navigate(from, { replace: true });
+      }
     }
-  }, [token])
+  }, []);
 
   return (
     <div className="login auth">
