@@ -460,7 +460,9 @@ const Routing = () => {
         location.pathname !== "/test-show-conversations" &&
         !location.pathname.startsWith("/edit-multi-property") &&
         !location.pathname.startsWith("/workbench/") &&
-        !location.pathname.startsWith("/edit-property/") && <Footer />}
+        !location.pathname.startsWith("/edit-property/") &&
+        location.pathname !== "/gcs-users" &&
+        <Footer />}
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Accordion, Spinner } from 'react-bootstrap';
 import { callGetGcsUserDataApi, callGetSubAccountTokenApi, setToken } from './gcs_functionality';
 import Loader from '../../helper/Loader';
+import AddSubAcctModal from './addSubAcctModal';
 import './gcsUsers.css';
 
 const GcsUsers = () => {
@@ -13,6 +14,8 @@ const GcsUsers = () => {
   const [loadingAccounts, setLoadingAccounts] = useState(true);
   const [navigatingToSubaccount, setNavigatingToSubaccount] = useState(false);
   const [loadingAccountId, setLoadingAccountId] = useState(null); // Track which account is loading
+  const [showAddModal, setShowAddModal] = useState(false); // State for modal visibility
+  const [refreshTrigger, setRefreshTrigger] = useState(0); // Used to trigger a refresh
 
   // Function to handle accordion item selection
   const handleAccordionSelect = (itemKey) => {
@@ -42,6 +45,11 @@ const GcsUsers = () => {
     }
   };
 
+  // Handle successful account addition
+  const handleAccountAdded = () => {
+    setRefreshTrigger(prev => prev + 1); // Increment the refresh trigger to cause a re-fetch
+  };
+
   // Fetch users data from API on component mount
   useEffect(() => {
     const fetchUsers = async () => {
@@ -49,12 +57,25 @@ const GcsUsers = () => {
       
       if (data && data.user && data.user.subaccounts) {
         // Transform the subaccounts object into an array for easier rendering
-        const subaccountsArray = Object.entries(data.user.subaccounts).map(([id, account]) => ({
-          id,
-          title: account.sub_account_name || `${id}`, // Use ID as fallback if no name
-          subtitle: `Account ID: ${id} • Last synced: Recently`,
-          options: ['Edit permissions', 'Reset password', 'Remove access']
-        }));
+        const subaccountsArray = Object.entries(data.user.subaccounts).map(([id, account]) => {
+          // Check integration status
+          const hasIntegrations = account?.calry_integrations && Object.keys(account.calry_integrations).length > 0;
+          let integrationStatus = "Not Connected";
+          
+          if (hasIntegrations) {
+            // Get the first (and only) integration key and capitalize its first letter
+            const integrationKey = Object.keys(account.calry_integrations)[0];
+            const capitalizedKey = integrationKey.charAt(0).toUpperCase() + integrationKey.slice(1);
+            integrationStatus = `Connected to ${capitalizedKey}`;
+          }
+          
+          return {
+            id,
+            title: account.sub_account_name || `${id}`, // Use ID as fallback if no name
+            subtitle: integrationStatus,
+            options: ['Edit permissions', 'Reset password', 'Remove access']
+          };
+        });
         
         setUsersData(subaccountsArray);
       } else {
@@ -63,7 +84,7 @@ const GcsUsers = () => {
     };
     
     fetchUsers();
-  }, []);
+  }, [refreshTrigger]); // Add refreshTrigger as a dependency to re-fetch when it changes
 
   return (
     <div className="gcs-users">
@@ -111,11 +132,14 @@ const GcsUsers = () => {
         
         {/* Add User Button */}
         <div className="other-content-tile">
-          <button className="primary-btn">
-            + Add New Guesty Account
+          <button className="primary-btn" onClick={() => setShowAddModal(true)}>
+            + Add New PM Account
           </button>
         </div>
       </div>
+
+      {/* Add Account Modal */}
+      <AddSubAcctModal show={showAddModal} handleClose={() => setShowAddModal(false)} onAccountAdded={handleAccountAdded}/>
     </div>
   );
 };
