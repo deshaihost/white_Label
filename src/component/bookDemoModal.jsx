@@ -107,16 +107,16 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
 
     if (parseInt(formData.propertyCount) <= 13) { url = groupDemoLink; }
     else if (parseInt(formData.propertyCount) <= 34) { url = oneOnOneNickOnlyDemoLink; }
-    else if (parseInt(formData.propertyCount) <= 150) { url = oneOnOneNickOrSamDemoLink; }
-    else if (parseInt(formData.propertyCount) > 150) { url = oneOnOneSamOnlyDemoLink; }
+    else if (parseInt(formData.propertyCount) <= 100) { url = oneOnOneNickOrSamDemoLink; }
+    else if (parseInt(formData.propertyCount) > 100) { url = oneOnOneNickOrSamDemoLink; }
     else { url = groupDemoLink; } // shouldn't happen
 
     setRedirectURL(url);
 
     if (parseInt(formData.propertyCount) <= 15) { // If it's a small fry, just send them to the group demo
       handleRedirectToDemoLink(url);
-    } else if (parseInt(formData.propertyCount) > 99) { // If it's a big fish, send 'em to Sam, don't let them choose group
-      handleRedirectToDemoLink(oneOnOneSamOnlyDemoLink, '1:1');
+    } else if (parseInt(formData.propertyCount) > 99) {
+      handleRedirectToDemoLink(oneOnOneNickOrSamDemoLink, '1:1');
     } else { // If it's a medium fish, let them choose between group or 1:1
       setShowDemoOptions(true);
     }

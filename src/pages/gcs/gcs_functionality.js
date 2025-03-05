@@ -77,6 +77,28 @@ export const callAddSubAccountApi = async (subAccountName, setLoading=null) => {
 }
 
 
+// If there is a GCS token saved in the user object in local or session storage, restore it
+// This ensures the user is acting as the GCS user, not from one of their subaccounts
+export const restoreGcsTokenIfAvailable = async () => {
+  return new Promise((resolve) => {
+    
+    // Get the saved auth/token data. Check localStorage first, then sessionStorage as fallback
+    const localAuth = JSON.parse(localStorage.getItem("hostBuddy_auth"));
+    const sessionAuth = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+    
+    const authData = localAuth || sessionAuth;
+    
+    if (authData && authData.gcs_access_token) { // Set the GCS token if it exists in the user object
+      setAuthorization(authData.gcs_access_token);
+      resolve(true);
+    } else {
+      resolve(false);
+    }
+  });
+}
+
+
+// Sets the token to be used for ALL api calls. Set this to the GCS user's token for the user to act as the GCS user; set this to a subaccount's token for the user to act as that subaccount
 export const setToken = (token) => {
   if (token) {
     setAuthorization(token);

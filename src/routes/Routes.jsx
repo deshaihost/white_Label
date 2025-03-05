@@ -387,6 +387,14 @@ const Routing = () => {
           }
         />
         <Route
+          path="/gcs-settings/:section?/:subsec?"
+          element={
+            <ProtectedRoute>
+              <SettingIndex />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/add-property"
           element={
             <ProtectedRoute>

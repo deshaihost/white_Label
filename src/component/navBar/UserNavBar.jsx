@@ -5,7 +5,7 @@ import "./NavBar.css";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import Authorized from "../../helper/Authorized";
+import Authorized, { logOut } from "../../helper/Authorized";
 import { setAuthorization } from "../../helper/apiCore";
 
 // import LogoNavBar from "../../helper/staticImage/logoNavBar.svg";
@@ -17,8 +17,15 @@ const UserNavBar = ({ gcsToken }) => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : {};
 
-  // List of paths that should show portal navigation
-  const protectedPaths = ["/dashboard", "/statistics", "/properties", "/test-property", "/workbench", "/property-insight", "/subscription", "/setting", "/add-property", "/edit-property", "/guided-setup", "/inbox", "/action-item", "/getstarted", "/journey"];
+  const logoutHandle = async (e) => {
+    e.preventDefault();
+    logOut();
+    navigate("/login");
+  };
+
+  // List of paths that should show portal navigation. Need to add to this list whenver a new protected path is added
+  const protectedPaths = ["/dashboard", "/statistics", "/properties", "/test-property", "/workbench", "/property-insight", "/subscription", "/setting", "/add-property", "/edit-property", "/guided-setup", "/inbox", "/action-item", "/getstarted", "/journey", "/gcs-users", '/gcs-settings'];
+  const isInGcsPortal = ["/gcs-users", '/gcs-settings'].includes(location.pathname);
 
   // Check if current path should show portal navigation
   const isProtectedPath = protectedPaths.some((path) =>
@@ -115,29 +122,38 @@ const UserNavBar = ({ gcsToken }) => {
               {isProtectedPath || (isConditionalPath && token) ? ( // in user portal
                 <>
                   {gcsToken ? (
-                    <NavLink to="#" className="nav-link" onClick={handlebackToUsersClick}>
-                      All Users
+                    <NavLink to="/gcs-users" className="nav-link" onClick={handlebackToUsersClick}>
+                      All Accounts
                     </NavLink>
                   ) : (
                     <NavLink to="/getstarted" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
                       Get Started
                     </NavLink>
                   )}
-                  <NavLink to="/dashboard" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                    Dashboard
+                  {!isInGcsPortal && (
+                    <>
+                      <NavLink to="/dashboard" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                        Dashboard
+                      </NavLink>
+                      <NavLink to="/properties" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                        Properties
+                      </NavLink>
+                      <NavLink to="/inbox" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                        Messaging
+                      </NavLink>
+                      <NavLink to="/action-item" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                        Action Items
+                      </NavLink>
+                    </>
+                  )}
+                  <NavLink to={isInGcsPortal ? '/gcs-settings' : '/setting'} className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                    {isInGcsPortal ? 'GCS Acct Settings' : 'Settings'}
                   </NavLink>
-                  <NavLink to="/properties" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                    Properties
-                  </NavLink>
-                  <NavLink to="/inbox" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                    Messaging
-                  </NavLink>
-                  <NavLink to="/action-item" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                    Action Items
-                  </NavLink>
-                  <NavLink to="/setting" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                    Settings
-                  </NavLink>
+                  {isInGcsPortal && (
+                    <NavLink to="/login" className="nav-link" onClick={logoutHandle}>
+                      Log Out
+                    </NavLink>
+                  )}
                 </>
               ) : ( // one of the front pages, outside of user portal
                 <>

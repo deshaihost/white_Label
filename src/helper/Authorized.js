@@ -66,6 +66,33 @@ export const useSelectorUseDispatch = () => {
   return useSeletUseDispa;
 };
 
+export const logOut = () => {
+  try {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const logoutUrl = `${baseUrl}/logout`;
+    const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+    const refreshToken = getSessionStorageData?.refreshToken;
+    const headers = {Authorization: `Bearer ${refreshToken}`};
+
+    /*
+    const response = await axios.post(logoutUrl, {}, { headers });
+    if (response.status === 200) {
+      localStorage.clear();
+      sessionStorage.removeItem("hostBuddy_auth");
+      setLogoutLoader(false);
+      navigate("/login");
+    }
+    */
+
+    // Instead of above, just call the API and continue. Don't wait for it, we don't care about the result
+    axios.post(logoutUrl, {}, { headers });
+    localStorage.clear();
+    sessionStorage.removeItem("hostBuddy_auth");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 let userDataPromise = null;
 
 // From the user data: look at all the subscription fields, and compute and return values that the program cares about

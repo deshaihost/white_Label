@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Accordion, Spinner } from 'react-bootstrap';
-import { callGetGcsUserDataApi, callGetSubAccountTokenApi, setToken } from './gcs_functionality';
+import { callGetGcsUserDataApi, callGetSubAccountTokenApi, setToken, restoreGcsTokenIfAvailable } from './gcs_functionality';
 import Loader from '../../helper/Loader';
 import AddSubAcctModal from './addSubAcctModal';
 import './gcsUsers.css';
+import ToastHandle from '../../helper/ToastMessage';
 
 const GcsUsers = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const GcsUsers = () => {
     } catch (error) { // If an error occurred, reset the loading state
       setLoadingAccountId(null);
       setNavigatingToSubaccount(false);
-      console.error("Error navigating to subaccount:", error);
+      ToastHandle(`Error navigating to subaccount: ${error}`, "danger");
     }
   };
 
@@ -50,46 +51,56 @@ const GcsUsers = () => {
     setRefreshTrigger(prev => prev + 1); // Increment the refresh trigger to cause a re-fetch
   };
 
-  // Fetch users data from API on component mount
+  // Fetch users data from API on component mount, ensuring token is restored first
   useEffect(() => {
-    const fetchUsers = async () => {
-      const data = await callGetGcsUserDataApi(setLoadingAccounts);
-      
-      if (data && data.user && data.user.subaccounts) {
-        // Transform the subaccounts object into an array for easier rendering
-        const subaccountsArray = Object.entries(data.user.subaccounts).map(([id, account]) => {
-          // Check integration status
-          const hasIntegrations = account?.calry_integrations && Object.keys(account.calry_integrations).length > 0;
-          let integrationStatus = "Not Connected";
-          
-          if (hasIntegrations) {
-            // Get the first (and only) integration key and capitalize its first letter
-            const integrationKey = Object.keys(account.calry_integrations)[0];
-            const capitalizedKey = integrationKey.charAt(0).toUpperCase() + integrationKey.slice(1);
-            integrationStatus = `Connected to ${capitalizedKey}`;
-          }
-          
-          return {
-            id,
-            title: account.sub_account_name || `${id}`, // Use ID as fallback if no name
-            subtitle: integrationStatus,
-            options: ['Edit permissions', 'Reset password', 'Remove access']
-          };
-        });
+    const initializeAndFetchUsers = async () => {
+      try {
+        // First ensure we're acting as the GCS user
+        await restoreGcsTokenIfAvailable();
         
-        setUsersData(subaccountsArray);
-      } else {
+        // Then fetch the users data
+        const data = await callGetGcsUserDataApi(setLoadingAccounts);
+        
+        if (data && data.user && data.user.subaccounts) {
+          // Transform the subaccounts object into an array for easier rendering
+          const subaccountsArray = Object.entries(data.user.subaccounts).map(([id, account]) => {
+            // Check integration status
+            const hasIntegrations = account?.calry_integrations && Object.keys(account.calry_integrations).length > 0;
+            let integrationStatus = "Not Connected";
+            
+            if (hasIntegrations) {
+              // Get the first (and only) integration key and capitalize its first letter
+              const integrationKey = Object.keys(account.calry_integrations)[0];
+              const capitalizedKey = integrationKey.charAt(0).toUpperCase() + integrationKey.slice(1);
+              integrationStatus = `Connected to ${capitalizedKey}`;
+            }
+            
+            return {
+              id,
+              title: account.sub_account_name || `${id}`, // Use ID as fallback if no name
+              subtitle: integrationStatus,
+              options: ['Edit permissions', 'Reset password', 'Remove access']
+            };
+          });
+          
+          setUsersData(subaccountsArray);
+        } else {
+          setUsersData([]);
+        }
+      } catch (error) {
+        ToastHandle(`Error initializing or fetching user data: ${error}`, "danger");
         setUsersData([]);
+        setLoadingAccounts(false);
       }
     };
     
-    fetchUsers();
+    initializeAndFetchUsers();
   }, [refreshTrigger]); // Add refreshTrigger as a dependency to re-fetch when it changes
 
   return (
     <div className="gcs-users">
       <div className="setup-tile blur-background-top-right">
-        <h2>PM Accounts</h2>
+        <h2>Host Accounts</h2>
         
         {loadingAccounts ? (
           <div className="text-center my-5">
@@ -133,7 +144,7 @@ const GcsUsers = () => {
         {/* Add User Button */}
         <div className="other-content-tile">
           <button className="primary-btn" onClick={() => setShowAddModal(true)}>
-            + Add New PM Account
+            + Add New Host Account
           </button>
         </div>
       </div>
