@@ -36,6 +36,7 @@ const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalS
             <option value="" disabled>Select role</option>
             <option value="admin">Admin</option>
             <option value="operator">Operator</option>
+            <option value="read_only">Read Only</option>
           </select>
 
           {userHasPermission ? (

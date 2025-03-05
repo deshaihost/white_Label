@@ -48,8 +48,10 @@ const InviteSignup = () => {
     if (!userConfirmed) { return; }
 
     // Call the API to accept the invitation, then redirect to the getstarted page
-    const acceptSuccess = await callAcceptInvitationApi(data.newPassword, data.firstName, data.lastName);
-    if (acceptSuccess) { navigate("/getstarted"); }
+    const acceptResponse = await callAcceptInvitationApi(data.newPassword, data.firstName, data.lastName);
+    if (acceptResponse.success) {
+      navigate(acceptResponse.isGcs ? "/gcs-users" : "/getstarted"); // Redirect into the portal (gcs-users page for gcs users; getstarted page otherwise)
+    }
   };
 
   const [inputSpaceValidation, setInputSpaceValidation] = useState({ firstName: "", lastName: ""});
@@ -112,20 +114,28 @@ const InviteSignup = () => {
           token: response.data.access_token, refreshToken: response.data.refresh_token,
         };
 
+        // If this is a GCS account, add the token under the gcs_access_token field (same is done on login, in auth/login/saga.js)
+        const isGcs = response?.data?.gcs;
+        if (isGcs) {
+          userData["gcs_access_token"] = response?.data?.access_token;
+        }
+
         // Save the token. This is copied from saga.js in src/redux/auth/login (it's what the login flow uses to save the token)
         const api = new APICore();
         api.setLoggedInUser(userData);
         setAuthorization(userData.token);
 
-        return true;
+        return { success: true, isGcs: isGcs };
       } else {
         ToastHandle(response?.data?.error, "danger");
-        return false;
+        return { success: false };
       }
     }
-    catch (error) { ToastHandle("Failed to accept invitation", "danger"); }
+    catch (error) { 
+      ToastHandle("Failed to accept invitation", "danger"); 
+      return { success: false };
+    }
     finally { setAcceptLoading(false); }
-    return false;
   }
 
   // When the page loads, call the API to get invitation data

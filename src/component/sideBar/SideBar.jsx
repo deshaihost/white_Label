@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./sidebar.css";
 import axios from "axios";
 import { FullScreenLoader } from "../../helper/Loader";
+import { logOut } from "../../helper/Authorized";
 
 const SideBar = () => {
   const navigate = useNavigate();
@@ -13,28 +14,7 @@ const SideBar = () => {
   const logoutHandle = async () => {
     try {
       setLogoutLoader(true);
-      const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-      const logoutUrl = `${baseUrl}/logout`;
-      // Define the refresh token
-      const getSessionStorageData = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
-      const refreshToken = getSessionStorageData?.refreshToken;
-      // Define the request headers
-      const headers = {Authorization: `Bearer ${refreshToken}`};
-
-      /*
-      const response = await axios.post(logoutUrl, {}, { headers });
-      if (response.status === 200) {
-        localStorage.clear();
-        sessionStorage.removeItem("hostBuddy_auth");
-        setLogoutLoader(false);
-        navigate("/login");
-      }
-      */
-
-      // Instead of above, just call the API and continue. Don't wait for it, we don't care about the result
-      axios.post(logoutUrl, {}, { headers });
-      localStorage.clear();
-      sessionStorage.removeItem("hostBuddy_auth");
+      logOut();
       setLogoutLoader(false);
       navigate("/login");
     } catch (error) {

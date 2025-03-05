@@ -179,6 +179,7 @@ const UsersTab = (userData) => {
 
       <p style={{fontSize:'16px', width:'100%', marginTop:'60px'}}>ADMIN users can perform any action on the account, including inviting new users, changing account settings, and updating payment information.</p>
       <p style={{fontSize:'16px', width:'100%', marginTop:'10px'}}>OPERATOR users can perform most actions on the account, including changing general settings. They cannot invite new users or update payment information.</p>
+      <p style={{fontSize:'16px', width:'100%', marginTop:'10px'}}>READ ONLY users can view all data in the account, but cannot make any changes. They cannot access the payment portal or view any payment/billing information.</p>
 
       <InviteModal show={isModalOpen} onClose={() => setIsModalOpen(false)} userData={userData} sendInviteIsLoading={sendInviteIsLoading} handleModalSubmit={handleModalSubmit} email={inviteEmail} setEmail={setInviteEmail} role={inviteRole} setRole={setInviteRole} />
     </div>

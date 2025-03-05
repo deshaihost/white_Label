@@ -18,20 +18,22 @@ function* loginFunction(action) {
     if (response.status === 200) {
       let access_token = response?.data?.access_token;
       let refresh_token = response?.data?.refresh_token;
-      const user = {
-        data: "userData",
-        id: 1,
-        password: "test",
-        lastName: "User",
-        role: "userRole",
+      const user = {data:"userData", id:1, password:"test", lastName:"User", role:"userRole",
         token: access_token, // I believe this is the only prop that's actually used. The rest is just dummy. TODO: delete once confirmed
         refreshToken: refresh_token,
       };
+
+      // If this is a GCS account, add the token under the gcs_access_token field
+      const isGcs = response?.data?.gcs;
+      if (isGcs) {
+        user["gcs_access_token"] = response?.data?.access_token;
+      }
+
       api.setLoggedInUser(user, rememberMe);
       setAuthorization(user["token"]);
       yield put({
         type: LoginActionTypes.LOGIN_SUCCESS,
-        payload: { ...response.data, status: response.status },
+        payload: isGcs ? { ...response.data, status:response.status, gcs:true } : { ...response.data, status:response.status },
       });
       yield put({
         type: LoginActionTypes.LOGIN_RESET,
