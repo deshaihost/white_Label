@@ -19,9 +19,6 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
   const [integrationPropertiesLoading, setIntegrationPropertiesLoading] = useState(true);
   const [listIntegrationPropertiesHasBeenCalled, setListIntegrationPropertiesHasBeenCalled] = useState(false);
 
-  //const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties; // array of integration_property objects; each with "name" and "id" properties
-  //const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
-
   const callListIntegrationPropertiesAPI = async () => {
     setIntegrationPropertiesLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -36,7 +33,12 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
       const response = await axios.get(`${baseUrl}/list_integration_properties`, config);
 
       if (response.status === 200) {
-        setIntegrationPropertiesList(response.data.properties); //list of dicts with "name" and "id" properties
+        // Ensure property IDs are stored as strings
+        const propertiesWithStringIds = response.data.properties.map(property => ({
+          ...property,
+          id: property.id.toString() // Ensure ID is a string
+        }));
+        setIntegrationPropertiesList(propertiesWithStringIds);
       } else {  }
     } catch (error) {  }
     finally { setIntegrationPropertiesLoading(false); }
@@ -65,13 +67,19 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
 
   const link_integration = async (e, propertyName, integrationPropertyId) => {
     e.preventDefault();
+    
+    // Ensure we're working with a string ID
+    if (!integrationPropertyId) return;
+    const propertyIdString = integrationPropertyId.toString();
+    
     setLinkIsLoading(true);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
     // Get the integrationPropertyName from the integrationPropertyId
-    const selectedIntegrationProperty = integrationPropertyList.find((property) => property.id === integrationPropertyId);
+    const selectedIntegrationProperty = integrationPropertyList.find((property) => property.id === propertyIdString);
     const integrationPropertyName = selectedIntegrationProperty?.internal_name ? selectedIntegrationProperty.internal_name : selectedIntegrationProperty?.name;
+    console.log("Linking to integration property:", integrationPropertyList)
 
     try {
       const config = {
@@ -79,7 +87,8 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
 
-      const jsonPayload = { platform_property_id: integrationPropertyId, platform_property_name: integrationPropertyName };
+      const jsonPayload = {platform_property_id:propertyIdString, platform_property_name:integrationPropertyName};
+      
       const response = await axios.post(`${baseUrl}/properties/${propertyName}/link_to_integration`, jsonPayload, config);
 
       if (response.status === 200) {
@@ -161,9 +170,9 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
                         <div className="col-12 mt-4 ">
                           {/* Vertical spacer */}
                         </div>
-                        <div class="property_select">
+                        <div className="property_select">
                           {integrationPropertyList?.length > 0 ? (
-                            <select id="integration_property_select" style={{ marginTop: "20px", width: "70%" }} class="form-select form-control" onChange={(e) => setSelectedIntegrationPropertyId( e.target.value )} >
+                            <select id="integration_property_select" style={{ marginTop: "20px", width: "70%" }} className="form-select form-control" onChange={(e) => setSelectedIntegrationPropertyId(e.target.value.toString())}>
                               <option value="" disabled selected>Click to select property...</option>
                               {integrationPropertyList?.map((property) => {
                                 return (
@@ -187,7 +196,7 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
                                 <BoxLoader />
                               </>
                             ) : (
-                              <button className="LinkPMSButton" style={{maxWidth:'300px'}} onClick={(e) => link_integration( e, property_name, selectedIntegrationPropertyId )} >
+                              <button className="LinkPMSButton" style={{maxWidth:'300px'}} onClick={(e) => link_integration(e, property_name, selectedIntegrationPropertyId)} disabled={!selectedIntegrationPropertyId}>
                                 Link To This Property
                               </button>
                             ))}
