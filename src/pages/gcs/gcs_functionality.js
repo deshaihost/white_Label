@@ -1,7 +1,7 @@
 import axios from 'axios';
 import ToastHandle from '../../helper/ToastMessage';
-//import { APICore } from '../../helper/apiCore';
-import { setAuthorization } from '../../helper/apiCore';
+import { jwtDecode } from 'jwt-decode';
+import { setAuthorization, getActiveToken } from '../../helper/apiCore';
 
 export const callGetGcsUserDataApi = async (setLoading=null) => {
   const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -102,5 +102,78 @@ export const restoreGcsTokenIfAvailable = async () => {
 export const setToken = (token) => {
   if (token) {
     setAuthorization(token);
+  }
+}
+
+
+// If the user is logged in as a GCS user, return the GCS token. Otherwise, return null
+export const getGcsToken = () => {
+  const localAuth = JSON.parse(localStorage.getItem("hostBuddy_auth"));
+  const sessionAuth = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+  const getAuthToken = localAuth || sessionAuth;
+  
+  // If token exists in local but not session storage, copy it to session storage
+  if (localAuth && !sessionAuth) {
+    sessionStorage.setItem("hostBuddy_auth", JSON.stringify(localAuth));
+  }
+  
+  if (!getAuthToken) return null;
+  
+  try {
+    const { gcs_access_token } = getAuthToken;
+    if (!gcs_access_token) return null;
+
+    const decoded = jwtDecode(gcs_access_token);
+    if (decoded.exp * 1000 <= Date.now()) {return null;}
+
+    return gcs_access_token;
+
+  } catch (error) {
+    return null;
+  }
+};
+
+
+// True if user is currently acting as a GCS master user (their active token is equal to the stored GCS token), false otherwise
+export const is_gcs_master_user = () => {
+  const localAuth = JSON.parse(localStorage.getItem("hostBuddy_auth"));
+  const sessionAuth = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+  const getAuthToken = localAuth || sessionAuth;
+
+  if (!getAuthToken) return false;
+  
+  try {
+    const { gcs_access_token } = getAuthToken;
+    if (!gcs_access_token) return false;
+
+    const activeToken = getActiveToken();
+    return gcs_access_token === activeToken;
+
+  } catch (error) {
+    return false;
+  }
+}
+
+
+// True if user is currently acting as a GCS subaccount user (they have a GCS token saved, and it is different from their active token), false otherwise
+export const is_gcs_subaccount_user = () => {
+  const localAuth = JSON.parse(localStorage.getItem("hostBuddy_auth"));
+  const sessionAuth = JSON.parse(sessionStorage.getItem("hostBuddy_auth"));
+  const getAuthToken = localAuth || sessionAuth;
+
+  if (!getAuthToken) return false;
+  
+  try {
+    const { gcs_access_token } = getAuthToken;
+    if (!gcs_access_token) return false;
+    
+    const activeToken = getActiveToken();
+    if (!activeToken) return false;
+    
+    // The user is a subaccount if they have a GCS token that is different from the active token
+    return gcs_access_token !== activeToken;
+
+  } catch (error) {
+    return false;
   }
 }

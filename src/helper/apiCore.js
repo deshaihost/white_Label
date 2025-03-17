@@ -7,6 +7,9 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.baseURL = process.env.REACT_APP_API_ENDPOINT;
 axios.defaults.headers.common["X-API-Key"] = API_KEY;
 
+// Add a variable to track the current active token
+let currentActiveToken = null;
+
 // intercepting to capture errors
 axios.interceptors.response.use(
   (response) => {
@@ -57,8 +60,22 @@ const AUTH_SESSION_KEY = "hostBuddy_auth";
  * @param {*} token
  */
 const setAuthorization = (token) => {
-  if (token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
-  else delete axios.defaults.headers.common["Authorization"];
+  if (token) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    currentActiveToken = token; // Store the current active token
+  }
+  else {
+    delete axios.defaults.headers.common["Authorization"];
+    currentActiveToken = null;
+  }
+};
+
+/**
+ * Gets the current active authorization token
+ * @returns {string|null} The current active token
+ */
+const getActiveToken = () => {
+  return currentActiveToken;
 };
 
 const getUserFromSession = () => {
@@ -176,4 +193,4 @@ if (user) {
   }
 }
 
-export { APICore, setAuthorization };
+export { APICore, setAuthorization, getActiveToken };
