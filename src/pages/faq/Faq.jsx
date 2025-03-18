@@ -52,7 +52,7 @@ function Faqs() {
                         <Accordion.Item eventKey="3">
                             <Accordion.Header>Is HostBuddy able to integrate with my property management software?</Accordion.Header>
                             <Accordion.Body>
-                            Currently, HostBuddy AI supports integration with many major property management softwares on the market. Here is a list of our current integrations: Guesty, Hostaway, Hostfully, Hostify, Hospitable, Lodgify, Smoobu, Beds24, OwnerRez, Zeevou, BookingSync, Resly, Tokeet. If you do not see your property management software here, please let us know! We are actively seeking more integration partners and are happy to consider integrating with your preferred PMS.
+                            Currently, HostBuddy AI supports integration with many major property management softwares on the market. Here is a list of our current integrations: Guesty, Hostaway, Hostfully, Hostify, Hospitable, Lodgify, Smoobu, Hostex, Beds24, OwnerRez, Zeevou, BookingSync, Resly, Tokeet. If you do not see your property management software here, please let us know! We are actively seeking more integration partners and are happy to consider integrating with your preferred PMS.
                             </Accordion.Body>
                         </Accordion.Item>
 

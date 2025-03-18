@@ -102,7 +102,6 @@ const MeetBanner = (props) => {
     }
   }, [messages]);
 
-  console.log(messages,'messagesmessages')
   return (
     <div className="meet-banner">
       <Container>
