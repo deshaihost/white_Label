@@ -17,8 +17,9 @@ import "./Integration.css";
 import ContactUs from "../meetHostBuddy/discover/contactUs/ContactUs";
 import { Helmet } from 'react-helmet';
 
+const HostexImg = 'https://hostbuddylb.com/partners/hostex_logo_en.webp';
+const ReslyImg = 'https://hostbuddylb.com/partners/resly_img.webp'
 const TidyImg = 'https://hostbuddylb.com/partners/tidy_logo_black_text.svg';
-
 
 const Integrations = () => {
   const [contactModalShow, setContactModalShow] = useState(false);
@@ -57,7 +58,15 @@ const Integrations = () => {
           <h2>Maximize Efficiency with AI-Powered Guest Messaging</h2>
           <p>Our AI-powered platform revolutionizes the way short-term rental hosts manage their rentals. With 24/7 guest messaging automation, issue troubleshooting, and booking support, HostBuddy reduces your workload while ensuring guest satisfaction. Whether you're managing a single vacation home or multiple properties, HostBuddy adapts to meet your unique hosting needs.</p>
         </div>
+        
         <div className="inter-box row">
+          <div className="col-lg-4 col-sm-6">
+            <a href="https://hospitable.com/" target="_blank" rel="noopener noreferrer">
+              <div className="image-boc-inter">
+                <img src={Hospitable} alt="" />
+              </div>
+            </a>
+          </div>
           <div className="col-lg-4 col-sm-6">
             <a href="https://www.guesty.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
@@ -86,11 +95,17 @@ const Integrations = () => {
               </div>
             </a>
           </div>
-
           <div className="col-lg-4 col-sm-6">
             <a href="https://www.hostaway.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
                 <img src={Hostaway} alt="" />
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-4 col-sm-6">
+            <a href={'https://www.resly.com.au/'} target="_blank" rel="noopener noreferrer">
+              <div className="image-boc-inter">
+                <img src={ReslyImg} alt="" />
               </div>
             </a>
           </div>
@@ -116,16 +131,16 @@ const Integrations = () => {
             </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <a href="https://hospitable.com/" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.tokeet.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
-                <img src={Hospitable} alt="" />
+                <img src={Tokeet} alt="" />
               </div>
             </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <a href="https://www.tokeet.com/" target="_blank" rel="noopener noreferrer">
+            <a href={'https://hostex.io/'} target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
-                <img src={Tokeet} alt="" />
+                <img src={HostexImg} alt="" />
               </div>
             </a>
           </div>

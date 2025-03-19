@@ -15,7 +15,7 @@ import ModalELEVEN from "../../../helper/staticImage/getStart/icon2.webp";
 const GetStartConnect = ({ show, onHide }) => {
   const { type, allType, interFaceShow } = show || {};
   const { connectYourPMS, importYourProperties, goLive, test } = allType || {};
-  const pmsData = ["Beds24", "BookingSync", "Guesty", "Hospitable", "Hostaway", "Hostfully", "Hostify", "Lodgify", "OwnerRez", "Smoobu"];
+  const pmsData = ["Beds24", "BookingSync", "Guesty", "Hospitable", "Hostaway", "Hostfully", "Hostify", "Lodgify", "OwnerRez", "Smoobu", "Hostex"];
 
   return (
     <Modal show={type} onHide={onHide} size="xl" aria-labelledby="contained-modal-title-vcenter" centered className="text-white get-started-modal">
