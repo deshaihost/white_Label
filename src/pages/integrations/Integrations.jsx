@@ -9,7 +9,6 @@ import Hospitable from "../../../src/helper/staticImage/hospitable.webp";
 import Smoobu from "../../../src/helper/staticImage/smoobu.webp";
 import Tokeet from "../../../src/helper/staticImage/tokeet.webp";
 import Beds from "../../../src/helper/staticImage/beds.webp";
-import Booking from "../../../src/helper/staticImage/Booking.webp";
 import Minut from "../../../src/helper/staticImage/minut.webp";
 import Turno from "../../../src/helper/staticImage/turno.webp";
 import SearchMyCal from "../../../src/helper/staticImage/searchmycal_logo.webp";
@@ -19,6 +18,7 @@ import { Helmet } from 'react-helmet';
 
 const HostexImg = 'https://hostbuddylb.com/partners/hostex_logo_en.webp';
 const ReslyImg = 'https://hostbuddylb.com/partners/resly_img.webp'
+const SmilyImg = 'https://hostbuddylb.com/partners/SmilyLogo.webp';
 const TidyImg = 'https://hostbuddylb.com/partners/tidy_logo_black_text.svg';
 
 const Integrations = () => {
@@ -109,6 +109,7 @@ const Integrations = () => {
               </div>
             </a>
           </div>
+          {/*
           <div className="col-lg-4 col-sm-6">
             <a href="https://www.smoobu.com/new/en/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
@@ -116,6 +117,7 @@ const Integrations = () => {
               </div>
             </a>
           </div>
+          */}
           <div className="col-lg-4 col-sm-6">
             <a href="https://beds24.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
@@ -124,9 +126,9 @@ const Integrations = () => {
             </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <a href="https://www.bookingsync.com/en/app-center/31" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.smily.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
-                <img src={Booking} alt="" />
+                <img src={SmilyImg} alt="" />
               </div>
             </a>
           </div>
