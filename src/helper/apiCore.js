@@ -9,6 +9,8 @@ axios.defaults.headers.common["X-API-Key"] = API_KEY;
 
 // Add a variable to track the current active token
 let currentActiveToken = null;
+const AUTH_SESSION_KEY = "hostBuddy_auth";
+const ACTIVE_TOKEN = "hostBuddy_active_token";
 
 // intercepting to capture errors
 axios.interceptors.response.use(
@@ -53,8 +55,6 @@ axios.interceptors.response.use(
   }
 );
 
-const AUTH_SESSION_KEY = "hostBuddy_auth";
-
 /**
  * Sets the default authorization
  * @param {*} token
@@ -63,10 +63,12 @@ const setAuthorization = (token) => {
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     currentActiveToken = token; // Store the current active token
+    sessionStorage.setItem(ACTIVE_TOKEN, token); // Store token in session storage
   }
   else {
     delete axios.defaults.headers.common["Authorization"];
     currentActiveToken = null;
+    sessionStorage.removeItem(ACTIVE_TOKEN); // Remove token from session storage
   }
 };
 
@@ -75,7 +77,16 @@ const setAuthorization = (token) => {
  * @returns {string|null} The current active token
  */
 const getActiveToken = () => {
-  return currentActiveToken;
+  if (currentActiveToken) return currentActiveToken;
+  
+  // If not in memory, check session storage
+  const storedToken = sessionStorage.getItem(ACTIVE_TOKEN);
+  if (storedToken) {
+    currentActiveToken = storedToken;
+    return storedToken;
+  }
+  
+  return null;
 };
 
 const getUserFromSession = () => {
@@ -185,11 +196,18 @@ class APICore {
 }
 
 //Check if token available in session
-let user = getUserFromSession();
-if (user) {
-  const { token } = user;
-  if (token) {
-    setAuthorization(token);
+console.log("Checking for token in session");
+const storedToken = sessionStorage.getItem(ACTIVE_TOKEN);
+if (storedToken) {
+  // Prioritize the stored active token if available
+  setAuthorization(storedToken);
+} else {
+  let user = getUserFromSession();
+  if (user) {
+    const { token } = user;
+    if (token) {
+      setAuthorization(token);
+    }
   }
 }
 

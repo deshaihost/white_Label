@@ -88,6 +88,7 @@ export const logOut = () => {
     axios.post(logoutUrl, {}, { headers });
     localStorage.clear();
     sessionStorage.removeItem("hostBuddy_auth");
+    sessionStorage.removeItem("hostBuddy_active_token"); // Also clear the active token
   } catch (error) {
     console.error(error);
   }
