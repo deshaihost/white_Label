@@ -11,7 +11,7 @@ import { setAuthorization } from "../../helper/apiCore";
 // import LogoNavBar from "../../helper/staticImage/logoNavBar.svg";
 const LogoNavBar = "https://hostbuddylb.com/logo/logoNavBar.svg";
 
-const UserNavBar = ({ gcsToken }) => {
+const UserNavBar = ({ gcsToken, subAccountName }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const getAuthToken = Authorized();
@@ -204,6 +204,19 @@ const UserNavBar = ({ gcsToken }) => {
           )}
         </Navbar>
       </Container>
+
+      {gcsToken && !isInGcsPortal && (
+        <div className="acting-as-user-banner">
+          <span>Viewing user: {subAccountName || "Unknown Account"}</span>
+          <span 
+            className="back-to-accounts-link" 
+            onClick={handlebackToUsersClick}
+            style={{ color:'#4AF', textDecoration:'none', cursor:'pointer' }}
+          >
+            (back to all accounts)
+          </span>
+        </div>
+      )}
     </header>
   );
 };

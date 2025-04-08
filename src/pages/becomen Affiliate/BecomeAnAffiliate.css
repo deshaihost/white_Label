@@ -17,6 +17,13 @@
   padding: 20px 12px;
   font-size: 25px;
   font-weight: bold;
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+}
+.emp-btn:hover {
+  background-color: #f8f9fa;
+  color: #000;
 }
 img.affi-logo {
   width: 100%;

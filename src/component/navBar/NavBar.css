@@ -144,6 +144,33 @@ header.header {
     width: 100%;
     z-index: 9;
 }
+
+/* Acting as user banner */
+.acting-as-user-banner {
+    background: rgba(20, 110, 245, 0.8);
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    width: 100%;
+    font-weight: 500;
+    border-bottom: 1px solid rgb(255 255 255 / 30%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.back-to-accounts-link {
+    color: white;
+    text-decoration: underline;
+    margin-left: 10px;
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.back-to-accounts-link:hover {
+    color: #d0e4ff;
+}
+
 @media (max-width: 1399px) { 
     .nav-buttons .link-btn {
         font-size: 17px;
