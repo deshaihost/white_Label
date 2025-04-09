@@ -84,6 +84,7 @@ const Workbench = () => {
   const [sessionId, setSessionId] = useState(null);
   const [responseIsLoading, setResponseIsLoading] = useState(false);
   const [lastMessageJustification, setLastMessageJustification] = useState(null);
+  const [restrictedTopicJustification, setRestrictedTopicJustification] = useState(null);
 
   // After a successful intiialize API call, call this to set the first messages and save the session ID
   const initializeStateFromApiReturn = (response) => {
@@ -101,10 +102,20 @@ const Workbench = () => {
     const bot_message_str = response.data.response;
     const message_id_str = response.data.message_id;
     const justification = response.data.justification;
+    const hasRestrictedTopic = response.data?.has_restricted_topic;
+    let restrictedTopicJustification = response.data?.restricted_topic_justification;
 
     const botMessage = { sender:"bot", text:{response:bot_message_str, message_id:message_id_str, justification:justification} };
     setMessages((prevMessages) => [...prevMessages, botMessage]);
     setLastMessageJustification(justification);
+
+    // Add or clear restricted topic justification
+    if (hasRestrictedTopic) {
+      if (!restrictedTopicJustification) { restrictedTopicJustification = "In a live guest conversation, no AI message would be sent to the guest."; }
+      setRestrictedTopicJustification(restrictedTopicJustification);
+    }
+    else { setRestrictedTopicJustification(null); }
+
   };
 
   // Call the API to initialize the chat session, then set the state for the brand new chat
@@ -208,16 +219,20 @@ const Workbench = () => {
               {responseIsLoading ? (
                 <TypingIndicator />
               ) : (
-                lastMessageJustification ? (
+                lastMessageJustification || restrictedTopicJustification ? (
                   <>
-                    <h5 style={{marginTop:'0'}}>Where did this response come from?</h5>
-                    <p>{lastMessageJustification}</p>
-                    {/*
-                    <h5>Suggestions</h5>
-                    <ul>
-                      <li>Add information about typical travel times and the best routes for driving to Tijuana from the property.</li>
-                    </ul>
-                    */}
+                    {restrictedTopicJustification && (
+                      <div className="restricted-topic">
+                        <h5 style={{marginTop:'0', color: 'rgb(255, 165, 0)'}}>Restricted topic detected</h5>
+                        <p>{restrictedTopicJustification}</p>
+                      </div>
+                    )}
+                    {lastMessageJustification && (
+                      <div className="justification-section">
+                        <h5 style={{marginTop:'0'}}>Where did this response come from?</h5>
+                        <p>{lastMessageJustification}</p>
+                      </div>
+                    )}
                   </>
                 ) : (
                   <p style={{color:'#AAA', fontStyle:'italic', fontSize:'16px'}}>Send HostBuddy a message to get started!</p>

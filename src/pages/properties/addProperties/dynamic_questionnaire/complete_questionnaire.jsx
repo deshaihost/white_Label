@@ -194,22 +194,54 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
   const handleInputComponentChange = (event, sec_name, subsec_name, q_ind, question_type) => {
     setLiveQuestionnaireData((prevData) => {
       const newData = JSON.parse(JSON.stringify(prevData));
-  
+      
+      // Ensure section exists
+      if (!newData.questionnaire[sec_name]) {
+        newData.questionnaire[sec_name] = {};
+      }
+      
+      // Ensure subsection exists
+      if (!newData.questionnaire[sec_name][subsec_name]) {
+        newData.questionnaire[sec_name][subsec_name] = [];
+      }
+      
+      // Check if we have a question_text coming from the event
+      const questionText = event.target?.dataset?.questionText || "";
+      
+      // Ensure question at index exists
+      while (newData.questionnaire[sec_name][subsec_name].length <= q_ind) {
+        newData.questionnaire[sec_name][subsec_name].push({
+          question_text: questionText, // Use the question text from the event if available
+          question_type: question_type,
+          response_text: question_type === "checkbox_group" ? [] : "",
+          placeholder_text: "",
+          hide_for_reservations: question_type === "checkbox_group" ? [] : "[]"
+        });
+      }
+
       if (question_type === "short_answer" || question_type === "long_answer") {
+        // Only update response_text, preserve existing question_text
         newData.questionnaire[sec_name][subsec_name][q_ind].response_text = event.target.value;
-  
+        // If we have a question_text in the event, update it
+        if (questionText) {
+          newData.questionnaire[sec_name][subsec_name][q_ind].question_text = questionText;
+        }
       } else if (question_type === "select") {
         newData.questionnaire[sec_name][subsec_name][q_ind].response_option = event.target.value;
-  
+
       } else if (question_type === "checkbox_group") {
         const question = newData.questionnaire[sec_name][subsec_name][q_ind];
-        if (event.target.checked) { // Add our selection to response_options, and a blank string to response_text and hide_for_reservations
+        if (!question.response_options) question.response_options = [];
+        if (!question.response_text) question.response_text = [];
+        if (!question.hide_for_reservations) question.hide_for_reservations = [];
+        
+        if (event.target.checked) {
           if (!question.response_options.includes(event.target.value)) {
             question.response_options.push(event.target.value); 
             question.response_text.push('');
             question.hide_for_reservations.push('');
           }
-        } else { // Remove our selection from response_options, and the corresponding elements from response_text and hide_for_reservations
+        } else {
           const optionIndex = question.response_options.indexOf(event.target.value);
           if (optionIndex > -1) {
             question.response_options = question.response_options.filter((item) => item !== event.target.value);
