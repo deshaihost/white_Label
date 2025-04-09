@@ -1,0 +1,22 @@
+[
+    {
+        "topic": "Early check-in requests",
+        "description": "Guests specifically asking to check in anytime before their scheduled check-in time."
+    },
+    {
+        "topic": "Late check-out requests",
+        "description": "Guests specifically asking to check out anytime after their scheduled check-out time."
+    },
+    {
+        "topic": "Discount requests",
+        "description": "Guests asking for a discount on their stay, including asks for a reduction or elimination in any fees related to the stay."
+    },
+    {
+        "topic": "Refund requests",
+        "description": "Guests asking for a refund for any payment that they had previously made related to their stay."
+    },
+    {
+        "topic": "Reservation changes",
+        "description": "Guests asking to change their reservation, including changing the dates of their stay, the number of guests, the type of room, or cancelling their reservation."
+    }
+]

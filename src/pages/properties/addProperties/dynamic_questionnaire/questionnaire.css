@@ -5,6 +5,26 @@
   max-width: 380px;
 }
 
+/* Add Question Button Styling */
+.add-question-btn {
+  color: #146EF5;
+  font-family: 'Samsung Sharp Sans Medium';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  background: transparent;
+  border: 1px solid #146EF5;
+  border-radius: 20px;
+  padding: 8px 15px;
+  transition: all 0.3s ease;
+}
+
+.add-question-btn:hover {
+  background-color: rgba(20, 110, 245, 0.1);
+  color: #146EF5;
+}
+
 .questionnaire-first-page .underline-btn,
 .auto-fill-buttons-container .underline-btn {
   color: #146EF5;
@@ -60,6 +80,84 @@
 .auto-fill-modal .sources-container .form-check-input:checked {
   background-color: blue;
   border-color: blue;
+}
+
+/* Modal Form Styling for Add Question */
+.auto-fill-modal .form-select {
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #0a1a44 !important;
+  color: #fff;
+  font-family: "Samsung Sharp Sans Medium";
+  font-size: 15px;
+  padding: 16px 20px;
+  margin-bottom: 10px;
+}
+
+.auto-fill-modal .form-check-input {
+  margin-right: 8px;
+}
+
+/* Question type tab styling */
+.question-type-tabs {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.question-type-tabs .tab-option {
+  flex: 1;
+  text-align: center;
+  padding: 12px 15px;
+  cursor: pointer;
+  background-color: #212529;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #aaa;
+  transition: all 0.3s ease;
+}
+
+.question-type-tabs .tab-option:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-right: none;
+}
+
+.question-type-tabs .tab-option:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-left: none;
+}
+
+.question-type-tabs .tab-option.active {
+  background-color: #146EF5;
+  color: white;
+  border-color: #146EF5;
+}
+
+/* Center modal footer buttons */
+.auto-fill-modal .modal-footer {
+  justify-content: center;
+}
+
+/* Description box styling */
+.description-box {
+  min-height: 200px;
+  border-radius: 15px !important;
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: #0a1a44;
+}
+
+.description-box p.text-white {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.description-box p.text-white-50 {
+  font-size: 12px;
 }
 
 .hostbuddy-knowledge-base {

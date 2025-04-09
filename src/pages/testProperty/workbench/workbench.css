@@ -117,6 +117,18 @@
 
 .workbench .chat-information p {
   font-size: 14px;
+  margin-bottom: 0; /* Remove default bottom margin */
+}
+
+/* Add specific styling for restricted topic section */
+.workbench .chat-information .restricted-topic {
+  margin-bottom: 20px; /* Extra margin for the restricted topic section */
+}
+
+/* Only the last paragraph in each section shouldn't have margin */
+.workbench .chat-information .restricted-topic p:last-child,
+.workbench .chat-information .justification-section p:last-child {
+  margin-bottom: 0;
 }
 
 .workbench .actions-section {
