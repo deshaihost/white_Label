@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {  Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import CopyToPropertiesModal from "./copyToPropertiesModal/CopyToPropertiesModal";
+import DeleteFromPropertiesModal from "./deleteFromPropertiesModal/DeleteFromPropertiesModal";
 
 const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSectionName, checkbox_group_option, handleModalSave, callDeleteQuestionApi, questionIndex, propertyName }) => {
 
@@ -26,6 +27,8 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
   const [reservationStageData, setReservationStageData] = useState(initialReservationStageSelections);
   const [extraNoteData, setextraNoteData] = useState("");
   const [showCopyToPropertiesModal, setShowCopyToPropertiesModal] = useState(false);
+  const [showDeleteFromPropertiesModal, setShowDeleteFromPropertiesModal] = useState(false);
+  const [questionDeleted, setQuestionDeleted] = useState(false);
 
   // When the modal is opened, populate the textArea and set reservationStageData according to any previous input
   useEffect(() => {
@@ -47,11 +50,10 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
     }
   }, [hide_for_reservations_data, show]);
 
-  
-
   const handleDeleteQuestion = () => {
     if (window.confirm('Are you sure you want to delete this question?')) {
-      callDeleteQuestionApi(sectionName, subSectionName, questionIndex, propertyName);
+      setQuestionDeleted(true);
+      callDeleteQuestionApi(sectionName, subSectionName, question_text, propertyName);
       setShowModal(false);
     }
   }
@@ -61,18 +63,22 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
     hide_for_reservations_data = null; // this is important. Otherwise the next time the modal is opened (show set to true), the useEffect might run and set the old hide_for_reservations_data values
     setReservationStageData(initialReservationStageSelections);
     setextraNoteData("");
+    setQuestionDeleted(false);
   }
 
   const saveAndClose = () => {
-    const selectedResStages = Object.keys(reservationStageData).filter(stage => reservationStageData[stage]);
-    handleModalSave(selectedResStages, extraNoteData);
+    // Only save if the question hasn't been deleted
+    if (!questionDeleted) {
+      const selectedResStages = Object.keys(reservationStageData).filter(stage => reservationStageData[stage]);
+      handleModalSave(selectedResStages, extraNoteData);
+    }
     modalCleanup();
     setShowModal(false);
   }
 
   return (
     <>
-      <Modal size="md" show={show} onHide={() => saveAndClose(false)} aria-labelledby="contained-modal-title-vcenter" centered className="contact-modal" >
+      <Modal size="md" show={show} onHide={() => saveAndClose()} aria-labelledby="contained-modal-title-vcenter" centered className="contact-modal" >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
             Additional Information
@@ -115,9 +121,14 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
             </a>
 
             {(((sectionName === 'SOPs' || sectionName === 'Extras') && subSectionName === 'Other') || (sectionName === 'Topics to Avoid')) && ( // For now, only support deleting the user-added custom questions, or topics to avoid questions
-              <a style={{ color:'red', textDecoration:'none', display:'block', textAlign:'center', marginTop:'15px', cursor:'pointer' }} onClick={() => handleDeleteQuestion(true)}>
-                Delete Question
-              </a>
+              <>
+                <a style={{ color:'red', textDecoration:'none', display:'block', textAlign:'center', marginTop:'15px', cursor:'pointer' }} onClick={() => handleDeleteQuestion(true)}>
+                  Delete Question
+                </a>
+                <a style={{ color:'red', textDecoration:'none', display:'block', textAlign:'center', marginTop:'15px', cursor:'pointer' }} onClick={() => setShowDeleteFromPropertiesModal(true)}>
+                  Delete From Multiple Properties
+                </a>
+              </>
             )}
 
           </div>
@@ -125,6 +136,20 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
       </Modal>
       {showCopyToPropertiesModal && (
         <CopyToPropertiesModal show={showCopyToPropertiesModal} setShow={setShowCopyToPropertiesModal} question_obj={question_obj} sectionName={sectionName} subSectionName={subSectionName} checkbox_group_option={checkbox_group_option} liveTextData={extraNoteData} liveHideForReservationsData={reservationStageData} />
+      )}
+      {showDeleteFromPropertiesModal && (
+        <DeleteFromPropertiesModal 
+          show={showDeleteFromPropertiesModal} 
+          setShow={setShowDeleteFromPropertiesModal} 
+          sectionName={sectionName} 
+          subSectionName={subSectionName} 
+          questionText={question_text} 
+          currentPropertyName={propertyName}
+          onDeleteSuccess={() => {
+            setQuestionDeleted(true);
+            callDeleteQuestionApi(sectionName, subSectionName, question_text, propertyName);
+          }}
+        />
       )}
     </>
   );

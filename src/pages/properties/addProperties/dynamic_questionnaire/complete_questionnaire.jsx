@@ -303,7 +303,7 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
     }
   }
 
-  const callDeleteQuestionApi = async (sectionName, subSectionName, questionIndex, propertyName) => {
+  const callDeleteQuestionApi = async (sectionName, subSectionName, questionText, propertyName) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -312,7 +312,7 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
         headers: {"X-API-Key": API_KEY},
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
-      const body_data = {section_name:sectionName, subsection_name:subSectionName, question_index:questionIndex, property_name:propertyName};
+      const body_data = {section_name:sectionName, subsection_name:subSectionName, question_text:questionText, property_names:[propertyName]};
       const response = await axios.post(`${baseUrl}/delete_questionnaire_question`, body_data, config);
 
       if (response.status === 200) { 
