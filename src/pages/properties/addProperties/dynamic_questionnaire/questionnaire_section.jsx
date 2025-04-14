@@ -19,6 +19,8 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
   const is_last_section = section_num === num_total_sections - 1;
   
   const isTopicsToAvoid = questionnaire_section_name === "Topics to Avoid";
+  const isSOPs = questionnaire_section_name === "SOPs";
+  const shouldShowAddItem = isTopicsToAvoid || isSOPs;
 
   const handleAddButtonClick = (subsectionName) => {
     setCurrentSubsection(subsectionName);
@@ -103,12 +105,12 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
                 })}
               </div>
               
-              {/* Add Question Button - Only visible in Topics to Avoid section */}
-              {isTopicsToAvoid && (
-                <div className="d-flex justify-content-end mb-4">
-                  <button className="btn add-question-btn" onClick={() => handleAddButtonClick(subsectionName)} type="button">
-                    <i className="fas fa-plus me-2"></i> + Add Item
-                  </button>
+              {/* Add Question Button - Now visible in Topics to Avoid AND SOPs sections */}
+              {shouldShowAddItem && (
+                <div className="d-flex justify-content-start mb-4">
+                  <a className="add-item-link" onClick={() => handleAddButtonClick(subsectionName)}>
+                    <i className="fas fa-plus me-1"></i> + Add Item
+                  </a>
                 </div>
               )}
             <div style={{ marginBottom: '50px' }}></div>
@@ -132,12 +134,12 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
         )}
       </div>
 
-      {/* Add Question Modal */}
       <AddQuestionModal 
-        show={showAddQuestionModal}
-        handleClose={() => setShowAddQuestionModal(false)}
-        handleAddQuestion={handleAddQuestion}
+        show={showAddQuestionModal} 
+        handleClose={() => setShowAddQuestionModal(false)} 
+        handleAddQuestion={handleAddQuestion} 
         subsectionName={currentSubsection}
+        skipPresets={questionnaire_section_name === "SOPs"} // Add this prop to skip presets for SOPs section
       />
     </div>
   );

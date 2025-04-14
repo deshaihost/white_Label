@@ -18,7 +18,6 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   const eliteOrWorksPlan = /elite|works/i.test(subscriptionPlan) || subscriptionPlan == 'trial'; // Case-insensitive check for 'elite' or 'works' in the plan name
   const eliteFeaturesAvailable = /elite/i.test(subscriptionPlan) || subscriptionPlan == 'trial'; // user subscribed to Elite or is on trial
   const propertyIsLocked = !!allConversationData?.is_locked;
-  //const accountAllowsGenerateButton = (eliteFeaturesAvailable && !propertyIsLocked) || (accountAgeDays && accountAgeDays <= 4); // Generate functionality allowed if user/prop subscription is sufficient, OR if the account is new
   const accountAllowsGenerateButton = (eliteFeaturesAvailable && !propertyIsLocked)
 
   const messageListRef = useRef(null);
@@ -347,6 +346,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           <div className="message-list" ref={messageListRef}>
             {messages?.map((message, index) => {
               return (
+                <React.Fragment key={message?.id}>
                   <MessageInbox
                     key={message?.id}
                     text={message.text?.text}
@@ -359,6 +359,17 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
                     prevMsgText={messages[index - 1]?.text}
                     isInitialMessage={index <= 1}
                   />
+                  {/* Banner for passed messages */}
+                  {allConversationData?.passed_msgs && 
+                   allConversationData.passed_msgs[message.id] && (
+                    <div className="passed-message-banner">
+                      <span>HostBuddy chose not to respond to this message. </span>
+                      <a href="#" onClick={(e) => handleJustificationClick(e, allConversationData.passed_msgs[message.id].justification)}>
+                        Why?
+                      </a>
+                    </div>
+                  )}
+                </React.Fragment>
               );
             })}
             {/* {updateMessageRespLoading && <Loader />} */}
@@ -371,7 +382,6 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           </div>
         )}
 
-        {/* ((eliteOrWorksPlan || (accountAgeDays && accountAgeDays <= 4)) && !(conversationData?.channel == 'hostbuddy')) ? ( // old logic */}
         {((eliteOrWorksPlan) && !(conversationData?.channel == 'hostbuddy')) ? ( // generate button and message input / send components
           <>
             <div className="ai-input">

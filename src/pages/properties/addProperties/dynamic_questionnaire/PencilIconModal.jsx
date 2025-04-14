@@ -120,7 +120,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
               Copy To Other Properties
             </a>
 
-            {(((sectionName === 'SOPs' || sectionName === 'Extras') && subSectionName === 'Other') || (sectionName === 'Topics to Avoid')) && ( // For now, only support deleting the user-added custom questions, or topics to avoid questions
+            {((sectionName === 'SOPs' || (sectionName === 'Extras' && subSectionName === 'Other') || sectionName === 'Topics to Avoid')) && (
               <>
                 <a style={{ color:'red', textDecoration:'none', display:'block', textAlign:'center', marginTop:'15px', cursor:'pointer' }} onClick={() => handleDeleteQuestion(true)}>
                   Delete Question
