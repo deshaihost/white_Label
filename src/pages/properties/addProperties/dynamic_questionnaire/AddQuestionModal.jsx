@@ -2,19 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import conversationTopics from "./conversation_topics.json";
 
-const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName }) => {
-  const [questionType, setQuestionType] = useState("preset");
+const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName, skipPresets = false }) => {
+  const [questionType, setQuestionType] = useState(skipPresets ? "free" : "preset");
   const [freeFormQuestion, setFreeFormQuestion] = useState("");
   const [selectedPreset, setSelectedPreset] = useState("");
   
   // Clear fields when modal is opened or closed
   useEffect(() => {
     if (show) {
-      setQuestionType("preset");
+      setQuestionType(skipPresets ? "free" : "preset");
       setFreeFormQuestion("");
       setSelectedPreset("");
     }
-  }, [show]);
+  }, [show, skipPresets]);
 
   const handleSubmit = () => {
     let questionText = "";
@@ -43,24 +43,26 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group className="mb-4">
-            <div className="question-type-tabs">
-              <div 
-                className={`tab-option ${questionType === "preset" ? "active" : ""}`}
-                onClick={() => setQuestionType("preset")}
-              >
-                Presets
+          {!skipPresets && (
+            <Form.Group className="mb-4">
+              <div className="question-type-tabs">
+                <div 
+                  className={`tab-option ${questionType === "preset" ? "active" : ""}`}
+                  onClick={() => setQuestionType("preset")}
+                >
+                  Presets
+                </div>
+                <div 
+                  className={`tab-option ${questionType === "free" ? "active" : ""}`}
+                  onClick={() => setQuestionType("free")}
+                >
+                  Custom
+                </div>
               </div>
-              <div 
-                className={`tab-option ${questionType === "free" ? "active" : ""}`}
-                onClick={() => setQuestionType("free")}
-              >
-                Custom
-              </div>
-            </div>
-          </Form.Group>
+            </Form.Group>
+          )}
 
-          {questionType === "free" ? (
+          {(questionType === "free" || skipPresets) ? (
             <Form.Group className="mb-3">
               <Form.Label>Question Text</Form.Label>
               <Form.Control type="text" placeholder="Enter your question here..." value={freeFormQuestion} onChange={(e) => setFreeFormQuestion(e.target.value)} />
@@ -106,7 +108,7 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
           variant="primary" 
           onClick={handleSubmit}
           disabled={(questionType === "free" && freeFormQuestion.trim() === "") || 
-                  (questionType === "preset" && !selectedPreset)}
+                  (questionType === "preset" && !selectedPreset && !skipPresets)}
         >
           Add Question
         </Button>
