@@ -470,6 +470,7 @@ const Routing = () => {
         !location.pathname.startsWith("/workbench/") &&
         !location.pathname.startsWith("/edit-property/") &&
         location.pathname !== "/gcs-users" &&
+        !location.pathname.startsWith("/property-chat") &&
         <Footer />}
     </div>
   );
