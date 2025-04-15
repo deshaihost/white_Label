@@ -259,3 +259,15 @@
   align-items: center; /* Vertically centers the loader and text */
   gap: 10px; /* Adds some space between the loader and the text */
 }
+
+/* Add Item Link Styling */
+.add-item-link {
+  color: #146EF5;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.add-item-link:hover {
+  opacity: 0.8;
+}

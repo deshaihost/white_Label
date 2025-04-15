@@ -129,12 +129,10 @@ const MeetBanner = (props) => {
   return (
     <div className="meet-banner">
       <Container>
-        <div className="banner-heading">
-          <h2>{getPropertyName !== undefined ? getPropertyName : ""}</h2>
-        </div>
+        <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '10px' }}>{getPropertyName !== undefined ? getPropertyName : ""}</h2>
         <div className="row">
           <div className="col-lg-12">
-            <div className="chatbot blur-background-top-left blur-background-bottom-right">
+            <div className="chat-window blur-background-top-left blur-background-bottom-right">
               <div className="message-list" ref={messageListRef}>
                 {messages?.map((message, index) => {
                   return (

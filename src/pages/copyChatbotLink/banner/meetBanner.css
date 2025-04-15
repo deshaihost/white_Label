@@ -4,7 +4,7 @@
     padding: 60px 0 100px;
 }
 
-.chatbot {
+.chat-window {
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -14,10 +14,12 @@
     border-radius: 30px;
     border: 1px solid #2C389E;
     background: #000212;
-    max-width: 690px;
+    width: calc(100% - 100px); /* Changed from max-width: 690px to be nearly full-width */
+    max-width: 100%;
     margin: auto;
     padding: 25px;
-    height: 613px;
+    min-height: 613px;
+    max-height: 1200px;
 }
 
 .message-list {
@@ -74,7 +76,7 @@
     line-height: 135%;
     padding: 20px;
     border-radius: 20px;
-    max-width: 400px;
+    max-width: 70%; /* Changed from 400px to be proportional to wider container */
     white-space: pre-wrap;
     word-wrap: break-word;
     
@@ -107,11 +109,10 @@
     margin-left: 8px;
 }
 
-.input-container {
+.chat-window .input-container {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    margin-top: 20px;
 }
 
 .input-container input {
@@ -131,7 +132,7 @@
     cursor: pointer;
 }
 
-.chatbot .input-container input {
+.chat-window .input-container input {
     position: relative;
     max-height: 145px;
     width: calc(100% - 75px);
@@ -146,7 +147,7 @@
     font-size: 16px;
 }
 
-.chatbot .input-container button {
+.chat-window .input-container button {
     border-radius: 30px;
     background: #146EF5;
     border: none;
@@ -157,7 +158,7 @@
     cursor: pointer;
 }
 
-.chatbot .input-container button svg {
+.chat-window .input-container button svg {
     max-width: 19px;
 }
 .chat-send{
@@ -199,10 +200,11 @@
 }
 
 @media only screen and (max-width: 767px) {
-    .chatbot {
+    .chat-window {
         margin-top: 20px;
         height: 494px;
         padding: 15px;
+        width: calc(100% - 30px); /* Added responsive padding for mobile */
     }
 
     .message.user img {
@@ -214,14 +216,14 @@
     .message p {
         font-size: 10px;
         padding: 10px 15px;
-        max-width: 200px;
+        max-width: 70%; /* Changed from 200px to be proportional */
     }
 
     .message-list {
         max-height: calc(100% - 74px);
     }
 
-    .chatbot .input-container input {
+    .chat-window .input-container input {
         padding: 18px 15px;
         width: calc(100% - 58px);
         max-width: calc(100% - 58px);
@@ -230,7 +232,7 @@
         line-height: 16px;
     }
 
-    .chatbot .input-container button {
+    .chat-window .input-container button {
         width: 48px;
         height: 48px;
         flex: 0 0 48px;
