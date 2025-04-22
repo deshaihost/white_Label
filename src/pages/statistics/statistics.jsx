@@ -70,9 +70,10 @@ const StatisticsPage = () => {
 
   // *** THIS contains the (static) definition of which tiles to render, and in which order *** //
   const messagingTiles = [
-    { component: MetricTile, dataSets: apiStatisticsData?.totalMessagesResponded, width: 4, height: "300px" },
-    { component: MetricTile, dataSets: apiStatisticsData?.responseTimes, width: 4, height: "300px" },
-    { component: MetricTile, dataSets: apiStatisticsData?.sentimentMetrics, width: 4, height: "300px" },
+    { component: MetricTile, dataSets: apiStatisticsData?.totalMessagesSent, width: 3, height: "300px" },
+    { component: MetricTile, dataSets: apiStatisticsData?.totalMessagesResponded, width: 3, height: "300px" },
+    { component: MetricTile, dataSets: apiStatisticsData?.responseTimes, width: 3, height: "300px" },
+    { component: MetricTile, dataSets: apiStatisticsData?.sentimentMetrics, width: 3, height: "300px" },
     { component: HistogramTile, dataSets: apiStatisticsData?.messageTimingData, width: 12, height: '300px' },
   ];
 
