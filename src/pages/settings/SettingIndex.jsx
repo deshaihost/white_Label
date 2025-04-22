@@ -17,6 +17,7 @@ import AccountNotificationSection from "../account/notificationSection";
 import MessagingChannels from "./settingContants/messagingChannels/messagingChannels";
 import { Link, useParams } from "react-router-dom";
 import HostDaddy from '../../component/hostDaddy/hostDaddy';
+import PMSSettings from "../account/pmsSettings";
 
 const SettingIndex = () => {
   const store = useSelector((state) => state);
@@ -79,6 +80,7 @@ const SettingIndex = () => {
                     <>
                       <UserInformationSection ApiUserData={userData} refreshUserData={refreshUserData} />
                       <AccountRegionSection ApiUserData={userData} refreshUserData={refreshUserData} />
+                      <PMSSettings ApiUserData={userData} />
                       <DangerZone />
                     </>
                   )}
