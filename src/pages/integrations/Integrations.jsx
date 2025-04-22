@@ -19,6 +19,7 @@ import { Helmet } from 'react-helmet';
 const HostexImg = 'https://hostbuddylb.com/partners/hostex_logo_en.webp';
 const ReslyImg = 'https://hostbuddylb.com/partners/resly_img.webp'
 const SmilyImg = 'https://hostbuddylb.com/partners/SmilyLogo.webp';
+const RentalWiseImg = 'https://hostbuddylb.com/partners/RentalWise.webp';
 const TidyImg = 'https://hostbuddylb.com/partners/tidy_logo_black_text.svg';
 
 const Integrations = () => {
@@ -119,16 +120,23 @@ const Integrations = () => {
           </div>
           */}
           <div className="col-lg-4 col-sm-6">
-            <a href="https://beds24.com/" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.rentalwise.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
-                <img src={Beds} alt="" />
+                <img src={RentalWiseImg} alt="" />
               </div>
             </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <a href="https://www.smily.com/" target="_blank" rel="noopener noreferrer">
+            <a href={'https://hostex.io/'} target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
-                <img src={SmilyImg} alt="" />
+                <img src={HostexImg} alt="" />
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-4 col-sm-6">
+            <a href="https://beds24.com/" target="_blank" rel="noopener noreferrer">
+              <div className="image-boc-inter">
+                <img src={Beds} alt="" />
               </div>
             </a>
           </div>
@@ -140,9 +148,9 @@ const Integrations = () => {
             </a>
           </div>
           <div className="col-lg-4 col-sm-6">
-            <a href={'https://hostex.io/'} target="_blank" rel="noopener noreferrer">
+            <a href="https://www.smily.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
-                <img src={HostexImg} alt="" />
+                <img src={SmilyImg} alt="" />
               </div>
             </a>
           </div>
