@@ -19,6 +19,65 @@ import { FaRotateRight } from "react-icons/fa6";
 
 import dummyPropertyImg from "../../../public/img/dummyPropertyImg.png";
 
+// Utility function to format markdown-like text
+const formatMarkdownText = (text) => {
+  if (!text) return "";
+  
+  // Process the text in stages
+  let formattedText = text;
+  
+  // Handle bold text (convert **text** to <span style="font-family: 'Samsung Sharp Sans Bold';">text</span>)
+  formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<span style="font-family: \'Samsung Sharp Sans Bold\';">$1</span>');
+  
+  // Split into lines to handle bullet points properly
+  const lines = formattedText.split('\n');
+  const processedLines = lines.map(line => {
+    // Check if line starts with bullet point (* or -)
+    if (line.trim().match(/^\s*[\*\-]\s+/)) {
+      // Convert bullet point to HTML list item
+      return `<li>${line.trim().replace(/^\s*[\*\-]\s+/, '')}</li>`;
+    }
+    return line;
+  });
+  
+  // Join lines back together, wrapping lists in <ul> tags
+  let result = '';
+  let inList = false;
+  
+  processedLines.forEach(line => {
+    if (line.startsWith('<li>')) {
+      if (!inList) {
+        result += '<ul class="markdown-list">';
+        inList = true;
+      }
+      result += line;
+    } else {
+      if (inList) {
+        result += '</ul>';
+        inList = false;
+      }
+      // Avoid adding <br/> if the line is empty or just whitespace, or if it's the last line before a list starts
+      const nextLineIsListItem = processedLines[processedLines.indexOf(line) + 1]?.startsWith('<li>');
+      if (line.trim() !== '' && !nextLineIsListItem) {
+        result += line + '<br/>';
+      } else if (line.trim() !== '') {
+         result += line; // Add line without <br/> if it's followed by a list item
+      }
+    }
+  });
+  
+  if (inList) {
+    result += '</ul>';
+  }
+  
+  // Remove trailing <br/> if present
+  if (result.endsWith('<br/>')) {
+    result = result.slice(0, -5);
+  }
+
+  return result;
+};
+
 const Workbench = () => {
   const { property_name } = useParams();
 
@@ -174,6 +233,8 @@ const Workbench = () => {
   }, [property_name]);
   // -----------------------------------------------------------------------------------
 
+  // Format the justification text for display
+  const formattedJustification = formatMarkdownText(lastMessageJustification);
 
   return (
     <div className='workbench'>
@@ -214,7 +275,7 @@ const Workbench = () => {
           </div>
 
           <div className='chat-information'>
-            <h3><img src={hostBuddyLogo} /> Conversation Analysis</h3>
+            <h3><img src={hostBuddyLogo} alt="HostBuddy Logo" /> Conversation Analysis</h3>
             <div className='chat-information-content'>
               {responseIsLoading ? (
                 <TypingIndicator />
@@ -228,9 +289,10 @@ const Workbench = () => {
                       </div>
                     )}
                     {lastMessageJustification && (
-                      <div className="justification-section">
+                      <div className="justification-section markdown-content"> {/* Add markdown-content class */}
                         <h5 style={{marginTop:'0'}}>Where did this response come from?</h5>
-                        <p>{lastMessageJustification}</p>
+                        {/* Use dangerouslySetInnerHTML to render the formatted HTML */}
+                        <div dangerouslySetInnerHTML={{ __html: formattedJustification }} />
                       </div>
                     )}
                   </>
