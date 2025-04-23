@@ -126,9 +126,52 @@
 }
 
 /* Only the last paragraph in each section shouldn't have margin */
+/* Updated selector to target divs rendered by dangerouslySetInnerHTML */
 .workbench .chat-information .restricted-topic p:last-child,
-.workbench .chat-information .justification-section p:last-child {
+.workbench .chat-information .justification-section div:last-child {
   margin-bottom: 0;
+}
+
+/* Styles for markdown content copied from justificationModal */
+.workbench .markdown-content {
+  color: #fff; /* Set default text color */
+  font-size: 14px; /* Set default font size */
+}
+.workbench .markdown-list {
+  margin-left: 40px; /* Indent list */
+  list-style-type: disc;
+  padding-left: 0; /* Reset padding if needed */
+  color: #fff; /* Ensure list items inherit text color */
+}
+.workbench .markdown-content ul {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.workbench .markdown-list li {
+  margin-bottom: 15px; /* Space between list items */
+  font-size: 14px; /* Match paragraph font size */
+  color: #fff; /* Ensure list items inherit text color */
+  list-style-type: disc !important; /* Ensure disc style is applied */
+  margin-left: 0; /* Reset margin if needed */
+}
+/* Ensure paragraphs inside markdown content have consistent styling */
+.workbench .markdown-content p {
+  font-size: 14px;
+  margin-bottom: 10px; /* Add some space between paragraphs */
+  color: #fff;
+}
+.workbench .markdown-content p:last-child {
+  margin-bottom: 0; /* Remove margin from the last paragraph */
+}
+/* Ensure line breaks work as expected */
+.workbench .markdown-content br {
+  content: "";
+  display: block;
+  margin-bottom: 10px; /* Adjust spacing for line breaks */
+}
+/* Ensure spans inside markdown content have consistent styling */
+.workbench .markdown-content span {
+  color: #fff; /* Set span text color to white */
 }
 
 .workbench .actions-section {
@@ -143,6 +186,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  margin-bottom: 40px;
 }
 
 .workbench .clickable-div {
