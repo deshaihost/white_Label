@@ -28,12 +28,15 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
   };
 
   const handleAddQuestion = (subsectionName, questionText, responseText) => {
+    const topics_to_avoid_placeholder_text = "(Optional) Clarify the definition of this topic to help the AI apply it to the right messages...";
+    const general_placeholder_text = "Enter text...";
+
     // Create a new question object of long_answer type
     const newQuestion = {
       question_text: questionText,
       question_type: "long_answer",
       response_text: responseText,
-      placeholder_text: "",
+      placeholder_text: questionnaire_section_name === "Topics to Avoid" ? topics_to_avoid_placeholder_text : general_placeholder_text,
       hide_for_reservations: "[]"
     };
 
@@ -68,7 +71,10 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
     const customEvent = {
       target: { 
         value: responseText,
-        dataset: { questionText: questionText }
+        dataset: { 
+          questionText: questionText,
+          placeholderText: newQuestion.placeholder_text
+        }
       }
     };
     
@@ -83,7 +89,16 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
 
   return (
     <div className="form-design">
-      <p style={{color:'white', marginBottom:'50px', color:'#AAA'}}>All fields are optional, but the more details you provide, the better HostBuddy can serve your guests.</p>
+      {questionnaire_section_name === "Topics to Avoid" ? (
+        <>
+          <p style={{marginBottom:'50px', color:'#AAA'}}>In this section, you can <span style={{color:'rgb(255,165,0)'}}>add any conversation topics that you want HostBuddy to avoid</span> while communicating with your guests. If a guest's message relates to any of the topics you add here, HostBuddy will not respond to it.</p>
+          <p style={{marginBottom:'50px', color:'#AAA'}}>Unsure what topics to avoid? View the full guide with examples and setup tips in the <a href="https://userguide.hostbuddy.ai/property-profile-setup/setting-topics-to-avoid" target="_blank" rel="noopener noreferrer">HostBuddy User Guide</a>.</p>
+        </>
+      ) : questionnaire_section_name === "SOPs" ? (
+          <p style={{marginBottom:'50px', color:'#AAA'}}>Need help writing SOPs? View the full guide with step-by-step instructions in the <a href="https://userguide.hostbuddy.ai/property-profile-setup/building-standard-operating-procedures" target="_blank" rel="noopener noreferrer">HostBuddy User Guide</a>.</p>
+      ) : (
+        <p style={{marginBottom:'50px', color:'#AAA'}}>All fields are optional, but the more details you provide, the better HostBuddy can serve your guests.</p>
+      )}
 
       {/* Form for this questionnaire section (map thru each subsection & question) */}
       {questionnaire_section_data && subsection_order.map((subsectionName) => {
