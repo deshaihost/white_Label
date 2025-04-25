@@ -272,7 +272,7 @@ function GuidedSetup({ property_name:propPropertyName }) {
                         {stepsCompleted.every(step => step) && (
                             <div className="other-content-tile">
                                 <p className="completion-message">
-                                    Property setup complete! You can <Link to={`/workbench/${property_name}`}>test HostBuddy's responses</Link> for this property, or get HostBuddy responding to your guests by scheduling coverage from the <Link to="/properties">properties page</Link>.
+                                    Property setup complete! You can <Link to={`/workbench/${property_name}`}>test HostBuddy's responses</Link> for this property, or go live by setting the schedule on the <Link to="/properties">properties page</Link>.
                                 </p>
                             </div>
                         )}

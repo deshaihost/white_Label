@@ -226,6 +226,14 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
         if (questionText) {
           newData.questionnaire[sec_name][subsec_name][q_ind].question_text = questionText;
         }
+        // Only set placeholder_text if it is currently empty
+        if (
+          event.target?.dataset?.placeholderText &&
+          !newData.questionnaire[sec_name][subsec_name][q_ind].placeholder_text
+        ) {
+          newData.questionnaire[sec_name][subsec_name][q_ind].placeholder_text =
+            event.target.dataset.placeholderText;
+        }
       } else if (question_type === "select") {
         newData.questionnaire[sec_name][subsec_name][q_ind].response_option = event.target.value;
 

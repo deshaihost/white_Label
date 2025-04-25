@@ -51,3 +51,16 @@
 #integrate_form1 .custom_checkbox:hover {
   box-shadow: 0 0 20px rgba(255, 255, 255, 1);
 }
+
+/* Style for Select All button */
+.select-all-button {
+  color: #146ef5;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+}
+
+.select-all-button:hover {
+  opacity: 0.8;
+}
