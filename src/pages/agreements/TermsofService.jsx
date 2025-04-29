@@ -1,6 +1,8 @@
 import React, {  useEffect } from 'react'
-import './TermsofService.css';
+import './agreements.css';
 import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
+
 const TermsofService = () => {
   // const [activeLink, setActiveLink] = useState("");
   // const handleClickScroll = (id) => {
@@ -97,6 +99,9 @@ const TermsofService = () => {
                             <li>
                               d. Data Ownership: Users retain ownership of all data provided to HostBuddy AI through the Service.  HostBuddy AI does not claim ownership of user data. However, by using the Service, users grant  HostBuddy AI a worldwide, royalty-free license to use, modify, reproduce, and distribute such data for the  purpose of providing and improving the Service.
                             </li>
+                            <li>
+                              e. Data Processing Agreement: When processing personal data on behalf of users who are subject to the GDPR or other data protection regulations, HostBuddy AI acts as a data processor. The relationship between HostBuddy AI and the user is governed by our <Link to="/data-processing-agreement">Data Processing Agreement</Link>, which forms an integral part of these Terms.
+                            </li>
                           </ul>
                         </div>
 
@@ -119,7 +124,7 @@ const TermsofService = () => {
                           <h4>5. Privacy</h4>
                           <ul>
                             <li>
-                              a. Data Collection: HostBuddy AI collects and processes user data in accordance with its Privacy Policy. By  using the Service, you consent to such data practices.
+                              a. Data Collection: HostBuddy AI collects and processes user data in accordance with its <Link to="/privacy-policy">Privacy Policy</Link> and, where applicable, the <Link to="/data-processing-agreement">Data Processing Agreement</Link>. By using the Service, you consent to such data practices.
                             </li>
                           </ul>
                         </div>
