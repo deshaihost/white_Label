@@ -6,19 +6,25 @@ import ConnectToMinut from './connectMinutButton';
 import ConnectToTidy from './connectTidyButton';
 import TurnoIntegration from './TurnoIntegration';
 import MinutIntegration from './MinutIntegration';
+import HostfullyGuidebooksIntegration from './HostfullyGuidebooksIntegration';
 import './Integrations.css';
 
 const IntegrationsIndex = (ApiUserData) => {
   const turnoUserId = Boolean(ApiUserData?.ApiUserData?.turno_user_id);
   const minutUserId = Boolean(ApiUserData?.ApiUserData?.minut_user_id);
   const tidyUserId = Boolean(ApiUserData?.ApiUserData?.tidy_user_id);
+  
+  // Only show the Hostfully Guidebooks section if the user's PMS is Hostfully
+  const pms_name = ApiUserData?.ApiUserData?.calry_integrations ? Object.keys(ApiUserData.ApiUserData.calry_integrations)[0] : undefined;
+  const isHostfully = pms_name === 'hostfully';
 
   // Identify connected integrations
   const connectedIntegrations = [];
   if (turnoUserId) connectedIntegrations.push('Turno');
   if (minutUserId) connectedIntegrations.push('Minut');
   if (tidyUserId) connectedIntegrations.push('Tidy');
-  // Add more integrations as needed
+  // Add Hostfully Guidebooks if PMS is Hostfully
+  if (isHostfully) connectedIntegrations.push('Hostfully Guidebooks');
 
   // State for selected integration tab
   const [selectedIntegration, setSelectedIntegration] = useState(connectedIntegrations[0] || '');
@@ -60,6 +66,10 @@ const IntegrationsIndex = (ApiUserData) => {
               <div>
                 <h3 style={{marginTop:'40px'}}>Connected to Tidy!</h3>
               </div>
+            )}
+
+            {selectedIntegration === 'Hostfully Guidebooks' && (
+              <HostfullyGuidebooksIntegration ApiUserData={ApiUserData} />
             )}
 
             {/* Add similar blocks for additional integrations */}
