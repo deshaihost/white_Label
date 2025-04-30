@@ -24,7 +24,8 @@ const IntegrationsIndex = (ApiUserData) => {
   if (minutUserId) connectedIntegrations.push('Minut');
   if (tidyUserId) connectedIntegrations.push('Tidy');
   // Add Hostfully Guidebooks if PMS is Hostfully
-  if (isHostfully) connectedIntegrations.push('Hostfully Guidebooks');
+  //if (isHostfully) connectedIntegrations.push('Hostfully Guidebooks');
+  connectedIntegrations.push('Hostfully Guidebooks');
 
   // State for selected integration tab
   const [selectedIntegration, setSelectedIntegration] = useState(connectedIntegrations[0] || '');
