@@ -25,6 +25,7 @@ const HostfullyGuidebooksIntegration = ({ ApiUserData }) => {
       };
 
       const response = await axios.get(`${baseUrl}/list_hostfully_guidebooks_properties`, config);
+      console.log('list_hostfully_guidebooks_properties Response:', response);
 
       if (response.status === 200) {
         setApiPropertyMappings(response?.data?.property_mapping);
@@ -62,6 +63,7 @@ const HostfullyGuidebooksIntegration = ({ ApiUserData }) => {
       };
 
       const response = await axios.post(`${baseUrl}/save_hostfully_guidebooks_property_mapping`, body_data, config);
+      console.log('save_hostfully_guidebooks_property_mapping Response:', response);
 
       if (response.status === 200) {
         ToastHandle('Property mappings saved successfully', 'success');
