@@ -29,7 +29,7 @@ const HostfullyGuidebooksIntegration = ({ ApiUserData }) => {
 
       if (response.status === 200) {
         setApiPropertyMappings(response?.data?.property_mapping);
-        setApiHostfullyProperties(response?.data?.hostfully_properties);
+        setApiHostfullyProperties(response?.data?.hostfully_guidebook_properties);
       }
     }
     catch (error) { }
@@ -49,7 +49,7 @@ const HostfullyGuidebooksIntegration = ({ ApiUserData }) => {
       if (hostfullyId) {
         const hostfullyProperty = apiHostfullyProperties.find(prop => prop.id === hostfullyId);
         if (hostfullyProperty) {
-          property_mapping[hostfullyId] = { 'hostfully_alias': hostfullyProperty.alias, 'hostbuddy_property_name': propertyName };
+          property_mapping[hostfullyId] = { 'hostfully_guidebooks_alias': hostfullyProperty.alias, 'hostbuddy_property_name': propertyName };
         }
       }
     }
