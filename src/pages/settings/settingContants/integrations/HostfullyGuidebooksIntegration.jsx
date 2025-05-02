@@ -29,7 +29,7 @@ const HostfullyGuidebooksIntegration = ({ ApiUserData }) => {
 
       if (response.status === 200) {
         setApiPropertyMappings(response?.data?.property_mapping);
-        setApiHostfullyProperties(response?.data?.hostfully_guidebook_properties);
+        setApiHostfullyProperties(response?.data?.hostfully_guidebooks_properties);
       }
     }
     catch (error) { }
