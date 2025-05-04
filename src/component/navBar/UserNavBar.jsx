@@ -147,7 +147,7 @@ const UserNavBar = ({ gcsToken, subAccountName }) => {
                     </>
                   )}
                   <NavLink to={isInGcsPortal ? '/gcs-settings' : '/setting'} className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                    {isInGcsPortal ? 'GCS Acct Settings' : 'Settings'}
+                    {isInGcsPortal ? 'Master Acct Settings' : 'Settings'}
                   </NavLink>
                   {isInGcsPortal && (
                     <NavLink to="/login" className="nav-link" onClick={logoutHandle}>
