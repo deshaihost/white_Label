@@ -124,7 +124,7 @@ const GcsUsers = () => {
           </Accordion>
         ) : (
           <div className="text-center my-5">
-            <p className="text-light">No accounts found. Add a Guesty account to get started.</p>
+            <p className="text-light">No accounts found. Add a host account to get started.</p>
           </div>
         )}
         
