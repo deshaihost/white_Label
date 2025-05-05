@@ -12,25 +12,15 @@ import { setAuthorization } from "../../helper/apiCore";
 const LogoNavBar = "https://hostbuddylb.com/logo/logoNavBar.svg";
 
 const UserNavBar = ({ gcsToken }) => {
+  // Define all React hooks at the top level to follow React's rules of hooks
   const location = useLocation();
   const navigate = useNavigate();
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : {};
 
-  // mobile navbar functionality - MOVED BEFORE CONDITIONAL RETURN
+  // Mobile navbar functionality - always defined at top level before any conditional returns
   const [loginIcon, setLoginIcon] = useState(false);
   const [expanded, setExpanded] = useState(false);
-
-  // Don't render UserNavBar for authenticated users (they'll use NavBarContainer instead)
-  if (token) {
-    return null;
-  }
-
-  const logoutHandle = async (e) => {
-    e.preventDefault();
-    logOut();
-    navigate("/login");
-  };
 
   // List of paths that should show portal navigation. Need to add to this list whenver a new protected path is added
   const protectedPaths = ["/dashboard", "/statistics", "/properties", "/test-property", "/workbench", "/property-insight", "/subscription", "/setting", "/add-property", "/edit-property", "/guided-setup", "/inbox", "/action-item", "/getstarted", "/journey", "/gcs-users", '/gcs-settings'];
@@ -46,6 +36,12 @@ const UserNavBar = ({ gcsToken }) => {
 
   // Check if current path should show portal navigation based on login status
   const isConditionalPath = conditionalPaths.includes(location.pathname);
+
+  const logoutHandle = async (e) => {
+    e.preventDefault();
+    logOut();
+    navigate("/login");
+  };
 
   const handleToggle = () => {
     setExpanded(!expanded);
@@ -70,6 +66,11 @@ const UserNavBar = ({ gcsToken }) => {
     setExpanded(false);
   };
   // mobile navbar functionality
+
+  // Don't render UserNavBar for authenticated users (they'll use NavBarContainer instead)
+  if (token) {
+    return null;
+  }
 
   return (
     <header className="header">
@@ -174,7 +175,7 @@ const UserNavBar = ({ gcsToken }) => {
                   <NavLink exact to="/pricing" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     Pricing
                   </NavLink>
-                  {/*
+                  {/* 
                   <NavLink exact to="/faqs" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     FAQs
                   </NavLink>
@@ -184,7 +185,7 @@ const UserNavBar = ({ gcsToken }) => {
                   </NavLink>
 
                   {/* Remove About Us and Blog for now, to save space in the navbar. Will re-add shortly after the navbar is redesigned to accommodate more items */}
-                  {/*
+                  {/* 
                   <NavLink exact to="/about-us" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
                     About Us
                   </NavLink>
