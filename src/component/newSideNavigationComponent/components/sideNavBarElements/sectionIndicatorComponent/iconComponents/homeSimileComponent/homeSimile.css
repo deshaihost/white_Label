@@ -1,0 +1,12 @@
+.home-smile-screen {
+    height: 20px;
+    position: relative;
+    width: 20px;
+    }
+    .home-smile-screen .icon {
+    height: 17px;
+    left: 2px;
+    position: absolute;
+    top: 1px;
+    width: 17px;
+    }

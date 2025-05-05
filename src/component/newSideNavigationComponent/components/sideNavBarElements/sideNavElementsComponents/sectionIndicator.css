@@ -1,0 +1,114 @@
+.side-nav-item {
+    align-items: center;
+    background-color: transparent;
+    border-radius: 4px;
+    display: flex;
+    gap: 6px;
+    height: 40px;
+    padding: 0px 8px 0px 0px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.side-nav-item .instance-node {
+    height: 20px !important;
+    position: relative !important;
+    width: 20px !important;
+    margin-left: 12px;
+}
+
+.side-nav-item .text-wrapper {
+    color: var(--colors-color-text-subtle);
+    flex: 1;
+    font-family: var(--body-medium-med-500-font-family);
+    font-size: var(--body-medium-med-500-font-size);
+    font-style: var(--body-medium-med-500-font-style);
+    font-weight: var(--body-medium-med-500-font-weight);
+    letter-spacing: var(--body-medium-med-500-letter-spacing);
+    line-height: var(--body-medium-med-500-line-height);
+    position: relative;
+}
+
+.side-nav-item .counter {
+    background-color: var(--color-primitives-neutral-alpha-400a);
+    color: var(--colors-color-text-white);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 20px;
+    text-align: center;
+}
+
+.side-nav-item .selection-indicator {
+    background-color: var(--colors-color-border-selected);
+    border-radius: 0px 2px 2px 0px;
+    height: 14px;
+    left: 0;
+    position: absolute;
+    top: 13px;
+    width: 3px;
+}
+
+.side-nav-item.selected {
+    background-color: var(--colors-color-background-selected-subtle-default);
+}
+
+.side-nav-item.selected .text-wrapper {
+    color: var(--colors-color-text-selected);
+}
+
+.side-nav-item:hover:not(.selected) {
+    background-color: var(--color-primitives-neutral-alpha-400a);
+}
+
+/* Dropdown styles */
+.dropdown-items {
+    width: 100%;
+;
+    margin-left: 0;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-color: var(--color-primitives-neutral-1100); /* Updated to black background */
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.side-nav-item.sub-item {
+    padding-left: 38px;
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.side-nav-item.sub-item:hover {
+    background-color: var(--colors-color-background-selected-hover); /* Blue background on hover */
+}
+
+.side-nav-item.sub-item.selected {
+    background-color: var(--colors-color-background-selected-default); /* Blue background when selected */
+}
+
+.side-nav-item.sub-item .text-wrapper {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.side-nav-item .trailing-icon {
+    transition: transform 0.3s ease;
+}
+
+.side-nav-item .trailing-icon.rotated {
+    transform: rotate(180deg);
+}

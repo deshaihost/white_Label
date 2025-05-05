@@ -57,6 +57,8 @@ import ActionItemsIndex from "../pages/actionItems/ActionItemsIndex";
 //import TestShowConvIndex from "../pages/testShowConversations/TestShowConvIndex";
 import AiMessaging from "../pages/aiMessaging/AiMessaging";
 import SmartTemplatesLanding from "../pages/smartTemplatesLanding/smartTemplatesLanding";
+import AuthenticatedLayout from "../component/layout/AuthenticatedLayout";
+import Authorized from "../helper/Authorized";
 
 // PMS instructions pages
 import PmsInstructionsMain from "../pages/userGuides/pmsInstructions/instructionsMain";
@@ -79,6 +81,7 @@ import CustomerJourney from "../pages/customerJourney/customerJourney";
 
 const Routing = () => {
   const location = useLocation();
+  const authData = Authorized();
 
   // Add rb2b profiling script to the head of the document
   useEffect(() => {
@@ -203,14 +206,15 @@ const Routing = () => {
     addMetaPixelScript();
   }, [location.pathname]);
 
-  return (
-    <div className="routes">
+  const content = (
+    <>
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/reset-password" &&
         location.pathname !== "/accept-invitation" &&
         location.pathname !== "/forgot" &&
-        location.pathname !== "/test-show-conversations" && <NavBar />}
+        location.pathname !== "/test-show-conversations" && 
+        !authData && <NavBar />}
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -361,7 +365,6 @@ const Routing = () => {
             </ProtectedRoute>
           }
         />
-        // ...existing code...
         <Route
           path="/property-insight"
           element={
@@ -471,6 +474,17 @@ const Routing = () => {
         !location.pathname.startsWith("/edit-property/") &&
         location.pathname !== "/gcs-users" &&
         <Footer />}
+    </>
+  );
+
+  // Wrap content with AuthenticatedLayout when the user is logged in
+  return (
+    <div className="routes">
+      {authData ? (
+        <AuthenticatedLayout>{content}</AuthenticatedLayout>
+      ) : (
+        <>{content}</>
+      )}
     </div>
   );
 };

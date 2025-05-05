@@ -1,0 +1,49 @@
+.filter-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--color-primitives-brand-700); /* #0B5FDE from the CSS root */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.filter-button:hover {
+  background-color: var(--color-primitives-brand-800);
+}
+
+.filter-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1); /* Make icon white */
+}
+
+.filter-form-popup {
+  position: absolute;
+  top: 0; /* Changed from below to on top of the button */
+  left: 0;
+  z-index: 100;
+  min-width: 320px; /* Increased from the current form width */
+}
+
+/* Close the popup when clicking outside */
+.filter-form-popup::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}

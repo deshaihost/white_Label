@@ -66,5 +66,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@vitejs/plugin-react": "^4.4.1",
+    "nth-check": "^2.1.1",
+    "postcss": "^8.4.31",
+    "vite": "^6.3.3"
+  },
+  "overrides": {
+    "nth-check": "^2.1.1",
+    "postcss": "^8.4.31",
+    "css-select": "^4.3.0",
+    "svgo": "^2.8.0"
   }
 }

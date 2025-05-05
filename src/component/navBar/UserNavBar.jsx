@@ -17,6 +17,11 @@ const UserNavBar = ({ gcsToken }) => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : {};
 
+  // Don't render UserNavBar for authenticated users (they'll use NavBarContainer instead)
+  if (token) {
+    return null;
+  }
+
   const logoutHandle = async (e) => {
     e.preventDefault();
     logOut();

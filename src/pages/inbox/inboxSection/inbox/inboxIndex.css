@@ -1,11 +1,16 @@
+
+
 .routes .row {
     width: 100%;
 }
 
 .inbox-content-container {
   position: relative;
+  height: 100vh;
 }
-
+.box {
+  flex : auto;
+}
 /* Mobile Styles */
 @media (max-width: 991.98px) {
   .left-bar,

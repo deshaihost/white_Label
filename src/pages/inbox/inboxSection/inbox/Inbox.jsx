@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { callGetConversationsApi, callGetSingleConversationApi } from "../../../../helper/getConversationsTest/inboxApi";
-import { howManyMinutesAgo } from '../../../../helper/commonFun';
-import { FullScreenLoader, InboxLoader } from "../../../../helper/Loader";
+import { InboxLoader } from "../../../../helper/Loader"; 
 import LeftMessage from "./leftMessage/LeftMessage";
 import MildeSection from "./mildeSection/MildeSection";
 import RightSection from "./rightSection/RightSection";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import ToastHandle from "../../../../helper/ToastMessage";
 import "./inboxIndex.css";
 
+// Import the SVG icons
+import PmsIcon from "./mildeSection/message/icons/pms_icon.svg";
+import WhatsappIcon from "./mildeSection/message/icons/whatsapp_icon.svg";
+import OpenIssueIcon from "./mildeSection/message/icons/openIssue_icon.svg";
+import NotesIcon from "./mildeSection/message/icons/notes_icon.svg";
+import CheckBoxIcon from "./mildeSection/message/icons/check_box.svg";
+
 const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptionPlan, accountAgeDays, singleConversationIdFromUrl }) => {
-  const eliteFeaturesAvailable = (/elite|works/i.test(subscriptionPlan) || subscriptionPlan == 'trial') // Case-insensitive check for 'elite' or 'works' in the plan name, OR user is on trial
+  const navigate = useNavigate();
+  const eliteFeaturesAvailable = (/elite|works/i.test(subscriptionPlan) || subscriptionPlan === 'trial') // Changed == to === for strict equality
 
   const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
   const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
@@ -19,7 +29,73 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [fromHostBuddyFilterVal, setFromHostBuddyFilterVal] = useState(false);
   const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
   const [currentView, setCurrentView] = useState('conversations'); // New state for mobile view
-  const [allowConvIdQuery, setAllowConvIdQuery] = useState(true);
+  const [activeTab, setActiveTab] = useState('pms'); // New state to track active tab
+  const [allowConvIdQuery, setAllowConvIdQuery] = useState(true); // Added state for handling conversationId query
+
+  // Action items state to display in the Open Issues tab
+  const [filteredActionItems, setFilteredActionItems] = useState([]);
+  const [isLoadingActionItems, setIsLoadingActionItems] = useState(false);
+
+  // Function to call the API to get action items
+  const callGetActionItemsApi = async (status_query = 'incomplete') => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setIsLoadingActionItems(true);
+  
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+      const response = await axios.get(`${baseUrl}/get_action_items?status=${status_query}&limit=200`, config);
+  
+      if (response.status === 200) {
+        setFilteredActionItems(response.data.action_items);
+      }
+      else { 
+        ToastHandle(response?.data?.error, "danger"); 
+      }
+      return response.data;
+    } catch (error) {
+      ToastHandle("Error - unable to get action items", "danger");
+      return { error: "Internal server error" };
+    } finally {
+      setIsLoadingActionItems(false);
+    }
+  };
+
+  // Function to call the API to mark an action item as complete
+  const callCompleteActionItemApi = async (actionItemId) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+      const bodyData = { action_item_id: actionItemId };
+      const response = await axios.put(`${baseUrl}/complete_action_item`, bodyData, config);
+  
+      if (response.status === 200) { 
+        // Remove the completed action item from the state
+        setFilteredActionItems(filteredActionItems.filter((item) => item.id !== actionItemId));
+        ToastHandle("Action item marked as completed", "success");
+      } else { 
+        ToastHandle(response?.data?.error, "danger"); 
+      }
+      return response.data;
+    } catch (error) {
+      ToastHandle("Error completing action item", "danger");
+    }
+  };
+
+  // Fetch action items when the Open Issues tab is selected
+  useEffect(() => {
+    if (activeTab === 'openIssue') {
+      callGetActionItemsApi();
+    }
+  }, [activeTab]);
 
   // Get the conversations we already have in the format needed to send to the API: { conversationId1: { last_message_time:<last_message_time_utc> }, ... }
   const getConversationsAlreadyHave = () => {
@@ -45,7 +121,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     else { // Tell the API which conversations we already have, so we don't need to get them again if they haven't been updated
       conversationsAlreadyHave = getConversationsAlreadyHave();
     }
-    const conversationId = (allowConvIdQuery && useConvIdQuery) ? (singleConversationIdFromUrl || null) : null;
+    const conversationId = (useConvIdQuery) ? (singleConversationIdFromUrl || null) : null;
 
     const data = await callGetConversationsApi(limit, conversationsAlreadyHave, urgent, propertyName, phase, meetHbOnly, guestName, conversationId);
     if (data?.conversations) { updateConversationsWithApiData(data.conversations); }
@@ -132,8 +208,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       const intervalId = setInterval(() => {
         const num_existing_convos = conversations.length;
         const num_convos_to_fetch = Math.max(num_existing_convos, 2); // always fetch at least 2 convos, even if we're only looking at one (e.g. due to filter), so if there's simultaneous updates we're more likely to catch it. 2 is still an arbitrary number tbh
-        const allowConvIdQuery = (num_existing_convos <= 1); // If we have loaded more convos, then we don't care about the query param anymore
-        fetchConversations(num_convos_to_fetch, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal);
+        fetchConversations(num_convos_to_fetch, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal, num_existing_convos <= 1);
       }, isNewAccount ? 10000 : 20000); // 10s for new accounts, 20s for elite users
 
       const timeoutId = setTimeout(() => { // Stop auto-updating after the page has been open for 2 hours (7,200,000 milliseconds = 4 hours)
@@ -152,20 +227,211 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       {conversationsNotYetFetched ? <InboxLoader /> : null}
       <div className="row text-white">
         {/* Desktop View */}
-        <div className="d-none d-lg-block col-lg-3 left-bar">
-          <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} setCurrentView={setCurrentView} currentView={currentView} setAllowConvIdQuery={setAllowConvIdQuery}/>
-        </div>
-        <div className="d-none d-lg-block col-lg-6">
-          <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays}/>
-        </div>
-        <div className="d-none d-lg-block col-lg-3">
-          <RightSection rightSectionData={selectedConversation} updateConversationFromApi={updateConversation} />
+        <div style={{ width: "100%", gap: "20px" }} className="d-none d-lg-flex col-lg-12">
+          <LeftMessage
+            className="box"
+            allPropertyNamesList={allPropertyNamesList}
+            allGuestNames={allGuestNamesList}
+            allConversations={conversations}
+            setAllConversations={setConversations}
+            setSelectedConvo={setSelectedConversation}
+            fetchConversations={fetchConversations}
+            userHasPMS={userHasPMS}
+            urgentFilterIsEnabled={urgentFilterIsEnabled}
+            setUrgentFilterIsEnabled={setUrgentFilterIsEnabled}
+            propertyFilterVal={propertyFilterVal}
+            setPropertyFilterVal={setPropertyFilterVal}
+            phaseFilterVal={phaseFilterVal}
+            setPhaseFilterVal={setPhaseFilterVal}
+            fromHostBuddyFilterVal={fromHostBuddyFilterVal}
+            setFromHostBuddyFilterVal={setFromHostBuddyFilterVal}
+            guestNameSearchVal={guestNameSearchVal}
+            setGuestNameSearchVal={setGuestNameSearchVal}
+            setCurrentView={setCurrentView}
+            currentView={currentView}
+            setAllowConvIdQuery={setAllowConvIdQuery}
+          />
+          <div className='middleSectionContainer' style={{ width: '496px', flex: 'none' ,height: 'calc(100vh - 100px)' }}>
+            <div>
+              {/* here user image , name ,  */}
+            </div>
+            <div style={{ display: 'flex', backgroundColor: '#17191f', padding: '4px', borderRadius: '4px', marginBottom: '4px' }}>
+              {/* Tabs for navigation */}
+              <div style={{ display: 'flex', width: '100%' }}>
+                {[
+                  { id: 'pms', icon: PmsIcon, text: 'PMS' },
+                  { id: 'whatsapp', icon: WhatsappIcon, text: 'WhatsApp' },
+                  { id: 'openIssue', icon: OpenIssueIcon, text: 'Open Issue' },
+                  { id: 'notes', icon: NotesIcon, text: 'Notes' }
+                ].map((tab) => (
+                  <div 
+                    key={tab.id}
+                    onClick={() => {
+                      setActiveTab(tab.id); // Update active tab state
+                    }}
+                    style={{ 
+                      fontFamily: "DM Sans", // Changed from fontStyle to fontFamily
+                      fontSize: "14px",
+                      cursor: 'pointer',
+                      position: 'relative',
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginRight: '10px',
+                      justifyContent: 'space-between', // Changed from alignItems to justifyContent
+                      borderBottom: tab.id === activeTab ? '2px solid #007bff' : 'none' // Blue underline for active tab
+                    }}
+                  >
+                    <img src={tab.icon} alt={tab.text} style={{ width: '15px', height: '15px', marginRight: '5px' }} />
+                    <span>{tab.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Tab content rendered inside the div container */}
+            {activeTab === 'pms' && (
+              <MildeSection
+                className="box"
+                allConversationData={selectedConversation}
+                updateConversationFromApi={updateConversation}
+                updateConversationLocal={addMessageToLocalConversation}
+                subscriptionPlan={subscriptionPlan}
+                accountAgeDays={accountAgeDays}
+              />
+            )}
+            {activeTab === 'whatsapp' && (
+              <div className="box" style={{ padding: '20px', backgroundColor: '#17191f', borderRadius: '4px' }}>
+                <h3>WhatsApp Messages</h3>
+                <p>WhatsApp integration content will appear here.</p>
+              </div>
+            )}
+            {activeTab === 'openIssue' && (
+              <div className="box" style={{ padding: '0px', backgroundColor: 'rgb(0,0,0)', borderRadius: '4px', height: 'calc(100vh - 30px)', overflowY: 'auto' }}>
+                
+                <div className="action-items-container">
+                  {/* We would fetch action items from the API in a real implementation */}
+                  {[].concat(filteredActionItems || []).filter(item => item.status !== 'completed').map(actionItem => (
+                    <div key={actionItem.id} className="action-item-card" style={{
+                      backgroundColor: '#23252f',
+                      borderRadius: '8px',
+                      padding: '10px',
+                      marginBottom: '16px',
+                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                      fontFamily: "DM Sans, Helvetica",
+                      fontSize: "14px"
+                    }}>
+                      <div className="action-item-header" style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginBottom: '12px'
+                      }}>
+                        <div className="action-item-date" style={{
+                          fontSize: '14px',
+                          color: '#a4a6aa'
+                        }}>
+                          {new Date(actionItem.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • {new Date(actionItem.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} • <span>
+                            {actionItem.category}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="action-item-description" style={{
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        color: 'white',
+                        lineHeight: '1.4',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}>
+                        <div style={{ flex: 1 }}>
+                          {actionItem.item}
+                        </div>
+                        <label className="action-item-checkbox" style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          cursor: 'pointer',
+                          marginLeft: '12px'
+                        }}>
+                          <div 
+                            style={{
+                              backgroundColor: "rgba(74, 70, 84, 0.41)",
+                              height: "32px",
+                              width: "32px",
+                              borderRadius: "4px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              cursor: "pointer"
+                            }}
+                            onClick={() => callCompleteActionItemApi(actionItem.id)}
+                            title="Mark as Resolved"
+                          >
+                            <img src={CheckBoxIcon} alt="Mark as Resolved" />
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* If there are no items or the API hasn't been integrated yet, show these mock items */}
+                  {(!filteredActionItems || filteredActionItems.length === 0) && (
+                    <div className="no-action-items" style={{
+                      padding: '20px',
+                      textAlign: 'center',
+                      color: '#a4a6aa'
+                    }}>
+                      <p>Loading </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            {activeTab === 'notes' && (
+              <div className="box" style={{ padding: '20px', backgroundColor: '#17191f', borderRadius: '4px' }}>
+                <h3>Notes</h3>
+                <p>Notes content will appear here.</p>
+              </div>
+            )}
+          </div>
+          <div className='rightSectionContainer' style={{ width: '296px', flex: 'none' ,height:"100%" }}>
+          <RightSection
+            className="box"
+            style={{ width: "100%", height: "calc(100vh - 100px)" }}
+            rightSectionData={selectedConversation}
+            updateConversationFromApi={updateConversation}
+          />
+          </div>
         </div>
 
-        {/* Mobile View */}
+
+        
+         
+          
+          {/* Mobile View */}
         <div className="d-block d-lg-none col-12">
           {currentView === 'conversations' && (
-            <LeftMessage allPropertyNamesList={allPropertyNamesList} allGuestNames={allGuestNamesList} allConversations={conversations} setAllConversations={setConversations} setSelectedConvo={setSelectedConversation} fetchConversations={fetchConversations} userHasPMS={userHasPMS} urgentFilterIsEnabled={urgentFilterIsEnabled} setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} propertyFilterVal={propertyFilterVal} setPropertyFilterVal={setPropertyFilterVal} phaseFilterVal={phaseFilterVal} setPhaseFilterVal={setPhaseFilterVal} fromHostBuddyFilterVal={fromHostBuddyFilterVal} setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} guestNameSearchVal={guestNameSearchVal} setGuestNameSearchVal={setGuestNameSearchVal} setCurrentView={setCurrentView} currentView={currentView} setAllowConvIdQuery={setAllowConvIdQuery}/>
+            <LeftMessage 
+              allPropertyNamesList={allPropertyNamesList} 
+              allGuestNames={allGuestNamesList} 
+              allConversations={conversations} 
+              setAllConversations={setConversations} 
+              setSelectedConvo={setSelectedConversation} 
+              fetchConversations={fetchConversations} 
+              userHasPMS={userHasPMS} 
+              urgentFilterIsEnabled={urgentFilterIsEnabled} 
+              setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} 
+              propertyFilterVal={propertyFilterVal} 
+              setPropertyFilterVal={setPropertyFilterVal} 
+              phaseFilterVal={phaseFilterVal} 
+              setPhaseFilterVal={setPhaseFilterVal} 
+              fromHostBuddyFilterVal={fromHostBuddyFilterVal} 
+              setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} 
+              guestNameSearchVal={guestNameSearchVal} 
+              setGuestNameSearchVal={setGuestNameSearchVal} 
+              setCurrentView={setCurrentView} 
+              currentView={currentView}
+              setAllowConvIdQuery={setAllowConvIdQuery} 
+            />
           )}
           {currentView === 'messages' && (
             <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays} setCurrentView={setCurrentView} />

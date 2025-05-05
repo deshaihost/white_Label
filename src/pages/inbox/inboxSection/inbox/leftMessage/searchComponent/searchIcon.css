@@ -1,0 +1,13 @@
+.search-md-screen {
+    height: 20px;
+    position: relative;
+    width: 20px;
+}
+
+.search-md-screen .icon {
+    height: 16px;
+    left: 2px;
+    position: absolute;
+    top: 2px;
+    width: 16px;
+}

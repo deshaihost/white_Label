@@ -67,4 +67,4 @@ export default (combineReducers({
   copyExistingPropertyReducer,
   messageFeedBackReducer,
   removeSupportingDocsReducer
-}): any);
+}));

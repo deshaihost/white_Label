@@ -1,0 +1,141 @@
+.side-nav-item {
+    align-items: center;
+    background-color: transparent;
+    border-radius: 4px;
+    display: flex;
+    gap: 6px;
+    height: 40px;
+    padding: 0px 8px 0px 0px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.side-nav-item .instance-node {
+    height: 20px !important;
+    position: relative !important;
+    width: 20px !important;
+    margin-left: 12px;
+    transition: color 0.2s ease;
+}
+
+.side-nav-item .text-wrapper {
+    color: var(--colors-color-text-subtle, #e0e0e0);
+    flex: 1;
+    font-family: var(--body-medium-med-500-font-family, 'Inter');
+    font-size: var(--body-medium-med-500-font-size, 14px);
+    font-style: var(--body-medium-med-500-font-style, normal);
+    font-weight: var(--body-medium-med-500-font-weight, 500);
+    letter-spacing: var(--body-medium-med-500-letter-spacing, normal);
+    line-height: var(--body-medium-med-500-line-height, 1.5);
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.side-nav-item .counter {
+    background-color: var(--color-primitives-neutral-alpha-400a, rgba(255, 255, 255, 0.1));
+    color: var(--colors-color-text-white, #ffffff);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 20px;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+.side-nav-item .selection-indicator {
+    background-color: var(--colors-color-border-selected, #3787ff);
+    border-radius: 0px 2px 2px 0px;
+    height: 16px; /* Slightly taller for better visibility */
+    left: 0;
+    position: absolute;
+    top: 12px;
+    width: 3px;
+    transition: all 0.2s ease-in-out;
+}
+
+.side-nav-item.selected {
+    background-color: var(--colors-color-background-selected-subtle-default, rgba(55, 135, 255, 0.1));
+    box-shadow: 0 0 0 1px rgba(55, 135, 255, 0.15); /* Subtle border effect */
+}
+
+.side-nav-item.selected .text-wrapper {
+    color: var(--colors-color-text-selected, #ffffff);
+    font-weight: 600; /* Make selected text slightly bolder */
+}
+
+.side-nav-item.selected .instance-node svg path {
+    fill: var(--colors-color-text-selected, #ffffff);
+}
+
+.side-nav-item:hover:not(.selected) {
+    background-color: var(--color-primitives-neutral-alpha-400a, rgba(255, 255, 255, 0.08));
+}
+
+.side-nav-item:hover .text-wrapper {
+    color: var(--colors-color-text-white, #ffffff);
+}
+
+/* Active/pressed state */
+.side-nav-item:active {
+    background-color: rgba(55, 135, 255, 0.15); /* Slightly more intense than hover */
+    transform: scale(0.98); /* Subtle press effect */
+}
+
+/* Dropdown styles */
+.dropdown-items {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-color: rgba(20, 22, 25, 0.9); /* Slightly transparent to show depth */
+    border-radius: 4px;
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Add subtle shadow for depth */
+}
+
+.side-nav-item.sub-item {
+    padding-left: 38px;
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 36px; /* Slightly smaller than parent items */
+}
+
+.side-nav-item.sub-item:hover {
+    background-color: rgba(55, 135, 255, 0.15); /* Lighter blue on hover */
+}
+
+.side-nav-item.sub-item.selected {
+    background-color: rgba(55, 135, 255, 0.25); /* Slightly deeper blue when selected */
+}
+
+.side-nav-item.sub-item .text-wrapper {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px; /* Slightly smaller text for sub items */
+}
+
+.side-nav-item .trailing-icon {
+    transition: transform 0.3s ease;
+    opacity: 0.7;
+}
+
+.side-nav-item:hover .trailing-icon {
+    opacity: 1;
+}
+
+.side-nav-item .trailing-icon.rotated {
+    transform: rotate(180deg);
+}

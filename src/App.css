@@ -1,9 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
+/* Global font override - apply DM Sans to all elements */
+*, *::before, *::after {
+  font-family: "DM Sans", Helvetica !important;
+}
+
 body {
   padding: 0;
   margin: 0;
-  font-family: "Samsung Sharp Sans Medium";
+  font-family: "DM Sans", Helvetica !important;
   background: #000212;
 }
 

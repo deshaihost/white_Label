@@ -2,19 +2,77 @@ import React, { useState } from "react";
 import "./index.css";
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import Loader from "../../../../../helper/Loader";
-
+import HostBuddyIcon from "./icons/hostbuddy_icon.svg";
+import NeutralIcon from "./icons/neautral_icon.svg";
+import ChevDownIcon from "./icons/chevDown_icon.svg";
 
 const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentView }) => {
-  const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, action_items, guest_chatbot_status, property_chatbot_status, conversation_id } = rightSectionData ? rightSectionData : {};
+  const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, action_items, guest_chatbot_status, property_chatbot_status, conversation_id , image_url ,user} = rightSectionData ? rightSectionData : {};
   const until_formatted = guest_chatbot_status?.until_utc == 'indefinitely' ? 'indefinitely' : (guest_chatbot_status?.until_local ? timeFormat(guest_chatbot_status?.until_local) : null);
   let { channel, is_locked } = rightSectionData || {};
 
   const [selectedOption, setSelectedOption] = useState('');
   const [toggleStatusLoading, setToggleStatusLoading] = useState(false);
+  const [issuesExpanded, setIssuesExpanded] = useState(false);
+  const navigate = useNavigate();
+  
+  // Force display for testing - remove in production
+  const isCheckInToday = true; // For testing
+  const isCheckOutToday = true; // For testing
+  const currentDate = new Date();
+  
+  const isToday = (dateString) => {
+    if (!dateString) return false;
+    
+    try {
+      // Parse the YYMMDD_HHMMSS format
+      // Format example: 250419_120000 (for April 19, 2025 at 12:00:00)
+      const year = parseInt('20' + dateString.substring(0, 2)); // Convert YY to YYYY
+      const month = parseInt(dateString.substring(2, 4)) - 1; // JS months are 0-indexed
+      const day = parseInt(dateString.substring(4, 6));
+      
+      const departure = new Date(year, month, day);
+      
+      return (
+        currentDate.getFullYear() === departure.getFullYear() &&
+        currentDate.getMonth() === departure.getMonth() &&
+        currentDate.getDate() === departure.getDate()
+      );
+    } catch (error) {
+      console.error("Error comparing dates:", error);
+      return false;
+    }
+  };
+
+
+
+
+
+  console.log("Debug - Arrival date:", arrival_date);
+  console.log("Debug - Departure date:", departure_date);
+
+  // Format timestamp for issues in "Month Time" format (e.g. "Feb 3:45pm")
+  const formatIssueTime = (dateTimeString) => {
+    if (!dateTimeString) return "";
+    
+    const date = new Date(dateTimeString);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    const month = months[date.getMonth()];
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "pm" : "am";
+    
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 hour should be 12
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    
+    return `${month} ${hours}:${minutes}${ampm}`;
+  };
 
   // Calculate end_time_utc based on timing, for toggle conversation status
   const calculateEndTimeUTC = (timing) => {
@@ -123,6 +181,10 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   else { channel = ""; }
   const statusText = getStatusText(status);
 
+  // Navigate to action items page
+  const navigateToActionItems = () => {
+    navigate('/action-item');
+  };
 
   return (
     <div className="right-side">
@@ -133,36 +195,198 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
         </button>
       </div>
 
-      <div className="bordr-cl right-title">
-        <h2>Reservation</h2>
+      <div className="right-title">
+        <p>Reservation Details</p>
       </div>
 
-      <div className="row">
+      {/* Guest Image */}
+      <div className="guest-image-container" style={{ marginBottom: '2px', textAlign: 'center' }}>
+        {image_url ? (
+          <img 
+            src={image_url} 
+            alt={`${guest_name || 'Guest'}`}
+            style={{ 
+              maxWidth: '272px',
+              maxHeight: '220px',
+              width: 'auto',
+              height: 'auto',
+              objectFit: 'contain',
+              borderRadius: '8px',
+              display: 'block',
+              marginLeft: '0'
+            }}
+            onError={(e) => {
+              e.target.onerror = null; 
+              e.target.src = dummyPropertyImg;
+            }}
+          />
+        ) : (
+          <img 
+            src={dummyPropertyImg} 
+            alt="Default guest" 
+            style={{ 
+              maxWidth: '272px',
+              maxHeight: '220px',
+              width: 'auto',
+              height: 'auto',
+              objectFit: 'contain',
+              borderRadius: '8px',
+              display: 'block',
+              marginLeft: '0'
+            }}
+          />
+        )}
+      </div>
+      
+      {/* User info aligned to the left */}
+      {user && (
+        <div style={{ textAlign: 'left', paddingLeft: '0px', marginBottom: '2px' ,marginTop: '5px'}}>
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
+            <div 
+              style={{
+                display: 'inline-block',
+                color: '#BDC1C9',
+                fontFamily: '"DM Sans", Helvetica',
+                fontSize: '14px',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                letterSpacing: '0px',
+                lineHeight: 'var(--body-medium-med-500-line-height)',
+                padding: '2px ',
+                borderRadius: '4px',
+                height: '25px',
+                backgroundColor: '#bdc1c926'
+              }}
+            >
+              {user}
+            </div>
+            
+            {/* Check-in-today badge */}
+            {isToday(arrival_date) && 
+                              <span className="checkin-badge">
+                                check-in today
+                              </span>
+                            }
+            
+            {/* Check-out-today badge */}
+            {isToday(departure_date) && 
+                              <span className="checkout-badge">
+                                check-out today
+                              </span>
+                            }
+          </div>
+        </div>
+      )}
+
+      <div >
 
         <div className="guest">
           {statusText || guest_name || property_name ? (
             <>
-              {statusText && <span>{statusText}</span>}
-              <h2>{guest_name}</h2>
-              <p>{property_name}</p>
-              <p className="guest_date">{arrival_date && formatDateRange(arrival_date, departure_date, true)}</p>
+              {/* {statusText && <span>{statusText}</span>} */}
+              <h1 style={{ fontSize: '14px', margin: 0 }}>{guest_name}</h1>
+              <h1 style={{ fontSize: '14px' }}>{property_name}</h1>
+              <h1 className="guest_date" style={{ fontSize: '14px' }}>{arrival_date && formatDateRange(arrival_date, departure_date, true)}</h1>
             </>
           ) : (
             <p>No guest selected</p>
           )}
         </div>
-
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '4px', marginBottom: '5px' }}>
+          <span style={{ 
+            display: 'inline-block',
+            color: '#BDC1C9',
+            fontFamily: '"DM Sans", Helvetica',
+            fontSize: '14px',
+            fontStyle: 'normal',
+            fontWeight: 700,
+            letterSpacing: '0px',
+            lineHeight: 'var(--body-medium-med-500-line-height)',
+            padding: '1px 6px',
+            borderRadius: '4px',
+            height: '25px',
+            backgroundColor: '#bdc1c926'
+          }}>{channel}</span>
+        </div>
+        
+        {/* Adding dividing line after channel */}
+        <div style={{ 
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
+          margin: '10px auto', 
+          width: '100%', 
+          maxWidth: '400px' 
+        }}></div>
       </div>
 
       {!(channel == 'Chat Window') && (
         !is_locked ? (
           curr_status && (
             <div className="toggle">
-              {curr_status === 'on' ? (
-                <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(0,180,0)"}}>RESPONDING</span> to this guest</p>
-              ) : (
-                <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(200,0,0)"}}>NOT RESPONDING</span> to this guest</p>
+              {curr_status && (
+                <div style={{fontSize:"12px", display: "flex", alignItems: "center", gap: "5px", marginBottom: "10px"}}>
+                  <img src={HostBuddyIcon} alt="HostBuddy" style={{width: "25px", height: "25px"}} />
+                  <span style={{fontSize:"14px" ,fontWeight:"600" , fontFamily:"Poppins Helvetica"}}>HostBuddy </span>
+                  <span>is</span>
+                  {!toggleStatusLoading ? (
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                      <select 
+                        className="response-dropdown"
+                        value={curr_status}
+                        onChange={(e) => callSetStatusAPI(e.target.value, 'indefinitely')}
+                        style={{
+                          alignItems: 'center',
+                          alignSelf: 'stretch',
+                          backgroundColor: '#24262E',
+                          border: '1px solid',
+                          borderColor: '#24262E',
+                          borderRadius: '4px',
+                          display: 'flex',
+                          gap: '6px',
+                          height: '32px',
+                          padding: '0px 8px',
+                          position: 'relative',
+                          width: '100%',
+                          marginLeft: '0px',
+                          color: curr_status === 'on' ? "rgb(0,180,0)" : "rgb(200,0,0)",
+                          fontWeight: "bold",
+                          outline: 'none',
+                          boxShadow: 'none',
+                          WebkitAppearance: 'none',
+                          MozAppearance: 'none',
+                          appearance: 'none',
+                          paddingRight: '25px' // Add space for the icon
+                        }}
+                      >
+                        
+                        <option value="on" style={{color: "rgb(0,180,0)" ,borderRadius:"4px" ,border: '1px solid'}}>● Active</option>
+                        <option value="off" style={{color: "rgb(200,0,0)"}}>● Not Active</option>
+                        <option value="" disabled>Set duration</option>
+                        <option value="15m">For 15 minutes</option>
+                        <option value="1h">For 1 hour</option>
+                        <option value="1d">For 24 hours</option>
+                        <option value="indefinitely">Indefinitely</option>
+                      </select>
+                      <img 
+                        src={ChevDownIcon} 
+                        alt="Dropdown Icon" 
+                        style={{ 
+                          position: 'absolute', 
+                          right: '8px', 
+                          top: '50%', 
+                          transform: 'translateY(-50%)',
+                          width: '16px', 
+                          height: '16px', 
+                          pointerEvents: 'none',
+                          zIndex: 5
+                        }} 
+                      />
+                    </div>
+                  ) : (
+                    <span style={{display: "inline-flex", alignItems: "center", height: "24px"}}><Loader /></span>
+                  )}
+                </div>
               )}
+
               {(source=='guest') && (
                 until_formatted === 'indefinitely' ? (
                   <p style={{ fontSize: "12px" }}>Indefinitely</p>
@@ -171,24 +395,28 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                 )
               )}
 
-              {!toggleStatusLoading ? (
-                (source=='property') ? (
-                  <select className="select-dropdown" value={selectedOption} onChange={(e) => handleSelectChange(e, curr_status)}>
-                    <option value="" disabled>Turn {curr_status === 'on' ? 'off' : 'on'}</option>
-                    <option value="15m">For 15 minutes</option>
-                    <option value="1h">For 1 hour</option>
-                    <option value="1d">For 24 hours</option>
-                    <option value="indefinitely">Indefinitely</option>
-                  </select>
-                ) : (
-                  <div style={{ textAlign: 'center' }}>
-                    <a style={{ fontSize: "14px", color: "#0d6efd", cursor: "pointer" }} onClick={handleRevertStatus}>
-                      Turn back {curr_status === 'on' ? 'off' : 'on'}
-                    </a>
-                  </div>
-                )
-              ) : (
-                <Loader />
+              {/* Additional time selection dropdown if needed */}
+              
+
+
+              {/* {here setDuration code is available below} */}
+              
+              {/* {!toggleStatusLoading && curr_status && source=='property' && (
+                <select className="select-dropdown" value={selectedOption} onChange={(e) => handleSelectChange(e, curr_status)}>
+                  <option value="" disabled>Set duration</option>
+                  <option value="15m">For 15 minutes</option>
+                  <option value="1h">For 1 hour</option>
+                  <option value="1d">For 24 hours</option>
+                  <option value="indefinitely">Indefinitely</option>
+                </select>
+              )} */}
+              
+              {source=='guest' && !toggleStatusLoading && (
+                <div style={{ textAlign: 'center' }}>
+                  <a style={{ fontSize: "14px", color: "#0d6efd", cursor: "pointer" }} onClick={handleRevertStatus}>
+                    Turn back {curr_status === 'on' ? 'off' : 'on'}
+                  </a>
+                </div>
               )}
             </div>
           )
@@ -199,35 +427,46 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
           </div>
         )
       )}
-      
-      {!(channel == 'Chat Window') && (
-        <div className="issue">
-          <h3>Open Issues</h3>
-          {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 ? (
-            action_items.filter(obj => obj.status === "incomplete").map((obj, index) => (
-              <p key={index} style={{ marginBottom: "10px" }}>{obj.item}</p>
-            ))
-          ) : (
-            <p style={{color:'#BBB'}}>None</p>
-          )}
-          {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 && (
-            <div style={{ display: "flex", justifyContent: "center", marginTop: "5px" }}>
-              <Link to={`/action-item?property_name=${property_name}`} style={{ fontSize: "14px" }}>Manage</Link>
-            </div>
-          )}
-        </div>
-      )}
 
       {!(channel == 'Chat Window') && (
         <div className="satisfy">
           <h2>Sentiment</h2>
           {sentiment ? (
             <>
-              <p className="result" style={{ color: sentiment === "positive" ? "rgb(0, 180, 0)" : sentiment === "negative" ? "rgb(200, 0, 0)" : "#BBB" }}>
-                {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
-              </p>
+              <div 
+                style={{
+                  alignItems: 'center',
+                  alignSelf: 'stretch',
+                  backgroundColor: '#24262E',
+                  border: '1px solid',
+                  borderColor: '#24262E',
+                  borderRadius: '4px',
+                  display: 'flex',
+                  gap: '6px',
+                  height: '32px',
+                  padding: '0px 8px',
+                  position: 'relative',
+                  width: '78%',
+                  marginLeft: '0px'
+                }}
+              >
+                <img src={NeutralIcon} alt="Sentiment Icon" style={{ width: "16px", height: "16px" }} />
+                {sentiment === "neutral" ? (
+                  <span style={{ color: "#BBB", flexGrow: 1 }}>Neutral</span>
+                ) : (
+                  <span 
+                    style={{ 
+                      color: sentiment === "positive" ? "rgb(0, 180, 0)" : "rgb(200, 0, 0)",
+                      flexGrow: 1
+                    }}
+                  >
+                    {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
+                  </span>
+                )}
+                <img src={ChevDownIcon} alt="Dropdown Icon" style={{ width: "16px", height: "16px" }} />
+              </div>
               {sentiment_justification && (
-                <p style={{ fontSize:'12px', marginTop:'3px' }}>{sentiment_justification}</p>
+                <p style={{ fontSize:'14px',width:"285px", marginTop:'3px', color: 'rgb(208, 211, 219)' }}>{sentiment_justification}</p>
               )}
             </>
           ) : (
@@ -235,23 +474,142 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
           )}
         </div>
       )}
-      
-      <div className="about about-inner user-detail">
-        <p>Channel: {channel ? channel : '--'}</p>
-      </div>
 
-      {/* Data not yet available in the API
-      <div className="about">
-        <div className="about-inner">
-          <h2>About {guest_name}</h2>
-          <div className="user-detail">
-            <p>Phone Number: 98765433</p>
-            <p>Plateform Booked: {channel}</p>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+      {!(channel == 'Chat Window') && (
+        <div style={{ 
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
+          margin: '10px auto', 
+          width: '100%', 
+          maxWidth: '400px' 
+        }}></div>
+      )}
+      
+      {!(channel == 'Chat Window') && (
+        <div className="issue">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0px' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <h1 style={{ 
+                margin: 0,
+                color: '#ffffff',
+                fontFamily: '"Poppins-SemiBold", Helvetica',
+                fontSize: '14px',
+                fontWeight: 600,
+                letterSpacing: 0,
+                lineHeight: '19.6px',
+                whiteSpace: 'nowrap',
+                position: 'relative'  /* Using relative instead of fixed to maintain layout flow */
+              }}>Open Issues</h1>
+              {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 && (
+                <span style={{ 
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: '#24262E',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '20px',
+                  height: '20px',
+                  fontSize: '10px',
+                  marginLeft: '8px',
+                  fontWeight: 'bold' ,
+                  margin:'5px'
+                }}>
+                  {action_items.filter(obj => obj.status === "incomplete").length}
+                </span>
+              )}
+            </div>
+            
+            {/* View All link - always rendered and navigates to action items page */}
+            <span 
+              onClick={navigateToActionItems} 
+              style={{ 
+                color: '#146ef5', 
+                fontSize: '14px', 
+                cursor: 'pointer'
+              }}
+            >
+              View All
+            </span>
           </div>
+
+          {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 ? (
+            <>
+              {/* Always display the first/latest issue with timestamp above */}
+              <div style={{ marginBottom: "10px" }}>
+                <div style={{ fontSize: "12px", color: "#808080", marginBottom: "2px" }}>
+                  {formatIssueTime(action_items.filter(obj => obj.status === "incomplete")[0].created_at)}
+                </div>
+                <p style={{ 
+                  margin: 0,
+                  color: '#d0d3db',
+                  fontFamily: '"DM Sans-Regular", Helvetica',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  letterSpacing: 0,
+                  lineHeight: 'normal',
+                  position: 'relative',  /* Using relative instead of fixed to maintain proper layout */
+                  width: '236px'
+                }}>
+                  {action_items.filter(obj => obj.status === "incomplete")[0].item}
+                </p>
+              </div>
+              
+              {/* Show remaining issues when expanded with timestamps above each */}
+              {issuesExpanded && action_items.filter(obj => obj.status === "incomplete").length > 1 && (
+                <div>
+                  {action_items.filter(obj => obj.status === "incomplete")
+                    .slice(1)
+                    .map((obj, index) => (
+                      <div key={index} style={{ marginBottom: "10px" }}>
+                        <div style={{ fontSize: "12px", color: "#808080", marginBottom: "2px" }}>
+                          {formatIssueTime(obj.created_at)}
+                        </div>
+                        <p style={{ 
+                              margin: 0,
+                              color: '#d0d3db',
+                              fontFamily: '"DM Sans-Regular", Helvetica',
+                              fontSize: '14px',
+                              fontWeight: 400,
+                              letterSpacing: 0,
+                              lineHeight: 'normal',
+                              position: 'relative',  /* Using relative instead of fixed to maintain proper layout */
+                              width: '236px'
+                }}>
+                          {obj.item}
+                        </p>
+                      </div>
+                    ))
+                  }
+                </div>
+              )}
+              
+              {/* Show "+X more issues" text (clickable to expand issues) */}
+              {!issuesExpanded && action_items.filter(obj => obj.status === "incomplete").length > 1 && (
+                <span 
+                  onClick={() => setIssuesExpanded(true)} 
+                  style={{ 
+                    color: '#a6a9b2',
+                    fontFamily: '"DM Sans-Regular", Helvetica',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    letterSpacing: 0,
+                    lineHeight: 'normal',
+                    position: 'relative',  /* Using relative instead of fixed to maintain proper layout */
+                    display: 'block',
+                    marginBottom: '10px',
+                    width: '272px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  +{action_items.filter(obj => obj.status === "incomplete").length - 1} more {action_items.filter(obj => obj.status === "incomplete").length - 1 === 1 ? 'issue' : 'issues'}
+                </span>
+              )}
+            </>
+          ) : (
+            <p style={{color:'#BBB'}}>None</p>
+          )}
         </div>
-      </div>
-      */}
+      )}
     </div>
   );
 };

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useLocation } from "react-router-dom";
 import { getUserDataActions } from "../../redux/actions";
 import { getSubscriptionStatus } from "../../helper/Authorized";
-import InBoxHeader from "./inboxHeader/InBoxHeader";
 import Inbox from "./inboxSection/inbox/Inbox";
 import SmartTemplateIndex from "./inboxSection/smartTemplates/smartTemplateFunctionality/SmartTemplateIndex";
 import ReviewRemoval from "./inboxSection/reviewRemoval/ReviewRemoval";
@@ -16,6 +15,7 @@ import HostDaddy from "../../component/hostDaddy/hostDaddy";
 const InboxIndex = () => {
   const { section } = useParams();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const conversationIdFromUrl = searchParams.get('conversationId');
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -87,12 +87,18 @@ const InboxIndex = () => {
   useEffect(() => {
     dispatch(getUserDataActions(false)); // So we can have the list of property names for the various dropdowns. false because we don't need the property data
     populateGuestNames(); // So we can have the list of guest names for the guest search bar
-    setInterFaceComponent(sectionMapping[section] || 0); // Set the interface component based on the URL path param
-  }, []);
+    
+    // Check for component index from URL path param or from location state
+    const componentFromLocation = location.state?.activeComponent;
+    if (componentFromLocation !== undefined) {
+      setInterFaceComponent(componentFromLocation);
+    } else {
+      setInterFaceComponent(sectionMapping[section] || 0);
+    }
+  }, [section, location.state]); // Added section and location.state as dependencies
 
   return (
     <div className="inbox-container">
-      <InBoxHeader showInterFace={(id) => setInterFaceComponent(id)} interFaceComponent={interFaceComponent} showTimeZoneNotif={showTimeZoneNotif}/>
       {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames} userHasPMS={userHasPMS} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays} singleConversationIdFromUrl={conversationIdFromUrl}/>}
       {interFaceComponent === 1 && <SmartTemplateIndex allPropertyNamesList={allPropertyNamesList} userData={allUserData}/>}
       {interFaceComponent === 2 && <Preferences allPropertyNamesList={allPropertyNamesList}/>}

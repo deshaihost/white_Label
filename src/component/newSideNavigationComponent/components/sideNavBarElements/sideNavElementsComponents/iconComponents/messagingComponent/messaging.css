@@ -1,0 +1,12 @@
+.bar-chart-square {
+    height: 20px;
+    position: relative;
+    width: 20px;
+    }
+    .bar-chart-square .icon {
+    height: 16px;
+    left: 2px;
+    position: absolute;
+    top: 2px;
+    width: 16px;
+    }

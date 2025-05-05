@@ -1,9 +1,27 @@
+
+
+.channel_name{
+  display:inline-block;
+  color: #BDC1C9;
+  font-family: "DM Sans", Helvetica;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0px;
+  line-height: var(--body-medium-med-500-line-height);
+  padding: 1px 6px;
+  border-radius: 4px;
+  height: 25px;
+  background-color: #bdc1c926;
+}
+
+
 .right-side::-webkit-scrollbar{
     width: 1px;
 }
 .right-side {
-    padding: 20px 0px;
-    height: calc(100vh - 175px);
+    padding:  0px;
+    height: 590px;
     overflow-y: scroll;
 }
 .bordr-cl h2 {
@@ -20,14 +38,14 @@
 .issue, .satisfy, .about-inner {
     max-width: 400px;
     margin: 0 auto;
-    padding: 20px 12px;
+    /* padding: 20px 12px; */
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
 
 /* Messaging status & toggle section */
 
 .right-side .toggle {
-    padding: 10px 12px;
+    /* padding: 10px 12px; */
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
 
@@ -45,7 +63,17 @@
 
 /* --------------------- */
 
-.right-title h2,
+.right-title h2{
+    font-size: 14px !important;
+    font-weight: 600;
+    font-family: "DM Sans", Helvetica !important;
+}
+.right-title p {
+    font-size: 22px !important;
+    font-weight: 600;
+    font-family: "DM Sans", Helvetica !important;
+    margin-bottom: 10px;
+}
 .about-inner h2{
     font-size: 20px;
     font-weight: 600;
@@ -64,7 +92,7 @@
     display: inline-block;
     margin-top: 10px;
     background: #212529;
-    padding: 5px 20px;
+    /* padding: 5px 20px; */
     border: 1px solid #146ef5;
     border-radius: 28px;
     color: #146ef5;
@@ -99,22 +127,24 @@
     margin-bottom: 3px;
 } */
 .guest span {
-    font-size: 12px;
+    font-size: 14px;
     margin-bottom: 0px;
     display: inline-block;
+    color:#D0D3DB;
 }
 
 .guest h2 {
-    font-size: 16px;
+    font-size: 14px;
     padding: 0px;
     margin: 3px 0;
     border: 0px;
+    color: #D0D3DB;
 }
 .guest_date,
 .guest p {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.4;
-    color: #ffffff96;
+    color: #D0D3DB;
 }
 .right-side .row {
     width: 100%;
@@ -126,6 +156,22 @@
 .about-inner h2{
     margin-bottom: 10px;
 }
+
+/* Apply DM Sans font family to all reservation elements */
+.guest h2, 
+.guest p, 
+.guest span,
+.row span,
+.toggle p,
+.select-dropdown,
+.issue h3,
+.issue p,
+.satisfy h2,
+.satisfy p,
+.about-inner p {
+    font-family: "DM Sans", Helvetica !important;
+}
+
 /* ==============responsive part start============== */
 /* @media (max-width: 1599.98px) { 
 .right-side h2 , .issue h3{

@@ -1,0 +1,48 @@
+.text-field {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+}
+
+.text-field .input {
+    align-items: center;
+    align-self: stretch;
+    background-color: #24262E;
+    border: 1px solid;
+    border-color: #24262E;
+    border-radius: 4px;
+    display: flex;
+    gap: 6px;
+    height: 32px;
+    padding: 0px 8px;
+    position: relative;
+    width: 96%;
+    margin-left: 4px;
+}
+
+.text-field .search-md {
+    height: 20px !important;
+    position: relative !important;
+    width: 20px !important;
+}
+
+.text-field .placeholder {
+    background: none;
+    border: none;
+    color: #676A73;
+    flex: 0;
+    flex-grow: 1;
+    font-family:  "DM Sans", Helvetica;
+    font-size: 14px;
+  
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0.1px;
+    line-height: 20px;
+    margin-top: -1.00px;
+    padding: 0;
+    position: relative;
+    width: 3px;
+}

@@ -11,6 +11,9 @@ import JustificationModal from "../../../../testProperty/banner/messages/justifi
 import { Tooltip } from "react-tooltip";
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
+import SendIcon from "./message/icons/send_icon.svg";
+import ChevDownIcon from "./message/icons/chevDown.svg";
+import AiMessageIcon from "./message/icons/ai_messsage_icon.svg";
 
 const placeholderImg = 'https://hostbuddylb.com/misc/chatBubbles.webp';
 
@@ -18,7 +21,6 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   const eliteOrWorksPlan = /elite|works/i.test(subscriptionPlan) || subscriptionPlan == 'trial'; // Case-insensitive check for 'elite' or 'works' in the plan name
   const eliteFeaturesAvailable = /elite/i.test(subscriptionPlan) || subscriptionPlan == 'trial'; // user subscribed to Elite or is on trial
   const propertyIsLocked = !!allConversationData?.is_locked;
-  //const accountAllowsGenerateButton = (eliteFeaturesAvailable && !propertyIsLocked) || (accountAgeDays && accountAgeDays <= 4); // Generate functionality allowed if user/prop subscription is sufficient, OR if the account is new
   const accountAllowsGenerateButton = (eliteFeaturesAvailable && !propertyIsLocked)
 
   const messageListRef = useRef(null);
@@ -257,6 +259,58 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     }
   }
 
+  // Function to format date for separators (Today or Month Day)
+  function formatDateForSeparator(date) {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return '';
+    }
+    
+    const today = new Date();
+    const todayDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    
+    // Check if the date is today
+    if (date.getDate() === todayDate.getDate() && 
+        date.getMonth() === todayDate.getMonth() && 
+        date.getFullYear() === todayDate.getFullYear()) {
+      return 'Today';
+    }
+    
+    // Check if it's yesterday
+    const yesterdayDate = new Date(todayDate);
+    yesterdayDate.setDate(todayDate.getDate() - 1);
+    
+    if (date.getDate() === yesterdayDate.getDate() && 
+        date.getMonth() === yesterdayDate.getMonth() && 
+        date.getFullYear() === yesterdayDate.getFullYear()) {
+      return 'Yesterday';
+    }
+    
+    // For older dates, show Month Day format
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+    
+    return `${month} ${day}`;
+  }
+
+  // Function to check if two dates are from the same day
+  function isSameDay(date1, date2) {
+    if (!(date1 instanceof Date) || !(date2 instanceof Date)) {
+      return false;
+    }
+    return date1.getDate() === date2.getDate() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getFullYear() === date2.getFullYear();
+  }
+
   // When we get the API data, populate the messages array and set the generate button functionality
   useEffect(() => {
     // Populate messages
@@ -268,6 +322,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           text: messageList !== undefined ? messageList : "",
           sender: sender === "host" || sender === "hostbuddy" ? "user" : "bot",
           messageDay: formatRelativeDate(time),
+          rawDate: new Date(time), // Store the raw date for comparing
           sendBy: sender,
           id,
           timeFormatConvert,
@@ -346,9 +401,15 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
         {allConversationData && Object.keys(allConversationData).length > 0 ? (
           <div className="message-list" ref={messageListRef}>
             {messages?.map((message, index) => {
+              const showDateSeparator = index === 0 || !isSameDay(messages[index - 1]?.rawDate, message.rawDate);
               return (
+                <React.Fragment key={message?.id}>
+                  {showDateSeparator && (
+                    <div className="date-separator">
+                      {formatDateForSeparator(message.rawDate)}
+                    </div>
+                  )}
                   <MessageInbox
-                    key={message?.id}
                     text={message.text?.text}
                     sender={message.sender}
                     currentMessageDay={message.messageDay}
@@ -358,10 +419,12 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
                     feedBackDataGet={feedBackDataGet}
                     prevMsgText={messages[index - 1]?.text}
                     isInitialMessage={index <= 1}
+                    guestName={allConversationData.guest_name}
+                    guestImageUrl={allConversationData.image_url}
                   />
+                </React.Fragment>
               );
             })}
-            {/* {updateMessageRespLoading && <Loader />} */}
             <div ref={messagesEndRef} />
           </div>
         ) : (
@@ -371,56 +434,19 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           </div>
         )}
 
-        {/* ((eliteOrWorksPlan || (accountAgeDays && accountAgeDays <= 4)) && !(conversationData?.channel == 'hostbuddy')) ? ( // old logic */}
-        {((eliteOrWorksPlan) && !(conversationData?.channel == 'hostbuddy')) ? ( // generate button and message input / send components
+        {((eliteOrWorksPlan) && !(conversationData?.channel == 'hostbuddy')) ? (
           <>
-            <div className="ai-input">
-              <div className="generate-container">
-                <button ref={buttonRef} className="generate-button" onClick={handleGenerateButtonClick}>
-                  <i className="bi bi-stars"></i>
-                </button>
-                {generateOptionsVisible && (
-                  <div ref={menuRef} className="generate-menu" style={{ zIndex: 1000 }}>
-                    {accountAllowsGenerateButton ? (
-                      conversationData?.conversation_id ? (
-                        <>
-                          {generateButtonIsEnabled ? (
-                            <button className="generate-menu-item" key='scratch' onClick={() => handleGenerateOptionSelect('scratch')}>Generate From Scratch</button>
-                          ) : (
-                            <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>Generate From Scratch</button>
-                          )}
-                          {inputValue.trim() !== "" ? (
-                            <button className="generate-menu-item" key='command' onClick={() => handleGenerateOptionSelect('command')}>Generate From My Instruction</button>
-                          ) : (
-                            <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Start typing to instruct HostBuddy how to message the guest'}>Generate From My Instruction</button>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Select a conversation to generate a response'}>Generate From Scratch</button>
-                          <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Select a conversation to instruct HostBuddy how to craft a message for this guest'}>Generate From My Instruction</button>
-                        </>
-                      )
-                    ) : (
-                      propertyIsLocked ? (
-                        <>
-                          <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Unlock this property from the Properties page to enable message generation in the inbox'}>Generate From Scratch</button>
-                          <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Unlock this property from the Properties page to enable message generation in the inbox'}>Generate From My Instruction</button>
-                        </>
-                      ) : (
-                        <>
-                          <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Upgrade to HostBuddy Elite to enable message generation in the inbox'}>Generate From Scratch</button>
-                          <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Upgrade to HostBuddy Elite to enable message generation in the inbox'}>Generate From My Instruction</button>
-                        </>
-                      )
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div className="input-container">
-                <textarea type="text" ref={textareaRef} placeholder="Type a message..." value={inputValue} onChange={handleInputFieldChange}
-                  onKeyDown={handleKeyPress} rows="1" disabled={(generateCommandApiLoading || generateScratchApiLoading || sendMessageLoading) ? true : false} style={{resize:'none', overflow:'auto'}}
+            <div className="ai-input" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+              <div className="input-container" style={{ width: '100%', marginBottom: '10px' }}>
+                <textarea type="text" ref={textareaRef} placeholder="Message..." value={inputValue} onChange={handleInputFieldChange} 
+                  onKeyDown={handleKeyPress} rows="1" disabled={(generateCommandApiLoading || generateScratchApiLoading || sendMessageLoading) ? true : false} 
+                  style={{
+                    resize:'none', 
+                    overflow:'auto', 
+                    outline: 'none',
+                    boxShadow: 'none',
+                    borderColor: 'inherit'
+                  }}
                 />
                 {(generateCommandApiLoading || generateScratchApiLoading) && (
                   <div className="loader-container">
@@ -428,16 +454,68 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
                   </div>
                 )}
               </div>
-
-              <button onClick={handleSendMessage} className='chat-send-button' disabled={(generateCommandApiLoading || generateScratchApiLoading || sendMessageLoading) ? true : false}>
-                {(sendMessageLoading) ? (
-                  <img src={loaderGif} width="25" height="25" />
-                ) : (
-                  <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="white" d="M23.9804 3.58131C24.5564 1.98798 23.0124 0.443978 21.419 1.02131L1.94572 8.06398C0.347048 8.64264 0.153715 10.824 1.62438 11.676L7.84038 15.2746L13.391 9.72398C13.6425 9.4811 13.9793 9.34671 14.3289 9.34975C14.6785 9.35278 15.0129 9.49301 15.2601 9.74022C15.5074 9.98743 15.6476 10.3218 15.6506 10.6714C15.6537 11.021 15.5193 11.3578 15.2764 11.6093L9.72571 17.16L13.3257 23.376C14.1764 24.8466 16.3577 24.652 16.9364 23.0546L23.9804 3.58131Z"></path>
-                  </svg>
-                )}
-              </button>
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                <div className="generate-container">
+                  <button ref={buttonRef} className="generate-button" onClick={handleGenerateButtonClick}>
+                    <img src={AiMessageIcon} alt="AI Message Icon" width="15" height="15" style={{ marginRight: '5px' }} />
+                    <span style={{ marginRight: '1px', color: 'rgba(208, 211, 219, 1)' }}>AI Response</span>
+                    <img src={ChevDownIcon} alt="Chevron Down Icon" width="20" height="20" style={{ marginLeft: '0px' }} />
+                  </button>
+                  {generateOptionsVisible && (
+                    <div ref={menuRef} className="generate-menu" style={{ zIndex: 1000 }}>
+                      {accountAllowsGenerateButton ? (
+                        conversationData?.conversation_id ? (
+                          <>
+                            {generateButtonIsEnabled ? (
+                              <button className="generate-menu-item" key='scratch' onClick={() => handleGenerateOptionSelect('scratch')}>Generate From Scratch</button>
+                            ) : (
+                              <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>Generate From Scratch</button>
+                            )}
+                            {inputValue.trim() !== "" ? (
+                              <button className="generate-menu-item" key='command' onClick={() => handleGenerateOptionSelect('command')}>Generate From My Instruction</button>
+                            ) : (
+                              <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Start typing to instruct HostBuddy how to message the guest'}>Generate From My Instruction</button>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Select a conversation to generate a response'}>Generate From Scratch</button>
+                            <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Select a conversation to instruct HostBuddy how to craft a message for this guest'}>Generate From My Instruction</button>
+                          </>
+                        )
+                      ) : (
+                        propertyIsLocked ? (
+                          <>
+                            <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Unlock this property from the Properties page to enable message generation in the inbox'}>Generate From Scratch</button>
+                            <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Unlock this property from the Properties page to enable message generation in the inbox'}>Generate From My Instruction</button>
+                          </>
+                        ) : (
+                          <>
+                            <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Upgrade to HostBuddy Elite to enable message generation in the inbox'}>Generate From Scratch</button>
+                            <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Upgrade to HostBuddy Elite to enable message generation in the inbox'}>Generate From My Instruction</button>
+                          </>
+                        )
+                      )}
+                    </div>
+                  )}
+                </div>
+                
+                <button onClick={handleSendMessage} className='chat-send-button' disabled={(generateCommandApiLoading || generateScratchApiLoading || sendMessageLoading) ? true : false}>
+                  {(sendMessageLoading) ? (
+                    <img src={loaderGif} width="25" height="25" />
+                  ) : (
+                    <>
+                      <span style={{ marginRight: '1px', marginLeft:"2px" , fontSize:"12px"}}>Send</span>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginLeft: '2px' }}>
+                        <path d="M10.5004 12H5.00043M4.91577 12.2915L2.58085 19.2662C2.39742 19.8142 2.3057 20.0881 2.37152 20.2569C2.42868 20.4034 2.55144 20.5145 2.70292 20.5567C2.87736 20.6054 3.14083 20.4869 3.66776 20.2497L20.3792 12.7296C20.8936 12.4981 21.1507 12.3824 21.2302 12.2216C21.2993 12.082 21.2993 11.9181 21.2302 11.7784C21.1507 11.6177 20.8936 11.5019 20.3792 11.2705L3.66193 3.74776C3.13659 3.51135 2.87392 3.39315 2.69966 3.44164C2.54832 3.48375 2.42556 3.59454 2.36821 3.74078C2.30216 3.90917 2.3929 4.18255 2.57437 4.72931L4.91642 11.7856C4.94759 11.8795 4.96317 11.9264 4.96933 11.9744C4.97479 12.0171 4.97473 12.0602 4.96916 12.1028C4.96289 12.1508 4.94718 12.1977 4.91577 12.2915Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>|</span>
+                      <img src={ChevDownIcon} alt="Chevron Down Icon" width="20" height="20" style={{ marginLeft: '0px' }} />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             {showGenerateJustificationButton &&
@@ -449,7 +527,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
             }
           </>
         ) : (
-          conversationData?.channel == 'hostbuddy' ? ( // chat link / embedded window conversations
+          conversationData?.channel == 'hostbuddy' ? (
             null
           ) : (
             allConversationData && Object.keys(allConversationData).length > 0 && (

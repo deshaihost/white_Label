@@ -4,8 +4,23 @@ import "./index.css";
 import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
 import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import { BoxLoader } from "../../../../../helper/Loader";
+import { TextField } from "./searchComponent/searchInput"; // Import the TextField component
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
+
+// Add a simple modal component
+function FilterModal({ show, onClose, children }) {
+  if (!show) return null;
+  return (
+    <div className="filter-modal-overlay">
+      <div className="filter-modal-content">
+        <button className="filter-modal-close" onClick={onClose}></button>
+        <h3 style={{ marginBottom: '16px', color: '#ffffff', fontSize: '16px', fontWeight: '500' }}>Filters</h3>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, userHasPMS, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal, setCurrentView, currentView, setAllowConvIdQuery }) => {
 
@@ -20,7 +35,43 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
   const [guestNameInputVal, setGuestNameInputVal] = useState(""); // currently typed text in the guest name search input
   
   const [filterQueryLoading, setFilterQueryLoading] = useState(false);
-  const [filtersVisible, setFiltersVisible] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  
+  const [searchInputValue, setSearchInputValue] = useState("");
+  const [filteredConversations, setFilteredConversations] = useState([]);
+  
+  // Temporary filter state (not applied until user clicks "Apply")
+  const [tempPropertyFilter, setTempPropertyFilter] = useState("");
+  const [tempPhaseFilter, setTempPhaseFilter] = useState("");
+  const [tempUrgentFilter, setTempUrgentFilter] = useState(false);
+  const [tempFromHostBuddyFilter, setTempFromHostBuddyFilter] = useState(false);
+  const [tempGuestNameFilter, setTempGuestNameFilter] = useState("");
+
+  // Use the current date for real-time checking
+  const currentDate = new Date();
+  // Function to check if a date is today - using the proper YYMMDD_HHMMSS format
+  const isToday = (dateString) => {
+    if (!dateString) return false;
+    
+    try {
+      // Parse the YYMMDD_HHMMSS format
+      // Format example: 250419_120000 (for April 19, 2025 at 12:00:00)
+      const year = parseInt('20' + dateString.substring(0, 2)); // Convert YY to YYYY
+      const month = parseInt(dateString.substring(2, 4)) - 1; // JS months are 0-indexed
+      const day = parseInt(dateString.substring(4, 6));
+      
+      const departure = new Date(year, month, day);
+      
+      return (
+        currentDate.getFullYear() === departure.getFullYear() &&
+        currentDate.getMonth() === departure.getMonth() &&
+        currentDate.getDate() === departure.getDate()
+      );
+    } catch (error) {
+      console.error("Error comparing dates:", error);
+      return false;
+    }
+  };
 
   // Load the next batch of conversations. fetchConversations handles excluding conversations we already have, calling the API, and updating the state
   const loadNextBatch = async () => {
@@ -30,6 +81,18 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
     await fetchConversations(num_existing_convos+10, false, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal, false);
     setNextBatchLoading(false);
   };
+
+  useEffect(() => {
+    if (searchInputValue.trim() === "") {
+      setFilteredConversations(allConversations);
+    } else {
+      const filtered = allConversations.filter(convo => 
+        convo.guest_name && 
+        convo.guest_name.toLowerCase().includes(searchInputValue.toLowerCase())
+      );
+      setFilteredConversations(filtered);
+    }
+  }, [allConversations, searchInputValue]);
 
   // When loadNextBatch is defined (i.e. component mount), initialize the event listener that tracks scrolling (so we can load more convos whenever the user scrolls to the bottom)
   useEffect(() => {
@@ -79,15 +142,13 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
 
   // Modify the useEffect that auto-selects the first conversation
   useEffect(() => {
-    // Only auto-select if:
-    // 1. No conversation is selected yet (selectedConversationId is empty)
-    // 2. There are conversations to select from
-    // 3. Either we're on desktop OR we're not coming back from a conversation view
     const isMobile = window.innerWidth < 992;
-    if (selectedConversationId === "" && allConversations.length > 0 && (!isMobile || currentView !== 'conversations')) {
-      openConversationHandle(allConversations[0], allConversations[0]?.conversation_id);
+    const conversationsToUse = filteredConversations.length > 0 ? filteredConversations : allConversations;
+    
+    if (selectedConversationId === "" && conversationsToUse.length > 0 && (!isMobile || currentView !== 'conversations')) {
+      openConversationHandle(conversationsToUse[0], conversationsToUse[0]?.conversation_id);
     }
-  }, [allConversations, currentView]);
+  }, [filteredConversations, allConversations, currentView]);
 
   // Add the listener for clicking outside the guest search dropdown (so it can be closed)
   useEffect(() => {
@@ -97,46 +158,78 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
     };
   }, []);
 
-  const handlePropertyFilterChange = async (e) => {
-    if (filterQueryLoading) { return; }
-    const selectedFilterVal = e.target.value;
-    setFilterQueryLoading(true);
-
-    await fetchConversations(10, true, urgentFilterIsEnabled, selectedFilterVal, phaseFilterVal, fromHostBuddyFilterVal, '');
-
-    setFilterQueryLoading(false);
-    setPropertyFilterVal(selectedFilterVal);
+  const handleSearchInputChange = (e) => {
+    setSearchInputValue(e.target.value);
   };
 
-  const handleUrgentClick = async () => {
-    if (filterQueryLoading) { return; }
-    setFilterQueryLoading(true);
+  const handlePropertyFilterChange = (e) => {
+    // Store selected value in temporary state without applying filter
+    setTempPropertyFilter(e.target.value);
+  };
 
-    await fetchConversations(10, true, !urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, '');
-    
-    setFilterQueryLoading(false);
-    setUrgentFilterIsEnabled(!urgentFilterIsEnabled);
+  const handleUrgentClick = () => {
+    // Toggle urgent filter in temporary state without applying
+    setTempUrgentFilter(!tempUrgentFilter);
   }
 
-  const handleFromHostBuddyClick = async () => {
-    if (filterQueryLoading) { return; }
-    setFilterQueryLoading(true);
-
-    await fetchConversations(10, true, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, !fromHostBuddyFilterVal, '');
-    
-    setFilterQueryLoading(false);
-    setFromHostBuddyFilterVal(!fromHostBuddyFilterVal);
+  const handleFromHostBuddyClick = () => {
+    // Toggle FromHostBuddy filter in temporary state without applying
+    setTempFromHostBuddyFilter(!tempFromHostBuddyFilter);
   }
 
-  const handlePhaseFilterChange = async (e) => {
-    if (filterQueryLoading) { return; }
-    const selectedFilterVal = e.target.value;
-    setFilterQueryLoading(true);
+  const handlePhaseFilterChange = (e) => {
+    // Store selected phase in temporary state without applying filter
+    setTempPhaseFilter(e.target.value);
+  };
 
-    await fetchConversations(10, true, urgentFilterIsEnabled, propertyFilterVal, selectedFilterVal, fromHostBuddyFilterVal, '');
+  const handleResetFilters = () => {
+    // Reset all temporary filters to default values
+    setTempPropertyFilter("");
+    setTempPhaseFilter("");
+    setTempUrgentFilter(false);
+    setTempFromHostBuddyFilter(false);
+    setTempGuestNameFilter("");
+  };
 
-    setFilterQueryLoading(false);
-    setPhaseFilterVal(selectedFilterVal);
+  const handleApplyFilters = async () => {
+    // Only fetch if filters have changed
+    if (tempPropertyFilter !== propertyFilterVal ||
+        tempPhaseFilter !== phaseFilterVal ||
+        tempUrgentFilter !== urgentFilterIsEnabled ||
+        tempFromHostBuddyFilter !== fromHostBuddyFilterVal ||
+        tempGuestNameFilter !== guestNameSearchVal) {
+      
+      setFilterQueryLoading(true);
+      
+      // Update the actual filter states with temporary values
+      setPropertyFilterVal(tempPropertyFilter);
+      setPhaseFilterVal(tempPhaseFilter);
+      setUrgentFilterIsEnabled(tempUrgentFilter);
+      setFromHostBuddyFilterVal(tempFromHostBuddyFilter);
+      setGuestNameSearchVal(tempGuestNameFilter);
+      
+      // Apply filters by fetching filtered conversations
+      await fetchConversations(10, true, tempUrgentFilter, tempPropertyFilter, tempPhaseFilter, tempFromHostBuddyFilter, tempGuestNameFilter);
+      
+      setFilterQueryLoading(false);
+    }
+    // Close the modal
+    setFilterModalOpen(false);
+  };
+
+  const handleCancelFilters = () => {
+    // Discard temporary changes by not applying them
+    setFilterModalOpen(false);
+  };
+
+  const openFilterModal = () => {
+    // Initialize temporary filters with current values
+    setTempPropertyFilter(propertyFilterVal);
+    setTempPhaseFilter(phaseFilterVal);
+    setTempUrgentFilter(urgentFilterIsEnabled);
+    setTempFromHostBuddyFilter(fromHostBuddyFilterVal);
+    setTempGuestNameFilter(guestNameSearchVal);
+    setFilterModalOpen(true);
   };
 
   const handleGuestSearchChange = async (e) => {
@@ -183,80 +276,126 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
   };
 
   return (
-    <div className="left-bar">
+    <div className="left-bar" style={{ width: '368px' ,height: '100vh', overflowY: 'auto'}}>
       <div className="message-filter">
-        <div className="messsage-search">
-          <h2>Messages</h2>
-          <button onClick={() => setFiltersVisible(!filtersVisible)} className={filtersVisible ? "bg-light text-dark" : ""}>
+        <div className="messsage-search" >
+          <div className="search-container" >
+            <TextField 
+              className="custom-padding"
+              type="search" 
+              placeholder="Search..." 
+              style={{ width: "100%", borderRadius: "4px", paddingLeft: '30px' }}
+              onChange={handleSearchInputChange}
+              value={searchInputValue}
+            />
+          </div>
+          <button 
+            className="filters-button"
+            onClick={openFilterModal} 
+            style={{ marginLeft: '8px', whiteSpace: 'nowrap' }}
+          >
+            <i className="bi bi-filter"></i>
             Filters
           </button>
         </div>
-        {filtersVisible && (
-          <div className="filter-btns">
-
-            {/* Guest Search */}
-            {allGuestNames && allGuestNames.length > 0 && (
-              <div className="search-input-wrapper" ref={dropdownRef}>
-                <div className="search-input" style={{ maxWidth: (searchFocus || guestNameInputVal) ? '400px' : '150px' }}>
-                  <input type="search" value={guestNameInputVal} onChange={handleGuestSearchChange} placeholder={searchFocus ? "" : "Guest name..."} onFocus={() => setSearchFocus(true)} onBlur={() => setSearchFocus(false)} style={{width:"100%", maxWidth:"100%"}} />
-                  {!guestNameInputVal && <i className="bi bi-search search-icon"></i> }
-                </div>
-                {filteredGuests.length > 0 && (
-                  <div className="dropdown">
-                    {filteredGuests.map((guest) => (
-                      <div key={guest?.id_for_react} className="dropdown-item" onClick={() => handleGuestClick(guest)}>
-                        <div className="guest-name">{guest.name}</div>
-                        <div className="guest-property">{guest.property}</div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Properties Select */}
-            <div className="custom-select">
-              <select name="all" id="all" value={propertyFilterVal} className={`${propertyFilterVal ? "select-active" : "bg-dark"}`} onChange={handlePropertyFilterChange}>
-                <option value="">
-                  All Properties
+      </div>
+      <FilterModal show={filterModalOpen} onClose={() => setFilterModalOpen(false)}>
+        <div className="filter-btns">
+          {/* Properties Select */}
+          <div className="custom-select">
+            <div className="filter-section-label">Property</div>
+            <select 
+              name="all" 
+              id="all" 
+              value={tempPropertyFilter} 
+             // className={`${tempPropertyFilter ? "select-active" : "bg-dark"}`}
+             className={`${tempPropertyFilter ? "bg-dark" : "bg-dark"}`}  
+              onChange={handlePropertyFilterChange}
+              style={{ width: "290px" }}
+            >
+              <option value="" style={{ width: "290px" }}>
+                All Properties
+              </option>
+              {allPropertyNamesList?.map((option, index) => (
+                <option key={option} value={option} >
+                  {option}
                 </option>
-                {allPropertyNamesList?.map((option, index) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Phase Select */}
-            <div className="custom-select">
-              <select name="all" id="all" value={phaseFilterVal} className={`${phaseFilterVal ? "select-active" : "bg-dark"}`} onChange={handlePhaseFilterChange} style={{minWidth:"120px"}}>
-                <option value="">All Phases</option>
-                  <option value='inquiry'>Inquiry</option>
-                  <option value='future'>Future</option>
-                  <option value='current'>Current</option>
-                  <option value='past'>Past</option>
-              </select>
-            </div>
-
-            {/* Urgent Button */}
-            <span onClick={handleUrgentClick} className={`${urgentFilterIsEnabled ? "bg-light text-dark" : "bg-dark"}`} style={{cursor:"pointer"}}>
+              ))}
+            </select>
+          </div>
+          
+          {/* Phase Select */}
+          <div className="custom-select">
+            <div className="filter-section-label">Phase</div>
+            <select 
+              name="all" 
+              id="all" 
+              value={tempPhaseFilter} 
+              className={`${tempPhaseFilter ? "bg-dark" : "bg-dark"}`} 
+              onChange={handlePhaseFilterChange}
+            >
+              <option value="">All Phases</option>
+                <option value='inquiry'>Inquiry</option>
+                <option value='future'>Future</option>
+                <option value='current'>Current</option>
+                <option value='past'>Past</option>
+            </select>
+          </div>
+          
+          {/* Urgent Button */}
+          <div>
+            <div className="filter-section-label">Importance</div>
+            <span 
+              onClick={handleUrgentClick} 
+              className={`${tempUrgentFilter ? "bg-light text-dark" : "bg-dark"} pointer-cursor`}
+            >
               Urgent
             </span>
-
-            {/* HostBuddy Messages Button */}
-            <span onClick={handleFromHostBuddyClick} className={`${fromHostBuddyFilterVal ? "bg-light text-dark" : "bg-dark"}`} style={{cursor:"pointer"}}>
+          </div>
+          
+          {/* HostBuddy Messages Button */}
+          <div>
+            <div className="filter-section-label">Source</div>
+            <span 
+              onClick={handleFromHostBuddyClick} 
+              className={`${tempFromHostBuddyFilter ? "bg-light text-dark" : "bg-dark"} pointer-cursor`}
+            >
               From HostBuddy
             </span>
-
           </div>
-        )}
-      </div>
+        </div>
+        
+        {/* Filter Action Buttons */}
+        <div className="filter-modal-actions">
+          <button 
+            className="filter-modal-button reset-button" 
+            onClick={handleResetFilters}
+          >
+            Reset Filters
+          </button>
+          <div style={{ display: 'flex', gap: '3px' }}>
+            <button 
+              className="filter-modal-button cancel-button" 
+              onClick={handleCancelFilters}
+              style={{ borderRadius: '4px' }}
+            >
+              Cancel
+            </button>
+            <button 
+              className="filter-modal-button apply-button" 
+              onClick={handleApplyFilters}
+              style={{ borderRadius: '4px' }}
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+      </FilterModal>
       {filterQueryLoading ? (<BoxLoader />) : (
-        allConversations && allConversations.length ? (
-          <div className={`left-bar-chat ${filtersVisible ? 'filters-visible' : ''}`} ref={containerRef}>
-            {allConversations?.map((message) => {
-              const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url, channel } = message;
+        filteredConversations && filteredConversations.length ? (
+          <div className={`left-bar-chat`} ref={containerRef}>
+            {filteredConversations.map((message) => {
+              const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url, channel , action_items , user, status } = message;
               const allDataForConversation = message;
               const messages = message?.messages; // Assuming message?.messages is an array
               const lastValue = messages[messages.length - 1];
@@ -281,46 +420,131 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                 datesAndPropertyNameDisplay = '';
               }
 
-              /*
-              if (datesAndPropertyNameDisplay.length > 40) {
-                datesAndPropertyNameDisplay = datesAndPropertyNameDisplay.slice(0, 40) + "...";
-              }
-              */
-
               return (
                 <React.Fragment key={conversation_id}>
-                  <div style={{ cursor: "pointer", overflow: 'hidden', width: '100%' }}
-                    className={`${conversation_id === selectedConversationId && "bg-dark"} left-inner-tab`}
+                  <div 
+                    className={`conversation-item ${conversation_id === selectedConversationId ? "bg-dark" : ""} left-inner-tab`}
                     onClick={() => openConversationHandle(allDataForConversation, conversation_id)}
                   >
-                    <div style={{ display:'flex', alignItems:'flex-start', overflow: 'hidden', width: '100%' }}>
-                      <div style={{flexShrink:0}}>
-                        <img src={image_url ? image_url : dummyPropertyImg} alt="Property Thumbnail Image" style={{width:"61px", height:"61px", marginTop:"2px"}} onError={(e) => { e.target.onerror = null; e.target.src = dummyPropertyImg; }}/>
+                    <div className="left-bar-container">
+                      <div className="image-container">
+                        <img 
+                          src={image_url ? image_url : dummyPropertyImg} 
+                          alt="Property Thumbnail Image" 
+                          className="property-thumbnail"
+                          onError={(e) => { e.target.onerror = null; e.target.src = dummyPropertyImg; }}
+                        />
                       </div>
-                      <div className="left-description" style={{ flex: 1, marginLeft: '10px', overflow: 'hidden' }}>
-                        <div className="d-flex justify-content-between description-item">
-                          <h2>
-                            {channel != 'hostbuddy' ? (
+                      <div className="content-container">
+                        {/* First line: Guest name and time format */}
+                        <div className="description-container description-item">
+                          <h2 className="guest-name ">
+                            {channel !== 'hostbuddy' ? (
                               opened ? guest_name : <strong>{guest_name}</strong>
                             ) : (
                               opened ? 'Chat Window' : <strong>Chat Window</strong>
                             )}
                           </h2>
-                          <div className="date" style={{margin:"0"}}>
+                          <div className="date date-no-margin">
                             {opened ? timeFormat(time) : <strong>{timeFormat(time)}</strong>}
                           </div>
                         </div>
-                        <div className="short-des" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {opened ? (
-                          <>
-                            <strong>{sender}:</strong> {shortenedText}
-                          </>
-                        ) : (
-                          <strong>{sender}: {shortenedText}</strong>
-                        )}
+                        
+                        {/* Second line: Message text and count of unread messages */}
+                        <div className="message-container short-des">
+                          <div className="message-text">
+                            {opened ? (
+                              <>
+                                <strong></strong> {shortenedText}
+                              </>
+                            ) : (
+                              <strong> {shortenedText}</strong>
+                            )}
+                          </div>
+                          {!opened && (
+                            <span className="message-counter">
+                              {messages && messages.filter(msg => !msg.read).length || 1}
+                            </span>
+                          )}
                         </div>
-                        <div className="date" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {opened ? datesAndPropertyNameDisplay : <strong>{datesAndPropertyNameDisplay}</strong>}
+                        
+                        {/* Third line: Reservation date and property address */}
+                        <div className="reservation-info">
+                          <div>
+                            {/* Reservation date range */}
+                            {arrival_date && departure_date && (
+                              <span>{formatDateRange(arrival_date, departure_date, false)}</span>
+                            )}
+                          </div>
+                          <div>
+                            {/* Property address/name */}
+                            {property_name && <span>{property_name}</span>}
+                          </div>
+                        </div>
+                        
+                        {/* Fourth line: User and status indicators */}
+                        <div className="status-container">
+                          <div>
+                            {/* User from line 324 */}
+                            <span className="user-badge ">
+                              {user || sender || "Unknown"}
+                            </span>
+                            {action_items && action_items.length === 0 && 
+                              <span className="urgent-badge">
+                                urgent
+                              </span>
+                            }
+                            {/* Display status badges */}
+                            {/* {status === 'future' && 
+                              <span className="future-badge">
+                                future
+                              </span>
+                            }
+                            {status === 'current' && 
+                              <span className="current-badge">
+                                current
+                              </span>
+                            }
+                            {status === 'inquiry' && 
+                              <span className="inquiry-badge">
+                                inquiry
+                              </span>
+                            } */}
+                          </div>
+                          <div className="status-indicators">
+                            {/* Status indicators */}
+                            
+                            {isToday(departure_date) && 
+                              <span className="checkout-badge">
+                                check-out today
+                              </span>
+                            }
+                            {isToday(arrival_date) && 
+                              <span className="checkin-badge">
+                                check-in today
+                              </span>
+                            }
+                                {status === 'future' && 
+                              <span className="future-badge">
+                                future
+                              </span>
+                            }
+                            {status === 'current' && 
+                              <span className="current-badge">
+                                current
+                              </span>
+                            }
+                            {status === 'inquiry' && 
+                              <span className="inquiry-badge">
+                                inquiry
+                              </span>
+                            }{status === 'past' && 
+                              <span className="inquiry-badge">
+                                past
+                              </span>
+                            }
+
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -332,28 +556,28 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
             
             {/* Button to load more conversations (failsafe for auto-load when user scrolls to bottom) - or loader icon if already loading */}
             {nextBatchLoading ? (
-              <div style={{height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              <div className="loading-container">
                 <BoxLoader />
               </div>
             ) : (
-              <button className="btn btn-primary" onClick={loadNextBatch} style={{display:'block', margin:'10px auto 0px auto', borderRadius:'50px'}}>
+              <button className="btn btn-primary load-more-button" onClick={loadNextBatch}>
                 Load More
               </button>
             )}
           </div>
         ) : (
-          (fromHostBuddyFilterVal || urgentFilterIsEnabled || propertyFilterVal || phaseFilterVal || guestNameSearchVal) ? (
-            <div className="no-messages" style={{textAlign:'center', margin:'10px auto 0 auto', width:'85%'}}>
-              <p style={{color:'#AAA', fontSize:'16px'}}>No conversations match the selected filters.</p>
+          (searchInputValue || fromHostBuddyFilterVal || urgentFilterIsEnabled || propertyFilterVal || phaseFilterVal || guestNameSearchVal) ? (
+            <div className="no-messages-container">
+              <p className="no-messages-text">No conversations match the selected filters.</p>
             </div>
           ) : (
             userHasPMS ? (
-              <div className="no-messages" style={{textAlign:'center', margin:'10px auto 0 auto', width:'85%'}}>
-                <p style={{color:'#AAA', fontSize:'16px'}}>No conversations found.</p>
+              <div className="no-messages-container">
+                <p className="no-messages-text">No conversations found.</p>
               </div>
             ) : (
-              <div className="no-messages" style={{textAlign:'center', margin:'10px auto 0 auto', width:'95%'}}>
-                <p style={{color:'#AAA', fontSize:'16px'}}>No conversations found. <Link to="/getstarted">Connecting your PMS</Link> will automatically import your conversations.</p>
+              <div className="no-messages-container no-messages-wide">
+                <p className="no-messages-text">No conversations found. <Link to="/getstarted">Connecting your PMS</Link> will automatically import your conversations.</p>
               </div>
             )
           )
