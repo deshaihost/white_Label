@@ -17,6 +17,10 @@ const UserNavBar = ({ gcsToken }) => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : {};
 
+  // mobile navbar functionality - MOVED BEFORE CONDITIONAL RETURN
+  const [loginIcon, setLoginIcon] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
   // Don't render UserNavBar for authenticated users (they'll use NavBarContainer instead)
   if (token) {
     return null;
@@ -42,10 +46,6 @@ const UserNavBar = ({ gcsToken }) => {
 
   // Check if current path should show portal navigation based on login status
   const isConditionalPath = conditionalPaths.includes(location.pathname);
-
-  // mobile navbar functionality
-  const [loginIcon, setLoginIcon] = useState(false);
-  const [expanded, setExpanded] = useState(false);
 
   const handleToggle = () => {
     setExpanded(!expanded);
