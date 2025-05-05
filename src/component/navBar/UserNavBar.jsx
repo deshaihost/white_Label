@@ -29,6 +29,7 @@ const UserNavBar = ({ gcsToken }) => {
   // Check if current path should show portal navigation
   const isProtectedPath = protectedPaths.some((path) =>
     location.pathname.startsWith(path)
+  
   );
 
   // List of paths that should show portal navigation based on login status
