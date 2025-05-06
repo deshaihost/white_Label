@@ -29,6 +29,7 @@ const icons = [
 const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   const [selected, setSelected] = useState(null);
   const location = useLocation();
+  const [hoverTimer, setHoverTimer] = useState(null);
 
   const {
     isProtectedPath,
@@ -66,6 +67,31 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
       setSelected(pathToIdMap[currentPath]);
     }
   }, [location.pathname]);
+
+  // Handle mouse enter event to expand the navbar after a short delay
+  const handleMouseEnter = () => {
+    const timer = setTimeout(() => {
+      onExpand();
+    }, 100); // 300ms delay before expanding
+    setHoverTimer(timer);
+  };
+
+  // Handle mouse leave event to cancel the expansion if the user moves away quickly
+  const handleMouseLeave = () => {
+    if (hoverTimer) {
+      clearTimeout(hoverTimer);
+      setHoverTimer(null);
+    }
+  };
+
+  // Cleanup the timer on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimer) {
+        clearTimeout(hoverTimer);
+      }
+    };
+  }, [hoverTimer]);
 
   // Handle icon click with navigation
   const handleIconClick = (iconId) => {
@@ -134,6 +160,8 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
     <div
       className={`collapsed-navbar${isOpen ? " open" : ""}`}
       style={{ display: isOpen ? "flex" : "none" }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div className="collapsed-navbar-icons">
         {filteredIcons.map((icon) => (

@@ -14,6 +14,7 @@ const navBarFontStyle = {
 
 function NavBarContainer() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [navbarHoverTimer, setNavbarHoverTimer] = useState(null);
   const [messagingActiveTab, setMessagingActiveTab] = useState(0); // Track which messaging tab is active
   const location = useLocation();
   const navigate = useNavigate();
@@ -52,6 +53,31 @@ function NavBarContainer() {
     setLoginIcon(!loginIcon);
     setExpanded(false);
   };
+
+  // Handle mouse leave to close the expanded navbar with a slight delay
+  const handleMouseLeave = () => {
+    const timer = setTimeout(() => {
+      setSidebarOpen(false);
+    }, 300); // 300ms delay before collapsing
+    setNavbarHoverTimer(timer);
+  };
+
+  // Handle mouse enter to cancel closing if user moves back quickly
+  const handleMouseEnter = () => {
+    if (navbarHoverTimer) {
+      clearTimeout(navbarHoverTimer);
+      setNavbarHoverTimer(null);
+    }
+  };
+
+  // Cleanup the timer on unmount
+  useEffect(() => {
+    return () => {
+      if (navbarHoverTimer) {
+        clearTimeout(navbarHoverTimer);
+      }
+    };
+  }, [navbarHoverTimer]);
 
   // Determine which messaging tab is active based on URL
   useEffect(() => {
@@ -145,7 +171,7 @@ function NavBarContainer() {
   }, [sidebarOpen]);
 
   return (
-    <div  style={{ 
+    <div style={{ 
       position: "fixed",
       top: 0,
       left: 0,
@@ -174,6 +200,8 @@ function NavBarContainer() {
             fontFamily: "DM Sans, Helvetica !important",
           }}
           onScroll={(e) => e.stopPropagation()}
+          onMouseLeave={handleMouseLeave}
+          onMouseEnter={handleMouseEnter}
         >
           <style>
             {`
