@@ -68,16 +68,16 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
     }
   }, [location.pathname]);
 
-  // Handle mouse enter event to expand the navbar after a short delay
-  const handleMouseEnter = () => {
+  // Handle mouse enter event for icons to expand the navbar after a short delay
+  const handleIconMouseEnter = () => {
     const timer = setTimeout(() => {
       onExpand();
-    }, 100); // 300ms delay before expanding
+    }, 200); // 300ms delay before expanding
     setHoverTimer(timer);
   };
 
-  // Handle mouse leave event to cancel the expansion if the user moves away quickly
-  const handleMouseLeave = () => {
+  // Handle mouse leave event for icons to cancel the expansion if the user moves away quickly
+  const handleIconMouseLeave = () => {
     if (hoverTimer) {
       clearTimeout(hoverTimer);
       setHoverTimer(null);
@@ -156,12 +156,16 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
     return false;
   });
 
+  // Check if an icon should have hover functionality
+  const shouldHaveHover = (iconId) => {
+    // Navigation icons that should trigger navbar opening on hover
+    return [1, 2, 3, 4, 5, 6, 7].includes(iconId);
+  };
+
   return (
     <div
       className={`collapsed-navbar${isOpen ? " open" : ""}`}
       style={{ display: isOpen ? "flex" : "none" }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       <div className="collapsed-navbar-icons">
         {filteredIcons.map((icon) => (
@@ -171,6 +175,8 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
             title={icon.label}
             onClick={() => icon.id === 0 ? null : handleIconClick(icon.id)}
             style={{ position: "relative" }}
+            onMouseEnter={shouldHaveHover(icon.id) ? handleIconMouseEnter : undefined}
+            onMouseLeave={shouldHaveHover(icon.id) ? handleIconMouseLeave : undefined}
           >
             {selected === icon.id && (
               <div className="collapsed-selection-indicator" />
