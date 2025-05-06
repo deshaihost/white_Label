@@ -44,7 +44,7 @@ const AuthenticatedLayout = ({ children }) => {
         overflow: "auto",
         // When sidebar is open, it's an overlay so no margin needed
         // When sidebar is collapsed, add margin equal to collapsed width (64px)
-        marginLeft: sidebarOpen ? 0 : 0,
+        marginLeft: sidebarOpen ? "64px" : "64px",
         transition: "margin-left 0.3s ease-in-out"
       }}>
         {children}
