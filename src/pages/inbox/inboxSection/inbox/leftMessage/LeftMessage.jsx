@@ -276,7 +276,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
   };
 
   return (
-    <div className="left-bar" style={{ width: '368px' ,height: '100vh', overflowY: 'auto'}}>
+    <div className="left-bar" style={{ width: '30%' ,height: '100vh', overflowY: 'auto'}}>
       <div className="message-filter">
         <div className="messsage-search" >
           <div className="search-container" >

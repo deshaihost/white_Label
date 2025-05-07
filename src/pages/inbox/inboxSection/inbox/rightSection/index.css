@@ -21,7 +21,8 @@
 }
 .right-side {
     padding:  0px;
-    height: 590px;
+    /* height: 590px; */
+    height: 100vh;
     overflow-y: scroll;
 }
 .bordr-cl h2 {
@@ -37,7 +38,7 @@
 }
 .issue, .satisfy, .about-inner {
     max-width: 400px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
     /* padding: 20px 12px; */
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }

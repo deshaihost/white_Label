@@ -206,10 +206,9 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
             src={image_url} 
             alt={`${guest_name || 'Guest'}`}
             style={{ 
-              maxWidth: '272px',
-              maxHeight: '220px',
-              width: 'auto',
-              height: 'auto',
+              
+              width: '80%',
+              height: '70%',
               objectFit: 'contain',
               borderRadius: '8px',
               display: 'block',

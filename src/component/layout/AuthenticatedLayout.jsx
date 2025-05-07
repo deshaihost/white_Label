@@ -48,8 +48,9 @@ const AuthenticatedLayout = ({ children }) => {
         width: "100%", 
         minHeight: "100vh", 
         overflow: "auto",
-        // Only adjust margin if sidebar was clicked open, otherwise keep at 64px
-        marginLeft: (sidebarOpen && sidebarClicked) ? `${sidebarWidth}px` : "64px",
+        // When mouse over/out, always use 64px
+        // When clicked, use sidebarWidth if sidebar is open, otherwise 64px
+        marginLeft: sidebarClicked ? (sidebarOpen ? `${sidebarWidth}px` : "64px") : "64px",
         transition: "margin-left 0.3s ease-in-out"
       }}>
         {children}

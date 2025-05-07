@@ -397,7 +397,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           Details
         </button>
       </div>
-      <div className="chatbot">
+      <div className="chatbot" style={{margin:"0px", width:"100%", padding:"0px"}}>
         {allConversationData && Object.keys(allConversationData).length > 0 ? (
           <div className="message-list" ref={messageListRef}>
             {messages?.map((message, index) => {

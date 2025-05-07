@@ -223,9 +223,9 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   }, [conversations, eliteFeaturesAvailable, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal, accountAgeDays]);
 
   return (
-    <div className="inbox-content-container">
+    <div className="inbox-content-container" style={{height:"100vh"}}>
       {conversationsNotYetFetched ? <InboxLoader /> : null}
-      <div className="row text-white">
+      <div className="row text-white" style={{height:"100%"}}>
         {/* Desktop View */}
         <div style={{ width: "100%", gap: "20px" }} className="d-none d-lg-flex col-lg-12">
           <LeftMessage
@@ -251,7 +251,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
             currentView={currentView}
             setAllowConvIdQuery={setAllowConvIdQuery}
           />
-          <div className='middleSectionContainer' style={{ width: '496px', flex: 'none' ,height: 'calc(100vh - 100px)' }}>
+          <div className='middleSectionContainer' style={{ width: '40%', flex: 'none' ,height: 'calc(100vh - 100px)' }}>
             <div>
               {/* here user image , name ,  */}
             </div>
@@ -393,7 +393,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               </div>
             )}
           </div>
-          <div className='rightSectionContainer' style={{ width: '296px', flex: 'none' ,height:"100%" }}>
+          <div className='rightSectionContainer' style={{ width: '30%', flex: 'none' ,height:"100%" }}>
           <RightSection
             className="box"
             style={{ width: "100%", height: "calc(100vh - 100px)" }}
