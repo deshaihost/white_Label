@@ -138,6 +138,14 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
     }
   };
 
+  // When the user clicks the expand button
+  const handleExpandClick = () => {
+    // Explicitly set this as a clicked expansion, not a hover
+    if (onExpand) {
+      onExpand(true); // Pass true to indicate this was a click, not hover
+    }
+  };
+
   // Filter icons based on user state
   const filteredIcons = icons.filter(icon => {
     // Always show the logo
@@ -213,7 +221,7 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
           </div>
           <button 
             className="collapsed-navbar-expand" 
-            onClick={handleBackClick} 
+            onClick={gcsToken ? handleBackClick : handleExpandClick} 
             title={gcsToken ? "Back to Users" : "Expand"} 
             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
           >

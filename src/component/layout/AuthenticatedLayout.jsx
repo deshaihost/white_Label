@@ -8,12 +8,17 @@ const AuthenticatedLayout = ({ children }) => {
   const authData = Authorized();
   const [sidebarWidth, setSidebarWidth] = useState(240);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
 
   // Listen for changes in the sidebar state
   useEffect(() => {
     const handleSidebarStateChange = (event) => {
       setSidebarWidth(event.detail.width);
       setSidebarOpen(event.detail.open);
+      // If clicked property is present in the event, update sidebarClicked state
+      if (event.detail.clicked !== undefined) {
+        setSidebarClicked(event.detail.clicked);
+      }
     };
     
     // Add event listener for sidebar state changes
@@ -24,6 +29,7 @@ const AuthenticatedLayout = ({ children }) => {
       const state = window.getSidebarState();
       setSidebarWidth(state.width);
       setSidebarOpen(state.open);
+      setSidebarClicked(state.clicked !== undefined ? state.clicked : state.open);
     }
     
     return () => {
@@ -42,9 +48,8 @@ const AuthenticatedLayout = ({ children }) => {
         width: "100%", 
         minHeight: "100vh", 
         overflow: "auto",
-        // When sidebar is open, it's an overlay so no margin needed
-        // When sidebar is collapsed, add margin equal to collapsed width (64px)
-        marginLeft: sidebarOpen ? "64px" : "64px",
+        // Only adjust margin if sidebar was clicked open, otherwise keep at 64px
+        marginLeft: (sidebarOpen && sidebarClicked) ? `${sidebarWidth}px` : "64px",
         transition: "margin-left 0.3s ease-in-out"
       }}>
         {children}

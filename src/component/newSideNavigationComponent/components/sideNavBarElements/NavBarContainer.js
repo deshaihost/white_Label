@@ -156,11 +156,19 @@ function NavBarContainer() {
   // Add state update function that can be called from outside components
   useEffect(() => {
     // Create a function that can be called by other components to get sidebar state
-    window.getSidebarState = () => ({ open: sidebarOpen, width: sidebarOpen ? 240 : 64 });
+    window.getSidebarState = () => ({ 
+      open: sidebarOpen, 
+      width: sidebarOpen ? 240 : 64,
+      clicked: true // Default to true for initial state
+    });
     
     // Dispatch an event when the sidebar state changes
     const event = new CustomEvent("sidebarStateChanged", { 
-      detail: { open: sidebarOpen, width: sidebarOpen ? 240 : 64 } 
+      detail: { 
+        open: sidebarOpen, 
+        width: sidebarOpen ? 240 : 64,
+        clicked: true // This is a clicked state change, not hover
+      } 
     });
     document.dispatchEvent(event);
     
@@ -169,6 +177,45 @@ function NavBarContainer() {
       delete window.getSidebarState;
     };
   }, [sidebarOpen]);
+
+  // Handle mouse hover separately from click events
+  const handleSidebarHover = (isHovered) => {
+    if (isHovered) {
+      // When hovering, don't set clicked state
+      const event = new CustomEvent("sidebarStateChanged", { 
+        detail: { 
+          open: true, 
+          width: 240,
+          clicked: false // This is a hover state change, not a click
+        } 
+      });
+      document.dispatchEvent(event);
+    } else if (!sidebarOpen) {
+      // When hover ends and sidebar wasn't explicitly opened, collapse back
+      const event = new CustomEvent("sidebarStateChanged", { 
+        detail: { 
+          open: false, 
+          width: 64,
+          clicked: false // This is a hover state ending, not a click
+        } 
+      });
+      document.dispatchEvent(event);
+    }
+  };
+
+  // Handle explicit click to expand the sidebar
+  const handleExpandClick = (isClicked) => {
+    setSidebarOpen(true);
+    // Create a custom event with clicked state explicitly set to true
+    const event = new CustomEvent("sidebarStateChanged", { 
+      detail: { 
+        open: true, 
+        width: 240,
+        clicked: true // This is a clicked action, force it to true
+      } 
+    });
+    document.dispatchEvent(event);
+  };
 
   return (
     <div style={{ 
@@ -200,8 +247,14 @@ function NavBarContainer() {
             fontFamily: "DM Sans, Helvetica !important",
           }}
           onScroll={(e) => e.stopPropagation()}
-          onMouseLeave={handleMouseLeave}
-          onMouseEnter={handleMouseEnter}
+          onMouseLeave={() => {
+            handleMouseLeave();
+            handleSidebarHover(false);
+          }}
+          onMouseEnter={() => {
+            handleMouseEnter();
+            handleSidebarHover(true);
+          }}
         >
           <style>
             {`
@@ -217,7 +270,18 @@ function NavBarContainer() {
             `}
           </style>
           {/* <Logo colour="default" type="icon" /> */}
-          <SideItemComponent onCollapse={() => setSidebarOpen(false)} navigationProps={getNavigationProps()} />
+          <SideItemComponent onCollapse={() => {
+            setSidebarOpen(false);
+            // When explicitly collapsed, update with clicked state
+            const event = new CustomEvent("sidebarStateChanged", { 
+              detail: { 
+                open: false, 
+                width: 64,
+                clicked: true // This is a click action
+              } 
+            });
+            document.dispatchEvent(event);
+          }} navigationProps={getNavigationProps()} />
         </div>
       ) : (
         <div style={{
@@ -233,7 +297,22 @@ function NavBarContainer() {
         }}>
           <CollapsedNavbar 
             isOpen={!sidebarOpen} 
-            onExpand={() => setSidebarOpen(true)} 
+            onExpand={() => {
+              // When expand icon is clicked, explicitly set sidebarOpen and dispatch event
+              setSidebarOpen(true);
+              
+              // Use setTimeout to ensure state change happens after render
+              setTimeout(() => {
+                const event = new CustomEvent("sidebarStateChanged", { 
+                  detail: { 
+                    open: true, 
+                    width: 240,
+                    clicked: true // Force this to true for clicks
+                  } 
+                });
+                document.dispatchEvent(event);
+              }, 0);
+            }} 
             navigationProps={getNavigationProps()} 
           />
         </div>
