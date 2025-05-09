@@ -41,11 +41,12 @@ const AuthenticatedLayout = ({ children }) => {
     <div className="authenticated-layout" style={{ 
       display: "flex", 
       flexDirection: "column", 
+      height: "90vh",
       width: "100%" 
     }}>
       {authData && <NavBarContainer />}
       <div style={{ 
-        width: "100%", 
+        width: "95%", 
         minHeight: "100vh", 
         overflow: "auto",
         // When mouse over/out, always use 64px
