@@ -403,7 +403,8 @@ width: 1px;
 /* Media query for left-bar responsive width */
 @media only screen and (max-width: 991px) {
   .left-bar {
-    width: calc(100vw - 100px) !important;
+    
+    width: calc(100vw - 10px) !important;
   }
 }
 

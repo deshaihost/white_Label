@@ -16,6 +16,15 @@ import OpenIssueIcon from "./mildeSection/message/icons/openIssue_icon.svg";
 import NotesIcon from "./mildeSection/message/icons/notes_icon.svg";
 import CheckBoxIcon from "./mildeSection/message/icons/check_box.svg";
 
+// Add responsive styles
+const responsiveStyles = `
+  @media (max-width: 991px) {
+    .inbox-content-container {
+      width: 105% !important;
+    }
+  }
+`;
+
 const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptionPlan, accountAgeDays, singleConversationIdFromUrl }) => {
   const navigate = useNavigate();
   const eliteFeaturesAvailable = (/elite|works/i.test(subscriptionPlan) || subscriptionPlan === 'trial') // Changed == to === for strict equality
@@ -340,402 +349,405 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   }, [conversations, eliteFeaturesAvailable, urgentFilterIsEnabled, propertyFilterVal, phaseFilterVal, fromHostBuddyFilterVal, guestNameSearchVal, accountAgeDays]);
 
   return (
-    <div className="inbox-content-container" style={{height:"96vh" ,margin:"10px" ,borderWidth:"1px" ,borderStyle:"solid",borderColor:"rgba(36, 38, 46, 1)"}}>
-      {conversationsNotYetFetched ? <InboxLoader /> : null}
-      <div className="row text-white" style={{height:"100%"}}>
-        {/* Desktop View */}
-        <div style={{ width: "100%", gap: "2px" }} className="d-none d-lg-flex col-lg-12">
-          <LeftMessage
-            className="box"
-            allPropertyNamesList={allPropertyNamesList}
-            allGuestNames={allGuestNamesList}
-            allConversations={conversations}
-            setAllConversations={setConversations}
-            setSelectedConvo={setSelectedConversation}
-            fetchConversations={fetchConversations}
-            userHasPMS={userHasPMS}
-            urgentFilterIsEnabled={urgentFilterIsEnabled}
-            setUrgentFilterIsEnabled={setUrgentFilterIsEnabled}
-            propertyFilterVal={propertyFilterVal}
-            setPropertyFilterVal={setPropertyFilterVal}
-            phaseFilterVal={phaseFilterVal}
-            setPhaseFilterVal={setPhaseFilterVal}
-            fromHostBuddyFilterVal={fromHostBuddyFilterVal}
-            setFromHostBuddyFilterVal={setFromHostBuddyFilterVal}
-            guestNameSearchVal={guestNameSearchVal}
-            setGuestNameSearchVal={setGuestNameSearchVal}
-            setCurrentView={setCurrentView}
-            currentView={currentView}
-            setAllowConvIdQuery={setAllowConvIdQuery}
-          />
-          <div className='middleSectionContainer' style={{ width: '40%', flex: 'none' ,height: 'calc(100vh - 100px)' }}>
-            <div>
-              {/* here user image , name ,  */}
-            </div>
-            <div style={{ display: 'flex', backgroundColor: '#17191f', padding: '4px', borderRadius: '4px', marginBottom: '4px' }}>
-              {/* Tabs for navigation */}
-              <div style={{ display: 'flex', width: '100%' }}>
-                {[
-                  { id: 'pms', icon: PmsIcon, text: 'PMS' },
-                  { id: 'whatsapp', icon: WhatsappIcon, text: 'WhatsApp' },
-                  { id: 'openIssue', icon: OpenIssueIcon, text: 'Open Issue' },
-                  { id: 'notes', icon: NotesIcon, text: 'Notes' }
-                ].map((tab) => (
-                  <div 
-                    key={tab.id}
-                    onClick={() => {
-                      setActiveTab(tab.id); // Update active tab state
-                    }}
-                    style={{ 
-                      fontFamily: "DM Sans", // Changed from fontStyle to fontFamily
-                      fontSize: "14px",
-                      cursor: 'pointer',
-                      position: 'relative',
-                      display: 'flex',
-                      alignItems: 'center',
-                      marginRight: '10px',
-                      justifyContent: 'space-between', // Changed from alignItems to justifyContent
-                      borderBottom: tab.id === activeTab ? '2px solid #007bff' : 'none' // Blue underline for active tab
-                    }}
-                  >
-                    <img src={tab.icon} alt={tab.text} style={{ width: '15px', height: '15px', marginRight: '5px' }} />
-                    <span>{tab.text}</span>
-                  </div>
-                ))}
+    <>
+      <style>{responsiveStyles}</style>
+      <div className="inbox-content-container" style={{height:"96vh" ,margin:"10px" ,borderWidth:"1px" ,borderStyle:"solid",borderColor:"rgba(36, 38, 46, 1)"}}>
+        {conversationsNotYetFetched ? <InboxLoader /> : null}
+        <div className="row text-white" style={{height:"100%"}}>
+          {/* Desktop View */}
+          <div style={{ width: "100%", gap: "2px" }} className="d-none d-lg-flex col-lg-12">
+            <LeftMessage
+              className="box"
+              allPropertyNamesList={allPropertyNamesList}
+              allGuestNames={allGuestNamesList}
+              allConversations={conversations}
+              setAllConversations={setConversations}
+              setSelectedConvo={setSelectedConversation}
+              fetchConversations={fetchConversations}
+              userHasPMS={userHasPMS}
+              urgentFilterIsEnabled={urgentFilterIsEnabled}
+              setUrgentFilterIsEnabled={setUrgentFilterIsEnabled}
+              propertyFilterVal={propertyFilterVal}
+              setPropertyFilterVal={setPropertyFilterVal}
+              phaseFilterVal={phaseFilterVal}
+              setPhaseFilterVal={setPhaseFilterVal}
+              fromHostBuddyFilterVal={fromHostBuddyFilterVal}
+              setFromHostBuddyFilterVal={setFromHostBuddyFilterVal}
+              guestNameSearchVal={guestNameSearchVal}
+              setGuestNameSearchVal={setGuestNameSearchVal}
+              setCurrentView={setCurrentView}
+              currentView={currentView}
+              setAllowConvIdQuery={setAllowConvIdQuery}
+            />
+            <div className='middleSectionContainer' style={{ width: '45%', flex: 'none' ,height: 'calc(100vh - 100px)' }}>
+              <div>
+                {/* here user image , name ,  */}
               </div>
-            </div>
-            
-            {/* Tab content rendered inside the div container */}
-            {activeTab === 'pms' && (
-              <MildeSection
-                className="box"
-                allConversationData={selectedConversation}
-                updateConversationFromApi={updateConversation}
-                updateConversationLocal={addMessageToLocalConversation}
-                subscriptionPlan={subscriptionPlan}
-                accountAgeDays={accountAgeDays}
-              />
-            )}
-            {activeTab === 'whatsapp' && (
-              <div className="box" style={{ padding: '20px', backgroundColor: '#17191f', borderRadius: '4px' }}>
-                <h3>WhatsApp Messages</h3>
-                <p>WhatsApp integration content will appear here.</p>
-              </div>
-            )}
-            {activeTab === 'openIssue' && (
-              <div className="box" style={{ padding: '0px', backgroundColor: 'rgb(0,0,0)', borderRadius: '4px', height: 'calc(100vh - 30px)', overflowY: 'auto' }}>
-                
-                <div className="action-items-container">
-                  {/* We would fetch action items from the API in a real implementation */}
-                  {[].concat(filteredActionItems || []).filter(item => item.status !== 'completed').map(actionItem => (
-                    <div key={actionItem.id} className="action-item-card" style={{
-                      backgroundColor: '#23252f',
-                      borderRadius: '8px',
-                      padding: '10px',
-                      marginBottom: '16px',
-                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-                      fontFamily: "DM Sans, Helvetica",
-                      fontSize: "14px"
-                    }}>
-                      <div className="action-item-header" style={{
+              <div style={{ display: 'flex', backgroundColor: '#17191f', padding: '4px', borderRadius: '4px', marginBottom: '4px' }}>
+                {/* Tabs for navigation */}
+                <div style={{ display: 'flex', width: '100%' }}>
+                  {[
+                    { id: 'pms', icon: PmsIcon, text: 'PMS' },
+                    { id: 'whatsapp', icon: WhatsappIcon, text: 'WhatsApp' },
+                    { id: 'openIssue', icon: OpenIssueIcon, text: 'Open Issue' },
+                    { id: 'notes', icon: NotesIcon, text: 'Notes' }
+                  ].map((tab) => (
+                    <div 
+                      key={tab.id}
+                      onClick={() => {
+                        setActiveTab(tab.id); // Update active tab state
+                      }}
+                      style={{ 
+                        fontFamily: "DM Sans", // Changed from fontStyle to fontFamily
+                        fontSize: "14px",
+                        cursor: 'pointer',
+                        position: 'relative',
                         display: 'flex',
-                        justifyContent: 'space-between',
-                        marginBottom: '12px'
-                      }}>
-                        <div className="action-item-date" style={{
-                          fontSize: '14px',
-                          color: '#a4a6aa'
-                        }}>
-                          {new Date(actionItem.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • {new Date(actionItem.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} • <span>
-                            {actionItem.category}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="action-item-description" style={{
-                        fontSize: '14px',
-                        fontWeight: '500',
-                        color: 'white',
-                        lineHeight: '1.4',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                      }}>
-                        <div style={{ flex: 1 }}>
-                          {actionItem.item}
-                        </div>
-                        <label className="action-item-checkbox" style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          cursor: 'pointer',
-                          marginLeft: '12px'
-                        }}>
-                          <div 
-                            style={{
-                              backgroundColor: "rgba(74, 70, 84, 0.41)",
-                              height: "32px",
-                              width: "32px",
-                              borderRadius: "4px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              cursor: "pointer"
-                            }}
-                            onClick={() => callCompleteActionItemApi(actionItem.id)}
-                            title="Mark as Resolved"
-                          >
-                            <img src={CheckBoxIcon} alt="Mark as Resolved" />
-                          </div>
-                        </label>
-                      </div>
+                        alignItems: 'center',
+                        marginRight: '10px',
+                        justifyContent: 'space-between', // Changed from alignItems to justifyContent
+                        borderBottom: tab.id === activeTab ? '2px solid #007bff' : 'none' // Blue underline for active tab
+                      }}
+                    >
+                      <img src={tab.icon} alt={tab.text} style={{ width: '15px', height: '15px', marginRight: '5px' }} />
+                      <span>{tab.text}</span>
                     </div>
                   ))}
-                  
-                  {/* If there are no items or the API hasn't been integrated yet, show these mock items */}
-                  {(!filteredActionItems || filteredActionItems.length === 0) && (
-                    <div className="no-action-items" style={{
-                      padding: '20px',
-                      textAlign: 'center',
-                      color: '#a4a6aa'
-                    }}>
-                      <p>Loading </p>
-                    </div>
-                  )}
                 </div>
               </div>
-            )}
-            {activeTab === 'notes' && (
-              <div className="box" style={{ 
-                padding: '0', 
-                backgroundColor: '#17191f', 
-                borderRadius: '4px', 
-                height: 'calc(100vh - 60px)', 
-                display: 'flex',
-                flexDirection: 'column'
-              }}>
-                <div className="notes-container" style={{ 
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%',
-                  overflowY: 'auto'
-                }}>
-                  {/* Messages/Notes List Area */}
-                  <div style={{ 
-                    flex: 1, 
-                    overflowY: 'auto',
-                    padding: '10px 20px'
-                  }}>
-                    {isLoadingNotes ? (
-                      <div style={{ textAlign: 'center', padding: '20px' }}>
-                        <div className="spinner-border text-primary" role="status">
-                          <span className="visually-hidden">Loading...</span>
+              
+              {/* Tab content rendered inside the div container */}
+              {activeTab === 'pms' && (
+                <MildeSection
+                  className="box"
+                  allConversationData={selectedConversation}
+                  updateConversationFromApi={updateConversation}
+                  updateConversationLocal={addMessageToLocalConversation}
+                  subscriptionPlan={subscriptionPlan}
+                  accountAgeDays={accountAgeDays}
+                />
+              )}
+              {activeTab === 'whatsapp' && (
+                <div className="box" style={{ padding: '20px', backgroundColor: '#17191f', borderRadius: '4px' }}>
+                  <h3>WhatsApp Messages</h3>
+                  <p>WhatsApp integration content will appear here.</p>
+                </div>
+              )}
+              {activeTab === 'openIssue' && (
+                <div className="box" style={{ padding: '0px', backgroundColor: 'rgb(0,0,0)', borderRadius: '4px', height: 'calc(100vh - 30px)', overflowY: 'auto' }}>
+                  
+                  <div className="action-items-container">
+                    {/* We would fetch action items from the API in a real implementation */}
+                    {[].concat(filteredActionItems || []).filter(item => item.status !== 'completed').map(actionItem => (
+                      <div key={actionItem.id} className="action-item-card" style={{
+                        backgroundColor: '#23252f',
+                        borderRadius: '8px',
+                        padding: '10px',
+                        marginBottom: '16px',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                        fontFamily: "DM Sans, Helvetica",
+                        fontSize: "14px"
+                      }}>
+                        <div className="action-item-header" style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          marginBottom: '12px'
+                        }}>
+                          <div className="action-item-date" style={{
+                            fontSize: '14px',
+                            color: '#a4a6aa'
+                          }}>
+                            {new Date(actionItem.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • {new Date(actionItem.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} • <span>
+                              {actionItem.category}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="action-item-description" style={{
+                          fontSize: '14px',
+                          fontWeight: '500',
+                          color: 'white',
+                          lineHeight: '1.4',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center'
+                        }}>
+                          <div style={{ flex: 1 }}>
+                            {actionItem.item}
+                          </div>
+                          <label className="action-item-checkbox" style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            marginLeft: '12px'
+                          }}>
+                            <div 
+                              style={{
+                                backgroundColor: "rgba(74, 70, 84, 0.41)",
+                                height: "32px",
+                                width: "32px",
+                                borderRadius: "4px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                cursor: "pointer"
+                              }}
+                              onClick={() => callCompleteActionItemApi(actionItem.id)}
+                              title="Mark as Resolved"
+                            >
+                              <img src={CheckBoxIcon} alt="Mark as Resolved" />
+                            </div>
+                          </label>
                         </div>
                       </div>
-                    ) : !selectedConversation?.conversation_id ? (
-                      <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
-                        Select a conversation to view notes
-                      </div>
-                    ) : notes.length === 0 ? (
-                      <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
-                        No notes found for this conversation
-                      </div>
-                    ) : (
-                      <div>
-                        {notes.map(note => (
-                          <div 
-                            key={note.note_id} 
-                            style={{ 
-                              marginBottom: '16px',
-                            }}
-                          >
-                            {/* Note header with user and timestamp */}
-                            <div style={{ 
-                              display: 'flex', 
-                              alignItems: 'center', 
-                              marginBottom: '6px' 
-                            }}>
-                              <div style={{ 
-                                width: '24px',
-                                height: '24px',
-                                borderRadius: '50%',
-                                backgroundColor: '#146ef5',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                marginRight: '8px',
-                                fontSize: '12px',
-                                fontWeight: 'bold',
-                                color: 'white'
-                              }}>
-                                {note.created_by ? note.created_by.charAt(0).toUpperCase() : 'U'}
-                              </div>
-                              <div style={{ fontSize: '13px', color: '#a4a6aa' }}>
-                                <span style={{ fontWeight: '500', color: '#d8d8d8' }}>{note.created_by || 'User'}</span>
-                                <span style={{ marginLeft: '8px', color: '#777' }}>
-                                  {new Date(note.created_at_utc).toLocaleDateString('en-US', { 
-                                    month: 'numeric', 
-                                    day: 'numeric'
-                                  })} {new Date(note.created_at_utc).toLocaleTimeString('en-US', { 
-                                    hour: 'numeric', 
-                                    minute: '2-digit', 
-                                    hour12: true 
-                                  })}
-                                </span>
-                              </div>
-                            </div>
-                            
-                            {/* Note content with delete button */}
-                            <div style={{ 
-                              backgroundColor: '#24262E', 
-                              padding: '12px 15px',
-                              borderRadius: '4px',
-                              position: 'relative',
-                              marginLeft: '32px'
-                            }}>
-                              <div style={{ fontSize: '14px', color: 'white', whiteSpace: 'pre-wrap' }}>
-                                {note.note}
-                              </div>
-                              
-                              {/* Delete icon absolutely positioned to the top right */}
-                              <div style={{ 
-                                position: 'absolute', 
-                                top: '10px', 
-                                right: '10px',
-                                cursor: 'pointer'
-                              }}>
-                                {deletingNoteId === note.note_id ? (
-                                  <div className="spinner-border spinner-border-sm text-danger" role="status">
-                                    <span className="visually-hidden">Deleting...</span>
-                                  </div>
-                                ) : (
-                                  <button
-                                    onClick={() => callDeleteNoteApi(note.note_id)}
-                                    style={{
-                                      background: 'none',
-                                      border: 'none',
-                                      color: '#888',
-                                      cursor: 'pointer',
-                                      padding: '0',
-                                      fontSize: '14px'
-                                    }}
-                                    title="Delete note"
-                                  >
-                                    <i className="bi bi-three-dots-vertical"></i>
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
+                    ))}
+                    
+                    {/* If there are no items or the API hasn't been integrated yet, show these mock items */}
+                    {(!filteredActionItems || filteredActionItems.length === 0) && (
+                      <div className="no-action-items" style={{
+                        padding: '20px',
+                        textAlign: 'center',
+                        color: '#a4a6aa'
+                      }}>
+                        <p>Loading </p>
                       </div>
                     )}
                   </div>
-                  
-                  {/* Note Input Area - Fixed at bottom */}
-                  <div style={{ 
-                    borderTop: '1px solid #222',
-                    padding: '15px 20px',
-                    backgroundColor: '#17191f'
+                </div>
+              )}
+              {activeTab === 'notes' && (
+                <div className="box" style={{ 
+                  padding: '0', 
+                  backgroundColor: '#17191f', 
+                  borderRadius: '4px', 
+                  height: 'calc(100vh - 62px)', 
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}>
+                  <div className="notes-container" style={{ 
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%',
+                    overflowY: 'auto'
                   }}>
-                    <form 
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        if (newNote.trim() && selectedConversation?.conversation_id) {
-                          callAddNoteApi(newNote);
-                        }
-                      }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                      }}
-                    >
-                      <input
-                        type="text"
-                        value={newNote}
-                        onChange={(e) => setNewNote(e.target.value)}
-                        placeholder="Type here..."
-                        style={{ 
-                          flex: 1,
-                          backgroundColor: '#17191f',
-                          border: 'none',
-                          color: '#EEE',
-                          padding: '8px 2px',
-                          fontSize: '14px',
-                          outline: 'none'
+                    {/* Messages/Notes List Area */}
+                    <div style={{ 
+                      flex: 1, 
+                      overflowY: 'auto',
+                      padding: '10px 20px'
+                    }}>
+                      {isLoadingNotes ? (
+                        <div style={{ textAlign: 'center', padding: '20px' }}>
+                          <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                          </div>
+                        </div>
+                      ) : !selectedConversation?.conversation_id ? (
+                        <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
+                          Select a conversation to view notes
+                        </div>
+                      ) : notes.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
+                          No notes found for this conversation
+                        </div>
+                      ) : (
+                        <div>
+                          {notes.map(note => (
+                            <div 
+                              key={note.note_id} 
+                              style={{ 
+                                marginBottom: '16px',
+                              }}
+                            >
+                              {/* Note header with user and timestamp */}
+                              <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                marginBottom: '6px' 
+                              }}>
+                                <div style={{ 
+                                  width: '24px',
+                                  height: '24px',
+                                  borderRadius: '50%',
+                                  backgroundColor: '#146ef5',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  marginRight: '8px',
+                                  fontSize: '12px',
+                                  fontWeight: 'bold',
+                                  color: 'white'
+                                }}>
+                                  {note.created_by ? note.created_by.charAt(0).toUpperCase() : 'U'}
+                                </div>
+                                <div style={{ fontSize: '13px', color: '#a4a6aa' }}>
+                                  <span style={{ fontWeight: '500', color: '#d8d8d8' }}>{note.created_by || 'User'}</span>
+                                  <span style={{ marginLeft: '8px', color: '#777' }}>
+                                    {new Date(note.created_at_utc).toLocaleDateString('en-US', { 
+                                      month: 'numeric', 
+                                      day: 'numeric'
+                                    })} {new Date(note.created_at_utc).toLocaleTimeString('en-US', { 
+                                      hour: 'numeric', 
+                                      minute: '2-digit', 
+                                      hour12: true 
+                                    })}
+                                  </span>
+                                </div>
+                              </div>
+                              
+                              {/* Note content with delete button */}
+                              <div style={{ 
+                                backgroundColor: '#24262E', 
+                                padding: '12px 15px',
+                                borderRadius: '4px',
+                                position: 'relative',
+                                marginLeft: '32px'
+                              }}>
+                                <div style={{ fontSize: '14px', color: 'white', whiteSpace: 'pre-wrap' }}>
+                                  {note.note}
+                                </div>
+                                
+                                {/* Delete icon absolutely positioned to the top right */}
+                                <div style={{ 
+                                  position: 'absolute', 
+                                  top: '10px', 
+                                  right: '10px',
+                                  cursor: 'pointer'
+                                }}>
+                                  {deletingNoteId === note.note_id ? (
+                                    <div className="spinner-border spinner-border-sm text-danger" role="status">
+                                      <span className="visually-hidden">Deleting...</span>
+                                    </div>
+                                  ) : (
+                                    <button
+                                      onClick={() => callDeleteNoteApi(note.note_id)}
+                                      style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        color: '#888',
+                                        cursor: 'pointer',
+                                        padding: '0',
+                                        fontSize: '14px'
+                                      }}
+                                      title="Delete note"
+                                    >
+                                      <i className="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Note Input Area - Fixed at bottom */}
+                    <div style={{ 
+                      borderTop: '1px solid #222',
+                      padding: '15px 20px',
+                      backgroundColor: '#17191f'
+                    }}>
+                      <form 
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          if (newNote.trim() && selectedConversation?.conversation_id) {
+                            callAddNoteApi(newNote);
+                          }
                         }}
-                        disabled={!selectedConversation?.conversation_id}
-                      />
-                      <button 
-                        type="submit"
                         style={{
-                          backgroundColor: '#146ef5',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '4px',
-                          padding: '4px 4px',
-                          fontSize: '12px',
-                          cursor: selectedConversation?.conversation_id && newNote.trim() ? 'pointer' : 'not-allowed',
-                          opacity: selectedConversation?.conversation_id && newNote.trim() ? '1' : '0.7'
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px'
                         }}
-                        disabled={!selectedConversation?.conversation_id || !newNote.trim()}
                       >
-                        + Add note
-                      </button>
-                    </form>
+                        <input
+                          type="text"
+                          value={newNote}
+                          onChange={(e) => setNewNote(e.target.value)}
+                          placeholder="Type here..."
+                          style={{ 
+                            flex: 1,
+                            backgroundColor: '#17191f',
+                            border: 'none',
+                            color: '#EEE',
+                            padding: '8px 2px',
+                            fontSize: '14px',
+                            outline: 'none'
+                          }}
+                          disabled={!selectedConversation?.conversation_id}
+                        />
+                        <button 
+                          type="submit"
+                          style={{
+                            backgroundColor: '#146ef5',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            padding: '4px 4px',
+                            fontSize: '12px',
+                            cursor: selectedConversation?.conversation_id && newNote.trim() ? 'pointer' : 'not-allowed',
+                            opacity: selectedConversation?.conversation_id && newNote.trim() ? '1' : '0.7'
+                          }}
+                          disabled={!selectedConversation?.conversation_id || !newNote.trim()}
+                        >
+                          + Add note
+                        </button>
+                      </form>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+            </div>
+            <div className='rightSectionContainer' style={{ width: '25%', flex: 'none' ,height:"100%" ,paddingLeft:"10px"}}> 
+            <RightSection
+              className="box"
+              style={{ width: "100%", height: "calc(100vh - 100px)" }}
+              rightSectionData={selectedConversation}
+              updateConversationFromApi={updateConversation}
+            />
+            </div>
+          </div>
+
+
+          
+           
+            
+            {/* Mobile View */}
+          <div className="d-block d-lg-none col-12">
+            {currentView === 'conversations' && (
+              <LeftMessage 
+                allPropertyNamesList={allPropertyNamesList} 
+                allGuestNames={allGuestNamesList} 
+                allConversations={conversations} 
+                setAllConversations={setConversations} 
+                setSelectedConvo={setSelectedConversation} 
+                fetchConversations={fetchConversations} 
+                userHasPMS={userHasPMS} 
+                urgentFilterIsEnabled={urgentFilterIsEnabled} 
+                setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} 
+                propertyFilterVal={propertyFilterVal} 
+                setPropertyFilterVal={setPropertyFilterVal} 
+                phaseFilterVal={phaseFilterVal} 
+                setPhaseFilterVal={setPhaseFilterVal} 
+                fromHostBuddyFilterVal={fromHostBuddyFilterVal} 
+                setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} 
+                guestNameSearchVal={guestNameSearchVal} 
+                setGuestNameSearchVal={setGuestNameSearchVal} 
+                setCurrentView={setCurrentView} 
+                currentView={currentView}
+                setAllowConvIdQuery={setAllowConvIdQuery} 
+              />
+            )}
+            {currentView === 'messages' && (
+              <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays} setCurrentView={setCurrentView} />
+            )}
+            {currentView === 'details' && (
+              <RightSection rightSectionData={selectedConversation} updateConversationFromApi={updateConversation} setCurrentView={setCurrentView} />
             )}
           </div>
-          <div className='rightSectionContainer' style={{ width: '30%', flex: 'none' ,height:"100%" ,paddingLeft:"10px"}}> 
-          <RightSection
-            className="box"
-            style={{ width: "100%", height: "calc(100vh - 100px)" }}
-            rightSectionData={selectedConversation}
-            updateConversationFromApi={updateConversation}
-          />
-          </div>
-        </div>
-
-
-        
-         
-          
-          {/* Mobile View */}
-        <div className="d-block d-lg-none col-12">
-          {currentView === 'conversations' && (
-            <LeftMessage 
-              allPropertyNamesList={allPropertyNamesList} 
-              allGuestNames={allGuestNamesList} 
-              allConversations={conversations} 
-              setAllConversations={setConversations} 
-              setSelectedConvo={setSelectedConversation} 
-              fetchConversations={fetchConversations} 
-              userHasPMS={userHasPMS} 
-              urgentFilterIsEnabled={urgentFilterIsEnabled} 
-              setUrgentFilterIsEnabled={setUrgentFilterIsEnabled} 
-              propertyFilterVal={propertyFilterVal} 
-              setPropertyFilterVal={setPropertyFilterVal} 
-              phaseFilterVal={phaseFilterVal} 
-              setPhaseFilterVal={setPhaseFilterVal} 
-              fromHostBuddyFilterVal={fromHostBuddyFilterVal} 
-              setFromHostBuddyFilterVal={setFromHostBuddyFilterVal} 
-              guestNameSearchVal={guestNameSearchVal} 
-              setGuestNameSearchVal={setGuestNameSearchVal} 
-              setCurrentView={setCurrentView} 
-              currentView={currentView}
-              setAllowConvIdQuery={setAllowConvIdQuery} 
-            />
-          )}
-          {currentView === 'messages' && (
-            <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays} setCurrentView={setCurrentView} />
-          )}
-          {currentView === 'details' && (
-            <RightSection rightSectionData={selectedConversation} updateConversationFromApi={updateConversation} setCurrentView={setCurrentView} />
-          )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
