@@ -203,6 +203,8 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
           </div>
         ))}
       </div>
+      {/* Adding a flexible spacer to push utility icons to the bottom */}
+      <div style={{ flexGrow: 1 }}></div>
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
           {/* Logout Icon - placed above Help & Support */}
