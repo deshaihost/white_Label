@@ -22,6 +22,11 @@ const SideBar = () => {
     }
   };
 
+  // Return null to stop rendering the sidebar content
+  // The component is still mounted but doesn't render anything to the DOM
+  return null;
+
+  /* Original sidebar code - commented out to stop rendering
   return (
     <div className="navigation-links custom-nav-links">
       <ul>
@@ -72,6 +77,7 @@ const SideBar = () => {
       </ul>
     </div>
   );
+  */
 };
 
 export default SideBar;
