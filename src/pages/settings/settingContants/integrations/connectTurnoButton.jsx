@@ -38,6 +38,11 @@ const ConnectToTurno = () => {
 
   useEffect(() => {
     const handleOauth = async () => {
+      // Only process if we're on the exact integrations path (not a subpath)
+      if (location.pathname !== '/setting/integrations') {
+        return;
+      }
+      
       const params = new URLSearchParams(location.search);
       const code = params.get('code');
       const returnedState = params.get('state');
@@ -69,7 +74,7 @@ const ConnectToTurno = () => {
     };
 
     handleOauth();
-  }, [location.search]);
+  }, [location.search, location.pathname]);
 
   const handleConnectClick = () => {
     if (isProcessing) { return; }
