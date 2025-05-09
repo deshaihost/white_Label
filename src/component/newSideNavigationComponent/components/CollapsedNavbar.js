@@ -70,9 +70,18 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
   // Handle mouse enter event for icons to expand the navbar after a short delay
   const handleIconMouseEnter = () => {
+    // Clear any existing hover timer
+    if (hoverTimer) {
+      clearTimeout(hoverTimer);
+      setHoverTimer(null);
+    }
+    
+    // Add a small delay before expanding
     const timer = setTimeout(() => {
-      onExpand();
-    }, 200); // 300ms delay before expanding
+      // Pass false to indicate this is a hover, not a click
+      if (onExpand) onExpand(false);
+    }, 100);
+    
     setHoverTimer(timer);
   };
 
@@ -134,7 +143,7 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
     if (gcsToken && handlebackToUsersClick) {
       handlebackToUsersClick(e);
     } else {
-      onExpand();
+      onExpand(true); // Explicitly pass true to indicate click
     }
   };
 
@@ -166,7 +175,8 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
   // Check if an icon should have hover functionality
   const shouldHaveHover = (iconId) => {
-    // Navigation icons that should trigger navbar opening on hover
+    // Only these specific navigation icons should trigger navbar opening on hover
+    // 1=Get Started, 2=Dashboard, 3=Properties, 4=Action Items, 5=Messaging, 6=Insights, 7=Settings
     return [1, 2, 3, 4, 5, 6, 7].includes(iconId);
   };
 

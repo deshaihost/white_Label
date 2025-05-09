@@ -52,7 +52,7 @@ width: 1px;
 }
 
 .left-bar-chat {
-    height: calc(100vh - 60px); /* Base height when filters are hidden */
+    height: calc(100vh - 73px); /* Base height when filters are hidden */
     overflow-y: auto;
 }
 
@@ -399,6 +399,19 @@ width: 1px;
         margin-bottom: 15px;
     }
  }
+
+/* Media query for left-bar responsive width */
+@media only screen and (max-width: 991px) {
+  .left-bar {
+    width: calc(100vw - 64px) !important;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .left-bar {
+    width: 30% !important;
+  }
+}
 
 .message-filter .messsage-search {
   display: flex;

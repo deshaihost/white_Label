@@ -508,7 +508,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                 padding: '0', 
                 backgroundColor: '#17191f', 
                 borderRadius: '4px', 
-                height: 'calc(100vh - 40px)', 
+                height: 'calc(100vh - 60px)', 
                 display: 'flex',
                 flexDirection: 'column'
               }}>
