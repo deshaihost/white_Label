@@ -85,7 +85,7 @@ const ConnectToNotion = () => {
   return (
     <div className="partner-tile" onClick={handleConnectClick}>
       <img className="partner-logo" alt="Notion Logo" src="https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png"/>
-      <p>Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy's knowledge base up to date in real time.</p>
+      <p>Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy's knowledge base up to date in real time. (Coming soon)</p>
     </div>
   );
 };
