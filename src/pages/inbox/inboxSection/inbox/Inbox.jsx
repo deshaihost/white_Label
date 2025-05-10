@@ -587,6 +587,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                   borderRadius: '4px', 
                   height: 'calc(100vh - 62px)', 
                   display: 'flex',
+                  border: '1px solid #24262E',
                   flexDirection: 'column'
                 }}>
                   <div className="notes-container" style={{ 
