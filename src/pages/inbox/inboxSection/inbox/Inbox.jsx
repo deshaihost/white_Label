@@ -47,6 +47,21 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [isLoadingNotes, setIsLoadingNotes] = useState(false);
   const [deletingNoteId, setDeletingNoteId] = useState(null);
 
+  // State for tracking which note's dropdown is currently open
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+
+  // State for currently editing note
+  const [editingNoteId, setEditingNoteId] = useState(null);
+
+  // Handle dropdown toggle
+  const toggleDropdown = (noteId) => {
+    if (openDropdownId === noteId) {
+      setOpenDropdownId(null);
+    } else {
+      setOpenDropdownId(noteId);
+    }
+  };
+
   // Function to call the API to get notes
   const callGetNotesApi = async () => {
     if (!selectedConversation?.conversation_id) return;
@@ -58,14 +73,14 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     try {
       const config = {
         headers: { 
-          "X-API-Key": API_KEY,
-          "Authorization": `Bearer ${localStorage.getItem('token')}`
+          "X-API-Key": API_KEY
         },
         validateStatus: function (status) { return status >= 200 && status < 500; }
       };
       
-      const bodyData = { conversation_id: selectedConversation.conversation_id };
-      const response = await axios.get(`${baseUrl}/get_notes`, { ...config, params: bodyData });
+      // Use conversation_id as a URL query parameter
+      const url = `${baseUrl}/get_notes?conversation_id=${encodeURIComponent(selectedConversation.conversation_id)}`;
+      const response = await axios.get(url, config);
   
       if (response.status === 200) {
         setNotes(response.data.notes || []);
@@ -90,12 +105,12 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     try {
       const config = {
         headers: { 
-          "X-API-Key": API_KEY,
-          "Authorization": `Bearer ${localStorage.getItem('token')}`
+          "X-API-Key": API_KEY
         },
         validateStatus: function (status) { return status >= 200 && status < 500; }
       };
       
+      // According to the API documentation pattern, include conversation_id in the request body
       const bodyData = { 
         note: noteText,
         conversation_id: selectedConversation.conversation_id
@@ -118,7 +133,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
 
   // Function to call the API to delete a note
   const callDeleteNoteApi = async (noteId) => {
-    if (!noteId) return;
+    if (!noteId || !selectedConversation?.conversation_id) return;
     
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -128,14 +143,22 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     try {
       const config = {
         headers: { 
-          "X-API-Key": API_KEY,
-          "Authorization": `Bearer ${localStorage.getItem('token')}`
+          "X-API-Key": API_KEY
         },
         validateStatus: function (status) { return status >= 200 && status < 500; }
       };
       
-      const bodyData = { note_id: noteId };
-      const response = await axios.delete(`${baseUrl}/delete_note`, { ...config, data: bodyData });
+      // According to the API documentation pattern, include data in the request body
+      const bodyData = { 
+        note_id: noteId,
+        conversation_id: selectedConversation.conversation_id
+      };
+      
+      // For DELETE requests with a body, we need to use the data property in the config
+      const response = await axios.delete(`${baseUrl}/delete_note`, { 
+        ...config, 
+        data: bodyData 
+      });
   
       if (response.status === 200) { 
         // Remove the deleted note from the state
@@ -148,6 +171,49 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       ToastHandle("Error deleting note", "danger");
     } finally {
       setDeletingNoteId(null);
+    }
+  };
+
+  // Function to call the API to update/edit a note
+  const callUpdateNoteApi = async (noteId, noteText) => {
+    if (!noteId || !noteText.trim()) return;
+    
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    
+    try {
+      const config = {
+        headers: { 
+          "X-API-Key": API_KEY
+        },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+      
+      // According to the API documentation for PUT /edit_note
+      const bodyData = { 
+        note_id: noteId,
+        note: noteText
+      };
+      
+      const response = await axios.put(`${baseUrl}/edit_note`, bodyData, config);
+  
+      if (response.status === 200) { 
+        // Update the note in the local state
+        const updatedNotes = notes.map(note => 
+          note.note_id === noteId ? { ...note, note: noteText } : note
+        );
+        setNotes(updatedNotes);
+        
+        // Clear the editing state
+        setEditingNoteId(null);
+        setNewNote("");
+        
+        ToastHandle("Note updated successfully", "success");
+      } else { 
+        ToastHandle(response?.data?.error || "Failed to update note", "danger"); 
+      }
+    } catch (error) {
+      ToastHandle("Error updating note", "danger");
     }
   };
 
@@ -258,7 +324,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const sortConversationsByMostRecentMessage = (conversations) => {
     return conversations.sort((a, b) => {
       const timeA = new Date(a.messages[a.messages.length - 1].time);
-      const timeB = new Date(b.messages[b.messages.length - 1].time);
+      const timeB = new Date(a.messages[a.messages.length - 1].time);
       return timeB - timeA; // Sort in descending order
     });
   };
@@ -527,13 +593,13 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     display: 'flex',
                     flexDirection: 'column',
                     height: '100%',
-                    overflowY: 'auto'
+                    backgroundColor: '#121318', 
                   }}>
-                    {/* Messages/Notes List Area */}
+                    {/* Notes List Area */}
                     <div style={{ 
                       flex: 1, 
                       overflowY: 'auto',
-                      padding: '10px 20px'
+                      padding: '5px 5px'
                     }}>
                       {isLoadingNotes ? (
                         <div style={{ textAlign: 'center', padding: '20px' }}>
@@ -555,84 +621,196 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                             <div 
                               key={note.note_id} 
                               style={{ 
-                                marginBottom: '16px',
+                                marginBottom: '5px',
                               }}
                             >
-                              {/* Note header with user and timestamp */}
+                              {/* Note content with three dots on the same line */}
                               <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                marginBottom: '6px' 
+                                display: 'flex',
+                                alignItems: 'flex-start',
                               }}>
-                                <div style={{ 
-                                  width: '24px',
-                                  height: '24px',
+                                {/* User avatar */}
+                                {/* <div style={{ 
+                                  width: '32px',
+                                  height: '32px',
                                   borderRadius: '50%',
-                                  backgroundColor: '#146ef5',
+                                  backgroundColor: '#1a73e8',
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'center',
-                                  marginRight: '8px',
-                                  fontSize: '12px',
+                                  marginRight: '12px',
+                                  fontSize: '16px',
                                   fontWeight: 'bold',
-                                  color: 'white'
+                                  color: 'white',
+                                  flexShrink: 0
                                 }}>
                                   {note.created_by ? note.created_by.charAt(0).toUpperCase() : 'U'}
-                                </div>
-                                <div style={{ fontSize: '13px', color: '#a4a6aa' }}>
-                                  <span style={{ fontWeight: '500', color: '#d8d8d8' }}>{note.created_by || 'User'}</span>
-                                  <span style={{ marginLeft: '8px', color: '#777' }}>
-                                    {new Date(note.created_at_utc).toLocaleDateString('en-US', { 
-                                      month: 'numeric', 
-                                      day: 'numeric'
-                                    })} {new Date(note.created_at_utc).toLocaleTimeString('en-US', { 
-                                      hour: 'numeric', 
-                                      minute: '2-digit', 
-                                      hour12: true 
-                                    })}
-                                  </span>
-                                </div>
-                              </div>
-                              
-                              {/* Note content with delete button */}
-                              <div style={{ 
-                                backgroundColor: '#24262E', 
-                                padding: '12px 15px',
-                                borderRadius: '4px',
-                                position: 'relative',
-                                marginLeft: '32px'
-                              }}>
-                                <div style={{ fontSize: '14px', color: 'white', whiteSpace: 'pre-wrap' }}>
-                                  {note.note}
-                                </div>
+                                </div> */}
                                 
-                                {/* Delete icon absolutely positioned to the top right */}
-                                <div style={{ 
-                                  position: 'absolute', 
-                                  top: '10px', 
-                                  right: '10px',
-                                  cursor: 'pointer'
+                                {/* Note content with three dots menu */}
+                                <div style={{
+                                  backgroundColor: '#1e1f25', 
+                                  padding: '9px 9px',
+                                  borderRadius: '4px',
+                                  boxShadow: '0 1px 1px rgba(0,0,0,0.1)',
+                                  flex: 1,
+                                  position: 'relative',
+                                  border: '1px solid',
+                                  borderColor: '#24262E'
                                 }}>
-                                  {deletingNoteId === note.note_id ? (
-                                    <div className="spinner-border spinner-border-sm text-danger" role="status">
-                                      <span className="visually-hidden">Deleting...</span>
+                                  <div style={{ 
+                                    display: 'flex', 
+                                    justifyContent: 'space-between',
+                                    alignItems: 'flex-start',
+                                    width: '100%'
+                                  }}>
+                                    <div style={{ 
+                                      fontSize: '14px', 
+                                      color: 'white', 
+                                      whiteSpace: 'pre-wrap',
+                                      flex: 1
+                                    }}>
+                                      {note.note}
                                     </div>
-                                  ) : (
-                                    <button
-                                      onClick={() => callDeleteNoteApi(note.note_id)}
-                                      style={{
-                                        background: 'none',
-                                        border: 'none',
-                                        color: '#888',
-                                        cursor: 'pointer',
-                                        padding: '0',
-                                        fontSize: '14px'
-                                      }}
-                                      title="Delete note"
-                                    >
-                                      <i className="bi bi-three-dots-vertical"></i>
-                                    </button>
-                                  )}
+                                    
+                                    {/* Three dots menu button */}
+                                    <div style={{ 
+                                      position: 'relative',
+                                      marginLeft: '10px',
+                                      flexShrink: 0
+                                    }}>
+                                      {deletingNoteId === note.note_id ? (
+                                        <div className="spinner-border spinner-border-sm text-secondary" role="status">
+                                          <span className="visually-hidden">Deleting...</span>
+                                        </div>
+                                      ) : (
+                                        <div>
+                                          <button
+                                            onClick={() => toggleDropdown(note.note_id)}
+                                            style={{
+                                              background: 'none',
+                                              border: 'none',
+                                              color: '#777',
+                                              cursor: 'pointer',
+                                              padding: '4px',
+                                              fontSize: '14px',
+                                              marginTop: '-4px'
+                                            }}
+                                            title="Options"
+                                          >
+                                            <i className="bi bi-three-dots-vertical"></i>
+                                          </button>
+                                          
+                                          {/* Dropdown menu */}
+                                          {openDropdownId === note.note_id && (
+                                            <div style={{
+                                              position: 'absolute',
+                                              right: '0',
+                                              top: '100%',
+                                              backgroundColor: '#262730',
+                                              borderRadius: '4px',
+                                              boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+                                              zIndex: 10,
+                                              width: '120px',
+                                              overflow: 'hidden'
+                                            }}>
+                                              <ul style={{
+                                                listStyle: 'none',
+                                                padding: '0',
+                                                margin: '0'
+                                              }}>
+                                                <li>
+                                                  <button 
+                                                    onClick={() => {
+                                                      toggleDropdown(note.note_id);
+                                                      setEditingNoteId(note.note_id);
+                                                      setNewNote(note.note);
+                                                    }}
+                                                    style={{
+                                                      display: 'block',
+                                                      width: '100%',
+                                                      textAlign: 'left',
+                                                      padding: '8px 12px',
+                                                      backgroundColor: 'transparent',
+                                                      border: 'none',
+                                                      color: 'white',
+                                                      cursor: 'pointer',
+                                                      fontSize: '14px'
+                                                    }}
+                                                  >
+                                                    <i className="bi bi-pencil-fill" style={{ marginRight: '8px' }}></i>
+                                                    Update
+                                                  </button>
+                                                </li>
+                                                <li>
+                                                  <button 
+                                                    onClick={() => {
+                                                      toggleDropdown(note.note_id);
+                                                      callDeleteNoteApi(note.note_id);
+                                                    }}
+                                                    style={{
+                                                      display: 'block',
+                                                      width: '100%',
+                                                      textAlign: 'left',
+                                                      padding: '8px 12px',
+                                                      backgroundColor: 'transparent',
+                                                      border: 'none',
+                                                      color: '#ff4d4f',
+                                                      cursor: 'pointer',
+                                                      fontSize: '14px'
+                                                    }}
+                                                  >
+                                                    <i className="bi bi-trash-fill" style={{ marginRight: '8px' }}></i>
+                                                    Delete
+                                                  </button>
+                                                </li>
+                                              </ul>
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Date and time with avatar */}
+                                  <div style={{ 
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    marginTop: '8px'
+                                  }}>
+                                    {/* Small user avatar */}
+                                    <div style={{ 
+                                      width: '20px',
+                                      height: '20px',
+                                      borderRadius: '50%',
+                                      backgroundColor: '#1a73e8',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      marginRight: '8px',
+                                      fontSize: '10px',
+                                      fontWeight: 'bold',
+                                      color: 'white',
+                                      flexShrink: 0
+                                    }}>
+                                      {note.created_by ? note.created_by.charAt(0).toUpperCase() : 'U'}
+                                    </div>
+                                    
+                                    {/* Date and time text in the requested format: Month Short name Date . Time */}
+                                    <div style={{ 
+                                      color: '#777', 
+                                      fontSize: '12px'
+                                    }}>
+                                      {new Date(note.created_at_utc).toLocaleDateString('en-US', { 
+                                        month: 'short'
+                                      })} {new Date(note.created_at_utc).getDate()} . 
+                                      {new Date(note.created_at_utc).toLocaleTimeString('en-US', { 
+                                        hour: 'numeric', 
+                                        minute: '2-digit', 
+                                        hour12: true 
+                                      })}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -644,55 +822,49 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     {/* Note Input Area - Fixed at bottom */}
                     <div style={{ 
                       borderTop: '1px solid #222',
-                      padding: '15px 20px',
-                      backgroundColor: '#17191f'
+                      padding: '16px 20px',
+                      backgroundColor: '#121318',
+                      display: 'flex'
                     }}>
-                      <form 
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          if (newNote.trim() && selectedConversation?.conversation_id) {
+                      <input
+                        type="text"
+                        value={newNote}
+                        onChange={(e) => setNewNote(e.target.value)}
+                        placeholder="Type here..."
+                        style={{ 
+                          flex: 1,
+                          backgroundColor: '#121318',
+                          border: 'none',
+                          color: '#EEE',
+                          padding: '8px 2px',
+                          fontSize: '14px',
+                          outline: 'none'
+                        }}
+                        disabled={!selectedConversation?.conversation_id}
+                      />
+                      <button 
+                        onClick={() => {
+                          if (editingNoteId) {
+                            callUpdateNoteApi(editingNoteId, newNote);
+                          } else if (newNote.trim() && selectedConversation?.conversation_id) {
                             callAddNoteApi(newNote);
                           }
                         }}
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px'
+                          backgroundColor: '#1a73e8',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          padding: '8px 16px',
+                          fontSize: '14px',
+                          fontWeight: '500',
+                          cursor: selectedConversation?.conversation_id && newNote.trim() ? 'pointer' : 'not-allowed',
+                          opacity: selectedConversation?.conversation_id && newNote.trim() ? '1' : '0.7'
                         }}
+                        disabled={!selectedConversation?.conversation_id || !newNote.trim()}
                       >
-                        <input
-                          type="text"
-                          value={newNote}
-                          onChange={(e) => setNewNote(e.target.value)}
-                          placeholder="Type here..."
-                          style={{ 
-                            flex: 1,
-                            backgroundColor: '#17191f',
-                            border: 'none',
-                            color: '#EEE',
-                            padding: '8px 2px',
-                            fontSize: '14px',
-                            outline: 'none'
-                          }}
-                          disabled={!selectedConversation?.conversation_id}
-                        />
-                        <button 
-                          type="submit"
-                          style={{
-                            backgroundColor: '#146ef5',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            padding: '4px 4px',
-                            fontSize: '12px',
-                            cursor: selectedConversation?.conversation_id && newNote.trim() ? 'pointer' : 'not-allowed',
-                            opacity: selectedConversation?.conversation_id && newNote.trim() ? '1' : '0.7'
-                          }}
-                          disabled={!selectedConversation?.conversation_id || !newNote.trim()}
-                        >
-                          + Add note
-                        </button>
-                      </form>
+                        {editingNoteId ? 'Update note' : '+ Add note'}
+                      </button>
                     </div>
                   </div>
                 </div>
