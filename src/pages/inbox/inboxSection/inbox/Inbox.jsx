@@ -826,10 +826,21 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                       backgroundColor: '#121318',
                       display: 'flex'
                     }}>
-                      <input
-                        type="text"
+                      <textarea
                         value={newNote}
                         onChange={(e) => setNewNote(e.target.value)}
+                        onKeyDown={(e) => {
+                          // Submit on Enter without Shift key
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            if (editingNoteId) {
+                              callUpdateNoteApi(editingNoteId, newNote);
+                            } else if (newNote.trim() && selectedConversation?.conversation_id) {
+                              callAddNoteApi(newNote);
+                            }
+                          }
+                          // Allow normal behavior for Shift+Enter (new line)
+                        }}
                         placeholder="Type here..."
                         style={{ 
                           flex: 1,
@@ -838,7 +849,13 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           color: '#EEE',
                           padding: '8px 2px',
                           fontSize: '14px',
-                          outline: 'none'
+                          outline: 'none',
+                          resize: 'none',
+                          minHeight: '40px',
+                          maxHeight: '100px',
+                          fontFamily: 'inherit',
+                          lineHeight: '1.4',
+                          overflowY: 'auto'
                         }}
                         disabled={!selectedConversation?.conversation_id}
                       />
@@ -853,10 +870,11 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                         style={{
                           backgroundColor: '#1a73e8',
                           color: 'white',
+                          height: '30px',
                           border: 'none',
                           borderRadius: '4px',
-                          padding: '8px 16px',
-                          fontSize: '14px',
+                          padding: '2px 2px',
+                          fontSize: '12px',
                           fontWeight: '500',
                           cursor: selectedConversation?.conversation_id && newNote.trim() ? 'pointer' : 'not-allowed',
                           opacity: selectedConversation?.conversation_id && newNote.trim() ? '1' : '0.7'
