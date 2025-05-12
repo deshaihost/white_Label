@@ -119,7 +119,7 @@ function NavBarContainer() {
 
   // List of paths that should show portal navigation
   const protectedPaths = ["/dashboard", "/statistics", "/properties", "/test-property", "/workbench", "/property-insight", "/subscription", "/setting", "/add-property", "/edit-property", "/guided-setup", "/inbox", "/action-item", "/getstarted", "/journey", "/gcs-users", '/gcs-settings'];
-  const isInGcsPortal = ["/gcs-users", '/gcs-settings'].includes(location.pathname);
+  const isInGcsPortal = location.pathname.startsWith('/gcs-users') || location.pathname.startsWith('/gcs-settings');
 
   // Check if current path should show portal navigation
   const isProtectedPath = protectedPaths.some((path) =>

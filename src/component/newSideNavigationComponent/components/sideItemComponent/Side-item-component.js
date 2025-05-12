@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom';
 import SideNavItem2 from '../sideNavBarElements/sectionIndicatorComponent/section'
 import {data} from './data'
+import GcsUserdata from './gcsData'
 import helpIcon from '../sideNavBarElements/sectionIndicatorComponent/navIcons/help-circle.svg'
 import Logo from "../../components/sideNavBarElements/logoComponent/logoComponentNav";
 import "../../components/sideNavBarElements/logoComponent/logoComponent.css";
+
 function SideItemComponent({ onCollapse, navigationProps = {} }) {
     const [selectedId, setSelectedId] = useState(null);
     const [expandedId, setExpandedId] = useState(null);
@@ -102,6 +104,13 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                         
                         setSelectedId(item.id);
                         
+                        // Special handling for Master Account Settings in GCS Portal
+                        if (isInGcsPortal && item.label === "Master Account Settings") {
+                            toggleDropdown(item.id);
+                            handleNavigation('/gcs-settings');
+                            return; // Don't navigate when clicking on Master Account Settings
+                        }
+                        
                         // Special handling for Messaging - only show dropdown
                         if (item.label === "Messaging") {
                             toggleDropdown(item.id);
@@ -122,12 +131,28 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                         
                         // Handle navigation based on item ID
                         if (handleNavigation) {
+                            if (isInGcsPortal) {
+                                // Special navigation for GCS Portal
+                                if (item.label === "All Accounts") {
+                                    handleNavigation('/gcs-users');
+                                    return;
+                                } else if (item.label === "Master Account Settings") {
+                                    handleNavigation('/gcs-settings');
+                                    return;
+                                }
+                            }
+                            
+                            // Regular navigation for non-GCS portal
                             switch(item.id) {
                                 case 1: // Get Started
                                     handleNavigation('/getstarted');
                                     break;
-                                case 2: // Dashboard
-                                    handleNavigation('/dashboard');
+                                case 2: // Dashboard or All Accounts (in GCS Portal)
+                                    if (isInGcsPortal) {
+                                        handleNavigation('/gcs-users');
+                                    } else {
+                                        handleNavigation('/dashboard');
+                                    }
                                     break;
                                 case 3: // Properties
                                     handleNavigation('/properties');
@@ -189,7 +214,15 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                                         // Handle dropdown item navigation
                                         if (handleNavigation) {
                                             // Map settings dropdown items to their corresponding routes
-                                            const settingsMap = {
+                                            const settingsMap = isInGcsPortal ? {
+                                                71: '/gcs-settings/account',     // Account
+                                                72: '/gcs-settings/contact',     // Contact
+                                                73: '/gcs-settings/notifications', // Notifications
+                                                74: '/gcs-settings/conversation-preferences', // Conversation Preferences 
+                                                75: '/gcs-settings/integrations', // Integration
+                                                76: '/gcs-settings/users',       // Users
+                                                77: '/gcs-settings/subscription' // Subscription
+                                            } : {
                                                 71: '/setting/account',     // Account
                                                 72: '/setting/contact',     // Contact
                                                 73: '/setting/notifications', // Notifications
@@ -242,22 +275,20 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
     };
 
     // Filter items based on user authentication and path
-    const filteredData = data.filter(item => {
-        // Always show the logo
-        if (item.id === 0) return true;
-        
-        // In protected paths or logged in conditional paths
-        if (isProtectedPath || (isConditionalPath && token)) {
-            // For GCS portal, only show certain items
-            if (isInGcsPortal) {
-                return [0, 7].includes(item.id); // Only Logo and Settings
+    const filteredData = isInGcsPortal 
+        ? GcsUserdata 
+        : data.filter(item => {
+            // Always show the logo
+            if (item.id === 0) return true;
+            
+            // In protected paths or logged in conditional paths
+            if (isProtectedPath || (isConditionalPath && token)) {
+                // Regular portal navigation
+                return true;
             }
-            // Regular portal navigation
-            return true;
-        }
-        // For non-protected paths, don't show the navigation items
-        return false;
-    });
+            // For non-protected paths, don't show the navigation items
+            return false;
+        });
 
     return (
         <div className="side-nav" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -335,76 +366,35 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                 />
             </div>
             <div style={{ width: '100%'}}>
-                {gcsToken ? (
-                    <SideNavItem2
-                        label="Back to Users"
-                        size="primary"
-                        stateProp="default"
-                        component={
-                            <div style={{
-                                display: 'flex', 
-                                alignItems: 'center',
-                                margin: '0', 
-                                padding: '0'
-                            }}>
-                                <img 
-                                    src={require('../sideNavBarElements/sectionIndicatorComponent/navIcons/chevron-left-double.svg').default} 
-                                    alt="Back to Users" 
-                                    style={{
-                                        width: '20px',
-                                        height: '20px',
-                                        marginLeft: '0',
-                                        verticalAlign: 'middle'
-                                    }} 
-                                />
-                            </div>
-                        }
-                        showLeadingIcon={true}
-                        showTrailingIcon={false}
-                        onSelect={(e) => handlebackToUsersClick && handlebackToUsersClick(e)}
-                    />
-                ) : (
-                    <SideNavItem2
-                        label="Collapse"
-                        size="primary"
-                        stateProp="default"
-                        component={
-                            <div style={{
-                                display: 'flex', 
-                                alignItems: 'center',
-                                margin: '0', 
-                                padding: '0'
-                            }}>
-                                <img 
-                                    src={require('../sideNavBarElements/sectionIndicatorComponent/navIcons/chevron-left-double.svg').default} 
-                                    alt="Collapse" 
-                                    style={{
-                                        width: '20px',
-                                        height: '20px',
-                                        marginLeft: '0',
-                                        verticalAlign: 'middle'
-                                    }} 
-                                />
-                            </div>
-                        }
-                        showLeadingIcon={true}
-                        showTrailingIcon={false}
-                        onSelect={onCollapse}
-                    />
-                )}
+                <SideNavItem2
+                    label="Collapse"
+                    size="primary"
+                    stateProp="default"
+                    component={
+                        <div style={{
+                            display: 'flex', 
+                            alignItems: 'center',
+                            margin: '0', 
+                            padding: '0'
+                        }}>
+                            <img 
+                                src={require('../sideNavBarElements/sectionIndicatorComponent/navIcons/chevron-left-double.svg').default} 
+                                alt="Collapse" 
+                                style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    marginLeft: '0',
+                                    verticalAlign: 'middle'
+                                }} 
+                            />
+                        </div>
+                    }
+                    showLeadingIcon={true}
+                    showTrailingIcon={false}
+                    onSelect={onCollapse}
+                />
             </div>
-            {isInGcsPortal && (
-                <div style={{ width: '100%', marginTop: '8px' }}>
-                    <SideNavItem2
-                        label="Log Out"
-                        size="primary"
-                        stateProp="default"
-                        showLeadingIcon={false}
-                        showTrailingIcon={false}
-                        onSelect={logoutHandle}
-                    />
-                </div>
-            )}
+
         </div>
     );
 }

@@ -7,6 +7,7 @@ import ActionDefault from "./sideNavBarElements/sectionIndicatorComponent/iconCo
 import MessageDefault from "./sideNavBarElements/sectionIndicatorComponent/iconComponents/messagingComponent/messaging";
 import InsightComponent from "./sideNavBarElements/sectionIndicatorComponent/iconComponents/insightComponent/insight";
 import SettingsDefault from "./sideNavBarElements/sectionIndicatorComponent/iconComponents/settingsComponent/settings";
+import GcsUserdata from "./sideItemComponent/gcsData";
 
 import SideNavItem2 from "./sideNavBarElements/sectionIndicatorComponent/section";
 import chevronLeftDouble from "./sideNavBarElements/sectionIndicatorComponent/navIcons/chevron-left-double.svg";
@@ -111,8 +112,12 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
         case 1: // Get Started
           handleNavigation('/getstarted');
           break;
-        case 2: // Dashboard
-          handleNavigation('/dashboard');
+        case 2: // Dashboard or All Accounts (in GCS Portal)
+          if (isInGcsPortal) {
+            handleNavigation('/gcs-users');
+          } else {
+            handleNavigation('/dashboard');
+          }
           break;
         case 3: // Properties
           handleNavigation('/properties');
@@ -140,11 +145,8 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   };
 
   const handleBackClick = (e) => {
-    if (gcsToken && handlebackToUsersClick) {
-      handlebackToUsersClick(e);
-    } else {
-      onExpand(true); // Explicitly pass true to indicate click
-    }
+    // Always expand the sidebar when clicked
+    onExpand(true); // Explicitly pass true to indicate click
   };
 
   // When the user clicks the expand button
@@ -155,18 +157,25 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
     }
   };
 
+  // Create appropriate icons array based on whether we're in GCS portal or not
+  const gcsDataWithLogo = [
+    {
+      id: 0, 
+      component: <Logo colour="default" type="icon" />, 
+      label: "Logo"
+    },
+    ...GcsUserdata
+  ];
+
+  const iconsToRender = isInGcsPortal ? gcsDataWithLogo : icons;
+
   // Filter icons based on user state
-  const filteredIcons = icons.filter(icon => {
+  const filteredIcons = iconsToRender.filter(icon => {
     // Always show the logo
     if (icon.id === 0) return true;
     
     // In protected paths or logged in conditional paths
     if (isProtectedPath || (isConditionalPath && token)) {
-      // For GCS portal, only show certain items
-      if (isInGcsPortal) {
-        return [0, 7].includes(icon.id); // Only Logo and Settings
-      }
-      // Regular portal navigation
       return true;
     }
     // For non-protected paths, don't show the navigation items
@@ -233,14 +242,14 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
           </div>
           <button 
             className="collapsed-navbar-expand" 
-            onClick={gcsToken ? handleBackClick : handleExpandClick} 
-            title={gcsToken ? "Back to Users" : "Expand"} 
+            onClick={handleBackClick} 
+            title="Expand" 
             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
           >
-            <img src={gcsToken ? chevronLeftDouble : chevronRightDouble} alt="" style={{ width: 24, height: 24 }} />
+            <img src={chevronRightDouble} alt="Expand" style={{ width: 24, height: 24 }} />
           </button>
           
-          {isInGcsPortal && (
+          {/* {isInGcsPortal && (
             <div 
               style={{ marginTop: 8, cursor: 'pointer', fontSize: '12px', color: 'white' }} 
               onClick={logoutHandle}
@@ -248,7 +257,7 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
             >
               Log Out
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
