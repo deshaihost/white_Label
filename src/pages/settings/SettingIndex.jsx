@@ -66,7 +66,9 @@ const SettingIndex = () => {
           <div className="col-lg-12 col-xl-12 col-xxl-12">
             <div className="setting_index_tab_grid text-white blur-background-top-right">
               <div className="setting_tab_title">
+                {/* SettingSideBarIndex component rendering has been disabled 
                 <SettingSideBarIndex interFaceTypes={interFaceTypes} changeHndl={setInterFaceSettings} activeTab={interFaceSettings} isAdmin={isAdmin}/>
+                */}
                 <div style={{ marginTop: "20px", textAlign: "center" }}>
                   <Link to="/dashboard" className="text-link">
                     &lt; Dashboard
