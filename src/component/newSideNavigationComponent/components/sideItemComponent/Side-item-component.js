@@ -278,8 +278,8 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
     const filteredData = isInGcsPortal 
         ? GcsUserdata 
         : data.filter(item => {
-            // Always show the logo
-            if (item.id === 0) return true;
+            // Skip the HostBuddy AI icon (id: 0)
+            if (item.id === 0) return false;
             
             // In protected paths or logged in conditional paths
             if (isProtectedPath || (isConditionalPath && token)) {
