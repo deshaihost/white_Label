@@ -23,6 +23,24 @@ const responsiveStyles = `
       width: 105% !important;
     }
   }
+  
+  @media (min-width: 992px) {
+    .middleSectionContainer.sidebar-expanded {
+      width: 35% !important;
+    }
+    
+    .middleSectionContainer.sidebar-collapsed {
+      width: 45% !important;
+    }
+    
+    .rightSectionContainer.sidebar-expanded {
+      width: 20% !important;
+    }
+    
+    .rightSectionContainer.sidebar-collapsed {
+      width: 25% !important;
+    }
+  }
 `;
 
 const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptionPlan, accountAgeDays, singleConversationIdFromUrl }) => {
@@ -40,6 +58,46 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [currentView, setCurrentView] = useState('conversations'); // New state for mobile view
   const [activeTab, setActiveTab] = useState('pms'); // New state to track active tab
   const [allowConvIdQuery, setAllowConvIdQuery] = useState(true); // Added state for handling conversationId query
+  const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
+
+  // Listen for sidebar state changes
+  useEffect(() => {
+    const handleSidebarStateChange = (event) => {
+      setSidebarOpen(event.detail.open);
+    };
+    
+    // Add event listener for sidebar state changes
+    document.addEventListener("sidebarStateChanged", handleSidebarStateChange);
+    
+    // Initial sidebar state check
+    if (window.getSidebarState) {
+      const state = window.getSidebarState();
+      setSidebarOpen(state.open);
+    }
+    
+    return () => {
+      document.removeEventListener("sidebarStateChanged", handleSidebarStateChange);
+    };
+  }, []);
+
+  // State for unread PMS messages count
+  const [unreadPmsCount, setUnreadPmsCount] = useState(0);
+
+  // Calculate unread PMS messages count when conversations change
+  useEffect(() => {
+    // Calculate unread messages for all conversations
+    const unreadCount = conversations.reduce((total, conversation) => {
+      // If the conversation is not opened, count messages that aren't marked as read
+      if (!conversation.opened) {
+        // Get unread messages using the same logic as in LeftMessage.jsx
+        const unreadMessages = conversation.messages && conversation.messages.filter(msg => !msg.read).length || 1;
+        return total + unreadMessages;
+      }
+      return total;
+    }, 0);
+    
+    setUnreadPmsCount(unreadCount);
+  }, [conversations]);
 
   // Notes state
   const [notes, setNotes] = useState([]);
@@ -275,6 +333,11 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     }
   };
 
+  // Fetch action items when the component mounts, regardless of active tab
+  useEffect(() => {
+    callGetActionItemsApi();
+  }, []);
+
   // Fetch action items when the Open Issues tab is selected
   useEffect(() => {
     if (activeTab === 'openIssue') {
@@ -282,7 +345,14 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     }
   }, [activeTab]);
 
-  // Load notes when the tab changes to 'notes' or when the selected conversation changes
+  // Load notes when the selected conversation changes, regardless of active tab
+  useEffect(() => {
+    if (selectedConversation?.conversation_id) {
+      callGetNotesApi();
+    }
+  }, [selectedConversation?.conversation_id]);
+
+  // Refresh notes when the tab changes to 'notes'
   useEffect(() => {
     if (activeTab === 'notes' && selectedConversation?.conversation_id) {
       callGetNotesApi();
@@ -445,7 +515,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               currentView={currentView}
               setAllowConvIdQuery={setAllowConvIdQuery}
             />
-            <div className='middleSectionContainer' style={{ width: '45%', flex: 'none' ,height: 'calc(100vh - 100px)' }}>
+            <div className={`middleSectionContainer ${sidebarOpen ? 'sidebar-expanded' : 'sidebar-collapsed'}`} style={{ width: '45%', flex: 'none' ,height: 'calc(100vh - 100px)' }}>
               <div>
                 {/* here user image , name ,  */}
               </div>
@@ -477,6 +547,23 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     >
                       <img src={tab.icon} alt={tab.text} style={{ width: '15px', height: '15px', marginRight: '5px' }} />
                       <span>{tab.text}</span>
+                      {tab.id === 'pms' && unreadPmsCount > 0 && (
+                        <span style={{
+                          backgroundColor: '#ff9800',
+                          color: 'white',
+                          borderRadius: '50%',
+                          width: '18px',
+                          height: '18px',
+                          fontSize: '12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginLeft: '6px',
+                          fontWeight: 'bold'
+                        }}>
+                          {unreadPmsCount}
+                        </span>
+                      )}
                       {tab.id === 'openIssue' && filteredActionItems.length > 0 && (
                         <span style={{
                           backgroundColor: '#ff4d4f',
@@ -492,6 +579,23 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           fontWeight: 'bold'
                         }}>
                           {filteredActionItems.length}
+                        </span>
+                      )}
+                      {tab.id === 'notes' && notes.length > 0 && (
+                        <span style={{
+                          backgroundColor: '#1a73e8',
+                          color: 'white',
+                          borderRadius: '50%',
+                          width: '18px',
+                          height: '18px',
+                          fontSize: '12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginLeft: '6px',
+                          fontWeight: 'bold'
+                        }}>
+                          {notes.length}
                         </span>
                       )}
                     </div>
@@ -517,7 +621,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                 </div>
               )}
               {activeTab === 'openIssue' && (
-                <div className="box" style={{ padding: '0px', backgroundColor: 'rgb(0,0,0)', borderRadius: '4px', height: 'calc(100vh - 30px)', overflowY: 'auto' }}>
+                <div className="box" style={{ padding: '0px', backgroundColor: '#0F1117', borderRadius: '4px', height: 'calc(100vh - 30px)', overflowY: 'auto' }}>
                   
                   <div className="action-items-container">
                     {/* We would fetch action items from the API in a real implementation */}
@@ -604,7 +708,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                   borderRadius: '4px', 
                   height: 'calc(100vh - 62px)', 
                   display: 'flex',
-                  border: '1px solid #24262E',
+                  // border: '1px solid #24262E',
                   flexDirection: 'column'
                 }}>
                   <div className="notes-container" style={{ 
@@ -617,6 +721,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     <div style={{ 
                       flex: 1, 
                       overflowY: 'auto',
+                      backgroundColor:"#0F1117",
                       padding: '5px 5px'
                     }}>
                       {isLoadingNotes ? (
@@ -640,6 +745,9 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                               key={note.note_id} 
                               style={{ 
                                 marginBottom: '5px',
+                                color:"#D0D3DB",
+                                fontSize: '14px',
+                                fontFamily: 'DM Sans'
                               }}
                             >
                               {/* Note content with three dots on the same line */}
@@ -647,23 +755,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                 display: 'flex',
                                 alignItems: 'flex-start',
                               }}>
-                                {/* User avatar */}
-                                {/* <div style={{ 
-                                  width: '32px',
-                                  height: '32px',
-                                  borderRadius: '50%',
-                                  backgroundColor: '#1a73e8',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  marginRight: '12px',
-                                  fontSize: '16px',
-                                  fontWeight: 'bold',
-                                  color: 'white',
-                                  flexShrink: 0
-                                }}>
-                                  {note.created_by ? note.created_by.charAt(0).toUpperCase() : 'U'}
-                                </div> */}
+                               
                                 
                                 {/* Note content with three dots menu */}
                                 <div style={{
@@ -684,7 +776,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                   }}>
                                     <div style={{ 
                                       fontSize: '14px', 
-                                      color: 'white', 
+                                      color: '#D0D3DB', 
                                       whiteSpace: 'pre-wrap',
                                       flex: 1
                                     }}>
@@ -796,28 +888,30 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                     alignItems: 'center',
                                     marginTop: '8px'
                                   }}>
-                                    {/* Small user avatar */}
+                                    {/* Small user avatar - showing full name with proper capitalization */}
                                     <div style={{ 
-                                      width: '20px',
+                                      width: 'auto',
+                                      color:"#A6A9B2",
                                       height: '20px',
-                                      borderRadius: '50%',
-                                      backgroundColor: '#1a73e8',
                                       display: 'flex',
+                                      fontFamily: 'DM Sans',
                                       alignItems: 'center',
-                                      justifyContent: 'center',
                                       marginRight: '8px',
-                                      fontSize: '10px',
+                                      fontSize: '14px',
                                       fontWeight: 'bold',
-                                      color: 'white',
+                                      
                                       flexShrink: 0
                                     }}>
-                                      {note.created_by ? note.created_by.charAt(0).toUpperCase() : 'U'}
+                                      {note.created_by ? 
+                                        note.created_by.charAt(0).toUpperCase() + note.created_by.slice(1).toLowerCase() 
+                                        : 'User'} .
                                     </div>
                                     
                                     {/* Date and time text in the requested format: Month Short name Date . Time */}
                                     <div style={{ 
-                                      color: '#777', 
-                                      fontSize: '12px'
+                                       color:"#A6A9B2", 
+                                      fontSize: '14px' ,
+                                      fontFamily: 'DM Sans',
                                     }}>
                                       {new Date(note.created_at_utc).toLocaleDateString('en-US', { 
                                         month: 'short'
@@ -839,8 +933,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     
                     {/* Note Input Area - Fixed at bottom */}
                     <div style={{ 
-                      borderTop: '1px solid #222',
-                      padding: '16px 20px',
+                      border: '1px solid #222',
+                      padding: '8px 8px',
                       backgroundColor: '#121318',
                       display: 'flex'
                     }}>
@@ -906,7 +1000,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                 </div>
               )}
             </div>
-            <div className='rightSectionContainer' style={{ width: '25%', flex: 'none' ,height:"100%" ,paddingLeft:"10px"}}> 
+            <div className={`rightSectionContainer ${sidebarOpen ? 'sidebar-expanded' : 'sidebar-collapsed'}`} style={{ width: '25%', flex: 'none' ,height:"100%" ,paddingLeft:"10px", borderLeft:"1px solid #24262E"}}> 
             <RightSection
               className="box"
               style={{ width: "100%", height: "calc(100vh - 100px)" }}

@@ -38,6 +38,8 @@ const AuthenticatedLayout = ({ children }) => {
   }, []);
 
   return (
+    
+      
     <div className="authenticated-layout" style={{ 
       display: "flex", 
       flexDirection: "column", 
@@ -57,6 +59,7 @@ const AuthenticatedLayout = ({ children }) => {
         {children}
       </div>
     </div>
+    
   );
 };
 

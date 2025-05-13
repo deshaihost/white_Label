@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
@@ -9,9 +9,37 @@ import Loader from "../../../../../helper/Loader";
 import HostBuddyIcon from "./icons/hostbuddy_icon.svg";
 import NeutralIcon from "./icons/neautral_icon.svg";
 import ChevDownIcon from "./icons/chevDown_icon.svg";
+import CheckBoxIcon from "../mildeSection/message/icons/check_box.svg";
+
+// Import action items API function from ActionsItemsTable
+const callGetActionItemsApi = async (setActionItems, setGetActionItemsLoading) => {
+  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  setGetActionItemsLoading(true);
+
+  try {
+    const config = {
+      headers: { "X-API-Key": API_KEY },
+      validateStatus: function (status) { return status >= 200 && status < 500; }
+    };
+    const response = await axios.get(`${baseUrl}/get_action_items?status=incomplete&limit=200`, config);
+
+    if (response.status === 200) {
+      setActionItems(response.data.action_items);
+    }
+    else { ToastHandle(response?.data?.error, "danger"); }
+    return response.data;
+  } catch (error) {
+    ToastHandle("Error - unable to get action items", "danger");
+    return { error: "Internal server error" };
+  } finally {
+    setGetActionItemsLoading(false);
+  }
+};
 
 const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentView }) => {
-  const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, action_items, guest_chatbot_status, property_chatbot_status, conversation_id , image_url ,user} = rightSectionData ? rightSectionData : {};
+  const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, guest_chatbot_status, property_chatbot_status, conversation_id, image_url, user } = rightSectionData ? rightSectionData : {};
+  
   const until_formatted = guest_chatbot_status?.until_utc == 'indefinitely' ? 'indefinitely' : (guest_chatbot_status?.until_local ? timeFormat(guest_chatbot_status?.until_local) : null);
   let { channel, is_locked } = rightSectionData || {};
 
@@ -20,6 +48,15 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   const [issuesExpanded, setIssuesExpanded] = useState(false);
   const navigate = useNavigate();
   
+  // State for action items
+  const [actionItems, setActionItems] = useState([]);
+  const [getActionItemsLoading, setGetActionItemsLoading] = useState(false);
+  
+  // Fetch action items when component mounts
+  useEffect(() => {
+    callGetActionItemsApi(setActionItems, setGetActionItemsLoading);
+  }, []);
+
   // Force display for testing - remove in production
   const isCheckInToday = true; // For testing
   const isCheckOutToday = true; // For testing
@@ -187,7 +224,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   };
 
   return (
-    <div className="right-side">
+    <div className="right-side" >
       {/* Mobile Back Button */}
       <div className="d-block d-lg-none mobile-nav">
         <button onClick={() => setCurrentView('messages')} className="btn btn-link">
@@ -498,7 +535,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                 whiteSpace: 'nowrap',
                 position: 'relative'  /* Using relative instead of fixed to maintain layout flow */
               }}>Open Issues</h1>
-              {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 && (
+              {actionItems && actionItems.filter(obj => obj.status === "incomplete").length > 0 && (
                 <span style={{ 
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -513,7 +550,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                   fontWeight: 'bold' ,
                   margin:'5px'
                 }}>
-                  {action_items.filter(obj => obj.status === "incomplete").length}
+                  {actionItems.filter(obj => obj.status === "incomplete").length}
                 </span>
               )}
             </div>
@@ -531,12 +568,12 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
             </span>
           </div>
 
-          {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 ? (
+          {actionItems && actionItems.filter(obj => obj.status === "incomplete").length > 0 ? (
             <>
               {/* Always display the first/latest issue with timestamp above */}
               <div style={{ marginBottom: "10px" }}>
                 <div style={{ fontSize: "12px", color: "#808080", marginBottom: "2px" }}>
-                  {formatIssueTime(action_items.filter(obj => obj.status === "incomplete")[0].created_at)}
+                  {formatIssueTime(actionItems.filter(obj => obj.status === "incomplete")[0].created_at)}
                 </div>
                 <p style={{ 
                   margin: 0,
@@ -549,14 +586,14 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                   position: 'relative',  /* Using relative instead of fixed to maintain proper layout */
                   width: '236px'
                 }}>
-                  {action_items.filter(obj => obj.status === "incomplete")[0].item}
+                  {actionItems.filter(obj => obj.status === "incomplete")[0].item}
                 </p>
               </div>
               
               {/* Show remaining issues when expanded with timestamps above each */}
-              {issuesExpanded && action_items.filter(obj => obj.status === "incomplete").length > 1 && (
+              {issuesExpanded && actionItems.filter(obj => obj.status === "incomplete").length > 1 && (
                 <div>
-                  {action_items.filter(obj => obj.status === "incomplete")
+                  {actionItems.filter(obj => obj.status === "incomplete")
                     .slice(1)
                     .map((obj, index) => (
                       <div key={index} style={{ marginBottom: "10px" }}>
@@ -583,7 +620,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
               )}
               
               {/* Show "+X more issues" text (clickable to expand issues) */}
-              {!issuesExpanded && action_items.filter(obj => obj.status === "incomplete").length > 1 && (
+              {!issuesExpanded && actionItems.filter(obj => obj.status === "incomplete").length > 1 && (
                 <span 
                   onClick={() => setIssuesExpanded(true)} 
                   style={{ 
@@ -600,7 +637,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                     cursor: 'pointer'
                   }}
                 >
-                  +{action_items.filter(obj => obj.status === "incomplete").length - 1} more {action_items.filter(obj => obj.status === "incomplete").length - 1 === 1 ? 'issue' : 'issues'}
+                  +{actionItems.filter(obj => obj.status === "incomplete").length - 1} more {actionItems.filter(obj => obj.status === "incomplete").length - 1 === 1 ? 'issue' : 'issues'}
                 </span>
               )}
             </>
