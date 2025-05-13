@@ -25,19 +25,19 @@ const responsiveStyles = `
   }
   
   @media (min-width: 992px) {
-    .middleSectionContainer.sidebar-expanded {
+    .middleSectionContainer.sidebar-clicked-expanded {
       width: 35% !important;
     }
     
-    .middleSectionContainer.sidebar-collapsed {
+    .middleSectionContainer.sidebar-clicked-collapsed {
       width: 45% !important;
     }
     
-    .rightSectionContainer.sidebar-expanded {
+    .rightSectionContainer.sidebar-clicked-expanded {
       width: 20% !important;
     }
     
-    .rightSectionContainer.sidebar-collapsed {
+    .rightSectionContainer.sidebar-clicked-collapsed {
       width: 25% !important;
     }
   }
@@ -59,11 +59,16 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [activeTab, setActiveTab] = useState('pms'); // New state to track active tab
   const [allowConvIdQuery, setAllowConvIdQuery] = useState(true); // Added state for handling conversationId query
   const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
+  const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
 
   // Listen for sidebar state changes
   useEffect(() => {
     const handleSidebarStateChange = (event) => {
       setSidebarOpen(event.detail.open);
+      // If clicked property is present in the event, update sidebarClicked state
+      if (event.detail.clicked !== undefined) {
+        setSidebarClicked(event.detail.clicked);
+      }
     };
     
     // Add event listener for sidebar state changes
@@ -73,6 +78,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     if (window.getSidebarState) {
       const state = window.getSidebarState();
       setSidebarOpen(state.open);
+      setSidebarClicked(state.clicked !== undefined ? state.clicked : state.open);
     }
     
     return () => {
@@ -515,7 +521,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               currentView={currentView}
               setAllowConvIdQuery={setAllowConvIdQuery}
             />
-            <div className={`middleSectionContainer ${sidebarOpen ? 'sidebar-expanded' : 'sidebar-collapsed'}`} style={{ width: '45%', flex: 'none' ,height: 'calc(100vh - 100px)' }}>
+            <div className={`middleSectionContainer ${sidebarClicked ? (sidebarOpen ? 'sidebar-clicked-expanded' : 'sidebar-clicked-collapsed') : ''}`} style={{ width: '45%', flex: 'none', height: 'calc(100vh - 100px)' }}>
               <div>
                 {/* here user image , name ,  */}
               </div>
@@ -1000,7 +1006,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                 </div>
               )}
             </div>
-            <div className={`rightSectionContainer ${sidebarOpen ? 'sidebar-expanded' : 'sidebar-collapsed'}`} style={{ width: '25%', flex: 'none' ,height:"100%" ,paddingLeft:"10px", borderLeft:"1px solid #24262E"}}> 
+            <div className={`rightSectionContainer ${sidebarClicked ? (sidebarOpen ? 'sidebar-clicked-expanded' : 'sidebar-clicked-collapsed') : ''}`} style={{ width: '25%', flex: 'none', height:"100%", paddingLeft:"10px", borderLeft:"1px solid #24262E"}}> 
             <RightSection
               className="box"
               style={{ width: "100%", height: "calc(100vh - 100px)" }}
