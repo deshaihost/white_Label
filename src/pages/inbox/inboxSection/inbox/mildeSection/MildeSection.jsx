@@ -11,6 +11,8 @@ import JustificationModal from "../../../../testProperty/banner/messages/justifi
 import { Tooltip } from "react-tooltip";
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
+
+// Import the SVG icons
 import SendIcon from "./message/icons/send_icon.svg";
 import ChevDownIcon from "./message/icons/chevDown.svg";
 import AiMessageIcon from "./message/icons/ai_messsage_icon.svg";
@@ -397,7 +399,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
           Details
         </button>
       </div>
-      <div className="chatbot" style={{margin:"0px", width:"100%", padding:"0px"}}>
+      <div className="chatbot" style={{margin:"0px", width:"100%", padding:"0px" ,backgroundColor:"#0F1117"}}>
         {allConversationData && Object.keys(allConversationData).length > 0 ? (
           <div className="message-list" ref={messageListRef}>
             {messages?.map((message, index) => {
@@ -436,7 +438,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
 
         {((eliteOrWorksPlan) && !(conversationData?.channel == 'hostbuddy')) ? (
           <>
-            <div className="ai-input" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <div className="ai-input" style={{ display: 'flex', flexDirection: 'column', width: '100%' , backgroundColor:"#17191F"}}>
               <div className="input-container" style={{ width: '100%', marginBottom: '10px' }}>
                 <textarea type="text" ref={textareaRef} placeholder="Message..." value={inputValue} onChange={handleInputFieldChange} 
                   onKeyDown={handleKeyPress} rows="1" disabled={(generateCommandApiLoading || generateScratchApiLoading || sendMessageLoading) ? true : false} 

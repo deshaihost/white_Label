@@ -497,7 +497,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         {conversationsNotYetFetched ? <InboxLoader /> : null}
         <div className="row text-white" style={{height:"100%"}}>
           {/* Desktop View */}
-          <div style={{ width: "100%", gap: "2px" }} className="d-none d-lg-flex col-lg-12">
+          <div style={{ width: "100%", gap: "0px" }} className="d-none d-lg-flex col-lg-12">
             <LeftMessage
               className="box"
               allPropertyNamesList={allPropertyNamesList}
@@ -522,12 +522,127 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               setAllowConvIdQuery={setAllowConvIdQuery}
             />
             <div className={`middleSectionContainer ${sidebarClicked ? (sidebarOpen ? 'sidebar-clicked-expanded' : 'sidebar-clicked-collapsed') : ''}`} style={{ width: '45%', flex: 'none', height: 'calc(100vh - 100px)' }}>
-              <div>
-                {/* here user image , name ,  */}
-              </div>
-              <div style={{ display: 'flex', backgroundColor: '#17191f', padding: '4px', borderRadius: '4px', marginBottom: '4px' }}>
-                {/* Tabs for navigation */}
-                <div style={{ display: 'flex', width: '100%' }}>
+              <div style={{ display: 'flex', backgroundColor: '#17191f', padding: '4px', borderRadius: '0px', marginBottom: '4px', flexDirection: 'column'  , border:"1px solid" , borderColor:"#24262E"}}>
+                {/* User header row with image, name and action icons */}
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center', 
+                  width: '100%', 
+                  padding: '4px',
+                  marginBottom: '4px'
+                }}>
+                  {/* Left side - User info */}
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {/* User image with square badge */}
+                    <div style={{ 
+                      width: '32px', 
+                      height: '32px', 
+                      backgroundColor: '#007bff', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      borderRadius: '4px',
+                      marginRight: '5px'
+                    }}>
+                      {selectedConversation?.guest_name ? selectedConversation.guest_name.charAt(0).toUpperCase() : 'G'}
+                    </div>
+                    
+                    {/* User name */}
+                    <span style={{ 
+                      color: 'white', 
+                      fontFamily: 'Poppins, helvetica', 
+                      fontSize: '18px', 
+                      fontWeight: '700' 
+                    }}>
+                      {selectedConversation?.guest_name || 'Guest'}
+                    </span>
+                  </div>
+                  
+                  {/* Right side - Icons */}
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {/* Pin icon without background */}
+                    <img 
+                      src={require('./icons/pin-02.svg').default} 
+                      alt="Pin" 
+                      style={{ 
+                        width: '18px', 
+                        height: '18px', 
+                        marginRight: '8px',
+                        cursor: 'pointer'
+                      }} 
+                    />
+                    
+                    {/* Three dots with square badge */}
+                    <div style={{
+                      width: '32px',
+                      height: '32px',
+                      backgroundColor: 'rgba(189, 193, 201, 0.08)', // #BDC1C9 with 8% opacity
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '4px',
+                      marginRight: '10px',
+                      cursor: 'pointer'
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '18px',
+                        height: '18px'
+                      }}>
+                        <div style={{
+                          width: '3px',
+                          height: '3px',
+                          borderRadius: '50%',
+                          backgroundColor: '#BDC1C9',
+                          margin: '0 1px'
+                        }}></div>
+                        <div style={{
+                          width: '3px',
+                          height: '3px',
+                          borderRadius: '50%',
+                          backgroundColor: '#BDC1C9',
+                          margin: '0 1px'
+                        }}></div>
+                        <div style={{
+                          width: '3px',
+                          height: '3px',
+                          borderRadius: '50%',
+                          backgroundColor: '#BDC1C9',
+                          margin: '0 1px'
+                        }}></div>
+                      </div>
+                    </div>
+                    
+                    {/* Info circle icon with background */}
+                    <div style={{
+                      width: '32px',
+                      height: '32px',
+                      backgroundColor: '#01255E',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}>
+                      <img 
+                        src={require('./icons/info-circle.svg').default} 
+                        alt="Info" 
+                        style={{ 
+                          width: '16px', 
+                          height: '16px'
+                        }} 
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Tabs navigation row */}
+                <div style={{ display: 'flex', width: '100%', padding: '0 9px' }}>
                   {[
                     { id: 'pms', icon: PmsIcon, text: 'PMS' },
                     { id: 'whatsapp', icon: WhatsappIcon, text: 'WhatsApp' },
@@ -537,18 +652,19 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     <div 
                       key={tab.id}
                       onClick={() => {
-                        setActiveTab(tab.id); // Update active tab state
+                        setActiveTab(tab.id);
                       }}
                       style={{ 
-                        fontFamily: "DM Sans", // Changed from fontStyle to fontFamily
+                        fontFamily: "DM Sans",
                         fontSize: "14px",
                         cursor: 'pointer',
                         position: 'relative',
                         display: 'flex',
                         alignItems: 'center',
-                        marginRight: '10px',
-                        justifyContent: 'space-between', // Changed from alignItems to justifyContent
-                        borderBottom: tab.id === activeTab ? '2px solid #007bff' : 'none' // Blue underline for active tab
+                        marginRight: '18px',
+                        paddingBottom: '2px',
+                        justifyContent: 'space-between',
+                        borderBottom: tab.id === activeTab ? '2px solid #007bff' : 'none'
                       }}
                     >
                       <img src={tab.icon} alt={tab.text} style={{ width: '15px', height: '15px', marginRight: '5px' }} />
@@ -712,7 +828,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                   padding: '0', 
                   backgroundColor: '#17191f', 
                   borderRadius: '4px', 
-                  height: 'calc(100vh - 62px)', 
+                  height: 'calc(100vh - 108px)', 
                   display: 'flex',
                   // border: '1px solid #24262E',
                   flexDirection: 'column'
@@ -941,7 +1057,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     <div style={{ 
                       border: '1px solid #222',
                       padding: '8px 8px',
-                      backgroundColor: '#121318',
+                      backgroundColor: '#17191F',
                       display: 'flex'
                     }}>
                       <textarea
@@ -962,7 +1078,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                         placeholder="Type here..."
                         style={{ 
                           flex: 1,
-                          backgroundColor: '#121318',
+                          backgroundColor: '#17191F',
                           border: 'none',
                           color: '#EEE',
                           padding: '8px 2px',

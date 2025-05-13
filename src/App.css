@@ -18,9 +18,9 @@ body {
   display: none; /* this hides the scrollbar */
 }
 
-::-webkit-scrollbar-thumb {
+/* ::-webkit-scrollbar-thumb {
   background: #146ef5;
-}
+} */
 
 ::-webkit-scrollbar-track {
   background: #020d29;
