@@ -477,6 +477,23 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     >
                       <img src={tab.icon} alt={tab.text} style={{ width: '15px', height: '15px', marginRight: '5px' }} />
                       <span>{tab.text}</span>
+                      {tab.id === 'openIssue' && filteredActionItems.length > 0 && (
+                        <span style={{
+                          backgroundColor: '#ff4d4f',
+                          color: 'white',
+                          borderRadius: '50%',
+                          width: '18px',
+                          height: '18px',
+                          fontSize: '12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginLeft: '6px',
+                          fontWeight: 'bold'
+                        }}>
+                          {filteredActionItems.length}
+                        </span>
+                      )}
                     </div>
                   ))}
                 </div>
