@@ -233,7 +233,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
       </div>
 
       <div className="right-title">
-        <p>Reservation Details</p>
+        <p>Reservation details</p>
       </div>
 
       {/* Guest Image */}
@@ -294,7 +294,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                 backgroundColor: '#bdc1c926'
               }}
             >
-              {user}
+              {user ? user.charAt(0).toUpperCase() + user.slice(1) : user}
             </div>
             
             {/* Check-in-today badge */}

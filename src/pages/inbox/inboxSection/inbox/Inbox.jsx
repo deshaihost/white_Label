@@ -517,8 +517,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               setAllowConvIdQuery={setAllowConvIdQuery}
               setUnreadPmsCount={setUnreadPmsCount}
             />
-            <div className={`middleSectionContainer ${sidebarClicked ? (sidebarOpen ? 'sidebar-clicked-expanded' : 'sidebar-clicked-collapsed') : ''}`} style={{ width: '45%', flex: 'none', height: 'calc(100vh - 100px)' }}>
-              <div style={{ display: 'flex', backgroundColor: '#17191f', padding: '4px', borderRadius: '0px', marginBottom: '4px', flexDirection: 'column'  , border:"1px solid" , borderColor:"#24262E"}}>
+            <div className={`middleSectionContainer ${sidebarClicked ? (sidebarOpen ? 'sidebar-clicked-expanded' : 'sidebar-clicked-collapsed') : ''}`} style={{ width: '45%', flex: 'none', height: 'calc(100vh - 100px)', border: '1px solid #24262E' }}>
+              <div style={{ display: 'flex', backgroundColor: '#17191f', padding: '5px', borderRadius: '0px', marginBottom: '4px', flexDirection: 'column'  , border:"1px solid" , borderColor:"#24262E"}}>
                 {/* User header row with image, name and action icons */}
                 <div style={{ 
                   display: 'flex', 
@@ -549,7 +549,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     {/* User name */}
                     <span style={{ 
                       color: 'white', 
-                      fontFamily: 'Poppins, helvetica', 
+                      fontFamily: 'DM Sans, helvetica !important', 
                       fontSize: '18px', 
                       fontWeight: '700' 
                     }}>
@@ -809,15 +809,23 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     ))}
                     
                     {/* If there are no items or the API hasn't been integrated yet, show these mock items */}
-                    {(!filteredActionItems || filteredActionItems.length === 0) && (
+                    {isLoadingActionItems ? (
                       <div className="no-action-items" style={{
                         padding: '20px',
                         textAlign: 'center',
                         color: '#a4a6aa'
                       }}>
-                        <p>Loading </p>
+                        <p>Loading...</p>
                       </div>
-                    )}
+                    ) : (!filteredActionItems || filteredActionItems.length === 0) ? (
+                      <div className="no-action-items" style={{
+                        padding: '20px',
+                        textAlign: 'center',
+                        color: '#a4a6aa'
+                      }}>
+                        <p>No open issues found</p>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               )}
@@ -939,17 +947,20 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                               top: '100%',
                                               backgroundColor: '#262730',
                                               borderRadius: '4px',
-                                              boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+                                             
                                               zIndex: 10,
-                                              width: '120px',
-                                              overflow: 'hidden'
+                                              width: '130px',
+                                              overflow: 'hidden',
+                                              border: '2px solid rgb(48, 49, 51)'
                                             }}>
                                               <ul style={{
                                                 listStyle: 'none',
                                                 padding: '0',
                                                 margin: '0'
                                               }}>
-                                                <li>
+                                                <li style={{
+                                                  border: '1px solid #24262E'
+                                                }}>
                                                   <button 
                                                     onClick={() => {
                                                       toggleDropdown(note.note_id);
@@ -957,18 +968,20 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                                       setNewNote(note.note);
                                                     }}
                                                     style={{
-                                                      display: 'block',
+                                                      display: 'flex',
+                                                      alignItems: 'center',
                                                       width: '100%',
                                                       textAlign: 'left',
-                                                      padding: '8px 12px',
-                                                      backgroundColor: 'transparent',
-                                                      border: 'none',
-                                                      color: 'white',
+                                                      padding: '8px 8px',
+                                                      backgroundColor: '#24262E',
+                                                      border: '1px solid #24262E',
+                                                      color: '#D0D3DB',
                                                       cursor: 'pointer',
-                                                      fontSize: '14px'
+                                                      fontSize: '14px',
+                                                      fontFamily: '"DM Sans", Helvetica'
                                                     }}
                                                   >
-                                                    <i className="bi bi-pencil-fill" style={{ marginRight: '8px' }}></i>
+                                                    <i className="bi bi-pencil-fill" style={{ marginRight: '4px' }}></i>
                                                     Update
                                                   </button>
                                                 </li>
@@ -979,19 +992,21 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                                       callDeleteNoteApi(note.note_id);
                                                     }}
                                                     style={{
-                                                      display: 'block',
+                                                      display: 'flex',
+                                                      alignItems: 'center',
                                                       width: '100%',
                                                       textAlign: 'left',
-                                                      padding: '8px 12px',
-                                                      backgroundColor: 'transparent',
-                                                      border: 'none',
-                                                      color: '#ff4d4f',
+                                                      padding: '8px 8px',
+                                                      backgroundColor: '#24262E',
+                                                      border: '1px solid #24262E',
+                                                      color: '#D0D3DB',
                                                       cursor: 'pointer',
-                                                      fontSize: '14px'
+                                                      fontSize: '14px',
+                                                      fontFamily: '"DM Sans", Helvetica'
                                                     }}
                                                   >
-                                                    <i className="bi bi-trash-fill" style={{ marginRight: '8px' }}></i>
-                                                    Delete
+                                                    <i className="bi bi-trash" style={{ marginRight: '4px' }}></i>
+                                                    Delete note
                                                   </button>
                                                 </li>
                                               </ul>
@@ -1011,15 +1026,17 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                     {/* Small user avatar - showing full name with proper capitalization */}
                                     <div style={{ 
                                       width: 'auto',
-                                      color:"#A6A9B2",
+                                      color: "#a6a9b2",
                                       height: '20px',
                                       display: 'flex',
-                                      fontFamily: 'DM Sans',
+                                      fontFamily: '"DM Sans-SemiBold", Helvetica',
                                       alignItems: 'center',
                                       marginRight: '8px',
-                                      fontSize: '14px',
-                                      fontWeight: 'bold',
-                                      
+                                      fontSize: '12px',
+                                      fontWeight: 600,
+                                      letterSpacing: 0,
+                                      lineHeight: 'normal',
+                                      position: 'relative',
                                       flexShrink: 0
                                     }}>
                                       {note.created_by ? 
@@ -1029,9 +1046,13 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                     
                                     {/* Date and time text in the requested format: Month Short name Date . Time */}
                                     <div style={{ 
-                                       color:"#A6A9B2", 
-                                      fontSize: '14px' ,
-                                      fontFamily: 'DM Sans',
+                                       color:"#a6a9b2", 
+                                       fontFamily: '"DM Sans-Regular", Helvetica',
+                                       fontSize: '12px',
+                                       fontWeight: 400,
+                                       letterSpacing: 0,
+                                       lineHeight: 'normal',
+                                       position: 'relative'
                                     }}>
                                       {new Date(note.created_at_utc).toLocaleDateString('en-US', { 
                                         month: 'short'
