@@ -439,7 +439,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                   <span style={{fontSize:"14px" ,fontWeight:"600" , fontFamily:"Poppins Helvetica"}}>HostBuddy </span>
                   <span>is</span>
                   {!toggleStatusLoading ? (
-                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <div style={{ position: 'relative', display: 'inline-block' ,width:"15vw" }}>
                       <select 
                         className="response-dropdown"
                         value={curr_status}
@@ -555,10 +555,10 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                   borderRadius: '4px',
                   display: 'flex',
                   gap: '6px',
-                  height: '32px',
+                  height: '5vh',
                   padding: '0px 8px',
                   position: 'relative',
-                  width: '78%',
+                  width: '100%',
                   marginLeft: '0px'
                 }}
               >
