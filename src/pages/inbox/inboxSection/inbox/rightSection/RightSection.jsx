@@ -547,6 +547,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
               <div 
                 style={{
                   alignItems: 'center',
+                  marginTop: '5px',
                   alignSelf: 'stretch',
                   backgroundColor: '#24262E',
                   border: '1px solid',

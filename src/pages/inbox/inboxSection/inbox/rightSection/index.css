@@ -38,6 +38,7 @@
 }
 .issue, .satisfy, .about-inner {
     max-width: 400px;
+    margin-top: 5px;
     /* margin: 0 auto; */
     /* padding: 20px 12px; */
     border-bottom: 1px solid rgb(255 255 255 / 10%);
