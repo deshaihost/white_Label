@@ -488,7 +488,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   return (
     <>
       <style>{responsiveStyles}</style>
-      <div className="inbox-content-container" style={{height:"96vh" ,margin:"10px" ,borderWidth:"1px" ,borderStyle:"solid",borderColor:"rgba(36, 38, 46, 1)"}}>
+      <div className="inbox-content-container" style={{height:"96vh" ,margin:"10px" ,borderWidth:"1px" ,borderStyle:"solid",borderColor:"rgba(36, 38, 46, 1)" , backgroundColor:"#17191F"}}>
         {conversationsNotYetFetched ? <InboxLoader /> : null}
         <div className="row text-white" style={{height:"100%"}}>
           {/* Desktop View */}
