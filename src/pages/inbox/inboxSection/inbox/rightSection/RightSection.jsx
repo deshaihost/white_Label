@@ -244,8 +244,8 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
             alt={`${guest_name || 'Guest'}`}
             style={{ 
               
-              width: '80%',
-              height: '70%',
+              width: '85%',
+              height: '75%',
               objectFit: 'contain',
               borderRadius: '8px',
               display: 'block',

@@ -34,7 +34,7 @@ const responsiveStyles = `
     }
     
     .rightSectionContainer.sidebar-clicked-expanded {
-      width: 20% !important;
+      width: 23% !important;
     }
     
     .rightSectionContainer.sidebar-clicked-collapsed {
