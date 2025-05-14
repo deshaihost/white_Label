@@ -11,15 +11,15 @@
     align-self: stretch;
     background-color: #24262E;
     border: 1px solid;
-    border-color: #24262E;
+    border-color: #38383d ;
     border-radius: 4px;
     display: flex;
     gap: 6px;
     height: 32px;
     padding: 0px 8px;
     position: relative;
-    width: 96%;
-    margin-left: 4px;
+    width: 100%;
+   
 }
 
 .text-field .search-md {

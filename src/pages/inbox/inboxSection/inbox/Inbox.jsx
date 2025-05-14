@@ -89,21 +89,16 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   // State for unread PMS messages count
   const [unreadPmsCount, setUnreadPmsCount] = useState(0);
 
-  // Calculate unread PMS messages count when conversations change
+  // Calculate unread PMS messages count when selected conversation changes
   useEffect(() => {
-    // Calculate unread messages for all conversations
-    const unreadCount = conversations.reduce((total, conversation) => {
-      // If the conversation is not opened, count messages that aren't marked as read
-      if (!conversation.opened) {
-        // Get unread messages using the same logic as in LeftMessage.jsx
-        const unreadMessages = conversation.messages && conversation.messages.filter(msg => !msg.read).length || 1;
-        return total + unreadMessages;
-      }
-      return total;
-    }, 0);
-    
-    setUnreadPmsCount(unreadCount);
-  }, [conversations]);
+    // Count unread messages only for the selected conversation
+    if (selectedConversation && selectedConversation.messages) {
+      const unreadCount = selectedConversation.messages.filter(msg => !msg.read).length;
+      setUnreadPmsCount(unreadCount);
+    } else {
+      setUnreadPmsCount(0);
+    }
+  }, [selectedConversation]);
 
   // Notes state
   const [notes, setNotes] = useState([]);
@@ -520,6 +515,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               setCurrentView={setCurrentView}
               currentView={currentView}
               setAllowConvIdQuery={setAllowConvIdQuery}
+              setUnreadPmsCount={setUnreadPmsCount}
             />
             <div className={`middleSectionContainer ${sidebarClicked ? (sidebarOpen ? 'sidebar-clicked-expanded' : 'sidebar-clicked-collapsed') : ''}`} style={{ width: '45%', flex: 'none', height: 'calc(100vh - 100px)' }}>
               <div style={{ display: 'flex', backgroundColor: '#17191f', padding: '4px', borderRadius: '0px', marginBottom: '4px', flexDirection: 'column'  , border:"1px solid" , borderColor:"#24262E"}}>
@@ -669,6 +665,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     >
                       <img src={tab.icon} alt={tab.text} style={{ width: '15px', height: '15px', marginRight: '5px' }} />
                       <span>{tab.text}</span>
+                      {/* Temporarily commented out unread message counter for PMS tab
                       {tab.id === 'pms' && unreadPmsCount > 0 && (
                         <span style={{
                           backgroundColor: '#ff9800',
@@ -686,6 +683,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           {unreadPmsCount}
                         </span>
                       )}
+                      */}
                       {tab.id === 'openIssue' && filteredActionItems.length > 0 && (
                         <span style={{
                           backgroundColor: '#ff4d4f',
@@ -1160,6 +1158,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                 setCurrentView={setCurrentView} 
                 currentView={currentView}
                 setAllowConvIdQuery={setAllowConvIdQuery} 
+                setUnreadPmsCount={setUnreadPmsCount}
               />
             )}
             {currentView === 'messages' && (

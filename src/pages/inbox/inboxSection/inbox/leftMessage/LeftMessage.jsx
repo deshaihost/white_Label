@@ -22,7 +22,7 @@ function FilterModal({ show, onClose, children }) {
   );
 }
 
-const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, userHasPMS, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal, setCurrentView, currentView, setAllowConvIdQuery }) => {
+const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, userHasPMS, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal, setCurrentView, currentView, setAllowConvIdQuery, setUnreadPmsCount }) => {
 
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -133,6 +133,12 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
     setSelectedConvo(data);
     setSelectedConversationId(id); // This is used to highlight the selected conversation
     markConversationAsOpened(data.conversation_id, data.property_name);
+    
+    // Update the unread message count for the PMS tab
+    if (data.messages) {
+      const unreadCount = data.messages.filter(msg => !msg.read).length;
+      setUnreadPmsCount && setUnreadPmsCount(unreadCount);
+    }
 
     // On mobile, navigate to messages view
     if (window.innerWidth < 992) {
@@ -277,14 +283,31 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
 
   return (
     <div className="left-bar" style={{ width: '30%', height: '95vh', overflowY: 'auto', border: "1px solid", borderColor: "#17191F" }}>
-      <div className="message-filter">
-        <div className="messsage-search" >
-          <div className="search-container" >
+      <div className="message-filter" style={{ padding: '2px', backgroundColor: '#0F1117', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ 
+          fontWeight: 'bold', 
+          fontSize: '24px', 
+          color: 'white', 
+          marginLeft:"5px",
+          marginBottom: '3px',
+          fontFamily: "Poppins-Bold, Helvetica",
+          lineHeight: "33.6px"
+        }}>Inbox</div>
+        <div className="messsage-search" style={{ display: 'flex', width: '96%' ,  marginLeft:"5px" }}>
+          <div className="search-container" style={{ position: 'relative', flex: 1 }}>
             <TextField 
               className="custom-padding"
               type="search" 
               placeholder="Search..." 
-              style={{ width: "100%", borderRadius: "4px", paddingLeft: '30px' }}
+              style={{ 
+                width: "100%", 
+                borderRadius: "4px", 
+                paddingLeft: '25px',
+                backgroundColor: '#1e1f25',
+                border: '1px solid #BDC1C9 · 15%',
+                color: 'white',
+                height: '32px'
+              }}
               onChange={handleSearchInputChange}
               value={searchInputValue}
             />
@@ -292,9 +315,20 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
           <button 
             className="filters-button"
             onClick={openFilterModal} 
-            style={{ marginLeft: '8px', whiteSpace: 'nowrap' }}
+            style={{ 
+              marginLeft: '8px', 
+              whiteSpace: 'nowrap',
+              backgroundColor: '#0B5ED7',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              padding: '6px 12px',
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: '14px'
+            }}
           >
-            <i className="bi bi-filter"></i>
+            <i className="bi bi-filter" style={{ marginRight: '4px' }}></i>
             Filters
           </button>
         </div>
@@ -394,6 +428,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
       {filterQueryLoading ? (<BoxLoader />) : (
         filteredConversations && filteredConversations.length ? (
           <div className={`left-bar-chat`} ref={containerRef}>
+            <div style={{ border: "1px solid #24262E" }}>
             {filteredConversations.map((message) => {
               const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url, channel , action_items , user, status } = message;
               const allDataForConversation = message;
@@ -421,6 +456,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
               }
 
               return (
+                
                 <React.Fragment key={conversation_id}>
                   <div 
                     className={`conversation-item ${conversation_id === selectedConversationId ? "bg-dark" : ""} left-inner-tab`}
@@ -473,7 +509,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                           <div>
                             {/* Reservation date range */}
                             {arrival_date && departure_date && (
-                              <span>{formatDateRange(arrival_date, departure_date, false)}</span>
+                              <span >{formatDateRange(arrival_date, departure_date, false)}</span>
                             )}
                           </div>
                           <div>
@@ -491,7 +527,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                             </span>
                             {action_items && action_items.length === 0 && 
                               <span className="urgent-badge">
-                                urgent
+                                Urgent
                               </span>
                             }
                             {/* Display status badges */}
@@ -516,31 +552,31 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                             
                             {isToday(departure_date) && 
                               <span className="checkout-badge">
-                                check-out today
+                                Check-out today
                               </span>
                             }
                             {isToday(arrival_date) && 
                               <span className="checkin-badge">
-                                check-in today
+                                Check-in today
                               </span>
                             }
                                 {status === 'future' && 
                               <span className="future-badge">
-                                future
+                                Future
                               </span>
                             }
                             {status === 'current' && 
                               <span className="current-badge">
-                                current
+                                Current
                               </span>
                             }
                             {status === 'inquiry' && 
                               <span className="inquiry-badge">
-                                inquiry
+                                Inquiry
                               </span>
                             }{status === 'past' && 
                               <span className="inquiry-badge">
-                                past
+                                Past
                               </span>
                             }
 
@@ -553,6 +589,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                 </React.Fragment>
               );
             })}
+            </div>
             
             {/* Button to load more conversations (failsafe for auto-load when user scrolls to bottom) - or loader icon if already loading */}
             {nextBatchLoading ? (
