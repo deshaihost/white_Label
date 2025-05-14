@@ -578,7 +578,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                 <img src={ChevDownIcon} alt="Dropdown Icon" style={{ width: "16px", height: "16px" }} />
               </div>
               {sentiment_justification && (
-                <p style={{ fontSize:'14px',width:"285px", marginTop:'3px', color: 'rgb(208, 211, 219)' }}>{sentiment_justification}</p>
+                <p style={{ fontSize:'14px',width:"18vw", marginTop:'3px', color: 'rgb(208, 211, 219)' }}>{sentiment_justification}</p>
               )}
             </>
           ) : (

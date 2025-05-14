@@ -11,26 +11,28 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
   const messageDetails = messageData?.text;
   const { id, justification, response } = messageDetails;
   const message_id = id ? id : [];
-  const sendByFormatted = (sendBy === "hostbuddy" ? "HostBuddy" : sendBy);
+  const sendByFormatted = (sendBy === "hostbuddy" ? "HostBuddy" : sendBy === "host" ? "Host" : sendBy);
   
   // Handle image loading error
   const [imageError, setImageError] = useState(false);
 
-  // Extract only the time in hh:mm format
+  // Extract only the time in h:mm format
   const formatTimeToHHMM = (timeString) => {
     try {
       // Check if timeString is a valid date format
       const date = new Date(timeString);
       
       if (!isNaN(date.getTime())) {
-        // Format to hh:mm using locale time
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        // Format to h:mm using locale time (no leading zeros)
+        return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
       } else if (typeof timeString === 'string') {
         // If it's already a string, try to extract time part
         // This handles formats like "2023-04-25 14:30:00" or "14:30:00"
         const timeMatch = timeString.match(/(\d{1,2}):(\d{1,2})/);
         if (timeMatch) {
-          return `${timeMatch[1]}:${timeMatch[2]}`;
+          // Remove leading zero if present for hours
+          const hour = timeMatch[1].replace(/^0/, '');
+          return `${hour}:${timeMatch[2]}`;
         }
       }
       
@@ -115,8 +117,17 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
         </p>
       )}
       <div className={`message ${sender} mesaage-box`}>
-        <div style={{ width: '100%' }}>
-          <p>
+        <div style={{ 
+          width: 'fit-content', 
+          maxWidth: '100%', 
+          height: 'auto', 
+          minHeight: 'fit-content',
+          minWidth: text?.length <= 1 ? '30px' : 'auto' // Add minimum width for very short messages
+        }}>
+          <p style={{
+            margin: text?.length <= 1 ? '8px 0' : '', // Better vertical padding for single characters
+            textAlign: text?.length <= 1 ? 'center' : 'left' // Center align very short messages
+          }}>
             {messageData?.attachments && messageData?.attachments.length > 0 && (
               <div className="image-attachment">
                 {messageData.attachments
