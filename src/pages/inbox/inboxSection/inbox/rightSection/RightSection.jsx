@@ -320,8 +320,8 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
           {statusText || guest_name || property_name ? (
             <>
               {/* {statusText && <span>{statusText}</span>} */}
-              <h1 style={{ fontSize: '14px', margin: 0 }}>{guest_name}</h1>
-              <h1 style={{ fontSize: '14px' }}>{property_name}</h1>
+              {/* <h1 style={{ fontSize: '14px', margin: 0 }}>{guest_name}</h1> */}
+              <h1 style={{ fontSize: '16px' ,fontWeight:"600", fontFamily: '"DM Sans", Helvetica' }}>{property_name}</h1>
               <h1 className="guest_date" style={{ fontSize: '14px' }}>{arrival_date && formatDateRange(arrival_date, departure_date, true)}</h1>
             </>
           ) : (
@@ -339,7 +339,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
             letterSpacing: '0px',
             lineHeight: 'var(--body-medium-med-500-line-height)',
             padding: '1px 6px',
-            borderRadius: '4px',
+            borderRadius: '3px',
             height: '25px',
             backgroundColor: '#bdc1c926'
           }}>{channel}</span>
@@ -352,6 +352,81 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
           width: '100%', 
           maxWidth: '400px' 
         }}></div>
+
+        {/* Contact Information Section */}
+        <div style={{ marginBottom: '15px' }}>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            marginBottom: '10px' 
+          }}>
+            <h2 style={{ 
+              margin: 0,
+              color: '#ffffff',
+              fontFamily: '"Poppins-SemiBold", Helvetica',
+              fontSize: '16px',
+              fontWeight: 600,
+              lineHeight: '19.6px',
+            }}>Contact information</h2>
+            <span style={{ 
+              color: '#4187ff', 
+              fontSize: '14px', 
+              cursor: 'pointer',
+              fontFamily: '"DM Sans", Helvetica'
+            }}>
+              Edit
+            </span>
+          </div>
+          
+          <div style={{ marginBottom: '5px' }}>
+            <span style={{ 
+              color: '#8b8d94',
+              fontFamily: '"DM Sans", Helvetica',
+              fontSize: '14px',
+              fontWeight: 400
+            }}>
+              Phone:
+            </span>
+            <span style={{ 
+              color: 'white',
+              fontFamily: '"DM Sans", Helvetica',
+              fontSize: '14px',
+              fontWeight: 400,
+              marginLeft: '5px'
+            }}>
+              (316) 555-0116
+            </span>
+          </div>
+          
+          <div>
+            <span style={{ 
+              color: '#8b8d94',
+              fontFamily: '"DM Sans", Helvetica',
+              fontSize: '14px',
+              fontWeight: 400
+            }}>
+              Email:
+            </span>
+            <span style={{ 
+              color: 'white',
+              fontFamily: '"DM Sans", Helvetica',
+              fontSize: '14px',
+              fontWeight: 400,
+              marginLeft: '5px'
+            }}>
+              floydmiles@gmail.com
+            </span>
+          </div>
+        </div>
+
+        <div style={{ 
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
+          margin: '10px auto', 
+          width: '100%', 
+          maxWidth: '400px' 
+        }}></div>
+
       </div>
 
       {!(channel == 'Chat Window') && (
@@ -519,6 +594,65 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
           maxWidth: '400px' 
         }}></div>
       )}
+
+
+       {/* render here the assign user  */}
+      <div >
+        <h2 style={{ 
+          margin: 0,
+          marginBottom: '5px',
+          color: '#ffffff',
+          fontFamily: '"Poppins-SemiBold", Helvetica',
+          fontSize: '16px',
+          fontWeight: 600,
+          lineHeight: '19.6px',
+        }}>Assign user</h2>
+        
+        <div style={{ position: 'relative' }}>
+          <select 
+            disabled
+            style={{
+              width: '100%',
+              padding: '6px',
+              backgroundColor: '#18191E',
+              border: '1px solid #BDC1C9 · 15%',
+              borderRadius: '6px',
+              color: '#8E8E93',
+              fontFamily: '"DM Sans", Helvetica',
+              fontSize: '16px',
+              appearance: 'none',
+              cursor: 'not-allowed',
+              paddingRight: '30px'
+            }}
+          >
+            <option>Select</option>
+          </select>
+          <div style={{
+            position: 'absolute',
+            right: '10px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            pointerEvents: 'none'
+          }}>
+            <img 
+              src={ChevDownIcon} 
+              alt="Dropdown Icon" 
+              style={{ 
+                width: '20px', 
+                height: '20px', 
+                pointerEvents: 'none'
+              }} 
+            />
+          </div>
+        </div>
+      </div>
+
+        <div style={{ 
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
+          margin: '10px auto', 
+          width: '100%', 
+          maxWidth: '400px' 
+        }}></div>
       
       {!(channel == 'Chat Window') && (
         <div className="issue">
