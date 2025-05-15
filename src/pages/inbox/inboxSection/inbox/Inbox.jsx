@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { callGetConversationsApi, callGetSingleConversationApi } from "../../../../helper/getConversationsTest/inboxApi";
+import { callPinConversationApi } from "../../../../helper/getConversationsTest/pinConversationApi";
 import { InboxLoader } from "../../../../helper/Loader"; 
 import LeftMessage from "./leftMessage/LeftMessage";
 import MildeSection from "./mildeSection/MildeSection";
@@ -15,6 +16,8 @@ import WhatsappIcon from "./mildeSection/message/icons/whatsapp_icon.svg";
 import OpenIssueIcon from "./mildeSection/message/icons/openIssue_icon.svg";
 import NotesIcon from "./mildeSection/message/icons/notes_icon.svg";
 import CheckBoxIcon from "./mildeSection/message/icons/check_box.svg";
+import DefaultPinIcon from "./mildeSection/message/icons/default_pin.svg";
+import SelectedPinIcon from "./mildeSection/message/icons/selected_pin.svg";
 
 // Add responsive styles
 const responsiveStyles = `
@@ -36,10 +39,22 @@ const responsiveStyles = `
     .rightSectionContainer.sidebar-clicked-expanded {
       width: 23% !important;
     }
-    
-    .rightSectionContainer.sidebar-clicked-collapsed {
+      .rightSectionContainer.sidebar-clicked-collapsed {
       width: 25% !important;
     }
+  }
+  
+  /* Pin icon styles */
+  .pin-icon-container {
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .pin-icon-container:hover {
+    background-color: rgba(189, 193, 201, 0.15) !important;
+  }
+  
+  .pin-icon-container:active {
+    background-color: rgba(15, 17, 23, 0.08) !important;
   }
 `;
 
@@ -60,6 +75,45 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [allowConvIdQuery, setAllowConvIdQuery] = useState(true); // Added state for handling conversationId query
   const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
+
+  // State for tracking pin status
+  const [isPinned, setIsPinned] = useState(false);
+  // Function to handle pin/unpin action
+  const handlePinToggle = async () => {
+    if (!selectedConversation?.conversation_id) return;
+    
+    try {
+      const result = await callPinConversationApi(selectedConversation.conversation_id, !isPinned);
+      
+      if (result && !result.error) {        // API response format: { "message": "Conversation pin status set", "pinned": true|false }
+        setIsPinned(result.pinned);
+        ToastHandle(result.message || `Conversation ${result.pinned ? 'pinned' : 'unpinned'}`, "success");
+        
+        // Update the conversation object to include the pinned state
+        if (selectedConversation) {
+          setSelectedConversation({
+            ...selectedConversation,
+            pinned: result.pinned,
+            is_pinned: result.pinned // For backward compatibility
+          });
+        }
+      }
+    } catch (error) {
+      ToastHandle("Error updating pin status", "danger");
+    }
+  };
+  // Update isPinned state when selected conversation changes
+  useEffect(() => {
+    if (selectedConversation?.pinned !== undefined) {
+      // Use 'pinned' property from the API response
+      setIsPinned(!!selectedConversation.pinned);
+    } else if (selectedConversation?.is_pinned !== undefined) {
+      // For backward compatibility with previous code
+      setIsPinned(!!selectedConversation.is_pinned);
+    } else {
+      setIsPinned(false);
+    }
+  }, [selectedConversation]);
 
   // Listen for sidebar state changes
   useEffect(() => {
@@ -488,7 +542,14 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   return (
     <>
       <style>{responsiveStyles}</style>
-      <div className="inbox-content-container" style={{height:"96vh" ,margin:"10px" ,borderWidth:"1px" ,borderStyle:"solid",borderColor:"rgba(36, 38, 46, 1)" , backgroundColor:"#17191F"}}>
+      <div className="inbox-content-container" 
+          style={{height:"96vh" ,
+                  margin:"10px" ,
+                  // borderWidth:"1px" ,
+                  // borderStyle:"solid",
+                  // borderColor:"rgba(36, 38, 46, 1)" , 
+                  // backgroundColor:"#17191F"
+                  }}>
         {conversationsNotYetFetched ? <InboxLoader /> : null}
         <div className="row text-white" style={{height:"100%"}}>
           {/* Desktop View */}
@@ -558,18 +619,70 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                   </div>
                   
                   {/* Right side - Icons */}
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {/* Pin icon without background */}
-                    <img 
-                      src={require('./icons/pin-02.svg').default} 
-                      alt="Pin" 
-                      style={{ 
-                        width: '18px', 
-                        height: '18px', 
+                  <div style={{ display: 'flex', alignItems: 'center' }}>                    {/* Pin icon with square badge */}
+                    <div 
+                      className="pin-icon-container"
+                      onClick={handlePinToggle}
+                      tabIndex={0}
+                      title={isPinned ? "Unpin conversation" : "Pin conversation"}
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        backgroundColor: 'rgba(189, 193, 201, 0.08)', // Normal state: #BDC1C9 with 8% opacity
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '4px',
                         marginRight: '8px',
-                        cursor: 'pointer'
-                      }} 
-                    />
+                        cursor: 'pointer',
+                        position: 'relative',
+                        outline: 'none', // Remove default focus outline
+                      }}
+                      onMouseDown={(e) => {
+                        // Add pressed style by changing backgroundColor
+                        e.currentTarget.style.backgroundColor = 'rgba(15, 17, 23, 0.08)'; // Pressed state: #0F1117 with opacity
+                      }}
+                      onMouseUp={(e) => {
+                        // Reset to normal style
+                        e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                      }}
+                      onMouseLeave={(e) => {
+                        // Reset to normal style if mouse leaves during press
+                        e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                      }}
+                      onFocus={(e) => {
+                        // Add focus style with blue border
+                        e.currentTarget.style.boxShadow = '0 0 0 2px #3E88F7';
+                      }}
+                      onBlur={(e) => {
+                        // Remove focus style
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                      onKeyDown={(e) => {
+                        // Handle keyboard activation (Enter or Space)
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          e.currentTarget.style.backgroundColor = 'rgba(15, 17, 23, 0.08)';
+                          handlePinToggle();
+                        }
+                      }}
+                      onKeyUp={(e) => {
+                        // Reset style after key press
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                        }
+                      }}
+                    >
+                      <img 
+                        src={isPinned ? SelectedPinIcon : DefaultPinIcon} 
+                        alt={isPinned ? "Unpin" : "Pin"} 
+                        style={{ 
+                          width: '18px', 
+                          height: '18px',
+                          pointerEvents: 'none' // Prevents the image from capturing events
+                        }} 
+                      />
+                    </div>
                     
                     {/* Three dots with square badge */}
                     <div style={{
@@ -741,7 +854,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                 </div>
               )}
               {activeTab === 'openIssue' && (
-                <div className="box" style={{ padding: '0px', backgroundColor: '#0F1117', borderRadius: '4px', height: 'calc(100vh - 30px)', overflowY: 'auto' }}>
+                <div className="box" style={{ padding: '0px', backgroundColor: '#0F1117', borderRadius: '4px', height: 'calc(-90px + 100vh)', overflowY: 'auto' }}>
                   
                   <div className="action-items-container">
                     {/* We would fetch action items from the API in a real implementation */}
@@ -1141,10 +1254,14 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                 </div>
               )}
             </div>
-            <div className={`rightSectionContainer ${sidebarClicked ? (sidebarOpen ? 'sidebar-clicked-expanded' : 'sidebar-clicked-collapsed') : ''}`} style={{ width: '25%', flex: 'none', height:"100%", paddingLeft:"10px", borderLeft:"1px solid #24262E"}}> 
+            <div className={`rightSectionContainer ${sidebarClicked ? (sidebarOpen ? 'sidebar-clicked-expanded' : 'sidebar-clicked-collapsed') : ''}`} 
+              style={{ width: '27%', flex: 'none', height:"100%", 
+                padding:"11px", 
+                border:"1px solid #24262E"
+              }}> 
             <RightSection
               className="box"
-              style={{ width: "100%", height: "calc(100vh - 100px)" }}
+              style={{ width: "100%", height: "calc(100vh - 110px)" }}
               rightSectionData={selectedConversation}
               updateConversationFromApi={updateConversation}
             />
