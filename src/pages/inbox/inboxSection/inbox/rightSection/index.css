@@ -1,5 +1,3 @@
-
-
 .channel_name{
   display:inline-block;
   color: #BDC1C9;
@@ -172,6 +170,71 @@
 .satisfy p,
 .about-inner p {
     font-family: "DM Sans", Helvetica !important;
+}
+
+/* Specific styles for the Assign User dropdown to match sentiment dropdown */
+.assign-user-dropdown {
+  /* Reset all styles first */
+  all: initial !important;
+  /* Re-apply necessary box model */
+  box-sizing: border-box !important;
+  display: block !important;
+  /* Fixed styles that should never change */
+  width: 100% !important;
+  padding: 8px 12px !important;
+  background-color: #262730 !important;
+  border: 1px solid rgb(57, 61, 70) !important;
+  border-radius: 4px !important;
+  color: #D0D3DB !important;
+  font-family: "DM Sans", Helvetica !important;
+  font-size: 16px !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  padding-right: 30px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 0 !important;
+}
+
+/* No hover styles to ensure no background/border changes on hover */
+.assign-user-dropdown:hover,
+.assign-user-dropdown:active,
+.assign-user-dropdown:focus-visible,
+.right-side .assign-user-dropdown:hover {
+  /* No style changes on hover */
+  background-color: #262730 !important;
+  border: 1px solid rgb(57, 61, 70) !important;
+  color: #D0D3DB !important;
+  outline: none !important;
+}
+
+/* Override any potential focus states with higher specificity */
+.assign-user-dropdown:focus,
+.right-side .assign-user-dropdown:focus {
+  outline: none !important;
+  background-color: #262730 !important;
+  border: 1px solid rgb(57, 61, 70) !important;
+  color: #D0D3DB !important;
+  box-shadow: none !important;
+}
+
+/* Ensure option colors match with the select */
+.assign-user-dropdown option {
+  color: #D0D3DB !important;
+  background-color: #2B2E36 !important;
+  padding: 8px 16px !important;
+}
+
+/* Disable wait cursor on select */
+.assign-user-dropdown[disabled] {
+  cursor: not-allowed !important;
+}
+
+/* Ensure option colors match with the select - added for consistency */
+.assign-user-dropdown option {
+  color: #D0D3DB;
+  background-color: #2B2E36;
 }
 
 /* ==============responsive part start============== */
