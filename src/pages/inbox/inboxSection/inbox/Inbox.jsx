@@ -100,20 +100,56 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       }
     } catch (error) {
       ToastHandle("Error updating pin status", "danger");
-    }
-  };
-  // Update isPinned state when selected conversation changes
+    }  };  // Update isPinned state when selected conversation changes
   useEffect(() => {
-    if (selectedConversation?.pinned !== undefined) {
-      // Use 'pinned' property from the API response
-      setIsPinned(!!selectedConversation.pinned);
-    } else if (selectedConversation?.is_pinned !== undefined) {
-      // For backward compatibility with previous code
-      setIsPinned(!!selectedConversation.is_pinned);
+    if (selectedConversation?.conversation_id) {
+      // Call the get_all_conversations API to get the latest conversation data when a conversation is selected
+      const fetchLatestConversationData = async () => {
+        try {
+          // Use callGetSingleConversationApi which calls /get_all_conversations with the conversation_id
+          const result = await callGetSingleConversationApi(selectedConversation.conversation_id);
+          
+          if (result && !result.error && result.conversations && result.conversations.length > 0) {
+            const updatedConversation = result.conversations[0];
+            
+            // Update pin status based on the API response
+            const isPinnedValue = !!(updatedConversation.pinned || updatedConversation.is_pinned);
+            setIsPinned(isPinnedValue);
+            
+            // Update the conversation object with the latest data from the API, preserving the pin status
+            setSelectedConversation({
+              ...updatedConversation,
+              pinned: isPinnedValue,
+              is_pinned: isPinnedValue // For backward compatibility
+            });
+          } else {
+            // If API call fails, fall back to using the property from the conversation object
+            if (selectedConversation?.pinned !== undefined) {
+              setIsPinned(!!selectedConversation.pinned);
+            } else if (selectedConversation?.is_pinned !== undefined) {
+              setIsPinned(!!selectedConversation.is_pinned);
+            } else {
+              setIsPinned(false);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching conversation data:", error);          // Fall back to using the property from the conversation object
+          if (selectedConversation?.pinned !== undefined) {
+            setIsPinned(!!selectedConversation.pinned);
+          } else if (selectedConversation?.is_pinned !== undefined) {
+            setIsPinned(!!selectedConversation.is_pinned);
+          } else {
+            setIsPinned(false);
+          }
+        }
+      };
+
+      fetchLatestConversationData();
     } else {
+      // No conversation selected, reset pin status
       setIsPinned(false);
     }
-  }, [selectedConversation]);
+  }, [selectedConversation?.conversation_id]); // Only re-run when the conversation ID changes
 
   // Listen for sidebar state changes
   useEffect(() => {
