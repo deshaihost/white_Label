@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./index.css";
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
@@ -7,9 +7,12 @@ import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import Loader from "../../../../../helper/Loader";
 import HostBuddyIcon from "./icons/hostbuddy_icon.svg";
-import NeutralIcon from "./icons/neautral_icon.svg";
+import NeutralIcon from "./icons/neutral_sentiment_icon.svg";
+import PositiveIcon from "./icons/positive_sentiment_icon.svg";
+import NegativeIcon from "./icons/negative_sentiment_icon.svg";
 import ChevDownIcon from "./icons/chevDown_icon.svg";
 import CheckBoxIcon from "../mildeSection/message/icons/check_box.svg";
+import { getActiveToken } from "../../../../../helper/apiCore";
 
 // Import action items API function from ActionsItemsTable
 const callGetActionItemsApi = async (setActionItems, setGetActionItemsLoading) => {
@@ -46,6 +49,9 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   const [selectedOption, setSelectedOption] = useState('');
   const [toggleStatusLoading, setToggleStatusLoading] = useState(false);
   const [issuesExpanded, setIssuesExpanded] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedSentiment, setSelectedSentiment] = useState(sentiment || 'neutral');
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
   
   // State for action items
@@ -56,10 +62,94 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   useEffect(() => {
     callGetActionItemsApi(setActionItems, setGetActionItemsLoading);
   }, []);
-
+    // Effect to handle outside clicks for dropdown
+  useEffect(() => {
+    function handleOutsideClick(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+  
+  // Update selectedSentiment when rightSectionData changes
+  useEffect(() => {
+    if (sentiment) {
+      setSelectedSentiment(sentiment);
+    } else {
+      setSelectedSentiment('neutral'); // Default to neutral
+    }
+  }, [sentiment]);
   // Force display for testing - remove in production
   const isCheckInToday = true; // For testing
   const isCheckOutToday = true; // For testing
+  // Function to handle sentiment selection
+  const handleSentimentSelect = (sentiment) => {
+    setSelectedSentiment(sentiment);
+    setDropdownOpen(false);
+    
+    // Call the API to update the sentiment if conversation_id exists
+    if (conversation_id) {
+      updateSentiment(conversation_id, sentiment);
+    }
+  };
+  // Function to call the API to update sentiment
+  const updateSentiment = async (conversationId, sentimentValue) => {
+    if (!conversationId) return;
+    
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    
+    try {
+      // Get token from the apiCore's active token or fall back to localStorage
+      const token = getActiveToken() || localStorage.getItem('authToken');
+      
+      const config = {
+        headers: { 
+          "X-API-Key": API_KEY,
+          "Authorization": token ? `Bearer ${token}` : undefined
+        },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+        const bodyData = { 
+        conversation_id: conversationId,
+        new_sentiment: sentimentValue,
+        property_name: property_name || undefined
+      };
+      
+      const response = await axios.post(`${baseUrl}/change_sentiment`, bodyData, config);
+  
+      if (response.status === 200) { 
+        ToastHandle(`Sentiment updated to ${sentimentValue}`, "success");
+        
+        // Update the conversation data if needed
+        if (updateConversationFromApi && typeof updateConversationFromApi === 'function') {
+          updateConversationFromApi(conversationId);
+        }
+      } else { 
+        ToastHandle(response?.data?.error || "Failed to update sentiment", "danger"); 
+      }
+    } catch (error) {
+      ToastHandle("Error updating sentiment", "danger");
+    }
+  };
+
+  // Function to get the appropriate icon based on sentiment
+  const getSentimentIcon = (sentiment) => {
+    switch(sentiment) {
+      case 'positive':
+        return PositiveIcon;
+      case 'negative':
+        return NegativeIcon;
+      case 'neutral':
+      default:
+        return NeutralIcon;
+    }
+  };
   const currentDate = new Date();
   
   const isToday = (dateString) => {
@@ -542,48 +632,152 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
       {!(channel == 'Chat Window') && (
         <div className="satisfy">
           <h2>Sentiment</h2>
-          {sentiment ? (
-            <>
-              <div 
-                style={{
-                  alignItems: 'center',
-                  
-                  alignSelf: 'stretch',
-                  backgroundColor: '#24262E',
-                  border: '1px solid',
-                  borderColor: '#24262E',
-                  borderRadius: '4px',
-                  display: 'flex',
-                  gap: '6px',
-                  height: '5vh',
-                  padding: '0px 8px',
-                  position: 'relative',
-                  width: '100%',
-                  marginLeft: '0px'
+          <div ref={dropdownRef} style={{ position: 'relative' }}>
+            {/* Sentiment Dropdown Button */}            <div 
+              onClick={() => setDropdownOpen(!dropdownOpen)}              
+              onMouseDown={(e) => {
+                const currentSentiment = selectedSentiment;
+                if (currentSentiment === 'positive') {
+                  e.currentTarget.style.backgroundColor = '#002B0B';
+                } else if (currentSentiment === 'negative') {
+                  e.currentTarget.style.backgroundColor = '#3B1900';
+                } else {
+                  e.currentTarget.style.backgroundColor = 'rgba(15, 17, 23, 0.6)';
+                }
+              }}
+              onMouseUp={(e) => {
+                const currentSentiment = selectedSentiment;
+                if (currentSentiment === 'positive') {
+                  e.currentTarget.style.backgroundColor = '#014714';
+                } else if (currentSentiment === 'negative') {
+                  e.currentTarget.style.backgroundColor = '#4D2100';
+                } else {
+                  e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                }
+              }}onMouseEnter={(e) => {
+                const currentSentiment = selectedSentiment;
+                if (currentSentiment === 'positive') {
+                  e.currentTarget.style.backgroundColor = '#036920';
+                } else if (currentSentiment === 'negative') {
+                  e.currentTarget.style.backgroundColor = '#7A3601'; // Same as default per specs
+                } else {
+                  e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)'; // Same as default per specs
+                }
+              }}
+              onMouseLeave={(e) => {
+                const currentSentiment = selectedSentiment;
+                if (currentSentiment === 'positive') {
+                  e.currentTarget.style.backgroundColor = '#014714';
+                } else if (currentSentiment === 'negative') {
+                  e.currentTarget.style.backgroundColor = '#4D2100';
+                } else {
+                  e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                }
+              }}              style={{
+                alignItems: 'center',
+                cursor: 'pointer',
+                alignSelf: 'stretch',
+                backgroundColor: selectedSentiment === 'positive' 
+                  ? '#014714' 
+                  : selectedSentiment === 'negative' 
+                    ? '#4D2100' 
+                    : 'rgba(189, 193, 201, 0.08)',
+                borderRadius: '4px',
+                display: 'flex',
+                gap: '6px',
+                height: '32px',
+                padding: '0px 8px',
+                position: 'relative',
+                width: '100%',
+                marginLeft: '0px',
+                transition: 'background-color 0.2s ease'
+              }}
+            >
+              <img src={getSentimentIcon(selectedSentiment)} alt="Sentiment Icon" style={{ width: "18px", height: "18px" }} />
+              <span 
+                style={{ 
+                  color: selectedSentiment === 'neutral' 
+                    ? "#BBB" 
+                    : selectedSentiment === 'positive' 
+                      ? "white" 
+                      : "white",
+                  flexGrow: 1,
+                  fontSize: '14px'
                 }}
               >
-                <img src={NeutralIcon} alt="Sentiment Icon" style={{ width: "16px", height: "16px" }} />
-                {sentiment === "neutral" ? (
-                  <span style={{ color: "#BBB", flexGrow: 1 }}>Neutral</span>
-                ) : (
-                  <span 
-                    style={{ 
-                      color: sentiment === "positive" ? "rgb(0, 180, 0)" : "rgb(200, 0, 0)",
-                      flexGrow: 1
-                    }}
-                  >
-                    {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
-                  </span>
-                )}
-                <img src={ChevDownIcon} alt="Dropdown Icon" style={{ width: "16px", height: "16px" }} />
+                {selectedSentiment.charAt(0).toUpperCase() + selectedSentiment.slice(1)}
+              </span>
+              <img 
+                src={ChevDownIcon} 
+                alt="Dropdown Icon" 
+                style={{ 
+                  width: "16px", 
+                  height: "16px", 
+                  transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0)',
+                  transition: 'transform 0.3s ease'
+                }} 
+              />
+            </div>            {/* Dropdown Menu */}
+            {dropdownOpen && (              
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: '80%',
+                  left: '0',
+                  right: '0',
+                  backgroundColor: '#262730',
+                  borderRadius: '4px',
+                  marginTop: '4px',
+                  zIndex: 100,
+                  border: '2px solid rgba(57, 61, 70, 1)',
+                  overflow: 'hidden'
+                }}
+              >                {/* Neutral Option */}
+                <div 
+                  onClick={() => handleSentimentSelect('neutral')}
+                  style={{
+                    padding: '8px 16px',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s ease',
+                    
+                  }}
+                >
+                  <span style={{ color: '#BBB' }}>Neutral</span>
+                </div>
+                
+                {/* Positive Option */}
+                <div 
+                  onClick={() => handleSentimentSelect('positive')}
+                  style={{
+                    padding: '8px 16px',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s ease',
+                    
+                  }}
+                >
+                  <span style={{ color: 'white' }}>Positive</span>
+                </div>
+                
+                {/* Negative Option */}
+                <div 
+                  onClick={() => handleSentimentSelect('negative')}
+                  style={{
+                    padding: '8px 16px',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s ease'
+                  }}
+                >
+                  <span style={{ color: 'white' }}>Negative</span>
+                </div>
               </div>
-              {sentiment_justification && (
-                <p style={{ fontSize:'14px',width:"18vw", marginTop:'3px', color: 'rgb(208, 211, 219)' }}>{sentiment_justification}</p>
-              )}
-            </>
-          ) : (
-            <p style={{ color:"#BBB", fontSize:'16px' }}>No data yet</p>
-          )}
+            )}
+            
+            {sentiment_justification && (
+              <p style={{ fontSize:'14px', marginTop:'3px', color: 'rgb(208, 211, 219)' }}>
+                {sentiment_justification}
+              </p>
+            )}
+          </div>
         </div>
       )}
 
