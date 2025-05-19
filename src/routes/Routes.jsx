@@ -31,8 +31,10 @@ import CopyChatBotLink from "../pages/copyChatbotLink/CopyChatBotLink";
 import TestProperty from "../pages/testProperty/TestProperty";
 import Workbench from "../pages/testProperty/workbench/workbench";
 import WorkbenchMulti from "../pages/testProperty/workbench-multi/workbenchMulti";
-import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";
-import TermsofService from "../pages/termsofService/TermsofService";
+import PrivacyPolicy from "../pages/agreements/PrivacyPolicy";
+import TermsofService from "../pages/agreements/TermsofService";
+import DPA from "../pages/agreements/DPA";
+import Subprocessors from "../pages/agreements/subprocessors";
 import SchedulingWalkthrough from "../pages/userGuides/schedulingWalkthrough/schedulingWalkthrough";
 import TipsAndTricks from "../pages/userGuides/tipsAndTricks/tipsAndTricks";
 import BestPractices from "../pages/userGuides/bestPractices/bestPractices";
@@ -224,6 +226,8 @@ const Routing = () => {
         <Route path="/forgot" element={<ForgotPass />}></Route>
         <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
         <Route path="/termsof-service" element={<TermsofService />}></Route>
+        <Route path="/data-processing-agreement" element={<DPA />}></Route>
+        <Route path="/subprocessors" element={<Subprocessors />}></Route>
         <Route
           path="/scheduling-walkthrough"
           element={<SchedulingWalkthrough />}

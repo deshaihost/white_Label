@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import SideBar from '../../component/sideBar/SideBar';
-import { Link } from 'react-router-dom';
-import './PrivactyPolicy.css';
+import './agreements.css';
 import { Helmet } from 'react-helmet';
 const PrivacyPolicy = () => {
     const [activeLink, setActiveLink] = useState("");
@@ -28,6 +26,7 @@ const PrivacyPolicy = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   return (
     <div>
        <div>
