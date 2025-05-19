@@ -206,7 +206,7 @@ const TermsofService = () => {
                           <h4>14. Entire Agreement</h4>
                           <ul>
                             <li>
-                              a. Comprehensive Agreement: These Terms constitute the entire agreement between you and HostBuddy AI regarding the use of the Service, superseding any prior agreements or understandings between the parties.
+                              a. Comprehensive Agreement: These Terms, along with the Data Processing Agreement and Privacy Policy referenced herein, constitute the entire agreement between you and HostBuddy AI regarding the use of the Service, superseding any prior agreements or understandings between the parties.
                             </li>
                           </ul>
                         </div>
