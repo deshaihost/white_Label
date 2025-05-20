@@ -60,6 +60,10 @@ const AuthenticatedLayout = ({ children }) => {
         transition: "margin-left 0.3s ease-in-out, width 0.3s ease-in-out",
         boxSizing: "border-box" // Ensure padding is included in width calculation
       }}>
+        
+        {/* Bread Crumbs */}
+
+
         {children}
       </div>
     </div>
