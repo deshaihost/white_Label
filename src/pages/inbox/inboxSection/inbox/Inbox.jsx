@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { callGetConversationsApi, callGetSingleConversationApi } from "../../../../helper/getConversationsTest/inboxApi";
 import { callPinConversationApi } from "../../../../helper/getConversationsTest/pinConversationApi";
+import { handleConversationChange } from "../../../../helper/getConversationsTest/abortController";
 import { InboxLoader } from "../../../../helper/Loader"; 
 import LeftMessage from "./leftMessage/LeftMessage";
 import MildeSection from "./mildeSection/MildeSection";
@@ -28,19 +29,24 @@ const responsiveStyles = `
   }
   
   @media (min-width: 992px) {
-    .middleSectionContainer.sidebar-clicked-expanded {
-      width: 35% !important;
+    /* Fixed left bar width for desktop view regardless of sidebar state */
+    .left-bar {
+      min-width: 368px !important;
+      max-width: 384px !important;
+      width: 368px !important;
     }
     
-    .middleSectionContainer.sidebar-clicked-collapsed {
-      width: 45% !important;
+    /* Fixed middle section width for desktop with responsive scaling */
+    .middleSectionContainer {
+      min-width: 384px !important;
+      flex: 1 !important;
+      width: auto !important;
     }
     
-    .rightSectionContainer.sidebar-clicked-expanded {
-      width: 23% !important;
-    }
-      .rightSectionContainer.sidebar-clicked-collapsed {
-      width: 25% !important;
+    /* Fixed right section width for desktop */
+    .rightSectionContainer {
+      width: 296px !important;
+      flex: none !important;
     }
   }
   
@@ -77,8 +83,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
 
   // State for tracking pin status
-  const [isPinned, setIsPinned] = useState(false);
-  // Function to handle pin/unpin action
+  const [isPinned, setIsPinned] = useState(false);  // Function to handle pin/unpin action
   const handlePinToggle = async () => {
     if (!selectedConversation?.conversation_id) return;
     
@@ -89,13 +94,22 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         setIsPinned(result.pinned);
         ToastHandle(result.message || `Conversation ${result.pinned ? 'pinned' : 'unpinned'}`, "success");
         
-        // Update the conversation object to include the pinned state
+        // Update the selected conversation object to include the pinned state
         if (selectedConversation) {
-          setSelectedConversation({
+          const updatedConversation = {
             ...selectedConversation,
             pinned: result.pinned,
             is_pinned: result.pinned // For backward compatibility
-          });
+          };
+          
+          setSelectedConversation(updatedConversation);
+          
+          // Update the conversation in the conversations list too
+          setConversations(prev => prev.map(convo => 
+            convo.conversation_id === selectedConversation.conversation_id 
+              ? { ...convo, pinned: result.pinned, is_pinned: result.pinned } 
+              : convo
+          ));
         }
       }
     } catch (error) {
@@ -151,11 +165,11 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     }
   }, [selectedConversation?.conversation_id]); // Only re-run when the conversation ID changes
 
-  // Listen for sidebar state changes
+  // Update the sidebar state when it changes from NavBarContainer
   useEffect(() => {
     const handleSidebarStateChange = (event) => {
       setSidebarOpen(event.detail.open);
-      // If clicked property is present in the event, update sidebarClicked state
+      // Only update clicked state if it was explicitly provided
       if (event.detail.clicked !== undefined) {
         setSidebarClicked(event.detail.clicked);
       }
@@ -175,6 +189,42 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       document.removeEventListener("sidebarStateChanged", handleSidebarStateChange);
     };
   }, []);
+
+  // Clean up request tracking arrays when conversation changes
+  const cleanupRequestTracking = (previousConversationId, newConversationId) => {
+    if (previousConversationId && previousConversationId !== newConversationId) {
+      // When conversation changes, we can clean up the request tracking for the previous conversation
+      delete requestIdsByConversation.current[previousConversationId];
+      delete notesRequestIdsByConversation.current[previousConversationId];      
+      
+      // Also abort any in-flight requests for the previous conversation
+      try {
+        // Use direct implementation if the imported function fails
+        if (typeof handleConversationChange === 'function') {
+          handleConversationChange(previousConversationId, newConversationId);
+        } else {
+          // Direct implementation of handleConversationChange logic
+          const abortUtils = require("../../../../helper/getConversationsTest/abortController");
+          if (abortUtils && abortUtils.abortAllForConversation) {
+            abortUtils.abortAllForConversation(previousConversationId);
+          }
+        }
+      } catch (error) {
+        console.error("Error handling conversation change:", error);
+      }
+    }
+  };
+
+  // Update currentConversationIdRef when selectedConversation changes
+  useEffect(() => {
+    const previousConversationId = currentConversationIdRef.current;
+    
+    if (selectedConversation?.conversation_id) {
+      currentConversationIdRef.current = selectedConversation.conversation_id;
+      // Clean up request tracking for previous conversation
+      cleanupRequestTracking(previousConversationId, selectedConversation.conversation_id);
+    }
+  }, [selectedConversation?.conversation_id]);
 
   // State for unread PMS messages count
   const [unreadPmsCount, setUnreadPmsCount] = useState(0);
@@ -196,6 +246,11 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [isLoadingNotes, setIsLoadingNotes] = useState(false);
   const [deletingNoteId, setDeletingNoteId] = useState(null);
 
+  // Request tracking refs
+  const currentConversationIdRef = useRef("");
+  const requestIdsByConversation = useRef({});
+  const notesRequestIdsByConversation = useRef({});
+
   // State for tracking which note's dropdown is currently open
   const [openDropdownId, setOpenDropdownId] = useState(null);
 
@@ -210,10 +265,20 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       setOpenDropdownId(noteId);
     }
   };
-
   // Function to call the API to get notes
   const callGetNotesApi = async () => {
     if (!selectedConversation?.conversation_id) return;
+    
+    const conversation_id = selectedConversation.conversation_id;
+    
+    // Create a unique request ID for this API call
+    const requestId = `get_notes_${Date.now()}`;
+    
+    // Store this request ID as the latest for this conversation
+    if (!notesRequestIdsByConversation.current[conversation_id]) {
+      notesRequestIdsByConversation.current[conversation_id] = [];
+    }
+    notesRequestIdsByConversation.current[conversation_id].push(requestId);
     
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -228,8 +293,18 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       };
       
       // Use conversation_id as a URL query parameter
-      const url = `${baseUrl}/get_notes?conversation_id=${encodeURIComponent(selectedConversation.conversation_id)}`;
+      const url = `${baseUrl}/get_notes?conversation_id=${encodeURIComponent(conversation_id)}`;
       const response = await axios.get(url, config);
+      
+      // Check if this is still the latest request for this conversation
+      const requests = notesRequestIdsByConversation.current[conversation_id] || [];
+      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
+      
+      // If not the latest request, or conversation has changed, ignore this response
+      if (!isLatestRequest || currentConversationIdRef.current !== conversation_id) {
+        console.log("Ignoring stale notes response");
+        return;
+      }
   
       if (response.status === 200) {
         setNotes(response.data.notes || []);
@@ -238,15 +313,37 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         ToastHandle(response?.data?.error || "Failed to fetch notes", "danger"); 
       }
     } catch (error) {
-      ToastHandle("Error - unable to get notes", "danger");
+      // Only show error if this is still the latest request for the current conversation
+      const requests = notesRequestIdsByConversation.current[conversation_id] || [];
+      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
+      
+      if (isLatestRequest && currentConversationIdRef.current === conversation_id) {
+        ToastHandle("Error - unable to get notes", "danger");
+      }
     } finally {
-      setIsLoadingNotes(false);
+      // Only update loading state if this is still the latest request for the current conversation
+      const requests = notesRequestIdsByConversation.current[conversation_id] || [];
+      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
+      
+      if (isLatestRequest && currentConversationIdRef.current === conversation_id) {
+        setIsLoadingNotes(false);
+      }
     }
   };
-
   // Function to call the API to add a note
   const callAddNoteApi = async (noteText) => {
     if (!selectedConversation?.conversation_id || !noteText.trim()) return;
+    
+    const conversation_id = selectedConversation.conversation_id;
+    
+    // Create a unique request ID for this API call
+    const requestId = `add_note_${Date.now()}`;
+    
+    // Store this request ID as the latest for this conversation
+    if (!notesRequestIdsByConversation.current[conversation_id]) {
+      notesRequestIdsByConversation.current[conversation_id] = [];
+    }
+    notesRequestIdsByConversation.current[conversation_id].push(requestId);
     
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -262,10 +359,20 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       // According to the API documentation pattern, include conversation_id in the request body
       const bodyData = { 
         note: noteText,
-        conversation_id: selectedConversation.conversation_id
+        conversation_id: conversation_id
       };
       
       const response = await axios.post(`${baseUrl}/add_note`, bodyData, config);
+      
+      // Check if this is still the latest request for this conversation
+      const requests = notesRequestIdsByConversation.current[conversation_id] || [];
+      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
+      
+      // If not the latest request, or conversation has changed, ignore this response
+      if (!isLatestRequest || currentConversationIdRef.current !== conversation_id) {
+        console.log("Ignoring stale add note response");
+        return;
+      }
   
       if (response.status === 200) { 
         // Refresh the notes list
@@ -276,7 +383,13 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         ToastHandle(response?.data?.error || "Failed to add note", "danger"); 
       }
     } catch (error) {
-      ToastHandle("Error adding note", "danger");
+      // Only show error if this is still the latest request for the current conversation
+      const requests = notesRequestIdsByConversation.current[conversation_id] || [];
+      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
+      
+      if (isLatestRequest && currentConversationIdRef.current === conversation_id) {
+        ToastHandle("Error adding note", "danger");
+      }
     }
   };
 
@@ -476,8 +589,32 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     }
     const conversationId = (useConvIdQuery) ? (singleConversationIdFromUrl || null) : null;
 
-    const data = await callGetConversationsApi(limit, conversationsAlreadyHave, urgent, propertyName, phase, meetHbOnly, guestName, conversationId);
-    if (data?.conversations) { updateConversationsWithApiData(data.conversations); }
+    // Create a unique request ID for batch fetching
+    const requestId = `batch_conversations_${Date.now()}`;
+    
+    // Use the enhanced API with request ID tracking and AbortController
+    const data = await callGetConversationsApi(
+      limit, 
+      conversationsAlreadyHave, 
+      urgent, 
+      propertyName, 
+      phase, 
+      meetHbOnly, 
+      guestName, 
+      conversationId,
+      requestId,
+      conversationId ? currentConversationIdRef : null // Only pass ref for single conversation fetch
+    );
+    
+    // If the API indicates this is a stale request, exit early
+    if (data.error === "Conversation changed") {
+      console.log("Conversation changed during API call, ignoring response");
+      return;
+    }
+    
+    if (data?.conversations) { 
+      updateConversationsWithApiData(data.conversations); 
+    }
     setConversationsNotYetFetched(false);
   };
 
@@ -489,23 +626,64 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       return timeB - timeA; // Sort in descending order
     });
   };
-
   // Given a conversation ID: fetch that convo from the API and update that conversation in the state
   const updateConversation = async (conversationId) => {
-    const updatedConversationData = await callGetSingleConversationApi(conversationId);
-    if (updatedConversationData?.conversations && updatedConversationData.conversations.length > 0) {
-      const retrievedConversation = updatedConversationData.conversations[0];
-      let updatedConversations = conversations.map((conversation) => {
-        if (conversation.conversation_id === conversationId) {
-          return retrievedConversation;
+    // Create a unique request ID for this API call
+    const requestId = `get_conversation_${Date.now()}`;
+    
+    // Store this request ID as the latest for this conversation
+    if (!requestIdsByConversation.current[conversationId]) {
+      requestIdsByConversation.current[conversationId] = [];
+    }
+    requestIdsByConversation.current[conversationId].push(requestId);
+    
+    try {
+      // Pass the request ID and currentConversationIdRef to the API function
+      const updatedConversationData = await callGetSingleConversationApi(
+        conversationId, 
+        requestId,
+        currentConversationIdRef
+      );
+      
+      // If the API indicates this is a stale request, exit early
+      if (updatedConversationData.error === "Conversation changed") {
+        console.log("Conversation changed during API call, ignoring response");
+        return;
+      }
+      
+      // Check if this is still the latest request for this conversation
+      const requests = requestIdsByConversation.current[conversationId] || [];
+      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
+      
+      // If not the latest request, or conversation has changed, ignore this response
+      if (!isLatestRequest || currentConversationIdRef.current !== conversationId) {
+        console.log("Ignoring stale conversation update response");
+        return;
+      }
+      
+      if (updatedConversationData?.conversations && updatedConversationData.conversations.length > 0) {
+        const retrievedConversation = updatedConversationData.conversations[0];
+        let updatedConversations = conversations.map((conversation) => {
+          if (conversation.conversation_id === conversationId) {
+            return retrievedConversation;
+          }
+          return conversation;
+        });
+        updatedConversations = sortConversationsByMostRecentMessage(updatedConversations);
+        setConversations(updatedConversations);
+        
+        // If the conversation to be updated is selectedConversation (the one currently being viewed), update that too
+        if (selectedConversation.conversation_id === conversationId && currentConversationIdRef.current === conversationId) {
+          setSelectedConversation(retrievedConversation);
         }
-        return conversation;
-      });
-      updatedConversations = sortConversationsByMostRecentMessage(updatedConversations);
-      setConversations(updatedConversations);
-      // If the conversation to be updated is selectedConversation (the one currently being viewed), update that too
-      if (selectedConversation.conversation_id === conversationId) {
-        setSelectedConversation(retrievedConversation);
+      }
+    } catch (error) {
+      // Only show error if this is still the latest request for the current conversation
+      const requests = requestIdsByConversation.current[conversationId] || [];
+      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
+      
+      if (isLatestRequest && currentConversationIdRef.current === conversationId) {
+        console.error("Error fetching conversation:", error);
       }
     }
   };
@@ -579,7 +757,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     <>
       <style>{responsiveStyles}</style>
       <div className="inbox-content-container" 
-          style={{height:"96vh" ,
+          style={{height:"95vh" ,
                   margin:"10px" ,
                   // borderWidth:"1px" ,
                   // borderStyle:"solid",
@@ -587,9 +765,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                   // backgroundColor:"#17191F"
                   }}>
         {conversationsNotYetFetched ? <InboxLoader /> : null}
-        <div className="row text-white" style={{height:"100%"}}>
-          {/* Desktop View */}
-          <div style={{ width: "100%", gap: "0px" }} className="d-none d-lg-flex col-lg-12">
+        <div className="row text-white" style={{height:"100%"}}>          {/* Desktop View */}
+          <div style={{ width: "100%", gap: "0px" ,height:"100%" }} className="desktop-view">
             <LeftMessage
               className="box"
               allPropertyNamesList={allPropertyNamesList}
@@ -613,8 +790,10 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               currentView={currentView}
               setAllowConvIdQuery={setAllowConvIdQuery}
               setUnreadPmsCount={setUnreadPmsCount}
+              sidebarClicked={sidebarClicked}
+              sidebarOpen={sidebarOpen}
             />
-            <div className={`middleSectionContainer ${sidebarClicked ? (sidebarOpen ? 'sidebar-clicked-expanded' : 'sidebar-clicked-collapsed') : ''}`} style={{ width: '45%', flex: 'none', height: 'calc(100vh - 100px)', border: '1px solid #24262E' }}>
+            <div className="middleSectionContainer" style={{ flex: '1', height: '100%', border: '1px solid #24262E' }}>
               <div style={{ display: 'flex', backgroundColor: '#17191f', padding: '5px', borderRadius: '0px', marginBottom: '4px', flexDirection: 'column'  , border:"1px solid" , borderColor:"#24262E"}}>
                 {/* User header row with image, name and action icons */}
                 <div style={{ 
@@ -798,8 +977,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                       key={tab.id}
                       onClick={() => {
                         setActiveTab(tab.id);
-                      }}
-                      style={{ 
+                      }}                      style={{ 
                         fontFamily: "DM Sans",
                         fontSize: "14px",
                         cursor: 'pointer',
@@ -809,7 +987,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                         marginRight: '18px',
                         paddingBottom: '2px',
                         justifyContent: 'space-between',
-                        borderBottom: tab.id === activeTab ? '2px solid #007bff' : 'none'
+                        borderBottom: tab.id === activeTab ? '2px solid #007bff' : 'none',
+                        color: tab.id === activeTab ? '#FFFFFF' : '#D0D3DB'
                       }}
                     >
                       <img src={tab.icon} alt={tab.text} style={{ width: '15px', height: '15px', marginRight: '5px' }} />
@@ -835,8 +1014,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                       */}
                       {tab.id === 'openIssue' && filteredActionItems.length > 0 && (
                         <span style={{
-                          backgroundColor: '#ff4d4f',
-                          color: 'white',
+                          backgroundColor: 'rgb(44 46 52)',
+                          color: '#A6A9B2',
                           borderRadius: '50%',
                           width: '18px',
                           height: '18px',
@@ -852,8 +1031,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                       )}
                       {tab.id === 'notes' && notes.length > 0 && (
                         <span style={{
-                          backgroundColor: '#1a73e8',
-                          color: 'white',
+                          backgroundColor: 'rgb(44 46 52)',
+                          color: '#A6A9B2',
                           borderRadius: '50%',
                           width: '18px',
                           height: '18px',
@@ -871,8 +1050,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                   ))}
                 </div>
               </div>
-              
-              {/* Tab content rendered inside the div container */}
+                {/* Tab content rendered inside the div container */}
               {activeTab === 'pms' && (
                 <MildeSection
                   className="box"
@@ -884,44 +1062,49 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                 />
               )}
               {activeTab === 'whatsapp' && (
-                <div className="box" style={{ padding: '20px', backgroundColor: '#17191f', borderRadius: '4px' }}>
+                <div className="box" style={{ padding: '20px', backgroundColor: '#17191f', borderRadius: '4px'  ,height: 'calc(100% - 85.101111px)' }}>
                   <h3>WhatsApp Messages</h3>
                   <p>WhatsApp integration content will appear here.</p>
                 </div>
               )}
               {activeTab === 'openIssue' && (
-                <div className="box" style={{ padding: '0px', backgroundColor: '#0F1117', borderRadius: '4px', height: 'calc(-90px + 100vh)', overflowY: 'auto' }}>
+                <div className="box" style={{ padding: '5px', backgroundColor: '#0F1117', borderRadius: '4px', height: 'calc(100% - 85.101111px)', overflowY: 'auto' ,
+                  border:"1px solid #24262E" 
+                 }}>
                   
                   <div className="action-items-container">
                     {/* We would fetch action items from the API in a real implementation */}
                     {[].concat(filteredActionItems || []).filter(item => item.status !== 'completed').map(actionItem => (
-                      <div key={actionItem.id} className="action-item-card" style={{
-                        backgroundColor: '#23252f',
+                      <div key={actionItem.id} 
+                      // className="action-item-card" 
+                      style={{
+                        backgroundColor: 'rgb(32 33 39)',
+                        border:"1px solid #24262E",
                         borderRadius: '8px',
                         padding: '10px',
-                        marginBottom: '16px',
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-                        fontFamily: "DM Sans, Helvetica",
+                        marginBottom: '8px',
+                        // boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                        fontFamily: "DM Sans, Helvetica !important",
                         fontSize: "14px"
                       }}>
                         <div className="action-item-header" style={{
                           display: 'flex',
                           justifyContent: 'space-between',
-                          marginBottom: '12px'
-                        }}>
-                          <div className="action-item-date" style={{
-                            fontSize: '14px',
-                            color: '#a4a6aa'
+                          marginBottom: '4px'
+                        }}>                          <div className="action-item-date" style={{
+                            fontSize: '12px',
+                            color: '#A6A9B2' ,
+                            forntweight:"600"
                           }}>
-                            {new Date(actionItem.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • {new Date(actionItem.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} • <span>
-                              {actionItem.category}
+                            {new Date(actionItem.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}  {new Date(actionItem.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} • <span>
+                              {actionItem.category ? actionItem.category.charAt(0).toUpperCase() + actionItem.category.slice(1).toLowerCase() : ''}
                             </span>
                           </div>
                         </div>
                         <div className="action-item-description" style={{
                           fontSize: '14px',
-                          fontWeight: '500',
-                          color: 'white',
+                          fontWeight: '400',
+                          color: '#D0D3DB',
                           lineHeight: '1.4',
                           display: 'flex',
                           justifyContent: 'space-between',
@@ -938,7 +1121,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           }}>
                             <div 
                               style={{
-                                backgroundColor: "rgba(74, 70, 84, 0.41)",
+                                backgroundColor: "rgba(189, 193, 201, 0.08)",
                                 height: "32px",
                                 width: "32px",
                                 borderRadius: "4px",
@@ -981,9 +1164,9 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               {activeTab === 'notes' && (
                 <div className="box" style={{ 
                   padding: '0', 
-                  backgroundColor: '#17191f', 
+                  backgroundColor: '#0F1117', 
                   borderRadius: '4px', 
-                  height: 'calc(100vh - 108px)', 
+                  height: 'calc(100% - 85.101111px)' , 
                   display: 'flex',
                   // border: '1px solid #24262E',
                   flexDirection: 'column'
@@ -1024,6 +1207,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                 marginBottom: '5px',
                                 color:"#D0D3DB",
                                 fontSize: '14px',
+                                fontWeight: '400',
                                 fontFamily: 'DM Sans'
                               }}
                             >
@@ -1071,8 +1255,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                           <span className="visually-hidden">Deleting...</span>
                                         </div>
                                       ) : (
-                                        <div>
-                                          <button
+                                        <div>                                          <button
                                             onClick={() => toggleDropdown(note.note_id)}
                                             style={{
                                               background: 'none',
@@ -1085,7 +1268,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                             }}
                                             title="Options"
                                           >
-                                            <i className="bi bi-three-dots-vertical"></i>
+                                            <i className="bi bi-three-dots"></i>
                                           </button>
                                           
                                           {/* Dropdown menu */}
@@ -1094,13 +1277,13 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                               position: 'absolute',
                                               right: '0',
                                               top: '100%',
-                                              backgroundColor: '#262730',
+                                              backgroundColor: '#2B2E36',
                                               borderRadius: '4px',
                                              
                                               zIndex: 10,
                                               width: '130px',
                                               overflow: 'hidden',
-                                              border: '2px solid rgb(48, 49, 51)'
+                                              border: '1px solid rgb(48, 49, 51)'
                                             }}>
                                               <ul style={{
                                                 listStyle: 'none',
@@ -1108,7 +1291,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                                 margin: '0'
                                               }}>
                                                 <li style={{
-                                                  border: '1px solid #24262E'
+                                                  // border: '1px solid #24262E'
                                                 }}>
                                                   <button 
                                                     onClick={() => {
@@ -1122,7 +1305,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                                       width: '100%',
                                                       textAlign: 'left',
                                                       padding: '8px 8px',
-                                                      backgroundColor: '#24262E',
+                                                     backgroundColor: '#2B2E36',
                                                       border: '1px solid #24262E',
                                                       color: '#D0D3DB',
                                                       cursor: 'pointer',
@@ -1130,7 +1313,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                                       fontFamily: '"DM Sans", Helvetica'
                                                     }}
                                                   >
-                                                    <i className="bi bi-pencil-fill" style={{ marginRight: '4px' }}></i>
+                                                    <i className="bi bi-pencil-fill" style={{ marginRight: '8px' }}></i>
                                                     Update
                                                   </button>
                                                 </li>
@@ -1146,15 +1329,18 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                                       width: '100%',
                                                       textAlign: 'left',
                                                       padding: '8px 8px',
-                                                      backgroundColor: '#24262E',
+                                                      backgroundColor: '#2B2E36',
                                                       border: '1px solid #24262E',
                                                       color: '#D0D3DB',
                                                       cursor: 'pointer',
                                                       fontSize: '14px',
                                                       fontFamily: '"DM Sans", Helvetica'
-                                                    }}
-                                                  >
-                                                    <i className="bi bi-trash" style={{ marginRight: '4px' }}></i>
+                                                    }}                                                  >
+                                                    <img 
+                                                      src={require('./mildeSection/message/icons/trash-01.svg').default} 
+                                                      alt="Delete" 
+                                                      style={{ marginRight: '4px', width: '18px', height: '23px' }} 
+                                                    />
                                                     Delete note
                                                   </button>
                                                 </li>
@@ -1170,12 +1356,12 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                   <div style={{ 
                                     display: 'flex',
                                     alignItems: 'center',
-                                    marginTop: '8px'
+                                    // marginTop: '8px'
                                   }}>
                                     {/* Small user avatar - showing full name with proper capitalization */}
                                     <div style={{ 
                                       width: 'auto',
-                                      color: "#a6a9b2",
+                                      color: "#A6A9B2",
                                       height: '20px',
                                       display: 'flex',
                                       fontFamily: '"DM Sans-SemiBold", Helvetica',
@@ -1195,7 +1381,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                     
                                     {/* Date and time text in the requested format: Month Short name Date . Time */}
                                     <div style={{ 
-                                       color:"#a6a9b2", 
+                                       color:"#A6A9B2", 
                                        fontFamily: '"DM Sans-Regular", Helvetica',
                                        fontSize: '12px',
                                        fontWeight: 400,
@@ -1243,7 +1429,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           }
                           // Allow normal behavior for Shift+Enter (new line)
                         }}
-                        placeholder="Type here..."
+                        placeholder="Type note..."
                         style={{ 
                           flex: 1,
                           backgroundColor: '#17191F',
@@ -1260,8 +1446,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           overflowY: 'auto'
                         }}
                         disabled={!selectedConversation?.conversation_id}
-                      />
-                      <button 
+                      />                      <button 
                         onClick={() => {
                           if (editingNoteId) {
                             callUpdateNoteApi(editingNoteId, newNote);
@@ -1270,8 +1455,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           }
                         }}
                         style={{
-                          backgroundColor: '#1a73e8',
-                          color: 'white',
+                          backgroundColor: (selectedConversation?.conversation_id && newNote.trim()) ? '#1a73e8' : 'rgba(15, 17, 23, 0.42)',
+                          color: (selectedConversation?.conversation_id && newNote.trim()) ? 'white' : '#4A4D54',
                           height: '30px',
                           border: 'none',
                           borderRadius: '4px',
@@ -1279,7 +1464,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           fontSize: '12px',
                           fontWeight: '500',
                           cursor: selectedConversation?.conversation_id && newNote.trim() ? 'pointer' : 'not-allowed',
-                          opacity: selectedConversation?.conversation_id && newNote.trim() ? '1' : '0.7'
+                          opacity: '1'
                         }}
                         disabled={!selectedConversation?.conversation_id || !newNote.trim()}
                       >
@@ -1288,16 +1473,14 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
-            <div className={`rightSectionContainer ${sidebarClicked ? (sidebarOpen ? 'sidebar-clicked-expanded' : 'sidebar-clicked-collapsed') : ''}`} 
-              style={{ width: '27%', flex: 'none', height:"100%", 
+              )}            </div>            <div className="rightSectionContainer" 
+              style={{ width: '296px', flex: 'none', height:"100%", 
                 padding:"11px", 
                 border:"1px solid #24262E"
-              }}> 
+              }}>
             <RightSection
               className="box"
-              style={{ width: "100%", height: "calc(100vh - 110px)" }}
+              style={{ width: "100%", height: "calc(100vh - 110px)" , backgroundColor:"#17191F"}}
               rightSectionData={selectedConversation}
               updateConversationFromApi={updateConversation}
             />
@@ -1307,9 +1490,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
 
           
            
-            
-            {/* Mobile View */}
-          <div className="d-block d-lg-none col-12">
+                {/* Mobile View */}
+          <div className="mobile-view">
             {currentView === 'conversations' && (
               <LeftMessage 
                 allPropertyNamesList={allPropertyNamesList} 
@@ -1333,9 +1515,10 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                 currentView={currentView}
                 setAllowConvIdQuery={setAllowConvIdQuery} 
                 setUnreadPmsCount={setUnreadPmsCount}
+                sidebarClicked={sidebarClicked}
+                sidebarOpen={sidebarOpen}
               />
-            )}
-            {currentView === 'messages' && (
+            )}            {currentView === 'messages' && (
               <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays} setCurrentView={setCurrentView} />
             )}
             {currentView === 'details' && (

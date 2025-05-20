@@ -1,6 +1,6 @@
 .main-chat .chatbot {
     /* height: calc(75vh + 30px); */
-    height: 82vh !important;
+    height:100%;
 }
 .main-chat .chatbot {
     max-width: 100%;
@@ -12,7 +12,7 @@
     
 }
 .main-chat {
-    height: calc(100vh - 167px);
+    height: calc(100% - 85.101111px);
     padding: 20px 0px;
     
 }
@@ -127,14 +127,26 @@
 .main-chat .generate-button {
     background: none;
     border: none;
-    padding: 0;
+    padding: 5px 10px;
+    border-radius: 4px;
     cursor: pointer;
     display: inline-flex;
     font-size: 13px;
     align-items: center;
     justify-content: center;
     margin-left: 4px;
-    
+}
+
+.main-chat .generate-button.active {
+    background-color: rgba(15, 17, 23, 0.6);
+}
+
+.main-chat .generate-button .chevron-icon {
+    transition: transform 0.3s ease;
+}
+
+.main-chat .generate-button.active .chevron-icon {
+    transform: rotate(180deg);
 }
 
 .main-chat .generate-button .bi-stars {
@@ -160,8 +172,9 @@
     left: 0;
     font-family: "DM Sans", Helvetica !important;
     font-size: 14px;
-    background-color: #17191f !important;
+    background-color: #2B2E36 !important;
     border-radius: 4px;
+    border: 1px solid rgb(38, 39, 48);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 10px;
     display: flex;
@@ -177,7 +190,7 @@
     padding: 10px 5px;
     cursor: pointer;
     text-align: left;
-    color: #FFF;
+    color: #D0D3DB !important;
     border-radius: 10px;
     font-size: 14px;
 }
@@ -188,7 +201,40 @@
 }
   
 .main-chat .generate-menu-item:not(.greyed-out):hover {
-    background-color: #888;
+    background-color: rgba(15, 17, 23, 0.6);
+}
+
+.main-chat .send-menu {
+    position: absolute;
+    top: -170px; /* Position above the send button */
+    right: 0;
+    font-family: "DM Sans", Helvetica !important;
+    font-size: 14px;
+    background-color: #2B2E36 !important;
+    border-radius: 4px;
+    border: 1px solid rgb(38, 39, 48);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+    width: auto;
+    z-index: 1000;
+}
+  
+.main-chat .send-menu-item {
+    background: none;
+    border: none;
+    padding: 10px 5px;
+    cursor: pointer;
+    text-align: left;
+    color: #D0D3DB !important;
+    border-radius: 10px;
+    font-size: 14px;
+}
+  
+.main-chat .send-menu-item:hover {
+    background-color: transparent; /* Remove hover background color */
 }
 
 .main-chat .input-container textarea {
@@ -203,7 +249,7 @@
 }
 
 .main-chat  {
-    padding-left: 2px !important;
+    /* padding-left: 2px !important; */
     padding: 0px 1px;
     border-radius: 2px !important;
     /* background-color: #007bff; */
@@ -225,11 +271,20 @@
     font-family: "DM Sans", Helvetica !important;
 }
 
+.chat-send-button:disabled {
+    background-color: rgba(15, 17, 23, 0.42);
+    color: #4A4D54;
+    cursor: not-allowed;
+}
+
 .date-separator {
   display: flex;
   align-items: center;
-  color: #999999;
-  font-size: 12px;
+  color: #a6a9b2;
+    font-family: "DM Sans-SemiBold", Helvetica;
+    font-size: 12px;
+    font-weight: 600;
+  
   margin: 20px 0;
   text-align: center;
   width: 100%;
@@ -239,6 +294,44 @@
 .date-separator::after {
   content: "";
   flex: 1;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #bdc1c926;;
   margin: 0 10px;
+}
+
+.main-chat .template-button {
+    background: #17191F;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 13px;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s ease;
+}
+
+/* Remove hover effect */
+.main-chat .template-button:hover {
+    background: #17191F; /* Keep same background on hover */
+}
+
+/* Add active (clicked) effect */
+.main-chat .template-button:active {
+    transform: scale(0.98); /* Slight scale down when clicked */
+    background-color: rgba(15, 17, 23, 0.9);
+}
+
+.main-chat .send-container {
+    position: relative;
+}
+
+/* Keep chevron in natural position by default */
+.main-chat .send-button-chevron {
+    transition: transform 0.3s ease;
+}
+
+/* Rotate chevron when dropdown is open */
+.main-chat .send-button-chevron.active {
+    transform: rotate(180deg);
 }

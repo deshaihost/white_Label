@@ -7,6 +7,15 @@ import { BoxLoader } from "../../../../../helper/Loader";
 import { TextField } from "./searchComponent/searchInput"; // Import the TextField component
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
+import PinnedIcon from "./icons/pinned_for_chat.svg"; // Import the pinned icon
+import RefreshIcon from "./icons/refresh_for_chat.svg"; // Import the refresh icon
+import UrgentFlagIcon from "./icons/urgent_flag_icon.svg"; // Import the urgent flag icon
+import AIRBIN_ICON from "./icons/AIRBIN_ICON.svg"; // Import the Airbnb icon
+import BOOKING_ICON from "./icons/BOOKING_ICON.svg"; // Import the Booking icon
+import VRBO_ICON from "./icons/VRBO_ICON.svg"; // Import the VRBO icon
+import DIRECT_ICON from "./icons/DIRECT_ICON.svg"; // Import the Direct icon
+import EMAIL_ICON from "./icons/EMAIL_ICON.svg"; // Import the Email icon
+import OPENPHONE_ICON from "./icons/OPENPHONE_ICON.svg"; // Import the OpenPhone icon
 
 // Add a simple modal component
 function FilterModal({ show, onClose, children }) {
@@ -22,7 +31,7 @@ function FilterModal({ show, onClose, children }) {
   );
 }
 
-const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, userHasPMS, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal, setCurrentView, currentView, setAllowConvIdQuery, setUnreadPmsCount }) => {
+const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, setAllConversations, setSelectedConvo, fetchConversations, userHasPMS, urgentFilterIsEnabled, setUrgentFilterIsEnabled, propertyFilterVal, setPropertyFilterVal, phaseFilterVal, setPhaseFilterVal, fromHostBuddyFilterVal, setFromHostBuddyFilterVal, guestNameSearchVal, setGuestNameSearchVal, setCurrentView, currentView, setAllowConvIdQuery, setUnreadPmsCount, sidebarClicked, sidebarOpen }) => {
 
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -46,7 +55,6 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
   const [tempUrgentFilter, setTempUrgentFilter] = useState(false);
   const [tempFromHostBuddyFilter, setTempFromHostBuddyFilter] = useState(false);
   const [tempGuestNameFilter, setTempGuestNameFilter] = useState("");
-
   // Use the current date for real-time checking
   const currentDate = new Date();
   // Function to check if a date is today - using the proper YYMMDD_HHMMSS format
@@ -72,6 +80,28 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
       return false;
     }
   };
+    // Function to check if arrival and departure dates are on the same day
+  const isSameDay = (arrivalDate, departureDate) => {
+    if (!arrivalDate || !departureDate) return false;
+    
+    try {
+      // Parse the YYMMDD_HHMMSS format
+      // Format example: 250419_120000 (for April 19, 2025 at 12:00:00)
+      const arrYear = parseInt('20' + arrivalDate.substring(0, 2));
+      const arrMonth = parseInt(arrivalDate.substring(2, 4)) - 1;
+      const arrDay = parseInt(arrivalDate.substring(4, 6));
+      
+      const depYear = parseInt('20' + departureDate.substring(0, 2));
+      const depMonth = parseInt(departureDate.substring(2, 4)) - 1;
+      const depDay = parseInt(departureDate.substring(4, 6));
+      
+      return arrYear === depYear && arrMonth === depMonth && arrDay === depDay;
+    } catch (error) {
+      console.error("Error comparing dates for same day check:", error);
+      return false;
+    }
+  };
+ 
 
   // Load the next batch of conversations. fetchConversations handles excluding conversations we already have, calling the API, and updating the state
   const loadNextBatch = async () => {
@@ -279,11 +309,9 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setFilteredGuests([]);
     }
-  };
-
-  return (
-    <div className="left-bar" style={{ width: '30%', height: '95vh', overflowY: 'auto', border: "1px solid", borderColor: "#17191F" }}>
-      <div className="message-filter" style={{ padding: '2px', backgroundColor: '#0F1117', display: 'flex', flexDirection: 'column' }}>
+  };  return (
+    <div className="left-bar" style={{ height: '100%', overflowY: 'auto', border: "1px solid", borderColor: "#24262E", backgroundColor: '#17191F' }}>
+      <div className="message-filter" style={{ padding: '2px', backgroundColor: '#17191F', display: 'flex', flexDirection: 'column' }}>
         <div style={{ 
           fontWeight: 'bold', 
           fontSize: '24px', 
@@ -303,9 +331,9 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                 width: "100%", 
                 borderRadius: "4px", 
                 paddingLeft: '25px',
-                backgroundColor: '#1e1f25',
+                backgroundColor: '#24262E',
                 border: '1px solid #BDC1C9 · 15%',
-                color: 'white',
+                color: '#676A73 !important', 
                 height: '32px'
               }}
               onChange={handleSearchInputChange}
@@ -430,7 +458,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
           <div className={`left-bar-chat`} ref={containerRef}>
             <div style={{ border: "1px solid #24262E" }}>
             {filteredConversations.map((message) => {
-              const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url, channel , action_items , user, status } = message;
+              const { property_name, guest_name, arrival_date, departure_date, opened, conversation_id, image_url, channel , action_items , user, status, pinned } = message;
               const allDataForConversation = message;
               const messages = message?.messages; // Assuming message?.messages is an array
               const lastValue = messages[messages.length - 1];
@@ -453,49 +481,115 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                 datesAndPropertyNameDisplay = property_name;
               } else {
                 datesAndPropertyNameDisplay = '';
-              }
-
-              return (
+              }              return (
                 
                 <React.Fragment key={conversation_id}>
                   <div 
                     className={`conversation-item ${conversation_id === selectedConversationId ? "bg-dark" : ""} left-inner-tab`}
-                    onClick={() => openConversationHandle(allDataForConversation, conversation_id)}
+                    onClick={() => openConversationHandle(allDataForConversation, conversation_id)
+                      
+                    }
+                    
                   >
-                    <div className="left-bar-container">
-                      <div className="image-container">
+                    {conversation_id === selectedConversationId && (
+                      <div className="sectionIndicatorBox">
+                        <div className="selection-indicator"></div>
+                      </div>
+                    )}
+                    <div className="left-bar-container">                    
+                      <div className="image-container" style={{ position: 'relative' }}>
                         <img 
                           src={image_url ? image_url : dummyPropertyImg} 
                           alt="Property Thumbnail Image" 
                           className="property-thumbnail"
                           onError={(e) => { e.target.onerror = null; e.target.src = dummyPropertyImg; }}
-                        />
+                        />                        {/* Pin badge for pinned conversations */}
+                        {(allDataForConversation.pinned || allDataForConversation.is_pinned) && (
+                          <div 
+                            style={{
+                              position: 'absolute',
+                              top: "5px",
+                              left: "5px",
+                              minWidth: '24px',
+                              minHeight: '24px',
+                              width: '24px',
+                              height: '24px',
+                              backgroundColor: '#F26C0C',
+                              borderRadius: '50%',
+                              border: '2px solid #17191f',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              zIndex: 1,
+                              transform: 'translate(-30%, -30%)',
+                              overflow: 'hidden'
+                            }}
+                          >
+                            <img 
+                              src={PinnedIcon} 
+                              alt="Pinned" 
+                              style={{
+                                maxWidth: '14px',
+                                maxHeight: '14px',
+                                width: '12px',
+                                height: '12px',
+                                objectFit: 'contain',
+                                display: 'block',
+                                margin: '0 auto'
+                              }}
+                            />
+                          </div>  
+                        )}                          {/* Refresh icon for same-day arrival/departure */}
+                        {isSameDay(arrival_date, departure_date) && (
+                          <div 
+                            style={{
+                              position: 'absolute',
+                              top: "6px",
+                              left: (allDataForConversation.pinned || allDataForConversation.is_pinned) ? "24px" : "6px",
+                              minWidth: '24px',
+                              minHeight: '24px',
+                              width: '24px',
+                              height: '24px',
+                              backgroundColor: '#1EC7C7',
+                              borderRadius: '50%',
+                              border: '2px solid #17191f',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              zIndex: 1,
+                              transform: 'translate(-30%, -30%)',
+                              overflow: 'hidden'
+                            }}
+                          >
+                            <img 
+                              src={RefreshIcon} 
+                              alt="Same-day stay" 
+                              style={{
+                                maxWidth: '14px',
+                                maxHeight: '14px',
+                                width: '12px',
+                                height: '12px',
+                                objectFit: 'contain',
+                                display: 'block',
+                                margin: '0 auto'
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
                       <div className="content-container">
-                        {/* First line: Guest name and time format */}
-                        <div className="description-container description-item">
+                        {/* First line: Guest name and time format */}                        <div className="description-container description-item">
                           <h2 className="guest-name ">
-                            {channel !== 'hostbuddy' ? (
-                              opened ? guest_name : <strong>{guest_name}</strong>
-                            ) : (
-                              opened ? 'Chat Window' : <strong>Chat Window</strong>
-                            )}
+                            {channel !== 'hostbuddy' ? guest_name : 'Chat Window'}
                           </h2>
                           <div className="date date-no-margin">
-                            {opened ? timeFormat(time) : <strong>{timeFormat(time)}</strong>}
+                            {timeFormat(time)}
                           </div>
                         </div>
-                        
-                        {/* Second line: Message text and count of unread messages */}
+                          {/* Second line: Message text and count of unread messages */}
                         <div className="message-container short-des">
-                          <div className="message-text">
-                            {opened ? (
-                              <>
-                                <strong></strong> {shortenedText}
-                              </>
-                            ) : (
-                              <strong> {shortenedText}</strong>
-                            )}
+                          <div className="message-text" style={{ fontWeight: !opened || conversation_id === selectedConversationId ? 600 : 400 }}>
+                            {shortenedText}
                           </div>
                           {!opened && (
                             <span className="message-counter">
@@ -517,20 +611,49 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                             {property_name && <span>{property_name}</span>}
                           </div>
                         </div>
-                        
-                        {/* Fourth line: User and status indicators */}
-                        <div className="status-container">
-                          <div>
-                            {/* User from line 324 */}
-                            <span className="user-badge ">
-                              {user || sender || "Unknown"}
-                            </span>
-                            {action_items && action_items.length === 0 && 
-                              <span className="urgent-badge">
-                                Urgent
-                              </span>
-                            }
-                            {/* Display status badges */}
+                          {/* Fourth line: User and status indicators */}
+                        <div className="status-container" style={{ 
+                          display: 'flex', 
+                          justifyContent: 'space-between',
+                          alignItems: 'center', 
+                          width: '100%' 
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center' }}>                            
+                            {/* User from line 324 */}                            
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <span className="user-badge ">
+                                {user ? user.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 
+                                 sender ? sender.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 
+                                 "Unknown"}
+                              </span>                                {action_items && action_items.length === 0 && 
+                                /* Replaced text with icon */
+                                <span className="urgent-badge" style={{
+                                  backgroundColor: '#4D2100',
+                                  borderRadius: '2px',
+                                  height: '20px',
+                                  width: '20px',
+                                  minWidth: '20px',
+                                  minHeight: '20px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  overflow: 'hidden'
+                                }}>
+                                  <img 
+                                    src={UrgentFlagIcon} 
+                                    alt="Urgent" 
+                                    style={{
+                                      width: '14px',
+                                      height: '14px',
+                                      objectFit: 'contain',
+                                      display: 'block',
+                                      margin: '0 auto'
+                                    }}
+                                  />
+                                </span>
+                              }
+                            </div>
+                            {/* Display status badges - commented out */}
                             {/* {status === 'future' && 
                               <span className="future-badge">
                                 future
@@ -546,46 +669,216 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                                 inquiry
                               </span>
                             } */}
-                          </div>
-                          <div className="status-indicators">
-                            {/* Status indicators */}
+                          </div>                         
+                           <div className="status-indicators" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            {/* Status indicators with updated logic */}
                             
-                            {isToday(departure_date) && 
-                              <span className="checkout-badge">
-                                Check-out today
-                              </span>
-                            }
-                            {isToday(arrival_date) && 
-                              <span className="checkin-badge">
-                                Check-in today
-                              </span>
-                            }
-                                {status === 'future' && 
-                              <span className="future-badge">
-                                Future
-                              </span>
-                            }
-                            {status === 'current' && 
-                              <span className="current-badge">
-                                Current
-                              </span>
-                            }
-                            {status === 'inquiry' && 
+                            {status === 'inquiry' ? (
                               <span className="inquiry-badge">
                                 Inquiry
                               </span>
-                            }{status === 'past' && 
-                              <span className="inquiry-badge">
-                                Past
-                              </span>
-                            }
+                            ) : (
+                              <>
+                                {isToday(departure_date) && 
+                                  <span className="checkout-badge">
+                                    Check-out today
+                                  </span>
+                                }
+                                {isToday(arrival_date) && 
+                                  <span className="checkin-badge">
+                                    Check-in today
+                                  </span>
+                                }
+                                {/* Show status badges only if not check-in/check-out today */}
+                                {!isToday(departure_date) && !isToday(arrival_date) && (
+                                  <>
+                                    {status === 'future' && 
+                                      <span className="future-badge">
+                                        Future
+                                      </span>
+                                    }
+                                    {status === 'current' && 
+                                      <span className="current-badge">
+                                        Current
+                                      </span>
+                                    }
+                                    {status === 'past' && 
+                                      <span className="inquiry-badge">
+                                        Past
+                                      </span>
+                                    }
+                                  </>
+                                )}
+                              </>
+                            )}
+                              {channel && (
+                              <>
+                                {channel.toUpperCase().includes('AIRBNB') && (
+                                  <div style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    minWidth: '20px',
+                                    minHeight: '20px',
+                                    backgroundColor: '#24262E',
+                                    borderRadius: '2px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden'
+                                  }}>
+                                    <img
+                                      src={AIRBIN_ICON}
+                                      alt="Airbnb"
+                                      style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        objectFit: 'contain',
+                                        display: 'block',
+                                        margin: '0 auto'
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                                {channel.toUpperCase().includes('BOOKING') && (
+                                  <div style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    minWidth: '20px',
+                                    minHeight: '20px',
+                                    backgroundColor: '#24262E',
+                                    borderRadius: '2px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden'
+                                  }}>
+                                    <img
+                                      src={BOOKING_ICON}
+                                      alt="Booking"
+                                      style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        objectFit: 'contain',
+                                        display: 'block',
+                                        margin: '0 auto'
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                                {channel.toUpperCase().includes('VRBO') && (
+                                  <div style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    minWidth: '20px',
+                                    minHeight: '20px',
+                                    backgroundColor: '#24262E',
+                                    borderRadius: '2px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden'
+                                  }}>
+                                    <img
+                                      src={VRBO_ICON}
+                                      alt="VRBO"
+                                      style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        objectFit: 'contain',
+                                        display: 'block',
+                                        margin: '0 auto'
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                                {channel.toUpperCase().includes('DIRECT') && (
+                                  <div style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    minWidth: '20px',
+                                    minHeight: '20px',
+                                    backgroundColor: '#24262E',
+                                    borderRadius: '2px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden'
+                                  }}>
+                                    <img
+                                      src={DIRECT_ICON}
+                                      alt="Direct"
+                                      style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        objectFit: 'contain',
+                                        display: 'block',
+                                        margin: '0 auto'
+                                      }}
+                                    />
+                                  </div>                               
+                                 )}                                
+                                  {channel.toUpperCase().includes('EMAIL') && (
+                                  <div style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    minWidth: '20px',
+                                    minHeight: '20px',
+                                    backgroundColor: '#24262E',
+                                    borderRadius: '2px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden'
+                                  }}>
+                                    <img
+                                      src={EMAIL_ICON}
+                                      alt="Email"
+                                      style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        objectFit: 'contain',
+                                        display: 'block',
+                                        margin: '0 auto'
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                                {(channel.toUpperCase().includes('OPENPHONE') || channel.toUpperCase().includes('OPEN PHONE')) && (
+                                  <div style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    minWidth: '20px',
+                                    minHeight: '20px',
+                                    backgroundColor: '#24262E',
+                                    borderRadius: '2px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden'
+                                  }}>
+                                    <img
+                                      src={OPENPHONE_ICON}
+                                      alt="OpenPhone"
+                                      style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        objectFit: 'contain',
+                                        display: 'block',
+                                        margin: '0 auto'
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                              </>
+                            )}
+                            </div>
 
-                          </div>
+
                         </div>
                       </div>
                     </div>
                   </div>
-                  <hr />
+                  {/* <hr /> */}
                 </React.Fragment>
               );
             })}

@@ -22,12 +22,109 @@
   scrollbar-color: rgba(255, 255, 255, 0.15) #0F1117;
 }
 
+/* Pin badge styling */
+.image-container {
+  position: relative;
+}
+
+.pin-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  background-color: #F26C0C;
+  border-radius: 50%;
+  border: 2px solid #17191f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transform: translate(-30%, -30%);
+}
+
+.pin-badge img {
+  width: 14px !important;
+  height: 14px !important;
+  object-fit: contain !important;
+}
+
+/* Pin badge styling */
+.image-container {
+  position: relative;
+}
+
+.pin-badge {
+  position: absolute;
+  top: 6px;
+  left:6px;
+  width: 24px;
+  height: 24px;
+  background-color: #F26C0C;
+  border-radius: 50%;
+  border: 2px solid #17191f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transform: translate(-30%, -30%);
+}
+
+.pin-badge img {
+  width: 14px !important;
+  height: 14px !important;
+  object-fit: contain !important;
+}
+
 .left-bar .left-inner-tab {
-    padding: 8px 8px;
+    padding: 8px 12px;
     /* max-width: 530px; */
     /* width: 368px; */
     margin: 0 auto;
+     border: 1px solid #24262E;
+     background-color: #17191F;
 }
+
+.left-bar .left-inner-tab:hover {
+    background-color: #24262E;
+    cursor: pointer;
+}
+
+.left-bar .left-inner-tab:active {
+    background-color: #0F1117;
+}
+
+.left-bar .conversation-item.bg-dark,
+.left-bar .left-inner-tab.bg-dark {
+    background-color: #0F1117 !important;
+    border: 1px solid #24262E !important;
+    position: relative;
+}
+
+/* Make sure hover doesn't override the selected state */
+.left-bar .left-inner-tab.bg-dark:hover {
+    background-color: #0F1117 !important;
+}
+
+/* Selection indicator box and selection indicator styles */
+.sectionIndicatorBox {
+    height: 40px;
+    width: 3px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.selection-indicator {
+    background-color: #3d88f7;
+    border-radius: 0px 2px 2px 0px;
+    height: 40px;
+    width: 3px;
+    display: block;
+}
+
 .left-inner-tab p{
     line-height: normal;
 }
@@ -429,7 +526,9 @@
 
 @media only screen and (min-width: 992px) {
   .left-bar {
-    width: 30% !important;
+    min-width: 368px !important;
+    max-width: 384px !important;
+    width: 368px !important;
   }
 }
 
@@ -497,7 +596,7 @@
 
 .property-thumbnail {
   width: 85px !important;
-  height: 85px !important;
+  height: 79px !important;
   border-radius: 5px !important;
   margin-top: 2px;
 }
@@ -615,25 +714,25 @@ line-height: 24px;
 .user-badge {
   background-color: #bdc1c926;
   color: #BDC1C9;
-  margin-left: 2px;
-  margin-right: 2px;
-  display:inline-flex;
-  
+  /* margin-left: 2px; */
+  /* margin-right: 2px; */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: "DM Sans", Helvetica;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0px;
-  line-height: var(--body-medium-med-500-line-height);
+  line-height: normal;
   padding: 0px 4px;
   border-radius: 2px;
   height: 20px;
-  
-  
 }
 
 .status-indicators {
-  /* display: flex; */
+  display: flex;
+  align-items: center;
   gap: 5px;
 }
 
@@ -652,18 +751,18 @@ line-height: 24px;
   
 }
 .urgent-badge{
-  
-background-color: #4D2100;
-margin-left: 2px;
-  margin-right: 2px;
-  display:inline-flex;
-  
+  background-color: #4D2100;
+  /* margin-left: 2px;
+  margin-right: 2px; */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: "DM Sans", Helvetica;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0px;
-  line-height: var(--body-medium-med-500-line-height);
+  line-height: normal;
   padding: 0px 4px;
   border-radius: 2px;
   height: 20px;
@@ -673,14 +772,15 @@ margin-left: 2px;
   background-color: #013280;
   margin-left: 2px;
   margin-right: 2px;
-  display:inline-flex;
-  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: "DM Sans", Helvetica;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0px;
-  line-height: var(--body-medium-med-500-line-height);
+  line-height: normal;
   padding: 0px 4px;
   border-radius: 2px;
   height: 20px;
@@ -690,14 +790,15 @@ margin-left: 2px;
   background-color: #035D63;
   margin-left: 2px;
   margin-right: 2px;
-  display:inline-flex;
-  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: "DM Sans", Helvetica;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0px;
-  line-height: var(--body-medium-med-500-line-height);
+  line-height: normal;
   padding: 0px 4px;
   border-radius: 2px;
   height: 20px;
@@ -707,14 +808,15 @@ margin-left: 2px;
   background-color: #5607B0;
   margin-left: 2px;
   margin-right: 2px;
-  display:inline-flex;
-  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: "DM Sans", Helvetica;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0px;
-  line-height: var(--body-medium-med-500-line-height);
+  line-height: normal;
   padding: 0px 4px;
   border-radius: 2px;
   height: 20px;
@@ -724,14 +826,15 @@ margin-left: 2px;
   background-color: #036920;
   margin-left: 2px;
   margin-right: 2px;
-  display:inline-flex;
-  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: "DM Sans", Helvetica;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0px;
-  line-height: var(--body-medium-med-500-line-height);
+  line-height: normal;
   padding: 0px 4px;
   border-radius: 2px;
   height: 20px;
@@ -741,14 +844,15 @@ margin-left: 2px;
   background-color: #614100;
   margin-left: 2px;
   margin-right: 2px;
-  display:inline-flex;
-  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: "DM Sans", Helvetica;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0px;
-  line-height: var(--body-medium-med-500-line-height);
+  line-height: normal;
   padding: 0px 4px;
   border-radius: 2px;
   height: 20px;

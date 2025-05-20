@@ -46,19 +46,20 @@
 
 .user-tag {
   display: inline-flex;
+   color:#D0D3DB;
   align-items: center;
   background-color: rgba(36, 38, 46, 1);
-  border-radius: 4px;
+  /* border-radius: 4px; */
   padding: 2px 8px;
   margin-right: 4px;
   margin-bottom: 0;
   flex-shrink: 0;
-  border: 1px solid rgba(189, 193, 201, 0.15);
+  /* border: 1px solid rgba(189, 193, 201, 0.15); */
 }
 
 .user-tag-text {
   font-size: 14px;
-  color: white;
+  color:#D0D3DB;
   margin-right: 6px;
   white-space: nowrap;
   overflow: hidden;
@@ -101,7 +102,7 @@
   border-radius: 4px;
   margin-top: 4px;
   z-index: 100;
-  border: 2px solid rgba(57, 61, 70, 1);
+  border: 1px solid #24262E;
   overflow: hidden;
   max-height: 200px;
   overflow-y: auto;
@@ -113,6 +114,7 @@
   transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
+  color:#D0D3DB;
   justify-content: space-between;
 }
 
@@ -125,7 +127,7 @@
 }
 
 .user-dropdown-item-text {
-  color: white;
+  
   font-size: 14px;
   font-family: "DM Sans", Helvetica;
 }

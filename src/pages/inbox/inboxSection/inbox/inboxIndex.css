@@ -1,16 +1,44 @@
-
-
 .routes .row {
     width: 100%;
 }
 
+.routes {
+    height: 100%;
+}
+
 .inbox-content-container {
   position: relative;
-  height: 100vh;
+  height: 96%;
 }
 .box {
   flex : auto;
 }
+
+/* Custom responsive classes to replace Bootstrap */
+/* .desktop-view {
+  display: none;
+  width: 100%;
+} */
+
+@media (min-width: 992px) {
+  .desktop-view {
+    display: flex;
+    width: 100%;
+  }
+}
+
+.mobile-view {
+  display: block;
+  width: 100%;
+  height: 100vh;
+}
+
+@media (min-width: 992px) {
+  .mobile-view {
+    display: none;
+  }
+}
+
 /* Mobile Styles */
 @media (max-width: 991.98px) {
   .left-bar,
@@ -28,5 +56,22 @@
   .mobile-nav .btn-link {
     color: #146ef5;
     font-size: 16px;
+  }
+}
+
+/* Desktop Styles - Fixed layout for sections */
+@media (min-width: 992px) {
+  /* Fixed middle section width with responsive scaling */
+  .middleSectionContainer {
+    min-width: 384px !important;
+    flex: 1 !important;
+    width: auto !important;
+  }
+  
+  /* Fixed right section width */
+  .rightSectionContainer {
+    width: 296px !important;
+    flex: none !important;
+    background-color: #17191F;
   }
 }

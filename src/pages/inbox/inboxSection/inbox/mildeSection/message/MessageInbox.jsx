@@ -100,9 +100,8 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
               }}
             >
               {initials}
-            </span>
-          )}
-           {displayName}  {timeFormatHHMM}
+            </span>          )}
+           {displayName}  <span style={{ fontWeight: 400 }}>{timeFormatHHMM}</span>
         </p>
       ) : (
         <p className="text-end timing">
@@ -113,7 +112,7 @@ const MessageInbox = ({key, text, sender, messageData, feedBckModelOpen, handleJ
               style={{ width: '21px', height: '21px', marginRight: '5px', verticalAlign: 'middle' }}
             />
           )}
-           {sendByFormatted}  {timeFormatHHMM}
+           {sendByFormatted}  <span style={{ fontWeight: 400 }}>{timeFormatHHMM}</span>
         </p>
       )}
       <div className={`message ${sender} mesaage-box`}>

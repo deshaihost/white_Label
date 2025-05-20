@@ -20,7 +20,7 @@
 .right-side {
     padding:  0px;
     /* height: 590px; */
-    height: 95vh;
+    height: 100%;
     overflow-y: scroll;
 }
 .bordr-cl h2 {
@@ -63,7 +63,7 @@
 
 /* --------------------- */
 
-.right-title h2{
+.right-title h1{
     font-size: 14px !important;
     font-weight: 600;
     font-family: "DM Sans", Helvetica !important;

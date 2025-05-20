@@ -5,6 +5,10 @@
   font-family: "DM Sans", Helvetica !important;
 }
 
+.App {
+  height: 100%;
+}
+
 body {
   padding: 0;
   margin: 0;

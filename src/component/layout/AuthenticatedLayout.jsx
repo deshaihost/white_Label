@@ -37,29 +37,32 @@ const AuthenticatedLayout = ({ children }) => {
     };
   }, []);
 
+  // Calculate the current effective sidebar width
+  const effectiveSidebarWidth = sidebarClicked 
+    ? (sidebarOpen ? sidebarWidth : 64) 
+    : 64;
+
   return (
-    
-      
     <div className="authenticated-layout" style={{ 
-      display: "flex", 
-      flexDirection: "column", 
-      height: "90vh",
+      display: "flex",
+      height: "100%",
       width: "100%" 
     }}>
+      {/* NavBarContainer is fixed positioned, so doesn't affect layout flow */}
       {authData && <NavBarContainer />}
+      
+      {/* Main content area - takes up the remaining space */}
       <div style={{ 
-        width: "95%", 
-        minHeight: "100vh", 
+        width: `calc(100% - ${effectiveSidebarWidth}px)`, 
+        marginLeft: `${effectiveSidebarWidth}px`,
+        height: "100%",
         overflow: "auto",
-        // When mouse over/out, always use 64px
-        // When clicked, use sidebarWidth if sidebar is open, otherwise 64px
-        marginLeft: sidebarClicked ? (sidebarOpen ? `${sidebarWidth}px` : "64px") : "64px",
-        transition: "margin-left 0.3s ease-in-out"
+        transition: "margin-left 0.3s ease-in-out, width 0.3s ease-in-out",
+        boxSizing: "border-box" // Ensure padding is included in width calculation
       }}>
         {children}
       </div>
     </div>
-    
   );
 };
 

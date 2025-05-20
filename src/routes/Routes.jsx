@@ -476,10 +476,9 @@ const Routing = () => {
         <Footer />}
     </>
   );
-
   // Wrap content with AuthenticatedLayout when the user is logged in
   return (
-    <div className="routes">
+    <div className="routes" style={{ height: "100%" }}>
       {authData ? (
         <AuthenticatedLayout>{content}</AuthenticatedLayout>
       ) : (
