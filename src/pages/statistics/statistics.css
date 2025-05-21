@@ -16,7 +16,7 @@
 
 /* Base container for the whole statistics page */
 .statistics-page {
-  padding: 20px; /* Adds padding around the entire page */
+  padding: 52px; /* Adds padding around the entire page */
   background-color: #000212;
   min-height: 100vh; /* Ensure the page takes up at least full screen height */
   margin-bottom: 150px;

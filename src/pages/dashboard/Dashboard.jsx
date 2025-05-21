@@ -286,13 +286,11 @@ const Dashboard = () => {
                 } />
               )}
             </div>
-          )}
-
-          <div className="row">
-            <div className="col-lg-2 col-xl-2  col-xxl-2">
+          )}          <div className="row justify-content-center">
+            <div className="col-lg-2 col-xl-2 col-xxl-2" style={{display: "none"}}>
               <SideBar />
             </div>
-            <div className="col-lg-10 col-xl-10  col-xxl-10">
+            <div className="col-lg-10 col-xl-10 col-xxl-10">
               <div className="dashboard-container blur-background-top-right">
                 <div className="account_heading">
                   {first_name ? (

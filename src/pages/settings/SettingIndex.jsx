@@ -69,11 +69,11 @@ const SettingIndex = () => {
                 {/* SettingSideBarIndex component rendering has been disabled 
                 <SettingSideBarIndex interFaceTypes={interFaceTypes} changeHndl={setInterFaceSettings} activeTab={interFaceSettings} isAdmin={isAdmin}/>
                 */}
-                <div style={{ marginTop: "20px", textAlign: "center" }}>
+                {/* <div style={{ marginTop: "20px", textAlign: "center" }}>
                   <Link to="/dashboard" className="text-link">
                     &lt; Dashboard
                   </Link>
-                </div>
+                </div> */}
               </div>
               <div className="setting_tab_data border border-primary p-3 " style={{ borderRadius: "20px" }}>
                 <div className="setting_tab_data_inner">
