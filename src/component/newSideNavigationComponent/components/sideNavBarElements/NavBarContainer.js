@@ -130,9 +130,7 @@ function NavBarContainer() {
   const conditionalPaths = ["/getstarted", "/smart-templates"];
 
   // Check if current path should show portal navigation based on login status
-  const isConditionalPath = conditionalPaths.includes(location.pathname);
-
-  // Navigation handling functions
+  const isConditionalPath = conditionalPaths.includes(location.pathname);  // Navigation handling functions
   const handleNavigation = (path, state) => {
     if (state) {
       navigate(path, { state });
