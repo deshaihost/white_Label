@@ -125,7 +125,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
 
 
   return (
-    <div className="upsells_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "20px"}}>
+    <div className="upsells_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "40px 60px"}}>
       {selectedSection === "preStayUpsells" && (
         <PreStayUpsells setSection={setSelectedSection} settingsApiData={preStaySettingsApiData} setSettingsApiData={setPreStaySettingsApiData} localSettingsData={preStayLocalSettingsData} setLocalSettingsData={setPreStayLocalSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPreStaySettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPreStayUpcomingMessagesLoading} upcomingMessagesData={preStayUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList}/>
       )}

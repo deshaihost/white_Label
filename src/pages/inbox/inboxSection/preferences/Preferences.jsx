@@ -235,7 +235,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
 
   return (
-    <div className="setting_index_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "20px"}}>
+    <div className="setting_index_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "40px 60px "}}>
       <div className="conversation-settings-inbox">
         {getSettingsLoading ? <FullScreenLoader /> : null}
 
