@@ -78,12 +78,15 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
   const [currentView, setCurrentView] = useState('conversations'); // New state for mobile view
   const [activeTab, setActiveTab] = useState('pms'); // New state to track active tab
+  const [pendingTabChange, setPendingTabChange] = useState(null); // To track pending tab change when switching views
   const [allowConvIdQuery, setAllowConvIdQuery] = useState(true); // Added state for handling conversationId query
   const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
 
   // State for tracking pin status
-  const [isPinned, setIsPinned] = useState(false);  // Function to handle pin/unpin action
+  const [isPinned, setIsPinned] = useState(false);
+  
+  // Function to handle pin/unpin action
   const handlePinToggle = async () => {
     if (!selectedConversation?.conversation_id) return;
     
@@ -256,6 +259,15 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
 
   // State for currently editing note
   const [editingNoteId, setEditingNoteId] = useState(null);
+
+  // Handle pending tab changes when view changes
+  useEffect(() => {
+    // If we have a pending tab change and we're in the messages view, apply it
+    if (pendingTabChange && currentView === 'messages') {
+      setActiveTab(pendingTabChange);
+      setPendingTabChange(null); // Clear the pending change
+    }
+  }, [currentView, pendingTabChange]);
 
   // Handle dropdown toggle
   const toggleDropdown = (noteId) => {
@@ -1477,12 +1489,13 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               style={{ width: '296px', flex: 'none', height:"100%", 
                 padding:"11px", 
                 border:"1px solid #24262E"
-              }}>
-            <RightSection
+              }}>            <RightSection
               className="box"
               style={{ width: "100%", height: "calc(100vh - 110px)" , backgroundColor:"#17191F" }}
               rightSectionData={selectedConversation}
               updateConversationFromApi={updateConversation}
+              setActiveTab={setActiveTab}
+              setPendingTabChange={setPendingTabChange}
             />
             </div>
           </div>
@@ -1522,7 +1535,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               <MildeSection allConversationData={selectedConversation} updateConversationFromApi={updateConversation} updateConversationLocal={addMessageToLocalConversation} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays} setCurrentView={setCurrentView} />
             )}
             {currentView === 'details' && (
-              <RightSection rightSectionData={selectedConversation} updateConversationFromApi={updateConversation} setCurrentView={setCurrentView} />
+              <RightSection rightSectionData={selectedConversation} updateConversationFromApi={updateConversation} setCurrentView={setCurrentView} setActiveTab={setActiveTab} setPendingTabChange={setPendingTabChange} />
             )}
           </div>
         </div>

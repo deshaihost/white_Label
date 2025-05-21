@@ -23,7 +23,7 @@ import SendTemplateIcon from "./message/icons/sendTemplate_icon.svg";
 
 const placeholderImg = 'https://hostbuddylb.com/misc/chatBubbles.webp';
 
-const MildeSection = ({ allConversationData, updateConversationFromApi, updateCovnersationLocal, subscriptionPlan, accountAgeDays, setCurrentView }) => {
+const MildeSection = ({ allConversationData, updateConversationFromApi, updateConversationLocal, subscriptionPlan, accountAgeDays, setCurrentView }) => {
   const eliteOrWorksPlan = /elite|works/i.test(subscriptionPlan) || subscriptionPlan == 'trial'; // Case-insensitive check for 'elite' or 'works' in the plan name
   const eliteFeaturesAvailable = /elite/i.test(subscriptionPlan) || subscriptionPlan == 'trial'; // user subscribed to Elite or is on trial
   const propertyIsLocked = !!allConversationData?.is_locked;

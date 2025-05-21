@@ -52,7 +52,7 @@ const callGetActionItemsApi = async (setActionItems, setGetActionItemsLoading) =
   }
 };
 
-const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentView }) => {
+const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentView, setActiveTab, setPendingTabChange }) => {
   const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, guest_chatbot_status, property_chatbot_status, conversation_id, image_url, user } = rightSectionData ? rightSectionData : {};
   
   const until_formatted = guest_chatbot_status?.until_utc == 'indefinitely' ? 'indefinitely' : (guest_chatbot_status?.until_local ? timeFormat(guest_chatbot_status?.until_local) : null);
@@ -589,9 +589,25 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   else { channel = ""; }
   const statusText = getStatusText(status);
 
-  // Navigate to action items page
+    // Navigate to action items page
   const navigateToActionItems = () => {
-    navigate('/action-item');
+    if (setActiveTab) {
+      // For desktop view, directly switch to Open Issue tab
+      setActiveTab('openIssue');
+      
+      // If we're in mobile view and need to navigate to messages view first
+      if (setCurrentView) {
+        // Set which tab we want to activate after the view change
+        if (setPendingTabChange) {
+          setPendingTabChange('openIssue');
+        }
+        // Navigate to messages view
+        setCurrentView('messages');
+      }
+    } else {
+      // Fallback to the original behavior if setActiveTab is not available
+      navigate('/action-item');
+    }
   };
 
   return (
