@@ -462,8 +462,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
 
   console.log("Debug - Arrival date:", arrival_date);
   console.log("Debug - Departure date:", departure_date);
-
-  // Format timestamp for issues in "Month Time" format (e.g. "Feb 3:45pm")
+  // Format timestamp for issues in "Month Day, Time" format (e.g. "Feb 15, 3:45pm")
   const formatIssueTime = (dateTimeString) => {
     if (!dateTimeString) return "";
     
@@ -471,6 +470,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
     const month = months[date.getMonth()];
+    const day = date.getDate(); // Get the day
     let hours = date.getHours();
     let minutes = date.getMinutes();
     const ampm = hours >= 12 ? "pm" : "am";
@@ -479,7 +479,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
     hours = hours ? hours : 12; // 0 hour should be 12
     minutes = minutes < 10 ? "0" + minutes : minutes;
     
-    return `${month} ${hours}:${minutes}${ampm}`;
+    return `${month} ${day}, ${hours}:${minutes}${ampm}`;
   };
 
   // Calculate end_time_utc based on timing, for toggle conversation status
@@ -1564,15 +1564,18 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
           {actionItems && actionItems.filter(obj => obj.status === "incomplete").length > 0 ? (
             <>
               {/* Always display the first/latest issue with timestamp above */}
-              <div style={{ marginBottom: "10px" }}>                <div style={{ fontSize: "12px", color: "#808080", marginBottom: "2px" }}>
+              <div style={{ marginBottom: "10px" }}>                
+                <div style={{ fontSize: "12px", color: "#808080", marginBottom: "2px" }}>
                   {formatIssueTime(actionItems.filter(obj => obj.status === "incomplete")[0].created_at)}
-                </div>                <div style={{ 
+                </div>               
+                 <div style={{ 
                    display: 'flex',
                    alignItems: 'center', 
                    gap: '8px',
                    justifyContent: 'space-between',
                    width: '100%'
-                }}>                  <p style={{ 
+                }}>                  
+                <p style={{ 
                     margin: 0,
                     color: '#d0d3db',
                     fontFamily: '"DM Sans-Regular", Helvetica',
