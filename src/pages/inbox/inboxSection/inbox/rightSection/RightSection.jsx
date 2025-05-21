@@ -892,7 +892,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
         }}></div>
 
         {/* Contact Information Section */}
-        <div style={{ marginBottom: '15px' }}>
+        {/* <div style={{ marginBottom: '15px' }}>
           <div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
@@ -958,7 +958,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
               {contactInfo.email}
             </span>
           </div>
-        </div>
+        </div> */}
 
         <div style={{ 
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
