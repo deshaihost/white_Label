@@ -30,8 +30,8 @@
 }
 
 .auth .auth-content .logo img {
+  max-width: 239px;
   width: 100%;
-  max-width: 202px;
 }
 
 .auth .auth-content .auth-form {
