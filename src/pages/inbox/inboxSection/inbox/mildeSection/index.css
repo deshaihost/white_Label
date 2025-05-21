@@ -181,7 +181,7 @@
     flex-direction: column;
     white-space: nowrap;
     width: auto;
-    z-index: 1000;
+    z-index: 1001;
 }
   
 .main-chat .generate-menu-item {
@@ -334,4 +334,18 @@
 /* Rotate chevron when dropdown is open */
 .main-chat .send-button-chevron.active {
     transform: rotate(180deg);
+}
+
+/* Tooltip styling to ensure it appears above the generate-menu */
+.generate-tooltip {
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+}
+
+/* Fix for React Tooltip to ensure it's positioned above content */
+#aiNotAvailableTooltip {
+    position: fixed !important;
+    transform: translateY(-10px) !important;
+    margin-top: -20px !important;
 }

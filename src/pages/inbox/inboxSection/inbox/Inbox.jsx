@@ -899,7 +899,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                       />
                     </div>
                     
-                    {/* Three dots with square badge */}
+                    {/* Three dots with square badge
                     <div style={{
                       width: '32px',
                       height: '32px',
@@ -940,7 +940,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           margin: '0 1px'
                         }}></div>
                       </div>
-                    </div>
+                    </div> */}
                     
                     {/* Info circle icon with background */}
                     <div style={{
@@ -1480,7 +1480,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               }}>
             <RightSection
               className="box"
-              style={{ width: "100%", height: "calc(100vh - 110px)" , backgroundColor:"#17191F"}}
+              style={{ width: "100%", height: "calc(100vh - 110px)" , backgroundColor:"#17191F" }}
               rightSectionData={selectedConversation}
               updateConversationFromApi={updateConversation}
             />

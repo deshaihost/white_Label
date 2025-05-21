@@ -847,7 +847,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
                               <button className="generate-menu-item greyed-out" key='scratch' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={toolTipMessage}>Generate From Scratch</button>
                             )}
                             {inputValue.trim() !== "" ? (
-                              <button className="generate-menu-item" key='command' onClick={() => handleGenerateOptionSelect('command')}>Generate From My Instruction</button>
+                              <button className="generate-menu-item greyed-out" key='command' onClick={() => handleGenerateOptionSelect('command')}>Generate From My Instruction</button>
                             ) : (
                               <button className="generate-menu-item greyed-out" key='command' disabled data-tooltip-id="aiNotAvailableTooltip" data-tooltip-content={'Start typing to instruct HostBuddy how to message the guest'}>Generate From My Instruction</button>
                             )}
@@ -956,8 +956,17 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
               </p>
             )
           )
-        )}
-      </div>      <Tooltip className="generate-tooltip" id="aiNotAvailableTooltip" delayShow={0} place="top" effect="solid"/>
+        )}      </div>      <Tooltip 
+        className="generate-tooltip" 
+        id="aiNotAvailableTooltip" 
+        delayShow={0}
+        place="top"
+        effect="solid"
+        style={{ zIndex: 9999 }}
+        positionStrategy="fixed"
+        offset={15}
+        float={true}
+      />
       <MessgFeedBckModel show={feedBackModelOpen} handleClose={messgFeedBckClose} feedBackDataGet={feedBackDataGet}/>
       <JustificationModal show={showJustificationModal} handleClose={() => setShowJustificationModal(false)} propertyName={propertyName} justification={justificationText}/>
       
