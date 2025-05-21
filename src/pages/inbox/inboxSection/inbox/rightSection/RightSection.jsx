@@ -53,10 +53,18 @@ const callGetActionItemsApi = async (setActionItems, setGetActionItemsLoading) =
 };
 
 const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentView, setActiveTab, setPendingTabChange }) => {
-  const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, guest_chatbot_status, property_chatbot_status, conversation_id, image_url, user } = rightSectionData ? rightSectionData : {};
+  const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, guest_chatbot_status, property_chatbot_status, conversation_id, image_url, user , action_items } = rightSectionData ? rightSectionData : {};
   
   const until_formatted = guest_chatbot_status?.until_utc == 'indefinitely' ? 'indefinitely' : (guest_chatbot_status?.until_local ? timeFormat(guest_chatbot_status?.until_local) : null);
   let { channel, is_locked } = rightSectionData || {};
+  
+  // Helper function to safely handle action items filtering
+  const getIncompleteActionItems = () => {
+    return (action_items && Array.isArray(action_items)) 
+      ? action_items.filter(obj => obj.status === "incomplete") 
+      : [];
+  };
+  
   const [selectedOption, setSelectedOption] = useState('');
   const [toggleStatusLoading, setToggleStatusLoading] = useState(false);
   const [issuesExpanded, setIssuesExpanded] = useState(false);
@@ -87,6 +95,18 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
     callGetActionItemsApi(setActionItems, setGetActionItemsLoading);
   }, []);
   
+  // Refresh action items when conversation_id changes and there are no action_items in rightSectionData
+  useEffect(() => {
+    if (conversation_id && (!action_items || action_items.length === 0)) {
+      // If there are no action_items in rightSectionData for this conversation,
+      // we could either update the callGetActionItemsApi to filter by conversation_id
+      // or rely on the updateConversationFromApi function to refresh the data
+      if (updateConversationFromApi && typeof updateConversationFromApi === 'function') {
+        updateConversationFromApi(conversation_id);
+      }
+    }
+  }, [conversation_id, action_items, updateConversationFromApi]);
+  
   // Function to mark an action item as complete
   const callCompleteActionItemApi = async (actionItemId) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -98,11 +118,15 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
         validateStatus: function (status) { return status >= 200 && status < 500; }
       };
       const bodyData = { action_item_id: actionItemId };
-      const response = await axios.put(`${baseUrl}/complete_action_item`, bodyData, config);
-  
-      if (response.status === 200) { 
+      const response = await axios.put(`${baseUrl}/complete_action_item`, bodyData, config);      if (response.status === 200) { 
         // Remove the completed action item from the state
         setActionItems(actionItems.filter((item) => item.id !== actionItemId));
+        
+        // If this is a conversation-specific action item and updateConversationFromApi is available, refresh the conversation data
+        if (conversation_id && updateConversationFromApi && typeof updateConversationFromApi === 'function') {
+          updateConversationFromApi(conversation_id);
+        }
+        
         ToastHandle("Action item marked as completed", "success");
       } else { 
         ToastHandle(response?.data?.error, "danger"); 
@@ -1531,8 +1555,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
         }}></div>
       
       {!(channel == 'Chat Window') && (
-        <div className="issue">          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0px' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div className="issue">          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0px' }}>            <div style={{ display: 'flex', alignItems: 'center' }}>
               <h1 style={{ 
                 margin: 0,
                 color: '#ffffff',
@@ -1544,7 +1567,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                 whiteSpace: 'nowrap',
                 position: 'relative'  /* Using relative instead of fixed to maintain layout flow */
               }}>Open Issues</h1>
-              {actionItems && actionItems.filter(obj => obj.status === "incomplete").length > 0 && (
+              {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 && (
                 <span style={{ 
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -1557,9 +1580,8 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                   fontSize: '10px',
                   marginLeft: '8px',
                   fontWeight: 'bold' ,
-                  margin:'5px'
-                }}>
-                  {actionItems.filter(obj => obj.status === "incomplete").length}
+                  margin:'5px'                }}>
+                  {getIncompleteActionItems().length}
                 </span>
               )}
             </div>
@@ -1574,16 +1596,13 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
               }}
             >
               View All
-            </span>
-          </div>
-
-          {actionItems && actionItems.filter(obj => obj.status === "incomplete").length > 0 ? (
+            </span>          </div>          {/* Use action_items from rightSectionData (guest specific) if available, otherwise fall back to actionItems state */}
+          {getIncompleteActionItems().length > 0 ? (
             <>
               {/* Always display the first/latest issue with timestamp above */}
-              <div style={{ marginBottom: "10px" }}>                
-                <div style={{ fontSize: "12px", color: "#808080", marginBottom: "2px" }}>
-                  {formatIssueTime(actionItems.filter(obj => obj.status === "incomplete")[0].created_at)}
-                </div>               
+              <div style={{ marginBottom: "10px" }}>                  <div style={{ fontSize: "12px", color: "#808080", marginBottom: "2px" }}>
+                  {formatIssueTime(getIncompleteActionItems()[0]?.created_at)}
+                </div>
                  <div style={{ 
                    display: 'flex',
                    alignItems: 'center', 
@@ -1601,8 +1620,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                     lineHeight: 'normal',
                     position: 'relative',
                     flex: '1'
-                  }}>
-                    {actionItems.filter(obj => obj.status === "incomplete")[0].item}
+                  }}>                    {getIncompleteActionItems()[0]?.item}
                   </p>
                   <div style={{
                     width: '32px',
@@ -1614,9 +1632,8 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                     justifyContent: 'center',
                     flexShrink: 0,
                     cursor: 'pointer'
-                  }}
-                  onClick={() => {
-                    const firstIncompleteItem = actionItems.filter(obj => obj.status === "incomplete")[0];
+                  }}                  onClick={() => {
+                    const firstIncompleteItem = getIncompleteActionItems()[0];
                     if (firstIncompleteItem && firstIncompleteItem.id) {
                       callCompleteActionItemApi(firstIncompleteItem.id);
                     }
@@ -1633,12 +1650,10 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                 </div>
 
 
-              </div>
-              
-              {/* Show remaining issues when expanded with timestamps above each */}
-              {issuesExpanded && actionItems.filter(obj => obj.status === "incomplete").length > 1 && (
+              </div>              {/* Show remaining issues when expanded with timestamps above each */}
+              {issuesExpanded && getIncompleteActionItems().length > 1 && (
                 <div>
-                  {actionItems.filter(obj => obj.status === "incomplete")
+                  {getIncompleteActionItems()
                     .slice(1)
                     .map((obj, index) => (
                       <div key={index} style={{ marginBottom: "10px" }}>                        <div style={{ fontSize: "12px", color: "#A6A9B2", marginBottom: "2px" , fontWeight: 600, }}>
@@ -1688,10 +1703,8 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                     ))
                   }
                 </div>
-              )}
-              
-              {/* Show "+X more issues" text (clickable to expand issues) */}
-              {!issuesExpanded && actionItems.filter(obj => obj.status === "incomplete").length > 1 && (
+              )}              {/* Show "+X more issues" text (clickable to expand issues) */}
+              {!issuesExpanded && getIncompleteActionItems().length > 1 && (
                 <span 
                   onClick={() => setIssuesExpanded(true)} 
                   style={{ 
@@ -1708,13 +1721,12 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                     cursor: 'pointer'
                   }}
                 >
-                  +{actionItems.filter(obj => obj.status === "incomplete").length - 1} more {actionItems.filter(obj => obj.status === "incomplete").length - 1 === 1 ? 'issue' : 'issues'}
+                  +{getIncompleteActionItems().length - 1} more {getIncompleteActionItems().length - 1 === 1 ? 'issue' : 'issues'}
                 </span>
-              )}
-            </>
+              )}            </>
           ) : (
-            <p style={{color:'#A6A9B2'}}>None</p>
-          )}        </div>
+            <p style={{color:'#A6A9B2', fontFamily: '"DM Sans-Regular", Helvetica', fontSize: '14px'}}>No action items for this guest</p>
+          )}</div>
       )}
       
       {/* Contact Information Modal */}

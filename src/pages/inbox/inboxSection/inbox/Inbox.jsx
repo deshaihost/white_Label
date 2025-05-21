@@ -495,6 +495,30 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
   const [filteredActionItems, setFilteredActionItems] = useState([]);
   const [isLoadingActionItems, setIsLoadingActionItems] = useState(false);
 
+  // Update action items when selectedConversation changes
+  useEffect(() => {
+    // Only proceed if we have a valid conversation with a conversation_id
+    if (selectedConversation && selectedConversation.conversation_id) {
+      setIsLoadingActionItems(true);
+      
+      // Check if the selected conversation has action_items
+      if (selectedConversation.action_items && Array.isArray(selectedConversation.action_items)) {
+        // Filter for incomplete items if needed
+        const incompleteItems = selectedConversation.action_items.filter(item => item.status === "incomplete");
+        setFilteredActionItems(incompleteItems);
+        setIsLoadingActionItems(false);
+      } else {
+        // If no action_items in the conversation data, set empty array
+        setFilteredActionItems([]);
+        setIsLoadingActionItems(false);
+      }
+    } else {
+      // No conversation selected, clear the action items
+      setFilteredActionItems([]);
+      setIsLoadingActionItems(false);
+    }
+  }, [selectedConversation]);
+
   // Function to call the API to get action items
   const callGetActionItemsApi = async (status_query = 'incomplete') => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -537,8 +561,40 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       const response = await axios.put(`${baseUrl}/complete_action_item`, bodyData, config);
   
       if (response.status === 200) { 
-        // Remove the completed action item from the state
+        // Remove the completed action item from the filteredActionItems state
         setFilteredActionItems(filteredActionItems.filter((item) => item.id !== actionItemId));
+        
+        // Update the action_items in the selectedConversation if this action item belongs to it
+        if (selectedConversation && selectedConversation.action_items) {
+          // Create a new action_items array with the completed item marked as "completed"
+          const updatedActionItems = selectedConversation.action_items.map(item => {
+            if (item.id === actionItemId) {
+              return { ...item, status: "completed" };
+            }
+            return item;
+          });
+          
+          // Update the selectedConversation state with the modified action_items
+          setSelectedConversation({
+            ...selectedConversation,
+            action_items: updatedActionItems
+          });
+          
+          // Also update the conversation in the conversations list if needed
+          if (conversations && conversations.length > 0) {
+            const updatedConversations = conversations.map(convo => {
+              if (convo.conversation_id === selectedConversation.conversation_id) {
+                return {
+                  ...convo,
+                  action_items: updatedActionItems
+                };
+              }
+              return convo;
+            });
+            setConversations(updatedConversations);
+          }
+        }
+        
         ToastHandle("Action item marked as completed", "success");
       } else { 
         ToastHandle(response?.data?.error, "danger"); 
@@ -548,11 +604,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       ToastHandle("Error completing action item", "danger");
     }
   };
-
-  // Fetch action items when the component mounts, regardless of active tab
-  useEffect(() => {
-    callGetActionItemsApi();
-  }, []);
+  // No need to fetch global action items when the component mounts
+  // since we're now showing conversation-specific action items
 
   // Fetch action items when the Open Issues tab is selected
   useEffect(() => {
@@ -560,6 +613,20 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       callGetActionItemsApi();
     }
   }, [activeTab]);
+
+  // When the activeTab changes to 'openIssue', ensure we have the latest action items
+  useEffect(() => {
+    if (activeTab === 'openIssue' && selectedConversation && selectedConversation.conversation_id) {
+      // If we already have the conversation data, just filter its action items
+      if (selectedConversation.action_items && Array.isArray(selectedConversation.action_items)) {
+        const incompleteItems = selectedConversation.action_items.filter(item => item.status === "incomplete");
+        setFilteredActionItems(incompleteItems);
+      } else {
+        // If the conversation doesn't have action_items, try to refresh the conversation data
+        updateConversation(selectedConversation.conversation_id);
+      }
+    }
+  }, [activeTab, selectedConversation?.conversation_id]);
 
   // Load notes when the selected conversation changes, regardless of active tab
   useEffect(() => {
@@ -1023,8 +1090,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           {unreadPmsCount}
                         </span>
                       )}
-                      */}
-                      {tab.id === 'openIssue' && filteredActionItems.length > 0 && (
+                      */}                      {tab.id === 'openIssue' && filteredActionItems && filteredActionItems.length > 0 && (
                         <span style={{
                           backgroundColor: 'rgb(44 46 52)',
                           color: '#A6A9B2',
@@ -1078,14 +1144,13 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                   <h3>WhatsApp Messages</h3>
                   <p>WhatsApp integration content will appear here.</p>
                 </div>
-              )}
-              {activeTab === 'openIssue' && (
+              )}              {activeTab === 'openIssue' && (
                 <div className="box" style={{ padding: '5px', backgroundColor: '#0F1117', borderRadius: '4px', height: 'calc(100% - 85.101111px)', overflowY: 'auto' ,
                   border:"1px solid #24262E" 
                  }}>
                   
                   <div className="action-items-container">
-                    {/* We would fetch action items from the API in a real implementation */}
+                    {/* Render action items from the selected conversation */}
                     {[].concat(filteredActionItems || []).filter(item => item.status !== 'completed').map(actionItem => (
                       <div key={actionItem.id} 
                       // className="action-item-card" 
@@ -1152,8 +1217,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                       </div>
                     ))}
                     
-                    {/* If there are no items or the API hasn't been integrated yet, show these mock items */}
-                    {isLoadingActionItems ? (
+                    {/* If there are no items or the API hasn't been integrated yet, show these mock items */}                    {isLoadingActionItems ? (
                       <div className="no-action-items" style={{
                         padding: '20px',
                         textAlign: 'center',
@@ -1161,13 +1225,21 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                       }}>
                         <p>Loading...</p>
                       </div>
+                    ) : (!selectedConversation?.conversation_id) ? (
+                      <div className="no-action-items" style={{
+                        padding: '20px',
+                        textAlign: 'center',
+                        color: '#a4a6aa'
+                      }}>
+                        <p>Select a conversation to view open issues</p>
+                      </div>
                     ) : (!filteredActionItems || filteredActionItems.length === 0) ? (
                       <div className="no-action-items" style={{
                         padding: '20px',
                         textAlign: 'center',
                         color: '#a4a6aa'
                       }}>
-                        <p>No open issues found</p>
+                        <p>No open issues found for this conversation</p>
                       </div>
                     ) : null}
                   </div>
