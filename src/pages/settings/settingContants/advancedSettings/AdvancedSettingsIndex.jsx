@@ -15,7 +15,7 @@ const AdvancedSettingsIndex = () => {
 
   return (
     <div>
-      {/* <h3 className="mb-4">Conversation Preferences</h3> */}
+      {/* <h3 className="mb-4">AI Preferences</h3> */}
       <Preferences allPropertyNamesList={allPropertyNamesList} />
     </div>
   );

@@ -85,11 +85,10 @@ const SettingIndex = () => {
                   )}
                   {interFaceTypes?.contact === interFaceSettings && (
                     <AccountContactSection />
-                  )}
-                  {interFaceTypes?.notifications === interFaceSettings && (
+                  )}                  {interFaceTypes?.notifications === interFaceSettings && (
                     <AccountNotificationSection />
                   )}
-                  {interFaceTypes?.conversationSettings === interFaceSettings && (
+                  {(interFaceSettings === "ai-preferences" || interFaceSettings === "conversation-preferences") && (
                     <AdvancedSettingsIndex />
                   )}
                   {interFaceTypes?.upsells === interFaceSettings && (

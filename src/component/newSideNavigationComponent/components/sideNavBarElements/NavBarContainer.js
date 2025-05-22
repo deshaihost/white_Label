@@ -128,11 +128,19 @@ function NavBarContainer() {
 
   // List of paths that should show portal navigation based on login status
   const conditionalPaths = ["/getstarted", "/smart-templates"];
-
   // Check if current path should show portal navigation based on login status
   const isConditionalPath = conditionalPaths.includes(location.pathname);  // Navigation handling functions
   const handleNavigation = (path, state) => {
-    if (state) {
+    // Special case for ai-preferences - redirect content but keep URL
+    if (path === '/setting/ai-preferences' || path === '/gcs-settings/ai-preferences') {
+      navigate('/inbox/preferences', { 
+        state: { 
+          ...(state || {}), 
+          activeComponent: 2, // The index for preferences component
+          originalPath: path  // Store the original path
+        }
+      });
+    } else if (state) {
       navigate(path, { state });
     } else {
       navigate(path);

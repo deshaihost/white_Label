@@ -81,15 +81,24 @@ const InboxIndex = () => {
       );
       setAllGuestNames(transformedGuestNames);
     }
-  };
-
-  // On page load, call some APIs
+  };  // On page load, call some APIs
   useEffect(() => {
     dispatch(getUserDataActions(false)); // So we can have the list of property names for the various dropdowns. false because we don't need the property data
     populateGuestNames(); // So we can have the list of guest names for the guest search bar
     
     // Check for component index from URL path param or from location state
     const componentFromLocation = location.state?.activeComponent;
+    
+    // Handle URL preservation if coming from settings route with originalPath
+    if (location.state?.originalPath && location.pathname === '/inbox/preferences') {
+      // Update browser URL without triggering navigation
+      window.history.replaceState(
+        { ...window.history.state }, 
+        document.title, 
+        location.state.originalPath
+      );
+    }
+    
     if (componentFromLocation !== undefined) {
       setInterFaceComponent(componentFromLocation);
     } else {
