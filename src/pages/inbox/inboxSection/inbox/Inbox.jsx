@@ -518,33 +518,11 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       setIsLoadingActionItems(false);
     }
   }, [selectedConversation]);
-
-  // Function to call the API to get action items
-  const callGetActionItemsApi = async (status_query = 'incomplete') => {
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    setIsLoadingActionItems(true);
-  
-    try {
-      const config = {
-        headers: { "X-API-Key": API_KEY },
-        validateStatus: function (status) { return status >= 200 && status < 500; }
-      };
-      const response = await axios.get(`${baseUrl}/get_action_items?status=${status_query}&limit=200`, config);
-  
-      if (response.status === 200) {
-        setFilteredActionItems(response.data.action_items);
-      }
-      else { 
-        ToastHandle(response?.data?.error, "danger"); 
-      }
-      return response.data;
-    } catch (error) {
-      ToastHandle("Error - unable to get action items", "danger");
-      return { error: "Internal server error" };
-    } finally {
-      setIsLoadingActionItems(false);
-    }
+  // This function is deprecated - we now get action items directly from the selected conversation
+  // Using the function will log a warning and do nothing
+  const callGetActionItemsApi = async () => {
+    console.warn("callGetActionItemsApi is deprecated - action items should be fetched from the selected conversation");
+    return { error: "Deprecated function" };
   };
 
   // Function to call the API to mark an action item as complete
@@ -603,27 +581,24 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     } catch (error) {
       ToastHandle("Error completing action item", "danger");
     }
-  };
-  // No need to fetch global action items when the component mounts
+  };  // No need to fetch global action items when the component mounts
   // since we're now showing conversation-specific action items
-
-  // Fetch action items when the Open Issues tab is selected
-  useEffect(() => {
-    if (activeTab === 'openIssue') {
-      callGetActionItemsApi();
-    }
-  }, [activeTab]);
-
-  // When the activeTab changes to 'openIssue', ensure we have the latest action items
+  // When the activeTab changes to 'openIssue', ensure we have the latest action items from the selected conversation only
   useEffect(() => {
     if (activeTab === 'openIssue' && selectedConversation && selectedConversation.conversation_id) {
+      setIsLoadingActionItems(true);
+      
       // If we already have the conversation data, just filter its action items
       if (selectedConversation.action_items && Array.isArray(selectedConversation.action_items)) {
+        // Only use action items from the selected conversation
         const incompleteItems = selectedConversation.action_items.filter(item => item.status === "incomplete");
         setFilteredActionItems(incompleteItems);
+        setIsLoadingActionItems(false);
       } else {
         // If the conversation doesn't have action_items, try to refresh the conversation data
-        updateConversation(selectedConversation.conversation_id);
+        updateConversation(selectedConversation.conversation_id)
+          .then(() => setIsLoadingActionItems(false))
+          .catch(() => setIsLoadingActionItems(false));
       }
     }
   }, [activeTab, selectedConversation?.conversation_id]);
@@ -1144,7 +1119,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                   <h3>WhatsApp Messages</h3>
                   <p>WhatsApp integration content will appear here.</p>
                 </div>
-              )}              {activeTab === 'openIssue' && (
+              )}             
+               {activeTab === 'openIssue' && (
                 <div className="box" style={{ padding: '5px', backgroundColor: '#0F1117', borderRadius: '4px', height: 'calc(100% - 85.101111px)', overflowY: 'auto' ,
                   border:"1px solid #24262E" 
                  }}>
@@ -1168,7 +1144,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           display: 'flex',
                           justifyContent: 'space-between',
                           marginBottom: '4px'
-                        }}>                          <div className="action-item-date" style={{
+                        }}>                          
+                        <div className="action-item-date" style={{
                             fontSize: '12px',
                             color: '#A6A9B2' ,
                             forntweight:"600"
