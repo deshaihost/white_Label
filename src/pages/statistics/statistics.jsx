@@ -93,11 +93,9 @@ const StatisticsPage = () => {
   return (
     <div className="statistics-page">
       
-      {dataLoading && <FullScreenLoader />}
-
-      <h1 className="page-header">
+      {dataLoading && <FullScreenLoader />}      <h1 className="page-header">
         Business Insights
-        <span className="subtitle" style={{color:'#146ef5' ,marginRight:"25px"}}>By HostBuddy</span>
+        <span className="subtitle" style={{color:'#146ef5'}}>By HostBuddy</span>
       </h1>
 
       <hr/>
