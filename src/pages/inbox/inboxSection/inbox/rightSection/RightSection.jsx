@@ -782,7 +782,8 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                     }}
                   />
                 </div>
-              )}              {channel.toUpperCase().includes('VIRBO') && (
+              )}             
+               {channel.toUpperCase().includes('VRBO') && (
                 <div style={{ 
                   display: 'flex',
                   alignItems: 'center',
@@ -796,7 +797,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                     src={VIRBO_ICON_FOR_RIGHT}
                     alt="VIRBO"
                     style={{
-                      width: '37.38px',
+                      width: '45.38px',
                       height: '20px',
                       objectFit: 'contain'
                     }}
