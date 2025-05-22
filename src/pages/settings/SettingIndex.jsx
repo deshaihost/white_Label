@@ -22,11 +22,10 @@ const SettingIndex = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const { section, subsec } = useParams();
-
   const [interFaceSettings, setInterFaceSettings] = useState("account");
   const [userData, setUserData] = useState({});
 
-  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"conversation-preferences", integrations:"integrations", users:"users", upsells:"upsells", subscription:"subscription", messagingChannels:"messaging-channels" };
+  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"ai-preferences", integrations:"integrations", users:"users", upsells:"upsells", subscription:"subscription", messagingChannels:"messaging-channels" };
 
   const ApiUserData = store?.getUserDataReducer?.getUserData?.data?.user;
   const isAdmin = store?.getUserDataReducer?.getUserData?.data?.user?.is_hb_admin;

@@ -58,8 +58,7 @@ export const data = [
         component: <InsightComponent/>,
         HasdropDown: "no"
     },
-    {
-        id: 7,
+    {        id: 7,
         label: "Settings",
         component: <SettingsDefault/>,
         HasdropDown: "yes",
@@ -67,7 +66,7 @@ export const data = [
             { id: 71, label: "Account", HasdropDown: "no" },
             { id: 72, label: "Contact", HasdropDown: "no" },
             { id: 73, label: "Notifications", HasdropDown: "no" },
-            { id: 74, label: "Conversation Preferences", HasdropDown: "no" } ,
+            { id: 74, label: "AI Preferences", HasdropDown: "no" } ,
             { id: 75, label: "Integration", HasdropDown: "no" } ,
             { id: 76, label: "Users", HasdropDown: "no" } ,
             { id: 77, label: "Subscription", HasdropDown: "no" } 

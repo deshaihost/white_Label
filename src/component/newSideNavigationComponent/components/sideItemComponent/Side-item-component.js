@@ -210,15 +210,14 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                                     onSelect={() => {
                                         setSelectedId(7); // Keep parent Settings selected
                                         setSettingsActiveTab(dropdownItem.id); // Track which settings tab is active
-                                        
-                                        // Handle dropdown item navigation
+                                          // Handle dropdown item navigation
                                         if (handleNavigation) {
                                             // Map settings dropdown items to their corresponding routes
                                             const settingsMap = isInGcsPortal ? {
                                                 71: '/gcs-settings/account',     // Account
                                                 72: '/gcs-settings/contact',     // Contact
                                                 73: '/gcs-settings/notifications', // Notifications
-                                                74: '/gcs-settings/conversation-preferences', // Conversation Preferences 
+                                                74: '/gcs-settings/ai-preferences', // AI Preferences 
                                                 75: '/gcs-settings/integrations', // Integration
                                                 76: '/gcs-settings/users',       // Users
                                                 77: '/gcs-settings/subscription' // Subscription
@@ -226,7 +225,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                                                 71: '/setting/account',     // Account
                                                 72: '/setting/contact',     // Contact
                                                 73: '/setting/notifications', // Notifications
-                                                74: '/setting/conversation-preferences', // Conversation Preferences 
+                                                74: '/setting/ai-preferences', // AI Preferences 
                                                 75: '/setting/integrations', // Integration
                                                 76: '/setting/users',       // Users
                                                 77: '/setting/subscription' // Subscription
