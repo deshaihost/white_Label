@@ -1290,20 +1290,37 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                   position: 'relative',
                                   border: '1px solid',
                                   borderColor: '#24262E'
-                                }}>
-                                  <div style={{ 
+                                }}>                                  <div style={{ 
                                     display: 'flex', 
                                     justifyContent: 'space-between',
                                     alignItems: 'flex-start',
                                     width: '100%'
                                   }}>
-                                    <div style={{ 
-                                      fontSize: '14px', 
-                                      color: '#D0D3DB', 
-                                      whiteSpace: 'pre-wrap',
-                                      flex: 1
-                                    }}>
-                                      {note.note}
+                                   
+                                    <div style={{ flex: 1 }}>
+                                      {note.visible_to_hostbuddy && (
+                                        <div style={{
+                                          backgroundColor: '#013280',
+                                          color: '#D4E4FC',
+                                          padding: '2px 6px',
+                                          borderRadius: '4px',
+                                          fontSize: '12px',
+                                          marginBottom: '6px',
+                                          fontWeight: '500',
+                                          display: 'inline-block'
+                                        }}>
+                                          Visible to HostBuddy
+                                        </div>
+                                      )}
+                                      
+                                      <div style={{ 
+                                        fontSize: '16px', 
+                                        color: '#D0D3DB', 
+                                        fontWeight: 400,
+                                        whiteSpace: 'pre-wrap'
+                                      }}>
+                                        {note.note}
+                                      </div>
                                     </div>
                                     
                                     {/* Three dots menu button */}
@@ -1434,7 +1451,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                       fontFamily: '"DM Sans-SemiBold", Helvetica',
                                       alignItems: 'center',
                                       marginRight: '8px',
-                                      fontSize: '12px',
+                                      fontSize: '14px',
                                       fontWeight: 600,
                                       letterSpacing: 0,
                                       lineHeight: 'normal',
@@ -1450,7 +1467,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                     <div style={{ 
                                        color:"#A6A9B2", 
                                        fontFamily: '"DM Sans-Regular", Helvetica',
-                                       fontSize: '12px',
+                                       fontSize: '14px',
                                        fontWeight: 400,
                                        letterSpacing: 0,
                                        lineHeight: 'normal',
