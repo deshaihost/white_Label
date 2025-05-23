@@ -1345,68 +1345,71 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                               zIndex: 10,
                                               width: '130px',
                                               overflow: 'hidden',
-                                              border: '1px solid rgb(48, 49, 51)'
+                                              border: '1px solid rgb(53 55 60)'
                                             }}>
                                               <ul style={{
                                                 listStyle: 'none',
                                                 padding: '0',
                                                 margin: '0'
-                                              }}>
-                                                <li style={{
-                                                  // border: '1px solid #24262E'
-                                                }}>
-                                                  <button 
-                                                    onClick={() => {
-                                                      toggleDropdown(note.note_id);
-                                                      setEditingNoteId(note.note_id);
-                                                      setNewNote(note.note);
-                                                    }}
-                                                    style={{
-                                                      display: 'flex',
-                                                      alignItems: 'center',
-                                                      width: '100%',
-                                                      textAlign: 'left',
-                                                      padding: '8px 8px',
-                                                     backgroundColor: '#2B2E36',
-                                                      border: '1px solid #24262E',
-                                                      color: '#D0D3DB',
-                                                      cursor: 'pointer',
-                                                      fontSize: '14px',
-                                                      fontFamily: '"DM Sans", Helvetica'
-                                                    }}
-                                                  >                                                    <img 
-                                                      src={require('./mildeSection/message/icons/update_icon.svg').default} 
-                                                      alt="Update" 
-                                                      style={{ marginRight: '8px', width: '18px', height: '23px' }} 
-                                                    />
-                                                    Edit note
-                                                  </button>
-                                                </li>
-                                                <li>
-                                                  <button 
-                                                    onClick={() => {
-                                                      toggleDropdown(note.note_id);
-                                                      callDeleteNoteApi(note.note_id);
-                                                    }}
-                                                    style={{
-                                                      display: 'flex',
-                                                      alignItems: 'center',
-                                                      width: '100%',
-                                                      textAlign: 'left',
-                                                      padding: '8px 8px',
-                                                      backgroundColor: '#2B2E36',
-                                                      border: '1px solid #24262E',
-                                                      color: '#F97257',
-                                                      cursor: 'pointer',
-                                                      fontSize: '14px',
-                                                      fontFamily: '"DM Sans", Helvetica'
-                                                    }}                                                  >                                                    <img 
-                                                      src={require('./mildeSection/message/icons/delete_red_icon.svg').default} 
-                                                      alt="Delete" 
-                                                      style={{ marginRight: '4px', width: '18px', height: '23px' }} 
-                                                    />
-                                                    Delete note
-                                                  </button>
+                                              }}>                                                <li 
+                                                  onClick={() => {
+                                                    toggleDropdown(note.note_id);
+                                                    setEditingNoteId(note.note_id);
+                                                    setNewNote(note.note);
+                                                  }}
+                                                  style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    width: '100%',
+                                                    textAlign: 'left',
+                                                    padding: '8px 8px',
+                                                    color: '#D0D3DB',
+                                                    cursor: 'pointer',
+                                                    fontSize: '14px',
+                                                    fontFamily: '"DM Sans", Helvetica'
+                                                  }}
+                                                >
+                                                  <img 
+                                                    src={require('./mildeSection/message/icons/update_icon.svg').default} 
+                                                    alt="Update" 
+                                                    style={{ 
+                                                      marginLeft: '8px', 
+                                                      marginRight: '6px', 
+                                                      width: '16px', 
+                                                      height: '16px',
+                                                      zIndex: 11
+                                                    }} 
+                                                  /> 
+                                                  Edit note
+                                                </li>                                                <li 
+                                                  onClick={() => {
+                                                    toggleDropdown(note.note_id);
+                                                    callDeleteNoteApi(note.note_id);
+                                                  }}
+                                                  style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    width: '100%',
+                                                    textAlign: 'left',
+                                                    padding: '8px 8px',
+                                                    color: '#F97257',
+                                                    cursor: 'pointer',
+                                                    fontSize: '14px',
+                                                    fontFamily: '"DM Sans", Helvetica'
+                                                  }}
+                                                >
+                                                  <img 
+                                                    src={require('./mildeSection/message/icons/delete_red_icon.svg').default} 
+                                                    alt="Delete" 
+                                                    style={{ 
+                                                      marginLeft: '8px', 
+                                                      marginRight: '6px', 
+                                                      width: '16px', 
+                                                      height: '16px',
+                                                      zIndex: 11
+                                                    }} 
+                                                  />
+                                                  Delete note
                                                 </li>
                                               </ul>
                                             </div>
