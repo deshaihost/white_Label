@@ -1065,7 +1065,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           {unreadPmsCount}
                         </span>
                       )}
-                      */}                      {tab.id === 'openIssue' && filteredActionItems && filteredActionItems.length > 0 && (
+                      */}                     
+                       {tab.id === 'openIssue' && filteredActionItems && filteredActionItems.length > 0 && (
                         <span style={{
                           backgroundColor: 'rgb(44 46 52)',
                           color: '#A6A9B2',
@@ -1373,9 +1374,12 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                                       fontSize: '14px',
                                                       fontFamily: '"DM Sans", Helvetica'
                                                     }}
-                                                  >
-                                                    <i className="bi bi-pencil-fill" style={{ marginRight: '8px' }}></i>
-                                                    Update
+                                                  >                                                    <img 
+                                                      src={require('./mildeSection/message/icons/update_icon.svg').default} 
+                                                      alt="Update" 
+                                                      style={{ marginRight: '8px', width: '18px', height: '23px' }} 
+                                                    />
+                                                    Edit note
                                                   </button>
                                                 </li>
                                                 <li>
@@ -1392,13 +1396,12 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                                       padding: '8px 8px',
                                                       backgroundColor: '#2B2E36',
                                                       border: '1px solid #24262E',
-                                                      color: '#D0D3DB',
+                                                      color: '#F97257',
                                                       cursor: 'pointer',
                                                       fontSize: '14px',
                                                       fontFamily: '"DM Sans", Helvetica'
-                                                    }}                                                  >
-                                                    <img 
-                                                      src={require('./mildeSection/message/icons/trash-01.svg').default} 
+                                                    }}                                                  >                                                    <img 
+                                                      src={require('./mildeSection/message/icons/delete_red_icon.svg').default} 
                                                       alt="Delete" 
                                                       style={{ marginRight: '4px', width: '18px', height: '23px' }} 
                                                     />
