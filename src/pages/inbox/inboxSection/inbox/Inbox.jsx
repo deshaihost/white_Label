@@ -1335,11 +1335,10 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                         </div>
                                       ) : (
                                         <div>                                          <button
-                                            onClick={() => toggleDropdown(note.note_id)}
-                                            style={{
+                                            onClick={() => toggleDropdown(note.note_id)}                                            style={{
                                               background: 'none',
                                               border: 'none',
-                                              color: '#777',
+                                              color: '#FFFFFF',
                                               cursor: 'pointer',
                                               padding: '4px',
                                               fontSize: '14px',
