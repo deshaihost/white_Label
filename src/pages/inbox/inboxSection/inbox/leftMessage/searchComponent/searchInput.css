@@ -32,7 +32,7 @@
 .text-field .placeholder {
     background: none;
     border: none;
-    color: #676A73 !important;
+    color: #676A73 !important; /* Default color for empty input */
     flex: 0;
     flex-grow: 1;
     font-family:  "DM Sans", Helvetica;
@@ -46,4 +46,29 @@
     padding: 0;
     position: relative;
     width: 3px;
+}
+
+.text-field .placeholder.has-value {
+    color: #ffffff !important; /* White text when input has value */
+}
+
+/* Add placeholder color styles */
+.text-field .placeholder::placeholder {
+    color: #676A73 !important;
+    opacity: 1; /* Firefox */
+}
+
+/* Internet Explorer */
+.text-field .placeholder:-ms-input-placeholder {
+    color: #676A73 !important;
+}
+
+/* Microsoft Edge */
+.text-field .placeholder::-ms-input-placeholder {
+    color: #676A73 !important;
+}
+
+/* Chrome, Safari, Opera */
+.text-field .placeholder::-webkit-input-placeholder {
+    color: #676A73 !important;
 }

@@ -63,7 +63,7 @@ const AuthenticatedLayout = ({ children }) => {
         
         {/* Bread Crumbs */}
 
-
+      
         {children}
       </div>
     </div>

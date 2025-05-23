@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./index.css";
+import "./LeftMessage.css";
 import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
 import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import { BoxLoader } from "../../../../../helper/Loader";
@@ -320,8 +321,7 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
           marginBottom: '3px',
           fontFamily: "Poppins-Bold, Helvetica",
           lineHeight: "33.6px"
-        }}>Inbox</div>
-        <div className="messsage-search" style={{ display: 'flex', width: '96%' ,  marginLeft:"5px" }}>
+        }}>Inbox</div>        <div className="messsage-search" style={{ display: 'flex', width: '96%' ,  marginLeft:"5px" }}>
           <div className="search-container" style={{ position: 'relative', flex: 1 }}>
             <TextField 
               className="custom-padding"
@@ -330,10 +330,8 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
               style={{ 
                 width: "100%", 
                 borderRadius: "4px", 
-                paddingLeft: '25px',
                 backgroundColor: '#24262E',
                 border: '1px solid #BDC1C9 · 15%',
-                color: '#676A73 !important', 
                 height: '32px'
               }}
               onChange={handleSearchInputChange}

@@ -4,6 +4,7 @@ import MessageInbox from "./message/MessageInbox";
 import Loader from "../../../../../helper/Loader";
 import loaderGif from "../../../../../public/img/new_loader.gif";
 import "./index.css";
+import "./MildeSection.css";
 import { timeFormat } from "../../../../../helper/commonFun";
 import { callSendMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import MessgFeedBckModel from "../../../../testProperty/banner/messages/messagesFeedBckModel/MessgFeedBckModel";
@@ -801,16 +802,23 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
             
             
               }}>
-              <div className="input-container" style={{ width: '100%', marginBottom: '10px' }}>
-                <textarea type="text" ref={textareaRef} placeholder="Message..." value={inputValue} onChange={handleInputFieldChange} 
-                  onKeyDown={handleKeyPress} rows="1" disabled={(generateCommandApiLoading || generateScratchApiLoading || sendMessageLoading) ? true : false} 
+              <div className="input-container" style={{ width: '100%', marginBottom: '10px' }}>                <textarea 
+                  type="text" 
+                  ref={textareaRef} 
+                  placeholder="Message..." 
+                  value={inputValue} 
+                  onChange={handleInputFieldChange} 
+                  onKeyDown={handleKeyPress} 
+                  rows="1" 
+                  disabled={(generateCommandApiLoading || generateScratchApiLoading || sendMessageLoading) ? true : false} 
+                  className="custom-textarea"
                   style={{
                     resize:'none', 
                     overflow:'auto', 
                     outline: 'none',
                     boxShadow: 'none',
-                    borderColor: 'inherit' ,
-                    color:"#ffffff",
+                    borderColor: 'inherit',
+                    color:"#ffffff"
                   }}
                 />
                 {(generateCommandApiLoading || generateScratchApiLoading) && (
