@@ -1604,7 +1604,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                               alignItems: 'center'
                             }}
                           >
-                            Visible to Hostbuddy
+                            Visible to HostBuddy
                             <div style={{
                               width: '20px',
                               height: '20px',
