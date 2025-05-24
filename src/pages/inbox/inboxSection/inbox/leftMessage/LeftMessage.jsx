@@ -623,7 +623,8 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
                                 {user ? user.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 
                                  sender ? sender.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 
                                  "Unknown"}
-                              </span>                                {action_items && action_items.length === 0 && 
+                              </span>                               
+                              {action_items && action_items.length === 0 && 
                                 /* Replaced text with icon */
                                 <span className="urgent-badge" style={{
                                   backgroundColor: '#4D2100',

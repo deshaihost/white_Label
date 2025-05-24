@@ -19,6 +19,7 @@ import NotesIcon from "./mildeSection/message/icons/notes_icon.svg";
 import CheckBoxIcon from "./mildeSection/message/icons/check_box.svg";
 import DefaultPinIcon from "./mildeSection/message/icons/default_pin.svg";
 import SelectedPinIcon from "./mildeSection/message/icons/selected_pin.svg";
+import UrgentFlagIcon from "./mildeSection/message/icons/urgent_flag_middle.svg";
 
 // Add responsive styles
 const responsiveStyles = `
@@ -885,6 +886,36 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                     }}>
                       {selectedConversation?.guest_name || 'Guest'}
                     </span>
+                    
+                    {/* Urgent flag render - placed right next to guest name */}
+                    {selectedConversation?.action_items && selectedConversation.action_items.length === 0 && (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        backgroundColor: '#4D2100',
+                        borderRadius: '4px',
+                        padding: '4px 8px',
+                        marginLeft: '10px',
+                        height: '24px'
+                      }}>
+                        <img 
+                          src={UrgentFlagIcon} 
+                          alt="Urgent" 
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            marginRight: '4px'
+                          }} 
+                        />
+                        <span style={{
+                          color: 'white',
+                          fontSize: '14px',
+                          fontWeight: '500'
+                        }}>
+                          Urgent
+                        </span>
+                      </div>
+                    )}
                   </div>
                   
                   {/* Right side - Icons */}
