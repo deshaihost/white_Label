@@ -51,6 +51,11 @@ const responsiveStyles = `
     }
   }
   
+  /* Notes textarea placeholder color */
+  .notes-textarea::placeholder {
+    color: #676A73 !important;
+  }
+  
   /* Pin icon styles */
   .pin-icon-container {
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
@@ -243,12 +248,12 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       setUnreadPmsCount(0);
     }
   }, [selectedConversation]);
-
   // Notes state
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [isLoadingNotes, setIsLoadingNotes] = useState(false);
   const [deletingNoteId, setDeletingNoteId] = useState(null);
+  const [visibleToHostbuddy, setVisibleToHostbuddy] = useState(false);
 
   // Request tracking refs
   const currentConversationIdRef = useRef("");
@@ -368,11 +373,11 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         },
         validateStatus: function (status) { return status >= 200 && status < 500; }
       };
-      
-      // According to the API documentation pattern, include conversation_id in the request body
+        // According to the API documentation pattern, include conversation_id in the request body
       const bodyData = { 
         note: noteText,
-        conversation_id: conversation_id
+        conversation_id: conversation_id,
+        visible_to_hostbuddy: visibleToHostbuddy
       };
       
       const response = await axios.post(`${baseUrl}/add_note`, bodyData, config);
@@ -1321,7 +1326,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                   position: 'relative',
                                   border: '1px solid',
                                   borderColor: '#24262E'
-                                }}>                                  <div style={{ 
+                                }}>                                  
+                                <div style={{ 
                                     display: 'flex', 
                                     justifyContent: 'space-between',
                                     alignItems: 'flex-start',
@@ -1526,7 +1532,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                       border: '1px solid #222',
                       padding: '8px 8px',
                       backgroundColor: '#17191F',
-                      display: 'flex'
+                      display: 'flex',
+                      flexDirection: 'column'
                     }}>
                       <textarea
                         value={newNote}
@@ -1542,14 +1549,14 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                             }
                           }
                           // Allow normal behavior for Shift+Enter (new line)
-                        }}
+                        }}                        
                         placeholder="Type note..."
                         style={{ 
                           flex: 1,
                           backgroundColor: '#17191F',
                           border: 'none',
                           color: '#EEE',
-                          padding: '8px 2px',
+                          // padding: '8px 2px',
                           fontSize: '14px',
                           outline: 'none',
                           resize: 'none',
@@ -1559,39 +1566,100 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                           lineHeight: '1.4',
                           overflowY: 'auto'
                         }}
+                        className="notes-textarea" // Add class for placeholder styling
                         disabled={!selectedConversation?.conversation_id}
-                      />                      <button 
-                        onClick={() => {
-                          if (editingNoteId) {
-                            callUpdateNoteApi(editingNoteId, newNote);
-                          } else if (newNote.trim() && selectedConversation?.conversation_id) {
-                            callAddNoteApi(newNote);
-                          }
-                        }}
-                        style={{
-                          backgroundColor: (selectedConversation?.conversation_id && newNote.trim()) ? '#1a73e8' : 'rgba(15, 17, 23, 0.42)',
-                          color: (selectedConversation?.conversation_id && newNote.trim()) ? 'white' : '#4A4D54',
-                          height: '30px',
-                          border: 'none',
-                          borderRadius: '4px',
-                          padding: '2px 2px',
-                          fontSize: '12px',
-                          fontWeight: '500',
-                          cursor: selectedConversation?.conversation_id && newNote.trim() ? 'pointer' : 'not-allowed',
-                          opacity: '1'
-                        }}
-                        disabled={!selectedConversation?.conversation_id || !newNote.trim()}
-                      >
-                        {editingNoteId ? 'Update note' : '+ Add note'}
-                      </button>
+                      />
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        // marginTop: '8px'
+                      }}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center'
+                        }}>                            <input 
+                            type="checkbox" 
+                            id="visibleToHostbuddy"
+                            checked={visibleToHostbuddy}
+                            onChange={(e) => setVisibleToHostbuddy(e.target.checked)}
+                            style={{
+                              cursor: 'pointer',
+                              marginRight: '5px',
+                              borderRadius:"4px",
+                              accentColor: '#0B5FDE',
+                              backgroundColor: visibleToHostbuddy ? '#0B5FDE' : 'transparent',
+                              width: '16px',
+                              height: '16px'
+                            }}
+                          />
+                          <label 
+                            htmlFor="visibleToHostbuddy"
+                            style={{
+                              color: '#D0D3DB',
+                              fontSize: '14px',
+                              fontWeight: '400',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center'
+                            }}
+                          >
+                            Visible to Hostbuddy
+                            <div style={{
+                              width: '20px',
+                              height: '20px',
+                              backgroundColor: '#24262E',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              marginLeft: '5px',
+                              borderRadius: '4px'
+                            }}>
+                              <img 
+                                src={require('./mildeSection/message/icons/helper_icon_notes.svg').default}
+                                alt="Help" 
+                                style={{ width: '14px', height: '14px' }}
+                              />
+                            </div>
+                          </label>
+                        </div>
+                        <button 
+                          onClick={() => {
+                            if (editingNoteId) {
+                              callUpdateNoteApi(editingNoteId, newNote);
+                            } else if (newNote.trim() && selectedConversation?.conversation_id) {
+                              callAddNoteApi(newNote);
+                            }
+                          }}
+                          style={{
+                            backgroundColor: (selectedConversation?.conversation_id && newNote.trim()) ? '#1a73e8' : 'rgba(15, 17, 23, 0.42)',
+                            color: (selectedConversation?.conversation_id && newNote.trim()) ? 'white' : '#4A4D54',
+                            height: '30px',
+                            border: 'none',
+                            borderRadius: '4px',
+                            padding: '2px 12px',
+                            fontSize: '12px',
+                            fontWeight: '500',
+                            cursor: selectedConversation?.conversation_id && newNote.trim() ? 'pointer' : 'not-allowed',
+                            opacity: '1'
+                          }}
+                          disabled={!selectedConversation?.conversation_id || !newNote.trim()}
+                        >
+                          {editingNoteId ? 'Update note' : '+ Add note'}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              )}            </div>            <div className="rightSectionContainer" 
+              )}            
+              </div>            
+              <div className="rightSectionContainer" 
               style={{ width: '296px', flex: 'none', height:"100%", 
                 padding:"11px", 
                 border:"1px solid #24262E"
-              }}>            <RightSection
+              }}>           
+              
+            <RightSection
               className="box"
               style={{ width: "100%", height: "calc(100vh - 110px)" , backgroundColor:"#17191F" }}
               rightSectionData={selectedConversation}
