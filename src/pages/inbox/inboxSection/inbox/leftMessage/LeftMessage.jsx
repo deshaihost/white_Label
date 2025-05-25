@@ -159,9 +159,13 @@ const LeftMessage = ({ allPropertyNamesList, allGuestNames, allConversations, se
     setAllConversations(updatedConversations);
     callMarkConversationAsOpenedApi(conversationId, propertyName);
   };
-
   const openConversationHandle = (data, id) => {
-    setSelectedConvo(data);
+    // Reset the API call flag when selecting a new conversation
+    // This ensures we make a fresh API call only for new selections
+    setSelectedConvo({
+      ...data,
+      _apiCallMade: false // Mark that this is a fresh selection
+    });
     setSelectedConversationId(id); // This is used to highlight the selected conversation
     markConversationAsOpened(data.conversation_id, data.property_name);
     

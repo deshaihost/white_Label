@@ -12,7 +12,7 @@ import JustificationModal from "../../../../testProperty/banner/messages/justifi
 import { Tooltip } from "react-tooltip";
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
-import { handleConversationChange, cleanupAllAbortControllers } from "../../../../../helper/getConversationsTest/abortController";
+
 
 // Import the SVG icons
 import SendIcon from "./message/icons/send_icon.svg";
@@ -195,15 +195,10 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     } else {
       return "AI response is only available when the last message is from the guest.";
     }
-  };
-  const handleSendMessage = async () => {
+  };  const handleSendMessage = async () => {
     if (inputValue.trim() === "") return; // no message added
     if (!conversationData?.conversation_id) return; // no conversation selected
     setSendMessageLoading(true);
-    
-    // Create a unique ID for this send message request
-    const requestId = `send_message_${Date.now()}`;
-    latestSendMessageRequestIdRef.current = requestId;
     
     const { conversation_id, reservation_id=null } = conversationData; // reservation_id default to null if not present. Sometimes the send operation will still work if it isn't included, so proceed
     const messageToSend = inputValue;
@@ -211,35 +206,17 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     try {
       const sendMsgResponse = await callSendMessageApi(messageToSend, conversation_id, reservation_id, propertyName, assistanceUsed);
       
-      // Check if this is still the most recent request and conversation hasn't changed
-      if (latestSendMessageRequestIdRef.current !== requestId || 
-          currentConversationIdRef.current !== conversation_id) {
-        console.log("Ignoring stale send message response");
-        return;
-      }
-      
       if (!("error" in sendMsgResponse)) {
         setInputValue("");
         setShowGenerateJustificationButton(false);
         setAssistanceUsed(null);
         
-        // Create another request ID for the conversation update
-        const updateRequestId = `update_after_send_${Date.now()}`;
-        latestConversationRequestIdRef.current = updateRequestId;
-        
         await updateConversationFromApi(conversation_id);
       }
     } catch (error) {
-      // Only show error if this is still the latest request for the current conversation
-      if (latestSendMessageRequestIdRef.current === requestId && 
-          currentConversationIdRef.current === conversation_id) {
-        ToastHandle("Error sending message", "danger");
-      }
+      ToastHandle("Error sending message", "danger");
     } finally {
-      // Only reset loading state if this is still the latest request
-      if (latestSendMessageRequestIdRef.current === requestId) {
-        setSendMessageLoading(false);
-      }
+      setSendMessageLoading(false);
     }
   };
 
@@ -767,20 +744,12 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
       }, 100); // Small delay to ensure content is rendered
     }
   }, [allConversationData?.conversation_id]);
-
-  // Clean up when component unmounts or conversation changes
+  // Track current conversation ID changes
   useEffect(() => {
     // This effect runs on mount and when conversation_id changes
-    const previousConversationId = currentConversationIdRef.current;
-    
     // Update the current conversation ID reference
     if (allConversationData?.conversation_id) {
       currentConversationIdRef.current = allConversationData.conversation_id;
-      
-      // Cancel any in-flight requests for the previous conversation
-      if (previousConversationId && previousConversationId !== allConversationData.conversation_id) {
-        handleConversationChange(previousConversationId, allConversationData.conversation_id);
-      }
     }
     
     // Return a cleanup function that runs when the component unmounts or conversation changes
@@ -790,11 +759,6 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
       latestCommandRequestIdRef.current = null;
       latestConversationRequestIdRef.current = null;
       latestSendMessageRequestIdRef.current = null;
-      
-      // Clean up any pending requests when component unmounts
-      if (currentConversationIdRef.current) {
-        handleConversationChange(currentConversationIdRef.current, null);
-      }
     };
   }, [allConversationData?.conversation_id]);
 

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { callGetConversationsApi, callGetSingleConversationApi } from "../../../../helper/getConversationsTest/inboxApi";
 import { callPinConversationApi } from "../../../../helper/getConversationsTest/pinConversationApi";
-import { handleConversationChange } from "../../../../helper/getConversationsTest/abortController";
-import { InboxLoader } from "../../../../helper/Loader"; 
+import { InboxLoader } from "../../../../helper/Loader";
 import LeftMessage from "./leftMessage/LeftMessage";
 import MildeSection from "./mildeSection/MildeSection";
 import RightSection from "./rightSection/RightSection";
@@ -109,9 +108,11 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
             ...selectedConversation,
             pinned: result.pinned,
             is_pinned: result.pinned // For backward compatibility
-          };
-          
-          setSelectedConversation(updatedConversation);
+          };          
+          setSelectedConversation({
+            ...updatedConversation,
+            _apiCallMade: true // Preserve the API call flag
+          });
           
           // Update the conversation in the conversations list too
           setConversations(prev => prev.map(convo => 
@@ -126,48 +127,49 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     }  };  // Update isPinned state when selected conversation changes
   useEffect(() => {
     if (selectedConversation?.conversation_id) {
-      // Call the get_all_conversations API to get the latest conversation data when a conversation is selected
-      const fetchLatestConversationData = async () => {
-        try {
-          // Use callGetSingleConversationApi which calls /get_all_conversations with the conversation_id
-          const result = await callGetSingleConversationApi(selectedConversation.conversation_id);
-          
-          if (result && !result.error && result.conversations && result.conversations.length > 0) {
-            const updatedConversation = result.conversations[0];
+      // Get the initial pin status from the conversation object
+      const currentPinStatus = !!(selectedConversation?.pinned || selectedConversation?.is_pinned);
+      setIsPinned(currentPinStatus);
+      
+      // Track if this conversation ID has been processed to prevent multiple API calls
+      const conversationId = selectedConversation.conversation_id;
+      const isNewConversationSelection = selectedConversation._apiCallMade !== true;
+      
+      // Only fetch conversation data if this is a new selection
+      if (isNewConversationSelection) {
+        const fetchLatestConversationData = async () => {
+          try {
+            // Mark that we've started processing this conversation
+            setSelectedConversation(prev => ({
+              ...prev,
+              _apiCallMade: true
+            }));
             
-            // Update pin status based on the API response
-            const isPinnedValue = !!(updatedConversation.pinned || updatedConversation.is_pinned);
-            setIsPinned(isPinnedValue);
+            // Call API only once per conversation selection
+            const result = await callGetSingleConversationApi(conversationId);
             
-            // Update the conversation object with the latest data from the API, preserving the pin status
-            setSelectedConversation({
-              ...updatedConversation,
-              pinned: isPinnedValue,
-              is_pinned: isPinnedValue // For backward compatibility
-            });
-          } else {
-            // If API call fails, fall back to using the property from the conversation object
-            if (selectedConversation?.pinned !== undefined) {
-              setIsPinned(!!selectedConversation.pinned);
-            } else if (selectedConversation?.is_pinned !== undefined) {
-              setIsPinned(!!selectedConversation.is_pinned);
-            } else {
-              setIsPinned(false);
+            if (result && !result.error && result.conversations && result.conversations.length > 0) {
+              const updatedConversation = result.conversations[0];
+              
+              // Update pin status based on the API response
+              const isPinnedValue = !!(updatedConversation.pinned || updatedConversation.is_pinned);
+              setIsPinned(isPinnedValue);
+              
+              // Update the conversation object with the latest data from the API
+              setSelectedConversation({
+                ...updatedConversation,
+                pinned: isPinnedValue,
+                is_pinned: isPinnedValue, // For backward compatibility
+                _apiCallMade: true // Mark that we've made the API call
+              });
             }
+          } catch (error) {
+            console.error("Error fetching conversation data:", error);
           }
-        } catch (error) {
-          console.error("Error fetching conversation data:", error);          // Fall back to using the property from the conversation object
-          if (selectedConversation?.pinned !== undefined) {
-            setIsPinned(!!selectedConversation.pinned);
-          } else if (selectedConversation?.is_pinned !== undefined) {
-            setIsPinned(!!selectedConversation.is_pinned);
-          } else {
-            setIsPinned(false);
-          }
-        }
-      };
+        };
 
-      fetchLatestConversationData();
+        fetchLatestConversationData();
+      }
     } else {
       // No conversation selected, reset pin status
       setIsPinned(false);
@@ -199,39 +201,10 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     };
   }, []);
 
-  // Clean up request tracking arrays when conversation changes
-  const cleanupRequestTracking = (previousConversationId, newConversationId) => {
-    if (previousConversationId && previousConversationId !== newConversationId) {
-      // When conversation changes, we can clean up the request tracking for the previous conversation
-      delete requestIdsByConversation.current[previousConversationId];
-      delete notesRequestIdsByConversation.current[previousConversationId];      
-      
-      // Also abort any in-flight requests for the previous conversation
-      try {
-        // Use direct implementation if the imported function fails
-        if (typeof handleConversationChange === 'function') {
-          handleConversationChange(previousConversationId, newConversationId);
-        } else {
-          // Direct implementation of handleConversationChange logic
-          const abortUtils = require("../../../../helper/getConversationsTest/abortController");
-          if (abortUtils && abortUtils.abortAllForConversation) {
-            abortUtils.abortAllForConversation(previousConversationId);
-          }
-        }
-      } catch (error) {
-        console.error("Error handling conversation change:", error);
-      }
-    }
-  };
-
-  // Update currentConversationIdRef when selectedConversation changes
+    // Update currentConversationIdRef when selectedConversation changes
   useEffect(() => {
-    const previousConversationId = currentConversationIdRef.current;
-    
     if (selectedConversation?.conversation_id) {
       currentConversationIdRef.current = selectedConversation.conversation_id;
-      // Clean up request tracking for previous conversation
-      cleanupRequestTracking(previousConversationId, selectedConversation.conversation_id);
     }
   }, [selectedConversation?.conversation_id]);
 
@@ -247,18 +220,15 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     } else {
       setUnreadPmsCount(0);
     }
-  }, [selectedConversation]);
-  // Notes state
+  }, [selectedConversation]);  // Notes state
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [isLoadingNotes, setIsLoadingNotes] = useState(false);
   const [deletingNoteId, setDeletingNoteId] = useState(null);
   const [visibleToHostbuddy, setVisibleToHostbuddy] = useState(false);
 
-  // Request tracking refs
+  // Keep the current conversation ID reference for context tracking
   const currentConversationIdRef = useRef("");
-  const requestIdsByConversation = useRef({});
-  const notesRequestIdsByConversation = useRef({});
 
   // State for tracking which note's dropdown is currently open
   const [openDropdownId, setOpenDropdownId] = useState(null);
@@ -282,22 +252,11 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
     } else {
       setOpenDropdownId(noteId);
     }
-  };
-  // Function to call the API to get notes
+  };  // Function to call the API to get notes
   const callGetNotesApi = async () => {
     if (!selectedConversation?.conversation_id) return;
     
     const conversation_id = selectedConversation.conversation_id;
-    
-    // Create a unique request ID for this API call
-    const requestId = `get_notes_${Date.now()}`;
-    
-    // Store this request ID as the latest for this conversation
-    if (!notesRequestIdsByConversation.current[conversation_id]) {
-      notesRequestIdsByConversation.current[conversation_id] = [];
-    }
-    notesRequestIdsByConversation.current[conversation_id].push(requestId);
-    
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setIsLoadingNotes(true);
@@ -314,16 +273,6 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       const url = `${baseUrl}/get_notes?conversation_id=${encodeURIComponent(conversation_id)}`;
       const response = await axios.get(url, config);
       
-      // Check if this is still the latest request for this conversation
-      const requests = notesRequestIdsByConversation.current[conversation_id] || [];
-      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
-      
-      // If not the latest request, or conversation has changed, ignore this response
-      if (!isLatestRequest || currentConversationIdRef.current !== conversation_id) {
-        console.log("Ignoring stale notes response");
-        return;
-      }
-  
       if (response.status === 200) {
         setNotes(response.data.notes || []);
       }
@@ -331,38 +280,15 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         ToastHandle(response?.data?.error || "Failed to fetch notes", "danger"); 
       }
     } catch (error) {
-      // Only show error if this is still the latest request for the current conversation
-      const requests = notesRequestIdsByConversation.current[conversation_id] || [];
-      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
-      
-      if (isLatestRequest && currentConversationIdRef.current === conversation_id) {
-        ToastHandle("Error - unable to get notes", "danger");
-      }
+      ToastHandle("Error - unable to get notes", "danger");
     } finally {
-      // Only update loading state if this is still the latest request for the current conversation
-      const requests = notesRequestIdsByConversation.current[conversation_id] || [];
-      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
-      
-      if (isLatestRequest && currentConversationIdRef.current === conversation_id) {
-        setIsLoadingNotes(false);
-      }
+      setIsLoadingNotes(false);
     }
-  };
-  // Function to call the API to add a note
+  };  // Function to call the API to add a note
   const callAddNoteApi = async (noteText) => {
     if (!selectedConversation?.conversation_id || !noteText.trim()) return;
     
     const conversation_id = selectedConversation.conversation_id;
-    
-    // Create a unique request ID for this API call
-    const requestId = `add_note_${Date.now()}`;
-    
-    // Store this request ID as the latest for this conversation
-    if (!notesRequestIdsByConversation.current[conversation_id]) {
-      notesRequestIdsByConversation.current[conversation_id] = [];
-    }
-    notesRequestIdsByConversation.current[conversation_id].push(requestId);
-    
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     
@@ -373,7 +299,7 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         },
         validateStatus: function (status) { return status >= 200 && status < 500; }
       };
-        // According to the API documentation pattern, include conversation_id in the request body
+      // According to the API documentation pattern, include conversation_id in the request body
       const bodyData = { 
         note: noteText,
         conversation_id: conversation_id,
@@ -382,32 +308,16 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       
       const response = await axios.post(`${baseUrl}/add_note`, bodyData, config);
       
-      // Check if this is still the latest request for this conversation
-      const requests = notesRequestIdsByConversation.current[conversation_id] || [];
-      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
-      
-      // If not the latest request, or conversation has changed, ignore this response
-      if (!isLatestRequest || currentConversationIdRef.current !== conversation_id) {
-        console.log("Ignoring stale add note response");
-        return;
-      }
-  
       if (response.status === 200) { 
         // Refresh the notes list
         callGetNotesApi();
         setNewNote(""); // Clear the input field
         ToastHandle("Note added successfully", "success");
       } else { 
-        ToastHandle(response?.data?.error || "Failed to add note", "danger"); 
+        ToastHandle(response?.data?.error || "Failed to add note", "danger");
       }
     } catch (error) {
-      // Only show error if this is still the latest request for the current conversation
-      const requests = notesRequestIdsByConversation.current[conversation_id] || [];
-      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
-      
-      if (isLatestRequest && currentConversationIdRef.current === conversation_id) {
-        ToastHandle("Error adding note", "danger");
-      }
+      ToastHandle("Error adding note", "danger");
     }
   };
 
@@ -557,11 +467,11 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
             }
             return item;
           });
-          
-          // Update the selectedConversation state with the modified action_items
+            // Update the selectedConversation state with the modified action_items
           setSelectedConversation({
             ...selectedConversation,
-            action_items: updatedActionItems
+            action_items: updatedActionItems,
+            _apiCallMade: selectedConversation._apiCallMade // Preserve the API call flag
           });
           
           // Also update the conversation in the conversations list if needed
@@ -636,7 +546,6 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       return {};
     }
   };
-
   // Call the API to get conversations, up to the specified limit, and update the state with the returned data.
   const fetchConversations = async (limit, reset=false, urgent=false, propertyName="", phase="", meetHbOnly=false, guestName='', useConvIdQuery=true) => {
     let conversationsAlreadyHave = {};
@@ -648,11 +557,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       conversationsAlreadyHave = getConversationsAlreadyHave();
     }
     const conversationId = (useConvIdQuery) ? (singleConversationIdFromUrl || null) : null;
-
-    // Create a unique request ID for batch fetching
-    const requestId = `batch_conversations_${Date.now()}`;
     
-    // Use the enhanced API with request ID tracking and AbortController
+    // Use the simplified API without request ID tracking and AbortController
     const data = await callGetConversationsApi(
       limit, 
       conversationsAlreadyHave, 
@@ -661,16 +567,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       phase, 
       meetHbOnly, 
       guestName, 
-      conversationId,
-      requestId,
-      conversationId ? currentConversationIdRef : null // Only pass ref for single conversation fetch
+      conversationId
     );
-    
-    // If the API indicates this is a stale request, exit early
-    if (data.error === "Conversation changed") {
-      console.log("Conversation changed during API call, ignoring response");
-      return;
-    }
     
     if (data?.conversations) { 
       updateConversationsWithApiData(data.conversations); 
@@ -685,44 +583,26 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       const timeB = new Date(a.messages[a.messages.length - 1].time);
       return timeB - timeA; // Sort in descending order
     });
-  };
+  };  
+  
   // Given a conversation ID: fetch that convo from the API and update that conversation in the state
   const updateConversation = async (conversationId) => {
-    // Create a unique request ID for this API call
-    const requestId = `get_conversation_${Date.now()}`;
-    
-    // Store this request ID as the latest for this conversation
-    if (!requestIdsByConversation.current[conversationId]) {
-      requestIdsByConversation.current[conversationId] = [];
-    }
-    requestIdsByConversation.current[conversationId].push(requestId);
-    
     try {
-      // Pass the request ID and currentConversationIdRef to the API function
-      const updatedConversationData = await callGetSingleConversationApi(
-        conversationId, 
-        requestId,
-        currentConversationIdRef
-      );
-      
-      // If the API indicates this is a stale request, exit early
-      if (updatedConversationData.error === "Conversation changed") {
-        console.log("Conversation changed during API call, ignoring response");
-        return;
+      // Check if this is the currently selected conversation that's already been loaded
+      if (selectedConversation?.conversation_id === conversationId && selectedConversation._apiCallMade) {
+        console.log("Skipping duplicate API call for already loaded conversation");
+        return; // Skip duplicate API call
       }
       
-      // Check if this is still the latest request for this conversation
-      const requests = requestIdsByConversation.current[conversationId] || [];
-      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
-      
-      // If not the latest request, or conversation has changed, ignore this response
-      if (!isLatestRequest || currentConversationIdRef.current !== conversationId) {
-        console.log("Ignoring stale conversation update response");
-        return;
-      }
+      // Use the simplified API function without passing request ID or reference
+      const updatedConversationData = await callGetSingleConversationApi(conversationId);
       
       if (updatedConversationData?.conversations && updatedConversationData.conversations.length > 0) {
-        const retrievedConversation = updatedConversationData.conversations[0];
+        const retrievedConversation = {
+          ...updatedConversationData.conversations[0],
+          _apiCallMade: true // Mark as loaded
+        };
+        
         let updatedConversations = conversations.map((conversation) => {
           if (conversation.conversation_id === conversationId) {
             return retrievedConversation;
@@ -733,18 +613,12 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         setConversations(updatedConversations);
         
         // If the conversation to be updated is selectedConversation (the one currently being viewed), update that too
-        if (selectedConversation.conversation_id === conversationId && currentConversationIdRef.current === conversationId) {
+        if (selectedConversation.conversation_id === conversationId) {
           setSelectedConversation(retrievedConversation);
         }
       }
     } catch (error) {
-      // Only show error if this is still the latest request for the current conversation
-      const requests = requestIdsByConversation.current[conversationId] || [];
-      const isLatestRequest = requests.length > 0 && requests[requests.length - 1] === requestId;
-      
-      if (isLatestRequest && currentConversationIdRef.current === conversationId) {
-        console.error("Error fetching conversation:", error);
-      }
+      console.error("Error fetching conversation:", error);
     }
   };
 
@@ -755,10 +629,12 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
       if (!conversation.hasOwnProperty('messages')) { // the API data doesn't include messages (or most other fields) for conversations we already have if there are no updates. Get the convo ID, find the convo in our local state, and copy that old record over into the new state
         const localConversation = conversations.find(conv => conv.conversation_id === conversationId);
         return localConversation ? localConversation : conversation;
-      }
-      else {
+      }      else {
         if (selectedConversation.conversation_id === conversationId) { // If this updated conversation record is the one currently being viewed, update the selectedConversation state
-          setSelectedConversation(conversation);
+          setSelectedConversation({
+            ...conversation,
+            _apiCallMade: true // Preserve the flag showing API data is up to date
+          });
         }
         return conversation;
       }
@@ -774,14 +650,14 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
         conversation.messages.push(message);
       }
       return conversation;
-    });
-    setConversations(updatedConversations);
+    });    setConversations(updatedConversations);
     // If the conversation to be updated is selectedConversation (the one currently being viewed), update it
     if (selectedConversation.conversation_id === conversationId) {
       setSelectedConversation((prevSelectedConversation) => {
         return {
           ...prevSelectedConversation,
           messages: [...prevSelectedConversation.messages, message],
+          _apiCallMade: prevSelectedConversation._apiCallMade // Preserve the API call flag
         };
       });
     }
@@ -924,7 +800,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                   </div>
                   
                   {/* Right side - Icons */}
-                  <div style={{ display: 'flex', alignItems: 'center' }}>                    {/* Pin icon with square badge */}
+                  <div style={{ display: 'flex', alignItems: 'center' }}>                   
+                     {/* Pin icon with square badge */}
                     <div 
                       className="pin-icon-container"
                       onClick={handlePinToggle}
@@ -933,7 +810,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                       style={{
                         width: '32px',
                         height: '32px',
-                        backgroundColor: 'rgba(189, 193, 201, 0.08)', // Normal state: #BDC1C9 with 8% opacity
+                        backgroundColor: 'rgba(189, 193, 201, 0.08)',
+                         // Normal state: #BDC1C9 with 8% opacity
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -941,11 +819,13 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                         marginRight: '8px',
                         cursor: 'pointer',
                         position: 'relative',
-                        outline: 'none', // Remove default focus outline
+                        outline: 'none', 
+                        // Remove default focus outline
                       }}
                       onMouseDown={(e) => {
                         // Add pressed style by changing backgroundColor
-                        e.currentTarget.style.backgroundColor = 'rgba(15, 17, 23, 0.08)'; // Pressed state: #0F1117 with opacity
+                        e.currentTarget.style.backgroundColor = 'rgba(15, 17, 23, 0.08)'; 
+                        // Pressed state: #0F1117 with opacity
                       }}
                       onMouseUp={(e) => {
                         // Reset to normal style
@@ -984,7 +864,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                         style={{ 
                           width: '18px', 
                           height: '18px',
-                          pointerEvents: 'none' // Prevents the image from capturing events
+                          pointerEvents: 'none' 
+                          // Prevents the image from capturing events
                         }} 
                       />
                     </div>
@@ -1404,7 +1285,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                                 listStyle: 'none',
                                                 padding: '0',
                                                 margin: '0'
-                                              }}>                                                <li 
+                                              }}>                                               
+                                               <li 
                                                   onClick={() => {
                                                     toggleDropdown(note.note_id);
                                                     setEditingNoteId(note.note_id);
@@ -1434,7 +1316,8 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
                                                     }} 
                                                   /> 
                                                   Edit note
-                                                </li>                                                <li 
+                                                </li>                                                
+                                                <li 
                                                   onClick={() => {
                                                     toggleDropdown(note.note_id);
                                                     callDeleteNoteApi(note.note_id);
@@ -1654,19 +1537,19 @@ const Inbox = ({allPropertyNamesList, allGuestNamesList, userHasPMS, subscriptio
               )}            
               </div>            
               <div className="rightSectionContainer" 
-              style={{ width: '296px', flex: 'none', height:"100%", 
+                 style={{ width: '296px', flex: 'none', height:"100%", 
                 padding:"11px", 
                 border:"1px solid #24262E"
               }}>           
               
-            <RightSection
-              className="box"
-              style={{ width: "100%", height: "calc(100vh - 110px)" , backgroundColor:"#17191F" }}
-              rightSectionData={selectedConversation}
-              updateConversationFromApi={updateConversation}
-              setActiveTab={setActiveTab}
-              setPendingTabChange={setPendingTabChange}
-            />
+                <RightSection
+                className="box"
+                style={{ width: "100%", height: "calc(100vh - 110px)" , backgroundColor:"#17191F" }}
+                rightSectionData={selectedConversation}
+                updateConversationFromApi={updateConversation}
+                setActiveTab={setActiveTab}
+                setPendingTabChange={setPendingTabChange}
+               />
             </div>
           </div>
 
