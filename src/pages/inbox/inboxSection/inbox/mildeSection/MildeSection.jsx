@@ -51,6 +51,7 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
   const [propertyName, setPropertyName] = useState("");
   const [sendMessageLoading, setSendMessageLoading] = useState(false);
   const [sendOptionsVisible, setSendOptionsVisible] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(true); // Track if user is scrolled to bottom
 
   const [generateButtonIsEnabled, setGenerateButtonIsEnabled] = useState(false);
   const [generateButtonText, setGenerateButtonText] = useState("");
@@ -701,6 +702,32 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
     };
   }, []);
 
+  // Function to check if scrolled to bottom (with a small threshold)
+  const checkIfScrolledToBottom = useCallback(() => {
+    if (messageListRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = messageListRef.current;
+      // Consider "at bottom" if within 30px of the bottom
+      const isBottom = scrollTop + clientHeight >= scrollHeight - 30;
+      setIsAtBottom(isBottom);
+      return isBottom;
+    }
+    return false;
+  }, []);
+
+  // Add scroll event listener to track if user manually scrolls away from bottom
+  useEffect(() => {
+    const messageList = messageListRef.current;
+    if (messageList) {
+      const handleScroll = () => {
+        checkIfScrolledToBottom();
+      };
+      messageList.addEventListener('scroll', handleScroll);
+      return () => {
+        messageList.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [checkIfScrolledToBottom]);
+
   // Allow the text area to expand vertically as lines are added
   useEffect(() => {
     if (textareaRef.current) {
@@ -708,13 +735,38 @@ const MildeSection = ({ allConversationData, updateConversationFromApi, updateCo
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [inputValue]);
-
-  // Scroll to the bottom of the message list when the messages are loaded
+  // Smart scroll behavior: only scroll to bottom if user was already at bottom or if user sent the message
   useEffect(() => {
     if (messageListRef.current) {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+      const wasAtBottom = isAtBottom;
+      const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+      const userSentLastMessage = lastMessage && lastMessage.sendBy === "host";
+      
+      // Auto-scroll if:
+      // 1. User was already at the bottom before new messages, OR
+      // 2. User just sent a message themselves (always scroll to show your own message)
+      if (wasAtBottom || userSentLastMessage) {
+        setTimeout(() => {
+          if (messageListRef.current) {
+            messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+            setIsAtBottom(true);
+          }
+        }, 0);
+      }
     }
-  }, [messages]);
+  }, [messages, isAtBottom]);
+
+  // Scroll to bottom when conversation initially loads
+  useEffect(() => {
+    if (messageListRef.current && allConversationData?.conversation_id) {
+      setTimeout(() => {
+        if (messageListRef.current) {
+          messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+          setIsAtBottom(true);
+        }
+      }, 100); // Small delay to ensure content is rendered
+    }
+  }, [allConversationData?.conversation_id]);
 
   // Clean up when component unmounts or conversation changes
   useEffect(() => {
