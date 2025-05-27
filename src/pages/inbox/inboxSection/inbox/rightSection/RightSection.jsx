@@ -98,12 +98,12 @@ const RightSection = ({
       ? action_items.filter((obj) => obj.status === "incomplete")
       : [];
   };
-
   const [selectedOption, setSelectedOption] = useState("");
   const [toggleStatusLoading, setToggleStatusLoading] = useState(false);
   const [issuesExpanded, setIssuesExpanded] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [hostbuddyDropdownOpen, setHostbuddyDropdownOpen] = useState(false);
+  const [localStatus, setLocalStatus] = useState(null); // Local state for tracking status changes
   const [selectedSentiment, setSelectedSentiment] = useState(
     sentiment || "neutral"
   );
@@ -121,15 +121,52 @@ const RightSection = ({
 
   const dropdownRef = useRef(null);
   const assignUserDropdownRef = useRef(null);
-  const hostbuddyDropdownRef = useRef(null);
-  const navigate = useNavigate();
+  const hostbuddyDropdownRef = useRef(null);  const navigate = useNavigate();
   // State for action items
   const [actionItems, setActionItems] = useState([]);
   const [getActionItemsLoading, setGetActionItemsLoading] = useState(false);
+
+  // Status calculation logic (moved here to avoid initialization issues)
+  const get_current_status = () => {
+    const { until_utc } = guest_chatbot_status || {};
+
+    // Check to see if a guest status applies
+    if (until_utc) {
+      let currentTime, untilTime;
+      if (until_utc !== "indefinitely") {
+        currentTime = new Date();
+        untilTime = new Date(until_utc);
+      }
+
+      if (untilTime > currentTime || until_utc === "indefinitely") {
+        // a guest status is active
+        if (guest_chatbot_status.status === "on") {
+          return { curr_status: "on", source: "guest" };
+        } else if (guest_chatbot_status.status === "off") {
+          return { curr_status: "off", source: "guest" };
+        }
+        // else: status is probably 'not_specified'. Use property status
+      }
+    }
+
+    // Otherwise, use property status
+    return { curr_status: property_chatbot_status, source: "property" };
+  };
+
+  const current_status_get = property_chatbot_status
+    ? get_current_status()
+    : null;
+  const { curr_status, source } = current_status_get || {};
+
   // Fetch action items when component mounts
   useEffect(() => {
     callGetActionItemsApi(setActionItems, setGetActionItemsLoading);
   }, []);
+
+  // Initialize localStatus whenever curr_status changes
+  useEffect(() => {
+    setLocalStatus(curr_status);
+  }, [curr_status]);
 
   // Refresh action items when conversation_id changes and there are no action_items in rightSectionData
   useEffect(() => {
@@ -636,41 +673,13 @@ const RightSection = ({
     return now.toISOString();
   };
 
-  const get_current_status = () => {
-    const { until_utc } = guest_chatbot_status || {};
-
-    // Check to see if a guest status applies
-    if (until_utc) {
-      let currentTime, untilTime;
-      if (until_utc !== "indefinitely") {
-        currentTime = new Date();
-        untilTime = new Date(until_utc);
-      }
-
-      if (untilTime > currentTime || until_utc === "indefinitely") {
-        // a guest status is active
-        if (guest_chatbot_status.status === "on") {
-          return { curr_status: "on", source: "guest" };
-        } else if (guest_chatbot_status.status === "off") {
-          return { curr_status: "off", source: "guest" };
-        }
-        // else: status is probably 'not_specified'. Use property status
-      }
-    }
-
-    // Otherwise, use property status
-    return { curr_status: property_chatbot_status, source: "property" };
-  };
-
-  const current_status_get = property_chatbot_status
-    ? get_current_status()
-    : null;
-  const { curr_status, source } = current_status_get || {};
-
   const callSetStatusAPI = async (on_or_off, timing) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setToggleStatusLoading(true);
+    
+    // Update local status immediately for better user experience
+    setLocalStatus(on_or_off);
 
     const end_time_utc = calculateEndTimeUTC(timing);
 
@@ -697,10 +706,14 @@ const RightSection = ({
         await updateConversationFromApi(conversation_id); // Call the API to get the updated conversation with the new status. This will trigger re-render
       } else {
         ToastHandle(response?.data?.error, "danger");
+        // If API fails, revert local status to original
+        setLocalStatus(curr_status);
       }
       return response.data;
     } catch (error) {
       ToastHandle("Internal server error", "danger");
+      // If API fails, revert local status to original
+      setLocalStatus(curr_status);
       return { error: "Internal server error" };
     } finally {
       setToggleStatusLoading(false);
@@ -712,10 +725,9 @@ const RightSection = ({
     const on_or_off = curr_status === "on" ? "off" : "on";
     callSetStatusAPI(on_or_off, event.target.value);
   };
-
   // When the user selects to revert guest status
   const handleRevertStatus = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     callSetStatusAPI("not_specified", "indefinitely");
   };
 
@@ -1234,12 +1246,11 @@ const RightSection = ({
                           borderRadius: "4px",
                           gap: "6px",
                           height: "32px",
-                          padding: "0px 8px",
-                          position: "relative",
+                          padding: "0px 8px",                          position: "relative",
                           width: "100%",
                           cursor: "pointer",
                           color:
-                            curr_status === "on"
+                            (localStatus || curr_status) === "on"
                               ? "rgb(0,180,0)"
                               : "rgb(200,0,0)",
                           fontWeight: "bold",
@@ -1256,8 +1267,7 @@ const RightSection = ({
                           }
                           handleHostbuddyDropdownKeyDown(e);
                         }}
-                      >
-                        <span
+                      >                        <span
                           style={{
                             display: "inline-block",
                             marginRight: "4px",
@@ -1266,7 +1276,7 @@ const RightSection = ({
                           ●
                         </span>
                         <span style={{ flexGrow: 1 }}>
-                          {curr_status === "on" ? "Active" : "Turned off"}
+                          {(localStatus || curr_status) === "on" ? "Active" : "Turned off"}
                         </span>
                         <img
                           src={ChevDownIcon}
@@ -1282,8 +1292,7 @@ const RightSection = ({
                         />
                       </div>
 
-                      {/* Custom Dropdown Menu */}
-                      {hostbuddyDropdownOpen && (
+                      {/* Custom Dropdown Menu */}                      {hostbuddyDropdownOpen && (
                         <div
                           style={{
                             position: "absolute",
@@ -1300,50 +1309,24 @@ const RightSection = ({
                           }}
                           role="listbox"
                         >
-                          {curr_status === "on" && (
-                            <div
-                              onClick={() => {
-                                callSetStatusAPI("off", "indefinitely");
-                                setHostbuddyDropdownOpen(false);
-                              }}
+                          {(localStatus || curr_status) === "on" && (
+                            <span
                               style={{
                                 padding: "8px 16px",
-                                cursor: "pointer",
-                                transition: "background-color 0.2s ease",
+                                display: "block",
+                                backgroundColor: "#353840",
                                 color: "white",
-                                hoverBackgroundColor: "#393d46",
+                                fontWeight: "500",
+                                borderLeft: "3px solid #0B5FDE"
                               }}
                               role="option"
-                              tabIndex={0}
-                              onMouseOver={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "#393d46")
-                              }
-                              onMouseOut={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "transparent")
-                              }
-                              onFocus={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "#393d46")
-                              }
-                              onBlur={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "transparent")
-                              }
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                  e.preventDefault();
-                                  callSetStatusAPI("off", "indefinitely");
-                                  setHostbuddyDropdownOpen(false);
-                                }
-                              }}
+                              aria-selected="true"
                             >
                               Turn off
-                            </div>
+                            </span>
                           )}
 
-                          {curr_status === "off" && (
+                          {(localStatus || curr_status) === "off" && (
                             <div
                               onClick={() => {
                                 callSetStatusAPI("on", "indefinitely");
@@ -1384,14 +1367,12 @@ const RightSection = ({
                             >
                               Turn back on
                             </div>
-                          )}
-
-                          {curr_status === "on" && (
+                          )}                          {(localStatus || curr_status) === "on" && (
                             <>
                               {" "}
                               <div
                                 onClick={() => {
-                                  callSetStatusAPI(curr_status, "15m");
+                                  callSetStatusAPI("off", "15m");
                                   setHostbuddyDropdownOpen(false);
                                 }}
                                 style={{
@@ -1421,7 +1402,7 @@ const RightSection = ({
                                 onKeyDown={(e) => {
                                   if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
-                                    callSetStatusAPI(curr_status, "15m");
+                                    callSetStatusAPI("off", "15m");
                                     setHostbuddyDropdownOpen(false);
                                   }
                                 }}
@@ -1430,7 +1411,7 @@ const RightSection = ({
                               </div>{" "}
                               <div
                                 onClick={() => {
-                                  callSetStatusAPI(curr_status, "1h");
+                                  callSetStatusAPI("off", "1h");
                                   setHostbuddyDropdownOpen(false);
                                 }}
                                 style={{
@@ -1460,7 +1441,7 @@ const RightSection = ({
                                 onKeyDown={(e) => {
                                   if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
-                                    callSetStatusAPI(curr_status, "1h");
+                                    callSetStatusAPI("off", "1h");
                                     setHostbuddyDropdownOpen(false);
                                   }
                                 }}
@@ -1469,7 +1450,7 @@ const RightSection = ({
                               </div>{" "}
                               <div
                                 onClick={() => {
-                                  callSetStatusAPI(curr_status, "1d");
+                                  callSetStatusAPI("off", "1d");
                                   setHostbuddyDropdownOpen(false);
                                 }}
                                 style={{
@@ -1499,7 +1480,7 @@ const RightSection = ({
                                 onKeyDown={(e) => {
                                   if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
-                                    callSetStatusAPI(curr_status, "1d");
+                                    callSetStatusAPI("off", "1d");
                                     setHostbuddyDropdownOpen(false);
                                   }
                                 }}
@@ -1508,7 +1489,7 @@ const RightSection = ({
                               </div>{" "}
                               <div
                                 onClick={() => {
-                                  callSetStatusAPI(curr_status, "indefinitely");
+                                  callSetStatusAPI("off", "indefinitely");
                                   setHostbuddyDropdownOpen(false);
                                 }}
                                 style={{
@@ -1538,10 +1519,7 @@ const RightSection = ({
                                 onKeyDown={(e) => {
                                   if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
-                                    callSetStatusAPI(
-                                      curr_status,
-                                      "indefinitely"
-                                    );
+                                    callSetStatusAPI("off", "indefinitely");
                                     setHostbuddyDropdownOpen(false);
                                   }
                                 }}
@@ -1573,7 +1551,7 @@ const RightSection = ({
                 ) : (
                   <p style={{ fontSize: "12px" }}>Until {until_formatted}</p>
                 )
-              )} */}
+              } */}
 
               {/* Additional time selection dropdown if needed */}
 
@@ -1587,8 +1565,7 @@ const RightSection = ({
                   <option value="1d">For 24 hours</option>
                   <option value="indefinitely">Indefinitely</option>
                 </select>
-              )} */}
-              {source == "guest1" && !toggleStatusLoading && (
+              )} */}              {source == "guest1" && !toggleStatusLoading && (
                 <div style={{ textAlign: "center" }}>
                   <a
                     style={{
@@ -1608,7 +1585,7 @@ const RightSection = ({
                       }
                     }}
                   >
-                    11Turn back {curr_status === "on" ? "off" : "on"}
+                    Turn back {curr_status === "on" ? "off" : "on"}
                   </a>
                 </div>
               )}
@@ -1629,6 +1606,8 @@ const RightSection = ({
             </p>
           </div>
         ))}
+
+        
       {!(channel == "Chat Window") && (
         <div className="satisfy">
           <h2>Sentiment</h2>
@@ -2136,7 +2115,7 @@ const RightSection = ({
                   onClick={() => setIssuesExpanded(true)}
                   style={{
                     color: "#A6A9B2",
-                    fontFamily: '"DM Sans-Regular", Helvetica',
+                    fontFamily: '"DM Sans", Helvetica',
                     fontSize: "14px",
                     fontWeight: 400,
                     letterSpacing: 0,
@@ -2160,7 +2139,7 @@ const RightSection = ({
             <p
               style={{
                 color: "#A6A9B2",
-                fontFamily: '"DM Sans-Regular", Helvetica',
+                fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
               }}
             >
