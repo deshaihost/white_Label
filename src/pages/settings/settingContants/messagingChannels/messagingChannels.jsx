@@ -16,9 +16,11 @@ const MessagingChannels = ({ ApiUserData, refreshUserData, subsec }) => {
         <button className={`tab-button ${selectedChannel === 'WhatsApp' ? 'active' : ''}`} onClick={() => setSelectedChannel('WhatsApp')}>
           WhatsApp
         </button>
+        {/*
         <button className={`tab-button ${selectedChannel === 'Email' ? 'active' : ''}`} onClick={() => setSelectedChannel('Email')}>
           Email
         </button>
+        */}
       </div>
 
       <div style={{ marginTop: '20px' }}>

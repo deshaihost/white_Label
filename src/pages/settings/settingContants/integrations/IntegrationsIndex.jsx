@@ -4,10 +4,12 @@ import Loader from '../../../../helper/Loader';
 import ConnectToTurno from "./connectTurnoButton";
 import ConnectToMinut from './connectMinutButton';
 import ConnectToTidy from './connectTidyButton';
+import ConnectToNotion from './connectNotionButton';
 import TurnoIntegration from './TurnoIntegration';
 import MinutIntegration from './MinutIntegration';
 import ConnectToHostfullyGuidebooks from './connectHostfullyGuidebooksButton';
 import HostfullyGuidebooksIntegration from './HostfullyGuidebooksIntegration';
+import NotionIntegration from './notionIntegration';
 import './Integrations.css';
 
 const IntegrationsIndex = (ApiUserData) => {
@@ -19,6 +21,7 @@ const IntegrationsIndex = (ApiUserData) => {
   // Only show the Hostfully Guidebooks section if the user's PMS is Hostfully
   //const pms_name = ApiUserData?.ApiUserData?.calry_integrations ? Object.keys(ApiUserData.ApiUserData.calry_integrations)[0] : undefined;
   //const isHostfully = pms_name === 'hostfully';
+  const notionUserId = Boolean(ApiUserData?.ApiUserData?.notion_user_id);
 
   // Identify connected integrations
   const connectedIntegrations = [];
@@ -26,6 +29,7 @@ const IntegrationsIndex = (ApiUserData) => {
   if (minutUserId) connectedIntegrations.push('Minut');
   if (tidyUserId) connectedIntegrations.push('Tidy');
   if (hostfullyGuidebooksUserId) connectedIntegrations.push('Hostfully Guidebooks');
+  if (notionUserId) connectedIntegrations.push('Notion');
 
   // State for selected integration tab
   const [selectedIntegration, setSelectedIntegration] = useState(connectedIntegrations[0] || '');
@@ -39,6 +43,7 @@ const IntegrationsIndex = (ApiUserData) => {
           {!minutUserId && <ConnectToMinut />}
           {!tidyUserId && <ConnectToTidy />}
           {!hostfullyGuidebooksUserId && <ConnectToHostfullyGuidebooks />}
+          {!notionUserId && <ConnectToNotion />}
         </div>
       </div>
 
@@ -72,6 +77,10 @@ const IntegrationsIndex = (ApiUserData) => {
 
             {selectedIntegration === 'Hostfully Guidebooks' && (
               <HostfullyGuidebooksIntegration ApiUserData={ApiUserData} />
+            )}
+
+            {selectedIntegration === 'Notion' && (
+              <NotionIntegration ApiUserData={ApiUserData} />
             )}
 
             {/* Add similar blocks for additional integrations */}

@@ -136,7 +136,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
     try {
       const config = {
         headers: { "X-API-Key": API_KEY },
-        validateStatus: function (status) { return status >= 200 && status < 500; }
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error if non-2xx returned
       };
 
       const jsonPayload = { integration_properties: selectedProperties };
@@ -216,7 +216,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
                   <div className="row form-design">
                     <div className="col-12 mt-3">
                       {integrationPropertyList
-                        ?.filter((integrationPropObj) => {
+                        ?.filter((integrationPropObj) => { // Apply the search filter. Try to match the search term to both the name and internal_name (if available)
                           const searchTermNormalized = normalizeString(searchTerm);
                           const nameMatches = integrationPropObj?.name && normalizeString(integrationPropObj.name).includes(searchTermNormalized);
                           const internalNameMatches = integrationPropObj?.internal_name && normalizeString(integrationPropObj.internal_name).includes(searchTermNormalized);
