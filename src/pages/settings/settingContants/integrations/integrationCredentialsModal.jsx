@@ -28,14 +28,8 @@ const IntegrationCredentialsModal = ({
       case "hostfullyGuidebooks":
         return (
           <Form.Group className="mb-3">
-            <Form.Label>Enter the Hostfully Guidebooks token</Form.Label>
-            <Form.Control 
-              type="text" 
-              name="token"
-              placeholder="Paste your token here" 
-              value={credentials.token} 
-              onChange={handleInputChange} 
-            />
+            <Form.Label>Enter your Hostfully Guidebooks API key (you may need to get this from Hostfully support)</Form.Label>
+            <Form.Control type="text" name="token" placeholder="Paste your token here" value={credentials.token} onChange={handleInputChange} />
           </Form.Group>
         );
       // Add cases for future integrations here
