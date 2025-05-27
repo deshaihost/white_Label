@@ -27,7 +27,10 @@ import GOOGLERENTAL_ICON_FOR_RIGHT from "./icons/GOOGLERENTAL_ICON_FOR_RIGHT.svg
 import SMS_ICON_FOR_RIGHT from "./icons/SMS_ICON_FOR_RIGHT.svg";
 
 // Import action items API function from ActionsItemsTable
-const callGetActionItemsApi = async (setActionItems, setGetActionItemsLoading) => {
+const callGetActionItemsApi = async (
+  setActionItems,
+  setGetActionItemsLoading
+) => {
   const baseUrl = process.env.REACT_APP_API_ENDPOINT;
   const API_KEY = process.env.REACT_APP_API_KEY;
   setGetActionItemsLoading(true);
@@ -35,14 +38,20 @@ const callGetActionItemsApi = async (setActionItems, setGetActionItemsLoading) =
   try {
     const config = {
       headers: { "X-API-Key": API_KEY },
-      validateStatus: function (status) { return status >= 200 && status < 500; }
+      validateStatus: function (status) {
+        return status >= 200 && status < 500;
+      },
     };
-    const response = await axios.get(`${baseUrl}/get_action_items?status=incomplete&limit=200`, config);
+    const response = await axios.get(
+      `${baseUrl}/get_action_items?status=incomplete&limit=200`,
+      config
+    );
 
     if (response.status === 200) {
       setActionItems(response.data.action_items);
+    } else {
+      ToastHandle(response?.data?.error, "danger");
     }
-    else { ToastHandle(response?.data?.error, "danger"); }
     return response.data;
   } catch (error) {
     ToastHandle("Error - unable to get action items", "danger");
@@ -52,25 +61,52 @@ const callGetActionItemsApi = async (setActionItems, setGetActionItemsLoading) =
   }
 };
 
-const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentView, setActiveTab, setPendingTabChange }) => {
-  const { arrival_date, departure_date, status, guest_name, sentiment, sentiment_justification, property_name, guest_chatbot_status, property_chatbot_status, conversation_id, image_url, user , action_items } = rightSectionData ? rightSectionData : {};
-  
-  const until_formatted = guest_chatbot_status?.until_utc == 'indefinitely' ? 'indefinitely' : (guest_chatbot_status?.until_local ? timeFormat(guest_chatbot_status?.until_local) : null);
+const RightSection = ({
+  rightSectionData,
+  updateConversationFromApi,
+  setCurrentView,
+  setActiveTab,
+  setPendingTabChange,
+}) => {
+  const {
+    arrival_date,
+    departure_date,
+    status,
+    guest_name,
+    sentiment,
+    sentiment_justification,
+    property_name,
+    guest_chatbot_status,
+    property_chatbot_status,
+    conversation_id,
+    image_url,
+    user,
+    action_items,
+  } = rightSectionData ? rightSectionData : {};
+
+  const until_formatted =
+    guest_chatbot_status?.until_utc == "indefinitely"
+      ? "indefinitely"
+      : guest_chatbot_status?.until_local
+      ? timeFormat(guest_chatbot_status?.until_local)
+      : null;
   let { channel, is_locked } = rightSectionData || {};
-  
+
   // Helper function to safely handle action items filtering
   const getIncompleteActionItems = () => {
-    return (action_items && Array.isArray(action_items)) 
-      ? action_items.filter(obj => obj.status === "incomplete") 
+    return action_items && Array.isArray(action_items)
+      ? action_items.filter((obj) => obj.status === "incomplete")
       : [];
   };
-  
-  const [selectedOption, setSelectedOption] = useState('');
+
+  const [selectedOption, setSelectedOption] = useState("");
   const [toggleStatusLoading, setToggleStatusLoading] = useState(false);
   const [issuesExpanded, setIssuesExpanded] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [hostbuddyDropdownOpen, setHostbuddyDropdownOpen] = useState(false);
-  const [selectedSentiment, setSelectedSentiment] = useState(sentiment || 'neutral');
+  const [selectedSentiment, setSelectedSentiment] = useState(
+    sentiment || "neutral"
+  );
   // State for sub-user names
   const [subUserNames, setSubUserNames] = useState([]);
   const [subUserLoading, setSubUserLoading] = useState(false);
@@ -80,56 +116,70 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [contactInfo, setContactInfo] = useState({
     email: "floydmiles@gmail.com",
-    phone: "(316) 555-0116"
+    phone: "(316) 555-0116",
   });
-  
+
   const dropdownRef = useRef(null);
   const assignUserDropdownRef = useRef(null);
   const hostbuddyDropdownRef = useRef(null);
   const navigate = useNavigate();
-    // State for action items
+  // State for action items
   const [actionItems, setActionItems] = useState([]);
   const [getActionItemsLoading, setGetActionItemsLoading] = useState(false);
-    // Fetch action items when component mounts
+  // Fetch action items when component mounts
   useEffect(() => {
     callGetActionItemsApi(setActionItems, setGetActionItemsLoading);
   }, []);
-  
+
   // Refresh action items when conversation_id changes and there are no action_items in rightSectionData
   useEffect(() => {
     if (conversation_id && (!action_items || action_items.length === 0)) {
       // If there are no action_items in rightSectionData for this conversation,
       // we could either update the callGetActionItemsApi to filter by conversation_id
       // or rely on the updateConversationFromApi function to refresh the data
-      if (updateConversationFromApi && typeof updateConversationFromApi === 'function') {
+      if (
+        updateConversationFromApi &&
+        typeof updateConversationFromApi === "function"
+      ) {
         updateConversationFromApi(conversation_id);
       }
     }
   }, [conversation_id, action_items, updateConversationFromApi]);
-  
+
   // Function to mark an action item as complete
   const callCompleteActionItemApi = async (actionItemId) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    
+
     try {
       const config = {
         headers: { "X-API-Key": API_KEY },
-        validateStatus: function (status) { return status >= 200 && status < 500; }
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
       };
       const bodyData = { action_item_id: actionItemId };
-      const response = await axios.put(`${baseUrl}/complete_action_item`, bodyData, config);      if (response.status === 200) { 
+      const response = await axios.put(
+        `${baseUrl}/complete_action_item`,
+        bodyData,
+        config
+      );
+      if (response.status === 200) {
         // Remove the completed action item from the state
         setActionItems(actionItems.filter((item) => item.id !== actionItemId));
-        
+
         // If this is a conversation-specific action item and updateConversationFromApi is available, refresh the conversation data
-        if (conversation_id && updateConversationFromApi && typeof updateConversationFromApi === 'function') {
+        if (
+          conversation_id &&
+          updateConversationFromApi &&
+          typeof updateConversationFromApi === "function"
+        ) {
           updateConversationFromApi(conversation_id);
         }
-        
+
         ToastHandle("Action item marked as completed", "success");
-      } else { 
-        ToastHandle(response?.data?.error, "danger"); 
+      } else {
+        ToastHandle(response?.data?.error, "danger");
       }
       return response.data;
     } catch (error) {
@@ -141,30 +191,35 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   const fetchSubUserNames = async () => {
     // If data was already fetched, don't fetch again
     if (dataFetched && subUserNames.length > 0) return;
-    
+
     setSubUserLoading(true);
     try {
       const baseUrl = process.env.REACT_APP_API_ENDPOINT;
       const API_KEY = process.env.REACT_APP_API_KEY;
-      
+
       // Get token from the apiCore's active token or fall back to localStorage
-      const token = getActiveToken() || localStorage.getItem('authToken');
-      
+      const token = getActiveToken() || localStorage.getItem("authToken");
+
       const config = {
-        headers: { 
+        headers: {
           "X-API-Key": API_KEY,
-          "Authorization": token ? `Bearer ${token}` : undefined
+          Authorization: token ? `Bearer ${token}` : undefined,
         },
-        validateStatus: function (status) { return status >= 200 && status < 500; }
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
       };
-      
+
       const response = await axios.get(`${baseUrl}/get_sub_user_names`, config);
-      
+
       if (response.status === 200) {
         setSubUserNames(response.data.sub_user_names || []);
         setDataFetched(true); // Mark data as fetched
       } else {
-        ToastHandle(response?.data?.error || "Failed to fetch user names", "danger");
+        ToastHandle(
+          response?.data?.error || "Failed to fetch user names",
+          "danger"
+        );
       }
     } catch (error) {
       ToastHandle("Error fetching user names", "danger");
@@ -177,7 +232,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   const handleAssignUserDropdownOpen = () => {
     const newState = !assignUserDropdownOpen;
     setAssignUserDropdownOpen(newState);
-    
+
     // If opening the dropdown and we haven't fetched data yet, fetch it
     if (newState && !dataFetched) {
       fetchSubUserNames();
@@ -186,11 +241,13 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
 
   // Handle user selection for multi-select
   const handleUserSelect = (user) => {
-    setSelectedUsers(prev => {
+    setSelectedUsers((prev) => {
       // Check if user is already selected
-      if (prev.some(selected => selected.email === user.email)) {
+      if (prev.some((selected) => selected.email === user.email)) {
         // If already selected, remove it
-        const newSelection = prev.filter(selected => selected.email !== user.email);
+        const newSelection = prev.filter(
+          (selected) => selected.email !== user.email
+        );
         // Call assign function with the updated selection
         setTimeout(() => assignUsersToConversation(newSelection), 0);
         return newSelection;
@@ -206,8 +263,8 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
 
   // Handle removing a user from selection
   const handleRemoveUser = (email) => {
-    setSelectedUsers(prev => {
-      const newSelection = prev.filter(user => user.email !== email);
+    setSelectedUsers((prev) => {
+      const newSelection = prev.filter((user) => user.email !== email);
       // Call assign function with the updated selection
       setTimeout(() => assignUsersToConversation(newSelection), 0);
       return newSelection;
@@ -220,7 +277,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
     // Call assign function with empty array
     setTimeout(() => assignUsersToConversation([]), 0);
   };
-  
+
   // Function to assign selected users to the conversation
   const assignUsersToConversation = async (usersToAssign = selectedUsers) => {
     if (!conversation_id) return;
@@ -228,36 +285,48 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
     try {
       const baseUrl = process.env.REACT_APP_API_ENDPOINT;
       const API_KEY = process.env.REACT_APP_API_KEY;
-      
+
       // Get token from the apiCore's active token or fall back to localStorage
-      const token = getActiveToken() || localStorage.getItem('authToken');
-      
+      const token = getActiveToken() || localStorage.getItem("authToken");
+
       const config = {
-        headers: { 
+        headers: {
           "X-API-Key": API_KEY,
-          "Authorization": token ? `Bearer ${token}` : undefined
+          Authorization: token ? `Bearer ${token}` : undefined,
         },
-        validateStatus: function (status) { return status >= 200 && status < 500; }
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
       };
-      
+
       // Extract emails from selected users
-      const subUserEmails = usersToAssign.map(user => user.email);
-      
+      const subUserEmails = usersToAssign.map((user) => user.email);
+
       const bodyData = {
         conversation_id: conversation_id,
-        sub_user_emails: subUserEmails
+        sub_user_emails: subUserEmails,
       };
-      
-      const response = await axios.put(`${baseUrl}/assign_sub_users_to_conversation`, bodyData, config);
-      
+
+      const response = await axios.put(
+        `${baseUrl}/assign_sub_users_to_conversation`,
+        bodyData,
+        config
+      );
+
       if (response.status === 200) {
         ToastHandle("Users assigned successfully", "success");
         // You can optionally update the conversation data if needed
-        if (updateConversationFromApi && typeof updateConversationFromApi === 'function') {
+        if (
+          updateConversationFromApi &&
+          typeof updateConversationFromApi === "function"
+        ) {
           updateConversationFromApi(conversation_id);
         }
       } else {
-        ToastHandle(response?.data?.error || "Failed to assign users", "danger");
+        ToastHandle(
+          response?.data?.error || "Failed to assign users",
+          "danger"
+        );
       }
     } catch (error) {
       console.error("Error assigning users:", error);
@@ -272,44 +341,52 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
         setSelectedUsers([]);
         return;
       }
-      
+
       // Only fetch if we've already loaded the sub-user names
       if (!dataFetched || subUserNames.length === 0) {
         return;
       }
-      
+
       try {
         const baseUrl = process.env.REACT_APP_API_ENDPOINT;
         const API_KEY = process.env.REACT_APP_API_KEY;
-        
+
         // Get token from the apiCore's active token or fall back to localStorage
-        const token = getActiveToken() || localStorage.getItem('authToken');
-        
+        const token = getActiveToken() || localStorage.getItem("authToken");
+
         const config = {
-          headers: { 
+          headers: {
             "X-API-Key": API_KEY,
-            "Authorization": token ? `Bearer ${token}` : undefined
+            Authorization: token ? `Bearer ${token}` : undefined,
           },
-          validateStatus: function (status) { return status >= 200 && status < 500; }
+          validateStatus: function (status) {
+            return status >= 200 && status < 500;
+          },
         };
-        
-        const response = await axios.get(`${baseUrl}/get_sub_users_for_conversation/${conversation_id}`, config);
-        
+
+        const response = await axios.get(
+          `${baseUrl}/get_sub_users_for_conversation/${conversation_id}`,
+          config
+        );
+
         if (response.status === 200 && response.data.sub_user_emails) {
           // Map assigned users to match our selected users format
-          const assignedUsers = response.data.sub_user_emails.map(email => {
+          const assignedUsers = response.data.sub_user_emails.map((email) => {
             // Find matching user in subUserNames
-            const user = subUserNames.find(user => user.email === email);
-            return user || { email, display_name: email.split('@')[0] }; // Fallback if user not found
+            const user = subUserNames.find((user) => user.email === email);
+            return user || { email, display_name: email.split("@")[0] }; // Fallback if user not found
           });
-          
+
           setSelectedUsers(assignedUsers);
         }
       } catch (error) {
-        console.error("Error fetching assigned users for get_sub_users_for_conversation :", error);
+        console.error(
+          "Error fetching assigned users for get_sub_users_for_conversation :",
+          error
+        );
       }
     };
-    
+
     fetchAssignedUsers();
   }, [conversation_id, dataFetched, subUserNames]);
 
@@ -319,40 +396,46 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
-      if (assignUserDropdownRef.current && !assignUserDropdownRef.current.contains(event.target)) {
+      if (
+        assignUserDropdownRef.current &&
+        !assignUserDropdownRef.current.contains(event.target)
+      ) {
         setAssignUserDropdownOpen(false);
       }
     }
-    
-    document.addEventListener('mousedown', handleOutsideClick);
+
+    document.addEventListener("mousedown", handleOutsideClick);
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
-  
+
   // Update selectedSentiment when rightSectionData changes
   useEffect(() => {
     if (sentiment) {
       setSelectedSentiment(sentiment);
     } else {
-      setSelectedSentiment('neutral'); // Default to neutral
+      setSelectedSentiment("neutral"); // Default to neutral
     }
   }, [sentiment]);
 
   // Handle clicks outside the Hostbuddy dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (hostbuddyDropdownRef.current && !hostbuddyDropdownRef.current.contains(event.target)) {
+      if (
+        hostbuddyDropdownRef.current &&
+        !hostbuddyDropdownRef.current.contains(event.target)
+      ) {
         setHostbuddyDropdownOpen(false);
       }
     };
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
   // Force display for testing - remove in production
   const isCheckInToday = true; // For testing
   const isCheckOutToday = true; // For testing
@@ -360,7 +443,7 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   const handleSentimentSelect = (sentiment) => {
     setSelectedSentiment(sentiment);
     setDropdownOpen(false);
-    
+
     // Call the API to update the sentiment if conversation_id exists
     if (conversation_id) {
       updateSentiment(conversation_id, sentiment);
@@ -370,32 +453,37 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   // Function to handle keyboard navigation in dropdown
   const handleHostbuddyDropdownKeyDown = (e) => {
     if (hostbuddyDropdownOpen) {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         e.preventDefault();
-        const menu = hostbuddyDropdownRef.current?.querySelector('[role="listbox"]');
+        const menu =
+          hostbuddyDropdownRef.current?.querySelector('[role="listbox"]');
         if (menu) {
           const options = Array.from(menu.querySelectorAll('[role="option"]'));
           const currentFocus = document.activeElement;
           const currentIndex = options.indexOf(currentFocus);
-          
+
           let nextIndex;
-          if (e.key === 'ArrowDown') {
-            nextIndex = currentIndex < options.length - 1 ? currentIndex + 1 : 0;
+          if (e.key === "ArrowDown") {
+            nextIndex =
+              currentIndex < options.length - 1 ? currentIndex + 1 : 0;
           } else {
-            nextIndex = currentIndex > 0 ? currentIndex - 1 : options.length - 1;
+            nextIndex =
+              currentIndex > 0 ? currentIndex - 1 : options.length - 1;
           }
-          
+
           options[nextIndex]?.focus();
         }
-      } else if (e.key === 'Escape') {
+      } else if (e.key === "Escape") {
         setHostbuddyDropdownOpen(false);
-      } else if (e.key === 'Home') {
+      } else if (e.key === "Home") {
         e.preventDefault();
-        const menu = hostbuddyDropdownRef.current?.querySelector('[role="listbox"]');
+        const menu =
+          hostbuddyDropdownRef.current?.querySelector('[role="listbox"]');
         menu?.querySelector('[role="option"]')?.focus();
-      } else if (e.key === 'End') {
+      } else if (e.key === "End") {
         e.preventDefault();
-        const menu = hostbuddyDropdownRef.current?.querySelector('[role="listbox"]');
+        const menu =
+          hostbuddyDropdownRef.current?.querySelector('[role="listbox"]');
         const options = menu?.querySelectorAll('[role="option"]');
         options?.[options.length - 1]?.focus();
       }
@@ -405,38 +493,50 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   // Function to call the API to update sentiment
   const updateSentiment = async (conversationId, sentimentValue) => {
     if (!conversationId) return;
-    
+
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    
+
     try {
       // Get token from the apiCore's active token or fall back to localStorage
-      const token = getActiveToken() || localStorage.getItem('authToken');
-      
+      const token = getActiveToken() || localStorage.getItem("authToken");
+
       const config = {
-        headers: { 
+        headers: {
           "X-API-Key": API_KEY,
-          "Authorization": token ? `Bearer ${token}` : undefined
+          Authorization: token ? `Bearer ${token}` : undefined,
         },
-        validateStatus: function (status) { return status >= 200 && status < 500; }
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
       };
-        const bodyData = { 
+      const bodyData = {
         conversation_id: conversationId,
         new_sentiment: sentimentValue,
-        property_name: property_name || undefined
+        property_name: property_name || undefined,
       };
-      
-      const response = await axios.post(`${baseUrl}/change_sentiment`, bodyData, config);
-  
-      if (response.status === 200) { 
+
+      const response = await axios.post(
+        `${baseUrl}/change_sentiment`,
+        bodyData,
+        config
+      );
+
+      if (response.status === 200) {
         ToastHandle(`Sentiment updated to ${sentimentValue}`, "success");
-        
+
         // Update the conversation data if needed
-        if (updateConversationFromApi && typeof updateConversationFromApi === 'function') {
+        if (
+          updateConversationFromApi &&
+          typeof updateConversationFromApi === "function"
+        ) {
           updateConversationFromApi(conversationId);
         }
-      } else { 
-        ToastHandle(response?.data?.error || "Failed to update sentiment", "danger"); 
+      } else {
+        ToastHandle(
+          response?.data?.error || "Failed to update sentiment",
+          "danger"
+        );
       }
     } catch (error) {
       ToastHandle("Error updating sentiment", "danger");
@@ -445,30 +545,30 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
 
   // Function to get the appropriate icon based on sentiment
   const getSentimentIcon = (sentiment) => {
-    switch(sentiment) {
-      case 'positive':
+    switch (sentiment) {
+      case "positive":
         return PositiveIcon;
-      case 'negative':
+      case "negative":
         return NegativeIcon;
-      case 'neutral':
+      case "neutral":
       default:
         return NeutralIcon;
     }
   };
   const currentDate = new Date();
-  
+
   const isToday = (dateString) => {
     if (!dateString) return false;
-    
+
     try {
       // Parse the YYMMDD_HHMMSS format
       // Format example: 250419_120000 (for April 19, 2025 at 12:00:00)
-      const year = parseInt('20' + dateString.substring(0, 2)); // Convert YY to YYYY
+      const year = parseInt("20" + dateString.substring(0, 2)); // Convert YY to YYYY
       const month = parseInt(dateString.substring(2, 4)) - 1; // JS months are 0-indexed
       const day = parseInt(dateString.substring(4, 6));
-      
+
       const departure = new Date(year, month, day);
-      
+
       return (
         currentDate.getFullYear() === departure.getFullYear() &&
         currentDate.getMonth() === departure.getMonth() &&
@@ -480,29 +580,38 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
     }
   };
 
-
-
-
-
-  console.log("Debug - Arrival date:", arrival_date);
-  console.log("Debug - Departure date:", departure_date);
+  // console.log("Debug - Arrival date:", arrival_date);
+  // console.log("Debug - Departure date:", departure_date);
   // Format timestamp for issues in "Month Day, Time" format (e.g. "Feb 15, 3:45pm")
   const formatIssueTime = (dateTimeString) => {
     if (!dateTimeString) return "";
-    
+
     const date = new Date(dateTimeString);
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
     const month = months[date.getMonth()];
     const day = date.getDate(); // Get the day
     let hours = date.getHours();
     let minutes = date.getMinutes();
     const ampm = hours >= 12 ? "pm" : "am";
-    
+
     hours = hours % 12;
     hours = hours ? hours : 12; // 0 hour should be 12
     minutes = minutes < 10 ? "0" + minutes : minutes;
-    
+
     return `${month} ${day}, ${hours}:${minutes}${ampm}`;
   };
 
@@ -510,63 +619,79 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
   const calculateEndTimeUTC = (timing) => {
     const now = new Date();
     switch (timing) {
-      case '15m':
+      case "15m":
         now.setMinutes(now.getMinutes() + 15);
         break;
-      case '1h':
+      case "1h":
         now.setHours(now.getHours() + 1);
         break;
-      case '1d':
+      case "1d":
         now.setDate(now.getDate() + 1);
         break;
-      case 'indefinitely':
-        return 'indefinitely';
+      case "indefinitely":
+        return "indefinitely";
       default:
-        throw new Error('Invalid timing value');
+        throw new Error("Invalid timing value");
     }
     return now.toISOString();
   };
 
   const get_current_status = () => {
     const { until_utc } = guest_chatbot_status || {};
-  
+
     // Check to see if a guest status applies
     if (until_utc) {
       let currentTime, untilTime;
-      if (until_utc !== 'indefinitely') {
+      if (until_utc !== "indefinitely") {
         currentTime = new Date();
         untilTime = new Date(until_utc);
       }
-  
-      if (untilTime > currentTime || until_utc === 'indefinitely') { // a guest status is active
-        if (guest_chatbot_status.status === 'on') { return {'curr_status':'on', source:'guest'}; }
-        else if (guest_chatbot_status.status === 'off') { return {'curr_status':'off', source:'guest'}; }
+
+      if (untilTime > currentTime || until_utc === "indefinitely") {
+        // a guest status is active
+        if (guest_chatbot_status.status === "on") {
+          return { curr_status: "on", source: "guest" };
+        } else if (guest_chatbot_status.status === "off") {
+          return { curr_status: "off", source: "guest" };
+        }
         // else: status is probably 'not_specified'. Use property status
       }
     }
 
     // Otherwise, use property status
-    return {'curr_status':property_chatbot_status, source:'property'}
+    return { curr_status: property_chatbot_status, source: "property" };
   };
 
-  const current_status_get = property_chatbot_status ? get_current_status() : null;
+  const current_status_get = property_chatbot_status
+    ? get_current_status()
+    : null;
   const { curr_status, source } = current_status_get || {};
 
   const callSetStatusAPI = async (on_or_off, timing) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setToggleStatusLoading(true);
-  
+
     const end_time_utc = calculateEndTimeUTC(timing);
-  
+
     try {
       const config = {
         headers: { "X-API-Key": API_KEY },
-        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        }, // don't throw an error for non-2xx responses
       };
-      const body_data = { conversation_id:rightSectionData.conversation_id, status:on_or_off, until_utc:end_time_utc };
-      const response = await axios.put(`${baseUrl}/toggle_conversation_status`, body_data, config);
-  
+      const body_data = {
+        conversation_id: rightSectionData.conversation_id,
+        status: on_or_off,
+        until_utc: end_time_utc,
+      };
+      const response = await axios.put(
+        `${baseUrl}/toggle_conversation_status`,
+        body_data,
+        config
+      );
+
       if (response.status === 200) {
         ToastHandle("Status updated successfully", "success");
         await updateConversationFromApi(conversation_id); // Call the API to get the updated conversation with the new status. This will trigger re-render
@@ -584,16 +709,15 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
 
   // When the user selects to toggle guest status
   const handleSelectChange = (event, curr_status) => {
-    const on_or_off = curr_status === 'on' ? 'off' : 'on';
+    const on_or_off = curr_status === "on" ? "off" : "on";
     callSetStatusAPI(on_or_off, event.target.value);
   };
 
   // When the user selects to revert guest status
   const handleRevertStatus = (e) => {
     e.preventDefault();
-    callSetStatusAPI('not_specified', 'indefinitely');
+    callSetStatusAPI("not_specified", "indefinitely");
   };
-
 
   // Determines what to display for the status section
   const getStatusText = (status) => {
@@ -608,298 +732,362 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
 
   if (channel) {
     channel = channel.split(" (")[0]; // channel e.g. "Airbnb (via Hostfully)". Remove the second part.
-    channel = channel.replace('hostbuddy', 'Chat Window');
+    channel = channel.replace("hostbuddy", "Chat Window");
+  } else {
+    channel = "";
   }
-  else { channel = ""; }
   const statusText = getStatusText(status);
 
-    // Navigate to action items page
+  // Navigate to action items page
   const navigateToActionItems = () => {
     if (setActiveTab) {
       // For desktop view, directly switch to Open Issue tab
-      setActiveTab('openIssue');
-      
+      setActiveTab("openIssue");
+
       // If we're in mobile view and need to navigate to messages view first
       if (setCurrentView) {
         // Set which tab we want to activate after the view change
         if (setPendingTabChange) {
-          setPendingTabChange('openIssue');
+          setPendingTabChange("openIssue");
         }
         // Navigate to messages view
-        setCurrentView('messages');
+        setCurrentView("messages");
       }
     } else {
       // Fallback to the original behavior if setActiveTab is not available
-      navigate('/action-item');
+      navigate("/action-item");
     }
   };
 
   return (
-    <div className="right-side" >
+    <div className="right-side">
       {/* Mobile Back Button */}
       <div className="d-block d-lg-none mobile-nav">
-        <button onClick={() => setCurrentView('messages')} className="btn btn-link">
+        <button
+          onClick={() => setCurrentView("messages")}
+          className="btn btn-link"
+        >
           Back to Messages
         </button>
       </div>
-
       <div className="right-title">
         <h1>Reservation details</h1>
       </div>
-
       {/* Guest Image */}
-      <div className="guest-image-container" style={{ marginBottom: '2px', textAlign: 'center' }}>
+      <div
+        className="guest-image-container"
+        style={{ marginBottom: "2px", textAlign: "center" }}
+      >
         {image_url ? (
-          <img 
-            src={image_url} 
-            alt={`${guest_name || 'Guest'}`}
-            style={{ 
-              
-              width: '100%',
-              height: '75%',
-              objectFit: 'contain',
-              borderRadius: '8px',
-              display: 'block',
-              marginLeft: '0'
+          <img
+            src={image_url}
+            alt={`${guest_name || "Guest"}`}
+            style={{
+              width: "100%",
+              height: "75%",
+              objectFit: "contain",
+              borderRadius: "8px",
+              display: "block",
+              marginLeft: "0",
             }}
             onError={(e) => {
-              e.target.onerror = null; 
+              e.target.onerror = null;
               e.target.src = dummyPropertyImg;
             }}
           />
         ) : (
-          <img 
-            src={dummyPropertyImg} 
-            alt="Default guest" 
-            style={{ 
-              maxWidth: '272px',
-              maxHeight: '220px',
-              width: 'auto',
-              height: 'auto',
-              objectFit: 'contain',
-              borderRadius: '8px',
-              display: 'block',
-              marginLeft: '0'
+          <img
+            src={dummyPropertyImg}
+            alt="Default guest"
+            style={{
+              maxWidth: "272px",
+              maxHeight: "220px",
+              width: "auto",
+              height: "auto",
+              objectFit: "contain",
+              borderRadius: "8px",
+              display: "block",
+              marginLeft: "0",
             }}
           />
         )}
       </div>
-      
       {/* User info aligned to the left */}
       {user && (
-        <div style={{ textAlign: 'left', paddingLeft: '0px', marginBottom: '2px' ,marginTop: '5px'}}>
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
-            <div 
+        <div
+          style={{
+            textAlign: "left",
+            paddingLeft: "0px",
+            marginBottom: "2px",
+            marginTop: "5px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "4px",
+            }}
+          >
+            <div
               style={{
-                display: 'inline-block',
-                color: '#BDC1C9',
+                display: "inline-block",
+                color: "#BDC1C9",
                 fontFamily: '"DM Sans", Helvetica',
-                fontSize: '14px',
-                fontStyle: 'normal',
+                fontSize: "14px",
+                fontStyle: "normal",
                 fontWeight: 500,
-                letterSpacing: '0px',
-                lineHeight: 'var(--body-medium-med-500-line-height)',
-                padding: '2px ',
-                borderRadius: '4px',
-                height: '25px',
-                backgroundColor: '#24262E'
+                letterSpacing: "0px",
+                lineHeight: "var(--body-medium-med-500-line-height)",
+                padding: "2px ",
+                borderRadius: "4px",
+                height: "25px",
+                backgroundColor: "#24262E",
               }}
             >
               {user ? user.charAt(0).toUpperCase() + user.slice(1) : user}
             </div>
-            
+
             {/* Check-in-today badge */}
-            {isToday(arrival_date) && 
-                              <span className="checkin-badge">
-                                check-in today
-                              </span>
-                            }
-            
+            {isToday(arrival_date) && (
+              <span className="checkin-badge">check-in today</span>
+            )}
+
             {/* Check-out-today badge */}
-            {isToday(departure_date) && 
-                              <span className="checkout-badge">
-                                check-out today
-                              </span>
-                            }
+            {isToday(departure_date) && (
+              <span className="checkout-badge">check-out today</span>
+            )}
           </div>
         </div>
       )}
-
-      <div >
-
+      <div>
         <div className="guest">
           {statusText || guest_name || property_name ? (
             <>
               {/* {statusText && <span>{statusText}</span>} */}
               {/* <h1 style={{ fontSize: '14px', margin: 0 }}>{guest_name}</h1> */}
-              <h1 style={{ fontSize: '14px' ,fontWeight:"600", fontFamily: '"DM Sans", Helvetica' , color:"#D0D3DB" }}>{property_name}</h1>
-              <h1 className="guest_date" style={{ fontSize: '14px',fontWeight:"600", fontFamily: '"DM Sans", Helvetica' , color:"#D0D3DB" }}>{arrival_date && formatDateRange(arrival_date, departure_date, true)}</h1>
+              <h1
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  fontFamily: '"DM Sans", Helvetica',
+                  color: "#D0D3DB",
+                }}
+              >
+                {property_name}
+              </h1>
+              <h1
+                className="guest_date"
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  fontFamily: '"DM Sans", Helvetica',
+                  color: "#D0D3DB",
+                }}
+              >
+                {arrival_date &&
+                  formatDateRange(arrival_date, departure_date, true)}
+              </h1>
             </>
           ) : (
             <p>No guest selected</p>
           )}
-        </div>        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '4px', marginBottom: '5px' }}>
+        </div>{" "}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "4px",
+            marginBottom: "5px",
+          }}
+        >
           {channel && (
-            <>              
-            {channel.toUpperCase().includes('AIRBNB') && (
-                <div style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  
-                  height: '20px',
-                   padding: '4px',
-                  borderRadius: '3px',
-                  backgroundColor: '#24262E'
-                }}>
-                  <img 
+            <>
+              {channel.toUpperCase().includes("AIRBNB") && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+
+                    height: "20px",
+                    padding: "4px",
+                    borderRadius: "3px",
+                    backgroundColor: "#24262E",
+                  }}
+                >
+                  <img
                     src={AIRBNB_ICON_FOR_RIGHT}
                     alt="Airbnb"
                     style={{
-                      width: '49.64px',
-                      height: '20px',
-                      objectFit: 'contain'
+                      width: "49.64px",
+                      height: "20px",
+                      objectFit: "contain",
                     }}
                   />
                 </div>
-              )}              {channel.toUpperCase().includes('BOOKING') && (
-                <div style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                   padding: '4px',
-                  height: '20px',
-                  borderRadius: '3px',
-                  backgroundColor: '#24262E'
-                }}>
-                  <img 
+              )}{" "}
+              {channel.toUpperCase().includes("BOOKING") && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "4px",
+                    height: "20px",
+                    borderRadius: "3px",
+                    backgroundColor: "#24262E",
+                  }}
+                >
+                  <img
                     src={BOOKING_ICON_FOR_RIGHT}
                     alt="Booking"
                     style={{
-                      width: '80.14px',
-                      height: '20px',
-                      objectFit: 'contain'
+                      width: "80.14px",
+                      height: "20px",
+                      objectFit: "contain",
                     }}
                   />
                 </div>
-              )}             
-               {channel.toUpperCase().includes('VRBO') && (
-                <div style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '4px',
-                  height: '20px',
-                  borderRadius: '3px',
-                  backgroundColor: '#24262E'
-                }}>
-                  <img 
+              )}
+              {channel.toUpperCase().includes("VRBO") && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "4px",
+                    height: "20px",
+                    borderRadius: "3px",
+                    backgroundColor: "#24262E",
+                  }}
+                >
+                  <img
                     src={VIRBO_ICON_FOR_RIGHT}
                     alt="VIRBO"
                     style={{
-                      width: '45.38px',
-                      height: '20px',
-                      objectFit: 'contain'
+                      width: "45.38px",
+                      height: "20px",
+                      objectFit: "contain",
                     }}
                   />
                 </div>
-              )}              {(channel.toUpperCase().includes('OPENPHONE') || channel.toUpperCase().includes('OPEN PHONE')) && (
-                <div style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '4px',
-                  height: '20px',
-                  borderRadius: '3px',
-                  backgroundColor: '#24262E'
-                }}>
-                  <img 
+              )}{" "}
+              {(channel.toUpperCase().includes("OPENPHONE") ||
+                channel.toUpperCase().includes("OPEN PHONE")) && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "4px",
+                    height: "20px",
+                    borderRadius: "3px",
+                    backgroundColor: "#24262E",
+                  }}
+                >
+                  <img
                     src={OPENPHONE_ICON_FOR_RIGHT}
                     alt="OpenPhone"
                     style={{
-                      width: '86.77px',
-                      height: '20px',
-                      objectFit: 'contain'
+                      width: "86.77px",
+                      height: "20px",
+                      objectFit: "contain",
                     }}
                   />
                 </div>
-              )}              {channel.toUpperCase().includes('DIRECT') && (
-                <div style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                 padding: '4px',
-                  height: '20px',
-                  borderRadius: '3px',
-                  backgroundColor: '#24262E'
-                }}>
-                  <img 
+              )}{" "}
+              {channel.toUpperCase().includes("DIRECT") && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "4px",
+                    height: "20px",
+                    borderRadius: "3px",
+                    backgroundColor: "#24262E",
+                  }}
+                >
+                  <img
                     src={DIRECT_ICON_FOR_RIGHT}
                     alt="Direct"
                     style={{
-                      width: '66px',
-                      height: '20px',
-                      objectFit: 'contain'
+                      width: "66px",
+                      height: "20px",
+                      objectFit: "contain",
                     }}
                   />
                 </div>
-              )}              {channel.toUpperCase().includes('EMAIL') && (
-                <div style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                 padding: '4px',
-                  height: '20px',
-                  borderRadius: '3px',
-                  backgroundColor: '#24262E'
-                }}>
-                  <img 
+              )}{" "}
+              {channel.toUpperCase().includes("EMAIL") && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "4px",
+                    height: "20px",
+                    borderRadius: "3px",
+                    backgroundColor: "#24262E",
+                  }}
+                >
+                  <img
                     src={EMAIL_ICON_RIGHT}
                     alt="Email"
                     style={{
-                      width: '58px',
-                      height: '20px',
-                      objectFit: 'contain'
+                      width: "58px",
+                      height: "20px",
+                      objectFit: "contain",
                     }}
                   />
                 </div>
-              )}              {(channel.toUpperCase().includes('GOOGLE RENTALS') || channel.toUpperCase().includes('GOOGLERENTALS')) && (
-                <div style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                padding: '4px',
-                  height: '20px',
-                  borderRadius: '3px',
-                  backgroundColor: '#24262E'
-                }}>
-                  <img 
+              )}{" "}
+              {(channel.toUpperCase().includes("GOOGLE RENTALS") ||
+                channel.toUpperCase().includes("GOOGLERENTALS")) && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "4px",
+                    height: "20px",
+                    borderRadius: "3px",
+                    backgroundColor: "#24262E",
+                  }}
+                >
+                  <img
                     src={GOOGLERENTAL_ICON_FOR_RIGHT}
                     alt="Google Rentals"
                     style={{
-                      width: '119.6px',
-                      height: '20px',
-                      objectFit: 'contain'
+                      width: "119.6px",
+                      height: "20px",
+                      objectFit: "contain",
                     }}
                   />
                 </div>
-              )}              {channel.toUpperCase().includes('SMS') && (
-                <div style={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '4px',
-                  height: '20px',
-                  borderRadius: '3px',
-                  backgroundColor: '#24262E'
-                }}>
-                  <img 
+              )}{" "}
+              {channel.toUpperCase().includes("SMS") && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "4px",
+                    height: "20px",
+                    borderRadius: "3px",
+                    backgroundColor: "#24262E",
+                  }}
+                >
+                  <img
                     src={SMS_ICON_FOR_RIGHT}
                     alt="SMS"
                     style={{
-                      width: '52px',
-                      height: '20px',
-                      objectFit: 'contain'
+                      width: "52px",
+                      height: "20px",
+                      objectFit: "contain",
                     }}
                   />
                 </div>
@@ -907,15 +1095,15 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
             </>
           )}
         </div>
-        
         {/* Adding dividing line after channel */}
-        <div style={{ 
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
-          margin: '10px auto', 
-          width: '100%', 
-          maxWidth: '400px' 
-        }}></div>
-
+        <div
+          style={{
+            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+            margin: "10px auto",
+            width: "100%",
+            maxWidth: "400px",
+          }}
+        ></div>
         {/* Contact Information Section */}
         {/* <div style={{ marginBottom: '15px' }}>
           <div style={{ 
@@ -984,112 +1172,169 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
             </span>
           </div>
         </div> */}
-
-        <div style={{ 
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
-          margin: '10px auto', 
-          width: '100%', 
-          maxWidth: '400px' 
-        }}></div>
-
+        <div
+          style={{
+            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+            margin: "10px auto",
+            width: "100%",
+            maxWidth: "400px",
+          }}
+        ></div>
       </div>
-
-      {!(channel == 'Chat Window') && (
-        !is_locked ? (
+      {!(channel == "Chat Window") &&
+        (!is_locked ? (
           curr_status && (
             <div className="toggle">
               {curr_status && (
-                <div style={{fontSize:"12px", display: "flex", alignItems: "center", gap: "5px", marginBottom: "10px"}}>                  <img src={HostBuddyIcon} alt="HostBuddy" style={{width: "25px", height: "25px"}} />
-                  <span style={{fontSize:"14px" ,fontWeight:"600" , fontFamily:"Poppins Helvetica"}}>HostBuddy </span>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  {" "}
+                  <img
+                    src={HostBuddyIcon}
+                    alt="HostBuddy"
+                    style={{ width: "25px", height: "25px" }}
+                  />
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      fontFamily: "Poppins Helvetica",
+                    }}
+                  >
+                    HostBuddy{" "}
+                  </span>
                   <span>is</span>
                   {!toggleStatusLoading ? (
-                    <div ref={hostbuddyDropdownRef} style={{ position: 'relative', display: 'inline-block', width:"15vw" }}>
+                    <div
+                      ref={hostbuddyDropdownRef}
+                      style={{
+                        position: "relative",
+                        display: "inline-block",
+                        width: "15vw",
+                      }}
+                    >
                       {/* Custom Dropdown Button */}
-                      <div 
-                        onClick={() => setHostbuddyDropdownOpen(!hostbuddyDropdownOpen)}
+                      <div
+                        onClick={() =>
+                          setHostbuddyDropdownOpen(!hostbuddyDropdownOpen)
+                        }
                         style={{
-                          alignItems: 'center',
-                          display: 'flex',
-                          backgroundColor: '#24262E',
+                          alignItems: "center",
+                          display: "flex",
+                          backgroundColor: "#24262E",
                           // border: '1px solid',
                           // borderColor: 'rgba(57, 61, 70, 1)',
-                          borderRadius: '4px',
-                          gap: '6px',
-                          height: '32px',
-                          padding: '0px 8px',
-                          position: 'relative',
-                          width: '100%',
-                          cursor: 'pointer',
-                          color: curr_status === 'on' ? "rgb(0,180,0)" : "rgb(200,0,0)",
+                          borderRadius: "4px",
+                          gap: "6px",
+                          height: "32px",
+                          padding: "0px 8px",
+                          position: "relative",
+                          width: "100%",
+                          cursor: "pointer",
+                          color:
+                            curr_status === "on"
+                              ? "rgb(0,180,0)"
+                              : "rgb(200,0,0)",
                           fontWeight: "bold",
-                          transition: 'background-color 0.2s ease'
+                          transition: "background-color 0.2s ease",
                         }}
                         tabIndex={0}
                         role="button"
                         aria-haspopup="listbox"
                         aria-expanded={hostbuddyDropdownOpen}
                         onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
+                          if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault();
                             setHostbuddyDropdownOpen(!hostbuddyDropdownOpen);
                           }
                           handleHostbuddyDropdownKeyDown(e);
                         }}
                       >
-                        <span style={{ display: 'inline-block', marginRight: '4px' }}>●</span>
-                        <span style={{ flexGrow: 1 }}>{curr_status === 'on' ? 'Active' : 'Turned off'}</span>
-                        <img 
-                          src={ChevDownIcon} 
-                          alt="Dropdown Icon" 
-                          style={{ 
-                            width: '16px', 
-                            height: '16px', 
-                            transform: hostbuddyDropdownOpen ? 'rotate(180deg)' : 'rotate(0)',
-                            transition: 'transform 0.3s ease'
-                          }} 
+                        <span
+                          style={{
+                            display: "inline-block",
+                            marginRight: "4px",
+                          }}
+                        >
+                          ●
+                        </span>
+                        <span style={{ flexGrow: 1 }}>
+                          {curr_status === "on" ? "Active" : "Turned off"}
+                        </span>
+                        <img
+                          src={ChevDownIcon}
+                          alt="Dropdown Icon"
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            transform: hostbuddyDropdownOpen
+                              ? "rotate(180deg)"
+                              : "rotate(0)",
+                            transition: "transform 0.3s ease",
+                          }}
                         />
                       </div>
-                      
+
                       {/* Custom Dropdown Menu */}
                       {hostbuddyDropdownOpen && (
-                        <div 
+                        <div
                           style={{
-                            position: 'absolute',
-                            top: '100%',
-                            left: '0',
-                            right: '0',
-                            backgroundColor: '#262730',
-                            borderRadius: '4px',
-                            marginTop: '4px',
+                            position: "absolute",
+                            top: "100%",
+                            left: "0",
+                            right: "0",
+                            backgroundColor: "#262730",
+                            borderRadius: "4px",
+                            marginTop: "4px",
                             zIndex: 100,
-                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
-                            border: '1px solid rgba(57, 61, 70, 1)',
-                            overflow: 'hidden'
+                            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
+                            border: "1px solid rgba(57, 61, 70, 1)",
+                            overflow: "hidden",
                           }}
                           role="listbox"
                         >
-                          {curr_status === 'on' && (                            <div 
+                          {curr_status === "on" && (
+                            <div
                               onClick={() => {
-                                callSetStatusAPI('off', 'indefinitely');
+                                callSetStatusAPI("off", "indefinitely");
                                 setHostbuddyDropdownOpen(false);
                               }}
                               style={{
-                                padding: '8px 16px',
-                                cursor: 'pointer',
-                                transition: 'background-color 0.2s ease',
-                                color: 'white',                              
-                                hoverBackgroundColor: '#393d46'
+                                padding: "8px 16px",
+                                cursor: "pointer",
+                                transition: "background-color 0.2s ease",
+                                color: "white",
+                                hoverBackgroundColor: "#393d46",
                               }}
                               role="option"
                               tabIndex={0}
-                              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                              onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                              onFocus={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                              onBlur={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                              onMouseOver={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "#393d46")
+                              }
+                              onMouseOut={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "transparent")
+                              }
+                              onFocus={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "#393d46")
+                              }
+                              onBlur={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "transparent")
+                              }
                               onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
+                                if (e.key === "Enter" || e.key === " ") {
                                   e.preventDefault();
-                                  callSetStatusAPI('off', 'indefinitely');
+                                  callSetStatusAPI("off", "indefinitely");
                                   setHostbuddyDropdownOpen(false);
                                 }
                               }}
@@ -1097,29 +1342,42 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                               Turn off
                             </div>
                           )}
-                          
-                          {curr_status === 'off' && (
-                            <div 
+
+                          {curr_status === "off" && (
+                            <div
                               onClick={() => {
-                                callSetStatusAPI('on', 'indefinitely');
+                                callSetStatusAPI("on", "indefinitely");
                                 setHostbuddyDropdownOpen(false);
                               }}
                               style={{
-                                padding: '8px 16px',
-                                cursor: 'pointer',
-                                transition: 'background-color 0.2s ease',
-                                color: 'white',
-                                hoverBackgroundColor: '#393d46'
-                              }}                              role="option"
+                                padding: "8px 16px",
+                                cursor: "pointer",
+                                transition: "background-color 0.2s ease",
+                                color: "white",
+                                hoverBackgroundColor: "#393d46",
+                              }}
+                              role="option"
                               tabIndex={0}
-                              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                              onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                              onFocus={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                              onBlur={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                              onMouseOver={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "#393d46")
+                              }
+                              onMouseOut={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "transparent")
+                              }
+                              onFocus={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "#393d46")
+                              }
+                              onBlur={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "transparent")
+                              }
                               onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
+                                if (e.key === "Enter" || e.key === " ") {
                                   e.preventDefault();
-                                  callSetStatusAPI('on', 'indefinitely');
+                                  callSetStatusAPI("on", "indefinitely");
                                   setHostbuddyDropdownOpen(false);
                                 }
                               }}
@@ -1127,103 +1385,163 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                               Turn back on
                             </div>
                           )}
-                          
-                          {curr_status === 'on' && (
-                            <>                              <div 
+
+                          {curr_status === "on" && (
+                            <>
+                              {" "}
+                              <div
                                 onClick={() => {
-                                  callSetStatusAPI(curr_status, '15m');
+                                  callSetStatusAPI(curr_status, "15m");
                                   setHostbuddyDropdownOpen(false);
                                 }}
                                 style={{
-                                  padding: '8px 16px',
-                                  cursor: 'pointer',
-                                  transition: 'background-color 0.2s ease',
-                                  color: 'white'
+                                  padding: "8px 16px",
+                                  cursor: "pointer",
+                                  transition: "background-color 0.2s ease",
+                                  color: "white",
                                 }}
                                 role="option"
-                                tabIndex={0}                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                onFocus={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                                onBlur={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                tabIndex={0}
+                                onMouseOver={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "#393d46")
+                                }
+                                onMouseOut={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "transparent")
+                                }
+                                onFocus={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "#393d46")
+                                }
+                                onBlur={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "transparent")
+                                }
                                 onKeyDown={(e) => {
-                                  if (e.key === 'Enter' || e.key === ' ') {
+                                  if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
-                                    callSetStatusAPI(curr_status, '15m');
+                                    callSetStatusAPI(curr_status, "15m");
                                     setHostbuddyDropdownOpen(false);
                                   }
                                 }}
                               >
                                 For 15 minutes
-                              </div>                              <div 
+                              </div>{" "}
+                              <div
                                 onClick={() => {
-                                  callSetStatusAPI(curr_status, '1h');
+                                  callSetStatusAPI(curr_status, "1h");
                                   setHostbuddyDropdownOpen(false);
                                 }}
                                 style={{
-                                  padding: '8px 16px',
-                                  cursor: 'pointer',
-                                  transition: 'background-color 0.2s ease',
-                                  color: 'white'
-                                }}                                role="option"
+                                  padding: "8px 16px",
+                                  cursor: "pointer",
+                                  transition: "background-color 0.2s ease",
+                                  color: "white",
+                                }}
+                                role="option"
                                 tabIndex={0}
-                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                onFocus={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                                onBlur={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                onMouseOver={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "#393d46")
+                                }
+                                onMouseOut={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "transparent")
+                                }
+                                onFocus={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "#393d46")
+                                }
+                                onBlur={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "transparent")
+                                }
                                 onKeyDown={(e) => {
-                                  if (e.key === 'Enter' || e.key === ' ') {
+                                  if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
-                                    callSetStatusAPI(curr_status, '1h');
+                                    callSetStatusAPI(curr_status, "1h");
                                     setHostbuddyDropdownOpen(false);
                                   }
                                 }}
                               >
                                 For 1 hour
-                              </div>                              <div 
+                              </div>{" "}
+                              <div
                                 onClick={() => {
-                                  callSetStatusAPI(curr_status, '1d');
+                                  callSetStatusAPI(curr_status, "1d");
                                   setHostbuddyDropdownOpen(false);
                                 }}
                                 style={{
-                                  padding: '8px 16px',
-                                  cursor: 'pointer',
-                                  transition: 'background-color 0.2s ease',
-                                  color: 'white'
-                                }}                                role="option"
+                                  padding: "8px 16px",
+                                  cursor: "pointer",
+                                  transition: "background-color 0.2s ease",
+                                  color: "white",
+                                }}
+                                role="option"
                                 tabIndex={0}
-                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                onFocus={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                                onBlur={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                onMouseOver={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "#393d46")
+                                }
+                                onMouseOut={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "transparent")
+                                }
+                                onFocus={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "#393d46")
+                                }
+                                onBlur={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "transparent")
+                                }
                                 onKeyDown={(e) => {
-                                  if (e.key === 'Enter' || e.key === ' ') {
+                                  if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
-                                    callSetStatusAPI(curr_status, '1d');
+                                    callSetStatusAPI(curr_status, "1d");
                                     setHostbuddyDropdownOpen(false);
                                   }
                                 }}
                               >
                                 For 24 hours
-                              </div>                              <div 
+                              </div>{" "}
+                              <div
                                 onClick={() => {
-                                  callSetStatusAPI(curr_status, 'indefinitely');
+                                  callSetStatusAPI(curr_status, "indefinitely");
                                   setHostbuddyDropdownOpen(false);
                                 }}
                                 style={{
-                                  padding: '8px 16px',
-                                  cursor: 'pointer',
-                                  transition: 'background-color 0.2s ease',
-                                  color: 'white'
-                                }}                                role="option"
+                                  padding: "8px 16px",
+                                  cursor: "pointer",
+                                  transition: "background-color 0.2s ease",
+                                  color: "white",
+                                }}
+                                role="option"
                                 tabIndex={0}
-                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                onFocus={(e) => e.currentTarget.style.backgroundColor = '#393d46'}
-                                onBlur={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                onMouseOver={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "#393d46")
+                                }
+                                onMouseOut={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "transparent")
+                                }
+                                onFocus={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "#393d46")
+                                }
+                                onBlur={(e) =>
+                                  (e.currentTarget.style.backgroundColor =
+                                    "transparent")
+                                }
                                 onKeyDown={(e) => {
-                                  if (e.key === 'Enter' || e.key === ' ') {
+                                  if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
-                                    callSetStatusAPI(curr_status, 'indefinitely');
+                                    callSetStatusAPI(
+                                      curr_status,
+                                      "indefinitely"
+                                    );
                                     setHostbuddyDropdownOpen(false);
                                   }
                                 }}
@@ -1236,7 +1554,15 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                       )}
                     </div>
                   ) : (
-                    <span style={{display: "inline-flex", alignItems: "center", height: "24px"}}><Loader /></span>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        height: "24px",
+                      }}
+                    >
+                      <Loader />
+                    </span>
                   )}
                 </div>
               )}
@@ -1250,11 +1576,9 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
               )} */}
 
               {/* Additional time selection dropdown if needed */}
-              
-
 
               {/* {here setDuration code is available below} */}
-              
+
               {/* {!toggleStatusLoading && curr_status && source=='property' && (
                 <select className="select-dropdown" value={selectedOption} onChange={(e) => handleSelectChange(e, curr_status)}>
                   <option value="" disabled>Set duration</option>
@@ -1264,227 +1588,269 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                   <option value="indefinitely">Indefinitely</option>
                 </select>
               )} */}
-                {source=='guest1' && !toggleStatusLoading && (
-                <div style={{ textAlign: 'center' }}>
-                  <a 
-                    style={{ 
-                      fontSize: "14px", 
-                      color: "#0d6efd", 
+              {source == "guest1" && !toggleStatusLoading && (
+                <div style={{ textAlign: "center" }}>
+                  <a
+                    style={{
+                      fontSize: "14px",
+                      color: "#0d6efd",
                       cursor: "pointer",
                       padding: "4px 8px",
                       marginTop: "8px",
-                      display: "inline-block"
-                    }} 
+                      display: "inline-block",
+                    }}
                     onClick={handleRevertStatus}
                     tabIndex={0}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
+                      if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
                         handleRevertStatus();
                       }
                     }}
                   >
-                    11Turn back {curr_status === 'on' ? 'off' : 'on'}
+                    11Turn back {curr_status === "on" ? "off" : "on"}
                   </a>
                 </div>
               )}
             </div>
           )
-        ) : 
-        (
+        ) : (
           <div className="toggle">
-            <p style={{fontSize:"12px"}}>HostBuddy is <span style={{color:"rgb(200,0,0)"}}>NOT RESPONDING</span> to this guest.</p>
-            <p style={{fontSize:"12px"}}><Link to='/properties' style={{fontSize:"14px"}}>Unlock</Link> this property to start responding.</p>
+            <p style={{ fontSize: "12px" }}>
+              HostBuddy is{" "}
+              <span style={{ color: "rgb(200,0,0)" }}>NOT RESPONDING</span> to
+              this guest.
+            </p>
+            <p style={{ fontSize: "12px" }}>
+              <Link to="/properties" style={{ fontSize: "14px" }}>
+                Unlock
+              </Link>{" "}
+              this property to start responding.
+            </p>
           </div>
-        )
-      )}
-
-      {!(channel == 'Chat Window') && (
+        ))}
+      {!(channel == "Chat Window") && (
         <div className="satisfy">
           <h2>Sentiment</h2>
-          <div ref={dropdownRef} style={{ position: 'relative' }}>
-            {/* Sentiment Dropdown Button */}            <div 
-              onClick={() => setDropdownOpen(!dropdownOpen)}              
+          <div ref={dropdownRef} style={{ position: "relative" }}>
+            {/* Sentiment Dropdown Button */}{" "}
+            <div
+              onClick={() => setDropdownOpen(!dropdownOpen)}
               onMouseDown={(e) => {
                 const currentSentiment = selectedSentiment;
-                if (currentSentiment === 'positive') {
-                  e.currentTarget.style.backgroundColor = '#002B0B';
-                } else if (currentSentiment === 'negative') {
-                  e.currentTarget.style.backgroundColor = '#3B1900';
+                if (currentSentiment === "positive") {
+                  e.currentTarget.style.backgroundColor = "#002B0B";
+                } else if (currentSentiment === "negative") {
+                  e.currentTarget.style.backgroundColor = "#3B1900";
                 } else {
-                  e.currentTarget.style.backgroundColor = 'rgba(15, 17, 23, 0.6)';
+                  e.currentTarget.style.backgroundColor =
+                    "rgba(15, 17, 23, 0.6)";
                 }
               }}
               onMouseUp={(e) => {
                 const currentSentiment = selectedSentiment;
-                if (currentSentiment === 'positive') {
-                  e.currentTarget.style.backgroundColor = '#014714';
-                } else if (currentSentiment === 'negative') {
-                  e.currentTarget.style.backgroundColor = '#4D2100';
+                if (currentSentiment === "positive") {
+                  e.currentTarget.style.backgroundColor = "#014714";
+                } else if (currentSentiment === "negative") {
+                  e.currentTarget.style.backgroundColor = "#4D2100";
                 } else {
-                  e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                  e.currentTarget.style.backgroundColor =
+                    "rgba(189, 193, 201, 0.08)";
                 }
-              }}onMouseEnter={(e) => {
+              }}
+              onMouseEnter={(e) => {
                 const currentSentiment = selectedSentiment;
-                if (currentSentiment === 'positive') {
-                  e.currentTarget.style.backgroundColor = '#036920';
-                } else if (currentSentiment === 'negative') {
-                  e.currentTarget.style.backgroundColor = '#7A3601'; // Same as default per specs
+                if (currentSentiment === "positive") {
+                  e.currentTarget.style.backgroundColor = "#036920";
+                } else if (currentSentiment === "negative") {
+                  e.currentTarget.style.backgroundColor = "#7A3601"; // Same as default per specs
                 } else {
-                  e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)'; // Same as default per specs
+                  e.currentTarget.style.backgroundColor =
+                    "rgba(189, 193, 201, 0.08)"; // Same as default per specs
                 }
               }}
               onMouseLeave={(e) => {
                 const currentSentiment = selectedSentiment;
-                if (currentSentiment === 'positive') {
-                  e.currentTarget.style.backgroundColor = '#014714';
-                } else if (currentSentiment === 'negative') {
-                  e.currentTarget.style.backgroundColor = '#4D2100';
+                if (currentSentiment === "positive") {
+                  e.currentTarget.style.backgroundColor = "#014714";
+                } else if (currentSentiment === "negative") {
+                  e.currentTarget.style.backgroundColor = "#4D2100";
                 } else {
-                  e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                  e.currentTarget.style.backgroundColor =
+                    "rgba(189, 193, 201, 0.08)";
                 }
-              }}              style={{
-                alignItems: 'center',
-                cursor: 'pointer',
-                alignSelf: 'stretch',
-                backgroundColor: selectedSentiment === 'positive' 
-                  ? '#014714' 
-                  : selectedSentiment === 'negative' 
-                    ? '#4D2100' 
-                    : 'rgba(189, 193, 201, 0.08)',
-                borderRadius: '4px',
-                display: 'flex',
-                gap: '6px',
-                height: '32px',
-                padding: '0px 8px',
-                position: 'relative',
-                width: '100%',
-                marginLeft: '0px',
-                transition: 'background-color 0.2s ease'
+              }}
+              style={{
+                alignItems: "center",
+                cursor: "pointer",
+                alignSelf: "stretch",
+                backgroundColor:
+                  selectedSentiment === "positive"
+                    ? "#014714"
+                    : selectedSentiment === "negative"
+                    ? "#4D2100"
+                    : "rgba(189, 193, 201, 0.08)",
+                borderRadius: "4px",
+                display: "flex",
+                gap: "6px",
+                height: "32px",
+                padding: "0px 8px",
+                position: "relative",
+                width: "100%",
+                marginLeft: "0px",
+                transition: "background-color 0.2s ease",
               }}
             >
-              <img src={getSentimentIcon(selectedSentiment)} alt="Sentiment Icon" style={{ width: "18px", height: "18px" }} />
-              <span 
-                style={{ 
-                  color: selectedSentiment === 'neutral' 
-                    ? "#BBB" 
-                    : selectedSentiment === 'positive' 
-                      ? "white" 
+              <img
+                src={getSentimentIcon(selectedSentiment)}
+                alt="Sentiment Icon"
+                style={{ width: "18px", height: "18px" }}
+              />
+              <span
+                style={{
+                  color:
+                    selectedSentiment === "neutral"
+                      ? "#BBB"
+                      : selectedSentiment === "positive"
+                      ? "white"
                       : "white",
                   flexGrow: 1,
-                  fontSize: '14px'
+                  fontSize: "14px",
                 }}
               >
-                {selectedSentiment.charAt(0).toUpperCase() + selectedSentiment.slice(1)}
+                {selectedSentiment.charAt(0).toUpperCase() +
+                  selectedSentiment.slice(1)}
               </span>
-              <img 
-                src={ChevDownIcon} 
-                alt="Dropdown Icon" 
-                style={{ 
-                  width: "16px", 
-                  height: "16px", 
-                  transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0)',
-                  transition: 'transform 0.3s ease'
-                }} 
-              />
-            </div>            {/* Dropdown Menu */}
-            {dropdownOpen && (              
-              <div 
+              <img
+                src={ChevDownIcon}
+                alt="Dropdown Icon"
                 style={{
-                  position: 'absolute',
-                
-                  left: '0',
-                  right: '0',
-                  backgroundColor: '#262730',
-                  borderRadius: '4px',
-                  marginTop: '4px',
-                  zIndex: 100,
-                  border: '1px solid #24262E' ,
-                  overflow: 'hidden'
+                  width: "16px",
+                  height: "16px",
+                  transform: dropdownOpen ? "rotate(180deg)" : "rotate(0)",
+                  transition: "transform 0.3s ease",
                 }}
-              >                {/* Neutral Option */}
-                <div 
-                  onClick={() => handleSentimentSelect('neutral')}
+              />
+            </div>{" "}
+            {/* Dropdown Menu */}
+            {dropdownOpen && (
+              <div
+                style={{
+                  position: "absolute",
+
+                  left: "0",
+                  right: "0",
+                  backgroundColor: "#262730",
+                  borderRadius: "4px",
+                  marginTop: "4px",
+                  zIndex: 100,
+                  border: "1px solid #24262E",
+                  overflow: "hidden",
+                }}
+              >
+                {" "}
+                {/* Neutral Option */}
+                <div
+                  onClick={() => handleSentimentSelect("neutral")}
                   style={{
-                    padding: '8px 16px',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.2s ease',
-                    color: '#D0D3DB'
-                    
+                    padding: "8px 16px",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s ease",
+                    color: "#D0D3DB",
                   }}
                 >
-                  <span style={{color: '#D0D3DB',fontSize:"14px"  }}>Neutral</span>
+                  <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
+                    Neutral
+                  </span>
                 </div>
-                
                 {/* Positive Option */}
-                <div 
-                  onClick={() => handleSentimentSelect('positive')}
+                <div
+                  onClick={() => handleSentimentSelect("positive")}
                   style={{
-                    padding: '8px 16px',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.2s ease',
-                    color: '#D0D3DB'
-                    
+                    padding: "8px 16px",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s ease",
+                    color: "#D0D3DB",
                   }}
                 >
-                  <span style={{ color: '#D0D3DB' ,fontSize:"14px" }}>Positive</span>
+                  <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
+                    Positive
+                  </span>
                 </div>
-                
                 {/* Negative Option */}
-                <div 
-                  onClick={() => handleSentimentSelect('negative')}
+                <div
+                  onClick={() => handleSentimentSelect("negative")}
                   style={{
-                    padding: '8px 16px',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.2s ease' ,
-                    color: '#D0D3DB'
+                    padding: "8px 16px",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s ease",
+                    color: "#D0D3DB",
                   }}
                 >
-                  <span style={{ color: '#D0D3DB' ,fontSize:"14px" }}>Negative</span>
+                  <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
+                    Negative
+                  </span>
                 </div>
               </div>
             )}
-            
             {sentiment_justification && (
-              <p style={{ fontSize:'14px', marginTop:'3px', color: '#D0D3DB' , fontWeight:"400" , fontFamily:"DM Sans"}}>
+              <p
+                style={{
+                  fontSize: "14px",
+                  marginTop: "3px",
+                  color: "#D0D3DB",
+                  fontWeight: "400",
+                  fontFamily: "DM Sans",
+                }}
+              >
                 {sentiment_justification}
               </p>
             )}
           </div>
         </div>
       )}
-
-      {!(channel == 'Chat Window') && (
-        <div style={{ 
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
-          margin: '10px auto', 
-          width: '100%', 
-          maxWidth: '400px' 
-        }}></div>
-      )}      {/* render here the assign user  */}      <div>
-        <h2 style={{ 
-          margin: 0,
-          marginBottom: '5px',
-          color: '#ffffff',
-          fontFamily: '"Poppins-SemiBold", Helvetica',
-          fontSize: '16px',
-          fontWeight: 600,
-          lineHeight: '19.6px',        }}>Assign user</h2>          
-        <div className="user-dropdown-container" ref={assignUserDropdownRef} style={{border: '1px solid #24262E' }}>            
+      {!(channel == "Chat Window") && (
+        <div
+          style={{
+            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+            margin: "10px auto",
+            width: "100%",
+            maxWidth: "400px",
+          }}
+        ></div>
+      )}{" "}
+      {/* render here the assign user  */}{" "}
+      <div>
+        <h2
+          style={{
+            margin: 0,
+            marginBottom: "5px",
+            color: "#ffffff",
+            fontFamily: '"Poppins-SemiBold", Helvetica',
+            fontSize: "16px",
+            fontWeight: 600,
+            lineHeight: "19.6px",
+          }}
+        >
+          Assign user
+        </h2>
+        <div
+          className="user-dropdown-container"
+          ref={assignUserDropdownRef}
+          style={{ border: "1px solid #24262E" }}
+        >
           {/* Custom dropdown that looks like the sentiment dropdown */}
-          <div 
+          <div
             className="user-dropdown-header"
             onClick={handleAssignUserDropdownOpen}
           >
             {/* Show selected users or placeholder */}
             {selectedUsers.length > 0 ? (
               <div className="user-tags-container">
-                {selectedUsers.map(user => (
+                {selectedUsers.map((user) => (
                   <div key={user.email} className="user-tag">
-                    <span className="user-tag-text">
-                      {user.display_name}
-                    </span>
-                    <span 
+                    <span className="user-tag-text">{user.display_name}</span>
+                    <span
                       className="user-tag-close"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1497,282 +1863,355 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                 ))}
               </div>
             ) : (
-              <span className="user-dropdown-placeholder">
-                Select
-              </span>
+              <span className="user-dropdown-placeholder">Select</span>
             )}
-            
+
             {/* Dropdown icon */}
-            <img 
-              src={ChevDownIcon} 
-              alt="Dropdown Icon" 
+            <img
+              src={ChevDownIcon}
+              alt="Dropdown Icon"
               className="user-dropdown-icon"
-              style={{ 
-                transform: assignUserDropdownOpen ? 'rotate(180deg)' : 'rotate(0)'
-              }} 
+              style={{
+                transform: assignUserDropdownOpen
+                  ? "rotate(180deg)"
+                  : "rotate(0)",
+              }}
             />
           </div>
 
           {/* Dropdown menu */}
           {assignUserDropdownOpen && !subUserLoading && (
             <div className="user-dropdown-menu">
-              {subUserNames && subUserNames.map((user, index) => (
-                <div 
-                  key={index} 
-                  className={`user-dropdown-item ${
-                    selectedUsers.some(selected => selected.email === user.email) 
-                      ? 'user-dropdown-item-selected' 
-                      : ''
-                  }`}
-                            
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleUserSelect(user);
-                  }}
-                >
-                  <span className="user-dropdown-item-text">{user.display_name}</span>
-                  {selectedUsers.some(selected => selected.email === user.email) && (
-                    <span className="user-dropdown-item-check">✓</span>
-                  )}
-                </div>
-              ))}
+              {subUserNames &&
+                subUserNames.map((user, index) => (
+                  <div
+                    key={index}
+                    className={`user-dropdown-item ${
+                      selectedUsers.some(
+                        (selected) => selected.email === user.email
+                      )
+                        ? "user-dropdown-item-selected"
+                        : ""
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUserSelect(user);
+                    }}
+                  >
+                    <span className="user-dropdown-item-text">
+                      {user.display_name}
+                    </span>
+                    {selectedUsers.some(
+                      (selected) => selected.email === user.email
+                    ) && <span className="user-dropdown-item-check">✓</span>}
+                  </div>
+                ))}
             </div>
           )}
-          
+
           {/* Loading indicator */}
           {subUserLoading && (
             <div className="user-dropdown-loading">
-              <span style={{ color: 'white' }}>Loading...</span>
+              <span style={{ color: "white" }}>Loading...</span>
             </div>
           )}
         </div>
       </div>
-
-        <div style={{ 
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
-          margin: '10px auto', 
-          width: '100%', 
-          maxWidth: '400px' 
-        }}></div>
-      
-      {!(channel == 'Chat Window') && (
-        <div className="issue">          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0px' }}>            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <h1 style={{ 
-                margin: 0,
-                color: '#ffffff',
-                fontFamily: '"Poppins-SemiBold", Helvetica',
-                fontSize: '14px',
-                fontWeight: 600,
-                letterSpacing: 0,
-                lineHeight: '19.6px',
-                whiteSpace: 'nowrap',
-                position: 'relative'  /* Using relative instead of fixed to maintain layout flow */
-              }}>Open Issues</h1>
-              {action_items && action_items.filter(obj => obj.status === "incomplete").length > 0 && (
-                <span style={{ 
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: '#24262E',
-                  color: 'white',
-                  borderRadius: '50%',
-                  width: '20px',
-                  height: '20px',
-                  fontSize: '10px',
-                  marginLeft: '8px',
-                  fontWeight: 'bold' ,
-                  margin:'5px'                }}>
-                  {getIncompleteActionItems().length}
-                </span>
-              )}
+      <div
+        style={{
+          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          margin: "10px auto",
+          width: "100%",
+          maxWidth: "400px",
+        }}
+      ></div>
+      {!(channel == "Chat Window") && (
+        <div className="issue">
+          {" "}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "0px",
+            }}
+          >
+            {" "}
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <h1
+                style={{
+                  margin: 0,
+                  color: "#ffffff",
+                  fontFamily: '"Poppins-SemiBold", Helvetica',
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  letterSpacing: 0,
+                  lineHeight: "19.6px",
+                  whiteSpace: "nowrap",
+                  position:
+                    "relative" /* Using relative instead of fixed to maintain layout flow */,
+                }}
+              >
+                Open Issues
+              </h1>
+              {action_items &&
+                action_items.filter((obj) => obj.status === "incomplete")
+                  .length > 0 && (
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "#24262E",
+                      color: "white",
+                      borderRadius: "50%",
+                      width: "20px",
+                      height: "20px",
+                      fontSize: "10px",
+                      marginLeft: "8px",
+                      fontWeight: "bold",
+                      margin: "5px",
+                    }}
+                  >
+                    {getIncompleteActionItems().length}
+                  </span>
+                )}
             </div>
-            
             {/* View All link - always rendered and navigates to action items page */}
-            <span 
-              onClick={navigateToActionItems} 
-              style={{ 
-                color: '#146ef5', 
-                fontSize: '14px', 
-                cursor: 'pointer'
+            <span
+              onClick={navigateToActionItems}
+              style={{
+                color: "#146ef5",
+                fontSize: "14px",
+                cursor: "pointer",
               }}
             >
               View All
-            </span>          </div>          {/* Use action_items from rightSectionData (guest specific) if available, otherwise fall back to actionItems state */}
+            </span>{" "}
+          </div>{" "}
+          {/* Use action_items from rightSectionData (guest specific) if available, otherwise fall back to actionItems state */}
           {getIncompleteActionItems().length > 0 ? (
             <>
               {/* Always display the first/latest issue with timestamp above */}
-              <div style={{ marginBottom: "10px" }}>                  <div style={{ fontSize: "12px", color: "#808080", marginBottom: "2px" }}>
+              <div style={{ marginBottom: "10px" }}>
+                {" "}
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: "#808080",
+                    marginBottom: "2px",
+                  }}
+                >
                   {formatIssueTime(getIncompleteActionItems()[0]?.created_at)}
                 </div>
-                 <div style={{ 
-                   display: 'flex',
-                   alignItems: 'center', 
-                   gap: '8px',
-                   justifyContent: 'space-between',
-                   width: '100%'
-                }}>                  
-                <p style={{ 
-                    margin: 0,
-                    color: '#d0d3db',
-                    fontFamily: '"DM Sans-Regular", Helvetica',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    letterSpacing: 0,
-                    lineHeight: 'normal',
-                    position: 'relative',
-                    flex: '1'
-                  }}>                    {getIncompleteActionItems()[0]?.item}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "#d0d3db",
+                      fontFamily: '"DM Sans-Regular", Helvetica',
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      letterSpacing: 0,
+                      lineHeight: "normal",
+                      position: "relative",
+                      flex: "1",
+                    }}
+                  >
+                    {" "}
+                    {getIncompleteActionItems()[0]?.item}
                   </p>
-                  <div style={{
-                    width: '32px',
-                    height: '32px',
-                    backgroundColor: 'rgba(189, 193, 201, 0.08)',
-                    borderRadius: '4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    cursor: 'pointer'
-                  }}                  onClick={() => {
-                    const firstIncompleteItem = getIncompleteActionItems()[0];
-                    if (firstIncompleteItem && firstIncompleteItem.id) {
-                      callCompleteActionItemApi(firstIncompleteItem.id);
-                    }
-                  }}>
-                    <img 
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      backgroundColor: "rgba(189, 193, 201, 0.08)",
+                      borderRadius: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      const firstIncompleteItem = getIncompleteActionItems()[0];
+                      if (firstIncompleteItem && firstIncompleteItem.id) {
+                        callCompleteActionItemApi(firstIncompleteItem.id);
+                      }
+                    }}
+                  >
+                    <img
                       src={CheckIconOpenIssue}
                       alt="Check icon"
                       style={{
-                        width: '18px',
-                        height: '18px'
+                        width: "18px",
+                        height: "18px",
                       }}
                     />
                   </div>
                 </div>
-
-
-              </div>              {/* Show remaining issues when expanded with timestamps above each */}
+              </div>{" "}
+              {/* Show remaining issues when expanded with timestamps above each */}
               {issuesExpanded && getIncompleteActionItems().length > 1 && (
                 <div>
                   {getIncompleteActionItems()
                     .slice(1)
                     .map((obj, index) => (
-                      <div key={index} style={{ marginBottom: "10px" }}>                        <div style={{ fontSize: "12px", color: "#A6A9B2", marginBottom: "2px" , fontWeight: 600, }}>
+                      <div key={index} style={{ marginBottom: "10px" }}>
+                        {" "}
+                        <div
+                          style={{
+                            fontSize: "12px",
+                            color: "#A6A9B2",
+                            marginBottom: "2px",
+                            fontWeight: 600,
+                          }}
+                        >
                           {formatIssueTime(obj.created_at)}
-                        </div>                        <div style={{ 
-                              display: 'flex', 
-                              alignItems: 'center', 
-                              gap: '8px',
-                              justifyContent: 'space-between',
-                              width: '100%'
-                        }}>                          <p style={{ 
-                                margin: 0,
-                                color: '#D0D3DB',
-                                fontFamily: '"DM Sans-Regular", Helvetica',
-                                fontSize: '14px',
-                                fontWeight: 400,
-                                letterSpacing: 0,
-                                lineHeight: 'normal',
-                                position: 'relative',
-                                flex: '1'
-                          }}>
+                        </div>{" "}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            justifyContent: "space-between",
+                            width: "100%",
+                          }}
+                        >
+                          {" "}
+                          <p
+                            style={{
+                              margin: 0,
+                              color: "#D0D3DB",
+                              fontFamily: '"DM Sans-Regular", Helvetica',
+                              fontSize: "14px",
+                              fontWeight: 400,
+                              letterSpacing: 0,
+                              lineHeight: "normal",
+                              position: "relative",
+                              flex: "1",
+                            }}
+                          >
                             {obj.item}
                           </p>
-                          <div style={{
-                            width: '32px',
-                            height: '32px',
-                            backgroundColor: 'rgba(189, 193, 201, 0.08)',
-                            borderRadius: '4px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                            cursor: 'pointer'
-                          }}
-                          onClick={() => callCompleteActionItemApi(obj.id)}>
-                            <img 
+                          <div
+                            style={{
+                              width: "32px",
+                              height: "32px",
+                              backgroundColor: "rgba(189, 193, 201, 0.08)",
+                              borderRadius: "4px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              flexShrink: 0,
+                              cursor: "pointer",
+                            }}
+                            onClick={() => callCompleteActionItemApi(obj.id)}
+                          >
+                            <img
                               src={CheckIconOpenIssue}
                               alt="Check icon"
                               style={{
-                                width: '18px',
-                                height: '18px'
+                                width: "18px",
+                                height: "18px",
                               }}
                             />
                           </div>
                         </div>
                       </div>
-                    ))
-                  }
+                    ))}
                 </div>
-              )}              {/* Show "+X more issues" text (clickable to expand issues) */}
+              )}{" "}
+              {/* Show "+X more issues" text (clickable to expand issues) */}
               {!issuesExpanded && getIncompleteActionItems().length > 1 && (
-                <span 
-                  onClick={() => setIssuesExpanded(true)} 
-                  style={{ 
-                    color: '#A6A9B2',
+                <span
+                  onClick={() => setIssuesExpanded(true)}
+                  style={{
+                    color: "#A6A9B2",
                     fontFamily: '"DM Sans-Regular", Helvetica',
-                    fontSize: '14px',
+                    fontSize: "14px",
                     fontWeight: 400,
                     letterSpacing: 0,
-                    lineHeight: 'normal',
-                    position: 'relative',  /* Using relative instead of fixed to maintain proper layout */
-                    display: 'block',
-                    marginBottom: '10px',
-                    width: '272px',
-                    cursor: 'pointer'
+                    lineHeight: "normal",
+                    position:
+                      "relative" /* Using relative instead of fixed to maintain proper layout */,
+                    display: "block",
+                    marginBottom: "10px",
+                    width: "272px",
+                    cursor: "pointer",
                   }}
                 >
-                  +{getIncompleteActionItems().length - 1} more {getIncompleteActionItems().length - 1 === 1 ? 'issue' : 'issues'}
+                  +{getIncompleteActionItems().length - 1} more{" "}
+                  {getIncompleteActionItems().length - 1 === 1
+                    ? "issue"
+                    : "issues"}
                 </span>
-              )}            </>
+              )}{" "}
+            </>
           ) : (
-            <p style={{color:'#A6A9B2', fontFamily: '"DM Sans-Regular", Helvetica', fontSize: '14px'}}>No action items for this guest</p>
-          )}</div>
+            <p
+              style={{
+                color: "#A6A9B2",
+                fontFamily: '"DM Sans-Regular", Helvetica',
+                fontSize: "14px",
+              }}
+            >
+              No action items for this guest
+            </p>
+          )}
+        </div>
       )}
-      
       {/* Contact Information Modal */}
       {contactModalOpen && (
         <div
           style={{
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
           }}
           onClick={() => setContactModalOpen(false)}
         >
           <div
             style={{
-              width: '400px',
-              backgroundColor: '#2B2E36',
-              borderRadius: '4px', // Setting border radius to 4px as requested
-              padding: '20px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' ,
-              border: '1px solid rgb(67 70 78)'
+              width: "400px",
+              backgroundColor: "#2B2E36",
+              borderRadius: "4px", // Setting border radius to 4px as requested
+              padding: "20px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+              border: "1px solid rgb(67 70 78)",
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '20px'
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "20px",
               }}
             >
               <h2
                 style={{
                   margin: 0,
-                  color: '#D0D3DB',
+                  color: "#D0D3DB",
                   fontFamily: '"Poppins-SemiBold", Helvetica',
-                  fontSize: '24px',
-                  fontWeight: 700
+                  fontSize: "24px",
+                  fontWeight: 700,
                 }}
               >
                 Contact information
@@ -1780,26 +2219,28 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
               <span
                 onClick={() => setContactModalOpen(false)}
                 style={{
-                  cursor: 'pointer',
-                  fontSize: '20px',
-                  color: '#A6A9B2'
+                  cursor: "pointer",
+                  fontSize: "20px",
+                  color: "#A6A9B2",
                 }}
               >
                 &times;
               </span>
             </div>
-            
+
             {/* Form Fields - Making email and phone labels appear horizontally */}
-            <div style={{ marginBottom: '20px' }}>
-              <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
+            <div style={{ marginBottom: "20px" }}>
+              <div
+                style={{ display: "flex", flexDirection: "row", gap: "20px" }}
+              >
                 {/* Email Field */}
                 <div style={{ flex: 1 }}>
-                  <label 
-                    style={{ 
-                      display: 'block', 
-                      // marginBottom: '5px', 
-                      fontSize: '14px',
-                      color: '#A6A9B2' // Setting label color as requested
+                  <label
+                    style={{
+                      display: "block",
+                      // marginBottom: '5px',
+                      fontSize: "14px",
+                      color: "#A6A9B2", // Setting label color as requested
                     }}
                   >
                     Email
@@ -1807,27 +2248,29 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                   <input
                     type="email"
                     value={contactInfo.email}
-                    onChange={(e) => setContactInfo({...contactInfo, email: e.target.value})}
+                    onChange={(e) =>
+                      setContactInfo({ ...contactInfo, email: e.target.value })
+                    }
                     style={{
-                      width: '100%',
-                      padding: '8px',
-                      backgroundColor: '#24262E',
-                      border: '1px solid #393d46',
-                      borderRadius: '4px',
-                      color: '#D0D3DB', // Setting input text color as requested
-                      fontSize: '14px'
+                      width: "100%",
+                      padding: "8px",
+                      backgroundColor: "#24262E",
+                      border: "1px solid #393d46",
+                      borderRadius: "4px",
+                      color: "#D0D3DB", // Setting input text color as requested
+                      fontSize: "14px",
                     }}
                   />
                 </div>
-                
+
                 {/* Phone Field */}
                 <div style={{ flex: 1 }}>
-                  <label 
-                    style={{ 
-                      display: 'block', 
-                      // marginBottom: '5px', 
-                      fontSize: '14px',
-                      color: '#A6A9B2' // Setting label color as requested
+                  <label
+                    style={{
+                      display: "block",
+                      // marginBottom: '5px',
+                      fontSize: "14px",
+                      color: "#A6A9B2", // Setting label color as requested
                     }}
                   >
                     Phone
@@ -1835,32 +2278,40 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
                   <input
                     type="tel"
                     value={contactInfo.phone}
-                    onChange={(e) => setContactInfo({...contactInfo, phone: e.target.value})}
+                    onChange={(e) =>
+                      setContactInfo({ ...contactInfo, phone: e.target.value })
+                    }
                     style={{
-                      width: '100%',
-                      padding: '8px',
-                      backgroundColor: '#24262E',
-                      border: '1px solid #393d46',
-                      borderRadius: '4px',
-                      color: '#D0D3DB', // Setting input text color as requested
-                      fontSize: '14px'
+                      width: "100%",
+                      padding: "8px",
+                      backgroundColor: "#24262E",
+                      border: "1px solid #393d46",
+                      borderRadius: "4px",
+                      color: "#D0D3DB", // Setting input text color as requested
+                      fontSize: "14px",
                     }}
                   />
                 </div>
               </div>
             </div>
-            
+
             {/* Action Buttons */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "10px",
+              }}
+            >
               <button
                 onClick={() => setContactModalOpen(false)}
                 style={{
-                  padding: '8px 16px',
-                  border: 'none',
-                  backgroundColor: 'transparent',
-                  color: '#D0D3DB',
-                  cursor: 'pointer',
-                  fontSize: '14px'
+                  padding: "8px 16px",
+                  border: "none",
+                  backgroundColor: "transparent",
+                  color: "#D0D3DB",
+                  cursor: "pointer",
+                  fontSize: "14px",
                 }}
               >
                 Cancel
@@ -1868,13 +2319,13 @@ const RightSection = ({ rightSectionData, updateConversationFromApi, setCurrentV
               <button
                 onClick={() => setContactModalOpen(false)}
                 style={{
-                  padding: '8px 8px',
-                  border: 'none',
-                  backgroundColor: '#0B5FDE',
-                  color: '#ffffff',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '14px'
+                  padding: "8px 8px",
+                  border: "none",
+                  backgroundColor: "#0B5FDE",
+                  color: "#ffffff",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "14px",
                 }}
               >
                 Update

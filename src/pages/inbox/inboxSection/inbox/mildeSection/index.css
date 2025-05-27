@@ -12,7 +12,8 @@
     
 }
 .main-chat {
-    height: calc(100% - 85.101111px);
+    height:100%;
+    /* height: calc(100% - 85.101111px); */
     padding: 20px 0px;
     
 }
