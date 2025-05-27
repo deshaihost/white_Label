@@ -7,6 +7,8 @@ import ConnectToTidy from './connectTidyButton';
 import ConnectToNotion from './connectNotionButton';
 import TurnoIntegration from './TurnoIntegration';
 import MinutIntegration from './MinutIntegration';
+import ConnectToHostfullyGuidebooks from './connectHostfullyGuidebooksButton';
+import HostfullyGuidebooksIntegration from './HostfullyGuidebooksIntegration';
 import NotionIntegration from './notionIntegration';
 import './Integrations.css';
 
@@ -14,6 +16,11 @@ const IntegrationsIndex = (ApiUserData) => {
   const turnoUserId = Boolean(ApiUserData?.ApiUserData?.turno_user_id);
   const minutUserId = Boolean(ApiUserData?.ApiUserData?.minut_user_id);
   const tidyUserId = Boolean(ApiUserData?.ApiUserData?.tidy_user_id);
+  const hostfullyGuidebooksUserId = Boolean(ApiUserData?.ApiUserData?.hostfully_guidebooks_user_id);
+  
+  // Only show the Hostfully Guidebooks section if the user's PMS is Hostfully
+  //const pms_name = ApiUserData?.ApiUserData?.calry_integrations ? Object.keys(ApiUserData.ApiUserData.calry_integrations)[0] : undefined;
+  //const isHostfully = pms_name === 'hostfully';
   const notionUserId = Boolean(ApiUserData?.ApiUserData?.notion_user_id);
 
   // Identify connected integrations
@@ -21,8 +28,8 @@ const IntegrationsIndex = (ApiUserData) => {
   if (turnoUserId) connectedIntegrations.push('Turno');
   if (minutUserId) connectedIntegrations.push('Minut');
   if (tidyUserId) connectedIntegrations.push('Tidy');
+  if (hostfullyGuidebooksUserId) connectedIntegrations.push('Hostfully Guidebooks');
   if (notionUserId) connectedIntegrations.push('Notion');
-  // Add more integrations as needed
 
   // State for selected integration tab
   const [selectedIntegration, setSelectedIntegration] = useState(connectedIntegrations[0] || '');
@@ -35,6 +42,7 @@ const IntegrationsIndex = (ApiUserData) => {
           {!turnoUserId && <ConnectToTurno />}
           {!minutUserId && <ConnectToMinut />}
           {!tidyUserId && <ConnectToTidy />}
+          {!hostfullyGuidebooksUserId && <ConnectToHostfullyGuidebooks />}
           {!notionUserId && <ConnectToNotion />}
         </div>
       </div>
@@ -65,6 +73,10 @@ const IntegrationsIndex = (ApiUserData) => {
               <div>
                 <h3 style={{marginTop:'40px'}}>Connected to Tidy!</h3>
               </div>
+            )}
+
+            {selectedIntegration === 'Hostfully Guidebooks' && (
+              <HostfullyGuidebooksIntegration ApiUserData={ApiUserData} />
             )}
 
             {selectedIntegration === 'Notion' && (
