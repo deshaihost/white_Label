@@ -256,6 +256,22 @@ const MildeSection = ({
     const { conversation_id, reservation_id = null } = conversationData; // reservation_id default to null if not present. Sometimes the send operation will still work if it isn't included, so proceed
     const messageToSend = inputValue;
 
+    // Optimistically add the message to the local state immediately
+    const currentTime = new Date();
+    const optimisticMessage = {
+      text: { text: messageToSend },
+      sender: "user",
+      messageDay: formatRelativeDate(currentTime.toISOString()),
+      rawDate: currentTime,
+      sendBy: "host",
+      id: `temp-${Date.now()}`, // Temporary ID until API response
+      timeFormatConvert: timeFormat(currentTime.toISOString()),
+      attachments: [],
+    };
+
+    // Add the message immediately to show it in the UI
+    setMessages(prevMessages => [...prevMessages, optimisticMessage]);
+
     try {
       const sendMsgResponse = await callSendMessageApi(
         messageToSend,
@@ -266,38 +282,23 @@ const MildeSection = ({
       );
 
       if (!("error" in sendMsgResponse)) {
-        // Create a temporary message object for immediate display
-        const tempMessage = {
-          text: {
-            text: messageToSend,
-            id: `temp_${Date.now()}`, // Temporary ID until API provides real one
-          },
-          sender: "user", // Since this is a sent message from the host
-          messageDay: formatRelativeDate(new Date().toISOString()),
-          rawDate: new Date(),
-          sendBy: "host",
-          id: `temp_${Date.now()}`,
-          timeFormatConvert: timeFormat(new Date().toISOString()),
-          attachments: [],
-        };        // Immediately add the sent message to the messages state for instant feedback
-        setMessages(prevMessages => [...prevMessages, tempMessage]);
-
-        // Scroll to bottom to show the new message
-        setTimeout(() => {
-          if (messageListRef.current) {
-            messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
-            setIsAtBottom(true);
-          }
-        }, 0);
-
         setInputValue("");
         setShowGenerateJustificationButton(false);
         setAssistanceUsed(null);
 
         await updateConversationFromApi(conversation_id);
+      } else {
+        // If there was an error, remove the optimistic message
+        setMessages(prevMessages => 
+          prevMessages.filter(msg => msg.id !== optimisticMessage.id)
+        );
       }
     } catch (error) {
       ToastHandle("Error sending message", "danger");
+      // Remove the optimistic message on error
+      setMessages(prevMessages => 
+        prevMessages.filter(msg => msg.id !== optimisticMessage.id)
+      );
     } finally {
       setSendMessageLoading(false);
     }
@@ -767,7 +768,8 @@ const MildeSection = ({
       date1.getMonth() === date2.getMonth() &&
       date1.getFullYear() === date2.getFullYear()
     );
-  }  // When we get the API data, populate the messages array and set the generate button functionality
+  }
+  // When we get the API data, populate the messages array and set the generate button functionality
   useEffect(() => {
     // Populate messages
     if (allConversationData?.messages) {
@@ -791,28 +793,8 @@ const MildeSection = ({
             attachments,
           };
         });
-        
-        // Filter out any temporary messages that might already be included in the API response
-        // This prevents duplicates when the optimistic update gets replaced by real data
-        setMessages(prevMessages => {
-          const tempMessages = prevMessages.filter(msg => msg.id && msg.id.startsWith('temp_'));
-          const apiMessageIds = new Set(newMessages.map(msg => msg.id));
-          
-          // Remove temp messages that have corresponding real messages from API
-          const filteredTempMessages = tempMessages.filter(tempMsg => {
-            // Check if there's a real message with similar content and timing
-            const hasCorrespondingRealMessage = newMessages.some(realMsg => 
-              realMsg.sendBy === tempMsg.sendBy && 
-              realMsg.text?.text === tempMsg.text?.text &&
-              Math.abs(new Date(realMsg.rawDate) - tempMsg.rawDate) < 10000 // Within 10 seconds
-            );
-            return !hasCorrespondingRealMessage;
-          });
-          
-          return [...newMessages, ...filteredTempMessages];
-        });
-        
         setConversationData(allConversationData);
+        setMessages(newMessages);
         setPropertyName(allConversationData.property_name);
       }
     }
