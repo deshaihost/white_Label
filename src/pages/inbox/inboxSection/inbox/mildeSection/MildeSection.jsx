@@ -248,8 +248,7 @@ const MildeSection = ({
     } else {
       return "AI response is only available when the last message is from the guest.";
     }
-  };
-  const handleSendMessage = async () => {
+  };  const handleSendMessage = async () => {
     if (inputValue.trim() === "") return; // no message added
     if (!conversationData?.conversation_id) return; // no conversation selected
     setSendMessageLoading(true);
@@ -267,6 +266,30 @@ const MildeSection = ({
       );
 
       if (!("error" in sendMsgResponse)) {
+        // Create a temporary message object for immediate display
+        const tempMessage = {
+          text: {
+            text: messageToSend,
+            id: `temp_${Date.now()}`, // Temporary ID until API provides real one
+          },
+          sender: "user", // Since this is a sent message from the host
+          messageDay: formatRelativeDate(new Date().toISOString()),
+          rawDate: new Date(),
+          sendBy: "host",
+          id: `temp_${Date.now()}`,
+          timeFormatConvert: timeFormat(new Date().toISOString()),
+          attachments: [],
+        };        // Immediately add the sent message to the messages state for instant feedback
+        setMessages(prevMessages => [...prevMessages, tempMessage]);
+
+        // Scroll to bottom to show the new message
+        setTimeout(() => {
+          if (messageListRef.current) {
+            messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+            setIsAtBottom(true);
+          }
+        }, 0);
+
         setInputValue("");
         setShowGenerateJustificationButton(false);
         setAssistanceUsed(null);
@@ -744,8 +767,7 @@ const MildeSection = ({
       date1.getMonth() === date2.getMonth() &&
       date1.getFullYear() === date2.getFullYear()
     );
-  }
-  // When we get the API data, populate the messages array and set the generate button functionality
+  }  // When we get the API data, populate the messages array and set the generate button functionality
   useEffect(() => {
     // Populate messages
     if (allConversationData?.messages) {
@@ -769,8 +791,28 @@ const MildeSection = ({
             attachments,
           };
         });
+        
+        // Filter out any temporary messages that might already be included in the API response
+        // This prevents duplicates when the optimistic update gets replaced by real data
+        setMessages(prevMessages => {
+          const tempMessages = prevMessages.filter(msg => msg.id && msg.id.startsWith('temp_'));
+          const apiMessageIds = new Set(newMessages.map(msg => msg.id));
+          
+          // Remove temp messages that have corresponding real messages from API
+          const filteredTempMessages = tempMessages.filter(tempMsg => {
+            // Check if there's a real message with similar content and timing
+            const hasCorrespondingRealMessage = newMessages.some(realMsg => 
+              realMsg.sendBy === tempMsg.sendBy && 
+              realMsg.text?.text === tempMsg.text?.text &&
+              Math.abs(new Date(realMsg.rawDate) - tempMsg.rawDate) < 10000 // Within 10 seconds
+            );
+            return !hasCorrespondingRealMessage;
+          });
+          
+          return [...newMessages, ...filteredTempMessages];
+        });
+        
         setConversationData(allConversationData);
-        setMessages(newMessages);
         setPropertyName(allConversationData.property_name);
       }
     }
