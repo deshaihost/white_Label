@@ -1236,7 +1236,7 @@ const Inbox = ({
                         </span>
                       )} */}
 
-                      {tab.id === "whatsapp" && unreadWhatsAppCount > 0 && (
+                      {/* {tab.id === "whatsapp" && unreadWhatsAppCount > 0 && (
                         <span
                           style={{
                             backgroundColor: "#25D366",
@@ -1254,7 +1254,7 @@ const Inbox = ({
                         >
                           {unreadWhatsAppCount}
                         </span>
-                      )}
+                      )} */}
 
                       {tab.id === "openIssue" &&
                         filteredActionItems &&

@@ -863,12 +863,12 @@ const RightSection = ({
 
             {/* Check-in-today badge */}
             {isToday(arrival_date) && (
-              <span className="checkin-badge">check-in today</span>
+              <span className="checkin-badge" style={{height:"25px" ,width:"112px"}}>Check-in today</span>
             )}
 
             {/* Check-out-today badge */}
             {isToday(departure_date) && (
-              <span className="checkout-badge">check-out today</span>
+              <span className="checkout-badge" style={{height:"25px" ,width:"112px"}}>Check-out today</span>
             )}
           </div>
         </div>
