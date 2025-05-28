@@ -15,30 +15,35 @@ import ChevDownIcon from "./message/icons/chevDown.svg";
 
 const placeholderImg = "https://hostbuddylb.com/misc/chatBubbles.webp";
 
-const WhatsAppSection = ({ allConversationData, updateConversationFromApi, propertyName }) => {
+const WhatsAppSection = ({
+  allConversationData,
+  updateConversationFromApi,
+  propertyName,
+}) => {
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
-  
   const [hasWhatsappIntegration, setHasWhatsappIntegration] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
-  
+
   // AI input functionality states
   const [inputValue, setInputValue] = useState("");
   const [sendMessageLoading, setSendMessageLoading] = useState(false);
   const [generateOptionsVisible, setGenerateOptionsVisible] = useState(false);
-  const [generateCommandApiLoading, setGenerateCommandApiLoading] = useState(false);
-  const [generateScratchApiLoading, setGenerateScratchApiLoading] = useState(false);
+  const [generateCommandApiLoading, setGenerateCommandApiLoading] =
+    useState(false);
+  const [generateScratchApiLoading, setGenerateScratchApiLoading] =
+    useState(false);
+
+  // Local state for WhatsApp messages with optimistic rendering
+  const [whatsappMessages, setWhatsappMessages] = useState([]);
 
   // Extract guest information from conversation data
   const guestName = allConversationData?.guest_name || "Guest";
   const guestImageUrl = allConversationData?.image_url || "";
-
-  // Extract WhatsApp messages from conversation data
-  const whatsappMessages = allConversationData?.whatsapp_messages || [];
 
   // Check for WhatsApp integration by calling the get_user_data API
   useEffect(() => {
@@ -84,12 +89,39 @@ const WhatsAppSection = ({ allConversationData, updateConversationFromApi, prope
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  };
-  // Scroll to bottom when messages change
+  };  // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [whatsappMessages]);
 
+  // Sync local WhatsApp messages state with conversation data
+  useEffect(() => {
+    if (allConversationData?.whatsapp_messages) {
+      setWhatsappMessages(allConversationData.whatsapp_messages);
+    } else {
+      setWhatsappMessages([]);
+    }
+  }, [allConversationData?.whatsapp_messages]);
+
+  // Helper function to format relative date (similar to MildeSection)
+  function formatRelativeDate(dateString) {
+    const messageDate = new Date(dateString);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    const messageDateOnly = new Date(messageDate.getFullYear(), messageDate.getMonth(), messageDate.getDate());
+    const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const yesterdayDateOnly = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate());
+
+    if (messageDateOnly.getTime() === todayDateOnly.getTime()) {
+      return "Today";
+    } else if (messageDateOnly.getTime() === yesterdayDateOnly.getTime()) {
+      return "Yesterday";
+    } else {
+      return messageDate.toLocaleDateString();
+    }
+  }
   // Handle sending WhatsApp message
   const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
@@ -98,6 +130,22 @@ const WhatsAppSection = ({ allConversationData, updateConversationFromApi, prope
 
     const { conversation_id, reservation_id = null } = allConversationData;
     const messageToSend = inputValue;
+    const currentTime = new Date();
+
+    // Create optimistic message object
+    const optimisticMessage = {
+      id: `temp-${Date.now()}`, // Temporary ID until API response
+      text: messageToSend,
+      time: currentTime.toISOString(),
+      time_utc: currentTime.toISOString(),
+      sender: "host"
+    };
+
+    // Add the message immediately to show it in the UI
+    setWhatsappMessages(prevMessages => [...prevMessages, optimisticMessage]);
+    
+    // Clear input immediately for better UX
+    setInputValue("");
 
     try {
       const sendMsgResponse = await callSendWhatsAppMessageApi(
@@ -109,12 +157,24 @@ const WhatsAppSection = ({ allConversationData, updateConversationFromApi, prope
       );
 
       if (!("error" in sendMsgResponse)) {
-        setInputValue("");
+        // Success - the API response will update via updateConversationFromApi
         if (updateConversationFromApi) {
           await updateConversationFromApi(conversation_id);
         }
+      } else {
+        // If there was an error, remove the optimistic message and restore input
+        setWhatsappMessages(prevMessages => 
+          prevMessages.filter(msg => msg.id !== optimisticMessage.id)
+        );
+        setInputValue(messageToSend); // Restore the message text
+        ToastHandle("Error sending WhatsApp message", "danger");
       }
     } catch (error) {
+      // Remove the optimistic message on error and restore input
+      setWhatsappMessages(prevMessages => 
+        prevMessages.filter(msg => msg.id !== optimisticMessage.id)
+      );
+      setInputValue(messageToSend); // Restore the message text
       ToastHandle("Error sending WhatsApp message", "danger");
     } finally {
       setSendMessageLoading(false);
@@ -152,7 +212,8 @@ const WhatsAppSection = ({ allConversationData, updateConversationFromApi, prope
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
+      textareaRef.current.style.height =
+        textareaRef.current.scrollHeight + "px";
     }
   };
 
@@ -201,7 +262,8 @@ const WhatsAppSection = ({ allConversationData, updateConversationFromApi, prope
           <p style={{ color: "#A6A9B2", fontSize: "16px", marginTop: "10px" }}>
             Loading WhatsApp data...
           </p>
-        </div>      ) : whatsappMessages.length > 0 ? (
+        </div>
+      ) : whatsappMessages.length > 0 ? (
         // Display WhatsApp messages if they exist
         <>
           <div
@@ -242,7 +304,9 @@ const WhatsAppSection = ({ allConversationData, updateConversationFromApi, prope
               <div
                 className="input-container"
                 style={{ width: "100%", marginBottom: "10px" }}
-              >                <textarea
+              >
+                {" "}
+                <textarea
                   type="text"
                   ref={textareaRef}
                   placeholder="Message..."
@@ -256,7 +320,8 @@ const WhatsAppSection = ({ allConversationData, updateConversationFromApi, prope
                     sendMessageLoading
                       ? true
                       : false
-                  }                  className="custom-textarea"
+                  }
+                  className="custom-textarea"
                   style={{
                     width: "100%",
                     backgroundColor: "#17191F",
@@ -276,7 +341,8 @@ const WhatsAppSection = ({ allConversationData, updateConversationFromApi, prope
                     </div>
                   </div>
                 )}
-              </div>              <div
+              </div>{" "}
+              <div
                 style={{
                   display: "flex",
                   justifyContent: "flex-end",
@@ -331,7 +397,7 @@ const WhatsAppSection = ({ allConversationData, updateConversationFromApi, prope
                         >
                           Send
                         </span>
-                         <svg
+                        <svg
                           width="15"
                           height="15"
                           viewBox="0 0 24 24"
