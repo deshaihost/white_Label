@@ -76,3 +76,45 @@
     
   }
 }
+
+/* Action items container scroll bar styling - matching left-bar-chat and message-list */
+.action-items-container::-webkit-scrollbar {
+  width: 4px;
+  background-color: #0F1117;
+}
+
+.action-items-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.action-items-container::-webkit-scrollbar-track {
+  background-color: #0F1117;
+}
+
+/* For Firefox */
+.action-items-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) #0F1117;
+}
+
+/* Notes container's scroll area styling - matching other scrollable components */
+.notes-scroll-area::-webkit-scrollbar {
+  width: 4px;
+  background-color: #0F1117;
+}
+
+.notes-scroll-area::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.notes-scroll-area::-webkit-scrollbar-track {
+  background-color: #0F1117;
+}
+
+/* For Firefox */
+.notes-scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) #0F1117;
+}

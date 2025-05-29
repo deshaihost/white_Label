@@ -352,7 +352,8 @@ const Inbox = ({
   const [editingNoteId, setEditingNoteId] = useState(null);
   const [isEditNoteModalOpen, setIsEditNoteModalOpen] = useState(false);
   const [editingNoteText, setEditingNoteText] = useState("");
-  const [editingNoteVisibleToHostbuddy, setEditingNoteVisibleToHostbuddy] = useState(false);
+  const [editingNoteVisibleToHostbuddy, setEditingNoteVisibleToHostbuddy] =
+    useState(false);
 
   // Handle pending tab changes when view changes
   useEffect(() => {
@@ -513,7 +514,7 @@ const Inbox = ({
       const bodyData = {
         note_id: noteId,
         note: noteText,
-        visible_to_hostbuddy: visibleToHostbuddy
+        visible_to_hostbuddy: visibleToHostbuddy,
       };
 
       const response = await axios.put(
@@ -525,7 +526,13 @@ const Inbox = ({
       if (response.status === 200) {
         // Update the note in the local state
         const updatedNotes = notes.map((note) =>
-          note.note_id === noteId ? { ...note, note: noteText, visible_to_hostbuddy: visibleToHostbuddy } : note
+          note.note_id === noteId
+            ? {
+                ...note,
+                note: noteText,
+                visible_to_hostbuddy: visibleToHostbuddy,
+              }
+            : note
         );
         setNotes(updatedNotes);
 
@@ -1440,7 +1447,16 @@ const Inbox = ({
                     width: "100%",
                     height: "100%",
                   }}
-                >                  <div className="action-items-container" style={{height: "100%", overflowY: "auto", padding: "5px"}}>
+                >
+                  {" "}
+                  <div
+                    className="action-items-container"
+                    style={{
+                      height: "100%",
+                      overflowY: "auto",
+                      padding: "5px",
+                    }}
+                  >
                     {/* Render action items from the selected conversation */}
                     {[]
                       .concat(filteredActionItems || [])
@@ -1618,9 +1634,9 @@ const Inbox = ({
                         height: "100%",
                         backgroundColor: "#121318",
                       }}
-                    >
-                      {/* Notes List Area */}
+                    >                      {/* Notes List Area */}
                       <div
+                        className="notes-scroll-area"
                         style={{
                           flex: 1,
                           overflowY: "auto",
@@ -1791,7 +1807,9 @@ const Inbox = ({
                                                     padding: "0",
                                                     margin: "0",
                                                   }}
-                                                >                                                  <li
+                                                >
+                                                  {" "}
+                                                  <li
                                                     onClick={() => {
                                                       toggleDropdown(
                                                         note.note_id
@@ -1799,9 +1817,15 @@ const Inbox = ({
                                                       setEditingNoteId(
                                                         note.note_id
                                                       );
-                                                      setEditingNoteText(note.note);
-                                                      setEditingNoteVisibleToHostbuddy(note.visible_to_hostbuddy);
-                                                      setIsEditNoteModalOpen(true);
+                                                      setEditingNoteText(
+                                                        note.note
+                                                      );
+                                                      setEditingNoteVisibleToHostbuddy(
+                                                        note.visible_to_hostbuddy
+                                                      );
+                                                      setIsEditNoteModalOpen(
+                                                        true
+                                                      );
                                                     }}
                                                     style={{
                                                       display: "flex",
@@ -1966,13 +1990,18 @@ const Inbox = ({
                         }}
                       >
                         <textarea
-                          value={newNote}                          onChange={(e) => setNewNote(e.target.value)}
+                          value={newNote}
+                          onChange={(e) => setNewNote(e.target.value)}
                           onKeyDown={(e) => {
                             // Submit on Enter without Shift key
                             if (e.key === "Enter" && !e.shiftKey) {
                               e.preventDefault();
                               if (editingNoteId) {
-                                callUpdateNoteApi(editingNoteId, newNote, visibleToHostbuddy);
+                                callUpdateNoteApi(
+                                  editingNoteId,
+                                  newNote,
+                                  visibleToHostbuddy
+                                );
                               } else if (
                                 newNote.trim() &&
                                 selectedConversation?.conversation_id
@@ -2069,10 +2098,15 @@ const Inbox = ({
                                 />
                               </div>
                             </label>
-                          </div>                          <button
+                          </div>{" "}
+                          <button
                             onClick={() => {
                               if (editingNoteId) {
-                                callUpdateNoteApi(editingNoteId, newNote, visibleToHostbuddy);
+                                callUpdateNoteApi(
+                                  editingNoteId,
+                                  newNote,
+                                  visibleToHostbuddy
+                                );
                               } else if (
                                 newNote.trim() &&
                                 selectedConversation?.conversation_id
@@ -2141,13 +2175,13 @@ const Inbox = ({
                 rightSectionData={selectedConversation}
                 updateConversationFromApi={updateConversation}
                 setActiveTab={setActiveTab}
-                setPendingTabChange={setPendingTabChange}                setRightSectionVisible={setRightSectionVisible}
+                setPendingTabChange={setPendingTabChange}
+                setRightSectionVisible={setRightSectionVisible}
               />
             </div>
           </div>
-          
           {/* Edit Note Modal */}
-          <EditNoteModal 
+          <EditNoteModal
             isOpen={isEditNoteModalOpen}
             onClose={() => {
               setIsEditNoteModalOpen(false);
@@ -2157,7 +2191,14 @@ const Inbox = ({
             setNoteText={setEditingNoteText}
             visibleToHostbuddy={editingNoteVisibleToHostbuddy}
             setVisibleToHostbuddy={setEditingNoteVisibleToHostbuddy}
-            onSave={() => callUpdateNoteApi(editingNoteId, editingNoteText, editingNoteVisibleToHostbuddy)}            onDelete={() => {
+            onSave={() =>
+              callUpdateNoteApi(
+                editingNoteId,
+                editingNoteText,
+                editingNoteVisibleToHostbuddy
+              )
+            }
+            onDelete={() => {
               if (editingNoteId) {
                 callDeleteNoteApi(editingNoteId);
                 setIsEditNoteModalOpen(false);
@@ -2225,166 +2266,192 @@ const EditNoteModal = ({
   onClose,
   noteText,
   setNoteText,
-  visibleToHostbuddy, 
+  visibleToHostbuddy,
   setVisibleToHostbuddy,
   onSave,
-  onDelete
+  onDelete,
 }) => {
   if (!isOpen) return null;
-  
+
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      backgroundColor: 'rgba(0, 0, 0, 0.7)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 1000,
-    }}>
-      <div style={{
-        width: '500px',
-        backgroundColor: '#2B2E36',
-        borderRadius: '4px',
-        border:"1px solid rgb(60 63 67)",
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}
+    >
+      <div
+        style={{
+          width: "500px",
+          backgroundColor: "#2B2E36",
+          borderRadius: "4px",
+          border: "1px solid rgb(60 63 67)",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4)",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         {/* Header */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '0px 24px'
-          // borderBottom: '1px solid #24262E',
-        }}>
-          <h3 style={{
-            margin: 0,
-            color: '#D0D3DB',
-            fontFamily: 'popins, sans-serif',
-            fontSize: '24px',
-            paddingTop:"10px",
-            fontWeight: '700',
-          }}>Edit note</h3>
-          <button 
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "0px 24px",
+            // borderBottom: '1px solid #24262E',
+          }}
+        >
+          <h3
+            style={{
+              margin: 0,
+              color: "#D0D3DB",
+              fontFamily: "popins, sans-serif",
+              fontSize: "24px",
+              paddingTop: "10px",
+              fontWeight: "700",
+            }}
+          >
+            Edit note
+          </h3>
+          <button
             onClick={onClose}
             style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              color: '#A6A9B2',
-              fontSize: '20px',
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "#A6A9B2",
+              fontSize: "20px",
               padding: 0,
             }}
           >
             ✕
           </button>
         </div>
-        
+
         {/* Note Content */}
-        <div style={{
-          padding: '10px 24px',
-        }}>
-          <div style={{color:"#A6A9B2" ,  fontFamily: 'DM Sans, helvetica !impotant'}}>Note</div>
-          <textarea 
+        <div
+          style={{
+            padding: "10px 24px",
+          }}
+        >
+          <div
+            style={{
+              color: "#A6A9B2",
+              fontFamily: "DM Sans, helvetica !impotant",
+            }}
+          >
+            Note
+          </div>
+          <textarea
             value={noteText}
             onChange={(e) => setNoteText(e.target.value)}
             placeholder="Type note..."
             style={{
-              width: '100%',
-              height: '80px',
-              backgroundColor: '#24262E',
-              border: '1px solid rgb(60 63 67)',
-              borderRadius: '4px',
-              color: '#EEE',
-              fontSize: '14px',
-              padding: '8px',
-              outline: 'none',
-              resize: 'none',
-              fontFamily: 'DM Sans, helvetica',
-              lineHeight: '1.5',
+              width: "100%",
+              height: "80px",
+              backgroundColor: "#24262E",
+              border: "1px solid rgb(60 63 67)",
+              borderRadius: "4px",
+              color: "#EEE",
+              fontSize: "14px",
+              padding: "8px",
+              outline: "none",
+              resize: "none",
+              fontFamily: "DM Sans, helvetica",
+              lineHeight: "1.5",
             }}
           />
-          
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            marginTop: '8px',
-          }}>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginTop: "8px",
+            }}
+          >
             <input
               type="checkbox"
               id="editVisibleToHostbuddy"
               checked={visibleToHostbuddy}
               onChange={(e) => setVisibleToHostbuddy(e.target.checked)}
               style={{
-                cursor: 'pointer',
-                marginRight: '8px',
-                accentColor: '#0B5FDE',
-                width: '16px',
-                height: '16px',
+                cursor: "pointer",
+                marginRight: "8px",
+                accentColor: "#0B5FDE",
+                width: "16px",
+                height: "16px",
               }}
             />
             <label
               htmlFor="editVisibleToHostbuddy"
               style={{
-                color: '#D0D3DB',
-                fontSize: '14px',
-                fontWeight: '400',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
+                color: "#D0D3DB",
+                fontSize: "14px",
+                fontWeight: "400",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
               }}
             >
               Visible to HostBuddy
               <div
                 style={{
-                  width: '20px',
-                  height: '20px',
-                  backgroundColor: '#24262E',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: '5px',
-                  borderRadius: '4px',
+                  width: "20px",
+                  height: "20px",
+                  backgroundColor: "#24262E",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginLeft: "5px",
+                  borderRadius: "4px",
                 }}
               >
                 <img
-                  src={require("./mildeSection/message/icons/helper_icon_notes.svg").default}
+                  src={
+                    require("./mildeSection/message/icons/helper_icon_notes.svg")
+                      .default
+                  }
                   alt="Help"
-                  style={{ width: '14px', height: '14px' }}
+                  style={{ width: "14px", height: "14px" }}
                 />
               </div>
             </label>
           </div>
         </div>
-        
+
         {/* Footer / Buttons */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          padding: '16px 24px',
-          gap: '12px',
-        }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "16px 24px",
+            gap: "12px",
+          }}
+        >
           <button
             onClick={() => {
               if (onDelete) onDelete();
             }}
             style={{
-              backgroundColor: 'transparent',
-              color: '#F97257',
-              border: 'none',
-              height: '36px',
-              borderRadius: '4px',
-              padding: '0',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
+              backgroundColor: "transparent",
+              color: "#F97257",
+              border: "none",
+              height: "36px",
+              borderRadius: "4px",
+              padding: "0",
+              fontSize: "14px",
+              fontWeight: "500",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
             }}
             title="Delete note"
           >
@@ -2392,48 +2459,50 @@ const EditNoteModal = ({
               src={require("./icons/delete_red_icon.svg").default}
               alt="Delete"
               style={{
-                marginRight: '6px',
-                width: '16px',
-                height: '16px',
+                marginRight: "6px",
+                width: "16px",
+                height: "16px",
               }}
             />
             Delete
           </button>
-          
-          <div style={{ display: 'flex', gap: '12px' }}>
+
+          <div style={{ display: "flex", gap: "12px" }}>
             <button
               onClick={onClose}
               style={{
-              backgroundColor: 'transparent',
-              color: '#D0D3DB',
-              border: '0px solid #24262E',
-              height: '36px',
-              borderRadius: '4px',
-              padding: '0 16px',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer',
-            }}
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onSave}
-            style={{
-              backgroundColor: '#1a73e8',
-              color: 'white',
-              border: 'none',
-              height: '36px',
-              borderRadius: '4px',
-              padding: '0 16px',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: noteText.trim() ? 'pointer' : 'not-allowed',
-              opacity: noteText.trim() ? '1' : '0.7',
-            }}
-            disabled={!noteText.trim()}
-          >            Save changes
-          </button>
+                backgroundColor: "transparent",
+                color: "#D0D3DB",
+                border: "0px solid #24262E",
+                height: "36px",
+                borderRadius: "4px",
+                padding: "0 16px",
+                fontSize: "14px",
+                fontWeight: "500",
+                cursor: "pointer",
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onSave}
+              style={{
+                backgroundColor: "#1a73e8",
+                color: "white",
+                border: "none",
+                height: "36px",
+                borderRadius: "4px",
+                padding: "0 16px",
+                fontSize: "14px",
+                fontWeight: "500",
+                cursor: noteText.trim() ? "pointer" : "not-allowed",
+                opacity: noteText.trim() ? "1" : "0.7",
+              }}
+              disabled={!noteText.trim()}
+            >
+              {" "}
+              Save changes
+            </button>
           </div>
         </div>
       </div>
