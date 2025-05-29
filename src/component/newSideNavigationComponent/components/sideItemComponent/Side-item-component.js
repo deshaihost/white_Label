@@ -295,25 +295,25 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
             <div style={{ flex: 1 }}>
                 {filteredData.map(item => renderItem(item))}
             </div>
-            
-            {/* Logout button - placed above Help & Support with icon on right side */}
+              {/* Logout button - placed above Help & Support with icon on right side */}
             <div style={{ width: '100%', marginBottom: '4px' ,backgroundColor: 'black' ,borderRadius: '4px'}}>
                 <SideNavItem2
                     label={
                         <div style={{ 
-                            // display: 'flex', 
-                             
-                            // alignItems: 'center',
-                            width: '100%' 
+                            display: 'flex', 
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            width: '100%',
+                            padding: '0 16px'
                         }}>
-                            <span style={{margin:"40px"}}>Log Out</span>
+                            <span style={{padding:"23px"}}>Log Out</span>
                             <img 
                                 src={require('../sideNavBarElements/sectionIndicatorComponent/navIcons/logout_icon.svg').default} 
                                 alt="Log Out" 
                                 style={{
                                     width: '20px',
                                     height: '20px',
-                                    marginLeft: '40px'
+                                    flexShrink: 0
                                 }} 
                             />
                         </div>
@@ -364,7 +364,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                     }}
                 />
             </div>
-            <div style={{ width: '100%'}}>
+            <div style={{ width: '100%' ,marginBottom:"16px"}}>
                 <SideNavItem2
                     label="Collapse"
                     size="primary"

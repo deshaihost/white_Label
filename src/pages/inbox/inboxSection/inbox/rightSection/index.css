@@ -14,14 +14,26 @@
 }
 
 
-.right-side::-webkit-scrollbar{
-    width: 1px;
+.right-side::-webkit-scrollbar {
+    width: 4px;
+    background-color: #0F1117;
 }
+
+.right-side::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.right-side::-webkit-scrollbar-track {
+    background-color: #0F1117;
+}
+
 .right-side {
-    padding:  0px;
-    /* height: 590px; */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) #0F1117;
+    padding: 0px;
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .bordr-cl h2 {
     border: 0px;

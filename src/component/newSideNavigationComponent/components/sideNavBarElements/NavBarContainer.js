@@ -206,26 +206,30 @@ function NavBarContainer() {
   // Handle explicit click to expand the sidebar
   const handleExpandClick = (isFromClick = true) => {
     updateSidebarState(true, isFromClick); // Open via explicit click or hover based on parameter
-  };
-
-  return (
+  };  return (
     <div style={{ 
       position: "fixed",
+      backgroundColor: sidebarOpen ? "rgba(23, 25, 31, 1)" : "transparent",
       top: 0,
       left: 0,
       height: "100vh",
       zIndex: 1000,
+      paddingTop: sidebarOpen ? "16px" : "0px",
+      paddingBottom: sidebarOpen ? "16px" : "0px",
+      paddingRight: sidebarOpen ? "8px" : "0px",
+      paddingLeft: sidebarOpen ? "8px" : "0px",
+      width:"240px",
       fontFamily: "DM Sans, Helvetica"
     }}>
       {sidebarOpen ? (
         <div
           style={{
             backgroundColor: "rgba(23, 25, 31, 1)",
-            width: "240px",
+            // width: "184px",
             height: "100vh",
             maxHeight: "100vh",
             overflowY: "auto",
-            padding: "16px",
+            
             boxSizing: "border-box",
             position: "relative",
             display: "flex",
@@ -263,7 +267,7 @@ function NavBarContainer() {
         <div 
           style={{
             position: "relative",
-            backgroundColor: "rgba(23, 25, 31, 1)",
+            // backgroundColor: "rgba(23, 25, 31, 1)",
             height: "100vh",
             maxHeight: "100vh",
             overflowY: "auto",

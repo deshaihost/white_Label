@@ -22,7 +22,9 @@
 }
 
 .side-nav-item .text-wrapper {
-    color: var(--colors-color-text-subtle, #e0e0e0);
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: #A6A9B2;
     flex: 1;
     font-family: var(--body-medium-med-500-font-family, 'Inter');
     font-size: var(--body-medium-med-500-font-size, 14px);
@@ -63,7 +65,7 @@
 }
 
 .side-nav-item.selected .text-wrapper {
-    color: var(--colors-color-text-selected, #ffffff);
+    color: #A6A9B2;
     font-weight: 600; /* Make selected text slightly bolder */
 }
 

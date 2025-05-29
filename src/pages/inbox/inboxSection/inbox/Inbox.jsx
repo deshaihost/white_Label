@@ -1112,24 +1112,37 @@ const Inbox = ({
                     {/* Info circle icon with background */}
                     <div
                       style={{
-                        width: "32px",
                         height: "32px",
-                        backgroundColor: "#01255E",
+                        backgroundColor: "rgb(39 41 43)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         borderRadius: "4px",
                         cursor: "pointer",
+                        padding: "0 8px",
+                        gap: "6px",
                       }}
                     >
                       <img
-                        src={require("./icons/info-circle.svg").default}
-                        alt="Info"
+                        src={
+                          require("./icons/Details_icon_for_right.svg").default
+                        }
+                        alt="Details"
                         style={{
                           width: "16px",
                           height: "16px",
                         }}
                       />
+                      <span
+                        style={{
+                          color: "#D0D3DB",
+                          fontSize: "14px",
+                          fontWeight: "400",
+                          fontFamily: "DM Sans",
+                        }}
+                      >
+                        Details
+                      </span>
                     </div>
                   </div>
                 </div>

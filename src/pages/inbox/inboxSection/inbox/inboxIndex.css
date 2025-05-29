@@ -15,10 +15,10 @@
 }
 
 /* Custom responsive classes to replace Bootstrap */
-/* .desktop-view {
+.desktop-view {
   display: none;
   width: 100%;
-} */
+}
 
 @media (min-width: 992px) {
   .desktop-view {
