@@ -165,6 +165,7 @@ const Inbox = ({
   const [rightSectionVisible, setRightSectionVisible] = useState(false); // State for right section visibility in medium screens
   const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width for responsive design
 
   // State for tracking pin status
   const [isPinned, setIsPinned] = useState(false);
@@ -914,6 +915,28 @@ const Inbox = ({
     guestNameSearchVal,
     accountAgeDays,
   ]);
+  // Track window resize for responsive behavior
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+    // Helper function to determine justifyContent value based on screen width and panel visibility
+  const determineJustifyContent = () => {
+    // For large screens (above 1279px), always use "space-between"
+    if (windowWidth > 1279) {
+      return "space-between";
+    }
+    
+    // For medium screens (1100px-1279px) and other smaller screens, use conditional logic
+    // If right section is visible, align items to the start
+    // otherwise distribute space between items
+    return rightSectionVisible ? "flex-start" : "space-between";
+  };
 
   return (
     <>
@@ -978,11 +1001,10 @@ const Inbox = ({
                   border: "1px solid",
                   borderColor: "#24262E",
                 }}
-              >
-                {/* User header row with image, name and action icons */}                <div
+              >                {/* User header row with image, name and action icons */}                <div
                   style={{
                     display: "flex",
-                    justifyContent: rightSectionVisible ? "flex-start" : "space-between",
+                    justifyContent: determineJustifyContent(),
                     alignItems: "center",
                     width: "100%",
                     padding: "4px",
