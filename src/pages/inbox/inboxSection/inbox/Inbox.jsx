@@ -1178,7 +1178,7 @@ const Inbox = ({
                     <div
                       style={{
                         height: "32px",
-                        backgroundColor: "rgb(39 41 43)",
+                        backgroundColor: "#01255E",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
