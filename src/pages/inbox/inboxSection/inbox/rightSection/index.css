@@ -271,6 +271,26 @@
   }
 }
 
+/* Media query for screen sizes between 1100px and 1279px */
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .right-title {
+    position: sticky !important;
+    top: 0;
+    width: 100%;
+    background-color: #17191F;
+    z-index: 10;
+    
+   
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-sizing: border-box;
+  }
+  
+  /* Ensure proper spacing and layout */
+  .right-side {
+    position: relative;
+  }
+}
+
 /* ==============responsive part start============== */
 /* @media (max-width: 1599.98px) { 
 .right-side h2 , .issue h3{

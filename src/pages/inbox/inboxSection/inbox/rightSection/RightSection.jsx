@@ -122,7 +122,8 @@ const RightSection = ({
 
   const dropdownRef = useRef(null);
   const assignUserDropdownRef = useRef(null);
-  const hostbuddyDropdownRef = useRef(null);  const navigate = useNavigate();
+  const hostbuddyDropdownRef = useRef(null);
+  const navigate = useNavigate();
   // State for action items
   const [actionItems, setActionItems] = useState([]);
   const [getActionItemsLoading, setGetActionItemsLoading] = useState(false);
@@ -678,7 +679,7 @@ const RightSection = ({
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setToggleStatusLoading(true);
-    
+
     // Update local status immediately for better user experience
     setLocalStatus(on_or_off);
 
@@ -782,26 +783,48 @@ const RightSection = ({
         >
           Back to Messages
         </button>
-      </div>      <div className="right-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      </div>{" "}
+      <div
+        className="right-title"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <h1>Reservation details</h1>
-        {setRightSectionVisible && (
-          <button 
+        {setRightSectionVisible && (          <button
             className="close-right-section-btn"
             onClick={() => setRightSectionVisible(false)}
             style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#D0D3DB',
-              cursor: 'pointer',
-              fontSize: '18px',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              transition: 'background-color 0.2s ease'
+              background: "transparent",
+              border: "none",
+              color: "#D0D3DB",
+              cursor: "pointer",
+              fontSize: "24px",
+              padding: "6px 12px",
+              borderRadius: "4px",
+              transition: "background-color 0.2s ease",
+              width: "40px",
+              height: "40px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: "bold",
             }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#24262E'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+            onMouseEnter={(e) => (e.target.style.backgroundColor = "#24262E")}
+            onMouseLeave={(e) =>
+              (e.target.style.backgroundColor = "transparent")
+            }
           >
-            ×
+            <img 
+              src={require("./icons/x-close.svg").default}
+              alt="Close"
+              style={{
+                width: "18px",
+                height: "18px",
+              }}
+            />
           </button>
         )}
       </div>
@@ -883,12 +906,22 @@ const RightSection = ({
 
             {/* Check-in-today badge */}
             {isToday(arrival_date) && (
-              <span className="checkin-badge" style={{height:"25px" ,width:"112px"}}>Check-in today</span>
+              <span
+                className="checkin-badge"
+                style={{ height: "25px", width: "112px" }}
+              >
+                Check-in today
+              </span>
             )}
 
             {/* Check-out-today badge */}
             {isToday(departure_date) && (
-              <span className="checkout-badge" style={{height:"25px" ,width:"112px"}}>Check-out today</span>
+              <span
+                className="checkout-badge"
+                style={{ height: "25px", width: "112px" }}
+              >
+                Check-out today
+              </span>
             )}
           </div>
         </div>
@@ -1266,7 +1299,8 @@ const RightSection = ({
                           borderRadius: "4px",
                           gap: "6px",
                           height: "32px",
-                          padding: "0px 8px",                          position: "relative",
+                          padding: "0px 8px",
+                          position: "relative",
                           width: "100%",
                           cursor: "pointer",
                           color:
@@ -1287,7 +1321,9 @@ const RightSection = ({
                           }
                           handleHostbuddyDropdownKeyDown(e);
                         }}
-                      >                        <span
+                      >
+                        {" "}
+                        <span
                           style={{
                             display: "inline-block",
                             marginRight: "4px",
@@ -1296,7 +1332,9 @@ const RightSection = ({
                           ●
                         </span>
                         <span style={{ flexGrow: 1 }}>
-                          {(localStatus || curr_status) === "on" ? "Active" : "Turned off"}
+                          {(localStatus || curr_status) === "on"
+                            ? "Active"
+                            : "Turned off"}
                         </span>
                         <img
                           src={ChevDownIcon}
@@ -1311,8 +1349,8 @@ const RightSection = ({
                           }}
                         />
                       </div>
-
-                      {/* Custom Dropdown Menu */}                      {hostbuddyDropdownOpen && (
+                      {/* Custom Dropdown Menu */}{" "}
+                      {hostbuddyDropdownOpen && (
                         <div
                           style={{
                             position: "absolute",
@@ -1337,7 +1375,7 @@ const RightSection = ({
                                 backgroundColor: "#353840",
                                 color: "white",
                                 fontWeight: "500",
-                                borderLeft: "3px solid #0B5FDE"
+                                borderLeft: "3px solid #0B5FDE",
                               }}
                               role="option"
                               aria-selected="true"
@@ -1345,7 +1383,6 @@ const RightSection = ({
                               Turn off
                             </span>
                           )}
-
                           {(localStatus || curr_status) === "off" && (
                             <div
                               onClick={() => {
@@ -1387,7 +1424,8 @@ const RightSection = ({
                             >
                               Turn back on
                             </div>
-                          )}                          {(localStatus || curr_status) === "on" && (
+                          )}{" "}
+                          {(localStatus || curr_status) === "on" && (
                             <>
                               {" "}
                               <div
@@ -1564,7 +1602,6 @@ const RightSection = ({
                   )}
                 </div>
               )}
-
               {/* {(source=='guest') && (
                 until_formatted === 'indefinitely' ? (
                   <p style={{ fontSize: "12px" }}>Indefinitely</p>
@@ -1572,11 +1609,8 @@ const RightSection = ({
                   <p style={{ fontSize: "12px" }}>Until {until_formatted}</p>
                 )
               } */}
-
               {/* Additional time selection dropdown if needed */}
-
               {/* {here setDuration code is available below} */}
-
               {/* {!toggleStatusLoading && curr_status && source=='property' && (
                 <select className="select-dropdown" value={selectedOption} onChange={(e) => handleSelectChange(e, curr_status)}>
                   <option value="" disabled>Set duration</option>
@@ -1585,7 +1619,8 @@ const RightSection = ({
                   <option value="1d">For 24 hours</option>
                   <option value="indefinitely">Indefinitely</option>
                 </select>
-              )} */}              {source == "guest1" && !toggleStatusLoading && (
+              )} */}{" "}
+              {source == "guest1" && !toggleStatusLoading && (
                 <div style={{ textAlign: "center" }}>
                   <a
                     style={{
@@ -1626,8 +1661,6 @@ const RightSection = ({
             </p>
           </div>
         ))}
-
-        
       {!(channel == "Chat Window") && (
         <div className="satisfy">
           <h2>Sentiment</h2>

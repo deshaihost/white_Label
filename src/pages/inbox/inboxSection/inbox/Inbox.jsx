@@ -979,11 +979,10 @@ const Inbox = ({
                   borderColor: "#24262E",
                 }}
               >
-                {/* User header row with image, name and action icons */}
-                <div
+                {/* User header row with image, name and action icons */}                <div
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    justifyContent: rightSectionVisible ? "flex-start" : "space-between",
                     alignItems: "center",
                     width: "100%",
                     padding: "4px",
@@ -1037,7 +1036,8 @@ const Inbox = ({
                             borderRadius: "4px",
                             padding: "4px 8px",
                             marginLeft: "10px",
-                            height: "24px",
+                            marginRight: "10px",
+                            height: "32px",
                           }}
                         >
                           <img
