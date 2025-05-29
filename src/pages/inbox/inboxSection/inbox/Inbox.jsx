@@ -1440,8 +1440,7 @@ const Inbox = ({
                     width: "100%",
                     height: "100%",
                   }}
-                >
-                  <div className="action-items-container">
+                >                  <div className="action-items-container" style={{height: "100%", overflowY: "auto", padding: "5px"}}>
                     {/* Render action items from the selected conversation */}
                     {[]
                       .concat(filteredActionItems || [])
