@@ -67,6 +67,7 @@ const RightSection = ({
   setCurrentView,
   setActiveTab,
   setPendingTabChange,
+  setRightSectionVisible,
 }) => {
   const {
     arrival_date,
@@ -781,9 +782,28 @@ const RightSection = ({
         >
           Back to Messages
         </button>
-      </div>
-      <div className="right-title">
+      </div>      <div className="right-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>Reservation details</h1>
+        {setRightSectionVisible && (
+          <button 
+            className="close-right-section-btn"
+            onClick={() => setRightSectionVisible(false)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#D0D3DB',
+              cursor: 'pointer',
+              fontSize: '18px',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              transition: 'background-color 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#24262E'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+          >
+            ×
+          </button>
+        )}
       </div>
       {/* Guest Image */}
       <div

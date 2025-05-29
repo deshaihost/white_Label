@@ -55,6 +55,69 @@ const responsiveStyles = `
     }
   }
   
+  /* Medium screen responsive design (1100px - 1279px) */
+  @media (min-width: 1100px) and (max-width: 1279px) {
+    .left-bar {
+      width: 368px !important;
+      min-width: 368px !important;
+      max-width: 368px !important;
+      flex: none !important;
+    }
+    
+    .middleSectionContainer {
+      min-width: 492px !important;
+      flex: 1 !important;
+      width: auto !important;
+    }
+    
+    .rightSectionContainer {
+      width: 280px !important;
+      min-width: 280px !important;
+      max-width: 280px !important;
+      flex: none !important;
+      position: absolute !important;
+      right: 11px !important;
+      top: 0 !important;
+      height: 100% !important;
+      z-index: 1000 !important;
+      background-color: #17191F !important;
+      border: 1px solid #24262E !important;
+      border-radius: 4px !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    .rightSectionContainer.hidden {
+      display: none !important;
+    }
+    
+    .middleSectionContainer.with-right-panel {
+      margin-right: 0px !important;
+    }
+    
+    .close-right-section {
+      position: absolute !important;
+      top: 10px !important;
+      right: 10px !important;
+      background: none !important;
+      border: none !important;
+      color: #FFFFFF !important;
+      font-size: 20px !important;
+      cursor: pointer !important;
+      z-index: 1001 !important;
+      width: 24px !important;
+      height: 24px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-radius: 4px !important;
+      transition: background-color 0.2s ease !important;
+    }
+    
+    .close-right-section:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+  
   /* Notes textarea placeholder color */
   .notes-textarea::placeholder {
     color: #676A73 !important;
@@ -99,6 +162,7 @@ const Inbox = ({
   const [activeTab, setActiveTab] = useState("pms"); // New state to track active tab
   const [pendingTabChange, setPendingTabChange] = useState(null); // To track pending tab change when switching views
   const [allowConvIdQuery, setAllowConvIdQuery] = useState(true); // Added state for handling conversationId query
+  const [rightSectionVisible, setRightSectionVisible] = useState(false); // State for right section visibility in medium screens
   const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
 
@@ -1107,9 +1171,7 @@ const Inbox = ({
                           margin: '0 1px'
                         }}></div>
                       </div>
-                    </div> */}
-
-                    {/* Info circle icon with background */}
+                    </div> */}                    {/* Info circle icon with background */}
                     <div
                       style={{
                         height: "32px",
@@ -1122,6 +1184,7 @@ const Inbox = ({
                         padding: "0 8px",
                         gap: "6px",
                       }}
+                      onClick={() => setRightSectionVisible(true)}
                     >
                       <img
                         src={
@@ -2053,9 +2116,8 @@ const Inbox = ({
                   </div>
                 </div>
               </div>
-            </div>
-            <div
-              className="rightSectionContainer"
+            </div>            <div
+              className={`rightSectionContainer ${!rightSectionVisible ? 'hidden' : ''}`}
               style={{
                 width: "296px",
                 flex: "none",
@@ -2063,8 +2125,7 @@ const Inbox = ({
                 padding: "11px",
                 border: "1px solid #24262E",
               }}
-            >
-              <RightSection
+            >              <RightSection
                 className="box"
                 style={{
                   width: "100%",
@@ -2075,6 +2136,7 @@ const Inbox = ({
                 updateConversationFromApi={updateConversation}
                 setActiveTab={setActiveTab}
                 setPendingTabChange={setPendingTabChange}
+                setRightSectionVisible={setRightSectionVisible}
               />
             </div>
           </div>

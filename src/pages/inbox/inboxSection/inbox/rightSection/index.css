@@ -249,6 +249,28 @@
   background-color: #2B2E36;
 }
 
+/* Close button for right section in medium screens */
+.close-right-section-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #D0D3DB !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.close-right-section-btn:hover {
+  background-color: #24262E !important;
+}
+
+@media (min-width: 1280px) {
+  .close-right-section-btn {
+    display: none !important;
+  }
+}
+
 /* ==============responsive part start============== */
 /* @media (max-width: 1599.98px) { 
 .right-side h2 , .issue h3{
