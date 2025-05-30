@@ -13,6 +13,7 @@ import guideToVacationRentalUpsells from './blogArticles/guide_to_vacation_renta
 import minutAlertsIntoInstantAction from "./blogArticles/minut_alerts_into_instant_action";
 import meetTheCoFounders from './blogArticles/meet_the_co_founders';
 import strMarket from './blogArticles/str_market_4-22';
+import hostfullyGuidebooksArticle from './blogArticles/hostfully_guidebooks_blog';
 
 const BlogArticle = () => {
   const { article_name } = useParams(); // Get the article_name from the path param
@@ -31,7 +32,8 @@ const BlogArticle = () => {
     "guide_to_vacation_rental_upsells":guideToVacationRentalUpsells,
     "minut_alerts_into_instant_action":minutAlertsIntoInstantAction,
     "meet_the_co_founders": meetTheCoFounders,
-    "str_market_4-22": strMarket
+    "str_market_4-22": strMarket,
+    "hostfully_guidebooks_blog": hostfullyGuidebooksArticle
   };
 
   useEffect(() => {
