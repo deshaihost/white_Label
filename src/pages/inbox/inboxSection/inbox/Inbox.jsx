@@ -1010,7 +1010,7 @@ const Inbox = ({
                     // justifyContent: determineJustifyContent(),
                     justifyContent:"space-between",
                     alignItems: "center",
-                    width: determineJustifyContent(),
+                    width: "100%",
                     padding: "4px",
                     marginBottom: "4px",
                   }}

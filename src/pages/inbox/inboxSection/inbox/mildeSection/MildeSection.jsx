@@ -1000,6 +1000,16 @@ const MildeSection = ({
                     guestName={allConversationData.guest_name}
                     guestImageUrl={allConversationData.image_url}
                   />
+                  {/* Banner for passed messages */}
+                  {allConversationData?.passed_msgs && 
+                   allConversationData.passed_msgs[message.id] && (
+                    <div className="passed-message-banner">
+                      <span>HostBuddy chose not to respond to this message. </span>
+                      <a href="#" onClick={(e) => handleJustificationClick(e, allConversationData.passed_msgs[message.id].justification)}>
+                        Why?
+                      </a>
+                    </div>
+                  )}
                 </React.Fragment>
               );
             })}
