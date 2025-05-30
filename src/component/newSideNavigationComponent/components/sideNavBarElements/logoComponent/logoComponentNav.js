@@ -1,13 +1,26 @@
 import PropTypes from "prop-types";
 import React from "react";
-import icon from "../sectionIndicatorComponent/navIcons/logoDefault.svg";
+import logoHeading from "../../NavBarIcons/Logo_heading.svg";
 import "./logoComponent.css";
 
 export const Logo = ({ type, colour, onlyIcon }) => {
-    return (
-        <div className="logo-container">
-            <img className="logo-icon" alt="HostBuddy Icon" src={icon} />
-        {!onlyIcon && <span className="logo-text">HostBuddy AI</span>}
+    return (        <div className="logo-container" style={{
+            width: "184px",
+            height: "33.65px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+           
+        }}>            <img 
+                className="logo-icon" 
+                alt="HostBuddy Logo" 
+                src={logoHeading}
+                style={{
+                    height: "100%",
+                    width: "auto",
+                    objectFit: "contain"
+                }}
+            />
         </div>
     );
 };
