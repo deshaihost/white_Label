@@ -17,10 +17,6 @@ const IntegrationsIndex = (ApiUserData) => {
   const minutUserId = Boolean(ApiUserData?.ApiUserData?.minut_user_id);
   const tidyUserId = Boolean(ApiUserData?.ApiUserData?.tidy_user_id);
   const hostfullyGuidebooksUserId = Boolean(ApiUserData?.ApiUserData?.hostfully_guidebooks_user_id);
-  
-  // Only show the Hostfully Guidebooks section if the user's PMS is Hostfully
-  //const pms_name = ApiUserData?.ApiUserData?.calry_integrations ? Object.keys(ApiUserData.ApiUserData.calry_integrations)[0] : undefined;
-  //const isHostfully = pms_name === 'hostfully';
   const notionUserId = Boolean(ApiUserData?.ApiUserData?.notion_user_id);
 
   // Identify connected integrations

@@ -15,6 +15,7 @@ const guide_to_vacation_rental_upsells_thumbnail = "https://i.postimg.cc/sxD47ds
 const minut_alerts_into_instant_action_thumbnail = "https://i.postimg.cc/hvLQ6vJc/minut-alerts-into-instant-action.webp";
 const meet_the_co_founders_thumbnail = "https://i.postimg.cc/8sgVdssK/Headshots-blog.webp";
 const str_market_thumbnail = "https://hostbuddylb.com/blog/str_market_4-22/Official%20STR%20Market%20Logo.webp";
+const hostfully_guidebooks_thumbnail = "https://hostbuddylb.com/blog/hostfully_guidebooks/Blog%20Header%20(19).webp";
 
 const BlogLandingPage = () => {
 
@@ -32,6 +33,7 @@ const BlogLandingPage = () => {
       { id:"minut_alerts_into_instant_action", title:"Turn Minut Alerts into Instant Action: HostBuddy AI's Game-Changing Integration with Minut", date:"Dec 03, 2024", img:minut_alerts_into_instant_action_thumbnail, description:"Streamline hosting with Minut and HostBuddy AI—automated alerts and real-time guest messaging for smarter rental management." },
       { id:"meet_the_co_founders", title:"Meet the Co-Founders of HostBuddy AI", date:"Jan 08, 2025", img:meet_the_co_founders_thumbnail, description:"Discover the visionaries behind HostBuddy AI—Jay Ullrich, Sam Mayes, and Michael Boddie—redefining the short-term rental industry with cutting-edge technology and innovation." },
       { id:"str_market_4-22", title:"STR Market: The Ultimate Marketplace for Short-Term Rental Success", date:"Apr 22, 2025", img:str_market_thumbnail, description:"Discover STR Market—the curated marketplace for short-term rental hosts. Find vetted tools, software, and products at exclusive discounts to boost your rental business." },
+      { id:"hostfully_guidebooks_blog", title:"Integration Alert: Our New Hostfully Guidebook Integration Takes AI Messaging for Short Term Rentals to the Next Level", date:"May 30, 2025", img:hostfully_guidebooks_thumbnail, description:"Discover how our new Hostfully Digital Guidebook integration transforms AI messaging for short-term rentals with comprehensive knowledge bases and personalized guest responses." },
     ];
 
     const reversedArticles = articles.reverse();
