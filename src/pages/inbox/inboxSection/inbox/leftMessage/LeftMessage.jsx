@@ -78,9 +78,11 @@ const LeftMessage = ({
 
   const [filterQueryLoading, setFilterQueryLoading] = useState(false);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-
   const [searchInputValue, setSearchInputValue] = useState("");
   const [filteredConversations, setFilteredConversations] = useState([]);
+  const [filteredGuestsFromSearch, setFilteredGuestsFromSearch] = useState([]);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const searchDropdownRef = useRef(null);
 
   // Temporary filter state (not applied until user clicks "Apply")
   const [tempPropertyFilter, setTempPropertyFilter] = useState("");
@@ -251,17 +253,65 @@ const LeftMessage = ({
       );
     }
   }, [filteredConversations, allConversations, currentView]);
-
   // Add the listener for clicking outside the guest search dropdown (so it can be closed)
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleSearchClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleSearchClickOutside);
     };
-  }, []);
+  }, []);  const handleSearchInputChange = async (e) => {
+    const searchVal = e.target.value;
+    setSearchInputValue(searchVal);
 
-  const handleSearchInputChange = (e) => {
-    setSearchInputValue(e.target.value);
+    if (searchVal && allGuestNames && allGuestNames.length > 0) {
+      const searchValLower = searchVal.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const filtered = allGuestNames.filter(guest =>
+        guest.searchable.startsWith(searchValLower) || 
+        guest.name.toLowerCase().includes(searchVal.toLowerCase())
+      );
+      setFilteredGuestsFromSearch(filtered);
+    } else {
+      setFilteredGuestsFromSearch([]);
+      
+      // If search is cleared and there was a guest filter active, clear it
+      if (!searchVal && guestNameSearchVal) {
+        setFilterQueryLoading(true);
+        setGuestNameSearchVal("");
+        
+        // Reset all filters when clearing search
+        setPropertyFilterVal("");
+        setPhaseFilterVal("");
+        setUrgentFilterIsEnabled(false);
+        setFromHostBuddyFilterVal(false);
+        
+        await fetchConversations(10, true, false, "", "", false, "");
+        setFilterQueryLoading(false);
+      }
+    }
+  };
+
+  const handleGuestSelectFromSearch = async (guest) => {
+    setFilterQueryLoading(true);
+    setFilteredGuestsFromSearch([]);
+    setSearchInputValue(guest.name);
+    setGuestNameSearchVal(guest.name);
+
+    // Clear all other filters when guest is selected
+    setPropertyFilterVal("");
+    setPhaseFilterVal("");
+    setUrgentFilterIsEnabled(false);
+    setFromHostBuddyFilterVal(false);
+
+    await fetchConversations(10, true, false, "", "", false, guest.name);
+    setFilterQueryLoading(false);
+  };
+
+  const handleSearchClickOutside = (event) => {
+    if (searchDropdownRef.current && !searchDropdownRef.current.contains(event.target)) {
+      setFilteredGuestsFromSearch([]);
+    }
   };
 
   const handlePropertyFilterChange = (e) => {
@@ -418,14 +468,14 @@ const LeftMessage = ({
           }}
         >
           Inbox
-        </div>{" "}
-        <div
+        </div>{" "}        <div
           className="messsage-search"
           style={{ display: "flex", width: "96%", marginLeft: "5px" }}
         >
           <div
             className="search-container"
             style={{ position: "relative", flex: 1 }}
+            ref={searchDropdownRef}
           >
             <TextField
               className="custom-padding"
@@ -440,7 +490,45 @@ const LeftMessage = ({
               }}
               onChange={handleSearchInputChange}
               value={searchInputValue}
-            />
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}            />            {filteredGuestsFromSearch.length > 0 && searchInputValue.trim() && (
+              <div className="dropdown" style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                background: "#24262E",
+                border: "1px solid rgba(189, 193, 201, 0.15)",
+                borderRadius: "4px",
+                maxHeight: "200px",
+                overflowY: "auto",
+                zIndex: 1000,
+                marginTop: "2px"
+              }}>
+                {filteredGuestsFromSearch.map((guest) => (
+                  <div 
+                    key={guest?.id_for_react} 
+                    className="dropdown-item" 
+                    onClick={() => handleGuestSelectFromSearch(guest)}
+                    style={{
+                      padding: "8px 12px",
+                      cursor: "pointer",
+                      color: "#fff",
+                      borderBottom: "1px solid #333"
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = "#333"}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = "transparent"}
+                  >
+                    <div className="guest-name" style={{  fontSize: "14px" , color:"#D0D3DB" , fontWeight: "400"}}>
+                      {guest.name}
+                    </div>
+                    <div className="guest-property" style={{  fontSize: "14px" , color:"#D0D3DB" , fontWeight: "400"}}>
+                      {guest.property}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <button
             className="filters-button"

@@ -71,9 +71,9 @@ const responsiveStyles = `
     }
     
     .rightSectionContainer {
-      width: 280px !important;
-      min-width: 280px !important;
-      max-width: 280px !important;
+      width: 296px !important;
+      min-width: 296px !important;
+      max-width: 296px !important;
       flex: none !important;
       position: absolute !important;
       right: 11px !important;
@@ -925,17 +925,17 @@ const Inbox = ({
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-    // Helper function to determine justifyContent value based on screen width and panel visibility
+  // Helper function to determine justifyContent value based on screen width and panel visibility
   const determineJustifyContent = () => {
     // For large screens (above 1279px), always use "space-between"
     if (windowWidth > 1279) {
-      return "space-between";
+      return "100%";
     }
-    
+
     // For medium screens (1100px-1279px) and other smaller screens, use conditional logic
     // If right section is visible, align items to the start
     // otherwise distribute space between items
-    return rightSectionVisible ? "flex-start" : "space-between";
+    return  rightSectionVisible ? "calc(100% - 290px)" : "100%";
   };
 
   return (
@@ -1001,12 +1001,16 @@ const Inbox = ({
                   border: "1px solid",
                   borderColor: "#24262E",
                 }}
-              >                {/* User header row with image, name and action icons */}                <div
+              >
+                {" "}
+                {/* User header row with image, name and action icons */}{" "}
+                <div
                   style={{
                     display: "flex",
-                    justifyContent: determineJustifyContent(),
+                    // justifyContent: determineJustifyContent(),
+                    justifyContent:"space-between",
                     alignItems: "center",
-                    width: "100%",
+                    width: determineJustifyContent(),
                     padding: "4px",
                     marginBottom: "4px",
                   }}
@@ -1656,7 +1660,9 @@ const Inbox = ({
                         height: "100%",
                         backgroundColor: "#121318",
                       }}
-                    >                      {/* Notes List Area */}
+                    >
+                      {" "}
+                      {/* Notes List Area */}
                       <div
                         className="notes-scroll-area"
                         style={{
@@ -2000,7 +2006,6 @@ const Inbox = ({
                           </div>
                         )}
                       </div>
-
                       {/* Note Input Area - Fixed at bottom */}
                       <div
                         style={{

@@ -793,7 +793,8 @@ const RightSection = ({
         }}
       >
         <h1>Reservation details</h1>
-        {setRightSectionVisible && (          <button
+        {setRightSectionVisible && (
+          <button
             className="close-right-section-btn"
             onClick={() => setRightSectionVisible(false)}
             style={{
@@ -817,13 +818,13 @@ const RightSection = ({
               (e.target.style.backgroundColor = "transparent")
             }
           >
-            <img 
+            <img
               src={require("./icons/x-close.svg").default}
               alt="Close"
               style={{
                 width: "18px",
                 height: "18px",
-                 background: "transparent"
+                background: "transparent",
               }}
             />
           </button>
