@@ -823,6 +823,7 @@ const RightSection = ({
               style={{
                 width: "18px",
                 height: "18px",
+                 background: "transparent"
               }}
             />
           </button>

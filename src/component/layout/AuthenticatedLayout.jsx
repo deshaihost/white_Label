@@ -6,7 +6,7 @@ import Authorized from "../../helper/Authorized";
 // and wraps the children components
 const AuthenticatedLayout = ({ children }) => {
   const authData = Authorized();
-  const [sidebarWidth, setSidebarWidth] = useState(240);
+  const [sidebarWidth, setSidebarWidth] = useState(200);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
 
@@ -39,8 +39,8 @@ const AuthenticatedLayout = ({ children }) => {
 
   // Calculate the current effective sidebar width
   const effectiveSidebarWidth = sidebarClicked 
-    ? (sidebarOpen ? sidebarWidth : 64) 
-    : 64;
+    ? (sidebarOpen ? sidebarWidth : 56) 
+    : 56;
 
   return (
     <div className="authenticated-layout" style={{ 

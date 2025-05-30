@@ -364,7 +364,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                     }}
                 />
             </div>
-            <div style={{ width: '100%' ,marginBottom:"16px"}}>
+            <div style={{ width: '100%' ,marginBottom:"24px"}}>
                 <SideNavItem2
                     label="Collapse"
                     size="primary"
