@@ -235,9 +235,9 @@ function NavBarContainer() {
   // Handle explicit click to expand the sidebar
   const handleExpandClick = (isFromClick = true) => {
     updateSidebarState(true, isFromClick); // Open via explicit click or hover based on parameter
-  };
-  return (
+  };  return (
     <div
+      className="navbar-main-container"
       style={{
         position: "fixed",
         backgroundColor: sidebarOpen ? "rgba(23, 25, 31, 1)" : "transparent",
@@ -249,12 +249,24 @@ function NavBarContainer() {
         paddingBottom: sidebarOpen ? "16px" : "0px",
         paddingRight: sidebarOpen ? "8px" : "0px",
         paddingLeft: sidebarOpen ? "8px" : "0px",
-        // width: "240px",
+        width: "200px",
         fontFamily: "DM Sans, Helvetica",
       }}
-    >
+    >      <style>
+        {`
+          @media (min-width: 1600px) {
+            .navbar-main-container {
+              width: 240px !important;
+            }
+            .navbar-container-1600 {
+              width: 224px !important;
+            }
+          }
+        `}
+      </style>
       {sidebarOpen ? (
         <div
+          className="navbar-container-1600"
           style={{
             backgroundColor: "rgba(23, 25, 31, 1)",
             width: "184px",
