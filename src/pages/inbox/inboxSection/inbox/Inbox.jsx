@@ -112,6 +112,117 @@ const responsiveStyles = `
       border-radius: 4px !important;
       transition: background-color 0.2s ease !important;
     }
+      .close-right-section:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+    /* Large screen responsive design (1280px - 1599px) */
+  @media (min-width: 1280px) and (max-width: 1599px) {
+    .left-bar {
+      width: 368px !important;
+      min-width: 368px !important;
+      max-width: 368px !important;
+      flex: none !important;
+    }
+    
+    .middleSectionContainer {
+      min-width: 376px !important;
+      flex: 1 !important;
+      width: auto !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    .rightSectionContainer {
+      width: 296px !important;
+      min-width: 296px !important;
+      max-width: 296px !important;
+      flex: none !important;
+      position: relative !important;
+      height: 100% !important;
+      background-color: #17191F !important;
+      border: 1px solid #24262E !important;
+      border-radius: 4px !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    .rightSectionContainer.hidden {
+      display: none !important;
+    }
+    
+    .close-right-section {
+      position: absolute !important;
+      top: 10px !important;
+      right: 10px !important;
+      background: none !important;
+      border: none !important;
+      color: #FFFFFF !important;
+      font-size: 20px !important;
+      cursor: pointer !important;
+      z-index: 1001 !important;
+      width: 24px !important;
+      height: 24px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-radius: 4px !important;
+      transition: background-color 0.2s ease !important;
+    }
+      .close-right-section:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+  
+  /* Extra large screen responsive design (1600px and above) */
+  @media (min-width: 1600px) {
+    .left-bar {
+      width: 400px !important;
+      min-width: 400px !important;
+      max-width: 400px !important;
+      flex: none !important;
+    }
+    
+    .middleSectionContainer {
+      min-width: 376px !important;
+      flex: 1 !important;
+      width: auto !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    .rightSectionContainer {
+      width: 320px !important;
+      min-width: 320px !important;
+      max-width: 320px !important;
+      flex: none !important;
+      position: relative !important;
+      height: 100% !important;
+      background-color: #17191F !important;
+      border: 1px solid #24262E !important;
+      border-radius: 4px !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    .rightSectionContainer.hidden {
+      display: none !important;
+    }
+    
+    .close-right-section {
+      position: absolute !important;
+      top: 10px !important;
+      right: 10px !important;
+      background: none !important;
+      border: none !important;
+      color: #FFFFFF !important;
+      font-size: 20px !important;
+      cursor: pointer !important;
+      z-index: 1001 !important;
+      width: 24px !important;
+      height: 24px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-radius: 4px !important;
+      transition: background-color 0.2s ease !important;
+    }
     
     .close-right-section:hover {
       background-color: rgba(255, 255, 255, 0.1) !important;
@@ -1220,7 +1331,7 @@ const Inbox = ({
                         padding: "0 8px",
                         gap: "6px",
                       }}
-                      onClick={() => setRightSectionVisible(true)}
+                      onClick={() => setRightSectionVisible(!rightSectionVisible)}
                     >
                       <img
                         src={
