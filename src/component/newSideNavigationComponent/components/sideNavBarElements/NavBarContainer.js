@@ -249,7 +249,7 @@ function NavBarContainer() {
         paddingBottom: sidebarOpen ? "16px" : "0px",
         paddingRight: sidebarOpen ? "8px" : "0px",
         paddingLeft: sidebarOpen ? "8px" : "0px",
-        width: "200px",
+        // width: "200px",
         fontFamily: "DM Sans, Helvetica",
       }}
     >      <style>
