@@ -256,7 +256,7 @@ function NavBarContainer() {
         {`
           @media (min-width: 1600px) {
             .navbar-main-container {
-              width: 240px !important;
+              // width: 240px !important;
             }
             .navbar-container-1600 {
               width: 224px !important;
@@ -264,6 +264,7 @@ function NavBarContainer() {
           }
         `}
       </style>
+      
       {sidebarOpen ? (
         <div
           className="navbar-container-1600"
