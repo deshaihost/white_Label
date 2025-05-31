@@ -211,13 +211,21 @@ const LeftMessage = ({
     });
     setAllConversations(updatedConversations);
     callMarkConversationAsOpenedApi(conversationId, propertyName);
-  };
-  const openConversationHandle = (data, id) => {
-    // Reset the API call flag when selecting a new conversation
-    // This ensures we make a fresh API call only for new selections
+  };  const openConversationHandle = (data, id) => {
+    // Enhanced cache-aware conversation selection
+    // Check if this conversation already has complete message data before forcing an API call
+    const hasCompleteMessageData = data.messages && 
+      Array.isArray(data.messages) && 
+      data.messages.length > 0 &&
+      data.messages.every(msg => msg.sender && msg.text && msg.time);
+
+    // If we have complete data, mark it as already processed to avoid unnecessary API calls
+    const shouldSkipApiCall = hasCompleteMessageData;
+    
     setSelectedConvo({
       ...data,
-      _apiCallMade: false, // Mark that this is a fresh selection
+      _apiCallMade: shouldSkipApiCall, // Only skip API call if we have complete data
+      _has_complete_local_data: hasCompleteMessageData // Flag to help with cache decisions
     });
     setSelectedConversationId(id); // This is used to highlight the selected conversation
     markConversationAsOpened(data.conversation_id, data.property_name);

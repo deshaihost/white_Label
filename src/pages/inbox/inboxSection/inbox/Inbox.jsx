@@ -259,9 +259,9 @@ const Inbox = ({
   const navigate = useNavigate();
   const eliteFeaturesAvailable =
     /elite|works/i.test(subscriptionPlan) || subscriptionPlan === "trial"; // Changed == to === for strict equality
-
   const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
   const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
+  const [conversationCache, setConversationCache] = useState(new Map()); // Cache to store full conversation details by conversation_id
   const [conversationsNotYetFetched, setConversationsNotYetFetched] =
     useState(true);
   const [urgentFilterIsEnabled, setUrgentFilterIsEnabled] = useState(false);
@@ -310,9 +310,7 @@ const Inbox = ({
           setSelectedConversation({
             ...updatedConversation,
             _apiCallMade: true, // Preserve the API call flag
-          });
-
-          // Update the conversation in the conversations list too
+          });          // Update the conversation in the conversations list too
           setConversations((prev) =>
             prev.map((convo) =>
               convo.conversation_id === selectedConversation.conversation_id
@@ -325,7 +323,8 @@ const Inbox = ({
     } catch (error) {
       ToastHandle("Error updating pin status", "danger");
     }
-  }; // Update isPinned state when selected conversation changes
+  };
+  // Update isPinned state when selected conversation changes
   useEffect(() => {
     if (selectedConversation?.conversation_id) {
       // Get the initial pin status from the conversation object
@@ -337,19 +336,90 @@ const Inbox = ({
       // Track if this conversation ID has been processed to prevent multiple API calls
       const conversationId = selectedConversation.conversation_id;
       const isNewConversationSelection =
-        selectedConversation._apiCallMade !== true;
-
-      // Only fetch conversation data if this is a new selection
+        selectedConversation._apiCallMade !== true;      // Only fetch conversation data if this is a new selection
       if (isNewConversationSelection) {
-        const fetchLatestConversationData = async () => {
+        // Enhanced cache-first strategy: Check multiple sources for complete conversation data
+        
+        // First, check if we have comprehensive cached data from periodic updates
+        const cachedConversation = conversationCache.get(conversationId);
+        if (cachedConversation && cachedConversation._has_complete_data) {
+          console.log("Using comprehensive cached conversation data from periodic updates for:", conversationId);
+          
+          // Update pin status based on cached data
+          const isPinnedValue = !!(
+            cachedConversation.pinned || cachedConversation.is_pinned
+          );
+          setIsPinned(isPinnedValue);
+
+          // Use the cached data immediately
+          setSelectedConversation({
+            ...cachedConversation,
+            pinned: isPinnedValue,
+            is_pinned: isPinnedValue, // For backward compatibility
+            _apiCallMade: true, // Mark that we've loaded the data
+          });
+          return; // Exit early since we have comprehensive cached data
+        }
+
+        // Second, check if the selected conversation already has complete message data from the conversations array
+        const hasCompleteMessageData = selectedConversation.messages && 
+          Array.isArray(selectedConversation.messages) && 
+          selectedConversation.messages.length > 0 &&
+          selectedConversation.messages.every(msg => msg.sender && msg.text && msg.time);
+
+        if (hasCompleteMessageData) {
+          // Use the existing conversation data from the conversations array
+          console.log("Using complete conversation data from conversations array for:", conversationId);
+          
+          // Cache this conversation data for future use
+          setConversationCache(prevCache => {
+            const newCache = new Map(prevCache);
+            newCache.set(conversationId, {
+              ...selectedConversation,
+              _cached_at: Date.now(),
+              _has_complete_data: true,
+              _from_conversations_array: true
+            });
+            return newCache;
+          });
+
+          // Mark as processed and update the conversation object
+          setSelectedConversation(prev => ({
+            ...prev,
+            _apiCallMade: true, // Mark that we've processed this conversation
+          }));
+          return; // Exit early since we have complete data
+        }        const fetchLatestConversationData = async () => {
           try {
+            // Third fallback: check if we have any cached data for this conversation (even if not complete)
+            const cachedConversation = conversationCache.get(conversationId);
+            
+            if (cachedConversation) {
+              // Use cached data instead of making API call, even if it's not marked as complete
+              console.log("Using fallback cached conversation data for:", conversationId);
+              
+              // Update pin status based on cached data
+              const isPinnedValue = !!(
+                cachedConversation.pinned || cachedConversation.is_pinned
+              );
+              setIsPinned(isPinnedValue);
+
+              // Update the conversation object with cached data
+              setSelectedConversation({
+                ...cachedConversation,
+                pinned: isPinnedValue,
+                is_pinned: isPinnedValue, // For backward compatibility
+                _apiCallMade: true, // Mark that we've loaded the data
+              });
+              return; // Exit early since we used cached data
+            }
+
             // Mark that we've started processing this conversation
             setSelectedConversation((prev) => ({
               ...prev,
               _apiCallMade: true,
-            }));
-
-            // Call API only once per conversation selection
+            }));            // Only call API if we don't have cached data
+            console.log("No cached data found, making API call for:", conversationId);
             const result = await callGetSingleConversationApi(conversationId);
 
             if (
@@ -359,6 +429,18 @@ const Inbox = ({
               result.conversations.length > 0
             ) {
               const updatedConversation = result.conversations[0];
+
+              // Enhanced cache update: Mark this as complete data from API
+              setConversationCache(prevCache => {
+                const newCache = new Map(prevCache);
+                newCache.set(conversationId, {
+                  ...updatedConversation,
+                  _cached_at: Date.now(),
+                  _has_complete_data: true,
+                  _from_api_call: true
+                });
+                return newCache;
+              });
 
               // Update pin status based on the API response
               const isPinnedValue = !!(
@@ -878,8 +960,7 @@ const Inbox = ({
       const timeB = new Date(a.messages[a.messages.length - 1].time);
       return timeB - timeA; // Sort in descending order
     });
-  };
-  // Given a conversation ID: fetch that convo from the API and update that conversation in the state
+  };  // Given a conversation ID: fetch that convo from the API and update that conversation in the state
   const updateConversation = async (conversationId) => {
     try {
       // Check if this is the currently selected conversation that's already been loaded
@@ -909,7 +990,17 @@ const Inbox = ({
           ...updatedConversationData.conversations[0],
           _apiCallMade: true, // Mark as loaded
           _isUpdate: selectedConversation?.conversation_id === conversationId, // Flag to indicate this is an update, not a new selection
-        };
+        };        // Cache the updated conversation data with enhanced metadata
+        setConversationCache(prevCache => {
+          const newCache = new Map(prevCache);
+          newCache.set(conversationId, {
+            ...retrievedConversation,
+            _cached_at: Date.now(),
+            _has_complete_data: true,
+            _from_update_api: true
+          });
+          return newCache;
+        });
 
         let updatedConversations = conversations.map((conversation) => {
           if (conversation.conversation_id === conversationId) {
@@ -929,9 +1020,7 @@ const Inbox = ({
     } catch (error) {
       console.error("Error fetching conversation:", error);
     }
-  };
-
-  // Update our conversation state with a new list returned by the API. This does NOT call the API: it takes the API data as a parameter. Also handles detecting when there are no updates from the API and making sure the previous state gets copied over.
+  };  // Update our conversation state with a new list returned by the API. This does NOT call the API: it takes the API data as a parameter. Also handles detecting when there are no updates from the API and making sure the previous state gets copied over.
   const updateConversationsWithApiData = (apiConversationData) => {
     let newConversationState = apiConversationData.map((conversation) => {
       const conversationId = conversation["conversation_id"];
@@ -942,6 +1031,27 @@ const Inbox = ({
         );
         return localConversation ? localConversation : conversation;
       } else {
+        // Enhanced cache population: Store complete conversation data with comprehensive message details
+        // This ensures we have full data available for immediate use when users click on conversations
+        const hasCompleteMessageData = conversation.messages && 
+          Array.isArray(conversation.messages) && 
+          conversation.messages.length > 0 &&
+          conversation.messages.every(msg => msg.sender && msg.text && msg.time);
+
+        if (hasCompleteMessageData) {
+          // Cache the full conversation details when we have complete data
+          setConversationCache(prevCache => {
+            const newCache = new Map(prevCache);
+            newCache.set(conversationId, {
+              ...conversation,
+              _cached_at: Date.now(), // Track when this was cached
+              _has_complete_data: true, // Flag to indicate this has complete message data
+              _from_periodic_update: true // Flag to indicate this came from periodic update
+            });
+            return newCache;
+          });
+        }
+
         if (selectedConversation.conversation_id === conversationId) {
           // If this updated conversation record is the one currently being viewed, update the selectedConversation state
           setSelectedConversation({
@@ -954,9 +1064,77 @@ const Inbox = ({
     });
     setConversations(newConversationState);
   };
+  // Cache management functions
+  const invalidateConversationCache = (conversationId) => {
+    setConversationCache(prevCache => {
+      const newCache = new Map(prevCache);
+      newCache.delete(conversationId);
+      return newCache;
+    });
+  };
 
+  const getCachedConversation = (conversationId) => {
+    return conversationCache.get(conversationId);
+  };
+
+  const updateConversationInCache = (conversationId, conversationData) => {
+    setConversationCache(prevCache => {
+      const newCache = new Map(prevCache);
+      newCache.set(conversationId, {
+        ...conversationData,
+        _cached_at: Date.now(),
+        _has_complete_data: conversationData.messages && 
+          Array.isArray(conversationData.messages) && 
+          conversationData.messages.length > 0 &&
+          conversationData.messages.every(msg => msg.sender && msg.text && msg.time)
+      });
+      return newCache;
+    });
+  };
+  // Clean up old cache entries (older than 10 minutes) to prevent memory leaks
+  const cleanupOldCacheEntries = () => {
+    const maxAge = 10 * 60 * 1000; // 10 minutes in milliseconds
+    const now = Date.now();
+    
+    setConversationCache(prevCache => {
+      const newCache = new Map();
+      let removedCount = 0;
+      for (const [key, value] of prevCache.entries()) {
+        if (value._cached_at && (now - value._cached_at) < maxAge) {
+          newCache.set(key, value);
+        } else {
+          removedCount++;
+        }
+      }
+      if (removedCount > 0) {
+        console.log(`Cache cleanup: Removed ${removedCount} old entries, ${newCache.size} entries remaining`);
+      }
+      return newCache;
+    });
+  };
+  // Run cache cleanup every 5 minutes
+  useEffect(() => {
+    const cleanupInterval = setInterval(cleanupOldCacheEntries, 5 * 60 * 1000); // 5 minutes
+    return () => clearInterval(cleanupInterval);
+  }, []);
+
+  // Debug function to log cache statistics (can be called from browser console)
+  window.logCacheStats = () => {
+    console.log(`Conversation Cache Statistics:
+      - Total cached conversations: ${conversationCache.size}
+      - Conversations with complete data: ${[...conversationCache.values()].filter(c => c._has_complete_data).length}
+      - Cache sources breakdown:
+        * From periodic updates: ${[...conversationCache.values()].filter(c => c._from_periodic_update).length}
+        * From API calls: ${[...conversationCache.values()].filter(c => c._from_api_call).length}
+        * From conversations array: ${[...conversationCache.values()].filter(c => c._from_conversations_array).length}
+        * From update API: ${[...conversationCache.values()].filter(c => c._from_update_api).length}
+    `);
+  };
   // Add a message to a conversation in our local record (conversations)
   const addMessageToLocalConversation = (conversationId, message) => {
+    // Invalidate cache when a new message is added
+    invalidateConversationCache(conversationId);
+    
     // Update the covnersation in covnersations
     const updatedConversations = conversations.map((conversation) => {
       if (conversation.conversation_id === conversationId) {
@@ -985,12 +1163,13 @@ const Inbox = ({
   // Fetch conversations to keep the page up-to-date (every 10s for new accounts, every 20s for elite users)
   useEffect(() => {
     const isNewAccount =
-      typeof accountAgeDays === "number" && accountAgeDays < 4;
-    if (isNewAccount || eliteFeaturesAvailable) {
+      typeof accountAgeDays === "number" && accountAgeDays < 4;    if (isNewAccount || eliteFeaturesAvailable) {
       const intervalId = setInterval(
         () => {
           const num_existing_convos = conversations.length;
           const num_convos_to_fetch = Math.max(num_existing_convos, 2); // always fetch at least 2 convos, even if we're only looking at one (e.g. due to filter), so if there's simultaneous updates we're more likely to catch it. 2 is still an arbitrary number tbh
+          
+          console.log(`Periodic update: Fetching ${num_convos_to_fetch} conversations to refresh cache`);
           fetchConversations(
             num_convos_to_fetch,
             false,
@@ -2215,6 +2394,7 @@ const Inbox = ({
                             >
                               Visible to HostBuddy
                               <div
+                               
                                 style={{
                                   width: "20px",
                                   height: "20px",
