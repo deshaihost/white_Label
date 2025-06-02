@@ -46,7 +46,7 @@ const MildeSection = ({
   const buttonRef = useRef(null);
   const sendMenuRef = useRef(null);
   const sendButtonRef = useRef(null);
-
+console.log("allConversationData from MildeSection", allConversationData);
   // Refs for tracking request IDs and current conversation
   const currentConversationIdRef = useRef("");
   const latestScratchRequestIdRef = useRef(null);
@@ -975,6 +975,7 @@ const MildeSection = ({
         }}
       >
         {allConversationData && Object.keys(allConversationData).length > 0 ? (
+         
           <div className="message-list" ref={messageListRef}>
             {messages?.map((message, index) => {
               const showDateSeparator =

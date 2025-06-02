@@ -212,6 +212,7 @@ const LeftMessage = ({
     setAllConversations(updatedConversations);
     callMarkConversationAsOpenedApi(conversationId, propertyName);
   };  const openConversationHandle = (data, id) => {
+    console.log("Opening conversation:", id, data);
     // Enhanced cache-aware conversation selection
     // Check if this conversation already has complete message data before forcing an API call
     const hasCompleteMessageData = data.messages && 

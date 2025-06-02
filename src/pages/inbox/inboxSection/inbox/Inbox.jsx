@@ -277,7 +277,7 @@ const Inbox = ({
   const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width for responsive design
-
+  console.log("selectedConversation from  inbox", selectedConversation);
   // State for tracking pin status
   const [isPinned, setIsPinned] = useState(false);
 
