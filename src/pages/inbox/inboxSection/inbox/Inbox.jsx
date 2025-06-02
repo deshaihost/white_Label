@@ -267,13 +267,12 @@ const Inbox = ({
   const [urgentFilterIsEnabled, setUrgentFilterIsEnabled] = useState(false);
   const [propertyFilterVal, setPropertyFilterVal] = useState("");
   const [phaseFilterVal, setPhaseFilterVal] = useState("");
-  const [fromHostBuddyFilterVal, setFromHostBuddyFilterVal] = useState(false);
-  const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
+  const [fromHostBuddyFilterVal, setFromHostBuddyFilterVal] = useState(false);  const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
   const [currentView, setCurrentView] = useState("conversations"); // New state for mobile view
   const [activeTab, setActiveTab] = useState("pms"); // New state to track active tab
   const [pendingTabChange, setPendingTabChange] = useState(null); // To track pending tab change when switching views
   const [allowConvIdQuery, setAllowConvIdQuery] = useState(true); // Added state for handling conversationId query
-  const [rightSectionVisible, setRightSectionVisible] = useState(false); // State for right section visibility in medium screens
+  const [rightSectionVisible, setRightSectionVisible] = useState(window.innerWidth >= 1280); // State for right section visibility in medium screens, default open for screens >= 1280px
   const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width for responsive design
@@ -468,7 +467,6 @@ const Inbox = ({
       setIsPinned(false);
     }
   }, [selectedConversation?.conversation_id]); // Only re-run when the conversation ID changes
-
   // Update the sidebar state when it changes from NavBarContainer
   useEffect(() => {
     const handleSidebarStateChange = (event) => {
@@ -496,6 +494,31 @@ const Inbox = ({
         "sidebarStateChanged",
         handleSidebarStateChange
       );
+    };
+  }, []);
+
+  // Handle window resize and set rightSectionVisible based on screen width
+  useEffect(() => {
+    const handleResize = () => {
+      const newWidth = window.innerWidth;
+      setWindowWidth(newWidth);
+      
+      // Auto-open right section for screens >= 1280px, auto-close for smaller screens
+      if (newWidth >= 1280) {
+        setRightSectionVisible(true);
+      } else if (newWidth < 1280) {
+        setRightSectionVisible(false);
+      }
+    };
+
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Set initial state based on current window width
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
