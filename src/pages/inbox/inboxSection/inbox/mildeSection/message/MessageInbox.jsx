@@ -27,33 +27,54 @@ const MessageInbox = ({
     sendBy === "hostbuddy" ? "HostBuddy" : sendBy === "host" ? "Host" : sendBy;
 
   // Handle image loading error
-  const [imageError, setImageError] = useState(false);
-  // Extract only the time in h:mm format
+  const [imageError, setImageError] = useState(false);  // Extract only the time in h:mm format
   const formatTimeToHHMM = (timeString) => {
     try {
       // Check if timeString is a valid date format
       const date = new Date(timeString);
 
       if (!isNaN(date.getTime())) {
-        // Format to h:mm using locale time (no leading zeros)
-        const timeStr = date.toLocaleTimeString([], {
-          hour: "numeric",
-          minute: "2-digit",
-        });
-        // Capitalize AM/PM
-        return timeStr.replace(/am|pm/gi, (match) => match.toUpperCase());
+        // Get hours and minutes
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        
+        // Convert to 12-hour format
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        
+        // Format minutes with leading zero if needed
+        const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+        
+        return `${hours}:${minutesStr} ${ampm}`;
       } else if (typeof timeString === "string") {
         // If it's already a string, try to extract time part
         // This handles formats like "2023-04-25 14:30:00" or "14:30:00"
         const timeMatch = timeString.match(/(\d{1,2}):(\d{1,2})/);
         if (timeMatch) {
-          // Remove leading zero if present for hours
-          const hour = timeMatch[1].replace(/^0/, "");
-          return `${hour}:${timeMatch[2]}`;
+          let hours = parseInt(timeMatch[1], 10);
+          const minutes = timeMatch[2];
+          
+          // Convert to 12-hour format
+          const ampm = hours >= 12 ? 'PM' : 'AM';
+          hours = hours % 12;
+          hours = hours ? hours : 12; // the hour '0' should be '12'
+          
+          return `${hours}:${minutes} ${ampm}`;
         }
       }
 
-      // If all else fails, return the original
+      // If all else fails, return the original but still try to format any existing time
+      if (timeString) {
+        let result = timeString;
+        // Try to capitalize existing am/pm
+        if (result.includes('am')) result = result.replace('am', 'AM');
+        if (result.includes('pm')) result = result.replace('pm', 'PM');
+        if (result.includes('a.m.')) result = result.replace('a.m.', 'AM');
+        if (result.includes('p.m.')) result = result.replace('p.m.', 'PM');
+        return result;
+      }
+      
       return timeString;
     } catch (error) {
       return timeString; // Return original on error
