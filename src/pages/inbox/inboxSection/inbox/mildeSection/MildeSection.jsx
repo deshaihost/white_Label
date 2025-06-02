@@ -768,9 +768,13 @@ console.log("allConversationData from MildeSection", allConversationData);
       date1.getMonth() === date2.getMonth() &&
       date1.getFullYear() === date2.getFullYear()
     );
-  }
-  // When we get the API data, populate the messages array and set the generate button functionality
+  }  // When we get the API data, populate the messages array and set the generate button functionality
   useEffect(() => {
+    // Update the current conversation ID ref first, before processing messages
+    if (allConversationData?.conversation_id) {
+      currentConversationIdRef.current = allConversationData.conversation_id;
+    }
+
     // Populate messages
     if (allConversationData?.messages) {
       // Only update the state if this conversation is still the one we want to display
@@ -835,13 +839,6 @@ console.log("allConversationData from MildeSection", allConversationData);
       setAssistanceUsed(null);
     }
   }, [allConversationData]);
-
-  // Update the current conversation ID ref when the conversation changes
-  useEffect(() => {
-    if (allConversationData?.conversation_id) {
-      currentConversationIdRef.current = allConversationData.conversation_id;
-    }
-  }, [allConversationData?.conversation_id]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
