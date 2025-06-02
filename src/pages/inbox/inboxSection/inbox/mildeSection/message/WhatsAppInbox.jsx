@@ -16,7 +16,6 @@ const WhatsAppInbox = ({ message, guestName, guestImageUrl }) => {
   
   // Determine message sender for CSS class - guest messages use "bot", host messages use "user"
   const messageSender = isHost ? "user" : "bot";
-
   // Format time
   const formatTimeToHHMM = (timeString) => {
     try {
@@ -25,10 +24,12 @@ const WhatsAppInbox = ({ message, guestName, guestImageUrl }) => {
 
       if (!isNaN(date.getTime())) {
         // Format to h:mm using locale time (no leading zeros)
-        return date.toLocaleTimeString([], {
+        const timeStr = date.toLocaleTimeString([], {
           hour: "numeric",
           minute: "2-digit",
         });
+        // Capitalize AM/PM
+        return timeStr.replace(/am|pm/gi, (match) => match.toUpperCase());
       } else if (typeof timeString === "string") {
         // If it's already a string, try to extract time part
         // This handles formats like "2023-04-25 14:30:00" or "14:30:00"
