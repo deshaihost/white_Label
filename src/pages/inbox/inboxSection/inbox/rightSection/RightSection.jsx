@@ -98,9 +98,9 @@ const RightSection = ({
     return action_items && Array.isArray(action_items)
       ? action_items.filter((obj) => obj.status === "incomplete")
       : [];
-  };
-  const [selectedOption, setSelectedOption] = useState("");
+  };  const [selectedOption, setSelectedOption] = useState("");
   const [toggleStatusLoading, setToggleStatusLoading] = useState(false);
+  const [sentimentLoading, setSentimentLoading] = useState(false); // Add new state for sentiment loading
   const [issuesExpanded, setIssuesExpanded] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [hostbuddyDropdownOpen, setHostbuddyDropdownOpen] = useState(false);
@@ -451,7 +451,10 @@ const RightSection = ({
 
   // Update selectedSentiment when rightSectionData changes
   useEffect(() => {
-    if (sentiment) {
+    if (sentiment === "clear") {
+      // If sentiment is explicitly cleared, display as neutral but with different styling
+      setSelectedSentiment("clear");
+    } else if (sentiment) {
       setSelectedSentiment(sentiment);
     } else {
       setSelectedSentiment("neutral"); // Default to neutral
@@ -477,15 +480,20 @@ const RightSection = ({
 
   // Force display for testing - remove in production
   const isCheckInToday = true; // For testing
-  const isCheckOutToday = true; // For testing
-  // Function to handle sentiment selection
+  const isCheckOutToday = true; // For testing  // Function to handle sentiment selection
   const handleSentimentSelect = (sentiment) => {
+    // Update the local UI state
     setSelectedSentiment(sentiment);
     setDropdownOpen(false);
-
+    
     // Call the API to update the sentiment if conversation_id exists
     if (conversation_id) {
-      updateSentiment(conversation_id, sentiment);
+      // Show loading indicator when updating any sentiment option
+      setSentimentLoading(true);
+      
+      // For API calls, ensure we're passing the correct values expected by the backend
+      const apiSentimentValue = sentiment === "clear" ? "clear" : sentiment;
+      updateSentiment(conversation_id, apiSentimentValue);
     }
   };
 
@@ -534,9 +542,14 @@ const RightSection = ({
     if (!conversationId) return;
 
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-
-    try {
+    const API_KEY = process.env.REACT_APP_API_KEY;    try {
+      // Validate the sentiment value is one of the accepted values
+      if (!["positive", "neutral", "negative", "clear"].includes(sentimentValue)) {
+        setSentimentLoading(false); // Make sure to reset loading state if validation fails
+        ToastHandle("Invalid sentiment value. Must be positive, neutral, negative, or clear.", "danger");
+        return;
+      }
+      
       // Get token from the apiCore's active token or fall back to localStorage
       const token = getActiveToken() || localStorage.getItem("authToken");
 
@@ -559,10 +572,22 @@ const RightSection = ({
         `${baseUrl}/change_sentiment`,
         bodyData,
         config
-      );
-
-      if (response.status === 200) {
-        ToastHandle(`Sentiment updated to ${sentimentValue}`, "success");
+      );      if (response.status === 200) {
+        // Handle API response which might include updated sentiment values
+        const updatedSentiment = response.data?.new_sentiment || sentimentValue;
+        const updatedJustification = response.data?.new_sentiment_justification;
+          // Update local state with the sentiment returned from API
+        setSelectedSentiment(updatedSentiment);
+        
+        // Reset the loading state
+        setSentimentLoading(false);
+        
+        // Display appropriate success message based on sentiment value
+        if (sentimentValue === "clear") {
+          ToastHandle("Sentiment cleared successfully", "success");
+        } else {
+          ToastHandle(`Sentiment updated to ${updatedSentiment}`, "success");
+        }
 
         // Update the conversation data if needed
         if (
@@ -570,15 +595,22 @@ const RightSection = ({
           typeof updateConversationFromApi === "function"
         ) {
           updateConversationFromApi(conversationId);
-        }
-      } else {
+        }      } else {
+        // Reset loading state on error
+        setSentimentLoading(false);
         ToastHandle(
           response?.data?.error || "Failed to update sentiment",
           "danger"
         );
       }
     } catch (error) {
-      ToastHandle("Error updating sentiment", "danger");
+      // Reset loading state on error
+      setSentimentLoading(false);
+      console.error("Error updating sentiment:", error);
+      ToastHandle(
+        error?.response?.data?.error || "Error updating sentiment", 
+        "danger"
+      );
     }
   };
 
@@ -589,6 +621,8 @@ const RightSection = ({
         return PositiveIcon;
       case "negative":
         return NegativeIcon;
+      case "clear":
+        return NeutralIcon; // Using neutral icon for clear too, can be changed if there's a specific icon
       case "neutral":
       default:
         return NeutralIcon;
@@ -1662,14 +1696,12 @@ const RightSection = ({
               this property to start responding.
             </p>
           </div>
-        ))}
-      {!(channel == "Chat Window") && (
+        ))}      {!(channel == "Chat Window") && (
         <div className="satisfy">
           <h2>Sentiment</h2>
           <div ref={dropdownRef} style={{ position: "relative" }}>
-            {/* Sentiment Dropdown Button */}{" "}
-            <div
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+            {/* Sentiment Dropdown Button */}{" "}            <div
+              onClick={() => !sentimentLoading && setDropdownOpen(!dropdownOpen)}
               onMouseDown={(e) => {
                 const currentSentiment = selectedSentiment;
                 if (currentSentiment === "positive") {
@@ -1691,38 +1723,42 @@ const RightSection = ({
                   e.currentTarget.style.backgroundColor =
                     "rgba(189, 193, 201, 0.08)";
                 }
-              }}
-              onMouseEnter={(e) => {
+              }}              onMouseEnter={(e) => {
                 const currentSentiment = selectedSentiment;
                 if (currentSentiment === "positive") {
                   e.currentTarget.style.backgroundColor = "#036920";
                 } else if (currentSentiment === "negative") {
                   e.currentTarget.style.backgroundColor = "#7A3601"; // Same as default per specs
+                } else if (currentSentiment === "clear") {
+                  e.currentTarget.style.backgroundColor = "#393d46"; // Darker gray for hover
                 } else {
                   e.currentTarget.style.backgroundColor =
                     "rgba(189, 193, 201, 0.08)"; // Same as default per specs
                 }
-              }}
-              onMouseLeave={(e) => {
+              }}onMouseLeave={(e) => {
                 const currentSentiment = selectedSentiment;
                 if (currentSentiment === "positive") {
                   e.currentTarget.style.backgroundColor = "#014714";
                 } else if (currentSentiment === "negative") {
                   e.currentTarget.style.backgroundColor = "#4D2100";
+                } else if (currentSentiment === "clear") {
+                  e.currentTarget.style.backgroundColor = "#24262E"; // Different color for clear
                 } else {
                   e.currentTarget.style.backgroundColor =
                     "rgba(189, 193, 201, 0.08)";
                 }
-              }}
-              style={{
+              }}              style={{
                 alignItems: "center",
-                cursor: "pointer",
+                cursor: sentimentLoading ? "wait" : "pointer",
+                pointerEvents: sentimentLoading ? "none" : "auto",
                 alignSelf: "stretch",
                 backgroundColor:
                   selectedSentiment === "positive"
                     ? "#014714"
                     : selectedSentiment === "negative"
                     ? "#4D2100"
+                    : selectedSentiment === "clear"
+                    ? "#24262E"
                     : "rgba(189, 193, 201, 0.08)",
                 borderRadius: "4px",
                 display: "flex",
@@ -1733,27 +1769,51 @@ const RightSection = ({
                 width: "100%",
                 marginLeft: "0px",
                 transition: "background-color 0.2s ease",
+                opacity: sentimentLoading ? 0.8 : 1,
               }}
-            >
-              <img
-                src={getSentimentIcon(selectedSentiment)}
-                alt="Sentiment Icon"
-                style={{ width: "18px", height: "18px" }}
-              />
+            >              {sentimentLoading ? (
+                <div style={{ 
+                  width: "18px", 
+                  height: "18px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  <div className="spinner-border" 
+                    role="status" 
+                    style={{ 
+                      width: '16px', 
+                      height: '16px', 
+                      borderWidth: '2px',
+                      color: selectedSentiment === "clear" ? "#A6A9B2" : "white"
+                    }}>
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              ) : (
+                <img
+                  src={getSentimentIcon(selectedSentiment)}
+                  alt="Sentiment Icon"
+                  style={{ width: "18px", height: "18px" }}
+                />
+              )}
               <span
                 style={{
                   color:
                     selectedSentiment === "neutral"
                       ? "#BBB"
-                      : selectedSentiment === "positive"
-                      ? "white"
+                      : selectedSentiment === "clear"
+                      ? "#A6A9B2"
                       : "white",
                   flexGrow: 1,
                   fontSize: "14px",
                 }}
               >
-                {selectedSentiment.charAt(0).toUpperCase() +
-                  selectedSentiment.slice(1)}
+                {sentimentLoading 
+                  ? "Updating..." 
+                  : selectedSentiment === "clear"
+                    ? "No sentiment"
+                    : selectedSentiment.charAt(0).toUpperCase() + selectedSentiment.slice(1)}
               </span>
               <img
                 src={ChevDownIcon}
@@ -1763,15 +1823,14 @@ const RightSection = ({
                   height: "16px",
                   transform: dropdownOpen ? "rotate(180deg)" : "rotate(0)",
                   transition: "transform 0.3s ease",
+                  opacity: sentimentLoading ? 0.5 : 1,
                 }}
               />
-            </div>{" "}
-            {/* Dropdown Menu */}
-            {dropdownOpen && (
+            </div>{" "}            {/* Dropdown Menu */}
+            {dropdownOpen && !sentimentLoading && (
               <div
                 style={{
                   position: "absolute",
-
                   left: "0",
                   right: "0",
                   backgroundColor: "#262730",
@@ -1811,8 +1870,7 @@ const RightSection = ({
                     Positive
                   </span>
                 </div>
-                {/* Negative Option */}
-                <div
+                {/* Negative Option */}                <div
                   onClick={() => handleSentimentSelect("negative")}
                   style={{
                     padding: "8px 16px",
@@ -1823,6 +1881,20 @@ const RightSection = ({
                 >
                   <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
                     Negative
+                  </span>
+                </div>
+                {/* Clear Option */}
+                <div
+                  onClick={() => handleSentimentSelect("clear")}
+                  style={{
+                    padding: "8px 16px",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s ease",
+                    color: "#D0D3DB"
+                  }}
+                >
+                  <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
+                    Clear
                   </span>
                 </div>
               </div>
