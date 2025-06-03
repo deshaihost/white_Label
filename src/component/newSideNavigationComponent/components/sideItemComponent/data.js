@@ -64,10 +64,10 @@ export const data = [
         HasdropDown: "yes",
         dropdownItems: [
             { id: 71, label: "Account", HasdropDown: "no" },
-            { id: 72, label: "Contact", HasdropDown: "no" },
+            { id: 72, label: "Contacts", HasdropDown: "no" },
             { id: 73, label: "Notifications", HasdropDown: "no" },
             { id: 74, label: "AI Preferences", HasdropDown: "no" } ,
-            { id: 75, label: "Integration", HasdropDown: "no" } ,
+            { id: 75, label: "Integrations", HasdropDown: "no" } ,
             { id: 76, label: "Users", HasdropDown: "no" } ,
             { id: 77, label: "Subscription", HasdropDown: "no" } 
         ]

@@ -359,7 +359,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                     onSelect={() => {
                         if (handleNavigation) {
                             // Navigate to help documentation
-                            window.open("https://userguide.hostbuddy.ai/quick-start/getting-started", "_blank");
+                            window.open("https://userguide.hostbuddy.ai/quick-start/welcome-to-hostbuddy", "_blank");
                         }
                     }}
                 />
