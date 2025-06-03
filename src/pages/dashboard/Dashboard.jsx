@@ -252,13 +252,11 @@ const Dashboard = () => {
     <>
       <Helmet>
         <title>Dashboard - HostBuddy AI</title>
-      </Helmet>
-      {propertiesConversationLoading && <FullScreenLoader />}
+      </Helmet>      {propertiesConversationLoading && <FullScreenLoader />}
       {completeActionsItemLoading && <FullScreenLoader />}
       <div className="account-main">
         <div className="container">
           <div className="banner-heading">
-            <p className="mainCursor" onClick={() => navigate('/gcs-users')}>Back to users</p>
             <h2>My HostBuddy</h2>
           </div>
 

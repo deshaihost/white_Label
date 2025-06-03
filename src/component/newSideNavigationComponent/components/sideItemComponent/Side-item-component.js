@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import SideNavItem2 from '../sideNavBarElements/sectionIndicatorComponent/section'
 import {data} from './data'
 import GcsUserdata from './gcsData'
 import helpIcon from '../sideNavBarElements/sectionIndicatorComponent/navIcons/help-circle.svg'
 import Logo from "../../components/sideNavBarElements/logoComponent/logoComponentNav";
 import "../../components/sideNavBarElements/logoComponent/logoComponent.css";
+import { is_gcs_subaccount_user } from "../../../../pages/gcs/gcs_functionality";
 
 function SideItemComponent({ onCollapse, navigationProps = {} }) {
     const [selectedId, setSelectedId] = useState(null);
     const [expandedId, setExpandedId] = useState(null);
     const [settingsActiveTab, setSettingsActiveTab] = useState(null);
     const location = useLocation();
+    const navigate = useNavigate();
     
     const {
       isProtectedPath,
@@ -291,11 +293,45 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
 
     return (
         <div className="side-nav" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <Logo colour="default" type="icon"  />
-            <div style={{ flex: 1 }}>
+            <Logo colour="default" type="icon"  />            <div style={{ flex: 1 }}>
                 {filteredData.map(item => renderItem(item))}
-            </div>
-              {/* Logout button - placed above Help & Support with icon on right side */}
+            </div>            {/* Back to users button - only shown when viewing a subaccount */}
+            {is_gcs_subaccount_user() && (
+                <div style={{ width: '100%', marginBottom: '4px', backgroundColor: 'black', borderRadius: '4px' }}>
+                    <SideNavItem2
+                        label={
+                            <div style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                width: '100%',
+                                padding: '0 16px'
+                            }}>                                <span style={{padding:"23px"}}>Back to users</span>
+                                <img 
+                                    src={require('../sideNavBarElements/sectionIndicatorComponent/navIcons/chevron-left-double.svg').default} 
+                                    alt="Back to users" 
+                                    style={{
+                                        width: '20px',
+                                        height: '20px',
+                                        flexShrink: 0
+                                    }} 
+                                />
+                            </div>
+                        }
+                        size="primary"
+                        stateProp="default"
+                        showLeadingIcon={false}
+                        showTrailingIcon={false}
+                        onSelect={() => navigate('/gcs-users')}
+                        style={{
+                            backgroundColor: '#000000',
+                            borderRadius: '4px'
+                        }}
+                    />
+                </div>
+            )}
+
+            {/* Logout button - placed above Help & Support with icon on right side */}
             <div style={{ width: '100%', marginBottom: '4px' ,backgroundColor: 'black' ,borderRadius: '4px'}}>
                 <SideNavItem2
                     label={
