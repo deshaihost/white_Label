@@ -98,7 +98,8 @@ const RightSection = ({
     return action_items && Array.isArray(action_items)
       ? action_items.filter((obj) => obj.status === "incomplete")
       : [];
-  };  const [selectedOption, setSelectedOption] = useState("");
+  };
+  const [selectedOption, setSelectedOption] = useState("");
   const [toggleStatusLoading, setToggleStatusLoading] = useState(false);
   const [sentimentLoading, setSentimentLoading] = useState(false); // Add new state for sentiment loading
   const [issuesExpanded, setIssuesExpanded] = useState(false);
@@ -485,12 +486,12 @@ const RightSection = ({
     // Update the local UI state
     setSelectedSentiment(sentiment);
     setDropdownOpen(false);
-    
+
     // Call the API to update the sentiment if conversation_id exists
     if (conversation_id) {
       // Show loading indicator when updating any sentiment option
       setSentimentLoading(true);
-      
+
       // For API calls, ensure we're passing the correct values expected by the backend
       const apiSentimentValue = sentiment === "clear" ? "clear" : sentiment;
       updateSentiment(conversation_id, apiSentimentValue);
@@ -542,14 +543,20 @@ const RightSection = ({
     if (!conversationId) return;
 
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;    try {
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    try {
       // Validate the sentiment value is one of the accepted values
-      if (!["positive", "neutral", "negative", "clear"].includes(sentimentValue)) {
+      if (
+        !["positive", "neutral", "negative", "clear"].includes(sentimentValue)
+      ) {
         setSentimentLoading(false); // Make sure to reset loading state if validation fails
-        ToastHandle("Invalid sentiment value. Must be positive, neutral, negative, or clear.", "danger");
+        ToastHandle(
+          "Invalid sentiment value. Must be positive, neutral, negative, or clear.",
+          "danger"
+        );
         return;
       }
-      
+
       // Get token from the apiCore's active token or fall back to localStorage
       const token = getActiveToken() || localStorage.getItem("authToken");
 
@@ -572,16 +579,17 @@ const RightSection = ({
         `${baseUrl}/change_sentiment`,
         bodyData,
         config
-      );      if (response.status === 200) {
+      );
+      if (response.status === 200) {
         // Handle API response which might include updated sentiment values
         const updatedSentiment = response.data?.new_sentiment || sentimentValue;
         const updatedJustification = response.data?.new_sentiment_justification;
-          // Update local state with the sentiment returned from API
+        // Update local state with the sentiment returned from API
         setSelectedSentiment(updatedSentiment);
-        
+
         // Reset the loading state
         setSentimentLoading(false);
-        
+
         // Display appropriate success message based on sentiment value
         if (sentimentValue === "clear") {
           ToastHandle("Sentiment cleared successfully", "success");
@@ -595,7 +603,8 @@ const RightSection = ({
           typeof updateConversationFromApi === "function"
         ) {
           updateConversationFromApi(conversationId);
-        }      } else {
+        }
+      } else {
         // Reset loading state on error
         setSentimentLoading(false);
         ToastHandle(
@@ -608,7 +617,7 @@ const RightSection = ({
       setSentimentLoading(false);
       console.error("Error updating sentiment:", error);
       ToastHandle(
-        error?.response?.data?.error || "Error updating sentiment", 
+        error?.response?.data?.error || "Error updating sentiment",
         "danger"
       );
     }
@@ -1408,18 +1417,17 @@ const RightSection = ({
                               style={{
                                 padding: "8px 16px",
                                 display: "block",
-                                backgroundColor: "#353840",
+                                // backgroundColor: "#353840",
                                 color: "white",
                                 fontWeight: "500",
-                                borderLeft: "3px solid #0B5FDE",
+                                // borderLeft: "3px solid #0B5FDE",
                               }}
                               role="option"
                               aria-selected="true"
                             >
                               Turn off
                             </span>
-                          )}
-                          {(localStatus || curr_status) === "off" && (
+                          )}                          {(localStatus || curr_status) === "off" && (
                             <div
                               onClick={() => {
                                 callSetStatusAPI("on", "indefinitely");
@@ -1430,41 +1438,77 @@ const RightSection = ({
                                 cursor: "pointer",
                                 transition: "background-color 0.2s ease",
                                 color: "white",
-                                hoverBackgroundColor: "#393d46",
+                                hoverBackgroundColor: "rgba(1, 50, 128, 1)",
+                                display: "flex",
+                                alignItems: "center",
+                                position: "relative",
                               }}
                               role="option"
                               tabIndex={0}
-                              onMouseOver={(e) =>
+                              onMouseDown={(e) =>
                                 (e.currentTarget.style.backgroundColor =
-                                  "#393d46")
+                                  "rgba(0, 19, 48, 1)")
                               }
-                              onMouseOut={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "transparent")
-                              }
-                              onFocus={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "#393d46")
-                              }
-                              onBlur={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "transparent")
-                              }
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                  "rgba(1, 50, 128, 1)";
+                                const indicator = e.currentTarget.querySelector('.section-indicator');
+                                if (indicator) {
+                                  indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                }
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                  "transparent";
+                                const indicator = e.currentTarget.querySelector('.section-indicator');
+                                if (indicator) {
+                                  indicator.style.backgroundColor = "transparent";
+                                }
+                              }}
+                              onFocus={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                  "rgba(1, 50, 128, 1)";
+                                const indicator = e.currentTarget.querySelector('.section-indicator');
+                                if (indicator) {
+                                  indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                }
+                              }}
+                              onBlur={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                  "transparent";
+                                const indicator = e.currentTarget.querySelector('.section-indicator');
+                                if (indicator) {
+                                  indicator.style.backgroundColor = "transparent";
+                                }
+                              }}
                               onKeyDown={(e) => {
                                 if (e.key === "Enter" || e.key === " ") {
                                   e.preventDefault();
                                   callSetStatusAPI("on", "indefinitely");
                                   setHostbuddyDropdownOpen(false);
                                 }
-                              }}
-                            >
-                              Turn back on
+                              }}                            >
+                              <div 
+                                className="section-indicator"
+                                style={{
+                                  width: "3px",
+                                  height: "calc(100% - 8px)",
+                                  backgroundColor: "transparent",
+                                  marginRight: "8px",
+                                  transition: "background-color 0.2s ease",
+                                  position: "absolute",
+                                  left: "0",
+                                  top: "4px",
+                                  bottom: "4px",
+                                  borderRadius: "0 2px 2px 0",
+                                }}
+                              />
+                              <span style={{ marginLeft: "8px" }}>Turn back on</span>
                             </div>
                           )}{" "}
                           {(localStatus || curr_status) === "on" && (
                             <>
-                              {" "}
-                              <div
+                              {" "}                              <div
                                 onClick={() => {
                                   callSetStatusAPI("off", "15m");
                                   setHostbuddyDropdownOpen(false);
@@ -1474,36 +1518,72 @@ const RightSection = ({
                                   cursor: "pointer",
                                   transition: "background-color 0.2s ease",
                                   color: "white",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  position: "relative",
                                 }}
                                 role="option"
                                 tabIndex={0}
-                                onMouseOver={(e) =>
+                                onMouseDown={(e) =>
                                   (e.currentTarget.style.backgroundColor =
-                                    "#393d46")
+                                    "rgba(0, 19, 48, 1)")
                                 }
-                                onMouseOut={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "transparent")
-                                }
-                                onFocus={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "#393d46")
-                                }
-                                onBlur={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "transparent")
-                                }
+                                onMouseOver={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "rgba(1, 50, 128, 1)";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                  }
+                                }}
+                                onMouseOut={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "transparent";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "transparent";
+                                  }
+                                }}
+                                onFocus={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "rgba(1, 50, 128, 1)";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                  }
+                                }}
+                                onBlur={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "transparent";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "transparent";
+                                  }
+                                }}
                                 onKeyDown={(e) => {
                                   if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
                                     callSetStatusAPI("off", "15m");
                                     setHostbuddyDropdownOpen(false);
                                   }
-                                }}
-                              >
-                                For 15 minutes
-                              </div>{" "}
-                              <div
+                                }}                              >
+                                <div 
+                                  className="section-indicator"
+                                  style={{
+                                    width: "3px",
+                                    height: "calc(100% - 8px)",
+                                    backgroundColor: "transparent",
+                                    marginRight: "8px",
+                                    transition: "background-color 0.2s ease",
+                                    position: "absolute",
+                                    left: "0",
+                                    top: "4px",
+                                    bottom: "4px",
+                                    borderRadius: "0 2px 2px 0",
+                                  }}
+                                />
+                                <span style={{ marginLeft: "8px" }}>For 15 minutes</span>
+                              </div>{" "}                              <div
                                 onClick={() => {
                                   callSetStatusAPI("off", "1h");
                                   setHostbuddyDropdownOpen(false);
@@ -1513,36 +1593,72 @@ const RightSection = ({
                                   cursor: "pointer",
                                   transition: "background-color 0.2s ease",
                                   color: "white",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  position: "relative",
                                 }}
                                 role="option"
                                 tabIndex={0}
-                                onMouseOver={(e) =>
+                                onMouseDown={(e) =>
                                   (e.currentTarget.style.backgroundColor =
-                                    "#393d46")
+                                    "rgba(0, 19, 48, 1)")
                                 }
-                                onMouseOut={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "transparent")
-                                }
-                                onFocus={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "#393d46")
-                                }
-                                onBlur={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "transparent")
-                                }
+                                onMouseOver={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "rgba(1, 50, 128, 1)";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                  }
+                                }}
+                                onMouseOut={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "transparent";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "transparent";
+                                  }
+                                }}
+                                onFocus={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "rgba(1, 50, 128, 1)";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                  }
+                                }}
+                                onBlur={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "transparent";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "transparent";
+                                  }
+                                }}
                                 onKeyDown={(e) => {
                                   if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
                                     callSetStatusAPI("off", "1h");
                                     setHostbuddyDropdownOpen(false);
                                   }
-                                }}
-                              >
-                                For 1 hour
-                              </div>{" "}
-                              <div
+                                }}                              >
+                                <div 
+                                  className="section-indicator"
+                                  style={{
+                                    width: "3px",
+                                    height: "calc(100% - 8px)",
+                                    backgroundColor: "transparent",
+                                    marginRight: "8px",
+                                    transition: "background-color 0.2s ease",
+                                    position: "absolute",
+                                    left: "0",
+                                    top: "4px",
+                                    bottom: "4px",
+                                    borderRadius: "0 2px 2px 0",
+                                  }}
+                                />
+                                <span style={{ marginLeft: "8px" }}>For 1 hour</span>
+                              </div>{" "}                              <div
                                 onClick={() => {
                                   callSetStatusAPI("off", "1d");
                                   setHostbuddyDropdownOpen(false);
@@ -1552,36 +1668,72 @@ const RightSection = ({
                                   cursor: "pointer",
                                   transition: "background-color 0.2s ease",
                                   color: "white",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  position: "relative",
                                 }}
                                 role="option"
                                 tabIndex={0}
-                                onMouseOver={(e) =>
+                                onMouseDown={(e) =>
                                   (e.currentTarget.style.backgroundColor =
-                                    "#393d46")
+                                    "rgba(0, 19, 48, 1)")
                                 }
-                                onMouseOut={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "transparent")
-                                }
-                                onFocus={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "#393d46")
-                                }
-                                onBlur={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "transparent")
-                                }
+                                onMouseOver={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "rgba(1, 50, 128, 1)";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                  }
+                                }}
+                                onMouseOut={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "transparent";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "transparent";
+                                  }
+                                }}
+                                onFocus={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "rgba(1, 50, 128, 1)";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                  }
+                                }}
+                                onBlur={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "transparent";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "transparent";
+                                  }
+                                }}
                                 onKeyDown={(e) => {
                                   if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
                                     callSetStatusAPI("off", "1d");
                                     setHostbuddyDropdownOpen(false);
                                   }
-                                }}
-                              >
-                                For 24 hours
-                              </div>{" "}
-                              <div
+                                }}                              >
+                                <div 
+                                  className="section-indicator"
+                                  style={{
+                                    width: "3px",
+                                    height: "calc(100% - 8px)",
+                                    backgroundColor: "transparent",
+                                    marginRight: "8px",
+                                    transition: "background-color 0.2s ease",
+                                    position: "absolute",
+                                    left: "0",
+                                    top: "4px",
+                                    bottom: "4px",
+                                    borderRadius: "0 2px 2px 0",
+                                  }}
+                                />
+                                <span style={{ marginLeft: "8px" }}>For 24 hours</span>
+                              </div>{" "}                              <div
                                 onClick={() => {
                                   callSetStatusAPI("off", "indefinitely");
                                   setHostbuddyDropdownOpen(false);
@@ -1591,34 +1743,71 @@ const RightSection = ({
                                   cursor: "pointer",
                                   transition: "background-color 0.2s ease",
                                   color: "white",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  position: "relative",
                                 }}
                                 role="option"
                                 tabIndex={0}
-                                onMouseOver={(e) =>
+                                onMouseDown={(e) =>
                                   (e.currentTarget.style.backgroundColor =
-                                    "#393d46")
+                                    "rgba(0, 19, 48, 1)")
                                 }
-                                onMouseOut={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "transparent")
-                                }
-                                onFocus={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "#393d46")
-                                }
-                                onBlur={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "transparent")
-                                }
+                                onMouseOver={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "rgba(1, 50, 128, 1)";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                  }
+                                }}
+                                onMouseOut={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "transparent";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "transparent";
+                                  }
+                                }}
+                                onFocus={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "rgba(1, 50, 128, 1)";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                  }
+                                }}
+                                onBlur={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    "transparent";
+                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  if (indicator) {
+                                    indicator.style.backgroundColor = "transparent";
+                                  }
+                                }}
                                 onKeyDown={(e) => {
                                   if (e.key === "Enter" || e.key === " ") {
                                     e.preventDefault();
                                     callSetStatusAPI("off", "indefinitely");
                                     setHostbuddyDropdownOpen(false);
                                   }
-                                }}
-                              >
-                                Indefinitely
+                                }}                              >
+                                <div 
+                                  className="section-indicator"
+                                  style={{
+                                    width: "3px",
+                                    height: "calc(100% - 8px)",
+                                    backgroundColor: "transparent",
+                                    marginRight: "8px",
+                                    transition: "background-color 0.2s ease",
+                                    position: "absolute",
+                                    left: "0",
+                                    top: "4px",
+                                    bottom: "4px",
+                                    borderRadius: "0 2px 2px 0",
+                                  }}
+                                />
+                                <span style={{ marginLeft: "8px" }}>Indefinitely</span>
                               </div>
                             </>
                           )}
@@ -1696,12 +1885,16 @@ const RightSection = ({
               this property to start responding.
             </p>
           </div>
-        ))}      {!(channel == "Chat Window") && (
+        ))}{" "}
+      {!(channel == "Chat Window") && (
         <div className="satisfy">
           <h2>Sentiment</h2>
           <div ref={dropdownRef} style={{ position: "relative" }}>
-            {/* Sentiment Dropdown Button */}{" "}            <div
-              onClick={() => !sentimentLoading && setDropdownOpen(!dropdownOpen)}
+            {/* Sentiment Dropdown Button */}{" "}
+            <div
+              onClick={() =>
+                !sentimentLoading && setDropdownOpen(!dropdownOpen)
+              }
               onMouseDown={(e) => {
                 const currentSentiment = selectedSentiment;
                 if (currentSentiment === "positive") {
@@ -1723,7 +1916,8 @@ const RightSection = ({
                   e.currentTarget.style.backgroundColor =
                     "rgba(189, 193, 201, 0.08)";
                 }
-              }}              onMouseEnter={(e) => {
+              }}
+              onMouseEnter={(e) => {
                 const currentSentiment = selectedSentiment;
                 if (currentSentiment === "positive") {
                   e.currentTarget.style.backgroundColor = "#036920";
@@ -1735,7 +1929,8 @@ const RightSection = ({
                   e.currentTarget.style.backgroundColor =
                     "rgba(189, 193, 201, 0.08)"; // Same as default per specs
                 }
-              }}onMouseLeave={(e) => {
+              }}
+              onMouseLeave={(e) => {
                 const currentSentiment = selectedSentiment;
                 if (currentSentiment === "positive") {
                   e.currentTarget.style.backgroundColor = "#014714";
@@ -1747,7 +1942,8 @@ const RightSection = ({
                   e.currentTarget.style.backgroundColor =
                     "rgba(189, 193, 201, 0.08)";
                 }
-              }}              style={{
+              }}
+              style={{
                 alignItems: "center",
                 cursor: sentimentLoading ? "wait" : "pointer",
                 pointerEvents: sentimentLoading ? "none" : "auto",
@@ -1771,22 +1967,29 @@ const RightSection = ({
                 transition: "background-color 0.2s ease",
                 opacity: sentimentLoading ? 0.8 : 1,
               }}
-            >              {sentimentLoading ? (
-                <div style={{ 
-                  width: "18px", 
-                  height: "18px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}>
-                  <div className="spinner-border" 
-                    role="status" 
-                    style={{ 
-                      width: '16px', 
-                      height: '16px', 
-                      borderWidth: '2px',
-                      color: selectedSentiment === "clear" ? "#A6A9B2" : "white"
-                    }}>
+            >
+              {" "}
+              {sentimentLoading ? (
+                <div
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    className="spinner-border"
+                    role="status"
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      borderWidth: "2px",
+                      color:
+                        selectedSentiment === "clear" ? "#A6A9B2" : "white",
+                    }}
+                  >
                     <span className="visually-hidden">Loading...</span>
                   </div>
                 </div>
@@ -1809,11 +2012,12 @@ const RightSection = ({
                   fontSize: "14px",
                 }}
               >
-                {sentimentLoading 
-                  ? "Updating..." 
+                {sentimentLoading
+                  ? "Updating..."
                   : selectedSentiment === "clear"
-                    ? "No sentiment"
-                    : selectedSentiment.charAt(0).toUpperCase() + selectedSentiment.slice(1)}
+                  ? "No sentiment"
+                  : selectedSentiment.charAt(0).toUpperCase() +
+                    selectedSentiment.slice(1)}
               </span>
               <img
                 src={ChevDownIcon}
@@ -1826,7 +2030,8 @@ const RightSection = ({
                   opacity: sentimentLoading ? 0.5 : 1,
                 }}
               />
-            </div>{" "}            {/* Dropdown Menu */}
+            </div>{" "}
+            {/* Dropdown Menu */}
             {dropdownOpen && !sentimentLoading && (
               <div
                 style={{
@@ -1870,7 +2075,8 @@ const RightSection = ({
                     Positive
                   </span>
                 </div>
-                {/* Negative Option */}                <div
+                {/* Negative Option */}{" "}
+                <div
                   onClick={() => handleSentimentSelect("negative")}
                   style={{
                     padding: "8px 16px",
@@ -1890,7 +2096,7 @@ const RightSection = ({
                     padding: "8px 16px",
                     cursor: "pointer",
                     transition: "background-color 0.2s ease",
-                    color: "#D0D3DB"
+                    color: "#D0D3DB",
                   }}
                 >
                   <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
