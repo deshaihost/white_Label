@@ -2046,59 +2046,191 @@ const RightSection = ({
                   overflow: "hidden",
                 }}
               >
-                {" "}
-                {/* Neutral Option */}
+                {" "}                {/* Neutral Option */}
                 <div
                   onClick={() => handleSentimentSelect("neutral")}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    if (indicator) {
+                      indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    if (indicator) {
+                      indicator.style.backgroundColor = "transparent";
+                    }
+                  }}
+                  onMouseDown={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(0, 19, 48, 1)";
+                  }}
+                  onMouseUp={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                  }}
                   style={{
                     padding: "8px 16px",
                     cursor: "pointer",
                     transition: "background-color 0.2s ease",
                     color: "#D0D3DB",
+                    position: "relative",
                   }}
-                >
+                >                  <div
+                    className="section-indicator"
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      top: "8px",
+                      bottom: "8px",
+                      width: "3px",
+                      backgroundColor: "transparent",
+                      borderTopRightRadius: "2px",
+                      borderBottomRightRadius: "2px",
+                      transition: "background-color 0.2s ease",
+                    }}
+                  />
                   <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
                     Neutral
                   </span>
-                </div>
-                {/* Positive Option */}
+                </div>                {/* Positive Option */}
                 <div
                   onClick={() => handleSentimentSelect("positive")}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    if (indicator) {
+                      indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    if (indicator) {
+                      indicator.style.backgroundColor = "transparent";
+                    }
+                  }}
+                  onMouseDown={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(0, 19, 48, 1)";
+                  }}
+                  onMouseUp={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                  }}
                   style={{
                     padding: "8px 16px",
                     cursor: "pointer",
                     transition: "background-color 0.2s ease",
                     color: "#D0D3DB",
+                    position: "relative",
                   }}
-                >
+                >                  <div
+                    className="section-indicator"
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      top: "8px",
+                      bottom: "8px",
+                      width: "3px",
+                      backgroundColor: "transparent",
+                      borderTopRightRadius: "2px",
+                      borderBottomRightRadius: "2px",
+                      transition: "background-color 0.2s ease",
+                    }}
+                  />
                   <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
                     Positive
                   </span>
-                </div>
-                {/* Negative Option */}{" "}
+                </div>                {/* Negative Option */}{" "}
                 <div
                   onClick={() => handleSentimentSelect("negative")}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    if (indicator) {
+                      indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    if (indicator) {
+                      indicator.style.backgroundColor = "transparent";
+                    }
+                  }}
+                  onMouseDown={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(0, 19, 48, 1)";
+                  }}
+                  onMouseUp={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                  }}
                   style={{
                     padding: "8px 16px",
                     cursor: "pointer",
                     transition: "background-color 0.2s ease",
                     color: "#D0D3DB",
+                    position: "relative",
                   }}
-                >
+                >                  <div
+                    className="section-indicator"
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      top: "8px",
+                      bottom: "8px",
+                      width: "3px",
+                      backgroundColor: "transparent",
+                      borderTopRightRadius: "2px",
+                      borderBottomRightRadius: "2px",
+                      transition: "background-color 0.2s ease",
+                    }}
+                  />
                   <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
                     Negative
                   </span>
-                </div>
-                {/* Clear Option */}
+                </div>                {/* Clear Option */}
                 <div
                   onClick={() => handleSentimentSelect("clear")}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    if (indicator) {
+                      indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    if (indicator) {
+                      indicator.style.backgroundColor = "transparent";
+                    }
+                  }}
+                  onMouseDown={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(0, 19, 48, 1)";
+                  }}
+                  onMouseUp={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                  }}
                   style={{
                     padding: "8px 16px",
                     cursor: "pointer",
                     transition: "background-color 0.2s ease",
                     color: "#D0D3DB",
+                    position: "relative",
                   }}
-                >
+                >                  <div
+                    className="section-indicator"
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      top: "8px",
+                      bottom: "8px",
+                      width: "3px",
+                      backgroundColor: "transparent",
+                      borderTopRightRadius: "2px",
+                      borderBottomRightRadius: "2px",
+                      transition: "background-color 0.2s ease",
+                    }}
+                  />
                   <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
                     Clear
                   </span>
@@ -2121,6 +2253,8 @@ const RightSection = ({
           </div>
         </div>
       )}
+
+
       {!(channel == "Chat Window") && (
         <div
           style={{
@@ -2131,6 +2265,8 @@ const RightSection = ({
           }}
         ></div>
       )}{" "}
+     
+     
       {/* render here the assign user  */}{" "}
       <div>
         <h2
