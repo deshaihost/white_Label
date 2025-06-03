@@ -33,10 +33,18 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
   const oneOnOneSamOnlyDemoLink = 'https://calendly.com/hostbuddy-ai/sam';
   */
 
-  // NEW LINKS
+  // NEW OLD LINKS
+  /*
   const groupDemoLink = 'https://calendly.com/hostbuddy-/group-demo';
   const midSizeDemoLink = 'https://calendly.com/d/cmyr-2pj-brv/hostbuddy-ai-product-demo';
   const bigDemoLink = 'https://calendly.com/hostbuddy-/hostbuddy-1-1-demo';
+  */
+
+  // NEW LINKS
+  const oneOnOneCamiloDemoLink = 'https://calendly.com/camilo-hostbuddy/30min';
+  const mediumDemoLink = 'https://calendly.com/d/cmyr-2pj-brv/hostbuddy-ai-product-demo';
+  const bigDemoLink = 'https://calendly.com/d/cm2q-5ht-w5m/hostbuddy-ai-demo';
+  const groupDemoLink = 'https://calendly.com/hostbuddy-/group-demo';
 
 
   // Once, on page load, randomly select the demo person
@@ -112,10 +120,10 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
 
     let url = bigDemoLink; // default for 51+ properties
 
-    if (parseInt(formData.propertyCount) <= 10) { 
-      url = groupDemoLink; 
+    if (parseInt(formData.propertyCount) <= 15) { 
+      url = oneOnOneCamiloDemoLink; 
     } else if (parseInt(formData.propertyCount) <= 50) { 
-      url = midSizeDemoLink; 
+      url = mediumDemoLink; 
     } else { 
       url = bigDemoLink; 
     }
@@ -123,7 +131,8 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     setRedirectURL(url);
 
     if (parseInt(formData.propertyCount) <= 10) { // If it's a small fry, just send them to the group demo
-      handleRedirectToDemoLink(url);
+      //handleRedirectToDemoLink(url);
+      setShowDemoOptions(true); // actually, let small fish choose 1:1 also
     } else if (parseInt(formData.propertyCount) > 99) { // For the biggest fish, make them do a 1:1
       handleRedirectToDemoLink(url, '1:1');
     } else { // If it's a medium fish, let them choose between group or 1:1
