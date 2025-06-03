@@ -914,7 +914,7 @@ const LeftMessage = ({
                                       .join(" ")
                                   : "Unknown"}
                               </span>
-                              {action_items && action_items.length === 0 && (
+                              {action_items && action_items.length != 0 && (
                                 /* Replaced text with icon */
                                 <span
                                   className="urgent-badge"

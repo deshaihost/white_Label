@@ -1366,7 +1366,7 @@ const Inbox = ({
 
                     {/* Urgent flag render - placed right next to guest name */}
                     {selectedConversation?.action_items &&
-                      selectedConversation.action_items.length === 0 && (
+                      selectedConversation.action_items.length != 0 && (
                         <div
                           style={{
                             display: "flex",
