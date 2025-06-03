@@ -211,22 +211,24 @@ const LeftMessage = ({
     });
     setAllConversations(updatedConversations);
     callMarkConversationAsOpenedApi(conversationId, propertyName);
-  };  const openConversationHandle = (data, id) => {
+  };
+  const openConversationHandle = (data, id) => {
     console.log("Opening conversation:", id, data);
     // Enhanced cache-aware conversation selection
     // Check if this conversation already has complete message data before forcing an API call
-    const hasCompleteMessageData = data.messages && 
-      Array.isArray(data.messages) && 
+    const hasCompleteMessageData =
+      data.messages &&
+      Array.isArray(data.messages) &&
       data.messages.length > 0 &&
-      data.messages.every(msg => msg.sender && msg.text && msg.time);
+      data.messages.every((msg) => msg.sender && msg.text && msg.time);
 
     // If we have complete data, mark it as already processed to avoid unnecessary API calls
     const shouldSkipApiCall = hasCompleteMessageData;
-    
+
     setSelectedConvo({
       ...data,
       _apiCallMade: shouldSkipApiCall, // Only skip API call if we have complete data
-      _has_complete_local_data: hasCompleteMessageData // Flag to help with cache decisions
+      _has_complete_local_data: hasCompleteMessageData, // Flag to help with cache decisions
     });
     setSelectedConversationId(id); // This is used to highlight the selected conversation
     markConversationAsOpened(data.conversation_id, data.property_name);
@@ -270,31 +272,33 @@ const LeftMessage = ({
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("mousedown", handleSearchClickOutside);
     };
-  }, []);  const handleSearchInputChange = async (e) => {
+  }, []);
+  const handleSearchInputChange = async (e) => {
     const searchVal = e.target.value;
     setSearchInputValue(searchVal);
 
     if (searchVal && allGuestNames && allGuestNames.length > 0) {
-      const searchValLower = searchVal.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const filtered = allGuestNames.filter(guest =>
-        guest.searchable.startsWith(searchValLower) || 
-        guest.name.toLowerCase().includes(searchVal.toLowerCase())
+      const searchValLower = searchVal.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const filtered = allGuestNames.filter(
+        (guest) =>
+          guest.searchable.startsWith(searchValLower) ||
+          guest.name.toLowerCase().includes(searchVal.toLowerCase())
       );
       setFilteredGuestsFromSearch(filtered);
     } else {
       setFilteredGuestsFromSearch([]);
-      
+
       // If search is cleared and there was a guest filter active, clear it
       if (!searchVal && guestNameSearchVal) {
         setFilterQueryLoading(true);
         setGuestNameSearchVal("");
-        
+
         // Reset all filters when clearing search
         setPropertyFilterVal("");
         setPhaseFilterVal("");
         setUrgentFilterIsEnabled(false);
         setFromHostBuddyFilterVal(false);
-        
+
         await fetchConversations(10, true, false, "", "", false, "");
         setFilterQueryLoading(false);
       }
@@ -318,7 +322,10 @@ const LeftMessage = ({
   };
 
   const handleSearchClickOutside = (event) => {
-    if (searchDropdownRef.current && !searchDropdownRef.current.contains(event.target)) {
+    if (
+      searchDropdownRef.current &&
+      !searchDropdownRef.current.contains(event.target)
+    ) {
       setFilteredGuestsFromSearch([]);
     }
   };
@@ -477,7 +484,8 @@ const LeftMessage = ({
           }}
         >
           Inbox
-        </div>{" "}        <div
+        </div>{" "}
+        <div
           className="messsage-search"
           style={{ display: "flex", width: "96%", marginLeft: "5px" }}
         >
@@ -494,44 +502,128 @@ const LeftMessage = ({
                 width: "100%",
                 borderRadius: "4px",
                 backgroundColor: "#24262E",
-                border: "1px solid #BDC1C9 · 15%",
+                border: searchFocused
+                  ? "2px solid rgba(62, 136, 247, 1)"
+                  : "1px solid rgba(189, 193, 201, 0.15)",
                 height: "32px",
               }}
               onChange={handleSearchInputChange}
               value={searchInputValue}
               onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}            />            {filteredGuestsFromSearch.length > 0 && searchInputValue.trim() && (
-              <div className="dropdown" style={{
-                position: "absolute",
-                top: "100%",
-                left: 0,
-                right: 0,
-                background: "#24262E",
-                border: "1px solid rgba(189, 193, 201, 0.15)",
-                borderRadius: "4px",
-                maxHeight: "200px",
-                overflowY: "auto",
-                zIndex: 1000,
-                marginTop: "2px"
-              }}>
+              onBlur={() => setSearchFocused(false)}
+            />{" "}
+            {filteredGuestsFromSearch.length > 0 && searchInputValue.trim() && (
+              <div
+                className="dropdown"
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  right: 0,
+                  background: "#24262E",
+                  border: "1px solid rgba(189, 193, 201, 0.15)",
+                  borderRadius: "4px",
+                  maxHeight: "200px",
+                  overflowY: "auto",
+                  zIndex: 1000,
+                  marginTop: "2px",
+                }}
+              >
+                {" "}
                 {filteredGuestsFromSearch.map((guest) => (
-                  <div 
-                    key={guest?.id_for_react} 
-                    className="dropdown-item" 
+                  <div
+                    key={guest?.id_for_react}
+                    className="dropdown-item"
                     onClick={() => handleGuestSelectFromSearch(guest)}
                     style={{
                       padding: "8px 12px",
                       cursor: "pointer",
                       color: "#fff",
-                      borderBottom: "1px solid #333"
+                      position: "relative",
                     }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = "#333"}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = "transparent"}
+                    onMouseEnter={(e) => {
+                      // Make sure we're only changing the background of this specific item
+                      if (
+                        e.currentTarget === e.target ||
+                        e.currentTarget.contains(e.target)
+                      ) {
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(1, 50, 128, 1)";
+
+                        // Create a section indicator element
+                        const indicator = document.createElement("div");
+                        indicator.className = "dropdown-section-indicator";
+                        indicator.style.position = "absolute";
+                        indicator.style.left = "0";
+                        indicator.style.top = "50%";
+                        indicator.style.transform = "translateY(-50%)";
+                        indicator.style.height = "50px";
+                        indicator.style.width = "3px";
+                        indicator.style.backgroundColor =
+                          "rgba(62, 136, 247, 1)";
+                        indicator.style.borderRadius = "0 2px 2px 0";
+
+                        // Remove any existing indicator
+                        const existingIndicator = e.currentTarget.querySelector(
+                          ".dropdown-section-indicator"
+                        );
+                        if (existingIndicator) {
+                          e.currentTarget.removeChild(existingIndicator);
+                        }
+
+                        e.currentTarget.appendChild(indicator);
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+
+                      // Remove section indicator
+                      const indicator = e.currentTarget.querySelector(
+                        ".dropdown-section-indicator"
+                      );
+                      if (indicator) {
+                        e.currentTarget.removeChild(indicator);
+                      }
+                    }}
+                    onMouseDown={(e) => {
+                      // Make sure we're only changing the background of this specific item
+                      if (
+                        e.currentTarget === e.target ||
+                        e.currentTarget.contains(e.target)
+                      ) {
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(0, 19, 48, 1)";
+                      }
+                    }}
+                    onMouseUp={(e) => {
+                      // Make sure we're only changing the background of this specific item
+                      if (
+                        e.currentTarget === e.target ||
+                        e.currentTarget.contains(e.target)
+                      ) {
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(1, 50, 128, 1)";
+                      }
+                    }}
                   >
-                    <div className="guest-name" style={{  fontSize: "14px" , color:"#D0D3DB" , fontWeight: "400"}}>
+                    <div
+                      className="guest-name"
+                      style={{
+                        fontSize: "14px",
+                        color: "#D0D3DB",
+                        fontWeight: "400",
+                      }}
+                    >
                       {guest.name}
                     </div>
-                    <div className="guest-property" style={{  fontSize: "14px" , color:"#D0D3DB" , fontWeight: "400"}}>
+                    <div
+                      className="guest-property"
+                      style={{
+                        fontSize: "14px",
+                        color: "#D0D3DB",
+                        fontWeight: "400",
+                      }}
+                    >
                       {guest.property}
                     </div>
                   </div>
