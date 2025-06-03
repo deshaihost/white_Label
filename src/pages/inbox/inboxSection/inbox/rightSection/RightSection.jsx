@@ -1427,7 +1427,8 @@ const RightSection = ({
                             >
                               Turn off
                             </span>
-                          )}                          {(localStatus || curr_status) === "off" && (
+                          )}{" "}
+                          {(localStatus || curr_status) === "off" && (
                             <div
                               onClick={() => {
                                 callSetStatusAPI("on", "indefinitely");
@@ -1452,33 +1453,49 @@ const RightSection = ({
                               onMouseOver={(e) => {
                                 e.currentTarget.style.backgroundColor =
                                   "rgba(1, 50, 128, 1)";
-                                const indicator = e.currentTarget.querySelector('.section-indicator');
+                                const indicator =
+                                  e.currentTarget.querySelector(
+                                    ".section-indicator"
+                                  );
                                 if (indicator) {
-                                  indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                  indicator.style.backgroundColor =
+                                    "rgba(62, 136, 247, 1)";
                                 }
                               }}
                               onMouseOut={(e) => {
                                 e.currentTarget.style.backgroundColor =
                                   "transparent";
-                                const indicator = e.currentTarget.querySelector('.section-indicator');
+                                const indicator =
+                                  e.currentTarget.querySelector(
+                                    ".section-indicator"
+                                  );
                                 if (indicator) {
-                                  indicator.style.backgroundColor = "transparent";
+                                  indicator.style.backgroundColor =
+                                    "transparent";
                                 }
                               }}
                               onFocus={(e) => {
                                 e.currentTarget.style.backgroundColor =
                                   "rgba(1, 50, 128, 1)";
-                                const indicator = e.currentTarget.querySelector('.section-indicator');
+                                const indicator =
+                                  e.currentTarget.querySelector(
+                                    ".section-indicator"
+                                  );
                                 if (indicator) {
-                                  indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                  indicator.style.backgroundColor =
+                                    "rgba(62, 136, 247, 1)";
                                 }
                               }}
                               onBlur={(e) => {
                                 e.currentTarget.style.backgroundColor =
                                   "transparent";
-                                const indicator = e.currentTarget.querySelector('.section-indicator');
+                                const indicator =
+                                  e.currentTarget.querySelector(
+                                    ".section-indicator"
+                                  );
                                 if (indicator) {
-                                  indicator.style.backgroundColor = "transparent";
+                                  indicator.style.backgroundColor =
+                                    "transparent";
                                 }
                               }}
                               onKeyDown={(e) => {
@@ -1487,8 +1504,9 @@ const RightSection = ({
                                   callSetStatusAPI("on", "indefinitely");
                                   setHostbuddyDropdownOpen(false);
                                 }
-                              }}                            >
-                              <div 
+                              }}
+                            >
+                              <div
                                 className="section-indicator"
                                 style={{
                                   width: "3px",
@@ -1503,12 +1521,15 @@ const RightSection = ({
                                   borderRadius: "0 2px 2px 0",
                                 }}
                               />
-                              <span style={{ marginLeft: "8px" }}>Turn back on</span>
+                              <span style={{ marginLeft: "8px" }}>
+                                Turn back on
+                              </span>
                             </div>
                           )}{" "}
                           {(localStatus || curr_status) === "on" && (
                             <>
-                              {" "}                              <div
+                              {" "}
+                              <div
                                 onClick={() => {
                                   callSetStatusAPI("off", "15m");
                                   setHostbuddyDropdownOpen(false);
@@ -1531,33 +1552,49 @@ const RightSection = ({
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "rgba(1, 50, 128, 1)";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                    indicator.style.backgroundColor =
+                                      "rgba(62, 136, 247, 1)";
                                   }
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "transparent";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "transparent";
+                                    indicator.style.backgroundColor =
+                                      "transparent";
                                   }
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "rgba(1, 50, 128, 1)";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                    indicator.style.backgroundColor =
+                                      "rgba(62, 136, 247, 1)";
                                   }
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "transparent";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "transparent";
+                                    indicator.style.backgroundColor =
+                                      "transparent";
                                   }
                                 }}
                                 onKeyDown={(e) => {
@@ -1566,8 +1603,9 @@ const RightSection = ({
                                     callSetStatusAPI("off", "15m");
                                     setHostbuddyDropdownOpen(false);
                                   }
-                                }}                              >
-                                <div 
+                                }}
+                              >
+                                <div
                                   className="section-indicator"
                                   style={{
                                     width: "3px",
@@ -1582,8 +1620,11 @@ const RightSection = ({
                                     borderRadius: "0 2px 2px 0",
                                   }}
                                 />
-                                <span style={{ marginLeft: "8px" }}>For 15 minutes</span>
-                              </div>{" "}                              <div
+                                <span style={{ marginLeft: "8px" }}>
+                                  For 15 minutes
+                                </span>
+                              </div>{" "}
+                              <div
                                 onClick={() => {
                                   callSetStatusAPI("off", "1h");
                                   setHostbuddyDropdownOpen(false);
@@ -1606,33 +1647,49 @@ const RightSection = ({
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "rgba(1, 50, 128, 1)";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                    indicator.style.backgroundColor =
+                                      "rgba(62, 136, 247, 1)";
                                   }
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "transparent";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "transparent";
+                                    indicator.style.backgroundColor =
+                                      "transparent";
                                   }
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "rgba(1, 50, 128, 1)";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                    indicator.style.backgroundColor =
+                                      "rgba(62, 136, 247, 1)";
                                   }
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "transparent";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "transparent";
+                                    indicator.style.backgroundColor =
+                                      "transparent";
                                   }
                                 }}
                                 onKeyDown={(e) => {
@@ -1641,8 +1698,9 @@ const RightSection = ({
                                     callSetStatusAPI("off", "1h");
                                     setHostbuddyDropdownOpen(false);
                                   }
-                                }}                              >
-                                <div 
+                                }}
+                              >
+                                <div
                                   className="section-indicator"
                                   style={{
                                     width: "3px",
@@ -1657,8 +1715,11 @@ const RightSection = ({
                                     borderRadius: "0 2px 2px 0",
                                   }}
                                 />
-                                <span style={{ marginLeft: "8px" }}>For 1 hour</span>
-                              </div>{" "}                              <div
+                                <span style={{ marginLeft: "8px" }}>
+                                  For 1 hour
+                                </span>
+                              </div>{" "}
+                              <div
                                 onClick={() => {
                                   callSetStatusAPI("off", "1d");
                                   setHostbuddyDropdownOpen(false);
@@ -1681,33 +1742,49 @@ const RightSection = ({
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "rgba(1, 50, 128, 1)";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                    indicator.style.backgroundColor =
+                                      "rgba(62, 136, 247, 1)";
                                   }
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "transparent";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "transparent";
+                                    indicator.style.backgroundColor =
+                                      "transparent";
                                   }
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "rgba(1, 50, 128, 1)";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                    indicator.style.backgroundColor =
+                                      "rgba(62, 136, 247, 1)";
                                   }
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "transparent";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "transparent";
+                                    indicator.style.backgroundColor =
+                                      "transparent";
                                   }
                                 }}
                                 onKeyDown={(e) => {
@@ -1716,8 +1793,9 @@ const RightSection = ({
                                     callSetStatusAPI("off", "1d");
                                     setHostbuddyDropdownOpen(false);
                                   }
-                                }}                              >
-                                <div 
+                                }}
+                              >
+                                <div
                                   className="section-indicator"
                                   style={{
                                     width: "3px",
@@ -1732,8 +1810,11 @@ const RightSection = ({
                                     borderRadius: "0 2px 2px 0",
                                   }}
                                 />
-                                <span style={{ marginLeft: "8px" }}>For 24 hours</span>
-                              </div>{" "}                              <div
+                                <span style={{ marginLeft: "8px" }}>
+                                  For 24 hours
+                                </span>
+                              </div>{" "}
+                              <div
                                 onClick={() => {
                                   callSetStatusAPI("off", "indefinitely");
                                   setHostbuddyDropdownOpen(false);
@@ -1756,33 +1837,49 @@ const RightSection = ({
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "rgba(1, 50, 128, 1)";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                    indicator.style.backgroundColor =
+                                      "rgba(62, 136, 247, 1)";
                                   }
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "transparent";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "transparent";
+                                    indicator.style.backgroundColor =
+                                      "transparent";
                                   }
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "rgba(1, 50, 128, 1)";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
+                                    indicator.style.backgroundColor =
+                                      "rgba(62, 136, 247, 1)";
                                   }
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
                                     "transparent";
-                                  const indicator = e.currentTarget.querySelector('.section-indicator');
+                                  const indicator =
+                                    e.currentTarget.querySelector(
+                                      ".section-indicator"
+                                    );
                                   if (indicator) {
-                                    indicator.style.backgroundColor = "transparent";
+                                    indicator.style.backgroundColor =
+                                      "transparent";
                                   }
                                 }}
                                 onKeyDown={(e) => {
@@ -1791,8 +1888,9 @@ const RightSection = ({
                                     callSetStatusAPI("off", "indefinitely");
                                     setHostbuddyDropdownOpen(false);
                                   }
-                                }}                              >
-                                <div 
+                                }}
+                              >
+                                <div
                                   className="section-indicator"
                                   style={{
                                     width: "3px",
@@ -1807,7 +1905,9 @@ const RightSection = ({
                                     borderRadius: "0 2px 2px 0",
                                   }}
                                 />
-                                <span style={{ marginLeft: "8px" }}>Indefinitely</span>
+                                <span style={{ marginLeft: "8px" }}>
+                                  Indefinitely
+                                </span>
                               </div>
                             </>
                           )}
@@ -2046,28 +2146,34 @@ const RightSection = ({
                   overflow: "hidden",
                 }}
               >
-                {" "}                {/* Neutral Option */}
+                {" "}
+                {/* Neutral Option */}
                 <div
                   onClick={() => handleSentimentSelect("neutral")}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
-                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(1, 50, 128, 1)";
+                    const indicator =
+                      e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
                       indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "transparent";
-                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    const indicator =
+                      e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
                       indicator.style.backgroundColor = "transparent";
                     }
                   }}
                   onMouseDown={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(0, 19, 48, 1)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
@@ -2076,7 +2182,9 @@ const RightSection = ({
                     color: "#D0D3DB",
                     position: "relative",
                   }}
-                >                  <div
+                >
+                  {" "}
+                  <div
                     className="section-indicator"
                     style={{
                       position: "absolute",
@@ -2093,28 +2201,34 @@ const RightSection = ({
                   <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
                     Neutral
                   </span>
-                </div>                {/* Positive Option */}
+                </div>{" "}
+                {/* Positive Option */}
                 <div
                   onClick={() => handleSentimentSelect("positive")}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
-                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(1, 50, 128, 1)";
+                    const indicator =
+                      e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
                       indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "transparent";
-                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    const indicator =
+                      e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
                       indicator.style.backgroundColor = "transparent";
                     }
                   }}
                   onMouseDown={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(0, 19, 48, 1)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
@@ -2123,7 +2237,9 @@ const RightSection = ({
                     color: "#D0D3DB",
                     position: "relative",
                   }}
-                >                  <div
+                >
+                  {" "}
+                  <div
                     className="section-indicator"
                     style={{
                       position: "absolute",
@@ -2140,28 +2256,34 @@ const RightSection = ({
                   <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
                     Positive
                   </span>
-                </div>                {/* Negative Option */}{" "}
+                </div>{" "}
+                {/* Negative Option */}{" "}
                 <div
                   onClick={() => handleSentimentSelect("negative")}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
-                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(1, 50, 128, 1)";
+                    const indicator =
+                      e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
                       indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "transparent";
-                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    const indicator =
+                      e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
                       indicator.style.backgroundColor = "transparent";
                     }
                   }}
                   onMouseDown={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(0, 19, 48, 1)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
@@ -2170,7 +2292,9 @@ const RightSection = ({
                     color: "#D0D3DB",
                     position: "relative",
                   }}
-                >                  <div
+                >
+                  {" "}
+                  <div
                     className="section-indicator"
                     style={{
                       position: "absolute",
@@ -2187,28 +2311,34 @@ const RightSection = ({
                   <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
                     Negative
                   </span>
-                </div>                {/* Clear Option */}
+                </div>{" "}
+                {/* Clear Option */}
                 <div
                   onClick={() => handleSentimentSelect("clear")}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
-                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(1, 50, 128, 1)";
+                    const indicator =
+                      e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
                       indicator.style.backgroundColor = "rgba(62, 136, 247, 1)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "transparent";
-                    const indicator = e.currentTarget.querySelector('.section-indicator');
+                    const indicator =
+                      e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
                       indicator.style.backgroundColor = "transparent";
                     }
                   }}
                   onMouseDown={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(0, 19, 48, 1)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
@@ -2217,7 +2347,9 @@ const RightSection = ({
                     color: "#D0D3DB",
                     position: "relative",
                   }}
-                >                  <div
+                >
+                  {" "}
+                  <div
                     className="section-indicator"
                     style={{
                       position: "absolute",
@@ -2253,8 +2385,6 @@ const RightSection = ({
           </div>
         </div>
       )}
-
-
       {!(channel == "Chat Window") && (
         <div
           style={{
@@ -2265,8 +2395,6 @@ const RightSection = ({
           }}
         ></div>
       )}{" "}
-     
-     
       {/* render here the assign user  */}{" "}
       <div>
         <h2
