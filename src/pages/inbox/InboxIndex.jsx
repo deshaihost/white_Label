@@ -23,53 +23,20 @@ const InboxIndex = () => {
   const dispatch = useDispatch();
   const [interFaceComponent, setInterFaceComponent] = useState(0);
   const [allGuestNames, setAllGuestNames] = useState({});
-  const [showVideoComponent, setShowVideoComponent] = useState(false);
-  const [showBanner, setShowBanner] = useState(() => {
-    // Check if user has previously clicked "Remind me later"
-    try {
-      const storedDate = localStorage.getItem("notificationBannerRemindLater");
-      if (storedDate) {
-        const expiryDate = new Date(storedDate);
-        if (expiryDate > new Date()) {
-          // If the stored date is in the future, don't show the banner
-          return false;
-        }
-      }
-    } catch (error) {
-      console.error("Error reading from localStorage:", error);
-    }
-    // By default, show the banner
-    return true;
-  });
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const handleWatchLetter = () => {
+  const [showVideoComponent, setShowVideoComponent] = useState(false);  const [showBanner, setShowBanner] = useState(true);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);  const handleWatchLetter = () => {
     // Handle the watch letter click event
     // You can add your own logic here, like opening a modal or navigating to a new page
     console.log("Watch letter button clicked");
     // Show the video component when clicked
     setShowVideoComponent(true);
-    // Hide the banner when clicked
-    // setShowBanner(false);
   };
 
   const handleCloseVideoComponent = () => {
     setShowVideoComponent(false);
   };
-
   const handleRemindLater = () => {
-    // Set reminder for 7 days from now
-    const reminderDate = new Date();
-    reminderDate.setDate(reminderDate.getDate() + 7);
-    try {
-      localStorage.setItem(
-        "notificationBannerRemindLater",
-        reminderDate.toISOString()
-      );
-    } catch (error) {
-      console.error("Error saving to localStorage:", error);
-    }
     setShowVideoComponent(false);
-    // setShowBanner(false);
   };
 
   const sectionMapping = {
