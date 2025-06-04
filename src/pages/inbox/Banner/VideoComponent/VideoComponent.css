@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400&display=swap');
+
+:root {
+    --component-width: 480px;
+    --video-width: 320px;
+    --video-height: 180px;
+}
+
+.parent-container {
+    position: relative;
+    width: 100%;
+    max-width: var(--component-width);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+    border: 3px solid transparent;
+    overflow: visible;
+    margin-top: 1.25rem; /* 20px */
+    font-size: 1rem; /* 16px */
+}
+
+.header-container {
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
+}
+
+.header-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.description-container {
+    width: 100%;
+    background-color: rgba(43, 46, 54, 1);
+    padding: 1.5625rem; /* 25px */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+    margin-top: 0;
+    border-bottom-left-radius: 17px;
+    border-bottom-right-radius: 17px;
+}
+
+.description-container p {
+    color: rgba(208, 211, 219, 1);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-size: 1rem; /* 16px */
+    line-height: 1.5;
+    margin: 0;
+    text-align: center;
+}
+
+.text-overlay {
+    position: absolute;
+    text-align: center;
+    color: rgba(255, 255, 255, 1);
+    font-size: 1.5rem; /* 24px */
+    font-weight: 700;
+    font-family: "poppins", sans-serif;
+    padding: 0 1.25rem; /* 0 20px */
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.watch-tour-button {
+    background-color: rgba(11, 95, 222, 1);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.625rem 1.25rem; /* 10px 20px */
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 1rem; /* 16px */
+    cursor: pointer;
+    margin-top: 1.25rem; /* 20px */
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* 8px */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.watch-tour-button:hover {
+    background-color: rgba(9, 82, 192, 1);
+}
+
+.watch-tour-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(11, 95, 222, 0.4);
+}
+
+.button-icon {
+    width: 1.25rem; /* 20px */
+    height: 1.25rem; /* 20px */
+    margin-left: 0.25rem; /* 4px */
+}
+
+.remind-later {
+    margin-top: 0.9375rem; /* 15px */
+    text-align: center;
+}
+
+.remind-later p {
+    color: rgba(208, 211, 219, 1);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* .remind-later p:hover {
+    color: rgba(166, 169, 178, 1);
+} */
+
+.video-player-container {
+    position: absolute;
+    width: 66.67%; /* 320px/480px = ~66.67% of parent container width */
+    max-width: var(--video-width);
+    aspect-ratio: 16/9; /* Maintains 16:9 aspect ratio instead of fixed height */
+    z-index: 10;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, -10%); /* Position with 10% of height over header */    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(70deg, #FF5B79, #57C6FF, #C67CFF, #FFF399) border-box;
+    box-shadow: 
+        0 0 5px rgba(255, 91, 121, 0.4),
+        0 0 8px rgba(87, 198, 255, 0.4), 
+        0 0 10px rgba(198, 124, 255, 0.4),
+        0 0 12px rgba(255, 243, 153, 0.4);
+    animation: glow 3s infinite alternate;
+}
+
+.video-thumbnail {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    cursor: pointer;
+}
+
+.video-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.play-button-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease;
+    width: 3rem; /* 48px */
+    height: 3rem; /* 48px */
+}
+
+.play-button-overlay svg {
+    width: 100%;
+    height: 100%;
+}
+
+.video-thumbnail:hover .play-button-overlay {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-element {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+}
+
+iframe.video-element {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.content-wrapper {
+    margin-top: 34.4%; /* Percentage based on parent width to maintain spacing for video */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1rem; /* Add some padding on smaller screens */
+    box-sizing: border-box;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 600px) {
+    .parent-container {
+        width: 95%;
+    }
+    
+    .text-overlay {
+        font-size: 1.25rem; /* 20px */
+    }
+    
+    .video-player-container {
+        width: 80%;
+    }
+    
+    .content-wrapper {
+        margin-top: 40%; /* Increased to accommodate larger video */
+    }
+}
+
+@media (max-width: 400px) {
+    .text-overlay {
+        font-size: 1.125rem; /* 18px */
+    }
+    
+    .description-container {
+        padding: 1.25rem; /* 20px */
+    }
+    
+    .watch-tour-button {
+        padding: 0.5rem 1rem; /* 8px 16px */
+    }
+}
+
+@media (min-width: 768px) {
+    .parent-container {
+        max-width: 540px; /* Slightly larger on bigger screens */
+    }
+    
+    .video-player-container {
+        max-width: 360px; /* Slightly larger video on bigger screens */
+    }
+}
+
+/* Glow animation */
+@keyframes glow {
+    0% {
+        box-shadow: 
+            0 0 4px rgba(255, 91, 121, 0.3),
+            0 0 6px rgba(87, 198, 255, 0.3), 
+            0 0 8px rgba(198, 124, 255, 0.3),
+            0 0 10px rgba(255, 243, 153, 0.3);
+    }
+    100% {
+        box-shadow: 
+            0 0 6px rgba(255, 91, 121, 0.5),
+            0 0 10px rgba(87, 198, 255, 0.5), 
+            0 0 12px rgba(198, 124, 255, 0.5),
+            0 0 15px rgba(255, 243, 153, 0.5);
+    }
+}

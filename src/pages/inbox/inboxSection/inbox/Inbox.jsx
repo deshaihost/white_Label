@@ -1257,7 +1257,7 @@ const Inbox = ({
       <div
         className="inbox-content-container"
         style={{
-          height: "95vh",
+          height: "calc(95vh - 40px)",
           margin: "10px",
           // borderWidth:"1px" ,
           // borderStyle:"solid",

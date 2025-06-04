@@ -667,7 +667,9 @@ const LeftMessage = ({
               // className={`${tempPropertyFilter ? "select-active" : "bg-dark"}`}
               className={`${tempPropertyFilter ? "bg-dark" : "bg-dark"}`}
               onChange={handlePropertyFilterChange}
-              style={{ width: "290px" }}
+              style={{ width: "290px"
+                
+              }}
             >
               <option value="" style={{ width: "290px" }}>
                 All Properties

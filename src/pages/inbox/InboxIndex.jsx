@@ -11,6 +11,7 @@ import Upsells from "./inboxSection/upsells/Upsells";
 import "./inboxSection/inbox/inboxIndex.css";
 import axios from "axios";
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
+import NotificationBanner from "./Banner/NotificationBanner/NotificationBanner";
 
 const InboxIndex = () => {
   const { section } = useParams();
@@ -19,9 +20,18 @@ const InboxIndex = () => {
   const conversationIdFromUrl = searchParams.get('conversationId');
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-
   const [interFaceComponent, setInterFaceComponent] = useState(0);
   const [allGuestNames, setAllGuestNames] = useState({});
+  const [showBanner, setShowBanner] = useState(true);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  const handleWatchLetter = () => {
+    // Handle the watch letter click event
+    // You can add your own logic here, like opening a modal or navigating to a new page
+    console.log("Watch letter button clicked");
+    // For demonstration purposes, let's hide the banner when clicked
+    setShowBanner(false);
+  };
 
   const sectionMapping = { "": 0, "smart-templates": 1, "preferences": 2, "upsells": 3, "review-removal": 4, }; // for URL path params
 
@@ -81,7 +91,22 @@ const InboxIndex = () => {
       );
       setAllGuestNames(transformedGuestNames);
     }
-  };  // On page load, call some APIs
+  };  // Track screen width for responsive rendering
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+    
+    // Set up event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // On page load, call some APIs
   useEffect(() => {
     dispatch(getUserDataActions(false)); // So we can have the list of property names for the various dropdowns. false because we don't need the property data
     populateGuestNames(); // So we can have the list of guest names for the guest search bar
@@ -102,11 +127,12 @@ const InboxIndex = () => {
     if (componentFromLocation !== undefined) {
       setInterFaceComponent(componentFromLocation);
     } else {
-      setInterFaceComponent(sectionMapping[section] || 0);
-    }
+      setInterFaceComponent(sectionMapping[section] || 0);    }
   }, [section, location.state]); // Added section and location.state as dependencies
-
+  
   return (
+    <>
+    {showBanner && screenWidth >= 1100 && (location.pathname === "/inbox") && <NotificationBanner onWatchLetter={handleWatchLetter} className="mb-3" />}
     <div className="inbox-container">
       {interFaceComponent === 0 && <Inbox allPropertyNamesList={allPropertyNamesList} allGuestNamesList={allGuestNames} userHasPMS={userHasPMS} subscriptionPlan={subscriptionPlan} accountAgeDays={accountAgeDays} singleConversationIdFromUrl={conversationIdFromUrl}/>}
       {interFaceComponent === 1 && <SmartTemplateIndex allPropertyNamesList={allPropertyNamesList} userData={allUserData}/>}
@@ -115,6 +141,7 @@ const InboxIndex = () => {
       {interFaceComponent === 4 && <ReviewRemoval allPropertyNamesList={allPropertyNamesList}/>}
       {interFaceComponent != 0 && <HostDaddy />}
     </div>
+    </>
   );
 };
 
