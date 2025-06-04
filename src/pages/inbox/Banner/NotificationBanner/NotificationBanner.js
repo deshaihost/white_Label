@@ -10,7 +10,7 @@ const NotificationBanner = ({ className = "", onWatchLetter }) => {
         ✨ Your inbox just got a major upgrade! See what's new and improved.
       </span>{" "}
       <div className="watch-letter-button" onClick={onWatchLetter}>
-        watch letter
+        Watch the tour
         <img src={arrowIcon} alt="arrow" className="watch-letter-icon" />
       </div>
     </div>

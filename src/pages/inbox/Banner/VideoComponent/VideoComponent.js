@@ -4,7 +4,7 @@ import headerImage from "./image/headerDiv.png";
 import trailingIcon from "./image/Trailing Icon (6).svg";
 import videoThumbnail from "./image/videoContainerImage.png";
 
-const VideoComponent = () => {
+const VideoComponent = ({ onRemindLater }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const watchButtonRef = useRef(null);
 
@@ -17,22 +17,34 @@ const VideoComponent = () => {
   // Watch button click handler to also play video
   const handleWatchTourClick = () => {
     handleVideoPlay();
-  };  return (
-    <div className="parent-container" style={{ borderRadius: "20px", border: "0px solid rgba(87, 198, 255, 0.7)", overflow: "hidden" }}>
-      {" "}      <div className="header-container">
+  };
+  return (
+    <div
+      className="parent-container"
+      style={{
+        borderRadius: "20px",
+        border: "0px solid rgba(87, 198, 255, 0.7)",
+        overflow: "hidden",
+      }}
+    >
+      {" "}
+      <div className="header-container">
         <img src={headerImage} alt="Header" className="header-image" />
         <div className="text-overlay">
           <p>✨ Your inbox just got a major upgrade!</p>
         </div>
       </div>
-      <div className="description-container">
-        <div className="video-player-container">          <div className="video-thumbnail" onClick={handleVideoPlay}>            {isPlaying ? (
-              <iframe 
+      <div className="lower-container">
+        <div className="video-player-container">
+          <div className="video-thumbnail" onClick={handleVideoPlay}>
+            {" "}
+            {isPlaying ? (
+              <iframe
                 className="video-element"
                 src="https://www.youtube.com/embed/f81rXqUgsPk?autoplay=1"
-                title="YouTube video player" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
             ) : (
@@ -70,7 +82,13 @@ const VideoComponent = () => {
             Watch the tour
             <img src={trailingIcon} alt="Play" className="button-icon" />
           </button>{" "}
-          <div className="remind-later">
+          <div
+            className="remind-later"
+            onClick={
+              onRemindLater || (() => console.log("Remind later clicked"))
+            }
+            style={{ cursor: "pointer" }}
+          >
             <p>Remind me Later</p>
           </div>
         </div>
