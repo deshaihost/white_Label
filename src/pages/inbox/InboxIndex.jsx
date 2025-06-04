@@ -69,7 +69,7 @@ const InboxIndex = () => {
       console.error("Error saving to localStorage:", error);
     }
     setShowVideoComponent(false);
-    setShowBanner(false);
+    // setShowBanner(false);
   };
 
   const sectionMapping = {
