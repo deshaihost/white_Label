@@ -2364,7 +2364,7 @@ const RightSection = ({
                     }}
                   />
                   <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
-                    Clear
+                    Auto-detect
                   </span>
                 </div>
               </div>
