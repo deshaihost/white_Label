@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
-  background-color: var(--colors-elevation-surface-default, #17191F);
+  background-color: #24262E;
   border: 1px solid var(--colors-color-border-bold, rgba(189, 193, 201, 0.15));
   border-radius: 6px;
   cursor: pointer;
@@ -61,8 +61,9 @@
     0px 8px 12px 0px rgba(15, 17, 23, 0.4), 
     0px 0px 1px 0px rgba(15, 17, 23, 0.7)
   );
-  z-index: 1000;
-  overflow: hidden;
+  z-index: 10000;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .dropdown-option {

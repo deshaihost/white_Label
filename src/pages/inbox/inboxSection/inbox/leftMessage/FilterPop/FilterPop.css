@@ -1,0 +1,98 @@
+.filter-pop-container {
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #2B2E36;
+  margin: 20px 0;
+  min-height: 441px;
+  width: 480px;
+  overflow: visible;
+  position: relative;
+}
+
+.filter-pop-heading {
+  color: #D0D3DB;
+  font-size: 24px;
+  margin: 0;
+}
+
+.filter-pop-dropdown {
+  margin-top: 20px;
+  width: 100%;
+  overflow: visible;
+}
+
+/* Make dropdown components take full width */
+.filter-pop-dropdown .dropdown-container {
+  width: 100%;
+  margin-bottom: 16px;
+  overflow: visible;
+}
+
+.filter-pop-label {
+  display: block;
+  color: #A6A9B2;
+  font-size: 16px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.filter-pop-buttons {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.filter-pop-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.filter-pop-button:hover {
+  transform: translateY(-1px);
+}
+
+.filter-pop-button:active {
+  transform: translateY(0);
+}
+
+.filter-pop-button--reset {
+  background-color: #BDC1C914;
+  font-size: 14px;
+  color: #D0D3DB;
+  font-weight: 600;
+  font-style: "DM Sans", sans-serif;
+  /* border: 1px solid #3A3A3A; */
+  flex: 1;
+}
+
+.filter-pop-button--reset:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.filter-pop-button--cancel {
+  background-color: transparent;
+  color: #FFFFFF;
+  /* border: 1px solid #3A3A3A; */
+  flex: 1;
+}
+
+.filter-pop-button--cancel:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.filter-pop-button--apply {
+  background-color: #2563EB;
+  color: white;
+  flex: 1;
+}
+
+.filter-pop-button--apply:hover {
+  background-color: #1D4ED8;
+}

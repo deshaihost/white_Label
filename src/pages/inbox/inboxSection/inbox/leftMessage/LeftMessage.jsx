@@ -6,6 +6,7 @@ import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
 import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import { BoxLoader } from "../../../../../helper/Loader";
 import { TextField } from "./searchComponent/searchInput"; // Import the TextField component
+import FilterPop from "./FilterPop/FilterPop"; // Import the FilterPop component
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 import PinnedIcon from "./icons/pinned_for_chat.svg"; // Import the pinned icon
@@ -17,29 +18,6 @@ import VRBO_ICON from "./icons/VRBO_ICON.svg"; // Import the VRBO icon
 import DIRECT_ICON from "./icons/DIRECT_ICON.svg"; // Import the Direct icon
 import EMAIL_ICON from "./icons/EMAIL_ICON.svg"; // Import the Email icon
 import OPENPHONE_ICON from "./icons/OPENPHONE_ICON.svg"; // Import the OpenPhone icon
-
-// Add a simple modal component
-function FilterModal({ show, onClose, children }) {
-  if (!show) return null;
-  return (
-    <div className="filter-modal-overlay">
-      <div className="filter-modal-content">
-        <button className="filter-modal-close" onClick={onClose}></button>
-        <h3
-          style={{
-            marginBottom: "16px",
-            color: "#ffffff",
-            fontSize: "16px",
-            fontWeight: "500",
-          }}
-        >
-          Filters
-        </h3>
-        {children}
-      </div>
-    </div>
-  );
-}
 
 const LeftMessage = ({
   allPropertyNamesList,
@@ -76,8 +54,17 @@ const LeftMessage = ({
   const [searchFocus, setSearchFocus] = useState(false);
   const [guestNameInputVal, setGuestNameInputVal] = useState(""); // currently typed text in the guest name search input
 
-  const [filterQueryLoading, setFilterQueryLoading] = useState(false);
+  // Filter modal state
   const [filterModalOpen, setFilterModalOpen] = useState(false);
+
+  // Temporary filter states (for modal)
+  const [tempPropertyFilter, setTempPropertyFilter] = useState("");
+  const [tempPhaseFilter, setTempPhaseFilter] = useState("");
+  const [tempUrgentFilter, setTempUrgentFilter] = useState(false);
+  const [tempFromHostBuddyFilter, setTempFromHostBuddyFilter] = useState(false);
+  const [tempGuestNameFilter, setTempGuestNameFilter] = useState("");
+
+  const [filterQueryLoading, setFilterQueryLoading] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [filteredConversations, setFilteredConversations] = useState([]);
   const [filteredGuestsFromSearch, setFilteredGuestsFromSearch] = useState([]);
@@ -85,11 +72,6 @@ const LeftMessage = ({
   const searchDropdownRef = useRef(null);
 
   // Temporary filter state (not applied until user clicks "Apply")
-  const [tempPropertyFilter, setTempPropertyFilter] = useState("");
-  const [tempPhaseFilter, setTempPhaseFilter] = useState("");
-  const [tempUrgentFilter, setTempUrgentFilter] = useState(false);
-  const [tempFromHostBuddyFilter, setTempFromHostBuddyFilter] = useState(false);
-  const [tempGuestNameFilter, setTempGuestNameFilter] = useState("");
   // Use the current date for real-time checking
   const currentDate = new Date();
   // Function to check if a date is today - using the proper YYMMDD_HHMMSS format
@@ -349,14 +331,32 @@ const LeftMessage = ({
     // Store selected phase in temporary state without applying filter
     setTempPhaseFilter(e.target.value);
   };
-
-  const handleResetFilters = () => {
+  const handleResetFilters = async () => {
     // Reset all temporary filters to default values
     setTempPropertyFilter("");
     setTempPhaseFilter("");
     setTempUrgentFilter(false);
     setTempFromHostBuddyFilter(false);
     setTempGuestNameFilter("");
+
+    // Also immediately apply the reset by clearing actual filter states
+    setFilterQueryLoading(true);
+    
+    // Clear the actual filter states
+    setPropertyFilterVal("");
+    setPhaseFilterVal("");
+    setUrgentFilterIsEnabled(false);
+    setFromHostBuddyFilterVal(false);
+    setGuestNameSearchVal("");
+    setSearchInputValue("");
+
+    // Fetch conversations with all filters cleared
+    await fetchConversations(10, true, false, "", "", false, "");
+    
+    setFilterQueryLoading(false);
+    
+    // Close the modal after reset
+    setFilterModalOpen(false);
   };
 
   const handleApplyFilters = async () => {
@@ -649,110 +649,28 @@ const LeftMessage = ({
           >
             <i className="bi bi-filter" style={{ marginRight: "4px" }}></i>
             Filters
-          </button>
-        </div>
+          </button>        </div>
       </div>
-      <FilterModal
+      
+      <FilterPop
         show={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
-      >
-        <div className="filter-btns">
-          {/* Properties Select */}
-          <div className="custom-select">
-            <div className="filter-section-label">Property</div>
-            <select
-              name="all"
-              id="all"
-              value={tempPropertyFilter}
-              // className={`${tempPropertyFilter ? "select-active" : "bg-dark"}`}
-              className={`${tempPropertyFilter ? "bg-dark" : "bg-dark"}`}
-              onChange={handlePropertyFilterChange}
-              style={{ width: "290px"
-                
-              }}
-            >
-              <option value="" style={{ width: "290px" }}>
-                All Properties
-              </option>
-              {allPropertyNamesList?.map((option, index) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
+        allPropertyNamesList={allPropertyNamesList}
+        tempPropertyFilter={tempPropertyFilter}
+        tempPhaseFilter={tempPhaseFilter}
+        tempUrgentFilter={tempUrgentFilter}
+        tempFromHostBuddyFilter={tempFromHostBuddyFilter}
+        handlePropertyFilterChange={handlePropertyFilterChange}
+        handlePhaseFilterChange={handlePhaseFilterChange}
+        handleUrgentClick={handleUrgentClick}
+        handleFromHostBuddyClick={handleFromHostBuddyClick}
+        handleResetFilters={handleResetFilters}
+        handleCancelFilters={handleCancelFilters}
+        handleApplyFilters={handleApplyFilters}
+      />
 
-          {/* Phase Select */}
-          <div className="custom-select">
-            <div className="filter-section-label">Phase</div>
-            <select
-              name="all"
-              id="all"
-              value={tempPhaseFilter}
-              className={`${tempPhaseFilter ? "bg-dark" : "bg-dark"}`}
-              onChange={handlePhaseFilterChange}
-            >
-              <option value="">All Phases</option>
-              <option value="inquiry">Inquiry</option>
-              <option value="future">Future</option>
-              <option value="current">Current</option>
-              <option value="past">Past</option>
-            </select>
-          </div>
 
-          {/* Urgent Button */}
-          <div>
-            <div className="filter-section-label">Importance</div>
-            <span
-              onClick={handleUrgentClick}
-              className={`${
-                tempUrgentFilter ? "bg-light text-dark" : "bg-dark"
-              } pointer-cursor`}
-            >
-              Urgent
-            </span>
-          </div>
 
-          {/* HostBuddy Messages Button */}
-          <div>
-            <div className="filter-section-label">Source</div>
-            <span
-              onClick={handleFromHostBuddyClick}
-              className={`${
-                tempFromHostBuddyFilter ? "bg-light text-dark" : "bg-dark"
-              } pointer-cursor`}
-            >
-              From HostBuddy
-            </span>
-          </div>
-        </div>
-
-        {/* Filter Action Buttons */}
-        <div className="filter-modal-actions">
-          <button
-            className="filter-modal-button reset-button"
-            onClick={handleResetFilters}
-          >
-            Reset Filters
-          </button>
-          <div style={{ display: "flex", gap: "3px" }}>
-            <button
-              className="filter-modal-button cancel-button"
-              onClick={handleCancelFilters}
-              style={{ borderRadius: "4px" }}
-            >
-              Cancel
-            </button>
-            <button
-              className="filter-modal-button apply-button"
-              onClick={handleApplyFilters}
-              style={{ borderRadius: "4px" }}
-            >
-              Apply
-            </button>
-          </div>
-        </div>
-      </FilterModal>
       {filterQueryLoading ? (
         <BoxLoader />
       ) : filteredConversations && filteredConversations.length ? (

@@ -408,6 +408,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
 }
 .filter-modal-content {
   background-color: #17191f;
