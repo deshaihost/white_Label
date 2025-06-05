@@ -7,6 +7,9 @@ import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConver
 import { BoxLoader } from "../../../../../helper/Loader";
 import { TextField } from "./searchComponent/searchInput"; // Import the TextField component
 import FilterPop from "./FilterPop/FilterPop"; // Import the FilterPop component
+import axios from "axios";
+import ToastHandle from "../../../../../helper/ToastMessage";
+import { getActiveToken } from "../../../../../helper/apiCore";
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
 import PinnedIcon from "./icons/pinned_for_chat.svg"; // Import the pinned icon
@@ -56,13 +59,18 @@ const LeftMessage = ({
 
   // Filter modal state
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-
   // Temporary filter states (for modal)
   const [tempPropertyFilter, setTempPropertyFilter] = useState("");
   const [tempPhaseFilter, setTempPhaseFilter] = useState("");
   const [tempUrgentFilter, setTempUrgentFilter] = useState(false);
   const [tempFromHostBuddyFilter, setTempFromHostBuddyFilter] = useState(false);
   const [tempGuestNameFilter, setTempGuestNameFilter] = useState("");
+  const [tempUserFilter, setTempUserFilter] = useState("");
+
+  // User-related state
+  const [subUserNames, setSubUserNames] = useState([]);
+  const [subUserLoading, setSubUserLoading] = useState(false);
+  const [dataFetched, setDataFetched] = useState(false);
 
   const [filterQueryLoading, setFilterQueryLoading] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -321,16 +329,61 @@ const LeftMessage = ({
     // Toggle urgent filter in temporary state without applying
     setTempUrgentFilter(!tempUrgentFilter);
   };
-
   const handleFromHostBuddyClick = () => {
     // Toggle FromHostBuddy filter in temporary state without applying
     setTempFromHostBuddyFilter(!tempFromHostBuddyFilter);
   };
 
+  const handleUserFilterChange = (e) => {
+    // Store selected user in temporary state without applying filter
+    setTempUserFilter(e.target.value);
+  };
   const handlePhaseFilterChange = (e) => {
     // Store selected phase in temporary state without applying filter
     setTempPhaseFilter(e.target.value);
   };
+
+  // Fetch sub user names from API
+  const fetchSubUserNames = async () => {
+    // If data was already fetched, don't fetch again
+    if (dataFetched && subUserNames.length > 0) return;
+
+    setSubUserLoading(true);
+    try {
+      const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+      const API_KEY = process.env.REACT_APP_API_KEY;
+
+      // Get token from the apiCore's active token or fall back to localStorage
+      const token = getActiveToken() || localStorage.getItem("authToken");
+
+      const config = {
+        headers: {
+          "X-API-Key": API_KEY,
+          Authorization: token ? `Bearer ${token}` : undefined,
+        },
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
+      };
+
+      const response = await axios.get(`${baseUrl}/get_sub_user_names`, config);
+
+      if (response.status === 200) {
+        setSubUserNames(response.data.sub_user_names || []);
+        setDataFetched(true); // Mark data as fetched
+      } else {
+        ToastHandle(
+          response?.data?.error || "Failed to fetch user names",
+          "danger"
+        );
+      }
+    } catch (error) {
+      ToastHandle("Error fetching user names", "danger");
+    } finally {
+      setSubUserLoading(false);
+    }
+  };
+
   const handleResetFilters = async () => {
     // Reset all temporary filters to default values
     setTempPropertyFilter("");
@@ -338,6 +391,7 @@ const LeftMessage = ({
     setTempUrgentFilter(false);
     setTempFromHostBuddyFilter(false);
     setTempGuestNameFilter("");
+    setTempUserFilter("");
 
     // Also immediately apply the reset by clearing actual filter states
     setFilterQueryLoading(true);
@@ -651,8 +705,7 @@ const LeftMessage = ({
             Filters
           </button>        </div>
       </div>
-      
-      <FilterPop
+        <FilterPop
         show={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
         allPropertyNamesList={allPropertyNamesList}
@@ -660,10 +713,15 @@ const LeftMessage = ({
         tempPhaseFilter={tempPhaseFilter}
         tempUrgentFilter={tempUrgentFilter}
         tempFromHostBuddyFilter={tempFromHostBuddyFilter}
+        tempUserFilter={tempUserFilter}
+        subUserNames={subUserNames}
+        subUserLoading={subUserLoading}
+        fetchSubUserNames={fetchSubUserNames}
         handlePropertyFilterChange={handlePropertyFilterChange}
         handlePhaseFilterChange={handlePhaseFilterChange}
         handleUrgentClick={handleUrgentClick}
         handleFromHostBuddyClick={handleFromHostBuddyClick}
+        handleUserFilterChange={handleUserFilterChange}
         handleResetFilters={handleResetFilters}
         handleCancelFilters={handleCancelFilters}
         handleApplyFilters={handleApplyFilters}

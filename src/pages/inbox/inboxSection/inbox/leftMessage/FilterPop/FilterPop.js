@@ -10,10 +10,15 @@ const FilterPop = ({
   tempPhaseFilter,
   tempUrgentFilter,
   tempFromHostBuddyFilter,
+  tempUserFilter,
+  subUserNames,
+  subUserLoading,
+  fetchSubUserNames,
   handlePropertyFilterChange,
   handlePhaseFilterChange,
   handleUrgentClick,
   handleFromHostBuddyClick,
+  handleUserFilterChange,
   handleResetFilters,
   handleCancelFilters,
   handleApplyFilters
@@ -41,17 +46,27 @@ const FilterPop = ({
   const importanceOptions = [
     { id: 'urgent', label: 'Urgent' }
   ];
-
   // Source options
   const sourceOptions = [
     { id: 'from_hostbuddy', label: 'From HostBuddy' }
   ];
 
+  // User options
+  const userOptions = [
+    { id: '', label: 'All Users' },
+    ...(subUserNames?.map((user, index) => ({
+      id: user.display_name || user.email || `user_${index}`,
+      label: user.display_name || user.email || `User ${index + 1}`
+    })) || [])
+  ];
   // Find selected property option
   const selectedPropertyOption = propertyOptions.find(option => option.id === tempPropertyFilter) || null;
   
   // Find selected phase option
   const selectedPhaseOption = phaseOptions.find(option => option.id === tempPhaseFilter) || null;
+
+  // Find selected user option
+  const selectedUserOption = userOptions.find(option => option.id === tempUserFilter) || null;
 
   // Handle property selection
   const handlePropertySelect = (option) => {
@@ -71,12 +86,17 @@ const FilterPop = ({
       handleUrgentClick();
     }
   };
-
   // Handle source selection
   const handleSourceSelect = (option) => {
     if (option?.id === 'from_hostbuddy') {
       handleFromHostBuddyClick();
     }
+  };
+
+  // Handle user selection
+  const handleUserSelect = (option) => {
+    const mockEvent = { target: { value: option?.id || '' } };
+    handleUserFilterChange(mockEvent);
   };
 
   return (
@@ -108,13 +128,22 @@ const FilterPop = ({
             onSelect={handleImportanceSelect}
             defaultValue={tempUrgentFilter ? importanceOptions[0] : null}
           />
-          
-          <label className="filter-pop-label">Source</label>
+            <label className="filter-pop-label">Source</label>
           <DropdownComponent 
             options={sourceOptions}
             placeholder={tempFromHostBuddyFilter ? "From HostBuddy (Selected)" : "Select source"}
             onSelect={handleSourceSelect}
             defaultValue={tempFromHostBuddyFilter ? sourceOptions[0] : null}
+          />
+
+          <label className="filter-pop-label">User</label>
+          <DropdownComponent 
+            options={userOptions}
+            placeholder={subUserLoading ? "Loading users..." : "Select user"}
+            onSelect={handleUserSelect}
+            defaultValue={selectedUserOption}
+            onOpen={fetchSubUserNames}
+            isLoading={subUserLoading}
           />
         </div>
         

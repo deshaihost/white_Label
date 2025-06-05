@@ -9,8 +9,10 @@ const DropdownComponent = ({
   ],
   placeholder = "Select an option",
   onSelect,
+  onOpen,
   defaultValue,
   className = "",
+  isLoading = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(defaultValue || null);
@@ -29,10 +31,15 @@ const DropdownComponent = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
+  }, []);  const handleToggle = () => {
+    const newIsOpen = !isOpen;
+    setIsOpen(newIsOpen);
     setHoveredIndex(-1);
+    
+    // Call onOpen callback when opening the dropdown
+    if (newIsOpen && onOpen) {
+      onOpen();
+    }
   };
 
   const handleOptionSelect = (option, index) => {
@@ -103,8 +110,7 @@ const DropdownComponent = ({
             display: "block",
             overflowY: "auto",
           }}
-        >
-          {options && options.length > 0 ? (
+        >          {options && options.length > 0 && !isLoading ? (
             options.map((option, index) => (
               <div
                 key={option.id}
@@ -139,6 +145,17 @@ const DropdownComponent = ({
                 <span className="dropdown-option__label">{option.label}</span>
               </div>
             ))
+          ) : isLoading ? (
+            <div
+              style={{
+                padding: "10px",
+                color: "#D0D3DB",
+                backgroundColor: "transparent",
+                textAlign: "center",
+              }}
+            >
+              Loading...
+            </div>
           ) : (
             <div
               style={{
