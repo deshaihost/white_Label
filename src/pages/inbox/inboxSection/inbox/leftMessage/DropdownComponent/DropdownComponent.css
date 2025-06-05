@@ -115,7 +115,7 @@
 }
 
 .dropdown-option--selected {
-  background-color: var(--colors-color-background-selected-default, #3E88F7);
+  background-color: #01255E;
    color: #D0D3DB;
   font-weight: var(--body-medium-semibold-600-font-weight, 600);
 }
