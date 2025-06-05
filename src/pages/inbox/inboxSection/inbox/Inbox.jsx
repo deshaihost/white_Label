@@ -264,11 +264,11 @@ const Inbox = ({
   const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
   const [conversationCache, setConversationCache] = useState(new Map()); // Cache to store full conversation details by conversation_id
   const [conversationsNotYetFetched, setConversationsNotYetFetched] =
-    useState(true);
-  const [urgentFilterIsEnabled, setUrgentFilterIsEnabled] = useState(false);
+    useState(true);  const [urgentFilterIsEnabled, setUrgentFilterIsEnabled] = useState(false);
   const [propertyFilterVal, setPropertyFilterVal] = useState("");
   const [phaseFilterVal, setPhaseFilterVal] = useState("");
   const [fromHostBuddyFilterVal, setFromHostBuddyFilterVal] = useState(false);  const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
+  const [userFilterVal, setUserFilterVal] = useState("");
   const [currentView, setCurrentView] = useState("conversations"); // New state for mobile view
   const [activeTab, setActiveTab] = useState("pms"); // New state to track active tab
   const [pendingTabChange, setPendingTabChange] = useState(null); // To track pending tab change when switching views
@@ -934,8 +934,7 @@ const Inbox = ({
     } else {
       return {};
     }
-  };
-  // Call the API to get conversations, up to the specified limit, and update the state with the returned data.
+  };  // Call the API to get conversations, up to the specified limit, and update the state with the returned data.
   const fetchConversations = async (
     limit,
     reset = false,
@@ -944,7 +943,8 @@ const Inbox = ({
     phase = "",
     meetHbOnly = false,
     guestName = "",
-    useConvIdQuery = true
+    useConvIdQuery = true,
+    userFilter = ""
   ) => {
     let conversationsAlreadyHave = {};
     if (reset) {
@@ -954,10 +954,15 @@ const Inbox = ({
     } else {
       // Tell the API which conversations we already have, so we don't need to get them again if they haven't been updated
       conversationsAlreadyHave = getConversationsAlreadyHave();
-    }
-    const conversationId = useConvIdQuery
+    }    const conversationId = useConvIdQuery
       ? singleConversationIdFromUrl || null
       : null;
+
+    // Convert userFilter to usersAssigned array of emails
+    let usersAssigned = [];
+    if (userFilter) {
+      usersAssigned = [userFilter]; // userFilter should already be an email address
+    }
 
     // Use the simplified API without request ID tracking and AbortController
     const data = await callGetConversationsApi(
@@ -968,7 +973,8 @@ const Inbox = ({
       phase,
       meetHbOnly,
       guestName,
-      conversationId
+      conversationId,
+      usersAssigned
     );
 
     if (data?.conversations) {
@@ -1193,8 +1199,7 @@ const Inbox = ({
           const num_existing_convos = conversations.length;
           const num_convos_to_fetch = Math.max(num_existing_convos, 2); // always fetch at least 2 convos, even if we're only looking at one (e.g. due to filter), so if there's simultaneous updates we're more likely to catch it. 2 is still an arbitrary number tbh
           
-          console.log(`Periodic update: Fetching ${num_convos_to_fetch} conversations to refresh cache`);
-          fetchConversations(
+          console.log(`Periodic update: Fetching ${num_convos_to_fetch} conversations to refresh cache`);          fetchConversations(
             num_convos_to_fetch,
             false,
             urgentFilterIsEnabled,
@@ -1202,7 +1207,8 @@ const Inbox = ({
             phaseFilterVal,
             fromHostBuddyFilterVal,
             guestNameSearchVal,
-            num_existing_convos <= 1
+            num_existing_convos <= 1,
+            userFilterVal
           );
         },
         isNewAccount ? 10000 : 20000
@@ -1218,8 +1224,7 @@ const Inbox = ({
         clearInterval(intervalId);
         clearTimeout(timeoutId);
       };
-    }
-  }, [
+    }  }, [
     conversations,
     eliteFeaturesAvailable,
     urgentFilterIsEnabled,
@@ -1227,6 +1232,7 @@ const Inbox = ({
     phaseFilterVal,
     fromHostBuddyFilterVal,
     guestNameSearchVal,
+    userFilterVal,
     accountAgeDays,
   ]);
   // Track window resize for responsive behavior
@@ -1272,8 +1278,7 @@ const Inbox = ({
           <div
             style={{ width: "100%", gap: "0px", height: "100%" }}
             className="desktop-view"
-          >
-            <LeftMessage
+          >            <LeftMessage
               className="box"
               allPropertyNamesList={allPropertyNamesList}
               allGuestNames={allGuestNamesList}
@@ -1292,6 +1297,8 @@ const Inbox = ({
               setFromHostBuddyFilterVal={setFromHostBuddyFilterVal}
               guestNameSearchVal={guestNameSearchVal}
               setGuestNameSearchVal={setGuestNameSearchVal}
+              userFilterVal={userFilterVal}
+              setUserFilterVal={setUserFilterVal}
               setCurrentView={setCurrentView}
               currentView={currentView}
               setAllowConvIdQuery={setAllowConvIdQuery}
@@ -2548,8 +2555,7 @@ const Inbox = ({
           />
           {/* Mobile View */}
           <div className="mobile-view">
-            {currentView === "conversations" && (
-              <LeftMessage
+            {currentView === "conversations" && (              <LeftMessage
                 allPropertyNamesList={allPropertyNamesList}
                 allGuestNames={allGuestNamesList}
                 allConversations={conversations}
@@ -2567,6 +2573,8 @@ const Inbox = ({
                 setFromHostBuddyFilterVal={setFromHostBuddyFilterVal}
                 guestNameSearchVal={guestNameSearchVal}
                 setGuestNameSearchVal={setGuestNameSearchVal}
+                userFilterVal={userFilterVal}
+                setUserFilterVal={setUserFilterVal}
                 setCurrentView={setCurrentView}
                 currentView={currentView}
                 setAllowConvIdQuery={setAllowConvIdQuery}

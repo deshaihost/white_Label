@@ -50,6 +50,7 @@
 
 .dropdown-menu {
   position: absolute;
+  padding:0px !important;
   top: 100%;
   left: 0;
   right: 0;
@@ -64,6 +65,7 @@
   z-index: 10000;
   max-height: 200px;
   overflow-y: auto;
+  
 }
 
 .dropdown-option {

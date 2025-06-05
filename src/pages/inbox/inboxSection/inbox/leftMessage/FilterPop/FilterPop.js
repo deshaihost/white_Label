@@ -50,12 +50,11 @@ const FilterPop = ({
   const sourceOptions = [
     { id: 'from_hostbuddy', label: 'From HostBuddy' }
   ];
-
-  // User options
+  // User options - use email as ID for the filter, display name for label
   const userOptions = [
     { id: '', label: 'All Users' },
     ...(subUserNames?.map((user, index) => ({
-      id: user.display_name || user.email || `user_${index}`,
+      id: user.email || `user_${index}`, // Use email as ID for filter
       label: user.display_name || user.email || `User ${index + 1}`
     })) || [])
   ];
@@ -145,18 +144,18 @@ const FilterPop = ({
             onOpen={fetchSubUserNames}
             isLoading={subUserLoading}
           />
-        </div>
-        
-        <div className="filter-pop-buttons">
+        </div>        <div className="filter-pop-buttons" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button className="filter-pop-button filter-pop-button--reset" onClick={handleResetFilters}>
             Reset Filter
           </button>
-          <button className="filter-pop-button filter-pop-button--cancel" onClick={handleCancelFilters}>
-            Cancel
-          </button>
-          <button className="filter-pop-button filter-pop-button--apply" onClick={handleApplyFilters}>
-            Apply
-          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button className="filter-pop-button filter-pop-button--cancel" onClick={handleCancelFilters}>
+              Cancel
+            </button>
+            <button className="filter-pop-button filter-pop-button--apply" onClick={handleApplyFilters}>
+              Apply
+            </button>
+          </div>
         </div>
       </div>
     </div>

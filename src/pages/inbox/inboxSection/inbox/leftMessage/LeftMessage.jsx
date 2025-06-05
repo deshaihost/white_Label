@@ -37,9 +37,10 @@ const LeftMessage = ({
   phaseFilterVal,
   setPhaseFilterVal,
   fromHostBuddyFilterVal,
-  setFromHostBuddyFilterVal,
-  guestNameSearchVal,
+  setFromHostBuddyFilterVal,  guestNameSearchVal,
   setGuestNameSearchVal,
+  userFilterVal,
+  setUserFilterVal,
   setCurrentView,
   currentView,
   setAllowConvIdQuery,
@@ -131,8 +132,7 @@ const LeftMessage = ({
   const loadNextBatch = async () => {
     setAllowConvIdQuery(false); // once the user decides to load more conversations: we cno longer want to regard the conversationId query param, if one was passed
     setNextBatchLoading(true);
-    const num_existing_convos = allConversations.length;
-    await fetchConversations(
+    const num_existing_convos = allConversations.length;    await fetchConversations(
       num_existing_convos + 10,
       false,
       urgentFilterIsEnabled,
@@ -140,7 +140,8 @@ const LeftMessage = ({
       phaseFilterVal,
       fromHostBuddyFilterVal,
       guestNameSearchVal,
-      false
+      false,
+      userFilterVal
     );
     setNextBatchLoading(false);
   };
@@ -281,15 +282,13 @@ const LeftMessage = ({
       // If search is cleared and there was a guest filter active, clear it
       if (!searchVal && guestNameSearchVal) {
         setFilterQueryLoading(true);
-        setGuestNameSearchVal("");
-
-        // Reset all filters when clearing search
+        setGuestNameSearchVal("");        // Reset all filters when clearing search
         setPropertyFilterVal("");
         setPhaseFilterVal("");
         setUrgentFilterIsEnabled(false);
         setFromHostBuddyFilterVal(false);
 
-        await fetchConversations(10, true, false, "", "", false, "");
+        await fetchConversations(10, true, false, "", "", false, "", true, "");
         setFilterQueryLoading(false);
       }
     }
@@ -299,15 +298,13 @@ const LeftMessage = ({
     setFilterQueryLoading(true);
     setFilteredGuestsFromSearch([]);
     setSearchInputValue(guest.name);
-    setGuestNameSearchVal(guest.name);
-
-    // Clear all other filters when guest is selected
+    setGuestNameSearchVal(guest.name);    // Clear all other filters when guest is selected
     setPropertyFilterVal("");
     setPhaseFilterVal("");
     setUrgentFilterIsEnabled(false);
     setFromHostBuddyFilterVal(false);
 
-    await fetchConversations(10, true, false, "", "", false, guest.name);
+    await fetchConversations(10, true, false, "", "", false, guest.name, true, "");
     setFilterQueryLoading(false);
   };
 
@@ -383,7 +380,6 @@ const LeftMessage = ({
       setSubUserLoading(false);
     }
   };
-
   const handleResetFilters = async () => {
     // Reset all temporary filters to default values
     setTempPropertyFilter("");
@@ -395,24 +391,23 @@ const LeftMessage = ({
 
     // Also immediately apply the reset by clearing actual filter states
     setFilterQueryLoading(true);
-    
+
     // Clear the actual filter states
     setPropertyFilterVal("");
     setPhaseFilterVal("");
     setUrgentFilterIsEnabled(false);
-    setFromHostBuddyFilterVal(false);
-    setGuestNameSearchVal("");
+    setFromHostBuddyFilterVal(false);    setGuestNameSearchVal("");
+    setUserFilterVal("");
     setSearchInputValue("");
 
     // Fetch conversations with all filters cleared
-    await fetchConversations(10, true, false, "", "", false, "");
-    
+    await fetchConversations(10, true, false, "", "", false, "", true, "");
+
     setFilterQueryLoading(false);
-    
+
     // Close the modal after reset
     setFilterModalOpen(false);
   };
-
   const handleApplyFilters = async () => {
     // Only fetch if filters have changed
     if (
@@ -420,7 +415,8 @@ const LeftMessage = ({
       tempPhaseFilter !== phaseFilterVal ||
       tempUrgentFilter !== urgentFilterIsEnabled ||
       tempFromHostBuddyFilter !== fromHostBuddyFilterVal ||
-      tempGuestNameFilter !== guestNameSearchVal
+      tempGuestNameFilter !== guestNameSearchVal ||
+      tempUserFilter !== userFilterVal
     ) {
       setFilterQueryLoading(true);
 
@@ -430,6 +426,7 @@ const LeftMessage = ({
       setUrgentFilterIsEnabled(tempUrgentFilter);
       setFromHostBuddyFilterVal(tempFromHostBuddyFilter);
       setGuestNameSearchVal(tempGuestNameFilter);
+      setUserFilterVal(tempUserFilter);
 
       // Apply filters by fetching filtered conversations
       await fetchConversations(
@@ -439,7 +436,9 @@ const LeftMessage = ({
         tempPropertyFilter,
         tempPhaseFilter,
         tempFromHostBuddyFilter,
-        tempGuestNameFilter
+        tempGuestNameFilter,
+        true,
+        tempUserFilter
       );
 
       setFilterQueryLoading(false);
@@ -452,7 +451,6 @@ const LeftMessage = ({
     // Discard temporary changes by not applying them
     setFilterModalOpen(false);
   };
-
   const openFilterModal = () => {
     // Initialize temporary filters with current values
     setTempPropertyFilter(propertyFilterVal);
@@ -460,6 +458,7 @@ const LeftMessage = ({
     setTempUrgentFilter(urgentFilterIsEnabled);
     setTempFromHostBuddyFilter(fromHostBuddyFilterVal);
     setTempGuestNameFilter(guestNameSearchVal);
+    setTempUserFilter(userFilterVal);
     setFilterModalOpen(true);
   };
 
@@ -474,11 +473,10 @@ const LeftMessage = ({
       );
       setFilteredGuests(filtered);
     } else {
-      setFilteredGuests([]);
-      if (guestNameSearchVal) {
+      setFilteredGuests([]);      if (guestNameSearchVal) {
         setGuestNameSearchVal("");
         setFilterQueryLoading(true);
-        await fetchConversations(10, true, false, "", "", false, "");
+        await fetchConversations(10, true, false, "", "", false, "", true, "");
         setFilterQueryLoading(false);
       }
     }
@@ -487,15 +485,13 @@ const LeftMessage = ({
   const handleGuestClick = async (guest) => {
     setFilterQueryLoading(true);
     setFilteredGuests([]);
-    setGuestNameSearchVal(guest.name);
-
-    // Clear all other filters. Guest name search overrides everything
+    setGuestNameSearchVal(guest.name);    // Clear all other filters. Guest name search overrides everything
     setPropertyFilterVal("");
     setPhaseFilterVal("");
     setUrgentFilterIsEnabled(false);
     setFromHostBuddyFilterVal(false);
 
-    await fetchConversations(10, true, false, "", "", false, guest.name);
+    await fetchConversations(10, true, false, "", "", false, guest.name, true, "");
 
     setFilterQueryLoading(false);
   };
@@ -703,9 +699,10 @@ const LeftMessage = ({
           >
             <i className="bi bi-filter" style={{ marginRight: "4px" }}></i>
             Filters
-          </button>        </div>
+          </button>{" "}
+        </div>
       </div>
-        <FilterPop
+      <FilterPop
         show={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
         allPropertyNamesList={allPropertyNamesList}
@@ -726,8 +723,6 @@ const LeftMessage = ({
         handleCancelFilters={handleCancelFilters}
         handleApplyFilters={handleApplyFilters}
       />
-
-
 
       {filterQueryLoading ? (
         <BoxLoader />
