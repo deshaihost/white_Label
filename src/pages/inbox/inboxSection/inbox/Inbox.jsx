@@ -255,6 +255,7 @@ const Inbox = ({
   subscriptionPlan,
   accountAgeDays,
   singleConversationIdFromUrl,
+  bannerVisible,
 }) => {
   const navigate = useNavigate();
   const eliteFeaturesAvailable =
@@ -1253,11 +1254,10 @@ const Inbox = ({
 
   return (
     <>
-      <style>{responsiveStyles}</style>
-      <div
+      <style>{responsiveStyles}</style>      <div
         className="inbox-content-container"
         style={{
-          height: "calc(95vh - 40px)",
+          height: bannerVisible ? "calc(95vh - 40px)" : "95vh",
           margin: "10px",
           // borderWidth:"1px" ,
           // borderStyle:"solid",

@@ -74,9 +74,38 @@
   outline: none;
 }
 
-/* .watch-letter-button:hover .watch-letter-icon {
-  transform: translateX(2px);
-} */
+.close-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(29, 0, 61, 1);
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+}
+
+.close-button:active {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(0.95);
+}
+
+.close-button:focus {
+  outline: 2px solid rgba(138, 42, 247, 0.5);
+  outline-offset: 2px;
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

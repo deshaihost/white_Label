@@ -158,10 +158,10 @@ const InboxIndex = () => {
     }
   }, [section, location.state]); // Added section and location.state as dependencies
   return (
-    <>
-      {showBanner && screenWidth >= 1100 && location.pathname === "/inbox" && (
+    <>      {showBanner && screenWidth >= 1100 && location.pathname === "/inbox" && (
         <NotificationBanner
           onWatchLetter={handleWatchLetter}
+          onClose={() => setShowBanner(false)}
           className="mb-3"
         />
       )}
@@ -216,8 +216,7 @@ const InboxIndex = () => {
         </div>
       )}
 
-      <div className="inbox-container">
-        {interFaceComponent === 0 && (
+      <div className="inbox-container">        {interFaceComponent === 0 && (
           <Inbox
             allPropertyNamesList={allPropertyNamesList}
             allGuestNamesList={allGuestNames}
@@ -225,6 +224,7 @@ const InboxIndex = () => {
             subscriptionPlan={subscriptionPlan}
             accountAgeDays={accountAgeDays}
             singleConversationIdFromUrl={conversationIdFromUrl}
+            bannerVisible={showBanner && screenWidth >= 1100 && location.pathname === "/inbox"}
           />
         )}
         {interFaceComponent === 1 && (
