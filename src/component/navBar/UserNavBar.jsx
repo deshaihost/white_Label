@@ -73,7 +73,7 @@ const UserNavBar = ({ gcsToken }) => {
   // Only create content if user is not authenticated (they would use NavBarContainer instead)
   if (!token) {
     content = (
-      <header className="header">
+      <header className="header" style={{padding:"10px"}}>
         <Container>
           <Navbar expand="lg" expanded={expanded} className="bg-body-tertiary header-container">
             <Navbar.Brand>
