@@ -23,8 +23,10 @@ const InboxIndex = () => {
   const dispatch = useDispatch();
   const [interFaceComponent, setInterFaceComponent] = useState(0);
   const [allGuestNames, setAllGuestNames] = useState({});
-  const [showVideoComponent, setShowVideoComponent] = useState(false);  const [showBanner, setShowBanner] = useState(true);
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);  const handleWatchLetter = () => {
+  const [showVideoComponent, setShowVideoComponent] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const handleWatchLetter = () => {
     // Handle the watch letter click event
     // You can add your own logic here, like opening a modal or navigating to a new page
     console.log("Watch letter button clicked");
@@ -158,14 +160,15 @@ const InboxIndex = () => {
     }
   }, [section, location.state]); // Added section and location.state as dependencies
   return (
-    <>      {showBanner && screenWidth >= 1100 && location.pathname === "/inbox" && (
+    <>
+      {" "}
+      {showBanner && screenWidth >= 1100 && location.pathname === "/inbox" && (
         <NotificationBanner
           onWatchLetter={handleWatchLetter}
           onClose={() => setShowBanner(false)}
           className="mb-3"
         />
       )}
-
       {/* Video Component Popup */}
       {showVideoComponent && (
         <div
@@ -215,8 +218,9 @@ const InboxIndex = () => {
           </div>
         </div>
       )}
-
-      <div className="inbox-container">        {interFaceComponent === 0 && (
+      <div className="inbox-container">
+        {" "}
+        {interFaceComponent === 0 && (
           <Inbox
             allPropertyNamesList={allPropertyNamesList}
             allGuestNamesList={allGuestNames}
@@ -224,7 +228,11 @@ const InboxIndex = () => {
             subscriptionPlan={subscriptionPlan}
             accountAgeDays={accountAgeDays}
             singleConversationIdFromUrl={conversationIdFromUrl}
-            bannerVisible={showBanner && screenWidth >= 1100 && location.pathname === "/inbox"}
+            bannerVisible={
+              showBanner &&
+              screenWidth >= 1100 &&
+              location.pathname === "/inbox"
+            }
           />
         )}
         {interFaceComponent === 1 && (
