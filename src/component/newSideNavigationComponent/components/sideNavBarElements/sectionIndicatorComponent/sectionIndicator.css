@@ -60,12 +60,13 @@
 }
 
 .side-nav-item.selected {
-    background-color: var(--colors-color-background-selected-subtle-default, rgba(55, 135, 255, 0.1));
+    background-color: #01255E;
+    /* background-color: var(--colors-color-background-selected-subtle-default, rgba(55, 135, 255, 0.1)); */
     box-shadow: 0 0 0 1px rgba(55, 135, 255, 0.15); /* Subtle border effect */
 }
 
 .side-nav-item.selected .text-wrapper {
-    color: #A6A9B2;
+    color: #98BFFA;
     font-weight: 600; /* Make selected text slightly bolder */
 }
 
