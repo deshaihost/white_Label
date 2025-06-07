@@ -726,9 +726,8 @@ const LeftMessage = ({
 
       {filterQueryLoading ? (
         <BoxLoader />
-      ) : filteredConversations && filteredConversations.length ? (
-        <div className={`left-bar-chat`} ref={containerRef}>
-          <div style={{ border: "1px solid #24262E" }}>
+      ) : filteredConversations && filteredConversations.length ? (        <div className={`left-bar-chat`} ref={containerRef}>
+          <div style={{ border: "1px solid #24262E", position: "relative" }}>
             {filteredConversations.map((message) => {
               const {
                 property_name,
@@ -1256,9 +1255,23 @@ const LeftMessage = ({
                   </div>
                   {/* <hr /> */}
                 </React.Fragment>
-              );
-            })}
+              );            })}
           </div>
+          
+          {/* Gradient overlay to indicate overflow content */}
+          <div 
+            style={{
+              position: 'absolute',
+              width:"350px",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '40px',
+              background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%)',
+              pointerEvents: 'none',
+              zIndex: 10
+            }}
+          />
 
           {/* Button to load more conversations (failsafe for auto-load when user scrolls to bottom) - or loader icon if already loading */}
           {nextBatchLoading ? (

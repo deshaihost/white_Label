@@ -122,12 +122,15 @@ const RightSection = ({
   });
 
   const dropdownRef = useRef(null);
-  const assignUserDropdownRef = useRef(null);
-  const hostbuddyDropdownRef = useRef(null);
+  const assignUserDropdownRef = useRef(null);  const hostbuddyDropdownRef = useRef(null);
+  const rightSideRef = useRef(null);
   const navigate = useNavigate();
   // State for action items
   const [actionItems, setActionItems] = useState([]);
   const [getActionItemsLoading, setGetActionItemsLoading] = useState(false);
+  // State for scroll overlay
+  const [showTopGradient, setShowTopGradient] = useState(false);
+  const [showBottomGradient, setShowBottomGradient] = useState(false);
 
   // Status calculation logic (moved here to avoid initialization issues)
   const get_current_status = () => {
@@ -461,7 +464,6 @@ const RightSection = ({
       setSelectedSentiment("neutral"); // Default to neutral
     }
   }, [sentiment]);
-
   // Handle clicks outside the Hostbuddy dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -478,6 +480,42 @@ const RightSection = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  
+  // Handle scroll gradients for overflow content
+  useEffect(() => {
+    const checkScroll = () => {
+      if (rightSideRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = rightSideRef.current;
+        
+        // Show top gradient when scrolled down
+        setShowTopGradient(scrollTop > 10);
+        
+        // Show bottom gradient when there's more content to scroll to
+        setShowBottomGradient(scrollHeight > clientHeight && scrollTop < scrollHeight - clientHeight - 10);
+      }
+    };
+    
+    // Check initial state
+    checkScroll();
+    
+    // Add scroll event listener
+    const rightSide = rightSideRef.current;
+    if (rightSide) {
+      rightSide.addEventListener('scroll', checkScroll);
+      
+      // Also check when content might have changed
+      const resizeObserver = new ResizeObserver(() => {
+        checkScroll();
+      });
+      
+      resizeObserver.observe(rightSide);
+      
+      return () => {
+        rightSide.removeEventListener('scroll', checkScroll);
+        resizeObserver.disconnect();
+      };
+    }
+  }, [rightSectionData]);
 
   // Force display for testing - remove in production
   const isCheckInToday = true; // For testing
@@ -815,9 +853,37 @@ const RightSection = ({
       navigate("/action-item");
     }
   };
-
   return (
-    <div className="right-side">
+    <div className="right-side" ref={rightSideRef}>
+      {/* Gradient overlays for scrolling indication */}
+      {showTopGradient && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "296px",
+            height: "40px",
+            background: "linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%)",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
+      )}
+      {showBottomGradient && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            width: "296px",
+            height: "40px",
+            background: "linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%)",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
+      )}
       {/* Mobile Back Button */}
       <div className="d-block d-lg-none mobile-nav">
         <button

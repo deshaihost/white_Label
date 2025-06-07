@@ -264,16 +264,20 @@ const Inbox = ({
   const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
   const [conversationCache, setConversationCache] = useState(new Map()); // Cache to store full conversation details by conversation_id
   const [conversationsNotYetFetched, setConversationsNotYetFetched] =
-    useState(true);  const [urgentFilterIsEnabled, setUrgentFilterIsEnabled] = useState(false);
+    useState(true);
+  const [urgentFilterIsEnabled, setUrgentFilterIsEnabled] = useState(false);
   const [propertyFilterVal, setPropertyFilterVal] = useState("");
   const [phaseFilterVal, setPhaseFilterVal] = useState("");
-  const [fromHostBuddyFilterVal, setFromHostBuddyFilterVal] = useState(false);  const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
+  const [fromHostBuddyFilterVal, setFromHostBuddyFilterVal] = useState(false);
+  const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
   const [userFilterVal, setUserFilterVal] = useState("");
   const [currentView, setCurrentView] = useState("conversations"); // New state for mobile view
   const [activeTab, setActiveTab] = useState("pms"); // New state to track active tab
   const [pendingTabChange, setPendingTabChange] = useState(null); // To track pending tab change when switching views
   const [allowConvIdQuery, setAllowConvIdQuery] = useState(true); // Added state for handling conversationId query
-  const [rightSectionVisible, setRightSectionVisible] = useState(window.innerWidth >= 1280); // State for right section visibility in medium screens, default open for screens >= 1280px
+  const [rightSectionVisible, setRightSectionVisible] = useState(
+    window.innerWidth >= 1280
+  ); // State for right section visibility in medium screens, default open for screens >= 1280px
   const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width for responsive design
@@ -310,7 +314,7 @@ const Inbox = ({
           setSelectedConversation({
             ...updatedConversation,
             _apiCallMade: true, // Preserve the API call flag
-          });          // Update the conversation in the conversations list too
+          }); // Update the conversation in the conversations list too
           setConversations((prev) =>
             prev.map((convo) =>
               convo.conversation_id === selectedConversation.conversation_id
@@ -336,15 +340,18 @@ const Inbox = ({
       // Track if this conversation ID has been processed to prevent multiple API calls
       const conversationId = selectedConversation.conversation_id;
       const isNewConversationSelection =
-        selectedConversation._apiCallMade !== true;      // Only fetch conversation data if this is a new selection
+        selectedConversation._apiCallMade !== true; // Only fetch conversation data if this is a new selection
       if (isNewConversationSelection) {
         // Enhanced cache-first strategy: Check multiple sources for complete conversation data
-        
+
         // First, check if we have comprehensive cached data from periodic updates
         const cachedConversation = conversationCache.get(conversationId);
         if (cachedConversation && cachedConversation._has_complete_data) {
-          console.log("Using comprehensive cached conversation data from periodic updates for:", conversationId);
-          
+          console.log(
+            "Using comprehensive cached conversation data from periodic updates for:",
+            conversationId
+          );
+
           // Update pin status based on cached data
           const isPinnedValue = !!(
             cachedConversation.pinned || cachedConversation.is_pinned
@@ -362,42 +369,52 @@ const Inbox = ({
         }
 
         // Second, check if the selected conversation already has complete message data from the conversations array
-        const hasCompleteMessageData = selectedConversation.messages && 
-          Array.isArray(selectedConversation.messages) && 
+        const hasCompleteMessageData =
+          selectedConversation.messages &&
+          Array.isArray(selectedConversation.messages) &&
           selectedConversation.messages.length > 0 &&
-          selectedConversation.messages.every(msg => msg.sender && msg.text && msg.time);
+          selectedConversation.messages.every(
+            (msg) => msg.sender && msg.text && msg.time
+          );
 
         if (hasCompleteMessageData) {
           // Use the existing conversation data from the conversations array
-          console.log("Using complete conversation data from conversations array for:", conversationId);
-          
+          console.log(
+            "Using complete conversation data from conversations array for:",
+            conversationId
+          );
+
           // Cache this conversation data for future use
-          setConversationCache(prevCache => {
+          setConversationCache((prevCache) => {
             const newCache = new Map(prevCache);
             newCache.set(conversationId, {
               ...selectedConversation,
               _cached_at: Date.now(),
               _has_complete_data: true,
-              _from_conversations_array: true
+              _from_conversations_array: true,
             });
             return newCache;
           });
 
           // Mark as processed and update the conversation object
-          setSelectedConversation(prev => ({
+          setSelectedConversation((prev) => ({
             ...prev,
             _apiCallMade: true, // Mark that we've processed this conversation
           }));
           return; // Exit early since we have complete data
-        }        const fetchLatestConversationData = async () => {
+        }
+        const fetchLatestConversationData = async () => {
           try {
             // Third fallback: check if we have any cached data for this conversation (even if not complete)
             const cachedConversation = conversationCache.get(conversationId);
-            
+
             if (cachedConversation) {
               // Use cached data instead of making API call, even if it's not marked as complete
-              console.log("Using fallback cached conversation data for:", conversationId);
-              
+              console.log(
+                "Using fallback cached conversation data for:",
+                conversationId
+              );
+
               // Update pin status based on cached data
               const isPinnedValue = !!(
                 cachedConversation.pinned || cachedConversation.is_pinned
@@ -418,8 +435,11 @@ const Inbox = ({
             setSelectedConversation((prev) => ({
               ...prev,
               _apiCallMade: true,
-            }));            // Only call API if we don't have cached data
-            console.log("No cached data found, making API call for:", conversationId);
+            })); // Only call API if we don't have cached data
+            console.log(
+              "No cached data found, making API call for:",
+              conversationId
+            );
             const result = await callGetSingleConversationApi(conversationId);
 
             if (
@@ -431,13 +451,13 @@ const Inbox = ({
               const updatedConversation = result.conversations[0];
 
               // Enhanced cache update: Mark this as complete data from API
-              setConversationCache(prevCache => {
+              setConversationCache((prevCache) => {
                 const newCache = new Map(prevCache);
                 newCache.set(conversationId, {
                   ...updatedConversation,
                   _cached_at: Date.now(),
                   _has_complete_data: true,
-                  _from_api_call: true
+                  _from_api_call: true,
                 });
                 return newCache;
               });
@@ -503,7 +523,7 @@ const Inbox = ({
     const handleResize = () => {
       const newWidth = window.innerWidth;
       setWindowWidth(newWidth);
-      
+
       // Auto-open right section for screens >= 1280px, auto-close for smaller screens
       if (newWidth >= 1280) {
         setRightSectionVisible(true);
@@ -513,13 +533,13 @@ const Inbox = ({
     };
 
     // Add event listener for window resize
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Set initial state based on current window width
     handleResize();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -934,7 +954,7 @@ const Inbox = ({
     } else {
       return {};
     }
-  };  // Call the API to get conversations, up to the specified limit, and update the state with the returned data.
+  }; // Call the API to get conversations, up to the specified limit, and update the state with the returned data.
   const fetchConversations = async (
     limit,
     reset = false,
@@ -954,7 +974,8 @@ const Inbox = ({
     } else {
       // Tell the API which conversations we already have, so we don't need to get them again if they haven't been updated
       conversationsAlreadyHave = getConversationsAlreadyHave();
-    }    const conversationId = useConvIdQuery
+    }
+    const conversationId = useConvIdQuery
       ? singleConversationIdFromUrl || null
       : null;
 
@@ -990,7 +1011,7 @@ const Inbox = ({
       const timeB = new Date(a.messages[a.messages.length - 1].time);
       return timeB - timeA; // Sort in descending order
     });
-  };  // Given a conversation ID: fetch that convo from the API and update that conversation in the state
+  }; // Given a conversation ID: fetch that convo from the API and update that conversation in the state
   const updateConversation = async (conversationId) => {
     try {
       // Check if this is the currently selected conversation that's already been loaded
@@ -1020,14 +1041,14 @@ const Inbox = ({
           ...updatedConversationData.conversations[0],
           _apiCallMade: true, // Mark as loaded
           _isUpdate: selectedConversation?.conversation_id === conversationId, // Flag to indicate this is an update, not a new selection
-        };        // Cache the updated conversation data with enhanced metadata
-        setConversationCache(prevCache => {
+        }; // Cache the updated conversation data with enhanced metadata
+        setConversationCache((prevCache) => {
           const newCache = new Map(prevCache);
           newCache.set(conversationId, {
             ...retrievedConversation,
             _cached_at: Date.now(),
             _has_complete_data: true,
-            _from_update_api: true
+            _from_update_api: true,
           });
           return newCache;
         });
@@ -1050,7 +1071,7 @@ const Inbox = ({
     } catch (error) {
       console.error("Error fetching conversation:", error);
     }
-  };  // Update our conversation state with a new list returned by the API. This does NOT call the API: it takes the API data as a parameter. Also handles detecting when there are no updates from the API and making sure the previous state gets copied over.
+  }; // Update our conversation state with a new list returned by the API. This does NOT call the API: it takes the API data as a parameter. Also handles detecting when there are no updates from the API and making sure the previous state gets copied over.
   const updateConversationsWithApiData = (apiConversationData) => {
     let newConversationState = apiConversationData.map((conversation) => {
       const conversationId = conversation["conversation_id"];
@@ -1063,20 +1084,23 @@ const Inbox = ({
       } else {
         // Enhanced cache population: Store complete conversation data with comprehensive message details
         // This ensures we have full data available for immediate use when users click on conversations
-        const hasCompleteMessageData = conversation.messages && 
-          Array.isArray(conversation.messages) && 
+        const hasCompleteMessageData =
+          conversation.messages &&
+          Array.isArray(conversation.messages) &&
           conversation.messages.length > 0 &&
-          conversation.messages.every(msg => msg.sender && msg.text && msg.time);
+          conversation.messages.every(
+            (msg) => msg.sender && msg.text && msg.time
+          );
 
         if (hasCompleteMessageData) {
           // Cache the full conversation details when we have complete data
-          setConversationCache(prevCache => {
+          setConversationCache((prevCache) => {
             const newCache = new Map(prevCache);
             newCache.set(conversationId, {
               ...conversation,
               _cached_at: Date.now(), // Track when this was cached
               _has_complete_data: true, // Flag to indicate this has complete message data
-              _from_periodic_update: true // Flag to indicate this came from periodic update
+              _from_periodic_update: true, // Flag to indicate this came from periodic update
             });
             return newCache;
           });
@@ -1096,7 +1120,7 @@ const Inbox = ({
   };
   // Cache management functions
   const invalidateConversationCache = (conversationId) => {
-    setConversationCache(prevCache => {
+    setConversationCache((prevCache) => {
       const newCache = new Map(prevCache);
       newCache.delete(conversationId);
       return newCache;
@@ -1108,15 +1132,18 @@ const Inbox = ({
   };
 
   const updateConversationInCache = (conversationId, conversationData) => {
-    setConversationCache(prevCache => {
+    setConversationCache((prevCache) => {
       const newCache = new Map(prevCache);
       newCache.set(conversationId, {
         ...conversationData,
         _cached_at: Date.now(),
-        _has_complete_data: conversationData.messages && 
-          Array.isArray(conversationData.messages) && 
+        _has_complete_data:
+          conversationData.messages &&
+          Array.isArray(conversationData.messages) &&
           conversationData.messages.length > 0 &&
-          conversationData.messages.every(msg => msg.sender && msg.text && msg.time)
+          conversationData.messages.every(
+            (msg) => msg.sender && msg.text && msg.time
+          ),
       });
       return newCache;
     });
@@ -1125,19 +1152,21 @@ const Inbox = ({
   const cleanupOldCacheEntries = () => {
     const maxAge = 10 * 60 * 1000; // 10 minutes in milliseconds
     const now = Date.now();
-    
-    setConversationCache(prevCache => {
+
+    setConversationCache((prevCache) => {
       const newCache = new Map();
       let removedCount = 0;
       for (const [key, value] of prevCache.entries()) {
-        if (value._cached_at && (now - value._cached_at) < maxAge) {
+        if (value._cached_at && now - value._cached_at < maxAge) {
           newCache.set(key, value);
         } else {
           removedCount++;
         }
       }
       if (removedCount > 0) {
-        console.log(`Cache cleanup: Removed ${removedCount} old entries, ${newCache.size} entries remaining`);
+        console.log(
+          `Cache cleanup: Removed ${removedCount} old entries, ${newCache.size} entries remaining`
+        );
       }
       return newCache;
     });
@@ -1152,19 +1181,34 @@ const Inbox = ({
   window.logCacheStats = () => {
     console.log(`Conversation Cache Statistics:
       - Total cached conversations: ${conversationCache.size}
-      - Conversations with complete data: ${[...conversationCache.values()].filter(c => c._has_complete_data).length}
+      - Conversations with complete data: ${
+        [...conversationCache.values()].filter((c) => c._has_complete_data)
+          .length
+      }
       - Cache sources breakdown:
-        * From periodic updates: ${[...conversationCache.values()].filter(c => c._from_periodic_update).length}
-        * From API calls: ${[...conversationCache.values()].filter(c => c._from_api_call).length}
-        * From conversations array: ${[...conversationCache.values()].filter(c => c._from_conversations_array).length}
-        * From update API: ${[...conversationCache.values()].filter(c => c._from_update_api).length}
+        * From periodic updates: ${
+          [...conversationCache.values()].filter((c) => c._from_periodic_update)
+            .length
+        }
+        * From API calls: ${
+          [...conversationCache.values()].filter((c) => c._from_api_call).length
+        }
+        * From conversations array: ${
+          [...conversationCache.values()].filter(
+            (c) => c._from_conversations_array
+          ).length
+        }
+        * From update API: ${
+          [...conversationCache.values()].filter((c) => c._from_update_api)
+            .length
+        }
     `);
   };
   // Add a message to a conversation in our local record (conversations)
   const addMessageToLocalConversation = (conversationId, message) => {
     // Invalidate cache when a new message is added
     invalidateConversationCache(conversationId);
-    
+
     // Update the covnersation in covnersations
     const updatedConversations = conversations.map((conversation) => {
       if (conversation.conversation_id === conversationId) {
@@ -1193,13 +1237,17 @@ const Inbox = ({
   // Fetch conversations to keep the page up-to-date (every 10s for new accounts, every 20s for elite users)
   useEffect(() => {
     const isNewAccount =
-      typeof accountAgeDays === "number" && accountAgeDays < 4;    if (isNewAccount || eliteFeaturesAvailable) {
+      typeof accountAgeDays === "number" && accountAgeDays < 4;
+    if (isNewAccount || eliteFeaturesAvailable) {
       const intervalId = setInterval(
         () => {
           const num_existing_convos = conversations.length;
           const num_convos_to_fetch = Math.max(num_existing_convos, 2); // always fetch at least 2 convos, even if we're only looking at one (e.g. due to filter), so if there's simultaneous updates we're more likely to catch it. 2 is still an arbitrary number tbh
-          
-          console.log(`Periodic update: Fetching ${num_convos_to_fetch} conversations to refresh cache`);          fetchConversations(
+
+          console.log(
+            `Periodic update: Fetching ${num_convos_to_fetch} conversations to refresh cache`
+          );
+          fetchConversations(
             num_convos_to_fetch,
             false,
             urgentFilterIsEnabled,
@@ -1224,7 +1272,8 @@ const Inbox = ({
         clearInterval(intervalId);
         clearTimeout(timeoutId);
       };
-    }  }, [
+    }
+  }, [
     conversations,
     eliteFeaturesAvailable,
     urgentFilterIsEnabled,
@@ -1255,12 +1304,13 @@ const Inbox = ({
     // For medium screens (1100px-1279px) and other smaller screens, use conditional logic
     // If right section is visible, align items to the start
     // otherwise distribute space between items
-    return  rightSectionVisible ? "calc(100% - 290px)" : "100%";
+    return rightSectionVisible ? "calc(100% - 290px)" : "100%";
   };
 
   return (
     <>
-      <style>{responsiveStyles}</style>      <div
+      <style>{responsiveStyles}</style>{" "}
+      <div
         className="inbox-content-container"
         style={{
           height: bannerVisible ? "calc(95vh - 40px)" : "95vh",
@@ -1276,9 +1326,11 @@ const Inbox = ({
           {" "}
           {/* Desktop View */}
           <div
-            style={{ width: "100%", gap: "0px", height: "100%" }}
+            style={{ width: "100%", gap: "0px", height: "100%" , paddingRight:"0px"}}
             className="desktop-view"
-          >            <LeftMessage
+          >
+            {" "}
+            <LeftMessage
               className="box"
               allPropertyNamesList={allPropertyNamesList}
               allGuestNames={allGuestNamesList}
@@ -1328,7 +1380,7 @@ const Inbox = ({
                   style={{
                     display: "flex",
                     // justifyContent: determineJustifyContent(),
-                    justifyContent:"space-between",
+                    justifyContent: "space-between",
                     alignItems: "center",
                     width: "100%",
                     padding: "4px",
@@ -1540,7 +1592,9 @@ const Inbox = ({
                         padding: "0 8px",
                         gap: "6px",
                       }}
-                      onClick={() => setRightSectionVisible(!rightSectionVisible)}
+                      onClick={() =>
+                        setRightSectionVisible(!rightSectionVisible)
+                      }
                     >
                       <img
                         src={
@@ -2424,7 +2478,6 @@ const Inbox = ({
                             >
                               Visible to HostBuddy
                               <div
-                               
                                 style={{
                                   width: "20px",
                                   height: "20px",
@@ -2555,7 +2608,8 @@ const Inbox = ({
           />
           {/* Mobile View */}
           <div className="mobile-view">
-            {currentView === "conversations" && (              <LeftMessage
+            {currentView === "conversations" && (
+              <LeftMessage
                 allPropertyNamesList={allPropertyNamesList}
                 allGuestNames={allGuestNamesList}
                 allConversations={conversations}
