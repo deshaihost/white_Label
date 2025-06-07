@@ -1315,6 +1315,7 @@ const Inbox = ({
         style={{
           height: bannerVisible ? "calc(95vh - 40px)" : "95vh",
           marginLeft:"10px",
+          marginTop: "10px"
           // margin: "10px",
           // borderWidth:"1px" ,
           // borderStyle:"solid",
