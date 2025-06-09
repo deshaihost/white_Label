@@ -75,7 +75,6 @@ const Properties = () => {
   const intergrationsMain = userData?.calry_integrations;
   //const subscription_data = userData?.subscription;
   const subscription_data = getSubscriptionStatus(userData); // {plan:<plan_name>, props_allowed:<num_props_allowed>}
-  console.log("subscription_data", subscription_data);
   const intergrations = intergrationsMain ? intergrationsMain : [];
   const toggleChatMessage = store?.togglechatBotOnOffReducer?.toggleChatBotOnOff?.data?.message;
   const toggleChatLoading = store?.togglechatBotOnOffReducer?.loading;
@@ -208,8 +207,8 @@ const Properties = () => {
           
           <SubscriptionBanner userData={userData} bottomMargin={'20px'} topMargin={(userData?.hospitable_permission_error || hospitableWhReminder) ? '0px' : '-30px'} />
 
-          <div className="row justify-content-center">
-            <div className="col-lg-2 col-xl-2 col-xxl-2" style={{display: "none"}}>
+          <div className="row">
+            <div className="col-lg-2 col-xl-2 col-xxl-2">
               <SideBar />
             </div>
             <div className="col-lg-10 col-xl-10 col-xxl-10">
