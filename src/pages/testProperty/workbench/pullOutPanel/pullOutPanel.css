@@ -47,6 +47,11 @@
   cursor: pointer;
 }
 
+.pull-out-panel .close-button.close-button-right {
+  left: auto;
+  right: 15px; /* Top right corner for conversationPreferences */
+}
+
 .pull-out-panel .panel-content {
   margin-top: 60px;
   padding: 20px;

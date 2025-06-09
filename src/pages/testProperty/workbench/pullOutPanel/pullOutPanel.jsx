@@ -35,12 +35,16 @@ const PullOutPanel = ({ onClose, content, className, propertyName, apiPropertyDa
         return null;
     }
   };
-
   return (
     <>
       <div className={`panel-overlay ${className}`} onClick={handleClose} />
       <div className={`pull-out-panel ${className}`}>
-        <button className='close-button' onClick={handleClose}>X</button>
+        <button 
+          className={`close-button ${content === 'conversationPreferences' ? 'close-button-right' : ''}`} 
+          onClick={handleClose}
+        >
+          X
+        </button>
         <div className='panel-content'>
           {renderContent()}
         </div>
