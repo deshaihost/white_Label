@@ -135,7 +135,7 @@ const FilterPop = ({
             defaultValue={tempFromHostBuddyFilter ? sourceOptions[0] : null}
           />
 
-          <label className="filter-pop-label">User</label>
+          <label className="filter-pop-label">Assigned Users</label>
           <DropdownComponent 
             options={userOptions}
             placeholder={subUserLoading ? "Loading users..." : "Select user"}
