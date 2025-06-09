@@ -80,6 +80,7 @@ const RightSection = ({
     guest_chatbot_status,
     property_chatbot_status,
     conversation_id,
+    reservation_id,
     image_url,
     user,
     action_items,
@@ -108,8 +109,7 @@ const RightSection = ({
   const [localStatus, setLocalStatus] = useState(null); // Local state for tracking status changes
   const [selectedSentiment, setSelectedSentiment] = useState(
     sentiment || "neutral"
-  );
-  // State for sub-user names
+  ); // State for sub-user names
   const [subUserNames, setSubUserNames] = useState([]);
   const [subUserLoading, setSubUserLoading] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -117,12 +117,15 @@ const RightSection = ({
   const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [contactInfo, setContactInfo] = useState({
-    email: "floydmiles@gmail.com",
-    phone: "(316) 555-0116",
+    email: "",
+    phone: "",
   });
+  const [getGuestDataLoading, setGetGuestDataLoading] = useState(false);
+  const [updateGuestDataLoading, setUpdateGuestDataLoading] = useState(false);
 
   const dropdownRef = useRef(null);
-  const assignUserDropdownRef = useRef(null);  const hostbuddyDropdownRef = useRef(null);
+  const assignUserDropdownRef = useRef(null);
+  const hostbuddyDropdownRef = useRef(null);
   const rightSideRef = useRef(null);
   const navigate = useNavigate();
   // State for action items
@@ -163,7 +166,6 @@ const RightSection = ({
     ? get_current_status()
     : null;
   const { curr_status, source } = current_status_get || {};
-
   // Fetch action items when component mounts
   useEffect(() => {
     callGetActionItemsApi(setActionItems, setGetActionItemsLoading);
@@ -480,38 +482,41 @@ const RightSection = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
   // Handle scroll gradients for overflow content
   useEffect(() => {
     const checkScroll = () => {
       if (rightSideRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = rightSideRef.current;
-        
+
         // Show top gradient when scrolled down
         setShowTopGradient(scrollTop > 10);
-        
+
         // Show bottom gradient when there's more content to scroll to
-        setShowBottomGradient(scrollHeight > clientHeight && scrollTop < scrollHeight - clientHeight - 10);
+        setShowBottomGradient(
+          scrollHeight > clientHeight &&
+            scrollTop < scrollHeight - clientHeight - 10
+        );
       }
     };
-    
+
     // Check initial state
     checkScroll();
-    
+
     // Add scroll event listener
     const rightSide = rightSideRef.current;
     if (rightSide) {
-      rightSide.addEventListener('scroll', checkScroll);
-      
+      rightSide.addEventListener("scroll", checkScroll);
+
       // Also check when content might have changed
       const resizeObserver = new ResizeObserver(() => {
         checkScroll();
       });
-      
+
       resizeObserver.observe(rightSide);
-      
+
       return () => {
-        rightSide.removeEventListener('scroll', checkScroll);
+        rightSide.removeEventListener("scroll", checkScroll);
         resizeObserver.disconnect();
       };
     }
@@ -853,6 +858,147 @@ const RightSection = ({
       navigate("/action-item");
     }
   };
+
+  // Function to call the API to get guest data
+  const callGetGuestDataApi = async () => {
+    if (!conversation_id) return;
+
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setGetGuestDataLoading(true);
+
+    try {
+      // Get token from the apiCore's active token or fall back to localStorage
+      const token = getActiveToken() || localStorage.getItem("authToken");
+
+      const config = {
+        headers: {
+          "X-API-Key": API_KEY,
+          Authorization: token ? `Bearer ${token}` : undefined,
+        },
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
+      }; // Build query parameters
+      const queryParams = new URLSearchParams({
+        conversation_id,
+        property_name,
+      });
+
+      // Add reservation_id only if it exists
+      if (reservation_id) {
+        queryParams.append("reservation_id", reservation_id);
+      }
+
+      const response = await axios.get(
+        `${baseUrl}/get_guest_data?${queryParams.toString()}`,
+        config
+      );
+      if (response.status === 200) {
+        // Update contact info with the response data
+        const guestData = response.data;
+        // Get last email address from email_addresses array
+        const emailAddresses = guestData.guest_data?.email_addresses || [];
+        const lastEmail =
+          emailAddresses.length > 0
+            ? emailAddresses[emailAddresses.length - 1]
+            : null;
+
+        // Get last phone number from phone_numbers array
+        const phoneNumbers = guestData.guest_data?.phone_numbers || [];
+        const lastPhone =
+          phoneNumbers.length > 0
+            ? phoneNumbers[phoneNumbers.length - 1]
+            : null;
+
+        setContactInfo({
+          email: lastEmail || "not added",
+          phone: lastPhone || "not added",
+        });
+      } else {
+        ToastHandle(
+          response?.data?.error || "Failed to fetch guest data",
+          "danger"
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching guest data:", error);
+      ToastHandle("Error fetching guest data", "danger");
+    } finally {
+      setGetGuestDataLoading(false);
+    }
+  };
+
+  // API function to update guest contact information
+  const callUpdateGuestDataApi = async () => {
+    if (!conversation_id) return;
+
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setUpdateGuestDataLoading(true);
+
+    try {
+      // Get token from the apiCore's active token or fall back to localStorage
+      const token = getActiveToken() || localStorage.getItem("authToken");
+
+      const config = {
+        headers: {
+          "X-API-Key": API_KEY,
+          Authorization: token ? `Bearer ${token}` : undefined,
+          "Content-Type": "application/json",
+        },
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
+      };
+
+      // Build the request body with contact information
+    const requestBody = {
+  conversation_id,
+  property_name,
+  guest_data: {
+    email_addresses: contactInfo.email && contactInfo.email !== "not added" ? [contactInfo.email] : [],
+    phone_numbers: contactInfo.phone && contactInfo.phone !== "not added" ? [contactInfo.phone] : [],
+  },
+};
+
+      // Add reservation_id only if it exists
+      if (reservation_id) {
+        requestBody.reservation_id = reservation_id;
+      }
+
+      const response = await axios.put(
+        `${baseUrl}//update_guest_info`,
+        requestBody,
+        config
+      );
+
+      if (response.status === 200) {
+        ToastHandle("Contact information updated successfully", "success");
+        // Refresh guest data to reflect the changes
+        await callGetGuestDataApi();
+        setContactModalOpen(false);
+      } else {
+        ToastHandle(
+          response?.data?.error || "Failed to update contact information",
+          "danger"
+        );
+      }
+    } catch (error) {
+      console.error("Error updating guest data:", error);
+      ToastHandle("Error updating contact information", "danger");
+    } finally {
+      setUpdateGuestDataLoading(false);
+    }
+  };
+
+  // Initial fetch of guest data when conversation_id is available
+  useEffect(() => {
+    if (conversation_id) {
+      callGetGuestDataApi();
+    }
+  }, [conversation_id]);
+
   return (
     <div className="right-side" ref={rightSideRef}>
       {/* Gradient overlays for scrolling indication */}
@@ -864,7 +1010,8 @@ const RightSection = ({
             left: 0,
             width: "296px",
             height: "40px",
-            background: "linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%)",
+            background:
+              "linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%)",
             pointerEvents: "none",
             zIndex: 1,
           }}
@@ -878,7 +1025,8 @@ const RightSection = ({
             left: 0,
             width: "296px",
             height: "40px",
-            background: "linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%)",
+            background:
+              "linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%)",
             pointerEvents: "none",
             zIndex: 1,
           }}
@@ -1281,73 +1429,86 @@ const RightSection = ({
           }}
         ></div>
         {/* Contact Information Section */}
-         <div style={{ marginBottom: '15px' }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            marginBottom: '10px' 
-          }}>
-            <h2 style={{ 
-              margin: 0,
-              color: '#ffffff',
-              fontFamily: '"Poppins-SemiBold", Helvetica',
-              fontSize: '14px',
-              fontWeight: 600,
-              lineHeight: '19.6px',
-            }}>Contact information</h2>            <span 
+        <div style={{ marginBottom: "15px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "10px",
+            }}
+          >
+            <h2
+              style={{
+                margin: 0,
+                color: "#ffffff",
+                fontFamily: '"Poppins-SemiBold", Helvetica',
+                fontSize: "14px",
+                fontWeight: 600,
+                lineHeight: "19.6px",
+              }}
+            >
+              Contact information
+            </h2>{" "}
+            <span
               onClick={() => setContactModalOpen(true)}
-              style={{ 
-                color: '#74A9F7', 
-                fontSize: '14px', 
-                cursor: 'pointer',
-                fontFamily: '"DM Sans", Helvetica'
+              style={{
+                color: "#74A9F7",
+                fontSize: "14px",
+                cursor: "pointer",
+                fontFamily: '"DM Sans", Helvetica',
               }}
             >
               Edit
             </span>
-          </div>
-          
-          <div style={{ marginBottom: '5px' }}>
-            <span style={{ 
-              color: '#A6A9B2',
-              fontFamily: '"DM Sans", Helvetica',
-              fontSize: '14px',
-              fontWeight: 400
-            }}>
+          </div>{" "}
+          <div style={{ marginBottom: "5px" }}>
+            <span
+              style={{
+                color: "#A6A9B2",
+                fontFamily: '"DM Sans", Helvetica',
+                fontSize: "14px",
+                fontWeight: 400,
+              }}
+            >
               Phone:
             </span>
-            <span style={{ 
-              color: '#D0D3DB',
-              fontFamily: '"DM Sans", Helvetica',
-              fontSize: '14px',
-              fontWeight: 400,
-              marginLeft: '5px'
-            }}>
-              {contactInfo.phone}
+            <span
+              style={{
+                color: "#D0D3DB",
+                fontFamily: '"DM Sans", Helvetica',
+                fontSize: "14px",
+                fontWeight: 400,
+                marginLeft: "5px",
+              }}
+            >
+              {getGuestDataLoading ? "Loading..." : contactInfo.phone}
             </span>
           </div>
-          
           <div>
-            <span style={{ 
-              color: '#A6A9B2',
-              fontFamily: '"DM Sans", Helvetica',
-              fontSize: '14px',
-              fontWeight: 400
-            }}>
+            <span
+              style={{
+                color: "#A6A9B2",
+                fontFamily: '"DM Sans", Helvetica',
+                fontSize: "14px",
+                fontWeight: 400,
+              }}
+            >
               Email:
             </span>
-            <span style={{ 
-              color: '#D0D3DB',
-              fontFamily: '"DM Sans", Helvetica',
-              fontSize: '14px',
-              fontWeight: 400,
-              marginLeft: '5px'
-            }}>
-              {contactInfo.email}
+            <span
+              style={{
+                color: "#D0D3DB",
+                fontFamily: '"DM Sans", Helvetica',
+                fontSize: "14px",
+                fontWeight: 400,
+                marginLeft: "5px",
+              }}
+            >
+              {getGuestDataLoading ? "Loading..." : contactInfo.email}
             </span>
           </div>
-        </div> 
+        </div>
         <div
           style={{
             borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
@@ -2945,6 +3106,7 @@ const RightSection = ({
                 gap: "10px",
               }}
             >
+              {" "}
               <button
                 onClick={() => setContactModalOpen(false)}
                 style={{
@@ -2959,18 +3121,25 @@ const RightSection = ({
                 Cancel
               </button>
               <button
-                onClick={() => setContactModalOpen(false)}
+                onClick={callUpdateGuestDataApi}
+                disabled={updateGuestDataLoading}
                 style={{
                   padding: "8px 8px",
                   border: "none",
-                  backgroundColor: "#0B5FDE",
+                  backgroundColor: updateGuestDataLoading
+                    ? "#4A5568"
+                    : "#0B5FDE",
                   color: "#ffffff",
                   borderRadius: "4px",
-                  cursor: "pointer",
+                  cursor: updateGuestDataLoading ? "not-allowed" : "pointer",
                   fontSize: "14px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minWidth: "60px",
                 }}
               >
-                Update
+                {updateGuestDataLoading ? <Loader /> : "Update"}
               </button>
             </div>
           </div>
