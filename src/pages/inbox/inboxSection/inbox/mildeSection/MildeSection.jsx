@@ -973,8 +973,8 @@ console.log("allConversationData from MildeSection", allConversationData);
       >
         {allConversationData && Object.keys(allConversationData).length > 0 ? (
          
-          <div className="message-list" ref={messageListRef}>
-            {messages?.map((message, index) => {
+          <div className="message-list" ref={messageListRef} style={{marginBottom: "0px"}}>
+            {messages?.map((message, index) => {  
               const showDateSeparator =
                 index === 0 ||
                 !isSameDay(messages[index - 1]?.rawDate, message.rawDate);

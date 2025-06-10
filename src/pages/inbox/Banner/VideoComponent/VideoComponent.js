@@ -37,11 +37,10 @@ const VideoComponent = ({ onRemindLater }) => {
       <div className="lower-container">
         <div className="video-player-container">
           <div className="video-thumbnail" onClick={handleVideoPlay}>
-            {" "}
-            {isPlaying ? (
+            {" "}            {isPlaying ? (
               <iframe
                 className="video-element"
-                src="https://www.youtube.com/embed/f81rXqUgsPk?autoplay=1"
+                src="https://www.youtube.com/embed/9YcAMM3AWdY"
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
