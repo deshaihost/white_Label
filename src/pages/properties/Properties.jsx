@@ -205,12 +205,11 @@ const Properties = () => {
             </div>
           )}
           
-          <SubscriptionBanner userData={userData} bottomMargin={'20px'} topMargin={(userData?.hospitable_permission_error || hospitableWhReminder) ? '0px' : '-30px'} />
-
-          <div className="row">
-            <div className="col-lg-2 col-xl-2 col-xxl-2">
+          <SubscriptionBanner userData={userData} bottomMargin={'20px'} topMargin={(userData?.hospitable_permission_error || hospitableWhReminder) ? '0px' : '-30px'} />          <div className="row justify-content-center">
+            {/* <div className="col-lg-2 col-xl-2 col-xxl-2">
+              
               <SideBar />
-            </div>
+            </div> */}
             <div className="col-lg-10 col-xl-10 col-xxl-10">
               <div className="account-container blur-background-top-right">
                 <div className="account_heading">
