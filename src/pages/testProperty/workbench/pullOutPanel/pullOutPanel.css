@@ -39,7 +39,7 @@
 .pull-out-panel .close-button {
   position: absolute;
   top: 15px;
-  left: 15px; /* Top left corner */
+  left: 15px; /* Changed from right to left */
   background: none;
   border: none;
   color: #fff;
