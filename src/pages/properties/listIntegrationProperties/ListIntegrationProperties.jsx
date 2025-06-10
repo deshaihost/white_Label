@@ -351,7 +351,7 @@ const ListIntegrationProperties = () => {
         <>
           {createPropertiesName?.map((properties, index) => {
             let PropertStop = PropertiesExtraData?.[properties]?.toggle_status;
-            let is_locked = PropertiesExtraData?.[properties]?.hasOwnProperty('is_locked') ?? false;
+            let is_locked = PropertiesExtraData?.[properties]?.is_locked ?? false;
             let chatbot_key = PropertiesExtraData?.[properties]?.chatbot_key;
 
             return (

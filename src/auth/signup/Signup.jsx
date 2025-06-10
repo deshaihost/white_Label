@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Container from "react-bootstrap/Container";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import PrimaryButton from "../../component/button/button";
 import "../auth.css";
@@ -24,6 +24,7 @@ const Signup = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); // Added to access query parameters
   const { data, status } = store?.registerReducer?.register ? store?.registerReducer?.register : [];
   const registerLoading = store?.registerReducer?.loading;
   const registerUserMessage = store?.registerReducer?.register?.data?.message;
@@ -33,23 +34,53 @@ const Signup = () => {
   const [emailEntered, setEmailEntered] = useState("");
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
 
+  // State for discount code field behavior
+  const [isDiscountFieldVisible, setIsDiscountFieldVisible] = useState(false);
+  const [isDiscountFieldEditable, setIsDiscountFieldEditable] = useState(false);
+
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
   const password = useRef({});
   password.current = watch("newPassword", "");
 
   const [inputData, setInputData] = useState({ email: "", password: "" });
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const discountCodeQuery = queryParams.get("discount_code");
+    const allowDiscountQuery = queryParams.get("allow_discount");
+
+    if (discountCodeQuery) {
+      setIsDiscountFieldVisible(true);
+      setIsDiscountFieldEditable(false);
+      setValue("discountCode", discountCodeQuery);
+    } else if (allowDiscountQuery) {
+      setIsDiscountFieldVisible(true);
+      setIsDiscountFieldEditable(true);
+      setValue("discountCode", "");
+    } else {
+      setIsDiscountFieldVisible(false);
+      // Optionally clear the value if the field is hidden
+      // setValue("discountCode", undefined); 
+    }
+  }, [location.search, setValue]);
+
   const onSubmit = (data) => {
     setEmailEntered(data.email);
+    const payload = { 
+      email: data.email, 
+      password: data.newPassword, 
+      first_name: data.firstName, 
+      last_name: data.lastName, 
+      phone: data.phone,
+      hear_about_us: data.hear_about_us
+    };
+
+    if (isDiscountFieldVisible) {
+      payload.discount_code = data.discountCode;
+    }
+
     dispatch(
-      registerActions({ 
-        email: data.email, 
-        password: data.newPassword, 
-        first_name: data.firstName, 
-        last_name: data.lastName, 
-        phone: data.phone,
-        hear_about_us: data.hear_about_us // added new field
-      })
+      registerActions(payload)
     );
     setInputData({email: data.email, password: data.newPassword});
   };
@@ -223,6 +254,18 @@ const Signup = () => {
                       <>{ErrorMessageShow(errors?.confirmPassword?.message)}</>
                     )}
                   </div>
+
+                  {isDiscountFieldVisible && (
+                    <div className="input-container">
+                      <input
+                        type="text"
+                        placeholder="Discount Code..."
+                        {...register("discountCode")}
+                        readOnly={!isDiscountFieldEditable}
+                      />
+                      {/* You can add error handling for discountCode if needed */}
+                    </div>
+                  )}
 
                   <div className="input-container">
                     <input type="text" placeholder="How did you hear about us? ..." {...register("hear_about_us")} />
