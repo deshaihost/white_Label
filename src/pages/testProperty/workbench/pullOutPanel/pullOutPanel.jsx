@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './pullOutPanel.css';
 
 import QuickAdd from './quickAdd';
@@ -6,8 +6,58 @@ import AdvancedSettingsIndex from '../../../inbox/inboxSection/preferences/Prefe
 import HostBuddyKnowledgeBase from '../../../properties/addProperties/dynamic_questionnaire/questionnaireFirstPage/knowledgeBase/hbKnowledgeBase';
 import QuestionnairePage from '../../../properties/addProperties/dynamic_questionnaire/complete_questionnaire';
 
-const PullOutPanel = ({ onClose, content, className, propertyName, apiPropertyData, setApiPropertyData, getPropertyDataFromAPI, allPropertyNamesList, setPanelContent }) => {
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+const PullOutPanel = ({ onClose, content, className, propertyName, apiPropertyData, setApiPropertyData, getPropertyDataFromAPI, allPropertyNamesList, setPanelContent }) => {  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [sidebarState, setSidebarState] = useState({ open: true, width: 240 });
+  // Listen to sidebar state changes
+  useEffect(() => {
+    const handleSidebarStateChange = (event) => {
+      setSidebarState({
+        open: event.detail.open,
+        width: event.detail.width
+      });
+    };
+
+    const handleWindowResize = () => {
+      // Force re-render when window is resized to recalculate panel width
+      if (content === 'conversationPreferences') {
+        setSidebarState(prevState => ({ ...prevState }));
+      }
+    };
+
+    // Listen for sidebar state changes
+    document.addEventListener('sidebarStateChanged', handleSidebarStateChange);
+    window.addEventListener('resize', handleWindowResize);
+
+    // Get initial sidebar state if available
+    if (window.getSidebarState) {
+      const initialState = window.getSidebarState();
+      setSidebarState(initialState);
+    }
+
+    return () => {
+      document.removeEventListener('sidebarStateChanged', handleSidebarStateChange);
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [content]);
+
+  // Calculate panel width based on sidebar state for conversationPreferences
+  const getPanelWidth = () => {
+    if (content === 'conversationPreferences') {
+      // Adjust width based on sidebar state
+      // When sidebar is expanded (240px), leave more space for panel
+      // When sidebar is collapsed (64px), panel can be wider
+      const viewportWidth = window.innerWidth;
+      const sidebarWidth = sidebarState.width;
+      const availableWidth = viewportWidth - sidebarWidth - 40; // 40px margin
+      
+      // Set minimum and maximum widths
+      const minWidth = 600;
+      const maxWidth = 1000;
+      
+      return Math.min(Math.max(availableWidth, minWidth), maxWidth);
+    }
+    return 860; // Default width for other content types
+  };
 
   const handleClose = () => {
     if (hasUnsavedChanges) {
@@ -34,13 +84,17 @@ const PullOutPanel = ({ onClose, content, className, propertyName, apiPropertyDa
       default:
         return null;
     }
-  };
-  return (
+  };  return (
     <>
       <div className={`panel-overlay ${className}`} onClick={handleClose} />
-      <div className={`pull-out-panel ${className}`}>
-        <button 
-          className={`close-button ${content === 'conversationPreferences' ? 'close-button-right' : ''}`} 
+      <div 
+        className={`pull-out-panel ${className}`}
+        style={{
+          width: content === 'conversationPreferences' ? `${getPanelWidth()}px` : undefined,
+          minWidth: content === 'conversationPreferences' ? `${getPanelWidth()}px` : undefined
+        }}
+      >        <button 
+          className="close-button" 
           onClick={handleClose}
         >
           X
