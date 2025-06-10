@@ -59,7 +59,10 @@ export const BlogArticleHeader = ({ title, author, date, headerImage }) => {
       <div className="blog-article-header-banner">
         <h1>{title}</h1>
         <div className="blog-article-header-info flex-wrap">
-          <p className="author"> <img src={author_profiles[author]} alt="Author Profile Img" className="author-img" />{author}</p>
+          <p className="author" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <img src={author_profiles[author]} alt="Author Profile Img" className="author-img" />
+            {author}
+          </p>
           <p className="date">{date}</p>
         </div>
         <img src={headerImage} alt={title} className="blog-article-header-image" />

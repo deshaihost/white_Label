@@ -82,11 +82,7 @@ const Properties = () => {
 
   //const createPropertiesSubscriptionAllowed = userData?.subscription?.num_properties_allowed;
   const createPropertiesSubscriptionAllowed = subscription_data?.props_allowed;
-  const propertyNamesStillLocked = propertiesExtraData
-    ? Object.entries(propertiesExtraData)
-        .filter(([_, value]) => value.is_locked)
-        .map(([key, _]) => key)
-    : [];
+  const propertyNamesStillLocked = propertiesExtraData ? Object.entries(propertiesExtraData).filter(([_, value]) => value.is_locked).map(([key, _]) => key) : [];
   const numPropsAlreadyUnlocked = Object.keys(propertiesExtraData).length - propertyNamesStillLocked.length;
   const numPropsStillLocked = propertyNamesStillLocked.length;
   const remainingUnlocksAllowed = createPropertiesSubscriptionAllowed - numPropsAlreadyUnlocked;

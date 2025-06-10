@@ -17,6 +17,7 @@ default_settings = {
     'message_signature_enabled': False,
     'defer_behavior': 'defer to team',   // 1) 'contact host' - tell the guest to contact the host at their personal number or some other channel; 2) 'defer to team' - “will check with team and get back to you later”; 3) 'defer to host' - “the host will get back to you”; 4) 'embody host' - “I don’t have that information right now / am not able to do that right now, will check and get back to you later”; 5) 'do not respond'
     'reveal_ai': 'only if asked',   // 'only if asked' or 'never'
+    'language': 'guest_language',  // 'guest_language' for HB to respond in whichever language the guest is speaking, OR the name of whichever language HB should always use
     'stop_responding_on_negative_sentiment': False,
     'match_host_tone': False,
     'min_message_delay_minutes': 0, // int, 0-8
@@ -41,6 +42,16 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
   const setCurrentSettingsData = (newData) => {
     setLocalSettingsData({ ...localSettingsData, [selectedConfig]: newData });
   };
+
+  // Add a new state to track the language input value separately
+  const [languageInputValue, setLanguageInputValue] = useState('');
+
+  // Initialize the language input value when settings are loaded
+  useEffect(() => {
+    if (currentSettingsData && currentSettingsData.language && currentSettingsData.language !== 'guest_language') {
+      setLanguageInputValue(currentSettingsData.language);
+    }
+  }, [currentSettingsData?.language]);
 
   // Set a particular field in the current settings
   const setSetting = (key, value) => {
@@ -128,6 +139,14 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
   // On save button click, call the API to save the settings
   const handleSaveSettings = () => {
+    // If custom language is selected but no language is specified, show a warning and abort
+    if (localSettingsData[selectedConfig]?.language !== undefined && 
+        localSettingsData[selectedConfig]?.language !== 'guest_language' &&
+        (!localSettingsData[selectedConfig]?.language || localSettingsData[selectedConfig]?.language.trim() === '')) {
+      ToastHandle("Please enter a language", "danger");
+      return;
+    }
+    
     callSaveSettingsApi();
   }
 
@@ -376,6 +395,59 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <p className="settings-label mb-2">Can HostBuddy communicate that it is an AI assistant?</p>
             <Form.Check type="radio" aria-label="radio1" name="group3" label="Only if directly asked" value="only if asked" checked={currentSettingsData.reveal_ai === 'only if asked'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
             <Form.Check type="radio" aria-label="radio2" name="group3" label="Never" value="never" checked={currentSettingsData.reveal_ai === 'never'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
+          </div>
+        </div>
+
+        <div className="row mt-5">
+          <div className="col-lg-11">
+            <label className="fs-5">Language</label>
+            <p className="settings-label mb-2">What language should HostBuddy use when responding to guests?</p>
+            <Form.Check 
+              type="radio" 
+              aria-label="radio1" 
+              name="group4" 
+              label="Whichever language the guest is using" 
+              value="guest_language" 
+              checked={currentSettingsData.language === undefined || currentSettingsData.language === 'guest_language'} 
+              onChange={(e) => setSetting('language', e.target.value)}
+            />
+            <div className="d-flex align-items-center gap-2">
+              <Form.Check 
+                type="radio" 
+                aria-label="radio2" 
+                name="group4" 
+                label="Always respond in:" 
+                value="specific_language" 
+                checked={currentSettingsData.language !== undefined && currentSettingsData.language !== 'guest_language'} 
+                onChange={() => {
+                  setSetting('language', languageInputValue || '');
+                }}
+              />
+              <input 
+                className="form-control" 
+                placeholder="ex. English" 
+                value={languageInputValue}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  setLanguageInputValue(newValue);
+                  
+                  // Only update the setting if the specific language option is selected
+                  if (currentSettingsData.language !== undefined && currentSettingsData.language !== 'guest_language') {
+                    setSetting('language', newValue);
+                  }
+                }}
+                onClick={() => {
+                  // Auto-select the specific language option when clicking on the input
+                  if (currentSettingsData.language === undefined || currentSettingsData.language === 'guest_language') {
+                    setSetting('language', languageInputValue || '');
+                  }
+                }}
+                style={{
+                  width: '300px', 
+                  opacity: currentSettingsData.language === undefined || currentSettingsData.language === 'guest_language' ? 0.6 : 1
+                }}
+              />
+            </div>
           </div>
         </div>
 

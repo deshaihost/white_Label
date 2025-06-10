@@ -177,3 +177,40 @@ export const is_gcs_subaccount_user = () => {
     return false;
   }
 }
+
+// Navigate into a specific subaccount's portal
+export const navigateToSubaccount = async (subAccountUserId, navigate, options = {}) => {
+  const { 
+    setNavigatingToSubaccount=null, 
+    setLoadingAccountId=null,
+    subAccountName=null 
+  } = options;
+  
+  if (setNavigatingToSubaccount) setNavigatingToSubaccount(true);
+  if (setLoadingAccountId) setLoadingAccountId(subAccountUserId);
+  
+  try {
+    const token = await callGetSubAccountTokenApi(subAccountUserId);
+    
+    if (token) {
+      setToken(token);
+      
+      // Save the subaccount name to session storage if provided
+      if (subAccountName) {
+        sessionStorage.setItem("hostBuddy_subaccount_name", subAccountName);
+      }
+      
+      navigate('/dashboard');
+      return true;
+    } else { // Just reset the loading state - don't navigate anywhere
+      if (setLoadingAccountId) setLoadingAccountId(null);
+      if (setNavigatingToSubaccount) setNavigatingToSubaccount(false);
+      return false;
+    }
+  } catch (error) { // If an error occurred, reset the loading state
+    if (setLoadingAccountId) setLoadingAccountId(null);
+    if (setNavigatingToSubaccount) setNavigatingToSubaccount(false);
+    ToastHandle(`Error navigating to subaccount: ${error}`, "danger");
+    return false;
+  }
+};

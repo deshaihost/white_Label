@@ -11,8 +11,10 @@ const NavBar = () => {
   }
   
   const gcsToken = getGcsToken();
+  const subAccountName = sessionStorage.getItem("hostBuddy_subaccount_name") || null;
+  
   return (
-    <UserNavBar gcsToken={gcsToken} />
+    <UserNavBar gcsToken={gcsToken} subAccountName={subAccountName} />
   );
 }
 

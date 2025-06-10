@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Accordion, Spinner } from 'react-bootstrap';
-import { callGetGcsUserDataApi, callGetSubAccountTokenApi, setToken, restoreGcsTokenIfAvailable } from './gcs_functionality';
+import { callGetGcsUserDataApi, callGetSubAccountTokenApi, setToken, restoreGcsTokenIfAvailable, navigateToSubaccount} from './gcs_functionality';
 import Loader from '../../helper/Loader';
 import AddSubAcctModal from './addSubAcctModal';
 import './gcsUsers.css';
@@ -23,27 +23,14 @@ const GcsUsers = () => {
     setActiveKey(activeKey === itemKey ? null : itemKey);
   };
 
-  // Navigate to a specific subaccount's dashboard (get the token for the subaccount, save it to be used for our API calls, and redirect to the dashboard)
-  const navigateToSubaccount = async (subAccountUserId) => {
+  // Wrapper function to handle navigation to a subaccount
+  const handleNavigateToSubaccount = (subAccountUserId, subAccountName) => {
     if (navigatingToSubaccount) return;
-    setNavigatingToSubaccount(true);
-    setLoadingAccountId(subAccountUserId); // Set the specific account as loading
-    
-    try {
-      const token = await callGetSubAccountTokenApi(subAccountUserId);
-      
-      if (token) {
-        setToken(token);
-        navigate('/dashboard');
-      } else { // If no token was returned, reset the loading state
-        setLoadingAccountId(null);
-        setNavigatingToSubaccount(false);
-      }
-    } catch (error) { // If an error occurred, reset the loading state
-      setLoadingAccountId(null);
-      setNavigatingToSubaccount(false);
-      ToastHandle(`Error navigating to subaccount: ${error}`, "danger");
-    }
+    navigateToSubaccount(subAccountUserId, navigate, {
+      setNavigatingToSubaccount, 
+      setLoadingAccountId,
+      subAccountName
+    });
   };
 
   // Handle successful account addition
@@ -113,7 +100,7 @@ const GcsUsers = () => {
               loadingAccountId === user.id ? ( // Show loader for the specific account being loaded
                 <Loader key={user.id} />
               ) : (
-                <Accordion.Item eventKey={user.id} key={user.id} className='accordion-link' onClick={() => navigateToSubaccount(user.id)}>
+                <Accordion.Item eventKey={user.id} key={user.id} className='accordion-link' onClick={() => handleNavigateToSubaccount(user.id, user.title)}>
                   <Accordion.Header>
                     {user.title}
                     <div className="subtitle">{user.subtitle}</div>
@@ -137,7 +124,7 @@ const GcsUsers = () => {
           </Accordion>
         ) : (
           <div className="text-center my-5">
-            <p className="text-light">No accounts found. Add a Guesty account to get started.</p>
+            <p className="text-light">No accounts found. Add a host account to get started.</p>
           </div>
         )}
         

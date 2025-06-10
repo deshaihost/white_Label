@@ -25,8 +25,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
   const [searchTerm, setSearchTerm] = useState('');
   const [maxPropertiesSelected, setMaxPropertiesSelected] = useState(false);
   
-  // Property limits - prevent user from selecting more properties than their account is allowed to have
-  const ENABLE_PROPERTY_LIMITS = false; // Set this to false to disable property limits
+  const ENABLE_PROPERTY_LIMITS = false;
   
   // Helper function to normalize strings
   const normalizeString = (str) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -72,6 +71,45 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
       }
     }
     setCheckBox(newCheckBox);
+  };
+
+  const handleSelectAll = () => {
+    const filteredProperties = integrationPropertyList?.filter((integrationPropObj) => {
+      const searchTermNormalized = normalizeString(searchTerm);
+      const nameMatches = integrationPropObj?.name && normalizeString(integrationPropObj.name).includes(searchTermNormalized);
+      const internalNameMatches = integrationPropObj?.internal_name && normalizeString(integrationPropObj.internal_name).includes(searchTermNormalized);
+      return nameMatches || internalNameMatches;
+    });
+    
+    // Check if all filtered properties are selected
+    const allSelected = filteredProperties.every(item => {
+      const primaryPropName = item?.internal_name ? item.internal_name : item?.name;
+      return checkBox?.hasOwnProperty(primaryPropName);
+    });
+    
+    if (allSelected && filteredProperties.length > 0) {
+      setCheckBox({});
+      if (ENABLE_PROPERTY_LIMITS && isOnTrial && maxPropertiesSelected) {
+        setMaxPropertiesSelected(false);
+      }
+    } else {
+      const newCheckBox = {};
+      let count = 0;
+      const limit = ENABLE_PROPERTY_LIMITS && isOnTrial ? numPropertiesRemaining : filteredProperties.length;
+      
+      filteredProperties.forEach((integrationPropObj) => {
+        if (count < limit) {
+          const primaryPropName = integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name;
+          newCheckBox[primaryPropName] = integrationPropObj.id;
+          count++;
+        }
+      });
+      
+      setCheckBox(newCheckBox);
+      if (ENABLE_PROPERTY_LIMITS && isOnTrial && count >= numPropertiesRemaining) {
+        setMaxPropertiesSelected(true);
+      }
+    }
   };
 
   const executeImport = async () => {
@@ -152,6 +190,28 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
                   
                   {/* Search bar */}
                   <input type="text" placeholder="Search properties..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control mb-3"/>
+                  
+                  <div className="d-flex justify-content-start mb-2">
+                    <span className="select-all-button" onClick={handleSelectAll}>
+                      {(() => {
+                        // Get the filtered properties based on search term
+                        const filteredProperties = integrationPropertyList?.filter(item => {
+                          const searchTermNormalized = normalizeString(searchTerm);
+                          const nameMatches = item?.name && normalizeString(item.name).includes(searchTermNormalized);
+                          const internalNameMatches = item?.internal_name && normalizeString(item.internal_name).includes(searchTermNormalized);
+                          return nameMatches || internalNameMatches;
+                        });
+
+                        // Check if all filtered properties are selected
+                        const allSelected = filteredProperties?.every(item => {
+                          const primaryPropName = item?.internal_name ? item.internal_name : item?.name;
+                          return checkBox?.hasOwnProperty(primaryPropName);
+                        });
+
+                        return allSelected && filteredProperties.length > 0 ? 'Deselect All' : 'Select All';
+                      })()}
+                    </span>
+                  </div>
 
                   <div className="row form-design">
                     <div className="col-12 mt-3">

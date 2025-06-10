@@ -248,36 +248,38 @@ function createMessageTimingData(guest_message_received_times, startDate, endDat
 
 // Create the data structure for the total messages responded tile, using the response times data.
 // This is NO LONGER USED since the data only includes responses (not all messages) - replaced by below funct which uses the all messages sent data
-function formatResponseTimeData(responseTimes) {
+function formatMessagesRespondedData(responseTimes) {
   const { host_response_times, hostbuddy_response_times, not_responded_in_2h } = responseTimes;
 
   // Calculate total responses
-  const totalResponses = host_response_times.count + hostbuddy_response_times.count + not_responded_in_2h;
+  // UPDATE 4-22-2025 - exclude not_responded_in_2h from the total responses, since this confuses people
+  //const totalResponses = host_response_times.count + hostbuddy_response_times.count + not_responded_in_2h;
+  const totalResponses = host_response_times.count + hostbuddy_response_times.count;
 
   // Calculate proportions
   const hostProportion = (host_response_times.count / totalResponses) * 100;
   const hostbuddyProportion = (hostbuddy_response_times.count / totalResponses) * 100;
-  const notRespondedProportion = (not_responded_in_2h / totalResponses) * 100;
+  //const notRespondedProportion = (not_responded_in_2h / totalResponses) * 100;
 
   // Create the metric data structure for Messages Processed
   const messagesProcessedData = {
     identifier: 'Totals',
-    title: 'Responses Sent',
+    title: 'Guest Messages Responded',
     data: [
       { number: host_response_times.count, text: "By Host" },
       { number: hostbuddy_response_times.count, text: "By HostBuddy" },
-      { number: not_responded_in_2h, text: "Not Responded (Within 2h)" }
+      //{ number: not_responded_in_2h, text: "Not Responded (Within 2h)" }
     ]
   };
 
   // Create the metric data structure for Response Time Proportions
   const responseProportionsData = {
     identifier: 'Percentages',
-    title: 'Responses Sent',
+    title: 'Guest Messages Responded',
     data: [
       { number: `${hostProportion.toFixed(1)}%`, text: "By Host" },
       { number: `${hostbuddyProportion.toFixed(1)}%`, text: "By HostBuddy" },
-      { number: `${notRespondedProportion.toFixed(1)}%`, text: "Not Responded (Within 2h)" }
+      //{ number: `${notRespondedProportion.toFixed(1)}%`, text: "Not Responded (Within 2h)" }
     ]
   };
 
@@ -618,15 +620,20 @@ export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, s
 
   const retrievedUpsellsStatistics = response?.statistics?.upsell_data;
 
-  let messageTimingData, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemMetrics, actionItemsReceived, actionItemsClosed, upsellMetrics;
+  let messageTimingData, totalMessagesSent, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemMetrics, actionItemsReceived, actionItemsClosed, upsellMetrics;
 
   try { // Message received timing (bar chart)
     messageTimingData = createMessageTimingData(retrievedStatistics.guest_message_received_times, startDate, endDate);
   } catch {}
 
-  try { // Host / hostbuddy total messages responded (metric tiles)
+  try { // Host / hostbuddy total messages sent (metric tiles)
     const messagesSent = retrievedStatistics.messages_sent;
-    totalMessagesResponded = formatMessagesSentData(messagesSent);
+    totalMessagesSent = formatMessagesSentData(messagesSent);
+  } catch {}
+
+  try { // Host / HostBuddy total guest messages responded (metric tiles)
+    const responseTimesData = { host_response_times:retrievedStatistics.host_response_times, hostbuddy_response_times:retrievedStatistics.hostbuddy_response_times, not_responded_in_2h:retrievedStatistics.not_responded_in_2h };
+    totalMessagesResponded = formatMessagesRespondedData(responseTimesData);
   } catch {}
 
   try { // Host vs HostBuddy response times (metric tiles)
@@ -655,6 +662,6 @@ export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, s
     upsellMetrics = formatUpsellMetrics(retrievedUpsellsStatistics);
   } catch (error) {}
 
-  setApiStatisticsData({ messageTimingData, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemsReceived, actionItemMetrics, actionItemsClosed, upsellMetrics });
+  setApiStatisticsData({ messageTimingData, totalMessagesSent, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemsReceived, actionItemMetrics, actionItemsClosed, upsellMetrics });
   setDataLoading(false);
 }

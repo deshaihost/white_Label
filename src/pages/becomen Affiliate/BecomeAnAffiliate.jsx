@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './BecomeAnAffiliate'
 import "./BecomeAnAffiliate.css"
 import { Col, Container, Row } from 'react-bootstrap'
-import ContactUs from "../testProperty/discover/contactUs/ContactUs";
 
 const LOGO = 'https://hostbuddylb.com/logo/logo_footer.webp';
 const Earn = 'https://hostbuddylb.com/becomeAnAffiliate/Commision.webp';
@@ -10,7 +9,6 @@ const BecomeAff = 'https://hostbuddylb.com/becomeAnAffiliate/earn-affilate.webp'
 const Affilateimg = 'https://hostbuddylb.com/becomeAnAffiliate/affilate-program.webp';
 
 const BecomeAnAffiliate = () => {
-    const [modalShow, setModalShow] = useState(false);
     return (
         <>
             <div className=''>
@@ -31,11 +29,11 @@ const BecomeAnAffiliate = () => {
                                 <p className='text-white fw-normal '>
                                     <strong className='text-white'>Unlimited Earnings: </strong>
                                     The more you promote, the more you earn.</p>
-                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black  w-100 my-5 display-btn'>EMPOWER HOSTS WITH AI </button>
+                                <a href="https://hostbuddy-ai.getrewardful.com/signup" className='emp-btn fw-bold text-black w-100 my-5 display-btn'>EMPOWER HOSTS WITH AI</a>
                             </Col>
                             <Col md={5} className='pe-md-5 custom-order-1'>
                                 <img className='w-100' src={Affilateimg} />
-                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black  w-100 my-5 display-btn-new'>EMPOWER HOSTS WITH AI </button>
+                                <a href="https://hostbuddy-ai.getrewardful.com/signup" className='emp-btn fw-bold text-black w-100 my-5 display-btn-new'>EMPOWER HOSTS WITH AI</a>
                             </Col>
                         </Row>
                     </Container >
@@ -45,7 +43,7 @@ const BecomeAnAffiliate = () => {
                         <Row className="mt-3 align-items-center px-2 md-px-0">
                             <Col md={5} className='pe-md-5  text-center'>
                                 <img className='w-75' src={Earn} />
-                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn-new'>EARN COMMISSION</button></Col>
+                                <a href="https://hostbuddy-ai.getrewardful.com/signup" className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn-new'>EARN COMMISSION</a></Col>
                             <Col md={7} className=' ps-md-5 pt-3 pt-md-0 '>
                                 <h1 className='text-uppercase fw-normal text-white mb-5'>HOSTBUDDY AI WILL PROVIDE:</h1>
                                 <p className='text-white fw-bold'>Unique Discount Code For Your Audience</p>
@@ -59,7 +57,7 @@ const BecomeAnAffiliate = () => {
                                     <strong className='text-white'>Collaborative Content Creation: </strong>
                                     Partner with us for webinars, guest blog posts, and more.</p>
                                 <p className='text-white fw-bold'>Early Feature Access</p>
-                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn'>EARN COMMISSION</button>
+                                <a href="https://hostbuddy-ai.getrewardful.com/signup" className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn'>EARN COMMISSION</a>
                             </Col>
 
                         </Row>
@@ -96,18 +94,17 @@ const BecomeAnAffiliate = () => {
 
                                     </div>
                                 </div>
-                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn'>BECOME AN AFFILIATE</button>
+                                <a href="https://hostbuddy-ai.getrewardful.com/signup" className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn'>BECOME AN AFFILIATE</a>
 
                             </Col>
                             <Col md={5} className=' ps-md-5 text-center custom-order-1'>
                                 <img className='w-75' src={BecomeAff} />
-                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn-new'>BECOME AN AFFILIATE</button>
+                                <a href="https://hostbuddy-ai.getrewardful.com/signup" className='emp-btn fw-bold text-black fs-3 w-100 my-5 display-btn-new'>BECOME AN AFFILIATE</a>
                             </Col>
                         </Row>
                     </Container >
                 </div >
             </div>
-            <ContactUs show={modalShow} onHide={() => setModalShow(false)} />
         </>
     )
 }

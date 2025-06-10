@@ -19,6 +19,65 @@ import { FaRotateRight } from "react-icons/fa6";
 
 import dummyPropertyImg from "../../../public/img/dummyPropertyImg.png";
 
+// Utility function to format markdown-like text
+const formatMarkdownText = (text) => {
+  if (!text) return "";
+  
+  // Process the text in stages
+  let formattedText = text;
+  
+  // Handle bold text (convert **text** to <span style="font-family: 'Samsung Sharp Sans Bold';">text</span>)
+  formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<span style="font-family: \'Samsung Sharp Sans Bold\';">$1</span>');
+  
+  // Split into lines to handle bullet points properly
+  const lines = formattedText.split('\n');
+  const processedLines = lines.map(line => {
+    // Check if line starts with bullet point (* or -)
+    if (line.trim().match(/^\s*[\*\-]\s+/)) {
+      // Convert bullet point to HTML list item
+      return `<li>${line.trim().replace(/^\s*[\*\-]\s+/, '')}</li>`;
+    }
+    return line;
+  });
+  
+  // Join lines back together, wrapping lists in <ul> tags
+  let result = '';
+  let inList = false;
+  
+  processedLines.forEach(line => {
+    if (line.startsWith('<li>')) {
+      if (!inList) {
+        result += '<ul class="markdown-list">';
+        inList = true;
+      }
+      result += line;
+    } else {
+      if (inList) {
+        result += '</ul>';
+        inList = false;
+      }
+      // Avoid adding <br/> if the line is empty or just whitespace, or if it's the last line before a list starts
+      const nextLineIsListItem = processedLines[processedLines.indexOf(line) + 1]?.startsWith('<li>');
+      if (line.trim() !== '' && !nextLineIsListItem) {
+        result += line + '<br/>';
+      } else if (line.trim() !== '') {
+         result += line; // Add line without <br/> if it's followed by a list item
+      }
+    }
+  });
+  
+  if (inList) {
+    result += '</ul>';
+  }
+  
+  // Remove trailing <br/> if present
+  if (result.endsWith('<br/>')) {
+    result = result.slice(0, -5);
+  }
+
+  return result;
+};
+
 const Workbench = () => {
   const { property_name } = useParams();
 
@@ -84,6 +143,7 @@ const Workbench = () => {
   const [sessionId, setSessionId] = useState(null);
   const [responseIsLoading, setResponseIsLoading] = useState(false);
   const [lastMessageJustification, setLastMessageJustification] = useState(null);
+  const [restrictedTopicJustification, setRestrictedTopicJustification] = useState(null);
 
   // After a successful intiialize API call, call this to set the first messages and save the session ID
   const initializeStateFromApiReturn = (response) => {
@@ -101,10 +161,20 @@ const Workbench = () => {
     const bot_message_str = response.data.response;
     const message_id_str = response.data.message_id;
     const justification = response.data.justification;
+    const hasRestrictedTopic = response.data?.has_restricted_topic;
+    let restrictedTopicJustification = response.data?.restricted_topic_justification;
 
     const botMessage = { sender:"bot", text:{response:bot_message_str, message_id:message_id_str, justification:justification} };
     setMessages((prevMessages) => [...prevMessages, botMessage]);
     setLastMessageJustification(justification);
+
+    // Add or clear restricted topic justification
+    if (hasRestrictedTopic) {
+      if (!restrictedTopicJustification) { restrictedTopicJustification = "In a live guest conversation, no AI message would be sent to the guest."; }
+      setRestrictedTopicJustification(restrictedTopicJustification);
+    }
+    else { setRestrictedTopicJustification(null); }
+
   };
 
   // Call the API to initialize the chat session, then set the state for the brand new chat
@@ -163,6 +233,8 @@ const Workbench = () => {
   }, [property_name]);
   // -----------------------------------------------------------------------------------
 
+  // Format the justification text for display
+  const formattedJustification = formatMarkdownText(lastMessageJustification);
 
   return (
     <div className='workbench'>
@@ -203,21 +275,26 @@ const Workbench = () => {
           </div>
 
           <div className='chat-information'>
-            <h3><img src={hostBuddyLogo} /> Conversation Analysis</h3>
+            <h3><img src={hostBuddyLogo} alt="HostBuddy Logo" /> Conversation Analysis</h3>
             <div className='chat-information-content'>
               {responseIsLoading ? (
                 <TypingIndicator />
               ) : (
-                lastMessageJustification ? (
+                lastMessageJustification || restrictedTopicJustification ? (
                   <>
-                    <h5 style={{marginTop:'0'}}>Where did this response come from?</h5>
-                    <p>{lastMessageJustification}</p>
-                    {/*
-                    <h5>Suggestions</h5>
-                    <ul>
-                      <li>Add information about typical travel times and the best routes for driving to Tijuana from the property.</li>
-                    </ul>
-                    */}
+                    {restrictedTopicJustification && (
+                      <div className="restricted-topic">
+                        <h5 style={{marginTop:'0', color: 'rgb(255, 165, 0)'}}>Restricted topic detected</h5>
+                        <p>{restrictedTopicJustification}</p>
+                      </div>
+                    )}
+                    {lastMessageJustification && (
+                      <div className="justification-section markdown-content"> {/* Add markdown-content class */}
+                        <h5 style={{marginTop:'0'}}>Where did this response come from?</h5>
+                        {/* Use dangerouslySetInnerHTML to render the formatted HTML */}
+                        <div dangerouslySetInnerHTML={{ __html: formattedJustification }} />
+                      </div>
+                    )}
                   </>
                 ) : (
                   <p style={{color:'#AAA', fontStyle:'italic', fontSize:'16px'}}>Send HostBuddy a message to get started!</p>
