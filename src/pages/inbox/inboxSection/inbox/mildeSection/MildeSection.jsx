@@ -212,16 +212,17 @@ console.log("allConversationData from MildeSection", allConversationData);
       }
     }
   };
-
   // Only checks if the second word is 'reacted'. So may not be 1000% accurate, but low stakes use case so fine for now. Can be improved later if needed
   const lastMessageIsEmojiReact = () => {
     if (
       allConversationData?.messages &&
       allConversationData.messages.length > 0
     ) {
-      const lastMessageText =
-        allConversationData.messages[allConversationData.messages.length - 1]
-          .text;
+      const lastMessage = allConversationData.messages[allConversationData.messages.length - 1];
+      if (!lastMessage || !lastMessage.text) {
+        return false;
+      }
+      const lastMessageText = lastMessage.text;
       const words = lastMessageText.split(" ");
       return words.length > 1 && words[1] === "reacted";
     }
@@ -232,14 +233,16 @@ console.log("allConversationData from MildeSection", allConversationData);
     if (generateButtonIsEnabled) {
       return "";
     }
-    if (!allConversationData?.messages) {
+    if (!allConversationData?.messages || allConversationData.messages.length === 0) {
       return "AI response not available.";
     }
 
-    if (
-      allConversationData.messages[allConversationData.messages.length - 1]
-        .sender === "guest"
-    ) {
+    const lastMessage = allConversationData.messages[allConversationData.messages.length - 1];
+    if (!lastMessage || !lastMessage.sender) {
+      return "AI response not available.";
+    }
+
+    if (lastMessage.sender === "guest") {
       if (lastMessageIsEmojiReact()) {
         return "AI response is only available when the last message is from the guest.";
       } else {
@@ -248,7 +251,7 @@ console.log("allConversationData from MildeSection", allConversationData);
     } else {
       return "AI response is only available when the last message is from the guest.";
     }
-  };  const handleSendMessage = async () => {
+  };const handleSendMessage = async () => {
     if (inputValue.trim() === "") return; // no message added
     if (!conversationData?.conversation_id) return; // no conversation selected
     setSendMessageLoading(true);
