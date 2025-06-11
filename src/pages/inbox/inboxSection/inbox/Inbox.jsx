@@ -270,7 +270,8 @@ const Inbox = ({
   const [phaseFilterVal, setPhaseFilterVal] = useState("");
   const [fromHostBuddyFilterVal, setFromHostBuddyFilterVal] = useState(false);
   const [guestNameSearchVal, setGuestNameSearchVal] = useState("");
-  const [userFilterVal, setUserFilterVal] = useState("");  const [currentView, setCurrentView] = useState("conversations"); // New state for mobile view
+  const [userFilterVal, setUserFilterVal] = useState("");
+  const [currentView, setCurrentView] = useState("conversations"); // New state for mobile view
   const [activeTab, setActiveTab] = useState("pms"); // New state to track active tab
   const [pendingTabChange, setPendingTabChange] = useState(null); // To track pending tab change when switching views
   const [allowConvIdQuery, setAllowConvIdQuery] = useState(true); // Added state for handling conversationId query
@@ -603,12 +604,16 @@ const Inbox = ({
   // Set default tab based on conversation content
   useEffect(() => {
     if (selectedConversation?.conversation_id) {
-      const hasMessages = selectedConversation.messages && selectedConversation.messages.length > 0;
-      const hasWhatsAppMessages = selectedConversation.whatsapp_messages && selectedConversation.whatsapp_messages.length > 0;
-      
+      const hasMessages =
+        selectedConversation.messages &&
+        selectedConversation.messages.length > 0;
+      const hasWhatsAppMessages =
+        selectedConversation.whatsapp_messages &&
+        selectedConversation.whatsapp_messages.length > 0;
+
       // Logic for default tab selection:
       // - If PMS messages exist, default to PMS tab
-      // - If no PMS messages but WhatsApp messages exist, default to WhatsApp tab  
+      // - If no PMS messages but WhatsApp messages exist, default to WhatsApp tab
       // - If both are empty, default to PMS tab
       if (hasMessages) {
         setActiveTab("pms");
@@ -618,7 +623,11 @@ const Inbox = ({
         setActiveTab("pms"); // Default fallback
       }
     }
-  }, [selectedConversation?.conversation_id, selectedConversation?.messages, selectedConversation?.whatsapp_messages]);
+  }, [
+    selectedConversation?.conversation_id,
+    selectedConversation?.messages,
+    selectedConversation?.whatsapp_messages,
+  ]);
 
   // Handle dropdown toggle
   const toggleDropdown = (noteId) => {
@@ -1332,8 +1341,8 @@ const Inbox = ({
         className="inbox-content-container"
         style={{
           height: bannerVisible ? "calc(95vh - 40px)" : "95vh",
-          marginLeft:"10px",
-          marginTop: "10px"
+          marginLeft: "10px",
+          marginTop: "10px",
           // margin: "10px",
           // borderWidth:"1px" ,
           // borderStyle:"solid",
@@ -1346,7 +1355,12 @@ const Inbox = ({
           {" "}
           {/* Desktop View */}
           <div
-            style={{ width: "100%", gap: "0px", height: "100%" , paddingRight:"0px"}}
+            style={{
+              width: "100%",
+              gap: "0px",
+              height: "100%",
+              paddingRight: "0px",
+            }}
             className="desktop-view"
           >
             {" "}
@@ -1849,7 +1863,9 @@ const Inbox = ({
                     width: "100%",
                     height: "100%",
                   }}
-                >                  <WhatsAppSection
+                >
+                  {" "}
+                  <WhatsAppSection
                     key="whatsapp-section"
                     allConversationData={selectedConversation}
                     updateConversationFromApi={updateConversation}
