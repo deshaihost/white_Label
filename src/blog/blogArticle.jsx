@@ -14,6 +14,7 @@ import minutAlertsIntoInstantAction from "./blogArticles/minut_alerts_into_insta
 import meetTheCoFounders from './blogArticles/meet_the_co_founders';
 import strMarket from './blogArticles/str_market_4-22';
 import hostfullyGuidebooksArticle from './blogArticles/hostfully_guidebooks_blog';
+import inboxBlogArticle from './blogArticles/inbox_blog';
 
 const BlogArticle = () => {
   const { article_name } = useParams(); // Get the article_name from the path param
@@ -29,11 +30,11 @@ const BlogArticle = () => {
     "tired_of_negative_reviews" :tiredOfNegativeReviews,
     "guesty_hostbuddy_join" :guestyHostbuddyJoin,
     "smart_templates": smartTemplates,
-    "guide_to_vacation_rental_upsells":guideToVacationRentalUpsells,
-    "minut_alerts_into_instant_action":minutAlertsIntoInstantAction,
+    "guide_to_vacation_rental_upsells":guideToVacationRentalUpsells,    "minut_alerts_into_instant_action":minutAlertsIntoInstantAction,
     "meet_the_co_founders": meetTheCoFounders,
     "str_market_4-22": strMarket,
-    "hostfully_guidebooks_blog": hostfullyGuidebooksArticle
+    "hostfully_guidebooks_blog": hostfullyGuidebooksArticle,
+    "inbox_blog": inboxBlogArticle
   };
 
   useEffect(() => {
