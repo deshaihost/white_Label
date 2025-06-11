@@ -742,16 +742,15 @@ const LeftMessage = ({
                 user,
                 status,
                 pinned,
-              } = message;
-              const allDataForConversation = message;
+              } = message;              const allDataForConversation = message;
               const messages = message?.messages; // Assuming message?.messages is an array
-              const lastValue = messages[messages.length - 1];
-              const { sender, text, time } = lastValue;
+              const lastValue = messages && messages.length > 0 ? messages[messages.length - 1] : null;
+              const { sender, text, time } = lastValue || { sender: '', text: '', time: '' };
               let shortenedText = text;
-              if (text.length > 50) {
+              if (text && text.length > 50) {
                 shortenedText = text.slice(0, 50) + "...";
               } else {
-                shortenedText = text;
+                shortenedText = text || '';
               }
 
               // Based on which of these fields are present (arrival_date, departure_date, property_name): render the appropriate string
@@ -890,9 +889,8 @@ const LeftMessage = ({
                             {channel !== "hostbuddy"
                               ? guest_name
                               : "Chat Window"}
-                          </h2>
-                          <div className="date date-no-margin">
-                            {timeFormat(time)}
+                          </h2>                          <div className="date date-no-margin">
+                            {time ? timeFormat(time) : ''}
                           </div>
                         </div>
                         {/* Second line: Message text and count of unread messages */}
