@@ -999,13 +999,12 @@ const RightSection = ({
       setUpdateGuestDataLoading(false);
     }
   };
-
-  // Initial fetch of guest data when conversation_id is available
+  // Initial fetch of guest data when conversation_id and reservation_id are available
   useEffect(() => {
-    if (conversation_id) {
+    if (conversation_id && reservation_id) {
       callGetGuestDataApi();
     }
-  }, [conversation_id]);
+  }, [conversation_id, reservation_id]);
 
   return (
     <div className="right-side" ref={rightSideRef}>
