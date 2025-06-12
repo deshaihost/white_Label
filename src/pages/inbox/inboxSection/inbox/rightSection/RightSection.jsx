@@ -919,10 +919,10 @@ const RightSection = ({
           email: "not added",
           phone: "not added",
         });
-        ToastHandle(
-          response?.data?.error || "Failed to fetch guest data",
-          "danger"
-        );
+        // ToastHandle(
+        //   response?.data?.error || "Failed to fetch guest data",
+        //   "danger"
+        // );
       }
     } catch (error) {
       console.error("Error fetching guest data:", error);
@@ -931,7 +931,7 @@ const RightSection = ({
         email: "not added",
         phone: "not added",
       });
-      ToastHandle("Error fetching guest data", "danger");
+      // ToastHandle("Error fetching guest data", "danger");
     } finally {
       setGetGuestDataLoading(false);
     }
