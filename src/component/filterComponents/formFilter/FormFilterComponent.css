@@ -1,0 +1,124 @@
+/* FormFilterComponent Styles */
+.form-filter-container {
+  background-color: var(--color-primitives-neutral-900);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 320px; /* Increased from 280px for better visibility */
+}
+
+.form-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.form-filter-title {
+  color: var(--colors-color-text-default);
+  font-family: var(--heading-small-font-family);
+  font-size: var(--heading-small-font-size);
+  font-style: var(--heading-small-font-style);
+  font-weight: var(--heading-small-font-weight);
+  letter-spacing: var(--heading-small-letter-spacing);
+  line-height: var(--heading-small-line-height);
+  position: relative;
+  margin: 0;
+}
+
+.add-filter-button {
+  background-color: #4758B8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-filter-button:hover {
+  background-color: #394796;
+}
+
+.form-filter-column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: var(--colors-color-text-subtle);
+}
+
+.form-filter-item {
+  width: 100%;
+  /* margin-bottom removed as requested */
+}
+
+.form-filter-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.footer-right-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.reset-button {
+  background-color: var(--colors-color-background-neutral-default);
+  color: var(--color-primitives-neutral-200);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-button:hover {
+  background-color: var(--color-primitives-neutral-800);
+}
+
+.cancel-button {
+  background-color: transparent;
+  color: var(--color-primitives-neutral-200);
+  border: 1px solid var(--color-primitives-neutral-600);
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-button:hover {
+  background-color: var(--color-primitives-neutral-800);
+}
+
+.apply-button {
+  background-color: var(--color-primitives-brand-700);
+  color: var(--colors-color-text-white);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.apply-button:hover {
+  background-color: var(--colors-color-background-brand-hover);
+}
+
+.apply-button:active {
+  background-color: var(--colors-color-background-brand-pressed);
+}
+
+@media (max-width: 768px) {
+  .form-filter-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

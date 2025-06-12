@@ -1,10 +1,39 @@
-.right-side::-webkit-scrollbar{
-    width: 1px;
+.channel_name{
+  display:inline-block;
+  color: #BDC1C9;
+  font-family: "DM Sans", Helvetica;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0px;
+  line-height: var(--body-medium-med-500-line-height);
+  padding: 1px 6px;
+  border-radius: 4px;
+  height: 25px;
+  background-color: #bdc1c926;
 }
+
+
+.right-side::-webkit-scrollbar {
+    width: 4px;
+    background-color: #0F1117;
+}
+
+.right-side::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.right-side::-webkit-scrollbar-track {
+    background-color: #0F1117;
+}
+
 .right-side {
-    padding: 20px 0px;
-    height: calc(100vh - 175px);
-    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) #0F1117;
+    padding: 0px;
+    height: 100%;
+    overflow-y: auto;
 }
 .bordr-cl h2 {
     border: 0px;
@@ -19,15 +48,16 @@
 }
 .issue, .satisfy, .about-inner {
     max-width: 400px;
-    margin: 0 auto;
-    padding: 20px 12px;
+    margin-top: 5px;
+    /* margin: 0 auto; */
+    /* padding: 20px 12px; */
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
 
 /* Messaging status & toggle section */
 
 .right-side .toggle {
-    padding: 10px 12px;
+    /* padding: 10px 12px; */
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
 
@@ -45,7 +75,17 @@
 
 /* --------------------- */
 
-.right-title h2,
+.right-title h1{
+    font-size: 14px !important;
+    font-weight: 600;
+    font-family: "DM Sans", Helvetica !important;
+}
+.right-title p {
+    font-size: 22px !important;
+    font-weight: 600;
+    font-family: "DM Sans", Helvetica !important;
+    margin-bottom: 10px;
+}
 .about-inner h2{
     font-size: 20px;
     font-weight: 600;
@@ -64,7 +104,7 @@
     display: inline-block;
     margin-top: 10px;
     background: #212529;
-    padding: 5px 20px;
+    /* padding: 5px 20px; */
     border: 1px solid #146ef5;
     border-radius: 28px;
     color: #146ef5;
@@ -99,22 +139,24 @@
     margin-bottom: 3px;
 } */
 .guest span {
-    font-size: 12px;
+    font-size: 14px;
     margin-bottom: 0px;
     display: inline-block;
+    color:#D0D3DB;
 }
 
 .guest h2 {
-    font-size: 16px;
+    font-size: 14px;
     padding: 0px;
     margin: 3px 0;
     border: 0px;
+    color: #D0D3DB;
 }
 .guest_date,
 .guest p {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.4;
-    color: #ffffff96;
+    color: #D0D3DB;
 }
 .right-side .row {
     width: 100%;
@@ -126,6 +168,129 @@
 .about-inner h2{
     margin-bottom: 10px;
 }
+
+/* Apply DM Sans font family to all reservation elements */
+.guest h2, 
+.guest p, 
+.guest span,
+.row span,
+.toggle p,
+.select-dropdown,
+.issue h3,
+.issue p,
+.satisfy h2,
+.satisfy p,
+.about-inner p {
+    font-family: "DM Sans", Helvetica !important;
+}
+
+/* Specific styles for the Assign User dropdown to match sentiment dropdown */
+.assign-user-dropdown {
+  /* Reset all styles first */
+  all: initial !important;
+  /* Re-apply necessary box model */
+  box-sizing: border-box !important;
+  display: block !important;
+  /* Fixed styles that should never change */
+  width: 100% !important;
+  padding: 8px 12px !important;
+  background-color: #262730 !important;
+  border: 1px solid rgb(57, 61, 70) !important;
+  border-radius: 4px !important;
+  color: #D0D3DB !important;
+  font-family: "DM Sans", Helvetica !important;
+  font-size: 16px !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  padding-right: 30px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 0 !important;
+}
+
+/* No hover styles to ensure no background/border changes on hover */
+.assign-user-dropdown:hover,
+.assign-user-dropdown:active,
+.assign-user-dropdown:focus-visible,
+.right-side .assign-user-dropdown:hover {
+  /* No style changes on hover */
+  background-color: #262730 !important;
+  border: 1px solid rgb(57, 61, 70) !important;
+  color: #D0D3DB !important;
+  outline: none !important;
+}
+
+/* Override any potential focus states with higher specificity */
+.assign-user-dropdown:focus,
+.right-side .assign-user-dropdown:focus {
+  outline: none !important;
+  background-color: #262730 !important;
+  border: 1px solid rgb(57, 61, 70) !important;
+  color: #D0D3DB !important;
+  box-shadow: none !important;
+}
+
+/* Ensure option colors match with the select */
+.assign-user-dropdown option {
+  color: #D0D3DB !important;
+  background-color: #2B2E36 !important;
+  padding: 8px 16px !important;
+}
+
+/* Disable wait cursor on select */
+.assign-user-dropdown[disabled] {
+  cursor: not-allowed !important;
+}
+
+/* Ensure option colors match with the select - added for consistency */
+.assign-user-dropdown option {
+  color: #D0D3DB;
+  background-color: #2B2E36;
+}
+
+/* Close button for right section in medium screens */
+.close-right-section-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #D0D3DB !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.close-right-section-btn:hover {
+  background-color: #24262E !important;
+}
+
+@media (min-width: 1280px) {
+  .close-right-section-btn {
+    display: none !important;
+  }
+}
+
+/* Media query for screen sizes between 1100px and 1279px */
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .right-title {
+    position: sticky !important;
+    top: 0;
+    width: 100%;
+    background-color: #17191F;
+    z-index: 10;
+    
+   
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-sizing: border-box;
+  }
+  
+  /* Ensure proper spacing and layout */
+  .right-side {
+    position: relative;
+  }
+}
+
 /* ==============responsive part start============== */
 /* @media (max-width: 1599.98px) { 
 .right-side h2 , .issue h3{

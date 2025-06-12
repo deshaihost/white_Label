@@ -1,10 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
+/* Global font override - apply DM Sans to all elements */
+*, *::before, *::after {
+  font-family: "DM Sans", Helvetica !important;
+}
+
+.App {
+  height: 100%;
+}
+
 body {
   padding: 0;
   margin: 0;
-  font-family: "Samsung Sharp Sans Medium";
-  background: #000212;
+  font-family: "DM Sans", Helvetica !important;
+  background: #0F1117;
 }
 
 ::-webkit-scrollbar {
@@ -13,9 +22,9 @@ body {
   display: none; /* this hides the scrollbar */
 }
 
-::-webkit-scrollbar-thumb {
+/* ::-webkit-scrollbar-thumb {
   background: #146ef5;
-}
+} */
 
 ::-webkit-scrollbar-track {
   background: #020d29;

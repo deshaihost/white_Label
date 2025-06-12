@@ -1,0 +1,92 @@
+.text-field {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+    width: 240px;
+}
+
+.text-field .label {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    position: relative;
+    width: 100%;
+}
+
+.text-field .text-wrapper {
+    color: var(--colors-color-text-subtle);
+    font-family: var(--body-medium-semibold-600-font-family);
+    font-size: var(--body-medium-semibold-600-font-size);
+    font-style: var(--body-medium-semibold-600-font-style);
+    font-weight: var(--body-medium-semibold-600-font-weight);
+    letter-spacing: var(--body-medium-semibold-600-letter-spacing);
+    line-height: var(--body-medium-semibold-600-line-height);
+    margin-top: -1.00px;
+    position: relative;
+    width: fit-content;
+}
+
+.text-field .input {
+    align-items: center;
+    align-self: stretch;
+    border-radius: 4px;
+    display: flex;
+    gap: 6px;
+    height: 40px;
+    padding: 0px 8px;
+    position: relative;
+    width: 100%;
+    
+}
+
+.text-field .search-md {
+    height: 20px !important;
+    position: relative !important;
+    width: 20px !important;
+}
+
+.text-field .div {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-grow: 1;
+    position: relative;
+}
+
+.text-field .caret {
+    background-color: var(--colors-color-border-focus);
+    height: 16px;
+    position: relative;
+    width: 1px;
+}
+
+.text-field .placeholder {
+    background: transparent;
+    border: none;
+    color: var(--colors-color-text-subtler);
+    flex: 1;
+    font-family: var(--body-medium-reg-400-font-family);
+    font-size: var(--body-medium-reg-400-font-size);
+    font-style: var(--body-medium-reg-400-font-style);
+    font-weight: var(--body-medium-reg-400-font-weight);
+    letter-spacing: var(--body-medium-reg-400-letter-spacing);
+    line-height: var(--body-medium-reg-400-line-height);
+    margin-top: -1.00px;
+    padding: 0;
+    position: relative;
+}
+
+.text-field .focus {
+    background-color: var(--colors-color-background-input-pressed);
+    border: 2px solid;
+    border-color: var(--colors-color-border-focus);
+}
+
+.text-field .hover {
+    background-color: var(--colors-color-background-input-hover);
+    border: 1px solid;
+    border-color: var(--colors-color-border-bold);
+}

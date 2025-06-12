@@ -30,8 +30,8 @@
 }
 
 .auth .auth-content .logo img {
+  max-width: 251px;
   width: 100%;
-  max-width: 202px;
 }
 
 .auth .auth-content .auth-form {
@@ -44,7 +44,7 @@
   color: #fff;
   text-align: center;
   font-family: "Samsung Sharp Sans Bold";
-  font-size: 35px;
+  font-size: 40px;
   font-style: normal;
   font-weight: 700;
   line-height: 50px;
@@ -55,7 +55,7 @@
   color: #fff;
   text-align: center;
   font-family: "Samsung Sharp Sans Medium";
-  font-size: 16px;
+  font-size: 21px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -64,7 +64,7 @@
 .auth .auth-content .auth-form > p a {
   color: #146ef5;
   font-family: "Samsung Sharp Sans Bold";
-  font-size: 18px;
+  font-size: 21px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;

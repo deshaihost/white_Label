@@ -1,0 +1,40 @@
+/* LeftMessage component styles */
+
+/* Style for the TextField placeholder */
+.search-text-field::placeholder {
+  color: #676A73 !important;
+}
+
+/* For Firefox */
+.search-text-field::-moz-placeholder {
+  color: #676A73 !important;
+  opacity: 1;
+}
+
+/* For Internet Explorer */
+.search-text-field:-ms-input-placeholder {
+  color: #676A73 !important;
+}
+
+/* For Chrome, Safari, and Opera */
+.search-text-field::-webkit-input-placeholder {
+  color: #676A73 !important;
+}
+
+/* Material UI TextField often uses an input element inside */
+.search-text-field .MuiInputBase-input::placeholder {
+  color: #676A73 !important;
+}
+
+.search-text-field .MuiInputBase-input::-webkit-input-placeholder {
+  color: #676A73 !important;
+}
+
+.search-text-field .MuiInputBase-input::-moz-placeholder {
+  color: #676A73 !important;
+  opacity: 1;
+}
+
+.search-text-field .MuiInputBase-input:-ms-input-placeholder {
+  color: #676A73 !important;
+}

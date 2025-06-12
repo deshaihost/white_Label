@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SideBar from "../../component/sideBar/SideBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./dashboard.css";
 import { useSelector, useDispatch } from "react-redux";
 import { getActionItemsActions, getUserDataActions, putCompleteActionItemActions, stateEmptyActions } from "../../redux/actions";
@@ -21,6 +21,7 @@ import { getStatisticsData, formatDateToReadable } from "../statistics/dataManag
 const Dashboard = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const userDataLoading = store?.getUserDataReducer?.loading;
   const actionItemsConvertationData = store?.getActionItemsReducer?.getActionsItems?.data?.action_items;
@@ -251,8 +252,7 @@ const Dashboard = () => {
     <>
       <Helmet>
         <title>Dashboard - HostBuddy AI</title>
-      </Helmet>
-      {propertiesConversationLoading && <FullScreenLoader />}
+      </Helmet>      {propertiesConversationLoading && <FullScreenLoader />}
       {completeActionsItemLoading && <FullScreenLoader />}
       <div className="account-main">
         <div className="container">
@@ -284,13 +284,11 @@ const Dashboard = () => {
                 } />
               )}
             </div>
-          )}
-
-          <div className="row">
-            <div className="col-lg-2 col-xl-2  col-xxl-2">
+          )}          <div className="row justify-content-center">
+            <div className="col-lg-2 col-xl-2 col-xxl-2" style={{display: "none"}}>
               <SideBar />
             </div>
-            <div className="col-lg-10 col-xl-10  col-xxl-10">
+            <div className="col-lg-10 col-xl-10 col-xxl-10">
               <div className="dashboard-container blur-background-top-right">
                 <div className="account_heading">
                   {first_name ? (

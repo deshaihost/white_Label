@@ -31,7 +31,7 @@
   z-index: 999;
   transform: translateX(100%);
   /* Improve animation smoothness */
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease;
   will-change: transform;
   pointer-events: none;
 }
@@ -39,12 +39,17 @@
 .pull-out-panel .close-button {
   position: absolute;
   top: 15px;
-  left: 15px; /* Top left corner */
+  left: 15px; /* Changed from right to left */
   background: none;
   border: none;
   color: #fff;
   font-size: 24px;
   cursor: pointer;
+}
+
+.pull-out-panel .close-button.close-button-right {
+  left: auto;
+  right: 15px; /* Top right corner for conversationPreferences */
 }
 
 .pull-out-panel .panel-content {

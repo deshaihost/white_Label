@@ -1,0 +1,13 @@
+.chevron-down-screen {
+    height: 20px;
+    position: relative;
+    width: 20px;
+}
+
+.chevron-down-screen .icon {
+    height: 6px;
+    left: 4px;
+    position: absolute;
+    top: 7px;
+    width: 12px;
+}

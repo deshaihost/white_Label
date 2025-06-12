@@ -100,7 +100,7 @@
   border-radius: 30px;
   background: #020d29;
   width: 262px;
-  padding: 30px;
+  padding: 16px !important;
 }
 .property-dropdown .dropdown-menu.show a {
   color: #fff !important;

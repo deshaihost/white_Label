@@ -1,0 +1,132 @@
+.select-drop-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 8px; /* Reduced from 15px to 8px to decrease spacing */
+  font-family: 'Inter', sans-serif;
+}
+
+.select-label {
+  display: flex; /* Changed to flex for centered alignment */
+  align-items: center; /* To vertically center the text within the 40px height */
+  font-size: 12px;
+  color: var(--color-primitives-neutral-200);
+  margin-bottom: 0px;
+  font-weight: 500;
+  line-height: 1.2;
+  height: 40px; /* Setting fixed height of 40px as requested */
+}
+
+.select-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background-color: var(--colors-elevation-surface-overlay-default, transparent);
+  border: 1px solid #D0D5DD;
+  border-radius: 6px;
+  cursor: pointer;
+  height: 33px;
+  width: 100%;
+  box-sizing: border-box;
+  color: #4B5563;
+}
+
+.select-field.focus {
+  background-color: var(--colors-color-background-input-pressed);
+  border: 2px solid;
+  border-color: var(--colors-color-border-focus);
+}
+
+.select-value {
+  font-size: 14px;
+  color: var(--color-primitives-neutral-200);
+}
+
+.chevron-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.chevron-icon.rotate {
+  transform: rotate(180deg);
+}
+
+.options-list {
+  align-items: flex-start;
+  background-color: var(--colors-elevation-surface-overlay-default);
+  border-radius: 4px;
+  box-shadow: var(--elevation-shadow-overlay);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 4px 1px;
+  position: relative;
+  width: 240px;
+  list-style: none;
+  z-index: 10;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.option-item {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--color-primitives-neutral-200);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  align-self: stretch !important;
+  width: 100% !important;
+  border: none !important; /* Prevent any default borders */
+  outline: none !important; /* Prevent any default outlines */
+}
+
+.option-item:hover {
+  background-color: var(--color-primitives-neutral-alpha-400a);
+  border: none !important;
+  outline: none !important;
+}
+
+.option-item.selected {
+  background-color: var(--colors-color-background-selected-subtle-pressed);
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important; /* Prevent any box shadows as well */
+}
+
+/* Override any focus styles for selected items */
+.option-item.selected:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Only apply focus styling when using keyboard navigation and the item is not selected */
+.option-item:focus:not(.selected) {
+  background-color: var(--colors-color-background-input-pressed);
+  border: 2px solid var(--colors-color-border-focus);
+  outline: none;
+}
+
+/* For scrollbar styling */
+.options-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.options-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 6px;
+}
+
+.options-list::-webkit-scrollbar-thumb {
+  background: #D0D5DD;
+  border-radius: 6px;
+}
+
+.options-list::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}

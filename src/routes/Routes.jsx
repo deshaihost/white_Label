@@ -59,6 +59,8 @@ import ActionItemsIndex from "../pages/actionItems/ActionItemsIndex";
 //import TestShowConvIndex from "../pages/testShowConversations/TestShowConvIndex";
 import AiMessaging from "../pages/aiMessaging/AiMessaging";
 import SmartTemplatesLanding from "../pages/smartTemplatesLanding/smartTemplatesLanding";
+import AuthenticatedLayout from "../component/layout/AuthenticatedLayout";
+import Authorized from "../helper/Authorized";
 
 // PMS instructions pages
 import PmsInstructionsMain from "../pages/userGuides/pmsInstructions/instructionsMain";
@@ -81,6 +83,7 @@ import CustomerJourney from "../pages/customerJourney/customerJourney";
 
 const Routing = () => {
   const location = useLocation();
+  const authData = Authorized();
 
   // Add rb2b profiling script to the head of the document
   useEffect(() => {
@@ -204,15 +207,38 @@ const Routing = () => {
     // Add Meta Pixel script to all pages
     addMetaPixelScript();
   }, [location.pathname]);
+  // List of paths that should always use UserNavBar (even for authenticated users)
+  const alwaysUseUserNavBarPaths = [
+    "/",
+    "/pricing", 
+    "/meet-hostbuddy",
+    "/faqs",
+    "/about-us",
+    "/blog",
+    "/privacy-policy",
+    "/termsof-service",
+    "/data-processing-agreement",
+    "/subprocessors",
+    "/scheduling-walkthrough",
+    "/tips-and-tricks",
+    "/best-practices",
+    "/integrations",
+    "/turno"
+  ];
+  
+  const shouldUseUserNavBar = alwaysUseUserNavBarPaths.some(path => 
+    location.pathname === path || location.pathname.startsWith(path + "/")
+  );
 
-  return (
-    <div className="routes">
+  const content = (
+    <>
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/reset-password" &&
         location.pathname !== "/accept-invitation" &&
         location.pathname !== "/forgot" &&
-        location.pathname !== "/test-show-conversations" && <NavBar />}
+        location.pathname !== "/test-show-conversations" && 
+        (!authData || shouldUseUserNavBar) && <NavBar />}
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -475,6 +501,15 @@ const Routing = () => {
         location.pathname !== "/gcs-users" &&
         !location.pathname.startsWith("/property-chat") &&
         <Footer />}
+    </>
+  );  // Wrap content with AuthenticatedLayout when the user is logged in AND not on public pages
+  return (
+    <div className="routes" style={{ height: "100%" }}>
+      {authData && !shouldUseUserNavBar ? (
+        <AuthenticatedLayout>{content}</AuthenticatedLayout>
+      ) : (
+        <>{content}</>
+      )}
     </div>
   );
 };

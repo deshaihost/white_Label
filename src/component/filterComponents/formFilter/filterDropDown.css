@@ -1,0 +1,117 @@
+.select {
+    align-items: flex-start;
+    display: flex;
+    gap: 8px;
+    position: relative;
+    width: 240px;
+}
+
+.select .select-input {
+    align-items: flex-start;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 4px;
+    position: relative;
+}
+
+.select .label-wrapper {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    position: relative;
+    width: 100%;
+}
+
+.select .text-wrapper {
+    color: var(--colors-color-text-subtle);
+    font-family: var(--body-medium-semibold-600-font-family);
+    font-size: var(--body-medium-semibold-600-font-size);
+    font-style: var(--body-medium-semibold-600-font-style);
+    font-weight: var(--body-medium-semibold-600-font-weight);
+    letter-spacing: var(--body-medium-semibold-600-letter-spacing);
+    line-height: var(--body-medium-semibold-600-line-height);
+    margin-top: -1.00px;
+    position: relative;
+    width: fit-content;
+}
+
+.select .input {
+    align-items: center;
+    align-self: stretch;
+    border-radius: 4px;
+    display: flex;
+    gap: 6px;
+    height: 32px;
+    padding: 0px 8px;
+    position: relative;
+    width: 100%;
+}
+
+.select .div {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-grow: 1;
+    position: relative;
+}
+
+.select .caret {
+    background-color: var(--colors-color-border-focus);
+    height: 16px;
+    position: relative;
+    width: 1px;
+}
+
+.select .text-wrapper-2 {
+    color: var(--colors-color-text-subtler);
+    flex: 1;
+    font-family: var(--body-medium-reg-400-font-family);
+    font-size: var(--body-medium-reg-400-font-size);
+    font-style: var(--body-medium-reg-400-font-style);
+    font-weight: var(--body-medium-reg-400-font-weight);
+    letter-spacing: var(--body-medium-reg-400-letter-spacing);
+    line-height: var(--body-medium-reg-400-line-height);
+    margin-top: -1.00px;
+    position: relative;
+}
+
+.select .instance-node {
+    height: 20px !important;
+    position: relative !important;
+    width: 20px !important;
+}
+
+.select .options {
+    align-items: flex-start;
+    background-color: var(--colors-elevation-surface-overlay-default);
+    border-radius: 4px;
+    box-shadow: var(--elevation-shadow-overlay);
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    overflow: hidden;
+    padding: 4px 1px;
+    position: absolute;
+    top: 62px;
+    width: 240px;
+}
+
+.select .option-instance {
+    align-self: stretch !important;
+    width: 100% !important;
+}
+
+.select .focus {
+    background-color: var(--colors-color-background-input-pressed);
+    border: 2px solid;
+    border-color: var(--colors-color-border-focus);
+}
+
+.select .default {
+    background-color: var(--colors-color-background-input-default);
+    border: 1px solid;
+    border-color: var(--colors-color-border-bold);
+}

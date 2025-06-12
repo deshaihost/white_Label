@@ -105,6 +105,7 @@ class APICore {
     } else {
       response = axios.get(`${url}`, params);
     }
+    console.log(response.data)
     return response;
   };
 

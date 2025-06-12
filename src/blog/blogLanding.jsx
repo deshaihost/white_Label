@@ -16,6 +16,7 @@ const minut_alerts_into_instant_action_thumbnail = "https://i.postimg.cc/hvLQ6vJ
 const meet_the_co_founders_thumbnail = "https://i.postimg.cc/8sgVdssK/Headshots-blog.webp";
 const str_market_thumbnail = "https://hostbuddylb.com/blog/str_market_4-22/Official%20STR%20Market%20Logo.webp";
 const hostfully_guidebooks_thumbnail = "https://hostbuddylb.com/blog/hostfully_guidebooks/Blog%20Header%20(19).webp";
+const inbox_blog_thumbnail = "https://storage.googleapis.com/frontend_media/blog/inbox_blog/10%20Minute%20Demo%20Thumbnail%20(1).webp";
 
 const BlogLandingPage = () => {
 
@@ -31,9 +32,9 @@ const BlogLandingPage = () => {
       { id:"smart_templates", title:"Smart Templates: Transform Your Short Term Rental Communication with AI-Powered Automation", date:"Oct 29, 2024", img:smart_templates_thumbnail, description:"Enhance your rental management with HostBuddy AI’s Smart Templates, offering personalized, AI-driven guest communication." },
       { id:"guide_to_vacation_rental_upsells", title:"The Ultimate Guide to Vacation Rental Upsells: Boost Your Revenue with AI", date:"Nov 06, 2024", img:guide_to_vacation_rental_upsells_thumbnail, description:"Discover how AI-driven upselling strategies can boost your vacation rental revenue and enhance guest experiences with personalized offerings." },
       { id:"minut_alerts_into_instant_action", title:"Turn Minut Alerts into Instant Action: HostBuddy AI's Game-Changing Integration with Minut", date:"Dec 03, 2024", img:minut_alerts_into_instant_action_thumbnail, description:"Streamline hosting with Minut and HostBuddy AI—automated alerts and real-time guest messaging for smarter rental management." },
-      { id:"meet_the_co_founders", title:"Meet the Co-Founders of HostBuddy AI", date:"Jan 08, 2025", img:meet_the_co_founders_thumbnail, description:"Discover the visionaries behind HostBuddy AI—Jay Ullrich, Sam Mayes, and Michael Boddie—redefining the short-term rental industry with cutting-edge technology and innovation." },
-      { id:"str_market_4-22", title:"STR Market: The Ultimate Marketplace for Short-Term Rental Success", date:"Apr 22, 2025", img:str_market_thumbnail, description:"Discover STR Market—the curated marketplace for short-term rental hosts. Find vetted tools, software, and products at exclusive discounts to boost your rental business." },
+      { id:"meet_the_co_founders", title:"Meet the Co-Founders of HostBuddy AI", date:"Jan 08, 2025", img:meet_the_co_founders_thumbnail, description:"Discover the visionaries behind HostBuddy AI—Jay Ullrich, Sam Mayes, and Michael Boddie—redefining the short-term rental industry with cutting-edge technology and innovation." },      { id:"str_market_4-22", title:"STR Market: The Ultimate Marketplace for Short-Term Rental Success", date:"Apr 22, 2025", img:str_market_thumbnail, description:"Discover STR Market—the curated marketplace for short-term rental hosts. Find vetted tools, software, and products at exclusive discounts to boost your rental business." },
       { id:"hostfully_guidebooks_blog", title:"Integration Alert: Our New Hostfully Guidebook Integration Takes AI Messaging for Short Term Rentals to the Next Level", date:"May 30, 2025", img:hostfully_guidebooks_thumbnail, description:"Discover how our new Hostfully Digital Guidebook integration transforms AI messaging for short-term rentals with comprehensive knowledge bases and personalized guest responses." },
+      { id:"inbox_blog", title:"The Future of Guest Communication is Here: Introducing the new HostBuddy Inbox 🚀", date:"June 11, 2025", img:inbox_blog_thumbnail, description:"Discover the most powerful inbox update in HostBuddy history. Complete UI transformation, WhatsApp integration, intelligent auto-tagging, and advanced filtering." },
     ];
 
     const reversedArticles = articles.reverse();

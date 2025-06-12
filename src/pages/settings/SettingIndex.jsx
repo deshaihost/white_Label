@@ -23,11 +23,10 @@ const SettingIndex = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const { section, subsec } = useParams();
-
   const [interFaceSettings, setInterFaceSettings] = useState("account");
   const [userData, setUserData] = useState({});
 
-  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"conversation-preferences", integrations:"integrations", users:"users", upsells:"upsells", subscription:"subscription", messagingChannels:"messaging-channels" };
+  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"ai-preferences", integrations:"integrations", users:"users", upsells:"upsells", subscription:"subscription", messagingChannels:"messaging-channels" };
 
   const ApiUserData = store?.getUserDataReducer?.getUserData?.data?.user;
   const isAdmin = store?.getUserDataReducer?.getUserData?.data?.user?.is_hb_admin;
@@ -67,12 +66,14 @@ const SettingIndex = () => {
           <div className="col-lg-12 col-xl-12 col-xxl-12">
             <div className="setting_index_tab_grid text-white blur-background-top-right">
               <div className="setting_tab_title">
+                {/* SettingSideBarIndex component rendering has been disabled 
                 <SettingSideBarIndex interFaceTypes={interFaceTypes} changeHndl={setInterFaceSettings} activeTab={interFaceSettings} isAdmin={isAdmin}/>
-                <div style={{ marginTop: "20px", textAlign: "center" }}>
+                */}
+                {/* <div style={{ marginTop: "20px", textAlign: "center" }}>
                   <Link to="/dashboard" className="text-link">
                     &lt; Dashboard
                   </Link>
-                </div>
+                </div> */}
               </div>
               <div className="setting_tab_data border border-primary p-3 " style={{ borderRadius: "20px" }}>
                 <div className="setting_tab_data_inner">
@@ -86,11 +87,10 @@ const SettingIndex = () => {
                   )}
                   {interFaceTypes?.contact === interFaceSettings && (
                     <AccountContactSection />
-                  )}
-                  {interFaceTypes?.notifications === interFaceSettings && (
+                  )}                  {interFaceTypes?.notifications === interFaceSettings && (
                     <AccountNotificationSection />
                   )}
-                  {interFaceTypes?.conversationSettings === interFaceSettings && (
+                  {(interFaceSettings === "ai-preferences" || interFaceSettings === "conversation-preferences") && (
                     <AdvancedSettingsIndex />
                   )}
                   {interFaceTypes?.upsells === interFaceSettings && (

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Alert } from "react-bootstrap";
 import "./NavBar.css";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -11,17 +10,16 @@ import { setAuthorization } from "../../helper/apiCore";
 // import LogoNavBar from "../../helper/staticImage/logoNavBar.svg";
 const LogoNavBar = "https://hostbuddylb.com/logo/logoNavBar.svg";
 
-const UserNavBar = ({ gcsToken, subAccountName }) => {
+const UserNavBar = ({ gcsToken }) => {
+  // Define all React hooks at the top level to follow React's rules of hooks
   const location = useLocation();
   const navigate = useNavigate();
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : {};
 
-  const logoutHandle = async (e) => {
-    e.preventDefault();
-    logOut();
-    navigate("/login");
-  };
+  // Mobile navbar functionality - always defined at top level before any conditional returns
+  const [loginIcon, setLoginIcon] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   // List of paths that should show portal navigation. Need to add to this list whenver a new protected path is added
   const protectedPaths = ["/dashboard", "/statistics", "/properties", "/test-property", "/workbench", "/property-insight", "/subscription", "/setting", "/add-property", "/edit-property", "/guided-setup", "/inbox", "/action-item", "/getstarted", "/journey", "/gcs-users", '/gcs-settings'];
@@ -30,6 +28,7 @@ const UserNavBar = ({ gcsToken, subAccountName }) => {
   // Check if current path should show portal navigation
   const isProtectedPath = protectedPaths.some((path) =>
     location.pathname.startsWith(path)
+  
   );
 
   // List of paths that should show portal navigation based on login status
@@ -38,9 +37,12 @@ const UserNavBar = ({ gcsToken, subAccountName }) => {
   // Check if current path should show portal navigation based on login status
   const isConditionalPath = conditionalPaths.includes(location.pathname);
 
-  // mobile navbar functionality
-  const [loginIcon, setLoginIcon] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  // Define all handlers at the top level, before any conditional returns
+  const logoutHandle = async (e) => {
+    e.preventDefault();
+    logOut();
+    navigate("/login");
+  };
 
   const handleToggle = () => {
     setExpanded(!expanded);
@@ -63,15 +65,15 @@ const UserNavBar = ({ gcsToken, subAccountName }) => {
   const handleToggleLogin = () => {
     setLoginIcon(!loginIcon);
     setExpanded(false);
-  };
-  // mobile navbar functionality
-
-  return (
-    <header className="header">
+  };  // Create the component content
+  // Always render UserNavBar when this component is called
+  // The logic for when to show this vs NavBarContainer is handled in Routes.jsx
+  const content = (
+    <header className="header" style={{padding:"10px"}}>
       <Container>
         <Navbar expand="lg" expanded={expanded} className="bg-body-tertiary header-container">
           <Navbar.Brand>
-            <NavLink exact to="/">
+            <NavLink to="/">
               <img src={LogoNavBar} alt="HostBuddy AI Logo" />
             </NavLink>
           </Navbar.Brand>
@@ -82,7 +84,7 @@ const UserNavBar = ({ gcsToken, subAccountName }) => {
                   {loginIcon ? (
                     <div className="close-icon">
                       {" "}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"></path>
                       </svg>
                     </div>
@@ -98,10 +100,10 @@ const UserNavBar = ({ gcsToken, subAccountName }) => {
                 </Navbar.Toggle>
                 {loginIcon && (
                   <div className="account-detail">
-                    <NavLink exact to="/login" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                    <NavLink to="/login" className="nav-link" onClick={handleNavLinkClick}>
                       Login
                     </NavLink>
-                    <NavLink exact to="/signup" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                    <NavLink to="/signup" className="nav-link" onClick={handleNavLinkClick}>
                       Signup
                     </NavLink>
                   </div>
@@ -147,7 +149,7 @@ const UserNavBar = ({ gcsToken, subAccountName }) => {
                     </>
                   )}
                   <NavLink to={isInGcsPortal ? '/gcs-settings' : '/setting'} className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                    {isInGcsPortal ? 'Master Acct Settings' : 'Settings'}
+                    {isInGcsPortal ? 'GCS Acct Settings' : 'Settings'}
                   </NavLink>
                   {isInGcsPortal && (
                     <NavLink to="/login" className="nav-link" onClick={logoutHandle}>
@@ -157,36 +159,32 @@ const UserNavBar = ({ gcsToken, subAccountName }) => {
                 </>
               ) : ( // one of the front pages, outside of user portal
                 <>
-                  <NavLink exact to="/" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink to="/" className="nav-link" onClick={handleNavLinkClick}>
                     Home
                   </NavLink>
-                  <NavLink exact to="/meet-hostbuddy" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink to="/meet-hostbuddy" className="nav-link" onClick={handleNavLinkClick}>
                     Meet HostBuddy
                   </NavLink>
-                  <NavLink exact to="/integrations" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink to="/integrations" className="nav-link" onClick={handleNavLinkClick}>
                     Integrations
                   </NavLink>
-                  <NavLink exact to="/pricing" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink to="/pricing" className="nav-link" onClick={handleNavLinkClick}>
                     Pricing
                   </NavLink>
-                  {/*
-                  <NavLink exact to="/faqs" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  {/* 
+                  <NavLink to="/faqs" className="nav-link" onClick={handleNavLinkClick}>
                     FAQs
                   </NavLink>
-                  */}
-                  <NavLink exact to="https://userguide.hostbuddy.ai/quick-start/getting-started" className="nav-link" activeClassName="active" onClick={handleNavLinkClick} target="_blank" rel="noopener noreferrer">
+                  */}                    <NavLink to="https://userguide.hostbuddy.ai/quick-start/getting-started" className="nav-link" onClick={handleNavLinkClick} target="_blank" rel="noopener noreferrer">
                     Docs
                   </NavLink>
 
-                  {/* Remove About Us and Blog for now, to save space in the navbar. Will re-add shortly after the navbar is redesigned to accommodate more items */}
-                  {/*
-                  <NavLink exact to="/about-us" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  {/* <NavLink to="/about-us" className="nav-link" onClick={handleNavLinkClick}>
                     About Us
                   </NavLink>
-                  <NavLink exact to="/blog" className="nav-link" activeClassName="active" onClick={handleNavLinkClick}>
+                  <NavLink to="/blog" className="nav-link" onClick={handleNavLinkClick}>
                     Blog
-                  </NavLink>
-                  */}
+                  </NavLink> */}
 
                 </>
               )}
@@ -201,24 +199,12 @@ const UserNavBar = ({ gcsToken, subAccountName }) => {
                 Log In
               </Link>
             </div>
-          )}
-        </Navbar>
+          )}        </Navbar>
       </Container>
-
-      {gcsToken && !isInGcsPortal && (
-        <div className="acting-as-user-banner">
-          <span>Viewing user: {subAccountName || "Unknown Account"}</span>
-          <span 
-            className="back-to-accounts-link" 
-            onClick={handlebackToUsersClick}
-            style={{ color:'#4AF', textDecoration:'none', cursor:'pointer' }}
-          >
-            (back to all accounts)
-          </span>
-        </div>
-      )}
     </header>
   );
+
+  return content;
 };
 
 export default UserNavBar;

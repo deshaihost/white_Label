@@ -1,0 +1,87 @@
+/* CollapsedNavbar.css - styles for the collapsed navbar, matching the sidebar */
+.collapsed-navbar {
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(23, 25, 31, 1);
+  width: 56px;
+  height: 100vh;
+  padding: 16px 0;
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+  z-index: 10;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.collapsed-navbar-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+}
+
+.collapsed-navbar-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.collapsed-navbar-icon.selected,
+.collapsed-navbar-icon.selected:hover {
+  background-color: rgba(55, 135, 255, 0.2);
+  box-shadow: 0 0 0 1px rgba(55, 135, 255, 0.15);
+}
+
+.collapsed-navbar-icon:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.collapsed-navbar-icon:active {
+  transform: scale(0.95);
+  background-color: rgba(55, 135, 255, 0.25);
+}
+
+/* Add a subtle glow effect to SVG icons on hover */
+.collapsed-navbar-icon:hover svg path {
+  fill: white;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2));
+}
+
+.collapsed-navbar-expand {
+  background: none;
+  border: none;
+  margin-top: auto;
+  margin-bottom: 8px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.collapsed-navbar-expand:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: scale(1.05);
+}
+
+.collapsed-navbar-expand:active {
+  transform: scale(0.95);
+}
+
+.collapsed-selection-indicator {
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 3px;
+  height: 16px;
+  background-color: #3787ff;
+  border-radius: 0px 2px 2px 0px;
+  z-index: 2;
+}

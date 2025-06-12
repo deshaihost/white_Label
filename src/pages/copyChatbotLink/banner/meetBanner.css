@@ -12,7 +12,7 @@
     justify-content: space-between;
     padding: 20px;
     border-radius: 30px;
-    border: 1px solid #2C389E;
+    /* border: 1px solid #2C389E; */
     background: #000212;
     width: calc(100% - 100px); /* Changed from max-width: 690px to be nearly full-width */
     max-width: 100%;

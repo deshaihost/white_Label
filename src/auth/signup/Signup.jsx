@@ -161,8 +161,8 @@ const Signup = () => {
           </div>
           <div className="col-lg-6">
             <div className="signup-content auth-content">
-              <Link to="/" className="logo">
-                <img src={Logo} alt="logo" />
+              <Link to="/" className="logo1">
+                <img src={Logo} alt="logo"  />
               </Link>
               <div className="auth-form">
                 <h2>Create An Account</h2>

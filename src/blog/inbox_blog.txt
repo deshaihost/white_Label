@@ -1,0 +1,132 @@
+
+
+[thumbNail]
+# The Future of Guest Communication is Here: Introducing the new HostBuddy Inbox 🚀
+
+**The most powerful inbox update in HostBuddy history has arrived.**
+
+We've completely reimagined your messaging experience from the ground up. After months of development and feedback from our incredible host community, we're thrilled to unveil the new HostBuddy Inbox – a revolutionary upgrade that transforms how you manage guest communication across your entire portfolio.
+
+[inboxImage]
+## What's Changed? Everything.
+
+### ✨ **Complete UI/UX Transformation**
+
+Say goodbye to our old interface and hello to intuitive design. Every pixel has been redesigned with you in mind, creating a seamless experience that makes managing hundreds of conversations feel effortless.
+
+### 🏷️ **Intelligent Auto-Tagging System**
+
+Never wonder about conversation context again. HostBuddy now automatically tags every conversation with:
+
+- **Guest Status**: Check-in today, check-out today, current guest, future guest, inquiry, past guest
+- **Booking Platform**: See at a glance whether guests are messaging via Airbnb, Vrbo, Booking.com, or direct
+- **Unread Count**: Instantly know how many messages need your attention
+
+### 🔍 **Advanced Filtering & Search**
+
+Take control of your inbox with powerful new filters:
+
+- Filter by booking channel
+- Sort by urgency and priority
+- Organize by message source
+- Custom property and reservation phase filtering
+- User assignment filtering
+- Quick name search functionality
+
+### 📌 **Conversation Management Tools**
+
+- **Pin Important Conversations**: Keep critical discussions at the top
+- **Urgent Flags**: Automatically flagged conversations with open issues
+
+[conversationManagement]
+## The Game-Changer: WhatsApp Business Integration 📱
+
+**This is the feature our hosts have been waiting for.**
+
+Connect your WhatsApp Business line directly to HostBuddy and watch the magic happen:
+
+✅ **Unified Communication**: Receive WhatsApp messages alongside PMS messages in one inbox
+✅ **Smart Reservation Matching**: HostBuddy automatically links WhatsApp conversations to existing reservations
+✅ **Seamless Experience**: Guests can switch between PMS messaging and WhatsApp without losing context
+✅ **No More Missed Messages**: Every guest touchpoint, captured and managed
+
+*Imagine a guest books through Airbnb but prefers WhatsApp for quick questions. Now you'll see both conversation threads connected to the same reservation, giving you complete communication visibility.*
+
+[gameChanger]
+## Enhanced Issue Management & Notes 📝
+
+### **Streamlined Open Issues**
+
+- All open issues preview directly in the conversation tab
+- Manage and resolve issues without leaving the conversation
+- Track resolution progress in real-time
+
+### **Smart Conversation Notes**
+
+Add private notes to any conversation for your team's reference. The game-changing feature? **You decide whether HostBuddy AI can see these notes** when crafting responses to guests.
+
+*Perfect for recording phone conversations, special guest requests, or internal team updates.*
+
+[smartConversation]
+## Why This Matters for Your Business
+
+### **🎯 Increased Efficiency**
+
+No more jumping between platforms. Everything you need is in one place, intelligently organized.
+
+### **🤝 Better Team Collaboration**
+
+Assign conversations, track progress, and ensure nothing falls through the cracks.
+
+### **📈 Improved Guest Experience**
+
+Faster response times, better context awareness, and seamless communication across all channels.
+
+### **💰 Revenue Protection**
+
+Never miss an inquiry, upsell opportunity, or urgent issue that could impact reviews.
+
+## Advanced Customization Features
+
+- **Manual Sentiment Override**: Adjust AI-detected sentiment when you have additional context
+- **Custom Contact Management**: Add phone numbers and emails for each reservation
+- **User Assignment**: Delegate specific conversations to team members
+
+[AdvancedCustomization]
+## Getting Started
+
+The new inbox experience will be available to all users automatically. Simply log in to see the transformation in action. This isn't just an update – it's a complete reimagining of what guest communication software should be.
+
+---
+
+*Questions about the new features? Our support team is standing by to help you make the most of your upgraded inbox   —>  support@hostbuddy.ai*
+
+---
+
+## Coming Soon: The Communication Revolution Continues 🔮
+
+The WhatsApp integration is just the beginning of our external communication expansion. Here's what's on the horizon:
+
+### **📧 Email Integration**
+
+Connect your business’ email directly to HostBuddy for complete communication coverage.
+
+### **📱 OpenPhone & SMS Support**
+
+Manage phone calls and text messages alongside all your other guest communication channels.
+
+### **⏰ Scheduled Messaging**
+
+Plan your communication strategy with the ability to schedule messages for optimal timing.
+
+### **📢 Bulk Send Functionality**
+
+Send important updates to multiple guests simultaneously – perfect for weather alerts, property updates, or special announcements.
+
+*Imagine having every single guest touchpoint – PMS messages, WhatsApp, email, phone calls, and texts – all flowing through one intelligent inbox with HostBuddy AI managing responses across every channel.*
+
+---
+
+**The HostBuddy Team**
+
+*P.S. This is just the beginning. We're building the most comprehensive guest communication platform in the industry. The future of hosting is unified, intelligent, and effortless.*
