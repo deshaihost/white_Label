@@ -179,12 +179,12 @@ const UserNavBar = ({ gcsToken }) => {
                     Docs
                   </NavLink>
 
-                  <NavLink to="/about-us" className="nav-link" onClick={handleNavLinkClick}>
+                  {/* <NavLink to="/about-us" className="nav-link" onClick={handleNavLinkClick}>
                     About Us
                   </NavLink>
                   <NavLink to="/blog" className="nav-link" onClick={handleNavLinkClick}>
                     Blog
-                  </NavLink>
+                  </NavLink> */}
 
                 </>
               )}

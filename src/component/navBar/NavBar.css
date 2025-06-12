@@ -21,6 +21,18 @@ header.header {
     padding: 20px 0;
 }
 
+/* Ensure navbar content stays properly aligned on all screen sizes */
+.header-container .navbar {
+    width: 100%;
+}
+
+.header-container .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .header-container .header-icons-list {
     display: flex;
     align-items: center;
@@ -243,10 +255,82 @@ header.header {
     }
 }
 
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .header-container .header-icons-list {
+        display: none;
+    }
 
+    .navbar-collapse {
+        justify-content: center;
+    }
+
+    .navbar-collapse .navbar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .navbar-collapse .navbar-nav .nav-link {
+        padding: 8px 12px;
+        margin-inline: 0;
+        font-size: 14px;
+        border-bottom: none;
+    }
+
+    .nav-buttons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .nav-buttons .link-btn {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
     .navbar-collapse .navbar-nav .nav-link {
         font-size: 18px;
         margin-inline: 15px;
     }
 }
+
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+    .header-container .header-icons-list {
+        display: none;
+    }
+
+    .navbar-collapse {
+        justify-content: center;
+    }
+
+    .navbar-collapse .navbar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .navbar-collapse .navbar-nav .nav-link {
+        padding: 6px 10px;
+        margin-inline: 0;
+        font-size: 13px;
+        border-bottom: none;
+    }
+
+    .nav-buttons {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 8px;
+    }
+
+    .nav-buttons .link-btn {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+}
+
