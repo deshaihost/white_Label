@@ -73,14 +73,16 @@ const VideoComponent = ({ onRemindLater }) => {
             Take a quick tour to see all the exciting updates and improvements
             that will streamline your guest communication workflow.
           </p>
-          <button
+          <a
             className="watch-tour-button"
-            onClick={handleWatchTourClick}
-            ref={watchButtonRef}
+            href="/blog/inbox_blog"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", marginTop: "1.25rem", marginLeft: "auto", marginRight: "auto" }}
           >
-            Watch the tour
+            Learn More
             <img src={trailingIcon} alt="Play" className="button-icon" />
-          </button>{" "}
+          </a>{" "}
           <div
             className="remind-later"
             onClick={
