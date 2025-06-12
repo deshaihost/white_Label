@@ -896,26 +896,29 @@ const RightSection = ({
       );
       if (response.status === 200) {
         // Update contact info with the response data
-        const guestData = response.data;
-        // Get last email address from email_addresses array
+        const guestData = response.data;        // Get last email address from email_addresses array
         const emailAddresses = guestData.guest_data?.email_addresses || [];
         const lastEmail =
-          emailAddresses.length > 0
+          emailAddresses.length > 0 && emailAddresses[emailAddresses.length - 1]
             ? emailAddresses[emailAddresses.length - 1]
             : null;
 
         // Get last phone number from phone_numbers array
         const phoneNumbers = guestData.guest_data?.phone_numbers || [];
         const lastPhone =
-          phoneNumbers.length > 0
+          phoneNumbers.length > 0 && phoneNumbers[phoneNumbers.length - 1]
             ? phoneNumbers[phoneNumbers.length - 1]
             : null;
 
         setContactInfo({
           email: lastEmail || "not added",
           phone: lastPhone || "not added",
+        });      } else {
+        // Reset contact info when API fails
+        setContactInfo({
+          email: "not added",
+          phone: "not added",
         });
-      } else {
         ToastHandle(
           response?.data?.error || "Failed to fetch guest data",
           "danger"
@@ -923,6 +926,11 @@ const RightSection = ({
       }
     } catch (error) {
       console.error("Error fetching guest data:", error);
+      // Reset contact info when API throws an error
+      setContactInfo({
+        email: "not added",
+        phone: "not added",
+      });
       ToastHandle("Error fetching guest data", "danger");
     } finally {
       setGetGuestDataLoading(false);
