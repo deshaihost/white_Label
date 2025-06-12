@@ -207,6 +207,28 @@ const Routing = () => {
     // Add Meta Pixel script to all pages
     addMetaPixelScript();
   }, [location.pathname]);
+  // List of paths that should always use UserNavBar (even for authenticated users)
+  const alwaysUseUserNavBarPaths = [
+    "/",
+    "/pricing", 
+    "/meet-hostbuddy",
+    "/faqs",
+    "/about-us",
+    "/blog",
+    "/privacy-policy",
+    "/termsof-service",
+    "/data-processing-agreement",
+    "/subprocessors",
+    "/scheduling-walkthrough",
+    "/tips-and-tricks",
+    "/best-practices",
+    "/integrations",
+    "/turno"
+  ];
+  
+  const shouldUseUserNavBar = alwaysUseUserNavBarPaths.some(path => 
+    location.pathname === path || location.pathname.startsWith(path + "/")
+  );
 
   const content = (
     <>
@@ -216,7 +238,7 @@ const Routing = () => {
         location.pathname !== "/accept-invitation" &&
         location.pathname !== "/forgot" &&
         location.pathname !== "/test-show-conversations" && 
-        !authData && <NavBar />}
+        (!authData || shouldUseUserNavBar) && <NavBar />}
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -480,11 +502,10 @@ const Routing = () => {
         !location.pathname.startsWith("/property-chat") &&
         <Footer />}
     </>
-  );
-  // Wrap content with AuthenticatedLayout when the user is logged in
+  );  // Wrap content with AuthenticatedLayout when the user is logged in AND not on public pages
   return (
     <div className="routes" style={{ height: "100%" }}>
-      {authData ? (
+      {authData && !shouldUseUserNavBar ? (
         <AuthenticatedLayout>{content}</AuthenticatedLayout>
       ) : (
         <>{content}</>

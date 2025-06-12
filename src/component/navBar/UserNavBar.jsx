@@ -65,154 +65,144 @@ const UserNavBar = ({ gcsToken }) => {
   const handleToggleLogin = () => {
     setLoginIcon(!loginIcon);
     setExpanded(false);
-  };
-
-  // Create the component content
-  let content = null;
-  
-  // Only create content if user is not authenticated (they would use NavBarContainer instead)
-  if (!token) {
-    content = (
-      <header className="header" style={{padding:"10px"}}>
-        <Container>
-          <Navbar expand="lg" expanded={expanded} className="bg-body-tertiary header-container">
-            <Navbar.Brand>
-              <NavLink to="/">
-                <img src={LogoNavBar} alt="HostBuddy AI Logo" />
-              </NavLink>
-            </Navbar.Brand>
-            <div className="header-icons-list">
-              {!isProtectedPath && (
-                <>
-                  <Navbar.Toggle className="header-icon" aria-controls="navbarSupportedContent" onClick={handleToggleLogin}>
-                    {loginIcon ? (
-                      <div className="close-icon">
-                        {" "}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
-                          <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"></path>
+  };  // Create the component content
+  // Always render UserNavBar when this component is called
+  // The logic for when to show this vs NavBarContainer is handled in Routes.jsx
+  const content = (
+    <header className="header" style={{padding:"10px"}}>
+      <Container>
+        <Navbar expand="lg" expanded={expanded} className="bg-body-tertiary header-container">
+          <Navbar.Brand>
+            <NavLink to="/">
+              <img src={LogoNavBar} alt="HostBuddy AI Logo" />
+            </NavLink>
+          </Navbar.Brand>
+          <div className="header-icons-list">
+            {!isProtectedPath && (
+              <>
+                <Navbar.Toggle className="header-icon" aria-controls="navbarSupportedContent" onClick={handleToggleLogin}>
+                  {loginIcon ? (
+                    <div className="close-icon">
+                      {" "}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"></path>
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="header-icon">
+                      <button>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fill="#146EF5" d="M9.99999 9.99999C12.5783 9.99999 14.6667 7.91166 14.6667 5.33332C14.6667 2.75499 12.5783 0.666656 9.99999 0.666656C7.42166 0.666656 5.33332 2.75499 5.33332 5.33332C5.33332 7.91166 7.42166 9.99999 9.99999 9.99999ZM9.99999 12.3333C6.88499 12.3333 0.666656 13.8967 0.666656 17V19.3333H19.3333V17C19.3333 13.8967 13.115 12.3333 9.99999 12.3333Z"></path>
                         </svg>
-                      </div>
-                    ) : (
-                      <div className="header-icon">
-                        <button>
-                          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="#146EF5" d="M9.99999 9.99999C12.5783 9.99999 14.6667 7.91166 14.6667 5.33332C14.6667 2.75499 12.5783 0.666656 9.99999 0.666656C7.42166 0.666656 5.33332 2.75499 5.33332 5.33332C5.33332 7.91166 7.42166 9.99999 9.99999 9.99999ZM9.99999 12.3333C6.88499 12.3333 0.666656 13.8967 0.666656 17V19.3333H19.3333V17C19.3333 13.8967 13.115 12.3333 9.99999 12.3333Z"></path>
-                          </svg>
-                        </button>
-                      </div>
-                    )}
-                  </Navbar.Toggle>
-                  {loginIcon && (
-                    <div className="account-detail">
-                      <NavLink to="/login" className="nav-link" onClick={handleNavLinkClick}>
-                        Login
-                      </NavLink>
-                      <NavLink to="/signup" className="nav-link" onClick={handleNavLinkClick}>
-                        Signup
-                      </NavLink>
+                      </button>
                     </div>
                   )}
+                </Navbar.Toggle>
+                {loginIcon && (
+                  <div className="account-detail">
+                    <NavLink to="/login" className="nav-link" onClick={handleNavLinkClick}>
+                      Login
+                    </NavLink>
+                    <NavLink to="/signup" className="nav-link" onClick={handleNavLinkClick}>
+                      Signup
+                    </NavLink>
+                  </div>
+                )}
+              </>
+            )}
+
+            <Navbar.Toggle className="header-icon" aria-controls="navbarSupportedContent" onClick={handleToggle}>
+              <button>
+                <span className="toggle-line my-1"></span>
+                <span className="toggle-line my-1"></span>
+                <span className="toggle-line my-1"></span>
+              </button>
+            </Navbar.Toggle>
+          </div>
+          <Navbar.Collapse id="navbarSupportedContent">
+            <Nav>
+              {isProtectedPath || (isConditionalPath && token) ? ( // in user portal
+                <>
+                  {gcsToken ? (
+                    <NavLink to="/gcs-users" className="nav-link" onClick={handlebackToUsersClick}>
+                      All Accounts
+                    </NavLink>
+                  ) : (
+                    <NavLink to="/getstarted" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                      Get Started
+                    </NavLink>
+                  )}
+                  {!isInGcsPortal && (
+                    <>
+                      <NavLink to="/dashboard" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                        Dashboard
+                      </NavLink>
+                      <NavLink to="/properties" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                        Properties
+                      </NavLink>
+                      <NavLink to="/inbox" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                        Messaging
+                      </NavLink>
+                      <NavLink to="/action-item" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                        Action Items
+                      </NavLink>
+                    </>
+                  )}
+                  <NavLink to={isInGcsPortal ? '/gcs-settings' : '/setting'} className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
+                    {isInGcsPortal ? 'GCS Acct Settings' : 'Settings'}
+                  </NavLink>
+                  {isInGcsPortal && (
+                    <NavLink to="/login" className="nav-link" onClick={logoutHandle}>
+                      Log Out
+                    </NavLink>
+                  )}
+                </>
+              ) : ( // one of the front pages, outside of user portal
+                <>
+                  <NavLink to="/" className="nav-link" onClick={handleNavLinkClick}>
+                    Home
+                  </NavLink>
+                  <NavLink to="/meet-hostbuddy" className="nav-link" onClick={handleNavLinkClick}>
+                    Meet HostBuddy
+                  </NavLink>
+                  <NavLink to="/integrations" className="nav-link" onClick={handleNavLinkClick}>
+                    Integrations
+                  </NavLink>
+                  <NavLink to="/pricing" className="nav-link" onClick={handleNavLinkClick}>
+                    Pricing
+                  </NavLink>
+                  {/* 
+                  <NavLink to="/faqs" className="nav-link" onClick={handleNavLinkClick}>
+                    FAQs
+                  </NavLink>
+                  */}                    <NavLink to="https://userguide.hostbuddy.ai/quick-start/getting-started" className="nav-link" onClick={handleNavLinkClick} target="_blank" rel="noopener noreferrer">
+                    Docs
+                  </NavLink>
+
+                  <NavLink to="/about-us" className="nav-link" onClick={handleNavLinkClick}>
+                    About Us
+                  </NavLink>
+                  <NavLink to="/blog" className="nav-link" onClick={handleNavLinkClick}>
+                    Blog
+                  </NavLink>
+
                 </>
               )}
-
-              <Navbar.Toggle className="header-icon" aria-controls="navbarSupportedContent" onClick={handleToggle}>
-                <button>
-                  <span className="toggle-line my-1"></span>
-                  <span className="toggle-line my-1"></span>
-                  <span className="toggle-line my-1"></span>
-                </button>
-              </Navbar.Toggle>
+            </Nav>
+          </Navbar.Collapse>
+          {(!isProtectedPath || (isConditionalPath && !token)) && (
+            <div className="nav-buttons">
+              <Link className="nav-btn nav-btn-primary link-btn outline-btn" to="/signup" style={{ marginRight: 10 }}>
+                Sign Up
+              </Link>
+              <Link className="nav-btn nav-btn-outline link-btn filled-btn" to="/login">
+                Log In
+              </Link>
             </div>
-            <Navbar.Collapse id="navbarSupportedContent">
-              <Nav>
-                {isProtectedPath || (isConditionalPath && token) ? ( // in user portal
-                  <>
-                    {gcsToken ? (
-                      <NavLink to="/gcs-users" className="nav-link" onClick={handlebackToUsersClick}>
-                        All Accounts
-                      </NavLink>
-                    ) : (
-                      <NavLink to="/getstarted" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                        Get Started
-                      </NavLink>
-                    )}
-                    {!isInGcsPortal && (
-                      <>
-                        <NavLink to="/dashboard" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                          Dashboard
-                        </NavLink>
-                        <NavLink to="/properties" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                          Properties
-                        </NavLink>
-                        <NavLink to="/inbox" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                          Messaging
-                        </NavLink>
-                        <NavLink to="/action-item" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                          Action Items
-                        </NavLink>
-                      </>
-                    )}
-                    <NavLink to={isInGcsPortal ? '/gcs-settings' : '/setting'} className={({isActive}) => isActive ? "nav-link active" : "nav-link"} onClick={handleNavLinkClick}>
-                      {isInGcsPortal ? 'GCS Acct Settings' : 'Settings'}
-                    </NavLink>
-                    {isInGcsPortal && (
-                      <NavLink to="/login" className="nav-link" onClick={logoutHandle}>
-                        Log Out
-                      </NavLink>
-                    )}
-                  </>
-                ) : ( // one of the front pages, outside of user portal
-                  <>
-                    <NavLink to="/" className="nav-link" onClick={handleNavLinkClick}>
-                      Home
-                    </NavLink>
-                    <NavLink to="/meet-hostbuddy" className="nav-link" onClick={handleNavLinkClick}>
-                      Meet HostBuddy
-                    </NavLink>
-                    <NavLink to="/integrations" className="nav-link" onClick={handleNavLinkClick}>
-                      Integrations
-                    </NavLink>
-                    <NavLink to="/pricing" className="nav-link" onClick={handleNavLinkClick}>
-                      Pricing
-                    </NavLink>
-                    {/* 
-                    <NavLink to="/faqs" className="nav-link" onClick={handleNavLinkClick}>
-                      FAQs
-                    </NavLink>
-                    */}
-                    <NavLink to="https://userguide.hostbuddy.ai/quick-start/getting-started" className="nav-link" onClick={handleNavLinkClick} target="_blank" rel="noopener noreferrer">
-                      Docs
-                    </NavLink>
-
-                    {/* Remove About Us and Blog for now, to save space in the navbar. Will re-add shortly after the navbar is redesigned to accommodate more items */}
-                    {/* 
-                    <NavLink to="/about-us" className="nav-link" onClick={handleNavLinkClick}>
-                      About Us
-                    </NavLink>
-                    <NavLink to="/blog" className="nav-link" onClick={handleNavLinkClick}>
-                      Blog
-                    </NavLink>
-                    */}
-
-                  </>
-                )}
-              </Nav>
-            </Navbar.Collapse>
-            {(!isProtectedPath || (isConditionalPath && !token)) && (
-              <div className="nav-buttons">
-                <Link className="nav-btn nav-btn-primary link-btn outline-btn" to="/signup" style={{ marginRight: 10 }}>
-                  Sign Up
-                </Link>
-                <Link className="nav-btn nav-btn-outline link-btn filled-btn" to="/login">
-                  Log In
-                </Link>
-              </div>
-            )}
-          </Navbar>
-        </Container>
-      </header>
-    );
-  }
+          )}        </Navbar>
+      </Container>
+    </header>
+  );
 
   return content;
 };
