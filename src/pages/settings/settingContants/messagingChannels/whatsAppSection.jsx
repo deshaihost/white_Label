@@ -49,7 +49,7 @@ const WhatsAppSection = (ApiUserData, refreshUserData) => {
       <h4 style={{marginBottom:'20px'}}>WhatsApp</h4>
       <p style={{fontSize:'15px', marginBottom:gapBetweenSections}}>If you have a WhatsApp Business account, you can connect it here to allow HostBuddy to communicate with your guest via WhatsApp.</p>
       
-      <h6 style={{marginBottom:'20px'}}>1. Enter your WhatsApp Business phone number, including the country code. This is the number that HostBuddy will communicate with your guests through. It MUST match the number that you choose in the Facebook portal in the next step.</h6>
+      <h6 style={{marginBottom:'20px'}}>1. Enter your WhatsApp Business phone number, including the country code. This is the number that HostBuddy will communicate with your guests through. <span style={{color:'orange'}}>It MUST match the number that you choose in the Facebook portal in the next step.</span></h6>
       <input type="tel" value={phoneNumber} onChange={handlePhoneNumberChange} disabled={registeredWhatsAppNumber !== null} placeholder="+1234567890" style={{marginBottom:gapBetweenSections, padding:'8px', fontSize:'16px', borderRadius:'4px', border:'1px solid #ccc', width:'200px', backgroundColor:registeredWhatsAppNumber !== null ? '#aaa' : 'white', color:'black'}}/>
       
       <h6 style={{marginBottom:'20px'}}>2. Click the button below to connect your WhatsApp Business account to HostBuddy.</h6>
@@ -73,24 +73,27 @@ const WhatsAppSection = (ApiUserData, refreshUserData) => {
         </div>
       )}
 
+      {/*
       <h6 style={{marginBottom:'20px'}}>3. Toggle the switch below to enable automated responses to your guests over WhatsApp.</h6>
       <div className="enableSection">
-          <p className="d-flex align-items-center gap-4">
-            <div className="form-check form-switch">
-              <input className="form-check-input" type="checkbox" checked={false} onChange={() => {}} id="flexSwitchCheckChecked"/>
-            </div>
-            Enable WhatsApp Messaging
+        <p className="d-flex align-items-center gap-4">
+          <div className="form-check form-switch">
+            <input className="form-check-input" type="checkbox" checked={false} onChange={() => {}} id="flexSwitchCheckChecked"/>
+          </div>
+          Enable WhatsApp Messaging
+        </p>
+        {!registeredWhatsAppNumber ? (
+          <p className="fs-14 text-muted">
+            Complete the steps above to enable WhatsApp messaging.
           </p>
-          {!registeredWhatsAppNumber ? (
-            <p className="fs-14 text-muted">
-              Complete the steps above to enable WhatsApp messaging.
-            </p>
-          ) : (
-            <p className="fs-14 text-muted">
-              This functionality is scheduled for release later this week. To have it enabled for your account, please contact support.
-            </p>
-          )}
-        </div>
+        ) : (
+          <p className="fs-14 text-muted">
+            This functionality is scheduled for release later this week. To have it enabled for your account, please contact support.
+          </p>
+        )}
+      </div>
+      */}
+
     </div>
   );
 };

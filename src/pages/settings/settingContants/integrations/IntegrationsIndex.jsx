@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import Loader from '../../../../helper/Loader';
+import ConnectToWhatsApp from './connectWhatsAppButton';
 import ConnectToTurno from "./connectTurnoButton";
 import ConnectToMinut from './connectMinutButton';
 import ConnectToTidy from './connectTidyButton';
@@ -10,6 +11,7 @@ import MinutIntegration from './MinutIntegration';
 import ConnectToHostfullyGuidebooks from './connectHostfullyGuidebooksButton';
 import HostfullyGuidebooksIntegration from './HostfullyGuidebooksIntegration';
 import NotionIntegration from './notionIntegration';
+import WhatsappIntegration from './whatsappIntegration';
 import './Integrations.css';
 
 const IntegrationsIndex = (ApiUserData) => {
@@ -18,6 +20,7 @@ const IntegrationsIndex = (ApiUserData) => {
   const tidyUserId = Boolean(ApiUserData?.ApiUserData?.tidy_user_id);
   const hostfullyGuidebooksUserId = Boolean(ApiUserData?.ApiUserData?.hostfully_guidebooks_user_id);
   const notionUserId = Boolean(ApiUserData?.ApiUserData?.notion_user_id);
+  const whatsappPhoneNumber = ApiUserData?.ApiUserData?.whatsapp_phone_number;
 
   // Identify connected integrations
   const connectedIntegrations = [];
@@ -26,6 +29,7 @@ const IntegrationsIndex = (ApiUserData) => {
   if (tidyUserId) connectedIntegrations.push('Tidy');
   if (hostfullyGuidebooksUserId) connectedIntegrations.push('Hostfully Guidebooks');
   if (notionUserId) connectedIntegrations.push('Notion');
+  if (whatsappPhoneNumber) connectedIntegrations.push('WhatsApp');
 
   // State for selected integration tab
   const [selectedIntegration, setSelectedIntegration] = useState(connectedIntegrations[0] || '');
@@ -35,6 +39,7 @@ const IntegrationsIndex = (ApiUserData) => {
       <div>
         <h3 className="mb-4">Integrations</h3>
         <div className="tiles-container">
+          {!whatsappPhoneNumber && <ConnectToWhatsApp />}
           {!turnoUserId && <ConnectToTurno />}
           {!minutUserId && <ConnectToMinut />}
           {!tidyUserId && <ConnectToTidy />}
@@ -77,6 +82,10 @@ const IntegrationsIndex = (ApiUserData) => {
 
             {selectedIntegration === 'Notion' && (
               <NotionIntegration ApiUserData={ApiUserData} />
+            )}
+
+            {selectedIntegration === 'WhatsApp' && (
+              <WhatsappIntegration />
             )}
 
             {/* Add similar blocks for additional integrations */}
