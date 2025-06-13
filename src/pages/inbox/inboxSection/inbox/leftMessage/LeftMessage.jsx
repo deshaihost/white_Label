@@ -501,16 +501,16 @@ const LeftMessage = ({
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setFilteredGuests([]);
     }
-  };
-  return (
+  };  return (
     <div
       className="left-bar"
       style={{
         height: "100%",
-        overflowY: "auto",
         border: "1px solid",
         borderColor: "#24262E",
         backgroundColor: "#17191F",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <div
@@ -520,6 +520,7 @@ const LeftMessage = ({
           backgroundColor: "#17191F",
           display: "flex",
           flexDirection: "column",
+          flexShrink: 0, // Prevent this from shrinking
         }}
       >
         <div
@@ -722,11 +723,20 @@ const LeftMessage = ({
         handleResetFilters={handleResetFilters}
         handleCancelFilters={handleCancelFilters}
         handleApplyFilters={handleApplyFilters}
-      />
-
-      {filterQueryLoading ? (
-        <BoxLoader />
-      ) : filteredConversations && filteredConversations.length ? (        <div className={`left-bar-chat`} ref={containerRef}>
+      />      {filterQueryLoading ? (
+        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <BoxLoader />
+        </div>
+      ) : filteredConversations && filteredConversations.length ? (
+        <div 
+          className={`left-bar-chat`} 
+          ref={containerRef}
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            position: "relative",
+          }}
+        >
           <div style={{ border: "1px solid #24262E", position: "relative" }}>
             {filteredConversations.map((message) => {
               const {
@@ -1284,24 +1294,23 @@ const LeftMessage = ({
               Load More
             </button>
           )}
-        </div>
-      ) : searchInputValue ||
+        </div>      ) : searchInputValue ||
         fromHostBuddyFilterVal ||
         urgentFilterIsEnabled ||
         propertyFilterVal ||
         phaseFilterVal ||
         guestNameSearchVal ? (
-        <div className="no-messages-container">
+        <div className="no-messages-container" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <p className="no-messages-text">
             No conversations match the selected filters.
           </p>
         </div>
       ) : userHasPMS ? (
-        <div className="no-messages-container">
+        <div className="no-messages-container" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <p className="no-messages-text">No conversations found.</p>
         </div>
       ) : (
-        <div className="no-messages-container no-messages-wide">
+        <div className="no-messages-container no-messages-wide" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <p className="no-messages-text">
             No conversations found.{" "}
             <Link to="/getstarted">Connecting your PMS</Link> will automatically

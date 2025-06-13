@@ -46,7 +46,6 @@ const MildeSection = ({
   const buttonRef = useRef(null);
   const sendMenuRef = useRef(null);
   const sendButtonRef = useRef(null);
-console.log("allConversationData from MildeSection", allConversationData);
   // Refs for tracking request IDs and current conversation
   const currentConversationIdRef = useRef("");
   const latestScratchRequestIdRef = useRef(null);
@@ -103,7 +102,6 @@ console.log("allConversationData from MildeSection", allConversationData);
         latestScratchRequestIdRef.current !== requestId ||
         currentConversationIdRef.current !== conversation_id
       ) {
-        console.log("Ignoring stale response from generate_response API");
         return { error: "Conversation changed" };
       }
 
@@ -163,7 +161,6 @@ console.log("allConversationData from MildeSection", allConversationData);
         latestCommandRequestIdRef.current !== requestId ||
         currentConversationIdRef.current !== conversation_id
       ) {
-        console.log("Ignoring stale response from response_from_command API");
         return { error: "Conversation changed" };
       }
 
@@ -1000,6 +997,8 @@ console.log("allConversationData from MildeSection", allConversationData);
                     isInitialMessage={index <= 1}
                     guestName={allConversationData.guest_name}
                     guestImageUrl={allConversationData.image_url}
+                    conversationId={allConversationData.conversation_id}
+                    reservationId={allConversationData.reservation_id}
                   />
                   {/* Banner for passed messages */}
                   {allConversationData?.passed_msgs && 
