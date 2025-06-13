@@ -17,6 +17,8 @@ const MessageInbox = ({
   isInitialMessage,
   guestName,
   guestImageUrl,
+  conversationId,
+  reservationId
 }) => {
   const { typeThumbs, messageId } = feedBackDataGet ? feedBackDataGet : {};
   const { timeFormatConvert, sendBy } = messageData;
@@ -105,6 +107,13 @@ const MessageInbox = ({
     setImageError(false);
   }, [guestImageUrl]);
 
+  // When the user clicks a message bubble: console.log the IDs so the support teams can easily access them from the frontend to use for troubleshooting and escalation.
+  const handleMessageClick = () => {
+    console.log('Message ID:', message_id);
+    console.log('Conversation ID:', conversationId);
+    console.log('Reservation ID: ', reservationId);
+  };
+
   return (
     <div style={{ marginBottom: "20px" }}>
       {sender === "bot" ? (
@@ -166,7 +175,11 @@ const MessageInbox = ({
           <span style={{ fontWeight: 400 }}>{timeFormatHHMM}</span>
         </p>
       )}
-      <div className={`message ${sender} mesaage-box`}>
+      <div 
+        className={`message ${sender} mesaage-box`}
+        onClick={handleMessageClick}
+        style={{ cursor: 'pointer' }}
+      >
         <div
           style={{
             width: "fit-content",
