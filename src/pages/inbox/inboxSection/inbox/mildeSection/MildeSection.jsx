@@ -46,6 +46,8 @@ const MildeSection = ({
   const buttonRef = useRef(null);
   const sendMenuRef = useRef(null);
   const sendButtonRef = useRef(null);
+  // Mobile navigation ref for height calculation
+  const mobileNavRef = useRef(null);
   // Refs for tracking request IDs and current conversation
   const currentConversationIdRef = useRef("");
   const latestScratchRequestIdRef = useRef(null);
@@ -60,6 +62,7 @@ const MildeSection = ({
   const [sendMessageLoading, setSendMessageLoading] = useState(false);
   const [sendOptionsVisible, setSendOptionsVisible] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(true); // Track if user is scrolled to bottom
+  const [mobileHeight, setMobileHeight] = useState("100vh"); // Height for mobile chatbot container
 
   const [generateButtonIsEnabled, setGenerateButtonIsEnabled] = useState(false);
   const [generateButtonText, setGenerateButtonText] = useState("");
@@ -215,7 +218,8 @@ const MildeSection = ({
       allConversationData?.messages &&
       allConversationData.messages.length > 0
     ) {
-      const lastMessage = allConversationData.messages[allConversationData.messages.length - 1];
+      const lastMessage =
+        allConversationData.messages[allConversationData.messages.length - 1];
       if (!lastMessage || !lastMessage.text) {
         return false;
       }
@@ -230,11 +234,15 @@ const MildeSection = ({
     if (generateButtonIsEnabled) {
       return "";
     }
-    if (!allConversationData?.messages || allConversationData.messages.length === 0) {
+    if (
+      !allConversationData?.messages ||
+      allConversationData.messages.length === 0
+    ) {
       return "AI response not available.";
     }
 
-    const lastMessage = allConversationData.messages[allConversationData.messages.length - 1];
+    const lastMessage =
+      allConversationData.messages[allConversationData.messages.length - 1];
     if (!lastMessage || !lastMessage.sender) {
       return "AI response not available.";
     }
@@ -248,7 +256,8 @@ const MildeSection = ({
     } else {
       return "AI response is only available when the last message is from the guest.";
     }
-  };const handleSendMessage = async () => {
+  };
+  const handleSendMessage = async () => {
     if (inputValue.trim() === "") return; // no message added
     if (!conversationData?.conversation_id) return; // no conversation selected
     setSendMessageLoading(true);
@@ -270,7 +279,7 @@ const MildeSection = ({
     };
 
     // Add the message immediately to show it in the UI
-    setMessages(prevMessages => [...prevMessages, optimisticMessage]);
+    setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
 
     try {
       const sendMsgResponse = await callSendMessageApi(
@@ -289,15 +298,15 @@ const MildeSection = ({
         await updateConversationFromApi(conversation_id);
       } else {
         // If there was an error, remove the optimistic message
-        setMessages(prevMessages => 
-          prevMessages.filter(msg => msg.id !== optimisticMessage.id)
+        setMessages((prevMessages) =>
+          prevMessages.filter((msg) => msg.id !== optimisticMessage.id)
         );
       }
     } catch (error) {
       ToastHandle("Error sending message", "danger");
       // Remove the optimistic message on error
-      setMessages(prevMessages => 
-        prevMessages.filter(msg => msg.id !== optimisticMessage.id)
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg.id !== optimisticMessage.id)
       );
     } finally {
       setSendMessageLoading(false);
@@ -768,7 +777,7 @@ const MildeSection = ({
       date1.getMonth() === date2.getMonth() &&
       date1.getFullYear() === date2.getFullYear()
     );
-  }  // When we get the API data, populate the messages array and set the generate button functionality
+  } // When we get the API data, populate the messages array and set the generate button functionality
   useEffect(() => {
     // Update the current conversation ID ref first, before processing messages
     if (allConversationData?.conversation_id) {
@@ -879,7 +888,7 @@ const MildeSection = ({
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  }, [inputValue]);  // Smart scroll behavior: only scroll to bottom if user was already at bottom or if user sent the message
+  }, [inputValue]); // Smart scroll behavior: only scroll to bottom if user was already at bottom or if user sent the message
   useEffect(() => {
     if (messageListRef.current && messages.length > 0) {
       const wasAtBottom = isAtBottom;
@@ -903,6 +912,34 @@ const MildeSection = ({
       }
     }
   }, [messages, isAtBottom, allConversationData?._isUpdate]);
+
+  // Calculate mobile height by subtracting mobile nav height from 100vh
+  useEffect(() => {
+    const calculateMobileHeight = () => {
+      if (window.innerWidth < 992 && mobileNavRef.current) {
+        const mobileNavHeight = mobileNavRef.current.offsetHeight;
+        const calculatedHeight = `calc(100vh - ${mobileNavHeight}px)`;
+        setMobileHeight(calculatedHeight);
+      } else {
+        setMobileHeight("100vh");
+      }
+    };
+
+    // Calculate on mount and window resize
+    calculateMobileHeight();
+
+    const handleResize = () => {
+      calculateMobileHeight();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   // Track the previous conversation ID to distinguish between new conversations and updates
   const previousConversationIdRef = useRef(null);
 
@@ -911,17 +948,21 @@ const MildeSection = ({
     if (messageListRef.current && allConversationData?.conversation_id) {
       const currentConversationId = allConversationData.conversation_id;
       const previousConversationId = previousConversationIdRef.current;
-      
+
       // Only auto-scroll if this is a truly NEW conversation selection
       if (currentConversationId !== previousConversationId) {
         setTimeout(() => {
-          if (messageListRef.current && allConversationData?.conversation_id === currentConversationId) {
-            messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+          if (
+            messageListRef.current &&
+            allConversationData?.conversation_id === currentConversationId
+          ) {
+            messageListRef.current.scrollTop =
+              messageListRef.current.scrollHeight;
             setIsAtBottom(true);
           }
         }, 100); // Small delay to ensure content is rendered
       }
-      
+
       // Update the previous conversation ID reference
       previousConversationIdRef.current = currentConversationId;
     }
@@ -948,7 +989,7 @@ const MildeSection = ({
 
   return (
     <div className="main-chat">
-      <div className="d-block d-lg-none mobile-nav">
+      <div className="d-block d-lg-none mobile-nav" ref={mobileNavRef}>
         <button
           onClick={() => setCurrentView("conversations")}
           className="btn btn-link"
@@ -961,20 +1002,23 @@ const MildeSection = ({
         >
           Details
         </button>
-      </div>
-      <div
+      </div>{" "}      <div
         className="chatbot"
         style={{
           margin: "0px",
           width: "100%",
           padding: "0px",
           backgroundColor: "#0F1117",
+          height: window.innerWidth < 992 ? mobileHeight : "100%",
         }}
       >
         {allConversationData && Object.keys(allConversationData).length > 0 ? (
-         
-          <div className="message-list" ref={messageListRef} style={{marginBottom: "0px"}}>
-            {messages?.map((message, index) => {  
+          <div
+            className="message-list"
+            ref={messageListRef}
+            style={{ marginBottom: "0px" }}
+          >
+            {messages?.map((message, index) => {
               const showDateSeparator =
                 index === 0 ||
                 !isSameDay(messages[index - 1]?.rawDate, message.rawDate);
@@ -1001,15 +1045,26 @@ const MildeSection = ({
                     reservationId={allConversationData.reservation_id}
                   />
                   {/* Banner for passed messages */}
-                  {allConversationData?.passed_msgs && 
-                   allConversationData.passed_msgs[message.id] && (
-                    <div className="passed-message-banner">
-                      <span>HostBuddy chose not to respond to this message. </span>
-                      <a href="#" onClick={(e) => handleJustificationClick(e, allConversationData.passed_msgs[message.id].justification)}>
-                        Why?
-                      </a>
-                    </div>
-                  )}
+                  {allConversationData?.passed_msgs &&
+                    allConversationData.passed_msgs[message.id] && (
+                      <div className="passed-message-banner">
+                        <span>
+                          HostBuddy chose not to respond to this message.{" "}
+                        </span>
+                        <a
+                          href="#"
+                          onClick={(e) =>
+                            handleJustificationClick(
+                              e,
+                              allConversationData.passed_msgs[message.id]
+                                .justification
+                            )
+                          }
+                        >
+                          Why?
+                        </a>
+                      </div>
+                    )}
                 </React.Fragment>
               );
             })}
@@ -1425,7 +1480,7 @@ const MildeSection = ({
               to generate and send messages.
             </p>
           )
-        )}{" "}
+        )}
       </div>
       <Tooltip
         className="generate-tooltip"
@@ -1449,7 +1504,6 @@ const MildeSection = ({
         propertyName={propertyName}
         justification={justificationText}
       />
-
       {/* Schedule Message Modal */}
       {scheduleMessageModalOpen && (
         <div

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import icon from "../sectionIndicatorComponent/navIcons/logoDefault.svg";
+import icon from "../sectionIndicatorComponent/navIcons/NewLogoCollapse.svg";
 import "./logoComponent.css";
 
 export const Logo = ({ type, colour, onlyIcon }) => {

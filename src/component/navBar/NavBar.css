@@ -40,22 +40,38 @@ header.header {
     gap: 10px;
 }
 
-.header-container .header-icon button {
+.login-dropdown-container {
+    position: relative;
+    display: inline-block;
+    z-index: 99999;
+}
+
+.header-container .header-icon button, .login-toggle {
     background: none;
     width: 40px;
     height: 40px;
     border: 1px solid #146EF5;
     border-radius: 100%;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 0px !important;
-    
+    cursor: pointer;
+    position: relative;
 }
 
 .header-container .header-icon button svg {
     flex: 0 0 20px;
 }
 
-.header-container .header-icon button span.toggle-line {
+.hamburger-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hamburger-toggle span.toggle-line {
     width: 22px;
     height: 2px;
     display: block;
@@ -67,25 +83,25 @@ header.header {
     transition-property: opacity, transform;
 }
 
-.header-container .header-icon:not(.collapsed) button span.toggle-line:nth-child(1) {
-    transform: rotate(-45deg) translateY(-3px);
+.hamburger-toggle:not(.collapsed) span.toggle-line:nth-child(1) {
+    /* transform: rotate(-45deg) translateY(5px); */
 }
 
-.header-container .header-icon:not(.collapsed) button span.toggle-line:nth-child(2) {
-    opacity: 0;
-    transform: scale(0);
+.hamburger-toggle:not(.collapsed) span.toggle-line:nth-child(2) {
+    /* opacity: 0;
+    transform: scale(0); */
 }
 
-.header-container .header-icon:not(.collapsed) button span.toggle-line:nth-child(3) {
-    transform: rotate(45deg) translateY(3px);
+.hamburger-toggle:not(.collapsed) span.toggle-line:nth-child(3) {
+    /* transform: rotate(45deg) translateY(-5px); */
 }
 
-.header-container .header-icon button span.toggle-line:nth-child(1) {
-    transform-origin: bottom right;
+.hamburger-toggle span.toggle-line:nth-child(1) {
+    transform-origin: center;
 }
 
-.header-container .header-icon button span.toggle-line:nth-child(3) {
-    transform-origin: top right;
+.hamburger-toggle span.toggle-line:nth-child(3) {
+    transform-origin: center;
 }
 
 
@@ -115,8 +131,16 @@ header.header {
 }
 .account-detail a {
     color: #fff;
-    border-bottom: 1px solid #d9d9d9;
-    padding: 13px 0px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 0px;
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+}
+.account-detail a:hover {
+    color: #e4f0ff;
 }
 .close-icon svg path {
     fill: #146EF5 !important;
@@ -126,13 +150,9 @@ header.header {
     height: 30px;
 }
 .close-icon {
-}
-.close-icon {
     background: none;
     width: 40px;
     height: 40px;
-    border: 1px solid #146EF5 !important;
-    border-radius: 100%;
     display: flex;
     padding: 0px !important;
     align-items: center;
@@ -144,17 +164,24 @@ header.header {
     padding: 20px;
     background: rgba(255, 255, 255, 0.7);
     background: linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%);
-    width: 100%;
+    max-width: 200px;
     top: 65px;
-    position: absolute;
-    right: 0;
+    position: fixed;
+    right: auto;
     transform-origin: top right;
     transition-timing-function: cubic-bezier(0.16,1,0.3,1);
     transition-duration: 500ms;
-    transition-property: opacity, transform;
+    transition-property: opacity, transform, visibility;
     height: auto !important;
-    width: 100%;
-    z-index: 9;
+    display: block;
+    z-index: 99999;
+    opacity: 1;
+    visibility: visible;
+}
+
+#login-popup {
+    position: absolute;
+    z-index: 99999;
 }
 
 /* Acting as user banner */
@@ -201,6 +228,33 @@ header.header {
         visibility: hidden;
         opacity: 0;
         transform: scale(0.9) translateY(-24px);
+    }
+    
+    .login-toggle {
+        position: relative;
+    }
+    
+    .header-icons-list {
+        position: relative;
+    }    .account-detail {
+        top: auto;
+        left: auto;
+        width: 160px;
+        font-size: 15px;
+        box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+        position: absolute;
+        animation: fadeIn 0.2s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .navbar-collapse {

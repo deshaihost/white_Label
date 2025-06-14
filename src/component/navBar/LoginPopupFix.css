@@ -1,0 +1,205 @@
+/* Login Popup Fix Styles */
+.account-detail#login-popup {
+  position: absolute !important;
+  z-index: 9999999 !important;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3) !important;
+  top: 60px !important;
+  right: 20px !important;
+  background: linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%) !important;
+  border-radius: 10px !important;
+  padding: 15px !important;
+  width: auto !important;
+  min-width: 150px !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important; /* Prevent any transform issues */
+}
+
+.account-detail#login-popup .nav-link {
+  color: white !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  padding: 10px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+  display: block !important;
+  margin: 0 !important;
+}
+
+.account-detail#login-popup .nav-link:last-child {
+  border-bottom: none !important;
+}
+
+.login-dropdown-container {
+  position: relative !important;
+  display: inline-block !important;
+  z-index: 9999999 !important; /* Extremely high z-index */
+}
+
+.header-icon#login-toggle-btn {
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Apply a higher z-index to the header to ensure it's above other elements */
+.header {
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+/* Special styling for the popup to ensure it's above everything */
+body #login-popup {
+  position: absolute !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important; /* Ensure clicks work */
+}
+
+/* Fix for mobile layout issues */
+.header-icons-list {
+  position: relative !important;
+  z-index: 99999 !important;
+}
+
+@media (max-width: 991px) {
+  /* Mobile-specific styling */
+  .account-detail#login-popup {
+    position: fixed !important; /* Use fixed on mobile to prevent scrolling issues */
+    top: 55px !important;
+    right: 10px !important;
+    max-width: calc(100% - 20px) !important; /* Prevent overflow */
+    overflow-y: auto !important; /* In case content is too tall */
+  }
+  
+  /* Ensure the container in mobile view has proper positioning context */
+  .login-dropdown-container {
+    position: static !important; /* Change to static on mobile to prevent issues */
+  }
+  
+  /* Force popup to be visible in mobile view */
+  #login-popup {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Ensure header remains above other content */
+  .header {
+    position: relative !important;
+    z-index: 9999 !important;
+  }
+    /* Make sure the body doesn't hide the dropdown */
+  body {
+    overflow-x: hidden !important;
+  }
+}
+
+/* Navigation Menu Popup Styles */
+.nav-menu-detail#nav-menu-popup {
+  position: absolute !important;
+  z-index: 9999999 !important;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3) !important;
+  top: 60px !important;
+  right: 20px !important;
+  background: linear-gradient(180deg, #6CA7FF 1.92%, #146EF5 119.23%) !important;
+  border-radius: 10px !important;
+  padding: 15px !important;
+  width: auto !important;
+  min-width: 180px !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.nav-menu-detail#nav-menu-popup .nav-link {
+  color: white !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  padding: 12px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+  display: block !important;
+  text-decoration: none !important;
+  font-size: 16px !important;
+  margin: 0 !important;
+}
+
+.nav-menu-detail#nav-menu-popup .nav-link:last-child {
+  border-bottom: none !important;
+}
+
+.nav-menu-detail#nav-menu-popup .nav-link:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 5px !important;
+}
+
+.header-icon#nav-toggle-btn {
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.nav-dropdown-container {
+  position: relative !important;
+  display: inline-block !important;
+  z-index: 9999999 !important;
+}
+
+/* Special styling for the nav popup to ensure it's above everything */
+body #nav-menu-popup {
+  position: absolute !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+@media (max-width: 991px) {
+  .nav-menu-detail#nav-menu-popup {
+    position: fixed !important;
+    top: 55px !important;
+    right: 60px !important;
+    min-width: 200px !important;
+    max-width: calc(100% - 80px) !important;
+  }
+    .nav-dropdown-container {
+    position: static !important;
+    border-radius: 100%;
+    border: 1px solid #146EF5;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .nav-dropdown-container .hamburger-toggle {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .nav-dropdown-container .hamburger-toggle > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+  }
+
+  #nav-menu-popup {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
