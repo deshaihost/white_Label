@@ -70,9 +70,7 @@ const UserNavBar = ({ gcsToken }) => {
     e.preventDefault();
     e.stopPropagation();
     console.log('handleToggle clicked, current navMenuOpen:', navMenuOpen);
-    const newNavMenuState = !navMenuOpen;
-    console.log('Setting navMenuOpen to:', newNavMenuState);
-    setNavMenuOpen(newNavMenuState);
+    setNavMenuOpen(!navMenuOpen);
     // Only close login dropdown if it's actually open
     if (loginIcon) {
       setLoginIcon(false);
@@ -274,13 +272,12 @@ const UserNavBar = ({ gcsToken }) => {
                     >
                       <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"></path>
                     </svg>
+                  </div>                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                    <span className="toggle-line"></span>
+                    <span className="toggle-line"></span>
+                    <span className="toggle-line"></span>
                   </div>
-                ) : (
-                  <>
-                    <span className="toggle-line my-1"></span>
-                    <span className="toggle-line my-1"></span>
-                    <span className="toggle-line my-1"></span>
-                  </>
                 )}
               </div>
             </div>            {navMenuOpen && (
