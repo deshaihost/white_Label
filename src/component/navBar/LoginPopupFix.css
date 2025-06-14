@@ -170,11 +170,33 @@ body #nav-menu-popup {
     min-width: 200px !important;
     max-width: calc(100% - 80px) !important;
   }
-  
-  .nav-dropdown-container {
+    .nav-dropdown-container {
     position: static !important;
+    border-radius: 100%;
+    border: 1px solid #146EF5;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
+  .nav-dropdown-container .hamburger-toggle {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .nav-dropdown-container .hamburger-toggle > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+  }
+
   #nav-menu-popup {
     display: block !important;
     visibility: visible !important;
