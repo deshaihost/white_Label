@@ -46,6 +46,8 @@ const MildeSection = ({
   const buttonRef = useRef(null);
   const sendMenuRef = useRef(null);
   const sendButtonRef = useRef(null);
+  // Mobile navigation ref for height calculation
+  const mobileNavRef = useRef(null);
   // Refs for tracking request IDs and current conversation
   const currentConversationIdRef = useRef("");
   const latestScratchRequestIdRef = useRef(null);
@@ -60,6 +62,7 @@ const MildeSection = ({
   const [sendMessageLoading, setSendMessageLoading] = useState(false);
   const [sendOptionsVisible, setSendOptionsVisible] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(true); // Track if user is scrolled to bottom
+  const [mobileHeight, setMobileHeight] = useState("100vh"); // Height for mobile chatbot container
 
   const [generateButtonIsEnabled, setGenerateButtonIsEnabled] = useState(false);
   const [generateButtonText, setGenerateButtonText] = useState("");
@@ -903,6 +906,34 @@ const MildeSection = ({
       }
     }
   }, [messages, isAtBottom, allConversationData?._isUpdate]);
+
+  // Calculate mobile height by subtracting mobile nav height from 100vh
+  useEffect(() => {
+    const calculateMobileHeight = () => {
+      if (window.innerWidth < 992 && mobileNavRef.current) {
+        const mobileNavHeight = mobileNavRef.current.offsetHeight;
+        const calculatedHeight = `calc(100vh - ${mobileNavHeight}px)`;
+        setMobileHeight(calculatedHeight);
+      } else {
+        setMobileHeight("100vh");
+      }
+    };
+
+    // Calculate on mount and window resize
+    calculateMobileHeight();
+    
+    const handleResize = () => {
+      calculateMobileHeight();
+    };
+
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   // Track the previous conversation ID to distinguish between new conversations and updates
   const previousConversationIdRef = useRef(null);
 
@@ -948,7 +979,7 @@ const MildeSection = ({
 
   return (
     <div className="main-chat">
-      <div className="d-block d-lg-none mobile-nav">
+      <div className="d-block d-lg-none mobile-nav" ref={mobileNavRef}>
         <button
           onClick={() => setCurrentView("conversations")}
           className="btn btn-link"
@@ -961,14 +992,14 @@ const MildeSection = ({
         >
           Details
         </button>
-      </div>
-      <div
+      </div>      <div
         className="chatbot"
         style={{
           margin: "0px",
           width: "100%",
           padding: "0px",
           backgroundColor: "#0F1117",
+          height: window.innerWidth < 992 ? mobileHeight : "auto",
         }}
       >
         {allConversationData && Object.keys(allConversationData).length > 0 ? (
@@ -1416,8 +1447,7 @@ const MildeSection = ({
           </>
         ) : conversationData?.channel == "hostbuddy" ? null : (
           allConversationData &&
-          Object.keys(allConversationData).length > 0 && (
-            <p style={{ fontSize: "14px", margin: "0 auto" }}>
+          Object.keys(allConversationData).length > 0 && (            <p style={{ fontSize: "14px", margin: "0 auto" }}>
               Inbox is in view-only mode.{" "}
               <Link to="/setting/subscription" style={{ fontSize: "14px" }}>
                 Upgrade
@@ -1425,7 +1455,7 @@ const MildeSection = ({
               to generate and send messages.
             </p>
           )
-        )}{" "}
+        )}
       </div>
       <Tooltip
         className="generate-tooltip"
