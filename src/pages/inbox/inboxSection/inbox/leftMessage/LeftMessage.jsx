@@ -37,7 +37,8 @@ const LeftMessage = ({
   phaseFilterVal,
   setPhaseFilterVal,
   fromHostBuddyFilterVal,
-  setFromHostBuddyFilterVal,  guestNameSearchVal,
+  setFromHostBuddyFilterVal,
+  guestNameSearchVal,
   setGuestNameSearchVal,
   userFilterVal,
   setUserFilterVal,
@@ -132,7 +133,8 @@ const LeftMessage = ({
   const loadNextBatch = async () => {
     setAllowConvIdQuery(false); // once the user decides to load more conversations: we cno longer want to regard the conversationId query param, if one was passed
     setNextBatchLoading(true);
-    const num_existing_convos = allConversations.length;    await fetchConversations(
+    const num_existing_convos = allConversations.length;
+    await fetchConversations(
       num_existing_convos + 10,
       false,
       urgentFilterIsEnabled,
@@ -282,7 +284,7 @@ const LeftMessage = ({
       // If search is cleared and there was a guest filter active, clear it
       if (!searchVal && guestNameSearchVal) {
         setFilterQueryLoading(true);
-        setGuestNameSearchVal("");        // Reset all filters when clearing search
+        setGuestNameSearchVal(""); // Reset all filters when clearing search
         setPropertyFilterVal("");
         setPhaseFilterVal("");
         setUrgentFilterIsEnabled(false);
@@ -298,13 +300,23 @@ const LeftMessage = ({
     setFilterQueryLoading(true);
     setFilteredGuestsFromSearch([]);
     setSearchInputValue(guest.name);
-    setGuestNameSearchVal(guest.name);    // Clear all other filters when guest is selected
+    setGuestNameSearchVal(guest.name); // Clear all other filters when guest is selected
     setPropertyFilterVal("");
     setPhaseFilterVal("");
     setUrgentFilterIsEnabled(false);
     setFromHostBuddyFilterVal(false);
 
-    await fetchConversations(10, true, false, "", "", false, guest.name, true, "");
+    await fetchConversations(
+      10,
+      true,
+      false,
+      "",
+      "",
+      false,
+      guest.name,
+      true,
+      ""
+    );
     setFilterQueryLoading(false);
   };
 
@@ -396,7 +408,8 @@ const LeftMessage = ({
     setPropertyFilterVal("");
     setPhaseFilterVal("");
     setUrgentFilterIsEnabled(false);
-    setFromHostBuddyFilterVal(false);    setGuestNameSearchVal("");
+    setFromHostBuddyFilterVal(false);
+    setGuestNameSearchVal("");
     setUserFilterVal("");
     setSearchInputValue("");
 
@@ -473,7 +486,8 @@ const LeftMessage = ({
       );
       setFilteredGuests(filtered);
     } else {
-      setFilteredGuests([]);      if (guestNameSearchVal) {
+      setFilteredGuests([]);
+      if (guestNameSearchVal) {
         setGuestNameSearchVal("");
         setFilterQueryLoading(true);
         await fetchConversations(10, true, false, "", "", false, "", true, "");
@@ -485,13 +499,23 @@ const LeftMessage = ({
   const handleGuestClick = async (guest) => {
     setFilterQueryLoading(true);
     setFilteredGuests([]);
-    setGuestNameSearchVal(guest.name);    // Clear all other filters. Guest name search overrides everything
+    setGuestNameSearchVal(guest.name); // Clear all other filters. Guest name search overrides everything
     setPropertyFilterVal("");
     setPhaseFilterVal("");
     setUrgentFilterIsEnabled(false);
     setFromHostBuddyFilterVal(false);
 
-    await fetchConversations(10, true, false, "", "", false, guest.name, true, "");
+    await fetchConversations(
+      10,
+      true,
+      false,
+      "",
+      "",
+      false,
+      guest.name,
+      true,
+      ""
+    );
 
     setFilterQueryLoading(false);
   };
@@ -501,7 +525,8 @@ const LeftMessage = ({
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setFilteredGuests([]);
     }
-  };  return (
+  };
+  return (
     <div
       className="left-bar"
       style={{
@@ -723,13 +748,21 @@ const LeftMessage = ({
         handleResetFilters={handleResetFilters}
         handleCancelFilters={handleCancelFilters}
         handleApplyFilters={handleApplyFilters}
-      />      {filterQueryLoading ? (
-        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      />{" "}
+      {filterQueryLoading ? (
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <BoxLoader />
         </div>
       ) : filteredConversations && filteredConversations.length ? (
-        <div 
-          className={`left-bar-chat`} 
+        <div
+          className={`left-bar-chat`}
           ref={containerRef}
           style={{
             flex: 1,
@@ -752,15 +785,23 @@ const LeftMessage = ({
                 user,
                 status,
                 pinned,
-              } = message;              const allDataForConversation = message;
+              } = message;
+              const allDataForConversation = message;
               const messages = message?.messages; // Assuming message?.messages is an array
-              const lastValue = messages && messages.length > 0 ? messages[messages.length - 1] : null;
-              const { sender, text, time } = lastValue || { sender: '', text: '', time: '' };
+              const lastValue =
+                messages && messages.length > 0
+                  ? messages[messages.length - 1]
+                  : null;
+              const { sender, text, time } = lastValue || {
+                sender: "",
+                text: "",
+                time: "",
+              };
               let shortenedText = text;
               if (text && text.length > 50) {
                 shortenedText = text.slice(0, 50) + "...";
               } else {
-                shortenedText = text || '';
+                shortenedText = text || "";
               }
 
               // Based on which of these fields are present (arrival_date, departure_date, property_name): render the appropriate string
@@ -899,8 +940,9 @@ const LeftMessage = ({
                             {channel !== "hostbuddy"
                               ? guest_name
                               : "Chat Window"}
-                          </h2>                          <div className="date date-no-margin">
-                            {time ? timeFormat(time) : ''}
+                          </h2>{" "}
+                          <div className="date date-no-margin">
+                            {time ? timeFormat(time) : ""}
                           </div>
                         </div>
                         {/* Second line: Message text and count of unread messages */}
@@ -1263,21 +1305,21 @@ const LeftMessage = ({
                   </div>
                   {/* <hr /> */}
                 </React.Fragment>
-              );            })}
-          </div>
-          
-          {/* Gradient overlay to indicate overflow content */}
-          <div 
+              );
+            })}
+          </div>          {/* Gradient overlay to indicate overflow content */}          <div
             style={{
-              position: 'absolute',
-              width:"350px",
+              position: "sticky",
+              width: "100%",
               bottom: 0,
               left: 0,
               right: 0,
-              height: '40px',
-              background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%)',
-              pointerEvents: 'none',
-              zIndex: 10
+              height: "40px",
+              marginTop: "-40px",
+              background:
+                "linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%)",
+              pointerEvents: "none",
+              zIndex: 10,
             }}
           />
 
@@ -1294,23 +1336,48 @@ const LeftMessage = ({
               Load More
             </button>
           )}
-        </div>      ) : searchInputValue ||
+        </div>
+      ) : searchInputValue ||
         fromHostBuddyFilterVal ||
         urgentFilterIsEnabled ||
         propertyFilterVal ||
         phaseFilterVal ||
         guestNameSearchVal ? (
-        <div className="no-messages-container" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div
+          className="no-messages-container"
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <p className="no-messages-text">
             No conversations match the selected filters.
           </p>
         </div>
       ) : userHasPMS ? (
-        <div className="no-messages-container" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div
+          className="no-messages-container"
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <p className="no-messages-text">No conversations found.</p>
         </div>
       ) : (
-        <div className="no-messages-container no-messages-wide" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div
+          className="no-messages-container no-messages-wide"
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <p className="no-messages-text">
             No conversations found.{" "}
             <Link to="/getstarted">Connecting your PMS</Link> will automatically
