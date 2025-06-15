@@ -229,18 +229,19 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                               72: "/gcs-settings/contact", // Contact
                               73: "/gcs-settings/notifications", // Notifications
                               74: "/gcs-settings/ai-preferences", // AI Preferences
-                              75: "/gcs-settings/integrations", // Integration
-                              76: "/gcs-settings/users", // Users
-                              77: "/gcs-settings/subscription", // Subscription
+                              76: "/gcs-settings/integrations", // Integration
+                              77: "/gcs-settings/users", // Users
+                              78: "/gcs-settings/subscription", // Subscription
                             }
                           : {
                               71: "/setting/account", // Account
                               72: "/setting/contact", // Contact
                               73: "/setting/notifications", // Notifications
                               74: "/setting/ai-preferences", // AI Preferences
-                              75: "/setting/integrations", // Integration
-                              76: "/setting/users", // Users
-                              77: "/setting/subscription", // Subscription
+                              75: "/setting/action-items", // Action Items settings
+                              76: "/setting/integrations", // Integration
+                              77: "/setting/users", // Users
+                              78: "/setting/subscription", // Subscription
                             };
 
                         if (settingsMap[dropdownItem.id]) {
