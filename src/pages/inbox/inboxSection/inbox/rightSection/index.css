@@ -302,3 +302,10 @@
   
 }
 } */
+
+/* Mobile view - Add gap for scroll bar to prevent overlapping */
+@media (max-width: 768px) {
+  .right-side {
+    padding-right: 12px; /* Add gap for scroll bar on mobile */
+  }
+}
