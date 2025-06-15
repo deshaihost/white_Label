@@ -15,6 +15,7 @@ import AccountRegionSection from "../account/regionSection";
 import DangerZone from '../account/dangerZone';
 import AccountNotificationSection from "../account/notificationSection";
 import MessagingChannels from "./settingContants/messagingChannels/messagingChannels";
+import ActionitemsSettings from "./settingContants/actionItems/actionItemSettings";
 import { Link, useParams } from "react-router-dom";
 import HostDaddy from '../../component/hostDaddy/hostDaddy';
 import PMSSettings from "../account/pmsSettings";
@@ -26,7 +27,18 @@ const SettingIndex = () => {
   const [interFaceSettings, setInterFaceSettings] = useState("account");
   const [userData, setUserData] = useState({});
 
-  const interFaceTypes = { account:"account", contact:"contact", notifications:"notifications", conversationSettings:"ai-preferences", integrations:"integrations", users:"users", upsells:"upsells", subscription:"subscription", messagingChannels:"messaging-channels" };
+  const interFaceTypes = { 
+    account: "account", 
+    contact: "contact", 
+    notifications: "notifications", 
+    conversationSettings: "ai-preferences", 
+    integrations: "integrations", 
+    users: "users", 
+    upsells: "upsells", 
+    subscription: "subscription", 
+    messagingChannels: "messaging-channels",
+    actionItems: "action-items"
+  };
 
   const ApiUserData = store?.getUserDataReducer?.getUserData?.data?.user;
   const isAdmin = store?.getUserDataReducer?.getUserData?.data?.user?.is_hb_admin;
@@ -87,7 +99,8 @@ const SettingIndex = () => {
                   )}
                   {interFaceTypes?.contact === interFaceSettings && (
                     <AccountContactSection />
-                  )}                  {interFaceTypes?.notifications === interFaceSettings && (
+                  )}
+                  {interFaceTypes?.notifications === interFaceSettings && (
                     <AccountNotificationSection />
                   )}
                   {(interFaceSettings === "ai-preferences" || interFaceSettings === "conversation-preferences") && (
@@ -107,6 +120,9 @@ const SettingIndex = () => {
                   )}
                   {interFaceTypes?.messagingChannels === interFaceSettings && (
                     <MessagingChannels ApiUserData={userData} refreshUserData={refreshUserData} subsec={subsec}/>
+                  )}
+                  {interFaceTypes?.actionItems === interFaceSettings && (
+                    <ActionitemsSettings />
                   )}
                 </div>
               </div>

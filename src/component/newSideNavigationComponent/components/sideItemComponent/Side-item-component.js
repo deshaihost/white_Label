@@ -227,10 +227,11 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                                                 71: '/setting/account',     // Account
                                                 72: '/setting/contact',     // Contact
                                                 73: '/setting/notifications', // Notifications
-                                                74: '/setting/ai-preferences', // AI Preferences 
-                                                75: '/setting/integrations', // Integration
-                                                76: '/setting/users',       // Users
-                                                77: '/setting/subscription' // Subscription
+                                                74: '/setting/ai-preferences', // AI Preferences
+                                                75: '/setting/action-items', // Action Items settings
+                                                76: '/setting/integrations', // Integration
+                                                77: '/setting/users',       // Users
+                                                78: '/setting/subscription' // Subscription
                                             };
                                             
                                             if (settingsMap[dropdownItem.id]) {

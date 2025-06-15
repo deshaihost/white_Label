@@ -1,0 +1,91 @@
+.action-items-settings {
+  padding: 20px;
+  color: #fff;
+}
+
+.instructions-form {
+  background-color: rgba(20, 110, 245, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.instructions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.instruction-tile {
+  background-color: #0a1a44;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 150px;
+  transition: all 0.3s ease;
+}
+
+.instruction-tile:hover {
+  box-shadow: 0 0 15px rgba(20, 110, 245, 0.3);
+  transform: translateY(-3px);
+}
+
+.instruction-content {
+  margin-bottom: 15px;
+}
+
+.instruction-content p {
+  color: #fff;
+  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.properties-tag {
+  background-color: rgba(20, 110, 245, 0.2);
+  border-radius: 10px;
+  padding: 5px 10px;
+  display: inline-block;
+}
+
+.properties-tag small {
+  color: #a0c0ff;
+  font-size: 12px;
+}
+
+.instruction-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+.btn-sm {
+  padding: 8px 15px;
+  font-size: 13px;
+}
+
+.property-toggle-link {
+  background: none !important;
+  border: none !important;
+  color: #146ef5 !important;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 0 !important;
+  font-weight: normal;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.property-toggle-link:hover {
+  color: #0d5fd9 !important;
+  text-decoration: underline;
+}
+
+.property-toggle-link:focus {
+  outline: none;
+  text-decoration: underline;
+}
