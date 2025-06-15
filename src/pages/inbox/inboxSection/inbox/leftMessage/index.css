@@ -521,7 +521,7 @@
 @media only screen and (max-width: 991px) {
   .left-bar {
     
-    width: calc(100vw - 10px) !important;
+    width: calc(100vw - 56px) !important;
   }
 }
 
