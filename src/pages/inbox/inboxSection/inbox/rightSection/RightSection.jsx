@@ -1561,7 +1561,7 @@ const RightSection = ({
                       style={{
                         position: "relative",
                         display: "inline-block",
-                        width: "15vw",
+                        width: "100%",
                       }}
                     >
                       {/* Custom Dropdown Button */}
