@@ -125,15 +125,41 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
+    // Create a map to identify properties with duplicate internal_names
+    const internalNameCounts = {};
+    Object.values(checkBox).forEach(prop => {
+      const internalName = prop?.internal_name;
+      if (internalName) {
+        internalNameCounts[internalName] = (internalNameCounts[internalName] || 0) + 1;
+      }
+    });
+
     // Create a transformed version of the checkBox object, handling rooms specially
     const selectedProperties = Object.entries(checkBox).reduce((obj, [uniqueKey, propertyData]) => {
       const name = propertyData?.internal_name || propertyData?.name;
 
       // For rooms, use room_id as the main id and add property_id under main_property_id. For regular properties, just use the id and name
       if (propertyData?.is_room) {
-        obj[propertyData.room_id] = {name: name, type:'room', main_property_id: propertyData.id};
+        obj[propertyData.room_id] = {
+          name: name, 
+          type: 'room', 
+          main_property_id: propertyData.id
+        };
+        
+        // Add name_second_part if this internal_name is used by multiple properties
+        if (propertyData?.internal_name && internalNameCounts[propertyData.internal_name] > 1) {
+          obj[propertyData.room_id].name_second_part = propertyData.name;
+        }
       } else {
-        obj[propertyData.id] = {name: name, type:'property'};
+        obj[propertyData.id] = {
+          name: name, 
+          type: 'property'
+        };
+        
+        // Add name_second_part if this internal_name is used by multiple properties
+        if (propertyData?.internal_name && internalNameCounts[propertyData.internal_name] > 1) {
+          obj[propertyData.id].name_second_part = propertyData.name;
+        }
       }
       return obj;
     }, {});
