@@ -38,6 +38,23 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
       }
   }, [showNoPlan]);
 
+  // Create a map of duplicate internal names from the original API response
+  const [internalNameCounts, setInternalNameCounts] = useState({});
+  
+  // Update internal name counts when the property list is loaded
+  useEffect(() => {
+    if (integrationPropertyList && integrationPropertyList.length > 0) {
+      const counts = {};
+      integrationPropertyList.forEach(prop => {
+        const internalName = prop?.internal_name;
+        if (internalName) {
+          counts[internalName] = (counts[internalName] || 0) + 1;
+        }
+      });
+      setInternalNameCounts(counts);
+    }
+  }, [integrationPropertyList]);
+
   // Check if user is at property limit when modal opens
   useEffect(() => {
     if (showNoPlan && isOnTrial && ENABLE_PROPERTY_LIMITS) {
@@ -125,15 +142,6 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
-    // Create a map to identify properties with duplicate internal_names
-    const internalNameCounts = {};
-    Object.values(checkBox).forEach(prop => {
-      const internalName = prop?.internal_name;
-      if (internalName) {
-        internalNameCounts[internalName] = (internalNameCounts[internalName] || 0) + 1;
-      }
-    });
-
     // Create a transformed version of the checkBox object, handling rooms specially
     const selectedProperties = Object.entries(checkBox).reduce((obj, [uniqueKey, propertyData]) => {
       const name = propertyData?.internal_name || propertyData?.name;
@@ -146,7 +154,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
           main_property_id: propertyData.id
         };
         
-        // Add name_second_part if this internal_name is used by multiple properties
+        // Add name_second_part if this internal_name has duplicates in the original list
         if (propertyData?.internal_name && internalNameCounts[propertyData.internal_name] > 1) {
           obj[propertyData.room_id].name_second_part = propertyData.name;
         }
@@ -156,7 +164,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
           type: 'property'
         };
         
-        // Add name_second_part if this internal_name is used by multiple properties
+        // Add name_second_part if this internal_name has duplicates in the original list
         if (propertyData?.internal_name && internalNameCounts[propertyData.internal_name] > 1) {
           obj[propertyData.id].name_second_part = propertyData.name;
         }
