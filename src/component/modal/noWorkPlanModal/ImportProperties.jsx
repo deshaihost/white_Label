@@ -38,6 +38,23 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
       }
   }, [showNoPlan]);
 
+  // Create a map of duplicate internal names from the original API response
+  const [internalNameCounts, setInternalNameCounts] = useState({});
+  
+  // Update internal name counts when the property list is loaded
+  useEffect(() => {
+    if (integrationPropertyList && integrationPropertyList.length > 0) {
+      const counts = {};
+      integrationPropertyList.forEach(prop => {
+        const internalName = prop?.internal_name;
+        if (internalName) {
+          counts[internalName] = (counts[internalName] || 0) + 1;
+        }
+      });
+      setInternalNameCounts(counts);
+    }
+  }, [integrationPropertyList]);
+
   // Check if user is at property limit when modal opens
   useEffect(() => {
     if (showNoPlan && isOnTrial && ENABLE_PROPERTY_LIMITS) {
@@ -131,9 +148,26 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
 
       // For rooms, use room_id as the main id and add property_id under main_property_id. For regular properties, just use the id and name
       if (propertyData?.is_room) {
-        obj[propertyData.room_id] = {name: name, type:'room', main_property_id: propertyData.id};
+        obj[propertyData.room_id] = {
+          name: name, 
+          type: 'room', 
+          main_property_id: propertyData.id
+        };
+        
+        // Add name_second_part if this internal_name has duplicates in the original list
+        if (propertyData?.internal_name && internalNameCounts[propertyData.internal_name] > 1) {
+          obj[propertyData.room_id].name_second_part = propertyData.name;
+        }
       } else {
-        obj[propertyData.id] = {name: name, type:'property'};
+        obj[propertyData.id] = {
+          name: name, 
+          type: 'property'
+        };
+        
+        // Add name_second_part if this internal_name has duplicates in the original list
+        if (propertyData?.internal_name && internalNameCounts[propertyData.internal_name] > 1) {
+          obj[propertyData.id].name_second_part = propertyData.name;
+        }
       }
       return obj;
     }, {});
