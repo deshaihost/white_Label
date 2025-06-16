@@ -48,14 +48,22 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
 
   const [checkBox, setCheckBox] = useState({});
 
-  // When a property is selected, toggle it by adding or removing it from the checkBox object (along with its ID)
+  // Helper function to create a unique key for each property
+  const createUniqueKey = (propObj) => {
+    const name = propObj?.internal_name || propObj?.name;
+    const id = propObj.id;
+    const roomId = propObj.room_id;
+    // Create unique key using name, id, and room_id (if present) to handle all duplicate scenarios
+    return roomId ? `${name}_${id}_${roomId}` : `${name}_${id}`;
+  };
+
+  // When a property is selected, toggle it by adding or removing it from the checkBox object
   const SelectItem = (selectedPropObj) => {
-    const selectedPropId = selectedPropObj.id;
-    const selectedPropName = selectedPropObj?.internal_name ? selectedPropObj.internal_name : selectedPropObj?.name;
+    const uniqueKey = createUniqueKey(selectedPropObj);
 
     const newCheckBox = { ...checkBox };
-    if (newCheckBox[selectedPropName]) { 
-      delete newCheckBox[selectedPropName]; 
+    if (newCheckBox[uniqueKey]) { 
+      delete newCheckBox[uniqueKey]; 
       if (ENABLE_PROPERTY_LIMITS && isOnTrial && maxPropertiesSelected && Object.keys(newCheckBox).length < numPropertiesRemaining) {
         setMaxPropertiesSelected(false);
       }
@@ -65,7 +73,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
         setMaxPropertiesSelected(true);
         return;
       }
-      newCheckBox[selectedPropName] = selectedPropId; 
+      newCheckBox[uniqueKey] = selectedPropObj; 
       if (ENABLE_PROPERTY_LIMITS && isOnTrial && Object.keys(newCheckBox).length >= numPropertiesRemaining) {
         setMaxPropertiesSelected(true);
       }
@@ -83,8 +91,8 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
     
     // Check if all filtered properties are selected
     const allSelected = filteredProperties.every(item => {
-      const primaryPropName = item?.internal_name ? item.internal_name : item?.name;
-      return checkBox?.hasOwnProperty(primaryPropName);
+      const uniqueKey = createUniqueKey(item);
+      return checkBox?.hasOwnProperty(uniqueKey);
     });
     
     if (allSelected && filteredProperties.length > 0) {
@@ -99,8 +107,8 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
       
       filteredProperties.forEach((integrationPropObj) => {
         if (count < limit) {
-          const primaryPropName = integrationPropObj?.internal_name ? integrationPropObj.internal_name : integrationPropObj?.name;
-          newCheckBox[primaryPropName] = integrationPropObj.id;
+          const uniqueKey = createUniqueKey(integrationPropObj);
+          newCheckBox[uniqueKey] = integrationPropObj;
           count++;
         }
       });
@@ -118,17 +126,14 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
     const API_KEY = process.env.REACT_APP_API_KEY;
 
     // Create a transformed version of the checkBox object, handling rooms specially
-    const selectedProperties = Object.entries(checkBox).reduce((obj, [name, id]) => {
-      // Find the original property data from integrationPropertyList
-      const propertyData = integrationPropertyList.find(p => 
-        (p.internal_name === name || p.name === name) && (p.id === id || p.room_id === id)
-      );
+    const selectedProperties = Object.entries(checkBox).reduce((obj, [uniqueKey, propertyData]) => {
+      const name = propertyData?.internal_name || propertyData?.name;
 
       // For rooms, use room_id as the main id and add property_id under main_property_id. For regular properties, just use the id and name
       if (propertyData?.is_room) {
-        obj[propertyData.room_id] = {name:name, type:'room', main_property_id:propertyData.id};
+        obj[propertyData.room_id] = {name: name, type:'room', main_property_id: propertyData.id};
       } else {
-        obj[id] = {name:name, type:'property'};
+        obj[propertyData.id] = {name: name, type:'property'};
       }
       return obj;
     }, {});
@@ -204,8 +209,8 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
 
                         // Check if all filtered properties are selected
                         const allSelected = filteredProperties?.every(item => {
-                          const primaryPropName = item?.internal_name ? item.internal_name : item?.name;
-                          return checkBox?.hasOwnProperty(primaryPropName);
+                          const uniqueKey = createUniqueKey(item);
+                          return checkBox?.hasOwnProperty(uniqueKey);
                         });
 
                         return allSelected && filteredProperties.length > 0 ? 'Deselect All' : 'Select All';
@@ -227,10 +232,11 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
                           const regName = integrationPropObj?.name;
                           const primaryPropName = internalName ? internalName : regName;
                           const secondaryPropName = (internalName && regName) ? regName : null;
-                          const isDisabled = ENABLE_PROPERTY_LIMITS && isOnTrial && !checkBox.hasOwnProperty(primaryPropName) && Object.keys(checkBox).length >= numPropertiesRemaining;
+                          const uniqueKey = createUniqueKey(integrationPropObj);
+                          const isDisabled = ENABLE_PROPERTY_LIMITS && isOnTrial && !checkBox.hasOwnProperty(uniqueKey) && Object.keys(checkBox).length >= numPropertiesRemaining;
                           return (
-                            <div className="form-check custom_checkbox" key={index} onClick={() => { if (!isDisabled) SelectItem(integrationPropObj); }}>
-                              <input className="form-check-input" type="checkbox" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={primaryPropName} checked={checkBox?.hasOwnProperty(primaryPropName)} disabled={isDisabled} onChange={() => { }} />
+                            <div className="form-check custom_checkbox" key={uniqueKey} onClick={() => { if (!isDisabled) SelectItem(integrationPropObj); }}>
+                              <input className="form-check-input" type="checkbox" name="flexRadioDefault" id={`flexRadioDefault${index}`} value={primaryPropName} checked={checkBox?.hasOwnProperty(uniqueKey)} disabled={isDisabled} onChange={() => { }} />
                               <div>
                                 <label className="form-check-label" htmlFor={`flexRadioDefault${index}`}>
                                   {primaryPropName}
