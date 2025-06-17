@@ -71,6 +71,8 @@ const RightSection = ({
 }) => {
   const {
     arrival_date,
+    assigned_sub_user_names,
+    assigned_sub_users,
     departure_date,
     status,
     guest_name,
@@ -85,6 +87,7 @@ const RightSection = ({
     user,
     action_items,
   } = rightSectionData ? rightSectionData : {};
+  // console.log("Assigned Sub user " , assigned_sub_user_names)
 
   const until_formatted =
     guest_chatbot_status?.until_utc == "indefinitely"
@@ -109,10 +112,12 @@ const RightSection = ({
   const [localStatus, setLocalStatus] = useState(null); // Local state for tracking status changes
   const [selectedSentiment, setSelectedSentiment] = useState(
     sentiment || "neutral"
-  ); // State for sub-user names
+  );  // State for sub-user names
   const [subUserNames, setSubUserNames] = useState([]);
   const [subUserLoading, setSubUserLoading] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [combinedUsers, setCombinedUsers] = useState([]); // State to store both assigned and selected users
+  const [combinedMails, setCombinedMails] = useState([]); // State to store email addresses for API calls
   const [assignUserDropdownOpen, setAssignUserDropdownOpen] = useState(false);
   const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
   const [contactModalOpen, setContactModalOpen] = useState(false);
@@ -190,6 +195,38 @@ const RightSection = ({
       }
     }
   }, [conversation_id, action_items, updateConversationFromApi]);
+  // Initialize combinedUsers with assigned_sub_user_names when component mounts or assigned users change
+  useEffect(() => {
+    if (assigned_sub_user_names && assigned_sub_user_names.length > 0) {
+      const assignedUsersFormatted = assigned_sub_user_names.map(
+        (name, index) => ({
+          id: `assigned-${index}`,
+          name: name,
+          type: "assigned",
+        })
+      );
+      setCombinedUsers(assignedUsersFormatted);
+      
+      // Initialize combinedMails with assigned_sub_users (emails)
+      if (assigned_sub_users && assigned_sub_users.length > 0) {
+        setCombinedMails([...assigned_sub_users]);
+      } else {
+        setCombinedMails([]);
+      }
+    } else {
+      setCombinedUsers([]);
+      setCombinedMails([]);    }
+  }, [assigned_sub_user_names, assigned_sub_users]);
+
+  // Track if combinedMails should trigger API calls (to avoid initial load API call)
+  const [shouldCallAPI, setShouldCallAPI] = useState(false);
+
+  // Trigger API call when combinedMails changes (but not on initial load)
+  useEffect(() => {
+    if (shouldCallAPI && conversation_id) {
+      assignUsersToConversation();
+    }
+  }, [combinedMails, shouldCallAPI, conversation_id]);
 
   // Function to mark an action item as complete
   const callCompleteActionItemApi = async (actionItemId) => {
@@ -282,10 +319,45 @@ const RightSection = ({
     if (newState && !dataFetched) {
       fetchSubUserNames();
     }
-  };
-
-  // Handle user selection for multi-select
+  };  // Handle user selection for multi-select
   const handleUserSelect = (user) => {
+    // Update combinedMails first to track email changes
+    setCombinedMails((prev) => {
+      if (prev.includes(user.email)) {
+        // If email already exists, remove it
+        return prev.filter((email) => email !== user.email);
+      } else {
+        // If email doesn't exist, add it
+        return [...prev, user.email];
+      }
+    });
+
+    setCombinedUsers((prev) => {
+      // Check if user is already in combinedUsers
+      if (
+        prev.some(
+          (selected) =>
+            selected.name === user.display_name || selected.name === user.email
+        )
+      ) {
+        // If already selected, remove it
+        return prev.filter(
+          (selected) =>
+            selected.name !== user.display_name && selected.name !== user.email
+        );
+      } else {
+        // If not selected, add it
+        const newUser = {
+          id: `selected-${user.email}`,
+          name: user.display_name,
+          email: user.email,
+          type: "selected",
+        };
+        return [...prev, newUser];
+      }
+    });
+
+    // Also update selectedUsers for API calls
     setSelectedUsers((prev) => {
       // Check if user is already selected
       if (prev.some((selected) => selected.email === user.email)) {
@@ -293,38 +365,63 @@ const RightSection = ({
         const newSelection = prev.filter(
           (selected) => selected.email !== user.email
         );
-        // Call assign function with the updated selection
-        setTimeout(() => assignUsersToConversation(newSelection), 0);
         return newSelection;
       } else {
         // If not selected, add it
         const newSelection = [...prev, user];
-        // Call assign function with the updated selection
-        setTimeout(() => assignUsersToConversation(newSelection), 0);
         return newSelection;
       }
     });
-  };
 
-  // Handle removing a user from selection
-  const handleRemoveUser = (email) => {
+    // Enable API calls for future combinedMails changes
+    setShouldCallAPI(true);
+  };// Handle removing a user from selection
+  const handleRemoveUser = (identifier) => {
+    // Find the user being removed to get their email
+    const userToRemove = combinedUsers.find(
+      (user) => user.name === identifier || user.email === identifier
+    );
+
+    // Remove from combinedMails
+    if (userToRemove) {
+      setCombinedMails((prev) => {
+        if (userToRemove.type === "assigned") {
+          // For assigned users, find the email by matching the index
+          const userIndex = assigned_sub_user_names?.indexOf(userToRemove.name);
+          const emailToRemove = assigned_sub_users?.[userIndex];
+          return prev.filter((email) => email !== emailToRemove);
+        } else {
+          // For selected users, remove by email
+          return prev.filter((email) => email !== userToRemove.email);
+        }
+      });
+    }
+
+    // Remove from combinedUsers
+    setCombinedUsers((prev) => {
+      return prev.filter(
+        (user) => user.name !== identifier && user.email !== identifier
+      );
+    });    // Also remove from selectedUsers if it's a selected user (for API calls)
     setSelectedUsers((prev) => {
-      const newSelection = prev.filter((user) => user.email !== email);
-      // Call assign function with the updated selection
-      setTimeout(() => assignUsersToConversation(newSelection), 0);
+      const newSelection = prev.filter(
+        (user) => user.email !== identifier && user.display_name !== identifier
+      );
       return newSelection;
     });
-  };
 
-  // Clear all selected users
+    // Enable API calls for future combinedMails changes
+    setShouldCallAPI(true);
+  };  // Clear all selected users
   const handleClearAllUsers = () => {
     setSelectedUsers([]);
-    // Call assign function with empty array
-    setTimeout(() => assignUsersToConversation([]), 0);
+    setCombinedUsers([]);
+    setCombinedMails([]);
+    // Enable API calls for future combinedMails changes
+    setShouldCallAPI(true);
   };
-
   // Function to assign selected users to the conversation
-  const assignUsersToConversation = async (usersToAssign = selectedUsers) => {
+  const assignUsersToConversation = async () => {
     if (!conversation_id) return;
 
     try {
@@ -341,11 +438,10 @@ const RightSection = ({
         },
         validateStatus: function (status) {
           return status >= 200 && status < 500;
-        },
-      };
+        },      };
 
-      // Extract emails from selected users
-      const subUserEmails = usersToAssign.map((user) => user.email);
+      // Use combinedMails instead of extracting from usersToAssign
+      const subUserEmails = combinedMails;
 
       const bodyData = {
         conversation_id: conversation_id,
@@ -896,7 +992,7 @@ const RightSection = ({
       );
       if (response.status === 200) {
         // Update contact info with the response data
-        const guestData = response.data;        // Get last email address from email_addresses array
+        const guestData = response.data; // Get last email address from email_addresses array
         const emailAddresses = guestData.guest_data?.email_addresses || [];
         const lastEmail =
           emailAddresses.length > 0 && emailAddresses[emailAddresses.length - 1]
@@ -913,7 +1009,8 @@ const RightSection = ({
         setContactInfo({
           email: lastEmail || "not added",
           phone: lastPhone || "not added",
-        });      } else {
+        });
+      } else {
         // Reset contact info when API fails
         setContactInfo({
           email: "not added",
@@ -961,14 +1058,20 @@ const RightSection = ({
       };
 
       // Build the request body with contact information
-    const requestBody = {
-  conversation_id,
-  property_name,
-  guest_data: {
-    email_addresses: contactInfo.email && contactInfo.email !== "not added" ? [contactInfo.email] : [],
-    phone_numbers: contactInfo.phone && contactInfo.phone !== "not added" ? [contactInfo.phone] : [],
-  },
-};
+      const requestBody = {
+        conversation_id,
+        property_name,
+        guest_data: {
+          email_addresses:
+            contactInfo.email && contactInfo.email !== "not added"
+              ? [contactInfo.email]
+              : [],
+          phone_numbers:
+            contactInfo.phone && contactInfo.phone !== "not added"
+              ? [contactInfo.phone]
+              : [],
+        },
+      };
 
       // Add reservation_id only if it exists
       if (reservation_id) {
@@ -2654,17 +2757,18 @@ const RightSection = ({
             className="user-dropdown-header"
             onClick={handleAssignUserDropdownOpen}
           >
-            {/* Show selected users or placeholder */}
-            {selectedUsers.length > 0 ? (
+            {" "}
+            {/* Show combined users or placeholder */}
+            {combinedUsers.length > 0 ? (
               <div className="user-tags-container">
-                {selectedUsers.map((user) => (
-                  <div key={user.email} className="user-tag">
-                    <span className="user-tag-text">{user.display_name}</span>
+                {combinedUsers.map((user) => (
+                  <div key={user.id} className="user-tag">
+                    <span className="user-tag-text">{user.name}</span>
                     <span
                       className="user-tag-close"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleRemoveUser(user.email);
+                        handleRemoveUser(user.name);
                       }}
                     >
                       ×
@@ -2675,7 +2779,6 @@ const RightSection = ({
             ) : (
               <span className="user-dropdown-placeholder">Select</span>
             )}
-
             {/* Dropdown icon */}
             <img
               src={ChevDownIcon}
@@ -2697,8 +2800,10 @@ const RightSection = ({
                   <div
                     key={index}
                     className={`user-dropdown-item ${
-                      selectedUsers.some(
-                        (selected) => selected.email === user.email
+                      combinedUsers.some(
+                        (selected) =>
+                          selected.name === user.display_name ||
+                          selected.email === user.email
                       )
                         ? "user-dropdown-item-selected"
                         : ""
@@ -2711,8 +2816,10 @@ const RightSection = ({
                     <span className="user-dropdown-item-text">
                       {user.display_name}
                     </span>
-                    {selectedUsers.some(
-                      (selected) => selected.email === user.email
+                    {combinedUsers.some(
+                      (selected) =>
+                        selected.name === user.display_name ||
+                        selected.email === user.email
                     ) && <span className="user-dropdown-item-check">✓</span>}
                   </div>
                 ))}
