@@ -46,26 +46,36 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
     );
 
     if (currentPath) {
-      setSelectedId(pathToIdMap[currentPath]);
-
-      // Auto-expand Messaging dropdown when in inbox section
+      setSelectedId(pathToIdMap[currentPath]);      // Auto-expand Messaging dropdown when in inbox section
       if (currentPath === "/inbox") {
         setExpandedId(5); // 5 is the ID for Messaging
+        
+        // Special case: Check if this is actually AI Preferences from settings
+        // (when AI Preferences redirects to /inbox/preferences)
+        if (location.pathname === "/inbox/preferences" && location.state?.originalPath) {
+          const originalPath = location.state.originalPath;
+          if (originalPath === "/setting/ai-preferences" || originalPath === "/gcs-settings/ai-preferences") {
+            // This is actually settings AI preferences, not messaging preferences
+            setSelectedId(7); // Set Settings as selected
+            setExpandedId(7); // Expand Settings dropdown
+            setSettingsActiveTab(74); // Set AI Preferences as active in settings
+            return; // Exit early to avoid setting messaging active tab
+          }
+        }
       }
 
       // Auto-expand Settings dropdown when in settings section
       if (currentPath === "/setting") {
-        setExpandedId(7); // 7 is the ID for Settings
-
-        // Map settings section from URL to tab ID
+        setExpandedId(7); // 7 is the ID for Settings        // Map settings section from URL to tab ID
         const settingsPathToId = {
           account: 71,
           contact: 72,
           notifications: 73,
-          "conversation-preferences": 74,
-          integrations: 75,
-          users: 76,
-          subscription: 77,
+          "ai-preferences": 74,
+          "action-items": 75,
+          integrations: 76,
+          users: 77,
+          subscription: 78,
         };
 
         // Extract the settings section from URL path
@@ -80,14 +90,14 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         }
       }
     }
-  }, [location.pathname]);
+  }, [location.pathname, location.state]);
 
   const toggleDropdown = (id) => {
     setExpandedId((prev) => (prev === id ? null : id));
   };
-
   const renderItem = (item) => {
     const isExpanded = expandedId === item.id;
+    const isDropdownParentExpanded = item.HasdropDown === "yes" && isExpanded && selectedId === item.id;
 
     return (
       <div key={item.id} style={{ width: "100%" }}>
@@ -104,6 +114,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
           stateProp="default"
           component={item.component}
           isSelected={selectedId === item.id}
+          isDropdownParentExpanded={isDropdownParentExpanded}
           onSelect={() => {
             // Don't set selected ID or navigate for HostBuddy AI label
             if (item.label === "HostBuddy AI") {
@@ -221,25 +232,25 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                       setSelectedId(7); // Keep parent Settings selected
                       setSettingsActiveTab(dropdownItem.id); // Track which settings tab is active
                       // Handle dropdown item navigation
-                      if (handleNavigation) {
-                        // Map settings dropdown items to their corresponding routes
+                      if (handleNavigation) {                        // Map settings dropdown items to their corresponding routes
                         const settingsMap = isInGcsPortal
                           ? {
                               71: "/gcs-settings/account", // Account
-                              72: "/gcs-settings/contact", // Contact
+                              72: "/gcs-settings/contact", // Contacts
                               73: "/gcs-settings/notifications", // Notifications
                               74: "/gcs-settings/ai-preferences", // AI Preferences
-                              76: "/gcs-settings/integrations", // Integration
+                              75: "/gcs-settings/action-items", // Action Items
+                              76: "/gcs-settings/integrations", // Integrations
                               77: "/gcs-settings/users", // Users
                               78: "/gcs-settings/subscription", // Subscription
                             }
                           : {
                               71: "/setting/account", // Account
-                              72: "/setting/contact", // Contact
+                              72: "/setting/contact", // Contacts
                               73: "/setting/notifications", // Notifications
                               74: "/setting/ai-preferences", // AI Preferences
-                              75: "/setting/action-items", // Action Items settings
-                              76: "/setting/integrations", // Integration
+                              75: "/setting/action-items", // Action Items
+                              76: "/setting/integrations", // Integrations
                               77: "/setting/users", // Users
                               78: "/setting/subscription", // Subscription
                             };
