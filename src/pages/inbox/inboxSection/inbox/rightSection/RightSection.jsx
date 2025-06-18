@@ -87,7 +87,8 @@ const RightSection = ({
     user,
     action_items,
   } = rightSectionData ? rightSectionData : {};
-  // console.log("Assigned Sub user " , assigned_sub_user_names)
+  console.log("Assigned Sub user " , assigned_sub_user_names);
+  console.log("assigned_sub_users" , assigned_sub_users)
 
   const until_formatted =
     guest_chatbot_status?.until_utc == "indefinitely"
@@ -127,12 +128,14 @@ const RightSection = ({
   });
   const [getGuestDataLoading, setGetGuestDataLoading] = useState(false);
   const [updateGuestDataLoading, setUpdateGuestDataLoading] = useState(false);
-
   const dropdownRef = useRef(null);
   const assignUserDropdownRef = useRef(null);
   const hostbuddyDropdownRef = useRef(null);
   const rightSideRef = useRef(null);
   const navigate = useNavigate();
+  
+  // Cache to store user assignments per conversation
+  const assignmentsByConversation = useRef({});
   // State for action items
   const [actionItems, setActionItems] = useState([]);
   const [getActionItemsLoading, setGetActionItemsLoading] = useState(false);
@@ -194,39 +197,63 @@ const RightSection = ({
         updateConversationFromApi(conversation_id);
       }
     }
-  }, [conversation_id, action_items, updateConversationFromApi]);
-  // Initialize combinedUsers with assigned_sub_user_names when component mounts or assigned users change
+  }, [conversation_id, action_items, updateConversationFromApi]);  // Initialize combinedUsers with assigned_sub_user_names when component mounts or assigned users change
   useEffect(() => {
-    if (assigned_sub_user_names && assigned_sub_user_names.length > 0) {
-      const assignedUsersFormatted = assigned_sub_user_names.map(
-        (name, index) => ({
-          id: `assigned-${index}`,
-          name: name,
-          type: "assigned",
-        })
-      );
-      setCombinedUsers(assignedUsersFormatted);
-      
-      // Initialize combinedMails with assigned_sub_users (emails)
-      if (assigned_sub_users && assigned_sub_users.length > 0) {
-        setCombinedMails([...assigned_sub_users]);
+    if (!conversation_id) return;
+    
+    // Check if we have cached data for this conversation
+    const cachedData = assignmentsByConversation.current[conversation_id];
+    
+    if (cachedData) {
+      // Use cached data if available (user has modified this conversation before)
+      setCombinedUsers(cachedData.users);
+      setCombinedMails(cachedData.mails);
+    } else {
+      // Use props data for first time viewing this conversation
+      if (assigned_sub_user_names && assigned_sub_user_names.length > 0) {
+        const assignedUsersFormatted = assigned_sub_user_names.map(
+          (name, index) => ({
+            id: `assigned-${index}`,
+            name: name,
+            type: "assigned",
+          })
+        );
+        setCombinedUsers(assignedUsersFormatted);
+        
+        // Initialize combinedMails with assigned_sub_users (emails)
+        if (assigned_sub_users && assigned_sub_users.length > 0) {
+          setCombinedMails([...assigned_sub_users]);
+        } else {
+          setCombinedMails([]);
+        }
       } else {
+        setCombinedUsers([]);
         setCombinedMails([]);
       }
-    } else {
-      setCombinedUsers([]);
-      setCombinedMails([]);    }
-  }, [assigned_sub_user_names, assigned_sub_users]);
-
-  // Track if combinedMails should trigger API calls (to avoid initial load API call)
-  const [shouldCallAPI, setShouldCallAPI] = useState(false);
-
-  // Trigger API call when combinedMails changes (but not on initial load)
-  useEffect(() => {
-    if (shouldCallAPI && conversation_id) {
-      assignUsersToConversation();
     }
-  }, [combinedMails, shouldCallAPI, conversation_id]);
+  }, [assigned_sub_user_names, assigned_sub_users, conversation_id]);  // Track when user explicitly takes an action that should trigger the API
+  const [userActionTriggered, setUserActionTriggered] = useState(false);
+
+  // Save current assignments to cache when user makes changes
+  useEffect(() => {
+    if (userActionTriggered && conversation_id && combinedMails.length >= 0) {
+      // Cache the current state for this conversation
+      assignmentsByConversation.current[conversation_id] = {
+        users: [...combinedUsers],
+        mails: [...combinedMails]
+      };
+    }
+  }, [combinedUsers, combinedMails, userActionTriggered, conversation_id]);
+
+  // Trigger API call only when user explicitly takes an action
+  useEffect(() => {
+    if (userActionTriggered && conversation_id) {
+      // Call API with current combinedMails
+      assignUsersToConversation();
+      // Reset flag after API call to prevent future automatic calls
+      setUserActionTriggered(false);
+    }
+  }, [userActionTriggered, conversation_id]);
 
   // Function to mark an action item as complete
   const callCompleteActionItemApi = async (actionItemId) => {
@@ -365,16 +392,15 @@ const RightSection = ({
         const newSelection = prev.filter(
           (selected) => selected.email !== user.email
         );
-        return newSelection;
-      } else {
+        return newSelection;      } else {
         // If not selected, add it
         const newSelection = [...prev, user];
         return newSelection;
       }
     });
 
-    // Enable API calls for future combinedMails changes
-    setShouldCallAPI(true);
+    // Trigger API call because user explicitly made a selection action
+    setUserActionTriggered(true);
   };// Handle removing a user from selection
   const handleRemoveUser = (identifier) => {
     // Find the user being removed to get their email
@@ -407,18 +433,16 @@ const RightSection = ({
       const newSelection = prev.filter(
         (user) => user.email !== identifier && user.display_name !== identifier
       );
-      return newSelection;
-    });
+      return newSelection;    });
 
-    // Enable API calls for future combinedMails changes
-    setShouldCallAPI(true);
+    // Trigger API call because user explicitly removed a user
+    setUserActionTriggered(true);
   };  // Clear all selected users
   const handleClearAllUsers = () => {
     setSelectedUsers([]);
     setCombinedUsers([]);
-    setCombinedMails([]);
-    // Enable API calls for future combinedMails changes
-    setShouldCallAPI(true);
+    setCombinedMails([]);    // Trigger API call because user explicitly cleared all users
+    setUserActionTriggered(true);
   };
   // Function to assign selected users to the conversation
   const assignUsersToConversation = async () => {
