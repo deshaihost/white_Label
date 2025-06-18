@@ -87,7 +87,8 @@ const RightSection = ({
     user,
     action_items,
   } = rightSectionData ? rightSectionData : {};
-  // console.log("Assigned Sub user " , assigned_sub_user_names)
+  console.log("Assigned Sub user " , assigned_sub_user_names);
+  console.log("assigned_sub_users" , assigned_sub_users)
 
   const until_formatted =
     guest_chatbot_status?.until_utc == "indefinitely"
@@ -127,12 +128,14 @@ const RightSection = ({
   });
   const [getGuestDataLoading, setGetGuestDataLoading] = useState(false);
   const [updateGuestDataLoading, setUpdateGuestDataLoading] = useState(false);
-
   const dropdownRef = useRef(null);
   const assignUserDropdownRef = useRef(null);
   const hostbuddyDropdownRef = useRef(null);
   const rightSideRef = useRef(null);
   const navigate = useNavigate();
+  
+  // Cache to store user assignments per conversation
+  const assignmentsByConversation = useRef({});
   // State for action items
   const [actionItems, setActionItems] = useState([]);
   const [getActionItemsLoading, setGetActionItemsLoading] = useState(false);
@@ -194,31 +197,53 @@ const RightSection = ({
         updateConversationFromApi(conversation_id);
       }
     }
-  }, [conversation_id, action_items, updateConversationFromApi]);
-  // Initialize combinedUsers with assigned_sub_user_names when component mounts or assigned users change
+  }, [conversation_id, action_items, updateConversationFromApi]);  // Initialize combinedUsers with assigned_sub_user_names when component mounts or assigned users change
   useEffect(() => {
-    if (assigned_sub_user_names && assigned_sub_user_names.length > 0) {
-      const assignedUsersFormatted = assigned_sub_user_names.map(
-        (name, index) => ({
-          id: `assigned-${index}`,
-          name: name,
-          type: "assigned",
-        })
-      );
-      setCombinedUsers(assignedUsersFormatted);
-      
-      // Initialize combinedMails with assigned_sub_users (emails)
-      if (assigned_sub_users && assigned_sub_users.length > 0) {
-        setCombinedMails([...assigned_sub_users]);
+    if (!conversation_id) return;
+    
+    // Check if we have cached data for this conversation
+    const cachedData = assignmentsByConversation.current[conversation_id];
+    
+    if (cachedData) {
+      // Use cached data if available (user has modified this conversation before)
+      setCombinedUsers(cachedData.users);
+      setCombinedMails(cachedData.mails);
+    } else {
+      // Use props data for first time viewing this conversation
+      if (assigned_sub_user_names && assigned_sub_user_names.length > 0) {
+        const assignedUsersFormatted = assigned_sub_user_names.map(
+          (name, index) => ({
+            id: `assigned-${index}`,
+            name: name,
+            type: "assigned",
+          })
+        );
+        setCombinedUsers(assignedUsersFormatted);
+        
+        // Initialize combinedMails with assigned_sub_users (emails)
+        if (assigned_sub_users && assigned_sub_users.length > 0) {
+          setCombinedMails([...assigned_sub_users]);
+        } else {
+          setCombinedMails([]);
+        }
       } else {
+        setCombinedUsers([]);
         setCombinedMails([]);
       }
-    } else {
-      setCombinedUsers([]);
-      setCombinedMails([]);    }
-  }, [assigned_sub_user_names, assigned_sub_users]);
-  // Track when user explicitly takes an action that should trigger the API
+    }
+  }, [assigned_sub_user_names, assigned_sub_users, conversation_id]);  // Track when user explicitly takes an action that should trigger the API
   const [userActionTriggered, setUserActionTriggered] = useState(false);
+
+  // Save current assignments to cache when user makes changes
+  useEffect(() => {
+    if (userActionTriggered && conversation_id && combinedMails.length >= 0) {
+      // Cache the current state for this conversation
+      assignmentsByConversation.current[conversation_id] = {
+        users: [...combinedUsers],
+        mails: [...combinedMails]
+      };
+    }
+  }, [combinedUsers, combinedMails, userActionTriggered, conversation_id]);
 
   // Trigger API call only when user explicitly takes an action
   useEffect(() => {
