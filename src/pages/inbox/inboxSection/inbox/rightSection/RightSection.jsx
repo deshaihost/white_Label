@@ -217,16 +217,18 @@ const RightSection = ({
       setCombinedUsers([]);
       setCombinedMails([]);    }
   }, [assigned_sub_user_names, assigned_sub_users]);
+  // Track when user explicitly takes an action that should trigger the API
+  const [userActionTriggered, setUserActionTriggered] = useState(false);
 
-  // Track if combinedMails should trigger API calls (to avoid initial load API call)
-  const [shouldCallAPI, setShouldCallAPI] = useState(false);
-
-  // Trigger API call when combinedMails changes (but not on initial load)
+  // Trigger API call only when user explicitly takes an action
   useEffect(() => {
-    if (shouldCallAPI && conversation_id) {
+    if (userActionTriggered && conversation_id) {
+      // Call API with current combinedMails
       assignUsersToConversation();
+      // Reset flag after API call to prevent future automatic calls
+      setUserActionTriggered(false);
     }
-  }, [combinedMails, shouldCallAPI, conversation_id]);
+  }, [userActionTriggered, conversation_id]);
 
   // Function to mark an action item as complete
   const callCompleteActionItemApi = async (actionItemId) => {
@@ -365,16 +367,15 @@ const RightSection = ({
         const newSelection = prev.filter(
           (selected) => selected.email !== user.email
         );
-        return newSelection;
-      } else {
+        return newSelection;      } else {
         // If not selected, add it
         const newSelection = [...prev, user];
         return newSelection;
       }
     });
 
-    // Enable API calls for future combinedMails changes
-    setShouldCallAPI(true);
+    // Trigger API call because user explicitly made a selection action
+    setUserActionTriggered(true);
   };// Handle removing a user from selection
   const handleRemoveUser = (identifier) => {
     // Find the user being removed to get their email
@@ -407,18 +408,16 @@ const RightSection = ({
       const newSelection = prev.filter(
         (user) => user.email !== identifier && user.display_name !== identifier
       );
-      return newSelection;
-    });
+      return newSelection;    });
 
-    // Enable API calls for future combinedMails changes
-    setShouldCallAPI(true);
+    // Trigger API call because user explicitly removed a user
+    setUserActionTriggered(true);
   };  // Clear all selected users
   const handleClearAllUsers = () => {
     setSelectedUsers([]);
     setCombinedUsers([]);
-    setCombinedMails([]);
-    // Enable API calls for future combinedMails changes
-    setShouldCallAPI(true);
+    setCombinedMails([]);    // Trigger API call because user explicitly cleared all users
+    setUserActionTriggered(true);
   };
   // Function to assign selected users to the conversation
   const assignUsersToConversation = async () => {
