@@ -62,7 +62,8 @@
 .side-nav-item.selected {
     background-color: #01255E;
     /* background-color: var(--colors-color-background-selected-subtle-default, rgba(55, 135, 255, 0.1)); */
-    box-shadow: 0 0 0 1px rgba(55, 135, 255, 0.15); /* Subtle border effect */
+    /* box-shadow: 0 0 0 1px rgba(55, 135, 255, 0.15); */
+     /* Subtle border effect */
 }
 
 .side-nav-item.selected .text-wrapper {
@@ -98,7 +99,7 @@
     /* gap: 2px; */
     box-sizing: border-box;
     overflow: hidden;
-    background-color: #0c0c0c; /* Slightly transparent to show depth */
+    background-color: rgba(15, 17, 23, 1); /* Slightly transparent to show depth */
     border-radius: 4px;
     padding: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Add subtle shadow for depth */
@@ -147,4 +148,18 @@
 
 .side-nav-item .trailing-icon.rotated {
     transform: rotate(180deg);
+}
+
+/* Special styling for dropdown parent items when expanded */
+.side-nav-item.dropdown-parent-expanded {
+    background-color: rgba(15, 17, 23, 1) !important;
+}
+
+.side-nav-item.dropdown-parent-expanded .selection-indicator {
+    display: none !important;
+}
+
+.side-nav-item.dropdown-parent-expanded .text-wrapper {
+    color: #A6A9B2 !important;
+    font-weight: 500 !important;
 }

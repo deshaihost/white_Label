@@ -15,15 +15,16 @@ const SideNavItem2 = ({
     component,
     onSelect,
     id,
-    trailingIconRotate
+    trailingIconRotate,
+    isDropdownParentExpanded = false
 }) => {
     return (
         <div
-            className={`side-nav-item ${isSelected ? 'selected' : ''} ${stateProp || 'default'} ${size === 'sub' ? 'sub-item' : ''}`}
+            className={`side-nav-item ${isSelected ? 'selected' : ''} ${stateProp || 'default'} ${size === 'sub' ? 'sub-item' : ''} ${isDropdownParentExpanded ? 'dropdown-parent-expanded' : ''}`}
             onClick={onSelect}
             data-item-id={id}
         >
-            {isSelected && <div className="selection-indicator" />}
+            {isSelected && !isDropdownParentExpanded && <div className="selection-indicator" />}
             {showLeadingIcon && component && <div className="instance-node">{component}</div>}
             <div className="text-wrapper">{label}</div>
             {showCounter && counter > 0 && <div className="counter">{counter}</div>}
@@ -47,7 +48,8 @@ SideNavItem2.propTypes = {
     label: PropTypes.string,
     onSelect: PropTypes.func,
     id: PropTypes.number,
-    trailingIconRotate: PropTypes.bool
+    trailingIconRotate: PropTypes.bool,
+    isDropdownParentExpanded: PropTypes.bool
 };
 
 export default SideNavItem2;

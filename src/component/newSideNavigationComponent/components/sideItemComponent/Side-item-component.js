@@ -95,9 +95,9 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
   const toggleDropdown = (id) => {
     setExpandedId((prev) => (prev === id ? null : id));
   };
-
   const renderItem = (item) => {
     const isExpanded = expandedId === item.id;
+    const isDropdownParentExpanded = item.HasdropDown === "yes" && isExpanded && selectedId === item.id;
 
     return (
       <div key={item.id} style={{ width: "100%" }}>
@@ -114,6 +114,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
           stateProp="default"
           component={item.component}
           isSelected={selectedId === item.id}
+          isDropdownParentExpanded={isDropdownParentExpanded}
           onSelect={() => {
             // Don't set selected ID or navigate for HostBuddy AI label
             if (item.label === "HostBuddy AI") {
