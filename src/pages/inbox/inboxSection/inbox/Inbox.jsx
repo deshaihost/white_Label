@@ -8,6 +8,7 @@ import { InboxLoader } from "../../../../helper/Loader";
 import LeftMessage from "./leftMessage/LeftMessage";
 import MildeSection from "./mildeSection/MildeSection";
 import WhatsAppSection from "./mildeSection/WhatsAppSection"; // Import WhatsApp Section
+import OpenPhoneSection from "./mildeSection/OpenPhoneSection" // Import OpenPhone Section
 import RightSection from "./rightSection/RightSection";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -18,6 +19,7 @@ import { timeFormat } from "../../../../helper/commonFun";
 // Import the SVG icons
 import PmsIcon from "./mildeSection/message/icons/pms_icon.svg";
 import WhatsappIcon from "./mildeSection/message/icons/whatsapp_icon.svg";
+import OpenPhoneIcon from "./mildeSection/message/icons/openphone_icon.svg"
 import OpenIssueIcon from "./mildeSection/message/icons/openIssue_icon.svg";
 import NotesIcon from "./mildeSection/message/icons/notes_icon.svg";
 import CheckBoxIcon from "./mildeSection/message/icons/check_box.svg";
@@ -552,6 +554,7 @@ const Inbox = ({
   // State for unread messages counts
   const [unreadPmsCount, setUnreadPmsCount] = useState(0);
   const [unreadWhatsAppCount, setUnreadWhatsAppCount] = useState(0);
+  const[unreadOpenPhoneCount, setUnreadOpenPhoneCount] = useState(0);
 
   // Calculate unread messages counts when selected conversation changes
   useEffect(() => {
@@ -574,7 +577,18 @@ const Inbox = ({
     } else {
       setUnreadWhatsAppCount(0);
     }
+
+    // Count unread OpenPhone messages if they exist
+    if (selectedConversation && selectedConversation.openphone_messages) {
+      const unreadOpenPhoneCount = selectedConversation.openphone_messages.filter(
+        (msg) => !msg.read
+      ).length;
+      setUnreadOpenPhoneCount(unreadOpenPhoneCount);
+    } else {
+      setUnreadOpenPhoneCount(0);
+    }
   }, [selectedConversation]); // Notes state
+
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [isLoadingNotes, setIsLoadingNotes] = useState(false);
@@ -610,15 +624,21 @@ const Inbox = ({
       const hasWhatsAppMessages =
         selectedConversation.whatsapp_messages &&
         selectedConversation.whatsapp_messages.length > 0;
+      const hasOpenPhoneMessages = 
+        selectedConversation.openphone_messages &&
+        selectedConversation.openphone_messages.length > 0;
 
       // Logic for default tab selection:
       // - If PMS messages exist, default to PMS tab
       // - If no PMS messages but WhatsApp messages exist, default to WhatsApp tab
+      // - If no PMS messages but OpenPhone messages exist, default to OpenPhone tab
       // - If both are empty, default to PMS tab
       if (hasMessages) {
         setActiveTab("pms");
       } else if (hasWhatsAppMessages) {
         setActiveTab("whatsapp");
+      } else if (hasOpenPhoneMessages) {
+        setActiveTab("openphone")
       } else {
         setActiveTab("pms"); // Default fallback
       }
@@ -627,6 +647,7 @@ const Inbox = ({
     selectedConversation?.conversation_id,
     selectedConversation?.messages,
     selectedConversation?.whatsapp_messages,
+    selectedConversation?.openphone_messages,
   ]);
 
   // Handle dropdown toggle
@@ -1660,6 +1681,7 @@ const Inbox = ({
                   {[
                     { id: "pms", icon: PmsIcon, text: "PMS" },
                     { id: "whatsapp", icon: WhatsappIcon, text: "WhatsApp" },
+                    { id: "openphone", icon: OpenPhoneIcon, text: "OpenPhone"},
                     {
                       id: "openIssue",
                       icon: OpenIssueIcon,
@@ -1867,6 +1889,26 @@ const Inbox = ({
                   {" "}
                   <WhatsAppSection
                     key="whatsapp-section"
+                    allConversationData={selectedConversation}
+                    updateConversationFromApi={updateConversation}
+                    propertyName={selectedConversation?.property_name}
+                  />
+                </div>
+
+                {/* OpenPhone Tab */}
+                <div
+                  style={{
+                    visibility: activeTab === "openphone" ? "visible" : "hidden",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {" "}
+                  <OpenPhoneSection
+                    key="openphone-section"
                     allConversationData={selectedConversation}
                     updateConversationFromApi={updateConversation}
                     propertyName={selectedConversation?.property_name}
