@@ -193,10 +193,13 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   };  return (
     <div
       className={`collapsed-navbar${isOpen ? " open" : ""}`}
-      style={{ display: isOpen ? "flex" : "none", height: "100vh" }}
+      style={{ 
+        display: isOpen ? "flex" : "none", 
+        height: "100vh",
+        transition: "all 200ms ease-in-out"
+      }}
     >
-      {" "}
-      <div 
+      {" "}      <div 
         className="collapsed-navbar-hover-area"
         onMouseEnter={handleIconMouseEnter}
         onMouseLeave={handleIconMouseLeave}
@@ -205,6 +208,7 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
           flexDirection: "column",
           width: "100%",
           height: "100%",
+          transition: "all 200ms ease-in-out"
         }}
       >
         <div className="collapsed-navbar-icons">
@@ -234,7 +238,7 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-            marginBottom: 8,
+          
           }}
         >
           <div
