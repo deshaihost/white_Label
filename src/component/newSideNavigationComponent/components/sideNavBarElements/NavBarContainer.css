@@ -1,0 +1,8 @@
+.navbar-main-container {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.navbar-main-container:hover {
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.7), 
+                2px 0 8px rgba(0, 0, 0, 0.7);
+}

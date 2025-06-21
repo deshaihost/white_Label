@@ -6,6 +6,7 @@ import CollapsedNavbar from "../CollapsedNavbar";
 import Authorized, { logOut } from "../../../../helper/Authorized";
 import { setAuthorization } from "../../../../helper/apiCore";
 import { getGcsToken } from "../../../../pages/gcs/gcs_functionality";
+import "./NavBarContainer.css";
 
 // Global style for the component
 const navBarFontStyle = {
