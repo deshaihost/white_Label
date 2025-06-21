@@ -1341,7 +1341,7 @@ const Inbox = ({
         className="inbox-content-container"
         style={{
           height: bannerVisible ? "calc(95vh - 40px)" : "95vh",
-          marginLeft: "10px",
+          marginLeft: "20px",
           marginTop: "10px",
           // margin: "10px",
           // borderWidth:"1px" ,
