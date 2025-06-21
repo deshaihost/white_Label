@@ -381,7 +381,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         style={{
           width: "100%",
           marginBottom: "4px",
-          backgroundColor: "black",
+          backgroundColor: "rgb(23, 25, 31)",
           borderRadius: "4px",
         }}
       >
