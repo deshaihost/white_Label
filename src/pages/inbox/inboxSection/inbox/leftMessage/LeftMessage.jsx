@@ -944,17 +944,12 @@ const LeftMessage = ({
                           <div className="date date-no-margin">
                             {time ? timeFormat(time) : ""}
                           </div>
-                        </div>
-                        {/* Second line: Message text and count of unread messages */}
+                        </div>                        {/* Second line: Message text and count of unread messages */}
                         <div className="message-container short-des">
                           <div
                             className="message-text"
                             style={{
-                              fontWeight:
-                                !opened ||
-                                conversation_id === selectedConversationId
-                                  ? 600
-                                  : 400,
+                              fontWeight: !opened ? 600 : 400,
                             }}
                           >
                             {shortenedText}
