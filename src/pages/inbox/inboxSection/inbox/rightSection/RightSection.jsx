@@ -1563,7 +1563,7 @@ const RightSection = ({
           }}
         ></div>
         {/* Contact Information Section */}
-        <div style={{ marginBottom: "15px" }}>
+        <div >
           <div
             style={{
               display: "flex",
