@@ -2922,6 +2922,7 @@ const RightSection = ({
               onClick={navigateToActionItems}
               style={{
                 color: "#74A9F7",
+                fontWeight: 600,
                 fontSize: "14px",
                 cursor: "pointer",
               }}
