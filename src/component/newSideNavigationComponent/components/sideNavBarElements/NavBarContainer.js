@@ -17,7 +17,12 @@ function NavBarContainer() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar state was set by a click
   const [navbarHoverTimer, setNavbarHoverTimer] = useState(null);
-  const [messagingActiveTab, setMessagingActiveTab] = useState(0); // Track which messaging tab is active
+  const [messagingActiveTab, setMessagingActiveTab] = useState(null); // Track which messaging tab is active, null means no selection
+  
+  // Debug: Log the current messagingActiveTab value
+  useEffect(() => {
+    console.log('MessagingActiveTab changed to:', messagingActiveTab);
+  }, [messagingActiveTab]);
   const location = useLocation();
   const navigate = useNavigate();
   const getAuthToken = Authorized();
@@ -103,20 +108,15 @@ function NavBarContainer() {
         clearTimeout(navbarHoverTimer);
       }
     };
-  }, [navbarHoverTimer]);
-
-  // Determine which messaging tab is active based on URL
+  }, [navbarHoverTimer]);  // Reset messaging tab when navigating away from inbox section
   useEffect(() => {
-    if (location.pathname.startsWith("/inbox/smart-templates")) {
-      setMessagingActiveTab(1);
-    } else if (location.pathname.startsWith("/inbox/preferences")) {
-      setMessagingActiveTab(2);
-    } else if (location.pathname.startsWith("/inbox/upsells")) {
-      setMessagingActiveTab(3);
-    } else if (location.pathname.startsWith("/inbox")) {
-      setMessagingActiveTab(0);
+    if (!location.pathname.startsWith("/inbox")) {
+      console.log('Clearing messaging tab because navigated away from inbox to:', location.pathname);
+      setMessagingActiveTab(null);
+    } else {
+      console.log('On inbox path:', location.pathname, 'Current messaging tab:', messagingActiveTab);
     }
-  }, [location.pathname]);
+  }, [location.pathname, messagingActiveTab]);
 
   // List of paths that should show portal navigation
   const protectedPaths = [
@@ -171,9 +171,9 @@ function NavBarContainer() {
     }
     handleNavLinkClick();
   };
-
   // Handle showing specific message interface component
   const handleMessageTabSelect = (index) => {
+    console.log('User explicitly selected messaging tab:', index);
     setMessagingActiveTab(index);
 
     // Maps to the same URL structure as InboxIndex.jsx uses
@@ -192,11 +192,16 @@ function NavBarContainer() {
     }
   };
 
+  // Function to reset messaging tab selection
+  const resetMessagingSelection = () => {
+    console.log('Resetting messaging selection to -1');
+    setMessagingActiveTab(-1);
+  };
+
   // Enhanced functions that can be passed to SideItemComponent
   const getNavigationProps = () => {
     return {
-      isProtectedPath,
-      isConditionalPath,
+      isProtectedPath,      isConditionalPath,
       token,
       isInGcsPortal,
       gcsToken,
@@ -205,6 +210,7 @@ function NavBarContainer() {
       handlebackToUsersClick,
       messagingActiveTab,
       handleMessageTabSelect,
+      resetMessagingSelection,
       expanded,
       setExpanded,
       handleNavLinkClick,
@@ -236,9 +242,8 @@ function NavBarContainer() {
   // Handle explicit click to expand the sidebar
   const handleExpandClick = (isFromClick = true) => {
     updateSidebarState(true, isFromClick); // Open via explicit click or hover based on parameter
-  };  return (
-    <div
-      className="navbar-main-container"
+  };  return (    <div
+      className={`navbar-main-container ${sidebarClicked ? 'expanded-by-click' : ''}`}
       style={{
         position: "fixed",
         backgroundColor: sidebarOpen ? "rgba(23, 25, 31, 1)" : "transparent",

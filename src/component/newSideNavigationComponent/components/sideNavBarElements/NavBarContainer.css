@@ -1,8 +1,19 @@
 .navbar-main-container {
+    box-shadow: none;
     transition: box-shadow 0.3s ease-in-out;
 }
 
-.navbar-main-container:hover {
+/* Only show shadow on hover when not permanently expanded */
+.navbar-main-container:hover:not(.expanded-by-click) {
     box-shadow: 4px 0 16px rgba(0, 0, 0, 0.7), 
                 2px 0 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Ensure no shadow when expanded by click */
+.navbar-main-container.expanded-by-click {
+    box-shadow: none !important;
+}
+
+.navbar-main-container.expanded-by-click:hover {
+    box-shadow: none !important;
 }

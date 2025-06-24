@@ -200,8 +200,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         />
 
         {item.HasdropDown === "yes" && isExpanded && (
-          <div className="dropdown-items">
-            {item.id === 5
+          <div className="dropdown-items">            {item.id === 5
               ? // Special rendering for Messaging dropdown using InBoxHeader approach
                 item.dropdownItems.map((dropdownItem, index) => (
                   <SideNavItem2
@@ -210,7 +209,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                     label={dropdownItem.label}
                     size="sub"
                     stateProp="default"
-                    isSelected={messagingActiveTab === index}
+                    isSelected={messagingActiveTab === index && messagingActiveTab !== null}
                     onSelect={() => handleMessageTabSelect(index)}
                     showLeadingIcon={false}
                     showTrailingIcon={false}
