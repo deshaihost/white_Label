@@ -27,6 +27,16 @@ const icons = [
   { id: 7, component: <SettingsDefault />, label: "Settings" },
 ];
 
+// Function to detect if device is mobile (consistent with NavBarContainer)
+const isMobileDevice = () => {
+  const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  const isMobileWidth = screenWidth <= 768;
+  const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
+  return isMobileWidth || (isMobileUserAgent && isTouchDevice);
+};
+
 const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   const [selected, setSelected] = useState(null);
   const location = useLocation();
@@ -68,9 +78,13 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
       setSelected(pathToIdMap[currentPath]);
     }
   }, [location.pathname]);
-
   // Handle mouse enter event for icons to expand the navbar after a short delay
   const handleIconMouseEnter = () => {
+    // Don't trigger hover behavior on mobile devices
+    if (isMobileDevice()) {
+      return;
+    }
+    
     // Clear any existing hover timer
     if (hoverTimer) {
       clearTimeout(hoverTimer);
@@ -88,6 +102,10 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
   // Handle mouse leave event for icons to cancel the expansion if the user moves away quickly
   const handleIconMouseLeave = () => {
+    // Don't trigger hover behavior on mobile devices
+    if (isMobileDevice()) {
+      return;
+    }
     if (hoverTimer) {
       clearTimeout(hoverTimer);
       setHoverTimer(null);
@@ -190,49 +208,103 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
     // Only these specific navigation icons should trigger navbar opening on hover
     // 1=Get Started, 2=Dashboard, 3=Properties, 4=Action Items, 5=Messaging, 6=Insights, 7=Settings
     return [1, 2, 3, 4, 5, 6, 7].includes(iconId);
-  };
-
-  return (
+  };  return (
     <div
       className={`collapsed-navbar${isOpen ? " open" : ""}`}
-      style={{ display: isOpen ? "flex" : "none" }}
+      style={{ 
+        display: isOpen ? "flex" : "none", 
+        transition: "all 200ms ease-in-out"
+      }}
     >
-      {" "}
-      <div className="collapsed-navbar-icons">
-        {filteredIcons.map((icon) => (
+      {" "}      <div 
+        className="collapsed-navbar-hover-area"
+        onMouseEnter={handleIconMouseEnter}
+        onMouseLeave={handleIconMouseLeave}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          height: "100%",
+          transition: "all 200ms ease-in-out"
+        }}
+      >
+        <div className="collapsed-navbar-icons">          {filteredIcons.map((icon) => (
+            <div
+              key={icon.id}
+              className={`collapsed-navbar-icon${
+                selected === icon.id ? " selected" : ""
+              }`}
+              data-icon-id={icon.id}
+              title={icon.label}
+              onClick={() => (icon.id === 0 ? null : handleIconClick(icon.id))}
+              style={{
+                position: "relative",
+                marginBottom: icon.id === 0 ? "16px" : "0px",
+              }}
+            >
+              {selected === icon.id && (
+                <div className="collapsed-selection-indicator" />
+              )}
+              {icon.component}
+            </div>
+          ))}</div>
+        {/* Adding a flexible spacer to push utility icons to the bottom */}
+        <div style={{ flex: 1 }}></div>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          
+          }}
+        >
           <div
-            key={icon.id}
-            className={`collapsed-navbar-icon${
-              selected === icon.id ? " selected" : ""
-            }`}
-            title={icon.label}
-            onClick={() => (icon.id === 0 ? null : handleIconClick(icon.id))}
             style={{
-              position: "relative",
-              marginBottom: icon.id === 0 ? "16px" : "0px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "100%",
             }}
-            onMouseEnter={
-              shouldHaveHover(icon.id) ? handleIconMouseEnter : undefined
-            }
-            onMouseLeave={
-              shouldHaveHover(icon.id) ? handleIconMouseLeave : undefined
-            }
           >
-            {selected === icon.id && (
-              <div className="collapsed-selection-indicator" />
-            )}
-            {icon.component}
+            {/* Logout Icon - placed above Help & Support */}
+            <div
+              style={{
+                // marginBottom: 8,
+                cursor: "pointer",
+                // backgroundColor: '#000000',
+                borderRadius: "4px",
+                padding: "4px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              onClick={logoutHandle}
+              title="Log Out"
+            >
+              <img
+                src={logoutIcon}
+                alt="Log Out"
+                style={{ width: 24, height: 24 }}
+              />
+            </div>            <div
+              style={{ padding:"8px", cursor: "pointer" }}
+              onClick={handleHelpClick}
+              title="Help & Support"
+            >
+              <img
+                src={helpIcon}
+                alt="Help & Support"
+                style={{ width: 24, height: 24 }}
+              />
+            </div>
           </div>
-        ))}
-      </div>
-      {/* Adding a flexible spacer to push utility icons to the bottom */}
-      <div style={{ flexGrow: 1 }}></div>
+        </div>
+      </div>      {/* Expand button outside the hover area */}
       <div
         style={{
           width: "100%",
           display: "flex",
           justifyContent: "center",
-          marginBottom: 8,
+          marginBottom: 16,
         }}
       >
         <div
@@ -243,38 +315,6 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
             width: "100%",
           }}
         >
-          {/* Logout Icon - placed above Help & Support */}
-          <div
-            style={{
-              // marginBottom: 8,
-              cursor: "pointer",
-              // backgroundColor: '#000000',
-              borderRadius: "4px",
-              padding: "4px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-            onClick={logoutHandle}
-            title="Log Out"
-          >
-            <img
-              src={logoutIcon}
-              alt="Log Out"
-              style={{ width: 24, height: 24 }}
-            />
-          </div>
-
-          <div
-            style={{ padding:"8px", cursor: "pointer" }}
-            onClick={handleHelpClick}
-            title="Help & Support"
-          >
-            <img
-              src={helpIcon}
-              alt="Help & Support"
-              style={{ width: 24, height: 24 }}
-            />
-          </div>
           <button
             className="collapsed-navbar-expand"
             onClick={handleBackClick}

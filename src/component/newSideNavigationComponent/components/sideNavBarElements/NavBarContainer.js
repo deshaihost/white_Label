@@ -6,17 +6,35 @@ import CollapsedNavbar from "../CollapsedNavbar";
 import Authorized, { logOut } from "../../../../helper/Authorized";
 import { setAuthorization } from "../../../../helper/apiCore";
 import { getGcsToken } from "../../../../pages/gcs/gcs_functionality";
+import "./NavBarContainer.css";
 
 // Global style for the component
 const navBarFontStyle = {
   fontFamily: "DM Sans, Helvetica",
 };
 
+// Function to detect if device is mobile
+const isMobileDevice = () => {
+  // Check screen width and user agent
+  const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  const isMobileWidth = screenWidth <= 768;
+  const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
+  return isMobileWidth || (isMobileUserAgent && isTouchDevice);
+};
+
 function NavBarContainer() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar state was set by a click
+  // Initialize sidebar state based on device type
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobileDevice());
+  const [sidebarClicked, setSidebarClicked] = useState(!isMobileDevice()); // Track if sidebar state was set by a click
   const [navbarHoverTimer, setNavbarHoverTimer] = useState(null);
-  const [messagingActiveTab, setMessagingActiveTab] = useState(0); // Track which messaging tab is active
+  const [messagingActiveTab, setMessagingActiveTab] = useState(null); // Track which messaging tab is active, null means no selection
+  
+  // Debug: Log the current messagingActiveTab value
+  useEffect(() => {
+    console.log('MessagingActiveTab changed to:', messagingActiveTab);
+  }, [messagingActiveTab]);
   const location = useLocation();
   const navigate = useNavigate();
   const getAuthToken = Authorized();
@@ -70,9 +88,13 @@ function NavBarContainer() {
     });
     document.dispatchEvent(event);
   };
-
   // Handle mouse enter to temporarily expand the sidebar
   const handleMouseEnter = () => {
+    // Don't trigger hover behavior on mobile devices
+    if (isMobileDevice()) {
+      return;
+    }
+    
     if (navbarHoverTimer) {
       clearTimeout(navbarHoverTimer);
       setNavbarHoverTimer(null);
@@ -86,6 +108,11 @@ function NavBarContainer() {
 
   // Handle mouse leave - only collapse if it was expanded by hovering
   const handleMouseLeave = () => {
+    // Don't trigger hover behavior on mobile devices
+    if (isMobileDevice()) {
+      return;
+    }
+    
     // Only collapse if the sidebar was opened by hover (not clicked)
     if (sidebarOpen && !sidebarClicked) {
       const timer = setTimeout(() => {
@@ -94,7 +121,6 @@ function NavBarContainer() {
       setNavbarHoverTimer(timer);
     }
   };
-
   // Cleanup the timer on unmount
   useEffect(() => {
     return () => {
@@ -104,18 +130,37 @@ function NavBarContainer() {
     };
   }, [navbarHoverTimer]);
 
-  // Determine which messaging tab is active based on URL
+  // Handle window resize to adjust sidebar state for mobile/desktop
   useEffect(() => {
-    if (location.pathname.startsWith("/inbox/smart-templates")) {
-      setMessagingActiveTab(1);
-    } else if (location.pathname.startsWith("/inbox/preferences")) {
-      setMessagingActiveTab(2);
-    } else if (location.pathname.startsWith("/inbox/upsells")) {
-      setMessagingActiveTab(3);
-    } else if (location.pathname.startsWith("/inbox")) {
-      setMessagingActiveTab(0);
+    const handleResize = () => {
+      const isMobile = isMobileDevice();
+      if (isMobile && sidebarOpen && sidebarClicked) {
+        // If switching to mobile and sidebar is open, collapse it
+        updateSidebarState(false, false);
+      } else if (!isMobile && !sidebarOpen) {
+        // If switching to desktop and sidebar is closed, open it
+        updateSidebarState(true, true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, [sidebarOpen, sidebarClicked]);
+
+  // Reset messaging tab when navigating away from inbox section
+  useEffect(() => {
+    if (!location.pathname.startsWith("/inbox")) {
+      console.log('Clearing messaging tab because navigated away from inbox to:', location.pathname);
+      setMessagingActiveTab(null);
+    } else {
+      console.log('On inbox path:', location.pathname, 'Current messaging tab:', messagingActiveTab);
     }
-  }, [location.pathname]);
+  }, [location.pathname, messagingActiveTab]);
 
   // List of paths that should show portal navigation
   const protectedPaths = [
@@ -170,9 +215,9 @@ function NavBarContainer() {
     }
     handleNavLinkClick();
   };
-
   // Handle showing specific message interface component
   const handleMessageTabSelect = (index) => {
+    console.log('User explicitly selected messaging tab:', index);
     setMessagingActiveTab(index);
 
     // Maps to the same URL structure as InboxIndex.jsx uses
@@ -191,11 +236,16 @@ function NavBarContainer() {
     }
   };
 
+  // Function to reset messaging tab selection
+  const resetMessagingSelection = () => {
+    console.log('Resetting messaging selection to -1');
+    setMessagingActiveTab(-1);
+  };
+
   // Enhanced functions that can be passed to SideItemComponent
   const getNavigationProps = () => {
     return {
-      isProtectedPath,
-      isConditionalPath,
+      isProtectedPath,      isConditionalPath,
       token,
       isInGcsPortal,
       gcsToken,
@@ -204,6 +254,7 @@ function NavBarContainer() {
       handlebackToUsersClick,
       messagingActiveTab,
       handleMessageTabSelect,
+      resetMessagingSelection,
       expanded,
       setExpanded,
       handleNavLinkClick,
@@ -235,16 +286,13 @@ function NavBarContainer() {
   // Handle explicit click to expand the sidebar
   const handleExpandClick = (isFromClick = true) => {
     updateSidebarState(true, isFromClick); // Open via explicit click or hover based on parameter
-  };  return (
-    <div
-      className="navbar-main-container"
+  };  return (    <div
+      className={`navbar-main-container ${sidebarClicked ? 'expanded-by-click' : ''} ${isMobileDevice() ? 'mobile-default-collapsed' : ''}`}
       style={{
         position: "fixed",
-        backgroundColor: sidebarOpen ? "rgba(23, 25, 31, 1)" : "transparent",
-        top: 0,
+        backgroundColor: sidebarOpen ? "rgba(23, 25, 31, 1)" : "transparent",        top: 0,
         left: 0,
-        height: "100vh",
-        zIndex: 1000,        paddingTop: sidebarOpen ? "16px" : "0px",
+        zIndex: 1000,paddingTop: sidebarOpen ? "16px" : "0px",
         paddingBottom: sidebarOpen ? "16px" : "0px",
         paddingRight: sidebarOpen ? "8px" : "0px",
         paddingLeft: sidebarOpen ? "8px" : "0px",
@@ -265,16 +313,12 @@ function NavBarContainer() {
         `}
       </style>
       
-      {sidebarOpen ? (
-        <div
+      {sidebarOpen ? (        <div
           className="navbar-container-1600"
           style={{
             backgroundColor: "rgba(23, 25, 31, 1)",
             width: "184px",
-            height: "100vh",
-            maxHeight: "100vh",
             overflowY: "auto",
-
             boxSizing: "border-box",
             position: "relative",
             display: "flex",
@@ -308,13 +352,11 @@ function NavBarContainer() {
             navigationProps={getNavigationProps()}
           />
         </div>
-      ) : (
-        <div
+      ) : (        <div
+          className="navbar-collapsed-container"
           style={{
             position: "relative",
             // backgroundColor: "rgba(23, 25, 31, 1)",
-            height: "100vh",
-            maxHeight: "100vh",
             overflowY: "auto",
             msOverflowStyle: "none",
             scrollbarWidth: "none",

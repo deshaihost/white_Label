@@ -72,16 +72,25 @@
 }
 
 .side-nav-item.selected .instance-node svg path {
-    fill: var(--colors-color-text-selected, #ffffff);
+    fill: rgba(116, 169, 247, 1) !important;
+}
+
+/* For img-based icons, use filter to change color to rgba(116, 169, 247, 1) - exclude messaging and settings */
+.side-nav-item.selected .instance-node img {
+    filter: brightness(0) saturate(100%) invert(42%) sepia(93%) saturate(1352%) hue-rotate(215deg) brightness(119%) contrast(119%) !important;
+}
+
+/* Exclude messaging (id=5) and settings (id=7) from icon color change */
+.side-nav-item.selected[data-item-id="5"] .instance-node img,
+.side-nav-item.selected[data-item-id="7"] .instance-node img {
+    filter: none !important;
 }
 
 .side-nav-item:hover:not(.selected) {
     background-color: var(--color-primitives-neutral-alpha-400a, rgba(255, 255, 255, 0.08));
 }
 
-.side-nav-item:hover .text-wrapper {
-    color: var(--colors-color-text-white, #ffffff);
-}
+/* Removed hover text color change - labels will maintain their original color on hover */
 
 /* Active/pressed state */
 .side-nav-item:active {

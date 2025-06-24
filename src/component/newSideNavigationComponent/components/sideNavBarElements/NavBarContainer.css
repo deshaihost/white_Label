@@ -1,0 +1,84 @@
+.navbar-main-container {
+    box-shadow: none;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+/* Only show shadow on hover when not permanently expanded */
+.navbar-main-container:hover:not(.expanded-by-click) {
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.7), 
+                2px 0 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Ensure no shadow when expanded by click */
+.navbar-main-container.expanded-by-click {
+    box-shadow: none !important;
+}
+
+.navbar-main-container.expanded-by-click:hover {
+    box-shadow: none !important;
+}
+
+/* Safari mobile fix for main navbar container */
+.navbar-main-container {
+    height: 100vh;
+    height: -webkit-fill-available; /* Safari/WebKit fallback */
+    height: 100dvh; /* Dynamic viewport height for modern browsers */
+}
+
+/* Safari mobile fix for navbar containers */
+.navbar-container-1600,
+.navbar-collapsed-container {
+    height: 100vh;
+    height: -webkit-fill-available; /* Safari/WebKit fallback */
+    height: 100dvh; /* Dynamic viewport height for modern browsers */
+    max-height: 100vh;
+    max-height: -webkit-fill-available; /* Safari/WebKit fallback */
+    max-height: 100dvh; /* Dynamic viewport height for modern browsers */
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+    .navbar-main-container,
+    .navbar-container-1600,
+    .navbar-collapsed-container {
+        height: -webkit-fill-available;
+        max-height: -webkit-fill-available;
+    }
+}
+
+/* Additional Safari mobile fix using env() for safe areas */
+@media screen and (max-width: 768px) {
+    .navbar-main-container,
+    .navbar-container-1600,
+    .navbar-collapsed-container {
+        height: calc(100vh - env(safe-area-inset-bottom, 0px));
+        height: calc(-webkit-fill-available - env(safe-area-inset-bottom, 0px));
+        height: calc(100dvh - env(safe-area-inset-bottom, 0px));
+        max-height: calc(100vh - env(safe-area-inset-bottom, 0px));
+        max-height: calc(-webkit-fill-available - env(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - env(safe-area-inset-bottom, 0px));
+    }
+    
+    /* Force sidebar to be collapsed on mobile by default */
+    .navbar-main-container.mobile-default-collapsed {
+        width: 56px;
+    }
+    
+    /* Ensure proper mobile behavior */
+    .navbar-container-1600 {
+        width: 184px;
+        transform: translateX(0);
+    }
+    
+    /* Mobile-specific collapsed state */
+    .navbar-collapsed-container {
+        width: 56px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .navbar-main-container:hover:not(.expanded-by-click) {
+        box-shadow: none; /* Remove hover shadow on touch devices */
+    }
+}

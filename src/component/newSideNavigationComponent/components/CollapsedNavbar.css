@@ -5,6 +5,9 @@
   background-color: rgba(23, 25, 31, 1);
   width: 56px;
   height: 100vh;
+  /* Safari mobile fix - use CSS fallbacks for proper viewport height */
+  height: -webkit-fill-available; /* Safari/WebKit fallback */
+  height: 100dvh; /* Dynamic viewport height for modern browsers */
   /* padding: 16px 0; */
   padding-top: 16px;
   padding-bottom: 16px;
@@ -16,6 +19,22 @@
   z-index: 10;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease-in-out;
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+    .collapsed-navbar {
+        height: -webkit-fill-available;
+    }
+}
+
+/* Additional Safari mobile fix using env() for safe areas */
+@media screen and (max-width: 768px) {
+    .collapsed-navbar {
+        height: calc(100vh - env(safe-area-inset-bottom, 0px));
+        height: calc(-webkit-fill-available - env(safe-area-inset-bottom, 0px));
+        height: calc(100dvh - env(safe-area-inset-bottom, 0px));
+    }
 }
 
 .collapsed-navbar-icons {
@@ -42,6 +61,11 @@
 .collapsed-navbar-icon.selected:hover {
   background-color: rgba(55, 135, 255, 0.2);
   box-shadow: 0 0 0 1px rgba(55, 135, 255, 0.15);
+}
+
+/* Apply blue color filter to selected icons - include ALL icons in collapsed navbar */
+.collapsed-navbar-icon.selected img {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(93%) saturate(1352%) hue-rotate(215deg) brightness(119%) contrast(119%) !important;
 }
 
 .collapsed-navbar-icon:hover {
