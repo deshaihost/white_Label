@@ -246,11 +246,9 @@ function NavBarContainer() {
       className={`navbar-main-container ${sidebarClicked ? 'expanded-by-click' : ''}`}
       style={{
         position: "fixed",
-        backgroundColor: sidebarOpen ? "rgba(23, 25, 31, 1)" : "transparent",
-        top: 0,
+        backgroundColor: sidebarOpen ? "rgba(23, 25, 31, 1)" : "transparent",        top: 0,
         left: 0,
-        height: "100vh",
-        zIndex: 1000,        paddingTop: sidebarOpen ? "16px" : "0px",
+        zIndex: 1000,paddingTop: sidebarOpen ? "16px" : "0px",
         paddingBottom: sidebarOpen ? "16px" : "0px",
         paddingRight: sidebarOpen ? "8px" : "0px",
         paddingLeft: sidebarOpen ? "8px" : "0px",
@@ -271,16 +269,12 @@ function NavBarContainer() {
         `}
       </style>
       
-      {sidebarOpen ? (
-        <div
+      {sidebarOpen ? (        <div
           className="navbar-container-1600"
           style={{
             backgroundColor: "rgba(23, 25, 31, 1)",
             width: "184px",
-            height: "100vh",
-            maxHeight: "100vh",
             overflowY: "auto",
-
             boxSizing: "border-box",
             position: "relative",
             display: "flex",
@@ -314,13 +308,11 @@ function NavBarContainer() {
             navigationProps={getNavigationProps()}
           />
         </div>
-      ) : (
-        <div
+      ) : (        <div
+          className="navbar-collapsed-container"
           style={{
             position: "relative",
             // backgroundColor: "rgba(23, 25, 31, 1)",
-            height: "100vh",
-            maxHeight: "100vh",
             overflowY: "auto",
             msOverflowStyle: "none",
             scrollbarWidth: "none",

@@ -195,7 +195,6 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
       className={`collapsed-navbar${isOpen ? " open" : ""}`}
       style={{ 
         display: isOpen ? "flex" : "none", 
-        height: "100vh",
         transition: "all 200ms ease-in-out"
       }}
     >
