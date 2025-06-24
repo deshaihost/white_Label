@@ -211,13 +211,13 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
           transition: "all 200ms ease-in-out"
         }}
       >
-        <div className="collapsed-navbar-icons">
-          {filteredIcons.map((icon) => (
+        <div className="collapsed-navbar-icons">          {filteredIcons.map((icon) => (
             <div
               key={icon.id}
               className={`collapsed-navbar-icon${
                 selected === icon.id ? " selected" : ""
               }`}
+              data-icon-id={icon.id}
               title={icon.label}
               onClick={() => (icon.id === 0 ? null : handleIconClick(icon.id))}
               style={{
@@ -230,7 +230,7 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
               )}
               {icon.component}
             </div>
-          ))}        </div>
+          ))}</div>
         {/* Adding a flexible spacer to push utility icons to the bottom */}
         <div style={{ flex: 1 }}></div>
         <div

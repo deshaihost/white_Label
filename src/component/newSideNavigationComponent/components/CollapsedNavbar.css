@@ -44,6 +44,11 @@
   box-shadow: 0 0 0 1px rgba(55, 135, 255, 0.15);
 }
 
+/* Apply blue color filter to selected icons - include ALL icons in collapsed navbar */
+.collapsed-navbar-icon.selected img {
+  filter: brightness(0) saturate(100%) invert(60%) sepia(86%) saturate(664%) hue-rotate(198deg) brightness(106%) contrast(95%) !important;
+}
+
 .collapsed-navbar-icon:hover {
   background-color: rgba(255, 255, 255, 0.08);
 }
