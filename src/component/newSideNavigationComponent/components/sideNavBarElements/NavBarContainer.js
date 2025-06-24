@@ -13,9 +13,21 @@ const navBarFontStyle = {
   fontFamily: "DM Sans, Helvetica",
 };
 
+// Function to detect if device is mobile
+const isMobileDevice = () => {
+  // Check screen width and user agent
+  const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  const isMobileWidth = screenWidth <= 768;
+  const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
+  return isMobileWidth || (isMobileUserAgent && isTouchDevice);
+};
+
 function NavBarContainer() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar state was set by a click
+  // Initialize sidebar state based on device type
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobileDevice());
+  const [sidebarClicked, setSidebarClicked] = useState(!isMobileDevice()); // Track if sidebar state was set by a click
   const [navbarHoverTimer, setNavbarHoverTimer] = useState(null);
   const [messagingActiveTab, setMessagingActiveTab] = useState(null); // Track which messaging tab is active, null means no selection
   
@@ -76,9 +88,13 @@ function NavBarContainer() {
     });
     document.dispatchEvent(event);
   };
-
   // Handle mouse enter to temporarily expand the sidebar
   const handleMouseEnter = () => {
+    // Don't trigger hover behavior on mobile devices
+    if (isMobileDevice()) {
+      return;
+    }
+    
     if (navbarHoverTimer) {
       clearTimeout(navbarHoverTimer);
       setNavbarHoverTimer(null);
@@ -92,6 +108,11 @@ function NavBarContainer() {
 
   // Handle mouse leave - only collapse if it was expanded by hovering
   const handleMouseLeave = () => {
+    // Don't trigger hover behavior on mobile devices
+    if (isMobileDevice()) {
+      return;
+    }
+    
     // Only collapse if the sidebar was opened by hover (not clicked)
     if (sidebarOpen && !sidebarClicked) {
       const timer = setTimeout(() => {
@@ -100,7 +121,6 @@ function NavBarContainer() {
       setNavbarHoverTimer(timer);
     }
   };
-
   // Cleanup the timer on unmount
   useEffect(() => {
     return () => {
@@ -108,7 +128,31 @@ function NavBarContainer() {
         clearTimeout(navbarHoverTimer);
       }
     };
-  }, [navbarHoverTimer]);  // Reset messaging tab when navigating away from inbox section
+  }, [navbarHoverTimer]);
+
+  // Handle window resize to adjust sidebar state for mobile/desktop
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = isMobileDevice();
+      if (isMobile && sidebarOpen && sidebarClicked) {
+        // If switching to mobile and sidebar is open, collapse it
+        updateSidebarState(false, false);
+      } else if (!isMobile && !sidebarOpen) {
+        // If switching to desktop and sidebar is closed, open it
+        updateSidebarState(true, true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, [sidebarOpen, sidebarClicked]);
+
+  // Reset messaging tab when navigating away from inbox section
   useEffect(() => {
     if (!location.pathname.startsWith("/inbox")) {
       console.log('Clearing messaging tab because navigated away from inbox to:', location.pathname);
@@ -243,7 +287,7 @@ function NavBarContainer() {
   const handleExpandClick = (isFromClick = true) => {
     updateSidebarState(true, isFromClick); // Open via explicit click or hover based on parameter
   };  return (    <div
-      className={`navbar-main-container ${sidebarClicked ? 'expanded-by-click' : ''}`}
+      className={`navbar-main-container ${sidebarClicked ? 'expanded-by-click' : ''} ${isMobileDevice() ? 'mobile-default-collapsed' : ''}`}
       style={{
         position: "fixed",
         backgroundColor: sidebarOpen ? "rgba(23, 25, 31, 1)" : "transparent",        top: 0,

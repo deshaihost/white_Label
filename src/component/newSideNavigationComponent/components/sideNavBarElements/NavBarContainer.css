@@ -58,4 +58,27 @@
         max-height: calc(-webkit-fill-available - env(safe-area-inset-bottom, 0px));
         max-height: calc(100dvh - env(safe-area-inset-bottom, 0px));
     }
+    
+    /* Force sidebar to be collapsed on mobile by default */
+    .navbar-main-container.mobile-default-collapsed {
+        width: 56px;
+    }
+    
+    /* Ensure proper mobile behavior */
+    .navbar-container-1600 {
+        width: 184px;
+        transform: translateX(0);
+    }
+    
+    /* Mobile-specific collapsed state */
+    .navbar-collapsed-container {
+        width: 56px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .navbar-main-container:hover:not(.expanded-by-click) {
+        box-shadow: none; /* Remove hover shadow on touch devices */
+    }
 }

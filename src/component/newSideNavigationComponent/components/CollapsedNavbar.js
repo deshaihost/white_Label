@@ -27,6 +27,16 @@ const icons = [
   { id: 7, component: <SettingsDefault />, label: "Settings" },
 ];
 
+// Function to detect if device is mobile (consistent with NavBarContainer)
+const isMobileDevice = () => {
+  const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  const isMobileWidth = screenWidth <= 768;
+  const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
+  return isMobileWidth || (isMobileUserAgent && isTouchDevice);
+};
+
 const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   const [selected, setSelected] = useState(null);
   const location = useLocation();
@@ -68,9 +78,13 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
       setSelected(pathToIdMap[currentPath]);
     }
   }, [location.pathname]);
-
   // Handle mouse enter event for icons to expand the navbar after a short delay
   const handleIconMouseEnter = () => {
+    // Don't trigger hover behavior on mobile devices
+    if (isMobileDevice()) {
+      return;
+    }
+    
     // Clear any existing hover timer
     if (hoverTimer) {
       clearTimeout(hoverTimer);
@@ -88,6 +102,10 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
   // Handle mouse leave event for icons to cancel the expansion if the user moves away quickly
   const handleIconMouseLeave = () => {
+    // Don't trigger hover behavior on mobile devices
+    if (isMobileDevice()) {
+      return;
+    }
     if (hoverTimer) {
       clearTimeout(hoverTimer);
       setHoverTimer(null);
