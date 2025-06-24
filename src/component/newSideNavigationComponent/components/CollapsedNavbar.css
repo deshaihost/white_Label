@@ -46,7 +46,7 @@
 
 /* Apply blue color filter to selected icons - include ALL icons in collapsed navbar */
 .collapsed-navbar-icon.selected img {
-  filter: brightness(0) saturate(100%) invert(60%) sepia(86%) saturate(664%) hue-rotate(198deg) brightness(106%) contrast(95%) !important;
+  filter: brightness(0) saturate(100%) invert(42%) sepia(93%) saturate(1352%) hue-rotate(215deg) brightness(119%) contrast(119%) !important;
 }
 
 .collapsed-navbar-icon:hover {
