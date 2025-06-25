@@ -70,7 +70,7 @@ const OpenPhoneIntegration = () => {
   return (
     <div>
       <p style={{ fontSize: '14px', textAlign: 'left', width: '95%', marginTop: '20px' }}>
-        Use the table below to set your OpenPhone number. Click "Chnage Phone Number" at the bottom to change the current number.
+        Use the table below to set your OpenPhone number. Click "Change Phone Number" at the bottom to change the current number.
       </p>
 
       <table style={{ marginTop: '50px', width: '100%', borderCollapse: 'collapse' }}>

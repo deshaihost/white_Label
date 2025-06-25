@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import WhatsAppSection from "./whatsAppSection";
+import OpenPhoneSection from '../../../inbox/inboxSection/inbox/mildeSection/OpenPhoneSection';
 import EmailSection from "./emailSection";
 import "./messagingChannels.css";
 
 const MessagingChannels = ({ ApiUserData, refreshUserData, subsec }) => {
-  const initialSection = (subsec === 'email' || subsec === 'gmail') ? 'Email' : 'WhatsApp';
+  const initialSection = (subsec === 'email' || subsec === 'gmail') ? 'Email' : (subsec === 'openphone' ? 'OpenPhone' : 'WhatsApp');
   const [selectedChannel, setSelectedChannel] = useState(initialSection);
 
   return (
@@ -16,6 +17,9 @@ const MessagingChannels = ({ ApiUserData, refreshUserData, subsec }) => {
         <button className={`tab-button ${selectedChannel === 'WhatsApp' ? 'active' : ''}`} onClick={() => setSelectedChannel('WhatsApp')}>
           WhatsApp
         </button>
+        <button className={`tab-button ${selectedChannel === 'OpenPhone' ? 'active' : ''}`} onClick={() => setSelectedChannel('OpenPhone')}>
+          OpenPhone
+        </button>
         {/* <button className={`tab-button ${selectedChannel === 'Email' ? 'active' : ''}`} onClick={() => setSelectedChannel('Email')}>
           Email
         </button> */}
@@ -23,7 +27,10 @@ const MessagingChannels = ({ ApiUserData, refreshUserData, subsec }) => {
 
       <div style={{ marginTop: '20px' }}>
         {selectedChannel === 'WhatsApp' && (
-          <WhatsAppSection ApiUserData={ApiUserData} refreshUserData={refreshUserData} />
+          <WhatsAppSection ApiUserData={ApiUserData} refreshUserData={refreshUserData} subsec={subsec} />
+        )}
+        {selectedChannel === 'OpenPhone' && (
+          <OpenPhoneSection ApiUserData={ApiUserData} refreshUserData={refreshUserData} subsec={subsec} />
         )}
         {selectedChannel === 'Email' && (
           <EmailSection ApiUserData={ApiUserData} refreshUserData={refreshUserData} subsec={subsec} />

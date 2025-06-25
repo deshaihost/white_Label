@@ -23,7 +23,7 @@ const IntegrationsIndex = (ApiUserData) => {
   const hostfullyGuidebooksUserId = Boolean(ApiUserData?.ApiUserData?.hostfully_guidebooks_user_id);
   const notionUserId = Boolean(ApiUserData?.ApiUserData?.notion_user_id);
   const whatsappPhoneNumber = ApiUserData?.ApiUserData?.whatsapp_phone_number;
-  const openphoneConnected = typeof ApiUserData?.ApiUserData?.openphone_numbers === 'string'; // fallback if it's stored as a string
+  const openphoneConnected = ApiUserData?.ApiUserData?.openphone_numbers // fallback if it's stored as a string
 
   // Identify connected integrations
   const connectedIntegrations = [];

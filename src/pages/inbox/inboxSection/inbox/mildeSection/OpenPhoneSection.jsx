@@ -62,7 +62,7 @@ const OpenPhoneSection = ({
         if (
           response.data &&
           response.data.user &&
-          response.data.user.openphone_phone_number
+          response.data.user.openphone_numbers
         ) {
           setHasOpenPhoneIntegration(true);
         } else {
