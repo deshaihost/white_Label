@@ -9,6 +9,7 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import Loader, { BoxLoader } from "../../../../helper/Loader";
 import SubscriptionFeatures from "./features/SubscriptionFeatures";
 import ArrowIcon from "./icons/arrow-narrow-right.svg";
+import "./subscription.css";
 
 const SubscriptionIndex = () => {
   const store = useSelector((state) => state);
@@ -94,9 +95,8 @@ const SubscriptionIndex = () => {
         }}
       >
         <h3
-          className="mb-4"
+          className="mb-4 samsung-sharp-sans-medium samsung-sharp-sans-medium"
           style={{
-            fontFamily: "'Samsung Sharp Sans Medium', sans-serif",
             fontWeight: "500",
             fontSize: "28px",
           }}
@@ -141,8 +141,8 @@ const SubscriptionIndex = () => {
                 alignItems: "center"
               }}>
                 <span
+                  className="samsung-sharp-sans samsung-sharp-sans"
                   style={{
-                    fontFamily: "'Samsung Sharp Sans', sans-serif",
                     fontWeight: "500",
                     fontSize: "32px",
                   }}
@@ -166,8 +166,8 @@ const SubscriptionIndex = () => {
                     alignItems: "center"
                   }}>
                     <span
+                      className="samsung-sharp-sans samsung-sharp-sans"
                       style={{
-                        fontFamily: "'Samsung Sharp Sans', sans-serif",
                         fontWeight: "500",
                         fontSize: "32px",
                       }}
@@ -175,8 +175,8 @@ const SubscriptionIndex = () => {
                       {numPropertiesAllowed}
                     </span>
                     <span
+                      className="samsung-sharp-sans samsung-sharp-sans"
                       style={{
-                        fontFamily: "'Samsung Sharp Sans', sans-serif",
                         fontWeight: "500",
                         fontSize: "12px",
                       }}
@@ -251,11 +251,11 @@ const SubscriptionIndex = () => {
       </div>
       <div style={{ marginTop: "30px" }}>
         <h2
+          className="samsung-sharp-sans-bold samsung-sharp-sans-bold"
           style={{
             fontSize: "28px",
             fontWeight: "700",
             marginBottom: "20px",
-            fontFamily: "'Samsung Sharp Sans Bold', sans-serif",
           }}
         >
           Compare Plans

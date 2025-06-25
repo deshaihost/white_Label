@@ -142,10 +142,11 @@ const SubscriptionFeatures = () => {
               </th>{" "}
               <th
                 style={{
-                  backgroundColor: "rgba(39, 43, 54, 1)",
+                  backgroundColor: "#272B36",
                   borderTopLeftRadius: "20px",
                   borderTopRightRadius: "20px",
-                  width: "260px",
+                  width: "200px",
+                  height: "48px",
                 }}
               >
                 <h3>
@@ -158,7 +159,8 @@ const SubscriptionFeatures = () => {
                   backgroundColor: "rgba(19, 34, 77, 1)",
                   borderTopLeftRadius: "20px",
                   borderTopRightRadius: "20px",
-                  width: "260px",
+                  width: "200px",
+                  height: "48px",
                 }}
               >
                 <h3>
@@ -171,7 +173,8 @@ const SubscriptionFeatures = () => {
                   backgroundColor: "rgba(23, 25, 31, 1)",
                   borderTopLeftRadius: "20px",
                   borderTopRightRadius: "20px",
-                  width: "260px",
+                  width: "200px",
+                  height: "48px",
                 }}
               >
                 <h3>
@@ -191,7 +194,7 @@ const SubscriptionFeatures = () => {
                   </td>{" "}
                   <td
                     style={{
-                      backgroundColor: "rgba(39, 43, 54, 1)",
+                      backgroundColor: "#272B36",
                       ...(isLastRow && {
                         borderBottomLeftRadius: "20px",
                         borderBottomRightRadius: "20px",
