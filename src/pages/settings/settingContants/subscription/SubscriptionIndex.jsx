@@ -87,49 +87,159 @@ const SubscriptionIndex = () => {
   return (
     <div>
       {/* Subscription information */}
-      <div>
-        <h3 className="mb-4">Subscription</h3>
-        {subscriptionPlanName && subscriptionPlanName !== "" ? (
-          <>
-            <p className="fs-14 mb-2">
-              Current Subscription: {subscriptionPlanName} (
-              {numPropertiesAllowed} properties)
-            </p>
-            <p className="fs-14 mb-2">Next Payment Date: {nextPaymentDate}</p>
-            {!goToBillingPortalLoading ? (
-              <Button
-                className="btn btn-primary px-3 fs-6 rounded-pill mt-2"
-                onClick={subscriptionClickHandler}
+      <div
+        style={{
+          // border: "1px solid rgba(49, 52, 79, 1)",
+          padding: "24px",
+        }}
+      >
+        <h3
+          className="mb-4"
+          style={{
+            fontFamily: "'Samsung Sharp Sans Medium', sans-serif",
+            fontWeight: "500",
+            fontSize: "28px",
+          }}
+        >
+          Subscription
+        </h3>
+        <div
+          style={{
+            border: "1px solid rgba(49, 52, 79, 1)",
+            borderRadius: "16px",
+            padding: "24px",
+          }}
+        >
+          {subscriptionPlanName && subscriptionPlanName !== "" ? (
+            <>
+              <span
+                style={{
+                  backgroundColor: "rgba(7, 27, 83, 1)",
+                  width: "108px",
+                  height: "24px",
+                  borderRadius: "100px",
+                  paddingLeft: "8px",
+                  paddingRight: "8px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  marginBottom: "24px",
+                }}
               >
-                Manage Subscription
-              </Button>
-            ) : (
-              <BoxLoader />
-            )}
-            {subscriptionNotFound && (
-              <>
-                <p style={{ marginTop: "30px", fontSize: "16px" }}>
-                  <span style={{ color: "rgb(190,0,0)" }}>
-                    We were unable to find a subscription for your account.
-                  </span>{" "}
-                  Please note that you must create a subscription (from the
-                  Properties page) before accessing your billing portal here.
-                </p>
-                <p style={{ marginTop: "15px", fontSize: "16px" }}>
-                  If you believe this is in error, please contact us at
-                  info@hostbuddy.ai and we will promptly assist with your
-                  subscription. We apologize for any inconvenience.
-                </p>
-              </>
-            )}
-          </>
-        ) : (
-          <p className="mb-2">
-            You are not yet subscribed. Click "Subscribe" on the{" "}
-            <Link to="/properties">Properties page</Link> to start your free
-            trial and get HostBuddy connected to your guests!
-          </p>
-        )}
+                Current plan
+              </span>
+              <p className="fs-14 mb-2">
+                Current Subscription: {subscriptionPlanName} (
+                {numPropertiesAllowed} properties)
+              </p>
+              <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
+              }}>
+                <span
+                  style={{
+                    fontFamily: "'Samsung Sharp Sans', sans-serif",
+                    fontWeight: "500",
+                    fontSize: "32px",
+                  }}
+                >
+                  Hostbuddy AI
+                </span>
+                <div style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "40px" ,
+                  paddingRight:"64px"
+                }}>
+                  <div style={{
+                    width: "1px",
+                    height: "40px",
+                    backgroundColor: "#ccc"
+                  }}></div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center"
+                  }}>
+                    <span
+                      style={{
+                        fontFamily: "'Samsung Sharp Sans', sans-serif",
+                        fontWeight: "500",
+                        fontSize: "32px",
+                      }}
+                    >
+                      {numPropertiesAllowed}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: "'Samsung Sharp Sans', sans-serif",
+                        fontWeight: "500",
+                        fontSize: "12px",
+                      }}
+                    >
+                     Total Properties
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <p className="fs-14 mb-2" >
+                Next Payment{" "}
+                <span
+                  style={{
+                    backgroundColor: "rgba(39, 41, 58, 1)",
+                    height: "24px",
+                    borderRadius: "100px",
+                    paddingLeft: "8px",
+                    paddingRight: "8px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    color: "white",
+                  }}
+                >
+                  {nextPaymentDate}
+                </span>
+              </p>
+              {!goToBillingPortalLoading ? (
+                <Button
+                  className="btn btn-primary px-3 fs-6 rounded-pill mt-2"
+                  onClick={subscriptionClickHandler}
+                >
+                  Manage Subscription
+                </Button>
+              ) : (
+                <BoxLoader />
+              )}
+              {subscriptionNotFound && (
+                <>
+                  <p style={{ marginTop: "30px", fontSize: "16px" }}>
+                    <span style={{ color: "rgb(190,0,0)" }}>
+                      We were unable to find a subscription for your account.
+                    </span>{" "}
+                    Please note that you must create a subscription (from the
+                    Properties page) before accessing your billing portal here.
+                  </p>
+                  <p style={{ marginTop: "15px", fontSize: "16px" }}>
+                    If you believe this is in error, please contact us at
+                    info@hostbuddy.ai and we will promptly assist with your
+                    subscription. We apologize for any inconvenience.
+                  </p>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="mb-2">
+                You are not yet subscribed. Click "Subscribe" on the{" "}
+                <Link to="/properties">Properties page</Link> to start your free
+                trial and get HostBuddy connected to your guests!
+              </p>
+            </>
+          )}
+        </div>
         {(!subscriptionPlanName || !/elite/i.test(subscriptionPlanName)) && ( // don't show this for elite users
           <p style={{ marginTop: "30px" }}>
             <a href="/pricing" target="_blank" rel="noopener noreferrer">
@@ -205,7 +315,9 @@ const SubscriptionIndex = () => {
                 borderRadius: "30px",
                 overflow: "hidden",
               }}
-            >              <button
+            >
+              {" "}
+              <button
                 style={{
                   padding: "10px 25px",
                   background: "#0D6EFD",
@@ -218,9 +330,10 @@ const SubscriptionIndex = () => {
                 }}
               >
                 Monthly
-              </button>              <img 
-                src={ArrowIcon} 
-                alt="Arrow" 
+              </button>{" "}
+              <img
+                src={ArrowIcon}
+                alt="Arrow"
                 style={{
                   margin: "0 5px",
                   width: "24px",
@@ -229,7 +342,7 @@ const SubscriptionIndex = () => {
                   alignSelf: "center", // Center vertically within flex container
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               />
               <button
