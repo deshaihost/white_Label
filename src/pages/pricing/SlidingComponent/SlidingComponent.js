@@ -179,7 +179,7 @@ const SlidingComponent = () => {
           </svg>
         </button>
       </div>
-        <div className="slider-dots">
+        {/* <div className="slider-dots">
         {itemsToShow === 1 
           // For mobile, show one dot per image
           ? images.map((_, index) => (
@@ -198,7 +198,7 @@ const SlidingComponent = () => {
             />
           ))
         }
-      </div>
+      </div> */}
     </div>
   );
 };

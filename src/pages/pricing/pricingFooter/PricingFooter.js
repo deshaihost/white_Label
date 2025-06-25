@@ -1,6 +1,7 @@
 import React from 'react';
 import './PricingFooter.css';
 import footerLogo from './icons/logoNavBar 1.svg';
+import verticalLine from './icons/vertical_line.svg';
 
 const PricingFooter = () => {
   return (
@@ -11,13 +12,13 @@ const PricingFooter = () => {
       <div className="footer-content">
         <nav className="footer-navigation">
           <a href="#" className="nav-item">Home</a>
-          <span className="nav-separator">|</span>
+          <img src={verticalLine} alt="separator" className="nav-separator" />
           <a href="#" className="nav-item">Meet HostBuddy</a>
-          <span className="nav-separator">|</span>
+          <img src={verticalLine} alt="separator" className="nav-separator" />
           <a href="#" className="nav-item">Integrations</a>
-          <span className="nav-separator">|</span>
+          <img src={verticalLine} alt="separator" className="nav-separator" />
           <a href="#" className="nav-item">Pricing</a>
-          <span className="nav-separator">|</span>
+          <img src={verticalLine} alt="separator" className="nav-separator" />
           <a href="#" className="nav-item">FAQs</a>
         </nav>
       </div>

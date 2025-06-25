@@ -321,10 +321,11 @@ const SlidingComponentFixed = () => {
         </div>
       )}
       
-      <div className="slider-dots">
-        {/* {renderDots()} */}
-      </div>
+      {/* <div className="slider-dots">
+        {renderDots()}
+      </div> */}
     </div>
+    
   );
 };
 
