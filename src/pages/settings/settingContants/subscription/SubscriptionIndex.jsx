@@ -6,13 +6,16 @@ import { getSubscriptionStatus } from "../../../../helper/Authorized";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
-import Loader, {BoxLoader} from "../../../../helper/Loader";
+import Loader, { BoxLoader } from "../../../../helper/Loader";
+import SubscriptionFeatures from "./features/SubscriptionFeatures";
+import ArrowIcon from "./icons/arrow-narrow-right.svg";
 
 const SubscriptionIndex = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  const [goToBillingPortalLoading, setGoToBillingPortalLoading] = React.useState(false);
+  const [goToBillingPortalLoading, setGoToBillingPortalLoading] =
+    React.useState(false);
   const [subscriptionNotFound, setSubscriptionNotFound] = useState(false);
 
   const userData = store?.getUserDataReducer?.getUserData?.data?.user;
@@ -21,9 +24,12 @@ const SubscriptionIndex = () => {
   const userSubscriptionStatus = getSubscriptionStatus(userData);
   const subscriptionPlanName = userSubscriptionStatus.plan;
   const numPropertiesAllowed = userSubscriptionStatus.props_allowed;
-  const paymentGoodUntil = userData?.subscr_payment_good_until || userSubscriptionData?.payment_good_until;
-  const nextPaymentDate = paymentGoodUntil ? paymentGoodUntil.split(' ')[0] : '';
-
+  const paymentGoodUntil =
+    userData?.subscr_payment_good_until ||
+    userSubscriptionData?.payment_good_until;
+  const nextPaymentDate = paymentGoodUntil
+    ? paymentGoodUntil.split(" ")[0]
+    : "";
 
   // Call the billing portal API, get the URL from the response, then redirect the user to it securely (in a way that wont make the browser mad)
   const goToBillingPortal = async () => {
@@ -34,16 +40,22 @@ const SubscriptionIndex = () => {
     try {
       const config = {
         headers: { "X-API-Key": API_KEY },
-        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        }, // don't throw an error for non-2xx responses
       };
 
-      const response = await axios.post( `${baseUrl}/go_to_billing_portal`, {}, config );
+      const response = await axios.post(
+        `${baseUrl}/go_to_billing_portal`,
+        {},
+        config
+      );
 
       if (response.status === 200) {
         setGoToBillingPortalLoading(false);
         window.location.assign(response.data.billing_portal_url);
-      }
-      else if (response.status == 403) { // 403 means insufficient permission, thrown when a non-admin user tries to access the billing portal
+      } else if (response.status == 403) {
+        // 403 means insufficient permission, thrown when a non-admin user tries to access the billing portal
         ToastHandle(response?.data?.error, "danger");
       } else {
         ToastHandle(response?.data?.error, "danger");
@@ -57,7 +69,6 @@ const SubscriptionIndex = () => {
       setGoToBillingPortalLoading(false);
     }
   };
-
 
   const subscriptionClickHandler = (event) => {
     event.preventDefault();
@@ -73,39 +84,190 @@ const SubscriptionIndex = () => {
 
     //dispatch(goToBillingportalPostActions());
   };
-
-
-
   return (
     <div>
-      <h3 className="mb-4">Subscription</h3>
-      {subscriptionPlanName && subscriptionPlanName !== "" ? (
-        <>
-          <p className="fs-14 mb-2">Current Subscription: {subscriptionPlanName} ({numPropertiesAllowed} properties)</p>
-          <p className="fs-14 mb-2">Next Payment Date: {nextPaymentDate}</p>
-          {!goToBillingPortalLoading ? (
-            <Button className="btn btn-primary px-3 fs-6 rounded-pill mt-2" onClick={subscriptionClickHandler}>
-              Manage Subscription
-            </Button>
-          ) : (
-            <BoxLoader />
-          )}
-          {subscriptionNotFound && (
-            <>
-              <p style={{marginTop:"30px", fontSize:"16px"}}><span style={{color:"rgb(190,0,0)"}}>We were unable to find a subscription for your account.</span> Please note that you must create a subscription (from the Properties page) before accessing your billing portal here.</p>
-              <p style={{marginTop:"15px", fontSize:"16px"}}>If you believe this is in error, please contact us at info@hostbuddy.ai and we will promptly assist with your subscription. We apologize for any inconvenience.</p>
-            </>
-          )}
-        </>
-      ) : (
-        <p className="mb-2">You are not yet subscribed. Click "Subscribe" on the <Link to='/properties'>Properties page</Link> to start your free trial and get HostBuddy connected to your guests!</p>
-      )}
+      {/* Subscription information */}
+      <div>
+        <h3 className="mb-4">Subscription</h3>
+        {subscriptionPlanName && subscriptionPlanName !== "" ? (
+          <>
+            <p className="fs-14 mb-2">
+              Current Subscription: {subscriptionPlanName} (
+              {numPropertiesAllowed} properties)
+            </p>
+            <p className="fs-14 mb-2">Next Payment Date: {nextPaymentDate}</p>
+            {!goToBillingPortalLoading ? (
+              <Button
+                className="btn btn-primary px-3 fs-6 rounded-pill mt-2"
+                onClick={subscriptionClickHandler}
+              >
+                Manage Subscription
+              </Button>
+            ) : (
+              <BoxLoader />
+            )}
+            {subscriptionNotFound && (
+              <>
+                <p style={{ marginTop: "30px", fontSize: "16px" }}>
+                  <span style={{ color: "rgb(190,0,0)" }}>
+                    We were unable to find a subscription for your account.
+                  </span>{" "}
+                  Please note that you must create a subscription (from the
+                  Properties page) before accessing your billing portal here.
+                </p>
+                <p style={{ marginTop: "15px", fontSize: "16px" }}>
+                  If you believe this is in error, please contact us at
+                  info@hostbuddy.ai and we will promptly assist with your
+                  subscription. We apologize for any inconvenience.
+                </p>
+              </>
+            )}
+          </>
+        ) : (
+          <p className="mb-2">
+            You are not yet subscribed. Click "Subscribe" on the{" "}
+            <Link to="/properties">Properties page</Link> to start your free
+            trial and get HostBuddy connected to your guests!
+          </p>
+        )}
+        {(!subscriptionPlanName || !/elite/i.test(subscriptionPlanName)) && ( // don't show this for elite users
+          <p style={{ marginTop: "30px" }}>
+            <a href="/pricing" target="_blank" rel="noopener noreferrer">
+              View our plans
+            </a>{" "}
+            and pricing
+          </p>
+        )}
+      </div>
+      <div style={{ marginTop: "30px" }}>
+        <h2
+          style={{
+            fontSize: "28px",
+            fontWeight: "700",
+            marginBottom: "20px",
+            fontFamily: "'Samsung Sharp Sans Bold', sans-serif",
+          }}
+        >
+          Compare Plans
+        </h2>{" "}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "30px",
+          }}
+        >
+          {/* Properties counter - Now positioned on the left */}
+          <div
+            style={{
+              backgroundColor: "#1E1E1E",
+              borderRadius: "30px",
+              padding: "10px 20px",
+              display: "inline-flex",
+              alignItems: "center",
+            }}
+          >
+            <span
+              style={{
+                color: "white",
+                fontSize: "14px",
+              }}
+            >
+              # of Properties:
+            </span>
+            <span
+              style={{
+                color: "white",
+                fontWeight: "bold",
+                marginLeft: "8px",
+                fontSize: "16px",
+              }}
+            >
+              32
+            </span>
+          </div>
+          {/* Monthly/Annual toggle - Now positioned on the right with added margin-right */}
+          <div
+            style={{
+              backgroundColor: "#1E1E1E",
+              borderRadius: "30px",
+              padding: "5px",
+              display: "inline-flex",
+              alignItems: "center",
+              marginRight: "200px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                position: "relative",
+                borderRadius: "30px",
+                overflow: "hidden",
+              }}
+            >              <button
+                style={{
+                  padding: "10px 25px",
+                  background: "#0D6EFD",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "30px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  zIndex: "1",
+                }}
+              >
+                Monthly
+              </button>              <img 
+                src={ArrowIcon} 
+                alt="Arrow" 
+                style={{
+                  margin: "0 5px",
+                  width: "24px",
+                  height: "24px",
+                  filter: "brightness(0) invert(1)", // Ensure pure white color
+                  alignSelf: "center", // Center vertically within flex container
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              />
+              <button
+                style={{
+                  padding: "10px 25px",
+                  background: "transparent",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "30px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <span>Annual</span>{" "}
+                <span
+                  style={{
+                    fontSize: "12px",
+                    color: "#FFA500",
+                    fontWeight: "400",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontStyle: "italic",
+                  }}
+                >
+                  2 Months Free!
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      {(!subscriptionPlanName || !/elite/i.test(subscriptionPlanName)) && ( // don't show this for elite users
-        <p style={{ marginTop: '30px' }}>
-          <a href='/pricing' target="_blank" rel="noopener noreferrer">View our plans</a> and pricing
-        </p>
-      )}
+      {/* Features component rendered below */}
+      <div style={{ marginTop: "50px" }}>
+        <SubscriptionFeatures />
+      </div>
     </div>
   );
 };

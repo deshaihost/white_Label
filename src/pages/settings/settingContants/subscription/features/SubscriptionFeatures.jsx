@@ -1,9 +1,9 @@
 import React from "react";
-import "./features.css";
-import CheckImg from "../../../public/img/right_check.png";
-import WrongImg from "../icons/princing_grey.svg";
+import "./SubscriptionFeatures.css";
+import CheckImg from "../icons/subscriptionCheck.svg";
+import WrongImg from "../icons/subscriptionCrossCheck.svg";
 
-const Features = () => {
+const SubscriptionFeatures = () => {
   const featurePlans = [
     {
       name: "AI-Powered Guest Messaging",
@@ -254,4 +254,4 @@ const Features = () => {
   );
 };
 
-export default Features;
+export default SubscriptionFeatures;
