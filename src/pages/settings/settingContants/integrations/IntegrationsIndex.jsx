@@ -23,7 +23,7 @@ const IntegrationsIndex = (ApiUserData) => {
   const hostfullyGuidebooksUserId = Boolean(ApiUserData?.ApiUserData?.hostfully_guidebooks_user_id);
   const notionUserId = Boolean(ApiUserData?.ApiUserData?.notion_user_id);
   const whatsappPhoneNumber = ApiUserData?.ApiUserData?.whatsapp_phone_number;
-  const openphoneConnected = ApiUserData?.ApiUserData?.openphone_numbers // fallback if it's stored as a string
+  const openphoneNumber = ApiUserData?.ApiUserData?.openphone_numbers
 
   // Identify connected integrations
   const connectedIntegrations = [];
@@ -33,7 +33,7 @@ const IntegrationsIndex = (ApiUserData) => {
   if (hostfullyGuidebooksUserId) connectedIntegrations.push('Hostfully Guidebooks');
   if (notionUserId) connectedIntegrations.push('Notion');
   if (whatsappPhoneNumber) connectedIntegrations.push('WhatsApp');
-  if (openphoneConnected) connectedIntegrations.push('OpenPhone');
+  if (openphoneNumber) connectedIntegrations.push('OpenPhone');
 
   // State for selected integration tab
   const [selectedIntegration, setSelectedIntegration] = useState(connectedIntegrations[0] || '');
@@ -48,7 +48,7 @@ const IntegrationsIndex = (ApiUserData) => {
           {!minutUserId && <ConnectToMinut />}
           {!tidyUserId && <ConnectToTidy />}
           {!hostfullyGuidebooksUserId && <ConnectToHostfullyGuidebooks />}
-          {!openphoneConnected && <ConnectToOpenPhone/>}
+          {!openphoneNumber && <ConnectToOpenPhone/>}
           {!notionUserId && <ConnectToNotion />}
         </div>
       </div>
