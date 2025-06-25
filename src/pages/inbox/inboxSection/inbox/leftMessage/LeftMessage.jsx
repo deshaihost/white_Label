@@ -541,7 +541,7 @@ const LeftMessage = ({
       <div
         className="message-filter"
         style={{
-          padding: "2px",
+          padding: "12px",
           backgroundColor: "#17191F",
           display: "flex",
           flexDirection: "column",
@@ -550,7 +550,7 @@ const LeftMessage = ({
       >
         <div
           style={{
-            fontWeight: "bold",
+            fontWeight: "700",
             fontSize: "24px",
             color: "white",
             marginLeft: "5px",
@@ -723,7 +723,7 @@ const LeftMessage = ({
               fontSize: "14px",
             }}
           >
-            <i className="bi bi-filter" style={{ marginRight: "4px" }}></i>
+            <i className="bi bi-filter" style={{ marginRight: "4px"  }}></i>
             Filters
           </button>{" "}
         </div>
@@ -944,17 +944,12 @@ const LeftMessage = ({
                           <div className="date date-no-margin">
                             {time ? timeFormat(time) : ""}
                           </div>
-                        </div>
-                        {/* Second line: Message text and count of unread messages */}
+                        </div>                        {/* Second line: Message text and count of unread messages */}
                         <div className="message-container short-des">
                           <div
                             className="message-text"
                             style={{
-                              fontWeight:
-                                !opened ||
-                                conversation_id === selectedConversationId
-                                  ? 600
-                                  : 400,
+                              fontWeight: !opened ? 600 : 400,
                             }}
                           >
                             {shortenedText}
@@ -1049,8 +1044,8 @@ const LeftMessage = ({
                                     src={UrgentFlagIcon}
                                     alt="Urgent"
                                     style={{
-                                      width: "14px",
-                                      height: "14px",
+                                      width: "20px",
+                                      height: "20px",
                                       objectFit: "contain",
                                       display: "block",
                                       margin: "0 auto",

@@ -1354,15 +1354,22 @@ const Inbox = ({
     // otherwise distribute space between items
     return rightSectionVisible ? "calc(100% - 290px)" : "100%";
   };
-
   return (
     <>
-      <style>{responsiveStyles}</style>{" "}
+      {" "}
+      <style>
+        {responsiveStyles}
+        {`
+          .inbox-guest-name-poppins {
+            font-family: "Poppins" !important;
+          }
+        `}
+      </style>{" "}
       <div
         className="inbox-content-container"
         style={{
           height: bannerVisible ? "calc(95vh - 40px)" : "95vh",
-          marginLeft: "10px",
+          marginLeft: "20px",
           marginTop: "10px",
           // margin: "10px",
           // borderWidth:"1px" ,
@@ -1465,19 +1472,17 @@ const Inbox = ({
                             .toUpperCase()
                         : "G"}
                     </div>
-
-                    {/* User name */}
+                    {/* User name */}{" "}
                     <span
+                      className="poppins-font"
                       style={{
                         color: "white",
-                        fontFamily: "DM Sans, helvetica !important",
                         fontSize: "18px",
                         fontWeight: "700",
                       }}
                     >
                       {selectedConversation?.guest_name || "Guest"}
                     </span>
-
                     {/* Urgent flag render - placed right next to guest name */}
                     {selectedConversation?.action_items &&
                       selectedConversation.action_items.length != 0 && (
@@ -1693,8 +1698,7 @@ const Inbox = ({
                       key={tab.id}
                       onClick={() => {
                         setActiveTab(tab.id);
-                      }}
-                      style={{
+                      }}                      style={{
                         fontFamily: "DM Sans",
                         fontSize: "14px",
                         cursor: "pointer",
@@ -1707,6 +1711,7 @@ const Inbox = ({
                         borderBottom:
                           tab.id === activeTab ? "2px solid #007bff" : "none",
                         color: tab.id === activeTab ? "#FFFFFF" : "#D0D3DB",
+                        fontWeight: tab.id === activeTab ? "600" : "500",
                         transition: "color 0.2s ease",
                       }}
                     >
@@ -1966,9 +1971,9 @@ const Inbox = ({
                             <div
                               className="action-item-date"
                               style={{
-                                fontSize: "12px",
+                                fontSize: "14px",
                                 color: "#A6A9B2",
-                                forntweight: "600",
+                                fontWeight: "500"
                               }}
                             >
                               {new Date(
@@ -1986,7 +1991,11 @@ const Inbox = ({
                                 hour12: true,
                               })}{" "}
                               •{" "}
-                              <span>
+                              <span  style={{
+                                fontSize: "14px",
+                                color: "#A6A9B2",
+                                fontWeight: "500"
+                              }}>
                                 {actionItem.category
                                   ? actionItem.category
                                       .charAt(0)
@@ -2008,7 +2017,11 @@ const Inbox = ({
                               alignItems: "center",
                             }}
                           >
-                            <div style={{ flex: 1 }}>{actionItem.item}</div>
+                            <div style={{
+                               color: "#D0D3DB",
+                                flex: 1 ,
+                                fontSize: "16px",
+                                fontWeight: "400" }}>{actionItem.item}</div>
                             <label
                               className="action-item-checkbox"
                               style={{

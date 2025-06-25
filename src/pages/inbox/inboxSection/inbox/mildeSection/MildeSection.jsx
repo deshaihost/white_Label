@@ -1168,6 +1168,8 @@ const MildeSection = ({
                         style={{
                           marginRight: "1px",
                           color: "rgba(208, 211, 219, 1)",
+                          fontWeight: "500",
+                          fontSize: "14px"
                         }}
                       >
                         AI Response

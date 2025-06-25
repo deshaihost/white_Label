@@ -1281,7 +1281,7 @@ const RightSection = ({
             <div
               style={{
                 display: "inline-block",
-                color: "#BDC1C9",
+                color: "#E1E3E8",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontStyle: "normal",
@@ -1563,44 +1563,43 @@ const RightSection = ({
           }}
         ></div>
         {/* Contact Information Section */}
-        <div style={{ marginBottom: "15px" }}>
+        <div >
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: "10px",
+              marginBottom: "12px",
             }}
-          >
-            <h2
+          >            <h2
+              className="poppins-font"
               style={{
                 margin: 0,
                 color: "#ffffff",
-                fontFamily: '"Poppins-SemiBold", Helvetica',
                 fontSize: "14px",
                 fontWeight: 600,
                 lineHeight: "19.6px",
               }}
             >
               Contact information
-            </h2>{" "}
-            <span
+            </h2>{" "}            <span
               onClick={() => setContactModalOpen(true)}
               style={{
                 color: "#74A9F7",
                 fontSize: "14px",
                 cursor: "pointer",
-                fontFamily: '"DM Sans", Helvetica',
+                fontWeight: 600,
+                fontFamily: '"DM Sans", Helvetica !important',
               }}
             >
               Edit
             </span>
           </div>{" "}
-          <div style={{ marginBottom: "5px" }}>
+          <div style={{ marginBottom: "0px" }}>
             <span
               style={{
                 color: "#A6A9B2",
-                fontFamily: '"DM Sans", Helvetica',
+                 fontFamily: '"DM Sans", Helvetica !important',
                 fontSize: "14px",
                 fontWeight: 400,
               }}
@@ -1610,9 +1609,9 @@ const RightSection = ({
             <span
               style={{
                 color: "#D0D3DB",
-                fontFamily: '"DM Sans", Helvetica',
+                 fontFamily: '"DM Sans", Helvetica !important',
                 fontSize: "14px",
-                fontWeight: 400,
+                fontWeight: 600,
                 marginLeft: "5px",
               }}
             >
@@ -1623,7 +1622,7 @@ const RightSection = ({
             <span
               style={{
                 color: "#A6A9B2",
-                fontFamily: '"DM Sans", Helvetica',
+                 fontFamily: '"DM Sans", Helvetica !important',
                 fontSize: "14px",
                 fontWeight: 400,
               }}
@@ -1633,7 +1632,7 @@ const RightSection = ({
             <span
               style={{
                 color: "#D0D3DB",
-                fontFamily: '"DM Sans", Helvetica',
+                fontFamily: '"DM Sans", Helvetica !important',
                 fontSize: "14px",
                 fontWeight: 400,
                 marginLeft: "5px",
@@ -1673,6 +1672,7 @@ const RightSection = ({
                     style={{ width: "25px", height: "25px" }}
                   />
                   <span
+                  className="poppins-font"
                     style={{
                       fontSize: "14px",
                       fontWeight: "600",
@@ -2346,10 +2346,9 @@ const RightSection = ({
               this property to start responding.
             </p>
           </div>
-        ))}{" "}
-      {!(channel == "Chat Window") && (
-        <div className="satisfy">
-          <h2>Sentiment</h2>
+        ))}{" "}      {!(channel == "Chat Window") && (
+        <div className="satisfy" >
+          <h2 className="poppins-font" style={{ fontFamily: 'Poppins, sans-serif !important' }}>Sentiment</h2>
           <div ref={dropdownRef} style={{ position: "relative" }}>
             {/* Sentiment Dropdown Button */}{" "}
             <div
@@ -2757,13 +2756,13 @@ const RightSection = ({
         ></div>
       )}{" "}
       {/* render here the assign user  */}{" "}
-      <div>
-        <h2
+      <div>        <h2
+          className="poppins-font"
           style={{
             margin: 0,
             marginBottom: "5px",
             color: "#ffffff",
-            fontFamily: '"Poppins-SemiBold", Helvetica',
+            fontFamily: 'Poppins, sans-serif !important',
             fontSize: "16px",
             fontWeight: 600,
             lineHeight: "19.6px",
@@ -2878,12 +2877,12 @@ const RightSection = ({
             }}
           >
             {" "}
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <h1
+            <div style={{ display: "flex", alignItems: "center" }}>              <h1
+                className="poppins-font"
                 style={{
                   margin: 0,
                   color: "#ffffff",
-                  fontFamily: '"Poppins-SemiBold", Helvetica',
+                  fontFamily: 'Poppins, sans-serif !important',
                   fontSize: "14px",
                   fontWeight: 600,
                   letterSpacing: 0,
@@ -2922,7 +2921,8 @@ const RightSection = ({
             <span
               onClick={navigateToActionItems}
               style={{
-                color: "#146ef5",
+                color: "#74A9F7",
+                fontWeight: 600,
                 fontSize: "14px",
                 cursor: "pointer",
               }}
@@ -2939,7 +2939,7 @@ const RightSection = ({
                 <div
                   style={{
                     fontSize: "12px",
-                    color: "#808080",
+                    color: "#A6A9B2",
                     marginBottom: "2px",
                   }}
                 >

@@ -78,7 +78,7 @@
 .right-title h1{
     font-size: 14px !important;
     font-weight: 600;
-    font-family: "DM Sans", Helvetica !important;
+    font-family: "Poppins" !important;
 }
 .right-title p {
     font-size: 22px !important;
@@ -117,6 +117,7 @@
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 3px;
+    font-family:"Poppins", Helvetica !important;
 }
 .satisfy p.result {
     font-size: 14px;
@@ -173,7 +174,7 @@
 .guest h2, 
 .guest p, 
 .guest span,
-.row span,
+.row span:not(.poppins-font),
 .toggle p,
 .select-dropdown,
 .issue h3,
@@ -263,6 +264,16 @@
 
 .close-right-section-btn:hover {
   background-color: #24262E !important;
+}
+
+
+.satisfy h2 {
+    border: 0px;
+    padding: 0px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 3px;
+    font-family:"Poppins", Helvetica !important;
 }
 
 @media (min-width: 1280px) {
