@@ -5,7 +5,7 @@ import footerLogo from './icons/logoNavBar 1.svg';
 const PricingFooter = () => {
   return (
     <footer className="footer-container">
-      <div className="logo-container">
+      <div className="logo-container_p">
         <img src={footerLogo} alt="Logo" />
       </div>
       <div className="footer-content">
