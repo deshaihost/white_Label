@@ -2,6 +2,7 @@ import React from "react";
 import "./SubscriptionFeatures.css";
 import CheckImg from "../icons/subscriptionCheck.svg";
 import WrongImg from "../icons/subscriptionCrossCheck.svg";
+import HelpCircleIcon from "../../../../pricing/icons/features_help_circle.svg";
 
 const SubscriptionFeatures = () => {
   const featurePlans = [
@@ -190,7 +191,14 @@ const SubscriptionFeatures = () => {
               return (
                 <tr key={i}>
                   <td>
-                    <h5>{feature.name}</h5>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <h5>{feature.name}</h5>
+                      <img 
+                        src={HelpCircleIcon} 
+                        alt="help" 
+                        style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                      />
+                    </div>
                   </td>{" "}
                   <td
                     style={{

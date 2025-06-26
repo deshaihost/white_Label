@@ -2,6 +2,7 @@ import React from "react";
 import "./features.css";
 import CheckImg from "../../../public/img/right_check.png";
 import WrongImg from "../icons/princing_grey.svg";
+import HelpCircleIcon from "../icons/features_help_circle.svg";
 
 const Features = () => {
   const featurePlans = [
@@ -187,7 +188,14 @@ const Features = () => {
               return (
                 <tr key={i}>
                   <td>
-                    <h5 style={{ fontFamily: 'DM Sans', fontWeight: 400, fontSize: '20px' }}>{feature.name}</h5>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <h5 style={{ fontFamily: 'DM Sans', fontWeight: 400, fontSize: '20px', margin: 0 }}>{feature.name}</h5>
+                      <img 
+                        src={HelpCircleIcon} 
+                        alt="help" 
+                        style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                      />
+                    </div>
                   </td>{" "}
                   <td
                     style={{
