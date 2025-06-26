@@ -129,7 +129,7 @@ const Features = () => {
   return (
     <div className="features">
       <div className="heading-box">
-        <h2 style={{ fontFamily: 'DM Sans', fontWeight: 400, fontSize: '20px' }}>Compare Features</h2>
+        <h2 style={{ fontFamily: 'DM Sans', fontWeight: 600, fontSize: '40px' }}>Compare Features</h2>
         {/* <p>Find the plan that best suits your needs</p> */}
       </div>{" "}
       <div className="features-list">

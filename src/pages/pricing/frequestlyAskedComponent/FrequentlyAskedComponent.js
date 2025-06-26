@@ -9,24 +9,34 @@ const FrequentlyAskedComponent = () => {
   const faqItems = [
     {
       id: 1,
-      question: "What is HostBuddy and how does it work?",
-      answer: "HostBuddy is a platform designed to help property hosts manage their listings efficiently. It streamlines communication, booking management, and guest experience across multiple rental platforms."
+      question: "How does the free trial work?",
+      answer: "All plans include a 14-day free trial with full access to all features. Your trial begins when you create your account, and subscribing during your trial period doesn't end your free days."
     },
     {
       id: 2,
-      question: "Can HostBuddy handle multiple properties?",
-      answer: "Yes, HostBuddy is specifically designed to manage multiple properties. You can add unlimited properties to your account and manage them all from a single dashboard."
+      question: "Which property management systems does HostBuddy integrate with?",
+      answer: "HostBuddy integrates with major platforms including Guesty, Hostaway, Hostfully, Lodgify, Hospitable, Lodgify, Beds24, OwnerRez, Resly, and more. We're continuously adding new integrations, so check our integrations page for the most up to date information."
     },
     {
       id: 3,
-      question: "How does HostBuddy save time for hosts?",
-      answer: "HostBuddy automates routine tasks like messaging guests, scheduling cleanings, and managing calendars across platforms. This automation can save hosts several hours each week."
+      question: "Can I customize when HostBuddy responds to guests?",
+      answer: "Absolutely! You can create weekly schedules and one-off shifts to match your availability. Schedule HostBuddy for specific hours, days, or 24/7 coverage based on your needs."
     },
     {
       id: 4,
-      question: "How quickly can I set up HostBuddy?",
-      answer: "Setting up HostBuddy is quick and easy. Most users can complete the initial setup within 15-30 minutes, and our support team is available to help if you need assistance."
+      question: "How does HostBuddy generate additional revenue?",
+      answer: "HostBuddy includes Gap Night Upsells that automatically identify and offer unbookable nights between reservations to guests, helping maximize occupancy through extended stays, early check-ins, and late checkouts. Additionally, HostBuddy users report higher review ratings, bumping up their listings in the search results, and increasing occupancy and average daily rate."
     },
+    {
+      id: 5,
+      question: "What happens if I need to add or remove properties?",
+      answer: "You can easily adjust your subscription, whether your business is growing or slimming down."
+    },
+    {
+      id: 6,
+      question: "How do I control what information HostBuddy shares?",
+      answer: "You have complete control over HostBuddy's knowledge base. Restrict specific information based on reservation phases to ensure sensitive data like property addresses is only shared with appropriate guests."
+    }
   ];
 
   // Toggle FAQ item expansion

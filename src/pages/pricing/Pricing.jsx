@@ -12,15 +12,106 @@ import SlidingComponent from "./SlidingComponent/SlidingComponent";
 import FrequentlyAskedComponent from "./frequestlyAskedComponent/FrequentlyAskedComponent";
 import PricingFooter from "./pricingFooter/PricingFooter";
 import BackgroundBlurComponent from "./BackgroundBlurComponent";
+import Slider from "react-slick";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+
+import ItemOne from "../../helper/staticImage/homePage/trusted-logo/itme10.webp";
+import ItemTwo from "../../helper/staticImage/homePage/trusted-logo/item11.webp";
+import ItemThree from "../../helper/staticImage/homePage/trusted-logo/item12.webp";
+import ItemFour from "../../helper/staticImage/homePage/trusted-logo/item13.webp";
+import ItemFive from "../../helper/staticImage/homePage/trusted-logo/item14.webp";
+import ItemSix from "../../helper/staticImage/homePage/trusted-logo/item15.webp";
+import ItemSeven from "../../helper/staticImage/homePage/trusted-logo/item16.webp";
+import ItemEight from "../../helper/staticImage/homePage/trusted-logo/item17.webp";
+
+const imageTrustedLogo = [
+  ItemOne,
+  ItemTwo,
+  ItemThree,
+  ItemFour,
+  ItemFive,
+  ItemSix,
+  ItemSeven,
+  ItemEight,
+];
+
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block" }}
+      onClick={onClick}
+    >
+      <FaChevronRight />
+    </div>
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block" }}
+      onClick={onClick}
+    >
+      <FaChevronLeft />
+    </div>
+  );
+}
 
 const Pricing = () => {
   const [demoModalShow, setDemoModalShow] = useState(false);
   const [contactModalShow, setContactModalShow] = useState(false);
+  const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'annual'
+
+  var settingsf = {
+    dots: false,
+    infinite: true, // Ensures that the slider loops back to the beginning
+    arrows: true,
+    speed: 400, // Slide speed of 0.4 seconds (400ms)
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    autoplay: true,
+    autoplaySpeed: 6000, // Pause for 6 seconds after all slides are visible
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+    ],
+  };
 
   // When the user navigates to this page, make sure it's scrolled to the top
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Toggle billing period between monthly and annual
+  const handleBillingToggle = (period) => {
+    setBillingPeriod(period);
+  };
+
+  // Toggle between monthly and annual when clicking anywhere on the toggle container
+  const handleToggleClick = () => {
+    setBillingPeriod(billingPeriod === 'monthly' ? 'annual' : 'monthly');
+  };
 
   return (
     <section className="pricing">
@@ -91,14 +182,23 @@ const Pricing = () => {
             <span className="months-free">2 Months Free</span>
             <div className="toggle-buttons-container">
               <span className="months-free-label">2 Months Free</span>
-              <div className="toggle-buttons">
-                <button className="toggle-button active">Monthly</button>
+              <div className="toggle-buttons" onClick={handleToggleClick} style={{ cursor: 'pointer' }}>
+                <button 
+                  className={`toggle-button ${billingPeriod === 'monthly' ? 'active' : ''}`}
+                >
+                  Monthly
+                </button>
                 <span className="toggle-arrow">→</span>
-                <button className="toggle-button">Annual</button>
+                <button 
+                  className={`toggle-button ${billingPeriod === 'annual' ? 'active' : ''}`}
+                >
+                  Annual
+                </button>
               </div>
             </div>
           </div>
-        </div>{" "}        {/* Background blur component positioned at left top - half size */}
+        </div>{" "}
+        {/* Background blur component positioned at left top - half size */}
         <div
           style={{
             position: "fixed",
@@ -110,7 +210,8 @@ const Pricing = () => {
           }}
         >
           <BackgroundBlurComponent />
-        </div>          <div
+        </div>{" "}
+        <div
           style={{
             position: "fixed",
             top: "0px",
@@ -120,7 +221,6 @@ const Pricing = () => {
         >
           <BackgroundBlurComponent />
         </div>
-        
         {/* Background blur component positioned at bottom center */}
         <div
           style={{
@@ -211,8 +311,32 @@ const Pricing = () => {
         {/* Old pricing section removed */}
         <PriceSlider />
         <Features />
-        <SlidingComponent />
+        {/* <SlidingComponent /> */}
         <FrequentlyAskedComponent />
+        <div className="row">
+          <div className="col-lg-12">
+            <h2 className="fs-1 fw-bold text-white mb-5 text-center">
+              Trusted by Leading Property Managers
+            </h2>
+          </div>
+          <div className="col-lg-12">
+            <div>
+              <Slider {...settingsf}>
+                {imageTrustedLogo?.map((images) => {
+                  return (
+                    <div className="outline-0 trusted-logo-box mx-auto">
+                      <img
+                        src={images}
+                        alt="works-img"
+                        className="img-fluid w-100 h-100"
+                      />
+                    </div>
+                  );
+                })}
+              </Slider>
+            </div>
+          </div>
+        </div>
         <div className="started">
           <div className="started-content">
             {/* <h3>Get Started Today!</h3>
