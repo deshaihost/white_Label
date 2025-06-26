@@ -19,7 +19,7 @@ import { timeFormat } from "../../../../helper/commonFun";
 // Import the SVG icons
 import PmsIcon from "./mildeSection/message/icons/pms_icon.svg";
 import WhatsappIcon from "./mildeSection/message/icons/whatsapp_icon.svg";
-import OpenPhoneIcon from "./mildeSection/message/icons/openphone_icon.svg"
+import OpenPhoneIcon from "./mildeSection/message/icons/openphone_icon.svg";
 import OpenIssueIcon from "./mildeSection/message/icons/openIssue_icon.svg";
 import NotesIcon from "./mildeSection/message/icons/notes_icon.svg";
 import CheckBoxIcon from "./mildeSection/message/icons/check_box.svg";

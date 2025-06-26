@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import OpenPhoneIcon from "./icons/openphone_icon.svg"; // Make sure to create or import this icon
 import HostBuddyIcon from "./thumbsComponent/icons/hostBuddy_icon.svg"; // Import HostBuddy icon
 
 const OpenPhoneInbox = ({ message, guestName, guestImageUrl }) => {

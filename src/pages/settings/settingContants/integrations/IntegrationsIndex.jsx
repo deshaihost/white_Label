@@ -23,7 +23,7 @@ const IntegrationsIndex = (ApiUserData) => {
   const hostfullyGuidebooksUserId = Boolean(ApiUserData?.ApiUserData?.hostfully_guidebooks_user_id);
   const notionUserId = Boolean(ApiUserData?.ApiUserData?.notion_user_id);
   const whatsappPhoneNumber = ApiUserData?.ApiUserData?.whatsapp_phone_number;
-  const openphoneNumber = ApiUserData?.ApiUserData?.openphone_numbers
+  const openphoneNumber = ApiUserData?.ApiUserData?.openphone_numbers;
 
   // Identify connected integrations
   const connectedIntegrations = [];
