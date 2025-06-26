@@ -124,7 +124,7 @@ const SlidingComponent = () => {
 
   return (
     <div className="sliding-component-container">
-      <h2 className="sliding-component-title">Trusted By Leading Property Managers</h2>
+      <h2 className="sliding-component-title poppins-font">Trusted By Leading Property Managers</h2>
       
       <div className="sliding-component">        <button 
           className="nav-button prev" 

@@ -129,7 +129,7 @@ const Features = () => {
   return (
     <div className="features">
       <div className="heading-box">
-        <h2>Compare Features</h2>
+        <h2 style={{ fontFamily: 'DM Sans', fontWeight: 400, fontSize: '20px' }}>Compare Features</h2>
         {/* <p>Find the plan that best suits your needs</p> */}
       </div>{" "}
       <div className="features-list">
@@ -187,7 +187,7 @@ const Features = () => {
               return (
                 <tr key={i}>
                   <td>
-                    <h5>{feature.name}</h5>
+                    <h5 style={{ fontFamily: 'DM Sans', fontWeight: 400, fontSize: '20px' }}>{feature.name}</h5>
                   </td>{" "}
                   <td
                     style={{

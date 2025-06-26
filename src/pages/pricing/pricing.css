@@ -218,13 +218,14 @@ a.explore-link {
 .number-properties h3 {
   color: #FFF;
   font-family: "DM Sans", sans-serif;
-  font-size: 20px;
-  font-weight: 500;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 32px;
+  font-weight: 600;
   margin-right: 20px;
 }
 
 .property-selector {
-  background-color: rgba(23, 25, 31, 1);
+  background-color: #17191F;
   border-radius: 50px;
   padding: 10px 20px;
   display: flex;
@@ -232,6 +233,7 @@ a.explore-link {
   justify-content: space-between;
   width: 291px;
   height: 64px;
+  border: 1px solid #24262E !important ;
 }
 
 .property-selector input {
@@ -244,6 +246,8 @@ a.explore-link {
 }
 
 .property-selector span {
+  font-size: 18px;
+  font-weight: 400;
   color: #FFF;
   font-family: "DM Sans", sans-serif;
 }
@@ -279,13 +283,16 @@ a.explore-link {
 .toggle-buttons {
   display: flex;
   align-items: center;
-  background-color: #13131B;
+  background-color: #24262E;
   border-radius: 50px;
   padding: 5px;
+  border: 1px solid #24262E;
 }
 
 .toggle-button {
   background: transparent;
+  font-size: 14px;
+  font-weight: 600;
   border: none;
   color: #FFF;
   font-family: "DM Sans", sans-serif;
@@ -324,16 +331,17 @@ a.explore-link {
 
 .pricing-card h2 {
   font-family: "DM Sans", sans-serif;
-  font-size: 36px;
+  font-size: 48px;
   font-weight: 700;
-  color: #FFF;
+  color: #FFFF;
   margin-bottom: 15px;
 }
 
 .card-description {
   font-family: "DM Sans", sans-serif;
-  font-size: 16px;
-  color: #FFF;
+  font-size: 18px;
+  font-weight: 400;
+  color: #FFFF;
   margin-bottom: 30px;
   line-height: 1.5;
 }
@@ -341,7 +349,8 @@ a.explore-link {
 .trial-info {
   font-family: "DM Sans", sans-serif;
   font-size: 14px;
-  color: #CCC;
+  font-weight: 400;
+  color: #FFFFFF;
   margin-bottom: 5px;
 }
 
@@ -353,7 +362,7 @@ a.explore-link {
 
 .dollar {
   font-family: "DM Sans", sans-serif;
-  font-size: 24px;
+  font-size: 48px;
   font-weight: 700;
   color: #FFF;
   margin-right: 5px;
@@ -361,7 +370,7 @@ a.explore-link {
 
 .amount {
   font-family: "DM Sans", sans-serif;
-  font-size: 50px;
+  font-size: 48px;
   font-weight: 700;
   color: #FFF;
 }
@@ -369,7 +378,8 @@ a.explore-link {
 .period {
   font-family: "DM Sans", sans-serif;
   font-size: 14px;
-  color: #CCC;
+  font-weight: 400;
+  color: #FFFFFF;
   margin-left: 5px;
 }
 
@@ -377,10 +387,10 @@ a.explore-link {
   background-color: #0D6EFD;
   border: none;
   border-radius: 50px;
-  color: #FFF;
+  color: #FFFFFF;
   font-family: "DM Sans", sans-serif;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   padding: 12px 20px;
   cursor: pointer;
   width: 100%;
@@ -389,7 +399,7 @@ a.explore-link {
 
 /* Individual Card Styles */
 .pro-card {
-  background-color: #1E1E24;
+  background-color: #272B36;
 }
 
 .elite-card {

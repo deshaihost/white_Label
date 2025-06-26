@@ -20,7 +20,7 @@
 }
 
 .faq-header h1 {
-  font-size: 36px;
+  font-size: 44px;
   font-weight: 700;
   color: white;
   margin: 0;
@@ -65,9 +65,8 @@
 .expand-button {
   width: 24px;
   height: 24px;
-  border-radius: 50%;
   background-color: transparent;
-  border: 1px solid white;
+  border: none;
   color: white;
   font-size: 18px;
   display: flex;
@@ -78,8 +77,8 @@
 }
 
 .expand-button.expanded {
-  background-color: #0066FF;
-  border-color: #0066FF;
+  background-color: transparent;
+  color: #0066FF;
 }
 
 .faq-answer {
@@ -90,7 +89,7 @@
 
 .faq-divider {
   height: 1px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #FFFFFF;
   width: 100%;
 }
 
