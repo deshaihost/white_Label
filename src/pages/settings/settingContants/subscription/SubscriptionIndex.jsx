@@ -158,7 +158,7 @@ const SubscriptionIndex = () => {
                     fontSize: "32px",
                   }}
                 >
-                  HostBuddy plan
+                  {subscriptionPlanName}
                 </span>
                 <div style={{
                   display: "flex",
