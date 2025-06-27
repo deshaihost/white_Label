@@ -12,6 +12,8 @@ import ConnectToHostfullyGuidebooks from './connectHostfullyGuidebooksButton';
 import HostfullyGuidebooksIntegration from './HostfullyGuidebooksIntegration';
 import NotionIntegration from './notionIntegration';
 import WhatsappIntegration from './whatsappIntegration';
+import ConnectToOpenPhone from './connectOpenPhoneButton';
+import OpenPhoneIntegration from './OpenPhoneIntegration';
 import './Integrations.css';
 
 const IntegrationsIndex = (ApiUserData) => {
@@ -21,6 +23,7 @@ const IntegrationsIndex = (ApiUserData) => {
   const hostfullyGuidebooksUserId = Boolean(ApiUserData?.ApiUserData?.hostfully_guidebooks_user_id);
   const notionUserId = Boolean(ApiUserData?.ApiUserData?.notion_user_id);
   const whatsappPhoneNumber = ApiUserData?.ApiUserData?.whatsapp_phone_number;
+  const openphoneNumber = ApiUserData?.ApiUserData?.openphone_numbers;
 
   // Identify connected integrations
   const connectedIntegrations = [];
@@ -30,6 +33,7 @@ const IntegrationsIndex = (ApiUserData) => {
   if (hostfullyGuidebooksUserId) connectedIntegrations.push('Hostfully Guidebooks');
   if (notionUserId) connectedIntegrations.push('Notion');
   if (whatsappPhoneNumber) connectedIntegrations.push('WhatsApp');
+  if (openphoneNumber) connectedIntegrations.push('OpenPhone');
 
   // State for selected integration tab
   const [selectedIntegration, setSelectedIntegration] = useState(connectedIntegrations[0] || '');
@@ -44,6 +48,7 @@ const IntegrationsIndex = (ApiUserData) => {
           {!minutUserId && <ConnectToMinut />}
           {!tidyUserId && <ConnectToTidy />}
           {!hostfullyGuidebooksUserId && <ConnectToHostfullyGuidebooks />}
+          {!openphoneNumber && <ConnectToOpenPhone/>}
           {!notionUserId && <ConnectToNotion />}
         </div>
       </div>
@@ -86,6 +91,10 @@ const IntegrationsIndex = (ApiUserData) => {
 
             {selectedIntegration === 'WhatsApp' && (
               <WhatsappIntegration />
+            )}
+
+            {selectedIntegration === 'OpenPhone' && (
+              <OpenPhoneIntegration ApiUserData={ApiUserData} />
             )}
 
             {/* Add similar blocks for additional integrations */}

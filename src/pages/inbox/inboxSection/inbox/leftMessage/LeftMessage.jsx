@@ -20,7 +20,7 @@ import BOOKING_ICON from "./icons/BOOKING_ICON.svg"; // Import the Booking icon
 import VRBO_ICON from "./icons/VRBO_ICON.svg"; // Import the VRBO icon
 import DIRECT_ICON from "./icons/DIRECT_ICON.svg"; // Import the Direct icon
 import EMAIL_ICON from "./icons/EMAIL_ICON.svg"; // Import the Email icon
-import OPENPHONE_ICON from "./icons/OPENPHONE_ICON.svg"; // Import the OpenPhone icon
+import OPENPHONE_ICON from "./icons/openphone_icon.svg"; // Import the OpenPhone icon
 
 const LeftMessage = ({
   allPropertyNamesList,

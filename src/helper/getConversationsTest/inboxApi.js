@@ -109,6 +109,37 @@ export const callSendWhatsAppMessageApi = async (message, conversationId, reserv
 };
 
 
+// Send a OpenPhone message in a conversation with OPENPHONE channel
+export const callSendOpenPhoneMessageApi = async (message, conversationId, reservationId, propertyName, assistanceUsed=null) => {
+  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_KEY;
+
+  try {
+    const config = {
+      headers: { "X-API-Key": API_KEY },
+      validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+    };
+    
+    const body_data = { 
+      conversation_id: conversationId, 
+      reservation_id: reservationId, 
+      property_name: propertyName, 
+      message,
+      channel: "OPENPHONE"
+    };
+    if (assistanceUsed) { body_data.assistance_used = assistanceUsed; }
+    const response = await axios.post( `${baseUrl}/send_message_manual`, body_data, config );
+
+    if (response.status === 200) { }
+    else { ToastHandle(response?.data?.error, "danger"); }
+    return response.data;
+  } catch (error) {
+    ToastHandle("Internal server error", "danger");
+    return { error: "Internal server error" };
+  }
+};
+
+
 export const callMarkConversationAsOpenedApi = async (conversationId, propertyName) => {
   const baseUrl = process.env.REACT_APP_API_ENDPOINT;
   const API_KEY = process.env.REACT_APP_API_KEY;
