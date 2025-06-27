@@ -18,6 +18,7 @@ const SubscriptionIndex = () => {
   const [goToBillingPortalLoading, setGoToBillingPortalLoading] =
     React.useState(false);
   const [subscriptionNotFound, setSubscriptionNotFound] = useState(false);
+  const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'annual'
 
   const userData = store?.getUserDataReducer?.getUserData?.data?.user;
   const userSubscriptionData = userData?.subscription;
@@ -85,6 +86,16 @@ const SubscriptionIndex = () => {
 
     //dispatch(goToBillingportalPostActions());
   };
+
+  // Toggle billing period between monthly and annual
+  const handleBillingToggle = (period) => {
+    setBillingPeriod(period);
+  };
+
+  // Toggle between monthly and annual when clicking anywhere on the toggle container
+  const handleToggleClick = () => {
+    setBillingPeriod(billingPeriod === 'monthly' ? 'annual' : 'monthly');
+  };
   return (
     <div>
       {/* Subscription information */}
@@ -147,7 +158,7 @@ const SubscriptionIndex = () => {
                     fontSize: "32px",
                   }}
                 >
-                  Hostbuddy AI
+                  HostBuddy plan
                 </span>
                 <div style={{
                   display: "flex",
@@ -306,7 +317,9 @@ const SubscriptionIndex = () => {
               display: "inline-flex",
               alignItems: "center",
               marginRight: "200px",
+              cursor: "pointer",
             }}
+            onClick={handleToggleClick}
           >
             <div
               style={{
@@ -320,13 +333,14 @@ const SubscriptionIndex = () => {
               <button
                 style={{
                   padding: "10px 25px",
-                  background: "#0D6EFD",
+                  background: billingPeriod === 'monthly' ? "#0D6EFD" : "transparent",
                   color: "white",
                   border: "none",
                   borderRadius: "30px",
                   fontWeight: "500",
                   cursor: "pointer",
                   zIndex: "1",
+                  pointerEvents: "none",
                 }}
               >
                 Monthly
@@ -348,7 +362,7 @@ const SubscriptionIndex = () => {
               <button
                 style={{
                   padding: "10px 25px",
-                  background: "transparent",
+                  background: billingPeriod === 'annual' ? "#0D6EFD" : "transparent",
                   color: "white",
                   border: "none",
                   borderRadius: "30px",
@@ -357,6 +371,7 @@ const SubscriptionIndex = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
+                  pointerEvents: "none",
                 }}
               >
                 <span>Annual</span>{" "}
