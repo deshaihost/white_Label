@@ -258,9 +258,9 @@ const SubscriptionFeatures = () => {
                               <div
                                 style={{
                                   position: 'absolute',
-                                  top: '-10px',
-                                  left: '50%',
-                                  transform: 'translateX(-50%) translateY(-100%)',
+                                  top: '50%',
+                                  left: '30px',
+                                  transform: 'translateY(-50%)',
                                   backgroundColor: '#BDC1C9',
                                   color: '#0F1117',
                                   padding: '12px 16px',
@@ -279,14 +279,14 @@ const SubscriptionFeatures = () => {
                                 <div
                                   style={{
                                     position: 'absolute',
-                                    top: '100%',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
+                                    top: '50%',
+                                    left: '-8px',
+                                    transform: 'translateY(-50%)',
                                     width: 0,
                                     height: 0,
-                                    borderLeft: '8px solid transparent',
-                                    borderRight: '8px solid transparent',
-                                    borderTop: '8px solid #BDC1C9',
+                                    borderTop: '8px solid transparent',
+                                    borderBottom: '8px solid transparent',
+                                    borderRight: '8px solid #BDC1C9',
                                   }}
                                 />
                               </div>
