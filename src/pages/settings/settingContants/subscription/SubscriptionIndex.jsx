@@ -19,6 +19,7 @@ const SubscriptionIndex = () => {
     React.useState(false);
   const [subscriptionNotFound, setSubscriptionNotFound] = useState(false);
   const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'annual'
+  const [numProperties, setNumProperties] = useState(32);
 
   const userData = store?.getUserDataReducer?.getUserData?.data?.user;
   const userSubscriptionData = userData?.subscription;
@@ -32,6 +33,99 @@ const SubscriptionIndex = () => {
   const nextPaymentDate = paymentGoodUntil
     ? paymentGoodUntil.split(" ")[0]
     : "";
+
+
+
+  // Pricing tiers configuration
+  const pricingTiers = {
+    monthly: {
+      Pro: [
+        { min: 1, max: 9, price: 7 },
+        { min: 10, max: 49, price: 6 },
+        { min: 50, max: 99, price: 5 },
+        { min: 100, max: 249, price: 4 },
+        { min: 250, max: 499, price: 3.50 },
+        { min: 500, max: 999, price: 3 },
+        { min: 1000, max: Infinity, price: 2.50 }
+      ],
+      Elite: [
+        { min: 1, max: 9, price: 10 },
+        { min: 10, max: 49, price: 8 },
+        { min: 50, max: 99, price: 6 },
+        { min: 100, max: 249, price: 4.75 },
+        { min: 250, max: 499, price: 4 },
+        { min: 500, max: 999, price: 3.50 },
+        { min: 1000, max: Infinity, price: 3 }
+      ],
+      Ultimate: [
+        { min: 1, max: 9, price: 12 },
+        { min: 10, max: 49, price: 10 },
+        { min: 50, max: 99, price: 8 },
+        { min: 100, max: 249, price: 6.25 },
+        { min: 250, max: 499, price: 5 },
+        { min: 500, max: 999, price: 4.25 },
+        { min: 1000, max: Infinity, price: 3.50 }
+      ]
+    }
+  };
+
+  // Calculate yearly pricing (16.67% discount)
+  pricingTiers.yearly = {};
+  Object.keys(pricingTiers.monthly).forEach(plan => {
+    pricingTiers.yearly[plan] = pricingTiers.monthly[plan].map(tier => ({
+      ...tier,
+      price: Math.round(tier.price * 0.8333 * 100) / 100 // 16.67% discount, rounded to 2 decimals
+    }));
+  });
+
+  // Function to calculate total price based on tiered pricing
+  const calculateTotalPrice = (numProperties, planName, isYearly = false) => {
+    if (!numProperties || !planName || numProperties <= 0) {
+      return 0;
+    }
+    
+    // Extract plan type from full plan name (e.g., "HostBuddy Elite" -> "Elite")
+    let normalizedPlanName = planName;
+    if (planName.toLowerCase().includes('pro')) {
+      normalizedPlanName = 'Pro';
+    } else if (planName.toLowerCase().includes('elite')) {
+      normalizedPlanName = 'Elite';
+    } else if (planName.toLowerCase().includes('ultimate')) {
+      normalizedPlanName = 'Ultimate';
+    }
+    
+    const period = isYearly ? 'yearly' : 'monthly';
+    const tiers = pricingTiers[period][normalizedPlanName];
+    
+    if (!tiers) {
+      return 0;
+    }
+    
+    let totalPrice = 0;
+    let remainingProperties = numProperties;
+    
+    for (const tier of tiers) {
+      if (remainingProperties <= 0) break;
+      
+      const tierSize = tier.max === Infinity ? remainingProperties : (tier.max - tier.min + 1);
+      const propertiesInThisTier = Math.min(remainingProperties, tierSize);
+      
+      const tierCost = propertiesInThisTier * tier.price;
+      totalPrice += tierCost;
+      remainingProperties -= propertiesInThisTier;
+      
+      if (tier.max === Infinity) break;
+    }
+    
+    return Math.round(totalPrice * 100) / 100; // Round to 2 decimal places
+  };
+
+  // Calculate current subscription total price
+  const currentTotalPrice = calculateTotalPrice(
+    numPropertiesAllowed, 
+    subscriptionPlanName, 
+    billingPeriod === 'annual'
+  );
 
   // Call the billing portal API, get the URL from the response, then redirect the user to it securely (in a way that wont make the browser mad)
   const goToBillingPortal = async () => {
@@ -96,6 +190,15 @@ const SubscriptionIndex = () => {
   const handleToggleClick = () => {
     setBillingPeriod(billingPeriod === 'monthly' ? 'annual' : 'monthly');
   };
+
+  // Handle properties input change
+  const handlePropertiesChange = (e) => {
+    const value = e.target.value;
+    // Only allow positive numbers and 0
+    if (value === '' || (Number(value) >= 0 && !isNaN(value))) {
+      setNumProperties(value === '' ? 0 : Number(value));
+    }
+  };
   return (
     <div>
       {/* Subscription information */}
@@ -123,7 +226,7 @@ const SubscriptionIndex = () => {
         >
           {subscriptionPlanName && subscriptionPlanName !== "" ? (
             <>
-              <span
+              {/* <span
                 style={{
                   backgroundColor: "rgba(7, 27, 83, 1)",
                   width: "108px",
@@ -141,11 +244,11 @@ const SubscriptionIndex = () => {
                 }}
               >
                 Current plan
-              </span>
-              <p className="fs-14 mb-2">
+              </span> */}
+              {/* <p className="fs-14 mb-2">
                 Current Subscription: {subscriptionPlanName} (
                 {numPropertiesAllowed} properties)
-              </p>
+              </p> */}
               <div style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -160,12 +263,42 @@ const SubscriptionIndex = () => {
                 >
                   {subscriptionPlanName}
                 </span>
+                
                 <div style={{
                   display: "flex",
                   alignItems: "center",
                   gap: "40px" ,
                   paddingRight:"64px"
                 }}>
+                  <div style={{
+                    width: "1px",
+                    height: "40px",
+                    backgroundColor: "#ccc"
+                  }}></div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center"
+                  }}>
+                    <span
+                      className="samsung-sharp-sans samsung-sharp-sans"
+                      style={{
+                        fontWeight: "500",
+                        fontSize: "32px",
+                      }}
+                    >
+                      ${currentTotalPrice}
+                    </span>
+                    <span
+                      className="samsung-sharp-sans samsung-sharp-sans"
+                      style={{
+                        fontWeight: "500",
+                        fontSize: "12px",
+                      }}
+                    >
+                     Total Price ({billingPeriod === 'annual' ? 'Yearly' : 'Monthly'})
+                    </span>
+                  </div>
                   <div style={{
                     width: "1px",
                     height: "40px",
@@ -214,6 +347,9 @@ const SubscriptionIndex = () => {
                   {nextPaymentDate}
                 </span>
               </p>
+              {/* <p className="fs-14 mb-2" >
+                Total Cost: ${currentTotalPrice} / {billingPeriod === 'monthly' ? 'mo' : 'yr'}
+              </p> */}
               {!goToBillingPortalLoading ? (
                 <Button
                   className="btn btn-primary px-3 fs-6 rounded-pill mt-2"
@@ -266,6 +402,7 @@ const SubscriptionIndex = () => {
           style={{
             fontSize: "28px",
             fontWeight: "700",
+            marginLeft: "30px",
             marginBottom: "20px",
           }}
         >
@@ -283,6 +420,7 @@ const SubscriptionIndex = () => {
           <div
             style={{
               backgroundColor: "#1E1E1E",
+              marginLeft: "30px",
               borderRadius: "30px",
               padding: "10px 20px",
               display: "inline-flex",
@@ -295,18 +433,25 @@ const SubscriptionIndex = () => {
                 fontSize: "14px",
               }}
             >
-              # of Properties:
+              # of {numProperties === 0 || numProperties === 1 ? 'Property' : 'Properties'}:
             </span>
-            <span
+            <input
+              type="number"
+              value={numProperties}
+              onChange={handlePropertiesChange}
+              min="0"
               style={{
                 color: "white",
                 fontWeight: "bold",
                 marginLeft: "8px",
                 fontSize: "16px",
+                backgroundColor: "transparent",
+                border: "none",
+                outline: "none",
+                width: "60px",
+                textAlign: "left",
               }}
-            >
-              32
-            </span>
+            />
           </div>
           {/* Monthly/Annual toggle - Now positioned on the right with added margin-right */}
           <div
