@@ -4,7 +4,7 @@ import CheckImg from "../icons/subscriptionCheck.svg";
 import WrongImg from "../icons/subscriptionCrossCheck.svg";
 import HelpCircleIcon from "../../../../pricing/icons/features_help_circle.svg";
 
-const SubscriptionFeatures = () => {
+const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' }) => {
   const [activeTooltip, setActiveTooltip] = useState(null);
 
   const handleTooltipClick = (featureName, event) => {
@@ -34,6 +34,91 @@ const SubscriptionFeatures = () => {
     };
     return tooltipTexts[featureName] || `Feature information for ${featureName}`;
   };
+
+  // Pricing tiers configuration
+  const pricingTiers = {
+    monthly: {
+      Pro: [
+        { min: 1, max: 9, price: 7 },
+        { min: 10, max: 49, price: 6 },
+        { min: 50, max: 99, price: 5 },
+        { min: 100, max: 249, price: 4 },
+        { min: 250, max: 499, price: 3.50 },
+        { min: 500, max: 999, price: 3 },
+        { min: 1000, max: Infinity, price: 2.50 }
+      ],
+      Elite: [
+        { min: 1, max: 9, price: 10 },
+        { min: 10, max: 49, price: 8 },
+        { min: 50, max: 99, price: 6 },
+        { min: 100, max: 249, price: 4.75 },
+        { min: 250, max: 499, price: 4 },
+        { min: 500, max: 999, price: 3.50 },
+        { min: 1000, max: Infinity, price: 3 }
+      ],
+      Ultimate: [
+        { min: 1, max: 9, price: 12 },
+        { min: 10, max: 49, price: 10 },
+        { min: 50, max: 99, price: 8 },
+        { min: 100, max: 249, price: 6.25 },
+        { min: 250, max: 499, price: 5 },
+        { min: 500, max: 999, price: 4.25 },
+        { min: 1000, max: Infinity, price: 3.50 }
+      ]
+    }
+  };
+
+  // Calculate yearly pricing (16.67% discount)
+  pricingTiers.yearly = {};
+  Object.keys(pricingTiers.monthly).forEach(plan => {
+    pricingTiers.yearly[plan] = pricingTiers.monthly[plan].map(tier => ({
+      ...tier,
+      price: Math.round(tier.price * 0.8333 * 100) / 100 // 16.67% discount, rounded to 2 decimals
+    }));
+  });
+
+  // Function to calculate total price based on tiered pricing
+  const calculateTotalPrice = (numProperties, planName, isYearly = false) => {
+    if (!numProperties || !planName || numProperties <= 0) {
+      return 0;
+    }
+    
+    const period = isYearly ? 'yearly' : 'monthly';
+    const tiers = pricingTiers[period][planName];
+    
+    if (!tiers) {
+      return 0;
+    }
+    
+    let totalPrice = 0;
+    let remainingProperties = numProperties;
+    
+    for (const tier of tiers) {
+      if (remainingProperties <= 0) break;
+      
+      const tierSize = tier.max === Infinity ? remainingProperties : (tier.max - tier.min + 1);
+      const propertiesInThisTier = Math.min(remainingProperties, tierSize);
+      
+      const tierCost = propertiesInThisTier * tier.price;
+      totalPrice += tierCost;
+      remainingProperties -= propertiesInThisTier;
+      
+      if (tier.max === Infinity) break;
+    }
+    
+    return Math.round(totalPrice * 100) / 100; // Round to 2 decimal places
+  };
+
+  // Calculate prices for each plan
+  const isYearly = billingPeriod === 'annual';
+  const proPriceTotal = calculateTotalPrice(numProperties, 'Pro', isYearly);
+  const elitePriceTotal = calculateTotalPrice(numProperties, 'Elite', isYearly);
+  const ultimatePriceTotal = calculateTotalPrice(numProperties, 'Ultimate', isYearly);
+
+  // Calculate per-property price for display
+  const proPricePerProperty = numProperties > 0 ? (proPriceTotal / numProperties) : 0;
+  const elitePricePerProperty = numProperties > 0 ? (elitePriceTotal / numProperties) : 0;
+  const ultimatePricePerProperty = numProperties > 0 ? (ultimatePriceTotal / numProperties) : 0;
  const featurePlans = [
     {
       name: "AI-Powered Guest Messaging",
@@ -203,12 +288,26 @@ const SubscriptionFeatures = () => {
                     borderTopLeftRadius: "20px",
                     borderTopRightRadius: "20px",
                     width: "260px",
+                    padding: "20px",
                   }}
                 >
-                  <h3>
-                    <br />
-                    Pro
-                  </h3>
+                  <h3 style={{ marginBottom: "15px" }}>Pro</h3>
+                  <div style={{ textAlign: 'center' }}>
+                    {/* <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginBottom: '5px' }}>
+                      {billingPeriod === 'annual' ? '2 weeks free, then' : '2 weeks free, then'}
+                    </div> */}
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
+                        ${proPricePerProperty.toFixed(2)}
+                      </span>
+                      <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
+                        per property
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                      ${proPriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
+                    </div>
+                  </div>
                 </th>{" "}
                 <th
                   style={{
@@ -216,12 +315,26 @@ const SubscriptionFeatures = () => {
                     borderTopLeftRadius: "20px",
                     borderTopRightRadius: "20px",
                     width: "260px",
+                    padding: "20px",
                   }}
                 >
-                  <h3>
-                    <br />
-                    Elite
-                  </h3>
+                  <h3 style={{ marginBottom: "15px" }}>Elite</h3>
+                  <div style={{ textAlign: 'center' }}>
+                    {/* <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#AAAAAA', marginBottom: '5px' }}>
+                      {billingPeriod === 'annual' ? '2 weeks free, then' : '2 weeks free, then'}
+                    </div> */}
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
+                        ${elitePricePerProperty.toFixed(2)}
+                      </span>
+                      <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
+                        per property
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                      ${elitePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
+                    </div>
+                  </div>
                 </th>{" "}
                 <th
                   style={{
@@ -229,12 +342,26 @@ const SubscriptionFeatures = () => {
                     borderTopLeftRadius: "20px",
                     borderTopRightRadius: "20px",
                     width: "260px",
+                    padding: "20px",
                   }}
                 >
-                  <h3>
-                    <br />
-                    Ultimate
-                  </h3>
+                  <h3 style={{ marginBottom: "15px" }}>Ultimate</h3>
+                  <div style={{ textAlign: 'center' }}>
+                    {/* <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#AAAAAA', marginBottom: '5px' }}>
+                      {billingPeriod === 'annual' ? '2 weeks free, then' : '2 weeks free, then'}
+                    </div> */}
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
+                        ${ultimatePricePerProperty.toFixed(2)}
+                      </span>
+                      <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
+                        per property
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                      ${ultimatePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
+                    </div>
+                  </div>
                 </th>
               </tr>
             </thead>{" "}

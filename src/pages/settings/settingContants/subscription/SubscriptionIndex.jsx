@@ -539,7 +539,10 @@ const SubscriptionIndex = () => {
 
       {/* Features component rendered below */}
       <div style={{ marginTop: "50px" }}>
-        <SubscriptionFeatures />
+        <SubscriptionFeatures 
+          numProperties={numProperties} 
+          billingPeriod={billingPeriod} 
+        />
       </div>
     </div>
   );
