@@ -345,8 +345,8 @@ const Pricing = () => {
             </div>
           </div>{" "}
           <div className="billing-toggle">
+            {/* <span className="months-free">2 Months Free</span> */}
             <div className="toggle-buttons-container">
-              <span className="months-free-label">2 Months Free</span>
               <div
                 className="toggle-buttons"
                 onClick={handleToggleClick}
@@ -364,9 +364,24 @@ const Pricing = () => {
                   className={`toggle-button ${
                     billingPeriod === "annual" ? "active" : ""
                   }`}
+                  style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center'
+                  }}
                 >
-                  <span className="months-free-label">2 Months Free</span>
-                  Annual
+                  <span>Annual</span>
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      color: "#FFA500",
+                      fontWeight: "400",
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    2 Months Free!
+                  </span>
                 </button>
               </div>
             </div>
