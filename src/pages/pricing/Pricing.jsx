@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import "./pricing.css";
 import Features from "./features/Features";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import BookDemoModal from "../../component/bookDemoModal";
 import NewPricingTiles from "./newPricingTiles/newPricingTiles";
@@ -62,9 +62,114 @@ function SamplePrevArrow(props) {
 }
 
 const Pricing = () => {
+  const navigate = useNavigate();
   const [demoModalShow, setDemoModalShow] = useState(false);
   const [contactModalShow, setContactModalShow] = useState(false);
-  const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'annual'
+  const [billingPeriod, setBillingPeriod] = useState("monthly"); // 'monthly' or 'annual'
+  const [propertyCount, setPropertyCount] = useState(0);
+  const [inputValue, setInputValue] = useState("0"); // Separate state for input display
+
+  // Pricing tiers structure
+  const pricingTiers = [
+    {
+      min: 1,
+      max: 9,
+      monthly: { pro: 7, elite: 10, ultimate: 12 },
+      yearly: { pro: 5.83, elite: 8.33, ultimate: 10.0 },
+    },
+    {
+      min: 10,
+      max: 49,
+      monthly: { pro: 6, elite: 8, ultimate: 10 },
+      yearly: { pro: 5.0, elite: 6.67, ultimate: 8.33 },
+    },
+    {
+      min: 50,
+      max: 99,
+      monthly: { pro: 5, elite: 6, ultimate: 8 },
+      yearly: { pro: 4.17, elite: 5.0, ultimate: 6.67 },
+    },
+    {
+      min: 100,
+      max: 249,
+      monthly: { pro: 4, elite: 4.75, ultimate: 6.25 },
+      yearly: { pro: 3.33, elite: 3.96, ultimate: 5.21 },
+    },
+    {
+      min: 250,
+      max: 499,
+      monthly: { pro: 3.5, elite: 4, ultimate: 5 },
+      yearly: { pro: 2.92, elite: 3.33, ultimate: 4.17 },
+    },
+    {
+      min: 500,
+      max: 999,
+      monthly: { pro: 3, elite: 3.5, ultimate: 4.25 },
+      yearly: { pro: 2.5, elite: 2.92, ultimate: 3.54 },
+    },
+    {
+      min: 1000,
+      max: Infinity,
+      monthly: { pro: 2.5, elite: 3, ultimate: 3.5 },
+      yearly: { pro: 2.08, elite: 2.5, ultimate: 2.92 },
+    },
+  ];
+
+  // Calculate total price for a plan based on property count and billing period
+  const calculateTotalPrice = (plan, propertyCount, billingPeriod) => {
+    if (propertyCount === 0) return 0;
+
+    let totalPrice = 0;
+    let remainingProperties = propertyCount;
+
+    // Convert 'annual' to 'yearly' to match our pricing tiers structure
+    const tierKey = billingPeriod === "annual" ? "yearly" : billingPeriod;
+
+    for (const tier of pricingTiers) {
+      if (remainingProperties <= 0) break;
+
+      const propertiesInThisTier = Math.min(
+        remainingProperties,
+        tier.max - tier.min + 1
+      );
+      const pricePerProperty =
+        tier[tierKey] && tier[tierKey][plan] ? tier[tierKey][plan] : 0;
+
+      totalPrice += propertiesInThisTier * pricePerProperty;
+      remainingProperties -= propertiesInThisTier;
+
+      if (tier.max === Infinity) break;
+    }
+
+    return totalPrice;
+  };
+
+  // Calculate average per-property price for display
+  const calculateAveragePerPropertyPrice = (plan, propertyCount, billingPeriod) => {
+    if (propertyCount === 0) {
+      // Return the first tier price for 0 properties
+      const tierKey = billingPeriod === "annual" ? "yearly" : billingPeriod;
+      const firstTier = pricingTiers[0];
+      return firstTier[tierKey] && firstTier[tierKey][plan] ? firstTier[tierKey][plan] : 0;
+    }
+    
+    const totalPrice = calculateTotalPrice(plan, propertyCount, billingPeriod);
+    return totalPrice / propertyCount;
+  };
+
+  // Format price for display
+  const formatPrice = (price) => {
+    if (price === 0) return { dollar: "$", amount: "0", period: "/month" };
+
+    const formattedPrice = price.toFixed(2);
+    const [dollars, cents] = formattedPrice.split(".");
+
+    return {
+      dollar: "$",
+      amount: cents === "00" ? dollars : formattedPrice,
+      period: billingPeriod === "monthly" ? "/month" : "/year",
+    };
+  };
 
   var settingsf = {
     dots: false,
@@ -103,6 +208,11 @@ const Pricing = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Sync inputValue with propertyCount when propertyCount changes externally
+  useEffect(() => {
+    setInputValue(propertyCount.toString());
+  }, [propertyCount]);
+
   // Toggle billing period between monthly and annual
   const handleBillingToggle = (period) => {
     setBillingPeriod(period);
@@ -110,7 +220,12 @@ const Pricing = () => {
 
   // Toggle between monthly and annual when clicking anywhere on the toggle container
   const handleToggleClick = () => {
-    setBillingPeriod(billingPeriod === 'monthly' ? 'annual' : 'monthly');
+    setBillingPeriod(billingPeriod === "monthly" ? "annual" : "monthly");
+  };
+
+  // Handle navigation to signup page
+  const handleTryForFree = () => {
+    navigate("/signup");
   };
 
   return (
@@ -174,23 +289,70 @@ const Pricing = () => {
           <div className="number-properties">
             <h3>Number of properties:</h3>
             <div className="property-selector">
-              <input type="text" defaultValue="1" />
-              <span>Property</span>
+              <input
+                type="text"
+                min="0"
+                value={inputValue}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  
+                  // Allow only numbers
+                  if (!/^\d*$/.test(newValue)) {
+                    return;
+                  }
+                  
+                  setInputValue(newValue);
+                  
+                  // Update property count
+                  if (newValue === '' || newValue === '0') {
+                    setPropertyCount(0);
+                  } else {
+                    const num = parseInt(newValue, 10);
+                    if (!isNaN(num) && num >= 0) {
+                      setPropertyCount(num);
+                    }
+                  }
+                }}
+                onFocus={(e) => {
+                  // Select all text when focused so typing replaces the value
+                  e.target.select();
+                }}
+                onBlur={(e) => {
+                  // When focus is lost, clean up the display value
+                  if (inputValue === '' || parseInt(inputValue, 10) === 0) {
+                    setInputValue("0");
+                    setPropertyCount(0);
+                  } else {
+                    const cleanValue = parseInt(inputValue, 10).toString();
+                    setInputValue(cleanValue);
+                    setPropertyCount(parseInt(cleanValue, 10));
+                  }
+                }}
+              />
+              <span>{propertyCount > 1 ? "Properties" : "Property"}</span>
             </div>
           </div>{" "}
           <div className="billing-toggle">
             <span className="months-free">2 Months Free</span>
             <div className="toggle-buttons-container">
               <span className="months-free-label">2 Months Free</span>
-              <div className="toggle-buttons" onClick={handleToggleClick} style={{ cursor: 'pointer' }}>
-                <button 
-                  className={`toggle-button ${billingPeriod === 'monthly' ? 'active' : ''}`}
+              <div
+                className="toggle-buttons"
+                onClick={handleToggleClick}
+                style={{ cursor: "pointer" }}
+              >
+                <button
+                  className={`toggle-button ${
+                    billingPeriod === "monthly" ? "active" : ""
+                  }`}
                 >
                   Monthly
                 </button>
                 <span className="toggle-arrow">→</span>
-                <button 
-                  className={`toggle-button ${billingPeriod === 'annual' ? 'active' : ''}`}
+                <button
+                  className={`toggle-button ${
+                    billingPeriod === "annual" ? "active" : ""
+                  }`}
                 >
                   Annual
                 </button>
@@ -247,16 +409,42 @@ const Pricing = () => {
             </div>
 
             <div className="price">
-              <span className="dollar">$</span>
-              <span className="amount">7</span>
+              <span className="dollar">
+                {
+                  formatPrice(
+                    calculateAveragePerPropertyPrice("pro", propertyCount, billingPeriod)
+                  ).dollar
+                }
+              </span>
+              <span className="amount">
+                {
+                  formatPrice(
+                    calculateAveragePerPropertyPrice("pro", propertyCount, billingPeriod)
+                  ).amount
+                }
+              </span>
               <span className="period">
-                /month
+                {
+                  formatPrice(
+                    calculateAveragePerPropertyPrice("pro", propertyCount, billingPeriod)
+                  ).period
+                }
                 <br />
                 per property
+                {propertyCount > 1 && (
+                  <>
+                    <br />
+                    {formatPrice(calculateTotalPrice("pro", propertyCount, billingPeriod)).dollar}
+                    {formatPrice(calculateTotalPrice("pro", propertyCount, billingPeriod)).amount}
+                    {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")}
+                  </>
+                )}
               </span>
             </div>
 
-            <button className="try-free-btn">Try For Free</button>
+            <button className="try-free-btn" onClick={handleTryForFree}>
+              Try For Free
+            </button>
           </div>
 
           {/* Elite Card */}
@@ -272,16 +460,42 @@ const Pricing = () => {
             </div>
 
             <div className="price">
-              <span className="dollar">$</span>
-              <span className="amount">10</span>
+              <span className="dollar">
+                {
+                  formatPrice(
+                    calculateAveragePerPropertyPrice("elite", propertyCount, billingPeriod)
+                  ).dollar
+                }
+              </span>
+              <span className="amount">
+                {
+                  formatPrice(
+                    calculateAveragePerPropertyPrice("elite", propertyCount, billingPeriod)
+                  ).amount
+                }
+              </span>
               <span className="period">
-                /month
+                {
+                  formatPrice(
+                    calculateAveragePerPropertyPrice("elite", propertyCount, billingPeriod)
+                  ).period
+                }
                 <br />
                 per property
+                {propertyCount > 1 && (
+                  <>
+                    <br />
+                    {formatPrice(calculateTotalPrice("elite", propertyCount, billingPeriod)).dollar}
+                    {formatPrice(calculateTotalPrice("elite", propertyCount, billingPeriod)).amount}
+                    {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")}
+                  </>
+                )}
               </span>
             </div>
 
-            <button className="try-free-btn">Try For Free</button>
+            <button className="try-free-btn" onClick={handleTryForFree}>
+              Try For Free
+            </button>
           </div>
 
           {/* Ultimate Card */}
@@ -296,20 +510,46 @@ const Pricing = () => {
             </div>
 
             <div className="price">
-              <span className="dollar">$</span>
-              <span className="amount">12</span>
+              <span className="dollar">
+                {
+                  formatPrice(
+                    calculateAveragePerPropertyPrice("ultimate", propertyCount, billingPeriod)
+                  ).dollar
+                }
+              </span>
+              <span className="amount">
+                {
+                  formatPrice(
+                    calculateAveragePerPropertyPrice("ultimate", propertyCount, billingPeriod)
+                  ).amount
+                }
+              </span>
               <span className="period">
-                /month
+                {
+                  formatPrice(
+                    calculateAveragePerPropertyPrice("ultimate", propertyCount, billingPeriod)
+                  ).period
+                }
                 <br />
                 per property
+                {propertyCount > 1 && (
+                  <>
+                    <br />
+                    {formatPrice(calculateTotalPrice("ultimate", propertyCount, billingPeriod)).dollar}
+                    {formatPrice(calculateTotalPrice("ultimate", propertyCount, billingPeriod)).amount}
+                    {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")}
+                  </>
+                )}
               </span>
             </div>
 
-            <button className="try-free-btn">Try For Free</button>
+            <button className="try-free-btn" onClick={handleTryForFree}>
+              Try For Free
+            </button>
           </div>
         </div>{" "}
         {/* Old pricing section removed */}
-        <PriceSlider />
+        {/* <PriceSlider /> */}
         <Features />
         {/* <SlidingComponent /> */}
         <FrequentlyAskedComponent />
