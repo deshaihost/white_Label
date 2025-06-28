@@ -143,8 +143,18 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
     console.log(`Upgrade to ${planName} plan`);
   };
 
+  const handleDowngrade = (planName) => {
+    // TODO: Implement downgrade logic
+    console.log(`Downgrade to ${planName} plan`);
+  };
+
   // Helper function to get button text and state
   const getButtonProps = (planName) => {
+    // Define plan hierarchy: Pro < Elite < Ultimate
+    const planHierarchy = { 'Pro': 1, 'Elite': 2, 'Ultimate': 3 };
+    const currentPlanLevel = planHierarchy[normalizedCurrentPlan] || 0;
+    const targetPlanLevel = planHierarchy[planName] || 0;
+
     if (normalizedCurrentPlan === planName) {
       return {
         text: 'Subscribed',
@@ -152,12 +162,23 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
         variant: 'disabled'
       };
     } else if (normalizedCurrentPlan && normalizedCurrentPlan !== '') {
-      return {
-        text: 'Upgrade',
-        disabled: false,
-        variant: 'upgrade',
-        onClick: () => handleUpgrade(planName)
-      };
+      if (targetPlanLevel > currentPlanLevel) {
+        // Higher plan - show Upgrade
+        return {
+          text: 'Upgrade',
+          disabled: false,
+          variant: 'upgrade',
+          onClick: () => handleUpgrade(planName)
+        };
+      } else {
+        // Lower plan - show Downgrade
+        return {
+          text: 'Downgrade',
+          disabled: false,
+          variant: 'downgrade',
+          onClick: () => handleDowngrade(planName)
+        };
+      }
     } else {
       return {
         text: 'Subscribe',
@@ -613,7 +634,11 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
                             fontSize: '16px',
                             fontWeight: '600',
                             cursor: buttonProps.disabled ? 'not-allowed' : 'pointer',
-                            backgroundColor: buttonProps.disabled ? '#131723' : (buttonProps.variant === 'upgrade' ? '#0D6EFD' : '#28a745'),
+                            backgroundColor: buttonProps.disabled ? '#131723' : (
+                              buttonProps.variant === 'upgrade' ? '#0D6EFD' : 
+                              buttonProps.variant === 'downgrade' ? '#DC3545' : 
+                              '#28a745'
+                            ),
                             color: 'white',
                             opacity: buttonProps.disabled ? 0.6 : 1,
                             transition: 'all 0.2s ease',
@@ -654,7 +679,11 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
                             fontSize: '16px',
                             fontWeight: '600',
                             cursor: buttonProps.disabled ? 'not-allowed' : 'pointer',
-                            backgroundColor: buttonProps.disabled ? '#131723' : (buttonProps.variant === 'upgrade' ? '#0D6EFD' : '#28a745'),
+                            backgroundColor: buttonProps.disabled ? '#131723' : (
+                              buttonProps.variant === 'upgrade' ? '#0D6EFD' : 
+                              buttonProps.variant === 'downgrade' ? '#DC3545' : 
+                              '#28a745'
+                            ),
                             color: 'white',
                             opacity: buttonProps.disabled ? 0.6 : 1,
                             transition: 'all 0.2s ease',
@@ -695,7 +724,11 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
                             fontSize: '16px',
                             fontWeight: '600',
                             cursor: buttonProps.disabled ? 'not-allowed' : 'pointer',
-                            backgroundColor: buttonProps.disabled ? '#131723' : (buttonProps.variant === 'upgrade' ? '#0D6EFD' : '#28a745'),
+                            backgroundColor: buttonProps.disabled ? '#131723' : (
+                              buttonProps.variant === 'upgrade' ? '#0D6EFD' : 
+                              buttonProps.variant === 'downgrade' ? '#DC3545' : 
+                              '#28a745'
+                            ),
                             color: 'white',
                             opacity: buttonProps.disabled ? 0.6 : 1,
                             transition: 'all 0.2s ease',
