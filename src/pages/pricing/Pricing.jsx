@@ -147,10 +147,8 @@ const Pricing = () => {
   // Calculate average per-property price for display
   const calculateAveragePerPropertyPrice = (plan, propertyCount, billingPeriod) => {
     if (propertyCount === 0) {
-      // Return the first tier price for 0 properties
-      const tierKey = billingPeriod === "annual" ? "yearly" : billingPeriod;
-      const firstTier = pricingTiers[0];
-      return firstTier[tierKey] && firstTier[tierKey][plan] ? firstTier[tierKey][plan] : 0;
+      // Return 0 for 0 properties
+      return 0;
     }
     
     const totalPrice = calculateTotalPrice(plan, propertyCount, billingPeriod);
@@ -288,11 +286,25 @@ const Pricing = () => {
         <div className="properties-selector">
           <div className="number-properties">
             <h3>Number of properties:</h3>
-            <div className="property-selector">
+            <div 
+              className="property-selector"
+              style={{
+                minWidth: '180px',
+                width: `${Math.max(180, inputValue.length * 16 + 100)}px`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
               <input
                 type="text"
                 min="0"
                 value={inputValue}
+                style={{
+                  minWidth: '80px',
+                  width: `${Math.max(80, inputValue.length * 16 + 30)}px`,
+                  textAlign: 'center'
+                }}
                 onChange={(e) => {
                   const newValue = e.target.value;
                   
@@ -329,11 +341,10 @@ const Pricing = () => {
                   }
                 }}
               />
-              <span>{propertyCount > 1 ? "Properties" : "Property"}</span>
+              <span>{propertyCount === 1 ? "Property" : "Properties"}</span>
             </div>
           </div>{" "}
           <div className="billing-toggle">
-            <span className="months-free">2 Months Free</span>
             <div className="toggle-buttons-container">
               <span className="months-free-label">2 Months Free</span>
               <div
@@ -354,6 +365,7 @@ const Pricing = () => {
                     billingPeriod === "annual" ? "active" : ""
                   }`}
                 >
+                  <span className="months-free-label">2 Months Free</span>
                   Annual
                 </button>
               </div>
@@ -424,12 +436,12 @@ const Pricing = () => {
                 }
               </span>
               <span className="period">
-                {
+                {/* {
                   formatPrice(
                     calculateAveragePerPropertyPrice("pro", propertyCount, billingPeriod)
                   ).period
-                }
-                <br />
+                } */}
+                {/* <br /> */}
                 per property
                 {propertyCount > 1 && (
                   <>
@@ -475,12 +487,12 @@ const Pricing = () => {
                 }
               </span>
               <span className="period">
-                {
+                {/* {
                   formatPrice(
                     calculateAveragePerPropertyPrice("elite", propertyCount, billingPeriod)
                   ).period
                 }
-                <br />
+                <br /> */}
                 per property
                 {propertyCount > 1 && (
                   <>
@@ -525,12 +537,12 @@ const Pricing = () => {
                 }
               </span>
               <span className="period">
-                {
+                {/* {
                   formatPrice(
                     calculateAveragePerPropertyPrice("ultimate", propertyCount, billingPeriod)
                   ).period
                 }
-                <br />
+                <br /> */}
                 per property
                 {propertyCount > 1 && (
                   <>
