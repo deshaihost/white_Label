@@ -367,7 +367,6 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' })
             </thead>{" "}
             <tbody>
               {featurePlans?.map((feature, i) => {
-                const isLastRow = i === featurePlans.length - 1;
                 return (
                   <tr key={i}>
                     <td>
@@ -425,10 +424,6 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' })
                     <td
                       style={{
                         backgroundColor: "rgba(39, 43, 54, 1)",
-                        ...(isLastRow && {
-                          borderBottomLeftRadius: "20px",
-                          borderBottomRightRadius: "20px",
-                        }),
                       }}
                     >
                       {typeof feature.pro === "boolean" ? (
@@ -442,10 +437,6 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' })
                     <td
                       style={{
                         backgroundColor: "rgba(19, 34, 77, 1)",
-                        ...(isLastRow && {
-                          borderBottomLeftRadius: "20px",
-                          borderBottomRightRadius: "20px",
-                        }),
                       }}
                     >
                       {typeof feature.elite === "boolean" ? (
@@ -461,10 +452,6 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' })
                     <td
                       style={{
                         backgroundColor: "rgba(23, 25, 31, 1)",
-                        ...(isLastRow && {
-                          borderBottomLeftRadius: "20px",
-                          borderBottomRightRadius: "20px",
-                        }),
                       }}
                     >
                       {typeof feature.ultimate === "boolean" ? (
@@ -480,6 +467,80 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' })
                   </tr>
                 );
               })}
+              {/* Pricing Row at the bottom */}
+              <tr>
+                <td>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
+                    <h5 style={{ fontFamily: 'DM Sans', fontWeight: 600, fontSize: '20px', margin: 0 }}>Pricing</h5>
+                  </div>
+                </td>
+                <td
+                  style={{
+                    backgroundColor: "rgba(39, 43, 54, 1)",
+                    borderBottomLeftRadius: "20px",
+                    borderBottomRightRadius: "20px",
+                    padding: "20px",
+                  }}
+                >
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
+                        ${proPricePerProperty.toFixed(2)}
+                      </span>
+                      <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
+                        per property
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                      ${proPriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
+                    </div>
+                  </div>
+                </td>
+                <td
+                  style={{
+                    backgroundColor: "rgba(19, 34, 77, 1)",
+                    borderBottomLeftRadius: "20px",
+                    borderBottomRightRadius: "20px",
+                    padding: "20px",
+                  }}
+                >
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
+                        ${elitePricePerProperty.toFixed(2)}
+                      </span>
+                      <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
+                        per property
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                      ${elitePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
+                    </div>
+                  </div>
+                </td>
+                <td
+                  style={{
+                    backgroundColor: "rgba(23, 25, 31, 1)",
+                    borderBottomLeftRadius: "20px",
+                    borderBottomRightRadius: "20px",
+                    padding: "20px",
+                  }}
+                >
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
+                        ${ultimatePricePerProperty.toFixed(2)}
+                      </span>
+                      <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
+                        per property
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                      ${ultimatePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
+                    </div>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
