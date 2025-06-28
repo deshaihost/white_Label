@@ -4,7 +4,7 @@ import CheckImg from "../icons/subscriptionCheck.svg";
 import WrongImg from "../icons/subscriptionCrossCheck.svg";
 import HelpCircleIcon from "../../../../pricing/icons/features_help_circle.svg";
 
-const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' }) => {
+const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', currentSubscriptionPlan = '' }) => {
   const [activeTooltip, setActiveTooltip] = useState(null);
 
   const handleTooltipClick = (featureName, event) => {
@@ -119,6 +119,54 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' })
   const proPricePerProperty = numProperties > 0 ? (proPriceTotal / numProperties) : 0;
   const elitePricePerProperty = numProperties > 0 ? (elitePriceTotal / numProperties) : 0;
   const ultimatePricePerProperty = numProperties > 0 ? (ultimatePriceTotal / numProperties) : 0;
+
+  // Helper function to normalize plan names for comparison
+  const normalizePlanName = (planName) => {
+    if (!planName) return '';
+    if (planName.toLowerCase().includes('pro')) return 'Pro';
+    if (planName.toLowerCase().includes('elite')) return 'Elite';
+    if (planName.toLowerCase().includes('ultimate')) return 'Ultimate';
+    return planName;
+  };
+
+  // Get normalized current subscription plan
+  const normalizedCurrentPlan = normalizePlanName(currentSubscriptionPlan);
+
+  // Button click handlers
+  const handleSubscribe = (planName) => {
+    // TODO: Implement subscription logic
+    console.log(`Subscribe to ${planName} plan`);
+  };
+
+  const handleUpgrade = (planName) => {
+    // TODO: Implement upgrade logic
+    console.log(`Upgrade to ${planName} plan`);
+  };
+
+  // Helper function to get button text and state
+  const getButtonProps = (planName) => {
+    if (normalizedCurrentPlan === planName) {
+      return {
+        text: 'Subscribed',
+        disabled: true,
+        variant: 'disabled'
+      };
+    } else if (normalizedCurrentPlan && normalizedCurrentPlan !== '') {
+      return {
+        text: 'Upgrade',
+        disabled: false,
+        variant: 'upgrade',
+        onClick: () => handleUpgrade(planName)
+      };
+    } else {
+      return {
+        text: 'Subscribe',
+        disabled: false,
+        variant: 'subscribe',
+        onClick: () => handleSubscribe(planName)
+      };
+    }
+  };
  const featurePlans = [
     {
       name: "AI-Powered Guest Messaging",
@@ -471,14 +519,12 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' })
               <tr>
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
-                    <h5 style={{ fontFamily: 'DM Sans', fontWeight: 600, fontSize: '20px', margin: 0 }}>Pricing</h5>
+                    {/* <h5 style={{ fontFamily: 'DM Sans', fontWeight: 600, fontSize: '20px', margin: 0 }}>Pricing</h5> */}
                   </div>
                 </td>
                 <td
                   style={{
                     backgroundColor: "rgba(39, 43, 54, 1)",
-                    borderBottomLeftRadius: "20px",
-                    borderBottomRightRadius: "20px",
                     padding: "20px",
                   }}
                 >
@@ -499,8 +545,6 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' })
                 <td
                   style={{
                     backgroundColor: "rgba(19, 34, 77, 1)",
-                    borderBottomLeftRadius: "20px",
-                    borderBottomRightRadius: "20px",
                     padding: "20px",
                   }}
                 >
@@ -521,8 +565,6 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' })
                 <td
                   style={{
                     backgroundColor: "rgba(23, 25, 31, 1)",
-                    borderBottomLeftRadius: "20px",
-                    borderBottomRightRadius: "20px",
                     padding: "20px",
                   }}
                 >
@@ -538,6 +580,137 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly' })
                     <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
                       ${ultimatePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
                     </div>
+                  </div>
+                </td>
+              </tr>
+              {/* Button Row */}
+              <tr>
+                <td>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
+                    {/* <h5 style={{ fontFamily: 'DM Sans', fontWeight: 600, fontSize: '20px', margin: 0 }}>Choose Plan</h5> */}
+                  </div>
+                </td>
+                <td
+                  style={{
+                    backgroundColor: "rgba(39, 43, 54, 1)",
+                    borderBottomLeftRadius: "20px",
+                    borderBottomRightRadius: "20px",
+                    padding: "20px",
+                  }}
+                >
+                  <div style={{ textAlign: 'center' }}>
+                    {(() => {
+                      const buttonProps = getButtonProps('Pro');
+                      return (
+                        <button
+                          onClick={buttonProps.onClick}
+                          disabled={buttonProps.disabled}
+                          className="subscription-button"
+                          style={{
+                            padding: '8px 12px',
+                            borderRadius: '100px',
+                            border: 'none',
+                            fontSize: '16px',
+                            fontWeight: '600',
+                            cursor: buttonProps.disabled ? 'not-allowed' : 'pointer',
+                            backgroundColor: buttonProps.disabled ? '#131723' : (buttonProps.variant === 'upgrade' ? '#0D6EFD' : '#28a745'),
+                            color: 'white',
+                            opacity: buttonProps.disabled ? 0.6 : 1,
+                            transition: 'all 0.2s ease',
+                            width: 'auto',
+                            minWidth: '89px',
+                            height: '32px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          {buttonProps.text}
+                        </button>
+                      );
+                    })()}
+                  </div>
+                </td>
+                <td
+                  style={{
+                    backgroundColor: "rgba(19, 34, 77, 1)",
+                    borderBottomLeftRadius: "20px",
+                    borderBottomRightRadius: "20px",
+                    padding: "20px",
+                  }}
+                >
+                  <div style={{ textAlign: 'center' }}>
+                    {(() => {
+                      const buttonProps = getButtonProps('Elite');
+                      return (
+                        <button
+                          onClick={buttonProps.onClick}
+                          disabled={buttonProps.disabled}
+                          className="subscription-button"
+                          style={{
+                            padding: '8px 12px',
+                            borderRadius: '100px',
+                            border: 'none',
+                            fontSize: '16px',
+                            fontWeight: '600',
+                            cursor: buttonProps.disabled ? 'not-allowed' : 'pointer',
+                            backgroundColor: buttonProps.disabled ? '#131723' : (buttonProps.variant === 'upgrade' ? '#0D6EFD' : '#28a745'),
+                            color: 'white',
+                            opacity: buttonProps.disabled ? 0.6 : 1,
+                            transition: 'all 0.2s ease',
+                            width: 'auto',
+                            minWidth: '89px',
+                            height: '32px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          {buttonProps.text}
+                        </button>
+                      );
+                    })()}
+                  </div>
+                </td>
+                <td
+                  style={{
+                    backgroundColor: "rgba(23, 25, 31, 1)",
+                    borderBottomLeftRadius: "20px",
+                    borderBottomRightRadius: "20px",
+                    padding: "20px",
+                  }}
+                >
+                  <div style={{ textAlign: 'center' }}>
+                    {(() => {
+                      const buttonProps = getButtonProps('Ultimate');
+                      return (
+                        <button
+                          onClick={buttonProps.onClick}
+                          disabled={buttonProps.disabled}
+                          className="subscription-button"
+                          style={{
+                            padding: '8px 12px',
+                            borderRadius: '100px',
+                            border: 'none',
+                            fontSize: '16px',
+                            fontWeight: '600',
+                            cursor: buttonProps.disabled ? 'not-allowed' : 'pointer',
+                            backgroundColor: buttonProps.disabled ? '#131723' : (buttonProps.variant === 'upgrade' ? '#0D6EFD' : '#28a745'),
+                            color: 'white',
+                            opacity: buttonProps.disabled ? 0.6 : 1,
+                            transition: 'all 0.2s ease',
+                            width: 'auto',
+                            minWidth: '89px',
+                            height: '32px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          {buttonProps.text}
+                        </button>
+                      );
+                    })()}
                   </div>
                 </td>
               </tr>

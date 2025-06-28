@@ -541,7 +541,8 @@ const SubscriptionIndex = () => {
       <div style={{ marginTop: "50px" }}>
         <SubscriptionFeatures 
           numProperties={numProperties} 
-          billingPeriod={billingPeriod} 
+          billingPeriod={billingPeriod}
+          currentSubscriptionPlan={subscriptionPlanName}
         />
       </div>
     </div>
