@@ -19,7 +19,6 @@ const SubscriptionIndex = () => {
     React.useState(false);
   const [subscriptionNotFound, setSubscriptionNotFound] = useState(false);
   const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'annual'
-  const [numProperties, setNumProperties] = useState(32);
 
   const userData = store?.getUserDataReducer?.getUserData?.data?.user;
   const userSubscriptionData = userData?.subscription;
@@ -27,6 +26,7 @@ const SubscriptionIndex = () => {
   const userSubscriptionStatus = getSubscriptionStatus(userData);
   const subscriptionPlanName = userSubscriptionStatus.plan;
   const numPropertiesAllowed = userSubscriptionStatus.props_allowed;
+  const [numProperties, setNumProperties] = useState(numPropertiesAllowed || 1);
   const paymentGoodUntil =
     userData?.subscr_payment_good_until ||
     userSubscriptionData?.payment_good_until;
