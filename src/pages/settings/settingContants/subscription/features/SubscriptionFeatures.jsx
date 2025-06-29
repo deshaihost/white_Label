@@ -15,6 +15,26 @@ const SubscriptionFeatures = ({
 }) => {
   const [activeTooltip, setActiveTooltip] = useState(null);
 
+  // Local fallback formatPrice function with comma formatting
+  const localFormatPrice = (price) => {
+    const formattedPrice = price.toFixed(2);
+    const [dollars, cents] = formattedPrice.split(".");
+
+    // Add comma formatting for thousands
+    const formatWithCommas = (num) => {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    const formattedAmount = cents === "00" 
+      ? formatWithCommas(dollars)
+      : formatWithCommas(dollars) + "." + cents;
+
+    return {
+      dollar: "$",
+      amount: formattedAmount,
+    };
+  };
+
   const handleTooltipClick = (featureName, event) => {
     event.stopPropagation();
     setActiveTooltip(activeTooltip === featureName ? null : featureName);
@@ -291,10 +311,10 @@ const SubscriptionFeatures = ({
                     </div> */}
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
                       <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(proPricePerProperty).dollar : '$'}
+                        {formatPrice ? formatPrice(proPricePerProperty).dollar : localFormatPrice(proPricePerProperty).dollar}
                       </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(proPricePerProperty).amount : proPricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(proPricePerProperty).amount : localFormatPrice(proPricePerProperty).amount}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
@@ -302,7 +322,7 @@ const SubscriptionFeatures = ({
                     </div>
                     {numProperties > 1 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                        {formatPrice ? formatPrice(proPriceTotal).dollar : '$'}{formatPrice ? formatPrice(proPriceTotal).amount : proPriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                        {formatPrice ? formatPrice(proPriceTotal).dollar : localFormatPrice(proPriceTotal).dollar}{formatPrice ? formatPrice(proPriceTotal).amount : localFormatPrice(proPriceTotal).amount} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
                       </div>
                     )}
                   </div>
@@ -323,10 +343,10 @@ const SubscriptionFeatures = ({
                     </div> */}
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
                       <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(elitePricePerProperty).dollar : '$'}
+                        {formatPrice ? formatPrice(elitePricePerProperty).dollar : localFormatPrice(elitePricePerProperty).dollar}
                       </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(elitePricePerProperty).amount : elitePricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(elitePricePerProperty).amount : localFormatPrice(elitePricePerProperty).amount}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
@@ -334,7 +354,7 @@ const SubscriptionFeatures = ({
                     </div>
                     {numProperties > 1 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                        {formatPrice ? formatPrice(elitePriceTotal).dollar : '$'}{formatPrice ? formatPrice(elitePriceTotal).amount : elitePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                        {formatPrice ? formatPrice(elitePriceTotal).dollar : localFormatPrice(elitePriceTotal).dollar}{formatPrice ? formatPrice(elitePriceTotal).amount : localFormatPrice(elitePriceTotal).amount} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
                       </div>
                     )}
                   </div>
@@ -355,10 +375,10 @@ const SubscriptionFeatures = ({
                     </div> */}
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
                       <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(ultimatePricePerProperty).dollar : '$'}
+                        {formatPrice ? formatPrice(ultimatePricePerProperty).dollar : localFormatPrice(ultimatePricePerProperty).dollar}
                       </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(ultimatePricePerProperty).amount : ultimatePricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(ultimatePricePerProperty).amount : localFormatPrice(ultimatePricePerProperty).amount}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
@@ -366,7 +386,7 @@ const SubscriptionFeatures = ({
                     </div>
                     {numProperties > 1 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                        {formatPrice ? formatPrice(ultimatePriceTotal).dollar : '$'}{formatPrice ? formatPrice(ultimatePriceTotal).amount : ultimatePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                        {formatPrice ? formatPrice(ultimatePriceTotal).dollar : localFormatPrice(ultimatePriceTotal).dollar}{formatPrice ? formatPrice(ultimatePriceTotal).amount : localFormatPrice(ultimatePriceTotal).amount} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
                       </div>
                     )}
                   </div>
@@ -491,10 +511,10 @@ const SubscriptionFeatures = ({
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
                       <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(proPricePerProperty).dollar : '$'}
+                        {formatPrice ? formatPrice(proPricePerProperty).dollar : localFormatPrice(proPricePerProperty).dollar}
                       </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(proPricePerProperty).amount : proPricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(proPricePerProperty).amount : localFormatPrice(proPricePerProperty).amount}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
@@ -502,7 +522,7 @@ const SubscriptionFeatures = ({
                     </div>
                     {numProperties > 1 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                        {formatPrice ? formatPrice(proPriceTotal).dollar : '$'}{formatPrice ? formatPrice(proPriceTotal).amount : proPriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                        {formatPrice ? formatPrice(proPriceTotal).dollar : localFormatPrice(proPriceTotal).dollar}{formatPrice ? formatPrice(proPriceTotal).amount : localFormatPrice(proPriceTotal).amount} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
                       </div>
                     )}
                   </div>
@@ -516,10 +536,10 @@ const SubscriptionFeatures = ({
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
                       <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(elitePricePerProperty).dollar : '$'}
+                        {formatPrice ? formatPrice(elitePricePerProperty).dollar : localFormatPrice(elitePricePerProperty).dollar}
                       </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(elitePricePerProperty).amount : elitePricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(elitePricePerProperty).amount : localFormatPrice(elitePricePerProperty).amount}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
@@ -527,7 +547,7 @@ const SubscriptionFeatures = ({
                     </div>
                     {numProperties > 1 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                        {formatPrice ? formatPrice(elitePriceTotal).dollar : '$'}{formatPrice ? formatPrice(elitePriceTotal).amount : elitePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                        {formatPrice ? formatPrice(elitePriceTotal).dollar : localFormatPrice(elitePriceTotal).dollar}{formatPrice ? formatPrice(elitePriceTotal).amount : localFormatPrice(elitePriceTotal).amount} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
                       </div>
                     )}
                   </div>
@@ -541,10 +561,10 @@ const SubscriptionFeatures = ({
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
                       <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(ultimatePricePerProperty).dollar : '$'}
+                        {formatPrice ? formatPrice(ultimatePricePerProperty).dollar : localFormatPrice(ultimatePricePerProperty).dollar}
                       </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        {formatPrice ? formatPrice(ultimatePricePerProperty).amount : ultimatePricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(ultimatePricePerProperty).amount : localFormatPrice(ultimatePricePerProperty).amount}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
@@ -552,7 +572,7 @@ const SubscriptionFeatures = ({
                     </div>
                     {numProperties > 1 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                        {formatPrice ? formatPrice(ultimatePriceTotal).dollar : '$'}{formatPrice ? formatPrice(ultimatePriceTotal).amount : ultimatePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                        {formatPrice ? formatPrice(ultimatePriceTotal).dollar : localFormatPrice(ultimatePriceTotal).dollar}{formatPrice ? formatPrice(ultimatePriceTotal).amount : localFormatPrice(ultimatePriceTotal).amount} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
                       </div>
                     )}
                   </div>

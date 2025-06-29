@@ -172,9 +172,18 @@ const Pricing = () => {
     const formattedPrice = price.toFixed(2);
     const [dollars, cents] = formattedPrice.split(".");
 
+    // Add comma formatting for thousands
+    const formatWithCommas = (num) => {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    const formattedAmount = cents === "00" 
+      ? formatWithCommas(dollars)
+      : formatWithCommas(dollars) + "." + cents;
+
     return {
       dollar: "$",
-      amount: cents === "00" ? dollars : formattedPrice,
+      amount: formattedAmount,
       period: billingPeriod === "monthly" ? "/month" : "/year",
     };
   };
