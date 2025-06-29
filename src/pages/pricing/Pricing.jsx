@@ -284,105 +284,208 @@ const Pricing = () => {
         </div>{" "}
         {/* Number of properties selector */}
         <div className="properties-selector">
-          <div className="number-properties">
-            <h3>Number of properties:</h3>
-            <div 
-              className="property-selector"
+          <div 
+            style={{
+              backgroundColor: "#1E1E1E",
+              borderRadius: "30px",
+              padding: "10px 20px",
+              display: "inline-flex",
+              alignItems: "center",
+            }}
+          >
+            <span
               style={{
-                minWidth: '180px',
-                width: `${Math.max(180, inputValue.length * 16 + 100)}px`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
+                color: "white",
+                fontSize: "14px",
               }}
             >
-              <input
-                type="text"
-                min="0"
-                value={inputValue}
+              Number of {propertyCount === 0 || propertyCount === 1 ? 'Property' : 'Properties'}:
+            </span>
+            <input
+              type="text"
+              min="0"
+              value={inputValue}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                
+                // Allow only numbers
+                if (!/^\d*$/.test(newValue)) {
+                  return;
+                }
+                
+                setInputValue(newValue);
+                
+                // Update property count
+                if (newValue === '' || newValue === '0') {
+                  setPropertyCount(0);
+                } else {
+                  const num = parseInt(newValue, 10);
+                  if (!isNaN(num) && num >= 0) {
+                    setPropertyCount(num);
+                  }
+                }
+              }}
+              onFocus={(e) => {
+                // Select all text when focused so typing replaces the value
+                e.target.select();
+              }}
+              onBlur={(e) => {
+                // When focus is lost, clean up the display value
+                if (inputValue === '' || parseInt(inputValue, 10) === 0) {
+                  setInputValue("0");
+                  setPropertyCount(0);
+                } else {
+                  const cleanValue = parseInt(inputValue, 10).toString();
+                  setInputValue(cleanValue);
+                  setPropertyCount(parseInt(cleanValue, 10));
+                }
+              }}
+              style={{
+                color: "white",
+                fontWeight: "bold",
+                marginLeft: "8px",
+                fontSize: "16px",
+                backgroundColor: "transparent",
+                border: "none",
+                outline: "none",
+                width: "60px",
+                textAlign: "center",
+              }}
+            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginLeft: "4px",
+              }}
+            >
+              <button
+                onClick={() => {
+                  const newValue = propertyCount + 1;
+                  setPropertyCount(newValue);
+                  setInputValue(newValue.toString());
+                }}
                 style={{
-                  minWidth: '80px',
-                  width: `${Math.max(80, inputValue.length * 16 + 30)}px`,
-                  textAlign: 'center'
+                  color: "white",
+                  backgroundColor: "transparent",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  borderRadius: "2px",
+                  width: "16px",
+                  height: "12px",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: "1px",
                 }}
-                onChange={(e) => {
-                  const newValue = e.target.value;
-                  
-                  // Allow only numbers
-                  if (!/^\d*$/.test(newValue)) {
-                    return;
-                  }
-                  
-                  setInputValue(newValue);
-                  
-                  // Update property count
-                  if (newValue === '' || newValue === '0') {
-                    setPropertyCount(0);
-                  } else {
-                    const num = parseInt(newValue, 10);
-                    if (!isNaN(num) && num >= 0) {
-                      setPropertyCount(num);
-                    }
-                  }
+              >
+                ▲
+              </button>
+              <button
+                onClick={() => {
+                  const newValue = Math.max(0, propertyCount - 1);
+                  setPropertyCount(newValue);
+                  setInputValue(newValue.toString());
                 }}
-                onFocus={(e) => {
-                  // Select all text when focused so typing replaces the value
-                  e.target.select();
+                style={{
+                  color: "white",
+                  backgroundColor: "transparent",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  borderRadius: "2px",
+                  width: "16px",
+                  height: "12px",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
-                onBlur={(e) => {
-                  // When focus is lost, clean up the display value
-                  if (inputValue === '' || parseInt(inputValue, 10) === 0) {
-                    setInputValue("0");
-                    setPropertyCount(0);
-                  } else {
-                    const cleanValue = parseInt(inputValue, 10).toString();
-                    setInputValue(cleanValue);
-                    setPropertyCount(parseInt(cleanValue, 10));
-                  }
-                }}
-              />
-              <span>{propertyCount === 1 ? "Property" : "Properties"}</span>
+              >
+                ▼
+              </button>
             </div>
           </div>{" "}
           <div className="billing-toggle">
             {/* <span className="months-free">2 Months Free</span> */}
             <div className="toggle-buttons-container">
               <div
-                className="toggle-buttons"
+                style={{
+                  backgroundColor: "#1E1E1E",
+                  borderRadius: "30px",
+                  padding: "5px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
                 onClick={handleToggleClick}
-                style={{ cursor: "pointer" }}
               >
-                <button
-                  className={`toggle-button ${
-                    billingPeriod === "monthly" ? "active" : ""
-                  }`}
-                >
-                  Monthly
-                </button>
-                <span className="toggle-arrow">→</span>
-                <button
-                  className={`toggle-button ${
-                    billingPeriod === "annual" ? "active" : ""
-                  }`}
-                  style={{ 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center'
+                <div
+                  style={{
+                    display: "flex",
+                    position: "relative",
+                    borderRadius: "30px",
+                    overflow: "hidden",
                   }}
                 >
-                  <span>Annual</span>
-                  <span
+                  <button
                     style={{
-                      fontSize: "12px",
-                      color: "#FFA500",
-                      fontWeight: "400",
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontStyle: "italic",
+                      padding: "10px 25px",
+                      background: billingPeriod === 'monthly' ? "#0D6EFD" : "transparent",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "30px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                      zIndex: "1",
+                      pointerEvents: "none",
                     }}
                   >
-                    2 Months Free!
+                    Monthly
+                  </button>
+                  <span
+                    style={{
+                      margin: "0 5px",
+                      color: "white",
+                      alignSelf: "center",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    →
                   </span>
-                </button>
+                  <button
+                    style={{
+                      padding: "10px 25px",
+                      background: billingPeriod === 'annual' ? "#0D6EFD" : "transparent",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "30px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <span>Annual</span>
+                    <span
+                      style={{
+                        fontSize: "12px",
+                        color: "#FFA500",
+                        fontWeight: "400",
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      2 Months Free!
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
