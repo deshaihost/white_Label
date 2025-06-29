@@ -363,7 +363,7 @@ const SubscriptionIndex = () => {
                           fontWeight: "400",
                           fontSize: "14px",
                           marginLeft: "4px",
-                          color: "#888"
+                          color: "#FFFFFF",
                         }}
                       >
                         per property
@@ -374,7 +374,7 @@ const SubscriptionIndex = () => {
                     {numPropertiesAllowed > 1 && (
                       <div style={{
                         fontSize: "14px",
-                        color: "#888",
+                        color: "#FFFFFF",
                         textAlign: "center"
                       }}>
                         {formatPrice(currentTotalPrice).dollar}
