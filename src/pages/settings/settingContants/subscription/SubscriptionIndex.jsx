@@ -31,7 +31,11 @@ const SubscriptionIndex = () => {
     userData?.subscr_payment_good_until ||
     userSubscriptionData?.payment_good_until;
   const nextPaymentDate = paymentGoodUntil
-    ? paymentGoodUntil.split(" ")[0]
+    ? new Date(paymentGoodUntil).toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      })
     : "";
 
 
