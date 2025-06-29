@@ -297,7 +297,7 @@ const Pricing = () => {
                 fontSize: "14px",
               }}
             >
-              Number of {propertyCount === 0 || propertyCount === 1 ? 'Property' : 'Properties'}:
+              {propertyCount === 1 ? 'Property' : 'Properties'}:
             </span>
             <input
               type="text"
