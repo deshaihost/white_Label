@@ -115,8 +115,8 @@ const Pricing = () => {
     },
   ];
 
-  // Calculate total price for a plan based on property count and billing period
-  const calculateTotalPrice = (plan, propertyCount, billingPeriod) => {
+  // Helper function to calculate base price without 12x multiplier
+  const calculateBasePricePerPeriod = (plan, propertyCount, billingPeriod) => {
     if (propertyCount === 0) return 0;
 
     let totalPrice = 0;
@@ -144,15 +144,27 @@ const Pricing = () => {
     return totalPrice;
   };
 
+  // Calculate total price for a plan based on property count and billing period
+  const calculateTotalPrice = (plan, propertyCount, billingPeriod) => {
+    const basePrice = calculateBasePricePerPeriod(plan, propertyCount, billingPeriod);
+    
+    // For yearly/annual billing, multiply by 12 to show annual total cost
+    if (billingPeriod === "annual") {
+      return basePrice * 12;
+    }
+    
+    return basePrice;
+  };
+
   // Calculate average per-property price for display
   const calculateAveragePerPropertyPrice = (plan, propertyCount, billingPeriod) => {
     if (propertyCount === 0) {
-      // Show price for 1 property when count is 0 for display purposes
-      return calculateTotalPrice(plan, 1, billingPeriod);
+      // Show 0 when count is 0
+      return 0;
     }
     
-    const totalPrice = calculateTotalPrice(plan, propertyCount, billingPeriod);
-    return totalPrice / propertyCount;
+    const basePrice = calculateBasePricePerPeriod(plan, propertyCount, billingPeriod);
+    return basePrice / propertyCount;
   };
 
   // Format price for display
@@ -282,7 +294,7 @@ const Pricing = () => {
         </div>{" "}
         {/* Number of properties selector */}
         <div className="properties-selector">
-          <div 
+          <div
             style={{
               backgroundColor: "#1E1E1E",
               borderRadius: "30px",
