@@ -379,7 +379,7 @@ const SubscriptionIndex = () => {
                       }}>
                         {formatPrice(currentTotalPrice).dollar}
                         {formatPrice(currentTotalPrice).amount}
-                        {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")} total
+                        {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")} 
                       </div>
                     )}
                     
