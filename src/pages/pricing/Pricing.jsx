@@ -147,8 +147,8 @@ const Pricing = () => {
   // Calculate average per-property price for display
   const calculateAveragePerPropertyPrice = (plan, propertyCount, billingPeriod) => {
     if (propertyCount === 0) {
-      // Return 0 for 0 properties
-      return 0;
+      // Show price for 1 property when count is 0 for display purposes
+      return calculateTotalPrice(plan, 1, billingPeriod);
     }
     
     const totalPrice = calculateTotalPrice(plan, propertyCount, billingPeriod);
@@ -157,8 +157,6 @@ const Pricing = () => {
 
   // Format price for display
   const formatPrice = (price) => {
-    if (price === 0) return { dollar: "$", amount: "0", period: "/month" };
-
     const formattedPrice = price.toFixed(2);
     const [dollars, cents] = formattedPrice.split(".");
 
@@ -539,37 +537,32 @@ const Pricing = () => {
             </div>
 
             <div className="price">
-              <span className="dollar">
-                {
-                  formatPrice(
-                    calculateAveragePerPropertyPrice("pro", propertyCount, billingPeriod)
-                  ).dollar
-                }
-              </span>
-              <span className="amount">
-                {
-                  formatPrice(
-                    calculateAveragePerPropertyPrice("pro", propertyCount, billingPeriod)
-                  ).amount
-                }
-              </span>
-              <span className="period">
-                {/* {
-                  formatPrice(
-                    calculateAveragePerPropertyPrice("pro", propertyCount, billingPeriod)
-                  ).period
-                } */}
-                {/* <br /> */}
-                per property
-                {propertyCount > 1 && (
-                  <>
-                    <br />
-                    {formatPrice(calculateTotalPrice("pro", propertyCount, billingPeriod)).dollar}
-                    {formatPrice(calculateTotalPrice("pro", propertyCount, billingPeriod)).amount}
-                    {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")}
-                  </>
-                )}
-              </span>
+              <div className="main-price">
+                <span className="dollar">
+                  {
+                    formatPrice(
+                      calculateAveragePerPropertyPrice("pro", propertyCount, billingPeriod)
+                    ).dollar
+                  }
+                </span>
+                <span className="amount">
+                  {
+                    formatPrice(
+                      calculateAveragePerPropertyPrice("pro", propertyCount, billingPeriod)
+                    ).amount
+                  }
+                </span>
+                <span className="period">
+                  per property
+                </span>
+              </div>
+              {propertyCount > 1 && (
+                <div className="total-price">
+                  {formatPrice(calculateTotalPrice("pro", propertyCount, billingPeriod)).dollar}
+                  {formatPrice(calculateTotalPrice("pro", propertyCount, billingPeriod)).amount}
+                  {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")}
+                </div>
+              )}
             </div>
 
             <button className="try-free-btn" onClick={handleTryForFree}>
@@ -590,37 +583,32 @@ const Pricing = () => {
             </div>
 
             <div className="price">
-              <span className="dollar">
-                {
-                  formatPrice(
-                    calculateAveragePerPropertyPrice("elite", propertyCount, billingPeriod)
-                  ).dollar
-                }
-              </span>
-              <span className="amount">
-                {
-                  formatPrice(
-                    calculateAveragePerPropertyPrice("elite", propertyCount, billingPeriod)
-                  ).amount
-                }
-              </span>
-              <span className="period">
-                {/* {
-                  formatPrice(
-                    calculateAveragePerPropertyPrice("elite", propertyCount, billingPeriod)
-                  ).period
-                }
-                <br /> */}
-                per property
-                {propertyCount > 1 && (
-                  <>
-                    <br />
-                    {formatPrice(calculateTotalPrice("elite", propertyCount, billingPeriod)).dollar}
-                    {formatPrice(calculateTotalPrice("elite", propertyCount, billingPeriod)).amount}
-                    {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")}
-                  </>
-                )}
-              </span>
+              <div className="main-price">
+                <span className="dollar">
+                  {
+                    formatPrice(
+                      calculateAveragePerPropertyPrice("elite", propertyCount, billingPeriod)
+                    ).dollar
+                  }
+                </span>
+                <span className="amount">
+                  {
+                    formatPrice(
+                      calculateAveragePerPropertyPrice("elite", propertyCount, billingPeriod)
+                    ).amount
+                  }
+                </span>
+                <span className="period">
+                  per property
+                </span>
+              </div>
+              {propertyCount > 1 && (
+                <div className="total-price">
+                  {formatPrice(calculateTotalPrice("elite", propertyCount, billingPeriod)).dollar}
+                  {formatPrice(calculateTotalPrice("elite", propertyCount, billingPeriod)).amount}
+                  {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")}
+                </div>
+              )}
             </div>
 
             <button className="try-free-btn" onClick={handleTryForFree}>
@@ -640,37 +628,32 @@ const Pricing = () => {
             </div>
 
             <div className="price">
-              <span className="dollar">
-                {
-                  formatPrice(
-                    calculateAveragePerPropertyPrice("ultimate", propertyCount, billingPeriod)
-                  ).dollar
-                }
-              </span>
-              <span className="amount">
-                {
-                  formatPrice(
-                    calculateAveragePerPropertyPrice("ultimate", propertyCount, billingPeriod)
-                  ).amount
-                }
-              </span>
-              <span className="period">
-                {/* {
-                  formatPrice(
-                    calculateAveragePerPropertyPrice("ultimate", propertyCount, billingPeriod)
-                  ).period
-                }
-                <br /> */}
-                per property
-                {propertyCount > 1 && (
-                  <>
-                    <br />
-                    {formatPrice(calculateTotalPrice("ultimate", propertyCount, billingPeriod)).dollar}
-                    {formatPrice(calculateTotalPrice("ultimate", propertyCount, billingPeriod)).amount}
-                    {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")}
-                  </>
-                )}
-              </span>
+              <div className="main-price">
+                <span className="dollar">
+                  {
+                    formatPrice(
+                      calculateAveragePerPropertyPrice("ultimate", propertyCount, billingPeriod)
+                    ).dollar
+                  }
+                </span>
+                <span className="amount">
+                  {
+                    formatPrice(
+                      calculateAveragePerPropertyPrice("ultimate", propertyCount, billingPeriod)
+                    ).amount
+                  }
+                </span>
+                <span className="period">
+                  per property
+                </span>
+              </div>
+              {propertyCount > 1 && (
+                <div className="total-price">
+                  {formatPrice(calculateTotalPrice("ultimate", propertyCount, billingPeriod)).dollar}
+                  {formatPrice(calculateTotalPrice("ultimate", propertyCount, billingPeriod)).amount}
+                  {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")}
+                </div>
+              )}
             </div>
 
             <button className="try-free-btn" onClick={handleTryForFree}>
