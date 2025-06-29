@@ -40,95 +40,144 @@ const SubscriptionIndex = () => {
 
 
 
-  // Pricing tiers configuration
-  const pricingTiers = {
-    monthly: {
-      Pro: [
-        { min: 1, max: 9, price: 7 },
-        { min: 10, max: 49, price: 6 },
-        { min: 50, max: 99, price: 5 },
-        { min: 100, max: 249, price: 4 },
-        { min: 250, max: 499, price: 3.50 },
-        { min: 500, max: 999, price: 3 },
-        { min: 1000, max: Infinity, price: 2.50 }
-      ],
-      Elite: [
-        { min: 1, max: 9, price: 10 },
-        { min: 10, max: 49, price: 8 },
-        { min: 50, max: 99, price: 6 },
-        { min: 100, max: 249, price: 4.75 },
-        { min: 250, max: 499, price: 4 },
-        { min: 500, max: 999, price: 3.50 },
-        { min: 1000, max: Infinity, price: 3 }
-      ],
-      Ultimate: [
-        { min: 1, max: 9, price: 12 },
-        { min: 10, max: 49, price: 10 },
-        { min: 50, max: 99, price: 8 },
-        { min: 100, max: 249, price: 6.25 },
-        { min: 250, max: 499, price: 5 },
-        { min: 500, max: 999, price: 4.25 },
-        { min: 1000, max: Infinity, price: 3.50 }
-      ]
-    }
-  };
+  // Pricing tiers structure (same as Pricing.jsx)
+  const pricingTiers = [
+    {
+      min: 1,
+      max: 9,
+      monthly: { pro: 7, elite: 10, ultimate: 12 },
+      yearly: { pro: 5.83, elite: 8.33, ultimate: 10.0 },
+    },
+    {
+      min: 10,
+      max: 49,
+      monthly: { pro: 6, elite: 8, ultimate: 10 },
+      yearly: { pro: 5.0, elite: 6.67, ultimate: 8.33 },
+    },
+    {
+      min: 50,
+      max: 99,
+      monthly: { pro: 5, elite: 6, ultimate: 8 },
+      yearly: { pro: 4.17, elite: 5.0, ultimate: 6.67 },
+    },
+    {
+      min: 100,
+      max: 249,
+      monthly: { pro: 4, elite: 4.75, ultimate: 6.25 },
+      yearly: { pro: 3.33, elite: 3.96, ultimate: 5.21 },
+    },
+    {
+      min: 250,
+      max: 499,
+      monthly: { pro: 3.5, elite: 4, ultimate: 5 },
+      yearly: { pro: 2.92, elite: 3.33, ultimate: 4.17 },
+    },
+    {
+      min: 500,
+      max: 999,
+      monthly: { pro: 3, elite: 3.5, ultimate: 4.25 },
+      yearly: { pro: 2.5, elite: 2.92, ultimate: 3.54 },
+    },
+    {
+      min: 1000,
+      max: Infinity,
+      monthly: { pro: 2.5, elite: 3, ultimate: 3.5 },
+      yearly: { pro: 2.08, elite: 2.5, ultimate: 2.92 },
+    },
+  ];
 
-  // Calculate yearly pricing (16.67% discount)
-  pricingTiers.yearly = {};
-  Object.keys(pricingTiers.monthly).forEach(plan => {
-    pricingTiers.yearly[plan] = pricingTiers.monthly[plan].map(tier => ({
-      ...tier,
-      price: Math.round(tier.price * 0.8333 * 100) / 100 // 16.67% discount, rounded to 2 decimals
-    }));
-  });
+  // Helper function to calculate base price without 12x multiplier (same as Pricing.jsx)
+  const calculateBasePricePerPeriod = (plan, propertyCount, billingPeriod) => {
+    if (propertyCount === 0) return 0;
 
-  // Function to calculate total price based on tiered pricing
-  const calculateTotalPrice = (numProperties, planName, isYearly = false) => {
-    if (!numProperties || !planName || numProperties <= 0) {
-      return 0;
-    }
-    
-    // Extract plan type from full plan name (e.g., "HostBuddy Elite" -> "Elite")
-    let normalizedPlanName = planName;
-    if (planName.toLowerCase().includes('pro')) {
-      normalizedPlanName = 'Pro';
-    } else if (planName.toLowerCase().includes('elite')) {
-      normalizedPlanName = 'Elite';
-    } else if (planName.toLowerCase().includes('ultimate')) {
-      normalizedPlanName = 'Ultimate';
-    }
-    
-    const period = isYearly ? 'yearly' : 'monthly';
-    const tiers = pricingTiers[period][normalizedPlanName];
-    
-    if (!tiers) {
-      return 0;
-    }
-    
     let totalPrice = 0;
-    let remainingProperties = numProperties;
-    
-    for (const tier of tiers) {
+    let remainingProperties = propertyCount;
+
+    // Convert 'annual' to 'yearly' to match our pricing tiers structure
+    const tierKey = billingPeriod === "annual" ? "yearly" : billingPeriod;
+
+    for (const tier of pricingTiers) {
       if (remainingProperties <= 0) break;
-      
-      const tierSize = tier.max === Infinity ? remainingProperties : (tier.max - tier.min + 1);
-      const propertiesInThisTier = Math.min(remainingProperties, tierSize);
-      
-      const tierCost = propertiesInThisTier * tier.price;
-      totalPrice += tierCost;
+
+      const propertiesInThisTier = Math.min(
+        remainingProperties,
+        tier.max - tier.min + 1
+      );
+      const pricePerProperty =
+        tier[tierKey] && tier[tierKey][plan] ? tier[tierKey][plan] : 0;
+
+      totalPrice += propertiesInThisTier * pricePerProperty;
       remainingProperties -= propertiesInThisTier;
-      
+
       if (tier.max === Infinity) break;
     }
-    
-    return Math.round(totalPrice * 100) / 100; // Round to 2 decimal places
+
+    return totalPrice;
   };
 
-  // Calculate current subscription total price
+  // Calculate total price for a plan based on property count and billing period (same as Pricing.jsx)
+  const calculateTotalPrice = (plan, propertyCount, billingPeriod) => {
+    const basePrice = calculateBasePricePerPeriod(plan, propertyCount, billingPeriod);
+    
+    // For yearly/annual billing, multiply by 12 to show annual total cost
+    if (billingPeriod === "annual") {
+      return basePrice * 12;
+    }
+    
+    return basePrice;
+  };
+
+  // Calculate average per-property price for display (same as Pricing.jsx)
+  const calculateAveragePerPropertyPrice = (plan, propertyCount, billingPeriod) => {
+    if (propertyCount === 0) {
+      // Show 0 when count is 0
+      return 0;
+    }
+    
+    const basePrice = calculateBasePricePerPeriod(plan, propertyCount, billingPeriod);
+    return basePrice / propertyCount;
+  };
+
+  // Format price for display (same as Pricing.jsx)
+  const formatPrice = (price) => {
+    const formattedPrice = price.toFixed(2);
+    const [dollars, cents] = formattedPrice.split(".");
+
+    return {
+      dollar: "$",
+      amount: cents === "00" ? dollars : formattedPrice,
+      period: billingPeriod === "monthly" ? "/month" : "/year",
+    };
+  };
+
+  // Helper function to normalize plan names (extract plan type from full plan name)
+  const normalizePlanName = (planName) => {
+    if (!planName) return '';
+    
+    if (planName.toLowerCase().includes('pro')) {
+      return 'pro';
+    } else if (planName.toLowerCase().includes('elite')) {
+      return 'elite';
+    } else if (planName.toLowerCase().includes('ultimate')) {
+      return 'ultimate';
+    }
+    
+    return planName.toLowerCase();
+  };
+
+  // Calculate current subscription total price using new logic
+  const normalizedPlan = normalizePlanName(subscriptionPlanName);
   const currentTotalPrice = calculateTotalPrice(
+    normalizedPlan, 
     numPropertiesAllowed, 
-    subscriptionPlanName, 
-    billingPeriod === 'annual'
+    billingPeriod
+  );
+
+  // Calculate current subscription average per-property price
+  const currentAveragePrice = calculateAveragePerPropertyPrice(
+    normalizedPlan,
+    numPropertiesAllowed,
+    billingPeriod
   );
 
   // Call the billing portal API, get the URL from the response, then redirect the user to it securely (in a way that wont make the browser mad)
@@ -284,23 +333,65 @@ const SubscriptionIndex = () => {
                     flexDirection: "column",
                     alignItems: "center"
                   }}>
-                    <span
-                      className="samsung-sharp-sans samsung-sharp-sans"
-                      style={{
-                        fontWeight: "500",
-                        fontSize: "32px",
-                      }}
-                    >
-                      ${currentTotalPrice}
-                    </span>
+                    {/* Average per-property price (main display) */}
+                    <div style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      marginBottom: "4px"
+                    }}>
+                      <span
+                        className="samsung-sharp-sans samsung-sharp-sans"
+                        style={{
+                          fontWeight: "500",
+                          fontSize: "24px",
+                        }}
+                      >
+                        {formatPrice(currentAveragePrice).dollar}
+                      </span>
+                      <span
+                        className="samsung-sharp-sans samsung-sharp-sans"
+                        style={{
+                          fontWeight: "500",
+                          fontSize: "32px",
+                        }}
+                      >
+                        {formatPrice(currentAveragePrice).amount}
+                      </span>
+                      <span
+                        className="samsung-sharp-sans samsung-sharp-sans"
+                        style={{
+                          fontWeight: "400",
+                          fontSize: "14px",
+                          marginLeft: "4px",
+                          color: "#888"
+                        }}
+                      >
+                        per property
+                      </span>
+                    </div>
+                    
+                    {/* Total price (secondary display) */}
+                    {numPropertiesAllowed > 1 && (
+                      <div style={{
+                        fontSize: "14px",
+                        color: "#888",
+                        textAlign: "center"
+                      }}>
+                        {formatPrice(currentTotalPrice).dollar}
+                        {formatPrice(currentTotalPrice).amount}
+                        {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")} total
+                      </div>
+                    )}
+                    
                     <span
                       className="samsung-sharp-sans samsung-sharp-sans"
                       style={{
                         fontWeight: "500",
                         fontSize: "12px",
+                        marginTop: "4px"
                       }}
                     >
-                     Total Price ({billingPeriod === 'annual' ? 'Yearly' : 'Monthly'})
+                     Pricing ({billingPeriod === 'annual' ? 'Yearly' : 'Monthly'})
                     </span>
                   </div>
                   <div style={{
@@ -547,6 +638,10 @@ const SubscriptionIndex = () => {
           numProperties={numProperties} 
           billingPeriod={billingPeriod}
           currentSubscriptionPlan={subscriptionPlanName}
+          calculateTotalPrice={calculateTotalPrice}
+          calculateAveragePerPropertyPrice={calculateAveragePerPropertyPrice}
+          formatPrice={formatPrice}
+          normalizePlanName={normalizePlanName}
         />
       </div>
     </div>

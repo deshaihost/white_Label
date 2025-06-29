@@ -4,7 +4,15 @@ import CheckImg from "../icons/subscriptionCheck.svg";
 import WrongImg from "../icons/subscriptionCrossCheck.svg";
 import HelpCircleIcon from "../../../../pricing/icons/features_help_circle.svg";
 
-const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', currentSubscriptionPlan = '' }) => {
+const SubscriptionFeatures = ({ 
+  numProperties = 32, 
+  billingPeriod = 'monthly', 
+  currentSubscriptionPlan = '',
+  calculateTotalPrice,
+  calculateAveragePerPropertyPrice,
+  formatPrice,
+  normalizePlanName
+}) => {
   const [activeTooltip, setActiveTooltip] = useState(null);
 
   const handleTooltipClick = (featureName, event) => {
@@ -35,102 +43,18 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
     return tooltipTexts[featureName] || `Feature information for ${featureName}`;
   };
 
-  // Pricing tiers configuration
-  const pricingTiers = {
-    monthly: {
-      Pro: [
-        { min: 1, max: 9, price: 7 },
-        { min: 10, max: 49, price: 6 },
-        { min: 50, max: 99, price: 5 },
-        { min: 100, max: 249, price: 4 },
-        { min: 250, max: 499, price: 3.50 },
-        { min: 500, max: 999, price: 3 },
-        { min: 1000, max: Infinity, price: 2.50 }
-      ],
-      Elite: [
-        { min: 1, max: 9, price: 10 },
-        { min: 10, max: 49, price: 8 },
-        { min: 50, max: 99, price: 6 },
-        { min: 100, max: 249, price: 4.75 },
-        { min: 250, max: 499, price: 4 },
-        { min: 500, max: 999, price: 3.50 },
-        { min: 1000, max: Infinity, price: 3 }
-      ],
-      Ultimate: [
-        { min: 1, max: 9, price: 12 },
-        { min: 10, max: 49, price: 10 },
-        { min: 50, max: 99, price: 8 },
-        { min: 100, max: 249, price: 6.25 },
-        { min: 250, max: 499, price: 5 },
-        { min: 500, max: 999, price: 4.25 },
-        { min: 1000, max: Infinity, price: 3.50 }
-      ]
-    }
-  };
+  // Calculate prices for each plan using helper functions from parent
+  const proPriceTotal = calculateTotalPrice ? calculateTotalPrice('pro', numProperties, billingPeriod) : 0;
+  const elitePriceTotal = calculateTotalPrice ? calculateTotalPrice('elite', numProperties, billingPeriod) : 0;
+  const ultimatePriceTotal = calculateTotalPrice ? calculateTotalPrice('ultimate', numProperties, billingPeriod) : 0;
 
-  // Calculate yearly pricing (16.67% discount)
-  pricingTiers.yearly = {};
-  Object.keys(pricingTiers.monthly).forEach(plan => {
-    pricingTiers.yearly[plan] = pricingTiers.monthly[plan].map(tier => ({
-      ...tier,
-      price: Math.round(tier.price * 0.8333 * 100) / 100 // 16.67% discount, rounded to 2 decimals
-    }));
-  });
+  // Calculate per-property price for display using helper functions
+  const proPricePerProperty = calculateAveragePerPropertyPrice ? calculateAveragePerPropertyPrice('pro', numProperties, billingPeriod) : 0;
+  const elitePricePerProperty = calculateAveragePerPropertyPrice ? calculateAveragePerPropertyPrice('elite', numProperties, billingPeriod) : 0;
+  const ultimatePricePerProperty = calculateAveragePerPropertyPrice ? calculateAveragePerPropertyPrice('ultimate', numProperties, billingPeriod) : 0;
 
-  // Function to calculate total price based on tiered pricing
-  const calculateTotalPrice = (numProperties, planName, isYearly = false) => {
-    if (!numProperties || !planName || numProperties <= 0) {
-      return 0;
-    }
-    
-    const period = isYearly ? 'yearly' : 'monthly';
-    const tiers = pricingTiers[period][planName];
-    
-    if (!tiers) {
-      return 0;
-    }
-    
-    let totalPrice = 0;
-    let remainingProperties = numProperties;
-    
-    for (const tier of tiers) {
-      if (remainingProperties <= 0) break;
-      
-      const tierSize = tier.max === Infinity ? remainingProperties : (tier.max - tier.min + 1);
-      const propertiesInThisTier = Math.min(remainingProperties, tierSize);
-      
-      const tierCost = propertiesInThisTier * tier.price;
-      totalPrice += tierCost;
-      remainingProperties -= propertiesInThisTier;
-      
-      if (tier.max === Infinity) break;
-    }
-    
-    return Math.round(totalPrice * 100) / 100; // Round to 2 decimal places
-  };
-
-  // Calculate prices for each plan
-  const isYearly = billingPeriod === 'annual';
-  const proPriceTotal = calculateTotalPrice(numProperties, 'Pro', isYearly);
-  const elitePriceTotal = calculateTotalPrice(numProperties, 'Elite', isYearly);
-  const ultimatePriceTotal = calculateTotalPrice(numProperties, 'Ultimate', isYearly);
-
-  // Calculate per-property price for display
-  const proPricePerProperty = numProperties > 0 ? (proPriceTotal / numProperties) : 0;
-  const elitePricePerProperty = numProperties > 0 ? (elitePriceTotal / numProperties) : 0;
-  const ultimatePricePerProperty = numProperties > 0 ? (ultimatePriceTotal / numProperties) : 0;
-
-  // Helper function to normalize plan names for comparison
-  const normalizePlanName = (planName) => {
-    if (!planName) return '';
-    if (planName.toLowerCase().includes('pro')) return 'Pro';
-    if (planName.toLowerCase().includes('elite')) return 'Elite';
-    if (planName.toLowerCase().includes('ultimate')) return 'Ultimate';
-    return planName;
-  };
-
-  // Get normalized current subscription plan
-  const normalizedCurrentPlan = normalizePlanName(currentSubscriptionPlan);
+  // Get normalized current subscription plan using helper function
+  const normalizedCurrentPlan = normalizePlanName ? normalizePlanName(currentSubscriptionPlan) : currentSubscriptionPlan;
 
   // Button click handlers
   const handleSubscribe = (planName) => {
@@ -150,12 +74,12 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
 
   // Helper function to get button text and state
   const getButtonProps = (planName) => {
-    // Define plan hierarchy: Pro < Elite < Ultimate
-    const planHierarchy = { 'Pro': 1, 'Elite': 2, 'Ultimate': 3 };
+    // Define plan hierarchy: pro < elite < ultimate
+    const planHierarchy = { 'pro': 1, 'elite': 2, 'ultimate': 3 };
     const currentPlanLevel = planHierarchy[normalizedCurrentPlan] || 0;
-    const targetPlanLevel = planHierarchy[planName] || 0;
+    const targetPlanLevel = planHierarchy[planName.toLowerCase()] || 0;
 
-    if (normalizedCurrentPlan === planName) {
+    if (normalizedCurrentPlan === planName.toLowerCase()) {
       return {
         text: 'Subscribed',
         disabled: true,
@@ -366,16 +290,21 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
                       {billingPeriod === 'annual' ? '2 weeks free, then' : '2 weeks free, then'}
                     </div> */}
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
+                        {formatPrice ? formatPrice(proPricePerProperty).dollar : '$'}
+                      </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        ${proPricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(proPricePerProperty).amount : proPricePerProperty.toFixed(2)}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
                       </span>
                     </div>
-                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                      ${proPriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
-                    </div>
+                    {numProperties > 1 && (
+                      <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                        {formatPrice ? formatPrice(proPriceTotal).dollar : '$'}{formatPrice ? formatPrice(proPriceTotal).amount : proPriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                      </div>
+                    )}
                   </div>
                 </th>{" "}
                 <th
@@ -393,16 +322,21 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
                       {billingPeriod === 'annual' ? '2 weeks free, then' : '2 weeks free, then'}
                     </div> */}
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
+                        {formatPrice ? formatPrice(elitePricePerProperty).dollar : '$'}
+                      </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        ${elitePricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(elitePricePerProperty).amount : elitePricePerProperty.toFixed(2)}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
                       </span>
                     </div>
-                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                      ${elitePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
-                    </div>
+                    {numProperties > 1 && (
+                      <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                        {formatPrice ? formatPrice(elitePriceTotal).dollar : '$'}{formatPrice ? formatPrice(elitePriceTotal).amount : elitePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                      </div>
+                    )}
                   </div>
                 </th>{" "}
                 <th
@@ -420,16 +354,21 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
                       {billingPeriod === 'annual' ? '2 weeks free, then' : '2 weeks free, then'}
                     </div> */}
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
+                        {formatPrice ? formatPrice(ultimatePricePerProperty).dollar : '$'}
+                      </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        ${ultimatePricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(ultimatePricePerProperty).amount : ultimatePricePerProperty.toFixed(2)}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
                       </span>
                     </div>
-                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                      ${ultimatePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
-                    </div>
+                    {numProperties > 1 && (
+                      <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                        {formatPrice ? formatPrice(ultimatePriceTotal).dollar : '$'}{formatPrice ? formatPrice(ultimatePriceTotal).amount : ultimatePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                      </div>
+                    )}
                   </div>
                 </th>
               </tr>
@@ -551,16 +490,21 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
                 >
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
+                        {formatPrice ? formatPrice(proPricePerProperty).dollar : '$'}
+                      </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        ${proPricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(proPricePerProperty).amount : proPricePerProperty.toFixed(2)}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
                       </span>
                     </div>
-                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                      ${proPriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
-                    </div>
+                    {numProperties > 1 && (
+                      <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                        {formatPrice ? formatPrice(proPriceTotal).dollar : '$'}{formatPrice ? formatPrice(proPriceTotal).amount : proPriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                      </div>
+                    )}
                   </div>
                 </td>
                 <td
@@ -571,16 +515,21 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
                 >
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
+                        {formatPrice ? formatPrice(elitePricePerProperty).dollar : '$'}
+                      </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        ${elitePricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(elitePricePerProperty).amount : elitePricePerProperty.toFixed(2)}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
                       </span>
                     </div>
-                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                      ${elitePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
-                    </div>
+                    {numProperties > 1 && (
+                      <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                        {formatPrice ? formatPrice(elitePriceTotal).dollar : '$'}{formatPrice ? formatPrice(elitePriceTotal).amount : elitePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                      </div>
+                    )}
                   </div>
                 </td>
                 <td
@@ -591,16 +540,21 @@ const SubscriptionFeatures = ({ numProperties = 32, billingPeriod = 'monthly', c
                 >
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
+                        {formatPrice ? formatPrice(ultimatePricePerProperty).dollar : '$'}
+                      </span>
                       <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>
-                        ${ultimatePricePerProperty.toFixed(2)}
+                        {formatPrice ? formatPrice(ultimatePricePerProperty).amount : ultimatePricePerProperty.toFixed(2)}
                       </span>
                       <span style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF', marginLeft: '8px' }}>
                         per property
                       </span>
                     </div>
-                    <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
-                      ${ultimatePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'}
-                    </div>
+                    {numProperties > 1 && (
+                      <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
+                        {formatPrice ? formatPrice(ultimatePriceTotal).dollar : '$'}{formatPrice ? formatPrice(ultimatePriceTotal).amount : ultimatePriceTotal} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} total
+                      </div>
+                    )}
                   </div>
                 </td>
               </tr>
