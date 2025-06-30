@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import MessageInbox from "./message/MessageInbox";
 import Loader from "../../../../../helper/Loader";
 import loaderGif from "../../../../../public/img/new_loader.gif";
+import InboxUpgrade from "./inbox_Upgrade/InboxUpgrade";
 import "./index.css";
 import "./MildeSection.css";
 import { timeFormat } from "../../../../../helper/commonFun";
@@ -76,6 +77,8 @@ const MildeSection = ({
   const [generateScratchApiLoading, setGenerateScratchApiLoading] =
     useState(false);
   const [assistanceUsed, setAssistanceUsed] = useState(null); // 'command' if the user clicked "generate from command"; 'generate' if the user clicked "generate from scratch"; null if neither, or if the user cleared a generated message
+  const [showInboxUpgradeModal, setShowInboxUpgradeModal] = useState(false);
+
   const callGenerateFromScratchApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -1476,9 +1479,20 @@ const MildeSection = ({
           Object.keys(allConversationData).length > 0 && (
             <p style={{ fontSize: "14px", margin: "0 auto" }}>
               Inbox is in view-only mode.{" "}
-              <Link to="/setting/subscription" style={{ fontSize: "14px" }}>
+              <button 
+                onClick={() => setShowInboxUpgradeModal(true)}
+                style={{ 
+                  fontSize: "14px", 
+                  background: "none", 
+                  border: "none", 
+                  color: "#007bff", 
+                  textDecoration: "underline", 
+                  cursor: "pointer",
+                  padding: "0"
+                }}
+              >
                 Upgrade
-              </Link>{" "}
+              </button>{" "}
               to generate and send messages.
             </p>
           )
@@ -2208,6 +2222,12 @@ const MildeSection = ({
           </div>
         </div>
       )}
+      
+      {/* InboxUpgrade Modal */}
+      <InboxUpgrade 
+        show={showInboxUpgradeModal} 
+        handleClose={() => setShowInboxUpgradeModal(false)} 
+      />
     </div>
   );
 };
