@@ -383,7 +383,7 @@ const SubscriptionIndex = () => {
                       </div>
                     )}
                     
-                    <span
+                    {/* <span
                       className="samsung-sharp-sans samsung-sharp-sans"
                       style={{
                         fontWeight: "500",
@@ -392,7 +392,7 @@ const SubscriptionIndex = () => {
                       }}
                     >
                      Pricing ({billingPeriod === 'annual' ? 'Yearly' : 'Monthly'})
-                    </span>
+                    </span> */}
                   </div>
                   <div style={{
                     width: "1px",

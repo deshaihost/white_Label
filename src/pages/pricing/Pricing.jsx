@@ -577,7 +577,7 @@ const Pricing = () => {
                   per property
                 </span>
               </div>
-              {propertyCount > 1 && (
+              {propertyCount >= 0 && (
                 <div className="total-price">
                   {formatPrice(calculateTotalPrice("pro", propertyCount, billingPeriod)).dollar}
                   {formatPrice(calculateTotalPrice("pro", propertyCount, billingPeriod)).amount}
@@ -623,7 +623,7 @@ const Pricing = () => {
                   per property
                 </span>
               </div>
-              {propertyCount > 1 && (
+              {propertyCount >= 0 && (
                 <div className="total-price">
                   {formatPrice(calculateTotalPrice("elite", propertyCount, billingPeriod)).dollar}
                   {formatPrice(calculateTotalPrice("elite", propertyCount, billingPeriod)).amount}
@@ -668,7 +668,7 @@ const Pricing = () => {
                   per property
                 </span>
               </div>
-              {propertyCount > 1 && (
+              {propertyCount >= 0 && (
                 <div className="total-price">
                   {formatPrice(calculateTotalPrice("ultimate", propertyCount, billingPeriod)).dollar}
                   {formatPrice(calculateTotalPrice("ultimate", propertyCount, billingPeriod)).amount}
