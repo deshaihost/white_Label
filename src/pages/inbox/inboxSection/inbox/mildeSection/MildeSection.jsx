@@ -994,11 +994,14 @@ const MildeSection = ({
 
   const toolTipMessage = getTooltipMessage();
 
-  // Filter messages for the last 30 days
+  // Filter messages for the last 30 or 60 days depending on plan
   const now = new Date();
-  const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
-  const recentMessages = messages.filter(msg => now - new Date(msg.rawDate) <= THIRTY_DAYS_MS);
-  const olderMessages = messages.filter(msg => now - new Date(msg.rawDate) > THIRTY_DAYS_MS);
+  let lockDurationMs = 30 * 24 * 60 * 60 * 1000; // Default 30 days
+  if (/elite/i.test(subscriptionPlan)) {
+    lockDurationMs = 60 * 24 * 60 * 60 * 1000; // 60 days for Elite
+  }
+  const recentMessages = messages.filter(msg => now - new Date(msg.rawDate) <= lockDurationMs);
+  const olderMessages = messages.filter(msg => now - new Date(msg.rawDate) > lockDurationMs);
 
   // Scroll handler to show lock when at top and there are older messages
   const handleMessageListScroll = (e) => {
