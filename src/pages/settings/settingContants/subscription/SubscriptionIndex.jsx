@@ -33,7 +33,8 @@ const SubscriptionIndex = () => {
     if (numPropertiesAllowed && numPropertiesAllowed !== numProperties) {
       setNumProperties(numPropertiesAllowed);
     }
-  }, [numPropertiesAllowed]);
+  }, [numPropertiesAllowed, numProperties]);
+
   const paymentGoodUntil =
     userData?.subscr_payment_good_until ||
     userSubscriptionData?.payment_good_until;
