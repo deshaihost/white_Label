@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./index.css";
 import "./MildeSection.css";
@@ -8,6 +8,7 @@ import { timeFormat } from "../../../../../helper/commonFun";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import loaderGif from "../../../../../public/img/new_loader.gif";
 import { callSendWhatsAppMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
+import WhatsAppLocked from "./whatsApplocked/WhatsAppLocked";
 
 // Import icons for AI input functionality
 import AiMessageIcon from "./message/icons/ai_messsage_icon.svg";
@@ -19,6 +20,7 @@ const WhatsAppSection = ({
   allConversationData,
   updateConversationFromApi,
   propertyName,
+  subscriptionPlan,
 }) => {
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -28,6 +30,7 @@ const WhatsAppSection = ({
   const [hasWhatsappIntegration, setHasWhatsappIntegration] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
 
   // AI input functionality states
   const [inputValue, setInputValue] = useState("");
@@ -228,6 +231,11 @@ const WhatsAppSection = ({
     setGenerateOptionsVisible(false);
     ToastHandle("AI generation for WhatsApp coming soon", "info");
   };
+
+  // Render WhatsAppLocked for pro plan
+  if (/pro/i.test(subscriptionPlan)) {
+    return <WhatsAppLocked onComparePlans={() => navigate('/setting/subscription')} />;
+  }
 
   return (
     <div

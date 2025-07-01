@@ -1897,6 +1897,7 @@ const Inbox = ({
                     allConversationData={selectedConversation}
                     updateConversationFromApi={updateConversation}
                     propertyName={selectedConversation?.property_name}
+                    subscriptionPlan={subscriptionPlan}
                   />
                 </div>
 
@@ -1917,6 +1918,7 @@ const Inbox = ({
                     allConversationData={selectedConversation}
                     updateConversationFromApi={updateConversation}
                     propertyName={selectedConversation?.property_name}
+                    subscriptionPlan={subscriptionPlan}
                   />
                 </div>
 
