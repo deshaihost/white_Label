@@ -13,6 +13,8 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
 import ConversationTranscriptModal from "../../inbox/inboxSection/resources/ConversationTranscriptModal";
 import customStyles from './selectStyles';
+import ActionItemsUpgrade from '../ActionItemsUpgrade/ActionItemsUpgrade';
+import { getSubscriptionStatus } from '../../../helper/Authorized';
 
 const ActionsItemsTable = () => {
 
@@ -188,6 +190,35 @@ const ActionsItemsTable = () => {
     if (propertyNameQuery) { setSelectedProperties([{ value: propertyNameQuery, label: propertyNameQuery }]); }
   }, [location.search]);
 
+  // Get user plan
+  const userData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const subscriptionPlan = getSubscriptionStatus(userData).plan || '';
+
+  // Helper to determine cutoff days
+  const getCutoffDays = () => {
+    if (/elite/i.test(subscriptionPlan)) return 30;
+    if (/pro/i.test(subscriptionPlan)) return 3;
+    return 10000; // fallback for other plans (show all)
+  };
+  const cutoffDays = getCutoffDays();
+  const now = new Date();
+
+  // Split action items into visible and locked
+  const visibleActionItems = filteredActionItems.filter(item => {
+    const itemDate = new Date(item.created_at);
+    const diffDays = (now - itemDate) / (1000 * 60 * 60 * 24);
+    return diffDays <= cutoffDays;
+  });
+  const lockedActionItems = filteredActionItems.filter(item => {
+    const itemDate = new Date(item.created_at);
+    const diffDays = (now - itemDate) / (1000 * 60 * 60 * 24);
+    return diffDays > cutoffDays;
+  });
+
+  const handleComparePlans = () => {
+    navigate('/setting/subscription');
+  };
+
   return (
     <>
       <Container>
@@ -240,7 +271,7 @@ const ActionsItemsTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredActionItems?.map((actionItem) => {
+                    {visibleActionItems?.map((actionItem) => {
                       const { id, created_at, property_name, conversation_id, item } = actionItem;
                       let actionItemSend = { propertyName: property_name, conversation_id };
                       return (
@@ -274,6 +305,10 @@ const ActionsItemsTable = () => {
                     })}
                   </tbody>
                 </table>
+                {/* Render ActionItemsUpgrade for each locked action item */}
+                {lockedActionItems.length > 0 && (
+                  <ActionItemsUpgrade onComparePlans={handleComparePlans} />
+                )}
               </>
             ) : (
               <span className="d-flex justify-content-center align-items-center" style={{ height:'500px', color:"#FFF" }}>
