@@ -312,6 +312,7 @@ const SubscriptionFeatures = ({
                     )}
                   </div>
                 </th>{" "}
+                
                 <th
                   style={{
                     backgroundColor: "rgba(19, 34, 77, 1)",
