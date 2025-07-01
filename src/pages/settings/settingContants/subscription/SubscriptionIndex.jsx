@@ -170,14 +170,14 @@ const SubscriptionIndex = () => {
   const currentTotalPrice = calculateTotalPrice(
     normalizedPlan, 
     numPropertiesAllowed, 
-    billingPeriod
+    'monthly'
   );
 
   // Calculate current subscription average per-property price
   const currentAveragePrice = calculateAveragePerPropertyPrice(
     normalizedPlan,
     numPropertiesAllowed,
-    billingPeriod
+    'monthly'
   );
 
   // Call the billing portal API, get the URL from the response, then redirect the user to it securely (in a way that wont make the browser mad)
@@ -379,7 +379,7 @@ const SubscriptionIndex = () => {
                       }}>
                         {formatPrice(currentTotalPrice).dollar}
                         {formatPrice(currentTotalPrice).amount}
-                        {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")} 
+                        {" monthly"} 
                       </div>
                     )}
                     
