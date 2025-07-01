@@ -26,7 +26,14 @@ const SubscriptionIndex = () => {
   const userSubscriptionStatus = getSubscriptionStatus(userData);
   const subscriptionPlanName = userSubscriptionStatus.plan;
   const numPropertiesAllowed = userSubscriptionStatus.props_allowed;
-  const [numProperties, setNumProperties] = useState(numPropertiesAllowed || 1);
+  const [numProperties, setNumProperties] = useState(numPropertiesAllowed || 0);
+
+  // Update numProperties when numPropertiesAllowed changes (e.g., after Redux state loads)
+  React.useEffect(() => {
+    if (numPropertiesAllowed && numPropertiesAllowed !== numProperties) {
+      setNumProperties(numPropertiesAllowed);
+    }
+  }, [numPropertiesAllowed]);
   const paymentGoodUntil =
     userData?.subscr_payment_good_until ||
     userSubscriptionData?.payment_good_until;
