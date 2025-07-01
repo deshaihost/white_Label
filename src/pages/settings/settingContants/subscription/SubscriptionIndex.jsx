@@ -30,10 +30,10 @@ const SubscriptionIndex = () => {
 
   // Update numProperties when numPropertiesAllowed changes (e.g., after Redux state loads)
   React.useEffect(() => {
-    if (numPropertiesAllowed && numPropertiesAllowed !== numProperties) {
+    if (numPropertiesAllowed && numPropertiesAllowed > 0) {
       setNumProperties(numPropertiesAllowed);
     }
-  }, [numPropertiesAllowed, numProperties]);
+  }, [numPropertiesAllowed]);
 
   const paymentGoodUntil =
     userData?.subscr_payment_good_until ||
