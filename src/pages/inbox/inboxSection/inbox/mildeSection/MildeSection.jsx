@@ -13,6 +13,7 @@ import JustificationModal from "../../../../testProperty/banner/messages/justifi
 import { Tooltip } from "react-tooltip";
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
+import ConversationHistoryLocked from "./inbox_messages_locked/ConversationHistoryLocked";
 
 // Import the SVG icons
 import SendIcon from "./message/icons/send_icon.svg";
@@ -78,6 +79,9 @@ const MildeSection = ({
     useState(false);
   const [assistanceUsed, setAssistanceUsed] = useState(null); // 'command' if the user clicked "generate from command"; 'generate' if the user clicked "generate from scratch"; null if neither, or if the user cleared a generated message
   const [showInboxUpgradeModal, setShowInboxUpgradeModal] = useState(false);
+
+  // Add state for showing locked history
+  const [showLocked, setShowLocked] = useState(false);
 
   const callGenerateFromScratchApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -990,6 +994,21 @@ const MildeSection = ({
 
   const toolTipMessage = getTooltipMessage();
 
+  // Filter messages for the last 30 days
+  const now = new Date();
+  const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+  const recentMessages = messages.filter(msg => now - new Date(msg.rawDate) <= THIRTY_DAYS_MS);
+  const olderMessages = messages.filter(msg => now - new Date(msg.rawDate) > THIRTY_DAYS_MS);
+
+  // Scroll handler to show lock when at top and there are older messages
+  const handleMessageListScroll = (e) => {
+    if (e.target.scrollTop === 0 && olderMessages.length > 0) {
+      setShowLocked(true);
+    } else if (e.target.scrollTop > 0 && showLocked) {
+      setShowLocked(false);
+    }
+  };
+
   return (
     <div className="main-chat">
       <div className="d-block d-lg-none mobile-nav" ref={mobileNavRef}>
@@ -1020,11 +1039,15 @@ const MildeSection = ({
             className="message-list"
             ref={messageListRef}
             style={{ marginBottom: "0px" }}
+            onScroll={handleMessageListScroll}
           >
-            {messages?.map((message, index) => {
+            {showLocked && (
+              <ConversationHistoryLocked />
+            )}
+            {recentMessages?.map((message, index) => {
               const showDateSeparator =
                 index === 0 ||
-                !isSameDay(messages[index - 1]?.rawDate, message.rawDate);
+                !isSameDay(recentMessages[index - 1]?.rawDate, message.rawDate);
               return (
                 <React.Fragment key={message?.id}>
                   {showDateSeparator && (
@@ -1040,7 +1063,7 @@ const MildeSection = ({
                     feedBckModelOpen={feedBckModelOpenHndle}
                     handleJustificationClick={handleJustificationClick}
                     feedBackDataGet={feedBackDataGet}
-                    prevMsgText={messages[index - 1]?.text}
+                    prevMsgText={recentMessages[index - 1]?.text}
                     isInitialMessage={index <= 1}
                     guestName={allConversationData.guest_name}
                     guestImageUrl={allConversationData.image_url}
