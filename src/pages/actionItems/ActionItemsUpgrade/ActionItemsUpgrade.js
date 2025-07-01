@@ -1,8 +1,17 @@
 import React from 'react';
 import './ActionItemsUpgrade.css';
 import ConversationLockedIcon from './icons/Conversation_locked_action_items.svg';
+import { useNavigate } from 'react-router-dom';
 
-const ActionItemsUpgrade = () => {
+const ActionItemsUpgrade = ({ onComparePlans }) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    if (onComparePlans) {
+      onComparePlans();
+    } else {
+      navigate('/setting/subscription');
+    }
+  };
   return (
     <div className="action-items-upgrade">
       <div className="upgrade-overlay">
@@ -24,7 +33,7 @@ const ActionItemsUpgrade = () => {
             Your current plan displays action items from past 3 days. Upgrade plan to view all of the action items.
           </p>
           
-          <button className="compare-plans-btn">
+          <button className="compare-plans-btn" onClick={handleClick}>
             Compare plans
           </button>
         </div>
