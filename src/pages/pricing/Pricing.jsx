@@ -688,12 +688,12 @@ const Pricing = () => {
         {/* <SlidingComponent /> */}
         <FrequentlyAskedComponent />
         <div className="row">
-          <div className="col-lg-12">
+          <div className="col-lg-12" >
             <h2 className="fs-1 fw-bold text-white mb-5 text-center">
               Trusted by Leading Property Managers
             </h2>
           </div>
-          <div className="col-lg-12">
+          <div className="col-lg-12" style={{margin:"10px"}}>
             <div>
               <Slider {...settingsf}>
                 {imageTrustedLogo?.map((images) => {

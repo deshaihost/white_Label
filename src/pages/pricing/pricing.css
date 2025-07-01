@@ -19,7 +19,10 @@
   color: #FFF;
   text-align: center;
   margin-top: 10px;
-  white-space: nowrap !important;
+  white-space: normal !important;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .pricing .pricing-plans-descriptions-lg {
@@ -502,13 +505,42 @@ a.explore-link {
     margin-top: 40px;
   }
 
-  .started .started-content h3 {
-    font-size: 35px;
-    line-height: 40px;
+  .started {
+    max-width: 98vw;
+    padding: 16px 0;
+    border-radius: 16px;
+    margin: 0 auto;
   }
-
-  .started .started-content p {
-    font-size: 16px;
+  .started .started-content {
+    max-width: 98vw;
+    padding: 0 4vw;
+  }
+  .started .started-content h2,
+  .started .started-content h3,
+  .started .started-content h1,
+  .started .started-content h4 {
+    font-size: 22px !important;
+    line-height: 1.2;
+    white-space: normal !important;
+    word-break: break-word;
+    text-align: center;
+  }
+  .started .started-content div,
+  .started .started-content a {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+  .started .started-content a.explore-link {
+    min-width: 0;
+    width: 90vw !important;
+    max-width: 300px !important;
+    margin: 0 auto;
+    font-size: 16px !important;
+    height: 48px !important;
+  }
+  .started .started-content div[style*='white-space: nowrap'] {
+    white-space: normal !important;
   }
 
   .blog-change { 
@@ -517,6 +549,13 @@ a.explore-link {
 
   .started .started-content a {
     font-size: 18px;
+  }
+
+  .pricing-description {
+    font-size: 16px !important;
+    max-width: 90vw;
+    white-space: normal !important;
+    word-break: break-word;
   }
 }
 
