@@ -1,8 +1,10 @@
 import React from 'react';
 import './ConversationHistoryLocked.css';
 import ConversationIcon from './icons/Conversation_icon_inbox_messages.svg';
+import { useNavigate } from 'react-router-dom';
 
 const ConversationHistoryLocked = () => {
+  const navigate = useNavigate();
   return (
     <div className="conversation-history-locked">
       <img src={ConversationIcon} alt="Conversation History" className="conversation-icon" />
@@ -28,7 +30,7 @@ const ConversationHistoryLocked = () => {
         Upgrade to view the full conversation history and get access to more powerful features!
       </p>
       
-      <button className="compare-plans-btn">
+      <button className="compare-plans-btn" onClick={() => navigate('/setting/subscription')}>
         Compare plans
       </button>
     </div>
