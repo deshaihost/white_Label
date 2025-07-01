@@ -305,7 +305,7 @@ const SubscriptionFeatures = ({
                         per property
                       </span>
                     </div>
-                    {numProperties > 1 && (
+                    {numProperties >= 0 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
                         {formatPriceAsUSD(proPriceTotal)} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} 
                       </div>
@@ -331,7 +331,7 @@ const SubscriptionFeatures = ({
                         per property
                       </span>
                     </div>
-                    {numProperties > 1 && (
+                    {numProperties >= 0 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
                         {formatPriceAsUSD(elitePriceTotal)} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} 
                       </div>
@@ -357,7 +357,7 @@ const SubscriptionFeatures = ({
                         per property
                       </span>
                     </div>
-                    {numProperties > 1 && (
+                    {numProperties >= 0 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
                         {formatPriceAsUSD(ultimatePriceTotal)} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} 
                       </div>
@@ -490,7 +490,7 @@ const SubscriptionFeatures = ({
                         per property
                       </span>
                     </div>
-                    {numProperties > 1 && (
+                    {numProperties >= 0 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
                         {formatPriceAsUSD(proPriceTotal)} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} 
                       </div>
@@ -512,7 +512,7 @@ const SubscriptionFeatures = ({
                         per property
                       </span>
                     </div>
-                    {numProperties > 1 && (
+                    {numProperties >= 0 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
                         {formatPriceAsUSD(elitePriceTotal)} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} 
                       </div>
@@ -534,7 +534,7 @@ const SubscriptionFeatures = ({
                         per property
                       </span>
                     </div>
-                    {numProperties > 1 && (
+                    {numProperties >= 0 && (
                       <div style={{ fontSize: '14px', fontFamily: 'Samsung Sharp Sans', fontWeight: '500', color: '#FFFFFF' }}>
                         {formatPriceAsUSD(ultimatePriceTotal)} {billingPeriod === 'annual' ? 'yearly' : 'monthly'} 
                       </div>
