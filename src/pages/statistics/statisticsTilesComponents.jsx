@@ -260,7 +260,7 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
         {blur && (
           <div className="blurred-tile-message">
             <img src={actionItemsLocked} alt="Locked" style={{ width: 40, height: 40, marginBottom: 8 }} />
-            Upgrade to unlock this insight & much more!!
+            Upgrade to unlock this insight & much more!
             <div
               className="compare-plans-link"
               onClick={() => navigate('/setting/subscription')}

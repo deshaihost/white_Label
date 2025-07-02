@@ -289,6 +289,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-width: 220px;
+  max-width: 320px;
+  word-break: normal;
+  white-space: normal;
 }
 
 .blurred-content {

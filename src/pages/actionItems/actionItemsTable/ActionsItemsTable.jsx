@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { getUserDataActions } from "../../../redux/actions";
@@ -204,25 +204,64 @@ const ActionsItemsTable = () => {
   const now = new Date();
 
   // Split action items into visible and locked
-  const visibleActionItems = filteredActionItems.filter(item => {
-    const itemDate = new Date(item.created_at);
-    const diffDays = (now - itemDate) / (1000 * 60 * 60 * 24);
-    return diffDays <= cutoffDays;
-  });
-  const lockedActionItems = filteredActionItems.filter(item => {
+  const isLocked = (item) => {
     const itemDate = new Date(item.created_at);
     const diffDays = (now - itemDate) / (1000 * 60 * 60 * 24);
     return diffDays > cutoffDays;
-  });
+  };
+  const hasLockedItems = filteredActionItems.some(isLocked);
 
   const handleComparePlans = () => {
     navigate('/setting/subscription');
   };
 
+  // Split into unlocked and locked
+  const unlockedActionItems = filteredActionItems.filter(item => !isLocked(item));
+  const lockedActionItems = filteredActionItems.filter(isLocked);
+  const lockedToShow = lockedActionItems.slice(0, 5);
+  // Combine for rendering: unlocked first, then up to 5 locked
+  const itemsToRender = [...unlockedActionItems, ...lockedToShow];
+
+  // Find indices of first and last locked rows in itemsToRender
+  const lockedRowIndices = itemsToRender
+    .map((item, idx) => isLocked(item) ? idx : -1)
+    .filter(idx => idx !== -1);
+  const firstLockedIdx = lockedRowIndices.length > 0 ? lockedRowIndices[0] : null;
+  const lastLockedIdx = lockedRowIndices.length > 0 ? lockedRowIndices[lockedRowIndices.length - 1] : null;
+
+  // Refs for positioning overlay
+  const tableBodyRef = useRef(null);
+  const firstLockedRef = useRef(null);
+  const lastLockedRef = useRef(null);
+  const [overlayStyle, setOverlayStyle] = useState({ display: 'none' });
+
+  useEffect(() => {
+    if (firstLockedIdx !== null && lastLockedIdx !== null && firstLockedRef.current && lastLockedRef.current && tableBodyRef.current) {
+      const tbodyRect = tableBodyRef.current.getBoundingClientRect();
+      const firstRect = firstLockedRef.current.getBoundingClientRect();
+      const lastRect = lastLockedRef.current.getBoundingClientRect();
+      setOverlayStyle({
+        position: 'absolute',
+        left: 0,
+        width: '100%',
+        top: firstRect.top - tbodyRect.top,
+        height: lastRect.bottom - firstRect.top,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 20,
+        background: 'rgba(2, 14, 41, 0.7)',
+        pointerEvents: 'auto',
+      });
+    } else {
+      setOverlayStyle({ display: 'none' });
+    }
+  }, [firstLockedIdx, lastLockedIdx, filteredActionItems]);
+
   return (
     <>
       <Container>
-        <div className="action-items-page">
+        <div className="action-items-page" style={{ position: 'relative' }}>
           {getActionItemsLoading && <FullScreenLoader />}
           <div className="action-items">
             <div className="action-heading">
@@ -256,10 +295,10 @@ const ActionsItemsTable = () => {
 
             </div>
           </div>
-          <div className="table-responsive" style={{ overflowY: "auto", marginBottom: "30px" }}>
-            {filteredActionItems?.length > 0 ? (
-              <>
-                <table class="table text-white action-items-table">
+          <div className="table-responsive" style={{ overflowY: "auto", marginBottom: "30px", position: 'relative' }}>
+            {itemsToRender?.length > 0 ? (
+              <div style={{ position: 'relative' }}>
+                <table className="table text-white action-items-table">
                   <thead style={{ background: "#020d29" }}>
                     <tr>
                       <th>Date/Time</th>
@@ -270,46 +309,66 @@ const ActionsItemsTable = () => {
                       <th>View/Done</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {visibleActionItems?.map((actionItem) => {
+                  <tbody ref={tableBodyRef}>
+                    {itemsToRender.map((actionItem, idx) => {
                       const { id, created_at, property_name, conversation_id, item } = actionItem;
                       let actionItemSend = { propertyName: property_name, conversation_id };
+                      const locked = isLocked(actionItem);
+                      const rowRef =
+                        idx === firstLockedIdx ? firstLockedRef :
+                        idx === lastLockedIdx ? lastLockedRef :
+                        null;
                       return (
-                        <tr key={id}>
+                        <tr key={id} ref={rowRef} style={locked ? { pointerEvents: 'none' } : {}}>
                           <td style={{ whiteSpace: "pre-line" }}>
-                            {/* whiteSpace: 'pre-line' preserves the newline between date and time */}
-                            {formatDateTime(created_at)}
+                            <div className={locked ? 'blurred-content' : ''}>
+                              {formatDateTime(created_at)}
+                            </div>
                           </td>
                           <td>
-                            {property_name}
-                            <br />
-                            {actionItem?.guest_name ? actionItem?.guest_name : ""}
+                            <div className={locked ? 'blurred-content' : ''}>
+                              {property_name}
+                              <br />
+                              {actionItem?.guest_name ? actionItem?.guest_name : ""}
+                            </div>
                           </td>
-                          <td>{actionItem?.category ? actionItem?.category : ""}</td>
+                          <td>
+                            <div className={locked ? 'blurred-content' : ''}>
+                              {actionItem?.category ? actionItem?.category : ""}
+                            </div>
+                          </td>
                           <td className="">
-                            <div className="">{item}</div>
+                            <div className={locked ? 'blurred-content' : ''}>{item}</div>
                           </td>
-                          {selectedStatus === "completed" && <td style={{minWidth:'130px'}}>{formatCompletedBy(actionItem?.completed_by)}</td> /* 130px min width makes sure that "completed by" in the th is not split into two lines */}
+                          {selectedStatus === "completed" && (
+                            <td style={{minWidth:'130px'}}>
+                              <div className={locked ? 'blurred-content' : ''}>{formatCompletedBy(actionItem?.completed_by)}</div>
+                            </td>
+                          )}
                           <td className="text-center">
-                            {actionItemCompleting === id || getConversationLoading === id ? (
-                              <BoxLoader />
-                            ) : (
-                              <>
-                                <FaExternalLinkAlt style={{marginRight:'10px', cursor:'pointer'}} onClick={() => { handleOpenConversation(conversation_id, id, property_name); }} />
-                                <FaCircleCheck className="text-primary fs-6" style={{cursor:'pointer'}} onClick={() => { handleComplete(id); }} />
-                              </>
-                            )}
+                            <div className={locked ? 'blurred-content' : ''}>
+                              {actionItemCompleting === id || getConversationLoading === id ? (
+                                <BoxLoader />
+                              ) : (
+                                <>
+                                  <FaExternalLinkAlt style={{marginRight:'10px', cursor:'pointer'}} onClick={() => { if (!locked) handleOpenConversation(conversation_id, id, property_name); }} />
+                                  <FaCircleCheck className="text-primary fs-6" style={{cursor:'pointer'}} onClick={() => { if (!locked) handleComplete(id); }} />
+                                </>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
-                {/* Render ActionItemsUpgrade for each locked action item */}
-                {lockedActionItems.length > 0 && (
-                  <ActionItemsUpgrade onComparePlans={handleComparePlans} />
+                {/* Single overlay for all locked rows */}
+                {firstLockedIdx !== null && lastLockedIdx !== null && (
+                  <div style={overlayStyle} className="action-items-upgrade-locked-overlay">
+                    <ActionItemsUpgrade onComparePlans={handleComparePlans} />
+                  </div>
                 )}
-              </>
+              </div>
             ) : (
               <span className="d-flex justify-content-center align-items-center" style={{ height:'500px', color:"#FFF" }}>
                 No Data Yet
