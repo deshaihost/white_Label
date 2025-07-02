@@ -11,9 +11,12 @@ const SubscriptionFeatures = ({
   calculateTotalPrice,
   calculateAveragePerPropertyPrice,
   formatPrice,
-  normalizePlanName
+  normalizePlanName,
+  goToBillingPortal,
+  goToBillingPortalLoading = false
 }) => {
   const [activeTooltip, setActiveTooltip] = useState(null);
+  const [loadingButton, setLoadingButton] = useState(null); // Track which button is loading
 
   // Reusable helper function to format price as USD currency
   const formatPriceAsUSD = (value) => {
@@ -67,20 +70,59 @@ const SubscriptionFeatures = ({
   // Get normalized current subscription plan using helper function
   const normalizedCurrentPlan = normalizePlanName ? normalizePlanName(currentSubscriptionPlan) : currentSubscriptionPlan;
 
-  // Button click handlers
+  // Button click handlers - now using billing portal functionality
   const handleSubscribe = (planName) => {
-    // TODO: Implement subscription logic
-    console.log(`Subscribe to ${planName} plan`);
+    if (goToBillingPortal) {
+      // Set loading state for this specific button
+      setLoadingButton(planName.toLowerCase());
+      
+      // Clear subscription-related localStorage data before going to billing portal
+      localStorage.removeItem("paymentStatus");
+      localStorage.removeItem("servicesExpireDate");
+      localStorage.removeItem("numPropertiesAllowed");
+      localStorage.removeItem("numPropertiesUsed");
+      localStorage.removeItem("tooManyPropertiesGraceUntil");
+      
+      goToBillingPortal();
+    } else {
+      console.log(`Subscribe to ${planName} plan`);
+    }
   };
 
   const handleUpgrade = (planName) => {
-    // TODO: Implement upgrade logic
-    console.log(`Upgrade to ${planName} plan`);
+    if (goToBillingPortal) {
+      // Set loading state for this specific button
+      setLoadingButton(planName.toLowerCase());
+      
+      // Clear subscription-related localStorage data before going to billing portal
+      localStorage.removeItem("paymentStatus");
+      localStorage.removeItem("servicesExpireDate");
+      localStorage.removeItem("numPropertiesAllowed");
+      localStorage.removeItem("numPropertiesUsed");
+      localStorage.removeItem("tooManyPropertiesGraceUntil");
+      
+      goToBillingPortal();
+    } else {
+      console.log(`Upgrade to ${planName} plan`);
+    }
   };
 
   const handleDowngrade = (planName) => {
-    // TODO: Implement downgrade logic
-    console.log(`Downgrade to ${planName} plan`);
+    if (goToBillingPortal) {
+      // Set loading state for this specific button
+      setLoadingButton(planName.toLowerCase());
+      
+      // Clear subscription-related localStorage data before going to billing portal
+      localStorage.removeItem("paymentStatus");
+      localStorage.removeItem("servicesExpireDate");
+      localStorage.removeItem("numPropertiesAllowed");
+      localStorage.removeItem("numPropertiesUsed");
+      localStorage.removeItem("tooManyPropertiesGraceUntil");
+      
+      goToBillingPortal();
+    } else {
+      console.log(`Downgrade to ${planName} plan`);
+    }
   };
 
   // Helper function to get button text and state
@@ -561,10 +603,11 @@ const SubscriptionFeatures = ({
                   <div style={{ textAlign: 'center' }}>
                     {(() => {
                       const buttonProps = getButtonProps('Pro');
+                      const isThisButtonLoading = loadingButton === 'pro';
                       return (
                         <button
                           onClick={buttonProps.onClick}
-                          disabled={buttonProps.disabled}
+                          disabled={buttonProps.disabled || isThisButtonLoading}
                           className="subscription-button"
                           style={{
                             padding: '8px 12px',
@@ -572,14 +615,14 @@ const SubscriptionFeatures = ({
                             border: 'none',
                             fontSize: '16px',
                             fontWeight: '600',
-                            cursor: buttonProps.disabled ? 'not-allowed' : 'pointer',
-                            backgroundColor: buttonProps.disabled ? '#131723' : (
+                            cursor: (buttonProps.disabled || isThisButtonLoading) ? 'not-allowed' : 'pointer',
+                            backgroundColor: (buttonProps.disabled || isThisButtonLoading) ? '#131723' : (
                               buttonProps.variant === 'upgrade' ? '#0D6EFD' : 
                               buttonProps.variant === 'downgrade' ? '#DC3545' : 
                               '#28a745'
                             ),
                             color: 'white',
-                            opacity: buttonProps.disabled ? 0.6 : 1,
+                            opacity: (buttonProps.disabled || isThisButtonLoading) ? 0.6 : 1,
                             transition: 'all 0.2s ease',
                             width: 'auto',
                             minWidth: '89px',
@@ -589,7 +632,7 @@ const SubscriptionFeatures = ({
                             justifyContent: 'center',
                           }}
                         >
-                          {buttonProps.text}
+                          {isThisButtonLoading ? 'Loading...' : buttonProps.text}
                         </button>
                       );
                     })()}
@@ -606,10 +649,11 @@ const SubscriptionFeatures = ({
                   <div style={{ textAlign: 'center' }}>
                     {(() => {
                       const buttonProps = getButtonProps('Elite');
+                      const isThisButtonLoading = loadingButton === 'elite';
                       return (
                         <button
                           onClick={buttonProps.onClick}
-                          disabled={buttonProps.disabled}
+                          disabled={buttonProps.disabled || isThisButtonLoading}
                           className="subscription-button"
                           style={{
                             padding: '8px 12px',
@@ -617,14 +661,14 @@ const SubscriptionFeatures = ({
                             border: 'none',
                             fontSize: '16px',
                             fontWeight: '600',
-                            cursor: buttonProps.disabled ? 'not-allowed' : 'pointer',
-                            backgroundColor: buttonProps.disabled ? '#131723' : (
+                            cursor: (buttonProps.disabled || isThisButtonLoading) ? 'not-allowed' : 'pointer',
+                            backgroundColor: (buttonProps.disabled || isThisButtonLoading) ? '#131723' : (
                               buttonProps.variant === 'upgrade' ? '#0D6EFD' : 
                               buttonProps.variant === 'downgrade' ? '#DC3545' : 
                               '#28a745'
                             ),
                             color: 'white',
-                            opacity: buttonProps.disabled ? 0.6 : 1,
+                            opacity: (buttonProps.disabled || isThisButtonLoading) ? 0.6 : 1,
                             transition: 'all 0.2s ease',
                             width: 'auto',
                             minWidth: '89px',
@@ -634,7 +678,7 @@ const SubscriptionFeatures = ({
                             justifyContent: 'center',
                           }}
                         >
-                          {buttonProps.text}
+                          {isThisButtonLoading ? 'Loading...' : buttonProps.text}
                         </button>
                       );
                     })()}
@@ -651,10 +695,11 @@ const SubscriptionFeatures = ({
                   <div style={{ textAlign: 'center' }}>
                     {(() => {
                       const buttonProps = getButtonProps('Ultimate');
+                      const isThisButtonLoading = loadingButton === 'ultimate';
                       return (
                         <button
                           onClick={buttonProps.onClick}
-                          disabled={buttonProps.disabled}
+                          disabled={buttonProps.disabled || isThisButtonLoading}
                           className="subscription-button"
                           style={{
                             padding: '8px 12px',
@@ -662,14 +707,14 @@ const SubscriptionFeatures = ({
                             border: 'none',
                             fontSize: '16px',
                             fontWeight: '600',
-                            cursor: buttonProps.disabled ? 'not-allowed' : 'pointer',
-                            backgroundColor: buttonProps.disabled ? '#131723' : (
+                            cursor: (buttonProps.disabled || isThisButtonLoading) ? 'not-allowed' : 'pointer',
+                            backgroundColor: (buttonProps.disabled || isThisButtonLoading) ? '#131723' : (
                               buttonProps.variant === 'upgrade' ? '#0D6EFD' : 
                               buttonProps.variant === 'downgrade' ? '#DC3545' : 
                               '#28a745'
                             ),
                             color: 'white',
-                            opacity: buttonProps.disabled ? 0.6 : 1,
+                            opacity: (buttonProps.disabled || isThisButtonLoading) ? 0.6 : 1,
                             transition: 'all 0.2s ease',
                             width: 'auto',
                             minWidth: '89px',
@@ -679,7 +724,7 @@ const SubscriptionFeatures = ({
                             justifyContent: 'center',
                           }}
                         >
-                          {buttonProps.text}
+                          {isThisButtonLoading ? 'Loading...' : buttonProps.text}
                         </button>
                       );
                     })()}

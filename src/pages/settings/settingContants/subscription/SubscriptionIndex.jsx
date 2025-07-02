@@ -650,6 +650,8 @@ const SubscriptionIndex = () => {
           calculateAveragePerPropertyPrice={calculateAveragePerPropertyPrice}
           formatPrice={formatPrice}
           normalizePlanName={normalizePlanName}
+          goToBillingPortal={goToBillingPortal}
+          goToBillingPortalLoading={goToBillingPortalLoading}
         />
       </div>
     </div>
