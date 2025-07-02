@@ -659,85 +659,97 @@ const Inbox = ({
     }
   }; // Function to call the API to get notes
   const callGetNotesApi = async () => {
-    if (!selectedConversation?.conversation_id) return;
+  const conversation_id = selectedConversation?.conversation_id;
+  const reservation_id = selectedConversation?.reservation_id;
 
-    const conversation_id = selectedConversation.conversation_id;
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    setIsLoadingNotes(true);
+  if (!conversation_id && !reservation_id) return;
 
-    try {
-      const config = {
-        headers: {
-          "X-API-Key": API_KEY,
-        },
-        validateStatus: function (status) {
-          return status >= 200 && status < 500;
-        },
-      };
+  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  setIsLoadingNotes(true);
 
-      // Use conversation_id as a URL query parameter
-      const url = `${baseUrl}/get_notes?conversation_id=${encodeURIComponent(
-        conversation_id
-      )}`;
-      const response = await axios.get(url, config);
+  try {
+    const config = {
+      headers: {
+        "X-API-Key": API_KEY,
+      },
+      validateStatus: function (status) {
+        return status >= 200 && status < 500;
+      },
+    };
 
-      if (response.status === 200) {
-        setNotes(response.data.notes || []);
-      } else {
-        ToastHandle(response?.data?.error || "Failed to fetch notes", "danger");
-      }
-    } catch (error) {
-      ToastHandle("Error - unable to get notes", "danger");
-    } finally {
-      setIsLoadingNotes(false);
+    // Build query parameters dynamically
+    const queryParams = new URLSearchParams();
+    if (reservation_id) queryParams.append("reservation_id", reservation_id);
+    else if (conversation_id) queryParams.append("conversation_id", conversation_id);
+
+    const url = `${baseUrl}/get_notes?${queryParams.toString()}`;
+    const response = await axios.get(url, config);
+
+    if (response.status === 200) {
+      setNotes(response.data.notes || []);
+    } else {
+      ToastHandle(response?.data?.error || "Failed to fetch notes", "danger");
     }
-  }; // Function to call the API to add a note
-  const callAddNoteApi = async (noteText) => {
-    if (!selectedConversation?.conversation_id || !noteText.trim()) return;
+  } catch (error) {
+    ToastHandle("Error - unable to get notes", "danger");
+  } finally {
+    setIsLoadingNotes(false);
+  }
+};
+const callAddNoteApi = async (noteText) => {
+  const conversation_id = selectedConversation?.conversation_id;
+  const reservation_id = selectedConversation?.reservation_id;
 
-    const conversation_id = selectedConversation.conversation_id;
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
+  // Allow if at least one is present, reject only if both are missing
+  if (!noteText.trim() || (!conversation_id && !reservation_id)) return;
 
-    try {
-      const config = {
-        headers: {
-          "X-API-Key": API_KEY,
-        },
-        validateStatus: function (status) {
-          return status >= 200 && status < 500;
-        },
-      };
-      // According to the API documentation pattern, include conversation_id in the request body
-      const bodyData = {
-        note: noteText,
-        conversation_id: conversation_id,
-        visible_to_hostbuddy: visibleToHostbuddy,
-      };
+  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_KEY;
 
-      const response = await axios.post(
-        `${baseUrl}/add_note`,
-        bodyData,
-        config
-      );
+  try {
+    const config = {
+      headers: {
+        "X-API-Key": API_KEY,
+      },
+      validateStatus: function (status) {
+        return status >= 200 && status < 500;
+      },
+    };
 
-      if (response.status === 200) {
-        // Refresh the notes list
-        callGetNotesApi();
-        setNewNote(""); // Clear the input field
-        ToastHandle("Note added successfully", "success");
-      } else {
-        ToastHandle(response?.data?.error || "Failed to add note", "danger");
-      }
-    } catch (error) {
-      ToastHandle("Error adding note", "danger");
+    const bodyData = {
+      note: noteText,
+      visible_to_hostbuddy: visibleToHostbuddy,
+    };
+
+    // Send only one: prefer conversation_id over reservation_id
+    if (reservation_id) bodyData.reservation_id = reservation_id;
+    else if (conversation_id) bodyData.conversation_id = conversation_id;
+
+    const response = await axios.post(
+      `${baseUrl}/add_note`,
+      bodyData,
+      config
+    );
+
+    if (response.status === 200) {
+      callGetNotesApi(); // Refresh notes
+      setNewNote("");    // Clear input
+      ToastHandle("Note added successfully", "success");
+    } else {
+      ToastHandle(response?.data?.error || "Failed to add note", "danger");
     }
-  };
+  } catch (error) {
+    ToastHandle("Error adding note", "danger");
+  }
+};
 
   // Function to call the API to delete a note
   const callDeleteNoteApi = async (noteId) => {
-    if (!noteId || !selectedConversation?.conversation_id) return;
+    const conversation_id = selectedConversation?.conversation_id;
+    const reservation_id = selectedConversation?.reservation_id;
+
+    if (!noteId || (!conversation_id && !reservation_id)) return;
 
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -757,8 +769,10 @@ const Inbox = ({
       // According to the API documentation pattern, include data in the request body
       const bodyData = {
         note_id: noteId,
-        conversation_id: selectedConversation.conversation_id,
       };
+
+      if (reservation_id) bodyData.reservation_id = reservation_id;
+      else if (conversation_id) bodyData.conversation_id = conversation_id;
 
       // For DELETE requests with a body, we need to use the data property in the config
       const response = await axios.delete(`${baseUrl}/delete_note`, {
@@ -978,14 +992,14 @@ const Inbox = ({
 
   // Load notes when the selected conversation changes, regardless of active tab
   useEffect(() => {
-    if (selectedConversation?.conversation_id) {
+    if (selectedConversation?.conversation_id || selectedConversation?.reservation_id) {
       callGetNotesApi();
     }
   }, [selectedConversation?.conversation_id]);
 
   // Refresh notes when the tab changes to 'notes'
   useEffect(() => {
-    if (activeTab === "notes" && selectedConversation?.conversation_id) {
+    if (activeTab === "notes" && (selectedConversation?.conversation_id || selectedConversation?.reservation_id)) {
       callGetNotesApi();
     }
   }, [activeTab, selectedConversation?.conversation_id]);
