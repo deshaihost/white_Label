@@ -793,9 +793,27 @@ const callAddNoteApi = async (noteText) => {
       setDeletingNoteId(null);
     }
   };
-  // Function to call the API to update/edit a note
+   // Function to call the API to update/edit a note
   const callUpdateNoteApi = async (noteId, noteText, visibleToHostbuddy) => {
-    if (!noteId || !noteText.trim()) return;
+    if (!noteId) return;
+
+let cleanedNoteText = '';
+
+// Handle different possible formats of noteText
+if (typeof noteText === 'string') {
+  cleanedNoteText = noteText.trim();
+} else if (Array.isArray(noteText)) {
+  cleanedNoteText = noteText.join('\n').trim();
+} else if (typeof noteText === 'object' && noteText !== null) {
+  // Handle object with numeric keys (e.g. { 0: "..." })
+  cleanedNoteText = Object.values(noteText).join('\n').trim();
+} else {
+  console.warn('Unsupported noteText format:', noteText);
+  return;
+}
+
+if (!cleanedNoteText) return;
+
 
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -813,7 +831,7 @@ const callAddNoteApi = async (noteText) => {
       // According to the API documentation for PUT /edit_note
       const bodyData = {
         note_id: noteId,
-        note: noteText,
+        note: cleanedNoteText,
         visible_to_hostbuddy: visibleToHostbuddy,
       };
 
@@ -849,7 +867,6 @@ const callAddNoteApi = async (noteText) => {
       ToastHandle("Error updating note", "danger");
     }
   };
-
   // Action items state to display in the Open Issues tab
   const [filteredActionItems, setFilteredActionItems] = useState([]);
   const [isLoadingActionItems, setIsLoadingActionItems] = useState(false);
@@ -2781,6 +2798,15 @@ const EditNoteModal = ({
   onDelete,
 }) => {
   if (!isOpen) return null;
+  let cleanedNoteText = '';
+
+if (typeof noteText === 'string') {
+  cleanedNoteText = noteText.trim();
+} else if (Array.isArray(noteText)) {
+  cleanedNoteText = noteText.join('\n').trim();
+} else if (typeof noteText === 'object' && noteText !== null) {
+  cleanedNoteText = Object.values(noteText).join('\n').trim();
+}
 
   return (
     <div
@@ -3004,10 +3030,10 @@ const EditNoteModal = ({
                 padding: "0 16px",
                 fontSize: "14px",
                 fontWeight: "500",
-                cursor: noteText.trim() ? "pointer" : "not-allowed",
-                opacity: noteText.trim() ? "1" : "0.7",
+                cursor: cleanedNoteText ? "pointer" : "not-allowed",
+                opacity: cleanedNoteText ? "1" : "0.7",
               }}
-              disabled={!noteText.trim()}
+              disabled={!cleanedNoteText}
             >
               {" "}
               Save changes
