@@ -26,7 +26,15 @@ const SubscriptionIndex = () => {
   const userSubscriptionStatus = getSubscriptionStatus(userData);
   const subscriptionPlanName = userSubscriptionStatus.plan;
   const numPropertiesAllowed = userSubscriptionStatus.props_allowed;
-  const [numProperties, setNumProperties] = useState(numPropertiesAllowed || 1);
+  const [numProperties, setNumProperties] = useState(numPropertiesAllowed || 0);
+
+  // Update numProperties when numPropertiesAllowed changes (e.g., after Redux state loads)
+  React.useEffect(() => {
+    if (numPropertiesAllowed && numPropertiesAllowed > 0) {
+      setNumProperties(numPropertiesAllowed);
+    }
+  }, [numPropertiesAllowed]);
+
   const paymentGoodUntil =
     userData?.subscr_payment_good_until ||
     userSubscriptionData?.payment_good_until;
@@ -170,14 +178,14 @@ const SubscriptionIndex = () => {
   const currentTotalPrice = calculateTotalPrice(
     normalizedPlan, 
     numPropertiesAllowed, 
-    billingPeriod
+    'monthly'
   );
 
   // Calculate current subscription average per-property price
   const currentAveragePrice = calculateAveragePerPropertyPrice(
     normalizedPlan,
     numPropertiesAllowed,
-    billingPeriod
+    'monthly'
   );
 
   // Call the billing portal API, get the URL from the response, then redirect the user to it securely (in a way that wont make the browser mad)
@@ -379,7 +387,7 @@ const SubscriptionIndex = () => {
                       }}>
                         {formatPrice(currentTotalPrice).dollar}
                         {formatPrice(currentTotalPrice).amount}
-                        {" " + (billingPeriod === "monthly" ? "monthly" : "yearly")} 
+                        {" monthly"} 
                       </div>
                     )}
                     
@@ -642,6 +650,8 @@ const SubscriptionIndex = () => {
           calculateAveragePerPropertyPrice={calculateAveragePerPropertyPrice}
           formatPrice={formatPrice}
           normalizePlanName={normalizePlanName}
+          goToBillingPortal={goToBillingPortal}
+          goToBillingPortalLoading={goToBillingPortalLoading}
         />
       </div>
     </div>
