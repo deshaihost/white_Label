@@ -343,6 +343,10 @@ const ListIntegrationProperties = () => {
     }
   }, [userDataGetLoading, PropertiesExtraData]);
 
+  console.log("Current plan:", subscription_data?.plan);
+
+  const isPro = subscription_data?.plan?.toLowerCase().includes("pro");
+
   return (
     <div>
       {chatBoxGetByNameLoading && <FullScreenLoader />}
@@ -425,11 +429,59 @@ const ListIntegrationProperties = () => {
                         </Dropdown.Item>
                         {!is_locked && (
                           <>
-                            <Dropdown.Item onClick={() => { handleEmbedClick(chatbot_key); }}>
+                            <Dropdown.Item
+                              style={{
+                                opacity: isPro ? 0.5 : 1,
+                                pointerEvents: isPro ? "none" : "auto",
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                              }}
+                              disabled={isPro}
+                              onClick={(e) => {
+                                if (isPro) return;
+                                handleEmbedClick(chatbot_key);
+                              }}
+                            >
                               Get Chat Link or Embed
+                              {isPro && (
+                                <span
+                                  style={{ color: '#146ef5', fontWeight: 500, fontSize: '0.95em', marginLeft: 'auto', cursor: 'pointer', pointerEvents: 'auto', textDecoration: 'underline' }}
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    navigate('/setting/subscription');
+                                  }}
+                                >
+                                  Upgrade
+                                </span>
+                              )}
                             </Dropdown.Item>
-                            <Dropdown.Item onClick={() => { selectedHandle(regenerateChatbotLink, properties); }}>
+                            <Dropdown.Item
+                              style={{
+                                opacity: isPro ? 0.5 : 1,
+                                pointerEvents: isPro ? "none" : "auto",
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                              }}
+                              disabled={isPro}
+                              onClick={(e) => {
+                                if (isPro) return;
+                                selectedHandle(regenerateChatbotLink, properties);
+                              }}
+                            >
                               Regenerate Chat Link
+                              {isPro && (
+                                <span
+                                  style={{ color: '#146ef5', fontWeight: 500, fontSize: '0.95em', marginLeft: 'auto', cursor: 'pointer', pointerEvents: 'auto', textDecoration: 'underline' }}
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    navigate('/setting/subscription');
+                                  }}
+                                >
+                                  Upgrade
+                                </span>
+                              )}
                             </Dropdown.Item>
                             {!lockPropertyLoading ? (
                               <Dropdown.Item onClick={() => { selectedHandle(lockProperty, properties); }}>
