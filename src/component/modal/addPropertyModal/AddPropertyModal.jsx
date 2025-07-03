@@ -69,13 +69,14 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                       <option value="" disabled style={{color: 'rgb(180, 180, 180)'}}>-- Please Select --</option>
                       <option value="HostBuddy Pro">HostBuddy Pro</option>
                       <option value="HostBuddy Elite">HostBuddy Elite</option>
+                      <option value="HostBuddy Ultimate">HostBuddy Ultimate</option>
                     </select>
                   </div>
                   {errors.subscription_plan && (
                     <>{ErrorMessageShow(errors.subscription_plan)}</>
                   )}
 
-                  {subscriptionPlan && (
+                  {subscriptionPlan && false && ( // hide this, since it's not accurate for the new plans
                     <div className="plan-info-box">
                       <h3>{subscriptionPlan}</h3>
                       {subscriptionPlan === "HostBuddy Pro" ? (
