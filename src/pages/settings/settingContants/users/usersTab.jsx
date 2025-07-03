@@ -234,7 +234,7 @@ const UsersTab = (userData) => {
         <button type="button" className="btn btn-primary" style={{ borderRadius: '50px', padding: '10px 20px' }} onClick={handleInviteClick}>
           Invite User
         </button>
-        <p style={{ fontSize: '14px', color: '#AAA', marginTop: '10px', textAlign: 'center' }}>
+        {/* <p style={{ fontSize: '14px', color: '#AAA', marginTop: '10px', textAlign: 'center' }}>
           {maxUsersAllowed > 0 ? (
             maxUsersAllowed === Infinity ? (
               `${currentUserCount} users (${subscriptionPlan} plan - unlimited)`
@@ -246,7 +246,7 @@ const UsersTab = (userData) => {
           ) : (
             'Subscribe to invite team members'
           )}
-        </p>
+        </p> */}
       </div>
 
       <p style={{ fontSize: '16px', width: '100%', marginTop: '60px' }}>ADMIN users can perform any action on the account, including inviting new users, changing account settings, and updating payment information.</p>
