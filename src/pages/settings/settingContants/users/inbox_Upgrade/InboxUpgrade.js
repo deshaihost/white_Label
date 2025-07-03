@@ -62,7 +62,7 @@ const InboxUpgrade = ({
         style={{ backgroundImage: `url(${upgradeBackground})` }}
       >
         <h1>{title}</h1>
-        <p>{description}</p>
+        <p>This feature requires a higher level plan to access</p>
       </div>
 
       <div className="upgrade-content">
