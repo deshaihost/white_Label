@@ -795,25 +795,7 @@ const callAddNoteApi = async (noteText) => {
   };
    // Function to call the API to update/edit a note
   const callUpdateNoteApi = async (noteId, noteText, visibleToHostbuddy) => {
-    if (!noteId) return;
-
-let cleanedNoteText = '';
-
-// Handle different possible formats of noteText
-if (typeof noteText === 'string') {
-  cleanedNoteText = noteText.trim();
-} else if (Array.isArray(noteText)) {
-  cleanedNoteText = noteText.join('\n').trim();
-} else if (typeof noteText === 'object' && noteText !== null) {
-  // Handle object with numeric keys (e.g. { 0: "..." })
-  cleanedNoteText = Object.values(noteText).join('\n').trim();
-} else {
-  console.warn('Unsupported noteText format:', noteText);
-  return;
-}
-
-if (!cleanedNoteText) return;
-
+    if (!noteId || !noteText.trim()) return;
 
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -831,7 +813,7 @@ if (!cleanedNoteText) return;
       // According to the API documentation for PUT /edit_note
       const bodyData = {
         note_id: noteId,
-        note: cleanedNoteText,
+        note: noteText,
         visible_to_hostbuddy: visibleToHostbuddy,
       };
 
@@ -2798,15 +2780,6 @@ const EditNoteModal = ({
   onDelete,
 }) => {
   if (!isOpen) return null;
-  let cleanedNoteText = '';
-
-if (typeof noteText === 'string') {
-  cleanedNoteText = noteText.trim();
-} else if (Array.isArray(noteText)) {
-  cleanedNoteText = noteText.join('\n').trim();
-} else if (typeof noteText === 'object' && noteText !== null) {
-  cleanedNoteText = Object.values(noteText).join('\n').trim();
-}
 
   return (
     <div
@@ -3030,10 +3003,10 @@ if (typeof noteText === 'string') {
                 padding: "0 16px",
                 fontSize: "14px",
                 fontWeight: "500",
-                cursor: cleanedNoteText ? "pointer" : "not-allowed",
-                opacity: cleanedNoteText ? "1" : "0.7",
+                cursor: noteText.trim() ? "pointer" : "not-allowed",
+                opacity: noteText.trim() ? "1" : "0.7",
               }}
-              disabled={!cleanedNoteText}
+              disabled={!noteText.trim()}
             >
               {" "}
               Save changes
