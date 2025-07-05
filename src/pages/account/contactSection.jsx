@@ -164,11 +164,11 @@ const AccountContactSection = () => {
   };
 
   const showAddFields = (section) => {
-    // Check if user has HostBuddy Pro plan and is trying to add WhatsApp or Slack
+    // Check if user has HostBuddy Pro plan and is trying to add WhatsApp, Slack, or Webhook
     const subscription_data = getSubscriptionStatus(userDataGet);
     const isProPlan = subscription_data.plan && subscription_data.plan.toLowerCase().includes('pro');
     
-    if (isProPlan && (section === 'whatsapp' || section === 'slack')) {
+    if (isProPlan && (section === 'whatsapp' || section === 'slack' || section === 'webhook')) {
       setShowUpgradePopup(true);
       return;
     }
