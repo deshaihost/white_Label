@@ -32,9 +32,9 @@ const IntegrationsIndex = (ApiUserData) => {
   const isProPlan = subscriptionPlan.toLowerCase().includes('pro');
 
   // Helper to render a disabled tile prompting the user to upgrade
-  const renderUpgradeTile = (logoSrc, altText, description = 'Available on HostBuddy Elite') => (
+  const renderUpgradeTile = (logoSrc, altText, description = 'Available on HostBuddy Elite', imgStyle = {}) => (
     <div className="partner-tile">
-      <img className="partner-logo" alt={altText} src={logoSrc} />
+      <img className="partner-logo" alt={altText} src={logoSrc} style={imgStyle} />
       <p>{description}</p>
       <Link to="/setting/subscription" className="btn btn-primary" style={{ borderRadius: '50px', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
         <img src={LockIcon} alt="Lock" style={{ width: '16px', height: '16px' }} />
@@ -79,7 +79,7 @@ const IntegrationsIndex = (ApiUserData) => {
           )}
           {/* Hostfully Guidebooks */}
           {!hostfullyGuidebooksUserId && (
-            isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/hostfully_circle.svg', 'Hostfully Guidebooks Logo', 'Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.') : <ConnectToHostfullyGuidebooks />
+            isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/hostfully_circle.svg', 'Hostfully Guidebooks Logo', 'Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.', { width: '50px', height: '50px' }) : <ConnectToHostfullyGuidebooks />
           )}
           {/* OpenPhone */}
           {!openphoneNumber && (
