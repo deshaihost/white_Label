@@ -11,11 +11,13 @@
 .upgrade-overlay {
   /* background: linear-gradient(180deg, #000212 0%, rgba(0, 2, 18, 0.75) 100%); */
   backdrop-filter: blur(6px);
-  border-radius: 12px;
-  padding: 64px 40px;
+  border-radius: 0;
+  overflow: visible;
+  padding: 24px 32px;
   width: 100%;
   /* max-width: 1282px; */
-  height: 281px;
+  height: auto;
+  min-height: 0;
   display: flex;
   justify-content: center;
   align-items: center;

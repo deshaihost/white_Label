@@ -121,7 +121,8 @@
   align-items: center;
   justify-content: center;
   z-index: 20;
-  background: rgba(2, 14, 41, 0.7);
+  background: transparent;
+  backdrop-filter: blur(6px);
   pointer-events: auto;
 }
 
@@ -141,12 +142,13 @@
   justify-content: center;
   width: 100%;
   pointer-events: auto;
-  background: rgba(2, 14, 41, 0.85);
+  background: transparent;
+  backdrop-filter: blur(6px);
   z-index: 20;
   min-height: 120px;
-  padding-top: 32px;
+  padding-top: 48px;
   padding-bottom: 40px;
   margin-top: -12px;
   margin-bottom: -24px;
-  box-shadow: 0 -8px 16px 8px rgba(2,14,41,0.85), 0 16px 32px 16px rgba(2,14,41,0.85);
+  box-shadow: none;
 }

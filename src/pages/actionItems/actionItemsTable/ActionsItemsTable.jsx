@@ -205,8 +205,14 @@ const ActionsItemsTable = () => {
 
   // Split action items into visible and locked
   const isLocked = (item) => {
+    // Compare only calendar days; ignore hours/minutes
     const itemDate = new Date(item.created_at);
-    const diffDays = (now - itemDate) / (1000 * 60 * 60 * 24);
+    const nowDate = new Date();
+    // Normalise both to midnight so we only compare the date portion
+    itemDate.setHours(0, 0, 0, 0);
+    nowDate.setHours(0, 0, 0, 0);
+
+    const diffDays = (nowDate - itemDate) / (1000 * 60 * 60 * 24);
     return diffDays > cutoffDays;
   };
   const hasLockedItems = filteredActionItems.some(isLocked);
@@ -240,17 +246,20 @@ const ActionsItemsTable = () => {
       const tbodyRect = tableBodyRef.current.getBoundingClientRect();
       const firstRect = firstLockedRef.current.getBoundingClientRect();
       const lastRect = lastLockedRef.current.getBoundingClientRect();
+      const paddingOffset = 24; // pixels to keep clear space above overlay
       setOverlayStyle({
         position: 'absolute',
         left: 0,
         width: '100%',
-        top: firstRect.top - tbodyRect.top,
-        height: lastRect.bottom - firstRect.top,
+        top: firstRect.top - tbodyRect.top + paddingOffset,
+        height: lastRect.bottom - firstRect.top - paddingOffset,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 20,
-        background: 'rgba(2, 14, 41, 0.7)',
+        background: 'transparent',
+        boxShadow: 'none',
+        backdropFilter: 'blur(6px)',
         pointerEvents: 'auto',
       });
     } else {
