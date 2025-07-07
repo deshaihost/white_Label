@@ -9,11 +9,16 @@ import "./AddPropertyModal.css";
 function AddPropertyModal({ handleClose, show, subscription_data }) {
   const [numProperties, setNumProperties] = useState("");
   const [subscriptionPlan, setSubscriptionPlan] = useState("");
+  const [billingPeriod, setBillingPeriod] = useState(""); // new state for billing period
   const [errors, setErrors] = useState({});
   const [confirmPropertyModel, setConfirmPropertyModel] = useState({ status: false, items: "" });
 
   const handlePlanChange = (event) => {
     setSubscriptionPlan(event.target.value);
+  };
+
+  const handleBillingPeriodChange = (event) => {
+    setBillingPeriod(event.target.value);
   };
 
   const handleNumberChange = (e) => {
@@ -34,7 +39,14 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
   const onSubmit = (event) => {
     event.preventDefault();
     if (validateForm()) {
-      setConfirmPropertyModel({ status: true, items: { num_properties: numProperties, subscription_plan: subscriptionPlan } });
+      setConfirmPropertyModel({ 
+        status: true, 
+        items: { 
+          num_properties: numProperties, 
+          subscription_plan: subscriptionPlan,
+          period: billingPeriod // pass billing period to confirmation modal
+        } 
+      });
       handleClose("addPropertyClose");
     }
   };
@@ -72,6 +84,15 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                       <option value="HostBuddy Ultimate">HostBuddy Ultimate</option>
                     </select>
                   </div>
+                  {/* New Billing Period Selector */}
+                  <div className="form-design mt-3 text-start">
+                    <label htmlFor="">Select Billing Period</label>
+                    <select id="billing_period" name="billing_period" className="form-control" onChange={handleBillingPeriodChange} value={billingPeriod}>
+                      <option value="" disabled style={{color: 'rgb(180, 180, 180)'}}>-- Please Select --</option>
+                      <option value="annual">Annual (17% off)</option>
+                      <option value="monthly">Monthly</option>
+                    </select>
+                  </div>
                   {errors.subscription_plan && (
                     <>{ErrorMessageShow(errors.subscription_plan)}</>
                   )}
@@ -100,7 +121,22 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                   )}
 
                   <div className="form-design mt-3 text-center">
-                    <button type="submit">Subscribe Now</button>
+                    <button
+                      type="submit"
+                      style={{ marginTop: "18px", marginBottom: "18px" }}
+                    >
+                      Subscribe Now
+                    </button>
+                  </div>
+                  <div className="form-design mt-2 text-center">
+                    <a
+                      href="/pricing"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "#007bff", textDecoration: "none" }}
+                    >
+                      View our plans and pricing
+                    </a>
                   </div>
                 </div>
               </div>
