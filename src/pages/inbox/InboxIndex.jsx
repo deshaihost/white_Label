@@ -235,6 +235,7 @@ const InboxIndex = () => {
               screenWidth >= 1100 &&
               location.pathname === "/inbox"
             }
+            userData={allUserData}
           />
         )}
         {interFaceComponent === 1 && (

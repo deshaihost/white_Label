@@ -48,7 +48,7 @@ const IntegrationsIndex = (ApiUserData) => {
           {!minutUserId && <ConnectToMinut />}
           {!tidyUserId && <ConnectToTidy />}
           {!hostfullyGuidebooksUserId && <ConnectToHostfullyGuidebooks />}
-          {!openphoneNumber && <ConnectToOpenPhone/>}
+          {/* {!openphoneNumber && <ConnectToOpenPhone/>} */}
           {!notionUserId && <ConnectToNotion />}
         </div>
       </div>
