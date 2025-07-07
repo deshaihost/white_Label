@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import Modal from "react-bootstrap/Modal";
+import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./justificationModal.css"; // Import the CSS file
+import "./customJustificationModal.css";
+import { ReactComponent as JustificationLogo } from "./icons/justificationLogo.svg";
 
 // Utility function to format markdown-like text
 const formatMarkdownText = (text) => {
@@ -63,62 +63,121 @@ const formatMarkdownText = (text) => {
   return result;
 };
 
-const JustificationModal = ({ show, handleClose, propertyName, justification }) => {
-  const logo = "https://hostbuddylb.com/logo/logoNoText.png";
-  const closeFeedBackModel=()=>{
-    handleClose("addPropertyClose");
-  }
-  // Format the justification text
-  const formattedJustification = formatMarkdownText(justification);
+const JustificationModal = ({
+  show,
+  handleClose,
+  propertyName,
+  justification,
+}) => {
+  console.log("jus:", justification);
+  const modalRef = useRef(null);
 
+  // Handle click outside to close
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target) && show) {
+        handleClose("addPropertyClose");
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [handleClose, show]);
+  // If not showing, don't render
+  if (!show) return null;
+
+  // Format the justification text using the markdown formatter
+  const formattedJustification = justification ? formatMarkdownText(justification) : "No justification available.";
   return (
-    <Modal show={show} size="xl" onHide={() => closeFeedBackModel()} aria-labelledby="contained-modal-title-vcenter" centered>
-      <Modal.Header closeButton>
-        <h5 className="modal-title">Hey HostBuddy, where did this response come from?</h5>
-      </Modal.Header>
-      <Modal.Body>
-        <div className="justification-modal">
+    <div className="custom-modal-overlay">
+      <div className="custom-modal-container" ref={modalRef}>
+        <div className="custom-modal-header">
+          <div className="custom-modal-logo">
+            <div className="logo-badge">
+              <JustificationLogo width="48" height="50" />
+            </div>
+          </div>
+          <h5 className="custom-modal-title heading-xsmall">
+            Hey HostBuddy, where did this response come from?
+          </h5>
+          <button
+            className="custom-modal-close"
+            onClick={() => handleClose("addPropertyClose")}
+          >
+            ×
+          </button>
+        </div>        <div className="custom-modal-body">
           <div className="justification-block">
             <div className="justification-content" style={{ display:'flex', alignItems:'center' }}>
-              <img src={logo} alt="Logo" className="justification-logo" />
+              {/* <JustificationLogo width="48" height="50" /> */}
               {/* Use dangerouslySetInnerHTML to render formatted justification */}
               <div
-                className="markdown-content justification-text" // Keep existing class for potential styling
-                style={{ marginTop:'30px', marginBottom:'30px', fontSize:'18px', textAlign:'left', color:'white', fontFamily: "'Samsung Sharp Sans Medium'" }}
+                className="markdown-content justification-text"
+                style={{ marginTop:'0px', marginBottom:'0px', fontSize:'16px', textAlign:'left', color:'rgba(166, 169, 178, 1)', fontFamily: "'Samsung Sharp Sans Medium'" }}
                 dangerouslySetInnerHTML={{ __html: formattedJustification }}
               />
             </div>
           </div>
-          <hr/>
-          <p className="text-center" style={{marginTop:"30px", marginBottom:"30px", fontSize:"16px", color:"#999"}}>HostBuddy's responses are based on the information in its knowledge base for this property. If something is missing or incorrect, you can <Link to={`/edit-property/${propertyName}`}>manage the knowledge base or add to the property profile</Link>.</p>
-          <p className="text-center" style={{marginTop:"30px", marginBottom:"30px", fontSize:"16px", color:"#999"}}>You can also adjust your <Link to='/inbox/preferences'>conversation preferences</Link> to change HostBuddy's behavior.</p>
+         
+          <div className="custom-modal-footer">
+            <p style={{marginTop:"0px", marginBottom:"0px", fontSize:"16px", color:"#999"}}>
+              HostBuddy's responses are based on the information in its
+              knowledge base for this property. If something is missing or
+              incorrect, you can{" "}
+              <Link
+                to={`/edit-property/${propertyName}`}
+                className="custom-link"
+              >
+                manage the knowledge base
+              </Link>{" "}
+              or{" "}
+              <Link
+                to={`/edit-property/${propertyName}`}
+                className="custom-link"
+              >
+                add to the property profile
+              </Link>
+              .
+            </p>
+            <p style={{
+              marginTop:"0px", 
+              marginBottom:"0px", fontSize:"16px", color:"#999"}}>
+              You can also adjust your{" "}
+              <Link to="/inbox/preferences" className="custom-link">
+                conversation preferences
+              </Link>{" "}
+              to change HostBuddy's behavior.
+            </p>
+          </div>
         </div>
-      </Modal.Body>
-      {/* Add style tag for markdown list styling */}
-      <style jsx="true">{`
-        .markdown-list {
-          margin-left: 40px; /* Adjust as needed based on logo size and desired indent */
-          list-style-type: disc;
-          padding-left: 20px; /* Add padding for list items */
-          color: white; /* Ensure list text color matches */
-          font-family: 'Samsung Sharp Sans Medium'; /* Match font */
-        }
-        .markdown-content ul {
-          margin-top: 10px;
-          margin-bottom: 10px;
-        }
-        .markdown-list li {
-          margin-bottom: 15px; /* Spacing between list items */
-        }
-        /* Ensure spans within the content inherit the base styles */
-        .markdown-content span {
-           font-family: inherit; /* Default to parent font */
-        }
-        .markdown-content span[style*="Samsung Sharp Sans Bold"] {
-           font-family: 'Samsung Sharp Sans Bold'; /* Override for bold */
-        }
-      `}</style>
-    </Modal>
+        {/* Add style tag for markdown list styling */}
+        <style jsx="true">{`
+          .markdown-list {
+            margin-left: 40px; /* Adjust as needed based on logo size and desired indent */
+            list-style-type: disc;
+            padding-left: 20px; /* Add padding for list items */
+            color: white; /* Ensure list text color matches */
+            font-family: 'Samsung Sharp Sans Medium'; /* Match font */
+          }
+          .markdown-content ul {
+            margin-top: 10px;
+            margin-bottom: 10px;
+          }
+          .markdown-list li {
+            margin-bottom: 15px; /* Spacing between list items */
+          }
+          /* Ensure spans within the content inherit the base styles */
+          .markdown-content span {
+             font-family: inherit; /* Default to parent font */
+          }
+          .markdown-content span[style*="Samsung Sharp Sans Bold"] {
+             font-family: 'Samsung Sharp Sans Bold'; /* Override for bold */
+          }
+        `}</style>
+      </div>
+    </div>
   );
 };
 

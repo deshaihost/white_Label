@@ -18,9 +18,14 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
       if (plantPring?.TotalProperties !== "") {
         //try { window.gtag_report_conversion('go-to-checkout'); } // Report the checkout start to Google Ads
         //catch {  } // forget the gtag report, just proceed
-        dispatch(
-          postCreateCheckoutSessionActions({ subscription_plan:plantPring?.yourPlan, num_properties:JSON.parse(plantPring?.TotalProperties) })
-        );
+        const payload = { 
+          subscription_plan: plantPring?.yourPlan, 
+          num_properties: JSON.parse(plantPring?.TotalProperties) 
+        };
+        if (plantPring?.period === "annual") {
+          payload.period = "annual";
+        }
+        dispatch(postCreateCheckoutSessionActions(payload));
       }
     }
   };
@@ -28,7 +33,7 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
   useEffect(() => {
     let PricePerProperty = 20;
     if (planModelDataSend?.items !== "") {
-      const { num_properties, subscription_plan } =
+      const { num_properties, subscription_plan, period } =
         planModelDataSend?.items !== "" ? planModelDataSend?.items : [];
       const calculatPropratedCost = PricePerProperty * num_properties;
       setPlantPrint({
@@ -37,6 +42,7 @@ function AddNewPropertyModal({ handleClose, show, planModelDataSend }) {
         TotalProperties: num_properties,
         PricePerProperty: PricePerProperty,
         proratedCost: calculatPropratedCost,
+        period: period || "", // store period for use in confirmHandle
       });
     }
   }, [planModelDataSend]);

@@ -1,0 +1,129 @@
+/* Frequently Asked Questions Component Styling */
+.faq-container {
+  width: 100%;
+  /* max-width: 1200px; */
+  margin: 0 auto;
+  /* background-color: #001034; */
+  color: white;
+  display: flex;
+  gap: 60px;
+  margin-bottom: 60px;
+  align-items: flex-start;
+  /* padding: 0 20px; */
+}
+
+.faq-header {
+  margin-bottom: 0;
+  margin-left: 60px;
+  text-align: left;
+  flex: 0 0 40%;
+  padding-right: 20px;
+}
+
+.faq-header h1 {
+  font-size: 44px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  text-align: left;
+}
+
+.faq-header h1 span {
+  color: #0066FF;
+}
+
+.faq-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  text-align: left;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+}
+
+.faq-item {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  font-size: 20px;
+  font-family: 'Samsung Sharp Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+}
+
+.faq-question span {
+  flex-grow: 1;
+  padding-right: 20px;
+}
+
+.expand-button {
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.expand-button.expanded {
+  background-color: transparent;
+  color: #0066FF;
+}
+
+.faq-answer {
+  padding: 0 0 20px 0;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.faq-divider {
+  height: 1px;
+  background-color: #FFFFFF;
+  width: 100%;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .faq-container {
+    padding: 40px 0px;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .faq-header {
+    flex: none;
+    padding-right: 0;
+    margin-bottom: 20px;
+    margin-left: 0;
+    text-align: center;
+    width: 100%;
+  }
+  .faq-content {
+    margin-right: 0;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .faq-header h1 {
+    font-size: 28px;
+    text-align: center;
+  }
+  
+  .faq-question {
+    font-size: 16px;
+  }
+}

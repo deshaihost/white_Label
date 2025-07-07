@@ -320,7 +320,8 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         flexDirection: "column",
       }}
     >
-      <div style={{ paddingBottom: "16px" }}>
+      <div style={{ 
+        paddingBottom: "16px" }}>
         <Logo colour="default" type="icon" />
       </div>{" "}
       <div style={{ flex: 1 }}>

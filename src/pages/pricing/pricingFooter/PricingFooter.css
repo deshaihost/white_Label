@@ -1,0 +1,136 @@
+/* Import Samsung Sharp Sans font if available */
+@import url('https://fonts.cdnfonts.com/css/samsung-sharp-sans');
+
+.footer-container {
+  /* background-color: #020929; */
+  color: white;
+  padding: 20px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-container_p {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-container img {
+  max-width: 150px;
+  height: auto;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-navigation {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-item {
+  color: rgba(255, 255, 255, 1);
+  text-decoration: none;
+  font-family: 'Samsung Sharp Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.nav-item:hover {
+  text-decoration: underline;
+}
+
+.nav-separator {
+  color: white;
+  opacity: 0.5;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.social-icon {
+  width: 32px;
+  height: 32px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.social-icon:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.social-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: white;
+}
+
+@media (max-width: 767px) {
+  .footer-container {
+    padding: 10px 0;
+    width: 100vw;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .logo-container_p {
+    margin-bottom: 10px;
+  }
+  .logo-container_p img,
+  .logo-container img {
+    max-width: 100px;
+    height: auto;
+  }
+  .footer-content {
+    padding: 10px 0;
+    max-width: 100vw;
+    width: 100vw;
+    margin: 0 auto;
+  }
+  .footer-navigation {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+  }
+  .nav-item {
+    font-size: 14px;
+    line-height: 20px;
+    width: 100%;
+    text-align: center;
+  }
+  .nav-separator {
+    display: none;
+  }
+  .social-icons {
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .social-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .social-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+}

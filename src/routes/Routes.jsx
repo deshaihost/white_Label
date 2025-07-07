@@ -488,11 +488,11 @@ const Routing = () => {
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>
         <Route path="/workbench-multi/:multi_property_id" element={<WorkbenchMulti />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
-      </Routes>
-      { location.pathname !== "/login" &&
+      </Routes>      { location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         location.pathname !== "/forgot" &&
         location.pathname !== "/accept-invitation" &&
+        location.pathname !== "/pricing" &&
         !location.pathname.startsWith("/inbox") &&
         location.pathname !== "/test-show-conversations" &&
         !location.pathname.startsWith("/edit-multi-property") &&

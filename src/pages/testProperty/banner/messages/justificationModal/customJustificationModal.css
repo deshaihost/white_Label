@@ -1,0 +1,206 @@
+/* Custom Justification Modal CSS */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+
+/* Modal overlay (background) */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+/* Modal container */
+.custom-modal-container {
+  background-color: #2B2E36;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  width: 90%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: hidden;
+  position: relative;
+  animation: modalFadeIn 0.25s;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Modal header styling */
+.custom-modal-header {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-modal-logo {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a90e2;
+}
+
+.logo-badge {
+  background-color: rgba(15, 17, 23, 0.32);
+  /* padding: 10px; */
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-modal-title {
+  flex-grow: 1;
+  margin: 0;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+}
+
+.heading-xsmall {
+  /* Additional styles for Heading/XSmall type */
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  font-family: 'Samsung Sharp Sans Bold', sans-serif;
+}
+
+.custom-modal-close {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 15px;
+}
+
+.custom-modal-close:hover {
+  color: #fff;
+}
+
+/* Modal body styling */
+.custom-modal-body {
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+  color: rgba(166, 169, 178, 1);
+  font-family: 'Samsung Sharp Sans', sans-serif;
+}
+
+/* Justification section styling */
+.custom-justification-section {
+  margin-bottom: 20px;
+  padding: 0 5px;
+}
+
+.justification-section-title {
+  color: rgba(208, 211, 219, 1);
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+ 
+  letter-spacing: -0.01em;
+}
+
+.justification-content {
+  color: rgba(166, 169, 178, 1);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  font-family: 'Samsung Sharp Sans', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Styling for source name in justification */
+.justification-source-name {
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Styling for quoted text in justification */
+.justification-quote {
+  color: rgba(208, 211, 219, 1);
+  font-weight: 500;
+
+ 
+
+  display: block;
+  border-radius: 0 4px 4px 0;
+  font-family: 'Samsung Sharp Sans', sans-serif;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Horizontal rules */
+hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 15px 0;
+}
+
+/* Footer text */
+.custom-modal-footer {
+  margin-top: 15px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-modal-footer p {
+  color: rgba(166, 169, 178, 1);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  font-family: 'Samsung Sharp Sans', sans-serif;
+}
+
+/* Links styling */
+.custom-link {
+  color: rgba(116, 169, 247, 1);
+    font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.custom-link:hover {
+  color: #6aa8f7;
+  text-decoration: underline;
+}
+
+/* Animation for modal appearance */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* For small screens */
+@media (max-width: 576px) {
+  .custom-modal-container {
+    width: 95%;
+  }
+  
+  .custom-modal-title {
+    font-size: 16px;
+  }
+  
+  .custom-modal-header {
+    padding: 10px 15px;
+  }
+  
+  .custom-modal-body {
+    padding: 15px;
+  }
+}

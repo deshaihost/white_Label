@@ -1,11 +1,11 @@
 .features .heading-box {
     padding-bottom: 40px;
-    border-bottom: 1px solid rgb(255 255 255 / 10%);
+    /* border-bottom: 1px solid rgb(255 255 255 / 10%); */
     margin-bottom: 0;
 }
 
 .features .heading-box h2 {
-    color: #FFF;
+    color: #FFFFFF;
     text-align: center;
     font-family: 'Samsung Sharp Sans Bold';
     font-size: 35px;
@@ -41,11 +41,19 @@
 }
 
 .features .features-list table>:not(:last-child)>:last-child>* {
-    border-bottom-color: currentColor;
+    /* border-bottom-color: currentColor; */
 }
 
 .features .features-list table th, .features .features-list table td {
     padding: 25px 0;
+}
+
+.pricing-feature-text {
+    font-family: "DM Sans", Helvetica, sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 20px !important;
+    color: rgba(255, 255, 255, 1) !important;
+    margin: 0;
 }
 
 .features .features-list table th h3 {
@@ -148,5 +156,38 @@
 
     .features .heading-box p {
         font-size: 16px;
+    }
+
+    .features .features-list {
+        width: 100vw;
+        max-width: 98vw;
+        overflow-x: auto;
+        display: block;
+        margin: 0 auto;
+    }
+    .features .features-list table {
+        width: 100%;
+        min-width: 600px;
+        font-size: 13px;
+    }
+    .features .features-list table th, .features .features-list table td {
+        padding: 8px 0;
+        font-size: 13px;
+    }
+    .features .features-list table th h3 {
+        font-size: 13px;
+        margin: 0 0 3px;
+    }
+    .features .features-list table td h5 {
+        font-size: 12px;
+    }
+    .features .features-list table td img {
+        max-width: 14px;
+    }
+    .features .features-list .unlimited-text {
+        font-size: 11px;
+    }
+    .features .features-list table tbody p {
+        font-size: 12px;
     }
 }

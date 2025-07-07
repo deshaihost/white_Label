@@ -1,0 +1,18 @@
+/* Subscription component specific font overrides with highest specificity */
+/* Override specific global selectors that target spans and headings */
+div span.samsung-sharp-sans.samsung-sharp-sans,
+.row span.samsung-sharp-sans.samsung-sharp-sans,
+span.samsung-sharp-sans.samsung-sharp-sans,
+span.samsung-sharp-sans.samsung-sharp-sans:not(.poppins-font) {
+  font-family: "Samsung Sharp Sans", sans-serif !important;
+}
+
+div h3.samsung-sharp-sans-medium.samsung-sharp-sans-medium,
+h3.samsung-sharp-sans-medium.samsung-sharp-sans-medium {
+  font-family: "Samsung Sharp Sans Medium", sans-serif !important;
+}
+
+div h2.samsung-sharp-sans-bold.samsung-sharp-sans-bold,
+h2.samsung-sharp-sans-bold.samsung-sharp-sans-bold {
+  font-family: "Samsung Sharp Sans Bold", sans-serif !important;
+}
