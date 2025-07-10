@@ -38,7 +38,7 @@ const IntegrationsIndex = (ApiUserData) => {
       <p>{description}</p>
       <Link to="/setting/subscription" className="btn btn-primary" style={{ borderRadius: '50px', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
         <img src={LockIcon} alt="Lock" style={{ width: '16px', height: '16px' }} />
-        Upgrade
+        Upgrade to unlock
       </Link>
     </div>
   );
