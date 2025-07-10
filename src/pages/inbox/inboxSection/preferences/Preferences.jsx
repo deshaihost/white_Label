@@ -11,6 +11,7 @@ import SettingsCalender from "./settingsCalendar";
 import { FullScreenLoader } from "../../../../helper/Loader";
 import { useSelector } from "react-redux";
 import { getSubscriptionStatus } from '../../../../helper/Authorized';
+import { useNavigate } from "react-router-dom";
 
 /*
 default_settings = {
@@ -32,6 +33,7 @@ default_settings = {
 
 const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
+  const navigate = useNavigate();
   const [getSettingsLoading, setGetSettingsLoading] = useState(false);
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
   const [settingsApiData, setSettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings configs
@@ -179,6 +181,12 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
     const newSettings = { ...localSettingsData[selectedConfig], schedules:newScheduleData };
     setCurrentSettingsData(newSettings);
   }
+
+  const handleUpgradeClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.location.href = '/setting/subscription';
+  };
 
   // On page load, call the API to get the settings
   useEffect(() => {
@@ -483,7 +491,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               )}
               <label className="fs-5 mb-0">Message Delay</label>
               { !isDelayEditable && (
-                <span style={{color:'#5498FF', fontWeight:'bold', fontSize:'17px', cursor:'pointer', marginLeft:'6px'}}>Upgrade</span>
+                <span style={{color:'#5498FF', fontWeight:'bold', fontSize:'17px', cursor:'pointer', marginLeft:'6px'}} onClick={handleUpgradeClick}>Upgrade</span>
               )}
             </div>
             <p className="settings-label mb-2">HostBuddy will delay its response to guests by a (random) number of minutes within this range. To have HostBuddy simply respond as quickly as possible, set min and max delay to 0.</p>
@@ -508,7 +516,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               )}
               <label className="fs-5 mb-0">Customize Tone</label>
               { !isToneEditable && (
-                <span style={{color:'#5498FF', fontWeight:'bold', fontSize:'17px', cursor:'pointer', marginLeft:'6px'}}>Upgrade</span>
+                <span style={{color:'#5498FF', fontWeight:'bold', fontSize:'17px', cursor:'pointer', marginLeft:'6px'}} onClick={handleUpgradeClick}>Upgrade</span>
               )}
             </div>
             <p className="settings-label">You can customize HostBuddy's responses by adding some instructions here to direct HostBuddy's tone. Make sure to test after you make changes here!</p>
