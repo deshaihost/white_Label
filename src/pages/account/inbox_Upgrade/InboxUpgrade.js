@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import "./InboxUpgrade.css";
 import upgradeBackground from "./assets/upgrade-background.png";
 import smartInboxIcon from "./assets/smart-inbox-icon.svg";
@@ -10,6 +11,7 @@ import integrationsIcon from "./assets/integrations-icon.svg";
 import featuresIconsForMessage from "./assets/Features_icons_for_message_upgarde.svg";
 
 const InboxUpgrade = ({ onClose }) => {
+  const navigate = useNavigate();
   const features = [
     {
       icon: smartInboxIcon,
@@ -90,7 +92,7 @@ const InboxUpgrade = ({ onClose }) => {
         </p>
         <p className="promotion-text">Get 2 months free with annual plans!</p>
         <div className="upgrade-buttons">
-          <button className="btn-primary">Compare plans</button>
+          <button className="btn-primary" onClick={() => navigate('/setting/subscription')}>Compare plans</button>
           <button className="btn-secondary" onClick={onClose}>Maybe later</button>
         </div>
       </div>
