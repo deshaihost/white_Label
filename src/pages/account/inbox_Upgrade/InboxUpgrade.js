@@ -92,8 +92,8 @@ const InboxUpgrade = ({ onClose }) => {
         </p>
         <p className="promotion-text">Get 2 months free with annual plans!</p>
         <div className="upgrade-buttons">
-          <button className="btn-primary" onClick={() => navigate('/setting/subscription')}>Compare plans</button>
-          <button className="btn-secondary" onClick={onClose}>Maybe later</button>
+          <button className="btn-primary_compare" onClick={() => navigate('/setting/subscription')}>Compare plans</button>
+          <button className="btn-secondary_maybe" onClick={onClose}>Maybe later</button>
         </div>
       </div>
     </div>
