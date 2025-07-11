@@ -396,14 +396,14 @@ const ListIntegrationProperties = () => {
                             </h6>
                           ) : (
                             <h6 style={{ marginTop:'13px', color: 'rgb(135,135,135)', fontSize:'0.84em', fontWeight:'normal' }}>
-                              {PropertiesExtraData?.[properties]?.status_statement.split(' ').map((word, index) => 
+                              {PropertiesExtraData?.[properties]?.status_statement?.split(' ').map((word, index) => 
                                 <React.Fragment key={index}>
                                   {word === 'RESPONDING' ? <span style={{ color: 'rgb(0,200,0)' }}>{word}</span> :
                                   word === 'OFF' ? <span style={{ color: 'rgb(255,0,0)' }}>{word}</span> :
                                   word}
                                   {' '}
                                 </React.Fragment>
-                              )}
+                              ) || 'Status not available'}
                             </h6>
                           )}
                         </div>

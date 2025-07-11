@@ -97,8 +97,8 @@ const InboxUpgrade = ({
         <p className="promotion-text">Get 2 months free with annual plans!</p>
         {showButtons && (
           <div className="upgrade-buttons">
-            <button className="btn-primary" onClick={onComparePlans}>Compare plans</button>
-            <button className="btn-secondary" onClick={onMaybeLater}>Maybe later</button>
+            <button className="btn-primary_compare" onClick={onComparePlans}>Compare plans</button>
+            <button className="btn-secondary_maybe" onClick={onMaybeLater}>Maybe later</button>
           </div>
         )}
       </div>

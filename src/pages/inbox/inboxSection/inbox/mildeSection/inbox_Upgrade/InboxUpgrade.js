@@ -121,10 +121,10 @@ const InboxUpgrade = ({ show, handleClose }) => {
         </p>
         <p className="promotion-text">Get 2 months free with annual plans!</p>
         <div className="upgrade-buttons">
-          <button className="btn-primary" onClick={handleComparePlans}>
+          <button className="btn-primary_compare" onClick={handleComparePlans}>
             Compare plans
           </button>
-          <button className="btn-secondary" onClick={handleMaybeLater}>
+          <button className="btn-secondary_maybe" onClick={handleMaybeLater}>
             Maybe later
           </button>
         </div>
