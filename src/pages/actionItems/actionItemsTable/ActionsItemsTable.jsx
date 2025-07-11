@@ -343,7 +343,7 @@ const ActionsItemsTable = () => {
                             <tr key={id} style={{ pointerEvents:'none' }}>
                               <td style={{ whiteSpace: 'pre-line' }}>{formatDateTime(created_at)}</td>
                               <td style={{paddingLeft:'30px'}}>{property_name}</td>
-                              <td style={{paddingLeft:'70px'}}>{actionItem?.category || ''}</td>
+                              <td style={{paddingLeft:'60px'}}>{actionItem?.category || ''}</td>
                               <td style={{paddingLeft:'30px'}}>{item}</td>
                               {selectedStatus === 'completed' && <td style={{paddingLeft:'30px'}}>{formatCompletedBy(actionItem?.completed_by)}</td>}
                               <td></td>
