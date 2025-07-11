@@ -335,17 +335,17 @@ const ActionsItemsTable = () => {
                 {/* Visual representation of locked items */}
                 {lockedActionItems.length > 0 && (
                   <div className="position-relative my-4">
-                    <table className="table text-white action-items-table mb-0" style={{filter:'blur(4px)'}}> {/* blurred table */}
+                    <table className="table text-white action-items-table mb-0" style={{filter:'blur(4px)', width:'100%'}}> {/* blurred table mimics layout */}
                       <tbody>
                         {lockedActionItems.slice(0,5).map((actionItem) => {
                           const { id, created_at, property_name, item } = actionItem;
                           return (
                             <tr key={id} style={{ pointerEvents:'none' }}>
                               <td style={{ whiteSpace: 'pre-line' }}>{formatDateTime(created_at)}</td>
-                              <td>{property_name}</td>
-                              <td>{actionItem?.category || ''}</td>
-                              <td>{item}</td>
-                              {selectedStatus === 'completed' && <td>{formatCompletedBy(actionItem?.completed_by)}</td>}
+                              <td style={{paddingLeft:'30px'}}>{property_name}</td>
+                              <td style={{paddingLeft:'70px'}}>{actionItem?.category || ''}</td>
+                              <td style={{paddingLeft:'30px'}}>{item}</td>
+                              {selectedStatus === 'completed' && <td style={{paddingLeft:'30px'}}>{formatCompletedBy(actionItem?.completed_by)}</td>}
                               <td></td>
                             </tr>
                           );
