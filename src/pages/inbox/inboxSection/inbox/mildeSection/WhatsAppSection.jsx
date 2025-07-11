@@ -234,7 +234,7 @@ const WhatsAppSection = ({
 
   // Render WhatsAppLocked for pro plan
   if (/pro/i.test(subscriptionPlan)) {
-    return <WhatsAppLocked onComparePlans={() => navigate('/setting/subscription')} />;
+    return <WhatsAppLocked onComparePlans={() => window.location.href = '/setting/subscription'} />;
   }
 
   return (
