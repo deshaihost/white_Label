@@ -10,7 +10,7 @@
 
 .upgrade-overlay {
   /* background: linear-gradient(180deg, #000212 0%, rgba(0, 2, 18, 0.75) 100%); */
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(0px);
   border-radius: 0;
   overflow: visible;
   padding: 24px 32px;
