@@ -53,7 +53,7 @@ const InboxUpgrade = ({ show, handleClose }) => {
 
   const handleComparePlans = () => {
     handleClose();
-    window.location.href = "/setting/subscription";
+    navigate('/setting/subscription');
   };
 
   const handleMaybeLater = () => {

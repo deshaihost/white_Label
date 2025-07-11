@@ -24,7 +24,7 @@ const SettingIndex = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const { section, subsec } = useParams();
-  const [interFaceSettings, setInterFaceSettings] = useState("account");
+  const [interFaceSettings, setInterFaceSettings] = useState(section || "account");
   const [userData, setUserData] = useState({});
 
   const interFaceTypes = { 
