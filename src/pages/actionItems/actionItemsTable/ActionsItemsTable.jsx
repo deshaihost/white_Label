@@ -221,51 +221,16 @@ const ActionsItemsTable = () => {
     navigate('/setting/subscription');
   };
 
-  // Split into unlocked and locked
+  // Keep only the items the current plan is allowed to see
   const unlockedActionItems = filteredActionItems.filter(item => !isLocked(item));
   const lockedActionItems = filteredActionItems.filter(isLocked);
-  const lockedToShow = lockedActionItems.slice(0, 5);
-  // Combine for rendering: unlocked first, then up to 5 locked
-  const itemsToRender = [...unlockedActionItems, ...lockedToShow];
+  const itemsToRender = unlockedActionItems;
 
-  // Find indices of first and last locked rows in itemsToRender
-  const lockedRowIndices = itemsToRender
-    .map((item, idx) => isLocked(item) ? idx : -1)
-    .filter(idx => idx !== -1);
-  const firstLockedIdx = lockedRowIndices.length > 0 ? lockedRowIndices[0] : null;
-  const lastLockedIdx = lockedRowIndices.length > 0 ? lockedRowIndices[lockedRowIndices.length - 1] : null;
 
-  // Refs for positioning overlay
-  const tableBodyRef = useRef(null);
-  const firstLockedRef = useRef(null);
-  const lastLockedRef = useRef(null);
-  const [overlayStyle, setOverlayStyle] = useState({ display: 'none' });
 
-  useEffect(() => {
-    if (firstLockedIdx !== null && lastLockedIdx !== null && firstLockedRef.current && lastLockedRef.current && tableBodyRef.current) {
-      const tbodyRect = tableBodyRef.current.getBoundingClientRect();
-      const firstRect = firstLockedRef.current.getBoundingClientRect();
-      const lastRect = lastLockedRef.current.getBoundingClientRect();
-      const paddingOffset = 24; // pixels to keep clear space above overlay
-      setOverlayStyle({
-        position: 'absolute',
-        left: 0,
-        width: '100%',
-        top: firstRect.top - tbodyRect.top + paddingOffset,
-        height: lastRect.bottom - firstRect.top - paddingOffset,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 20,
-        background: 'transparent',
-        boxShadow: 'none',
-        backdropFilter: 'blur(6px)',
-        pointerEvents: 'auto',
-      });
-    } else {
-      setOverlayStyle({ display: 'none' });
-    }
-  }, [firstLockedIdx, lastLockedIdx, filteredActionItems]);
+
+
+
 
   return (
     <>
@@ -318,17 +283,13 @@ const ActionsItemsTable = () => {
                       <th>View/Done</th>
                     </tr>
                   </thead>
-                  <tbody ref={tableBodyRef}>
+                  <tbody>
                     {itemsToRender.map((actionItem, idx) => {
                       const { id, created_at, property_name, conversation_id, item } = actionItem;
                       let actionItemSend = { propertyName: property_name, conversation_id };
-                      const locked = isLocked(actionItem);
-                      const rowRef =
-                        idx === firstLockedIdx ? firstLockedRef :
-                        idx === lastLockedIdx ? lastLockedRef :
-                        null;
+                      const locked = false; // locked rows are not rendered
                       return (
-                        <tr key={id} ref={rowRef} style={locked ? { pointerEvents: 'none' } : {}}>
+                        <tr key={id}>
                           <td style={{ whiteSpace: "pre-line" }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {formatDateTime(created_at)}
@@ -371,10 +332,30 @@ const ActionsItemsTable = () => {
                     })}
                   </tbody>
                 </table>
-                {/* Single overlay for all locked rows */}
-                {firstLockedIdx !== null && lastLockedIdx !== null && (
-                  <div style={overlayStyle} className="action-items-upgrade-locked-overlay">
-                    <ActionItemsUpgrade onComparePlans={handleComparePlans} />
+                {/* Visual representation of locked items */}
+                {lockedActionItems.length > 0 && (
+                  <div className="position-relative my-4">
+                    <table className="table text-white action-items-table mb-0" style={{filter:'blur(4px)'}}> {/* blurred table */}
+                      <tbody>
+                        {lockedActionItems.slice(0,5).map((actionItem) => {
+                          const { id, created_at, property_name, item } = actionItem;
+                          return (
+                            <tr key={id} style={{ pointerEvents:'none' }}>
+                              <td style={{ whiteSpace: 'pre-line' }}>{formatDateTime(created_at)}</td>
+                              <td>{property_name}</td>
+                              <td>{actionItem?.category || ''}</td>
+                              <td>{item}</td>
+                              {selectedStatus === 'completed' && <td>{formatCompletedBy(actionItem?.completed_by)}</td>}
+                              <td></td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                    {/* Overlay upgrade prompt */}
+                    <div className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{pointerEvents:'auto'}}>
+                      <ActionItemsUpgrade onComparePlans={handleComparePlans} />
+                    </div>
                   </div>
                 )}
               </div>
