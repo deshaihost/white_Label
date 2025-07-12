@@ -15,16 +15,21 @@ const SubscriptionIndex = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  const [goToBillingPortalLoading, setGoToBillingPortalLoading] =
-    React.useState(false);
+  const [goToBillingPortalLoading, setGoToBillingPortalLoading] = React.useState(false);
   const [subscriptionNotFound, setSubscriptionNotFound] = useState(false);
   const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'annual'
 
   const userData = store?.getUserDataReducer?.getUserData?.data?.user;
-  const userSubscriptionData = userData?.subscription;
+  const userSubscriptionData = userData?.subscription; // legacy
   //const subscriptionPlanName = userSubscriptionData?.plan;
   const userSubscriptionStatus = getSubscriptionStatus(userData);
-  const subscriptionPlanName = userSubscriptionStatus.plan;
+  let subscriptionPlanName = userSubscriptionStatus.plan;
+
+  // If user is on Ultimate: check the plan name in their user data. This is because getSubscriptionStatus may return Ultimate for Pro/Elite users who signed up before the price change, but in that case we actually want to show pro/elite, not ultimate.
+  if (subscriptionPlanName && subscriptionPlanName.toLowerCase().includes('ultimate')) {
+    subscriptionPlanName = userData?.subscr_plan || userSubscriptionData?.plan || userSubscriptionStatus.plan;
+  }
+
   const numPropertiesAllowed = userSubscriptionStatus.props_allowed;
   const [numProperties, setNumProperties] = useState(numPropertiesAllowed || 0);
 
@@ -336,77 +341,73 @@ const SubscriptionIndex = () => {
                     height: "40px",
                     backgroundColor: "#ccc"
                   }}></div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center"
-                  }}>
-                    {/* Average per-property price (main display) */}
+
+                  {false && ( // temporarily disabled - pricing section
                     <div style={{
                       display: "flex",
-                      alignItems: "baseline",
-                      marginBottom: "4px"
+                      flexDirection: "column",
+                      alignItems: "center"
                     }}>
-                      <span
-                        className="samsung-sharp-sans samsung-sharp-sans"
-                        style={{
-                          fontWeight: "500",
-                          fontSize: "24px",
-                        }}
-                      >
-                        {formatPrice(currentAveragePrice).dollar}
-                      </span>
-                      <span
-                        className="samsung-sharp-sans samsung-sharp-sans"
-                        style={{
-                          fontWeight: "500",
-                          fontSize: "32px",
-                        }}
-                      >
-                        {formatPrice(currentAveragePrice).amount}
-                      </span>
-                      <span
-                        className="samsung-sharp-sans samsung-sharp-sans"
-                        style={{
-                          fontWeight: "400",
-                          fontSize: "14px",
-                          marginLeft: "4px",
-                          color: "#FFFFFF",
-                        }}
-                      >
-                        per property
-                      </span>
-                    </div>
-                    
-                    {/* Total price (secondary display) */}
-                    {numPropertiesAllowed > 1 && (
+                      {/* Average per-property price (main display) */}
                       <div style={{
-                        fontSize: "14px",
-                        color: "#FFFFFF",
-                        textAlign: "center"
+                        display: "flex",
+                        alignItems: "baseline",
+                        marginBottom: "4px"
                       }}>
-                        {formatPrice(currentTotalPrice).dollar}
-                        {formatPrice(currentTotalPrice).amount}
-                        {" monthly"} 
+                        <span
+                          className="samsung-sharp-sans samsung-sharp-sans"
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "24px",
+                          }}
+                        >
+                          {formatPrice(currentAveragePrice).dollar}
+                        </span>
+                        <span
+                          className="samsung-sharp-sans samsung-sharp-sans"
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "32px",
+                          }}
+                        >
+                          {formatPrice(currentAveragePrice).amount}
+                        </span>
+                        <span
+                          className="samsung-sharp-sans samsung-sharp-sans"
+                          style={{
+                            fontWeight: "400",
+                            fontSize: "14px",
+                            marginLeft: "4px",
+                            color: "#FFFFFF",
+                          }}
+                        >
+                          per property
+                        </span>
                       </div>
-                    )}
-                    
-                    {/* <span
-                      className="samsung-sharp-sans samsung-sharp-sans"
-                      style={{
-                        fontWeight: "500",
-                        fontSize: "12px",
-                        marginTop: "4px"
-                      }}
-                    >
-                     Pricing ({billingPeriod === 'annual' ? 'Yearly' : 'Monthly'})
-                    </span> */}
-                  </div>
-                  <div style={{
-                    width: "1px",
-                    height: "40px",
-                    backgroundColor: "#ccc"
-                  }}></div>
+                      
+                      {/* Total price (secondary display) */}
+                      {numPropertiesAllowed > 1 && (
+                        <div style={{
+                          fontSize: "14px",
+                          color: "#FFFFFF",
+                          textAlign: "center"
+                        }}>
+                          {formatPrice(currentTotalPrice).dollar}
+                          {formatPrice(currentTotalPrice).amount}
+                          {" monthly"} 
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {false && ( // temporarily disabled - separator line
+                    <div style={{
+                      width: "1px",
+                      height: "40px",
+                      backgroundColor: "#ccc"
+                    }}></div>
+                  )}
+
                   <div style={{
                     display: "flex",
                     flexDirection: "column",
