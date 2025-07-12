@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SmartTemplateAddEditForm from "./smartTemplateAddEdit/SmartTemplateAddEditForm";
 import PrebuiltTemplatesModal from "./prebuiltModal";
+import InboxUpgrade from "../../inbox/mildeSection/inbox_Upgrade/InboxUpgrade";
 import Loader from "../../../../../helper/Loader";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import axios from "axios";
@@ -19,7 +20,9 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
   const [getTemplatesLoading, setGetTemplatesLoading] = useState(true);
   const [saveTemplateLoading, setSaveTemplateLoading] = useState(false);
   const [deleteTemplateLoading, setDeleteTemplateLoading] = useState(false);
+  const [toggleTemplateLoading, setToggleTemplateLoading] = useState(false);
   const [showPrebuiltModal, setShowPrebuiltModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const callGetTemplatesApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -107,6 +110,71 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
     } finally { setSaveTemplateLoading(false); }
   };
 
+  const callToggleTemplateApi = async (template) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setToggleTemplateLoading(true);
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
+
+      const template_id = template.id;
+      const templateToSave = { ...template };
+      delete templateToSave.id;
+      const body_data = { template_id, template_data: templateToSave };
+      const response = await axios.post(`${baseUrl}/save_template`, body_data, config);
+
+      if (response.status === 200) {
+        ToastHandle(`Template ${template.enabled ? 'enabled' : 'disabled'} successfully`, 'success');
+        return true;
+      } else {
+        ToastHandle('Failed to update template', 'danger');
+        return false;
+      }
+    } catch (error) {
+      ToastHandle('Failed to update template', 'danger');
+      return false;
+    } finally { setToggleTemplateLoading(false); }
+  };
+
+  // Check subscription limits for enabling templates
+  const checkSubscriptionLimits = (isEnabling) => {
+    if (!isEnabling) return true; // No restrictions for disabling
+    
+    const enabledCount = smartAllData.filter(template => template.enabled).length;
+    const subscriptionPlan = userData?.subscription_plan?.toLowerCase() || 'pro';
+    
+    switch (subscriptionPlan) {
+      case 'pro':
+        if (enabledCount >= 2) {
+          setShowUpgradeModal(true);
+          return false;
+        }
+        break;
+      case 'elite':
+        if (enabledCount >= 5) {
+          setShowUpgradeModal(true);
+          return false;
+        }
+        break;
+      case 'ultimate':
+        // No restrictions for ultimate plan
+        break;
+      default:
+        // Default to pro plan restrictions
+        if (enabledCount >= 2) {
+          setShowUpgradeModal(true);
+          return false;
+        }
+        break;
+    }
+    
+    return true;
+  };
+
   // Check for errors that would prevent saving the template
   const checkForErrors = (dataStructure) => {
     const errors = [];
@@ -181,6 +249,32 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
     }
   };
 
+  const handleToggleTemplate = async (template, event) => {
+    event.stopPropagation(); // Prevent the row click event from firing
+    
+    const isEnabling = !template.enabled;
+    
+    // Check subscription limits before enabling
+    if (!checkSubscriptionLimits(isEnabling)) {
+      return; // Don't proceed if limits are exceeded
+    }
+    
+    const updatedTemplate = { ...template, enabled: isEnabling };
+    
+    // Call the dedicated toggle API without interfering with other operations
+    const toggleSuccess = await callToggleTemplateApi(updatedTemplate);
+    if (toggleSuccess) {
+      // Update the local state to reflect the change immediately
+      setSmartAllData(prevData => 
+        prevData.map(item => 
+          item.id === template.id 
+            ? { ...item, enabled: isEnabling }
+            : item
+        )
+      );
+    }
+  };
+
   // When the page loads, call the API to get all the templates
   useEffect(() => {
     if (userData) { callGetTemplatesApi(); }
@@ -210,15 +304,38 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                   const { name, enabled } = smartItem;
                   const templateDescription = describeTemplate(smartItem);
                   return (
-                    <div className="row mt-5 clickable-div" style={{ marginLeft: "0", marginRight: "0" }}
-                      onClick={() => setAddEditSmart({type:{type:edit, index:smartIndex}, data: "", smartTemplateData:{smartItem}, description:templateDescription})}
-                    >
+                    <div className="row mt-5" style={{ 
+                      marginLeft: "0", 
+                      marginRight: "0", 
+                      border: "1px solid #045ce9", 
+                      borderRadius: "15px", 
+                      padding: "15px 10px", 
+                      boxShadow: "0 4px 8px 0 rgba(255, 255, 255, 0.5)" 
+                    }}>
                       <div className="col-lg-11 col-12">
                         <label className="fs-5 d-flex justify-content-between">
                           {name !== "" ? name : <p className="text-danger">No Name</p>}
-                          <span className={`template-status ${enabled ? 'enabled' : 'not-enabled'}`}>
-                            {enabled ? 'Enabled' : 'Not enabled'}
-                          </span>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className={`template-status ${enabled ? 'enabled' : 'not-enabled'}`}>
+                              {enabled ? 'Enabled' : 'Not enabled'}
+                            </span>
+                            <div className="form-check form-switch">
+                              <input 
+                                className="form-check-input" 
+                                type="checkbox" 
+                                checked={enabled} 
+                                onChange={(e) => handleToggleTemplate(smartItem, e)}
+                                id={`flexSwitchCheckChecked-${smartIndex}`}
+                              />
+                            </div>
+                            <button 
+                              className="btn btn-link text-primary p-0 ms-2"
+                              onClick={() => setAddEditSmart({type:{type:edit, index:smartIndex}, data: "", smartTemplateData:{smartItem}, description:templateDescription})}
+                              style={{ textDecoration: 'none', fontSize: '14px' }}
+                            >
+                              Edit
+                            </button>
+                          </div>
                         </label>
                         <p className="settings-label truncate-text">{templateDescription}</p>
                       </div>
@@ -240,6 +357,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
       </div>
 
       <PrebuiltTemplatesModal modalShow={showPrebuiltModal} handleClose={() => setShowPrebuiltModal(false)} saveTemplate={handleSaveTemplate} saveLoading={saveTemplateLoading} allPropertyNamesList={structuredClone(allPropertyNamesList)} turno_user_id={turno_user_id} minut_user_id={minut_user_id}/>
+      <InboxUpgrade show={showUpgradeModal} handleClose={() => setShowUpgradeModal(false)} />
     </>
   );
 };
