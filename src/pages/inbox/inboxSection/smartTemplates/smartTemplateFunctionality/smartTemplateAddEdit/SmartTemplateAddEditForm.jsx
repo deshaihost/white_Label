@@ -8,7 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import MultiSelect from "../../../../../../component/multiSelect/multiSelect";
 
-const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, turno_user_id, minut_user_id}) => {
+// Lazy load the InboxUpgrade component to avoid circular dependency
+const InboxUpgrade = React.lazy(() => import("../../../inbox/mildeSection/inbox_Upgrade/InboxUpgrade.js"));
+
+const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, turno_user_id, minut_user_id, userData, smartAllData}) => {
   const { type, smartTemplateData } = addEditSmart;
   const { triggers, conditions } = dataInput;
   const { minutTriggers, minutConditions } = minutDataInput;
@@ -24,6 +27,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   const [allData, setAllData] = useState({ modelShow: false, modelShowType: "", formData: [] });
   const [dataStructure, setDataStructure] = useState(dataStructurePayload);
   const [templateDescription, setTemplateDesctiption] = useState(describeTemplate(dataStructure));
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const triggeredGuestNote = getUseTriggeredGuestFromTemplate(dataStructure); // Get the note for the triggered guest
 
@@ -39,6 +43,53 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
   // State to manage follow-up visibility
   const [showFollowUps, setShowFollowUps] = useState(dataStructure?.follow_ups?.length > 0);
+
+  // Check subscription limits for enabling templates
+  const checkSubscriptionLimits = (isEnabling) => {
+    if (!isEnabling) return true; // No restrictions for disabling
+    
+    const enabledCount = smartAllData ? smartAllData.filter(template => template.enabled && template.id !== dataStructure.id).length : 0;
+    const subscriptionPlan = userData?.subscription_plan?.toLowerCase() || 'pro';
+    
+    switch (subscriptionPlan) {
+      case 'pro':
+        if (enabledCount >= 2) {
+          setShowUpgradeModal(true);
+          return false;
+        }
+        break;
+      case 'elite':
+        if (enabledCount >= 5) {
+          setShowUpgradeModal(true);
+          return false;
+        }
+        break;
+      case 'ultimate':
+        // No restrictions for ultimate plan
+        break;
+      default:
+        // Default to pro plan restrictions
+        if (enabledCount >= 2) {
+          setShowUpgradeModal(true);
+          return false;
+        }
+        break;
+    }
+    
+    return true;
+  };
+
+  // Handle enable toggle with subscription check
+  const handleEnableToggle = (e) => {
+    const isEnabling = e.target.checked;
+    
+    // Check subscription limits before enabling
+    if (!checkSubscriptionLimits(isEnabling)) {
+      return; // Don't proceed if limits are exceeded
+    }
+    
+    setDataStructure({...dataStructure, enabled: isEnabling});
+  };
 
   // Modal submit to add a new trigger/target/condition or edit an existing one
   const submitHndle = (getFormData) => {
@@ -227,7 +278,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           <p className="d-flex align-items-center gap-5">
             Enable
             <div className="form-check form-switch">
-              <input className="form-check-input" type="checkbox" checked={dataStructure?.enabled} onChange={(e) => {setDataStructure({...dataStructure, enabled: e.target.checked});}} id="flexSwitchCheckChecked"/>
+              <input className="form-check-input" type="checkbox" checked={dataStructure?.enabled} onChange={handleEnableToggle} id="flexSwitchCheckChecked"/>
             </div>
           </p>
           <p className="fs-14 text-muted">
@@ -442,6 +493,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       </div>
 
       <TriggersTrargetsConditionsModel show={allData} handleClose={() => setAllData({ modelShow: false, modelShowType: "" }) } submitHndle={submitHndle} turno_user_id={turno_user_id} minut_user_id={minut_user_id}/>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <InboxUpgrade show={showUpgradeModal} handleClose={() => setShowUpgradeModal(false)} />
+      </React.Suspense>
     </div>
   );
 };
