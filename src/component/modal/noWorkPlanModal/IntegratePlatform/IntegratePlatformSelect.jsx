@@ -16,7 +16,7 @@ const IntegratePlatformSelect = ({ handleNoPlanClose }) => {
     { type: "eviivo", data: "eviivo" },
     //{ type: "Resly", data: "resly" }, // this is now actually supported
     { type: "Hosthub", data: "hosthub" },
-    { type: "Avantio", data: "avantio" },
+    //{ type: "Avantio", data: "avantio" }, // this is now supported
     { type: "CiiRus", data: "ciirus" },
   ];
   const integrationsArray = [
