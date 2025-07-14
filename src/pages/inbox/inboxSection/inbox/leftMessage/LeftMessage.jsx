@@ -12,6 +12,22 @@ import ToastHandle from "../../../../../helper/ToastMessage";
 import { getActiveToken } from "../../../../../helper/apiCore";
 
 import dummyPropertyImg from "../../../../../public/img/dummyPropertyImg.png";
+import avatar01 from "../../../../../public/img/Avatar-01.png";
+import avatar02 from "../../../../../public/img/Avatar-02.png";
+import avatar03 from "../../../../../public/img/Avatar-03.png";
+import avatar04 from "../../../../../public/img/Avatar-04.png";
+import avatar05 from "../../../../../public/img/Avatar-05.png";
+import avatar06 from "../../../../../public/img/Avatar-06.png";
+import avatar07 from "../../../../../public/img/Avatar-07.png";
+import avatar08 from "../../../../../public/img/Avatar-08.png";
+import avatar09 from "../../../../../public/img/Avatar-09.png";
+import avatar10 from "../../../../../public/img/Avatar-10.png";
+import avatar11 from "../../../../../public/img/Avatar-11.png";
+import avatar12 from "../../../../../public/img/Avatar-12.png";
+import avatar13 from "../../../../../public/img/Avatar-13.png";
+import avatar14 from "../../../../../public/img/Avatar-14.png";
+import avatar15 from "../../../../../public/img/Avatar-15.png";
+import avatar16 from "../../../../../public/img/Avatar-16.png";
 import PinnedIcon from "./icons/pinned_for_chat.svg"; // Import the pinned icon
 import RefreshIcon from "./icons/refresh_for_chat.svg"; // Import the refresh icon
 import UrgentFlagIcon from "./icons/urgent_flag_icon.svg"; // Import the urgent flag icon
@@ -21,6 +37,29 @@ import VRBO_ICON from "./icons/VRBO_ICON.svg"; // Import the VRBO icon
 import DIRECT_ICON from "./icons/DIRECT_ICON.svg"; // Import the Direct icon
 import EMAIL_ICON from "./icons/EMAIL_ICON.svg"; // Import the Email icon
 import OPENPHONE_ICON from "./icons/openphone_icon.svg"; // Import the OpenPhone icon
+
+const avatarImages = [
+  avatar01, avatar02, avatar03, avatar04,
+  avatar05, avatar06, avatar07, avatar08,
+  avatar09, avatar10, avatar11, avatar12,
+  avatar13, avatar14, avatar15, avatar16
+];
+
+const avatarCache = new Map();
+
+function getRandomAvatar(conversationId) {
+  if (!avatarCache.has(conversationId)) {
+    // Generate a deterministic index based on the conversationId
+    // This ensures the same conversation always gets the same avatar
+    const hashCode = conversationId.split('').reduce(
+      (acc, char) => (acc * 31 + char.charCodeAt(0)) & 0xffffffff, 0
+    );
+    const avatarIndex = Math.abs(hashCode) % avatarImages.length;
+    avatarCache.set(conversationId, avatarImages[avatarIndex]);
+  }
+
+  return avatarCache.get(conversationId);
+}
 
 const LeftMessage = ({
   allPropertyNamesList,
@@ -48,6 +87,7 @@ const LeftMessage = ({
   setUnreadPmsCount,
   sidebarClicked,
   sidebarOpen,
+  contactType,
 }) => {
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -149,6 +189,27 @@ const LeftMessage = ({
   };
 
   useEffect(() => {
+    if (contactType) {
+      console.log("Contact type changed:", contactType);
+      const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+      const API_KEY = process.env.REACT_APP_API_KEY;
+      const token = getActiveToken() || localStorage.getItem("authToken");
+      const config = {
+        headers: {
+          "X-API-Key": API_KEY,
+          Authorization: token ? `Bearer ${token}` : undefined,
+          "Content-Type": "application/json",
+        },
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
+      };
+      const body_data = { 'query_data': { 'conversation_id': selectedConversationId } };
+      axios.post(`${baseUrl}/get_all_conversations`, body_data, config);
+    }
+  }, [contactType]);
+
+  useEffect(() => {
     if (searchInputValue.trim() === "") {
       setFilteredConversations(allConversations);
     } else {
@@ -205,6 +266,20 @@ const LeftMessage = ({
     setAllConversations(updatedConversations);
     callMarkConversationAsOpenedApi(conversationId, propertyName);
   };
+
+  const getContactTypeDisplayText = (type) => {
+    if (type === "Guest") {
+      return "Guest";
+    } else if (type === "External Contact") {
+      return "External Contact"; // Change "External Contact" to "Guest" when contactType === "Guest"
+    } else if (type === "Vendor") {
+      return "Vendor"; // Change "External Contact" to "Guest" when contactType === "Guest"
+    } else if (type === "Owner") {
+      return "Owner"; // Change "External Contact" to "Guest" when contactType === "Guest"
+    }
+    return type;
+  };
+
   const openConversationHandle = (data, id) => {
     console.log("Opening conversation:", id, data);
     // Enhanced cache-aware conversation selection
@@ -723,7 +798,7 @@ const LeftMessage = ({
               fontSize: "14px",
             }}
           >
-            <i className="bi bi-filter" style={{ marginRight: "4px"  }}></i>
+            <i className="bi bi-filter" style={{ marginRight: "4px" }}></i>
             Filters
           </button>{" "}
         </div>
@@ -792,16 +867,26 @@ const LeftMessage = ({
                 messages && messages.length > 0
                   ? messages[messages.length - 1]
                   : null;
-              const { sender, text, time } = lastValue || {
+              const { sender, text: messageText, time } = lastValue || {
                 sender: "",
                 text: "",
                 time: "",
               };
-              let shortenedText = text;
-              if (text && text.length > 50) {
-                shortenedText = text.slice(0, 50) + "...";
-              } else {
-                shortenedText = text || "";
+              // Fix the text extraction
+              let shortenedText = "";
+              let messageTime = time;
+              if (messageText) {
+                shortenedText = messageText.length > 50 ? messageText.slice(0, 50) + "..." : messageText;
+              } else if (message.openphone_messages && message.openphone_messages.length > 0) {
+                // Special handling for OpenPhone messages
+                const lastOpenPhoneMessage = message.openphone_messages[message.openphone_messages.length - 1];
+                shortenedText = lastOpenPhoneMessage.text;
+                if (shortenedText && shortenedText.length > 50) {
+                  shortenedText = shortenedText.slice(0, 50) + "...";
+                }
+
+                // Extract time from OpenPhone message
+                messageTime = lastOpenPhoneMessage.time || lastOpenPhoneMessage.time_utc || time;
               }
 
               // Based on which of these fields are present (arrival_date, departure_date, property_name): render the appropriate string
@@ -822,11 +907,10 @@ const LeftMessage = ({
               return (
                 <React.Fragment key={conversation_id}>
                   <div
-                    className={`conversation-item ${
-                      conversation_id === selectedConversationId
-                        ? "bg-dark"
-                        : ""
-                    } left-inner-tab`}
+                    className={`conversation-item ${conversation_id === selectedConversationId
+                      ? "bg-dark"
+                      : ""
+                      } left-inner-tab`}
                     onClick={() =>
                       openConversationHandle(
                         allDataForConversation,
@@ -845,8 +929,12 @@ const LeftMessage = ({
                         style={{ position: "relative" }}
                       >
                         <img
-                          src={image_url ? image_url : dummyPropertyImg}
-                          alt="Property Thumbnail Image"
+                          src={
+                            !message.reservation_id
+                              ? getRandomAvatar(message.conversation_id)
+                              : message.image_url || dummyPropertyImg
+                          }
+                          alt="Thumbnail"
                           className="property-thumbnail"
                           onError={(e) => {
                             e.target.onerror = null;
@@ -856,41 +944,41 @@ const LeftMessage = ({
                         {/* Pin badge for pinned conversations */}
                         {(allDataForConversation.pinned ||
                           allDataForConversation.is_pinned) && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "5px",
-                              left: "5px",
-                              minWidth: "24px",
-                              minHeight: "24px",
-                              width: "24px",
-                              height: "24px",
-                              backgroundColor: "#F26C0C",
-                              borderRadius: "50%",
-                              border: "2px solid #17191f",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              zIndex: 1,
-                              transform: "translate(-30%, -30%)",
-                              overflow: "hidden",
-                            }}
-                          >
-                            <img
-                              src={PinnedIcon}
-                              alt="Pinned"
+                            <div
                               style={{
-                                maxWidth: "14px",
-                                maxHeight: "14px",
-                                width: "12px",
-                                height: "12px",
-                                objectFit: "contain",
-                                display: "block",
-                                margin: "0 auto",
+                                position: "absolute",
+                                top: "5px",
+                                left: "5px",
+                                minWidth: "24px",
+                                minHeight: "24px",
+                                width: "24px",
+                                height: "24px",
+                                backgroundColor: "#F26C0C",
+                                borderRadius: "50%",
+                                border: "2px solid #17191f",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                zIndex: 1,
+                                transform: "translate(-30%, -30%)",
+                                overflow: "hidden",
                               }}
-                            />
-                          </div>
-                        )}{" "}
+                            >
+                              <img
+                                src={PinnedIcon}
+                                alt="Pinned"
+                                style={{
+                                  maxWidth: "14px",
+                                  maxHeight: "14px",
+                                  width: "12px",
+                                  height: "12px",
+                                  objectFit: "contain",
+                                  display: "block",
+                                  margin: "0 auto",
+                                }}
+                              />
+                            </div>
+                          )}{" "}
                         {/* Refresh icon for same-day arrival/departure */}
                         {isSameDay(arrival_date, departure_date) && (
                           <div
@@ -899,7 +987,7 @@ const LeftMessage = ({
                               top: "6px",
                               left:
                                 allDataForConversation.pinned ||
-                                allDataForConversation.is_pinned
+                                  allDataForConversation.is_pinned
                                   ? "24px"
                                   : "6px",
                               minWidth: "24px",
@@ -936,13 +1024,15 @@ const LeftMessage = ({
                       <div className="content-container">
                         {/* First line: Guest name and time format */}{" "}
                         <div className="description-container description-item">
-                          <h2 className="guest-name ">
+                          <h2 className="guest-name">
                             {channel !== "hostbuddy"
-                              ? guest_name
+                              ? !message.reservation_id
+                                ? (message?.name) ? (message.name) : "Unknown Contact"
+                                : guest_name
                               : "Chat Window"}
                           </h2>{" "}
                           <div className="date date-no-margin">
-                            {time ? timeFormat(time) : ""}
+                            {messageTime ? timeFormat(messageTime) : ""}
                           </div>
                         </div>                        {/* Second line: Message text and count of unread messages */}
                         <div className="message-container short-des">
@@ -1003,56 +1093,93 @@ const LeftMessage = ({
                               }}
                             >
                               <span className="user-badge ">
-                                {user
-                                  ? user
-                                      .split(" ")
-                                      .map(
-                                        (word) =>
-                                          word.charAt(0).toUpperCase() +
-                                          word.slice(1).toLowerCase()
-                                      )
-                                      .join(" ")
-                                  : sender
-                                  ? sender
-                                      .split(" ")
-                                      .map(
-                                        (word) =>
-                                          word.charAt(0).toUpperCase() +
-                                          word.slice(1).toLowerCase()
-                                      )
-                                      .join(" ")
-                                  : "Unknown"}
+                                {
+                                  // Always show "External Contact" if contact_type is set to that
+                                  contactType === "Guest"
+                                    ? "Guest"
+                                    : contactType === "External Contact"
+                                      ? "External Contact"  // Change "External Contact" to "Guest"
+                                      : message.contact_type
+                                        ? message.contact_type
+                                        : message.contact_info && message.contact_info.name
+                                          ? message.contact_info.name
+                                            .split(" ")
+                                            .map(
+                                              (word) =>
+                                                word.charAt(0).toUpperCase() +
+                                                word.slice(1).toLowerCase()
+                                            )
+                                            .join(" ")
+                                          : message.name
+                                            ? message.name
+                                              .split(" ")
+                                              .map(
+                                                (word) =>
+                                                  word.charAt(0).toUpperCase() +
+                                                  word.slice(1).toLowerCase()
+                                              )
+                                              .join(" ")
+                                            : !message.reservation_id
+                                              ? "External Contact"
+                                              : user
+                                                ? user
+                                                  .split(" ")
+                                                  .map(
+                                                    (word) =>
+                                                      word.charAt(0).toUpperCase() +
+                                                      word.slice(1).toLowerCase()
+                                                  )
+                                                  .join(" ")
+                                                : sender
+                                                  ? sender
+                                                    .split(" ")
+                                                    .map(
+                                                      (word) =>
+                                                        word.charAt(0).toUpperCase() +
+                                                        word.slice(1).toLowerCase()
+                                                    )
+                                                    .join(" ")
+                                                  : "Unknown"
+                                }
                               </span>
-                              {action_items && action_items.length != 0 && (
-                                /* Replaced text with icon */
-                                <span
-                                  className="urgent-badge"
-                                  style={{
-                                    backgroundColor: "#4D2100",
-                                    borderRadius: "2px",
-                                    height: "20px",
-                                    width: "20px",
-                                    minWidth: "20px",
-                                    minHeight: "20px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    overflow: "hidden",
-                                  }}
-                                >
-                                  <img
-                                    src={UrgentFlagIcon}
-                                    alt="Urgent"
+                              {(() => {
+                                let hasActionItems = action_items && action_items.length > 0;
+                                const isExternalContact = message.contact_type === "External Contact";
+                                if (!message.reservation_id) {
+                                  hasActionItems = false; // No action items for non-reservation messages
+                                }
+
+                                return (hasActionItems || isExternalContact);
+                              })() && (
+                                  /* Replaced text with icon */
+                                  <span
+                                    className="urgent-badge"
                                     style={{
-                                      width: "20px",
+                                      backgroundColor: "#4D2100",
+                                      borderRadius: "2px",
                                       height: "20px",
-                                      objectFit: "contain",
-                                      display: "block",
-                                      margin: "0 auto",
+                                      width: "20px",
+                                      minWidth: "20px",
+                                      minHeight: "20px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      overflow: "hidden",
                                     }}
-                                  />
-                                </span>
-                              )}
+                                  >
+                                    <img
+                                      src={UrgentFlagIcon}
+                                      alt="Urgent"
+                                      style={{
+                                        width: "20px",
+                                        height: "20px",
+                                        objectFit: "contain",
+                                        display: "block",
+                                        margin: "0 auto",
+                                      }}
+                                    />
+                                  </span>
+                                )}
                             </div>
                             {/* Display status badges - commented out */}
                             {/* {status === 'future' && 
@@ -1264,33 +1391,33 @@ const LeftMessage = ({
                                   channel
                                     .toUpperCase()
                                     .includes("OPEN PHONE")) && (
-                                  <div
-                                    style={{
-                                      width: "20px",
-                                      height: "20px",
-                                      minWidth: "20px",
-                                      minHeight: "20px",
-                                      backgroundColor: "#24262E",
-                                      borderRadius: "2px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      overflow: "hidden",
-                                    }}
-                                  >
-                                    <img
-                                      src={OPENPHONE_ICON}
-                                      alt="OpenPhone"
+                                    <div
                                       style={{
-                                        width: "16px",
-                                        height: "16px",
-                                        objectFit: "contain",
-                                        display: "block",
-                                        margin: "0 auto",
+                                        width: "20px",
+                                        height: "20px",
+                                        minWidth: "20px",
+                                        minHeight: "20px",
+                                        backgroundColor: "#24262E",
+                                        borderRadius: "2px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        overflow: "hidden",
                                       }}
-                                    />
-                                  </div>
-                                )}
+                                    >
+                                      <img
+                                        src={OPENPHONE_ICON}
+                                        alt="OpenPhone"
+                                        style={{
+                                          width: "16px",
+                                          height: "16px",
+                                          objectFit: "contain",
+                                          display: "block",
+                                          margin: "0 auto",
+                                        }}
+                                      />
+                                    </div>
+                                  )}
                               </>
                             )}
                           </div>

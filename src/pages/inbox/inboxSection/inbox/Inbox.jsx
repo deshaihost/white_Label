@@ -10,6 +10,7 @@ import MildeSection from "./mildeSection/MildeSection";
 import WhatsAppSection from "./mildeSection/WhatsAppSection"; // Import WhatsApp Section
 import OpenPhoneSection from "./mildeSection/OpenPhoneSection" // Import OpenPhone Section
 import RightSection from "./rightSection/RightSection";
+import NonGuestRightSection from "./rightSection/NonGuestRightSection";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
@@ -283,6 +284,7 @@ const Inbox = ({
   const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width for responsive design
+  const [contactType, setContactType] = useState("");
   console.log("selectedConversation from  inbox", selectedConversation);
   // State for tracking pin status
   const [isPinned, setIsPinned] = useState(false);
@@ -302,7 +304,7 @@ const Inbox = ({
         setIsPinned(result.pinned);
         ToastHandle(
           result.message ||
-            `Conversation ${result.pinned ? "pinned" : "unpinned"}`,
+          `Conversation ${result.pinned ? "pinned" : "unpinned"}`,
           "success"
         );
 
@@ -330,6 +332,15 @@ const Inbox = ({
       ToastHandle("Error updating pin status", "danger");
     }
   };
+
+  useEffect(() => {
+    if (selectedConversation?.contact_type) {
+      setContactType(selectedConversation.contact_type);
+    } else {
+      setContactType("");
+    }
+  }, [selectedConversation?.contact_type]);
+
   // Update isPinned state when selected conversation changes
   useEffect(() => {
     if (selectedConversation?.conversation_id) {
@@ -554,7 +565,7 @@ const Inbox = ({
   // State for unread messages counts
   const [unreadPmsCount, setUnreadPmsCount] = useState(0);
   const [unreadWhatsAppCount, setUnreadWhatsAppCount] = useState(0);
-  const[unreadOpenPhoneCount, setUnreadOpenPhoneCount] = useState(0);
+  const [unreadOpenPhoneCount, setUnreadOpenPhoneCount] = useState(0);
 
   // Calculate unread messages counts when selected conversation changes
   useEffect(() => {
@@ -624,7 +635,7 @@ const Inbox = ({
       const hasWhatsAppMessages =
         selectedConversation.whatsapp_messages &&
         selectedConversation.whatsapp_messages.length > 0;
-      const hasOpenPhoneMessages = 
+      const hasOpenPhoneMessages =
         selectedConversation.openphone_messages &&
         selectedConversation.openphone_messages.length > 0;
 
@@ -659,90 +670,90 @@ const Inbox = ({
     }
   }; // Function to call the API to get notes
   const callGetNotesApi = async () => {
-  const conversation_id = selectedConversation?.conversation_id;
-  const reservation_id = selectedConversation?.reservation_id;
+    const conversation_id = selectedConversation?.conversation_id;
+    const reservation_id = selectedConversation?.reservation_id;
 
-  if (!conversation_id && !reservation_id) return;
+    if (!conversation_id && !reservation_id) return;
 
-  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  setIsLoadingNotes(true);
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setIsLoadingNotes(true);
 
-  try {
-    const config = {
-      headers: {
-        "X-API-Key": API_KEY,
-      },
-      validateStatus: function (status) {
-        return status >= 200 && status < 500;
-      },
-    };
+    try {
+      const config = {
+        headers: {
+          "X-API-Key": API_KEY,
+        },
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
+      };
 
-    // Build query parameters dynamically
-    const queryParams = new URLSearchParams();
-    if (reservation_id) queryParams.append("reservation_id", reservation_id);
-    else if (conversation_id) queryParams.append("conversation_id", conversation_id);
+      // Build query parameters dynamically
+      const queryParams = new URLSearchParams();
+      if (reservation_id) queryParams.append("reservation_id", reservation_id);
+      else if (conversation_id) queryParams.append("conversation_id", conversation_id);
 
-    const url = `${baseUrl}/get_notes?${queryParams.toString()}`;
-    const response = await axios.get(url, config);
+      const url = `${baseUrl}/get_notes?${queryParams.toString()}`;
+      const response = await axios.get(url, config);
 
-    if (response.status === 200) {
-      setNotes(response.data.notes || []);
-    } else {
-      ToastHandle(response?.data?.error || "Failed to fetch notes", "danger");
+      if (response.status === 200) {
+        setNotes(response.data.notes || []);
+      } else {
+        ToastHandle(response?.data?.error || "Failed to fetch notes", "danger");
+      }
+    } catch (error) {
+      ToastHandle("Error - unable to get notes", "danger");
+    } finally {
+      setIsLoadingNotes(false);
     }
-  } catch (error) {
-    ToastHandle("Error - unable to get notes", "danger");
-  } finally {
-    setIsLoadingNotes(false);
-  }
-};
-const callAddNoteApi = async (noteText) => {
-  const conversation_id = selectedConversation?.conversation_id;
-  const reservation_id = selectedConversation?.reservation_id;
+  };
+  const callAddNoteApi = async (noteText) => {
+    const conversation_id = selectedConversation?.conversation_id;
+    const reservation_id = selectedConversation?.reservation_id;
 
-  // Allow if at least one is present, reject only if both are missing
-  if (!noteText.trim() || (!conversation_id && !reservation_id)) return;
+    // Allow if at least one is present, reject only if both are missing
+    if (!noteText.trim() || (!conversation_id && !reservation_id)) return;
 
-  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-  const API_KEY = process.env.REACT_APP_API_KEY;
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
 
-  try {
-    const config = {
-      headers: {
-        "X-API-Key": API_KEY,
-      },
-      validateStatus: function (status) {
-        return status >= 200 && status < 500;
-      },
-    };
+    try {
+      const config = {
+        headers: {
+          "X-API-Key": API_KEY,
+        },
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
+      };
 
-    const bodyData = {
-      note: noteText,
-      visible_to_hostbuddy: visibleToHostbuddy,
-    };
+      const bodyData = {
+        note: noteText,
+        visible_to_hostbuddy: visibleToHostbuddy,
+      };
 
-    // Send only one: prefer conversation_id over reservation_id
-    if (reservation_id) bodyData.reservation_id = reservation_id;
-    else if (conversation_id) bodyData.conversation_id = conversation_id;
+      // Send only one: prefer conversation_id over reservation_id
+      if (reservation_id) bodyData.reservation_id = reservation_id;
+      else if (conversation_id) bodyData.conversation_id = conversation_id;
 
-    const response = await axios.post(
-      `${baseUrl}/add_note`,
-      bodyData,
-      config
-    );
+      const response = await axios.post(
+        `${baseUrl}/add_note`,
+        bodyData,
+        config
+      );
 
-    if (response.status === 200) {
-      callGetNotesApi(); // Refresh notes
-      setNewNote("");    // Clear input
-      ToastHandle("Note added successfully", "success");
-    } else {
-      ToastHandle(response?.data?.error || "Failed to add note", "danger");
+      if (response.status === 200) {
+        callGetNotesApi(); // Refresh notes
+        setNewNote("");    // Clear input
+        ToastHandle("Note added successfully", "success");
+      } else {
+        ToastHandle(response?.data?.error || "Failed to add note", "danger");
+      }
+    } catch (error) {
+      ToastHandle("Error adding note", "danger");
     }
-  } catch (error) {
-    ToastHandle("Error adding note", "danger");
-  }
-};
+  };
 
   // Function to call the API to delete a note
   const callDeleteNoteApi = async (noteId) => {
@@ -793,7 +804,7 @@ const callAddNoteApi = async (noteText) => {
       setDeletingNoteId(null);
     }
   };
-   // Function to call the API to update/edit a note
+  // Function to call the API to update/edit a note
   const callUpdateNoteApi = async (noteId, noteText, visibleToHostbuddy) => {
     if (!noteId || !noteText.trim()) return;
 
@@ -828,10 +839,10 @@ const callAddNoteApi = async (noteText) => {
         const updatedNotes = notes.map((note) =>
           note.note_id === noteId
             ? {
-                ...note,
-                note: noteText,
-                visible_to_hostbuddy: visibleToHostbuddy,
-              }
+              ...note,
+              note: noteText,
+              visible_to_hostbuddy: visibleToHostbuddy,
+            }
             : note
         );
         setNotes(updatedNotes);
@@ -1242,29 +1253,58 @@ const callAddNoteApi = async (noteText) => {
   window.logCacheStats = () => {
     console.log(`Conversation Cache Statistics:
       - Total cached conversations: ${conversationCache.size}
-      - Conversations with complete data: ${
-        [...conversationCache.values()].filter((c) => c._has_complete_data)
-          .length
+      - Conversations with complete data: ${[...conversationCache.values()].filter((c) => c._has_complete_data)
+        .length
       }
       - Cache sources breakdown:
-        * From periodic updates: ${
-          [...conversationCache.values()].filter((c) => c._from_periodic_update)
-            .length
-        }
-        * From API calls: ${
-          [...conversationCache.values()].filter((c) => c._from_api_call).length
-        }
-        * From conversations array: ${
-          [...conversationCache.values()].filter(
-            (c) => c._from_conversations_array
-          ).length
-        }
-        * From update API: ${
-          [...conversationCache.values()].filter((c) => c._from_update_api)
-            .length
-        }
+        * From periodic updates: ${[...conversationCache.values()].filter((c) => c._from_periodic_update)
+        .length
+      }
+        * From API calls: ${[...conversationCache.values()].filter((c) => c._from_api_call).length
+      }
+        * From conversations array: ${[...conversationCache.values()].filter(
+        (c) => c._from_conversations_array
+      ).length
+      }
+        * From update API: ${[...conversationCache.values()].filter((c) => c._from_update_api)
+        .length
+      }
     `);
   };
+
+  const updateSpecificConversation = (conversationId, updatedData) => {
+    setConversations(prevConversations =>
+      prevConversations.map(conversation =>
+        conversation.conversation_id === conversationId
+          ? { ...conversation, ...updatedData }
+          : conversation
+      )
+    );
+  };
+
+  const updateSelectedConversation = (conversationId, updatedData) => {
+    // Update the conversation in the conversations list
+    setConversations(prevConversations =>
+      prevConversations.map(conv =>
+        conv.conversation_id === conversationId
+          ? { ...conv, ...updatedData }
+          : conv
+      )
+    );
+
+    // Only update selectedConversation if it matches the conversationId being updated
+    setSelectedConversation(prevConversation => {
+      if (prevConversation?.conversation_id === conversationId) {
+        return {
+          ...prevConversation,
+          ...updatedData,
+          _apiCallMade: prevConversation._apiCallMade // Preserve API call flag
+        };
+      }
+      return prevConversation; // Return unchanged if it's not the selected conversation
+    });
+  };
+
   // Add a message to a conversation in our local record (conversations)
   const addMessageToLocalConversation = (conversationId, message) => {
     // Invalidate cache when a new message is added
@@ -1355,6 +1395,7 @@ const callAddNoteApi = async (noteText) => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   // Helper function to determine justifyContent value based on screen width and panel visibility
   const determineJustifyContent = () => {
     // For large screens (above 1279px), always use "space-between"
@@ -1432,6 +1473,8 @@ const callAddNoteApi = async (noteText) => {
               setUnreadPmsCount={setUnreadPmsCount}
               sidebarClicked={sidebarClicked}
               sidebarOpen={sidebarOpen}
+              updateSpecificConversation={updateSpecificConversation}
+              updateSelectedConversation={updateSelectedConversation}
             />
             <div
               className="middleSectionContainer"
@@ -1481,9 +1524,11 @@ const callAddNoteApi = async (noteText) => {
                     >
                       {selectedConversation?.guest_name
                         ? selectedConversation.guest_name
-                            .charAt(0)
-                            .toUpperCase()
-                        : "G"}
+                          .charAt(0)
+                          .toUpperCase()
+                        : selectedConversation?.name
+                          ? selectedConversation.name.charAt(0).toUpperCase()
+                          : "U"}{" "}
                     </div>
                     {/* User name */}{" "}
                     <span
@@ -1494,11 +1539,14 @@ const callAddNoteApi = async (noteText) => {
                         fontWeight: "700",
                       }}
                     >
-                      {selectedConversation?.guest_name || "Guest"}
+                      {/* Show "External Contact" if not associated with reservation, else show guest_name or "Guest" */}
+                      {selectedConversation?.reservation_id
+                        ? selectedConversation?.guest_name ? selectedConversation?.guest_name : "Guest"
+                        : selectedConversation?.name ? selectedConversation?.name : "External Contact"}
                     </span>
                     {/* Urgent flag render - placed right next to guest name */}
-                    {selectedConversation?.action_items &&
-                      selectedConversation.action_items.length != 0 && (
+                    {((selectedConversation?.action_items &&
+                      selectedConversation.action_items.length !== 0) || (selectedConversation?.contact_type === "External Contact")) && (
                         <div
                           style={{
                             display: "flex",
@@ -1699,19 +1747,17 @@ const callAddNoteApi = async (noteText) => {
                   {[
                     { id: "pms", icon: PmsIcon, text: "PMS" },
                     { id: "whatsapp", icon: WhatsappIcon, text: "WhatsApp" },
-                    { id: "openphone", icon: OpenPhoneIcon, text: "OpenPhone"},
-                    {
-                      id: "openIssue",
-                      icon: OpenIssueIcon,
-                      text: "Open Issue",
-                    },
+                    { id: "openphone", icon: OpenPhoneIcon, text: "OpenPhone" },
+                    ...(selectedConversation?.reservation_id
+                      ? [{ id: "openIssue", icon: OpenIssueIcon, text: "Open Issue" }]
+                      : []),
                     { id: "notes", icon: NotesIcon, text: "Notes" },
                   ].map((tab) => (
                     <div
                       key={tab.id}
                       onClick={() => {
                         setActiveTab(tab.id);
-                      }}                      style={{
+                      }} style={{
                         fontFamily: "DM Sans",
                         fontSize: "14px",
                         cursor: "pointer",
@@ -1880,9 +1926,8 @@ const callAddNoteApi = async (noteText) => {
                   }}
                 >
                   <MildeSection
-                    key={`pms-section-${
-                      selectedConversation?.conversation_id || "empty"
-                    }`}
+                    key={`pms-section-${selectedConversation?.conversation_id || "empty"
+                      }`}
                     className="box"
                     allConversationData={selectedConversation}
                     updateConversationFromApi={updateConversation}
@@ -1929,6 +1974,7 @@ const callAddNoteApi = async (noteText) => {
                     key="openphone-section"
                     allConversationData={selectedConversation}
                     updateConversationFromApi={updateConversation}
+                    updateSpecificConversation={updateSpecificConversation}
                     propertyName={selectedConversation?.property_name}
                   />
                 </div>
@@ -2004,16 +2050,16 @@ const callAddNoteApi = async (noteText) => {
                                 hour12: true,
                               })}{" "}
                               •{" "}
-                              <span  style={{
+                              <span style={{
                                 fontSize: "14px",
                                 color: "#A6A9B2",
                                 fontWeight: "500"
                               }}>
                                 {actionItem.category
                                   ? actionItem.category
-                                      .charAt(0)
-                                      .toUpperCase() +
-                                    actionItem.category.slice(1).toLowerCase()
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                  actionItem.category.slice(1).toLowerCase()
                                   : ""}
                               </span>
                             </div>
@@ -2031,10 +2077,11 @@ const callAddNoteApi = async (noteText) => {
                             }}
                           >
                             <div style={{
-                               color: "#D0D3DB",
-                                flex: 1 ,
-                                fontSize: "16px",
-                                fontWeight: "400" }}>{actionItem.item}</div>
+                              color: "#D0D3DB",
+                              flex: 1,
+                              fontSize: "16px",
+                              fontWeight: "400"
+                            }}>{actionItem.item}</div>
                             <label
                               className="action-item-checkbox"
                               style={{
@@ -2293,117 +2340,117 @@ const callAddNoteApi = async (noteText) => {
                                             {/* Dropdown menu */}
                                             {openDropdownId ===
                                               note.note_id && (
-                                              <div
-                                                style={{
-                                                  position: "absolute",
-                                                  right: "0",
-                                                  top: "100%",
-                                                  backgroundColor: "#2B2E36",
-                                                  borderRadius: "4px",
-
-                                                  zIndex: 10,
-                                                  width: "130px",
-                                                  overflow: "hidden",
-                                                  border:
-                                                    "1px solid rgb(53 55 60)",
-                                                }}
-                                              >
-                                                <ul
+                                                <div
                                                   style={{
-                                                    listStyle: "none",
-                                                    padding: "0",
-                                                    margin: "0",
+                                                    position: "absolute",
+                                                    right: "0",
+                                                    top: "100%",
+                                                    backgroundColor: "#2B2E36",
+                                                    borderRadius: "4px",
+
+                                                    zIndex: 10,
+                                                    width: "130px",
+                                                    overflow: "hidden",
+                                                    border:
+                                                      "1px solid rgb(53 55 60)",
                                                   }}
                                                 >
-                                                  {" "}
-                                                  <li
-                                                    onClick={() => {
-                                                      toggleDropdown(
-                                                        note.note_id
-                                                      );
-                                                      setEditingNoteId(
-                                                        note.note_id
-                                                      );
-                                                      setEditingNoteText(
-                                                        note.note
-                                                      );
-                                                      setEditingNoteVisibleToHostbuddy(
-                                                        note.visible_to_hostbuddy
-                                                      );
-                                                      setIsEditNoteModalOpen(
-                                                        true
-                                                      );
-                                                    }}
+                                                  <ul
                                                     style={{
-                                                      display: "flex",
-                                                      alignItems: "center",
-                                                      width: "100%",
-                                                      textAlign: "left",
-                                                      padding: "8px 8px",
-                                                      color: "#D0D3DB",
-                                                      cursor: "pointer",
-                                                      fontSize: "14px",
-                                                      fontFamily:
-                                                        '"DM Sans", Helvetica',
+                                                      listStyle: "none",
+                                                      padding: "0",
+                                                      margin: "0",
                                                     }}
                                                   >
-                                                    <img
-                                                      src={
-                                                        require("./mildeSection/message/icons/update_icon.svg")
-                                                          .default
-                                                      }
-                                                      alt="Update"
-                                                      style={{
-                                                        marginLeft: "8px",
-                                                        marginRight: "6px",
-                                                        width: "16px",
-                                                        height: "16px",
-                                                        zIndex: 11,
+                                                    {" "}
+                                                    <li
+                                                      onClick={() => {
+                                                        toggleDropdown(
+                                                          note.note_id
+                                                        );
+                                                        setEditingNoteId(
+                                                          note.note_id
+                                                        );
+                                                        setEditingNoteText(
+                                                          note.note
+                                                        );
+                                                        setEditingNoteVisibleToHostbuddy(
+                                                          note.visible_to_hostbuddy
+                                                        );
+                                                        setIsEditNoteModalOpen(
+                                                          true
+                                                        );
                                                       }}
-                                                    />
-                                                    Edit note
-                                                  </li>
-                                                  <li
-                                                    onClick={() => {
-                                                      toggleDropdown(
-                                                        note.note_id
-                                                      );
-                                                      callDeleteNoteApi(
-                                                        note.note_id
-                                                      );
-                                                    }}
-                                                    style={{
-                                                      display: "flex",
-                                                      alignItems: "center",
-                                                      width: "100%",
-                                                      textAlign: "left",
-                                                      padding: "8px 8px",
-                                                      color: "#F97257",
-                                                      cursor: "pointer",
-                                                      fontSize: "14px",
-                                                      fontFamily:
-                                                        '"DM Sans", Helvetica',
-                                                    }}
-                                                  >
-                                                    <img
-                                                      src={
-                                                        require("./mildeSection/message/icons/delete_red_icon.svg")
-                                                          .default
-                                                      }
-                                                      alt="Delete"
                                                       style={{
-                                                        marginLeft: "8px",
-                                                        marginRight: "6px",
-                                                        width: "16px",
-                                                        height: "16px",
-                                                        zIndex: 11,
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        width: "100%",
+                                                        textAlign: "left",
+                                                        padding: "8px 8px",
+                                                        color: "#D0D3DB",
+                                                        cursor: "pointer",
+                                                        fontSize: "14px",
+                                                        fontFamily:
+                                                          '"DM Sans", Helvetica',
                                                       }}
-                                                    />
-                                                    Delete note
-                                                  </li>
-                                                </ul>
-                                              </div>
-                                            )}
+                                                    >
+                                                      <img
+                                                        src={
+                                                          require("./mildeSection/message/icons/update_icon.svg")
+                                                            .default
+                                                        }
+                                                        alt="Update"
+                                                        style={{
+                                                          marginLeft: "8px",
+                                                          marginRight: "6px",
+                                                          width: "16px",
+                                                          height: "16px",
+                                                          zIndex: 11,
+                                                        }}
+                                                      />
+                                                      Edit note
+                                                    </li>
+                                                    <li
+                                                      onClick={() => {
+                                                        toggleDropdown(
+                                                          note.note_id
+                                                        );
+                                                        callDeleteNoteApi(
+                                                          note.note_id
+                                                        );
+                                                      }}
+                                                      style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        width: "100%",
+                                                        textAlign: "left",
+                                                        padding: "8px 8px",
+                                                        color: "#F97257",
+                                                        cursor: "pointer",
+                                                        fontSize: "14px",
+                                                        fontFamily:
+                                                          '"DM Sans", Helvetica',
+                                                      }}
+                                                    >
+                                                      <img
+                                                        src={
+                                                          require("./mildeSection/message/icons/delete_red_icon.svg")
+                                                            .default
+                                                        }
+                                                        alt="Delete"
+                                                        style={{
+                                                          marginLeft: "8px",
+                                                          marginRight: "6px",
+                                                          width: "16px",
+                                                          height: "16px",
+                                                          zIndex: 11,
+                                                        }}
+                                                      />
+                                                      Delete note
+                                                    </li>
+                                                  </ul>
+                                                </div>
+                                              )}
                                           </div>
                                         )}
                                       </div>
@@ -2438,11 +2485,11 @@ const callAddNoteApi = async (noteText) => {
                                       >
                                         {note.created_by
                                           ? note.created_by
-                                              .charAt(0)
-                                              .toUpperCase() +
-                                            note.created_by
-                                              .slice(1)
-                                              .toLowerCase()
+                                            .charAt(0)
+                                            .toUpperCase() +
+                                          note.created_by
+                                            .slice(1)
+                                            .toLowerCase()
                                           : "User"}{" "}
                                         .
                                       </div>
@@ -2623,12 +2670,12 @@ const callAddNoteApi = async (noteText) => {
                             style={{
                               backgroundColor:
                                 selectedConversation?.conversation_id &&
-                                newNote.trim()
+                                  newNote.trim()
                                   ? "#1a73e8"
                                   : "rgba(15, 17, 23, 0.42)",
                               color:
                                 selectedConversation?.conversation_id &&
-                                newNote.trim()
+                                  newNote.trim()
                                   ? "white"
                                   : "#4A4D54",
                               height: "30px",
@@ -2639,7 +2686,7 @@ const callAddNoteApi = async (noteText) => {
                               fontWeight: "500",
                               cursor:
                                 selectedConversation?.conversation_id &&
-                                newNote.trim()
+                                  newNote.trim()
                                   ? "pointer"
                                   : "not-allowed",
                               opacity: "1",
@@ -2659,9 +2706,8 @@ const callAddNoteApi = async (noteText) => {
               </div>
             </div>{" "}
             <div
-              className={`rightSectionContainer ${
-                !rightSectionVisible ? "hidden" : ""
-              }`}
+              className={`rightSectionContainer ${!rightSectionVisible ? "hidden" : ""
+                }`}
               style={{
                 width: "296px",
                 flex: "none",
@@ -2671,19 +2717,39 @@ const callAddNoteApi = async (noteText) => {
               }}
             >
               {" "}
-              <RightSection
-                className="box"
-                style={{
-                  width: "100%",
-                  height: "calc(100vh - 110px)",
-                  backgroundColor: "#17191F",
-                }}
-                rightSectionData={selectedConversation}
-                updateConversationFromApi={updateConversation}
-                setActiveTab={setActiveTab}
-                setPendingTabChange={setPendingTabChange}
-                setRightSectionVisible={setRightSectionVisible}
-              />
+              {selectedConversation?.reservation_id ? (
+                <RightSection
+                  className="box"
+                  style={{
+                    width: "100%",
+                    height: "calc(100vh - 110px)",
+                    backgroundColor: "#17191F",
+                  }}
+                  rightSectionData={selectedConversation}
+                  updateConversationFromApi={updateConversation}
+                  setActiveTab={setActiveTab}
+                  setPendingTabChange={setPendingTabChange}
+                  setRightSectionVisible={setRightSectionVisible}
+                />
+              ) : (
+                <NonGuestRightSection
+                  className="box"
+                  style={{
+                    width: "100%",
+                    height: "calc(100vh - 110px)",
+                    backgroundColor: "#17191F",
+                  }}
+                  rightSectionData={selectedConversation}
+                  updateConversationFromApi={updateConversation}
+                  updateSpecificConversation={updateSpecificConversation}
+                  updateSelectedConversation={updateSelectedConversation}
+                  setActiveTab={setActiveTab}
+                  setPendingTabChange={setPendingTabChange}
+                  setRightSectionVisible={setRightSectionVisible}
+                  contactType={contactType}
+                  setContactType={setContactType}
+                />
+              )}
             </div>
           </div>
           {/* Edit Note Modal */}
@@ -2753,13 +2819,37 @@ const callAddNoteApi = async (noteText) => {
               />
             )}
             {currentView === "details" && (
-              <RightSection
-                rightSectionData={selectedConversation}
-                updateConversationFromApi={updateConversation}
-                setCurrentView={setCurrentView}
-                setActiveTab={setActiveTab}
-                setPendingTabChange={setPendingTabChange}
-              />
+              selectedConversation?.reservation_id ? (
+                <RightSection
+                  className="box"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "#17191F",
+                  }}
+                  rightSectionData={selectedConversation}
+                  updateConversationFromApi={updateConversation}
+                  setActiveTab={setActiveTab}
+                  setPendingTabChange={setPendingTabChange}
+                  setRightSectionVisible={setRightSectionVisible}
+                />
+              ) : (
+                <NonGuestRightSection
+                  className="box"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "#17191F",
+                  }}
+                  rightSectionData={selectedConversation}
+                  updateConversationFromApi={updateConversation}
+                  updateSpecificConversation={updateSpecificConversation}
+                  updateSelectedConversation={updateSelectedConversation}
+                  setCurrentView={setCurrentView}
+                  setActiveTab={setActiveTab}
+                  setPendingTabChange={setPendingTabChange}
+                />
+              )
             )}
           </div>
         </div>

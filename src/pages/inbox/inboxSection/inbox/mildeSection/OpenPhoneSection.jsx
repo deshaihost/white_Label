@@ -1,18 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios, { all } from "axios";
 import "./index.css";
 import "./MildeSection.css";
 import OpenPhoneInbox from "./message/OpenPhoneInbox";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import loaderGif from "../../../../../public/img/new_loader.gif";
 import { callSendOpenPhoneMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
+import avatar01 from "../../../../../public/img/Avatar-01.png";
+import avatar02 from "../../../../../public/img/Avatar-02.png";
+import avatar03 from "../../../../../public/img/Avatar-03.png";
+import avatar04 from "../../../../../public/img/Avatar-04.png";
+import avatar05 from "../../../../../public/img/Avatar-05.png";
+import avatar06 from "../../../../../public/img/Avatar-06.png";
+import avatar07 from "../../../../../public/img/Avatar-07.png";
+import avatar08 from "../../../../../public/img/Avatar-08.png";
+import avatar09 from "../../../../../public/img/Avatar-09.png";
+import avatar10 from "../../../../../public/img/Avatar-10.png";
+import avatar11 from "../../../../../public/img/Avatar-11.png";
+import avatar12 from "../../../../../public/img/Avatar-12.png";
+import avatar13 from "../../../../../public/img/Avatar-13.png";
+import avatar14 from "../../../../../public/img/Avatar-14.png";
+import avatar15 from "../../../../../public/img/Avatar-15.png";
+import avatar16 from "../../../../../public/img/Avatar-16.png";
 
 const placeholderImg = "https://hostbuddylb.com/misc/chatBubbles.webp";
 
 const OpenPhoneSection = ({
   allConversationData,
   updateConversationFromApi,
+  updateSpecificConversation,
   propertyName,
 }) => {
   const messageListRef = useRef(null);
@@ -37,8 +54,51 @@ const OpenPhoneSection = ({
   const [openphoneMessages, setOpenPhoneMessages] = useState([]);
 
   // Extract guest information from conversation data
-  const guestName = allConversationData?.guest_name || "Guest";
-  const guestImageUrl = allConversationData?.image_url || "";
+  const name = allConversationData?.name;
+  const isValidName = name && !/^Unknown Contact\s*\(\d+\)/.test(name);
+
+  const guestName =
+    allConversationData?.reservation_id
+      ? allConversationData?.guest_name || "Guest"
+      : allConversationData?.contact_type === "Vendor"
+        ? isValidName ? name : "Vendor"
+        : allConversationData?.contact_type === "Owner"
+          ? isValidName ? name : "Owner"
+          : allConversationData?.contact_type === "External Contact"
+            ? isValidName ? name : "External Contact"
+            : isValidName ? name : "Guest";
+
+  const avatarImages = [
+    avatar01, avatar02, avatar03, avatar04,
+    avatar05, avatar06, avatar07, avatar08,
+    avatar09, avatar10, avatar11, avatar12,
+    avatar13, avatar14, avatar15, avatar16
+  ];
+
+  const avatarCache = new Map();
+
+  function getRandomAvatar(conversationId) {
+    // Add null/undefined check
+    if (!conversationId) {
+      return avatarImages[0]; // Return default avatar if no conversation ID
+    }
+
+    if (!avatarCache.has(conversationId)) {
+      // Generate a deterministic index based on the conversationId
+      // This ensures the same conversation always gets the same avatar
+      const hashCode = conversationId.split('').reduce(
+        (acc, char) => (acc * 31 + char.charCodeAt(0)) & 0xffffffff, 0
+      );
+      const avatarIndex = Math.abs(hashCode) % avatarImages.length;
+      avatarCache.set(conversationId, avatarImages[avatarIndex]);
+    }
+
+    return avatarCache.get(conversationId);
+  }
+
+  const guestImageUrl = !allConversationData?.reservation_id
+    ? getRandomAvatar(allConversationData?.conversation_id || "default")
+    : allConversationData?.image_url || ""
 
   // Check for OpenPhone integration by calling the get_user_data API
   useEffect(() => {
@@ -89,6 +149,17 @@ const OpenPhoneSection = ({
     scrollToBottom();
   }, [openphoneMessages]);
 
+  // In OpenPhoneSection.jsx - Update the guest information extraction to be more reactive
+  useEffect(() => {
+    // This effect should run whenever contact-related fields change
+    // Force a re-calculation of guest information when these fields update
+  }, [
+    allConversationData?.name,
+    allConversationData?.contact_type,
+    allConversationData?.guest_name,
+    allConversationData?.conversation_id
+  ]);
+
   // Sync local OpenPhone messages state with conversation data
   useEffect(() => {
     if (allConversationData?.openphone_messages) {
@@ -137,7 +208,7 @@ const OpenPhoneSection = ({
         }
       } else {
         // If there was an error, remove the optimistic message and restore input
-        setOpenPhoneMessages(prevMessages => 
+        setOpenPhoneMessages(prevMessages =>
           prevMessages.filter(msg => msg.id !== optimisticMessage.id)
         );
         setInputValue(messageToSend); // Restore the message text
@@ -145,7 +216,7 @@ const OpenPhoneSection = ({
       }
     } catch (error) {
       // Remove the optimistic message on error and restore input
-      setOpenPhoneMessages(prevMessages => 
+      setOpenPhoneMessages(prevMessages =>
         prevMessages.filter(msg => msg.id !== optimisticMessage.id)
       );
       setInputValue(messageToSend); // Restore the message text
@@ -278,8 +349,8 @@ const OpenPhoneSection = ({
                   rows="1"
                   disabled={
                     generateCommandApiLoading ||
-                    generateScratchApiLoading ||
-                    sendMessageLoading
+                      generateScratchApiLoading ||
+                      sendMessageLoading
                       ? true
                       : false
                   }
@@ -328,20 +399,20 @@ const OpenPhoneSection = ({
                     style={{
                       backgroundColor:
                         !inputValue.trim() &&
-                        !(
-                          generateCommandApiLoading ||
-                          generateScratchApiLoading ||
-                          sendMessageLoading
-                        )
+                          !(
+                            generateCommandApiLoading ||
+                            generateScratchApiLoading ||
+                            sendMessageLoading
+                          )
                           ? "rgba(15, 17, 23, 0.42)"
                           : "#007bff",
                       color:
                         !inputValue.trim() &&
-                        !(
-                          generateCommandApiLoading ||
-                          generateScratchApiLoading ||
-                          sendMessageLoading
-                        )
+                          !(
+                            generateCommandApiLoading ||
+                            generateScratchApiLoading ||
+                            sendMessageLoading
+                          )
                           ? "#4A4D54"
                           : "white",
                     }}
@@ -424,36 +495,36 @@ const OpenPhoneSection = ({
               ) : (
                 // If OpenPhone integration is not configured
                 <>                  <svg
-                    width="60"
-                    height="60"
-                    viewBox="0 0 60 60"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{ marginBottom: "20px" }}
-                  >
-                    {/* Circular background with increased radius */}
-                    <circle cx="30" cy="30" r="28" fill="rgba(95, 56, 65, 1)" />
-                    
-                    {/* OpenPhone integration icon - better centered */}
-                    <g transform="translate(16, 14) scale(1.75)">
-                      <path d="M9.85625 0.484375C9.67812 0.184375 9.35 0 9 0C8.65 0 8.32188 0.184375 8.14375 0.484375L5.14375 5.48438C4.95938 5.79375 4.95312 6.17812 5.13125 6.49062C5.30937 6.80312 5.64062 6.99687 6 6.99687H12C12.3594 6.99687 12.6937 6.80312 12.8687 6.49062C13.0437 6.17812 13.0406 5.79375 12.8562 5.48438L9.85625 0.484375ZM9 9.75V14.25C9 14.9406 9.55937 15.5 10.25 15.5H14.75C15.4406 15.5 16 14.9406 16 14.25V9.75C16 9.05937 15.4406 8.5 14.75 8.5H10.25C9.55937 8.5 9 9.05937 9 9.75ZM4 16C5.06087 16 6.07828 15.5786 6.82843 14.8284C7.57857 14.0783 8 13.0609 8 12C8 10.9391 7.57857 9.92172 6.82843 9.17157C6.07828 8.42143 5.06087 8 4 8C2.93913 8 1.92172 8.42143 1.17157 9.17157C0.421427 9.92172 0 10.9391 0 12C0 13.0609 0.421427 14.0783 1.17157 14.8284C1.92172 15.5786 2.93913 16 4 16Z" fill="#F7CFD8"/>
-                    </g>
-                    
-                    {/* 8×8 star at top right */}
-                    <g transform="translate(44, 6)">
-                      <path d="M4 0L4.1362 2.00402C4.20401 3.00171 4.99829 3.79599 5.99598 3.8638L8 4L5.99598 4.1362C4.99829 4.20401 4.20401 4.99829 4.1362 5.99598L4 8L3.8638 5.99598C3.79599 4.99829 3.00171 4.20401 2.00402 4.1362L0 4L2.00402 3.8638C3.00171 3.79599 3.79599 3.00171 3.8638 2.00402L4 0Z" fill="#D37B8F"/>
-                    </g>
-                    
-                    {/* 9×9 star at bottom right */}
-                    <g transform="translate(46, 44)">
-                      <path d="M4.5 0L4.66802 2.4722C4.73583 3.46989 5.53011 4.26417 6.5278 4.33198L9 4.5L6.5278 4.66802C5.53011 4.73583 4.73583 5.53011 4.66802 6.5278L4.5 9L4.33198 6.5278C4.26417 5.53011 3.46989 4.73583 2.4722 4.66802L0 4.5L2.4722 4.33198C3.46989 4.26417 4.26417 3.46989 4.33198 2.4722L4.5 0Z" fill="#D37B8F"/>
-                    </g>
-                    
-                    {/* 12×12 star at left side */}
-                    <g transform="translate(4, 24)">
-                      <path d="M6 0L6.26348 3.87674C6.33129 4.87443 7.12557 5.66871 8.12326 5.73652L12 6L8.12326 6.26348C7.12557 6.33129 6.33129 7.12557 6.26348 8.12326L6 12L5.73652 8.12326C5.66871 7.12557 4.87443 6.33129 3.87674 6.26348L0 6L3.87674 5.73652C4.87443 5.66871 5.66871 4.87443 5.73652 3.87674L6 0Z" fill="#EEBBC7"/>
-                    </g>
-                  </svg>
+                  width="60"
+                  height="60"
+                  viewBox="0 0 60 60"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginBottom: "20px" }}
+                >
+                  {/* Circular background with increased radius */}
+                  <circle cx="30" cy="30" r="28" fill="rgba(95, 56, 65, 1)" />
+
+                  {/* OpenPhone integration icon - better centered */}
+                  <g transform="translate(16, 14) scale(1.75)">
+                    <path d="M9.85625 0.484375C9.67812 0.184375 9.35 0 9 0C8.65 0 8.32188 0.184375 8.14375 0.484375L5.14375 5.48438C4.95938 5.79375 4.95312 6.17812 5.13125 6.49062C5.30937 6.80312 5.64062 6.99687 6 6.99687H12C12.3594 6.99687 12.6937 6.80312 12.8687 6.49062C13.0437 6.17812 13.0406 5.79375 12.8562 5.48438L9.85625 0.484375ZM9 9.75V14.25C9 14.9406 9.55937 15.5 10.25 15.5H14.75C15.4406 15.5 16 14.9406 16 14.25V9.75C16 9.05937 15.4406 8.5 14.75 8.5H10.25C9.55937 8.5 9 9.05937 9 9.75ZM4 16C5.06087 16 6.07828 15.5786 6.82843 14.8284C7.57857 14.0783 8 13.0609 8 12C8 10.9391 7.57857 9.92172 6.82843 9.17157C6.07828 8.42143 5.06087 8 4 8C2.93913 8 1.92172 8.42143 1.17157 9.17157C0.421427 9.92172 0 10.9391 0 12C0 13.0609 0.421427 14.0783 1.17157 14.8284C1.92172 15.5786 2.93913 16 4 16Z" fill="#F7CFD8" />
+                  </g>
+
+                  {/* 8×8 star at top right */}
+                  <g transform="translate(44, 6)">
+                    <path d="M4 0L4.1362 2.00402C4.20401 3.00171 4.99829 3.79599 5.99598 3.8638L8 4L5.99598 4.1362C4.99829 4.20401 4.20401 4.99829 4.1362 5.99598L4 8L3.8638 5.99598C3.79599 4.99829 3.00171 4.20401 2.00402 4.1362L0 4L2.00402 3.8638C3.00171 3.79599 3.79599 3.00171 3.8638 2.00402L4 0Z" fill="#D37B8F" />
+                  </g>
+
+                  {/* 9×9 star at bottom right */}
+                  <g transform="translate(46, 44)">
+                    <path d="M4.5 0L4.66802 2.4722C4.73583 3.46989 5.53011 4.26417 6.5278 4.33198L9 4.5L6.5278 4.66802C5.53011 4.73583 4.73583 5.53011 4.66802 6.5278L4.5 9L4.33198 6.5278C4.26417 5.53011 3.46989 4.73583 2.4722 4.66802L0 4.5L2.4722 4.33198C3.46989 4.26417 4.26417 3.46989 4.33198 2.4722L4.5 0Z" fill="#D37B8F" />
+                  </g>
+
+                  {/* 12×12 star at left side */}
+                  <g transform="translate(4, 24)">
+                    <path d="M6 0L6.26348 3.87674C6.33129 4.87443 7.12557 5.66871 8.12326 5.73652L12 6L8.12326 6.26348C7.12557 6.33129 6.33129 7.12557 6.26348 8.12326L6 12L5.73652 8.12326C5.66871 7.12557 4.87443 6.33129 3.87674 6.26348L0 6L3.87674 5.73652C4.87443 5.66871 5.66871 4.87443 5.73652 3.87674L6 0Z" fill="#EEBBC7" />
+                  </g>
+                </svg>
                   <p
                     style={{
                       color: "rgba(208, 211, 219, 1)",
@@ -462,17 +533,17 @@ const OpenPhoneSection = ({
                       marginBottom: "10px",
                     }}
                   >
-Setup OpenPhone to enhance communication with your guests!                  </p>{" "}                  <Link
-                    to="/setting/integrations"
-                    style={{
-                      color: "rgba(116, 169, 247, 1)",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      fontFamily: "DM Sans, sans-serif",
-                      textDecoration: "none",
-                      display: "inline-flex",
-                      alignItems: "center",
-                    }}>
+                    Setup OpenPhone to enhance communication with your guests!                  </p>{" "}                  <Link
+                      to="/setting/integrations"
+                      style={{
+                        color: "rgba(116, 169, 247, 1)",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        fontFamily: "DM Sans, sans-serif",
+                        textDecoration: "none",
+                        display: "inline-flex",
+                        alignItems: "center",
+                      }}>
                     <svg
                       width="17"
                       height="16"
@@ -481,7 +552,7 @@ Setup OpenPhone to enhance communication with your guests!                  </p>
                       xmlns="http://www.w3.org/2000/svg"
                       style={{ marginRight: "4px" }}
                     >
-                      <path d="M8.49967 5.33334V10.6667M5.83301 8.00001H11.1663M15.1663 8.00001C15.1663 11.6819 12.1816 14.6667 8.49967 14.6667C4.81778 14.6667 1.83301 11.6819 1.83301 8.00001C1.83301 4.31811 4.81778 1.33334 8.49967 1.33334C12.1816 1.33334 15.1663 4.31811 15.1663 8.00001Z" stroke="#74A9F7" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M8.49967 5.33334V10.6667M5.83301 8.00001H11.1663M15.1663 8.00001C15.1663 11.6819 12.1816 14.6667 8.49967 14.6667C4.81778 14.6667 1.83301 11.6819 1.83301 8.00001C1.83301 4.31811 4.81778 1.33334 8.49967 1.33334C12.1816 1.33334 15.1663 4.31811 15.1663 8.00001Z" stroke="#74A9F7" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                     Integrate OpenPhone
                     <svg

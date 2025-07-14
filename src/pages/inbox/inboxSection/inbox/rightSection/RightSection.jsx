@@ -87,15 +87,15 @@ const RightSection = ({
     user,
     action_items,
   } = rightSectionData ? rightSectionData : {};
-  console.log("Assigned Sub user " , assigned_sub_user_names);
-  console.log("assigned_sub_users" , assigned_sub_users)
+  console.log("Assigned Sub user ", assigned_sub_user_names);
+  console.log("assigned_sub_users", assigned_sub_users)
 
   const until_formatted =
     guest_chatbot_status?.until_utc == "indefinitely"
       ? "indefinitely"
       : guest_chatbot_status?.until_local
-      ? timeFormat(guest_chatbot_status?.until_local)
-      : null;
+        ? timeFormat(guest_chatbot_status?.until_local)
+        : null;
   let { channel, is_locked } = rightSectionData || {};
 
   // Helper function to safely handle action items filtering
@@ -133,7 +133,7 @@ const RightSection = ({
   const hostbuddyDropdownRef = useRef(null);
   const rightSideRef = useRef(null);
   const navigate = useNavigate();
-  
+
   // Cache to store user assignments per conversation
   const assignmentsByConversation = useRef({});
   // State for action items
@@ -200,10 +200,10 @@ const RightSection = ({
   }, [conversation_id, action_items, updateConversationFromApi]);  // Initialize combinedUsers with assigned_sub_user_names when component mounts or assigned users change
   useEffect(() => {
     if (!conversation_id) return;
-    
+
     // Check if we have cached data for this conversation
     const cachedData = assignmentsByConversation.current[conversation_id];
-    
+
     if (cachedData) {
       // Use cached data if available (user has modified this conversation before)
       setCombinedUsers(cachedData.users);
@@ -219,7 +219,7 @@ const RightSection = ({
           })
         );
         setCombinedUsers(assignedUsersFormatted);
-        
+
         // Initialize combinedMails with assigned_sub_users (emails)
         if (assigned_sub_users && assigned_sub_users.length > 0) {
           setCombinedMails([...assigned_sub_users]);
@@ -392,7 +392,8 @@ const RightSection = ({
         const newSelection = prev.filter(
           (selected) => selected.email !== user.email
         );
-        return newSelection;      } else {
+        return newSelection;
+      } else {
         // If not selected, add it
         const newSelection = [...prev, user];
         return newSelection;
@@ -433,7 +434,8 @@ const RightSection = ({
       const newSelection = prev.filter(
         (user) => user.email !== identifier && user.display_name !== identifier
       );
-      return newSelection;    });
+      return newSelection;
+    });
 
     // Trigger API call because user explicitly removed a user
     setUserActionTriggered(true);
@@ -462,7 +464,8 @@ const RightSection = ({
         },
         validateStatus: function (status) {
           return status >= 200 && status < 500;
-        },      };
+        },
+      };
 
       // Use combinedMails instead of extracting from usersToAssign
       const subUserEmails = combinedMails;
@@ -615,7 +618,7 @@ const RightSection = ({
         // Show bottom gradient when there's more content to scroll to
         setShowBottomGradient(
           scrollHeight > clientHeight &&
-            scrollTop < scrollHeight - clientHeight - 10
+          scrollTop < scrollHeight - clientHeight - 10
         );
       }
     };
@@ -928,6 +931,14 @@ const RightSection = ({
     }
   };
 
+  const handleOpenContactModal = () => {
+    setContactInfo({
+      email: contactInfo.email || "not added",
+      phone: contactInfo.phone || "not added",
+    });
+    setContactModalOpen(true);
+  };
+
   // When the user selects to toggle guest status
   const handleSelectChange = (event, curr_status) => {
     const on_or_off = curr_status === "on" ? "off" : "on";
@@ -979,27 +990,40 @@ const RightSection = ({
     }
   };
 
+  // Initial fetch of guest data when conversation_id is available
+useEffect(() => {
+  if (conversation_id) {
+    callGetGuestDataApi();
+  }
+}, [conversation_id, property_name, reservation_id]); // Added property_name and reservation_id as dependencies
+
   // Function to call the API to get guest data
-  const callGetGuestDataApi = async () => {
-    if (!conversation_id) return;
+  // Function to call the API to get guest data
+const callGetGuestDataApi = async () => {
+  if (!conversation_id) return;
 
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    setGetGuestDataLoading(true);
+  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  setGetGuestDataLoading(true);
 
-    try {
-      // Get token from the apiCore's active token or fall back to localStorage
-      const token = getActiveToken() || localStorage.getItem("authToken");
+  try {
+    // Get token from the apiCore's active token or fall back to localStorage
+    const token = getActiveToken() || localStorage.getItem("authToken");
 
-      const config = {
-        headers: {
-          "X-API-Key": API_KEY,
-          Authorization: token ? `Bearer ${token}` : undefined,
-        },
-        validateStatus: function (status) {
-          return status >= 200 && status < 500;
-        },
-      }; // Build query parameters
+    const config = {
+      headers: {
+        "X-API-Key": API_KEY,
+        Authorization: token ? `Bearer ${token}` : undefined,
+      },
+      validateStatus: function (status) {
+        return status >= 200 && status < 500;
+      },
+    };
+
+    let response;
+    
+    // Try to get guest data first (for reservation-associated conversations)
+    if (property_name && reservation_id) {
       const queryParams = new URLSearchParams({
         conversation_id,
         property_name,
@@ -1010,122 +1034,172 @@ const RightSection = ({
         queryParams.append("reservation_id", reservation_id);
       }
 
-      const response = await axios.get(
+      response = await axios.get(
         `${baseUrl}/get_guest_data?${queryParams.toString()}`,
         config
       );
+    }
+
+    // If guest data API fails or conversation is not associated with reservation,
+    // try getting external contact info
+    if (!response || response.status !== 200) {
+      const queryParams = new URLSearchParams({
+        conversation_id,
+      });
+
+      response = await axios.get(
+        `${baseUrl}/get_external_contact_info?${queryParams.toString()}`,
+        config
+      );
+
       if (response.status === 200) {
-        // Update contact info with the response data
-        const guestData = response.data; // Get last email address from email_addresses array
-        const emailAddresses = guestData.guest_data?.email_addresses || [];
-        const lastEmail =
-          emailAddresses.length > 0 && emailAddresses[emailAddresses.length - 1]
-            ? emailAddresses[emailAddresses.length - 1]
-            : null;
+        // Handle external contact data
+        const contactData = response.data.contact_info;
+        
+        const phoneNumber = contactData.phone_numbers?.[0] || '';
+        const emailAddress = contactData.email_addresses?.[0] || '';
 
-        // Get last phone number from phone_numbers array
-        const phoneNumbers = guestData.guest_data?.phone_numbers || [];
-        const lastPhone =
-          phoneNumbers.length > 0 && phoneNumbers[phoneNumbers.length - 1]
-            ? phoneNumbers[phoneNumbers.length - 1]
-            : null;
+        console.log('External Contact Phone Number:', phoneNumber);
+        console.log('External Contact Email Address:', emailAddress);
 
         setContactInfo({
-          email: lastEmail || "not added",
-          phone: lastPhone || "not added",
+          email: emailAddress || "not added",
+          phone: phoneNumber || "not added",
         });
-      } else {
-        // Reset contact info when API fails
-        setContactInfo({
-          email: "not added",
-          phone: "not added",
-        });
-        // ToastHandle(
-        //   response?.data?.error || "Failed to fetch guest data",
-        //   "danger"
-        // );
+        return;
       }
-    } catch (error) {
-      console.error("Error fetching guest data:", error);
-      // Reset contact info when API throws an error
+    }
+
+    if (response && response.status === 200) {
+      // Handle guest data (reservation-associated conversation)
+      const guestData = response.data.guest_data;
+
+      // Get first phone number and first email address
+      const phoneNumber = guestData.phone_numbers?.[0] || '';
+      const emailAddress = guestData.email_addresses?.[0] || '';
+
+      console.log('Guest Phone Number:', phoneNumber);
+      console.log('Guest Email Address:', emailAddress);
+
+      setContactInfo({
+        email: emailAddress || "not added",
+        phone: phoneNumber || "not added",
+      });
+    } else {
+      // Reset contact info when both APIs fail
       setContactInfo({
         email: "not added",
         phone: "not added",
       });
-      // ToastHandle("Error fetching guest data", "danger");
-    } finally {
-      setGetGuestDataLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching contact data:", error);
+    // Reset contact info when API throws an error
+    setContactInfo({
+      email: "not added",
+      phone: "not added",
+    });
+  } finally {
+    setGetGuestDataLoading(false);
+  }
+};
 
   // API function to update guest contact information
-  const callUpdateGuestDataApi = async () => {
-    if (!conversation_id) return;
+  // API function to update guest contact information
+const callUpdateGuestDataApi = async () => {
+  if (!conversation_id) return;
 
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    setUpdateGuestDataLoading(true);
+  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  setUpdateGuestDataLoading(true);
 
-    try {
-      // Get token from the apiCore's active token or fall back to localStorage
-      const token = getActiveToken() || localStorage.getItem("authToken");
+  try {
+    // Get token from the apiCore's active token or fall back to localStorage
+    const token = getActiveToken() || localStorage.getItem("authToken");
 
-      const config = {
-        headers: {
-          "X-API-Key": API_KEY,
-          Authorization: token ? `Bearer ${token}` : undefined,
-          "Content-Type": "application/json",
-        },
-        validateStatus: function (status) {
-          return status >= 200 && status < 500;
-        },
-      };
+    const config = {
+      headers: {
+        "X-API-Key": API_KEY,
+        Authorization: token ? `Bearer ${token}` : undefined,
+        "Content-Type": "application/json",
+      },
+      validateStatus: function (status) {
+        return status >= 200 && status < 500;
+      },
+    };
 
-      // Build the request body with contact information
-      const requestBody = {
-        conversation_id,
-        property_name,
-        guest_data: {
-          email_addresses:
-            contactInfo.email && contactInfo.email !== "not added"
-              ? [contactInfo.email]
-              : [],
-          phone_numbers:
-            contactInfo.phone && contactInfo.phone !== "not added"
-              ? [contactInfo.phone]
-              : [],
-        },
-      };
+    const emailValue = contactInfo.email && contactInfo.email !== "not added" ? contactInfo.email.trim() : "";
+    const phoneValue = contactInfo.phone && contactInfo.phone !== "not added" ? contactInfo.phone.trim() : "";
 
-      // Add reservation_id only if it exists
-      if (reservation_id) {
-        requestBody.reservation_id = reservation_id;
-      }
+    // Build the request body with contact information
+    const requestBody = {
+      conversation_id,
+      property_name,
+      guest_data: {
+        email_addresses:
+          emailValue
+            ? [emailValue]
+            : [],
+        phone_numbers:
+          phoneValue
+            ? [phoneValue]
+            : [],
+      },
+    };
 
-      const response = await axios.put(
-        `${baseUrl}//update_guest_info`,
-        requestBody,
-        config
-      );
-
-      if (response.status === 200) {
-        ToastHandle("Contact information updated successfully", "success");
-        // Refresh guest data to reflect the changes
-        await callGetGuestDataApi();
-        setContactModalOpen(false);
-      } else {
-        ToastHandle(
-          response?.data?.error || "Failed to update contact information",
-          "danger"
-        );
-      }
-    } catch (error) {
-      console.error("Error updating guest data:", error);
-      ToastHandle("Error updating contact information", "danger");
-    } finally {
-      setUpdateGuestDataLoading(false);
+    // Add reservation_id only if it exists
+    if (reservation_id) {
+      requestBody.reservation_id = reservation_id;
     }
-  };
+
+    const response = await axios.put(
+      `${baseUrl}/update_guest_info`,
+      requestBody,
+      config
+    );
+
+    if (response.status === 200) {
+      ToastHandle("Contact information updated successfully", "success");
+      
+      // Check if phone numbers or email addresses were removed
+      const wasPhoneRemoved = phoneValue === "" && contactInfo.phone !== "not added";
+      const wasEmailRemoved = emailValue === "" && contactInfo.email !== "not added";
+      
+      if (wasPhoneRemoved || wasEmailRemoved) {
+        // If contact info was removed, the conversation might have been converted to external contact
+        // Update the contact info immediately to reflect the change
+        setContactInfo({
+          email: emailValue || "not added",
+          phone: phoneValue || "not added",
+        });
+        
+        // Also refresh the conversation data to get updated reservation association
+        if (updateConversationFromApi && typeof updateConversationFromApi === "function") {
+          setTimeout(() => {
+            updateConversationFromApi(conversation_id);
+          }, 1000);
+        }
+      } else {
+        // Normal refresh for adding contact info
+        setTimeout(async () => {
+          await callGetGuestDataApi();
+        }, 1000); // 1 second delay
+      }
+      
+      setContactModalOpen(false);
+    } else {
+      ToastHandle(
+        response?.data?.error || "Failed to update contact information",
+        "danger"
+      );
+    }
+  } catch (error) {
+    console.error("Error updating guest data:", error);
+    ToastHandle("Error updating contact information", "danger");
+  } finally {
+    setUpdateGuestDataLoading(false);
+  }
+};
   // Initial fetch of guest data when conversation_id and reservation_id are available
   useEffect(() => {
     if (conversation_id && reservation_id) {
@@ -1435,28 +1509,28 @@ const RightSection = ({
               )}{" "}
               {(channel.toUpperCase().includes("OPENPHONE") ||
                 channel.toUpperCase().includes("OPEN PHONE")) && (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "4px",
-                    height: "20px",
-                    borderRadius: "3px",
-                    backgroundColor: "#24262E",
-                  }}
-                >
-                  <img
-                    src={OPENPHONE_ICON_FOR_RIGHT}
-                    alt="OpenPhone"
+                  <div
                     style={{
-                      width: "86.77px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "4px",
                       height: "20px",
-                      objectFit: "contain",
+                      borderRadius: "3px",
+                      backgroundColor: "#24262E",
                     }}
-                  />
-                </div>
-              )}{" "}
+                  >
+                    <img
+                      src={OPENPHONE_ICON_FOR_RIGHT}
+                      alt="OpenPhone"
+                      style={{
+                        width: "86.77px",
+                        height: "20px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </div>
+                )}{" "}
               {channel.toUpperCase().includes("DIRECT") && (
                 <div
                   style={{
@@ -1505,28 +1579,28 @@ const RightSection = ({
               )}{" "}
               {(channel.toUpperCase().includes("GOOGLE RENTALS") ||
                 channel.toUpperCase().includes("GOOGLERENTALS")) && (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "4px",
-                    height: "20px",
-                    borderRadius: "3px",
-                    backgroundColor: "#24262E",
-                  }}
-                >
-                  <img
-                    src={GOOGLERENTAL_ICON_FOR_RIGHT}
-                    alt="Google Rentals"
+                  <div
                     style={{
-                      width: "119.6px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "4px",
                       height: "20px",
-                      objectFit: "contain",
+                      borderRadius: "3px",
+                      backgroundColor: "#24262E",
                     }}
-                  />
-                </div>
-              )}{" "}
+                  >
+                    <img
+                      src={GOOGLERENTAL_ICON_FOR_RIGHT}
+                      alt="Google Rentals"
+                      style={{
+                        width: "119.6px",
+                        height: "20px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </div>
+                )}{" "}
               {channel.toUpperCase().includes("SMS") && (
                 <div
                   style={{
@@ -1585,7 +1659,7 @@ const RightSection = ({
               Contact information
             </h2>{" "}
             <span
-              onClick={() => setContactModalOpen(true)}
+              onClick={handleOpenContactModal}
               style={{
                 color: "#74A9F7",
                 fontSize: "14px",
@@ -1808,8 +1882,8 @@ const RightSection = ({
                               role="option"
                               tabIndex={0}
                               onMouseDown={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "rgba(0, 19, 48, 1)")
+                              (e.currentTarget.style.backgroundColor =
+                                "rgba(0, 19, 48, 1)")
                               }
                               onMouseOver={(e) => {
                                 e.currentTarget.style.backgroundColor =
@@ -1907,8 +1981,8 @@ const RightSection = ({
                                 role="option"
                                 tabIndex={0}
                                 onMouseDown={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "rgba(0, 19, 48, 1)")
+                                (e.currentTarget.style.backgroundColor =
+                                  "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
@@ -2002,8 +2076,8 @@ const RightSection = ({
                                 role="option"
                                 tabIndex={0}
                                 onMouseDown={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "rgba(0, 19, 48, 1)")
+                                (e.currentTarget.style.backgroundColor =
+                                  "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
@@ -2097,8 +2171,8 @@ const RightSection = ({
                                 role="option"
                                 tabIndex={0}
                                 onMouseDown={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "rgba(0, 19, 48, 1)")
+                                (e.currentTarget.style.backgroundColor =
+                                  "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
@@ -2192,8 +2266,8 @@ const RightSection = ({
                                 role="option"
                                 tabIndex={0}
                                 onMouseDown={(e) =>
-                                  (e.currentTarget.style.backgroundColor =
-                                    "rgba(0, 19, 48, 1)")
+                                (e.currentTarget.style.backgroundColor =
+                                  "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
@@ -2413,10 +2487,10 @@ const RightSection = ({
                   selectedSentiment === "positive"
                     ? "#014714"
                     : selectedSentiment === "negative"
-                    ? "#4D2100"
-                    : selectedSentiment === "clear"
-                    ? "#24262E"
-                    : "rgba(189, 193, 201, 0.08)",
+                      ? "#4D2100"
+                      : selectedSentiment === "clear"
+                        ? "#24262E"
+                        : "rgba(189, 193, 201, 0.08)",
                 borderRadius: "4px",
                 display: "flex",
                 gap: "6px",
@@ -2467,8 +2541,8 @@ const RightSection = ({
                     selectedSentiment === "neutral"
                       ? "#BBB"
                       : selectedSentiment === "clear"
-                      ? "#A6A9B2"
-                      : "white",
+                        ? "#A6A9B2"
+                        : "white",
                   flexGrow: 1,
                   fontSize: "14px",
                 }}
@@ -2476,8 +2550,8 @@ const RightSection = ({
                 {sentimentLoading
                   ? "Updating..."
                   : selectedSentiment === "clear"
-                  ? "No sentiment"
-                  : selectedSentiment.charAt(0).toUpperCase() +
+                    ? "No sentiment"
+                    : selectedSentiment.charAt(0).toUpperCase() +
                     selectedSentiment.slice(1)}
               </span>
               <img
@@ -2823,15 +2897,14 @@ const RightSection = ({
                 subUserNames.map((user, index) => (
                   <div
                     key={index}
-                    className={`user-dropdown-item ${
-                      combinedUsers.some(
-                        (selected) =>
-                          selected.name === user.display_name ||
-                          selected.email === user.email
-                      )
+                    className={`user-dropdown-item ${combinedUsers.some(
+                      (selected) =>
+                        selected.name === user.display_name ||
+                        selected.email === user.email
+                    )
                         ? "user-dropdown-item-selected"
                         : ""
-                    }`}
+                      }`}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleUserSelect(user);
@@ -3188,9 +3261,9 @@ const RightSection = ({
                   </label>
                   <input
                     type="email"
-                    value={contactInfo.email}
+                    value={contactInfo.email === "not added" ? "" : contactInfo.email}
                     onChange={(e) =>
-                      setContactInfo({ ...contactInfo, email: e.target.value })
+                      setContactInfo({ ...contactInfo, email: e.target.value || "not added" })
                     }
                     style={{
                       width: "100%",
@@ -3218,9 +3291,9 @@ const RightSection = ({
                   </label>
                   <input
                     type="tel"
-                    value={contactInfo.phone}
+                    value={contactInfo.phone === "not added" ? "" : contactInfo.phone}
                     onChange={(e) =>
-                      setContactInfo({ ...contactInfo, phone: e.target.value })
+                      setContactInfo({ ...contactInfo, phone: e.target.value || "not added" })
                     }
                     style={{
                       width: "100%",
