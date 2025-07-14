@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
 import OpenPhoneIcon from "./icons/openphone_icon.svg"; // Make sure to create or import this icon
+import ThumbsUpIcon from "./thumbsComponent/icons/Thumbs_Up_Icon.svg";
+import ThumbsDownIcon from "./thumbsComponent/icons/Thumbs_Down_Icon.svg";
+import HelpCircleIcon from "./thumbsComponent/icons/help_circle.svg";
 import HostBuddyIcon from "./thumbsComponent/icons/hostBuddy_icon.svg"; // Import HostBuddy icon
 
-const OpenPhoneInbox = ({ message, guestName, guestImageUrl }) => {
+const OpenPhoneInbox = ({ message, guestName, guestImageUrl, feedBackDataGet, feedBckModelOpen, prevMsgText, handleJustificationClick }) => {
   // Handle image loading error
   const [imageError, setImageError] = useState(false);
 
   // Extract message details
-  const { id, text, time, time_utc, sender } = message || {};
+  const { id, text, time, time_utc, sender, justification, response } = message || {};
   const isHost = sender === "host" || sender === "hostbuddy";
+  const { typeThumbs, messageId } = feedBackDataGet ? feedBackDataGet : {};
+  const message_id = id ? id : [];
+
   const sendByFormatted =
     sender === "hostbuddy" ? "HostBuddy" : sender === "host" ? "Host" : sender;
-  
+
   // Determine message sender for CSS class - guest messages use "bot", host messages use "user"
   const messageSender = isHost ? "user" : "bot";  // Format time
   const formatTimeToHHMM = (timeString) => {
@@ -23,15 +29,15 @@ const OpenPhoneInbox = ({ message, guestName, guestImageUrl }) => {
         // Get hours and minutes
         let hours = date.getHours();
         const minutes = date.getMinutes();
-        
+
         // Convert to 12-hour format
         const ampm = hours >= 12 ? 'PM' : 'AM';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        
+
         // Format minutes with leading zero if needed
         const minutesStr = minutes < 10 ? '0' + minutes : minutes;
-        
+
         return `${hours}:${minutesStr} ${ampm}`;
       } else if (typeof timeString === "string") {
         // If it's already a string, try to extract time part
@@ -40,12 +46,12 @@ const OpenPhoneInbox = ({ message, guestName, guestImageUrl }) => {
         if (timeMatch) {
           let hours = parseInt(timeMatch[1], 10);
           const minutes = timeMatch[2];
-          
+
           // Convert to 12-hour format
           const ampm = hours >= 12 ? 'PM' : 'AM';
           hours = hours % 12;
           hours = hours ? hours : 12; // the hour '0' should be '12'
-          
+
           return `${hours}:${minutes} ${ampm}`;
         }
       }
@@ -60,7 +66,7 @@ const OpenPhoneInbox = ({ message, guestName, guestImageUrl }) => {
         if (result.includes('p.m.')) result = result.replace('p.m.', 'PM');
         return result;
       }
-      
+
       return timeString;
     } catch (error) {
       return timeString; // Return original on error
@@ -90,6 +96,7 @@ const OpenPhoneInbox = ({ message, guestName, guestImageUrl }) => {
   useEffect(() => {
     setImageError(false);
   }, [guestImageUrl]);
+
   return (
     <div style={{ marginBottom: "20px" }}>      {/* Message timing header - same structure as MessageInbox */}
       {messageSender === "bot" ? (
@@ -132,27 +139,27 @@ const OpenPhoneInbox = ({ message, guestName, guestImageUrl }) => {
           )}
           {displayName}{" "}
           <span style={{ fontWeight: 400 }}>{timeFormatHHMM}</span>
-        </p>      ) 
+        </p>)
         :
-         (
-        <p className="text-end timing">
-          {sender === "hostbuddy" && (
-            <img
-              src={HostBuddyIcon}
-              alt="HostBuddy"
-              style={{
-                width: "21px",
-                height: "21px",
-                marginRight: "5px",
-                verticalAlign: "middle",
-              }}
-            />
-          )}
-          {sendByFormatted}{" "}
-          <span style={{ fontWeight: 400 }}>{timeFormatHHMM}</span>
-        </p>
-      )}
-      
+        (
+          <p className="text-end timing">
+            {sender === "hostbuddy" && (
+              <img
+                src={HostBuddyIcon}
+                alt="HostBuddy"
+                style={{
+                  width: "21px",
+                  height: "21px",
+                  marginRight: "5px",
+                  verticalAlign: "middle",
+                }}
+              />
+            )}
+            {sendByFormatted}{" "}
+            <span style={{ fontWeight: 400 }}>{timeFormatHHMM}</span>
+          </p>
+        )}
+
       {/* Message bubble - same structure as MessageInbox */}
       <div className={`message ${messageSender} mesaage-box`}>
         <div
@@ -170,8 +177,78 @@ const OpenPhoneInbox = ({ message, guestName, guestImageUrl }) => {
               textAlign: text?.length <= 1 ? "center" : "left",
             }}
           >
+            {message?.attachments &&
+              message?.attachments.length > 0 && (
+                <div className="image-attachment">
+                  {message.attachments
+                    .filter(
+                      (attachment) =>
+                        attachment.type.toLowerCase().includes("image") ||
+                        ["jpeg", "jpg", "png", "gif", "bmp", "webp"].some(
+                          (format) =>
+                            attachment.type.toLowerCase().includes(format)
+                        )
+                    )
+                    .map((attachment, index) => (
+                      <img
+                        key={index}
+                        src={attachment.url}
+                        alt="attachment"
+                        style={{ width: "320px" }}
+                      />
+                    ))}
+                </div>
+              )}
             {text}
           </p>
+          {/* Thumbs feedback for hostbuddy messages, same logic as MildeSection.jsx */}
+          {sender === "hostbuddy" && (
+            <div
+              className="thunbs"
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "flex-end",
+                marginTop: "5px",
+              }}
+            >
+              <span style={{ marginRight: "3px" }}>
+                <img
+                  src={ThumbsUpIcon}
+                  alt="Thumbs Up"
+                  className="mainCursor"
+                  onClick={() =>
+                    feedBckModelOpen("up", message_id, response, prevMsgText)
+                  }
+                />
+              </span>
+              <span style={{ marginRight: "3px" }}>
+                <img
+                  src={ThumbsDownIcon}
+                  alt="Thumbs Down"
+                  className="mainCursor"
+                  onClick={() =>
+                    feedBckModelOpen("down", message_id, response, prevMsgText)
+                  }
+                />
+              </span>
+              <span>
+                <img
+                  src={HelpCircleIcon}
+                  alt="Help"
+                  className="mainCursor"
+                  style={{ width: "16px", height: "16px" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleJustificationClick(
+                      e,
+                      justification || "No justification available"
+                    );
+                  }}
+                />
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>

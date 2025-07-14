@@ -1094,44 +1094,23 @@ const LeftMessage = ({
                             >
                               <span className="user-badge ">
                                 {
-                                  // Always show "External Contact" if contact_type is set to that
+                                  // Always show contact type labels, not guest names
                                   contactType === "Guest"
                                     ? "Guest"
                                     : contactType === "External Contact"
-                                      ? "External Contact"  // Change "External Contact" to "Guest"
-                                      : message.contact_type
-                                        ? message.contact_type
-                                        : message.contact_info && message.contact_info.name
-                                          ? message.contact_info.name
-                                            .split(" ")
-                                            .map(
-                                              (word) =>
-                                                word.charAt(0).toUpperCase() +
-                                                word.slice(1).toLowerCase()
-                                            )
-                                            .join(" ")
-                                          : message.name
-                                            ? message.name
-                                              .split(" ")
-                                              .map(
-                                                (word) =>
-                                                  word.charAt(0).toUpperCase() +
-                                                  word.slice(1).toLowerCase()
-                                              )
-                                              .join(" ")
-                                            : !message.reservation_id
-                                              ? "External Contact"
-                                              : user
-                                                ? user
-                                                  .split(" ")
-                                                  .map(
-                                                    (word) =>
-                                                      word.charAt(0).toUpperCase() +
-                                                      word.slice(1).toLowerCase()
-                                                  )
-                                                  .join(" ")
-                                                : sender
-                                                  ? sender
+                                      ? "External Contact"
+                                      : message.contact_type === "Vendor"
+                                        ? "Vendor"
+                                        : message.contact_type === "Owner"
+                                          ? "Owner"
+                                          : message.contact_type === "External Contact"
+                                            ? "External Contact"
+                                            : message.contact_type
+                                              ? message.contact_type
+                                              : !message.reservation_id
+                                                ? "External Contact"
+                                                : user
+                                                  ? user
                                                     .split(" ")
                                                     .map(
                                                       (word) =>
@@ -1139,7 +1118,16 @@ const LeftMessage = ({
                                                         word.slice(1).toLowerCase()
                                                     )
                                                     .join(" ")
-                                                  : "Unknown"
+                                                  : sender
+                                                    ? sender
+                                                      .split(" ")
+                                                      .map(
+                                                        (word) =>
+                                                          word.charAt(0).toUpperCase() +
+                                                          word.slice(1).toLowerCase()
+                                                      )
+                                                      .join(" ")
+                                                    : "Guest"
                                 }
                               </span>
                               {(() => {

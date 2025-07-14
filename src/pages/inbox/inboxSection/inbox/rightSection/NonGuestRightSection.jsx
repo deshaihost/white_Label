@@ -108,7 +108,7 @@ const NonGuestRightSection = ({
 
     // Otherwise, use property status
     const propertyStatus = property_chatbot_status || propertyChatbotStatus;
-    const status = propertyStatus ? String(propertyStatus).toLowerCase() : "off";
+    const status = propertyStatus ? String(propertyStatus).toLowerCase() : "";
     return { curr_status: status, source: "property" };
   };
 

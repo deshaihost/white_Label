@@ -8,7 +8,7 @@ import { InboxLoader } from "../../../../helper/Loader";
 import LeftMessage from "./leftMessage/LeftMessage";
 import MildeSection from "./mildeSection/MildeSection";
 import WhatsAppSection from "./mildeSection/WhatsAppSection"; // Import WhatsApp Section
-import OpenPhoneSection from "./mildeSection/OpenPhoneSection" // Import OpenPhone Section
+import OpenPhoneSection from "./mildeSection/OpenPhoneSection"; // Import OpenPhone Section
 import RightSection from "./rightSection/RightSection";
 import NonGuestRightSection from "./rightSection/NonGuestRightSection";
 import { Link, useNavigate } from "react-router-dom";
@@ -334,15 +334,6 @@ const Inbox = ({
       ToastHandle("Error updating pin status", "danger");
     }
   };
-
-  useEffect(() => {
-    if (selectedConversation?.contact_type) {
-      setContactType(selectedConversation.contact_type);
-    } else {
-      setContactType("");
-    }
-  }, [selectedConversation?.contact_type]);
-
   // Update isPinned state when selected conversation changes
   useEffect(() => {
     if (selectedConversation?.conversation_id) {
@@ -564,6 +555,15 @@ const Inbox = ({
       currentConversationIdRef.current = selectedConversation.conversation_id;
     }
   }, [selectedConversation?.conversation_id]);
+
+  useEffect(() => {
+    if (selectedConversation?.contact_type) {
+      setContactType(selectedConversation.contact_type);
+    } else {
+      setContactType("");
+    }
+  }, [selectedConversation?.contact_type]);
+
   // State for unread messages counts
   const [unreadPmsCount, setUnreadPmsCount] = useState(0);
   const [unreadWhatsAppCount, setUnreadWhatsAppCount] = useState(0);
@@ -676,7 +676,6 @@ const Inbox = ({
     const reservation_id = selectedConversation?.reservation_id;
 
     if (!conversation_id && !reservation_id) return;
-
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setIsLoadingNotes(true);
@@ -710,6 +709,7 @@ const Inbox = ({
       setIsLoadingNotes(false);
     }
   };
+  // Function to call the API to add a note
   const callAddNoteApi = async (noteText) => {
     const conversation_id = selectedConversation?.conversation_id;
     const reservation_id = selectedConversation?.reservation_id;
@@ -729,13 +729,13 @@ const Inbox = ({
           return status >= 200 && status < 500;
         },
       };
-
+      // According to the API documentation pattern, include conversation_id in the request body
       const bodyData = {
         note: noteText,
         visible_to_hostbuddy: visibleToHostbuddy,
       };
 
-      // Send only one: prefer conversation_id over reservation_id
+      // Send only one: prefer reservation_id over conversation_id
       if (reservation_id) bodyData.reservation_id = reservation_id;
       else if (conversation_id) bodyData.conversation_id = conversation_id;
 
@@ -746,8 +746,9 @@ const Inbox = ({
       );
 
       if (response.status === 200) {
-        callGetNotesApi(); // Refresh notes
-        setNewNote("");    // Clear input
+        // Refresh the notes list
+        callGetNotesApi();
+        setNewNote(""); // Clear the input field
         ToastHandle("Note added successfully", "success");
       } else {
         ToastHandle(response?.data?.error || "Failed to add note", "danger");
@@ -862,6 +863,7 @@ const Inbox = ({
       ToastHandle("Error updating note", "danger");
     }
   };
+
   // Action items state to display in the Open Issues tab
   const [filteredActionItems, setFilteredActionItems] = useState([]);
   const [isLoadingActionItems, setIsLoadingActionItems] = useState(false);
@@ -1307,6 +1309,7 @@ const Inbox = ({
     });
   };
 
+
   // Add a message to a conversation in our local record (conversations)
   const addMessageToLocalConversation = (conversationId, message) => {
     // Invalidate cache when a new message is added
@@ -1397,7 +1400,6 @@ const Inbox = ({
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
   // Helper function to determine justifyContent value based on screen width and panel visibility
   const determineJustifyContent = () => {
     // For large screens (above 1279px), always use "space-between"
@@ -1530,7 +1532,7 @@ const Inbox = ({
                           .toUpperCase()
                         : selectedConversation?.name
                           ? selectedConversation.name.charAt(0).toUpperCase()
-                          : "U"}{" "}
+                          : "U"}
                     </div>
                     {/* User name */}{" "}
                     <span
@@ -1748,51 +1750,49 @@ const Inbox = ({
                 >
                   {[
                     { id: "pms", icon: PmsIcon, text: "PMS" },
-                    { id: "whatsapp", icon: WhatsappIcon, text: "WhatsApp" },
-                    { id: "openphone", icon: OpenPhoneIcon, text: "OpenPhone"},
-                    {
-                      id: "openIssue",
-                      icon: OpenIssueIcon,
-                      text: "Open Issue",
-                    },
+                    userHasWhatsAppIntegration && { id: "whatsapp", icon: WhatsappIcon, text: "WhatsApp" },
+                    userHasOpenPhoneIntegration && { id: "openphone", icon: OpenPhoneIcon, text: "OpenPhone" },
+                    ...(selectedConversation?.reservation_id
+                      ? [{ id: "openIssue", icon: OpenIssueIcon, text: "Open Issue" }]
+                      : []),
                     { id: "notes", icon: NotesIcon, text: "Notes" },
                   ]
                     .filter(Boolean)
                     .map((tab) => (
-                    <div
-                      key={tab.id}
-                      onClick={() => {
-                        setActiveTab(tab.id);
-                      }} style={{
-                        fontFamily: "DM Sans",
-                        fontSize: "14px",
-                        cursor: "pointer",
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "center",
-                        marginRight: "18px",
-                        paddingBottom: "2px",
-                        justifyContent: "space-between",
-                        borderBottom:
-                          tab.id === activeTab ? "2px solid #007bff" : "none",
-                        color: tab.id === activeTab ? "#FFFFFF" : "#D0D3DB",
-                        fontWeight: tab.id === activeTab ? "600" : "500",
-                        transition: "color 0.2s ease",
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <img
-                          src={tab.icon}
-                          alt={tab.text}
-                          style={{
-                            width: "15px",
-                            height: "15px",
-                            marginRight: "5px",
-                          }}
-                        />
-                        <span>{tab.text}</span>
-                      </div>
-                      {/* Unread message counters{tab.id === 'pms' && unreadPmsCount > 0 && (
+                      <div
+                        key={tab.id}
+                        onClick={() => {
+                          setActiveTab(tab.id);
+                        }} style={{
+                          fontFamily: "DM Sans",
+                          fontSize: "14px",
+                          cursor: "pointer",
+                          position: "relative",
+                          display: "flex",
+                          alignItems: "center",
+                          marginRight: "18px",
+                          paddingBottom: "2px",
+                          justifyContent: "space-between",
+                          borderBottom:
+                            tab.id === activeTab ? "2px solid #007bff" : "none",
+                          color: tab.id === activeTab ? "#FFFFFF" : "#D0D3DB",
+                          fontWeight: tab.id === activeTab ? "600" : "500",
+                          transition: "color 0.2s ease",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <img
+                            src={tab.icon}
+                            alt={tab.text}
+                            style={{
+                              width: "15px",
+                              height: "15px",
+                              marginRight: "5px",
+                            }}
+                          />
+                          <span>{tab.text}</span>
+                        </div>
+                        {/* Unread message counters{tab.id === 'pms' && unreadPmsCount > 0 && (
                         <span style={{
                           backgroundColor: '#ff9800',
                           color: 'white',
@@ -1828,7 +1828,7 @@ const Inbox = ({
                         </span>
                       )}
                       */}
-                      {/* {tab.id === "pms" && unreadPmsCount > 0 && (
+                        {/* {tab.id === "pms" && unreadPmsCount > 0 && (
                         <span
                           style={{
                              backgroundColor: "rgb(44 46 52)",
@@ -1848,7 +1848,7 @@ const Inbox = ({
                         </span>
                       )} */}
 
-                      {/* {tab.id === "whatsapp" && unreadWhatsAppCount > 0 && (
+                        {/* {tab.id === "whatsapp" && unreadWhatsAppCount > 0 && (
                         <span
                           style={{
                             backgroundColor: "#25D366",
@@ -1868,9 +1868,28 @@ const Inbox = ({
                         </span>
                       )} */}
 
-                      {tab.id === "openIssue" &&
-                        filteredActionItems &&
-                        filteredActionItems.length > 0 && (
+                        {tab.id === "openIssue" &&
+                          filteredActionItems &&
+                          filteredActionItems.length > 0 && (
+                            <span
+                              style={{
+                                backgroundColor: "rgb(44 46 52)",
+                                color: "#A6A9B2",
+                                borderRadius: "50%",
+                                width: "18px",
+                                height: "18px",
+                                fontSize: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginLeft: "6px",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {filteredActionItems.length}
+                            </span>
+                          )}
+                        {tab.id === "notes" && notes.length > 0 && (
                           <span
                             style={{
                               backgroundColor: "rgb(44 46 52)",
@@ -1886,30 +1905,11 @@ const Inbox = ({
                               fontWeight: "bold",
                             }}
                           >
-                            {filteredActionItems.length}
+                            {notes.length}
                           </span>
                         )}
-                      {tab.id === "notes" && notes.length > 0 && (
-                        <span
-                          style={{
-                            backgroundColor: "rgb(44 46 52)",
-                            color: "#A6A9B2",
-                            borderRadius: "50%",
-                            width: "18px",
-                            height: "18px",
-                            fontSize: "12px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            marginLeft: "6px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {notes.length}
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                      </div>
+                    ))}
                 </div>
               </div>
               {/* Tab content rendered inside the div container */}
