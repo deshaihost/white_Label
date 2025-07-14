@@ -1960,6 +1960,7 @@ const Inbox = ({
                     key="whatsapp-section"
                     allConversationData={selectedConversation}
                     updateConversationFromApi={updateConversation}
+                    updateSpecificConversation={updateSpecificConversation}
                     propertyName={selectedConversation?.property_name}
                   />
                 </div>
