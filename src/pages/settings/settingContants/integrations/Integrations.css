@@ -2,7 +2,7 @@
 /* FYI page background is: #000212 */
 
 .settings-integrations {
-  padding: 20px;
+  padding: 42px;
 }
 
 .settings-integrations .grey-text {
@@ -158,4 +158,34 @@
 }
 .settings-integrations .main-tab-btn:hover {
   color: #6b8aff;
+}
+
+.settings-integrations .table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.settings-integrations .table th,
+.settings-integrations .table td {
+  padding-left: 32px;
+  padding-right: 32px;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.settings-integrations .table th:first-child,
+.settings-integrations .table td:first-child {
+  text-align: left;
+}
+
+.settings-integrations .table th:nth-child(2),
+.settings-integrations .table td:nth-child(2) {
+  text-align: center;
+}
+
+.settings-integrations .table th:last-child,
+.settings-integrations .table td:last-child {
+  text-align: right;
+  padding-right: 0;
+  margin-right: 24px;
 }

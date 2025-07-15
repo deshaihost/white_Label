@@ -74,6 +74,15 @@ const IntegrationsIndex = (ApiUserData) => {
   const [addingWebhook, setAddingWebhook] = useState(false);
   const [addWebhookError, setAddWebhookError] = useState('');
 
+  // Slack integration state
+  const [slackOauthCode, setSlackOauthCode] = useState("");
+  useEffect(() => {
+    // If this is a redirect from Slack OAuth, get the code from the URL
+    const queryParams = new URLSearchParams(window.location.search);
+    const code = queryParams.get("code");
+    if (code) { setSlackOauthCode(code); }
+  }, []);
+
   // Helper to refresh user data (if available from props)
   const refreshUserData = ApiUserData?.refreshUserData;
 
@@ -144,6 +153,19 @@ const IntegrationsIndex = (ApiUserData) => {
     } catch (error) {
       alert('Error deleting webhook');
     }
+  };
+
+  // Slack delete handler
+  const handleDeleteSlack = async (name) => {
+    if (!window.confirm("Are you sure you want to delete this Slack account?")) return;
+    // TODO: Call your delete API here if needed
+    // For now, just remove from local state
+    const slackAccounts = { ...(ApiUserData?.ApiUserData?.contact_information?.slack || {}) };
+    delete slackAccounts[name];
+    // If you want to update the backend, add API call here
+    // Optionally, update the parent or refresh user data
+    // setSlackAccounts(slackAccounts); // If you use local state
+    if (typeof refreshUserData === 'function') refreshUserData();
   };
 
   // Prepare connected integrations section based on mainTab
@@ -276,20 +298,30 @@ const IntegrationsIndex = (ApiUserData) => {
                   )}
                   Webhook Endpoints
                 </h4>
+                {/* Webhook Table with headers */}
                 <div className="table-responsive">
                   <table className="table">
+                    <colgroup>
+                      <col style={{ width: '40%' }} />
+                      <col style={{ width: '30%' }} />
+                      <col style={{ width: '30%' }} />
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th className="fs-14 text-white">Name</th>
+                        <th className="fs-14 text-white">Status</th>
+                        <th className="fs-14 text-white">Action</th>
+                      </tr>
+                    </thead>
                     <tbody>
                       {Object.entries(webhooks).map(([url, details]) => (
                         <tr key={url}>
                           <td><h6 className="fs-14 text-white m-0">{details.name || url}</h6></td>
-                          <td><h6 className="fs-14 text-white m-0">{url}</h6></td>
                           <td><h6 className="fs-14 grey-text m-0">Confirmed</h6></td>
                           <td>
-                            <span className="d-flex justify-content-center">
-                              <Link to="#" style={{ color: "red", fontSize: "1rem", lineHeight: '1.2', margin: '0' }} className="text-link" onClick={() => handleDeleteWebhook(url)}>
-                                Delete
-                              </Link>
-                            </span>
+                            <Link to="#" style={{ color: "red", fontSize: "1rem", lineHeight: '1.2', margin: '0' }} className="text-link" onClick={() => handleDeleteWebhook(url)}>
+                              Delete
+                            </Link>
                           </td>
                         </tr>
                       ))}
@@ -330,6 +362,77 @@ const IntegrationsIndex = (ApiUserData) => {
                 {Object.keys(webhooks).length === 0 && (
                   <div style={{ color: '#fff', padding: '16px' }}>No webhooks connected yet.</div>
                 )}
+              </div>
+              {/* Slack Accounts Section */}
+              <div style={{ marginTop: '40px' }}>
+                <h4 className="fs-14 mb-4 mt-5" style={{ color: 'white' }}>Slack Accounts</h4>
+                {(() => {
+                  const slackAccounts = ApiUserData?.ApiUserData?.contact_information?.slack || {};
+                  const hasSlack = Object.keys(slackAccounts).length > 0;
+                  if (hasSlack) {
+                    return (
+                      <div className="table-responsive">
+                        <table className="table">
+                          <colgroup>
+                            <col style={{ width: '40%' }} />
+                            <col style={{ width: '30%' }} />
+                            <col style={{ width: '30%' }} />
+                          </colgroup>
+                          <thead>
+                            <tr>
+                              <th className="fs-14 text-white">Name</th>
+                              <th className="fs-14 text-white">Status</th>
+                              <th className="fs-14 text-white">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {Object.entries(slackAccounts).map(([name, details]) => (
+                              <tr key={name}>
+                                <td>
+                                  <h6 className="fs-14 text-white m-0">{name}</h6>
+                                </td>
+                                <td>
+                                  <h6 className="fs-14 grey-text m-0">Confirmed</h6>
+                                </td>
+                                <td>
+                                  <a
+                                    href="#"
+                                    style={{ color: "red", fontSize: "1rem", lineHeight: '1.2', margin: '0' }}
+                                    className="text-link"
+                                    onClick={() => handleDeleteSlack(name)}
+                                  >
+                                    Delete
+                                  </a>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                        <a
+                          href="https://slack.com/oauth/v2/authorize?scope=incoming-webhook%2Cchannels%3Aread%2Cchat%3Awrite&amp;redirect_uri=https%3A%2F%2Fhostbuddy.ai%2Fsetting%2Fcontact&amp;client_id=6640565127554.7377267101792"
+                          className="text-link"
+                          style={{ color: '#146ef5', fontSize: '18px', textDecoration: 'none' }}
+                        >
+                          + Add Slack Account
+                        </a>
+                      </div>
+                    );
+                  }
+                })()}
+              </div>
+              {/* Slack Integration UI (OAuth loader) remains below if needed */}
+              <div className="recipient" style={{ marginTop: '20px' }}>
+                {slackOauthCode ? (
+                  <div className="slack-container">
+                    <p>We're adding HostBuddy AI to your Slack account. Please wait...</p>
+                    <Loader />
+                  </div>
+                ) : null}
               </div>
             </>
           )}
