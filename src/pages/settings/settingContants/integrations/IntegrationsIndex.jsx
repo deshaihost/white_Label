@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import Loader from '../../../../helper/Loader';
 import ConnectToWhatsApp from './connectWhatsAppButton';
@@ -15,8 +15,9 @@ import WhatsappIntegration from './whatsappIntegration';
 import ConnectToOpenPhone from './connectOpenPhoneButton';
 import OpenPhoneIntegration from './OpenPhoneIntegration';
 import { getSubscriptionStatus } from '../../../../helper/Authorized';
-import LockIcon from './Icons/Integartion_lock.svg';
+import LockIcon from '../../../inbox/inboxSection/preferences/icons/lock.svg';
 import './Integrations.css';
+import axios from 'axios';
 
 const IntegrationsIndex = (ApiUserData) => {
   const turnoUserId = Boolean(ApiUserData?.ApiUserData?.turno_user_id);
@@ -56,49 +57,116 @@ const IntegrationsIndex = (ApiUserData) => {
   // State for selected integration tab
   const [selectedIntegration, setSelectedIntegration] = useState(connectedIntegrations[0] || '');
 
-  return (
-    <div className='settings-integrations'>
-      <div>
-        <h3 className="mb-4">Integrations</h3>
-        <div className="tiles-container">
-          {/* Whatsapp */}
-          {!whatsappPhoneNumber && (
-            isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/WhatsApp_logo.svg', 'WhatsApp Logo', 'Connect your WhatsApp Business Account to view your WhatsApp conversations in your inbox, and let HostBuddy automatically respond to your guests over WhatsApp.') : <ConnectToWhatsApp />
-          )}
-          {/* Turno */}
-          {!turnoUserId && (
-            isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/turno-logo-with-text.webp', 'Turno Logo', 'Connecting your Turno account lets you use \"Property Ready\" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
-          )}
-          {/* Minut */}
-          {!minutUserId && (
-            isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/minut_logo_text.svg', 'Minut Logo', 'Connect with Minut’s insights platform to automate and personalize guest messaging for noise or occupancy events. streamline your operations, keep your property protected, and enhance guest experience.') : <ConnectToMinut />
-          )}
-          {/* Tidy */}
-          {!tidyUserId && (
-            isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/tidy_logo_black_text.svg', 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
-          )}
-          {/* Hostfully Guidebooks */}
-          {!hostfullyGuidebooksUserId && (
-            isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/hostfully_circle.svg', 'Hostfully Guidebooks Logo', 'Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.', { width: '50px', height: '50px' }) : <ConnectToHostfullyGuidebooks />
-          )}
-          {/* OpenPhone */}
-          {!openphoneNumber && (
-            isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/openphone_logo.webp', 'OpenPhone Logo', 'Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.') : <ConnectToOpenPhone />
-          )}
-          {/* Notion */}
-          {!notionUserId && (
-            isProPlan ? renderUpgradeTile('https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png', 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
-          )}
-        </div>
-      </div>
+  // Tab state for top-level tabs
+  const [mainTab, setMainTab] = useState('Communication channels');
+  const mainTabs = ['Communication channels', 'Third-party apps', 'Webhooks'];
 
-      <div className="connected-integrations-section">
+  // --- Webhook integrations from user data ---
+  const [webhooks, setWebhooks] = useState(ApiUserData?.ApiUserData?.contact_information?.webhook || {});
+  useEffect(() => {
+    setWebhooks(ApiUserData?.ApiUserData?.contact_information?.webhook || {});
+  }, [ApiUserData]);
+
+  // Add Webhook state
+  const [showAddWebhook, setShowAddWebhook] = useState(false);
+  const [newWebhookName, setNewWebhookName] = useState('');
+  const [newWebhookUrl, setNewWebhookUrl] = useState('');
+  const [addingWebhook, setAddingWebhook] = useState(false);
+  const [addWebhookError, setAddWebhookError] = useState('');
+
+  // Helper to refresh user data (if available from props)
+  const refreshUserData = ApiUserData?.refreshUserData;
+
+  // Add webhook API logic (mirroring contactSection.jsx)
+  const addWebhook = async () => {
+    setAddingWebhook(true);
+    setAddWebhookError('');
+    if (!newWebhookName || !newWebhookUrl) {
+      setAddWebhookError('Please fill all fields');
+      setAddingWebhook(false);
+      return;
+    }
+    if (!newWebhookUrl.startsWith('https://')) {
+      setAddWebhookError('URL must start with https://');
+      setAddingWebhook(false);
+      return;
+    }
+    try {
+      const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+      const API_KEY = process.env.REACT_APP_API_KEY;
+      const dataToSend = { 'contact_info': { [newWebhookUrl]: { name: newWebhookName, type: 'webhook' } } };
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+      const response = await axios.post(`${baseUrl}/add_contact`, dataToSend, config);
+      if (response.status === 200) {
+        setShowAddWebhook(false);
+        setNewWebhookName('');
+        setNewWebhookUrl('');
+        setWebhooks(prev => ({
+          ...prev,
+          [newWebhookUrl]: { name: newWebhookName, type: 'webhook' }
+        }));
+        if (typeof refreshUserData === 'function') refreshUserData();
+      } else {
+        setAddWebhookError(response?.data?.error || 'Failed to add webhook');
+      }
+    } catch (error) {
+      setAddWebhookError('Error adding webhook');
+    } finally {
+      setAddingWebhook(false);
+    }
+  };
+
+  // Add webhook delete logic
+  const handleDeleteWebhook = async (url) => {
+    if (!window.confirm("Are you sure you want to delete this webhook?")) return;
+    try {
+      const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+      const API_KEY = process.env.REACT_APP_API_KEY;
+      const params = new URLSearchParams({ contact_type: 'webhook', contact_information: url }).toString();
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+      const response = await axios.delete(`${baseUrl}/delete_contact?${params}`, config);
+      if (response.status === 200) {
+        setWebhooks(prev => {
+          const updated = { ...prev };
+          delete updated[url];
+          return updated;
+        });
+        if (typeof refreshUserData === 'function') refreshUserData();
+      } else {
+        alert(response?.data?.error || 'Failed to delete webhook');
+      }
+    } catch (error) {
+      alert('Error deleting webhook');
+    }
+  };
+
+  // Prepare connected integrations section based on mainTab
+  let connectedIntegrationsSection = null;
+  if (mainTab !== 'Webhooks') {
+    let filteredIntegrations = [];
+    if (mainTab === 'Communication channels') {
+      if (whatsappPhoneNumber) filteredIntegrations.push('WhatsApp');
+      if (openphoneNumber) filteredIntegrations.push('OpenPhone');
+    } else if (mainTab === 'Third-party apps') {
+      if (turnoUserId) filteredIntegrations.push('Turno');
+      if (minutUserId) filteredIntegrations.push('Minut');
+      if (tidyUserId) filteredIntegrations.push('Tidy');
+      if (hostfullyGuidebooksUserId) filteredIntegrations.push('Hostfully Guidebooks');
+      if (notionUserId) filteredIntegrations.push('Notion');
+    }
+    connectedIntegrationsSection = (
+      <>
         <h4 className="connected-title">Connected integrations</h4>
-        {connectedIntegrations.length > 0 ? (
+        {filteredIntegrations.length > 0 ? (
           <>
-            {/* Render tabs for connected integrations */}
             <div className="integrations-tabs">
-              {connectedIntegrations.map((integration) => (
+              {filteredIntegrations.map((integration) => (
                 <button key={integration} className={`tab-button ${selectedIntegration === integration ? 'active' : ''}`} onClick={() => setSelectedIntegration(integration)}>
                   {integration}
                 </button>
@@ -135,14 +203,141 @@ const IntegrationsIndex = (ApiUserData) => {
             {selectedIntegration === 'OpenPhone' && (
               <OpenPhoneIntegration ApiUserData={ApiUserData} />
             )}
-
-            {/* Add similar blocks for additional integrations */}
           </>
         ) : (
           <p className="no-integrations-message">
             No integrations connected yet. Connect to an integration above to get started.
           </p>
         )}
+      </>
+    );
+  }
+
+  return (
+    <div className='settings-integrations'>
+      {/* Main Tab Bar */}
+      <div className="main-tabs-bar">
+        {mainTabs.map(tab => (
+          <button
+            key={tab}
+            className={`main-tab-btn${mainTab === tab ? ' active' : ''}`}
+            onClick={() => setMainTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+      <div>
+        <h3 className="mb-4">Integrations</h3>
+        <div className="tiles-container">
+          {/* Render tiles based on mainTab */}
+          {mainTab === 'Communication channels' && (
+            <>
+              {/* Whatsapp */}
+              {!whatsappPhoneNumber && (
+                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/WhatsApp_logo.svg', 'WhatsApp Logo', 'Connect your WhatsApp Business Account to view your WhatsApp conversations in your inbox, and let HostBuddy automatically respond to your guests over WhatsApp.') : <ConnectToWhatsApp />
+              )}
+              {/* OpenPhone */}
+              {!openphoneNumber && (
+                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/openphone_logo.webp', 'OpenPhone Logo', 'Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.') : <ConnectToOpenPhone />
+              )}
+            </>
+          )}
+          {mainTab === 'Third-party apps' && (
+            <>
+              {/* Turno */}
+              {!turnoUserId && (
+                isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/turno-logo-with-text.webp', 'Turno Logo', 'Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
+              )}
+              {/* Minut */}
+              {!minutUserId && (
+                isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/minut_logo_text.svg', 'Minut Logo', 'Connect with Minut’s insights platform to automate and personalize guest messaging for noise or occupancy events. streamline your operations, keep your property protected, and enhance guest experience.') : <ConnectToMinut />
+              )}
+              {/* Tidy */}
+              {!tidyUserId && (
+                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/tidy_logo_black_text.svg', 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
+              )}
+              {/* Hostfully Guidebooks */}
+              {!hostfullyGuidebooksUserId && (
+                isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/hostfully_circle.svg', 'Hostfully Guidebooks Logo', 'Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.', { width: '50px', height: '50px' }) : <ConnectToHostfullyGuidebooks />
+              )}
+              {/* Notion */}
+              {!notionUserId && (
+                isProPlan ? renderUpgradeTile('https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png', 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
+              )}
+            </>
+          )}
+          {mainTab === 'Webhooks' && (
+            <>
+              <div style={{ width: '100%', marginTop: '20px' }}>
+                <h4 className="fs-14 mb-4 mt-5 d-flex align-items-center">
+                  {isProPlan && (
+                    <img src={LockIcon} alt="lock" style={{ width: '14px', marginRight: '6px' }} />
+                  )}
+                  Webhook Endpoints
+                </h4>
+                <div className="table-responsive">
+                  <table className="table">
+                    <tbody>
+                      {Object.entries(webhooks).map(([url, details]) => (
+                        <tr key={url}>
+                          <td><h6 className="fs-14 text-white m-0">{details.name || url}</h6></td>
+                          <td><h6 className="fs-14 text-white m-0">{url}</h6></td>
+                          <td><h6 className="fs-14 grey-text m-0">Confirmed</h6></td>
+                          <td>
+                            <span className="d-flex justify-content-center">
+                              <Link to="#" style={{ color: "red", fontSize: "1rem", lineHeight: '1.2', margin: '0' }} className="text-link" onClick={() => handleDeleteWebhook(url)}>
+                                Delete
+                              </Link>
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {/* Add Webhook Form */}
+                {showAddWebhook ? (
+                  <div className="recipient" style={{ marginBottom: '18px' }}>
+                    <div className="row">
+                      <div className="col input_group">
+                        <label htmlFor="webhookName">Name</label>
+                        <input type="text" id="webhookName" name="name" className="form-control" value={newWebhookName} onChange={e => setNewWebhookName(e.target.value)} />
+                      </div>
+                      <div className="col input_group">
+                        <label htmlFor="webhookUrl">Webhook URL</label>
+                        <input type="text" id="webhookUrl" name="url" className="form-control" placeholder="https://example.com/webhook" value={newWebhookUrl} onChange={e => setNewWebhookUrl(e.target.value)} />
+                      </div>
+                    </div>
+                    {addWebhookError && <div style={{ color: 'red', marginTop: '8px' }}>{addWebhookError}</div>}
+                    <span className="d-flex justify-content-center">
+                      {!addingWebhook ? (
+                        <Link to="#" className="text-link" style={{ marginTop: '20px', textAlign: 'center' }} onClick={addWebhook}>
+                          Submit
+                        </Link>
+                      ) : (
+                        <Loader />
+                      )}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="d-flex justify-content-center" style={{ marginTop: '10px', marginBottom: '18px' }}>
+                    <Link to="#" className="text-link" onClick={() => setShowAddWebhook(true)}>
+                      + Add Webhook
+                    </Link>
+                  </span>
+                )}
+                {Object.keys(webhooks).length === 0 && (
+                  <div style={{ color: '#fff', padding: '16px' }}>No webhooks connected yet.</div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="connected-integrations-section">
+        {connectedIntegrationsSection}
       </div>
     </div>
   );
