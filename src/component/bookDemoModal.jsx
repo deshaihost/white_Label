@@ -41,9 +41,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
   */
 
   // NEW LINKS
-  const oneOnOneCamiloDemoLink = 'https://calendly.com/camilo-hostbuddy/30min';
-  const mediumDemoLink = 'https://calendly.com/d/cmyr-2pj-brv/hostbuddy-ai-product-demo';
-  const bigDemoLink = 'https://calendly.com/d/cm2q-5ht-w5m/hostbuddy-ai-demo';
+  const allOneOnOneDemosLink = 'https://calendly.com/d/cm2q-5ht-w5m/hostbuddy-ai-demo';
   const groupDemoLink = 'https://calendly.com/hostbuddy-/group-demo';
 
 
@@ -118,14 +116,14 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     setIsSubmitted(true);
     trackFormSubmission();
 
-    let url = bigDemoLink; // default for 51+ properties
+    let url = allOneOnOneDemosLink; // default for 51+ properties
 
     if (parseInt(formData.propertyCount) <= 15) { 
-      url = oneOnOneCamiloDemoLink; 
+      url = allOneOnOneDemosLink; 
     } else if (parseInt(formData.propertyCount) <= 50) { 
-      url = mediumDemoLink; 
+      url = allOneOnOneDemosLink; 
     } else { 
-      url = bigDemoLink; 
+      url = allOneOnOneDemosLink; 
     }
 
     setRedirectURL(url);
