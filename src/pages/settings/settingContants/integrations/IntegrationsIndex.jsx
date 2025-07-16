@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Loader from '../../../../helper/Loader';
 import ConnectToWhatsApp from './connectWhatsAppButton';
 import ConnectToTurno from "./connectTurnoButton";
@@ -18,8 +18,13 @@ import { getSubscriptionStatus } from '../../../../helper/Authorized';
 import LockIcon from '../../../inbox/inboxSection/preferences/icons/lock.svg';
 import './Integrations.css';
 import axios from 'axios';
+import ToastHandle from '../../../../helper/ToastMessage';
+import { useDispatch } from 'react-redux';
+import { getUserDataActions } from '../../../../redux/actions';
 
 const IntegrationsIndex = (ApiUserData) => {
+  const dispatch = useDispatch();
+  const location = useLocation();
   const turnoUserId = Boolean(ApiUserData?.ApiUserData?.turno_user_id);
   const minutUserId = Boolean(ApiUserData?.ApiUserData?.minut_user_id);
   const tidyUserId = Boolean(ApiUserData?.ApiUserData?.tidy_user_id);
@@ -76,12 +81,48 @@ const IntegrationsIndex = (ApiUserData) => {
 
   // Slack integration state
   const [slackOauthCode, setSlackOauthCode] = useState("");
+  
+  // If this is a redirect from Slack OAuth, get the code from the URL
   useEffect(() => {
-    // If this is a redirect from Slack OAuth, get the code from the URL
-    const queryParams = new URLSearchParams(window.location.search);
+    const queryParams = new URLSearchParams(location.search);
     const code = queryParams.get("code");
     if (code) { setSlackOauthCode(code); }
-  }, []);
+  }, [location]);
+
+  // Complete Slack OAuth API
+  const completeSlackOauthAPI = async (code) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const dataToSend = { code };
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+
+      const response = await axios.post(`${baseUrl}/complete_slack_oauth`, dataToSend, config);
+
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        setSlackOauthCode(""); // reset the slackOauthCode state
+        dispatch(getUserDataActions(false)); // update our data from the API
+        if (typeof refreshUserData === 'function') refreshUserData();
+      } else {
+        ToastHandle(response?.data?.error, "danger");
+      }
+      return response.status;
+    } catch (error) {
+      ToastHandle("Unable to complete Slack OAuth", "danger");
+    }
+  };
+
+  // If we have a Slack OAuth code, complete the OAuth process
+  useEffect(() => {
+    if (slackOauthCode) {
+      completeSlackOauthAPI(slackOauthCode);
+    }
+  }, [slackOauthCode]);
 
   // Helper to refresh user data (if available from props)
   const refreshUserData = ApiUserData?.refreshUserData;
@@ -302,13 +343,15 @@ const IntegrationsIndex = (ApiUserData) => {
                 <div className="table-responsive">
                   <table className="table">
                     <colgroup>
-                      <col style={{ width: '40%' }} />
-                      <col style={{ width: '30%' }} />
-                      <col style={{ width: '30%' }} />
+                      <col style={{ width: '25%' }} />
+                      <col style={{ width: '35%' }} />
+                      <col style={{ width: '20%' }} />
+                      <col style={{ width: '20%' }} />
                     </colgroup>
                     <thead>
                       <tr>
                         <th className="fs-14 text-white">Name</th>
+                        <th className="fs-14 text-white">Endpoint</th>
                         <th className="fs-14 text-white">Status</th>
                         <th className="fs-14 text-white">Action</th>
                       </tr>
@@ -317,6 +360,7 @@ const IntegrationsIndex = (ApiUserData) => {
                       {Object.entries(webhooks).map(([url, details]) => (
                         <tr key={url}>
                           <td><h6 className="fs-14 text-white m-0">{details.name || url}</h6></td>
+                          <td><h6 className="fs-14 text-white m-0" style={{ wordBreak: 'break-all' }}>{url}</h6></td>
                           <td><h6 className="fs-14 grey-text m-0">Confirmed</h6></td>
                           <td>
                             <Link to="#" style={{ color: "red", fontSize: "1rem", lineHeight: '1.2', margin: '0' }} className="text-link" onClick={() => handleDeleteWebhook(url)}>
@@ -364,7 +408,7 @@ const IntegrationsIndex = (ApiUserData) => {
                 )}
               </div>
               {/* Slack Accounts Section */}
-              <div style={{ marginTop: '40px' }}>
+              <div style={{ marginTop: '40px', width: '100%' }}>
                 <h4 className="fs-14 mb-4 mt-5" style={{ color: 'white' }}>Slack Accounts</h4>
                 {(() => {
                   const slackAccounts = ApiUserData?.ApiUserData?.contact_information?.slack || {};
