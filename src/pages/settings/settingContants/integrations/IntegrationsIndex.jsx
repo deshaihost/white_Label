@@ -16,6 +16,7 @@ import ConnectToOpenPhone from './connectOpenPhoneButton';
 import OpenPhoneIntegration from './OpenPhoneIntegration';
 import { getSubscriptionStatus } from '../../../../helper/Authorized';
 import LockIcon from '../../../inbox/inboxSection/preferences/icons/lock.svg';
+import InboxUpgrade from '../../../account/inbox_Upgrade/InboxUpgrade';
 import './Integrations.css';
 import axios from 'axios';
 import ToastHandle from '../../../../helper/ToastMessage';
@@ -82,6 +83,9 @@ const IntegrationsIndex = (ApiUserData) => {
   // Slack integration state
   const [slackOauthCode, setSlackOauthCode] = useState("");
   
+  // Upgrade popup state
+  const [showUpgradePopup, setShowUpgradePopup] = useState(false);
+  
   // If this is a redirect from Slack OAuth, get the code from the URL
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -126,6 +130,29 @@ const IntegrationsIndex = (ApiUserData) => {
 
   // Helper to refresh user data (if available from props)
   const refreshUserData = ApiUserData?.refreshUserData;
+
+  // Handle upgrade popup close
+  const handleUpgradePopupClose = () => {
+    setShowUpgradePopup(false);
+  };
+
+  // Handle Slack button click for pro users
+  const handleSlackButtonClick = (e) => {
+    if (isProPlan) {
+      e.preventDefault();
+      setShowUpgradePopup(true);
+    }
+  };
+
+  // Handle Add Webhook button click for pro users
+  const handleAddWebhookClick = (e) => {
+    if (isProPlan) {
+      e.preventDefault();
+      setShowUpgradePopup(true);
+    } else {
+      setShowAddWebhook(true);
+    }
+  };
 
   // Add webhook API logic (mirroring contactSection.jsx)
   const addWebhook = async () => {
@@ -398,7 +425,7 @@ const IntegrationsIndex = (ApiUserData) => {
                   </div>
                 ) : (
                   <span className="d-flex justify-content-center" style={{ marginTop: '10px', marginBottom: '18px' }}>
-                    <Link to="#" className="text-link" onClick={() => setShowAddWebhook(true)}>
+                    <Link to="#" className="text-link" onClick={handleAddWebhookClick}>
                       + Add Webhook
                     </Link>
                   </span>
@@ -458,7 +485,7 @@ const IntegrationsIndex = (ApiUserData) => {
                     return (
                       <div style={{ textAlign: 'center', marginTop: '20px' }}>
                         <Link
-                          to="/setting/contact"
+                          to={isProPlan ? "#" : "/setting/contact"}
                           className="text-link"
                           style={{ 
                             display: 'inline-flex',
@@ -475,6 +502,7 @@ const IntegrationsIndex = (ApiUserData) => {
                             transition: 'all 0.3s ease',
                             cursor: 'pointer'
                           }}
+                          onClick={handleSlackButtonClick}
                           onMouseOver={(e) => {
                             e.target.style.backgroundColor = '#f8f9fa';
                             e.target.style.transform = 'translateY(-1px)';
@@ -516,6 +544,39 @@ const IntegrationsIndex = (ApiUserData) => {
       <div className="connected-integrations-section">
         {connectedIntegrationsSection}
       </div>
+
+      {/* Upgrade Popup Modal */}
+      {showUpgradePopup && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000
+          }}
+          onClick={handleUpgradePopupClose}
+        >
+          <div 
+            style={{
+           
+              borderRadius: '8px',
+              maxWidth: '600px',
+              width: '90%',
+              maxHeight: '80vh',
+              overflow: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <InboxUpgrade onClose={handleUpgradePopupClose} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
