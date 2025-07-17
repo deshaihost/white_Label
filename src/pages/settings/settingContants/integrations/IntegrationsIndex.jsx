@@ -60,12 +60,27 @@ const IntegrationsIndex = (ApiUserData) => {
   if (whatsappPhoneNumber) connectedIntegrations.push('WhatsApp');
   if (openphoneNumber) connectedIntegrations.push('OpenPhone');
 
-  // State for selected integration tab
-  const [selectedIntegration, setSelectedIntegration] = useState(connectedIntegrations[0] || '');
-
   // Tab state for top-level tabs
   const [mainTab, setMainTab] = useState('Communication channels');
   const mainTabs = ['Communication channels', 'Third-party apps', 'Webhooks'];
+  
+  // Filter integrations based on mainTab
+  const getFilteredIntegrations = (tab) => {
+    if (tab === 'Communication channels') {
+      return connectedIntegrations.filter(integration => 
+        integration === 'WhatsApp' || integration === 'OpenPhone'
+      );
+    } else if (tab === 'Third-party apps') {
+      return connectedIntegrations.filter(integration => 
+        ['Turno', 'Minut', 'Tidy', 'Hostfully Guidebooks', 'Notion'].includes(integration)
+      );
+    }
+    return [];
+  };
+  
+  // State for selected integration tab
+  const filteredIntegrations = getFilteredIntegrations(mainTab);
+  const [selectedIntegration, setSelectedIntegration] = useState(filteredIntegrations[0] || '');
 
   // --- Webhook integrations from user data ---
   const [webhooks, setWebhooks] = useState(ApiUserData?.ApiUserData?.contact_information?.webhook || {});
@@ -92,6 +107,12 @@ const IntegrationsIndex = (ApiUserData) => {
     const code = queryParams.get("code");
     if (code) { setSlackOauthCode(code); }
   }, [location]);
+  
+  // Update selected integration when main tab changes
+  useEffect(() => {
+    const filteredIntegrations = getFilteredIntegrations(mainTab);
+    setSelectedIntegration(filteredIntegrations[0] || '');
+  }, [mainTab]);
 
   // Complete Slack OAuth API
   const completeSlackOauthAPI = async (code) => {
@@ -239,17 +260,7 @@ const IntegrationsIndex = (ApiUserData) => {
   // Prepare connected integrations section based on mainTab
   let connectedIntegrationsSection = null;
   if (mainTab !== 'Webhooks') {
-    let filteredIntegrations = [];
-    if (mainTab === 'Communication channels') {
-      if (whatsappPhoneNumber) filteredIntegrations.push('WhatsApp');
-      if (openphoneNumber) filteredIntegrations.push('OpenPhone');
-    } else if (mainTab === 'Third-party apps') {
-      if (turnoUserId) filteredIntegrations.push('Turno');
-      if (minutUserId) filteredIntegrations.push('Minut');
-      if (tidyUserId) filteredIntegrations.push('Tidy');
-      if (hostfullyGuidebooksUserId) filteredIntegrations.push('Hostfully Guidebooks');
-      if (notionUserId) filteredIntegrations.push('Notion');
-    }
+    const filteredIntegrations = getFilteredIntegrations(mainTab);
     connectedIntegrationsSection = (
       <>
         <h4 className="connected-title">Connected integrations</h4>
@@ -564,6 +575,7 @@ const IntegrationsIndex = (ApiUserData) => {
       </div>
 
       <div className="connected-integrations-section">
+    
         {connectedIntegrationsSection}
       </div>
 
