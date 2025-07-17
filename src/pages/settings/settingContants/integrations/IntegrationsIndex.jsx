@@ -331,6 +331,19 @@ const IntegrationsIndex = (ApiUserData) => {
               {!openphoneNumber && (
                 isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/openphone_logo.webp', 'OpenPhone Logo', 'Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.') : <ConnectToOpenPhone />
               )}
+              {/* Slack */}
+              {isProPlan ? 
+                renderUpgradeTile('https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg', 'Slack Logo', 'Connect your Slack workspace to receive notifications and interact with HostBuddy directly from your Slack channels.', { width: '50px', height: '50px' }) 
+                : 
+                <div className="partner-tile">
+                  <img className="partner-logo" alt="Slack Logo" src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg" style={{ width: '50px', height: '50px' }} />
+                  <p>Connect your Slack workspace to receive notifications and interact with HostBuddy directly from your Slack channels.</p>
+                  <Link to="/setting/contact" className="btn btn-primary" style={{ borderRadius: '50px', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                    Connect Slack
+                  </Link>
+                </div>
+              }
+             
             </>
           )}
           {mainTab === 'Third-party apps' && (
@@ -434,7 +447,8 @@ const IntegrationsIndex = (ApiUserData) => {
                   <div style={{ color: '#fff', padding: '16px' }}>No webhooks connected yet.</div>
                 )}
               </div>
-              {/* Slack Accounts Section */}
+              {/* Slack Accounts Section - Commented out as requested */}
+              {/*
               <div style={{ marginTop: '40px', width: '100%' }}>
                 <h4 className="fs-14 mb-4 mt-5" style={{ color: 'white' }}>Slack Accounts</h4>
                 {(() => {
@@ -527,7 +541,10 @@ const IntegrationsIndex = (ApiUserData) => {
                   }
                 })()}
               </div>
-              {/* Slack Integration UI (OAuth loader) remains below if needed */}
+              */}
+
+              {/* Slack Integration UI (OAuth loader) - Also commented out */}
+              {/*
               <div className="recipient" style={{ marginTop: '20px' }}>
                 {slackOauthCode ? (
                   <div className="slack-container">
@@ -536,6 +553,7 @@ const IntegrationsIndex = (ApiUserData) => {
                   </div>
                 ) : null}
               </div>
+              */}
             </>
           )}
         </div>
