@@ -305,8 +305,10 @@ const IntegrationsIndex = (ApiUserData) => {
 
   return (
     <div className='settings-integrations'>
+        <h3 className="mb-4">Integrations</h3>
       {/* Main Tab Bar */}
       <div className="main-tabs-bar">
+       
         {mainTabs.map(tab => (
           <button
             key={tab}
@@ -318,7 +320,7 @@ const IntegrationsIndex = (ApiUserData) => {
         ))}
       </div>
       <div>
-        <h3 className="mb-4">Integrations</h3>
+        {/* <h3 className="mb-4">Integrations</h3> */}
         <div className="tiles-container">
           {/* Render tiles based on mainTab */}
           {mainTab === 'Communication channels' && (
