@@ -325,22 +325,19 @@ const IntegrationsIndex = (ApiUserData) => {
             <>
               {/* Whatsapp */}
               {!whatsappPhoneNumber && (
-                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/WhatsApp_logo.svg', 'WhatsApp Logo', 'Connect your WhatsApp Business Account to view your WhatsApp conversations in your inbox, and let HostBuddy automatically respond to your guests over WhatsApp.') : <ConnectToWhatsApp />
+                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/WhatsApp_logo.svg', 'WhatsApp Logo', 'Connect your WhatsApp Business Account to view your WhatsApp conversations in your inbox, and let HostBuddy automatically respond to your guests over WhatsApp.', { width: '152px', height: '50px' }) : <ConnectToWhatsApp />
               )}
               {/* OpenPhone */}
               {!openphoneNumber && (
-                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/openphone_logo.webp', 'OpenPhone Logo', 'Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.') : <ConnectToOpenPhone />
+                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/openphone_logo.webp', 'OpenPhone Logo', 'Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.', { width: '153px', height: '36px' }) : <ConnectToOpenPhone />
               )}
               {/* Slack */}
               {isProPlan ? 
-                renderUpgradeTile('https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg', 'Slack Logo', 'Connect your Slack workspace to receive notifications and interact with HostBuddy directly from your Slack channels.', { width: '50px', height: '50px' }) 
+                renderUpgradeTile(require('./Icons/Slack-Logo.png'), 'Slack Logo', 'Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.', { width: '82px', height: '50px' }) 
                 : 
-                <div className="partner-tile">
-                  <img className="partner-logo" alt="Slack Logo" src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg" style={{ width: '50px', height: '50px' }} />
-                  <p>Connect your Slack workspace to receive notifications and interact with HostBuddy directly from your Slack channels.</p>
-                  <Link to="/setting/contact" className="btn btn-primary" style={{ borderRadius: '50px', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                    Connect Slack
-                  </Link>
+                <div className="partner-tile" style={{ cursor: 'pointer' }} onClick={() => window.location.href = '/setting/contact'}>
+                  <img className="partner-logo" alt="Slack Logo" src={require('./Icons/Slack-Logo.png')} style={{ width: '83px', height: '50px' }} />
+                  <p>Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.</p>
                 </div>
               }
              
