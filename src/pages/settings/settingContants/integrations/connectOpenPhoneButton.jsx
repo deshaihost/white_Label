@@ -24,7 +24,12 @@ const ConnectToOpenPhone = () => {
   return (
     <>
       <div className="partner-tile" onClick={handleConnectClick}>
-        <img className="partner-logo" alt="OpenPhone Logo" src="https://hostbuddylb.com/partners/openphone_logo.webp" style={{ height: '27px', width: '200px' }}
+        <img className="partner-logo" alt="OpenPhone Logo" src={require('./Icons/OpenPhone-Logo.png')} style={{ 
+          height: '27px', 
+          width: '200px',
+          mixBlendMode: 'multiply', /* This helps remove white backgrounds */
+          backgroundColor: 'transparent'
+        }}
         />
         <p>Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.</p>
       </div>

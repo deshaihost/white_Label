@@ -329,7 +329,12 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* OpenPhone */}
               {!openphoneNumber && (
-                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/openphone_logo.webp', 'OpenPhone Logo', 'Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.', { width: '153px', height: '36px' }) : <ConnectToOpenPhone />
+                isProPlan ? renderUpgradeTile(require('./Icons/OpenPhone-Blue.png'), 'OpenPhone Logo', 'Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.', { 
+                  width: '153px', 
+                  height: '36px',
+                  mixBlendMode: 'multiply',
+                  backgroundColor: 'transparent' 
+                }) : <ConnectToOpenPhone />
               )}
               {/* Slack */}
               {isProPlan ? 
