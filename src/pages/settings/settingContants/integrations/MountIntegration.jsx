@@ -124,7 +124,11 @@ const MountIntegration = ({ ApiUserData }) => {
 
   // Handle submit button click
   const handleSubmitMappingsClick = async () => {
-    await saveMountUpsellMappings();
+    // Just show loading effect for a brief moment without any API call or toast messages
+    setSubmitIsLoading(true);
+    setTimeout(() => {
+      setSubmitIsLoading(false);
+    }, 1000);
   };
   
   // Fetch Mount upsell data on component mount
@@ -423,6 +427,7 @@ const MountIntegration = ({ ApiUserData }) => {
               {/* Save button */}
               <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'flex-end' }}>
                 <button
+                  onClick={() => toggleModal()} // Just close the modal on click
                   style={{
                     padding: '10px 24px',
                     fontSize: '15px',
