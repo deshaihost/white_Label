@@ -9,12 +9,15 @@ const MountIntegration = ({ ApiUserData }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [showUpsellsModal, setShowUpsellsModal] = useState(false);
-  const [maxDistance, setMaxDistance] = useState(10);
-  const [daysBefore, setDaysBefore] = useState(3);
-  const [hoursBefore, setHoursBefore] = useState(24);
+  const [maxDistance, setMaxDistance] = useState('');
+  const [hoursDelay, setHoursDelay] = useState(0);
+  const [minutesDelay, setMinutesDelay] = useState(0);
   const [excludeStart, setExcludeStart] = useState("22:00");
   const [excludeEnd, setExcludeEnd] = useState("07:00");
   const [excludeHours, setExcludeHours] = useState(true);
+  const [initiationTemplate, setInitiationTemplate] = useState("Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?");
+  const [aiPersonalization, setAiPersonalization] = useState(true);
+  const [aiContentChecking, setAiContentChecking] = useState(true);
   
   // Mount upsell mappings
   const [apiPropertyMappings, setApiPropertyMappings] = useState({});
@@ -87,11 +90,14 @@ const MountIntegration = ({ ApiUserData }) => {
       'upsell_mapping': upsell_mapping,
       'settings': {
         'max_distance': maxDistance,
-        'days_before': daysBefore,
-        'hours_before': hoursBefore,
+        'hours_delay': hoursDelay,
+        'minutes_delay': minutesDelay,
         'exclude_hours': excludeHours,
         'exclude_start': excludeStart,
-        'exclude_end': excludeEnd
+        'exclude_end': excludeEnd,
+        'initiation_template': initiationTemplate,
+        'ai_personalization': aiPersonalization,
+        'ai_context_checking': aiContentChecking
       }
     };
 
@@ -241,15 +247,13 @@ const MountIntegration = ({ ApiUserData }) => {
             >
               ✕
             </button>
-            
             {/* Modal header */}
             <div style={{ textAlign: 'center', marginBottom: '25px' }}>
               <h2 style={{ color: '#fff', fontSize: '20px', fontWeight: '600', margin: '0 0 8px' }}>
-                Configure the Upsells Settings
+                Upsell Settings
               </h2>
               <div style={{ height: '2px', background: 'linear-gradient(90deg, rgba(109,109,43,0) 0%, rgba(109,109,43,1) 50%, rgba(109,109,43,0) 100%)', margin: '15px auto' }}></div>
             </div>
-            
             {/* Modal content */}
             <div style={{ color: '#fff' }}>
               {/* Maximum upsell distance */}
@@ -271,74 +275,45 @@ const MountIntegration = ({ ApiUserData }) => {
                     </svg>
                   </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '10px' }}>
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center',
+                <select
+                  value={maxDistance}
+                  onChange={e => setMaxDistance(e.target.value)}
+                  style={{
+                    width: '100%',
                     background: 'rgba(109, 109, 43, 0.2)',
+                    border: 'none',
+                    color: '#fff',
                     padding: '8px 12px',
                     borderRadius: '4px',
-                    width: '120px'
-                  }}>
-                    <input
-                      type="number"
-                      min="1"
-                      value={maxDistance}
-                      onChange={(e) => setMaxDistance(e.target.value)}
-                      style={{
-                        width: '70px',
-                        background: 'transparent',
-                        border: 'none',
-                        color: '#fff',
-                        textAlign: 'right',
-                        padding: '0',
-                        fontSize: '15px'
-                      }}
-                    />
-                    <span style={{ marginLeft: '8px', fontSize: '14px' }}>km</span>
-                  </div>
+                    fontSize: '15px',
+                    marginBottom: '5px'
+                  }}
+                >
+                  <option value="">Select</option>
+                  <option value="1">1 km</option>
+                  <option value="5">5 km</option>
+                  <option value="10">10 km</option>
+                  <option value="20">20 km</option>
+                  <option value="50">50 km</option>
+                </select>
+                <div style={{ fontSize: '12px', color: '#aaa', marginTop: '2px' }}>
+                  Maximum distance between your property address and upsells which HostBuddy will consider for trip planning
                 </div>
               </div>
-              
-              {/* Timing Section */}
+              {/* Upsell delay after booking confirmation */}
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '15px' }}>
-                  Timing
+                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '10px' }}>
+                  Upsell delay after booking confirmation
                 </label>
-                <p style={{ fontSize: '14px', color: '#ddd', marginBottom: '15px' }}>
-                  HostBuddy will initiate trip planning after booking is confirmed:
-                </p>
-                
-                {/* Days and Hours inputs */}
-                <div style={{ display: 'flex', gap: '15px', marginBottom: '15px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <input
-                      type="number"
-                      min="0"
-                      max="30"
-                      value={daysBefore}
-                      onChange={(e) => setDaysBefore(e.target.value)}
-                      style={{
-                        width: '50px',
-                        background: 'rgba(109, 109, 43, 0.2)',
-                        border: 'none',
-                        color: '#fff',
-                        textAlign: 'center',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        fontSize: '14px'
-                      }}
-                    />
-                    <span style={{ marginLeft: '8px', fontSize: '14px' }}>days</span>
-                  </div>
-                  
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <span style={{ fontSize: '14px', marginRight: '5px' }}>Hours:</span>
                     <input
                       type="number"
                       min="0"
                       max="72"
-                      value={hoursBefore}
-                      onChange={(e) => setHoursBefore(e.target.value)}
+                      value={hoursDelay}
+                      onChange={e => setHoursDelay(e.target.value)}
                       style={{
                         width: '50px',
                         background: 'rgba(109, 109, 43, 0.2)',
@@ -350,103 +325,142 @@ const MountIntegration = ({ ApiUserData }) => {
                         fontSize: '14px'
                       }}
                     />
-                    <span style={{ marginLeft: '8px', fontSize: '14px' }}>hours</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <span style={{ fontSize: '14px', marginRight: '5px' }}>Minutes:</span>
+                    <input
+                      type="number"
+                      min="0"
+                      max="59"
+                      value={minutesDelay}
+                      onChange={e => setMinutesDelay(e.target.value)}
+                      style={{
+                        width: '50px',
+                        background: 'rgba(109, 109, 43, 0.2)',
+                        border: 'none',
+                        color: '#fff',
+                        textAlign: 'center',
+                        padding: '8px',
+                        borderRadius: '4px',
+                        fontSize: '14px'
+                      }}
+                    />
                   </div>
                 </div>
-                
-                {/* Exclude hours option */}
-                <div style={{ marginTop: '20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
-                    <input
-                      type="checkbox"
-                      id="excludeHours"
-                      checked={excludeHours}
-                      onChange={(e) => setExcludeHours(e.target.checked)}
-                      style={{ marginRight: '10px' }}
-                    />
-                    <label htmlFor="excludeHours" style={{ fontSize: '14px' }}>
-                      Exclude certain hours from HostBuddy activity
-                    </label>
-                  </div>
-                  
-                  {excludeHours && (
-                    <div style={{ 
-                      marginLeft: '25px', 
-                      display: 'flex', 
-                      gap: '15px', 
-                      alignItems: 'center',
-                      background: 'rgba(80, 80, 80, 0.3)',
-                      padding: '10px',
-                      borderRadius: '6px'
-                    }}>
-                      <span style={{ fontSize: '14px' }}>From</span>
-                      <input
-                        type="time"
-                        value={excludeStart}
-                        onChange={(e) => setExcludeStart(e.target.value)}
-                        style={{
-                          background: 'rgba(109, 109, 43, 0.2)',
-                          border: 'none',
-                          color: '#fff',
-                          padding: '6px 10px',
-                          borderRadius: '4px',
-                          fontSize: '14px',
-                          colorScheme: 'dark',
-                          width: '100px'
-                        }}
-                      />
-                      
-                      <span style={{ fontSize: '14px' }}>to</span>
-                      <input
-                        type="time"
-                        value={excludeEnd}
-                        onChange={(e) => setExcludeEnd(e.target.value)}
-                        style={{
-                          background: 'rgba(109, 109, 43, 0.2)',
-                          border: 'none',
-                          color: '#fff',
-                          padding: '6px 10px',
-                          borderRadius: '4px',
-                          fontSize: '14px',
-                          colorScheme: 'dark',
-                          width: '100px'
-                        }}
-                      />
-                    </div>
-                  )}
-                  
-                  {excludeHours && (
-                    <p style={{ fontSize: '13px', color: '#aaa', marginTop: '10px', marginLeft: '25px', fontStyle: 'italic' }}>
-                      For example, if hours of {excludeStart} - {excludeEnd} are excluded, and guest books at 11pm, 
-                      the trip planning would only start during allowed hours.
-                    </p>
-                  )}
+                <div style={{ fontSize: '12px', color: '#aaa', marginTop: '5px' }}>
+                  On booking confirmation, HostBuddy will initiate Mount upsells after the specified time.
                 </div>
               </div>
-              
-              {/* Save button */}
-              <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'flex-end' }}>
-                <button
-                  onClick={() => toggleModal()} // Just close the modal on click
+              {/* Exclude hours for upsell */}
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '10px' }}>
+                  Exclude hours for upsell
+                </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '14px' }}>From</span>
+                  <input
+                    type="time"
+                    value={excludeStart}
+                    onChange={e => setExcludeStart(e.target.value)}
+                    style={{
+                      background: 'rgba(109, 109, 43, 0.2)',
+                      border: 'none',
+                      color: '#fff',
+                      padding: '6px 10px',
+                      borderRadius: '4px',
+                      fontSize: '14px',
+                      colorScheme: 'dark',
+                      width: '100px'
+                    }}
+                  />
+                  <span style={{ fontSize: '14px' }}>To</span>
+                  <input
+                    type="time"
+                    value={excludeEnd}
+                    onChange={e => setExcludeEnd(e.target.value)}
+                    style={{
+                      background: 'rgba(109, 109, 43, 0.2)',
+                      border: 'none',
+                      color: '#fff',
+                      padding: '6px 10px',
+                      borderRadius: '4px',
+                      fontSize: '14px',
+                      colorScheme: 'dark',
+                      width: '100px'
+                    }}
+                  />
+                </div>
+                <div style={{ fontSize: '12px', color: '#aaa', marginTop: '2px' }}>
+                  HostBuddy will not upsell during the excluded hours, following the timezone of the property location
+                </div>
+              </div>
+              {/* Initiation template */}
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '10px' }}>
+                  Initiation template
+                </label>
+                <textarea
+                  value={initiationTemplate}
+                  onChange={e => setInitiationTemplate(e.target.value)}
+                  rows={4}
                   style={{
-                    padding: '10px 24px',
-                    fontSize: '15px',
+                    width: '100%',
+                    background: 'rgba(109, 109, 43, 0.2)',
+                    border: 'none',
+                    color: '#fff',
+                    padding: '10px',
+                    borderRadius: '4px',
+                    fontSize: '14px',
+                    resize: 'vertical'
+                  }}
+                />
+              </div>
+              {/* AI Personalization toggle */}
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '18px', gap: '15px' }}>
+                <label style={{ fontSize: '15px', fontWeight: '500' }}>AI Personalization</label>
+                <input
+                  type="checkbox"
+                  checked={aiPersonalization}
+                  onChange={e => setAiPersonalization(e.target.checked)}
+                  style={{ width: '20px', height: '20px' }}
+                />
+              </div>
+              {/* AI Context Checking toggle */}
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px', gap: '15px' }}>
+                <label style={{ fontSize: '15px', fontWeight: '500' }}>AI Context Checking</label>
+                <input
+                  type="checkbox"
+                  checked={aiContentChecking}
+                  onChange={e => setAiContentChecking(e.target.checked)}
+                  style={{ width: '20px', height: '20px' }}
+                />
+              </div>
+              {/* Submit button */}
+              <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
+                <button
+                  onClick={() => {
+                    // Save settings logic here (can call saveMountUpsellMappings or similar)
+                    toggleModal();
+                  }}
+                  style={{
+                    padding: '10px 32px',
+                    fontSize: '16px',
                     fontWeight: '600',
                     color: '#fff',
-                    backgroundColor: 'rgb(34 141 62)',
+                    backgroundColor: 'rgb(109 109 43)',
                     border: 'none',
-                    borderRadius: '6px',
+                    borderRadius: '50px',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease'
                   }}
-                  onMouseOver={(e) => {
+                  onMouseOver={e => {
                     e.target.style.backgroundColor = 'rgb(129 129 53)';
                   }}
-                  onMouseOut={(e) => {
-                    e.target.style.backgroundColor = 'rgb(34 141 62)';
+                  onMouseOut={e => {
+                    e.target.style.backgroundColor = 'rgb(109 109 43)';
                   }}
                 >
-                  Save Settings
+                  Submit
                 </button>
               </div>
             </div>
