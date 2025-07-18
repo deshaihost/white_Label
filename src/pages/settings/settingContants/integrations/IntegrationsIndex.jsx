@@ -6,8 +6,10 @@ import ConnectToTurno from "./connectTurnoButton";
 import ConnectToMinut from './connectMinutButton';
 import ConnectToTidy from './connectTidyButton';
 import ConnectToNotion from './connectNotionButton';
+import ConnectToMount from './connectMountButton';
 import TurnoIntegration from './TurnoIntegration';
 import MinutIntegration from './MinutIntegration';
+import MountIntegration from './MountIntegration';
 import ConnectToHostfullyGuidebooks from './connectHostfullyGuidebooksButton';
 import HostfullyGuidebooksIntegration from './HostfullyGuidebooksIntegration';
 import NotionIntegration from './notionIntegration';
@@ -72,7 +74,7 @@ const IntegrationsIndex = (ApiUserData) => {
       );
     } else if (tab === 'Third-party apps') {
       return connectedIntegrations.filter(integration => 
-        ['Turno', 'Minut', 'Tidy', 'Hostfully Guidebooks', 'Notion'].includes(integration)
+        ['Turno', 'Minut', 'Tidy', 'Hostfully Guidebooks', 'Notion', 'Mount'].includes(integration)
       );
     }
     return [];
@@ -100,6 +102,7 @@ const IntegrationsIndex = (ApiUserData) => {
   
   // Upgrade popup state
   const [showUpgradePopup, setShowUpgradePopup] = useState(false);
+  const [mountActive, setMountActive] = useState(false);
   
   // If this is a redirect from Slack OAuth, get the code from the URL
   useEffect(() => {
@@ -173,6 +176,12 @@ const IntegrationsIndex = (ApiUserData) => {
     } else {
       setShowAddWebhook(true);
     }
+  };
+  
+  // Handle Mount toggle change
+  const handleMountToggleChange = () => {
+    setMountActive(!mountActive);
+    // You can add API call here to update the status on the backend
   };
 
   // Add webhook API logic (mirroring contactSection.jsx)
@@ -297,6 +306,10 @@ const IntegrationsIndex = (ApiUserData) => {
               <NotionIntegration ApiUserData={ApiUserData} />
             )}
 
+            {selectedIntegration === 'Mount' && (
+              <MountIntegration ApiUserData={ApiUserData} />
+            )}
+
             {selectedIntegration === 'WhatsApp' && (
               <WhatsappIntegration />
             )}
@@ -316,6 +329,22 @@ const IntegrationsIndex = (ApiUserData) => {
 
   return (
     <div className='settings-integrations'>
+        <style>{`
+          /* Toggle switch styles */
+          .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+          
+          .switch input:checked + .slider:before {
+            transform: translateX(13px);
+          }
+          
+          .switch input:focus + .slider {
+            box-shadow: 0 0 1px #146ef5;
+          }
+        `}</style>
         <h3 className="mb-4">Integrations</h3>
       {/* Main Tab Bar */}
       <div className="main-tabs-bar">
@@ -379,6 +408,53 @@ const IntegrationsIndex = (ApiUserData) => {
               {!hostfullyGuidebooksUserId && (
                 isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/hostfully_circle.svg', 'Hostfully Guidebooks Logo', 'Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.', { width: '50px', height: '50px' }) : <ConnectToHostfullyGuidebooks />
               )}
+              {/* Mount */}
+              <div className="partner-tile">
+                <img className="partner-logo" alt="Mount Logo" src={require('./Icons/Mount Logo.svg').default} style={{ maxWidth: '150px', height: 'auto', filter: 'invert(1)' }} />
+                <p>Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area</p>
+                <div style={{ 
+                  background: '#121212', 
+                  padding: '10px 20px',
+                  borderRadius: '25px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  width: '180px',
+                  marginTop: '15px'
+                }}>
+                  <span style={{ color: mountActive ? '#4caf50' : '#fff', fontWeight: '700' }}>{mountActive ? 'Active' : 'Not active'}</span>
+                  <label className="switch" style={{ margin: 0 }}>
+                    <input 
+                      type="checkbox" 
+                      checked={mountActive} 
+                      onChange={handleMountToggleChange}
+                    />
+                    <span className="slider round" style={{ 
+                      position: 'relative',
+                      display: 'inline-block',
+                      width: '30px',
+                      height: '17px',
+                      background: mountActive ? '#4caf50' : '#444',
+                      borderRadius: '34px',
+                      transition: '0.4s',
+                      cursor: 'pointer',
+                      boxShadow: mountActive ? '0 0 5px #4caf50' : 'none'
+                    }}>
+                      <span style={{
+                        position: 'absolute',
+                        content: '""',
+                        height: '13px',
+                        width: '13px',
+                        left: mountActive ? '14px' : '2px',
+                        bottom: '2px',
+                        background: '#fff',
+                        borderRadius: '50%',
+                        transition: '0.4s'
+                      }}></span>
+                    </span>
+                  </label>
+                </div>
+              </div>
               {/* Notion */}
               {!notionUserId && (
                 isProPlan ? renderUpgradeTile('https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png', 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
