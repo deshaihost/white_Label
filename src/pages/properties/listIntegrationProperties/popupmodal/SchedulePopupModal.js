@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import getSubscriptionStatus from "../../../../helper/Authorized";
 import Modal from "react-bootstrap/Modal";
 import ToastHandle from "../../../../helper/ToastMessage";
 import axios from "axios";
@@ -140,6 +142,12 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
     setData(prevData => ({...prevData, startTime:"00:00", endTime:"23:59"}));
   };
 
+  // ...existing code...
+  const store = useSelector((state) => state);
+  const userData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const subscriptionPlan = getSubscriptionStatus(userData).plan || '';
+  const isMountPlan = subscriptionPlan?.toLowerCase().includes("mount");
+  
   return (
     <div>
       <Modal show={show} size="md" onHide={() => setShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -153,26 +161,28 @@ const SchedulePopupModal = ({ show, setShow, selectedTime, setselectedTime, resp
             </p>
           </div>
 
-          <div className=" d-flex justify-content-between mt-3">
-            <div class="col text-center">
-              <input type="checkbox" checked={checkedSchedule.Future} onChange={(e) => handleOnChange(e, "Future")} className="btn-check" id="future" autocomplete="off"/>
-              <label for="future" className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "" : "btn-unselected"}`}>
-                Future
-              </label>
+          {!isMountPlan && (
+            <div className=" d-flex justify-content-between mt-3">
+              <div class="col text-center">
+                <input type="checkbox" checked={checkedSchedule.Future} onChange={(e) => handleOnChange(e, "Future")} className="btn-check" id="future" autocomplete="off"/>
+                <label for="future" className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Future ? "" : "btn-unselected"}`}>
+                  Future
+                </label>
+              </div>
+              <div class="col text-center">
+                <input type="checkbox" checked={checkedSchedule.Past} onChange={(e) => handleOnChange(e, "Past")} className="btn-check" id="past" autocomplete="off" />
+                <label for="past" className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "" : "btn-unselected"}`} >
+                  Inquiry/Past
+                </label>
+              </div>
+              <div class="col text-center">
+                <input type="checkbox" checked={checkedSchedule.Current} onChange={(e) => handleOnChange(e, "Current")} className="btn-check" id="current" autocomplete="off" />
+                <label for="current" className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "" : "btn-unselected"}`} >
+                  Current
+                </label>
+              </div>
             </div>
-            <div class="col text-center">
-              <input type="checkbox" checked={checkedSchedule.Past} onChange={(e) => handleOnChange(e, "Past")} className="btn-check" id="past" autocomplete="off" />
-              <label for="past" className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${checkedSchedule.Past ? "" : "btn-unselected"}`} >
-                Inquiry/Past
-              </label>
-            </div>
-            <div class="col text-center">
-              <input type="checkbox" checked={checkedSchedule.Current} onChange={(e) => handleOnChange(e, "Current")} className="btn-check" id="current" autocomplete="off" />
-              <label for="current" className={`btn btn-primary rounded-pill tab-btn-stage px-4 ${checkedSchedule.Current ? "" : "btn-unselected"}`} >
-                Current
-              </label>
-            </div>
-          </div>
+          )}
           <div className="d-flex flex-column pt-3 gap-4">
             <div class="row py-2">
               <div class="col">
