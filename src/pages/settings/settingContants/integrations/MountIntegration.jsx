@@ -464,7 +464,7 @@ const MountIntegration = ({ ApiUserData }) => {
           <thead>
             <tr>
               <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>HostBuddy properties</th>
-              <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA', textAlign: 'center' }}>Enable/Disable Upsells</th>
+              <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA', textAlign: 'center' }}>Upsells Settings</th>
             </tr>
           </thead>
           <tbody>
@@ -475,8 +475,9 @@ const MountIntegration = ({ ApiUserData }) => {
                   <td style={{ padding: '10px' }}>
                     <div style={{ 
                       display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '8px'
                     }}>
                       <span style={{ 
                         color: selectedMountUpsells[property] ? '#25db28' : '#ff4d4d', 
