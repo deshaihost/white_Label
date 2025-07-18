@@ -422,7 +422,7 @@ const IntegrationsIndex = (ApiUserData) => {
                   width: '180px',
                   marginTop: '15px'
                 }}>
-                  <span style={{ color: mountActive ? '#4caf50' : '#fff', fontWeight: '700' }}>{mountActive ? 'Active' : 'Not active'}</span>
+                  <span style={{ color: mountActive ? '#25db28' : '#ff4d4d', fontWeight: '700' }}>{mountActive ? 'Active' : 'Not active'}</span>
                   <label className="switch" style={{ margin: 0 }}>
                     <input 
                       type="checkbox" 
@@ -434,11 +434,11 @@ const IntegrationsIndex = (ApiUserData) => {
                       display: 'inline-block',
                       width: '30px',
                       height: '17px',
-                      background: mountActive ? '#4caf50' : '#444',
+                      background: mountActive ? '#25db28' : '#ff4d4d',
                       borderRadius: '34px',
                       transition: '0.4s',
                       cursor: 'pointer',
-                      boxShadow: mountActive ? '0 0 5px #4caf50' : 'none'
+                      boxShadow: mountActive ? '0 0 5px #25db28' : '0 0 5px #ff4d4d'
                     }}>
                       <span style={{
                         position: 'absolute',
