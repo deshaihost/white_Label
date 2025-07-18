@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ToastHandle from '../../../../helper/ToastMessage';
 import Loader from '../../../../helper/Loader';
+import axios from 'axios';
 
 const MountIntegration = ({ ApiUserData }) => {
+  const propertyData = ApiUserData?.ApiUserData?.property_data;
+  const propertiesList = Object.keys(propertyData || {});
+
   const [isLoading, setIsLoading] = useState(false);
   const [showUpsellsModal, setShowUpsellsModal] = useState(false);
   const [maxDistance, setMaxDistance] = useState(10);
@@ -11,6 +15,136 @@ const MountIntegration = ({ ApiUserData }) => {
   const [excludeStart, setExcludeStart] = useState("22:00");
   const [excludeEnd, setExcludeEnd] = useState("07:00");
   const [excludeHours, setExcludeHours] = useState(true);
+  
+  // Mount upsell mappings
+  const [apiPropertyMappings, setApiPropertyMappings] = useState({});
+  const [apiMountUpsells, setApiMountUpsells] = useState([]);
+  const [selectedMountUpsells, setSelectedMountUpsells] = useState({});
+  const [submitIsLoading, setSubmitIsLoading] = useState(false);
+  const [getMountUpsellsLoading, setGetMountUpsellsLoading] = useState(false);
+  
+  // API to fetch Mount upsells and property mappings
+  const fetchMountUpsellsData = async () => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setGetMountUpsellsLoading(true);
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+
+      // Simulating API call - replace with actual endpoint
+      // const response = await axios.get(`${baseUrl}/list_mount_upsells`, config);
+      
+      // Simulated data for demonstration purposes
+      const response = {
+        status: 200,
+        data: {
+          property_mapping: {},
+          mount_upsells: [
+            { id: 'upsell1', name: 'Local City Tour' },
+            { id: 'upsell2', name: 'Wine Tasting Experience' },
+            { id: 'upsell3', name: 'Museum Guided Tour' },
+            { id: 'upsell4', name: 'Mountain Hiking Adventure' },
+            { id: 'upsell5', name: 'Local Restaurant Recommendations' }
+          ]
+        }
+      };
+
+      if (response.status === 200) {
+        setApiPropertyMappings(response?.data?.property_mapping);
+        setApiMountUpsells(response?.data?.mount_upsells);
+      }
+    }
+    catch (error) {
+      console.error('Error fetching Mount upsell data:', error);
+    }
+    finally {
+      setGetMountUpsellsLoading(false);
+    }
+  };
+
+  // API to save property-upsell mappings
+  const saveMountUpsellMappings = async () => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    const upsell_mapping = {};
+
+    for (const propertyName in selectedMountUpsells) {
+      const upsellId = selectedMountUpsells[propertyName];
+      if (upsellId) {
+        const mountUpsell = apiMountUpsells.find(upsell => upsell.id === upsellId);
+        if (mountUpsell) {
+          upsell_mapping[upsellId] = { 'mount_upsell_name': mountUpsell.name, 'hostbuddy_property_name': propertyName };
+        }
+      }
+    }
+
+    const body_data = { 
+      'upsell_mapping': upsell_mapping,
+      'settings': {
+        'max_distance': maxDistance,
+        'days_before': daysBefore,
+        'hours_before': hoursBefore,
+        'exclude_hours': excludeHours,
+        'exclude_start': excludeStart,
+        'exclude_end': excludeEnd
+      }
+    };
+
+    try {
+      setSubmitIsLoading(true);
+      // Simulating API call - replace with actual endpoint
+      // const response = await axios.post(`${baseUrl}/save_mount_upsell_mappings`, body_data, config);
+      
+      // Simulated response
+      setTimeout(() => {
+        ToastHandle('Mount upsell settings saved successfully', 'success');
+        setSubmitIsLoading(false);
+      }, 1000);
+    }
+    catch (error) {
+      ToastHandle('An error occurred while saving settings.', 'danger');
+      setSubmitIsLoading(false);
+    }
+  };
+
+  // Handle select change for property-upsell mapping
+  const handleUpsellSelectChange = (propertyName, upsellId) => {
+    setSelectedMountUpsells(prevState => ({ ...prevState, [propertyName]: upsellId }));
+  };
+
+  // Check if an upsell option is already selected for another property
+  const isUpsellOptionDisabled = (upsellId, currentPropertyName) => {
+    return Object.entries(selectedMountUpsells).some(([propertyName, id]) => id === upsellId && propertyName !== currentPropertyName);
+  };
+
+  // Handle submit button click
+  const handleSubmitMappingsClick = async () => {
+    await saveMountUpsellMappings();
+  };
+  
+  // Fetch Mount upsell data on component mount
+  useEffect(() => {
+    fetchMountUpsellsData();
+  }, []);
+
+  // Update selected upsells when API data changes
+  useEffect(() => {
+    if (Object.keys(apiPropertyMappings).length > 0) {
+      const newSelectedUpsells = {};
+      for (const upsellId in apiPropertyMappings) {
+        const mapping = apiPropertyMappings[upsellId];
+        if (mapping.hostbuddy_property_name) {
+          newSelectedUpsells[mapping.hostbuddy_property_name] = upsellId;
+        }
+      }
+      setSelectedMountUpsells(newSelectedUpsells);
+    }
+  }, [apiPropertyMappings]);
   
   const toggleModal = () => {
     setShowUpsellsModal(!showUpsellsModal);
@@ -59,6 +193,7 @@ const MountIntegration = ({ ApiUserData }) => {
           </svg>
           Upsells Settings
         </button>
+        
       </div>
       
       {/* Upsells Settings Modal */}
@@ -313,6 +448,109 @@ const MountIntegration = ({ ApiUserData }) => {
           </div>
         </div>
       )}
+      
+      {/* HostBuddy Properties and Upsell Settings Table */}
+      <div style={{ marginTop: '40px' }}>
+        <p style={{ fontSize: '14px', textAlign: 'left', width: '95%', marginTop: '20px', color: '#fff' }}>
+          Use the toggles below to enable or disable Mount upsells for each of your properties. Click "Save Upsell Mappings" at the bottom when finished.
+        </p>
+
+        <table style={{ marginTop: '30px', width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>HostBuddy properties</th>
+              <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA', textAlign: 'center' }}>Enable/Disable Upsells</th>
+            </tr>
+          </thead>
+          <tbody>
+            {!getMountUpsellsLoading ? (
+              propertiesList.map((property, index) => (
+                <tr key={index} style={{ height: '40px', borderBottom: '1px solid white' }}>
+                  <td style={{ padding: '10px', fontSize: '14px', color: '#fff' }}>{property}</td>
+                  <td style={{ padding: '10px' }}>
+                    <div style={{ 
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
+                    }}>
+                      <span style={{ 
+                        color: selectedMountUpsells[property] ? '#25db28' : '#ff4d4d', 
+                        fontWeight: '600',
+                        fontSize: '14px'
+                      }}>
+                        {selectedMountUpsells[property] ? 'Enabled' : 'Disabled'}
+                      </span>
+                      <label className="switch" style={{ margin: 0 }}>
+                        <input 
+                          type="checkbox" 
+                          checked={!!selectedMountUpsells[property]} 
+                          onChange={() => {
+                            const newValue = selectedMountUpsells[property] ? '' : 'upsell1'; // Toggle between disabled and enabled
+                            handleUpsellSelectChange(property, newValue);
+                          }}
+                        />
+                        <span className="slider round" style={{ 
+                          position: 'relative',
+                          display: 'inline-block',
+                          width: '30px',
+                          height: '17px',
+                          background: selectedMountUpsells[property] ? '#25db28' : '#ff4d4d',
+                          borderRadius: '34px',
+                          transition: '0.4s',
+                          cursor: 'pointer',
+                          boxShadow: selectedMountUpsells[property] ? '0 0 5px #25db28' : '0 0 5px #ff4d4d'
+                        }}>
+                          <span style={{
+                            position: 'absolute',
+                            content: '""',
+                            height: '13px',
+                            width: '13px',
+                            left: selectedMountUpsells[property] ? '14px' : '2px',
+                            bottom: '2px',
+                            background: '#fff',
+                            borderRadius: '50%',
+                            transition: '0.4s'
+                          }}></span>
+                        </span>
+                      </label>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="2" style={{ textAlign: 'center', padding: '20px' }}>
+                  <Loader />
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+          {!submitIsLoading ? (
+            <button 
+              type="button" 
+              className="btn btn-primary" 
+              style={{ 
+                borderRadius: '50px', 
+                padding: '10px 20px',
+                backgroundColor: 'rgb(109 109 43)',
+                color: '#fff',
+                border: 'none',
+                fontSize: '15px',
+                fontWeight: '600',
+                cursor: 'pointer'
+              }} 
+              onClick={handleSubmitMappingsClick}
+            >
+              Save Upsell Mappings
+            </button>
+          ) : (
+            <Loader />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
