@@ -237,7 +237,7 @@ const MountIntegration = ({ ApiUserData }) => {
                       gap: '15px', 
                       alignItems: 'center',
                       background: 'rgba(80, 80, 80, 0.3)',
-                      padding: '15px',
+                      padding: '10px',
                       borderRadius: '6px'
                     }}>
                       <span style={{ fontSize: '14px' }}>From</span>
@@ -251,7 +251,9 @@ const MountIntegration = ({ ApiUserData }) => {
                           color: '#fff',
                           padding: '6px 10px',
                           borderRadius: '4px',
-                          fontSize: '14px'
+                          fontSize: '14px',
+                          colorScheme: 'dark',
+                          width: '100px'
                         }}
                       />
                       
@@ -266,7 +268,9 @@ const MountIntegration = ({ ApiUserData }) => {
                           color: '#fff',
                           padding: '6px 10px',
                           borderRadius: '4px',
-                          fontSize: '14px'
+                          fontSize: '14px',
+                          colorScheme: 'dark',
+                          width: '100px'
                         }}
                       />
                     </div>
