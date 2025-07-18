@@ -34,7 +34,7 @@ const MildeSection = ({
   setCurrentView,
 }) => {
   const eliteOrWorksPlan =
-    /elite|works/i.test(subscriptionPlan) || subscriptionPlan == "trial"; // Case-insensitive check for 'elite' or 'works' in the plan name
+    (/elite|works|ultimate/i.test(subscriptionPlan) && !/mount|pro/i.test(subscriptionPlan)) || subscriptionPlan == "trial"; // Case-insensitive check for 'elite', 'works', or 'ultimate' in the plan name, but exclude 'mount' and 'pro'
   const eliteFeaturesAvailable =
     /elite/i.test(subscriptionPlan) || subscriptionPlan == "trial"; // user subscribed to Elite or is on trial
   const propertyIsLocked = !!allConversationData?.is_locked;
