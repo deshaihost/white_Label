@@ -280,7 +280,7 @@ const MountIntegration = ({ ApiUserData }) => {
                   onChange={e => setMaxDistance(e.target.value)}
                   style={{
                     width: '100%',
-                    background: 'rgba(109, 109, 43, 0.2)',
+                    background: '#222', // Changed to dark gray for this modal only
                     border: 'none',
                     color: '#fff',
                     padding: '8px 12px',
