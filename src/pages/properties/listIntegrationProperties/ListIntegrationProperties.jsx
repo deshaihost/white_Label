@@ -413,12 +413,20 @@ const ListIntegrationProperties = () => {
                     </div>
 
                     <div className="property_listing_btn">
-                      <Button className="property-edit-btn" onClick={() => {selectedHandle(editProperty, properties);}}>
-                        Property Setup
-                      </Button>
-                      <Button className="test-property-btn border-0" onClick={() => { navigate(`/workbench/${properties}`); }}>
-                        Test Property
-                      </Button>
+                      {isMountPlan ? (
+                        <Button className="property-edit-btn" onClick={() => { navigate('/setting/integrations'); }}>
+                          Configure Upsells
+                        </Button>
+                      ) : (
+                        <>
+                          <Button className="property-edit-btn" onClick={() => {selectedHandle(editProperty, properties);}}>
+                            Property Setup
+                          </Button>
+                          <Button className="test-property-btn border-0" onClick={() => { navigate(`/workbench/${properties}`); }}>
+                            Test Property
+                          </Button>
+                        </>
+                      )}
                     </div>
 
                     <Dropdown className="property-dropdown">
