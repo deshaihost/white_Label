@@ -243,17 +243,19 @@ const ActionsItemsTable = () => {
             </div>
             <div className="action-select">
 
-              <div className="item-select">
-                <select aria-label="Default select example" className="bg-dark form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-                  <option value="all">All Categories</option>
-                  <option value="CLEANLINESS">Cleanliness</option>
-                  <option value="MAINTENANCE">Maintenance</option>
-                  <option value="RESERVATION CHANGES">Reservation Changes</option>
-                  <option value="GUEST REQUESTS">Guest Requests</option>
-                  <option value="KNOWLEDGE BASE SUGGESTIONS">Knowledge Base Suggestions</option>
-                  <option value="OTHER">Other</option>
-                </select>
-              </div>
+              {subscriptionPlan !== "HostBuddy x Mount - Guest Experience Concierge" && (
+                <div className="item-select">
+                  <select aria-label="Default select example" className="bg-dark form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                    <option value="all">All Categories</option>
+                    <option value="CLEANLINESS">Cleanliness</option>
+                    <option value="MAINTENANCE">Maintenance</option>
+                    <option value="RESERVATION CHANGES">Reservation Changes</option>
+                    <option value="GUEST REQUESTS">Guest Requests</option>
+                    <option value="KNOWLEDGE BASE SUGGESTIONS">Knowledge Base Suggestions</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                </div>
+              )}
 
               <div className="item-select">
                 <select aria-label="Default select example" className="bg-dark form-select" value={selectedStatus} onChange={handleSelectStatusChange}>
