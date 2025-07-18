@@ -31,6 +31,7 @@ const IntegrationsIndex = (ApiUserData) => {
   const turnoUserId = Boolean(ApiUserData?.ApiUserData?.turno_user_id);
   const minutUserId = Boolean(ApiUserData?.ApiUserData?.minut_user_id);
   const tidyUserId = Boolean(ApiUserData?.ApiUserData?.tidy_user_id);
+  const roomzaUserId = Boolean(ApiUserData?.ApiUserData?.roomza_user_id);
   const hostfullyGuidebooksUserId = Boolean(ApiUserData?.ApiUserData?.hostfully_guidebooks_user_id);
   const notionUserId = Boolean(ApiUserData?.ApiUserData?.notion_user_id);
   const whatsappPhoneNumber = ApiUserData?.ApiUserData?.whatsapp_phone_number;
@@ -39,6 +40,10 @@ const IntegrationsIndex = (ApiUserData) => {
   // Determine user's subscription plan
   const subscriptionPlan = getSubscriptionStatus(ApiUserData?.ApiUserData).plan || '';
   const isProPlan = subscriptionPlan.toLowerCase().includes('pro');
+
+  // Upgrade popup state
+  const [showUpgradePopup, setShowUpgradePopup] = useState(false);
+  const [mountActive, setMountActive] = useState(false);
 
   // Helper to render a disabled tile prompting the user to upgrade
   const renderUpgradeTile = (logoSrc, altText, description = 'Available on HostBuddy Elite', imgStyle = {}) => (
@@ -61,6 +66,7 @@ const IntegrationsIndex = (ApiUserData) => {
   if (notionUserId) connectedIntegrations.push('Notion');
   if (whatsappPhoneNumber) connectedIntegrations.push('WhatsApp');
   if (openphoneNumber) connectedIntegrations.push('OpenPhone');
+  if (mountActive) connectedIntegrations.push('Mount');
 
   // Tab state for top-level tabs
   const [mainTab, setMainTab] = useState('Communication channels');
@@ -74,7 +80,7 @@ const IntegrationsIndex = (ApiUserData) => {
       );
     } else if (tab === 'Third-party apps') {
       return connectedIntegrations.filter(integration => 
-        ['Turno', 'Minut', 'Tidy', 'Hostfully Guidebooks', 'Notion', 'Mount'].includes(integration)
+        ['Turno', 'Minut', 'Tidy', 'Roomza', 'Hostfully Guidebooks', 'Notion', 'Mount'].includes(integration)
       );
     }
     return [];
@@ -100,10 +106,6 @@ const IntegrationsIndex = (ApiUserData) => {
   // Slack integration state
   const [slackOauthCode, setSlackOauthCode] = useState("");
   
-  // Upgrade popup state
-  const [showUpgradePopup, setShowUpgradePopup] = useState(false);
-  const [mountActive, setMountActive] = useState(false);
-  
   // If this is a redirect from Slack OAuth, get the code from the URL
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -111,11 +113,11 @@ const IntegrationsIndex = (ApiUserData) => {
     if (code) { setSlackOauthCode(code); }
   }, [location]);
   
-  // Update selected integration when main tab changes
+  // Update selected integration when main tab changes or mountActive state changes
   useEffect(() => {
     const filteredIntegrations = getFilteredIntegrations(mainTab);
     setSelectedIntegration(filteredIntegrations[0] || '');
-  }, [mainTab]);
+  }, [mainTab, mountActive]);
 
   // Complete Slack OAuth API
   const completeSlackOauthAPI = async (code) => {
@@ -180,7 +182,12 @@ const IntegrationsIndex = (ApiUserData) => {
   
   // Handle Mount toggle change
   const handleMountToggleChange = () => {
-    setMountActive(!mountActive);
+    const newActiveState = !mountActive;
+    setMountActive(newActiveState);
+    // If Mount becomes active, select it in the third-party apps tab
+    if (newActiveState && mainTab === 'Third-party apps') {
+      setSelectedIntegration('Mount');
+    }
     // You can add API call here to update the status on the backend
   };
 
