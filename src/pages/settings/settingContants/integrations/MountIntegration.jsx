@@ -132,40 +132,31 @@ const MountIntegration = ({ ApiUserData }) => {
                     </svg>
                   </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <input
-                    type="range"
-                    min="1"
-                    max="50"
-                    value={maxDistance}
-                    onChange={(e) => setMaxDistance(e.target.value)}
-                    style={{ flex: '1', height: '4px' }}
-                  />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '10px' }}>
                   <div style={{ 
                     display: 'flex', 
-                    alignItems: 'center', 
-                    minWidth: '70px',
+                    alignItems: 'center',
                     background: 'rgba(109, 109, 43, 0.2)',
-                    padding: '6px 10px',
-                    borderRadius: '4px'
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    width: '120px'
                   }}>
                     <input
                       type="number"
                       min="1"
-                      max="50"
                       value={maxDistance}
                       onChange={(e) => setMaxDistance(e.target.value)}
                       style={{
-                        width: '40px',
+                        width: '70px',
                         background: 'transparent',
                         border: 'none',
                         color: '#fff',
                         textAlign: 'right',
                         padding: '0',
-                        fontSize: '14px'
+                        fontSize: '15px'
                       }}
                     />
-                    <span style={{ marginLeft: '5px', fontSize: '14px' }}>km</span>
+                    <span style={{ marginLeft: '8px', fontSize: '14px' }}>km</span>
                   </div>
                 </div>
               </div>
@@ -298,7 +289,7 @@ const MountIntegration = ({ ApiUserData }) => {
                     fontSize: '15px',
                     fontWeight: '600',
                     color: '#fff',
-                    backgroundColor: 'rgb(109 109 43)',
+                    backgroundColor: 'rgb(34 141 62)',
                     border: 'none',
                     borderRadius: '6px',
                     cursor: 'pointer',
@@ -308,7 +299,7 @@ const MountIntegration = ({ ApiUserData }) => {
                     e.target.style.backgroundColor = 'rgb(129 129 53)';
                   }}
                   onMouseOut={(e) => {
-                    e.target.style.backgroundColor = 'rgb(109 109 43)';
+                    e.target.style.backgroundColor = 'rgb(34 141 62)';
                   }}
                 >
                   Save Settings
