@@ -4,6 +4,17 @@ import Loader from '../../../../helper/Loader';
 
 const MountIntegration = ({ ApiUserData }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showUpsellsModal, setShowUpsellsModal] = useState(false);
+  const [maxDistance, setMaxDistance] = useState(10);
+  const [daysBefore, setDaysBefore] = useState(3);
+  const [hoursBefore, setHoursBefore] = useState(24);
+  const [excludeStart, setExcludeStart] = useState("22:00");
+  const [excludeEnd, setExcludeEnd] = useState("07:00");
+  const [excludeHours, setExcludeHours] = useState(true);
+  
+  const toggleModal = () => {
+    setShowUpsellsModal(!showUpsellsModal);
+  };
   
   return (
     <div>
@@ -13,6 +24,7 @@ const MountIntegration = ({ ApiUserData }) => {
         </p>
         
         <button 
+          onClick={toggleModal}
           style={{
             marginTop: '20px',
             padding: '12px 24px',
@@ -48,6 +60,264 @@ const MountIntegration = ({ ApiUserData }) => {
           Upsells Settings
         </button>
       </div>
+      
+      {/* Upsells Settings Modal */}
+      {showUpsellsModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: '#2a2a2a',
+            borderRadius: '10px',
+            padding: '30px',
+            width: '500px',
+            maxWidth: '90%',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+            position: 'relative'
+          }}>
+            {/* Close button */}
+            <button 
+              onClick={toggleModal}
+              style={{
+                position: 'absolute',
+                top: '15px',
+                right: '15px',
+                background: 'none',
+                border: 'none',
+                fontSize: '18px',
+                color: '#aaa',
+                cursor: 'pointer'
+              }}
+            >
+              ✕
+            </button>
+            
+            {/* Modal header */}
+            <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+              <h2 style={{ color: '#fff', fontSize: '20px', fontWeight: '600', margin: '0 0 8px' }}>
+                Configure the Upsells Settings
+              </h2>
+              <div style={{ height: '2px', background: 'linear-gradient(90deg, rgba(109,109,43,0) 0%, rgba(109,109,43,1) 50%, rgba(109,109,43,0) 100%)', margin: '15px auto' }}></div>
+            </div>
+            
+            {/* Modal content */}
+            <div style={{ color: '#fff' }}>
+              {/* Maximum upsell distance */}
+              <div style={{ marginBottom: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                  <label style={{ fontWeight: '600', fontSize: '15px' }}>
+                    Maximum upsell distance
+                  </label>
+                  <div 
+                    style={{ 
+                      marginLeft: '10px', 
+                      position: 'relative',
+                      display: 'inline-block'
+                    }}
+                    title="Maximum distance between your property address and upsells which HostBuddy will consider for trip planning"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" style={{ color: '#aaa' }}>
+                      <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <input
+                    type="range"
+                    min="1"
+                    max="50"
+                    value={maxDistance}
+                    onChange={(e) => setMaxDistance(e.target.value)}
+                    style={{ flex: '1', height: '4px' }}
+                  />
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    minWidth: '70px',
+                    background: 'rgba(109, 109, 43, 0.2)',
+                    padding: '6px 10px',
+                    borderRadius: '4px'
+                  }}>
+                    <input
+                      type="number"
+                      min="1"
+                      max="50"
+                      value={maxDistance}
+                      onChange={(e) => setMaxDistance(e.target.value)}
+                      style={{
+                        width: '40px',
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#fff',
+                        textAlign: 'right',
+                        padding: '0',
+                        fontSize: '14px'
+                      }}
+                    />
+                    <span style={{ marginLeft: '5px', fontSize: '14px' }}>km</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Timing Section */}
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '15px' }}>
+                  Timing
+                </label>
+                <p style={{ fontSize: '14px', color: '#ddd', marginBottom: '15px' }}>
+                  HostBuddy will initiate trip planning after booking is confirmed:
+                </p>
+                
+                {/* Days and Hours inputs */}
+                <div style={{ display: 'flex', gap: '15px', marginBottom: '15px', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <input
+                      type="number"
+                      min="0"
+                      max="30"
+                      value={daysBefore}
+                      onChange={(e) => setDaysBefore(e.target.value)}
+                      style={{
+                        width: '50px',
+                        background: 'rgba(109, 109, 43, 0.2)',
+                        border: 'none',
+                        color: '#fff',
+                        textAlign: 'center',
+                        padding: '8px',
+                        borderRadius: '4px',
+                        fontSize: '14px'
+                      }}
+                    />
+                    <span style={{ marginLeft: '8px', fontSize: '14px' }}>days</span>
+                  </div>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <input
+                      type="number"
+                      min="0"
+                      max="72"
+                      value={hoursBefore}
+                      onChange={(e) => setHoursBefore(e.target.value)}
+                      style={{
+                        width: '50px',
+                        background: 'rgba(109, 109, 43, 0.2)',
+                        border: 'none',
+                        color: '#fff',
+                        textAlign: 'center',
+                        padding: '8px',
+                        borderRadius: '4px',
+                        fontSize: '14px'
+                      }}
+                    />
+                    <span style={{ marginLeft: '8px', fontSize: '14px' }}>hours</span>
+                  </div>
+                </div>
+                
+                {/* Exclude hours option */}
+                <div style={{ marginTop: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
+                    <input
+                      type="checkbox"
+                      id="excludeHours"
+                      checked={excludeHours}
+                      onChange={(e) => setExcludeHours(e.target.checked)}
+                      style={{ marginRight: '10px' }}
+                    />
+                    <label htmlFor="excludeHours" style={{ fontSize: '14px' }}>
+                      Exclude certain hours from HostBuddy activity
+                    </label>
+                  </div>
+                  
+                  {excludeHours && (
+                    <div style={{ 
+                      marginLeft: '25px', 
+                      display: 'flex', 
+                      gap: '15px', 
+                      alignItems: 'center',
+                      background: 'rgba(80, 80, 80, 0.3)',
+                      padding: '15px',
+                      borderRadius: '6px'
+                    }}>
+                      <span style={{ fontSize: '14px' }}>From</span>
+                      <input
+                        type="time"
+                        value={excludeStart}
+                        onChange={(e) => setExcludeStart(e.target.value)}
+                        style={{
+                          background: 'rgba(109, 109, 43, 0.2)',
+                          border: 'none',
+                          color: '#fff',
+                          padding: '6px 10px',
+                          borderRadius: '4px',
+                          fontSize: '14px'
+                        }}
+                      />
+                      
+                      <span style={{ fontSize: '14px' }}>to</span>
+                      <input
+                        type="time"
+                        value={excludeEnd}
+                        onChange={(e) => setExcludeEnd(e.target.value)}
+                        style={{
+                          background: 'rgba(109, 109, 43, 0.2)',
+                          border: 'none',
+                          color: '#fff',
+                          padding: '6px 10px',
+                          borderRadius: '4px',
+                          fontSize: '14px'
+                        }}
+                      />
+                    </div>
+                  )}
+                  
+                  {excludeHours && (
+                    <p style={{ fontSize: '13px', color: '#aaa', marginTop: '10px', marginLeft: '25px', fontStyle: 'italic' }}>
+                      For example, if hours of {excludeStart} - {excludeEnd} are excluded, and guest books at 11pm, 
+                      the trip planning would only start during allowed hours.
+                    </p>
+                  )}
+                </div>
+              </div>
+              
+              {/* Save button */}
+              <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'flex-end' }}>
+                <button
+                  style={{
+                    padding: '10px 24px',
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    color: '#fff',
+                    backgroundColor: 'rgb(109 109 43)',
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = 'rgb(129 129 53)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = 'rgb(109 109 43)';
+                  }}
+                >
+                  Save Settings
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
