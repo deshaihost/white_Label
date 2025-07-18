@@ -193,6 +193,7 @@ const ActionsItemsTable = () => {
   // Get user plan
   const userData = store?.getUserDataReducer?.getUserData?.data?.user;
   const subscriptionPlan = getSubscriptionStatus(userData).plan || '';
+  const isMountPlan = subscriptionPlan?.toLowerCase().includes("mount");
 
   // Helper to determine cutoff days
   const getCutoffDays = () => {
@@ -243,7 +244,7 @@ const ActionsItemsTable = () => {
             </div>
             <div className="action-select">
 
-              {subscriptionPlan !== "HostBuddy x Mount - Guest Experience Concierge" && (
+              {!isMountPlan && (
                 <div className="item-select">
                   <select aria-label="Default select example" className="bg-dark form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
                     <option value="all">All Categories</option>

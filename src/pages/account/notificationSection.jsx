@@ -20,6 +20,7 @@ const AccountNotificationSection = () => {
 
   // Get user subscription plan
   const subscriptionPlan = getSubscriptionStatus(userDataGet).plan || '';
+  const isMountPlan = subscriptionPlan?.toLowerCase().includes("mount");
 
   // Initialize user_contact_options with all possible contact channels set to empty objects
   let all_possible_contact_channels = ["email", "sms", "slack", "whatsapp", "webhook"];
@@ -138,7 +139,7 @@ const AccountNotificationSection = () => {
 
   const showNewRecipientFields = () => {
     setNewRecipient({ firstName: "", channel: "", RecipientAddress: "", timing: "", time: "", consent_checked: false });
-    if (subscriptionPlan !== "HostBuddy x Mount - Guest Experience Concierge") {
+    if (!isMountPlan) {
       setSelectedCategories(categoryOptions); // Populate with all category options by default
     } else {
       setSelectedCategories([]); // Set empty for Mount plan
@@ -194,7 +195,7 @@ const AccountNotificationSection = () => {
     }
 
     // Validate categories and properties
-    if (subscriptionPlan !== "HostBuddy x Mount - Guest Experience Concierge" && (!selectedCategories || selectedCategories.length === 0)) {
+    if (!isMountPlan && (!selectedCategories || selectedCategories.length === 0)) {
       ToastHandle("Please select at least one category", "danger");
       return;
     }
@@ -205,7 +206,7 @@ const AccountNotificationSection = () => {
     }
 
     // Before adding the new recipient, assign categories from selectedCategories
-    if (subscriptionPlan !== "HostBuddy x Mount - Guest Experience Concierge") {
+    if (!isMountPlan) {
       newRecipient.categories = selectedCategories.map((option) => option.value);
     } else {
       newRecipient.categories = []; // Set empty array for Mount plan
@@ -243,7 +244,7 @@ const AccountNotificationSection = () => {
   const editRecipient = (index) => {
     const recipientToEdit = recipients[index];
     setNewRecipient(recipientToEdit);
-    if (subscriptionPlan !== "HostBuddy x Mount - Guest Experience Concierge") {
+    if (!isMountPlan) {
       setSelectedCategories(
         recipientToEdit.categories.map((category) =>
           categoryOptions.find((option) => option.value === category)
@@ -470,7 +471,7 @@ const AccountNotificationSection = () => {
             </div>
 
             <div className="row" style={{ marginTop: "20px" }}>
-              {subscriptionPlan !== "HostBuddy x Mount - Guest Experience Concierge" && (
+              {!isMountPlan && (
                 <div className="col input_group">
                   <label htmlFor="Categories" >Categories</label>
                   <MultiSelect id="Categories" options={categoryOptions} selectedOptions={selectedCategories} setSelectedOptions={setSelectedCategories} placeholder="Select categories..."/>
