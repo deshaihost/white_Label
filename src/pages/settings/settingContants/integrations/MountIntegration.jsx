@@ -221,8 +221,8 @@ const MountIntegration = ({ ApiUserData }) => {
           zIndex: 1000
         }}>
           <div style={{
-            backgroundColor: '#2a2a2a',
-            borderRadius: '10px',
+            backgroundColor: '#1a2341',
+            borderRadius: '18px',
             padding: '30px',
             width: '500px',
             maxWidth: '90%',
@@ -280,13 +280,15 @@ const MountIntegration = ({ ApiUserData }) => {
                   onChange={e => setMaxDistance(e.target.value)}
                   style={{
                     width: '100%',
-                    background: '#222', // Changed to dark gray for this modal only
+                    background: '#22305a',
                     border: 'none',
                     color: '#fff',
-                    padding: '8px 12px',
-                    borderRadius: '4px',
+                    padding: '10px 16px',
+                    borderRadius: '24px',
                     fontSize: '15px',
-                    marginBottom: '5px'
+                    marginBottom: '5px',
+                    appearance: 'none',
+                    outline: 'none',
                   }}
                 >
                   <option value="">Select</option>
@@ -315,14 +317,15 @@ const MountIntegration = ({ ApiUserData }) => {
                       value={hoursDelay}
                       onChange={e => setHoursDelay(e.target.value)}
                       style={{
-                        width: '50px',
-                        background: 'rgba(109, 109, 43, 0.2)',
+                        width: '60px',
+                        background: '#22305a',
                         border: 'none',
                         color: '#fff',
                         textAlign: 'center',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        fontSize: '14px'
+                        padding: '10px',
+                        borderRadius: '24px',
+                        fontSize: '15px',
+                        outline: 'none',
                       }}
                     />
                   </div>
@@ -335,14 +338,15 @@ const MountIntegration = ({ ApiUserData }) => {
                       value={minutesDelay}
                       onChange={e => setMinutesDelay(e.target.value)}
                       style={{
-                        width: '50px',
-                        background: 'rgba(109, 109, 43, 0.2)',
+                        width: '60px',
+                        background: '#22305a',
                         border: 'none',
                         color: '#fff',
                         textAlign: 'center',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        fontSize: '14px'
+                        padding: '10px',
+                        borderRadius: '24px',
+                        fontSize: '15px',
+                        outline: 'none',
                       }}
                     />
                   </div>
@@ -363,15 +367,16 @@ const MountIntegration = ({ ApiUserData }) => {
                     value={excludeStart}
                     onChange={e => setExcludeStart(e.target.value)}
                     style={{
-                      background: 'rgba(109, 109, 43, 0.2)',
-                      border: 'none',
-                      color: '#fff',
-                      padding: '6px 10px',
-                      borderRadius: '4px',
-                      fontSize: '14px',
-                      colorScheme: 'dark',
-                      width: '100px'
-                    }}
+                        background: '#22305a',
+                        border: 'none',
+                        color: '#fff',
+                        padding: '10px 16px',
+                        borderRadius: '24px',
+                        fontSize: '15px',
+                        colorScheme: 'dark',
+                        width: '110px',
+                        outline: 'none',
+                      }}
                   />
                   <span style={{ fontSize: '14px' }}>To</span>
                   <input
@@ -379,15 +384,16 @@ const MountIntegration = ({ ApiUserData }) => {
                     value={excludeEnd}
                     onChange={e => setExcludeEnd(e.target.value)}
                     style={{
-                      background: 'rgba(109, 109, 43, 0.2)',
-                      border: 'none',
-                      color: '#fff',
-                      padding: '6px 10px',
-                      borderRadius: '4px',
-                      fontSize: '14px',
-                      colorScheme: 'dark',
-                      width: '100px'
-                    }}
+                        background: '#22305a',
+                        border: 'none',
+                        color: '#fff',
+                        padding: '10px 16px',
+                        borderRadius: '24px',
+                        fontSize: '15px',
+                        colorScheme: 'dark',
+                        width: '110px',
+                        outline: 'none',
+                      }}
                   />
                 </div>
                 <div style={{ fontSize: '12px', color: '#aaa', marginTop: '2px' }}>
@@ -405,35 +411,88 @@ const MountIntegration = ({ ApiUserData }) => {
                   rows={4}
                   style={{
                     width: '100%',
-                    background: 'rgba(109, 109, 43, 0.2)',
+                    background: '#22305a',
                     border: 'none',
                     color: '#fff',
-                    padding: '10px',
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    resize: 'vertical'
+                    padding: '14px',
+                    borderRadius: '24px',
+                    fontSize: '15px',
+                    resize: 'vertical',
+                    outline: 'none',
                   }}
                 />
               </div>
               {/* AI Personalization toggle */}
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '18px', gap: '15px' }}>
-                <label style={{ fontSize: '15px', fontWeight: '500' }}>AI Personalization</label>
-                <input
-                  type="checkbox"
-                  checked={aiPersonalization}
-                  onChange={e => setAiPersonalization(e.target.checked)}
-                  style={{ width: '20px', height: '20px' }}
-                />
+                <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Personalization</label>
+                <label style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
+                  <input
+                    type="checkbox"
+                    checked={aiPersonalization}
+                    onChange={e => setAiPersonalization(e.target.checked)}
+                    style={{ opacity: 0, width: 0, height: 0 }}
+                  />
+                  <span style={{
+                    position: 'absolute',
+                    cursor: 'pointer',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: aiPersonalization ? '#338aff' : '#22305a',
+                    borderRadius: '24px',
+                    transition: '0.4s',
+                    boxShadow: aiPersonalization ? '0 0 6px #338aff' : 'none'
+                  }}>
+                    <span style={{
+                      position: 'absolute',
+                      content: '""',
+                      height: '18px',
+                      width: '18px',
+                      left: aiPersonalization ? '22px' : '4px',
+                      bottom: '3px',
+                      background: '#fff',
+                      borderRadius: '50%',
+                      transition: '0.4s'
+                    }}></span>
+                  </span>
+                </label>
               </div>
               {/* AI Context Checking toggle */}
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px', gap: '15px' }}>
-                <label style={{ fontSize: '15px', fontWeight: '500' }}>AI Context Checking</label>
-                <input
-                  type="checkbox"
-                  checked={aiContentChecking}
-                  onChange={e => setAiContentChecking(e.target.checked)}
-                  style={{ width: '20px', height: '20px' }}
-                />
+                <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Context Checking</label>
+                <label style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
+                  <input
+                    type="checkbox"
+                    checked={aiContentChecking}
+                    onChange={e => setAiContentChecking(e.target.checked)}
+                    style={{ opacity: 0, width: 0, height: 0 }}
+                  />
+                  <span style={{
+                    position: 'absolute',
+                    cursor: 'pointer',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: aiContentChecking ? '#338aff' : '#22305a',
+                    borderRadius: '24px',
+                    transition: '0.4s',
+                    boxShadow: aiContentChecking ? '0 0 6px #338aff' : 'none'
+                  }}>
+                    <span style={{
+                      position: 'absolute',
+                      content: '""',
+                      height: '18px',
+                      width: '18px',
+                      left: aiContentChecking ? '22px' : '4px',
+                      bottom: '3px',
+                      background: '#fff',
+                      borderRadius: '50%',
+                      transition: '0.4s'
+                    }}></span>
+                  </span>
+                </label>
               </div>
               {/* Submit button */}
               <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
@@ -443,21 +502,23 @@ const MountIntegration = ({ ApiUserData }) => {
                     toggleModal();
                   }}
                   style={{
-                    padding: '10px 32px',
-                    fontSize: '16px',
-                    fontWeight: '600',
+                    padding: '14px 0',
+                    width: '100%',
+                    fontSize: '18px',
+                    fontWeight: '700',
                     color: '#fff',
-                    backgroundColor: 'rgb(109 109 43)',
+                    backgroundColor: '#338aff',
                     border: 'none',
-                    borderRadius: '50px',
+                    borderRadius: '32px',
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease'
+                    transition: 'all 0.2s ease',
+                    boxShadow: '0 2px 8px rgba(51,138,255,0.15)'
                   }}
                   onMouseOver={e => {
-                    e.target.style.backgroundColor = 'rgb(129 129 53)';
+                    e.target.style.backgroundColor = '#2566c1';
                   }}
                   onMouseOut={e => {
-                    e.target.style.backgroundColor = 'rgb(109 109 43)';
+                    e.target.style.backgroundColor = '#338aff';
                   }}
                 >
                   Submit
