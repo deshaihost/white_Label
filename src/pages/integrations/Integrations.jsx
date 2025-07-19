@@ -17,6 +17,7 @@ import ContactUs from "../meetHostBuddy/discover/contactUs/ContactUs";
 import { Helmet } from 'react-helmet';
 
 
+
 const HostexImg = 'https://hostbuddylb.com/partners/hostex_logo_en.webp';
 const ReslyImg = 'https://hostbuddylb.com/partners/resly_img.webp'
 const SmilyImg = 'https://hostbuddylb.com/partners/SmilyLogo.webp';
