@@ -14,6 +14,7 @@ const placeholderImg = "https://hostbuddylb.com/misc/chatBubbles.webp";
 const OpenPhoneSection = ({
   allConversationData,
   updateConversationFromApi,
+  updateConversationLocal,
   propertyName,
   subscriptionPlan,
 }) => {
@@ -120,9 +121,15 @@ const OpenPhoneSection = ({
       sender: "host"
     };
 
-    // Add the message immediately to show it in the UI
+    // Add the message to the local state for immediate display
     setOpenPhoneMessages(prevMessages => [...prevMessages, optimisticMessage]);
+    
     setInputValue("");
+
+    // Add the message to the main conversation state in the parent component
+    if (updateConversationLocal) {
+      updateConversationLocal(conversation_id, optimisticMessage, "openphone");
+    }
 
     try {
       const sendMsgResponse = await callSendOpenPhoneMessageApi(
@@ -147,7 +154,7 @@ const OpenPhoneSection = ({
         ToastHandle("Error sending OpenPhone message", "danger");
       }
     } catch (error) {
-      // Remove the optimistic message on error and restore input
+      // Remove the optimistic message and restore input on error
       setOpenPhoneMessages(prevMessages => 
         prevMessages.filter(msg => msg.id !== optimisticMessage.id)
       );

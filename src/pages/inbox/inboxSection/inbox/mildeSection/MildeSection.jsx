@@ -275,8 +275,8 @@ const MildeSection = ({
     // Optimistically add the message to the local state immediately
     const currentTime = new Date();
     const optimisticMessage = {
-      text: { text: messageToSend },
-      sender: "user",
+      text: messageToSend, // Use simple string for LeftMessage compatibility
+      sender: "host", // Host messages should have sender "host" to render on right side
       messageDay: formatRelativeDate(currentTime.toISOString()),
       rawDate: currentTime,
       sendBy: "host",
@@ -285,8 +285,13 @@ const MildeSection = ({
       attachments: [],
     };
 
-    // Add the message immediately to show it in the UI
+    // Add the message to the local state for immediate display
     setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+    
+    // Also add the message to the main conversation state in the parent component
+    if (updateConversationLocal) {
+      updateConversationLocal(conversation_id, optimisticMessage, "pms");
+    }
 
     try {
       const sendMsgResponse = await callSendMessageApi(
@@ -304,17 +309,20 @@ const MildeSection = ({
 
         await updateConversationFromApi(conversation_id);
       } else {
-        // If there was an error, remove the optimistic message
+        // If there was an error, remove the optimistic message and restore the input
         setMessages((prevMessages) =>
           prevMessages.filter((msg) => msg.id !== optimisticMessage.id)
         );
+        setInputValue(messageToSend);
+        ToastHandle("Error sending message", "danger");
       }
     } catch (error) {
       ToastHandle("Error sending message", "danger");
-      // Remove the optimistic message on error
+      // Remove the optimistic message and restore the input on error
       setMessages((prevMessages) =>
         prevMessages.filter((msg) => msg.id !== optimisticMessage.id)
       );
+      setInputValue(messageToSend);
     } finally {
       setSendMessageLoading(false);
     }
@@ -802,7 +810,7 @@ const MildeSection = ({
           const { sender, text, time, attachments, id } = messageList;
           let timeFormatConvert = timeFormat(time);
           return {
-            text: messageList !== undefined ? messageList : "",
+            text: typeof text === 'string' ? text : text?.text || "",
             sender:
               sender === "host" || sender === "hostbuddy" ? "user" : "bot",
             messageDay: formatRelativeDate(time),
@@ -1059,7 +1067,7 @@ const MildeSection = ({
                     </div>
                   )}
                   <MessageInbox
-                    text={message.text?.text}
+                    text={typeof message.text === 'string' ? message.text : message.text?.text}
                     sender={message.sender}
                     currentMessageDay={message.messageDay}
                     messageData={message}

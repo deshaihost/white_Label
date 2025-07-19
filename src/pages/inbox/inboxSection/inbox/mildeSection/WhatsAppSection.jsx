@@ -19,6 +19,7 @@ const placeholderImg = "https://hostbuddylb.com/misc/chatBubbles.webp";
 const WhatsAppSection = ({
   allConversationData,
   updateConversationFromApi,
+  updateConversationLocal,
   propertyName,
   subscriptionPlan,
 }) => {
@@ -144,11 +145,16 @@ const WhatsAppSection = ({
       sender: "host"
     };
 
-    // Add the message immediately to show it in the UI
+    // Add the message to the local state for immediate display
     setWhatsappMessages(prevMessages => [...prevMessages, optimisticMessage]);
     
     // Clear input immediately for better UX
     setInputValue("");
+
+    // Add the message to the main conversation state in the parent component
+    if (updateConversationLocal) {
+      updateConversationLocal(conversation_id, optimisticMessage, "whatsapp");
+    }
 
     try {
       const sendMsgResponse = await callSendWhatsAppMessageApi(
@@ -173,7 +179,7 @@ const WhatsAppSection = ({
         ToastHandle("Error sending WhatsApp message", "danger");
       }
     } catch (error) {
-      // Remove the optimistic message on error and restore input
+      // Remove the optimistic message and restore input on error
       setWhatsappMessages(prevMessages => 
         prevMessages.filter(msg => msg.id !== optimisticMessage.id)
       );
