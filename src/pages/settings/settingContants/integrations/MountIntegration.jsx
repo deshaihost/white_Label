@@ -539,7 +539,53 @@ const MountIntegration = ({ ApiUserData }) => {
           <thead>
             <tr>
               <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>HostBuddy properties</th>
-              <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA', textAlign: 'center' }}>Upsells Settings</th>
+              <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA', textAlign: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+                  <span>Upsells Settings</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '14px', color: '#ccc' }}>All</span>
+                    <label style={{ position: 'relative', display: 'inline-block', width: '40px', height: '22px' }}>
+                      <input
+                        type="checkbox"
+                        checked={propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])}
+                        onChange={(e) => {
+                          const newValue = e.target.checked ? 'upsell1' : '';
+                          const newSelectedUpsells = {};
+                          propertiesList.forEach(property => {
+                            newSelectedUpsells[property] = newValue;
+                          });
+                          setSelectedMountUpsells(newSelectedUpsells);
+                        }}
+                        style={{ opacity: 0, width: 0, height: 0 }}
+                      />
+                      <span style={{
+                        position: 'absolute',
+                        cursor: 'pointer',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: (propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])) ? '#25db28' : '#ff4d4d',
+                        borderRadius: '34px',
+                        transition: '0.4s',
+                        boxShadow: (propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])) ? '0 0 5px #25db28' : '0 0 5px #ff4d4d'
+                      }}>
+                        <span style={{
+                          position: 'absolute',
+                          content: '""',
+                          height: '16px',
+                          width: '16px',
+                          left: (propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])) ? '21px' : '3px',
+                          bottom: '3px',
+                          background: '#fff',
+                          borderRadius: '50%',
+                          transition: '0.4s'
+                        }}></span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
