@@ -27,25 +27,53 @@ const NotionIntegration = ({ ApiUserData }) => {
           headers: { 'X-API-Key': API_KEY, 'Content-Type': 'application/json' },
           validateStatus: status => status >= 200 && status < 500
         };
-        // Assumed endpoint
+        // Get data from /list_notion_pages endpoint
         const response = await axios.get(`${baseUrl}/list_notion_pages`, config);
         if (response.status === 200) {
-          setNotionPages(response.data?.notion_pages || []);
-          // If there are existing mappings, load them
-          if (response.data?.property_mapping && Array.isArray(response.data.property_mapping)) {
-            setRows(
-              response.data.property_mapping.map((m) => ({
-                notionPageId: m.notion_page_id,
-                propertyNames: (m.property_names || []).map((p) => ({ value: p, label: p }))
-              }))
-            );
+          // Set notion pages from the response
+          const pages = response.data?.notion_pages || [];
+          setNotionPages(pages.map(page => ({ 
+            id: page.id, 
+            title: page.alias,
+            url: page.url,
+            created_time: page.created_time,
+            last_edited_time: page.last_edited_time
+          })));
+          
+          // Process property mappings if they exist
+          const mappingObj = response.data?.property_mapping || {};
+          if (Object.keys(mappingObj).length > 0) {
+            const initialRows = [];
+            
+            // Convert property_mapping object to rows format
+            Object.entries(mappingObj).forEach(([notionPageId, data]) => {
+              if (data.properties && data.properties.length > 0) {
+                // Create a row for each notion page that has mappings
+                initialRows.push({
+                  notionPageId: notionPageId,
+                  propertyNames: data.properties.map(prop => ({
+                    value: prop.hostbuddy_property_name,
+                    label: prop.hostbuddy_property_name
+                  }))
+                });
+              }
+            });
+            
+            // If mappings exist, set rows with them
+            if (initialRows.length > 0) {
+              setRows(initialRows);
+            } else {
+              setRows([{ notionPageId: '', propertyNames: [] }]);
+            }
           } else {
+            // Start with one empty row if no mappings
             setRows([{ notionPageId: '', propertyNames: [] }]);
           }
         } else {
           ToastHandle(response.data?.error || 'Failed to load Notion pages', 'danger');
         }
       } catch (error) {
+        console.error('Error fetching Notion pages:', error);
         ToastHandle('Internal server error', 'danger');
       } finally {
         setLoading(false);
@@ -74,36 +102,22 @@ const NotionIntegration = ({ ApiUserData }) => {
     setRows(rows.map((row, i) => i === idx ? { ...row, propertyNames: selected } : row));
   };
 
-  // Save mappings
+  // Save mappings - Just a placeholder function as requested (no actual save functionality)
   const handleSave = async () => {
-    setSaving(true);
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    // Prepare mapping: only include rows with both fields filled
-    const mapping = rows
-      .filter(row => row.notionPageId && row.propertyNames && row.propertyNames.length > 0)
-      .map(row => ({
-        notion_page_id: row.notionPageId,
-        property_names: row.propertyNames.map((p) => p.value)
-      }));
-    try {
-      const config = {
-        headers: { 'X-API-Key': API_KEY, 'Content-Type': 'application/json' },
-        validateStatus: status => status >= 200 && status < 500
-      };
-      const body_data = { mapping };
-      // Assumed endpoint
-      const response = await axios.post(`${baseUrl}/save_notion_page_property_mapping`, body_data, config);
-      if (response.status === 200) {
-        ToastHandle('Mappings saved successfully', 'success');
-      } else {
-        ToastHandle(response.data?.error || 'Failed to save mappings', 'danger');
+    console.log('Save functionality is disabled as per requirements');
+    // Display what would be saved for demonstration purposes
+    const mappingsToSave = {};
+    rows.forEach(row => {
+      if (row.notionPageId && row.propertyNames && row.propertyNames.length > 0) {
+        mappingsToSave[row.notionPageId] = {
+          properties: row.propertyNames.map(prop => ({
+            hostbuddy_property_name: prop.value,
+            notion_page_name: notionPages.find(p => p.id === row.notionPageId)?.title || ''
+          }))
+        };
       }
-    } catch (error) {
-      ToastHandle('Internal server error', 'danger');
-    } finally {
-      setSaving(false);
-    }
+    });
+    console.log('Mappings that would be saved:', mappingsToSave);
   };
 
   // Used Notion page IDs in other rows (to prevent duplicate selection)
@@ -112,7 +126,7 @@ const NotionIntegration = ({ ApiUserData }) => {
   return (
     <div>
       <p style={{ fontSize: '14px', textAlign: 'left', width: '95%', marginTop: '20px' }}>
-        Use the table below to assign your Notion pages or databases to HostBuddy properties. Click "Save" at the bottom when finished.
+        Use the table below to assign your Notion pages or databases to HostBuddy properties. Click "Add Another Page" to add more mappings.
       </p>
       {loading ? (
         <Loader />
@@ -123,8 +137,8 @@ const NotionIntegration = ({ ApiUserData }) => {
           <table style={{ marginTop: '30px', width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>Notion page/database</th>
-                <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>Properties</th>
+                <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>Notion pages</th>
+                <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>HostBuddy properties</th>
                 <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}></th>
               </tr>
             </thead>
