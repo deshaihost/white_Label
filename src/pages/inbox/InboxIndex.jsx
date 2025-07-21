@@ -151,28 +151,38 @@ const InboxIndex = () => {
     }
   };
 
+
   const populateExternalContactNumbers = async () => {
   const data = await callExternalContactNumbersApi();
 
-  if (data?.external_contact_numbers && typeof data.external_contact_numbers === "object") {
+  if (data?.external_contact_numbers && typeof data.external_contact_numbers === 'object') {
     let idCounter = 1;
-    const transformedExternalContactNumbers = Object.entries(data.external_contact_numbers).flatMap(
-      ([conversation_id, numbers]) =>
-        (numbers || []).map(number => {
+    
+    // Transform the object into an array of contact entries
+    const transformedExternalContactNumbers = Object.entries(data.external_contact_numbers)
+      .flatMap(([conversation_id, contactInfo]) => {
+        const name = contactInfo.name || `Unknown Contact (${conversation_id.slice(-4)})`;
+        const numbers = contactInfo.phone_numbers || [];
+        
+        return numbers.map(number => {
           const cleanDigits = typeof number === "string" ? number.replace(/\D/g, "") : "";
           return {
             conversation_id,
+            name,
             contact_number: number,
-            channel: conversation_id.startsWith("whatsapp:") ? "WHATSAPP" : conversation_id.startsWith("openphone:") ? "OPENPHONE" : "UNKNOWN",
+            channel: conversation_id.startsWith("whatsapp:") ? "WHATSAPP" : 
+                    conversation_id.startsWith("openphone:") ? "OPENPHONE" : "UNKNOWN",
             searchable: cleanDigits,
             id_for_react: idCounter++,
             phone_numbers: [number]
           };
-        })
-    );
+        });
+      });
+    
     setAllExternalContactNumbers(transformedExternalContactNumbers);
   } else {
-    console.warn("No external_contact_numbers found in API response.");
+    console.warn("No external_contact_numbers found in API response or invalid format.");
+    setAllExternalContactNumbers([]);
   }
 };
 
