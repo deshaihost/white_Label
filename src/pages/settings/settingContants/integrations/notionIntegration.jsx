@@ -49,12 +49,14 @@ const NotionIntegration = ({ ApiUserData }) => {
             Object.entries(mappingObj).forEach(([notionPageId, data]) => {
               if (data.properties && data.properties.length > 0) {
                 // Create a row for each notion page that has mappings
+                const propertyNames = data.properties.map(prop => ({
+                  value: prop.hostbuddy_property_name,
+                  label: prop.hostbuddy_property_name
+                }));
+                
                 initialRows.push({
                   notionPageId: notionPageId,
-                  propertyNames: data.properties.map(prop => ({
-                    value: prop.hostbuddy_property_name,
-                    label: prop.hostbuddy_property_name
-                  }))
+                  propertyNames: propertyNames
                 });
               }
             });
@@ -102,22 +104,65 @@ const NotionIntegration = ({ ApiUserData }) => {
     setRows(rows.map((row, i) => i === idx ? { ...row, propertyNames: selected } : row));
   };
 
-  // Save mappings - Just a placeholder function as requested (no actual save functionality)
+  // Save mappings to the /save_notion_property_mapping endpoint
   const handleSave = async () => {
-    console.log('Save functionality is disabled as per requirements');
-    // Display what would be saved for demonstration purposes
-    const mappingsToSave = {};
-    rows.forEach(row => {
-      if (row.notionPageId && row.propertyNames && row.propertyNames.length > 0) {
-        mappingsToSave[row.notionPageId] = {
-          properties: row.propertyNames.map(prop => ({
+    setSaving(true);
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    
+    try {
+      // Format data according to API requirements
+      const propertyMapping = {};
+      
+      // Process each row that has valid selections
+      rows.forEach(row => {
+        if (row.notionPageId && row.propertyNames && row.propertyNames.length > 0) {
+          const notionPage = notionPages.find(p => p.id === row.notionPageId);
+          const notionPageName = notionPage?.title || '';
+          
+          // Create the properties array for this page
+          const properties = row.propertyNames.map(prop => ({
             hostbuddy_property_name: prop.value,
-            notion_page_name: notionPages.find(p => p.id === row.notionPageId)?.title || ''
-          }))
-        };
+            notion_page_name: notionPageName
+          }));
+          
+          // Add to the property mapping object
+          propertyMapping[row.notionPageId] = {
+            properties: properties
+          };
+        }
+      });
+      
+      // Prepare request body
+      const requestBody = {
+        property_mapping: propertyMapping
+      };
+      
+      // Setup config for the request
+      const config = {
+        headers: { 'X-API-Key': API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: status => status >= 200 && status < 500
+      };
+      
+      // Send the request
+      const response = await axios.post(
+        `${baseUrl}/save_notion_property_mapping`, 
+        requestBody, 
+        config
+      );
+      
+      // Handle the response
+      if (response.status === 200) {
+        ToastHandle('Notion property mappings saved successfully', 'success');
+      } else {
+        ToastHandle(response.data?.error || 'Failed to save mappings', 'danger');
       }
-    });
-    console.log('Mappings that would be saved:', mappingsToSave);
+    } catch (error) {
+      console.error('Error saving Notion property mappings:', error);
+      ToastHandle('Internal server error', 'danger');
+    } finally {
+      setSaving(false);
+    }
   };
 
   // Used Notion page IDs in other rows (to prevent duplicate selection)
