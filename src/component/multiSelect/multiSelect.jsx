@@ -24,7 +24,8 @@ const MultiSelect = ({
     return (
       <components.ValueContainer {...props}>
         <div>{displayText}</div>
-        {children}
+        {children}\
+        
       </components.ValueContainer>
     );
   };
