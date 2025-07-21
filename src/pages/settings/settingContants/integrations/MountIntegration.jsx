@@ -565,10 +565,10 @@ const MountIntegration = ({ ApiUserData }) => {
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        backgroundColor: (propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])) ? '#25db28' : '#ff4d4d',
+                        backgroundColor: (propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])) ? 'rgba(20, 110, 245, 1)' : '#333',
                         borderRadius: '34px',
                         transition: '0.4s',
-                        boxShadow: (propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])) ? '0 0 5px #25db28' : '0 0 5px #ff4d4d'
+                        boxShadow: (propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])) ? '0 0 5px rgba(20, 110, 245, 1)' : '0 0 5px #333'
                       }}>
                         <span style={{
                           position: 'absolute',
@@ -601,7 +601,7 @@ const MountIntegration = ({ ApiUserData }) => {
                       gap: '8px'
                     }}>
                       <span style={{ 
-                        color: selectedMountUpsells[property] ? '#25db28' : '#ff4d4d', 
+                        color: selectedMountUpsells[property] ? 'rgba(20, 110, 245, 1)' : '#ccc', 
                         fontWeight: '600',
                         fontSize: '14px'
                       }}>
@@ -621,11 +621,11 @@ const MountIntegration = ({ ApiUserData }) => {
                           display: 'inline-block',
                           width: '30px',
                           height: '17px',
-                          background: selectedMountUpsells[property] ? '#25db28' : '#ff4d4d',
+                          background: selectedMountUpsells[property] ? 'rgba(20, 110, 245, 1)' : '#333',
                           borderRadius: '34px',
                           transition: '0.4s',
                           cursor: 'pointer',
-                          boxShadow: selectedMountUpsells[property] ? '0 0 5px #25db28' : '0 0 5px #ff4d4d'
+                          boxShadow: selectedMountUpsells[property] ? '0 0 5px rgba(20, 110, 245, 1)' : '0 0 5px #333'
                         }}>
                           <span style={{
                             position: 'absolute',
