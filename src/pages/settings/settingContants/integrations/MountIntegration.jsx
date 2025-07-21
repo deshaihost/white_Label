@@ -12,9 +12,12 @@ const MountIntegration = ({ ApiUserData }) => {
   const [maxDistance, setMaxDistance] = useState('');
   const [hoursDelay, setHoursDelay] = useState(0);
   const [minutesDelay, setMinutesDelay] = useState(0);
+  const [hoursBeforeCheckin, setHoursBeforeCheckin] = useState(0);
+  const [minutesBeforeCheckin, setMinutesBeforeCheckin] = useState(0);
   const [excludeStart, setExcludeStart] = useState("22:00");
   const [excludeEnd, setExcludeEnd] = useState("07:00");
   const [excludeHours, setExcludeHours] = useState(true);
+  const [upsellTiming, setUpsellTiming] = useState("afterBooking");
   const [initiationTemplate, setInitiationTemplate] = useState("Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?");
   const [aiPersonalization, setAiPersonalization] = useState(true);
   const [aiContentChecking, setAiContentChecking] = useState(true);
@@ -221,8 +224,9 @@ const MountIntegration = ({ ApiUserData }) => {
           zIndex: 1000
         }}>
           <div style={{
-            backgroundColor: '#1a2341',
-            borderRadius: '18px',
+            backgroundColor: 'rgba(2, 13, 41, 1)',
+            border: '2px solid rgba(19, 49, 123, 1)',
+            borderRadius: '30px',
             padding: '30px',
             width: '500px',
             maxWidth: '90%',
@@ -252,7 +256,7 @@ const MountIntegration = ({ ApiUserData }) => {
               <h2 style={{ color: '#fff', fontSize: '20px', fontWeight: '600', margin: '0 0 8px' }}>
                 Upsell Settings
               </h2>
-              <div style={{ height: '2px', background: 'linear-gradient(90deg, rgba(109,109,43,0) 0%, rgba(109,109,43,1) 50%, rgba(109,109,43,0) 100%)', margin: '15px auto' }}></div>
+              {/* <div style={{ height: '2px', background: 'linear-gradient(90deg, rgba(109,109,43,0) 0%, rgba(109,109,43,1) 50%, rgba(109,109,43,0) 100%)', margin: '15px auto' }}></div> */}
             </div>
             {/* Modal content */}
             <div style={{ color: '#fff' }}>
@@ -264,6 +268,7 @@ const MountIntegration = ({ ApiUserData }) => {
                   </label>
                   <div 
                     style={{ 
+                      color:"rgba(187, 187, 187, 1)",
                       marginLeft: '10px', 
                       position: 'relative',
                       display: 'inline-block'
@@ -280,8 +285,8 @@ const MountIntegration = ({ ApiUserData }) => {
                   onChange={e => setMaxDistance(e.target.value)}
                   style={{
                     width: '100%',
-                    background: '#22305a',
-                    border: 'none',
+                    background: 'rgba(10, 26, 68, 1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
                     color: '#fff',
                     padding: '10px 16px',
                     borderRadius: '24px',
@@ -302,99 +307,349 @@ const MountIntegration = ({ ApiUserData }) => {
                   Maximum distance between your property address and upsells which HostBuddy will consider for trip planning
                 </div>
               </div>
-              {/* Upsell delay after booking confirmation */}
+              {/* Upsell timing */}
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '10px' }}>
-                  Upsell delay after booking confirmation
+                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '15px' }}>
+                  Upsell timing
                 </label>
-                <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span style={{ fontSize: '14px', marginRight: '5px' }}>Hours:</span>
+                
+                {/* After booking confirmation */}
+                <div style={{ marginBottom: '15px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                     <input
-                      type="number"
-                      min="0"
-                      max="72"
-                      value={hoursDelay}
-                      onChange={e => setHoursDelay(e.target.value)}
-                      style={{
-                        width: '60px',
-                        background: '#22305a',
-                        border: 'none',
-                        color: '#fff',
-                        textAlign: 'center',
-                        padding: '10px',
-                        borderRadius: '24px',
-                        fontSize: '15px',
-                        outline: 'none',
-                      }}
+                      type="radio"
+                      id="afterBooking"
+                      name="upsellTiming"
+                      checked={upsellTiming === "afterBooking"}
+                      onChange={() => setUpsellTiming("afterBooking")}
+                      style={{ marginRight: '8px' }}
                     />
+                    <label htmlFor="afterBooking" style={{ fontSize: '14px', fontWeight: '500' }}>
+                      After booking confirmation
+                    </label>
+                    <div 
+                      style={{ 
+                        marginLeft: '10px', 
+                        position: 'relative',
+                        display: 'inline-block'
+                      }}
+                      title="Upsell will be sent after booking confirmation"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" style={{ color: '#aaa' }}>
+                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+                      </svg>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span style={{ fontSize: '14px', marginRight: '5px' }}>Minutes:</span>
-                    <input
-                      type="number"
-                      min="0"
-                      max="59"
-                      value={minutesDelay}
-                      onChange={e => setMinutesDelay(e.target.value)}
-                      style={{
-                        width: '60px',
-                        background: '#22305a',
-                        border: 'none',
-                        color: '#fff',
-                        textAlign: 'center',
-                        padding: '10px',
+                  <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginLeft: '24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                      <div style={{
+                        width: '100%',
+                        background: upsellTiming === "afterBooking" ? 'rgba(10, 26, 68, 1)' : 'rgba(10, 26, 68, 0.5)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: upsellTiming === "afterBooking" ? '#fff' : '#aaa',
+                        textAlign: 'left',
+                        padding: '10px 15px',
                         borderRadius: '24px',
                         fontSize: '15px',
                         outline: 'none',
-                      }}
-                    />
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start'
+                      }}>
+                        <span style={{ marginRight: '5px' }}>Hours:</span>
+                        <input
+                          type="text"
+                          value={hoursDelay}
+                          onChange={e => {
+                            const value = e.target.value;
+                            // Allow numbers, decimals, and time formats like "1.5", "1h", "1 hr", etc.
+                            if (value === '' || /^(\d*\.?\d*[hH]?r?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
+                              setHoursDelay(value);
+                            }
+                          }}
+                          onBlur={e => {
+                            // Convert various formats to pure number on blur
+                            let value = e.target.value.toString().toLowerCase();
+                            value = value.replace(/[hH]r?s?/g, '').trim();
+                            const numValue = parseFloat(value) || 0;
+                            if (numValue >= 0 && numValue <= 72) {
+                              setHoursDelay(numValue);
+                            } else {
+                              setHoursDelay(0);
+                            }
+                          }}
+                          placeholder="0"
+                          disabled={upsellTiming !== "afterBooking"}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: upsellTiming === "afterBooking" ? '#fff' : '#aaa',
+                            textAlign: 'left',
+                            fontSize: '15px',
+                            outline: 'none',
+                            width: '60px'
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                      <div style={{
+                        width: '100%',
+                        background: upsellTiming === "afterBooking" ? 'rgba(10, 26, 68, 1)' : 'rgba(10, 26, 68, 0.5)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: upsellTiming === "afterBooking" ? '#fff' : '#aaa',
+                        textAlign: 'left',
+                        padding: '10px 15px',
+                        borderRadius: '24px',
+                        fontSize: '15px',
+                        outline: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start'
+                      }}>
+                        <span style={{ marginRight: '5px' }}>Minutes:</span>
+                        <input
+                          type="text"
+                          value={minutesDelay}
+                          onChange={e => {
+                            const value = e.target.value;
+                            // Allow numbers, decimals, and time formats like "30", "30m", "30 min", etc.
+                            if (value === '' || /^(\d*\.?\d*[mM]?i?n?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
+                              setMinutesDelay(value);
+                            }
+                          }}
+                          onBlur={e => {
+                            // Convert various formats to pure number on blur
+                            let value = e.target.value.toString().toLowerCase();
+                            value = value.replace(/[mM]i?n?s?/g, '').trim();
+                            const numValue = parseFloat(value) || 0;
+                            if (numValue >= 0 && numValue <= 59) {
+                              setMinutesDelay(numValue);
+                            } else {
+                              setMinutesDelay(0);
+                            }
+                          }}
+                          placeholder="0"
+                          disabled={upsellTiming !== "afterBooking"}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: upsellTiming === "afterBooking" ? '#fff' : '#aaa',
+                            textAlign: 'left',
+                            fontSize: '15px',
+                            outline: 'none',
+                            width: '60px'
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div style={{ fontSize: '12px', color: '#aaa', marginTop: '5px' }}>
-                  On booking confirmation, HostBuddy will initiate Mount upsells after the specified time.
+
+                {/* Before check-in */}
+                <div style={{ marginBottom: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                    <input
+                      type="radio"
+                      id="beforeCheckin"
+                      name="upsellTiming"
+                      checked={upsellTiming === "beforeCheckin"}
+                      onChange={() => setUpsellTiming("beforeCheckin")}
+                      style={{ marginRight: '8px' }}
+                    />
+                    <label htmlFor="beforeCheckin" style={{ fontSize: '14px', fontWeight: '500' }}>
+                      Before check-in
+                    </label>
+                    <div 
+                      style={{ 
+                        marginLeft: '10px', 
+                        position: 'relative',
+                        display: 'inline-block'
+                      }}
+                      title="Upsell will be sent before check-in time"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" style={{ color: '#aaa' }}>
+                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginLeft: '24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                      <div style={{
+                        width: '100%',
+                        background: upsellTiming === "beforeCheckin" ? 'rgba(10, 26, 68, 1)' : 'rgba(10, 26, 68, 0.5)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: upsellTiming === "beforeCheckin" ? '#fff' : '#aaa',
+                        textAlign: 'left',
+                        padding: '10px 15px',
+                        borderRadius: '24px',
+                        fontSize: '15px',
+                        outline: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start'
+                      }}>
+                        <span style={{ marginRight: '5px' }}>Hours:</span>
+                        <input
+                          type="text"
+                          value={hoursBeforeCheckin}
+                          onChange={e => {
+                            const value = e.target.value;
+                            // Allow numbers, decimals, and time formats like "1.5", "1h", "1 hr", etc.
+                            if (value === '' || /^(\d*\.?\d*[hH]?r?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
+                              setHoursBeforeCheckin(value);
+                            }
+                          }}
+                          onBlur={e => {
+                            // Convert various formats to pure number on blur
+                            let value = e.target.value.toString().toLowerCase();
+                            value = value.replace(/[hH]r?s?/g, '').trim();
+                            const numValue = parseFloat(value) || 0;
+                            if (numValue >= 0 && numValue <= 72) {
+                              setHoursBeforeCheckin(numValue);
+                            } else {
+                              setHoursBeforeCheckin(0);
+                            }
+                          }}
+                          placeholder="0"
+                          disabled={upsellTiming !== "beforeCheckin"}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: upsellTiming === "beforeCheckin" ? '#fff' : '#aaa',
+                            textAlign: 'left',
+                            fontSize: '15px',
+                            outline: 'none',
+                            width: '60px'
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                      <div style={{
+                        width: '100%',
+                        background: upsellTiming === "beforeCheckin" ? 'rgba(10, 26, 68, 1)' : 'rgba(10, 26, 68, 0.5)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: upsellTiming === "beforeCheckin" ? '#fff' : '#aaa',
+                        textAlign: 'left',
+                        padding: '10px 15px',
+                        borderRadius: '24px',
+                        fontSize: '15px',
+                        outline: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start'
+                      }}>
+                        <span style={{ marginRight: '5px' }}>Minutes:</span>
+                        <input
+                          type="text"
+                          value={minutesBeforeCheckin}
+                          onChange={e => {
+                            const value = e.target.value;
+                            // Allow numbers, decimals, and time formats like "30", "30m", "30 min", etc.
+                            if (value === '' || /^(\d*\.?\d*[mM]?i?n?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
+                              setMinutesBeforeCheckin(value);
+                            }
+                          }}
+                          onBlur={e => {
+                            // Convert various formats to pure number on blur
+                            let value = e.target.value.toString().toLowerCase();
+                            value = value.replace(/[mM]i?n?s?/g, '').trim();
+                            const numValue = parseFloat(value) || 0;
+                            if (numValue >= 0 && numValue <= 59) {
+                              setMinutesBeforeCheckin(numValue);
+                            } else {
+                              setMinutesBeforeCheckin(0);
+                            }
+                          }}
+                          placeholder="0"
+                          disabled={upsellTiming !== "beforeCheckin"}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: upsellTiming === "beforeCheckin" ? '#fff' : '#aaa',
+                            textAlign: 'left',
+                            fontSize: '15px',
+                            outline: 'none',
+                            width: '60px'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              {/* Upsell delay after booking confirmation */}
+              
               {/* Exclude hours for upsell */}
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '10px' }}>
+                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '15px' }}>
                   Exclude hours for upsell
                 </label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '14px' }}>From</span>
-                  <input
-                    type="time"
-                    value={excludeStart}
-                    onChange={e => setExcludeStart(e.target.value)}
-                    style={{
-                        background: '#22305a',
-                        border: 'none',
-                        color: '#fff',
-                        padding: '10px 16px',
-                        borderRadius: '24px',
-                        fontSize: '15px',
-                        colorScheme: 'dark',
-                        width: '110px',
-                        outline: 'none',
-                      }}
-                  />
-                  <span style={{ fontSize: '14px' }}>To</span>
-                  <input
-                    type="time"
-                    value={excludeEnd}
-                    onChange={e => setExcludeEnd(e.target.value)}
-                    style={{
-                        background: '#22305a',
-                        border: 'none',
-                        color: '#fff',
-                        padding: '10px 16px',
-                        borderRadius: '24px',
-                        fontSize: '15px',
-                        colorScheme: 'dark',
-                        width: '110px',
-                        outline: 'none',
-                      }}
-                  />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                    <span style={{ fontSize: '14px', marginRight: '10px', minWidth: '40px' }}>From</span>
+                    <div style={{
+                      width: '100%',
+                      background: 'rgba(10, 26, 68, 1)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      color: '#fff',
+                      padding: '10px 15px',
+                      borderRadius: '24px',
+                      fontSize: '15px',
+                      outline: 'none',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}>
+                      <input
+                        type="time"
+                        value={excludeStart}
+                        onChange={e => setExcludeStart(e.target.value)}
+                        placeholder="HH : MM AM"
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: '#fff',
+                          fontSize: '15px',
+                          outline: 'none',
+                          width: '100%',
+                          colorScheme: 'dark'
+                        }}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                    <span style={{ fontSize: '14px', marginRight: '10px', minWidth: '25px' }}>To</span>
+                    <div style={{
+                      width: '100%',
+                      background: 'rgba(10, 26, 68, 1)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      color: '#fff',
+                      padding: '10px 15px',
+                      borderRadius: '24px',
+                      fontSize: '15px',
+                      outline: 'none',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}>
+                      <input
+                        type="time"
+                        value={excludeEnd}
+                        onChange={e => setExcludeEnd(e.target.value)}
+                        placeholder="HH : MM PM"
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: '#fff',
+                          fontSize: '15px',
+                          outline: 'none',
+                          width: '100%',
+                          colorScheme: 'dark'
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div style={{ fontSize: '12px', color: '#aaa', marginTop: '2px' }}>
                   HostBuddy will not upsell during the excluded hours, following the timezone of the property location
@@ -411,8 +666,8 @@ const MountIntegration = ({ ApiUserData }) => {
                   rows={4}
                   style={{
                     width: '100%',
-                    background: '#22305a',
-                    border: 'none',
+                    background: 'rgba(10, 26, 68, 1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
                     color: '#fff',
                     padding: '14px',
                     borderRadius: '24px',
