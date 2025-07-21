@@ -200,7 +200,7 @@ const WhatsAppInbox = ({ message, guestName, guestImageUrl, feedBackDataGet, fee
                     ))}
                 </div>
               )}
-            {text}
+            {text?.text || text}
           </p>
           {/* Thumbs feedback for hostbuddy messages, same logic as MildeSection.jsx */}
           {sender === "hostbuddy" && (

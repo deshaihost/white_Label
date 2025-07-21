@@ -27,6 +27,7 @@ import CheckBoxIcon from "./mildeSection/message/icons/check_box.svg";
 import DefaultPinIcon from "./mildeSection/message/icons/default_pin.svg";
 import SelectedPinIcon from "./mildeSection/message/icons/selected_pin.svg";
 import UrgentFlagIcon from "./mildeSection/message/icons/urgent_flag_middle.svg";
+import { set } from "react-hook-form";
 
 // Add responsive styles
 const responsiveStyles = `
@@ -254,6 +255,7 @@ const responsiveStyles = `
 const Inbox = ({
   allPropertyNamesList,
   allGuestNamesList,
+  allExternalContactNumbersList,
   userHasPMS,
   subscriptionPlan,
   accountAgeDays,
@@ -287,7 +289,6 @@ const Inbox = ({
   const [sidebarClicked, setSidebarClicked] = useState(true); // Track if sidebar was clicked vs hovered
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width for responsive design
   const [contactType, setContactType] = useState("");
-  console.log("selectedConversation from  inbox", selectedConversation);
   // State for tracking pin status
   const [isPinned, setIsPinned] = useState(false);
 
@@ -641,12 +642,15 @@ const Inbox = ({
         selectedConversation.openphone_messages &&
         selectedConversation.openphone_messages.length > 0;
 
-      // Logic for default tab selection:
-      // - If PMS messages exist, default to PMS tab
-      // - If no PMS messages but WhatsApp messages exist, default to WhatsApp tab
-      // - If no PMS messages but OpenPhone messages exist, default to OpenPhone tab
-      // - If both are empty, default to PMS tab
-      if (hasMessages) {
+      const hasAnyMessages = hasMessages || hasWhatsAppMessages || hasOpenPhoneMessages;
+      if (!hasAnyMessages) {
+        setActiveTab("notes");
+      } else if (hasMessages) { // Default to PMS tab if no messages exist
+        // Logic for default tab selection:
+        // - If PMS messages exist, default to PMS tab
+        // - If no PMS messages but WhatsApp messages exist, default to WhatsApp tab
+        // - If no PMS messages but OpenPhone messages exist, default to OpenPhone tab
+        // - If both are empty, default to PMS tab
         setActiveTab("pms");
       } else if (hasWhatsAppMessages) {
         setActiveTab("whatsapp");
@@ -1221,7 +1225,6 @@ const Inbox = ({
             (msg) => msg.sender && msg.text && msg.time
           ),
       });
-      return newCache;
     });
   };
   // Clean up old cache entries (older than 10 minutes) to prevent memory leaks
@@ -1412,6 +1415,7 @@ const Inbox = ({
     // otherwise distribute space between items
     return rightSectionVisible ? "calc(100% - 290px)" : "100%";
   };
+  console.log("Selected conversation:", selectedConversation);
   return (
     <>
       {" "}
@@ -1451,9 +1455,9 @@ const Inbox = ({
           >
             {" "}
             <LeftMessage
-              className="box"
               allPropertyNamesList={allPropertyNamesList}
               allGuestNames={allGuestNamesList}
+              allExternalContactNumbers={allExternalContactNumbersList}
               allConversations={conversations}
               setAllConversations={setConversations}
               setSelectedConvo={setSelectedConversation}
@@ -1477,8 +1481,7 @@ const Inbox = ({
               setUnreadPmsCount={setUnreadPmsCount}
               sidebarClicked={sidebarClicked}
               sidebarOpen={sidebarOpen}
-              updateSpecificConversation={updateSpecificConversation}
-              updateSelectedConversation={updateSelectedConversation}
+              contactType={contactType}
             />
             <div
               className="middleSectionContainer"
@@ -1834,14 +1837,14 @@ const Inbox = ({
                              backgroundColor: "rgb(44 46 52)",
                             color: "#A6A9B2",
                             borderRadius: "50%",
-                            width: "18px",
-                            height: "18px",
-                            fontSize: "12px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            marginLeft: "6px",
-                            fontWeight: "bold",
+                            width: '18px',
+                            height: '18px',
+                            fontSize: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginLeft: '6px',
+                            fontWeight: 'bold',
                           }}
                         >
                           {unreadPmsCount}
@@ -1854,17 +1857,17 @@ const Inbox = ({
                             backgroundColor: "#25D366",
                             color: "white",
                             borderRadius: "50%",
-                            width: "18px",
-                            height: "18px",
-                            fontSize: "12px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            marginLeft: "6px",
-                            fontWeight: "bold",
+                            width: '18px',
+                            height: '18px',
+                            fontSize: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginLeft: '6px',
+                            fontWeight: 'bold',
                           }}
                         >
-                          {unreadWhatsAppCount}
+                                                   {unreadWhatsAppCount}
                         </span>
                       )} */}
 
@@ -1876,6 +1879,9 @@ const Inbox = ({
                                 backgroundColor: "rgb(44 46 52)",
                                 color: "#A6A9B2",
                                 borderRadius: "50%",
+                                width: "18px",
+                                height: "18px",
+                                fontSize: "12px",
                                 width: "18px",
                                 height: "18px",
                                 fontSize: "12px",
@@ -2790,6 +2796,7 @@ const Inbox = ({
               <LeftMessage
                 allPropertyNamesList={allPropertyNamesList}
                 allGuestNames={allGuestNamesList}
+                allExternalContactNumbers={allExternalContactNumbersList}
                 allConversations={conversations}
                 setAllConversations={setConversations}
                 setSelectedConvo={setSelectedConversation}

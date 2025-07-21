@@ -199,7 +199,7 @@ const OpenPhoneInbox = ({ message, guestName, guestImageUrl, feedBackDataGet, fe
                     ))}
                 </div>
               )}
-            {text}
+            {text?.text || text}
           </p>
           {/* Thumbs feedback for hostbuddy messages, same logic as MildeSection.jsx */}
           {sender === "hostbuddy" && (

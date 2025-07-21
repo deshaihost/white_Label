@@ -139,7 +139,7 @@ const WhatsAppSection = ({
         if (
           response.data &&
           response.data.user &&
-          response.data.user.whatsapp_numbers
+          response.data.user.whatsapp_phone_number
         ) {
           setHasWhatsAppIntegration(true);
         } else {

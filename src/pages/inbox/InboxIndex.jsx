@@ -26,6 +26,8 @@ const InboxIndex = () => {
   const [showVideoComponent, setShowVideoComponent] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [allExternalContactNumbers, setAllExternalContactNumbers] = useState([]);
+
   const handleWatchLetter = () => {
     // Handle the watch letter click event
     // You can add your own logic here, like opening a modal or navigating to a new page
@@ -100,6 +102,36 @@ const InboxIndex = () => {
     }
   };
 
+  const callExternalContactNumbersApi = async () => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
+      };
+      const response = await axios.get(
+        `${baseUrl}/get_external_contact_numbers`,
+        config
+      );
+
+      console.log('API response:', response.data); // Debug log
+
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        console.error('API error:', response.data);
+        return { error: "Failed to search contacts" };
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      return { error: "Internal server error" };
+    }
+  };
+
   // Call API to get guest names (like: { "property_name1": ["guest_name1", "guest_name2", ...], ... })
   // Save in the state like: [ { name:"Guest Name1", searchable:"guestname1", property:"property_name1" }, ... ]
   const populateGuestNames = async () => {
@@ -118,6 +150,32 @@ const InboxIndex = () => {
       setAllGuestNames(transformedGuestNames);
     }
   };
+
+  const populateExternalContactNumbers = async () => {
+  const data = await callExternalContactNumbersApi();
+
+  if (data?.external_contact_numbers && typeof data.external_contact_numbers === "object") {
+    let idCounter = 1;
+    const transformedExternalContactNumbers = Object.entries(data.external_contact_numbers).flatMap(
+      ([conversation_id, numbers]) =>
+        (numbers || []).map(number => {
+          const cleanDigits = typeof number === "string" ? number.replace(/\D/g, "") : "";
+          return {
+            conversation_id,
+            contact_number: number,
+            channel: conversation_id.startsWith("whatsapp:") ? "WHATSAPP" : conversation_id.startsWith("openphone:") ? "OPENPHONE" : "UNKNOWN",
+            searchable: cleanDigits,
+            id_for_react: idCounter++,
+            phone_numbers: [number]
+          };
+        })
+    );
+    setAllExternalContactNumbers(transformedExternalContactNumbers);
+  } else {
+    console.warn("No external_contact_numbers found in API response.");
+  }
+};
+
   // Track screen width for responsive rendering
   useEffect(() => {
     const handleResize = () => {
@@ -137,6 +195,7 @@ const InboxIndex = () => {
   useEffect(() => {
     dispatch(getUserDataActions(false)); // So we can have the list of property names for the various dropdowns. false because we don't need the property data
     populateGuestNames(); // So we can have the list of guest names for the guest search bar
+    populateExternalContactNumbers(); // So we can have the list of external contact numbers for the contact search bar
 
     // Check for component index from URL path param or from location state
     const componentFromLocation = location.state?.activeComponent;
@@ -226,6 +285,7 @@ const InboxIndex = () => {
           <Inbox
             allPropertyNamesList={allPropertyNamesList}
             allGuestNamesList={allGuestNames}
+            allExternalContactNumbersList={allExternalContactNumbers}
             userHasPMS={userHasPMS}
             subscriptionPlan={subscriptionPlan}
             accountAgeDays={accountAgeDays}

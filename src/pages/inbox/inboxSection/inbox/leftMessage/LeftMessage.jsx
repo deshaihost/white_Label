@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { callGetSingleConversationApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import "./index.css";
 import "./LeftMessage.css";
 import { formatDateRange, timeFormat } from "../../../../../helper/commonFun";
-import { callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
+import { callGetConversationsApi, callMarkConversationAsOpenedApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import { BoxLoader } from "../../../../../helper/Loader";
 import { TextField } from "./searchComponent/searchInput"; // Import the TextField component
 import FilterPop from "./FilterPop/FilterPop"; // Import the FilterPop component
@@ -37,6 +38,8 @@ import VRBO_ICON from "./icons/VRBO_ICON.svg"; // Import the VRBO icon
 import DIRECT_ICON from "./icons/DIRECT_ICON.svg"; // Import the Direct icon
 import EMAIL_ICON from "./icons/EMAIL_ICON.svg"; // Import the Email icon
 import OPENPHONE_ICON from "./icons/openphone_icon.svg"; // Import the OpenPhone icon
+import WHATSAPPSUP_ICON from "./icons/WHATSAPPSUP_ICON.svg"; // Import the WhatsApp icon
+import { set } from "react-hook-form";
 
 const avatarImages = [
   avatar01, avatar02, avatar03, avatar04,
@@ -48,6 +51,12 @@ const avatarImages = [
 const avatarCache = new Map();
 
 function getRandomAvatar(conversationId) {
+  // Add safety check for undefined conversationId
+  if (!conversationId || typeof conversationId !== 'string') {
+    // Return a default avatar if conversationId is invalid
+    return avatarImages[0];
+  }
+
   if (!avatarCache.has(conversationId)) {
     // Generate a deterministic index based on the conversationId
     // This ensures the same conversation always gets the same avatar
@@ -64,6 +73,7 @@ function getRandomAvatar(conversationId) {
 const LeftMessage = ({
   allPropertyNamesList,
   allGuestNames,
+  allExternalContactNumbers,
   allConversations,
   setAllConversations,
   setSelectedConvo,
@@ -120,6 +130,10 @@ const LeftMessage = ({
   const [filteredGuestsFromSearch, setFilteredGuestsFromSearch] = useState([]);
   const [searchFocused, setSearchFocused] = useState(false);
   const searchDropdownRef = useRef(null);
+
+  // Add phone number search states
+  const [filteredContactsFromPhoneSearch, setFilteredContactsFromPhoneSearch] = useState([]);
+  const [justSelectedFromPhoneSearch, setJustSelectedFromPhoneSearch] = useState(false);
 
   // Temporary filter state (not applied until user clicks "Apply")
   // Use the current date for real-time checking
@@ -341,33 +355,237 @@ const LeftMessage = ({
       document.removeEventListener("mousedown", handleSearchClickOutside);
     };
   }, []);
+
+  const phoneSearchTimeout = useRef(null);
+
   const handleSearchInputChange = async (e) => {
     const searchVal = e.target.value;
     setSearchInputValue(searchVal);
 
-    if (searchVal && allGuestNames && allGuestNames.length > 0) {
+    const isPhoneSearch = /^\d+$/.test(searchVal.trim());
+
+    // Debounce
+    if (phoneSearchTimeout.current) {
+      clearTimeout(phoneSearchTimeout.current);
+    }
+
+    // ======== IF INPUT CLEARED ========
+    if (searchVal.trim() === "") {
+      setFilteredGuestsFromSearch([]);
+      setFilteredContactsFromPhoneSearch([]);
+      
+      // Reset the flag when search is cleared
+      setJustSelectedFromPhoneSearch(false);
+
+      // If there was a guest filter active, clear it and reload all conversations
+      if (guestNameSearchVal) {
+        setFilterQueryLoading(true);
+        setGuestNameSearchVal("");
+
+        try {
+          await fetchConversations(
+            10,
+            true, // replace existing conversations
+            urgentFilterIsEnabled, // keep current urgent filter
+            propertyFilterVal, // keep current property filter
+            phaseFilterVal, // keep current phase filter
+            fromHostBuddyFilterVal, // keep current host buddy filter
+            "", // clear guest name search
+            true, // force refresh
+            userFilterVal // keep current user filter
+          );
+        } catch (error) {
+          console.error("Error fetching conversations:", error);
+        } finally {
+          setFilterQueryLoading(false);
+        }
+      } else {
+        // Remove any conversations that were added from phone search (external contacts)
+        // Keep only conversations that have reservation_id or were part of original conversations
+        const originalConversations = allConversations.filter(convo =>
+          convo.reservation_id || !convo._isCompleteConversation
+        );
+
+        setAllConversations(originalConversations);
+        setFilteredConversations(originalConversations);
+      }
+      return; // Early return to avoid running other search logic
+    }
+
+    // ======== PHONE NUMBER SEARCH (Guest-like Logic) ========
+    if (isPhoneSearch && allExternalContactNumbers && allExternalContactNumbers?.length > 0) {
+      const digitSearch = searchVal.replace(/\D/g, "");
+
+      // Filter phone contacts by last 4 or full digits
+      const filteredContacts = allExternalContactNumbers.filter((contact) =>
+        contact.searchable.includes(digitSearch) || contact.searchable.endsWith(digitSearch)
+      );
+      setFilteredGuestsFromSearch([]); // Clear guest name dropdown
+      setFilteredContactsFromPhoneSearch(filteredContacts); // Show in phone dropdown
+
+      console.log("Filtered conversations from phone search:", allConversations);
+    }
+
+    // ======== GUEST NAME SEARCH LOGIC ========
+    else if (!isPhoneSearch && allGuestNames && allGuestNames.length > 0) {
       const searchValLower = searchVal.toLowerCase().replace(/[^a-z0-9]/g, "");
-      const filtered = allGuestNames.filter(
+      const filteredGuests = allGuestNames.filter(
         (guest) =>
           guest.searchable.startsWith(searchValLower) ||
           guest.name.toLowerCase().includes(searchVal.toLowerCase())
       );
-      setFilteredGuestsFromSearch(filtered);
+      setFilteredGuestsFromSearch(filteredGuests);
+      setFilteredContactsFromPhoneSearch([]);
+
+      // Filter conversation tiles
+      const guestFiltered = allConversations.filter(
+        (convo) =>
+          convo.guest_name &&
+          convo.guest_name.toLowerCase().includes(searchVal.toLowerCase())
+      );
+      setFilteredConversations(guestFiltered);
+    }
+  };
+
+  useEffect(() => {
+    console.log("Input value changed:", searchInputValue);
+    // If we just selected from phone search, don't filter anything - keep the selected conversation
+    if (justSelectedFromPhoneSearch) {
+      console.log("Just selected from phone search, keeping current filtered conversations", setSearchInputValue);
+      return; // Don't change justSelectedFromPhoneSearch here
+    }
+
+    if (searchInputValue.trim() === "") {
+      setFilteredConversations(allConversations);
     } else {
-      setFilteredGuestsFromSearch([]);
+      const inputLower = searchInputValue.toLowerCase();
+      const inputClean = searchInputValue.replace(/^\+/, ''); // Remove leading + for phone matching
 
-      // If search is cleared and there was a guest filter active, clear it
-      if (!searchVal && guestNameSearchVal) {
-        setFilterQueryLoading(true);
-        setGuestNameSearchVal(""); // Reset all filters when clearing search
-        setPropertyFilterVal("");
-        setPhaseFilterVal("");
-        setUrgentFilterIsEnabled(false);
-        setFromHostBuddyFilterVal(false);
+      console.log("All conversations for filtering:", allConversations);
 
-        await fetchConversations(10, true, false, "", "", false, "", true, "");
-        setFilterQueryLoading(false);
+      const filtered = allConversations.filter((convo) => {
+        // Guest name matching
+        const guestNameMatch = convo.guest_name?.toLowerCase().includes(inputLower);
+
+        // Enhanced phone number matching
+        const phoneFromId = convo.conversation_id?.split(":")[1] || "";
+        const phoneMatch =
+          phoneFromId === searchInputValue || // Exact match with +
+          phoneFromId === inputClean || // Exact match without +
+          phoneFromId.includes(searchInputValue) || // Contains with +
+          phoneFromId.includes(inputClean) || // Contains without +
+          convo.phone_numbers?.some(p =>
+            p === searchInputValue ||
+            p === inputClean ||
+            p.includes(searchInputValue) ||
+            p.includes(inputClean)
+          ) ||
+          convo.whatsapp_numbers?.some(p =>
+            p === searchInputValue ||
+            p === inputClean ||
+            p.includes(searchInputValue) ||
+            p.includes(inputClean)
+          );
+
+        // Name matching for external contacts
+        const nameMatch = convo.name?.toLowerCase().includes(inputLower);
+
+        // Conversation ID matching (for openphone: or whatsapp: prefixed IDs)
+        const conversationIdMatch = convo.conversation_id?.toLowerCase().includes(inputLower) ||
+          convo.conversation_id?.includes(searchInputValue);
+
+        const matched = guestNameMatch || phoneMatch || nameMatch || conversationIdMatch;
+
+        if (searchInputValue.trim()) {
+          console.log(`Conversation ${convo.conversation_id} matched: ${matched}`, {
+            guestNameMatch, phoneMatch, nameMatch, conversationIdMatch,
+            searchInputValue, inputLower, inputClean, phoneFromId
+          });
+        }
+
+        return matched;
+      });
+
+      console.log("Filtered conversations based on search input:", filtered);
+      setFilteredConversations(filtered);
+    }
+  }, [allConversations, searchInputValue, justSelectedFromPhoneSearch]);
+
+  const handleContactSelectFromPhoneSearch = async (contact) => {
+    console.log("Selected contact:", contact);
+    setFilteredContactsFromPhoneSearch([]);
+    setFilteredGuestsFromSearch([]);
+
+    try {
+      // Fetch the conversation from the API
+      const apiResult = await callGetSingleConversationApi(contact.conversation_id);
+      console.log("API result for phone contact:", apiResult);
+
+      const conversation =
+        apiResult?.conversations && apiResult.conversations.length > 0
+          ? apiResult.conversations[0]
+          : null;
+
+      // Extract phone number from conversation ID for search input
+      const phoneNumber = contact.conversation_id.includes(":")
+        ? contact.conversation_id.split(":")[1]
+        : contact.conversation_id;
+
+      if (conversation) {
+        console.log("Found conversation:", conversation);
+
+        // Mark this conversation as complete to identify it later
+        conversation._isCompleteConversation = true;
+
+        // CRITICAL: Set the flag BEFORE any state updates
+        setJustSelectedFromPhoneSearch(true);
+
+        // Set search input to the phone number (don't clear it)
+        setSearchInputValue(phoneNumber);
+        
+        // Add to allConversations if it doesn't exist
+        let updatedConversations = [...allConversations];
+        const existingIndex = updatedConversations.findIndex(
+          c => c.conversation_id === conversation.conversation_id
+        );
+        
+        if (existingIndex === -1) {
+          // Add to the beginning if it doesn't exist
+          updatedConversations = [conversation, ...updatedConversations];
+          setAllConversations(updatedConversations);
+        } else {
+          // Update existing conversation with latest data
+          updatedConversations[existingIndex] = {
+            ...updatedConversations[existingIndex],
+            ...conversation,
+            _isCompleteConversation: true
+          };
+          setAllConversations(updatedConversations);
+        }
+        
+        // Always set filtered conversations explicitly to make sure the tile appears
+        setFilteredConversations([conversation]);
+        
+        console.log("Set filtered conversations to:", [conversation]);
+        console.log("Updated all conversations:", updatedConversations);
+
+        // Open the conversation
+        // openConversationHandle(conversation, conversation.conversation_id);
+        
+      } else {
+        console.log("No conversation found for contact");
+        setSearchInputValue(phoneNumber);
+        setFilteredConversations([]);
       }
+    } catch (error) {
+      console.error("Error fetching phone contact conversation:", error);
+      setFilteredConversations([]);
+    } finally {
+      // Reset the flag after a short delay to allow useEffect to process
+      setTimeout(() => {
+        setJustSelectedFromPhoneSearch(false);
+      }, 500);
+      setFilterQueryLoading(false);
     }
   };
 
@@ -401,6 +619,7 @@ const LeftMessage = ({
       !searchDropdownRef.current.contains(event.target)
     ) {
       setFilteredGuestsFromSearch([]);
+      setFilteredContactsFromPhoneSearch([]); // Also clear phone search results
     }
   };
 
@@ -648,7 +867,7 @@ const LeftMessage = ({
             <TextField
               className="custom-padding"
               type="search"
-              placeholder="Search..."
+              placeholder="Search by guest name or phone number..."
               style={{
                 width: "100%",
                 borderRadius: "4px",
@@ -662,7 +881,9 @@ const LeftMessage = ({
               value={searchInputValue}
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
-            />{" "}
+            />
+
+            {/* Guest search dropdown */}
             {filteredGuestsFromSearch.length > 0 && searchInputValue.trim() && (
               <div
                 className="dropdown"
@@ -680,7 +901,6 @@ const LeftMessage = ({
                   marginTop: "2px",
                 }}
               >
-                {" "}
                 {filteredGuestsFromSearch.map((guest) => (
                   <div
                     key={guest?.id_for_react}
@@ -693,7 +913,6 @@ const LeftMessage = ({
                       position: "relative",
                     }}
                     onMouseEnter={(e) => {
-                      // Make sure we're only changing the background of this specific item
                       if (
                         e.currentTarget === e.target ||
                         e.currentTarget.contains(e.target)
@@ -701,7 +920,6 @@ const LeftMessage = ({
                         e.currentTarget.style.backgroundColor =
                           "rgba(1, 50, 128, 1)";
 
-                        // Create a section indicator element
                         const indicator = document.createElement("div");
                         indicator.className = "dropdown-section-indicator";
                         indicator.style.position = "absolute";
@@ -714,7 +932,6 @@ const LeftMessage = ({
                           "rgba(62, 136, 247, 1)";
                         indicator.style.borderRadius = "0 2px 2px 0";
 
-                        // Remove any existing indicator
                         const existingIndicator = e.currentTarget.querySelector(
                           ".dropdown-section-indicator"
                         );
@@ -728,7 +945,6 @@ const LeftMessage = ({
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = "transparent";
 
-                      // Remove section indicator
                       const indicator = e.currentTarget.querySelector(
                         ".dropdown-section-indicator"
                       );
@@ -737,7 +953,6 @@ const LeftMessage = ({
                       }
                     }}
                     onMouseDown={(e) => {
-                      // Make sure we're only changing the background of this specific item
                       if (
                         e.currentTarget === e.target ||
                         e.currentTarget.contains(e.target)
@@ -747,7 +962,6 @@ const LeftMessage = ({
                       }
                     }}
                     onMouseUp={(e) => {
-                      // Make sure we're only changing the background of this specific item
                       if (
                         e.currentTarget === e.target ||
                         e.currentTarget.contains(e.target)
@@ -781,12 +995,135 @@ const LeftMessage = ({
                 ))}
               </div>
             )}
+
+            {/* Phone search dropdown */}
+            {filteredContactsFromPhoneSearch.length > 0 && searchInputValue.trim() && (
+              <div
+                className="dropdown"
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  right: 0,
+                  background: "#24262E",
+                  border: "1px solid rgba(189, 193, 201, 0.15)",
+                  borderRadius: "4px",
+                  maxHeight: "200px",
+                  overflowY: "auto",
+                  zIndex: 1000,
+                  marginTop: "2px",
+                }}
+              >
+                {filteredContactsFromPhoneSearch.map((contact) => (
+                  <div
+                    key={contact?.id_for_react}
+                    className="dropdown-item"
+                    onClick={() => handleContactSelectFromPhoneSearch(contact)}
+                    style={{
+                      padding: "8px 12px",
+                      cursor: "pointer",
+                      color: "#fff",
+                      position: "relative",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (
+                        e.currentTarget === e.target ||
+                        e.currentTarget.contains(e.target)
+                      ) {
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(1, 50, 128, 1)";
+
+                        const indicator = document.createElement("div");
+                        indicator.className = "dropdown-section-indicator";
+                        indicator.style.position = "absolute";
+                        indicator.style.left = "0";
+                        indicator.style.top = "50%";
+                        indicator.style.transform = "translateY(-50%)";
+                        indicator.style.height = "50px";
+                        indicator.style.width = "3px";
+                        indicator.style.backgroundColor =
+                          "rgba(62, 136, 247, 1)";
+                        indicator.style.borderRadius = "0 2px 2px 0";
+
+                        const existingIndicator = e.currentTarget.querySelector(
+                          ".dropdown-section-indicator"
+                        );
+                        if (existingIndicator) {
+                          e.currentTarget.removeChild(existingIndicator);
+                        }
+
+                        e.currentTarget.appendChild(indicator);
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+
+                      const indicator = e.currentTarget.querySelector(
+                        ".dropdown-section-indicator"
+                      );
+                      if (indicator) {
+                        e.currentTarget.removeChild(indicator);
+                      }
+                    }}
+                    onMouseDown={(e) => {
+                      if (
+                        e.currentTarget === e.target ||
+                        e.currentTarget.contains(e.target)
+                      ) {
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(0, 19, 48, 1)";
+                      }
+                    }}
+                    onMouseUp={(e) => {
+                      if (
+                        e.currentTarget === e.target ||
+                        e.currentTarget.contains(e.target)
+                      ) {
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(1, 50, 128, 1)";
+                      }
+                    }}
+                  >
+                    <div
+                      className="contact-name"
+                      style={{
+                        fontSize: "14px",
+                        color: "#D0D3DB",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {contact.name || contact.guest_name || "Unknown Contact"}
+                    </div>
+                    <div
+                      className="contact-phone"
+                      style={{
+                        fontSize: "14px",
+                        color: "#D0D3DB",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {/* Extract phone from conversation ID or phone_numbers/whatsapp_numbers */}
+                      {(() => {
+                        if (contact.whatsapp_numbers && contact.whatsapp_numbers.length > 0) {
+                          return `${contact.whatsapp_numbers[0]}`;
+                        }
+                        if (contact.phone_numbers && contact.phone_numbers.length > 0) {
+                          return `${contact.phone_numbers[0]}`;
+                        }
+                        if (contact.conversation_id && contact.conversation_id.includes(":")) {
+                          return contact.conversation_id.split(":")[1];
+                        }
+                      })()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <button
             className="filters-button"
             onClick={openFilterModal}
             style={{
-              marginLeft: "8px",
               whiteSpace: "nowrap",
               backgroundColor: "#0B5ED7",
               color: "white",
@@ -847,6 +1184,7 @@ const LeftMessage = ({
         >
           <div style={{ border: "1px solid #24262E", position: "relative" }}>
             {filteredConversations.map((message) => {
+              console.log("Rendering message:", message);
               const {
                 property_name,
                 guest_name,
@@ -887,6 +1225,15 @@ const LeftMessage = ({
 
                 // Extract time from OpenPhone message
                 messageTime = lastOpenPhoneMessage.time || lastOpenPhoneMessage.time_utc || time;
+              } else if (message.whatsapp_messages && message.whatsapp_messages.length > 0) {
+                const lastWhatsAppMessage = message.whatsapp_messages[message.whatsapp_messages.length - 1];
+                shortenedText = lastWhatsAppMessage.text;
+                if (shortenedText && shortenedText.length > 50) {
+                  shortenedText = shortenedText.slice(0, 50) + "...";
+                }
+
+                // Extract time from WhatsApp message
+                messageTime = lastWhatsAppMessage.time || lastWhatsAppMessage.time_utc || time;
               }
 
               // Based on which of these fields are present (arrival_date, departure_date, property_name): render the appropriate string
@@ -931,7 +1278,7 @@ const LeftMessage = ({
                         <img
                           src={
                             !message.reservation_id
-                              ? getRandomAvatar(message.conversation_id)
+                              ? getRandomAvatar(message.conversation_id || `temp_${Math.random()}`)
                               : message.image_url || dummyPropertyImg
                           }
                           alt="Thumbnail"
@@ -1095,39 +1442,35 @@ const LeftMessage = ({
                               <span className="user-badge ">
                                 {
                                   // Always show contact type labels, not guest names
-                                  contactType === "Guest"
-                                    ? "Guest"
-                                    : contactType === "External Contact"
-                                      ? "External Contact"
-                                      : message.contact_type === "Vendor"
-                                        ? "Vendor"
-                                        : message.contact_type === "Owner"
-                                          ? "Owner"
-                                          : message.contact_type === "External Contact"
+                                  message.contact_type === "Vendor"
+                                    ? "Vendor"
+                                    : message.contact_type === "Owner"
+                                      ? "Owner"
+                                      : message.contact_type === "External Contact"
+                                        ? "External Contact"
+                                        : message.contact_type
+                                          ? message.contact_type
+                                          : !message.reservation_id
                                             ? "External Contact"
-                                            : message.contact_type
-                                              ? message.contact_type
-                                              : !message.reservation_id
-                                                ? "External Contact"
-                                                : user
-                                                  ? user
-                                                    .split(" ")
-                                                    .map(
-                                                      (word) =>
-                                                        word.charAt(0).toUpperCase() +
-                                                        word.slice(1).toLowerCase()
-                                                    )
-                                                    .join(" ")
-                                                  : sender
-                                                    ? sender
-                                                      .split(" ")
-                                                      .map(
-                                                        (word) =>
-                                                          word.charAt(0).toUpperCase() +
-                                                          word.slice(1).toLowerCase()
-                                                      )
-                                                      .join(" ")
-                                                    : "Guest"
+                                            : user
+                                              ? user
+                                                .split(" ")
+                                                .map(
+                                                  (word) =>
+                                                    word.charAt(0).toUpperCase() +
+                                                    word.slice(1).toLowerCase()
+                                                )
+                                                .join(" ")
+                                              : sender
+                                                ? sender
+                                                  .split(" ")
+                                                  .map(
+                                                    (word) =>
+                                                      word.charAt(0).toUpperCase() +
+                                                      word.slice(1).toLowerCase()
+                                                  )
+                                                  .join(" ")
+                                                : "Guest"
                                 }
                               </span>
                               {(() => {
@@ -1406,6 +1749,34 @@ const LeftMessage = ({
                                       />
                                     </div>
                                   )}
+                                {channel.toUpperCase().includes("WHATSAPP") && (
+                                  <div
+                                    style={{
+                                      width: "20px",
+                                      height: "20px",
+                                      minWidth: "20px",
+                                      minHeight: "20px",
+                                      backgroundColor: "#24262E",
+                                      borderRadius: "2px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      overflow: "hidden",
+                                    }}
+                                  >
+                                    <img
+                                      src={WHATSAPPSUP_ICON}
+                                      alt="Direct"
+                                      style={{
+                                        width: "16px",
+                                        height: "16px",
+                                        objectFit: "contain",
+                                        display: "block",
+                                        margin: "0 auto",
+                                      }}
+                                    />
+                                  </div>
+                                )}
                               </>
                             )}
                           </div>

@@ -964,7 +964,6 @@ const NonGuestRightSection = ({
   }
   const statusText = getStatusText(status);
 
-  // Replace the existing useEffect that syncs property with rightSectionData:
   useEffect(() => {
     // Only sync from rightSectionData on initial load, not during updates
     if (conversation_id && rightSectionData?.property_name !== undefined) {
