@@ -67,6 +67,7 @@ const ActionItemsUpgrade = ({ onComparePlans }) => {
             {upgradeMessage || `Your current plan displays action items from past ${daysLimit} days. Upgrade plan to view all of the action items.`}
           </p>
           
+          
           {/* Only show compare plans button if not on Elite plan */}
           {upgradeMessage && upgradeMessage.includes("Upgrade plan") && (
             <button className="compare-plans-btn" onClick={handleClick}>
