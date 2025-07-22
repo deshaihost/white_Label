@@ -5,6 +5,7 @@ import PrebuiltTemplatesModal from "./prebuiltModal";
 import InboxUpgrade from "../../inbox/mildeSection/inbox_Upgrade/InboxUpgrade";
 import Loader from "../../../../../helper/Loader";
 import ToastHandle from "../../../../../helper/ToastMessage";
+import { getSubscriptionStatus } from "../../../../../helper/Authorized";
 import axios from "axios";
 import "./smartTemplate.css";
 
@@ -144,32 +145,46 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
   const checkSubscriptionLimits = (isEnabling) => {
     if (!isEnabling) return true; // No restrictions for disabling
     
-    const enabledCount = smartAllData.filter(template => template.enabled).length;
-    const subscriptionPlan = userData?.subscription_plan?.toLowerCase() || 'pro';
+    // Use the getSubscriptionStatus function from Authorized.js to get the plan
+    const subscriptionData = getSubscriptionStatus(userData);
+    console.log("Subscription data from getSubscriptionStatus:", subscriptionData);
     
-    switch (subscriptionPlan) {
-      case 'pro':
-        if (enabledCount >= 2) {
-          setShowUpgradeModal(true);
-          return false;
-        }
-        break;
-      case 'elite':
-        if (enabledCount >= 5) {
-          setShowUpgradeModal(true);
-          return false;
-        }
-        break;
-      case 'ultimate':
-        // No restrictions for ultimate plan
-        break;
-      default:
-        // Default to pro plan restrictions
-        if (enabledCount >= 2) {
-          setShowUpgradeModal(true);
-          return false;
-        }
-        break;
+    const planNameLower = subscriptionData.plan.toLowerCase();
+    console.log("Plan name (lowercase):", planNameLower);
+    
+    // Check if this is an Ultimate plan
+    const hasUltimatePlan = planNameLower.includes('ultimate');
+    console.log("Has Ultimate plan:", hasUltimatePlan);
+    
+    if (hasUltimatePlan) {
+      console.log("User has Ultimate plan, no restrictions apply");
+      // No restrictions for ultimate plan
+      return true;
+    }
+    
+    const enabledCount = smartAllData.filter(template => template.enabled).length;
+    console.log("Current enabled templates:", enabledCount);
+    
+    // For non-Ultimate plans, apply the appropriate limits
+    if (planNameLower.includes('pro')) {
+      if (enabledCount >= 2) {
+        console.log("Pro plan limit reached");
+        setShowUpgradeModal(true);
+        return false;
+      }
+    } else if (planNameLower.includes('elite')) {
+      if (enabledCount >= 5) {
+        console.log("Elite plan limit reached");
+        setShowUpgradeModal(true);
+        return false;
+      }
+    } else {
+      // Default to pro plan restrictions for any other plan
+      if (enabledCount >= 2) {
+        console.log("Default plan limit reached");
+        setShowUpgradeModal(true);
+        return false;
+      }
     }
     
     return true;
@@ -254,8 +269,16 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
     
     const isEnabling = !template.enabled;
     
+    // Debug: Log the userData and subscription plan
+    console.log("userData:", userData);
+    console.log("Subscription Plan:", userData?.subscription_plan);
+    
     // Check subscription limits before enabling
-    if (!checkSubscriptionLimits(isEnabling)) {
+    const subscriptionCheckResult = checkSubscriptionLimits(isEnabling);
+    console.log("Subscription check result:", subscriptionCheckResult);
+    
+    if (!subscriptionCheckResult) {
+      console.log("Subscription limits exceeded, not proceeding with toggle");
       return; // Don't proceed if limits are exceeded
     }
     
