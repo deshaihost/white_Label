@@ -34,8 +34,8 @@ const WhatsAppLocked = ({ onComparePlans }) => {
         </div>
         
         <h3 className="locked-title">
-          Upgrade to add  Non Pms communication for<br />
-          your guests!
+        Upgrade to add WhatsApp communication for 
+        your guests!
         </h3>
         
         <button 

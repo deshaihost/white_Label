@@ -30,7 +30,7 @@ const ActionItemsUpgrade = ({ onComparePlans }) => {
           </div> */}
           
           <p className="upgrade-message">
-            Your current plan displays action items from past 3 days. Upgrade plan to view all of the action items.
+          Your current plan displays  action items from past 3 days. Upgrade plan to view all of the action items.
           </p>
           
           <button className="compare-plans-btn" onClick={handleClick}>
