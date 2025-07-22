@@ -420,16 +420,19 @@ const IntegrationsIndex = (ApiUserData) => {
                 <img className="partner-logo" alt="Mount Logo" src={require('./Icons/Mount Logo black.svg').default} style={{ maxWidth: '150px', height: 'auto' }} />
                 <p>Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area</p>
                 <div style={{ 
-                  background: '#121212', 
-                  padding: '10px 20px',
-                  borderRadius: '25px',
+                  background: 'rgba(6, 9, 26, 1)',
+                  border: '1px solid rgba(37, 39, 54, 1)',
+                  borderRadius: '100px',
+                  width: '267px',
+                  height: '40px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  width: '180px',
-                  marginTop: '15px'
+                  padding: '0 24px',
+                  boxSizing: 'border-box',
+                  margin: '0 auto',
                 }}>
-                  <span style={{ color: mountActive ? '#25db28' : '#ff4d4d', fontWeight: '700' }}>{mountActive ? 'Active' : 'Not active'}</span>
+                  <span style={{ color: mountActive ? 'rgb(20, 110, 245)' : '#bdbdbd', fontWeight: '700' }}>{mountActive ? 'Active' : 'Not active'}</span>
                   <label className="switch" style={{ margin: 0 }}>
                     <input 
                       type="checkbox" 
@@ -441,11 +444,11 @@ const IntegrationsIndex = (ApiUserData) => {
                       display: 'inline-block',
                       width: '30px',
                       height: '17px',
-                      background: mountActive ? '#25db28' : '#ff4d4d',
+                      background: mountActive ? 'rgb(20, 110, 245)' : '#fff',
                       borderRadius: '34px',
                       transition: '0.4s',
                       cursor: 'pointer',
-                      boxShadow: mountActive ? '0 0 5px #25db28' : '0 0 5px #ff4d4d'
+                      boxShadow: mountActive ? '0 0 5px rgb(20, 110, 245)' : '0 0 5px #eee'
                     }}>
                       <span style={{
                         position: 'absolute',
