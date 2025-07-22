@@ -122,19 +122,15 @@ const UsersTab = (userData) => {
   }, []);
 
   const handleInviteClick = () => {
-    // Check if user has a valid plan that allows inviting users
-    if (maxUsersAllowed === 0) {
-      // User has no plan or plan doesn't allow users, show upgrade modal
-      setIsUpgradeModalOpen(true);
+    // For Ultimate plan, always allow
+    if (maxUsersAllowed === Infinity) {
+      setIsModalOpen(true);
       return;
     }
-
-    // Check if user can add more users based on their plan
+    // For other plans, restrict if at or above max
     if (currentUserCount >= maxUsersAllowed) {
-      // User has reached their plan limit, show upgrade modal
       setIsUpgradeModalOpen(true);
     } else {
-      // User can add more users, show regular invite modal
       setIsModalOpen(true);
     }
   };
