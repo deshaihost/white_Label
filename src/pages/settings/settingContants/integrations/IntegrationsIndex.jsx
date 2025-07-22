@@ -401,7 +401,7 @@ const IntegrationsIndex = (ApiUserData) => {
             <>
               {/* Turno */}
               {!turnoUserId && (
-                isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/turno-logo-with-text.webp', 'Turno Logo', 'Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
+                isProPlan ? renderUpgradeTile(require('./Icons/Turno Logo.svg').default, 'Turno Logo', 'Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
               )}
               {/* Minut */}
               {!minutUserId && (
@@ -409,7 +409,7 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* Tidy */}
               {!tidyUserId && (
-                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/tidy_logo_black_text.svg', 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
+                isProPlan ? renderUpgradeTile(require('./Icons/Tidy Logo.svg').default, 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
               )}
               {/* Hostfully Guidebooks */}
               {!hostfullyGuidebooksUserId && (
@@ -417,7 +417,7 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* Mount */}
               <div className="partner-tile">
-                <img className="partner-logo" alt="Mount Logo" src={require('./Icons/Mount Logo.svg').default} style={{ maxWidth: '150px', height: 'auto', filter: 'invert(1)' }} />
+                <img className="partner-logo" alt="Mount Logo" src={require('./Icons/Mount Logo black.svg').default} style={{ maxWidth: '150px', height: 'auto' }} />
                 <p>Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area</p>
                 <div style={{ 
                   background: '#121212', 
@@ -464,7 +464,7 @@ const IntegrationsIndex = (ApiUserData) => {
               </div>
               {/* Notion */}
               {!notionUserId && (
-                isProPlan ? renderUpgradeTile('https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png', 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
+                isProPlan ? renderUpgradeTile(require('./Icons/Notion Logo.svg').default, 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
               )}
             </>
           )}
