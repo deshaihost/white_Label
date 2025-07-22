@@ -7,7 +7,7 @@ import OpenPhoneInbox from "./message/OpenPhoneInbox";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import loaderGif from "../../../../../public/img/new_loader.gif";
 import { callSendOpenPhoneMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
-import WhatsAppLocked from "./whatsApplocked/WhatsAppLocked";
+import OpenPhoneLocked from "./openPhoneLocked/OpenPhoneLocked";
 
 const placeholderImg = "https://hostbuddylb.com/misc/chatBubbles.webp";
 
@@ -194,9 +194,9 @@ const OpenPhoneSection = ({
     }
   };
 
-  // Render WhatsAppLocked for pro plan
+  // Render OpenPhoneLocked for pro plan
   if (/pro/i.test(subscriptionPlan)) {
-    return <WhatsAppLocked onComparePlans={() => window.location.href = "/setting/subscription"} />;
+    return <OpenPhoneLocked onComparePlans={() => window.location.href = "/setting/subscription"} />;
   }
 
   return (
