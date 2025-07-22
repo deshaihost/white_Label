@@ -124,8 +124,10 @@ export const getSubscriptionStatus = (userData) => {
 
     return { plan: planName, props_allowed: propsAllowed, status: subscrStatus };
   }
-// "HostBuddy Ultimate"
-
+// "HostBuddy ultimate"
+// "HostBuddy pRo"
+// "HostBuddy ELiTe"
+// "HostBuddy mOUNT"
 
   // If no plan name, check if trial applies
   if ('trial_ends' in userData) {
