@@ -14,8 +14,8 @@ const MountIntegration = ({ ApiUserData }) => {
   const [minutesDelay, setMinutesDelay] = useState(0);
   const [hoursBeforeCheckin, setHoursBeforeCheckin] = useState(0);
   const [minutesBeforeCheckin, setMinutesBeforeCheckin] = useState(0);
-  const [excludeStart, setExcludeStart] = useState("22:00");
-  const [excludeEnd, setExcludeEnd] = useState("07:00");
+  const [excludeStart, setExcludeStart] = useState("");
+  const [excludeEnd, setExcludeEnd] = useState("");
   const [excludeHours, setExcludeHours] = useState(true);
   const [upsellTiming, setUpsellTiming] = useState("afterBooking");
   const [initiationTemplate, setInitiationTemplate] = useState("Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?");
@@ -599,11 +599,16 @@ const MountIntegration = ({ ApiUserData }) => {
                       fontSize: '15px',
                       outline: 'none',
                       display: 'flex',
-                      alignItems: 'center'
+                      alignItems: 'center',
+                      gap: '8px'
                     }}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{marginRight: '6px'}} xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="#aaa" strokeWidth="2"/>
+                        <path d="M12 7V12L15 14" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
                       <input
-                        type="time"
-                        value={excludeStart}
+                        type="text"
+                        value={excludeStart || ''}
                         onChange={e => setExcludeStart(e.target.value)}
                         placeholder="HH : MM AM"
                         style={{
@@ -612,9 +617,9 @@ const MountIntegration = ({ ApiUserData }) => {
                           color: '#fff',
                           fontSize: '15px',
                           outline: 'none',
-                          width: '100%',
-                          colorScheme: 'dark'
+                          width: '100%'
                         }}
+                        maxLength={8}
                       />
                     </div>
                   </div>
@@ -631,11 +636,16 @@ const MountIntegration = ({ ApiUserData }) => {
                       fontSize: '15px',
                       outline: 'none',
                       display: 'flex',
-                      alignItems: 'center'
+                      alignItems: 'center',
+                      gap: '8px'
                     }}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{marginRight: '6px'}} xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="#aaa" strokeWidth="2"/>
+                        <path d="M12 7V12L15 14" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
                       <input
-                        type="time"
-                        value={excludeEnd}
+                        type="text"
+                        value={excludeEnd || ''}
                         onChange={e => setExcludeEnd(e.target.value)}
                         placeholder="HH : MM PM"
                         style={{
@@ -644,9 +654,9 @@ const MountIntegration = ({ ApiUserData }) => {
                           color: '#fff',
                           fontSize: '15px',
                           outline: 'none',
-                          width: '100%',
-                          colorScheme: 'dark'
+                          width: '100%'
                         }}
+                        maxLength={8}
                       />
                     </div>
                   </div>
