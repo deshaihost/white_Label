@@ -27,9 +27,9 @@ const UsersTab = (userData) => {
   const getMaxUsersAllowed = (plan) => {
     if (!plan) return 0;
     const planLower = plan.toLowerCase();
-    if (planLower.includes('pro')) return 1;
+    if (planLower.includes('ultimate')) return Infinity;
     if (planLower.includes('elite')) return 3;
-    if (planLower.includes('ultimate')) return Infinity; // Ultimate users get unlimited users
+    if (planLower.includes('pro')) return 1;
     if (planLower === 'trial') return 3; // Trial users get Elite benefits
     return 0; // Default for other plans or no plan
   };
@@ -165,29 +165,64 @@ const UsersTab = (userData) => {
     <div className='settings-integrations'>
       <h3 className="mb-4">Your Team</h3>
 
-      {/* Remaining users bar */}
-      <div style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        background: '#232335',
-        borderRadius: '32px',
-        padding: '8px 24px',
-        fontSize: '14px',
-        color: '#bfc0d2',
-        marginBottom: '16px',
-        marginLeft: '2px',
-        fontFamily: 'inherit',
-      }}>
-        <span style={{marginRight: '8px', letterSpacing: '0.5px'}}>
-          Remaining users: {maxUsersAllowed === Infinity ? '∞' : Math.max(0, maxUsersAllowed - currentUserCount)}
-        </span>
-        <span 
-          style={{ color: '#2970ff', cursor: 'pointer', fontWeight: 500, marginLeft: '8px', fontFamily: 'inherit' }}
-          onClick={handleInviteClick}
-        >
-          Add more
-        </span>
-      </div>
+      {/* Remaining users bar and Add user button */}
+      {maxUsersAllowed !== Infinity && (
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          background: '#232335',
+          borderRadius: '32px',
+          padding: '8px 24px',
+          fontSize: '14px',
+          color: '#bfc0d2',
+          marginBottom: '16px',
+          marginLeft: '2px',
+          fontFamily: 'inherit',
+        }}>
+          <span style={{marginRight: '8px', letterSpacing: '0.5px'}}>
+            {
+              (() => {
+                let remaining = maxUsersAllowed - currentUserCount;
+                // For pro, if user count > 1, show 0
+                if (maxUsersAllowed === 1 && currentUserCount > 1) remaining = 0;
+                // For elite, if user count > 3, show 0
+                if (maxUsersAllowed === 3 && currentUserCount > 3) remaining = 0;
+                // Never show negative
+                if (remaining < 0) remaining = 0;
+                return `Remaining users: ${remaining}`;
+              })()
+            }
+          </span>
+          <span 
+            style={{ color: '#2970ff', cursor: 'pointer', fontWeight: 500, marginLeft: '8px', fontFamily: 'inherit' }}
+            onClick={handleInviteClick}
+          >
+            Add user
+          </span>
+        </div>
+      )}
+      {/* Add user button: only show if Ultimate and no Remaining users bar */}
+      {maxUsersAllowed === Infinity && (
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          background: '#232335',
+          borderRadius: '32px',
+          padding: '8px 24px',
+          fontSize: '14px',
+          color: '#bfc0d2',
+          marginBottom: '16px',
+          marginLeft: '2px',
+          fontFamily: 'inherit',
+        }}>
+          <span 
+            style={{ color: '#2970ff', cursor: 'pointer', fontWeight: 500, marginLeft: '8px', fontFamily: 'inherit' }}
+            onClick={handleInviteClick}
+          >
+            Add user
+          </span>
+        </div>
+      )}
 
       <table style={{ marginTop: '40px', width: '100%', borderCollapse: 'collapse' }}>
         <thead>
