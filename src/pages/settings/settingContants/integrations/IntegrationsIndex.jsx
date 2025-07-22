@@ -387,10 +387,10 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* Slack */}
               {isProPlan ? 
-                renderUpgradeTile(require('./Icons/Slack-Logo.png'), 'Slack Logo', 'Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.', { width: '82px', height: '50px' }) 
+                renderUpgradeTile(require('./Icons/Slack.svg').default, 'Slack Logo', 'Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.', { width: '82px', height: '50px' }) 
                 : 
                 <div className="partner-tile" style={{ cursor: 'pointer' }} onClick={() => window.location.href = '/setting/contact'}>
-                  <img className="partner-logo" alt="Slack Logo" src={require('./Icons/Slack-Logo.png')} style={{ width: '83px', height: '50px' }} />
+                  <img className="partner-logo" alt="Slack Logo" src={require('./Icons/Slack.svg').default} style={{ width: '83px', height: '50px' }} />
                   <p>Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.</p>
                 </div>
               }
