@@ -371,46 +371,69 @@ const LeftMessage = ({
 
     // ======== IF INPUT CLEARED ========
     if (searchVal.trim() === "") {
-      setFilteredGuestsFromSearch([]);
-      setFilteredContactsFromPhoneSearch([]);
-      
-      // Reset the flag when search is cleared
-      setJustSelectedFromPhoneSearch(false);
+    setFilteredGuestsFromSearch([]);
+    setFilteredContactsFromPhoneSearch([]);
+    
+    // Reset the flag when search is cleared
+    setJustSelectedFromPhoneSearch(false);
 
-      // If there was a guest filter active, clear it and reload all conversations
-      if (guestNameSearchVal) {
-        setFilterQueryLoading(true);
-        setGuestNameSearchVal("");
+    // If there was a guest filter active, clear it and reload all conversations
+    if (guestNameSearchVal) {
+      setFilterQueryLoading(true);
+      setGuestNameSearchVal("");
 
-        try {
-          await fetchConversations(
-            10,
-            true, // replace existing conversations
-            urgentFilterIsEnabled, // keep current urgent filter
-            propertyFilterVal, // keep current property filter
-            phaseFilterVal, // keep current phase filter
-            fromHostBuddyFilterVal, // keep current host buddy filter
-            "", // clear guest name search
-            true, // force refresh
-            userFilterVal // keep current user filter
-          );
-        } catch (error) {
-          console.error("Error fetching conversations:", error);
-        } finally {
-          setFilterQueryLoading(false);
-        }
-      } else {
-        // Remove any conversations that were added from phone search (external contacts)
-        // Keep only conversations that have reservation_id or were part of original conversations
-        const originalConversations = allConversations.filter(convo =>
-          convo.reservation_id || !convo._isCompleteConversation
+      try {
+        await fetchConversations(
+          10,
+          true, // replace existing conversations
+          urgentFilterIsEnabled, // keep current urgent filter
+          propertyFilterVal, // keep current property filter
+          phaseFilterVal, // keep current phase filter
+          fromHostBuddyFilterVal, // keep current host buddy filter
+          "", // clear guest name search
+          true, // force refresh
+          userFilterVal // keep current user filter
         );
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+      } finally {
+        setFilterQueryLoading(false);
+      }
+    } else {
+      // Remove conversations that were added from phone search (external contacts)
+      // Keep only conversations that have reservation_id or don't have the _isCompleteConversation flag
+      const originalConversations = allConversations.filter(convo => {
+        // Keep conversations that:
+        // 1. Have a reservation_id (these are original PMS conversations)
+        // 2. Don't have the _isCompleteConversation flag (these weren't added via phone search)
+        return convo.reservation_id || !convo._isCompleteConversation;
+      });
 
+      // Re-fetch fresh conversations to restore original order
+      setFilterQueryLoading(true);
+      try {
+        await fetchConversations(
+          10,
+          true, // replace existing conversations
+          urgentFilterIsEnabled,
+          propertyFilterVal,
+          phaseFilterVal,
+          fromHostBuddyFilterVal,
+          "",
+          true, // force refresh
+          userFilterVal
+        );
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+        // Fallback to filtered original conversations if API call fails
         setAllConversations(originalConversations);
         setFilteredConversations(originalConversations);
+      } finally {
+        setFilterQueryLoading(false);
       }
-      return; // Early return to avoid running other search logic
     }
+    return; // Early return to avoid running other search logic
+  }
 
     // ======== PHONE NUMBER SEARCH (Guest-like Logic) ========
     if (isPhoneSearch && allExternalContactNumbers && allExternalContactNumbers?.length > 0) {
