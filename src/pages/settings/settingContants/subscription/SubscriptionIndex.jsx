@@ -331,18 +331,18 @@ const SubscriptionIndex = () => {
                   gap: "40px" ,
                   paddingRight:"64px"
                 }}>
-                  <div style={{
+                  {/* <div style={{
                     width: "1px",
                     height: "40px",
                     backgroundColor: "#ccc"
-                  }}></div>
+                  }}></div> */}
                   <div style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center"
                   }}>
                     {/* Average per-property price (main display) */}
-                    <div style={{
+                    {/* <div style={{
                       display: "flex",
                       alignItems: "baseline",
                       marginBottom: "4px"
@@ -376,10 +376,10 @@ const SubscriptionIndex = () => {
                       >
                         per property
                       </span>
-                    </div>
+                    </div> */}
                     
                     {/* Total price (secondary display) */}
-                    {numPropertiesAllowed > 1 && (
+                    {/* {numPropertiesAllowed > 1 && (
                       <div style={{
                         fontSize: "14px",
                         color: "#FFFFFF",
@@ -389,7 +389,7 @@ const SubscriptionIndex = () => {
                         {formatPrice(currentTotalPrice).amount}
                         {" monthly"} 
                       </div>
-                    )}
+                    )} */}
                     
                     {/* <span
                       className="samsung-sharp-sans samsung-sharp-sans"
