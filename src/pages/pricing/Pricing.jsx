@@ -66,8 +66,8 @@ const Pricing = () => {
   const [demoModalShow, setDemoModalShow] = useState(false);
   const [contactModalShow, setContactModalShow] = useState(false);
   const [billingPeriod, setBillingPeriod] = useState("monthly"); // 'monthly' or 'annual'
-  const [propertyCount, setPropertyCount] = useState(0);
-  const [inputValue, setInputValue] = useState("0"); // Separate state for input display
+  const [propertyCount, setPropertyCount] = useState(1);
+  const [inputValue, setInputValue] = useState("1"); // Default to 1
 
   // Pricing tiers structure
   const pricingTiers = [
@@ -318,28 +318,28 @@ const Pricing = () => {
                 fontSize: "14px",
               }}
             >
-              {propertyCount === 1 ? 'Property' : 'Properties'}:
+              Properties:
             </span>
             <input
               type="text"
-              min="0"
+              min="1"
               value={inputValue}
               onChange={(e) => {
                 const newValue = e.target.value;
-                
+
                 // Allow only numbers
                 if (!/^\d*$/.test(newValue)) {
                   return;
                 }
-                
+
                 setInputValue(newValue);
-                
+
                 // Update property count
-                if (newValue === '' || newValue === '0') {
-                  setPropertyCount(0);
+                if (newValue === '' || parseInt(newValue, 10) < 1) {
+                  setPropertyCount(1);
                 } else {
                   const num = parseInt(newValue, 10);
-                  if (!isNaN(num) && num >= 0) {
+                  if (!isNaN(num) && num >= 1) {
                     setPropertyCount(num);
                   }
                 }
@@ -350,9 +350,9 @@ const Pricing = () => {
               }}
               onBlur={(e) => {
                 // When focus is lost, clean up the display value
-                if (inputValue === '' || parseInt(inputValue, 10) === 0) {
-                  setInputValue("0");
-                  setPropertyCount(0);
+                if (inputValue === '' || parseInt(inputValue, 10) < 1) {
+                  setInputValue("1");
+                  setPropertyCount(1);
                 } else {
                   const cleanValue = parseInt(inputValue, 10).toString();
                   setInputValue(cleanValue);
@@ -404,7 +404,7 @@ const Pricing = () => {
               </button>
               <button
                 onClick={() => {
-                  const newValue = Math.max(0, propertyCount - 1);
+                  const newValue = Math.max(1, propertyCount - 1);
                   setPropertyCount(newValue);
                   setInputValue(newValue.toString());
                 }}

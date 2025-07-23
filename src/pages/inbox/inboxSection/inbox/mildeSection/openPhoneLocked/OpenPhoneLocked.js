@@ -1,11 +1,11 @@
 import React from 'react';
-import './WhatsAppLocked.css';
+import './OpenPhoneLocked.css';
 import { ReactComponent as IntegrationsIcon } from './icons/Integrations Icon.svg';
 
-const WhatsAppLocked = ({ onComparePlans }) => {
+const OpenPhoneLocked = ({ onComparePlans }) => {
   return (
-    <div className="whatsapp-locked">
-      <div className="whatsapp-locked-content">
+    <div className="openphone-locked">
+      <div className="openphone-locked-content">
         {/* <div className="integrations-icon">
           <div className="star star-1"></div>
           <div className="star star-2"></div>
@@ -34,7 +34,7 @@ const WhatsAppLocked = ({ onComparePlans }) => {
         </div>
         
         <h3 className="locked-title">
-        Upgrade to add WhatsApp communication for 
+        Upgrade to add OpenPhone communication for 
         your guests!
         </h3>
         
@@ -49,4 +49,4 @@ const WhatsAppLocked = ({ onComparePlans }) => {
   );
 };
 
-export default WhatsAppLocked;
+export default OpenPhoneLocked;

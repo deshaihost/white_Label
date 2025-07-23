@@ -27,6 +27,7 @@ const ConversationHistoryLocked = () => {
       {/* </div> */}
       
       <p className="upgrade-text">
+  
         Upgrade to view the full conversation history and get access to more powerful features!
       </p>
       

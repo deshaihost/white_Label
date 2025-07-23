@@ -387,10 +387,10 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* Slack */}
               {isProPlan ? 
-                renderUpgradeTile(require('./Icons/Slack-Logo.png'), 'Slack Logo', 'Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.', { width: '82px', height: '50px' }) 
+                renderUpgradeTile(require('./Icons/Slack.svg').default, 'Slack Logo', 'Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.', { width: '82px', height: '50px' }) 
                 : 
                 <div className="partner-tile" style={{ cursor: 'pointer' }} onClick={() => window.location.href = '/setting/contact'}>
-                  <img className="partner-logo" alt="Slack Logo" src={require('./Icons/Slack-Logo.png')} style={{ width: '83px', height: '50px' }} />
+                  <img className="partner-logo" alt="Slack Logo" src={require('./Icons/Slack.svg').default} style={{ width: '83px', height: '50px' }} />
                   <p>Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.</p>
                 </div>
               }
@@ -401,7 +401,7 @@ const IntegrationsIndex = (ApiUserData) => {
             <>
               {/* Turno */}
               {!turnoUserId && (
-                isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/turno-logo-with-text.webp', 'Turno Logo', 'Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
+                isProPlan ? renderUpgradeTile(require('./Icons/Turno Logo.svg').default, 'Turno Logo', 'Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
               )}
               {/* Minut */}
               {!minutUserId && (
@@ -409,7 +409,7 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* Tidy */}
               {!tidyUserId && (
-                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/tidy_logo_black_text.svg', 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
+                isProPlan ? renderUpgradeTile(require('./Icons/Tidy Logo.svg').default, 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
               )}
               {/* Hostfully Guidebooks */}
               {!hostfullyGuidebooksUserId && (
@@ -417,19 +417,22 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* Mount */}
               <div className="partner-tile">
-                <img className="partner-logo" alt="Mount Logo" src={require('./Icons/Mount Logo.svg').default} style={{ maxWidth: '150px', height: 'auto', filter: 'invert(1)' }} />
+                <img className="partner-logo" alt="Mount Logo" src={require('./Icons/Mount Logo black.svg').default} style={{ maxWidth: '150px', height: 'auto' }} />
                 <p>Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area</p>
                 <div style={{ 
-                  background: '#121212', 
-                  padding: '10px 20px',
-                  borderRadius: '25px',
+                  background: 'rgba(6, 9, 26, 1)',
+                  border: '1px solid rgba(37, 39, 54, 1)',
+                  borderRadius: '100px',
+                  width: '267px',
+                  height: '40px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  width: '180px',
-                  marginTop: '15px'
+                  padding: '0 24px',
+                  boxSizing: 'border-box',
+                  margin: '0 auto',
                 }}>
-                  <span style={{ color: mountActive ? '#25db28' : '#ff4d4d', fontWeight: '700' }}>{mountActive ? 'Active' : 'Not active'}</span>
+                  <span style={{ color: mountActive ? 'rgb(20, 110, 245)' : '#bdbdbd', fontWeight: '700' }}>{mountActive ? 'Active' : 'Not active'}</span>
                   <label className="switch" style={{ margin: 0 }}>
                     <input 
                       type="checkbox" 
@@ -438,14 +441,15 @@ const IntegrationsIndex = (ApiUserData) => {
                     />
                     <span className="slider round" style={{ 
                       position: 'relative',
+                      top:"4px",
                       display: 'inline-block',
                       width: '30px',
                       height: '17px',
-                      background: mountActive ? '#25db28' : '#ff4d4d',
+                      background: mountActive ? 'rgb(20, 110, 245)' : 'black',
                       borderRadius: '34px',
                       transition: '0.4s',
                       cursor: 'pointer',
-                      boxShadow: mountActive ? '0 0 5px #25db28' : '0 0 5px #ff4d4d'
+                      // boxShadow: mountActive ? '0 0 5px rgb(20, 110, 245)' : '0 0 5px #eee'
                     }}>
                       <span style={{
                         position: 'absolute',
@@ -464,7 +468,7 @@ const IntegrationsIndex = (ApiUserData) => {
               </div>
               {/* Notion */}
               {!notionUserId && (
-                isProPlan ? renderUpgradeTile('https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png', 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
+                isProPlan ? renderUpgradeTile(require('./Icons/Notion Logo.svg').default, 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
               )}
             </>
           )}

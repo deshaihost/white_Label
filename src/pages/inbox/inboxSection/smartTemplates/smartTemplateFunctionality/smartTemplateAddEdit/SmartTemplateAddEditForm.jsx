@@ -5,6 +5,7 @@ import TriggersTrargetsConditionsModel from "./TriggersTrargetsConditionsModel";
 import { dataInput, minutDataInput, createTypeToGuesttypeMapping, getUseTriggeredGuestFromTemplate, describeTemplate } from "./SmartTemplateJson";
 import Loader from "../../../../../../helper/Loader";
 import { v4 as uuidv4 } from 'uuid';
+import { getSubscriptionStatus } from '../../../../../../helper/Authorized';
 
 import MultiSelect from "../../../../../../component/multiSelect/multiSelect";
 
@@ -41,6 +42,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   }, [dataStructure]);
   */
 
+  
   // State to manage follow-up visibility
   const [showFollowUps, setShowFollowUps] = useState(dataStructure?.follow_ups?.length > 0);
 
@@ -49,31 +51,27 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
     if (!isEnabling) return true; // No restrictions for disabling
     
     const enabledCount = smartAllData ? smartAllData.filter(template => template.enabled && template.id !== dataStructure.id).length : 0;
-    const subscriptionPlan = userData?.subscription_plan?.toLowerCase() || 'pro';
+    const { plan } = getSubscriptionStatus(userData);
+    const subscriptionPlan = (plan || '').toLowerCase();
     
-    switch (subscriptionPlan) {
-      case 'pro':
-        if (enabledCount >= 2) {
-          setShowUpgradeModal(true);
-          return false;
-        }
-        break;
-      case 'elite':
-        if (enabledCount >= 5) {
-          setShowUpgradeModal(true);
-          return false;
-        }
-        break;
-      case 'ultimate':
-        // No restrictions for ultimate plan
-        break;
-      default:
-        // Default to pro plan restrictions
-        if (enabledCount >= 2) {
-          setShowUpgradeModal(true);
-          return false;
-        }
-        break;
+    if (subscriptionPlan.includes('pro')) {
+      if (enabledCount >= 2) {
+        setShowUpgradeModal(true);
+        return false;
+      }
+    } else if (subscriptionPlan.includes('elite')) {
+      if (enabledCount >= 5) {
+        setShowUpgradeModal(true);
+        return false;
+      }
+    } else if (subscriptionPlan.includes('ultimate')) {
+      // No restrictions for ultimate plan
+    } else {
+      // Default to pro plan restrictions
+      if (enabledCount >= 2) {
+        setShowUpgradeModal(true);
+        return false;
+      }
     }
     
     return true;
