@@ -131,7 +131,7 @@ export const getSubscriptionStatus = (userData) => {
     //   }
     // }
 
-    return { plan: "HostBuddy mOUNT"  , props_allowed: propsAllowed, status: subscrStatus };
+    return { plan: planName, props_allowed: propsAllowed, status: subscrStatus };
   }
 // "HostBuddy ultimate"
 // "HostBuddy pRo"
