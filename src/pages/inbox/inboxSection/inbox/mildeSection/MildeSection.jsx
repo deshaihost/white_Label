@@ -1134,7 +1134,7 @@ const MildeSection = ({
             <p style={{ color: "#AAA" }}>No conversation selected</p>
           </div>
         )}
-        {eliteOrHigherPlan && !(conversationData?.channel == "hostbuddy") ? (
+        {eliteFeaturesAvailable && !(conversationData?.channel == "hostbuddy") ? (
           <>
             {" "}
             <div
