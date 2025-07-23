@@ -337,7 +337,7 @@ const MountIntegration = ({ ApiUserData }) => {
                     >
                       <CustomTooltip 
                         title="After Booking Timing" 
-                        description="Upsell will be sent after booking confirmation"
+                        description="HostBuddy will send upsells this amount of time after the booking is confirmed"
                       >
                         <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
                       </CustomTooltip>
@@ -470,7 +470,7 @@ const MountIntegration = ({ ApiUserData }) => {
                     >
                       <CustomTooltip 
                         title="Before Check-in Timing" 
-                        description="Upsell will be sent before check-in time"
+                        description="HostBuddy will send upsells this amount of time before the guest’s check-in time"
                       >
                         <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
                       </CustomTooltip>
@@ -692,7 +692,21 @@ const MountIntegration = ({ ApiUserData }) => {
               </div>
               {/* AI Personalization toggle */}
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '18px', gap: '15px' }}>
-                <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Personalization</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Personalization</label>
+                  <div 
+                    style={{ 
+                      color:"rgba(187, 187, 187, 1)"
+                    }}
+                  >
+                    <CustomTooltip 
+                      title="AI Personalization Info" 
+                      description="If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation."
+                    >
+                      <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
+                    </CustomTooltip>
+                  </div>
+                </div>
                 <label style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
                   <input
                     type="checkbox"
@@ -728,7 +742,21 @@ const MountIntegration = ({ ApiUserData }) => {
               </div>
               {/* AI Context Checking toggle */}
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px', gap: '15px' }}>
-                <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Context Checking</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Context Checking</label>
+                  <div 
+                    style={{ 
+                      color:"rgba(187, 187, 187, 1)"
+                    }}
+                  >
+                    <CustomTooltip 
+                      title="AI Context Checking Info" 
+                      description="If this is enabled, HostBuddy will refrain from sending the message to a guest if the AI determines that the message is not contextually appropriate, based on the conversation history"
+                    >
+                      <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
+                    </CustomTooltip>
+                  </div>
+                </div>
                 <label style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
                   <input
                     type="checkbox"
