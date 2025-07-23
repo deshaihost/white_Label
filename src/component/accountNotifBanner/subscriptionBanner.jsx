@@ -83,7 +83,7 @@ const SubscriptionBanner = ({userData, bottomMargin, topMargin}) => {
   return (
     <>
       <AccountNotifBanner title={title} message={message} theme={theme} bottomMargin={bottomMargin} topMargin={topMargin}/>
-      <AddPropertyModal handleClose={() => setShowSubscribeModal(false)} show={showSubscribeModal} subscription_data={subscription_data}/>
+      <AddPropertyModal handleClose={() => setShowSubscribeModal(false)} show={showSubscribeModal} subscription_data={subscription_data} userData={userData} />
     </>
   );
 };

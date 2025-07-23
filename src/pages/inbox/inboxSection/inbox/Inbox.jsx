@@ -258,10 +258,12 @@ const Inbox = ({
   accountAgeDays,
   singleConversationIdFromUrl,
   bannerVisible,
+  userData
 }) => {
   const navigate = useNavigate();
-  const eliteFeaturesAvailable =
-    /elite|works/i.test(subscriptionPlan) || subscriptionPlan === "trial"; // Changed == to === for strict equality
+  const eliteFeaturesAvailable = /elite|works/i.test(subscriptionPlan) || subscriptionPlan === "trial";
+  const userHasOpenPhoneIntegration = Boolean(userData?.openphone_numbers?.length);
+  const userHasWhatsAppIntegration = Boolean(userData?.whatsapp_phone_number);
   const [conversations, setConversations] = useState([]); // All conversations to be displayed; array of objs
   const [selectedConversation, setSelectedConversation] = useState({}); // The single selected conversation; obj. Messages are under the key 'messages'
   const [conversationCache, setConversationCache] = useState(new Map()); // Cache to store full conversation details by conversation_id
@@ -1747,15 +1749,13 @@ const Inbox = ({
                 >
                   {[
                     { id: "pms", icon: PmsIcon, text: "PMS" },
-                    { id: "whatsapp", icon: WhatsappIcon, text: "WhatsApp" },
-                    { id: "openphone", icon: OpenPhoneIcon, text: "OpenPhone"},
-                    {
-                      id: "openIssue",
-                      icon: OpenIssueIcon,
-                      text: "Open Issue",
-                    },
+                    userHasWhatsAppIntegration && { id: "whatsapp", icon: WhatsappIcon, text: "WhatsApp" },
+                    userHasOpenPhoneIntegration && { id: "openphone", icon: OpenPhoneIcon, text: "OpenPhone"},
+                    { id: "openIssue", icon: OpenIssueIcon, text: "Open Issues"},
                     { id: "notes", icon: NotesIcon, text: "Notes" },
-                  ].map((tab) => (
+                  ]
+                    .filter(Boolean)
+                    .map((tab) => (
                     <div
                       key={tab.id}
                       onClick={() => {

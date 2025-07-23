@@ -11,7 +11,7 @@ import Upsells from "./inboxSection/upsells/Upsells";
 import "./inboxSection/inbox/inboxIndex.css";
 import axios from "axios";
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
-import NotificationBanner from "./Banner/NotificationBanner/NotificationBanner";
+//import NotificationBanner from "./Banner/NotificationBanner/NotificationBanner";
 import VideoComponent from "./Banner/VideoComponent/VideoComponent";
 
 const InboxIndex = () => {
@@ -24,7 +24,7 @@ const InboxIndex = () => {
   const [interFaceComponent, setInterFaceComponent] = useState(0);
   const [allGuestNames, setAllGuestNames] = useState({});
   const [showVideoComponent, setShowVideoComponent] = useState(false);
-  const [showBanner, setShowBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const handleWatchLetter = () => {
     // Handle the watch letter click event
@@ -162,6 +162,7 @@ const InboxIndex = () => {
   return (
     <>
       {" "}
+      {/* 
       {showBanner && screenWidth >= 1100 && location.pathname === "/inbox" && (
         <NotificationBanner
           onWatchLetter={handleWatchLetter}
@@ -169,6 +170,7 @@ const InboxIndex = () => {
           className="mb-3"
         />
       )}
+      */}
       {/* Video Component Popup */}
       {showVideoComponent && (
         <div
@@ -233,6 +235,7 @@ const InboxIndex = () => {
               screenWidth >= 1100 &&
               location.pathname === "/inbox"
             }
+            userData={allUserData}
           />
         )}
         {interFaceComponent === 1 && (

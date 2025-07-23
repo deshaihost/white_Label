@@ -187,14 +187,17 @@ export const HistogramTile = ({ dataSets, width, height, blur }) => {
         {blur && <div className="blurred-tile-overlay" style={{ height: '100%', width: '100%' }} />}
         {blur && (
           <div className="blurred-tile-message">
-            <img src={actionItemsLocked} alt="Locked" style={{ width: 40, height: 40, marginBottom: 8 }} />
-            Upgrade to unlock this insight & much more!!
-            <div
-              className="compare-plans-link"
-              onClick={() => navigate('/setting/subscription')}
-              style={{ cursor: 'pointer', color: '#4FC3F7', textDecoration: 'underline', marginTop: 8 }}
-            >
-              Compare Plans
+            <p className="blurred-tile-message-top">Action Items Received</p>
+            <div className="blurred-tile-message-middle">
+              <img src={actionItemsLocked} alt="Locked" style={{ width: 40, height: 40, marginBottom: 8 }} />
+              Upgrade to unlock this insight & much more!
+              <div
+                className="compare-plans-link"
+                onClick={() => navigate('/setting/subscription')}
+                style={{ cursor: 'pointer', color: '#4FC3F7',  marginTop: 8 }}
+              >
+                Compare Plans
+              </div>
             </div>
           </div>
         )}
@@ -259,17 +262,21 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
         {blur && <div className="blurred-tile-overlay" style={{ height: '100%', width: '100%' }} />}
         {blur && (
           <div className="blurred-tile-message">
-            <img src={actionItemsLocked} alt="Locked" style={{ width: 40, height: 40, marginBottom: 8 }} />
-            Upgrade to unlock this insight & much more!
-            <div
-              className="compare-plans-link"
-              onClick={() => navigate('/setting/subscription')}
-              style={{ cursor: 'pointer', color: '#4FC3F7', textDecoration: 'underline', marginTop: 8 }}
-            >
-              Compare Plans
+            <p className="blurred-tile-message-top">Action Items Received and Closed</p>
+            <div className="blurred-tile-message-middle">
+              <img src={actionItemsLocked} alt="Locked" style={{ width: 40, height: 40, marginBottom: 8 }} />
+              Upgrade to unlock this insight & much more!
+              <div
+                className="compare-plans-link"
+                onClick={() => navigate('/setting/subscription')}
+                style={{ cursor: 'pointer', color: '#4FC3F7', marginTop: 8 }}
+              >
+                Compare Plans
+              </div>
             </div>
           </div>
         )}
+
         <div style={{ position: 'relative', zIndex: 0 }}>
           <div className="tile-header">
             <h3>{dataSets[currentDataSetIndex].title}</h3>

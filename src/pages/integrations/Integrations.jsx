@@ -21,6 +21,7 @@ import { Helmet } from 'react-helmet';
 const HostexImg = 'https://hostbuddylb.com/partners/hostex_logo_en.webp';
 const ReslyImg = 'https://hostbuddylb.com/partners/resly_img.webp'
 const SmilyImg = 'https://hostbuddylb.com/partners/SmilyLogo.webp';
+const AvantioImg = 'https://hostbuddylb.com/partners/avantio_logo.svg';
 const RentalWiseImg = 'https://hostbuddylb.com/partners/RentalWise.webp';
 const TidyImg = 'https://hostbuddylb.com/partners/tidy_logo_black_text.svg';
 
@@ -139,6 +140,13 @@ const Integrations = () => {
             <a href="https://beds24.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
                 <img src={Beds} alt="" />
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-4 col-sm-6">
+            <a href="https://www.avantio.com/" target="_blank" rel="noopener noreferrer">
+              <div className="image-boc-inter">
+                <img src={AvantioImg} alt="" />
               </div>
             </a>
           </div>

@@ -36,7 +36,7 @@ const MildeSection = ({
   const eliteOrWorksPlan =
     (/elite|works|ultimate/i.test(subscriptionPlan) && !/mount|pro/i.test(subscriptionPlan)) || subscriptionPlan == "trial"; // Case-insensitive check for 'elite', 'works', or 'ultimate' in the plan name, but exclude 'mount' and 'pro'
   const eliteFeaturesAvailable =
-    /elite/i.test(subscriptionPlan) || subscriptionPlan == "trial"; // user subscribed to Elite or is on trial
+    /elite|ultimate/i.test(subscriptionPlan) || subscriptionPlan === "trial"; // user subscribed to Elite or Ultimate or is on trial
   const propertyIsLocked = !!allConversationData?.is_locked;
   const accountAllowsGenerateButton =
     eliteFeaturesAvailable && !propertyIsLocked;
@@ -1002,17 +1002,34 @@ const MildeSection = ({
 
   const toolTipMessage = getTooltipMessage();
 
-  // Filter messages for the last 30 or 60 days depending on plan
+  // Filter messages based on subscription plan
   const now = new Date();
-  let lockDurationMs = 30 * 24 * 60 * 60 * 1000; // Default 30 days
-  if (/elite/i.test(subscriptionPlan)) {
+  let lockDurationMs = 3 * 24 * 60 * 60 * 1000; // Default 3 days for basic plans
+  
+  // Check for different subscription plans (case insensitive)
+  const isPro = /pro/i.test(subscriptionPlan);
+  const isElite = /elite/i.test(subscriptionPlan);
+  const isUltimate = /ultimate/i.test(subscriptionPlan);
+  
+  if (isPro) {
+    lockDurationMs = 30 * 24 * 60 * 60 * 1000; // 30 days for Pro
+  } else if (isElite) {
     lockDurationMs = 60 * 24 * 60 * 60 * 1000; // 60 days for Elite
+  } else if (isUltimate) {
+    lockDurationMs = Number.MAX_SAFE_INTEGER; // No limit for Ultimate
   }
+  
   const recentMessages = messages.filter(msg => now - new Date(msg.rawDate) <= lockDurationMs);
-  const olderMessages = messages.filter(msg => now - new Date(msg.rawDate) > lockDurationMs);
+  const olderMessages = !isUltimate ? messages.filter(msg => now - new Date(msg.rawDate) > lockDurationMs) : [];
 
   // Scroll handler to show lock when at top and there are older messages
   const handleMessageListScroll = (e) => {
+    // Don't show locked messages UI for Ultimate plan
+    if (isUltimate) {
+      setShowLocked(false);
+      return;
+    }
+    
     if (e.target.scrollTop === 0 && olderMessages.length > 0) {
       setShowLocked(true);
     } else if (e.target.scrollTop > 0 && showLocked) {
@@ -1052,7 +1069,7 @@ const MildeSection = ({
             style={{ marginBottom: "0px" }}
             onScroll={handleMessageListScroll}
           >
-            {showLocked && (
+            {showLocked && !isUltimate && (
               <ConversationHistoryLocked />
             )}
             {recentMessages?.map((message, index) => {
@@ -1125,7 +1142,7 @@ const MildeSection = ({
             <p style={{ color: "#AAA" }}>No conversation selected</p>
           </div>
         )}
-        {eliteOrWorksPlan && !(conversationData?.channel == "hostbuddy") ? (
+        {eliteFeaturesAvailable && !(conversationData?.channel == "hostbuddy") ? (
           <>
             {" "}
             <div

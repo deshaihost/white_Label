@@ -190,7 +190,7 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 1.3;
-  color: #FFE2C9;
+  color: #FFE2C9 !important;
   text-align: center;
   margin: 0;
 }

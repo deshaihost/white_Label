@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import ToastHandle from '../../../../helper/ToastMessage';
 import Loader from '../../../../helper/Loader';
 import axios from 'axios';
+import ToolTipIcon from './Icons/ToolTip.svg';
+import CustomTooltip from './components/CustomTooltip';
 
 const MountIntegration = ({ ApiUserData }) => {
   const propertyData = ApiUserData?.ApiUserData?.property_data;
@@ -12,9 +14,12 @@ const MountIntegration = ({ ApiUserData }) => {
   const [maxDistance, setMaxDistance] = useState('');
   const [hoursDelay, setHoursDelay] = useState(0);
   const [minutesDelay, setMinutesDelay] = useState(0);
-  const [excludeStart, setExcludeStart] = useState("22:00");
-  const [excludeEnd, setExcludeEnd] = useState("07:00");
+  const [hoursBeforeCheckin, setHoursBeforeCheckin] = useState(0);
+  const [minutesBeforeCheckin, setMinutesBeforeCheckin] = useState(0);
+  const [excludeStart, setExcludeStart] = useState("");
+  const [excludeEnd, setExcludeEnd] = useState("");
   const [excludeHours, setExcludeHours] = useState(true);
+  const [upsellTiming, setUpsellTiming] = useState("afterBooking");
   const [initiationTemplate, setInitiationTemplate] = useState("Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?");
   const [aiPersonalization, setAiPersonalization] = useState(true);
   const [aiContentChecking, setAiContentChecking] = useState(true);
@@ -172,29 +177,30 @@ const MountIntegration = ({ ApiUserData }) => {
           style={{
             marginTop: '20px',
             padding: '12px 24px',
-            fontSize: '15px',
-            fontWeight: '600',
+            fontSize: '14px',
+            fontFamily: "'Samsung Sharp Sans', sans-serif",
+            fontWeight: '500',
             color: '#fff',
-            backgroundColor: 'rgb(109 109 43)',
+            backgroundColor: 'rgba(39, 42, 64, 1)',
             border: 'none',
-            borderRadius: '8px',
+            borderRadius: '100px',
             cursor: 'pointer',
-            boxShadow: '0 4px 14px rgba(20, 110, 245, 0.4)',
-            transition: 'all 0.3s ease',
+            // boxShadow: '0 4px 14px rgba(20, 110, 245, 0.4)',
+            // transition: 'all 0.3s ease',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '8px'
           }}
           onMouseOver={(e) => {
-            e.target.style.backgroundColor = 'rgb(109 109 43)';
-            e.target.style.transform = 'translateY(-2px)';
-            e.target.style.boxShadow = '0 6px 20px rgba(20, 110, 245, 0.5)';
+            e.target.style.backgroundColor = 'rgba(39, 42, 64, 1)';
+          //   e.target.style.transform = 'translateY(-2px)';
+            // e.target.style.boxShadow = '0 6px 20px rgba(39, 42, 64, 1)';
           }}
           onMouseOut={(e) => {
-            e.target.style.backgroundColor = 'rgb(109 109 43)';
-            e.target.style.transform = 'translateY(0)';
-            e.target.style.boxShadow = '0 4px 14px rgba(20, 110, 245, 0.4)';
+            e.target.style.backgroundColor = 'rgba(39, 42, 64, 1)';
+           // e.target.style.transform = 'translateY(0)';
+            // e.target.style.boxShadow = '0 4px 14px rgba(39, 42, 64, 1)';
           }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -221,8 +227,9 @@ const MountIntegration = ({ ApiUserData }) => {
           zIndex: 1000
         }}>
           <div style={{
-            backgroundColor: '#1a2341',
-            borderRadius: '18px',
+            backgroundColor: 'rgba(2, 13, 41, 1)',
+            border: '2px solid rgba(19, 49, 123, 1)',
+            borderRadius: '30px',
             padding: '30px',
             width: '500px',
             maxWidth: '90%',
@@ -252,7 +259,7 @@ const MountIntegration = ({ ApiUserData }) => {
               <h2 style={{ color: '#fff', fontSize: '20px', fontWeight: '600', margin: '0 0 8px' }}>
                 Upsell Settings
               </h2>
-              <div style={{ height: '2px', background: 'linear-gradient(90deg, rgba(109,109,43,0) 0%, rgba(109,109,43,1) 50%, rgba(109,109,43,0) 100%)', margin: '15px auto' }}></div>
+              {/* <div style={{ height: '2px', background: 'linear-gradient(90deg, rgba(109,109,43,0) 0%, rgba(109,109,43,1) 50%, rgba(109,109,43,0) 100%)', margin: '15px auto' }}></div> */}
             </div>
             {/* Modal content */}
             <div style={{ color: '#fff' }}>
@@ -264,15 +271,26 @@ const MountIntegration = ({ ApiUserData }) => {
                   </label>
                   <div 
                     style={{ 
-                      marginLeft: '10px', 
-                      position: 'relative',
-                      display: 'inline-block'
+                      color:"rgba(187, 187, 187, 1)",
+                      marginLeft: '10px',
+                      padding: '4px',
+                      borderRadius: '4px',
+                      transition: 'background-color 0.2s ease',
+                      cursor: 'pointer'
                     }}
-                    title="Maximum distance between your property address and upsells which HostBuddy will consider for trip planning"
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" style={{ color: '#aaa' }}>
-                      <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
-                    </svg>
+                    <CustomTooltip 
+                      title="Maximum Distance Info" 
+                      description="Maximum distance between your property address and upsells which HostBuddy will consider for trip planning"
+                    >
+                      <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
+                    </CustomTooltip>
                   </div>
                 </div>
                 <select
@@ -280,8 +298,8 @@ const MountIntegration = ({ ApiUserData }) => {
                   onChange={e => setMaxDistance(e.target.value)}
                   style={{
                     width: '100%',
-                    background: '#22305a',
-                    border: 'none',
+                    background: 'rgba(10, 26, 68, 1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
                     color: '#fff',
                     padding: '10px 16px',
                     borderRadius: '24px',
@@ -302,99 +320,379 @@ const MountIntegration = ({ ApiUserData }) => {
                   Maximum distance between your property address and upsells which HostBuddy will consider for trip planning
                 </div>
               </div>
-              {/* Upsell delay after booking confirmation */}
+              {/* Upsell timing */}
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '10px' }}>
-                  Upsell delay after booking confirmation
+                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '15px' }}>
+                  Upsell timing
                 </label>
-                <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span style={{ fontSize: '14px', marginRight: '5px' }}>Hours:</span>
+                
+                {/* After booking confirmation */}
+                <div style={{ marginBottom: '15px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                     <input
-                      type="number"
-                      min="0"
-                      max="72"
-                      value={hoursDelay}
-                      onChange={e => setHoursDelay(e.target.value)}
-                      style={{
-                        width: '60px',
-                        background: '#22305a',
-                        border: 'none',
-                        color: '#fff',
-                        textAlign: 'center',
-                        padding: '10px',
-                        borderRadius: '24px',
-                        fontSize: '15px',
-                        outline: 'none',
-                      }}
+                      type="radio"
+                      id="afterBooking"
+                      name="upsellTiming"
+                      checked={upsellTiming === "afterBooking"}
+                      onChange={() => setUpsellTiming("afterBooking")}
+                      style={{ marginRight: '8px' }}
                     />
+                    <label htmlFor="afterBooking" style={{ fontSize: '14px', fontWeight: '500' }}>
+                      After booking confirmation
+                    </label>
+                    <div 
+                      style={{ 
+                        marginLeft: '10px',
+                        padding: '4px',
+                        borderRadius: '4px',
+                        transition: 'background-color 0.2s ease',
+                        cursor: 'pointer'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      <CustomTooltip 
+                        title="After Booking Timing" 
+                        description="HostBuddy will send upsells this amount of time after the booking is confirmed"
+                      >
+                        <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
+                      </CustomTooltip>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span style={{ fontSize: '14px', marginRight: '5px' }}>Minutes:</span>
-                    <input
-                      type="number"
-                      min="0"
-                      max="59"
-                      value={minutesDelay}
-                      onChange={e => setMinutesDelay(e.target.value)}
-                      style={{
-                        width: '60px',
-                        background: '#22305a',
-                        border: 'none',
-                        color: '#fff',
-                        textAlign: 'center',
-                        padding: '10px',
+                  <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginLeft: '24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                      <div style={{
+                        width: '100%',
+                        background: upsellTiming === "afterBooking" ? 'rgba(10, 26, 68, 1)' : 'rgba(10, 26, 68, 0.5)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: upsellTiming === "afterBooking" ? '#fff' : '#aaa',
+                        textAlign: 'left',
+                        padding: '10px 15px',
                         borderRadius: '24px',
                         fontSize: '15px',
                         outline: 'none',
-                      }}
-                    />
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start'
+                      }}>
+                        <span style={{ marginRight: '5px' }}>Hours:</span>
+                        <input
+                          type="text"
+                          value={hoursDelay}
+                          onChange={e => {
+                            const value = e.target.value;
+                            // Allow numbers, decimals, and time formats like "1.5", "1h", "1 hr", etc.
+                            if (value === '' || /^(\d*\.?\d*[hH]?r?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
+                              setHoursDelay(value);
+                            }
+                          }}
+                          onBlur={e => {
+                            // Convert various formats to pure number on blur
+                            let value = e.target.value.toString().toLowerCase();
+                            value = value.replace(/[hH]r?s?/g, '').trim();
+                            const numValue = parseFloat(value) || 0;
+                            if (numValue >= 0 && numValue <= 72) {
+                              setHoursDelay(numValue);
+                            } else {
+                              setHoursDelay(0);
+                            }
+                          }}
+                          placeholder="0"
+                          disabled={upsellTiming !== "afterBooking"}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: upsellTiming === "afterBooking" ? '#fff' : '#aaa',
+                            textAlign: 'left',
+                            fontSize: '15px',
+                            outline: 'none',
+                            width: '60px'
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                      <div style={{
+                        width: '100%',
+                        background: upsellTiming === "afterBooking" ? 'rgba(10, 26, 68, 1)' : 'rgba(10, 26, 68, 0.5)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: upsellTiming === "afterBooking" ? '#fff' : '#aaa',
+                        textAlign: 'left',
+                        padding: '10px 15px',
+                        borderRadius: '24px',
+                        fontSize: '15px',
+                        outline: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start'
+                      }}>
+                        <span style={{ marginRight: '5px' }}>Minutes:</span>
+                        <input
+                          type="text"
+                          value={minutesDelay}
+                          onChange={e => {
+                            const value = e.target.value;
+                            // Allow numbers, decimals, and time formats like "30", "30m", "30 min", etc.
+                            if (value === '' || /^(\d*\.?\d*[mM]?i?n?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
+                              setMinutesDelay(value);
+                            }
+                          }}
+                          onBlur={e => {
+                            // Convert various formats to pure number on blur
+                            let value = e.target.value.toString().toLowerCase();
+                            value = value.replace(/[mM]i?n?s?/g, '').trim();
+                            const numValue = parseFloat(value) || 0;
+                            if (numValue >= 0 && numValue <= 59) {
+                              setMinutesDelay(numValue);
+                            } else {
+                              setMinutesDelay(0);
+                            }
+                          }}
+                          placeholder="0"
+                          disabled={upsellTiming !== "afterBooking"}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: upsellTiming === "afterBooking" ? '#fff' : '#aaa',
+                            textAlign: 'left',
+                            fontSize: '15px',
+                            outline: 'none',
+                            width: '60px'
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div style={{ fontSize: '12px', color: '#aaa', marginTop: '5px' }}>
-                  On booking confirmation, HostBuddy will initiate Mount upsells after the specified time.
+
+                {/* Before check-in */}
+                <div style={{ marginBottom: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                    <input
+                      type="radio"
+                      id="beforeCheckin"
+                      name="upsellTiming"
+                      checked={upsellTiming === "beforeCheckin"}
+                      onChange={() => setUpsellTiming("beforeCheckin")}
+                      style={{ marginRight: '8px' }}
+                    />
+                    <label htmlFor="beforeCheckin" style={{ fontSize: '14px', fontWeight: '500' }}>
+                      Before check-in
+                    </label>
+                    <div 
+                      style={{ 
+                        marginLeft: '10px',
+                        padding: '4px',
+                        borderRadius: '4px',
+                        transition: 'background-color 0.2s ease',
+                        cursor: 'pointer'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      <CustomTooltip 
+                        title="Before Check-in Timing" 
+                        description="HostBuddy will send upsells this amount of time before the guest’s check-in time"
+                      >
+                        <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
+                      </CustomTooltip>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginLeft: '24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                      <div style={{
+                        width: '100%',
+                        background: upsellTiming === "beforeCheckin" ? 'rgba(10, 26, 68, 1)' : 'rgba(10, 26, 68, 0.5)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: upsellTiming === "beforeCheckin" ? '#fff' : '#aaa',
+                        textAlign: 'left',
+                        padding: '10px 15px',
+                        borderRadius: '24px',
+                        fontSize: '15px',
+                        outline: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start'
+                      }}>
+                        <span style={{ marginRight: '5px' }}>Hours:</span>
+                        <input
+                          type="text"
+                          value={hoursBeforeCheckin}
+                          onChange={e => {
+                            const value = e.target.value;
+                            // Allow numbers, decimals, and time formats like "1.5", "1h", "1 hr", etc.
+                            if (value === '' || /^(\d*\.?\d*[hH]?r?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
+                              setHoursBeforeCheckin(value);
+                            }
+                          }}
+                          onBlur={e => {
+                            // Convert various formats to pure number on blur
+                            let value = e.target.value.toString().toLowerCase();
+                            value = value.replace(/[hH]r?s?/g, '').trim();
+                            const numValue = parseFloat(value) || 0;
+                            if (numValue >= 0 && numValue <= 72) {
+                              setHoursBeforeCheckin(numValue);
+                            } else {
+                              setHoursBeforeCheckin(0);
+                            }
+                          }}
+                          placeholder="0"
+                          disabled={upsellTiming !== "beforeCheckin"}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: upsellTiming === "beforeCheckin" ? '#fff' : '#aaa',
+                            textAlign: 'left',
+                            fontSize: '15px',
+                            outline: 'none',
+                            width: '60px'
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                      <div style={{
+                        width: '100%',
+                        background: upsellTiming === "beforeCheckin" ? 'rgba(10, 26, 68, 1)' : 'rgba(10, 26, 68, 0.5)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: upsellTiming === "beforeCheckin" ? '#fff' : '#aaa',
+                        textAlign: 'left',
+                        padding: '10px 15px',
+                        borderRadius: '24px',
+                        fontSize: '15px',
+                        outline: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start'
+                      }}>
+                        <span style={{ marginRight: '5px' }}>Minutes:</span>
+                        <input
+                          type="text"
+                          value={minutesBeforeCheckin}
+                          onChange={e => {
+                            const value = e.target.value;
+                            // Allow numbers, decimals, and time formats like "30", "30m", "30 min", etc.
+                            if (value === '' || /^(\d*\.?\d*[mM]?i?n?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
+                              setMinutesBeforeCheckin(value);
+                            }
+                          }}
+                          onBlur={e => {
+                            // Convert various formats to pure number on blur
+                            let value = e.target.value.toString().toLowerCase();
+                            value = value.replace(/[mM]i?n?s?/g, '').trim();
+                            const numValue = parseFloat(value) || 0;
+                            if (numValue >= 0 && numValue <= 59) {
+                              setMinutesBeforeCheckin(numValue);
+                            } else {
+                              setMinutesBeforeCheckin(0);
+                            }
+                          }}
+                          placeholder="0"
+                          disabled={upsellTiming !== "beforeCheckin"}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: upsellTiming === "beforeCheckin" ? '#fff' : '#aaa',
+                            textAlign: 'left',
+                            fontSize: '15px',
+                            outline: 'none',
+                            width: '60px'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              {/* Upsell delay after booking confirmation */}
+              
               {/* Exclude hours for upsell */}
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '10px' }}>
+                <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '15px' }}>
                   Exclude hours for upsell
                 </label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '14px' }}>From</span>
-                  <input
-                    type="time"
-                    value={excludeStart}
-                    onChange={e => setExcludeStart(e.target.value)}
-                    style={{
-                        background: '#22305a',
-                        border: 'none',
-                        color: '#fff',
-                        padding: '10px 16px',
-                        borderRadius: '24px',
-                        fontSize: '15px',
-                        colorScheme: 'dark',
-                        width: '110px',
-                        outline: 'none',
-                      }}
-                  />
-                  <span style={{ fontSize: '14px' }}>To</span>
-                  <input
-                    type="time"
-                    value={excludeEnd}
-                    onChange={e => setExcludeEnd(e.target.value)}
-                    style={{
-                        background: '#22305a',
-                        border: 'none',
-                        color: '#fff',
-                        padding: '10px 16px',
-                        borderRadius: '24px',
-                        fontSize: '15px',
-                        colorScheme: 'dark',
-                        width: '110px',
-                        outline: 'none',
-                      }}
-                  />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                    <span style={{ fontSize: '14px', marginRight: '10px', minWidth: '40px' }}>From</span>
+                    <div style={{
+                      width: '100%',
+                      background: 'rgba(10, 26, 68, 1)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      color: '#fff',
+                      padding: '10px 15px',
+                      borderRadius: '24px',
+                      fontSize: '15px',
+                      outline: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{marginRight: '6px'}} xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="#aaa" strokeWidth="2"/>
+                        <path d="M12 7V12L15 14" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <input
+                        type="text"
+                        value={excludeStart || ''}
+                        onChange={e => setExcludeStart(e.target.value)}
+                        placeholder="HH : MM AM"
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: '#fff',
+                          fontSize: '15px',
+                          outline: 'none',
+                          width: '100%'
+                        }}
+                        maxLength={8}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', width: '50%' }}>
+                    <span style={{ fontSize: '14px', marginRight: '10px', minWidth: '25px' }}>To</span>
+                    <div style={{
+                      width: '100%',
+                      background: 'rgba(10, 26, 68, 1)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      color: '#fff',
+                      padding: '10px 15px',
+                      borderRadius: '24px',
+                      fontSize: '15px',
+                      outline: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{marginRight: '6px'}} xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="#aaa" strokeWidth="2"/>
+                        <path d="M12 7V12L15 14" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <input
+                        type="text"
+                        value={excludeEnd || ''}
+                        onChange={e => setExcludeEnd(e.target.value)}
+                        placeholder="HH : MM PM"
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: '#fff',
+                          fontSize: '15px',
+                          outline: 'none',
+                          width: '100%'
+                        }}
+                        maxLength={8}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div style={{ fontSize: '12px', color: '#aaa', marginTop: '2px' }}>
                   HostBuddy will not upsell during the excluded hours, following the timezone of the property location
@@ -411,8 +709,8 @@ const MountIntegration = ({ ApiUserData }) => {
                   rows={4}
                   style={{
                     width: '100%',
-                    background: '#22305a',
-                    border: 'none',
+                    background: 'rgba(10, 26, 68, 1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
                     color: '#fff',
                     padding: '14px',
                     borderRadius: '24px',
@@ -424,7 +722,31 @@ const MountIntegration = ({ ApiUserData }) => {
               </div>
               {/* AI Personalization toggle */}
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '18px', gap: '15px' }}>
-                <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Personalization</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Personalization</label>
+                  <div 
+                    style={{ 
+                      color:"rgba(187, 187, 187, 1)",
+                      padding: '4px',
+                      borderRadius: '4px',
+                      transition: 'background-color 0.2s ease',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
+                  >
+                    <CustomTooltip 
+                      title="AI Personalization Info" 
+                      description="If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation."
+                    >
+                      <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
+                    </CustomTooltip>
+                  </div>
+                </div>
                 <label style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
                   <input
                     type="checkbox"
@@ -460,7 +782,31 @@ const MountIntegration = ({ ApiUserData }) => {
               </div>
               {/* AI Context Checking toggle */}
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px', gap: '15px' }}>
-                <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Context Checking</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Context Checking</label>
+                  <div 
+                    style={{ 
+                      color:"rgba(187, 187, 187, 1)",
+                      padding: '4px',
+                      borderRadius: '4px',
+                      transition: 'background-color 0.2s ease',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
+                  >
+                    <CustomTooltip 
+                      title="AI Context Checking Info" 
+                      description="If this is enabled, HostBuddy will refrain from sending the message to a guest if the AI determines that the message is not contextually appropriate, based on the conversation history"
+                    >
+                      <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
+                    </CustomTooltip>
+                  </div>
+                </div>
                 <label style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
                   <input
                     type="checkbox"
@@ -539,7 +885,53 @@ const MountIntegration = ({ ApiUserData }) => {
           <thead>
             <tr>
               <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA' }}>HostBuddy properties</th>
-              <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA', textAlign: 'center' }}>Upsells Settings</th>
+              <th style={{ padding: '10px', borderBottom: '1px solid white', fontSize: '18px', color: '#AAA', textAlign: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+                  <span>Upsells Settings</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '14px', color: '#ccc' }}>All</span>
+                    <label style={{ position: 'relative', display: 'inline-block', width: '40px', height: '22px' }}>
+                      <input
+                        type="checkbox"
+                        checked={propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])}
+                        onChange={(e) => {
+                          const newValue = e.target.checked ? 'upsell1' : '';
+                          const newSelectedUpsells = {};
+                          propertiesList.forEach(property => {
+                            newSelectedUpsells[property] = newValue;
+                          });
+                          setSelectedMountUpsells(newSelectedUpsells);
+                        }}
+                        style={{ opacity: 0, width: 0, height: 0 }}
+                      />
+                      <span style={{
+                        position: 'absolute',
+                        cursor: 'pointer',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: (propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])) ? 'rgba(20, 110, 245, 1)' : '#333',
+                        borderRadius: '34px',
+                        transition: '0.4s',
+                        boxShadow: (propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])) ? '0 0 5px rgba(20, 110, 245, 1)' : '0 0 5px #333'
+                      }}>
+                        <span style={{
+                          position: 'absolute',
+                          content: '""',
+                          height: '16px',
+                          width: '16px',
+                          left: (propertiesList.length > 0 && propertiesList.every(property => !!selectedMountUpsells[property])) ? '21px' : '3px',
+                          bottom: '3px',
+                          background: '#fff',
+                          borderRadius: '50%',
+                          transition: '0.4s'
+                        }}></span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -555,7 +947,7 @@ const MountIntegration = ({ ApiUserData }) => {
                       gap: '8px'
                     }}>
                       <span style={{ 
-                        color: selectedMountUpsells[property] ? '#25db28' : '#ff4d4d', 
+                        color: selectedMountUpsells[property] ? 'rgba(20, 110, 245, 1)' : '#ccc', 
                         fontWeight: '600',
                         fontSize: '14px'
                       }}>
@@ -575,11 +967,11 @@ const MountIntegration = ({ ApiUserData }) => {
                           display: 'inline-block',
                           width: '30px',
                           height: '17px',
-                          background: selectedMountUpsells[property] ? '#25db28' : '#ff4d4d',
+                          background: selectedMountUpsells[property] ? 'rgba(20, 110, 245, 1)' : '#333',
                           borderRadius: '34px',
                           transition: '0.4s',
                           cursor: 'pointer',
-                          boxShadow: selectedMountUpsells[property] ? '0 0 5px #25db28' : '0 0 5px #ff4d4d'
+                          boxShadow: selectedMountUpsells[property] ? '0 0 5px rgba(20, 110, 245, 1)' : '0 0 5px #333'
                         }}>
                           <span style={{
                             position: 'absolute',
@@ -616,7 +1008,7 @@ const MountIntegration = ({ ApiUserData }) => {
               style={{ 
                 borderRadius: '50px', 
                 padding: '10px 20px',
-                backgroundColor: 'rgb(109 109 43)',
+                backgroundColor: 'rgba(13, 110, 253, 1)',
                 color: '#fff',
                 border: 'none',
                 fontSize: '15px',
@@ -625,7 +1017,7 @@ const MountIntegration = ({ ApiUserData }) => {
               }} 
               onClick={handleSubmitMappingsClick}
             >
-              Save Upsell Mappings
+              Save 
             </button>
           ) : (
             <Loader />

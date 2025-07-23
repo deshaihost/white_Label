@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './ActionItemsUpgrade.css';
 import ConversationLockedIcon from './icons/Conversation_locked_action_items.svg';
 import { useNavigate } from 'react-router-dom';
+import { getSubscriptionStatus } from '../../../helper/Authorized';
 
 const ActionItemsUpgrade = ({ onComparePlans }) => {
   const navigate = useNavigate();
+  const [daysLimit, setDaysLimit] = useState(3);
+  const [upgradeMessage, setUpgradeMessage] = useState('');
+
+  useEffect(() => {
+    // Get user data from session storage
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+    if (userData) {
+      const subscriptionStatus = getSubscriptionStatus(userData);
+      let newDaysLimit = 3;
+      
+      // Convert plan to lowercase for case-insensitive comparison
+      const planLower = subscriptionStatus.plan ? subscriptionStatus.plan.toLowerCase() : '';
+      
+      // Set days limit based on subscription plan
+      if (planLower.includes('elite')) {
+        newDaysLimit = 30;
+      } else if (planLower.includes('pro')) {
+        newDaysLimit = 3;
+      }
+      
+      setDaysLimit(newDaysLimit);
+      
+      // Set message based on subscription plan
+      if (planLower.includes('elite')) {
+        setUpgradeMessage(`Your current plan displays action items from past ${newDaysLimit} days.`);
+      } else if (planLower.includes('pro')) {
+        setUpgradeMessage(`Your current plan displays action items from past ${newDaysLimit} days. Upgrade plan to view all of the action items.`);
+      } else {
+        setUpgradeMessage(`Your current plan displays action items from past ${newDaysLimit} days. Upgrade plan to view all of the action items.`);
+      }
+    }
+  }, []);
+
   const handleClick = () => {
     if (onComparePlans) {
       onComparePlans();
@@ -30,12 +64,16 @@ const ActionItemsUpgrade = ({ onComparePlans }) => {
           </div> */}
           
           <p className="upgrade-message">
-            Your current plan displays action items from past 3 days. Upgrade plan to view all of the action items.
+            {upgradeMessage || `Your current plan displays action items from past ${daysLimit} days. Upgrade plan to view all of the action items.`}
           </p>
           
-          <button className="compare-plans-btn" onClick={handleClick}>
-            Compare plans
-          </button>
+          
+          {/* Only show compare plans button if not on Elite plan */}
+          {upgradeMessage && upgradeMessage.includes("Upgrade plan") && (
+            <button className="compare-plans-btn" onClick={handleClick}>
+              Compare plans
+            </button>
+          )}
         </div>
       </div>
     </div>
