@@ -36,7 +36,7 @@ const MildeSection = ({
   const eliteOrWorksPlan =
     (/elite|works|ultimate/i.test(subscriptionPlan) && !/mount|pro/i.test(subscriptionPlan)) || subscriptionPlan == "trial"; // Case-insensitive check for 'elite', 'works', or 'ultimate' in the plan name, but exclude 'mount' and 'pro'
   const eliteFeaturesAvailable =
-    /elite/i.test(subscriptionPlan) || subscriptionPlan == "trial"; // user subscribed to Elite or is on trial
+    /elite|ultimate/i.test(subscriptionPlan) || subscriptionPlan === "trial"; // user subscribed to Elite or Ultimate or is on trial
   const propertyIsLocked = !!allConversationData?.is_locked;
   const accountAllowsGenerateButton =
     eliteFeaturesAvailable && !propertyIsLocked;
@@ -1134,7 +1134,7 @@ const MildeSection = ({
             <p style={{ color: "#AAA" }}>No conversation selected</p>
           </div>
         )}
-        {eliteOrWorksPlan && !(conversationData?.channel == "hostbuddy") ? (
+        {eliteOrHigherPlan && !(conversationData?.channel == "hostbuddy") ? (
           <>
             {" "}
             <div
