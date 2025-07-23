@@ -272,7 +272,17 @@ const MountIntegration = ({ ApiUserData }) => {
                   <div 
                     style={{ 
                       color:"rgba(187, 187, 187, 1)",
-                      marginLeft: '10px'
+                      marginLeft: '10px',
+                      padding: '4px',
+                      borderRadius: '4px',
+                      transition: 'background-color 0.2s ease',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
                     <CustomTooltip 
@@ -332,7 +342,17 @@ const MountIntegration = ({ ApiUserData }) => {
                     </label>
                     <div 
                       style={{ 
-                        marginLeft: '10px'
+                        marginLeft: '10px',
+                        padding: '4px',
+                        borderRadius: '4px',
+                        transition: 'background-color 0.2s ease',
+                        cursor: 'pointer'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
                       }}
                     >
                       <CustomTooltip 
@@ -465,7 +485,17 @@ const MountIntegration = ({ ApiUserData }) => {
                     </label>
                     <div 
                       style={{ 
-                        marginLeft: '10px'
+                        marginLeft: '10px',
+                        padding: '4px',
+                        borderRadius: '4px',
+                        transition: 'background-color 0.2s ease',
+                        cursor: 'pointer'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
                       }}
                     >
                       <CustomTooltip 
@@ -696,7 +726,17 @@ const MountIntegration = ({ ApiUserData }) => {
                   <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Personalization</label>
                   <div 
                     style={{ 
-                      color:"rgba(187, 187, 187, 1)"
+                      color:"rgba(187, 187, 187, 1)",
+                      padding: '4px',
+                      borderRadius: '4px',
+                      transition: 'background-color 0.2s ease',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
                     <CustomTooltip 
@@ -746,7 +786,17 @@ const MountIntegration = ({ ApiUserData }) => {
                   <label style={{ fontSize: '15px', fontWeight: '500', color: '#fff' }}>AI Context Checking</label>
                   <div 
                     style={{ 
-                      color:"rgba(187, 187, 187, 1)"
+                      color:"rgba(187, 187, 187, 1)",
+                      padding: '4px',
+                      borderRadius: '4px',
+                      transition: 'background-color 0.2s ease',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(189, 193, 201, 0.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
                     <CustomTooltip 
