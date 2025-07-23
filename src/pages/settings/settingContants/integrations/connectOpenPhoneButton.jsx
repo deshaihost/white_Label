@@ -5,7 +5,7 @@ import './Integrations.css';
 import IntegrationCredentialsModal from './integrationCredentialsModal';
 import OpenPhonePng from './Icons/OpenPhone-Logo.png';
 import MountLogo from './Icons/Mount Logo.svg';
-import { ReactComponent as OpenphoneLogo } from './Icons/Openphone.svg';
+const OpenphoneLogo = require('./Icons/Openphone.svg').default;
 
 const ConnectToOpenPhone = () => {
   const [showModal, setShowModal] = useState(false);

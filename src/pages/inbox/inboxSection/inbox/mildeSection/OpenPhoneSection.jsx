@@ -7,7 +7,7 @@ import OpenPhoneInbox from "./message/OpenPhoneInbox";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import loaderGif from "../../../../../public/img/new_loader.gif";
 import { callSendOpenPhoneMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
-import OpenPhoneLocked from "./openPhoneLocked/OpenPhoneLocked";
+import OpenPhoneLocked from "./openPhoneLocked/OpenPhoneLocked.js";
 
 const placeholderImg = "https://hostbuddylb.com/misc/chatBubbles.webp";
 

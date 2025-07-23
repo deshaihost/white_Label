@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import ToastHandle from '../../../../helper/ToastMessage';
 import Loader from '../../../../helper/Loader';
 import axios from 'axios';
-import ToolTipIcon from './Icons/ToolTip.svg';
 import CustomTooltip from './components/CustomTooltip';
+
+// SVG import
+const ToolTipIcon = require('./Icons/ToolTip.svg').default;
 
 const MountIntegration = ({ ApiUserData }) => {
   const propertyData = ApiUserData?.ApiUserData?.property_data;

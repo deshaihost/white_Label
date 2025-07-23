@@ -104,7 +104,7 @@ const ConnectToTurno = () => {
 
   return (
     <div className="partner-tile" onClick={handleConnectClick}>
-      <img className="partner-logo" alt="Turno Logo" src={require('./Icons/Turno Logo.svg').default}/>
+      <img className="partner-logo" alt="Turno Logo" src={require('./Icons/Turno Logo.svg').default || ""}/>
       <p>Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.</p>
     </div>
   );

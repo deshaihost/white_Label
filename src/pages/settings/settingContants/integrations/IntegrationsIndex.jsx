@@ -25,6 +25,13 @@ import ToastHandle from '../../../../helper/ToastMessage';
 import { useDispatch } from 'react-redux';
 import { getUserDataActions } from '../../../../redux/actions';
 
+// SVG imports
+const SlackSvg = require('./Icons/Slack.svg').default;
+const TurnoLogoSvg = require('./Icons/Turno Logo.svg').default;
+const TidyLogoSvg = require('./Icons/Tidy Logo.svg').default;
+const MountLogoBlackSvg = require('./Icons/Mount Logo black.svg').default;
+const NotionLogoSvg = require('./Icons/Notion Logo.svg').default;
+
 const IntegrationsIndex = (ApiUserData) => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -387,10 +394,10 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* Slack */}
               {isProPlan ? 
-                renderUpgradeTile(require('./Icons/Slack.svg').default, 'Slack Logo', 'Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.', { width: '82px', height: '50px' }) 
+                renderUpgradeTile(SlackSvg, 'Slack Logo', 'Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.', { width: '82px', height: '50px' }) 
                 : 
                 <div className="partner-tile" style={{ cursor: 'pointer' }} onClick={() => window.location.href = '/setting/contact'}>
-                  <img className="partner-logo" alt="Slack Logo" src={require('./Icons/Slack.svg').default} style={{ width: '83px', height: '50px' }} />
+                  <img className="partner-logo" alt="Slack Logo" src={SlackSvg} style={{ width: '83px', height: '50px' }} />
                   <p>Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.</p>
                 </div>
               }
@@ -401,7 +408,7 @@ const IntegrationsIndex = (ApiUserData) => {
             <>
               {/* Turno */}
               {!turnoUserId && (
-                isProPlan ? renderUpgradeTile(require('./Icons/Turno Logo.svg').default, 'Turno Logo', 'Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
+                isProPlan ? renderUpgradeTile(TurnoLogoSvg, 'Turno Logo', 'Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
               )}
               {/* Minut */}
               {!minutUserId && (
@@ -409,7 +416,7 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* Tidy */}
               {!tidyUserId && (
-                isProPlan ? renderUpgradeTile(require('./Icons/Tidy Logo.svg').default, 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
+                isProPlan ? renderUpgradeTile(TidyLogoSvg, 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
               )}
               {/* Hostfully Guidebooks */}
               {!hostfullyGuidebooksUserId && (
@@ -417,7 +424,7 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* Mount */}
               <div className="partner-tile">
-                <img className="partner-logo" alt="Mount Logo" src={require('./Icons/Mount Logo black.svg').default} style={{ maxWidth: '150px', height: 'auto' }} />
+                <img className="partner-logo" alt="Mount Logo" src={MountLogoBlackSvg} style={{ maxWidth: '150px', height: 'auto' }} />
                 <p>Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area</p>
                 <div style={{ 
                   background: 'rgba(6, 9, 26, 1)',
@@ -468,7 +475,7 @@ const IntegrationsIndex = (ApiUserData) => {
               </div>
               {/* Notion */}
               {!notionUserId && (
-                isProPlan ? renderUpgradeTile(require('./Icons/Notion Logo.svg').default, 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
+                isProPlan ? renderUpgradeTile(NotionLogoSvg, 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
               )}
             </>
           )}
