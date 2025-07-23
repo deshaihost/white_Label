@@ -238,8 +238,8 @@ const WhatsAppSection = ({
     ToastHandle("AI generation for WhatsApp coming soon", "info");
   };
 
-  // Render WhatsAppLocked for pro plan
-  if (/pro/i.test(subscriptionPlan)) {
+  // Render WhatsAppLocked for pro and mount plans
+  if (/pro|mount/i.test(subscriptionPlan)) {
     return <WhatsAppLocked onComparePlans={() => window.location.href = '/setting/subscription'} />;
   }
 
