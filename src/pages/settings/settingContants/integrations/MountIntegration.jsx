@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import ToastHandle from '../../../../helper/ToastMessage';
 import Loader from '../../../../helper/Loader';
 import axios from 'axios';
+import ToolTipIcon from './Icons/ToolTip.svg';
+import CustomTooltip from './components/CustomTooltip';
 
 const MountIntegration = ({ ApiUserData }) => {
   const propertyData = ApiUserData?.ApiUserData?.property_data;
@@ -270,15 +272,15 @@ const MountIntegration = ({ ApiUserData }) => {
                   <div 
                     style={{ 
                       color:"rgba(187, 187, 187, 1)",
-                      marginLeft: '10px', 
-                      position: 'relative',
-                      display: 'inline-block'
+                      marginLeft: '10px'
                     }}
-                    title="Maximum distance between your property address and upsells which HostBuddy will consider for trip planning"
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" style={{ color: '#aaa' }}>
-                      <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
-                    </svg>
+                    <CustomTooltip 
+                      title="Maximum Distance Info" 
+                      description="Maximum distance between your property address and upsells which HostBuddy will consider for trip planning"
+                    >
+                      <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
+                    </CustomTooltip>
                   </div>
                 </div>
                 <select
@@ -330,15 +332,15 @@ const MountIntegration = ({ ApiUserData }) => {
                     </label>
                     <div 
                       style={{ 
-                        marginLeft: '10px', 
-                        position: 'relative',
-                        display: 'inline-block'
+                        marginLeft: '10px'
                       }}
-                      title="Upsell will be sent after booking confirmation"
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" style={{ color: '#aaa' }}>
-                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
-                      </svg>
+                      <CustomTooltip 
+                        title="After Booking Timing" 
+                        description="Upsell will be sent after booking confirmation"
+                      >
+                        <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
+                      </CustomTooltip>
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginLeft: '24px' }}>
@@ -463,15 +465,15 @@ const MountIntegration = ({ ApiUserData }) => {
                     </label>
                     <div 
                       style={{ 
-                        marginLeft: '10px', 
-                        position: 'relative',
-                        display: 'inline-block'
+                        marginLeft: '10px'
                       }}
-                      title="Upsell will be sent before check-in time"
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" style={{ color: '#aaa' }}>
-                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
-                      </svg>
+                      <CustomTooltip 
+                        title="Before Check-in Timing" 
+                        description="Upsell will be sent before check-in time"
+                      >
+                        <img src={ToolTipIcon} alt="Tooltip" width="16" height="16" />
+                      </CustomTooltip>
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginLeft: '24px' }}>
