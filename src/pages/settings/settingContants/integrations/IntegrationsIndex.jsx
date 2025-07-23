@@ -374,17 +374,29 @@ const IntegrationsIndex = (ApiUserData) => {
             <>
               {/* Whatsapp */}
               {!whatsappPhoneNumber && (
-                isProPlan ? renderUpgradeTile('https://hostbuddylb.com/partners/WhatsApp_logo.svg', 'WhatsApp Logo', 'Connect your WhatsApp Business Account to view your WhatsApp conversations in your inbox, and let HostBuddy automatically respond to your guests over WhatsApp.', { width: '152px', height: '50px' }) : <ConnectToWhatsApp />
+                isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/Whatsapp.svg', 'WhatsApp Logo', 'Connect your WhatsApp Business Account to view your WhatsApp conversations in your inbox, and let HostBuddy automatically respond to your guests over WhatsApp.', { width: '33%', height: '50px' }) : <ConnectToWhatsApp />
               )}
               {/* OpenPhone */}
-              {!openphoneNumber && (
-                isProPlan ? renderUpgradeTile(require('./Icons/OpenPhone-Blue.png'), 'OpenPhone Logo', 'Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.', { 
+              {/* {!openphoneNumber && (
+                isProPlan ? renderUpgradeTile("https://storage.googleapis.com/frontend_media/logo/Openphone.svg", 'OpenPhone Logo', 'Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.', { 
                   width: '153px', 
                   height: '36px',
                   mixBlendMode: 'multiply',
                   backgroundColor: 'transparent' 
                 }) : <ConnectToOpenPhone />
+              )} */}
+
+               {/* https://storage.googleapis.com/frontend_media/partners/Hostfully_tile_icon.svg */}
+
+                 {!openphoneNumber && (
+                isProPlan ? renderUpgradeTile("https://storage.googleapis.com/frontend_media/partners/Openphone.svg", 'OpenPhone Logo', 'Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.', { 
+                  width: '153px', 
+                  height: '36px',
+                }) : <ConnectToOpenPhone />
               )}
+
+
+
               {/* Slack */}
               {isProPlan ? 
                 renderUpgradeTile(require('./Icons/Slack.svg').default, 'Slack Logo', 'Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.', { width: '82px', height: '50px' }) 
@@ -404,16 +416,22 @@ const IntegrationsIndex = (ApiUserData) => {
                 isProPlan ? renderUpgradeTile(require('./Icons/Turno Logo.svg').default, 'Turno Logo', 'Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
               )}
               {/* Minut */}
-              {!minutUserId && (
+              {/* {!minutUserId && (
                 isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/minut_logo_text.svg', 'Minut Logo', 'Connect with Minut’s insights platform to automate and personalize guest messaging for noise or occupancy events. streamline your operations, keep your property protected, and enhance guest experience.') : <ConnectToMinut />
+              )} */}
+
+               {!minutUserId && (
+                isProPlan ?renderUpgradeTile(require('./Icons/Minut Logo.svg').default, 'Minut Logo', 'Connect with Minut’s insights platform to automate and personalize guest messaging for noise or occupancy events. streamline your operations, keep your property protected, and enhance guest experience.') : <ConnectToMinut />
               )}
+
+
               {/* Tidy */}
               {!tidyUserId && (
                 isProPlan ? renderUpgradeTile(require('./Icons/Tidy Logo.svg').default, 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
               )}
               {/* Hostfully Guidebooks */}
               {!hostfullyGuidebooksUserId && (
-                isProPlan ? renderUpgradeTile('https://storage.googleapis.com/frontend_media/partners/hostfully_circle.svg', 'Hostfully Guidebooks Logo', 'Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.', { width: '50px', height: '50px' }) : <ConnectToHostfullyGuidebooks />
+                isProPlan ? renderUpgradeTile(require('./Icons/Hostfully_tile_icon.svg').default, 'Hostfully Guidebooks Logo', 'Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.', { width: '50%', height: '50px' }) : <ConnectToHostfullyGuidebooks />
               )}
               {/* Mount */}
               <div className="partner-tile">
