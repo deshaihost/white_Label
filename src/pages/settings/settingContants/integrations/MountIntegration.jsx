@@ -175,29 +175,30 @@ const MountIntegration = ({ ApiUserData }) => {
           style={{
             marginTop: '20px',
             padding: '12px 24px',
-            fontSize: '15px',
-            fontWeight: '600',
+            fontSize: '14px',
+            fontFamily: "'Samsung Sharp Sans', sans-serif",
+            fontWeight: '500',
             color: '#fff',
-            backgroundColor: 'rgb(109 109 43)',
+            backgroundColor: 'rgba(39, 42, 64, 1)',
             border: 'none',
-            borderRadius: '8px',
+            borderRadius: '100px',
             cursor: 'pointer',
-            boxShadow: '0 4px 14px rgba(20, 110, 245, 0.4)',
-            transition: 'all 0.3s ease',
+            // boxShadow: '0 4px 14px rgba(20, 110, 245, 0.4)',
+            // transition: 'all 0.3s ease',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '8px'
           }}
           onMouseOver={(e) => {
-            e.target.style.backgroundColor = 'rgb(109 109 43)';
-            e.target.style.transform = 'translateY(-2px)';
-            e.target.style.boxShadow = '0 6px 20px rgba(20, 110, 245, 0.5)';
+            e.target.style.backgroundColor = 'rgba(39, 42, 64, 1)';
+          //   e.target.style.transform = 'translateY(-2px)';
+            // e.target.style.boxShadow = '0 6px 20px rgba(39, 42, 64, 1)';
           }}
           onMouseOut={(e) => {
-            e.target.style.backgroundColor = 'rgb(109 109 43)';
-            e.target.style.transform = 'translateY(0)';
-            e.target.style.boxShadow = '0 4px 14px rgba(20, 110, 245, 0.4)';
+            e.target.style.backgroundColor = 'rgba(39, 42, 64, 1)';
+           // e.target.style.transform = 'translateY(0)';
+            // e.target.style.boxShadow = '0 4px 14px rgba(39, 42, 64, 1)';
           }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
