@@ -928,7 +928,7 @@ const MountIntegration = ({ ApiUserData }) => {
               style={{ 
                 borderRadius: '50px', 
                 padding: '10px 20px',
-                backgroundColor: 'rgb(109 109 43)',
+                backgroundColor: 'rgba(13, 110, 253, 1)',
                 color: '#fff',
                 border: 'none',
                 fontSize: '15px',
@@ -937,7 +937,7 @@ const MountIntegration = ({ ApiUserData }) => {
               }} 
               onClick={handleSubmitMappingsClick}
             >
-              Save Upsell Mappings
+              Save 
             </button>
           ) : (
             <Loader />
