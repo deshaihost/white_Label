@@ -441,14 +441,15 @@ const IntegrationsIndex = (ApiUserData) => {
                     />
                     <span className="slider round" style={{ 
                       position: 'relative',
+                      top:"4px",
                       display: 'inline-block',
                       width: '30px',
                       height: '17px',
-                      background: mountActive ? 'rgb(20, 110, 245)' : '#fff',
+                      background: mountActive ? 'rgb(20, 110, 245)' : 'black',
                       borderRadius: '34px',
                       transition: '0.4s',
                       cursor: 'pointer',
-                      boxShadow: mountActive ? '0 0 5px rgb(20, 110, 245)' : '0 0 5px #eee'
+                      // boxShadow: mountActive ? '0 0 5px rgb(20, 110, 245)' : '0 0 5px #eee'
                     }}>
                       <span style={{
                         position: 'absolute',
