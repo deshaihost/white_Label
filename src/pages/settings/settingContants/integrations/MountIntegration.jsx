@@ -30,6 +30,7 @@ const MountIntegration = ({ ApiUserData }) => {
   const [selectedMountUpsells, setSelectedMountUpsells] = useState({});
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
   const [getMountUpsellsLoading, setGetMountUpsellsLoading] = useState(false);
+  const [fetchingModalSettings, setFetchingModalSettings] = useState(false);
   
   // API to fetch Mount upsells and property mappings
   const fetchMountUpsellsData = async () => {
@@ -74,6 +75,117 @@ const MountIntegration = ({ ApiUserData }) => {
     }
   };
 
+  // API to fetch experience planning messages settings
+  const fetchExperiencePlanningSettings = async () => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    try {
+      setFetchingModalSettings(true);
+      console.log('Fetching experience planning settings...');
+
+      const config = {
+        headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+
+      // Try to fetch existing settings from the API
+      try {
+        // Using GET request to fetch existing settings - replace with correct endpoint if different
+        const response = await axios.get(`${baseUrl}/get_experience_planning_messages`, config);
+        
+        if (response && response.status === 200 && response.data && response.data.experience_planning_messages) {
+          const settings = response.data.experience_planning_messages[0]; // Get first settings object
+          
+          if (settings) {
+            // Populate modal with fetched data
+            setUpsellTiming(settings.trigger_type === 'after_booking' ? 'afterBooking' : 'beforeCheckin');
+            setExcludeStart(settings.exclude_time_range && settings.exclude_time_range[0] ? settings.exclude_time_range[0] : '');
+            setExcludeEnd(settings.exclude_time_range && settings.exclude_time_range[1] ? settings.exclude_time_range[1] : '');
+            setAiContentChecking(settings.ai_context_check !== undefined ? settings.ai_context_check : true);
+            setAiPersonalization(settings.ai_personalization !== undefined ? settings.ai_personalization : true);
+            setInitiationTemplate(settings.message || "Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?");
+            
+            // Set timing fields based on trigger type
+            if (settings.trigger_type === 'after_booking') {
+              setHoursDelay(settings.hours_after || 0);
+              setMinutesDelay(settings.minutes_after || 0);
+              // Reset before check-in values
+              setHoursBeforeCheckin(0);
+              setMinutesBeforeCheckin(0);
+            } else if (settings.trigger_type === 'before_check_in') {
+              // For before check-in, calculate total hours from days_before and time_of_day if available
+              const daysBefore = settings.days_before || 0;
+              const timeOfDay = settings.time_of_day || '00:00';
+              const [timeHours, timeMinutes] = timeOfDay.split(':').map(num => parseInt(num) || 0);
+              
+              const totalHours = (daysBefore * 24) + timeHours;
+              setHoursBeforeCheckin(totalHours);
+              setMinutesBeforeCheckin(timeMinutes);
+              // Reset after booking values
+              setHoursDelay(0);
+              setMinutesDelay(0);
+            }
+            
+            console.log('Successfully populated modal with fetched settings:', settings);
+          }
+        } else {
+          console.log('No existing settings found, using default values');
+        }
+      } catch (apiError) {
+        // If API endpoint doesn't exist or returns error, simulate with example data for testing
+        console.warn('Could not fetch existing settings, using defaults (API might not be available):', apiError.message);
+        
+        // For demonstration, you can uncomment the following block to simulate loading data:
+        /*
+        // Simulate the response format provided by user for testing
+        const simulatedSettings = {
+          "ai_context_check": true,
+          "ai_personalization": true,
+          "enabled": true,
+          "exclude_time_range": ["05:05", "12:12"],
+          "hours_after": 4,
+          "message": "Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?",
+          "minutes_after": 34,
+          "name": "",
+          "properties": "<all_properties>",
+          "template_id": "052e0050-6312-4b76-b95c-385449cc7117",
+          "trigger_type": "after_booking"
+        };
+        
+        // Populate modal with simulated data
+        setUpsellTiming(simulatedSettings.trigger_type === 'after_booking' ? 'afterBooking' : 'beforeCheckin');
+        setExcludeStart(simulatedSettings.exclude_time_range && simulatedSettings.exclude_time_range[0] ? simulatedSettings.exclude_time_range[0] : '');
+        setExcludeEnd(simulatedSettings.exclude_time_range && simulatedSettings.exclude_time_range[1] ? simulatedSettings.exclude_time_range[1] : '');
+        setAiContentChecking(simulatedSettings.ai_context_check !== undefined ? simulatedSettings.ai_context_check : true);
+        setAiPersonalization(simulatedSettings.ai_personalization !== undefined ? simulatedSettings.ai_personalization : true);
+        setInitiationTemplate(simulatedSettings.message || "Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?");
+        setHoursDelay(simulatedSettings.hours_after || 0);
+        setMinutesDelay(simulatedSettings.minutes_after || 0);
+        
+        console.log('Using simulated settings for testing:', simulatedSettings);
+        */
+        
+        // Set default values (these are already set in state initialization, but making it explicit)
+        setUpsellTiming("afterBooking");
+        setHoursDelay(0);
+        setMinutesDelay(0);
+        setHoursBeforeCheckin(0);
+        setMinutesBeforeCheckin(0);
+        setExcludeStart("");
+        setExcludeEnd("");
+        setAiPersonalization(true);
+        setAiContentChecking(true);
+        setInitiationTemplate("Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?");
+      }
+    } catch (error) {
+      console.error('Error fetching experience planning settings:', error);
+      // Use default values on error
+    } finally {
+      setFetchingModalSettings(false);
+    }
+  };
+
   // API to save experience planning messages settings
   const saveExperiencePlanningSettings = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -88,7 +200,11 @@ const MountIntegration = ({ ApiUserData }) => {
         'trigger_type': upsellTiming === 'afterBooking' ? 'after_booking' : 'before_check_in',
         'exclude_time_range': excludeStart && excludeEnd ? [excludeStart, excludeEnd] : [],
         'ai_context_check': aiContentChecking,
-        'ai_personalization': aiPersonalization
+        'ai_personalization': aiPersonalization,
+        'message': initiationTemplate, // Add the initiation template message
+        'name': '', // Add empty name field as per API format
+        'properties': '<all_properties>', // Add properties field as per API format
+        'template_id': '' // Add empty template_id field as per API format
       };
 
       // Add timing-specific fields based on trigger type
@@ -200,7 +316,11 @@ const MountIntegration = ({ ApiUserData }) => {
     }
   }, [apiPropertyMappings]);
   
-  const toggleModal = () => {
+  const toggleModal = async () => {
+    if (!showUpsellsModal) {
+      // Opening modal - fetch settings first
+      await fetchExperiencePlanningSettings();
+    }
     setShowUpsellsModal(!showUpsellsModal);
   };
   
@@ -301,6 +421,22 @@ const MountIntegration = ({ ApiUserData }) => {
               {/* <div style={{ height: '2px', background: 'linear-gradient(90deg, rgba(109,109,43,0) 0%, rgba(109,109,43,1) 50%, rgba(109,109,43,0) 100%)', margin: '15px auto' }}></div> */}
             </div>
             {/* Modal content */}
+            {fetchingModalSettings ? (
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                minHeight: '200px',
+                color: '#fff'
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <Loader />
+                  <p style={{ marginTop: '15px', fontSize: '14px', color: '#aaa' }}>
+                    Loading upsell settings...
+                  </p>
+                </div>
+              </div>
+            ) : (
             <div style={{ color: '#fff' }}>
               {/* Maximum upsell distance */}
               {/* <div style={{ marginBottom: '24px' }}>
@@ -1007,6 +1143,7 @@ const MountIntegration = ({ ApiUserData }) => {
                 </button>
               </div>
             </div>
+            )}
           </div>
         </div>
       )}
