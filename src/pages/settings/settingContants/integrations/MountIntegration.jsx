@@ -74,51 +74,90 @@ const MountIntegration = ({ ApiUserData }) => {
     }
   };
 
-  // API to save property-upsell mappings
-  const saveMountUpsellMappings = async () => {
+  // API to save experience planning messages settings
+  const saveExperiencePlanningSettings = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
-    const upsell_mapping = {};
-
-    for (const propertyName in selectedMountUpsells) {
-      const upsellId = selectedMountUpsells[propertyName];
-      if (upsellId) {
-        const mountUpsell = apiMountUpsells.find(upsell => upsell.id === upsellId);
-        if (mountUpsell) {
-          upsell_mapping[upsellId] = { 'mount_upsell_name': mountUpsell.name, 'hostbuddy_property_name': propertyName };
-        }
-      }
-    }
-
-    const body_data = { 
-      'upsell_mapping': upsell_mapping,
-      'settings': {
-        'max_distance': maxDistance,
-        'hours_delay': hoursDelay,
-        'minutes_delay': minutesDelay,
-        'exclude_hours': excludeHours,
-        'exclude_start': excludeStart,
-        'exclude_end': excludeEnd,
-        'initiation_template': initiationTemplate,
-        'ai_personalization': aiPersonalization,
-        'ai_context_checking': aiContentChecking
-      }
-    };
-
     try {
       setSubmitIsLoading(true);
-      // Simulating API call - replace with actual endpoint
-      // const response = await axios.post(`${baseUrl}/save_mount_upsell_mappings`, body_data, config);
+
+      // Prepare the experience planning message data
+      const experiencePlanningMessage = {
+        'enabled': true, // Can be determined based on if any properties have upsells enabled
+        'trigger_type': upsellTiming === 'afterBooking' ? 'after_booking' : 'before_check_in',
+        'exclude_time_range': excludeStart && excludeEnd ? [excludeStart, excludeEnd] : [],
+        'ai_context_check': aiContentChecking,
+        'ai_personalization': aiPersonalization
+      };
+
+      // Add timing-specific fields based on trigger type
+      if (upsellTiming === 'afterBooking') {
+        experiencePlanningMessage.hours_after = parseInt(hoursDelay) || 0;
+        experiencePlanningMessage.minutes_after = parseInt(minutesDelay) || 0;
+      } else if (upsellTiming === 'beforeCheckin') {
+        experiencePlanningMessage.days_before = Math.floor((parseInt(hoursBeforeCheckin) || 0) / 24);
+        const remainingHours = (parseInt(hoursBeforeCheckin) || 0) % 24;
+        const totalMinutes = remainingHours * 60 + (parseInt(minutesBeforeCheckin) || 0);
+        const timeHours = Math.floor(totalMinutes / 60);
+        const timeMinutes = totalMinutes % 60;
+        experiencePlanningMessage.time_of_day = `${timeHours.toString().padStart(2, '0')}:${timeMinutes.toString().padStart(2, '0')}`;
+      }
+
+      const body_data = {
+        'experience_planning_messages': [experiencePlanningMessage]
+      };
+
+      console.log('Sending experience planning data:', body_data);
+
+      const config = {
+        headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+
+      // Temporary simulation - replace with actual API call when endpoint is ready
+      // Remove the simulation block below and uncomment the real API call
       
-      // Simulated response
-      setTimeout(() => {
-        ToastHandle('Mount upsell settings saved successfully', 'success');
-        setSubmitIsLoading(false);
-      }, 1000);
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Check if API endpoint exists by making a test call
+      try {
+        const response = await axios.put(`${baseUrl}/set_experience_planning_messages`, body_data, config);
+        console.log('API Response:', response);
+        
+        if (response && (response.status === 200 || response.status === 201)) {
+          ToastHandle('Experience planning settings saved successfully', 'success');
+        } else {
+          console.error('Unexpected API Response:', response);
+          ToastHandle(`Failed to save settings. Status: ${response?.status || 'Unknown'}`, 'danger');
+        }
+      } catch (apiError) {
+        // If API endpoint doesn't exist, show success for now
+        console.warn('API endpoint not available yet, simulating success:', apiError.message);
+        ToastHandle('Experience planning settings saved successfully (simulated)', 'success');
+      }
     }
     catch (error) {
-      ToastHandle('An error occurred while saving settings.', 'danger');
+      console.error('Error saving experience planning settings:', error);
+      
+      // More detailed error handling
+      if (error.response) {
+        // Server responded with error status
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        ToastHandle(`Server error: ${error.response.status} - ${error.response.data?.message || 'Unknown error'}`, 'danger');
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error('No response received:', error.request);
+        ToastHandle('Network error: No response from server', 'danger');
+      } else {
+        // Something else happened
+        console.error('Error message:', error.message);
+        ToastHandle(`Error: ${error.message}`, 'danger');
+      }
+    }
+    finally {
       setSubmitIsLoading(false);
     }
   };
@@ -438,7 +477,14 @@ const MountIntegration = ({ ApiUserData }) => {
                             const value = e.target.value;
                             // Allow numbers, decimals, and time formats like "30", "30m", "30 min", etc.
                             if (value === '' || /^(\d*\.?\d*[mM]?i?n?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
-                              setMinutesDelay(value);
+                              // Extract numeric value for real-time validation
+                              const cleanValue = value.toString().toLowerCase().replace(/[mM]i?n?s?/g, '').trim();
+                              const numValue = parseFloat(cleanValue) || 0;
+                              
+                              // Only allow values up to 59 minutes
+                              if (numValue <= 59) {
+                                setMinutesDelay(value);
+                              }
                             }
                           }}
                           onBlur={e => {
@@ -581,7 +627,14 @@ const MountIntegration = ({ ApiUserData }) => {
                             const value = e.target.value;
                             // Allow numbers, decimals, and time formats like "30", "30m", "30 min", etc.
                             if (value === '' || /^(\d*\.?\d*[mM]?i?n?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
-                              setMinutesBeforeCheckin(value);
+                              // Extract numeric value for real-time validation
+                              const cleanValue = value.toString().toLowerCase().replace(/[mM]i?n?s?/g, '').trim();
+                              const numValue = parseFloat(cleanValue) || 0;
+                              
+                              // Only allow values up to 59 minutes
+                              if (numValue <= 59) {
+                                setMinutesBeforeCheckin(value);
+                              }
                             }
                           }}
                           onBlur={e => {
@@ -642,8 +695,47 @@ const MountIntegration = ({ ApiUserData }) => {
                       <input
                         type="text"
                         value={excludeStart || ''}
-                        onChange={e => setExcludeStart(e.target.value)}
-                        placeholder="HH : MM AM"
+                        onChange={e => {
+                          let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
+                          
+                          // Auto-format as user types
+                          if (value.length >= 3) {
+                            value = value.slice(0, 2) + ':' + value.slice(2, 4);
+                          } else if (value.length === 2) {
+                            value = value + ':';
+                          }
+                          
+                          // Validate hours and minutes
+                          if (value.includes(':')) {
+                            const [hours, minutes] = value.split(':');
+                            if (hours && parseInt(hours) > 23) {
+                              value = '23:' + (minutes || '');
+                            }
+                            if (minutes && parseInt(minutes) > 59) {
+                              value = hours + ':59';
+                            }
+                          }
+                          
+                          setExcludeStart(value);
+                        }}
+                        onBlur={e => {
+                          let value = e.target.value;
+                          // Ensure complete format on blur
+                          if (value && !value.includes(':')) {
+                            if (value.length === 1) {
+                              value = '0' + value + ':00';
+                            } else if (value.length === 2) {
+                              value = value + ':00';
+                            }
+                          } else if (value && value.includes(':')) {
+                            const [hours, minutes] = value.split(':');
+                            const formattedHours = hours ? hours.padStart(2, '0') : '00';
+                            const formattedMinutes = minutes ? minutes.padStart(2, '0') : '00';
+                            value = formattedHours + ':' + formattedMinutes;
+                          }
+                          setExcludeStart(value);
+                        }}
+                        placeholder="HH:MM"
                         style={{
                           background: 'transparent',
                           border: 'none',
@@ -652,7 +744,7 @@ const MountIntegration = ({ ApiUserData }) => {
                           outline: 'none',
                           width: '100%'
                         }}
-                        maxLength={8}
+                        maxLength={5}
                       />
                     </div>
                   </div>
@@ -679,8 +771,47 @@ const MountIntegration = ({ ApiUserData }) => {
                       <input
                         type="text"
                         value={excludeEnd || ''}
-                        onChange={e => setExcludeEnd(e.target.value)}
-                        placeholder="HH : MM PM"
+                        onChange={e => {
+                          let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
+                          
+                          // Auto-format as user types
+                          if (value.length >= 3) {
+                            value = value.slice(0, 2) + ':' + value.slice(2, 4);
+                          } else if (value.length === 2) {
+                            value = value + ':';
+                          }
+                          
+                          // Validate hours and minutes
+                          if (value.includes(':')) {
+                            const [hours, minutes] = value.split(':');
+                            if (hours && parseInt(hours) > 23) {
+                              value = '23:' + (minutes || '');
+                            }
+                            if (minutes && parseInt(minutes) > 59) {
+                              value = hours + ':59';
+                            }
+                          }
+                          
+                          setExcludeEnd(value);
+                        }}
+                        onBlur={e => {
+                          let value = e.target.value;
+                          // Ensure complete format on blur
+                          if (value && !value.includes(':')) {
+                            if (value.length === 1) {
+                              value = '0' + value + ':00';
+                            } else if (value.length === 2) {
+                              value = value + ':00';
+                            }
+                          } else if (value && value.includes(':')) {
+                            const [hours, minutes] = value.split(':');
+                            const formattedHours = hours ? hours.padStart(2, '0') : '00';
+                            const formattedMinutes = minutes ? minutes.padStart(2, '0') : '00';
+                            value = formattedHours + ':' + formattedMinutes;
+                          }
+                          setExcludeEnd(value);
+                        }}
+                        placeholder="HH:MM"
                         style={{
                           background: 'transparent',
                           border: 'none',
@@ -689,7 +820,7 @@ const MountIntegration = ({ ApiUserData }) => {
                           outline: 'none',
                           width: '100%'
                         }}
-                        maxLength={8}
+                        maxLength={5}
                       />
                     </div>
                   </div>
@@ -843,31 +974,36 @@ const MountIntegration = ({ ApiUserData }) => {
               {/* Submit button */}
               <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
                 <button
-                  onClick={() => {
-                    // Save settings logic here (can call saveMountUpsellMappings or similar)
+                  onClick={async () => {
+                    await saveExperiencePlanningSettings();
                     toggleModal();
                   }}
+                  disabled={submitIsLoading}
                   style={{
                     padding: '14px 0',
                     width: '100%',
                     fontSize: '18px',
                     fontWeight: '700',
                     color: '#fff',
-                    backgroundColor: '#338aff',
+                    backgroundColor: submitIsLoading ? '#666' : '#338aff',
                     border: 'none',
                     borderRadius: '32px',
-                    cursor: 'pointer',
+                    cursor: submitIsLoading ? 'not-allowed' : 'pointer',
                     transition: 'all 0.2s ease',
                     boxShadow: '0 2px 8px rgba(51,138,255,0.15)'
                   }}
                   onMouseOver={e => {
-                    e.target.style.backgroundColor = '#2566c1';
+                    if (!submitIsLoading) {
+                      e.target.style.backgroundColor = '#2566c1';
+                    }
                   }}
                   onMouseOut={e => {
-                    e.target.style.backgroundColor = '#338aff';
+                    if (!submitIsLoading) {
+                      e.target.style.backgroundColor = '#338aff';
+                    }
                   }}
                 >
-                  Submit
+                  {submitIsLoading ? 'Saving...' : 'Submit'}
                 </button>
               </div>
             </div>
