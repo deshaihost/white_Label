@@ -264,7 +264,7 @@ const MountIntegration = ({ ApiUserData }) => {
             {/* Modal content */}
             <div style={{ color: '#fff' }}>
               {/* Maximum upsell distance */}
-              <div style={{ marginBottom: '24px' }}>
+              {/* <div style={{ marginBottom: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                   <label style={{ fontWeight: '600', fontSize: '15px' }}>
                     Maximum upsell distance
@@ -319,7 +319,7 @@ const MountIntegration = ({ ApiUserData }) => {
                 <div style={{ fontSize: '12px', color: '#aaa', marginTop: '2px' }}>
                   Maximum distance between your property address and upsells which HostBuddy will consider for trip planning
                 </div>
-              </div>
+              </div> */}
               {/* Upsell timing */}
               <div style={{ marginBottom: '24px' }}>
                 <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '15px' }}>

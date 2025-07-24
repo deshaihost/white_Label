@@ -40,6 +40,7 @@ const IntegrationsIndex = (ApiUserData) => {
   // Determine user's subscription plan
   const subscriptionPlan = getSubscriptionStatus(ApiUserData?.ApiUserData).plan || '';
   const isProPlan = subscriptionPlan.toLowerCase().includes('pro');
+  const isMountPlan = subscriptionPlan.toLowerCase().includes('mount');
 
   // Upgrade popup state
   const [showUpgradePopup, setShowUpgradePopup] = useState(false);
@@ -66,7 +67,7 @@ const IntegrationsIndex = (ApiUserData) => {
   if (notionUserId) connectedIntegrations.push('Notion');
   if (whatsappPhoneNumber) connectedIntegrations.push('WhatsApp');
   if (openphoneNumber) connectedIntegrations.push('OpenPhone');
-  if (mountActive) connectedIntegrations.push('Mount');
+  if (mountActive && isMountPlan) connectedIntegrations.push('Mount');
 
   // Tab state for top-level tabs
   const [mainTab, setMainTab] = useState('Communication channels');
@@ -117,7 +118,7 @@ const IntegrationsIndex = (ApiUserData) => {
   useEffect(() => {
     const filteredIntegrations = getFilteredIntegrations(mainTab);
     setSelectedIntegration(filteredIntegrations[0] || '');
-  }, [mainTab, mountActive]);
+  }, [mainTab, mountActive, isMountPlan]);
 
   // Complete Slack OAuth API
   const completeSlackOauthAPI = async (code) => {
@@ -182,6 +183,8 @@ const IntegrationsIndex = (ApiUserData) => {
   
   // Handle Mount toggle change
   const handleMountToggleChange = () => {
+    if (!isMountPlan) return; // Only allow toggle if user has Mount plan
+    
     const newActiveState = !mountActive;
     setMountActive(newActiveState);
     // If Mount becomes active, select it in the third-party apps tab
@@ -313,7 +316,7 @@ const IntegrationsIndex = (ApiUserData) => {
               <NotionIntegration ApiUserData={ApiUserData} />
             )}
 
-            {selectedIntegration === 'Mount' && (
+            {selectedIntegration === 'Mount' && isMountPlan && (
               <MountIntegration ApiUserData={ApiUserData} />
             )}
 
@@ -434,56 +437,58 @@ const IntegrationsIndex = (ApiUserData) => {
                 isProPlan ? renderUpgradeTile(require('./Icons/Hostfully_tile_icon.svg').default, 'Hostfully Guidebooks Logo', 'Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.', { width: '50%', height: '50px' }) : <ConnectToHostfullyGuidebooks />
               )}
               {/* Mount */}
-              <div className="partner-tile">
-                <img className="partner-logo" alt="Mount Logo" src={require('./Icons/Mount Logo black.svg').default} style={{ maxWidth: '150px', height: 'auto' }} />
-                <p>Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area</p>
-                <div style={{ 
-                  background: 'rgba(6, 9, 26, 1)',
-                  border: '1px solid rgba(37, 39, 54, 1)',
-                  borderRadius: '100px',
-                  width: '267px',
-                  height: '40px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '0 24px',
-                  boxSizing: 'border-box',
-                  margin: '0 auto',
-                }}>
-                  <span style={{ color: mountActive ? 'rgb(20, 110, 245)' : '#bdbdbd', fontWeight: '700' }}>{mountActive ? 'Active' : 'Not active'}</span>
-                  <label className="switch" style={{ margin: 0 }}>
-                    <input 
-                      type="checkbox" 
-                      checked={mountActive} 
-                      onChange={handleMountToggleChange}
-                    />
-                    <span className="slider round" style={{ 
-                      position: 'relative',
-                      top:"4px",
-                      display: 'inline-block',
-                      width: '30px',
-                      height: '17px',
-                      background: mountActive ? 'rgb(20, 110, 245)' : 'black',
-                      borderRadius: '34px',
-                      transition: '0.4s',
-                      cursor: 'pointer',
-                      // boxShadow: mountActive ? '0 0 5px rgb(20, 110, 245)' : '0 0 5px #eee'
-                    }}>
-                      <span style={{
-                        position: 'absolute',
-                        content: '""',
-                        height: '13px',
-                        width: '13px',
-                        left: mountActive ? '14px' : '2px',
-                        bottom: '2px',
-                        background: '#fff',
-                        borderRadius: '50%',
-                        transition: '0.4s'
-                      }}></span>
-                    </span>
-                  </label>
+              {isMountPlan && (
+                <div className="partner-tile">
+                  <img className="partner-logo" alt="Mount Logo" src={require('./Icons/Mount Logo black.svg').default} style={{ maxWidth: '150px', height: 'auto' }} />
+                  <p>Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area</p>
+                  <div style={{ 
+                    background: 'rgba(6, 9, 26, 1)',
+                    border: '1px solid rgba(37, 39, 54, 1)',
+                    borderRadius: '100px',
+                    width: '267px',
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0 24px',
+                    boxSizing: 'border-box',
+                    margin: '0 auto',
+                  }}>
+                    <span style={{ color: mountActive ? 'rgb(20, 110, 245)' : '#bdbdbd', fontWeight: '700' }}>{mountActive ? 'Active' : 'Not active'}</span>
+                    <label className="switch" style={{ margin: 0 }}>
+                      <input 
+                        type="checkbox" 
+                        checked={mountActive} 
+                        onChange={handleMountToggleChange}
+                      />
+                      <span className="slider round" style={{ 
+                        position: 'relative',
+                        top:"4px",
+                        display: 'inline-block',
+                        width: '30px',
+                        height: '17px',
+                        background: mountActive ? 'rgb(20, 110, 245)' : 'black',
+                        borderRadius: '34px',
+                        transition: '0.4s',
+                        cursor: 'pointer',
+                        // boxShadow: mountActive ? '0 0 5px rgb(20, 110, 245)' : '0 0 5px #eee'
+                      }}>
+                        <span style={{
+                          position: 'absolute',
+                          content: '""',
+                          height: '13px',
+                          width: '13px',
+                          left: mountActive ? '14px' : '2px',
+                          bottom: '2px',
+                          background: '#fff',
+                          borderRadius: '50%',
+                          transition: '0.4s'
+                        }}></span>
+                      </span>
+                    </label>
+                  </div>
                 </div>
-              </div>
+              )}
               {/* Notion */}
               {!notionUserId && (
                 isProPlan ? renderUpgradeTile(require('./Icons/Notion Logo.svg').default, 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />

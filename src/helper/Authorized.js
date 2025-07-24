@@ -123,13 +123,13 @@ export const getSubscriptionStatus = (userData) => {
     }
 
     // For now: if user is on Pro or Elite and their account was created before the price change executed (Jul 5 2025): interpret their plan as Ultimate
-    // if (planName.toLowerCase().includes('pro') || planName.toLowerCase().includes('elite')) {
-    //   const acct_created_date = new Date(userData.date_created.replace(' ', 'T') + 'Z'); // "YYYY-MM-DD HH:MM:SS" e.g. "2025-04-17 06:28:38", in UTC. Replace space with 'T' to ensure correct parsing in JS
-    //   const price_change_date = new Date('2025-07-05T00:00:00Z'); // Jul 5 2025, in UTC
-    //   if (acct_created_date < price_change_date) {
-    //     return { plan: 'HostBuddy Ultimate', props_allowed: propsAllowed, status: subscrStatus };
-    //   }
-    // }
+    if (planName.toLowerCase().includes('pro') || planName.toLowerCase().includes('elite')) {
+      const acct_created_date = new Date(userData.date_created.replace(' ', 'T') + 'Z'); // "YYYY-MM-DD HH:MM:SS" e.g. "2025-04-17 06:28:38", in UTC. Replace space with 'T' to ensure correct parsing in JS
+      const price_change_date = new Date('2025-07-05T00:00:00Z'); // Jul 5 2025, in UTC
+      if (acct_created_date < price_change_date) {
+        return { plan: 'HostBuddy Ultimate', props_allowed: propsAllowed, status: subscrStatus };
+      }
+    }
 
     return { plan: planName, props_allowed: propsAllowed, status: subscrStatus };
   }
