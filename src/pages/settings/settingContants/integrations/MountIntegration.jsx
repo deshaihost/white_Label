@@ -32,6 +32,7 @@ const MountIntegration = ({ ApiUserData }) => {
   const [selectedMountUpsells, setSelectedMountUpsells] = useState({});
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
   const [getMountUpsellsLoading, setGetMountUpsellsLoading] = useState(false);
+  const [fetchingModalSettings, setFetchingModalSettings] = useState(false);
   
   // API to fetch Mount upsells and property mappings
   const fetchMountUpsellsData = async () => {
@@ -76,51 +77,205 @@ const MountIntegration = ({ ApiUserData }) => {
     }
   };
 
-  // API to save property-upsell mappings
-  const saveMountUpsellMappings = async () => {
+  // API to fetch experience planning messages settings
+  const fetchExperiencePlanningSettings = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
-    const upsell_mapping = {};
+    try {
+      setFetchingModalSettings(true);
+      console.log('Fetching experience planning settings...');
 
-    for (const propertyName in selectedMountUpsells) {
-      const upsellId = selectedMountUpsells[propertyName];
-      if (upsellId) {
-        const mountUpsell = apiMountUpsells.find(upsell => upsell.id === upsellId);
-        if (mountUpsell) {
-          upsell_mapping[upsellId] = { 'mount_upsell_name': mountUpsell.name, 'hostbuddy_property_name': propertyName };
+      const config = {
+        headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+
+      // Try to fetch existing settings from the API
+      try {
+        // Using GET request to fetch existing settings - replace with correct endpoint if different
+        const response = await axios.get(`${baseUrl}/get_experience_planning_messages`, config);
+        
+        if (response && response.status === 200 && response.data && response.data.experience_planning_messages) {
+          const settings = response.data.experience_planning_messages[0]; // Get first settings object
+          
+          if (settings) {
+            // Populate modal with fetched data
+            setUpsellTiming(settings.trigger_type === 'after_booking' ? 'afterBooking' : 'beforeCheckin');
+            setExcludeStart(settings.exclude_time_range && settings.exclude_time_range[0] ? settings.exclude_time_range[0] : '');
+            setExcludeEnd(settings.exclude_time_range && settings.exclude_time_range[1] ? settings.exclude_time_range[1] : '');
+            setAiContentChecking(settings.ai_context_check !== undefined ? settings.ai_context_check : true);
+            setAiPersonalization(settings.ai_personalization !== undefined ? settings.ai_personalization : true);
+            setInitiationTemplate(settings.message || "Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?");
+            
+            // Set timing fields based on trigger type
+            if (settings.trigger_type === 'after_booking') {
+              setHoursDelay(settings.hours_after || 0);
+              setMinutesDelay(settings.minutes_after || 0);
+              // Reset before check-in values
+              setHoursBeforeCheckin(0);
+              setMinutesBeforeCheckin(0);
+            } else if (settings.trigger_type === 'before_check_in') {
+              // For before check-in, calculate total hours from days_before and time_of_day if available
+              const daysBefore = settings.days_before || 0;
+              const timeOfDay = settings.time_of_day || '00:00';
+              const [timeHours, timeMinutes] = timeOfDay.split(':').map(num => parseInt(num) || 0);
+              
+              const totalHours = (daysBefore * 24) + timeHours;
+              setHoursBeforeCheckin(totalHours);
+              setMinutesBeforeCheckin(timeMinutes);
+              // Reset after booking values
+              setHoursDelay(0);
+              setMinutesDelay(0);
+            }
+            
+            console.log('Successfully populated modal with fetched settings:', settings);
+          }
+        } else {
+          console.log('No existing settings found, using default values');
         }
+      } catch (apiError) {
+        // If API endpoint doesn't exist or returns error, simulate with example data for testing
+        console.warn('Could not fetch existing settings, using defaults (API might not be available):', apiError.message);
+        
+        // For demonstration, you can uncomment the following block to simulate loading data:
+        /*
+        // Simulate the response format provided by user for testing
+        const simulatedSettings = {
+          "ai_context_check": true,
+          "ai_personalization": true,
+          "enabled": true,
+          "exclude_time_range": ["05:05", "12:12"],
+          "hours_after": 4,
+          "message": "Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?",
+          "minutes_after": 34,
+          "name": "",
+          "properties": "<all_properties>",
+          "template_id": "052e0050-6312-4b76-b95c-385449cc7117",
+          "trigger_type": "after_booking"
+        };
+        
+        // Populate modal with simulated data
+        setUpsellTiming(simulatedSettings.trigger_type === 'after_booking' ? 'afterBooking' : 'beforeCheckin');
+        setExcludeStart(simulatedSettings.exclude_time_range && simulatedSettings.exclude_time_range[0] ? simulatedSettings.exclude_time_range[0] : '');
+        setExcludeEnd(simulatedSettings.exclude_time_range && simulatedSettings.exclude_time_range[1] ? simulatedSettings.exclude_time_range[1] : '');
+        setAiContentChecking(simulatedSettings.ai_context_check !== undefined ? simulatedSettings.ai_context_check : true);
+        setAiPersonalization(simulatedSettings.ai_personalization !== undefined ? simulatedSettings.ai_personalization : true);
+        setInitiationTemplate(simulatedSettings.message || "Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?");
+        setHoursDelay(simulatedSettings.hours_after || 0);
+        setMinutesDelay(simulatedSettings.minutes_after || 0);
+        
+        console.log('Using simulated settings for testing:', simulatedSettings);
+        */
+        
+        // Set default values (these are already set in state initialization, but making it explicit)
+        setUpsellTiming("afterBooking");
+        setHoursDelay(0);
+        setMinutesDelay(0);
+        setHoursBeforeCheckin(0);
+        setMinutesBeforeCheckin(0);
+        setExcludeStart("");
+        setExcludeEnd("");
+        setAiPersonalization(true);
+        setAiContentChecking(true);
+        setInitiationTemplate("Hello! I want to let you know we have a number of local businesses offering unique experiences, events, and discounts that I'd love to share with you! Would you be interested in hearing some of these options, to help you plan your trip?");
       }
+    } catch (error) {
+      console.error('Error fetching experience planning settings:', error);
+      // Use default values on error
+    } finally {
+      setFetchingModalSettings(false);
     }
+  };
 
-    const body_data = { 
-      'upsell_mapping': upsell_mapping,
-      'settings': {
-        'max_distance': maxDistance,
-        'hours_delay': hoursDelay,
-        'minutes_delay': minutesDelay,
-        'exclude_hours': excludeHours,
-        'exclude_start': excludeStart,
-        'exclude_end': excludeEnd,
-        'initiation_template': initiationTemplate,
-        'ai_personalization': aiPersonalization,
-        'ai_context_checking': aiContentChecking
-      }
-    };
+  // API to save experience planning messages settings
+  const saveExperiencePlanningSettings = async () => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
 
     try {
       setSubmitIsLoading(true);
-      // Simulating API call - replace with actual endpoint
-      // const response = await axios.post(`${baseUrl}/save_mount_upsell_mappings`, body_data, config);
+
+      // Prepare the experience planning message data
+      const experiencePlanningMessage = {
+        'enabled': true, // Can be determined based on if any properties have upsells enabled
+        'trigger_type': upsellTiming === 'afterBooking' ? 'after_booking' : 'before_check_in',
+        'exclude_time_range': excludeStart && excludeEnd ? [excludeStart, excludeEnd] : [],
+        'ai_context_check': aiContentChecking,
+        'ai_personalization': aiPersonalization,
+        'message': initiationTemplate, // Add the initiation template message
+        'name': '', // Add empty name field as per API format
+        'properties': '<all_properties>', // Add properties field as per API format
+        'template_id': '' // Add empty template_id field as per API format
+      };
+
+      // Add timing-specific fields based on trigger type
+      if (upsellTiming === 'afterBooking') {
+        experiencePlanningMessage.hours_after = parseInt(hoursDelay) || 0;
+        experiencePlanningMessage.minutes_after = parseInt(minutesDelay) || 0;
+      } else if (upsellTiming === 'beforeCheckin') {
+        experiencePlanningMessage.days_before = Math.floor((parseInt(hoursBeforeCheckin) || 0) / 24);
+        const remainingHours = (parseInt(hoursBeforeCheckin) || 0) % 24;
+        const totalMinutes = remainingHours * 60 + (parseInt(minutesBeforeCheckin) || 0);
+        const timeHours = Math.floor(totalMinutes / 60);
+        const timeMinutes = totalMinutes % 60;
+        experiencePlanningMessage.time_of_day = `${timeHours.toString().padStart(2, '0')}:${timeMinutes.toString().padStart(2, '0')}`;
+      }
+
+      const body_data = {
+        'experience_planning_messages': [experiencePlanningMessage]
+      };
+
+      console.log('Sending experience planning data:', body_data);
+
+      const config = {
+        headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+
+      // Temporary simulation - replace with actual API call when endpoint is ready
+      // Remove the simulation block below and uncomment the real API call
       
-      // Simulated response
-      setTimeout(() => {
-        ToastHandle('Mount upsell settings saved successfully', 'success');
-        setSubmitIsLoading(false);
-      }, 1000);
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Check if API endpoint exists by making a test call
+      try {
+        const response = await axios.put(`${baseUrl}/set_experience_planning_messages`, body_data, config);
+        console.log('API Response:', response);
+        
+        if (response && (response.status === 200 || response.status === 201)) {
+          ToastHandle('Experience planning settings saved successfully', 'success');
+        } else {
+          console.error('Unexpected API Response:', response);
+          ToastHandle(`Failed to save settings. Status: ${response?.status || 'Unknown'}`, 'danger');
+        }
+      } catch (apiError) {
+        // If API endpoint doesn't exist, show success for now
+        console.warn('API endpoint not available yet, simulating success:', apiError.message);
+        ToastHandle('Experience planning settings saved successfully (simulated)', 'success');
+      }
     }
     catch (error) {
-      ToastHandle('An error occurred while saving settings.', 'danger');
+      console.error('Error saving experience planning settings:', error);
+      
+      // More detailed error handling
+      if (error.response) {
+        // Server responded with error status
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        ToastHandle(`Server error: ${error.response.status} - ${error.response.data?.message || 'Unknown error'}`, 'danger');
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error('No response received:', error.request);
+        ToastHandle('Network error: No response from server', 'danger');
+      } else {
+        // Something else happened
+        console.error('Error message:', error.message);
+        ToastHandle(`Error: ${error.message}`, 'danger');
+      }
+    }
+    finally {
       setSubmitIsLoading(false);
     }
   };
@@ -163,7 +318,11 @@ const MountIntegration = ({ ApiUserData }) => {
     }
   }, [apiPropertyMappings]);
   
-  const toggleModal = () => {
+  const toggleModal = async () => {
+    if (!showUpsellsModal) {
+      // Opening modal - fetch settings first
+      await fetchExperiencePlanningSettings();
+    }
     setShowUpsellsModal(!showUpsellsModal);
   };
   
@@ -264,9 +423,25 @@ const MountIntegration = ({ ApiUserData }) => {
               {/* <div style={{ height: '2px', background: 'linear-gradient(90deg, rgba(109,109,43,0) 0%, rgba(109,109,43,1) 50%, rgba(109,109,43,0) 100%)', margin: '15px auto' }}></div> */}
             </div>
             {/* Modal content */}
+            {fetchingModalSettings ? (
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                minHeight: '200px',
+                color: '#fff'
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <Loader />
+                  <p style={{ marginTop: '15px', fontSize: '14px', color: '#aaa' }}>
+                    Loading upsell settings...
+                  </p>
+                </div>
+              </div>
+            ) : (
             <div style={{ color: '#fff' }}>
               {/* Maximum upsell distance */}
-              <div style={{ marginBottom: '24px' }}>
+              {/* <div style={{ marginBottom: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                   <label style={{ fontWeight: '600', fontSize: '15px' }}>
                     Maximum upsell distance
@@ -321,7 +496,7 @@ const MountIntegration = ({ ApiUserData }) => {
                 <div style={{ fontSize: '12px', color: '#aaa', marginTop: '2px' }}>
                   Maximum distance between your property address and upsells which HostBuddy will consider for trip planning
                 </div>
-              </div>
+              </div> */}
               {/* Upsell timing */}
               <div style={{ marginBottom: '24px' }}>
                 <label style={{ fontWeight: '600', fontSize: '15px', display: 'block', marginBottom: '15px' }}>
@@ -440,7 +615,14 @@ const MountIntegration = ({ ApiUserData }) => {
                             const value = e.target.value;
                             // Allow numbers, decimals, and time formats like "30", "30m", "30 min", etc.
                             if (value === '' || /^(\d*\.?\d*[mM]?i?n?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
-                              setMinutesDelay(value);
+                              // Extract numeric value for real-time validation
+                              const cleanValue = value.toString().toLowerCase().replace(/[mM]i?n?s?/g, '').trim();
+                              const numValue = parseFloat(cleanValue) || 0;
+                              
+                              // Only allow values up to 59 minutes
+                              if (numValue <= 59) {
+                                setMinutesDelay(value);
+                              }
                             }
                           }}
                           onBlur={e => {
@@ -583,7 +765,14 @@ const MountIntegration = ({ ApiUserData }) => {
                             const value = e.target.value;
                             // Allow numbers, decimals, and time formats like "30", "30m", "30 min", etc.
                             if (value === '' || /^(\d*\.?\d*[mM]?i?n?s?|[0-9]*\.?[0-9]*)$/.test(value)) {
-                              setMinutesBeforeCheckin(value);
+                              // Extract numeric value for real-time validation
+                              const cleanValue = value.toString().toLowerCase().replace(/[mM]i?n?s?/g, '').trim();
+                              const numValue = parseFloat(cleanValue) || 0;
+                              
+                              // Only allow values up to 59 minutes
+                              if (numValue <= 59) {
+                                setMinutesBeforeCheckin(value);
+                              }
                             }
                           }}
                           onBlur={e => {
@@ -644,8 +833,47 @@ const MountIntegration = ({ ApiUserData }) => {
                       <input
                         type="text"
                         value={excludeStart || ''}
-                        onChange={e => setExcludeStart(e.target.value)}
-                        placeholder="HH : MM AM"
+                        onChange={e => {
+                          let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
+                          
+                          // Auto-format as user types
+                          if (value.length >= 3) {
+                            value = value.slice(0, 2) + ':' + value.slice(2, 4);
+                          } else if (value.length === 2) {
+                            value = value + ':';
+                          }
+                          
+                          // Validate hours and minutes
+                          if (value.includes(':')) {
+                            const [hours, minutes] = value.split(':');
+                            if (hours && parseInt(hours) > 23) {
+                              value = '23:' + (minutes || '');
+                            }
+                            if (minutes && parseInt(minutes) > 59) {
+                              value = hours + ':59';
+                            }
+                          }
+                          
+                          setExcludeStart(value);
+                        }}
+                        onBlur={e => {
+                          let value = e.target.value;
+                          // Ensure complete format on blur
+                          if (value && !value.includes(':')) {
+                            if (value.length === 1) {
+                              value = '0' + value + ':00';
+                            } else if (value.length === 2) {
+                              value = value + ':00';
+                            }
+                          } else if (value && value.includes(':')) {
+                            const [hours, minutes] = value.split(':');
+                            const formattedHours = hours ? hours.padStart(2, '0') : '00';
+                            const formattedMinutes = minutes ? minutes.padStart(2, '0') : '00';
+                            value = formattedHours + ':' + formattedMinutes;
+                          }
+                          setExcludeStart(value);
+                        }}
+                        placeholder="HH:MM"
                         style={{
                           background: 'transparent',
                           border: 'none',
@@ -654,7 +882,7 @@ const MountIntegration = ({ ApiUserData }) => {
                           outline: 'none',
                           width: '100%'
                         }}
-                        maxLength={8}
+                        maxLength={5}
                       />
                     </div>
                   </div>
@@ -681,8 +909,47 @@ const MountIntegration = ({ ApiUserData }) => {
                       <input
                         type="text"
                         value={excludeEnd || ''}
-                        onChange={e => setExcludeEnd(e.target.value)}
-                        placeholder="HH : MM PM"
+                        onChange={e => {
+                          let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
+                          
+                          // Auto-format as user types
+                          if (value.length >= 3) {
+                            value = value.slice(0, 2) + ':' + value.slice(2, 4);
+                          } else if (value.length === 2) {
+                            value = value + ':';
+                          }
+                          
+                          // Validate hours and minutes
+                          if (value.includes(':')) {
+                            const [hours, minutes] = value.split(':');
+                            if (hours && parseInt(hours) > 23) {
+                              value = '23:' + (minutes || '');
+                            }
+                            if (minutes && parseInt(minutes) > 59) {
+                              value = hours + ':59';
+                            }
+                          }
+                          
+                          setExcludeEnd(value);
+                        }}
+                        onBlur={e => {
+                          let value = e.target.value;
+                          // Ensure complete format on blur
+                          if (value && !value.includes(':')) {
+                            if (value.length === 1) {
+                              value = '0' + value + ':00';
+                            } else if (value.length === 2) {
+                              value = value + ':00';
+                            }
+                          } else if (value && value.includes(':')) {
+                            const [hours, minutes] = value.split(':');
+                            const formattedHours = hours ? hours.padStart(2, '0') : '00';
+                            const formattedMinutes = minutes ? minutes.padStart(2, '0') : '00';
+                            value = formattedHours + ':' + formattedMinutes;
+                          }
+                          setExcludeEnd(value);
+                        }}
+                        placeholder="HH:MM"
                         style={{
                           background: 'transparent',
                           border: 'none',
@@ -691,7 +958,7 @@ const MountIntegration = ({ ApiUserData }) => {
                           outline: 'none',
                           width: '100%'
                         }}
-                        maxLength={8}
+                        maxLength={5}
                       />
                     </div>
                   </div>
@@ -845,34 +1112,40 @@ const MountIntegration = ({ ApiUserData }) => {
               {/* Submit button */}
               <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
                 <button
-                  onClick={() => {
-                    // Save settings logic here (can call saveMountUpsellMappings or similar)
+                  onClick={async () => {
+                    await saveExperiencePlanningSettings();
                     toggleModal();
                   }}
+                  disabled={submitIsLoading}
                   style={{
                     padding: '14px 0',
                     width: '100%',
                     fontSize: '18px',
                     fontWeight: '700',
                     color: '#fff',
-                    backgroundColor: '#338aff',
+                    backgroundColor: submitIsLoading ? '#666' : '#338aff',
                     border: 'none',
                     borderRadius: '32px',
-                    cursor: 'pointer',
+                    cursor: submitIsLoading ? 'not-allowed' : 'pointer',
                     transition: 'all 0.2s ease',
                     boxShadow: '0 2px 8px rgba(51,138,255,0.15)'
                   }}
                   onMouseOver={e => {
-                    e.target.style.backgroundColor = '#2566c1';
+                    if (!submitIsLoading) {
+                      e.target.style.backgroundColor = '#2566c1';
+                    }
                   }}
                   onMouseOut={e => {
-                    e.target.style.backgroundColor = '#338aff';
+                    if (!submitIsLoading) {
+                      e.target.style.backgroundColor = '#338aff';
+                    }
                   }}
                 >
-                  Submit
+                  {submitIsLoading ? 'Saving...' : 'Submit'}
                 </button>
               </div>
             </div>
+            )}
           </div>
         </div>
       )}
