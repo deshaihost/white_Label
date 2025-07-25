@@ -101,31 +101,85 @@ const WhatsAppSection = ({
   // Sync local WhatsApp messages state with conversation data
   useEffect(() => {
     if (allConversationData?.whatsapp_messages) {
-      setWhatsappMessages(allConversationData.whatsapp_messages);
+      // Process messages to add rawDate for date separator functionality
+      const processedMessages = allConversationData.whatsapp_messages.map(message => ({
+        ...message,
+        rawDate: new Date(message.time || message.time_utc)
+      }));
+      setWhatsappMessages(processedMessages);
     } else {
       setWhatsappMessages([]);
     }
   }, [allConversationData?.whatsapp_messages]);
 
-  // Helper function to format relative date (similar to MildeSection)
-  function formatRelativeDate(dateString) {
-    const messageDate = new Date(dateString);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-
-    const messageDateOnly = new Date(messageDate.getFullYear(), messageDate.getMonth(), messageDate.getDate());
-    const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const yesterdayDateOnly = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate());
-
-    if (messageDateOnly.getTime() === todayDateOnly.getTime()) {
-      return "Today";
-    } else if (messageDateOnly.getTime() === yesterdayDateOnly.getTime()) {
-      return "Yesterday";
-    } else {
-      return messageDate.toLocaleDateString();
+  // Helper functions for date separator (same as MildeSection)
+  function formatDateForSeparator(date) {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return "";
     }
+
+    const today = new Date();
+    const todayDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+
+    // Check if the date is today
+    if (
+      date.getDate() === todayDate.getDate() &&
+      date.getMonth() === todayDate.getMonth() &&
+      date.getFullYear() === todayDate.getFullYear()
+    ) {
+      return "Today";
+    }
+
+    // Check if it's yesterday
+    const yesterdayDate = new Date(todayDate);
+    yesterdayDate.setDate(todayDate.getDate() - 1);
+
+    if (
+      date.getDate() === yesterdayDate.getDate() &&
+      date.getMonth() === yesterdayDate.getMonth() &&
+      date.getFullYear() === yesterdayDate.getFullYear()
+    ) {
+      return "Yesterday";
+    }
+
+    // For older dates, show Month Day format
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+
+    return `${month} ${day}`;
   }
+
+  // Function to check if two dates are from the same day
+  function isSameDay(date1, date2) {
+    if (!(date1 instanceof Date) || !(date2 instanceof Date)) {
+      return false;
+    }
+    return (
+      date1.getDate() === date2.getDate() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getFullYear() === date2.getFullYear()
+    );
+  }
+
   // Handle sending WhatsApp message
   const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
@@ -142,7 +196,8 @@ const WhatsAppSection = ({
       text: messageToSend,
       time: currentTime.toISOString(),
       time_utc: currentTime.toISOString(),
-      sender: "host"
+      sender: "host",
+      rawDate: currentTime // Add rawDate for date separator functionality
     };
 
     // Add the message to the local state for immediate display
@@ -292,14 +347,26 @@ const WhatsAppSection = ({
               flexDirection: "column",
             }}
           >
-            {whatsappMessages.map((message) => (
-              <WhatsAppInbox
-                key={message.id}
-                message={message}
-                guestName={guestName}
-                guestImageUrl={guestImageUrl}
-              />
-            ))}
+            {whatsappMessages.map((message, index) => {
+              const showDateSeparator =
+                index === 0 ||
+                !isSameDay(whatsappMessages[index - 1]?.rawDate, message.rawDate);
+              return (
+                <React.Fragment key={message?.id}>
+                  {showDateSeparator && (
+                    <div className="date-separator">
+                      {formatDateForSeparator(message.rawDate)}
+                    </div>
+                  )}
+                  <WhatsAppInbox
+                    key={message.id}
+                    message={message}
+                    guestName={guestName}
+                    guestImageUrl={guestImageUrl}
+                  />
+                </React.Fragment>
+              );
+            })}
             <div ref={messagesEndRef} />
           </div>
 
