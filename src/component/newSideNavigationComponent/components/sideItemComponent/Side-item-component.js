@@ -38,6 +38,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
       "/action-item": 4,
       "/inbox": 5,
       "/setting": 7,
+      "/gcs-settings": 7, // GCS settings also maps to settings dropdown
     };
 
     // Find the ID that matches the current path
@@ -65,18 +66,27 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
       }
 
       // Auto-expand Settings dropdown when in settings section
-      if (currentPath === "/setting") {
-        setExpandedId(7); // 7 is the ID for Settings        // Map settings section from URL to tab ID
-        const settingsPathToId = {
-          account: 71,
-          contact: 72,
-          notifications: 73,
-          "ai-preferences": 74,
-          "action-items": 75,
-          integrations: 76,
-          users: 77,
-          subscription: 78,
-        };
+      if (currentPath === "/setting" || currentPath === "/gcs-settings") {
+        setExpandedId(7); // 7 is the ID for Settings        // Map settings section from URL to tab ID based on portal type
+        const settingsPathToId = isInGcsPortal
+          ? {
+              account: 71,
+              contact: 72,
+              notifications: 73,
+              integrations: 75,
+              users: 76,
+              subscription: 77,
+            }
+          : {
+              account: 71,
+              contact: 72,
+              notifications: 73,
+              "ai-preferences": 74,
+              "action-items": 75,
+              integrations: 76,
+              users: 77,
+              subscription: 78,
+            };
 
         // Extract the settings section from URL path
         const settingsSection = location.pathname.split("/")[2];
@@ -237,11 +247,9 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                               71: "/gcs-settings/account", // Account
                               72: "/gcs-settings/contact", // Contacts
                               73: "/gcs-settings/notifications", // Notifications
-                              74: "/gcs-settings/ai-preferences", // AI Preferences
-                              75: "/gcs-settings/action-items", // Action Items
-                              76: "/gcs-settings/integrations", // Integrations
-                              77: "/gcs-settings/users", // Users
-                              78: "/gcs-settings/subscription", // Subscription
+                              75: "/gcs-settings/integrations", // Integrations
+                              76: "/gcs-settings/users", // Users
+                              77: "/gcs-settings/subscription", // Subscription
                             }
                           : {
                               71: "/setting/account", // Account
