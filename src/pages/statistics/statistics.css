@@ -209,6 +209,19 @@
   margin-bottom: 10px;
 }
 
+/* from here  */
+
+/* Add gap between metric number and text for sentiment metrics */
+.sentiment-tile .metric-item {
+  justify-content: flex-start;
+}
+
+/* Add specific spacing for sentiment metric numbers */
+.sentiment-tile.metric-tile .metric-number {
+  margin-right: 8rem; /* Use relative units for responsive spacing with higher specificity */
+}
+/* from here dash board  */
+
 .metric-tile .metric-number {
   font-size: 35px;
   color: #2196F3; /* Blue color for the number */
