@@ -831,58 +831,22 @@ const MountIntegration = ({ ApiUserData }) => {
                         <path d="M12 7V12L15 14" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                       <input
-                        type="text"
+                        type="time"
                         value={excludeStart || ''}
                         onChange={e => {
-                          let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
-                          
-                          // Auto-format as user types
-                          if (value.length >= 3) {
-                            value = value.slice(0, 2) + ':' + value.slice(2, 4);
-                          } else if (value.length === 2) {
-                            value = value + ':';
-                          }
-                          
-                          // Validate hours and minutes
-                          if (value.includes(':')) {
-                            const [hours, minutes] = value.split(':');
-                            if (hours && parseInt(hours) > 23) {
-                              value = '23:' + (minutes || '');
-                            }
-                            if (minutes && parseInt(minutes) > 59) {
-                              value = hours + ':59';
-                            }
-                          }
-                          
-                          setExcludeStart(value);
+                          setExcludeStart(e.target.value);
                         }}
-                        onBlur={e => {
-                          let value = e.target.value;
-                          // Ensure complete format on blur
-                          if (value && !value.includes(':')) {
-                            if (value.length === 1) {
-                              value = '0' + value + ':00';
-                            } else if (value.length === 2) {
-                              value = value + ':00';
-                            }
-                          } else if (value && value.includes(':')) {
-                            const [hours, minutes] = value.split(':');
-                            const formattedHours = hours ? hours.padStart(2, '0') : '00';
-                            const formattedMinutes = minutes ? minutes.padStart(2, '0') : '00';
-                            value = formattedHours + ':' + formattedMinutes;
-                          }
-                          setExcludeStart(value);
-                        }}
-                        placeholder="HH:MM"
                         style={{
                           background: 'transparent',
                           border: 'none',
                           color: '#fff',
                           fontSize: '15px',
                           outline: 'none',
-                          width: '100%'
+                          width: '100%',
+                          appearance: 'none', // Removes default styling
+                          WebkitAppearance: 'none', // For Safari/Chrome
+                          MozAppearance: 'none', // For Firefox
                         }}
-                        maxLength={5}
                       />
                     </div>
                   </div>
@@ -907,64 +871,45 @@ const MountIntegration = ({ ApiUserData }) => {
                         <path d="M12 7V12L15 14" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                       <input
-                        type="text"
+                        type="time"
                         value={excludeEnd || ''}
                         onChange={e => {
-                          let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
-                          
-                          // Auto-format as user types
-                          if (value.length >= 3) {
-                            value = value.slice(0, 2) + ':' + value.slice(2, 4);
-                          } else if (value.length === 2) {
-                            value = value + ':';
-                          }
-                          
-                          // Validate hours and minutes
-                          if (value.includes(':')) {
-                            const [hours, minutes] = value.split(':');
-                            if (hours && parseInt(hours) > 23) {
-                              value = '23:' + (minutes || '');
-                            }
-                            if (minutes && parseInt(minutes) > 59) {
-                              value = hours + ':59';
-                            }
-                          }
-                          
-                          setExcludeEnd(value);
+                          setExcludeEnd(e.target.value);
                         }}
-                        onBlur={e => {
-                          let value = e.target.value;
-                          // Ensure complete format on blur
-                          if (value && !value.includes(':')) {
-                            if (value.length === 1) {
-                              value = '0' + value + ':00';
-                            } else if (value.length === 2) {
-                              value = value + ':00';
-                            }
-                          } else if (value && value.includes(':')) {
-                            const [hours, minutes] = value.split(':');
-                            const formattedHours = hours ? hours.padStart(2, '0') : '00';
-                            const formattedMinutes = minutes ? minutes.padStart(2, '0') : '00';
-                            value = formattedHours + ':' + formattedMinutes;
-                          }
-                          setExcludeEnd(value);
-                        }}
-                        placeholder="HH:MM"
                         style={{
                           background: 'transparent',
                           border: 'none',
                           color: '#fff',
                           fontSize: '15px',
                           outline: 'none',
-                          width: '100%'
+                          width: '100%',
+                          appearance: 'none', // Removes default styling
+                          WebkitAppearance: 'none', // For Safari/Chrome
+                          MozAppearance: 'none', // For Firefox
                         }}
-                        maxLength={5}
                       />
                     </div>
                   </div>
                 </div>
-                <div style={{ fontSize: '12px', color: '#aaa', marginTop: '2px' }}>
-                  HostBuddy will not upsell during the excluded hours, following the timezone of the property location
+                <div style={{ fontSize: '12px', color: '#aaa', marginTop: '2px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>HostBuddy will not upsell during the excluded hours, following the timezone of the property location</span>
+                  <a 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setExcludeStart("00:00");
+                      setExcludeEnd("23:59");
+                    }} 
+                    style={{ 
+                      fontSize: '13px', 
+                      color: 'rgba(51, 138, 255, 0.85)',
+                      textDecoration: 'none',
+                      marginLeft: '10px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    Set All Day (24 Hours)
+                  </a>
                 </div>
               </div>
               {/* Initiation template */}

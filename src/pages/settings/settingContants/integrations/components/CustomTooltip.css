@@ -30,13 +30,16 @@
 }
 
 .custom-tooltip-title {
+  font-family: "DM Sans", sans-serif;
   font-weight: 600;
-  font-size: 16px;
-  color: rgba(15, 17, 23, 1);
+  font-size: 14px;
+  color: #0F1117;
   margin-bottom: 4px;
 }
 
 .custom-tooltip-description {
+   font-size: 14px;
+  font-weight: 400;
   font-size: 14px;
-  color: rgba(15, 17, 23, 1);
+  color: #0F1117;
 }
