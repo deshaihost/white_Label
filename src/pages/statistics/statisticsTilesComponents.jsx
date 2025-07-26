@@ -150,7 +150,7 @@ export const LineGraphTile = ({ dataSets, width, height }) => {
             <Line type="monotone" dataKey="value" stroke="#8884d8" />
           </LineChart>
         ) : (
-          <p>No data yet</p>
+          <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
         )}
       </div>
     </Grid>
@@ -226,7 +226,7 @@ export const HistogramTile = ({ dataSets, width, height, blur }) => {
                 <Bar dataKey="value" fill="#2196F3" />
               </BarChart>
             ) : (
-              <p>No data yet</p>
+              <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
             )}
           </div>
         </div>
@@ -312,7 +312,7 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
                 );
               })
             ) : (
-            <p>No data yet</p>
+            <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
           )}
           </div>
         </div>

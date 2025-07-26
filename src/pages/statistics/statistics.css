@@ -195,6 +195,15 @@
   margin: auto 0;
 }
 
+/* Styling for "No data yet" message */
+.statistics-tile .no-data-message {
+  color: white;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: 20px;
+}
+
 /* LineGraphTile and HistogramTile specific styling */
 .statistics-tile .recharts-wrapper {
   margin: 0 auto; /* Center the chart horizontally */
