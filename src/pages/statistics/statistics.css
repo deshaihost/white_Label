@@ -14,9 +14,17 @@
   cursor: pointer;
 }
 
-/* Apply width 100% to the parent container of tile-header for sentiment metrics tile */
-.sentiment-tile div[style*="position: relative; z-index: 0"] {
+/* Apply width 100% to the parent container of tile-header for all metric tiles */
+.metric-tile div[style*="position: relative; z-index: 0"] {
   width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
+/* Position metric-content at the bottom of its parent for all metric tiles */
+.metric-tile .metric-content {
+  margin-top: auto !important;
 }
 
 /* Base container for the whole statistics page */
