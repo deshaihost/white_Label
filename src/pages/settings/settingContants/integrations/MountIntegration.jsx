@@ -8,6 +8,27 @@ import CustomTooltip from './components/CustomTooltip';
 const MountIntegration = ({ ApiUserData }) => {
   const propertyData = ApiUserData?.ApiUserData?.property_data;
   const propertiesList = Object.keys(propertyData || {});
+  
+  // Add style to hide time input clock icon
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      .hide-time-picker-icon::-webkit-calendar-picker-indicator {
+        display: none !important;
+      }
+      .hide-time-picker-icon::-webkit-inner-spin-button { 
+        display: none !important;
+      }
+      .hide-time-picker-icon::-webkit-clear-button {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   const [isLoading, setIsLoading] = useState(false);
   const [showUpsellsModal, setShowUpsellsModal] = useState(false);
@@ -824,9 +845,9 @@ const MountIntegration = ({ ApiUserData }) => {
                       alignItems: 'center',
                       gap: '8px'
                     }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{marginRight: '6px'}} xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" stroke="#aaa" strokeWidth="2"/>
-                        <path d="M12 7V12L15 14" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/>
+                        <polyline points="12,6 12,12 16,14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                       <input
                         type="time"
@@ -844,7 +865,10 @@ const MountIntegration = ({ ApiUserData }) => {
                           appearance: 'none', // Removes default styling
                           WebkitAppearance: 'none', // For Safari/Chrome
                           MozAppearance: 'none', // For Firefox
+                          textAlign: 'left',
+                          paddingLeft: '5px'
                         }}
+                        className="hide-time-picker-icon"
                       />
                     </div>
                   </div>
@@ -864,9 +888,9 @@ const MountIntegration = ({ ApiUserData }) => {
                       alignItems: 'center',
                       gap: '8px'
                     }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{marginRight: '6px'}} xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" stroke="#aaa" strokeWidth="2"/>
-                        <path d="M12 7V12L15 14" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/>
+                        <polyline points="12,6 12,12 16,14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                       <input
                         type="time"
@@ -884,7 +908,10 @@ const MountIntegration = ({ ApiUserData }) => {
                           appearance: 'none', // Removes default styling
                           WebkitAppearance: 'none', // For Safari/Chrome
                           MozAppearance: 'none', // For Firefox
+                          textAlign: 'left',
+                          paddingLeft: '5px'
                         }}
+                        className="hide-time-picker-icon"
                       />
                     </div>
                   </div>
