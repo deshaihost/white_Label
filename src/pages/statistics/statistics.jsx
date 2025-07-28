@@ -6,6 +6,7 @@ import { FullScreenLoader } from '../../helper/Loader';
 import Select from "react-select";
 import customStyles from './selectStyles';
 import './statistics.css';
+import { getSubscriptionStatus } from '../../helper/Authorized';
 
 import { MetricTile, LineGraphTile, HistogramTile, renderTiles } from './statisticsTilesComponents';
 import { lineGraphDataSets, histogramDataSets, callGetStatisticsApi, getStatisticsData, formatDateToReadable } from './dataManager';
@@ -68,18 +69,25 @@ const StatisticsPage = () => {
     setShowDatePickers(!showDatePickers);
   }
 
+
+  // Get user data from redux store
+  const userData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const subscriptionStatus = getSubscriptionStatus(userData);
+  const isProPlan = subscriptionStatus.plan && subscriptionStatus.plan.toLowerCase().includes('pro');
+  const isMountPlan = subscriptionStatus.plan && subscriptionStatus.plan.toLowerCase().includes('mount');
+  //const isMountPlan=true;
   // *** THIS contains the (static) definition of which tiles to render, and in which order *** //
   const messagingTiles = [
     { component: MetricTile, dataSets: apiStatisticsData?.totalMessagesSent, width: 3, height: "300px" },
-    { component: MetricTile, dataSets: apiStatisticsData?.totalMessagesResponded, width: 3, height: "300px" },
+    ...(isMountPlan ? [] : [{ component: MetricTile, dataSets: apiStatisticsData?.totalMessagesResponded, width: 3, height: "300px" }]),
     { component: MetricTile, dataSets: apiStatisticsData?.responseTimes, width: 3, height: "300px" },
     { component: MetricTile, dataSets: apiStatisticsData?.sentimentMetrics, width: 3, height: "300px" },
     { component: HistogramTile, dataSets: apiStatisticsData?.messageTimingData, width: 12, height: '300px' },
   ];
 
   const actionItemsTiles = [
-    { component: MetricTile, dataSets: apiStatisticsData?.actionItemMetrics, width: 3, height: "300px" },
-    { component: HistogramTile, dataSets: apiStatisticsData?.actionItemsReceived, width: 9, height: '300px' },
+    { component: MetricTile, dataSets: apiStatisticsData?.actionItemMetrics, width: 3, height: "300px", blur: isProPlan },
+    { component: HistogramTile, dataSets: apiStatisticsData?.actionItemsReceived, width: 9, height: '300px', blur: isProPlan },
   ];
 
   const upsellsTiles = [

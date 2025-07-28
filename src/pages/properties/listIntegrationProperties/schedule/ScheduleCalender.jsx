@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import "./ScheduleCalendar.css";
 import SchedulePopupModal from "../popupmodal/SchedulePopupModal";
 import CopyToPropertiesModal from "../../../../helper/copyToPropertiesModal/CopyToPropertiesModal";
@@ -7,6 +8,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
 import ToastHandle from "../../../../helper/ToastMessage";
 import Loader from "../../../../helper/Loader";
+import { getSubscriptionStatus } from "../../../../helper/Authorized";
 import axios from "axios";
 
 const daysOfWeek = [ "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ];
@@ -15,6 +17,13 @@ const ScheduleCalender = ({ getScheduleAPI, allProperties, setShowCalender, sele
   const [show, setShow] = useState(false);
   const [showCopyToPropertiesModal, setShowCopyToPropertiesModal] = useState(false);
   const [selectedTime, setSelectedTime] = useState({});
+
+  // Get user subscription plan
+  const store = useSelector((state) => state);
+  const userData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const subscriptionPlan = getSubscriptionStatus(userData).plan || '';
+  const isMountPlan = subscriptionPlan?.toLowerCase().includes("mount");
+ 
 
   // if (!scheduleData) {
   //   return <div>Loading...</div>; // Or display some loading indicator
@@ -184,25 +193,27 @@ const ScheduleCalender = ({ getScheduleAPI, allProperties, setShowCalender, sele
                                               <span> - </span>
                                               <span>{endDateTime}</span>
                                             </p>
-                                            <div data-bs-toggle="tooltip" data-bs-placement="top" title={resStage}>
-                                              <p className="d-flex align-items-center justify-content-center gap-2">
-                                                {resStagesForThisTimeRange.includes("FUTURE") ? (
-                                                  <span className="future-status calender-table-status"></span>
-                                                ) : (
-                                                  <span className="placeholder-status calender-table-status"></span>
-                                                )}
-                                                {resStagesForThisTimeRange.includes("CURRENT") ? (
-                                                  <span className="current-status calender-table-status"></span>
-                                                ) : (
-                                                  <span className="placeholder-status calender-table-status"></span>
-                                                )}
-                                                {resStagesForThisTimeRange.includes("INQUIRY/PAST") ? (
-                                                  <span className="inquery-status calender-table-status"></span>
-                                                ) : (
-                                                  <span className="placeholder-status calender-table-status"></span>
-                                                )}
-                                              </p>
-                                            </div>
+                                            {!isMountPlan && (
+                                              <div data-bs-toggle="tooltip" data-bs-placement="top" title={resStage}>
+                                                <p className="d-flex align-items-center justify-content-center gap-2">
+                                                  {resStagesForThisTimeRange.includes("FUTURE") ? (
+                                                    <span className="future-status calender-table-status"></span>
+                                                  ) : (
+                                                    <span className="placeholder-status calender-table-status"></span>
+                                                  )}
+                                                  {resStagesForThisTimeRange.includes("CURRENT") ? (
+                                                    <span className="current-status calender-table-status"></span>
+                                                  ) : (
+                                                    <span className="placeholder-status calender-table-status"></span>
+                                                  )}
+                                                  {resStagesForThisTimeRange.includes("INQUIRY/PAST") ? (
+                                                    <span className="inquery-status calender-table-status"></span>
+                                                  ) : (
+                                                    <span className="placeholder-status calender-table-status"></span>
+                                                  )}
+                                                </p>
+                                              </div>
+                                            )}
 
                                             <div>
                                               {/* 
@@ -259,31 +270,33 @@ const ScheduleCalender = ({ getScheduleAPI, allProperties, setShowCalender, sele
                     );
                   })}
                 </div>
-                <div className="col-md-4 text-white">
-                  <div className="px-0 px-lg-3 px-md-3 px-xxl-5">
-                    <div className="border border-primary border-2 p-4 rounded-3">
-                      <h4 className="fs-6 text-center mb-3">Legend</h4>
-                      <p className="fs-14 mb-3">Colored dots indicate that HostBuddy will respond to guests at reservation stages:</p>
-                      <p className="fs-14">
-                        <span className="future-status calender-table-status me-2"></span>
-                        Future
-                      </p>
-                      <p className="fs-14">
-                        <span className="current-status calender-table-status me-2"></span>
-                        Current
-                      </p>
-                      <p className="fs-14">
-                        <span className="inquery-status calender-table-status me-2"></span>
-                        Inquiry/Past
-                      </p>
+                {!isMountPlan && (
+                  <div className="col-md-4 text-white">
+                    <div className="px-0 px-lg-3 px-md-3 px-xxl-5">
+                      <div className="border border-primary border-2 p-4 rounded-3">
+                        <h4 className="fs-6 text-center mb-3">Legend</h4>
+                        <p className="fs-14 mb-3">Colored dots indicate that HostBuddy will respond to guests at reservation stages:</p>
+                        <p className="fs-14">
+                          <span className="future-status calender-table-status me-2"></span>
+                          Future
+                        </p>
+                        <p className="fs-14">
+                          <span className="current-status calender-table-status me-2"></span>
+                          Current
+                        </p>
+                        <p className="fs-14">
+                          <span className="inquery-status calender-table-status me-2"></span>
+                          Inquiry/Past
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
           {/* // */}
-
+          
           <div class="row w-full mt-3 mb-3 d-flex justify-content-center">
             <div className="d-flex gap-3 flex-wrap flex-md-nowrap" style={{ width: "80%" }}>
               <button onClick={handleClearAll} className="btn btn-primary form-control" style={{ color: "rgb(220, 0, 0)" }}>

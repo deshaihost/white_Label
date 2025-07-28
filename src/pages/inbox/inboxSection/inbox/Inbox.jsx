@@ -1255,26 +1255,88 @@ const Inbox = ({
     `);
   };
   // Add a message to a conversation in our local record (conversations)
-  const addMessageToLocalConversation = (conversationId, message) => {
+  const addMessageToLocalConversation = (conversationId, message, messageType = "pms") => {
     // Invalidate cache when a new message is added
     invalidateConversationCache(conversationId);
 
-    // Update the covnersation in covnersations
+    // Create a message object that matches the expected format for the conversation
+    const messageToAdd = {
+      sender: message.sender || "host",
+      text: typeof message.text === 'string' ? message.text : message.text?.text || message.text,
+      time: message.time || new Date().toISOString(),
+      id: message.id || `temp-${Date.now()}`,
+    };
+
+    // Update the conversation in conversations
     const updatedConversations = conversations.map((conversation) => {
       if (conversation.conversation_id === conversationId) {
-        conversation.messages.push(message);
+        // Add message to the appropriate array based on message type
+        if (messageType === "whatsapp") {
+          if (!conversation.whatsapp_messages) {
+            conversation.whatsapp_messages = [];
+          }
+          // Check if message already exists to prevent duplicates
+          const messageExists = conversation.whatsapp_messages.some(msg => msg.id === messageToAdd.id);
+          if (!messageExists) {
+            conversation.whatsapp_messages.push(messageToAdd);
+          }
+        } else if (messageType === "openphone") {
+          if (!conversation.openphone_messages) {
+            conversation.openphone_messages = [];
+          }
+          // Check if message already exists to prevent duplicates
+          const messageExists = conversation.openphone_messages.some(msg => msg.id === messageToAdd.id);
+          if (!messageExists) {
+            conversation.openphone_messages.push(messageToAdd);
+          }
+        } else {
+          // Default to PMS messages
+          // Check if message already exists to prevent duplicates
+          const messageExists = conversation.messages.some(msg => msg.id === messageToAdd.id);
+          if (!messageExists) {
+            conversation.messages.push(messageToAdd);
+          }
+        }
       }
       return conversation;
     });
     setConversations(updatedConversations);
+    
     // If the conversation to be updated is selectedConversation (the one currently being viewed), update it
     if (selectedConversation.conversation_id === conversationId) {
       setSelectedConversation((prevSelectedConversation) => {
-        return {
-          ...prevSelectedConversation,
-          messages: [...prevSelectedConversation.messages, message],
-          _apiCallMade: prevSelectedConversation._apiCallMade, // Preserve the API call flag
-        };
+        const updatedConversation = { ...prevSelectedConversation };
+        
+        // Add message to the appropriate array based on message type
+        if (messageType === "whatsapp") {
+          if (!updatedConversation.whatsapp_messages) {
+            updatedConversation.whatsapp_messages = [];
+          }
+          // Check if message already exists to prevent duplicates
+          const messageExists = (prevSelectedConversation.whatsapp_messages || []).some(msg => msg.id === messageToAdd.id);
+          if (!messageExists) {
+            updatedConversation.whatsapp_messages = [...(prevSelectedConversation.whatsapp_messages || []), messageToAdd];
+          }
+        } else if (messageType === "openphone") {
+          if (!updatedConversation.openphone_messages) {
+            updatedConversation.openphone_messages = [];
+          }
+          // Check if message already exists to prevent duplicates
+          const messageExists = (prevSelectedConversation.openphone_messages || []).some(msg => msg.id === messageToAdd.id);
+          if (!messageExists) {
+            updatedConversation.openphone_messages = [...(prevSelectedConversation.openphone_messages || []), messageToAdd];
+          }
+        } else {
+          // Default to PMS messages
+          // Check if message already exists to prevent duplicates
+          const messageExists = prevSelectedConversation.messages.some(msg => msg.id === messageToAdd.id);
+          if (!messageExists) {
+            updatedConversation.messages = [...prevSelectedConversation.messages, messageToAdd];
+          }
+        }
+        
+        updatedConversation._apiCallMade = prevSelectedConversation._apiCallMade; // Preserve the API call flag
+        return updatedConversation;
       });
     }
   };
@@ -1896,7 +1958,9 @@ const Inbox = ({
                     key="whatsapp-section"
                     allConversationData={selectedConversation}
                     updateConversationFromApi={updateConversation}
+                    updateConversationLocal={addMessageToLocalConversation}
                     propertyName={selectedConversation?.property_name}
+                    subscriptionPlan={subscriptionPlan}
                   />
                 </div>
 
@@ -1916,7 +1980,9 @@ const Inbox = ({
                     key="openphone-section"
                     allConversationData={selectedConversation}
                     updateConversationFromApi={updateConversation}
+                    updateConversationLocal={addMessageToLocalConversation}
                     propertyName={selectedConversation?.property_name}
+                    subscriptionPlan={subscriptionPlan}
                   />
                 </div>
 

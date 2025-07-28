@@ -9,13 +9,16 @@ import "./Preferences.css";
 import "./SettingIndex.css";
 import SettingsCalender from "./settingsCalendar";
 import { FullScreenLoader } from "../../../../helper/Loader";
+import { useSelector } from "react-redux";
+import { getSubscriptionStatus } from '../../../../helper/Authorized';
+import { useNavigate } from "react-router-dom";
 
 /*
 default_settings = {
     'emergency_contact_instructions': '',
     'message_signature': '- HostBuddy, our friendly AI assistant',
     'message_signature_enabled': False,
-    'defer_behavior': 'defer to team',   // 1) 'contact host' - tell the guest to contact the host at their personal number or some other channel; 2) 'defer to team' - “will check with team and get back to you later”; 3) 'defer to host' - “the host will get back to you”; 4) 'embody host' - “I don’t have that information right now / am not able to do that right now, will check and get back to you later”; 5) 'do not respond'
+    'defer_behavior': 'defer to team',   // 1) 'contact host' - tell the guest to contact the host at their personal number or some other channel; 2) 'defer to team' - "will check with team and get back to you later"; 3) 'defer to host' - "the host will get back to you"; 4) 'embody host' - "I don't have that information right now / am not able to do that right now, will check and get back to you later"; 5) 'do not respond'
     'reveal_ai': 'only if asked',   // 'only if asked' or 'never'
     'language': 'guest_language',  // 'guest_language' for HB to respond in whichever language the guest is speaking, OR the name of whichever language HB should always use
     'stop_responding_on_negative_sentiment': False,
@@ -30,6 +33,7 @@ default_settings = {
 
 const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
+  const navigate = useNavigate();
   const [getSettingsLoading, setGetSettingsLoading] = useState(false);
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
   const [settingsApiData, setSettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings configs
@@ -178,6 +182,12 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
     setCurrentSettingsData(newSettings);
   }
 
+  const handleUpgradeClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.location.href = '/setting/subscription';
+  };
+
   // On page load, call the API to get the settings
   useEffect(() => {
     if (Object.keys(settingsApiData).length === 0) {
@@ -252,6 +262,13 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
   }, []);
   // -------------------------------------
 
+  const store = useSelector((state) => state);
+  const userData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const planRaw = getSubscriptionStatus(userData).plan || '';
+  const plan = planRaw.toLowerCase();
+  console.log('DEBUG planRaw:', planRaw, 'plan:', plan, 'userData:', userData);
+  const isDelayEditable = plan.includes('elite') || plan.includes('ultimate');
+  const isToneEditable = plan.includes('elite') || plan.includes('ultimate');
 
   return (
     <div className="setting_index_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "40px 60px "}}>
@@ -468,16 +485,24 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="row mt-5">
           <div className="col-lg-11">
-            <label className="fs-5">Message Delay</label>
+            <div className="d-flex align-items-center gap-2">
+              { !isDelayEditable && (
+                <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight:'6px', display:'inline-block', verticalAlign:'middle', position:'relative', top:'2px'}}><g clipPath="url(#clip0_4408_17872)"><path d="M5.625 5.625V7.5H11.875V5.625C11.875 3.89844 10.4766 2.5 8.75 2.5C7.02344 2.5 5.625 3.89844 5.625 5.625ZM3.125 7.5V5.625C3.125 2.51953 5.64453 0 8.75 0C11.8555 0 14.375 2.51953 14.375 5.625V7.5H15C16.3789 7.5 17.5 8.62109 17.5 10V17.5C17.5 18.8789 16.3789 20 15 20H2.5C1.12109 20 0 18.8789 0 17.5V10C0 8.62109 1.12109 7.5 2.5 7.5H3.125Z" fill="#FF9F00"/></g><defs><clipPath id="clip0_4408_17872"><rect width="17.5" height="20" fill="white"/></clipPath></defs></svg>
+              )}
+              <label className="fs-5 mb-0">Message Delay</label>
+              { !isDelayEditable && (
+                <span style={{color:'#5498FF', fontWeight:'bold', fontSize:'17px', cursor:'pointer', marginLeft:'6px'}} onClick={handleUpgradeClick}>Upgrade</span>
+              )}
+            </div>
             <p className="settings-label mb-2">HostBuddy will delay its response to guests by a (random) number of minutes within this range. To have HostBuddy simply respond as quickly as possible, set min and max delay to 0.</p>
             <div className="row">
               <div className="col-lg-3">
                 <label className="fs-6">Min. Delay</label>
-                <input type="number" className="form-control" placeholder="0 mins" value={currentSettingsData.min_message_delay_minutes} onChange={(e) => setSetting('min_message_delay_minutes', e.target.value)}/>
+                <input type="number" className="form-control" placeholder="0 mins" value={currentSettingsData.min_message_delay_minutes} onChange={(e) => setSetting('min_message_delay_minutes', e.target.value)} disabled={!isDelayEditable}/>
               </div>
               <div className="col-lg-3">
                 <label className="fs-6">Max. Delay</label>
-                <input type="number" className="form-control" placeholder="0 mins" value={currentSettingsData.max_message_delay_minutes} onChange={(e) => setSetting('max_message_delay_minutes', e.target.value)}/>
+                <input type="number" className="form-control" placeholder="0 mins" value={currentSettingsData.max_message_delay_minutes} onChange={(e) => setSetting('max_message_delay_minutes', e.target.value)} disabled={!isDelayEditable}/>
               </div>
             </div>
           </div>
@@ -485,13 +510,18 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="row mt-5">
           <div className="col-lg-11">
-            <div className="d-flex align-items-center gap-5 mt-4">
-            <label className="fs-5">Customize Tone</label>
-          </div>
-          <p className="settings-label">You can customize HostBuddy's responses by adding some instructions here to direct HostBuddy's tone. Make sure to test after you make changes here!</p>
-          <p className="settings-label">HostBuddy is already optimized for friendly, hospitable conversation, so this is completely optional.</p>
-          <textarea className="form-control setting-textarea" placeholder="(Optional) Add instructions to direct HostBuddy's tone..." rows={1} value={currentSettingsData.tone_instructions || ''} onChange={(e) => setSetting('tone_instructions', e.target.value)} maxLength={1000}/>
-          {/* <small className="text-muted">{(currentSettingsData.tone_instructions?.length || 0)}/1000 characters</small> */}
+            <div className="d-flex align-items-center gap-2 mt-4">
+              { !isToneEditable && (
+                <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight:'6px', display:'inline-block', verticalAlign:'middle', position:'relative', top:'2px'}}><g clipPath="url(#clip0_4408_17872)"><path d="M5.625 5.625V7.5H11.875V5.625C11.875 3.89844 10.4766 2.5 8.75 2.5C7.02344 2.5 5.625 3.89844 5.625 5.625ZM3.125 7.5V5.625C3.125 2.51953 5.64453 0 8.75 0C11.8555 0 14.375 2.51953 14.375 5.625V7.5H15C16.3789 7.5 17.5 8.62109 17.5 10V17.5C17.5 18.8789 16.3789 20 15 20H2.5C1.12109 20 0 18.8789 0 17.5V10C0 8.62109 1.12109 7.5 2.5 7.5H3.125Z" fill="#FF9F00"/></g><defs><clipPath id="clip0_4408_17872"><rect width="17.5" height="20" fill="white"/></clipPath></defs></svg>
+              )}
+              <label className="fs-5 mb-0">Customize Tone</label>
+              { !isToneEditable && (
+                <span style={{color:'#5498FF', fontWeight:'bold', fontSize:'17px', cursor:'pointer', marginLeft:'6px'}} onClick={handleUpgradeClick}>Upgrade</span>
+              )}
+            </div>
+            <p className="settings-label">You can customize HostBuddy's responses by adding some instructions here to direct HostBuddy's tone. Make sure to test after you make changes here!</p>
+            <p className="settings-label">HostBuddy is already optimized for friendly, hospitable conversation, so this is completely optional.</p>
+            <textarea className="form-control setting-textarea" placeholder="(Optional) Add instructions to direct HostBuddy's tone..." rows={1} value={currentSettingsData.tone_instructions || ''} onChange={(e) => setSetting('tone_instructions', e.target.value)} maxLength={1000} disabled={!isToneEditable}/>
           </div>
         </div>
 

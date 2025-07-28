@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./index.css";
 import "./MildeSection.css";
@@ -8,6 +8,7 @@ import { timeFormat } from "../../../../../helper/commonFun";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import loaderGif from "../../../../../public/img/new_loader.gif";
 import { callSendWhatsAppMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
+import WhatsAppLocked from "./whatsApplocked/WhatsAppLocked";
 
 // Import icons for AI input functionality
 import AiMessageIcon from "./message/icons/ai_messsage_icon.svg";
@@ -18,7 +19,9 @@ const placeholderImg = "https://hostbuddylb.com/misc/chatBubbles.webp";
 const WhatsAppSection = ({
   allConversationData,
   updateConversationFromApi,
+  updateConversationLocal,
   propertyName,
+  subscriptionPlan,
 }) => {
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -28,6 +31,7 @@ const WhatsAppSection = ({
   const [hasWhatsappIntegration, setHasWhatsappIntegration] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
 
   // AI input functionality states
   const [inputValue, setInputValue] = useState("");
@@ -97,31 +101,85 @@ const WhatsAppSection = ({
   // Sync local WhatsApp messages state with conversation data
   useEffect(() => {
     if (allConversationData?.whatsapp_messages) {
-      setWhatsappMessages(allConversationData.whatsapp_messages);
+      // Process messages to add rawDate for date separator functionality
+      const processedMessages = allConversationData.whatsapp_messages.map(message => ({
+        ...message,
+        rawDate: new Date(message.time || message.time_utc)
+      }));
+      setWhatsappMessages(processedMessages);
     } else {
       setWhatsappMessages([]);
     }
   }, [allConversationData?.whatsapp_messages]);
 
-  // Helper function to format relative date (similar to MildeSection)
-  function formatRelativeDate(dateString) {
-    const messageDate = new Date(dateString);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-
-    const messageDateOnly = new Date(messageDate.getFullYear(), messageDate.getMonth(), messageDate.getDate());
-    const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const yesterdayDateOnly = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate());
-
-    if (messageDateOnly.getTime() === todayDateOnly.getTime()) {
-      return "Today";
-    } else if (messageDateOnly.getTime() === yesterdayDateOnly.getTime()) {
-      return "Yesterday";
-    } else {
-      return messageDate.toLocaleDateString();
+  // Helper functions for date separator (same as MildeSection)
+  function formatDateForSeparator(date) {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return "";
     }
+
+    const today = new Date();
+    const todayDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+
+    // Check if the date is today
+    if (
+      date.getDate() === todayDate.getDate() &&
+      date.getMonth() === todayDate.getMonth() &&
+      date.getFullYear() === todayDate.getFullYear()
+    ) {
+      return "Today";
+    }
+
+    // Check if it's yesterday
+    const yesterdayDate = new Date(todayDate);
+    yesterdayDate.setDate(todayDate.getDate() - 1);
+
+    if (
+      date.getDate() === yesterdayDate.getDate() &&
+      date.getMonth() === yesterdayDate.getMonth() &&
+      date.getFullYear() === yesterdayDate.getFullYear()
+    ) {
+      return "Yesterday";
+    }
+
+    // For older dates, show Month Day format
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+
+    return `${month} ${day}`;
   }
+
+  // Function to check if two dates are from the same day
+  function isSameDay(date1, date2) {
+    if (!(date1 instanceof Date) || !(date2 instanceof Date)) {
+      return false;
+    }
+    return (
+      date1.getDate() === date2.getDate() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getFullYear() === date2.getFullYear()
+    );
+  }
+
   // Handle sending WhatsApp message
   const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
@@ -138,14 +196,20 @@ const WhatsAppSection = ({
       text: messageToSend,
       time: currentTime.toISOString(),
       time_utc: currentTime.toISOString(),
-      sender: "host"
+      sender: "host",
+      rawDate: currentTime // Add rawDate for date separator functionality
     };
 
-    // Add the message immediately to show it in the UI
+    // Add the message to the local state for immediate display
     setWhatsappMessages(prevMessages => [...prevMessages, optimisticMessage]);
     
     // Clear input immediately for better UX
     setInputValue("");
+
+    // Add the message to the main conversation state in the parent component
+    if (updateConversationLocal) {
+      updateConversationLocal(conversation_id, optimisticMessage, "whatsapp");
+    }
 
     try {
       const sendMsgResponse = await callSendWhatsAppMessageApi(
@@ -170,7 +234,7 @@ const WhatsAppSection = ({
         ToastHandle("Error sending WhatsApp message", "danger");
       }
     } catch (error) {
-      // Remove the optimistic message on error and restore input
+      // Remove the optimistic message and restore input on error
       setWhatsappMessages(prevMessages => 
         prevMessages.filter(msg => msg.id !== optimisticMessage.id)
       );
@@ -229,6 +293,11 @@ const WhatsAppSection = ({
     ToastHandle("AI generation for WhatsApp coming soon", "info");
   };
 
+  // Render WhatsAppLocked for pro and mount plans
+  if (/pro|mount/i.test(subscriptionPlan)) {
+    return <WhatsAppLocked onComparePlans={() => window.location.href = '/setting/subscription'} />;
+  }
+
   return (
     <div
       className="whatsapp-section box"
@@ -278,14 +347,26 @@ const WhatsAppSection = ({
               flexDirection: "column",
             }}
           >
-            {whatsappMessages.map((message) => (
-              <WhatsAppInbox
-                key={message.id}
-                message={message}
-                guestName={guestName}
-                guestImageUrl={guestImageUrl}
-              />
-            ))}
+            {whatsappMessages.map((message, index) => {
+              const showDateSeparator =
+                index === 0 ||
+                !isSameDay(whatsappMessages[index - 1]?.rawDate, message.rawDate);
+              return (
+                <React.Fragment key={message?.id}>
+                  {showDateSeparator && (
+                    <div className="date-separator">
+                      {formatDateForSeparator(message.rawDate)}
+                    </div>
+                  )}
+                  <WhatsAppInbox
+                    key={message.id}
+                    message={message}
+                    guestName={guestName}
+                    guestImageUrl={guestImageUrl}
+                  />
+                </React.Fragment>
+              );
+            })}
             <div ref={messagesEndRef} />
           </div>
 

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import MessageInbox from "./message/MessageInbox";
 import Loader from "../../../../../helper/Loader";
 import loaderGif from "../../../../../public/img/new_loader.gif";
+import InboxUpgrade from "./inbox_Upgrade/InboxUpgrade";
 import "./index.css";
 import "./MildeSection.css";
 import { timeFormat } from "../../../../../helper/commonFun";
@@ -12,6 +13,7 @@ import JustificationModal from "../../../../testProperty/banner/messages/justifi
 import { Tooltip } from "react-tooltip";
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
+import ConversationHistoryLocked from "./inbox_messages_locked/ConversationHistoryLocked";
 
 // Import the SVG icons
 import SendIcon from "./message/icons/send_icon.svg";
@@ -31,8 +33,8 @@ const MildeSection = ({
   accountAgeDays,
   setCurrentView,
 }) => {
-  const eliteOrHigherPlan =
-    /elite|works|ultimate/i.test(subscriptionPlan) || subscriptionPlan === "trial"; // Case-insensitive check for 'elite', 'works', or 'ultimate' in the plan name
+  const eliteOrWorksPlan =
+    (/elite|works|ultimate/i.test(subscriptionPlan) && !/mount|pro/i.test(subscriptionPlan)) || subscriptionPlan == "trial"; // Case-insensitive check for 'elite', 'works', or 'ultimate' in the plan name, but exclude 'mount' and 'pro'
   const eliteFeaturesAvailable =
     /elite|ultimate/i.test(subscriptionPlan) || subscriptionPlan === "trial"; // user subscribed to Elite or Ultimate or is on trial
   const propertyIsLocked = !!allConversationData?.is_locked;
@@ -76,6 +78,11 @@ const MildeSection = ({
   const [generateScratchApiLoading, setGenerateScratchApiLoading] =
     useState(false);
   const [assistanceUsed, setAssistanceUsed] = useState(null); // 'command' if the user clicked "generate from command"; 'generate' if the user clicked "generate from scratch"; null if neither, or if the user cleared a generated message
+  const [showInboxUpgradeModal, setShowInboxUpgradeModal] = useState(false);
+
+  // Add state for showing locked history
+  const [showLocked, setShowLocked] = useState(false);
+
   const callGenerateFromScratchApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -268,8 +275,8 @@ const MildeSection = ({
     // Optimistically add the message to the local state immediately
     const currentTime = new Date();
     const optimisticMessage = {
-      text: { text: messageToSend },
-      sender: "user",
+      text: messageToSend, // Use simple string for LeftMessage compatibility
+      sender: "host", // Host messages should have sender "host" to render on right side
       messageDay: formatRelativeDate(currentTime.toISOString()),
       rawDate: currentTime,
       sendBy: "host",
@@ -278,8 +285,13 @@ const MildeSection = ({
       attachments: [],
     };
 
-    // Add the message immediately to show it in the UI
+    // Add the message to the local state for immediate display
     setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+    
+    // Also add the message to the main conversation state in the parent component
+    if (updateConversationLocal) {
+      updateConversationLocal(conversation_id, optimisticMessage, "pms");
+    }
 
     try {
       const sendMsgResponse = await callSendMessageApi(
@@ -297,17 +309,20 @@ const MildeSection = ({
 
         await updateConversationFromApi(conversation_id);
       } else {
-        // If there was an error, remove the optimistic message
+        // If there was an error, remove the optimistic message and restore the input
         setMessages((prevMessages) =>
           prevMessages.filter((msg) => msg.id !== optimisticMessage.id)
         );
+        setInputValue(messageToSend);
+        ToastHandle("Error sending message", "danger");
       }
     } catch (error) {
       ToastHandle("Error sending message", "danger");
-      // Remove the optimistic message on error
+      // Remove the optimistic message and restore the input on error
       setMessages((prevMessages) =>
         prevMessages.filter((msg) => msg.id !== optimisticMessage.id)
       );
+      setInputValue(messageToSend);
     } finally {
       setSendMessageLoading(false);
     }
@@ -795,7 +810,7 @@ const MildeSection = ({
           const { sender, text, time, attachments, id } = messageList;
           let timeFormatConvert = timeFormat(time);
           return {
-            text: messageList !== undefined ? messageList : "",
+            text: typeof text === 'string' ? text : text?.text || "",
             sender:
               sender === "host" || sender === "hostbuddy" ? "user" : "bot",
             messageDay: formatRelativeDate(time),
@@ -987,6 +1002,41 @@ const MildeSection = ({
 
   const toolTipMessage = getTooltipMessage();
 
+  // Filter messages based on subscription plan
+  const now = new Date();
+  let lockDurationMs = 3 * 24 * 60 * 60 * 1000; // Default 3 days for basic plans
+  
+  // Check for different subscription plans (case insensitive)
+  const isPro = /pro/i.test(subscriptionPlan);
+  const isElite = /elite/i.test(subscriptionPlan);
+  const isUltimate = /ultimate/i.test(subscriptionPlan);
+  
+  if (isPro) {
+    lockDurationMs = 30 * 24 * 60 * 60 * 1000; // 30 days for Pro
+  } else if (isElite) {
+    lockDurationMs = 60 * 24 * 60 * 60 * 1000; // 60 days for Elite
+  } else if (isUltimate) {
+    lockDurationMs = Number.MAX_SAFE_INTEGER; // No limit for Ultimate
+  }
+  
+  const recentMessages = messages.filter(msg => now - new Date(msg.rawDate) <= lockDurationMs);
+  const olderMessages = !isUltimate ? messages.filter(msg => now - new Date(msg.rawDate) > lockDurationMs) : [];
+
+  // Scroll handler to show lock when at top and there are older messages
+  const handleMessageListScroll = (e) => {
+    // Don't show locked messages UI for Ultimate plan
+    if (isUltimate) {
+      setShowLocked(false);
+      return;
+    }
+    
+    if (e.target.scrollTop === 0 && olderMessages.length > 0) {
+      setShowLocked(true);
+    } else if (e.target.scrollTop > 0 && showLocked) {
+      setShowLocked(false);
+    }
+  };
+
   return (
     <div className="main-chat">
       <div className="d-block d-lg-none mobile-nav" ref={mobileNavRef}>
@@ -1017,11 +1067,15 @@ const MildeSection = ({
             className="message-list"
             ref={messageListRef}
             style={{ marginBottom: "0px" }}
+            onScroll={handleMessageListScroll}
           >
-            {messages?.map((message, index) => {
+            {showLocked && !isUltimate && (
+              <ConversationHistoryLocked />
+            )}
+            {recentMessages?.map((message, index) => {
               const showDateSeparator =
                 index === 0 ||
-                !isSameDay(messages[index - 1]?.rawDate, message.rawDate);
+                !isSameDay(recentMessages[index - 1]?.rawDate, message.rawDate);
               return (
                 <React.Fragment key={message?.id}>
                   {showDateSeparator && (
@@ -1030,14 +1084,14 @@ const MildeSection = ({
                     </div>
                   )}
                   <MessageInbox
-                    text={message.text?.text}
+                    text={typeof message.text === 'string' ? message.text : message.text?.text}
                     sender={message.sender}
                     currentMessageDay={message.messageDay}
                     messageData={message}
                     feedBckModelOpen={feedBckModelOpenHndle}
                     handleJustificationClick={handleJustificationClick}
                     feedBackDataGet={feedBackDataGet}
-                    prevMsgText={messages[index - 1]?.text}
+                    prevMsgText={recentMessages[index - 1]?.text}
                     isInitialMessage={index <= 1}
                     guestName={allConversationData.guest_name}
                     guestImageUrl={allConversationData.image_url}
@@ -1088,7 +1142,7 @@ const MildeSection = ({
             <p style={{ color: "#AAA" }}>No conversation selected</p>
           </div>
         )}
-        {eliteOrHigherPlan && !(conversationData?.channel == "hostbuddy") ? (
+        {eliteFeaturesAvailable && !(conversationData?.channel == "hostbuddy") ? (
           <>
             {" "}
             <div
@@ -1476,9 +1530,20 @@ const MildeSection = ({
           Object.keys(allConversationData).length > 0 && (
             <p style={{ fontSize: "14px", margin: "0 auto" }}>
               Inbox is in view-only mode.{" "}
-              <Link to="/setting/subscription" style={{ fontSize: "14px" }}>
+              <button 
+                onClick={() => setShowInboxUpgradeModal(true)}
+                style={{ 
+                  fontSize: "14px", 
+                  background: "none", 
+                  border: "none", 
+                  color: "#007bff", 
+                  textDecoration: "underline", 
+                  cursor: "pointer",
+                  padding: "0"
+                }}
+              >
                 Upgrade
-              </Link>{" "}
+              </button>{" "}
               to generate and send messages.
             </p>
           )
@@ -2208,6 +2273,12 @@ const MildeSection = ({
           </div>
         </div>
       )}
+      
+      {/* InboxUpgrade Modal */}
+      <InboxUpgrade 
+        show={showInboxUpgradeModal} 
+        handleClose={() => setShowInboxUpgradeModal(false)} 
+      />
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./index.css";
 import "./MildeSection.css";
@@ -7,13 +7,16 @@ import OpenPhoneInbox from "./message/OpenPhoneInbox";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import loaderGif from "../../../../../public/img/new_loader.gif";
 import { callSendOpenPhoneMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
+import OpenPhoneLocked from "./openPhoneLocked/OpenPhoneLocked";
 
 const placeholderImg = "https://hostbuddylb.com/misc/chatBubbles.webp";
 
 const OpenPhoneSection = ({
   allConversationData,
   updateConversationFromApi,
+  updateConversationLocal,
   propertyName,
+  subscriptionPlan,
 }) => {
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -23,6 +26,7 @@ const OpenPhoneSection = ({
   const [hasOpenPhoneIntegration, setHasOpenPhoneIntegration] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
 
   // AI input functionality states
   const [inputValue, setInputValue] = useState("");
@@ -92,11 +96,84 @@ const OpenPhoneSection = ({
   // Sync local OpenPhone messages state with conversation data
   useEffect(() => {
     if (allConversationData?.openphone_messages) {
-      setOpenPhoneMessages(allConversationData.openphone_messages);
+      // Process messages to add rawDate for date separator functionality
+      const processedMessages = allConversationData.openphone_messages.map(message => ({
+        ...message,
+        rawDate: new Date(message.time || message.time_utc)
+      }));
+      setOpenPhoneMessages(processedMessages);
     } else {
       setOpenPhoneMessages([]);
     }
   }, [allConversationData?.openphone_messages]);
+
+  // Helper functions for date separator (same as MildeSection)
+  function formatDateForSeparator(date) {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return "";
+    }
+
+    const today = new Date();
+    const todayDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+
+    // Check if the date is today
+    if (
+      date.getDate() === todayDate.getDate() &&
+      date.getMonth() === todayDate.getMonth() &&
+      date.getFullYear() === todayDate.getFullYear()
+    ) {
+      return "Today";
+    }
+
+    // Check if it's yesterday
+    const yesterdayDate = new Date(todayDate);
+    yesterdayDate.setDate(todayDate.getDate() - 1);
+
+    if (
+      date.getDate() === yesterdayDate.getDate() &&
+      date.getMonth() === yesterdayDate.getMonth() &&
+      date.getFullYear() === yesterdayDate.getFullYear()
+    ) {
+      return "Yesterday";
+    }
+
+    // For older dates, show Month Day format
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+
+    return `${month} ${day}`;
+  }
+
+  // Function to check if two dates are from the same day
+  function isSameDay(date1, date2) {
+    if (!(date1 instanceof Date) || !(date2 instanceof Date)) {
+      return false;
+    }
+    return (
+      date1.getDate() === date2.getDate() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getFullYear() === date2.getFullYear()
+    );
+  }
 
   // Handle sending OpenPhone message
   const handleSendMessage = async () => {
@@ -114,12 +191,19 @@ const OpenPhoneSection = ({
       text: messageToSend,
       time: currentTime.toISOString(),
       time_utc: currentTime.toISOString(),
-      sender: "host"
+      sender: "host",
+      rawDate: currentTime // Add rawDate for date separator functionality
     };
 
-    // Add the message immediately to show it in the UI
+    // Add the message to the local state for immediate display
     setOpenPhoneMessages(prevMessages => [...prevMessages, optimisticMessage]);
+    
     setInputValue("");
+
+    // Add the message to the main conversation state in the parent component
+    if (updateConversationLocal) {
+      updateConversationLocal(conversation_id, optimisticMessage, "openphone");
+    }
 
     try {
       const sendMsgResponse = await callSendOpenPhoneMessageApi(
@@ -144,7 +228,7 @@ const OpenPhoneSection = ({
         ToastHandle("Error sending OpenPhone message", "danger");
       }
     } catch (error) {
-      // Remove the optimistic message on error and restore input
+      // Remove the optimistic message and restore input on error
       setOpenPhoneMessages(prevMessages => 
         prevMessages.filter(msg => msg.id !== optimisticMessage.id)
       );
@@ -190,6 +274,11 @@ const OpenPhoneSection = ({
         textareaRef.current.scrollHeight + "px";
     }
   };
+
+  // Render OpenPhoneLocked for pro and mount plans
+  if (/pro|mount/i.test(subscriptionPlan)) {
+    return <OpenPhoneLocked onComparePlans={() => window.location.href = "/setting/subscription"} />;
+  }
 
   return (
     <div
@@ -240,14 +329,26 @@ const OpenPhoneSection = ({
               flexDirection: "column",
             }}
           >
-            {openphoneMessages.map((message) => (
-              <OpenPhoneInbox
-                key={message.id}
-                message={message}
-                guestName={guestName}
-                guestImageUrl={guestImageUrl}
-              />
-            ))}
+            {openphoneMessages.map((message, index) => {
+              const showDateSeparator =
+                index === 0 ||
+                !isSameDay(openphoneMessages[index - 1]?.rawDate, message.rawDate);
+              return (
+                <React.Fragment key={message?.id}>
+                  {showDateSeparator && (
+                    <div className="date-separator">
+                      {formatDateForSeparator(message.rawDate)}
+                    </div>
+                  )}
+                  <OpenPhoneInbox
+                    key={message.id}
+                    message={message}
+                    guestName={guestName}
+                    guestImageUrl={guestImageUrl}
+                  />
+                </React.Fragment>
+              );
+            })}
             <div ref={messagesEndRef} />
           </div>
 

@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid2';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from 'recharts';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import './statistics.css';
+import actionItemsLocked from './icons/actionItemsLocked.svg';
+import { useNavigate } from 'react-router-dom';
 
 // Sample for how the data should be structured for the different tile types
 export const lineGraphDataSets = [
@@ -148,7 +150,7 @@ export const LineGraphTile = ({ dataSets, width, height }) => {
             <Line type="monotone" dataKey="value" stroke="#8884d8" />
           </LineChart>
         ) : (
-          <p>No data yet</p>
+          <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
         )}
       </div>
     </Grid>
@@ -156,11 +158,12 @@ export const LineGraphTile = ({ dataSets, width, height }) => {
 };
 
 // HistogramTile component
-export const HistogramTile = ({ dataSets, width, height }) => {
+export const HistogramTile = ({ dataSets, width, height, blur }) => {
   const [tileRef, tileWidth] = useElementWidth(); // Hook to get dynamic width of the tile
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
 
@@ -180,42 +183,64 @@ export const HistogramTile = ({ dataSets, width, height }) => {
 
   return (
     <Grid size={width}>
-      <div className="statistics-tile" style={{ height }} ref={tileRef}>
-        <div className="tile-header">
-          <h3>{currentDataSet.title}</h3>
-          <IconButton onClick={handleMenuOpen} className="icon-button">
-            <span style={{ fontSize: '24px' }}>⋮</span>
-          </IconButton>
-          <Menu anchorEl={anchorEl} open={open} onClose={() => handleMenuClose()}>
-            {dataSets.map((dataset, index) => (
-              <MenuItem key={index} selected={index === currentDataSetIndex} onClick={() => handleMenuClose(index)}>
-                {dataset.identifier}
-              </MenuItem>
-            ))}
-          </Menu>
-        </div>
-        {currentDataSet.data && currentDataSet.data.length > 0 ? (
-          <BarChart width={tileWidth - 40} height={heightAsInt-80} data={currentDataSet.data}>
-            {/* Adjust chart width dynamically */}
-            <XAxis dataKey="name" />
-            <YAxis />
-            <CartesianGrid stroke="#eee" strokeDasharray="1 5" />
-            <Tooltip />
-            <Bar dataKey="value" fill="#2196F3" />
-          </BarChart>
-        ) : (
-          <p>No data yet</p>
+      <div className={`statistics-tile${blur ? ' blurred-tile' : ''}`} style={{ height, position: 'relative' }} ref={tileRef}>
+        {blur && <div className="blurred-tile-overlay" style={{ height: '100%', width: '100%' }} />}
+        {blur && (
+          <div className="blurred-tile-message">
+            <p className="blurred-tile-message-top">Action Items Received</p>
+            <div className="blurred-tile-message-middle">
+              <img src={actionItemsLocked} alt="Locked" style={{ width: 40, height: 40, marginBottom: 8 }} />
+              Upgrade to unlock this insight & much more!
+              <div
+                className="compare-plans-link"
+                onClick={() => navigate('/setting/subscription')}
+                style={{ cursor: 'pointer', color: '#4FC3F7',  marginTop: 8 }}
+              >
+                Compare Plans
+              </div>
+            </div>
+          </div>
         )}
+        <div style={{ position: 'relative', zIndex: 0 }}>
+          <div className="tile-header">
+            <h3>{currentDataSet.title}</h3>
+            <IconButton onClick={handleMenuOpen} className="icon-button">
+              <span style={{ fontSize: '24px' }}>⋮</span>
+            </IconButton>
+            <Menu anchorEl={anchorEl} open={open} onClose={() => handleMenuClose()}>
+              {dataSets.map((dataset, index) => (
+                <MenuItem key={index} selected={index === currentDataSetIndex} onClick={() => handleMenuClose(index)}>
+                  {dataset.identifier}
+                </MenuItem>
+              ))}
+            </Menu>
+          </div>
+          <div className={blur ? 'blurred-content' : ''}>
+            {currentDataSet.data && currentDataSet.data.length > 0 ? (
+              <BarChart width={tileWidth - 40} height={heightAsInt-80} data={currentDataSet.data}>
+                {/* Adjust chart width dynamically */}
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid stroke="#eee" strokeDasharray="1 5" />
+                <Tooltip />
+                <Bar dataKey="value" fill="#2196F3" />
+              </BarChart>
+            ) : (
+              <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
+            )}
+          </div>
+        </div>
       </div>
     </Grid>
   );
 };
 
 // Tile containing prominently displayed numbers and text labels
-export const MetricTile = ({ dataSets, width, height }) => {
+export const MetricTile = ({ dataSets, width, height, blur }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -231,40 +256,65 @@ export const MetricTile = ({ dataSets, width, height }) => {
   const currentDataSet = dataSets[currentDataSetIndex].data;
   if (!currentDataSet) { return null; } // Return null if data is not available yet
 
+  // Check if this is a sentiment-related tile
+  const isSentimentTile = dataSets[currentDataSetIndex].title && 
+    (dataSets[currentDataSetIndex].title.toLowerCase().includes('sentiment') ||
+     dataSets[currentDataSetIndex].title.toLowerCase().includes('guest sentiment'));
+
   return (
     <Grid size={width}>
-      <div className="statistics-tile metric-tile" style={{ height }}>
-        <div className="tile-header">
-          <h3>{dataSets[currentDataSetIndex].title}</h3>
-          {dataSets && dataSets.length > 1 && (
-            <IconButton onClick={handleMenuOpen} className="icon-button">
-              <span style={{ fontSize: '24px' }}>⋮</span>
-            </IconButton>
-          )}
-          <Menu anchorEl={anchorEl} open={open} onClose={() => handleMenuClose()}>
-            {dataSets.map((dataset, index) => (
-              <MenuItem key={dataset.identifier} selected={index === currentDataSetIndex} onClick={() => handleMenuClose(index)}>
-                {dataset.identifier}
-              </MenuItem>
-            ))}
-          </Menu>
-        </div>
-        <div className="metric-content">
-          {currentDataSet && currentDataSet.length > 0 ? (
-            currentDataSet.map((item, index) => {
-              const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
-              const useSmallerNumbers = (heightAsInt < currentDataSet.length * 100);
-
-              return (
-                <div key={index} className="metric-item">
-                  <div className="metric-number" style={useSmallerNumbers ? { lineHeight: '1' } : {}}>{item.number}</div>
-                  <div className="metric-text">{item.text}</div>
-                </div>
-              );
-            })
-          ) : (
-          <p>No data yet</p>
+      <div className={`statistics-tile metric-tile${blur ? ' blurred-tile' : ''}${isSentimentTile ? ' sentiment-tile' : ''}`} style={{ height, position: 'relative' }}>
+        {blur && <div className="blurred-tile-overlay" style={{ height: '100%', width: '100%' }} />}
+        {blur && (
+          <div className="blurred-tile-message">
+            <p className="blurred-tile-message-top">Action Items Received and Closed</p>
+            <div className="blurred-tile-message-middle">
+              <img src={actionItemsLocked} alt="Locked" style={{ width: 40, height: 40, marginBottom: 8 }} />
+              Upgrade to unlock this insight & much more!
+              <div
+                className="compare-plans-link"
+                onClick={() => navigate('/setting/subscription')}
+                style={{ cursor: 'pointer', color: '#4FC3F7', marginTop: 8 }}
+              >
+                Compare Plans
+              </div>
+            </div>
+          </div>
         )}
+
+        <div style={{ position: 'relative', zIndex: 0 }}>
+          <div className="tile-header">
+            <h3>{dataSets[currentDataSetIndex].title}</h3>
+            {dataSets && dataSets.length > 1 && (
+              <IconButton onClick={handleMenuOpen} className="icon-button">
+                <span style={{ fontSize: '24px' }}>⋮</span>
+              </IconButton>
+            )}
+            <Menu anchorEl={anchorEl} open={open} onClose={() => handleMenuClose()}>
+              {dataSets.map((dataset, index) => (
+                <MenuItem key={dataset.identifier} selected={index === currentDataSetIndex} onClick={() => handleMenuClose(index)}>
+                  {dataset.identifier}
+                </MenuItem>
+              ))}
+            </Menu>
+          </div>
+          <div className={`metric-content${blur ? ' blurred-content' : ''}`}>
+            {currentDataSet && currentDataSet.length > 0 ? (
+              currentDataSet.map((item, index) => {
+                const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
+                const useSmallerNumbers = (heightAsInt < currentDataSet.length * 100);
+
+                return (
+                  <div key={index} className="metric-item">
+                    <div className="metric-number" style={useSmallerNumbers ? { lineHeight: '1' } : {}}>{item.number}</div>
+                    <div className="metric-text">{item.text}</div>
+                  </div>
+                );
+              })
+            ) : (
+            <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
+          )}
+          </div>
         </div>
       </div>
     </Grid>

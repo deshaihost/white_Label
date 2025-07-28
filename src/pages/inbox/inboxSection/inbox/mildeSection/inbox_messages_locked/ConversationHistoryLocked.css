@@ -1,0 +1,119 @@
+.conversation-history-locked {
+  width:100%;
+  height: 280px;
+  padding: 40px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.75) 73.56%, rgba(0, 0, 0, 0) 100%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.conversation-history-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #88592F;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: #F2C49B;
+}
+
+.star {
+  position: absolute;
+  background-color: #F1BA88;
+  border-radius: 2px;
+}
+
+.star-1 {
+  width: 8px;
+  height: 8px;
+  top: 22px;
+  left: 33px;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.star-2 {
+  width: 12px;
+  height: 12px;
+  top: 0px;
+  left: 1px;
+  background-color: #D38B4A;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.star-3 {
+  width: 9px;
+  height: 9px;
+  top: 29px;
+  left: 3px;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.chat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.upgrade-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #D0D3DB;
+  text-align: center;
+  margin: 0;
+  max-width: 100%;
+}
+
+.compare-plans-btn {
+  background: none;
+  border: none;
+  color: #74A9F7;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.302;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.compare-plans-btn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.compare-plans-btn:focus {
+  outline: 2px solid #74A9F7;
+  outline-offset: 2px;
+}
+
+.conversation-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .conversation-history-locked {
+    width: 100%;
+    max-width: 461px;
+    padding: 32px 24px 20px;
+  }
+  
+  .upgrade-text {
+    font-size: 13px;
+  }
+}
