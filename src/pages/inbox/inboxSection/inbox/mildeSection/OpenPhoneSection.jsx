@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./index.css";
@@ -96,11 +96,84 @@ const OpenPhoneSection = ({
   // Sync local OpenPhone messages state with conversation data
   useEffect(() => {
     if (allConversationData?.openphone_messages) {
-      setOpenPhoneMessages(allConversationData.openphone_messages);
+      // Process messages to add rawDate for date separator functionality
+      const processedMessages = allConversationData.openphone_messages.map(message => ({
+        ...message,
+        rawDate: new Date(message.time || message.time_utc)
+      }));
+      setOpenPhoneMessages(processedMessages);
     } else {
       setOpenPhoneMessages([]);
     }
   }, [allConversationData?.openphone_messages]);
+
+  // Helper functions for date separator (same as MildeSection)
+  function formatDateForSeparator(date) {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return "";
+    }
+
+    const today = new Date();
+    const todayDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+
+    // Check if the date is today
+    if (
+      date.getDate() === todayDate.getDate() &&
+      date.getMonth() === todayDate.getMonth() &&
+      date.getFullYear() === todayDate.getFullYear()
+    ) {
+      return "Today";
+    }
+
+    // Check if it's yesterday
+    const yesterdayDate = new Date(todayDate);
+    yesterdayDate.setDate(todayDate.getDate() - 1);
+
+    if (
+      date.getDate() === yesterdayDate.getDate() &&
+      date.getMonth() === yesterdayDate.getMonth() &&
+      date.getFullYear() === yesterdayDate.getFullYear()
+    ) {
+      return "Yesterday";
+    }
+
+    // For older dates, show Month Day format
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+
+    return `${month} ${day}`;
+  }
+
+  // Function to check if two dates are from the same day
+  function isSameDay(date1, date2) {
+    if (!(date1 instanceof Date) || !(date2 instanceof Date)) {
+      return false;
+    }
+    return (
+      date1.getDate() === date2.getDate() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getFullYear() === date2.getFullYear()
+    );
+  }
 
   // Handle sending OpenPhone message
   const handleSendMessage = async () => {
@@ -118,7 +191,8 @@ const OpenPhoneSection = ({
       text: messageToSend,
       time: currentTime.toISOString(),
       time_utc: currentTime.toISOString(),
-      sender: "host"
+      sender: "host",
+      rawDate: currentTime // Add rawDate for date separator functionality
     };
 
     // Add the message to the local state for immediate display
@@ -255,14 +329,26 @@ const OpenPhoneSection = ({
               flexDirection: "column",
             }}
           >
-            {openphoneMessages.map((message) => (
-              <OpenPhoneInbox
-                key={message.id}
-                message={message}
-                guestName={guestName}
-                guestImageUrl={guestImageUrl}
-              />
-            ))}
+            {openphoneMessages.map((message, index) => {
+              const showDateSeparator =
+                index === 0 ||
+                !isSameDay(openphoneMessages[index - 1]?.rawDate, message.rawDate);
+              return (
+                <React.Fragment key={message?.id}>
+                  {showDateSeparator && (
+                    <div className="date-separator">
+                      {formatDateForSeparator(message.rawDate)}
+                    </div>
+                  )}
+                  <OpenPhoneInbox
+                    key={message.id}
+                    message={message}
+                    guestName={guestName}
+                    guestImageUrl={guestImageUrl}
+                  />
+                </React.Fragment>
+              );
+            })}
             <div ref={messagesEndRef} />
           </div>
 

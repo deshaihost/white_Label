@@ -35,7 +35,16 @@ const UsersTab = (userData) => {
   };
 
   const maxUsersAllowed = getMaxUsersAllowed(subscriptionPlan);
-  const currentUserCount = apiSubUsers.length + 1; // +1 for the main user
+  const currentSubUserCount = apiSubUsers.length; // Only count sub-users, not the main user
+
+  // Debug logging to help troubleshoot
+  console.log('Debug - Users Tab:', {
+    subscriptionPlan,
+    maxUsersAllowed,
+    apiSubUsersLength: apiSubUsers.length,
+    currentSubUserCount,
+    remaining: maxUsersAllowed - currentSubUserCount
+  });
 
   const callGetSubUsersApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -128,7 +137,7 @@ const UsersTab = (userData) => {
       return;
     }
     // For other plans, restrict if at or above max
-    if (currentUserCount >= maxUsersAllowed) {
+    if (currentSubUserCount >= maxUsersAllowed) {
       setIsUpgradeModalOpen(true);
     } else {
       setIsModalOpen(true);
@@ -178,13 +187,10 @@ const UsersTab = (userData) => {
           <span style={{marginRight: '8px', letterSpacing: '0.5px'}}>
             {
               (() => {
-                let remaining = maxUsersAllowed - currentUserCount;
-                // For pro, if user count > 1, show 0
-                if (maxUsersAllowed === 1 && currentUserCount > 1) remaining = 0;
-                // For elite, if user count > 3, show 0
-                if (maxUsersAllowed === 3 && currentUserCount > 3) remaining = 0;
-                // Never show negative
-                if (remaining < 0) remaining = 0;
+                // Calculate remaining user slots (not counting the main user)
+                const remainingSlots = maxUsersAllowed - currentSubUserCount;
+                // Ensure we never show negative values
+                const remaining = Math.max(0, remainingSlots);
                 return `Remaining users: ${remaining}`;
               })()
             }
@@ -268,9 +274,9 @@ const UsersTab = (userData) => {
         {/* <p style={{ fontSize: '14px', color: '#AAA', marginTop: '10px', textAlign: 'center' }}>
           {maxUsersAllowed > 0 ? (
             maxUsersAllowed === Infinity ? (
-              `${currentUserCount} users (${subscriptionPlan} plan - unlimited)`
+              `${currentSubUserCount + 1} users (${subscriptionPlan} plan - unlimited)`
             ) : (
-              `${currentUserCount} of ${maxUsersAllowed} users used (${subscriptionPlan} plan)`
+              `${currentSubUserCount + 1} of ${maxUsersAllowed} users used (${subscriptionPlan} plan)`
             )
           ) : subscriptionPlan ? (
             'Upgrade your plan to invite team members'

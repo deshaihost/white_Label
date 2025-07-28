@@ -25,7 +25,7 @@ const ConnectToHostfullyGuidebooks = () => {
   return (
     <>
       <div className="partner-tile" onClick={handleConnectClick}>
-        <HostfullyIcon className="partner-logo" style={{ height: '50px', width: '50px' }} />
+        <HostfullyIcon className="partner-logo" style={{ height: '50px', width: '62%' }} />
         <p>Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.</p>
       </div>
       <IntegrationCredentialsModal show={showModal} handleClose={handleModalClose} onSuccess={handleSuccess} integration="hostfullyGuidebooks" title="Connect to Hostfully Guidebooks"/>
