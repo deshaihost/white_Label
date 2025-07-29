@@ -62,7 +62,7 @@ const CustomJustificationModal = ({ show, handleClose, propertyName, justificati
           <hr />
           <div className="custom-modal-footer">
             <p>
-            Ram  HostBuddy's responses are based on the information in its knowledge base for this property. 
+             HostBuddy's responses are based on the information in its knowledge base for this property. 
               If something is missing or incorrect, you can <Link to={`/edit-property/${propertyName}`} className="custom-link">manage the knowledge base</Link> or <Link to={`/edit-property/${propertyName}`} className="custom-link">add to the property profile</Link>.
             </p>
             <p>

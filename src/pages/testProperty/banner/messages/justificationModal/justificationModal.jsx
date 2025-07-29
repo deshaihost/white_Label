@@ -13,54 +13,75 @@ const formatMarkdownText = (text) => {
   // Handle bold text (convert **text** to <span style="font-family: 'Samsung Sharp Sans Bold';">text</span>)
   formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<span style="font-family: \'Samsung Sharp Sans Bold\';">$1</span>');
 
-  // Split into lines to handle bullet points properly
-  const lines = formattedText.split('\n');
-  const processedLines = lines.map(line => {
-    // Check if line starts with bullet point (* or -)
-    if (line.trim().match(/^\s*[\*\-]\s+/)) {
-      // Convert bullet point to HTML list item
-      return `<li>${line.trim().replace(/^\s*[\*\-]\s+/, '')}</li>`;
+  // Handle source references with special styling
+  formattedText = formattedText.replace(/\[source:\s*"([^"]+)"\]/g, '<span class="source-reference">[source: "$1"]</span>');
+
+  // Since the justification doesn't have explicit line breaks, we need to intelligently break it into bullet points
+  // Split the text into meaningful chunks for bullet points
+  
+  // First, split on common transition words and phrases
+  let chunks = formattedText.split(/\b(Additionally|Furthermore|Also|Moreover|In addition|The most relevant|This information)\b/i);
+  
+  // Filter and clean chunks
+  let meaningfulChunks = [];
+  let currentChunk = '';
+  
+  for (let i = 0; i < chunks.length; i++) {
+    let chunk = chunks[i];
+    
+    // Skip transition words themselves
+    if (chunk.match(/^(Additionally|Furthermore|Also|Moreover|In addition|The most relevant|This information)$/i)) {
+      continue;
     }
-    return line;
-  });
-
-  // Join lines back together, wrapping lists in <ul> tags
-  let result = '';
-  let inList = false;
-
-  processedLines.forEach(line => {
-    if (line.startsWith('<li>')) {
-      if (!inList) {
-        result += '<ul class="markdown-list">';
-        inList = true;
-      }
-      result += line;
+    
+    // Combine with previous chunk if it's too short
+    if (chunk.trim().length < 50 && currentChunk) {
+      currentChunk += chunk;
     } else {
-      if (inList) {
-        result += '</ul>';
-        inList = false;
+      if (currentChunk.trim().length > 0) {
+        meaningfulChunks.push(currentChunk.trim());
       }
-      // Avoid adding <br/> if the line is empty or just whitespace after processing
-      if (line.trim().length > 0) {
-        result += line + '<br/>';
-      } else if (result.endsWith('<br/>')) {
-         // Prevent multiple <br/> for consecutive empty lines
-      } else {
-         result += '<br/>'; // Add break for intentional empty lines
-      }
+      currentChunk = chunk;
     }
-  });
-
-  if (inList) {
+  }
+  
+  // Add the last chunk
+  if (currentChunk.trim().length > 0) {
+    meaningfulChunks.push(currentChunk.trim());
+  }
+  
+  // Clean up the chunks and create bullet points
+  let bulletPoints = meaningfulChunks.map(chunk => {
+    let cleaned = chunk.trim();
+    
+    // Remove leading comma, space, or period
+    cleaned = cleaned.replace(/^[,.\s]+/, '');
+    
+    // Ensure it starts with capital letter
+    if (cleaned.length > 0) {
+      cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+    }
+    
+    // Ensure it ends with period
+    if (!cleaned.match(/[.!?]$/)) {
+      cleaned += '.';
+    }
+    
+    return cleaned;
+  }).filter(chunk => chunk.length > 10); // Filter very short chunks
+  
+  // If we have meaningful bullet points, create the list
+  if (bulletPoints.length > 1) {
+    let result = '<ul class="markdown-list">';
+    bulletPoints.forEach(point => {
+      result += `<li>${point}</li>`;
+    });
     result += '</ul>';
+    return result;
+  } else {
+    // If we can't break it into meaningful bullets, just format as paragraphs
+    return formattedText.replace(/\n/g, '<br/>');
   }
-
-  // Remove trailing <br/> if it exists
-  if (result.endsWith('<br/>')) {
-    result = result.substring(0, result.length - 5);
-  }
-
-  return result;
 };
 
 const JustificationModal = ({
@@ -155,25 +176,45 @@ const JustificationModal = ({
         {/* Add style tag for markdown list styling */}
         <style jsx="true">{`
           .markdown-list {
-            margin-left: 40px; /* Adjust as needed based on logo size and desired indent */
+            margin-left: 0px; 
             list-style-type: disc;
-            padding-left: 20px; /* Add padding for list items */
-            color: white; /* Ensure list text color matches */
-            font-family: 'Samsung Sharp Sans Medium'; /* Match font */
-          }
-          .markdown-content ul {
+            padding-left: 20px; 
+            color: rgba(166, 169, 178, 1); 
+            font-family: 'Samsung Sharp Sans Medium'; 
             margin-top: 10px;
             margin-bottom: 10px;
           }
+          .markdown-content ul {
+            margin-top: 8px;
+            margin-bottom: 8px;
+          }
           .markdown-list li {
-            margin-bottom: 15px; /* Spacing between list items */
+            margin-bottom: 12px; 
+            line-height: 1.5;
+            color: rgba(166, 169, 178, 1);
+          }
+          /* Source reference styling */
+          .source-reference {
+            color: rgba(166, 169, 178, 0.8);
+            font-style: italic;
+            font-size: 14px;
+            font-family: 'Samsung Sharp Sans Medium';
           }
           /* Ensure spans within the content inherit the base styles */
           .markdown-content span {
              font-family: inherit; /* Default to parent font */
+             color: inherit;
           }
           .markdown-content span[style*="Samsung Sharp Sans Bold"] {
              font-family: 'Samsung Sharp Sans Bold'; /* Override for bold */
+             color: rgba(166, 169, 178, 1);
+          }
+          /* Better spacing for justified content */
+          .justification-text {
+            line-height: 1.6;
+          }
+          .justification-text p {
+            margin-bottom: 8px;
           }
         `}</style>
       </div>

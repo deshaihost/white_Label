@@ -807,7 +807,7 @@ const MildeSection = ({
         currentConversationIdRef.current
       ) {
         const newMessages = allConversationData.messages.map((messageList) => {
-          const { sender, text, time, attachments, id } = messageList;
+          const { sender, text, time, attachments, id, justification, response } = messageList;
           let timeFormatConvert = timeFormat(time);
           return {
             text: typeof text === 'string' ? text : text?.text || "",
@@ -819,6 +819,8 @@ const MildeSection = ({
             id,
             timeFormatConvert,
             attachments,
+            justification, // Include justification property
+            response, // Include response property
           };
         });
         setConversationData(allConversationData);
