@@ -1026,8 +1026,8 @@ const MildeSection = ({
 
   // Scroll handler to show lock when at top and there are older messages
   const handleMessageListScroll = (e) => {
-    // Don't show locked messages UI for Ultimate plan
-    if (isUltimate) {
+    // Don't show locked messages UI for Ultimate plan or trial users
+    if (isUltimate || subscriptionPlan === "trial") {
       setShowLocked(false);
       return;
     }
@@ -1071,7 +1071,7 @@ const MildeSection = ({
             style={{ marginBottom: "0px" }}
             onScroll={handleMessageListScroll}
           >
-            {showLocked && !isUltimate && (
+            {showLocked && !isUltimate && subscriptionPlan !== "trial" && (
               <ConversationHistoryLocked />
             )}
             {recentMessages?.map((message, index) => {
