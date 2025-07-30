@@ -5,6 +5,7 @@ import HelpCircleIcon from "./thumbsComponent/icons/help_circle.svg";
 import HostBuddyIcon from "./thumbsComponent/icons/hostBuddy_icon.svg";
 import dummyPropertyImg from "../../../../../../public/img/dummyPropertyImg.png";
 
+
 const MessageInbox = ({
   key,
   text,
@@ -21,9 +22,8 @@ const MessageInbox = ({
   reservationId
 }) => {
   const { typeThumbs, messageId } = feedBackDataGet ? feedBackDataGet : {};
-  const { timeFormatConvert, sendBy } = messageData;
-  const messageDetails = messageData?.text;
-  const { id, justification, response } = messageDetails;
+  const { timeFormatConvert, sendBy, id, justification, response } = messageData;
+  
   const message_id = id ? id : [];
   const sendByFormatted =
     sendBy === "hostbuddy" ? "HostBuddy" : sendBy === "host" ? "Host" : sendBy;
@@ -109,9 +109,7 @@ const MessageInbox = ({
 
   // When the user clicks a message bubble: console.log the IDs so the support teams can easily access them from the frontend to use for troubleshooting and escalation.
   const handleMessageClick = () => {
-    console.log('Message ID:', message_id);
-    console.log('Conversation ID:', conversationId);
-    console.log('Reservation ID: ', reservationId);
+    // Message interaction tracking removed
   };
 
   return (
