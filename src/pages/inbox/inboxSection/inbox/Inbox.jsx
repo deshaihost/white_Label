@@ -1816,7 +1816,7 @@ const Inbox = ({
                   {[
                     { id: "pms", icon: PmsIcon, text: "PMS" },
                     userHasWhatsAppIntegration && { id: "whatsapp", icon: WhatsappIcon, text: "WhatsApp" },
-                    userHasOpenPhoneIntegration && { id: "openphone", icon: OpenPhoneIcon, text: "OpenPhone" },
+                    { id: "openphone", icon: OpenPhoneIcon, text: "OpenPhone" },
                     ...(selectedConversation?.reservation_id
                       ? [{ id: "openIssue", icon: OpenIssueIcon, text: "Open Issue" }]
                       : []),
