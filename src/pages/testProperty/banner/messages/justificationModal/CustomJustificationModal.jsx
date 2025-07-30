@@ -48,7 +48,7 @@ const CustomJustificationModal = ({ show, handleClose, propertyName, justificati
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
             </svg>
           </div>
-          <h5 className="custom-modal-title">Hey HostBuddy h, where did this response come from?</h5>
+          <h5 className="custom-modal-title">Hey HostBuddy , where did this response come from?</h5>
           <button className="custom-modal-close" onClick={handleClose}>×</button>
         </div>
         <div className="custom-modal-body">
