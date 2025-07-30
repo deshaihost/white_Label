@@ -6,82 +6,60 @@ import { ReactComponent as JustificationLogo } from "./icons/justificationLogo.s
 // Utility function to format markdown-like text
 const formatMarkdownText = (text) => {
   if (!text) return "";
-
+  
   // Process the text in stages
   let formattedText = text;
-
+  
   // Handle bold text (convert **text** to <span style="font-family: 'Samsung Sharp Sans Bold';">text</span>)
   formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<span style="font-family: \'Samsung Sharp Sans Bold\';">$1</span>');
-
-  // Handle source references with special styling
-  formattedText = formattedText.replace(/\[source:\s*"([^"]+)"\]/g, '<span class="source-reference">[source: "$1"]</span>');
-
-  // Since the justification doesn't have explicit line breaks, we need to intelligently break it into bullet points
-  // Split the text into meaningful chunks for bullet points
   
-  // First, split on common transition words and phrases
-  let chunks = formattedText.split(/\b(Additionally|Furthermore|Also|Moreover|In addition|The most relevant|This information)\b/i);
-  
-  // Filter and clean chunks
-  let meaningfulChunks = [];
-  let currentChunk = '';
-  
-  for (let i = 0; i < chunks.length; i++) {
-    let chunk = chunks[i];
-    
-    // Skip transition words themselves
-    if (chunk.match(/^(Additionally|Furthermore|Also|Moreover|In addition|The most relevant|This information)$/i)) {
-      continue;
+  // Split into lines to handle bullet points properly
+  const lines = formattedText.split('\n');
+  const processedLines = lines.map(line => {
+    // Check if line starts with bullet point (* or -)
+    if (line.trim().match(/^\s*[\*\-]\s+/)) {
+      // Convert bullet point to HTML list item
+      return `<li>${line.trim().replace(/^\s*[\*\-]\s+/, '')}</li>`;
     }
-    
-    // Combine with previous chunk if it's too short
-    if (chunk.trim().length < 50 && currentChunk) {
-      currentChunk += chunk;
-    } else {
-      if (currentChunk.trim().length > 0) {
-        meaningfulChunks.push(currentChunk.trim());
+    return line;
+  });
+  
+  // Join lines back together, wrapping lists in <ul> tags
+  let result = '';
+  let inList = false;
+  
+  processedLines.forEach(line => {
+    if (line.startsWith('<li>')) {
+      if (!inList) {
+        result += '<ul class="markdown-list">';
+        inList = true;
       }
-      currentChunk = chunk;
+      result += line;
+    } else {
+      if (inList) {
+        result += '</ul>';
+        inList = false;
+      }
+      // Avoid adding <br/> if the line is empty or just whitespace, or if it's the last line before a list starts
+      const nextLineIsListItem = processedLines[processedLines.indexOf(line) + 1]?.startsWith('<li>');
+      if (line.trim() !== '' && !nextLineIsListItem) {
+        result += line + '<br/>';
+      } else if (line.trim() !== '') {
+         result += line; // Add line without <br/> if it's followed by a list item
+      }
     }
-  }
+  });
   
-  // Add the last chunk
-  if (currentChunk.trim().length > 0) {
-    meaningfulChunks.push(currentChunk.trim());
-  }
-  
-  // Clean up the chunks and create bullet points
-  let bulletPoints = meaningfulChunks.map(chunk => {
-    let cleaned = chunk.trim();
-    
-    // Remove leading comma, space, or period
-    cleaned = cleaned.replace(/^[,.\s]+/, '');
-    
-    // Ensure it starts with capital letter
-    if (cleaned.length > 0) {
-      cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
-    }
-    
-    // Ensure it ends with period
-    if (!cleaned.match(/[.!?]$/)) {
-      cleaned += '.';
-    }
-    
-    return cleaned;
-  }).filter(chunk => chunk.length > 10); // Filter very short chunks
-  
-  // If we have meaningful bullet points, create the list
-  if (bulletPoints.length > 1) {
-    let result = '<ul class="markdown-list">';
-    bulletPoints.forEach(point => {
-      result += `<li>${point}</li>`;
-    });
+  if (inList) {
     result += '</ul>';
-    return result;
-  } else {
-    // If we can't break it into meaningful bullets, just format as paragraphs
-    return formattedText.replace(/\n/g, '<br/>');
   }
+  
+  // Remove trailing <br/> if present
+  if (result.endsWith('<br/>')) {
+    result = result.slice(0, -5);
+  }
+
+  return result;
 };
 
 const JustificationModal = ({
@@ -121,7 +99,7 @@ const JustificationModal = ({
             </div>
           </div>
           <h5 className="custom-modal-title heading-xsmall">
-            Hey HostBuddy, where did this response come from?
+            Hey HostBuddy , where did this response come from?
           </h5>
           <button
             className="custom-modal-close"
