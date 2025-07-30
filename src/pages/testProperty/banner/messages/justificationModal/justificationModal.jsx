@@ -68,7 +68,6 @@ const JustificationModal = ({
   propertyName,
   justification,
 }) => {
-  console.log("jus:", justification);
   const modalRef = useRef(null);
 
   // Handle click outside to close
