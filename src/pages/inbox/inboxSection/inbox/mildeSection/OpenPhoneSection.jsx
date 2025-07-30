@@ -616,11 +616,6 @@ const OpenPhoneSection = ({
     }
   };
 
-  // Render OpenPhoneLocked for pro and mount plans
-  if (/pro|mount/i.test(subscriptionPlan)) {
-    return <OpenPhoneLocked onComparePlans={() => window.location.href = "/setting/subscription"} />;
-  }
-
   const handleClickOutside = (event) => {
     // Close generate options menu when clicking outside
     if (
@@ -1216,6 +1211,11 @@ const OpenPhoneSection = ({
   }, [allConversationData?.conversation_id]);
 
   const toolTipMessage = getTooltipMessage();
+
+  // Render OpenPhoneLocked for pro and mount plans
+  if (/pro|mount/i.test(subscriptionPlan)) {
+    return <OpenPhoneLocked onComparePlans={() => window.location.href = "/setting/subscription"} />;
+  }
 
   return (
     <div
