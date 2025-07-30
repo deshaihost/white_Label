@@ -336,19 +336,55 @@ const SubscriptionIndex = () => {
                   gap: "40px" ,
                   paddingRight:"64px"
                 }}>
-                  <div style={{
+                  {/* <div style={{
                     width: "1px",
                     height: "40px",
                     backgroundColor: "#ccc"
-                  }}></div>
-
-                  {false && ( // temporarily disabled - pricing section
-                    <div style={{
+                  }}></div> */}
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center"
+                  }}>
+                    {/* Average per-property price (main display) */}
+                    {/* <div style={{
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center"
                     }}>
-                      {/* Average per-property price (main display) */}
+                      <span
+                        className="samsung-sharp-sans samsung-sharp-sans"
+                        style={{
+                          fontWeight: "500",
+                          fontSize: "24px",
+                        }}
+                      >
+                        {formatPrice(currentAveragePrice).dollar}
+                      </span>
+                      <span
+                        className="samsung-sharp-sans samsung-sharp-sans"
+                        style={{
+                          fontWeight: "500",
+                          fontSize: "32px",
+                        }}
+                      >
+                        {formatPrice(currentAveragePrice).amount}
+                      </span>
+                      <span
+                        className="samsung-sharp-sans samsung-sharp-sans"
+                        style={{
+                          fontWeight: "400",
+                          fontSize: "14px",
+                          marginLeft: "4px",
+                          color: "#FFFFFF",
+                        }}
+                      >
+                        per property
+                      </span>
+                    </div> */}
+                    
+                    {/* Total price (secondary display) */}
+                    {/* {numPropertiesAllowed > 1 && (
                       <div style={{
                         display: "flex",
                         alignItems: "baseline",
@@ -384,30 +420,24 @@ const SubscriptionIndex = () => {
                           per property
                         </span>
                       </div>
-                      
-                      {/* Total price (secondary display) */}
-                      {numPropertiesAllowed > 1 && (
-                        <div style={{
-                          fontSize: "14px",
-                          color: "#FFFFFF",
-                          textAlign: "center"
-                        }}>
-                          {formatPrice(currentTotalPrice).dollar}
-                          {formatPrice(currentTotalPrice).amount}
-                          {" monthly"} 
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {false && ( // temporarily disabled - separator line
-                    <div style={{
-                      width: "1px",
-                      height: "40px",
-                      backgroundColor: "#ccc"
-                    }}></div>
-                  )}
-
+                    )} */}
+                    
+                    {/* <span
+                      className="samsung-sharp-sans samsung-sharp-sans"
+                      style={{
+                        fontWeight: "500",
+                        fontSize: "12px",
+                        marginTop: "4px"
+                      }}
+                    >
+                     Pricing ({billingPeriod === 'annual' ? 'Yearly' : 'Monthly'})
+                    </span> */}
+                  </div>
+                  <div style={{
+                    width: "1px",
+                    height: "40px",
+                    backgroundColor: "#ccc"
+                  }}></div>
                   <div style={{
                     display: "flex",
                     flexDirection: "column",

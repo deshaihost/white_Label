@@ -14,10 +14,17 @@ const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalS
     setRole(e.target.value);
   };
 
-  // Only HostBuddy Elite users can add sub-users
-  //const subscription_plan = userData?.userData?.subscription?.plan;
+  // Check user's subscription plan and determine if they can invite users
   const subscription_plan = getSubscriptionStatus(userData?.userData).plan;
-  const userHasPermission = (subscription_plan && (subscription_plan.toLowerCase().includes("elite") || subscription_plan.toLowerCase().includes("ultimate") || subscription_plan.toLowerCase() == "trial"));
+  
+  // Determine if user can invite users based on plan
+  const canInviteUsers = (plan) => {
+    if (!plan) return false;
+    const planLower = plan.toLowerCase();
+    return planLower.includes('pro') || planLower.includes('elite') || planLower === 'trial';
+  };
+  
+  const userHasPermission = canInviteUsers(subscription_plan);
 
   return (
     <Modal show={show} size="lg" onHide={onClose} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -49,7 +56,12 @@ const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalS
             )
           ) : (
             <div style={{ textAlign: 'center', marginTop: '40px' }}>
-              <p style={{ color: 'rgb(255,165,0)', fontSize: '16px' }}>You must be on the Elite plan to invite users.</p>
+              <p style={{ color: 'rgb(255,165,0)', fontSize: '16px' }}>
+                {subscription_plan ? 
+                  'You must be on the Pro plan or higher to invite users.' : 
+                  'You must subscribe to invite users.'
+                }
+              </p>
               {subscription_plan ? (
                 <Link to="/setting/subscription">Upgrade Your Subscription</Link>
               ) : (

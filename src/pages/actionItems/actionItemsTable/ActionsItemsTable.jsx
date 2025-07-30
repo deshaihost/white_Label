@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { getUserDataActions } from "../../../redux/actions";
@@ -13,6 +13,8 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
 import ConversationTranscriptModal from "../../inbox/inboxSection/resources/ConversationTranscriptModal";
 import customStyles from './selectStyles';
+import ActionItemsUpgrade from '../ActionItemsUpgrade/ActionItemsUpgrade';
+import { getSubscriptionStatus } from '../../../helper/Authorized';
 
 const ActionsItemsTable = () => {
 
@@ -188,10 +190,53 @@ const ActionsItemsTable = () => {
     if (propertyNameQuery) { setSelectedProperties([{ value: propertyNameQuery, label: propertyNameQuery }]); }
   }, [location.search]);
 
+  // Get user plan
+  const userData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const subscriptionPlan = getSubscriptionStatus(userData).plan || '';
+  const isMountPlan = subscriptionPlan?.toLowerCase().includes("mount");
+
+  // Helper to determine cutoff days
+  const getCutoffDays = () => {
+    if (/elite/i.test(subscriptionPlan)) return 30;
+    if (/pro/i.test(subscriptionPlan)) return 3;
+    return 10000; // fallback for other plans (show all)
+  };
+  const cutoffDays = getCutoffDays();
+  const now = new Date();
+
+  // Split action items into visible and locked
+  const isLocked = (item) => {
+    // Compare only calendar days; ignore hours/minutes
+    const itemDate = new Date(item.created_at);
+    const nowDate = new Date();
+    // Normalise both to midnight so we only compare the date portion
+    itemDate.setHours(0, 0, 0, 0);
+    nowDate.setHours(0, 0, 0, 0);
+
+    const diffDays = (nowDate - itemDate) / (1000 * 60 * 60 * 24);
+    return diffDays > cutoffDays;
+  };
+  const hasLockedItems = filteredActionItems.some(isLocked);
+
+  const handleComparePlans = () => {
+    navigate('/setting/subscription');
+  };
+
+  // Keep only the items the current plan is allowed to see
+  const unlockedActionItems = filteredActionItems.filter(item => !isLocked(item));
+  const lockedActionItems = filteredActionItems.filter(isLocked);
+  const itemsToRender = unlockedActionItems;
+
+
+
+
+
+
+
   return (
     <>
       <Container>
-        <div className="action-items-page">
+        <div className="action-items-page" style={{ position: 'relative' }}>
           {getActionItemsLoading && <FullScreenLoader />}
           <div className="action-items">
             <div className="action-heading">
@@ -199,17 +244,19 @@ const ActionsItemsTable = () => {
             </div>
             <div className="action-select">
 
-              <div className="item-select">
-                <select aria-label="Default select example" className="bg-dark form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-                  <option value="all">All Categories</option>
-                  <option value="CLEANLINESS">Cleanliness</option>
-                  <option value="MAINTENANCE">Maintenance</option>
-                  <option value="RESERVATION CHANGES">Reservation Changes</option>
-                  <option value="GUEST REQUESTS">Guest Requests</option>
-                  <option value="KNOWLEDGE BASE SUGGESTIONS">Knowledge Base Suggestions</option>
-                  <option value="OTHER">Other</option>
-                </select>
-              </div>
+              {!isMountPlan && (
+                <div className="item-select">
+                  <select aria-label="Default select example" className="bg-dark form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                    <option value="all">All Categories</option>
+                    <option value="CLEANLINESS">Cleanliness</option>
+                    <option value="MAINTENANCE">Maintenance</option>
+                    <option value="RESERVATION CHANGES">Reservation Changes</option>
+                    <option value="GUEST REQUESTS">Guest Requests</option>
+                    <option value="KNOWLEDGE BASE SUGGESTIONS">Knowledge Base Suggestions</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                </div>
+              )}
 
               <div className="item-select">
                 <select aria-label="Default select example" className="bg-dark form-select" value={selectedStatus} onChange={handleSelectStatusChange}>
@@ -225,10 +272,10 @@ const ActionsItemsTable = () => {
 
             </div>
           </div>
-          <div className="table-responsive" style={{ overflowY: "auto", marginBottom: "30px" }}>
-            {filteredActionItems?.length > 0 ? (
-              <>
-                <table class="table text-white action-items-table">
+          <div className="table-responsive" style={{ overflowY: "auto", marginBottom: "30px", position: 'relative' }}>
+            {itemsToRender?.length > 0 ? (
+              <div style={{ position: 'relative' }}>
+                <table className="table text-white action-items-table">
                   <thead style={{ background: "#020d29" }}>
                     <tr>
                       <th>Date/Time</th>
@@ -240,41 +287,81 @@ const ActionsItemsTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredActionItems?.map((actionItem) => {
+                    {itemsToRender.map((actionItem, idx) => {
                       const { id, created_at, property_name, conversation_id, item } = actionItem;
                       let actionItemSend = { propertyName: property_name, conversation_id };
+                      const locked = false; // locked rows are not rendered
                       return (
                         <tr key={id}>
                           <td style={{ whiteSpace: "pre-line" }}>
-                            {/* whiteSpace: 'pre-line' preserves the newline between date and time */}
-                            {formatDateTime(created_at)}
+                            <div className={locked ? 'blurred-content' : ''}>
+                              {formatDateTime(created_at)}
+                            </div>
                           </td>
                           <td>
-                            {property_name}
-                            <br />
-                            {actionItem?.guest_name ? actionItem?.guest_name : ""}
+                            <div className={locked ? 'blurred-content' : ''}>
+                              {property_name}
+                              <br />
+                              {actionItem?.guest_name ? actionItem?.guest_name : ""}
+                            </div>
                           </td>
-                          <td>{actionItem?.category ? actionItem?.category : ""}</td>
+                          <td>
+                            <div className={locked ? 'blurred-content' : ''}>
+                              {actionItem?.category ? actionItem?.category : ""}
+                            </div>
+                          </td>
                           <td className="">
-                            <div className="">{item}</div>
+                            <div className={locked ? 'blurred-content' : ''}>{item}</div>
                           </td>
-                          {selectedStatus === "completed" && <td style={{minWidth:'130px'}}>{formatCompletedBy(actionItem?.completed_by)}</td> /* 130px min width makes sure that "completed by" in the th is not split into two lines */}
+                          {selectedStatus === "completed" && (
+                            <td style={{minWidth:'130px'}}>
+                              <div className={locked ? 'blurred-content' : ''}>{formatCompletedBy(actionItem?.completed_by)}</div>
+                            </td>
+                          )}
                           <td className="text-center">
-                            {actionItemCompleting === id || getConversationLoading === id ? (
-                              <BoxLoader />
-                            ) : (
-                              <>
-                                <FaExternalLinkAlt style={{marginRight:'10px', cursor:'pointer'}} onClick={() => { handleOpenConversation(conversation_id, id, property_name); }} />
-                                <FaCircleCheck className="text-primary fs-6" style={{cursor:'pointer'}} onClick={() => { handleComplete(id); }} />
-                              </>
-                            )}
+                            <div className={locked ? 'blurred-content' : ''}>
+                              {actionItemCompleting === id || getConversationLoading === id ? (
+                                <BoxLoader />
+                              ) : (
+                                <>
+                                  <FaExternalLinkAlt style={{marginRight:'10px', cursor:'pointer'}} onClick={() => { if (!locked) handleOpenConversation(conversation_id, id, property_name); }} />
+                                  <FaCircleCheck className="text-primary fs-6" style={{cursor:'pointer'}} onClick={() => { if (!locked) handleComplete(id); }} />
+                                </>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
-              </>
+                {/* Visual representation of locked items */}
+                {lockedActionItems.length > 0 && (
+                  <div className="position-relative my-4">
+                    <table className="table text-white action-items-table mb-0" style={{filter:'blur(4px)', width:'100%'}}> {/* blurred table mimics layout */}
+                      <tbody>
+                        {lockedActionItems.slice(0,5).map((actionItem) => {
+                          const { id, created_at, property_name, item } = actionItem;
+                          return (
+                            <tr key={id} style={{ pointerEvents:'none' }}>
+                              <td style={{ whiteSpace: 'pre-line' }}>{formatDateTime(created_at)}</td>
+                              <td style={{paddingLeft:'30px'}}>{property_name}</td>
+                              <td style={{paddingLeft:'60px'}}>{actionItem?.category || ''}</td>
+                              <td style={{paddingLeft:'40px'}}>{item}</td>
+                              {selectedStatus === 'completed' && <td style={{paddingLeft:'30px'}}>{formatCompletedBy(actionItem?.completed_by)}</td>}
+                              <td></td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                    {/* Overlay upgrade prompt */}
+                    <div className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{pointerEvents:'auto'}}>
+                      <ActionItemsUpgrade onComparePlans={handleComparePlans} />
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
               <span className="d-flex justify-content-center align-items-center" style={{ height:'500px', color:"#FFF" }}>
                 No Data Yet

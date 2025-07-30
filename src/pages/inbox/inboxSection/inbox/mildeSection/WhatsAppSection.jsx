@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios, { all } from "axios";
 import "./index.css";
 import "./MildeSection.css";
@@ -8,6 +8,7 @@ import { timeFormat } from "../../../../../helper/commonFun";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import loaderGif from "../../../../../public/img/new_loader.gif";
 import { callSendWhatsAppMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
+import WhatsAppLocked from "./whatsApplocked/WhatsAppLocked";
 import avatar01 from "../../../../../public/img/Avatar-01.png";
 import avatar02 from "../../../../../public/img/Avatar-02.png";
 import avatar03 from "../../../../../public/img/Avatar-03.png";
@@ -37,8 +38,10 @@ const placeholderImg = "https://hostbuddylb.com/misc/chatBubbles.webp";
 const WhatsAppSection = ({
   allConversationData,
   updateConversationFromApi,
+  updateConversationLocal,
   updateSpecificConversation,
   propertyName,
+  subscriptionPlan,
 }) => {
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -58,6 +61,7 @@ const WhatsAppSection = ({
   const [hasWhatsAppIntegration, setHasWhatsAppIntegration] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [sendOptionsVisible, setSendOptionsVisible] = useState(false);
   const [conversationData, setConversationData] = useState({});
@@ -391,11 +395,17 @@ const WhatsAppSection = ({
       attachments: [],
       sender: "user",
       sendBy: "host",
+      rawDate: currentTime // Add rawDate for date separator functionality,
     };
 
-    // Add the message immediately to show it in the UI
+    // Add the message to the local state for immediate display
     setWhatsAppMessages(prevMessages => [...prevMessages, optimisticMessage]);
     setInputValue("");
+
+    // Add the message to the main conversation state in the parent component
+    if (updateConversationLocal) {
+      updateConversationLocal(conversation_id, optimisticMessage, "whatsapp");
+    }
 
     try {
       const sendMsgResponse = await callSendWhatsAppMessageApi(
@@ -424,7 +434,7 @@ const WhatsAppSection = ({
         ToastHandle("Error sending WhatsApp message", "danger");
       }
     } catch (error) {
-      // Remove the optimistic message on error and restore input
+      // Remove the optimistic message and restore input on error
       setWhatsAppMessages(prevMessages =>
         prevMessages.filter(msg => msg.id !== optimisticMessage.id)
       );
@@ -1114,6 +1124,11 @@ const WhatsAppSection = ({
   const toolTipMessage = getTooltipMessage();
 
   const guestName = allConversationData?.guest_name || "Guest";
+
+  // Render WhatsAppLocked for pro and mount plans
+  if (/pro|mount/i.test(subscriptionPlan)) {
+    return <WhatsAppLocked onComparePlans={() => window.location.href = '/setting/subscription'} />;
+  }
 
   return (
     <div

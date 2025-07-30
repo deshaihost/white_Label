@@ -5,6 +5,7 @@ import HelpCircleIcon from "./thumbsComponent/icons/help_circle.svg";
 import HostBuddyIcon from "./thumbsComponent/icons/hostBuddy_icon.svg";
 import dummyPropertyImg from "../../../../../../public/img/dummyPropertyImg.png";
 
+
 const MessageInbox = ({
   key,
   text,
@@ -21,9 +22,8 @@ const MessageInbox = ({
   reservationId
 }) => {
   const { typeThumbs, messageId } = feedBackDataGet ? feedBackDataGet : {};
-  const { timeFormatConvert, sendBy } = messageData;
-  const messageDetails = messageData?.text;
-  const { id, justification, response } = messageDetails;
+  const { timeFormatConvert, sendBy, id, justification, response } = messageData;
+  
   const message_id = id ? id : [];
   const sendByFormatted =
     sendBy === "hostbuddy" ? "HostBuddy" : sendBy === "host" ? "Host" : sendBy;

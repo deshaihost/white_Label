@@ -2,7 +2,7 @@
 /* FYI page background is: #000212 */
 
 .settings-integrations {
-  padding: 20px;
+  padding: 42px;
 }
 
 .settings-integrations .grey-text {
@@ -41,29 +41,29 @@
   flex: 0 0 400px; /* Don't grow, don't shrink, stay at 400px */
   height: auto;
   min-height: 300px;
-  border: 2px solid #045ce9;
+  border: 2px solid rgba(40, 44, 72, 1);
   border-radius: 8px;
   padding: 20px;
   cursor: pointer;
-  background-color: #DDD;
-  box-shadow: 0 0 20px 5px rgba(0, 0, 200, 0.5); /* parameters: x-offset, y-offset, blur-radius, spread-radius, color */
-  transition: transform 0.3s, box-shadow 0.3s;
+  background-color: rgba(23, 25, 41, 1);
+  /* box-shadow: 0 0 20px 5px rgba(0, 0, 200, 0.5); parameters: x-offset, y-offset, blur-radius, spread-radius, color */
+  /* transition: transform 0.3s, box-shadow 0.3s; */
 }
 
-.settings-integrations .partner-tile:hover {
+/* .settings-integrations .partner-tile:hover {
   transform: translateY(-10px);
-  box-shadow: 0 0 20px 8px rgba(0, 0, 200, 0.8); /* parameters: x-offset, y-offset, blur-radius, spread-radius, color */
-}
+  box-shadow: 0 0 20px 8px rgba(0, 0, 200, 0.8);
+} */
 
 .settings-integrations .partner-logo {
-  width: 100px;
+  width: 35%;
   height: auto;
   margin-bottom: 20px;
 }
 
 .settings-integrations .partner-tile p {
   font-size: 16px;
-  color: #333; /* Dark text color */
+  color: rgba(204, 204, 204, 1); /* Updated description text color */
   text-align: center;
 }
 
@@ -117,4 +117,75 @@
   border: 1px dashed #555;
   border-radius: 8px;
   margin-top: 20px;
+}
+
+/* Main Tabs Bar Styles */
+.settings-integrations .main-tabs-bar {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #22253a;
+  background: #05061a;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  height: 38px;
+}
+.settings-integrations .main-tab-btn {
+  background: none;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 400;
+  margin-right: 24px;
+  padding: 0 0 8px 0;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+.settings-integrations .main-tab-btn.active {
+  color: #6b8aff;
+}
+.settings-integrations .main-tab-btn.active::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 2px 2px 0 0;
+}
+.settings-integrations .main-tab-btn:hover {
+  color: #6b8aff;
+}
+
+.settings-integrations .table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.settings-integrations .table th,
+.settings-integrations .table td {
+  padding-left: 32px;
+  padding-right: 32px;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.settings-integrations .table th:first-child,
+.settings-integrations .table td:first-child {
+  text-align: left;
+}
+
+.settings-integrations .table th:nth-child(2),
+.settings-integrations .table td:nth-child(2) {
+  text-align: center;
+}
+
+.settings-integrations .table th:last-child,
+.settings-integrations .table td:last-child {
+  text-align: right;
+  padding-right: 0;
+  margin-right: 24px;
 }

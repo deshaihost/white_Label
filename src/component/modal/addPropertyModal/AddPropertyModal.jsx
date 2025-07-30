@@ -6,7 +6,7 @@ import AddNewPropertyModal from "../addNewPropertyModal/AddNewPropertyModal";
 import "./AddPropertyModal.css";
 
 // Shown when user clicks "Add property" if they have no active subscription. Asks user to select a plan and number of properties to add, with Submit button which opens a confirmation modal (AddNewPropertyModal)
-function AddPropertyModal({ handleClose, show, subscription_data }) {
+function AddPropertyModal({ handleClose, show, subscription_data, user_data }) {
   const [numProperties, setNumProperties] = useState("");
   const [subscriptionPlan, setSubscriptionPlan] = useState("");
   const [billingPeriod, setBillingPeriod] = useState(""); // new state for billing period
@@ -31,7 +31,12 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
     if (!numProperties) { formErrors.num_properties = ErrorMessageKey.THIS_FIELD_REQUIRED; }
     else if (numProperties < 1) { formErrors.num_properties = ErrorMessageKey.PLEASE_SELECT_OR_ENTER_HOW_MANY_PROPERTIES_WANT_TO_ADD; }
     else if (numProperties > 1000) { formErrors.num_properties = ErrorMessageKey.ONLY_FIVETY_PROPERTIES_CAN_BE_ADDED; }
-    if (!subscriptionPlan) { formErrors.subscription_plan = ErrorMessageKey.PLEASE_ONE_PLAN_SELECT; }
+    
+    // Only validate subscription plan if not a Mount partner
+    if (user_data?.partner !== 'mount' && !subscriptionPlan) { 
+      formErrors.subscription_plan = ErrorMessageKey.PLEASE_ONE_PLAN_SELECT; 
+    }
+    
     setErrors(formErrors);
     return Object.keys(formErrors).length === 0;
   };
@@ -39,13 +44,19 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
   const onSubmit = (event) => {
     event.preventDefault();
     if (validateForm()) {
+      const planData = {
+        num_properties: numProperties,
+        subscription_plan: user_data?.partner === 'mount' ? 'Mount' : subscriptionPlan
+      };
+      
+      // Only include billing period if not a Mount partner
+      if (user_data?.partner !== 'mount') {
+        planData.period = billingPeriod;
+      }
+      
       setConfirmPropertyModel({ 
         status: true, 
-        items: { 
-          num_properties: numProperties, 
-          subscription_plan: subscriptionPlan,
-          period: billingPeriod // pass billing period to confirmation modal
-        } 
+        items: planData
       });
       handleClose("addPropertyClose");
     }
@@ -75,24 +86,32 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                       <>{ErrorMessageShow(errors.num_properties)}</>
                     )}
                   </div>
-                  <div className="form-design mt-3 text-start">
-                    <label htmlFor="">Select Plan</label>
-                    <select id="selected_plan_stripe" name="selected_plan_stripe" className="form-control" onChange={handlePlanChange} value={subscriptionPlan}>
-                      <option value="" disabled style={{color: 'rgb(180, 180, 180)'}}>-- Please Select --</option>
-                      <option value="HostBuddy Pro">HostBuddy Pro</option>
-                      <option value="HostBuddy Elite">HostBuddy Elite</option>
-                      <option value="HostBuddy Ultimate">HostBuddy Ultimate</option>
-                    </select>
-                  </div>
-                  {/* New Billing Period Selector */}
-                  <div className="form-design mt-3 text-start">
-                    <label htmlFor="">Select Billing Period</label>
-                    <select id="billing_period" name="billing_period" className="form-control" onChange={handleBillingPeriodChange} value={billingPeriod}>
-                      <option value="" disabled style={{color: 'rgb(180, 180, 180)'}}>-- Please Select --</option>
-                      <option value="annual">Annual (17% off)</option>
-                      <option value="monthly">Monthly</option>
-                    </select>
-                  </div>
+                  
+                  {/* Only show plan selection if not a Mount partner */}
+                  {user_data?.partner !== 'mount' && (
+                    <div className="form-design mt-3 text-start">
+                      <label htmlFor="">Select Plan</label>
+                      <select id="selected_plan_stripe" name="selected_plan_stripe" className="form-control" onChange={handlePlanChange} value={subscriptionPlan}>
+                        <option value="" disabled style={{color: 'rgb(180, 180, 180)'}}>-- Please Select --</option>
+                        <option value="HostBuddy Pro">HostBuddy Pro</option>
+                        <option value="HostBuddy Elite">HostBuddy Elite</option>
+                        <option value="HostBuddy Ultimate">HostBuddy Ultimate</option>
+                      </select>
+                    </div>
+                  )}
+                  
+                  {/* Only show billing period selection if not a Mount partner */}
+                  {user_data?.partner !== 'mount' && (
+                    <div className="form-design mt-3 text-start">
+                      <label htmlFor="">Select Billing Period</label>
+                      <select id="billing_period" name="billing_period" className="form-control" onChange={handleBillingPeriodChange} value={billingPeriod}>
+                        <option value="" disabled style={{color: 'rgb(180, 180, 180)'}}>-- Please Select --</option>
+                        <option value="annual">Annual (17% off)</option>
+                        <option value="monthly">Monthly</option>
+                      </select>
+                    </div>
+                  )}
+                  
                   {errors.subscription_plan && (
                     <>{ErrorMessageShow(errors.subscription_plan)}</>
                   )}
@@ -129,12 +148,12 @@ function AddPropertyModal({ handleClose, show, subscription_data }) {
                     </button>
                   </div>
                   <div className="form-design mt-2 text-center">
-                    <a
-                      href="/pricing"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: "#007bff", textDecoration: "none" }}
-                    >
+                    {user_data?.partner == 'mount' && (
+                      <p style={{ color:'white', marginBottom:'10px', marginTop:'10px', fontSize:'14px' }}>
+                        Interested in full AI guest communication management?
+                      </p>
+                    )}
+                    <a href="/pricing" target="_blank" rel="noopener noreferrer" style={{ color: "#007bff", textDecoration: "none" }}>
                       View our plans and pricing
                     </a>
                   </div>

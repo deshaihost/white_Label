@@ -6,6 +6,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions, stateEmptyActions } from "../../redux/actions";
 import { Tooltip } from "react-tooltip";
+import { getSubscriptionStatus } from "../../helper/Authorized";
 
 import MultiSelect from "../../component/multiSelect/multiSelect";
 
@@ -16,6 +17,10 @@ const AccountNotificationSection = () => {
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const propertyNamesList = Object.keys(userDataGet?.property_data || {});
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
+
+  // Get user subscription plan
+  const subscriptionPlan = getSubscriptionStatus(userDataGet).plan || '';
+  const isMountPlan = subscriptionPlan?.toLowerCase().includes("mount");
 
   // Initialize user_contact_options with all possible contact channels set to empty objects
   let all_possible_contact_channels = ["email", "sms", "slack", "whatsapp", "webhook"];
@@ -134,7 +139,11 @@ const AccountNotificationSection = () => {
 
   const showNewRecipientFields = () => {
     setNewRecipient({ firstName: "", channel: "", RecipientAddress: "", timing: "", time: "", consent_checked: false });
-    setSelectedCategories(categoryOptions); // Populate with all category options by default
+    if (!isMountPlan) {
+      setSelectedCategories(categoryOptions); // Populate with all category options by default
+    } else {
+      setSelectedCategories([]); // Set empty for Mount plan
+    }
     setSelectedProperties(propertyOptions); // Populate with all property options by default
     setEditingRecipientIndex(null);
   };
@@ -186,7 +195,7 @@ const AccountNotificationSection = () => {
     }
 
     // Validate categories and properties
-    if (!selectedCategories || selectedCategories.length === 0) {
+    if (!isMountPlan && (!selectedCategories || selectedCategories.length === 0)) {
       ToastHandle("Please select at least one category", "danger");
       return;
     }
@@ -197,7 +206,11 @@ const AccountNotificationSection = () => {
     }
 
     // Before adding the new recipient, assign categories from selectedCategories
-    newRecipient.categories = selectedCategories.map((option) => option.value);
+    if (!isMountPlan) {
+      newRecipient.categories = selectedCategories.map((option) => option.value);
+    } else {
+      newRecipient.categories = []; // Set empty array for Mount plan
+    }
     newRecipient.properties = selectedProperties.map((option) => option.value); // Add properties
 
     // Convert time field to time_of_day for API consistency
@@ -231,11 +244,15 @@ const AccountNotificationSection = () => {
   const editRecipient = (index) => {
     const recipientToEdit = recipients[index];
     setNewRecipient(recipientToEdit);
-    setSelectedCategories(
-      recipientToEdit.categories.map((category) =>
-        categoryOptions.find((option) => option.value === category)
-      )
-    );
+    if (!isMountPlan) {
+      setSelectedCategories(
+        recipientToEdit.categories.map((category) =>
+          categoryOptions.find((option) => option.value === category)
+        )
+      );
+    } else {
+      setSelectedCategories([]);
+    }
     setSelectedProperties(  // Add properties handling for edit
       recipientToEdit.properties?.map((property) =>
         propertyOptions.find((option) => option.value === property)
@@ -454,10 +471,12 @@ const AccountNotificationSection = () => {
             </div>
 
             <div className="row" style={{ marginTop: "20px" }}>
-              <div className="col input_group">
-                <label htmlFor="Categories" >Categories</label>
-                <MultiSelect id="Categories" options={categoryOptions} selectedOptions={selectedCategories} setSelectedOptions={setSelectedCategories} placeholder="Select categories..."/>
-              </div>
+              {!isMountPlan && (
+                <div className="col input_group">
+                  <label htmlFor="Categories" >Categories</label>
+                  <MultiSelect id="Categories" options={categoryOptions} selectedOptions={selectedCategories} setSelectedOptions={setSelectedCategories} placeholder="Select categories..."/>
+                </div>
+              )}
 
               <div className="col input_group">
                 <label htmlFor="Properties" >Properties</label>

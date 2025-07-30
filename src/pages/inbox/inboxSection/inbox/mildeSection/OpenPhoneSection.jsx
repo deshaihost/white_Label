@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios, { all } from "axios";
 import "./index.css";
 import "./MildeSection.css";
@@ -8,6 +8,7 @@ import { timeFormat } from "../../../../../helper/commonFun";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import loaderGif from "../../../../../public/img/new_loader.gif";
 import { callSendOpenPhoneMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
+import OpenPhoneLocked from "./openPhoneLocked/OpenPhoneLocked";
 import avatar01 from "../../../../../public/img/Avatar-01.png";
 import avatar02 from "../../../../../public/img/Avatar-02.png";
 import avatar03 from "../../../../../public/img/Avatar-03.png";
@@ -37,8 +38,10 @@ const placeholderImg = "https://hostbuddylb.com/misc/chatBubbles.webp";
 const OpenPhoneSection = ({
   allConversationData,
   updateConversationFromApi,
+  updateConversationLocal,
   updateSpecificConversation,
   propertyName,
+  subscriptionPlan,
 }) => {
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -58,6 +61,7 @@ const OpenPhoneSection = ({
   const [hasOpenPhoneIntegration, setHasOpenPhoneIntegration] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [sendOptionsVisible, setSendOptionsVisible] = useState(false);
   const [conversationData, setConversationData] = useState({});
@@ -184,11 +188,84 @@ const OpenPhoneSection = ({
   // Sync local OpenPhone messages state with conversation data
   useEffect(() => {
     if (allConversationData?.openphone_messages) {
-      setOpenPhoneMessages(allConversationData.openphone_messages);
+      // Process messages to add rawDate for date separator functionality
+      const processedMessages = allConversationData.openphone_messages.map(message => ({
+        ...message,
+        rawDate: new Date(message.time || message.time_utc)
+      }));
+      setOpenPhoneMessages(processedMessages);
     } else {
       setOpenPhoneMessages([]);
     }
   }, [allConversationData?.openphone_messages]);
+
+  // Helper functions for date separator (same as MildeSection)
+  function formatDateForSeparator(date) {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return "";
+    }
+
+    const today = new Date();
+    const todayDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+
+    // Check if the date is today
+    if (
+      date.getDate() === todayDate.getDate() &&
+      date.getMonth() === todayDate.getMonth() &&
+      date.getFullYear() === todayDate.getFullYear()
+    ) {
+      return "Today";
+    }
+
+    // Check if it's yesterday
+    const yesterdayDate = new Date(todayDate);
+    yesterdayDate.setDate(todayDate.getDate() - 1);
+
+    if (
+      date.getDate() === yesterdayDate.getDate() &&
+      date.getMonth() === yesterdayDate.getMonth() &&
+      date.getFullYear() === yesterdayDate.getFullYear()
+    ) {
+      return "Yesterday";
+    }
+
+    // For older dates, show Month Day format
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+
+    return `${month} ${day}`;
+  }
+
+  // Function to check if two dates are from the same day
+  function isSameDay(date1, date2) {
+    if (!(date1 instanceof Date) || !(date2 instanceof Date)) {
+      return false;
+    }
+    return (
+      date1.getDate() === date2.getDate() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getFullYear() === date2.getFullYear()
+    );
+  }
 
   // Process OpenPhone messages to add date formatting
   useEffect(() => {
@@ -406,11 +483,18 @@ const OpenPhoneSection = ({
       attachments: [],
       sender: "user",
       sendBy: "host",
+      rawDate: currentTime // Add rawDate for date separator functionality,
     };
 
-    // Add the message immediately to show it in the UI
+    // Add the message to the local state for immediate display
     setOpenPhoneMessages(prevMessages => [...prevMessages, optimisticMessage]);
+    
     setInputValue("");
+
+    // Add the message to the main conversation state in the parent component
+    if (updateConversationLocal) {
+      updateConversationLocal(conversation_id, optimisticMessage, "openphone");
+    }
 
     try {
       const sendMsgResponse = await callSendOpenPhoneMessageApi(
@@ -439,7 +523,7 @@ const OpenPhoneSection = ({
         ToastHandle("Error sending OpenPhone message", "danger");
       }
     } catch (error) {
-      // Remove the optimistic message on error and restore input
+      // Remove the optimistic message and restore input on error
       setOpenPhoneMessages(prevMessages =>
         prevMessages.filter(msg => msg.id !== optimisticMessage.id)
       );
@@ -531,6 +615,11 @@ const OpenPhoneSection = ({
         textareaRef.current.scrollHeight + "px";
     }
   };
+
+  // Render OpenPhoneLocked for pro and mount plans
+  if (/pro|mount/i.test(subscriptionPlan)) {
+    return <OpenPhoneLocked onComparePlans={() => window.location.href = "/setting/subscription"} />;
+  }
 
   const handleClickOutside = (event) => {
     // Close generate options menu when clicking outside

@@ -6,6 +6,9 @@ import ToastHandle from "../../helper/ToastMessage";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions, stateEmptyActions } from "../../redux/actions";
+import InboxUpgrade from "./inbox_Upgrade/InboxUpgrade";
+import { getSubscriptionStatus } from "../../helper/Authorized";
+import LockIcon from "../inbox/inboxSection/preferences/icons/lock.svg";
 
 // Location & Time Zone Section of account page
 const AccountContactSection = () => {
@@ -21,6 +24,11 @@ const AccountContactSection = () => {
   const [confirmationCode, setConfirmationCode] = useState(""); // This is the user's input for confirmation code
   const [codeSentFor, setCodeSentFor] = useState(""); // This is the contact that the code was sent for, if any
   const [slackOauthCode, setSlackOauthCode] = useState(""); // Code received from Slack OAuth as part of the OAuth flow
+  const [showUpgradePopup, setShowUpgradePopup] = useState(false); // Controls the InboxUpgrade popup
+
+  // Determine if the user has a Pro plan
+  const subscriptionData = getSubscriptionStatus(userDataGet);
+  const isProPlanUser = subscriptionData.plan && subscriptionData.plan.toLowerCase().includes('pro');
 
   // Define the different sections of contact information. Will need to manually update this as we add new contact types
   const contact_sections = {'email':{'title':'Email Addresses', 'singular':'Email Address'}, 'sms':{'title':'Phone Numbers', 'singular':'Phone Number'}, 'whatsapp':{'title':'WhatsApp Contacts', 'singular':'WhatsApp Number'}, 'slack':{'title':'Slack Accounts', 'singular':'Slack Account'}, 'webhook':{'title':'Webhook Endpoints','singular':'Webhook URL'}};
@@ -161,6 +169,15 @@ const AccountContactSection = () => {
   };
 
   const showAddFields = (section) => {
+    // Check if user has HostBuddy Pro plan and is trying to add WhatsApp, Slack, or Webhook
+    const subscription_data = getSubscriptionStatus(userDataGet);
+    const isProPlan = subscription_data.plan && subscription_data.plan.toLowerCase().includes('pro');
+    
+    if (isProPlan && (section === 'whatsapp' || section === 'slack' || section === 'webhook')) {
+      setShowUpgradePopup(true);
+      return;
+    }
+
     let updatedNewContacts;
     if (section === 'sms') {
       updatedNewContacts = { ...newContacts, [section]: { type: '', name: '', address: '', confirmed: false, consent_checked: false } };
@@ -263,12 +280,66 @@ const AccountContactSection = () => {
     <div className="account-content location-section">
       <h3 className="mb-5">Contact Information</h3>
 
+      {/* InboxUpgrade Popup */}
+      {showUpgradePopup && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 9999
+        }}>
+          <div style={{
+            position: 'relative',
+            maxWidth: '90%',
+            maxHeight: '90%',
+            overflow: 'auto'
+          }}>
+            <button
+              onClick={() => setShowUpgradePopup(false)}
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                background: 'none',
+                border: 'none',
+                fontSize: '24px',
+                color: '#fff',
+                cursor: 'pointer',
+                zIndex: 10000
+              }}
+            >
+              ×
+            </button>
+            <InboxUpgrade onClose={() => setShowUpgradePopup(false)} />
+          </div>
+        </div>
+      )}
+
       <form action="">
 
         {Object.keys(contact_sections).map((section, index) => (
           <>
             {/* <hr className="in-section-divider" /> */}
-            <h4 className="fs-14 mb-4 mt-5">{contact_sections[section].title}</h4>
+            <h4
+              className="fs-14 mb-4 mt-5 d-flex align-items-center"
+              style={{ cursor: isProPlanUser && (section === 'whatsapp' || section === 'slack' || section === 'webhook') ? 'pointer' : 'default' }}
+              onClick={() => {
+                if (isProPlanUser && (section === 'whatsapp' || section === 'slack' || section === 'webhook')) {
+                  setShowUpgradePopup(true);
+                }
+              }}
+            >
+              {isProPlanUser && (section === 'whatsapp' || section === 'slack' || section === 'webhook') && (
+                <img src={LockIcon} alt="lock" style={{ width: '14px', marginRight: '6px' }} />
+              )}
+              {contact_sections[section].title}
+            </h4>
 
             {/* Existing contact information */}
             <div className="table-responsive">

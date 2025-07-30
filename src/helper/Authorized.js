@@ -133,12 +133,20 @@ export const getSubscriptionStatus = (userData) => {
 
     return { plan: planName, props_allowed: propsAllowed, status: subscrStatus };
   }
+// "HostBuddy ultimate"
+// "HostBuddy pRo"
+// "HostBuddy ELiTe"
+// "HostBuddy mOUNT"
 
   // If no plan name, check if trial applies
   if ('trial_ends' in userData) {
     const trialEnds = new Date(userData.trial_ends);
     if (new Date() < trialEnds) {
-      return { plan: 'trial', props_allowed: 1000, status: subscrStatus };
+      if (userData?.partner === 'mount') {
+        return { plan: 'mount_trial', props_allowed: 1000, status: subscrStatus };
+      } else {
+        return { plan: 'trial', props_allowed: 1000, status: subscrStatus };
+      }
     }
     return { plan: 'trial_over', props_allowed: 0, status: subscrStatus };
   }

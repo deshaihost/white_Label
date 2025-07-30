@@ -37,6 +37,7 @@ const Signup = () => {
   // State for discount code field behavior
   const [isDiscountFieldVisible, setIsDiscountFieldVisible] = useState(false);
   const [isDiscountFieldEditable, setIsDiscountFieldEditable] = useState(false);
+  const [partnerValue, setPartnerValue] = useState(""); // If partner is specified in the URL, send that value to the backend to be stored with the newly created user data
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
   const password = useRef({});
@@ -48,6 +49,7 @@ const Signup = () => {
     const queryParams = new URLSearchParams(location.search);
     const discountCodeQuery = queryParams.get("discount_code");
     const allowDiscountQuery = queryParams.get("allow_discount");
+    const partnerQuery = queryParams.get("partner");
 
     if (discountCodeQuery) {
       setIsDiscountFieldVisible(true);
@@ -61,6 +63,10 @@ const Signup = () => {
       setIsDiscountFieldVisible(false);
       // Optionally clear the value if the field is hidden
       // setValue("discountCode", undefined); 
+    }
+
+    if (partnerQuery) {
+      setPartnerValue(partnerQuery);
     }
   }, [location.search, setValue]);
 
@@ -77,6 +83,10 @@ const Signup = () => {
 
     if (isDiscountFieldVisible) {
       payload.discount_code = data.discountCode;
+    }
+
+    if (partnerValue) {
+      payload.partner = partnerValue;
     }
 
     dispatch(
@@ -295,7 +305,7 @@ const Signup = () => {
               {/*
               <div className="footer-auth">
                 <div>
-                  By continuing, you agree to the <a href="/termsof-service" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>
+                  By continuing, you agree to the <a href="/termsofservice" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>
                 </div>
               </div>
               */}

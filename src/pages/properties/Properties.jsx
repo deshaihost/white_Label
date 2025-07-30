@@ -325,7 +325,7 @@ const Properties = () => {
         </div>
       </div>
       <BillingPortalModel handleClose={handleModelClose} show={model?.billingPortal}/>
-      <AddPropertyModal handleClose={handleModelClose} show={model?.addProperty} subscription_data={subscription_data}/>
+      <AddPropertyModal handleClose={handleModelClose} show={model?.addProperty} subscription_data={subscription_data} user_data={userData}/>
       <NoWorkPlanModal handleNoPlanClose={handleModelClose} showNoPlan={model?.pmsIntegration}/>
       <DisconnectIntegration handleNoPlanClose={handleModelClose} showNoPlan={model?.disconnectIntegration}/>
       <ImportPropertiesModal handleNoPlanClose={handleModelClose} showNoPlan={model?.importProperties} setNewPropertiesAdded={setNewPropertiesAdded} userData={userData}/>
