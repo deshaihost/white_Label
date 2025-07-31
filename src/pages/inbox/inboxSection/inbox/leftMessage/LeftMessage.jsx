@@ -95,6 +95,7 @@ const LeftMessage = ({
   currentView,
   setAllowConvIdQuery,
   setUnreadPmsCount,
+  setUnreadOpenPhoneCount,
   sidebarClicked,
   sidebarOpen,
   contactType,
@@ -223,20 +224,33 @@ const LeftMessage = ({
     }
   }, [contactType]);
 
-  useEffect(() => {
-    if (searchInputValue.trim() === "") {
-      setFilteredConversations(allConversations);
-    } else {
-      const filtered = allConversations.filter(
-        (convo) =>
-          convo.guest_name &&
-          convo.guest_name
-            .toLowerCase()
-            .includes(searchInputValue.toLowerCase())
-      );
-      setFilteredConversations(filtered);
-    }
-  }, [allConversations, searchInputValue]);
+  // In the useEffect that processes conversations before display:
+useEffect(() => {
+  if (searchInputValue.trim() === "") {
+    // Sort conversations by timestamp (newest first)
+    const sortedConversations = [...allConversations]
+      .filter(convo => 
+        convo.reservation_id || 
+        convo.contact_type === "External Contact" ||
+        (!convo.reservation_id && convo.conversation_id?.includes("openphone:"))
+      )
+      .sort((a, b) => {
+        // Sort by timestamp (newest first)
+        return getConversationTimestamp(b) - getConversationTimestamp(a);
+      });
+    
+    setFilteredConversations(sortedConversations);
+  } else {
+    // Same filter logic but with sorting
+    const filtered = allConversations
+      .filter(/* your existing filter logic */)
+      .sort((a, b) => {
+        return getConversationTimestamp(b) - getConversationTimestamp(a);
+      });
+    
+    setFilteredConversations(filtered);
+  }
+}, [allConversations, searchInputValue]);
 
   // When loadNextBatch is defined (i.e. component mount), initialize the event listener that tracks scrolling (so we can load more convos whenever the user scrolls to the bottom)
   useEffect(() => {
@@ -294,39 +308,105 @@ const LeftMessage = ({
     return type;
   };
 
-  const openConversationHandle = (data, id) => {
-    console.log("Opening conversation:", id, data);
-    // Enhanced cache-aware conversation selection
-    // Check if this conversation already has complete message data before forcing an API call
-    const hasCompleteMessageData =
-      data.messages &&
-      Array.isArray(data.messages) &&
-      data.messages.length > 0 &&
-      data.messages.every((msg) => msg.sender && msg.text && msg.time);
-
-    // If we have complete data, mark it as already processed to avoid unnecessary API calls
-    const shouldSkipApiCall = hasCompleteMessageData;
-
-    setSelectedConvo({
-      ...data,
-      _apiCallMade: shouldSkipApiCall, // Only skip API call if we have complete data
-      _has_complete_local_data: hasCompleteMessageData, // Flag to help with cache decisions
+  // Add this function to the component or to a utility file
+const getConversationTimestamp = (conversation) => {
+  // First try to use last_message_time_utc if available
+  if (conversation.last_message_time_utc) {
+    return new Date(conversation.last_message_time_utc).getTime();
+  }
+  
+  // For OpenPhone conversations, check openphone_messages
+  if (conversation.openphone_messages && conversation.openphone_messages.length > 0) {
+    const messages = [...conversation.openphone_messages].sort((a, b) => {
+      return new Date(b.time || b.time_utc || 0) - new Date(a.time || a.time_utc || 0);
     });
-    setSelectedConversationId(id); // This is used to highlight the selected conversation
-    markConversationAsOpened(data.conversation_id, data.property_name);
-
-    // Update the unread message count for the PMS tab
-    if (data.messages) {
-      const unreadCount = data.messages.filter((msg) => !msg.read).length;
-      setUnreadPmsCount && setUnreadPmsCount(unreadCount);
+    if (messages[0].time || messages[0].time_utc) {
+      return new Date(messages[0].time || messages[0].time_utc).getTime();
     }
-
-    // On mobile, navigate to messages view
-    if (window.innerWidth < 992) {
-      setCurrentView("messages");
+  }
+  
+  // For regular messages
+  if (conversation.messages && conversation.messages.length > 0) {
+    const messages = [...conversation.messages].sort((a, b) => {
+      return new Date(b.time || 0) - new Date(a.time || 0);
+    });
+    if (messages[0].time) {
+      return new Date(messages[0].time).getTime();
     }
-  };
+  }
+  
+  // Fallback to conversation_start_time or current time
+  return conversation.conversation_start_time 
+    ? new Date(conversation.conversation_start_time).getTime() 
+    : new Date().getTime();
+};
 
+  const openConversationHandle = (data, id) => {
+  console.log("Opening conversation:", id, data);
+  
+  // Enhanced cache-aware conversation selection
+  const hasCompleteMessageData =
+    data.messages &&
+    Array.isArray(data.messages) &&
+    data.messages.length > 0 &&
+    data.messages.every((msg) => msg.sender && msg.text && msg.time);
+
+  const shouldSkipApiCall = hasCompleteMessageData;
+
+  // First, mark the conversation as read in the local state
+  // This is important for UI updates to show correct badge counts
+  const updatedData = { ...data };
+  
+  // Handle different message types
+  if (data.conversation_id?.includes("openphone:") || 
+      (data.channel && data.channel.toUpperCase().includes("OPENPHONE"))) {
+    // Mark OpenPhone messages as read
+    if (updatedData.openphone_messages && Array.isArray(updatedData.openphone_messages)) {
+      updatedData.openphone_messages = updatedData.openphone_messages.map(msg => ({
+        ...msg,
+        read: true
+      }));
+      
+      // Update the global OpenPhone unread count
+      setUnreadOpenPhoneCount && setUnreadOpenPhoneCount(prevCount => {
+        const unreadCount = data.openphone_messages?.filter(msg => !msg.read)?.length || 0;
+        return Math.max(0, prevCount - unreadCount);
+      });
+    }
+    
+  } else {
+    // Handle regular PMS messages
+    if (updatedData.messages && Array.isArray(updatedData.messages)) {
+      updatedData.messages = updatedData.messages.map(msg => ({
+        ...msg,
+        read: true
+      }));
+      
+      // Update the global PMS unread count
+      setUnreadPmsCount && setUnreadPmsCount(prevCount => {
+        const unreadCount = data.messages?.filter(msg => !msg.read)?.length || 0;
+        return Math.max(0, prevCount - unreadCount);
+      });
+    }
+  }
+  
+  // Set as opened in the state (this affects the visual appearance in the list)
+  updatedData.opened = true;
+  
+  setSelectedConvo({
+    ...updatedData,
+    _apiCallMade: shouldSkipApiCall,
+    _has_complete_local_data: hasCompleteMessageData,
+  });
+  
+  setSelectedConversationId(id); // This is used to highlight the selected conversation
+  markConversationAsOpened(data.conversation_id, data.property_name);
+
+  // On mobile, navigate to messages view
+  if (window.innerWidth < 992) {
+    setCurrentView("messages");
+  }
+};
   // Modify the useEffect that auto-selects the first conversation
   useEffect(() => {
     const isMobile = window.innerWidth < 992;
@@ -406,7 +486,7 @@ const LeftMessage = ({
         // Keep conversations that:
         // 1. Have a reservation_id (these are original PMS conversations)
         // 2. Don't have the _isCompleteConversation flag (these weren't added via phone search)
-        return convo.reservation_id || !convo._isCompleteConversation;
+        return convo.reservation_id || !convo._isCompleteConversation || convo.contact_type === "External Contact";
       });
 
       // Re-fetch fresh conversations to restore original order
@@ -1416,9 +1496,12 @@ const LeftMessage = ({
                           </div>
                           {!opened && (
                             <span className="message-counter">
-                              {(messages &&
-                                messages.filter((msg) => !msg.read).length) ||
-                                1}
+                              {message.conversation_id?.includes("openphone:") || 
+       (channel && channel.toUpperCase().includes("OPENPHONE")) 
+        ? (message.openphone_messages && 
+           message.openphone_messages.filter(msg => !msg.read).length) || 1
+        : (messages &&
+           messages.filter((msg) => !msg.read).length) || 1}
                             </span>
                           )}
                         </div>

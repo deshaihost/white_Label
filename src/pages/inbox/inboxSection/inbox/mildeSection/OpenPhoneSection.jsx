@@ -481,8 +481,9 @@ const OpenPhoneSection = ({
       rawDate: currentTime,
       timeFormatConvert: timeFormat(currentTime.toISOString()),
       attachments: [],
-      sender: "user",
+      sender: "host",
       sendBy: "host",
+      read: true,
       rawDate: currentTime // Add rawDate for date separator functionality,
     };
 
@@ -493,7 +494,10 @@ const OpenPhoneSection = ({
 
     // Add the message to the main conversation state in the parent component
     if (updateConversationLocal) {
-      updateConversationLocal(conversation_id, optimisticMessage, "openphone");
+      updateConversationLocal(conversation_id, {
+        ...optimisticMessage, 
+        is_sent_by_you: true,
+      },"openphone");
     }
 
     try {

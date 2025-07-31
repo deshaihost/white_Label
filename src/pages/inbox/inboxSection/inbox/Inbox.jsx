@@ -1121,6 +1121,7 @@ const Inbox = ({
           ...updatedConversationData.conversations[0],
           _apiCallMade: true, // Mark as loaded
           _isUpdate: selectedConversation?.conversation_id === conversationId, // Flag to indicate this is an update, not a new selection
+          _isCompleteConversation: true, // Flag to indicate this conversation has complete data
         }; // Cache the updated conversation data with enhanced metadata
         setConversationCache((prevCache) => {
           const newCache = new Map(prevCache);
@@ -1129,29 +1130,52 @@ const Inbox = ({
             _cached_at: Date.now(),
             _has_complete_data: true,
             _from_update_api: true,
+            _isCompleteConversation: true, // Flag to indicate this conversation has complete data
           });
           return newCache;
         });
 
+        // Check if the conversation exists in the current list
+      const conversationExists = conversations.some(
+        conv => conv.conversation_id === conversationId
+      );
+
+      // If it doesn't exist in the list (which can happen after disassociation),
+      // we need to add it
+      if (!conversationExists) {
+        console.log("Adding newly disassociated conversation to list:", retrievedConversation);
+        setConversations(prevConversations => 
+          [retrievedConversation, ...prevConversations]
+        );
+      } else {
+        // Otherwise, update the existing conversation
         let updatedConversations = conversations.map((conversation) => {
           if (conversation.conversation_id === conversationId) {
             return retrievedConversation;
           }
           return conversation;
         });
-        updatedConversations =
-          sortConversationsByMostRecentMessage(updatedConversations);
-        setConversations(updatedConversations);
-
-        // If the conversation to be updated is selectedConversation (the one currently being viewed), update that too
-        if (selectedConversation.conversation_id === conversationId) {
-          setSelectedConversation(retrievedConversation);
+        
+        // Make sure conversations remain sorted by most recent message
+        try {
+          updatedConversations = sortConversationsByMostRecentMessage(updatedConversations);
+        } catch (error) {
+          console.error("Error sorting conversations:", error);
         }
+        
+        setConversations(updatedConversations);
       }
-    } catch (error) {
-      console.error("Error fetching conversation:", error);
+
+      // If the conversation to be updated is selectedConversation (the one currently being viewed), update that too
+      if (selectedConversation.conversation_id === conversationId) {
+        setSelectedConversation(retrievedConversation);
+      }
     }
-  }; // Update our conversation state with a new list returned by the API. This does NOT call the API: it takes the API data as a parameter. Also handles detecting when there are no updates from the API and making sure the previous state gets copied over.
+  } catch (error) {
+    console.error("Error fetching conversation:", error);
+  }
+};
+ // Update our conversation state with a new list returned by the API. This does NOT call the API: it takes the API data as a parameter. Also handles detecting when there are no updates from the API and making sure the previous state gets copied over.
   const updateConversationsWithApiData = (apiConversationData) => {
     let newConversationState = apiConversationData.map((conversation) => {
       const conversationId = conversation["conversation_id"];
@@ -1541,6 +1565,7 @@ const Inbox = ({
               currentView={currentView}
               setAllowConvIdQuery={setAllowConvIdQuery}
               setUnreadPmsCount={setUnreadPmsCount}
+              setUnreadOpenPhoneCount={setUnreadOpenPhoneCount}
               sidebarClicked={sidebarClicked}
               sidebarOpen={sidebarOpen}
               contactType={contactType}
@@ -2884,6 +2909,7 @@ const Inbox = ({
                 currentView={currentView}
                 setAllowConvIdQuery={setAllowConvIdQuery}
                 setUnreadPmsCount={setUnreadPmsCount}
+                setUnreadOpenPhoneCount={setUnreadOpenPhoneCount}
                 sidebarClicked={sidebarClicked}
                 sidebarOpen={sidebarOpen}
               />
