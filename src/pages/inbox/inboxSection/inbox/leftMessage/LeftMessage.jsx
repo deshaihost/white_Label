@@ -241,9 +241,37 @@ useEffect(() => {
     
     setFilteredConversations(sortedConversations);
   } else {
-    // Same filter logic but with sorting
+    // Filter and sort conversations based on search input
+    const inputLower = searchInputValue.toLowerCase();
+    const inputClean = searchInputValue.replace(/^\+/, ''); // Remove leading + for phone matching
+    
     const filtered = allConversations
-      .filter(/* your existing filter logic */)
+      .filter(convo => {
+        // Guest name matching
+        const guestNameMatch = convo.guest_name?.toLowerCase().includes(inputLower);
+        
+        // Phone number matching
+        const phoneFromId = convo.conversation_id?.split(":")[1] || "";
+        const phoneMatch = 
+          phoneFromId === searchInputValue ||
+          phoneFromId === inputClean ||
+          phoneFromId.includes(searchInputValue) ||
+          phoneFromId.includes(inputClean) ||
+          convo.phone_numbers?.some(p => 
+            p === searchInputValue || 
+            p === inputClean ||
+            p.includes(searchInputValue) ||
+            p.includes(inputClean)
+          );
+        
+        // Name matching for external contacts
+        const nameMatch = convo.name?.toLowerCase().includes(inputLower);
+        
+        // Conversation ID matching
+        const conversationIdMatch = convo.conversation_id?.toLowerCase().includes(inputLower);
+        
+        return guestNameMatch || phoneMatch || nameMatch || conversationIdMatch;
+      })
       .sort((a, b) => {
         return getConversationTimestamp(b) - getConversationTimestamp(a);
       });
