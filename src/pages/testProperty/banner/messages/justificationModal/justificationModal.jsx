@@ -6,13 +6,13 @@ import { ReactComponent as JustificationLogo } from "./icons/justificationLogo.s
 // Utility function to format markdown-like text
 const formatMarkdownText = (text) => {
   if (!text) return "";
-
+  
   // Process the text in stages
   let formattedText = text;
-
+  
   // Handle bold text (convert **text** to <span style="font-family: 'Samsung Sharp Sans Bold';">text</span>)
   formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<span style="font-family: \'Samsung Sharp Sans Bold\';">$1</span>');
-
+  
   // Split into lines to handle bullet points properly
   const lines = formattedText.split('\n');
   const processedLines = lines.map(line => {
@@ -23,11 +23,11 @@ const formatMarkdownText = (text) => {
     }
     return line;
   });
-
+  
   // Join lines back together, wrapping lists in <ul> tags
   let result = '';
   let inList = false;
-
+  
   processedLines.forEach(line => {
     if (line.startsWith('<li>')) {
       if (!inList) {
@@ -40,24 +40,23 @@ const formatMarkdownText = (text) => {
         result += '</ul>';
         inList = false;
       }
-      // Avoid adding <br/> if the line is empty or just whitespace after processing
-      if (line.trim().length > 0) {
+      // Avoid adding <br/> if the line is empty or just whitespace, or if it's the last line before a list starts
+      const nextLineIsListItem = processedLines[processedLines.indexOf(line) + 1]?.startsWith('<li>');
+      if (line.trim() !== '' && !nextLineIsListItem) {
         result += line + '<br/>';
-      } else if (result.endsWith('<br/>')) {
-         // Prevent multiple <br/> for consecutive empty lines
-      } else {
-         result += '<br/>'; // Add break for intentional empty lines
+      } else if (line.trim() !== '') {
+         result += line; // Add line without <br/> if it's followed by a list item
       }
     }
   });
-
+  
   if (inList) {
     result += '</ul>';
   }
-
-  // Remove trailing <br/> if it exists
+  
+  // Remove trailing <br/> if present
   if (result.endsWith('<br/>')) {
-    result = result.substring(0, result.length - 5);
+    result = result.slice(0, -5);
   }
 
   return result;
@@ -69,7 +68,6 @@ const JustificationModal = ({
   propertyName,
   justification,
 }) => {
-  console.log("jus:", justification);
   const modalRef = useRef(null);
 
   // Handle click outside to close
@@ -100,7 +98,7 @@ const JustificationModal = ({
             </div>
           </div>
           <h5 className="custom-modal-title heading-xsmall">
-            Hey HostBuddy, where did this response come from?
+            Hey HostBuddy , where did this response come from?
           </h5>
           <button
             className="custom-modal-close"
@@ -155,25 +153,45 @@ const JustificationModal = ({
         {/* Add style tag for markdown list styling */}
         <style jsx="true">{`
           .markdown-list {
-            margin-left: 40px; /* Adjust as needed based on logo size and desired indent */
+            margin-left: 0px; 
             list-style-type: disc;
-            padding-left: 20px; /* Add padding for list items */
-            color: white; /* Ensure list text color matches */
-            font-family: 'Samsung Sharp Sans Medium'; /* Match font */
-          }
-          .markdown-content ul {
+            padding-left: 20px; 
+            color: rgba(166, 169, 178, 1); 
+            font-family: 'Samsung Sharp Sans Medium'; 
             margin-top: 10px;
             margin-bottom: 10px;
           }
+          .markdown-content ul {
+            margin-top: 8px;
+            margin-bottom: 8px;
+          }
           .markdown-list li {
-            margin-bottom: 15px; /* Spacing between list items */
+            margin-bottom: 12px; 
+            line-height: 1.5;
+            color: rgba(166, 169, 178, 1);
+          }
+          /* Source reference styling */
+          .source-reference {
+            color: rgba(166, 169, 178, 0.8);
+            font-style: italic;
+            font-size: 14px;
+            font-family: 'Samsung Sharp Sans Medium';
           }
           /* Ensure spans within the content inherit the base styles */
           .markdown-content span {
              font-family: inherit; /* Default to parent font */
+             color: inherit;
           }
           .markdown-content span[style*="Samsung Sharp Sans Bold"] {
              font-family: 'Samsung Sharp Sans Bold'; /* Override for bold */
+             color: rgba(166, 169, 178, 1);
+          }
+          /* Better spacing for justified content */
+          .justification-text {
+            line-height: 1.6;
+          }
+          .justification-text p {
+            margin-bottom: 8px;
           }
         `}</style>
       </div>

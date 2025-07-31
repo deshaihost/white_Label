@@ -807,7 +807,7 @@ const MildeSection = ({
         currentConversationIdRef.current
       ) {
         const newMessages = allConversationData.messages.map((messageList) => {
-          const { sender, text, time, attachments, id } = messageList;
+          const { sender, text, time, attachments, id, justification, response } = messageList;
           let timeFormatConvert = timeFormat(time);
           return {
             text: typeof text === 'string' ? text : text?.text || "",
@@ -819,6 +819,8 @@ const MildeSection = ({
             id,
             timeFormatConvert,
             attachments,
+            justification, // Include justification property
+            response, // Include response property
           };
         });
         setConversationData(allConversationData);
@@ -1024,8 +1026,8 @@ const MildeSection = ({
 
   // Scroll handler to show lock when at top and there are older messages
   const handleMessageListScroll = (e) => {
-    // Don't show locked messages UI for Ultimate plan
-    if (isUltimate) {
+    // Don't show locked messages UI for Ultimate plan or trial users
+    if (isUltimate || subscriptionPlan === "trial") {
       setShowLocked(false);
       return;
     }
@@ -1069,7 +1071,7 @@ const MildeSection = ({
             style={{ marginBottom: "0px" }}
             onScroll={handleMessageListScroll}
           >
-            {showLocked && !isUltimate && (
+            {showLocked && !isUltimate && subscriptionPlan !== "trial" && (
               <ConversationHistoryLocked />
             )}
             {recentMessages?.map((message, index) => {

@@ -267,8 +267,8 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
   const planRaw = getSubscriptionStatus(userData).plan || '';
   const plan = planRaw.toLowerCase();
   console.log('DEBUG planRaw:', planRaw, 'plan:', plan, 'userData:', userData);
-  const isDelayEditable = plan.includes('elite') || plan.includes('ultimate');
-  const isToneEditable = plan.includes('elite') || plan.includes('ultimate');
+  const isDelayEditable = plan.includes('elite') || plan.includes('ultimate') || plan.includes('trial');
+  const isToneEditable = plan.includes('elite') || plan.includes('ultimate') || plan.includes('trial');
 
   return (
     <div className="setting_index_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "40px 60px "}}>

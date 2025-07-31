@@ -27,10 +27,10 @@ const UsersTab = (userData) => {
   const getMaxUsersAllowed = (plan) => {
     if (!plan) return 0;
     const planLower = plan.toLowerCase();
-    if (planLower.includes('ultimate')) return Infinity;
+    if (planLower.includes('ultimate') || planLower.includes('trial')) return Infinity;
     if (planLower.includes('elite')) return 3;
     if (planLower.includes('pro')) return 1;
-    if (planLower === 'trial') return 3; // Trial users get Elite benefits
+    // Trial users get Elite benefits
     return 0; // Default for other plans or no plan
   };
 
