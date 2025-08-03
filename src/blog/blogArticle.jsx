@@ -15,6 +15,7 @@ import meetTheCoFounders from './blogArticles/meet_the_co_founders';
 import strMarket from './blogArticles/str_market_4-22';
 import hostfullyGuidebooksArticle from './blogArticles/hostfully_guidebooks_blog';
 import inboxBlogArticle from './blogArticles/inbox_blog';
+import openPhoneBlogArticle from './blogArticles/openPhone_blog';
 
 const BlogArticle = () => {
   const { article_name } = useParams(); // Get the article_name from the path param
@@ -34,7 +35,8 @@ const BlogArticle = () => {
     "meet_the_co_founders": meetTheCoFounders,
     "str_market_4-22": strMarket,
     "hostfully_guidebooks_blog": hostfullyGuidebooksArticle,
-    "inbox_blog": inboxBlogArticle
+    "inbox_blog": inboxBlogArticle,
+    "openphone_blog": openPhoneBlogArticle
   };
 
   useEffect(() => {
