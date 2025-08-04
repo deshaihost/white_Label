@@ -4,7 +4,7 @@ import Loader from '../../../../helper/Loader';
 import { getSubscriptionStatus } from '../../../../helper/Authorized';
 import { Link } from "react-router-dom";
 
-const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalSubmit, email, role, setEmail, setRole}) => {
+const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalSubmit, email, role, setEmail, setRole, currentSubUserCount, maxUsersAllowed}) => {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -15,16 +15,56 @@ const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalS
   };
 
   // Check user's subscription plan and determine if they can invite users
-  const subscription_plan = getSubscriptionStatus(userData?.userData).plan;
+  // Use getSubscriptionStatus from Authorized.js to get the plan
+   const subscription_plan = getSubscriptionStatus(userData?.userData).plan;
+ 
+
+  console.log( "sub debug", subscription_plan);
   
-  // Determine if user can invite users based on plan
+  // Determine if user can invite users based on plan and current count
   const canInviteUsers = (plan) => {
-    if (!plan) return false;
+    if (!plan) return false; // No plan = no invites allowed
     const planLower = plan.toLowerCase();
-    return planLower.includes('pro') || planLower.includes('elite') || planLower === 'trial';
+    
+    // Ultimate and Trial plans - always allow invites
+    if (planLower.includes('ultimate') || planLower.includes('trial')) return true;
+    
+    // For Elite plan: allow if sub-users is less than 3
+    if (planLower.includes('elite')) {
+      return currentSubUserCount < 3;
+    }
+    
+    // For Pro plan: allow if sub-users is less than 1  
+    if (planLower.includes('pro')) {
+      return currentSubUserCount < 1;
+    }
+    
+    return false;
+  };
+  
+  // Check if user should see upgrade prompt
+  const shouldShowUpgrade = (plan) => {
+    if (!plan) return true; // No plan = show subscribe link
+    const planLower = plan.toLowerCase();
+    
+    // Ultimate and Trial - never show upgrade
+    if (planLower.includes('ultimate') || planLower.includes('trial')) return false;
+    
+    // For Elite: show upgrade if sub-users >= 3
+    if (planLower.includes('elite')) {
+      return currentSubUserCount >= 3;
+    }
+    
+    // For Pro: show upgrade if sub-users >= 1
+    if (planLower.includes('pro')) {
+      return currentSubUserCount >= 1;
+    }
+    
+    return true;
   };
   
   const userHasPermission = canInviteUsers(subscription_plan);
+  const showUpgradePrompt = shouldShowUpgrade(subscription_plan);
 
   return (
     <Modal show={show} size="lg" onHide={onClose} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -46,7 +86,7 @@ const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalS
             <option value="read_only">Read Only</option>
           </select>
 
-          {userHasPermission ? (
+          {userHasPermission && !showUpgradePrompt ? (
             !sendInviteIsLoading ? (
               <button className="btn btn-primary" onClick={handleModalSubmit} style={{display:'block', margin:'40px auto 0 auto', borderRadius:'50px', padding:'10px 20px'}}>
                 Send Invite
@@ -57,16 +97,20 @@ const InviteModal = ({show, onClose, userData, sendInviteIsLoading, handleModalS
           ) : (
             <div style={{ textAlign: 'center', marginTop: '40px' }}>
               <p style={{ color: 'rgb(255,165,0)', fontSize: '16px' }}>
-                {subscription_plan ? 
-                  'You must be on the Pro plan or higher to invite users.' : 
-                  'You must subscribe to invite users.'
+                {!subscription_plan ? 
+                  'You must subscribe to invite users.' :
+                  subscription_plan.toLowerCase().includes('pro') ?
+                    'You have reached the maximum users for Pro plan. Upgrade to Elite or Ultimate to add more users.' :
+                  subscription_plan.toLowerCase().includes('elite') ?
+                    'You have reached the maximum users for Elite plan (3 sub-users allowed). Upgrade to Ultimate for unlimited users.' :
+                    'You must be on the Elite plan or Ultimate to invite users.'
                 }
               </p>
-              {subscription_plan ? (
-                <Link to="/setting/subscription">Upgrade Your Subscription</Link>
-              ) : (
+              {!subscription_plan ? (
                 <Link to="/properties">Subscribe</Link>
-              )}
+              ) : !subscription_plan.toLowerCase().includes('ultimate') && !subscription_plan.toLowerCase().includes('trial') ? (
+                <Link to="/setting/subscription">Upgrade Your Subscription</Link>
+              ) : null}
             </div>
           )}
 
