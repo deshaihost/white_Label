@@ -17,6 +17,7 @@ const meet_the_co_founders_thumbnail = "https://i.postimg.cc/8sgVdssK/Headshots-
 const str_market_thumbnail = "https://hostbuddylb.com/blog/str_market_4-22/Official%20STR%20Market%20Logo.webp";
 const hostfully_guidebooks_thumbnail = "https://hostbuddylb.com/blog/hostfully_guidebooks/Blog%20Header%20(19).webp";
 const inbox_blog_thumbnail = "https://storage.googleapis.com/frontend_media/blog/inbox_blog/10%20Minute%20Demo%20Thumbnail%20(1).webp";
+const openphone_blog_thumbnail = "https://hostbuddylb.com/blog/OpenPhone_Blog/10%20Minute%20Demo%20Thumbnail.webp";
 
 const BlogLandingPage = () => {
 
@@ -35,6 +36,7 @@ const BlogLandingPage = () => {
       { id:"meet_the_co_founders", title:"Meet the Co-Founders of HostBuddy AI", date:"Jan 08, 2025", img:meet_the_co_founders_thumbnail, description:"Discover the visionaries behind HostBuddy AI—Jay Ullrich, Sam Mayes, and Michael Boddie—redefining the short-term rental industry with cutting-edge technology and innovation." },      { id:"str_market_4-22", title:"STR Market: The Ultimate Marketplace for Short-Term Rental Success", date:"Apr 22, 2025", img:str_market_thumbnail, description:"Discover STR Market—the curated marketplace for short-term rental hosts. Find vetted tools, software, and products at exclusive discounts to boost your rental business." },
       { id:"hostfully_guidebooks_blog", title:"Integration Alert: Our New Hostfully Guidebook Integration Takes AI Messaging for Short Term Rentals to the Next Level", date:"May 30, 2025", img:hostfully_guidebooks_thumbnail, description:"Discover how our new Hostfully Digital Guidebook integration transforms AI messaging for short-term rentals with comprehensive knowledge bases and personalized guest responses." },
       { id:"inbox_blog", title:"The Future of Guest Communication is Here: Introducing the new HostBuddy Inbox 🚀", date:"June 11, 2025", img:inbox_blog_thumbnail, description:"Discover the most powerful inbox update in HostBuddy history. Complete UI transformation, WhatsApp integration, intelligent auto-tagging, and advanced filtering." },
+      { id:"openphone_blog", title:"Revolutionary AI Messaging for OpenPhone: Transform Your Short Term Rental Communication 📞", date:"Aug 03, 2025", img:openphone_blog_thumbnail, description:"Discover how OpenPhone AI messaging integration revolutionizes short-term rental communication with automatic phone number matching, call summaries, and unified messaging." },
     ];
 
     const reversedArticles = articles.reverse();

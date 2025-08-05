@@ -23,15 +23,15 @@ const UsersTab = (userData) => {
   const subscriptionStatus = getSubscriptionStatus(userData?.userData);
   const subscriptionPlan = subscriptionStatus.plan;
 
-  // Determine max users based on plan
+  // Determine max users based on plan (sub-users only, not including main user)
   const getMaxUsersAllowed = (plan) => {
-    if (!plan) return 0;
+    if (!plan) return 0; // No sub-users allowed for no plan
     const planLower = plan.toLowerCase();
     if (planLower.includes('ultimate') || planLower.includes('trial')) return Infinity;
-    if (planLower.includes('elite')) return 3;
-    if (planLower.includes('pro')) return 1;
-    // Trial users get Elite benefits
-    return 0; // Default for other plans or no plan
+    if (planLower.includes('elite')) return 3; // 3 additional sub-users
+    if (planLower.includes('pro')) return 1; // 1 additional sub-user
+    // Trial users get unlimited users
+    return 0; // Default: no sub-users for other plans
   };
 
   const maxUsersAllowed = getMaxUsersAllowed(subscriptionPlan);
@@ -131,12 +131,13 @@ const UsersTab = (userData) => {
   }, []);
 
   const handleInviteClick = () => {
-    // For Ultimate plan, always allow
+    // For Ultimate and Trial plans, always allow
     if (maxUsersAllowed === Infinity) {
       setIsModalOpen(true);
       return;
     }
-    // For other plans, restrict if at or above max
+    // For Elite and Pro plans, check if sub-user count exceeds limit  
+    // Elite: 3 sub-users allowed, Pro: 1 sub-user allowed
     if (currentSubUserCount >= maxUsersAllowed) {
       setIsUpgradeModalOpen(true);
     } else {
@@ -187,7 +188,7 @@ const UsersTab = (userData) => {
           <span style={{marginRight: '8px', letterSpacing: '0.5px'}}>
             {
               (() => {
-                // Calculate remaining user slots (not counting the main user)
+                // Calculate remaining sub-user slots (not counting the main user)
                 const remainingSlots = maxUsersAllowed - currentSubUserCount;
                 // Ensure we never show negative values
                 const remaining = Math.max(0, remainingSlots);
@@ -290,7 +291,19 @@ const UsersTab = (userData) => {
       <p style={{ fontSize: '16px', width: '100%', marginTop: '10px' }}>OPERATOR users can perform most actions on the account, including changing general settings. They cannot invite new users or update payment information.</p>
       <p style={{ fontSize: '16px', width: '100%', marginTop: '10px' }}>READ ONLY users can view all data in the account, but cannot make any changes. They cannot access the payment portal or view any payment/billing information.</p>
 
-      <InviteModal show={isModalOpen} onClose={() => setIsModalOpen(false)} userData={userData} sendInviteIsLoading={sendInviteIsLoading} handleModalSubmit={handleModalSubmit} email={inviteEmail} setEmail={setInviteEmail} role={inviteRole} setRole={setInviteRole} />
+      <InviteModal 
+        show={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        userData={userData} 
+        sendInviteIsLoading={sendInviteIsLoading} 
+        handleModalSubmit={handleModalSubmit} 
+        email={inviteEmail} 
+        setEmail={setInviteEmail} 
+        role={inviteRole} 
+        setRole={setInviteRole}
+        currentSubUserCount={currentSubUserCount}
+        maxUsersAllowed={maxUsersAllowed}
+      />
 
       {/* InboxUpgrade Modal */}
       {isUpgradeModalOpen && (
