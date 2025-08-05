@@ -4,7 +4,7 @@ import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const TriggersTrargetsConditionsModel = (props) => {
-  const { show, handleClose, submitHndle, turno_user_id, minut_user_id } = props;
+  const { show, handleClose, submitHndle, hasCleaningManagementIntegration, minut_user_id } = props;
   const { modelShow, modelShowType, formData, minutFormData, editFormData, typepAddEdit, editIndex, followUpIndex } = show;
 
   const [selectGet, setSelectGet] = useState({}); // Selected trigger/target/condition obj from the dataInput json
@@ -200,8 +200,8 @@ const TriggersTrargetsConditionsModel = (props) => {
           </>
         </div>
 
-        {!turno_user_id && (type === 'cleaning_complete') && (
-          <p className="settings-label" style={{marginTop:'10px', color:'rgb(255, 165, 0)', fontSize:'16px', textAlign:'center'}}>This event requires a Turno integration. <Link to="/setting/integrations">Click here</Link> to set one up.</p>
+        {!hasCleaningManagementIntegration && (type === 'cleaning_complete') && (
+          <p className="settings-label" style={{marginTop:'10px', color:'rgb(255, 165, 0)', fontSize:'16px', textAlign:'center'}}>This event requires a supported cleaning management software integration. <Link to="/setting/integrations">Click here</Link> to set one up.</p>
         )}
 
         {inputFiled?.length > 0 ? (
@@ -210,7 +210,7 @@ const TriggersTrargetsConditionsModel = (props) => {
               <button type="submit" className="bg_theme_btn mb-3" onClick={closeHndleModel}>
                 Cancel
               </button>
-              <button type="submit" className="bg_theme_btn mb-3" onClick={onSubmitHndle} disabled={!turno_user_id && (type === 'cleaning_complete')}>
+              <button type="submit" className="bg_theme_btn mb-3" onClick={onSubmitHndle} disabled={!hasCleaningManagementIntegration && (type === 'cleaning_complete')}>
                 Confirm
               </button>
             </div>
