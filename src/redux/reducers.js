@@ -68,3 +68,4 @@ export default (combineReducers({
   messageFeedBackReducer,
   removeSupportingDocsReducer
 }));
+

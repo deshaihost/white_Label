@@ -5,3 +5,4 @@ export const RegisterActionTypes = {
     REGISTER_ERROR: '@@auth/REGISTER_ERROR',
     REGISTER_RESET: '@@auth/REGISTER_RESET',
 };
+

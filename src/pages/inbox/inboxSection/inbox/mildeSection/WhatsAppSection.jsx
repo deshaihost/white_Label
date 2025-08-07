@@ -390,12 +390,11 @@ const WhatsAppSection = ({
       id: `temp-${Date.now()}`, // Temporary ID until API response
       messageDay: formatRelativeDate(currentTime.toISOString()),
       text: { text: messageToSend },
-      rawDate: currentTime,
+      rawDate: currentTime, // Add rawDate for date separator functionality
       timeFormatConvert: timeFormat(currentTime.toISOString()),
       attachments: [],
       sender: "user",
       sendBy: "host",
-      rawDate: currentTime // Add rawDate for date separator functionality,
     };
 
     // Add the message to the local state for immediate display

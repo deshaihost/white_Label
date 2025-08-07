@@ -1,6 +1,6 @@
 import React from 'react';
 import './WhatsAppLocked.css';
-import { ReactComponent as IntegrationsIcon } from './icons/Integrations Icon.svg';
+import IntegrationsIconSvg from './icons/Integrations Icon.svg';
 
 const WhatsAppLocked = ({ onComparePlans }) => {
   return (
@@ -30,7 +30,7 @@ const WhatsAppLocked = ({ onComparePlans }) => {
         </div> */}
         
         <div className="integrations-icon">
-          <IntegrationsIcon />
+          <img src={IntegrationsIconSvg} alt="Integrations Icon" />
         </div>
         
         <h3 className="locked-title">

@@ -7,6 +7,7 @@ import ToastHandle from "../../../../../helper/ToastMessage";
 import Loader from "../../../../../helper/Loader";
 import HostBuddyIcon from "./icons/hostbuddy_icon.svg";
 import ChevDownIcon from "./icons/chevDown_icon.svg";
+import XCloseSvg from "./icons/x-close.svg";
 import { getActiveToken } from "../../../../../helper/apiCore";
 import { set } from "react-hook-form";
 import { use } from "react";
@@ -1379,7 +1380,7 @@ const NonGuestRightSection = ({
             }
           >
             <img
-              src={require("./icons/x-close.svg").default}
+              src={XCloseSvg}
               alt="Close"
               style={{
                 width: "18px",

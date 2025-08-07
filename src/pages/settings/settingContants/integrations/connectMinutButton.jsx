@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import './Integrations.css';
 import axios from 'axios';
 import ToastHandle from "../../../../helper/ToastMessage";
+import MinutLogo from './Icons/Minut Logo.svg';
 
 const ConnectToMinut = () => {
   const dispatch = useDispatch();
@@ -83,7 +84,7 @@ const ConnectToMinut = () => {
 
   return (
     <div className="partner-tile" onClick={handleConnectClick}>
-      <img className="partner-logo" alt="Minut Logo" src={require('./Icons/Minut Logo.svg').default} />
+      <img className="partner-logo" alt="Minut Logo" src={MinutLogo} />
       <p>Connect with Minut’s insights platform to automate and personalize guest messaging for noise or occupancy events. streamline your operations, keep your property protected, and enhance guest experience.</p>
     </div>
   );

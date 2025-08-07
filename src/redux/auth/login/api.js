@@ -3,7 +3,7 @@ import * as URL from '../../../helper/apiEndPoint';
 
 const api = new APICore();
 
-function loginEndPoint(params: any): any {
+function loginEndPoint(params) {
     return api.create(URL.LOGIN, params);
 }
 
@@ -11,3 +11,4 @@ function loginEndPoint(params: any): any {
 export {
     loginEndPoint,
 };
+

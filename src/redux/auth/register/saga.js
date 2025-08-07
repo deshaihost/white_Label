@@ -40,15 +40,16 @@ function* stateEmptyFunction() {
   });
 }
 
-export function* acctionRegister(): any {
+export function* acctionRegister() {
   yield takeEvery(RegisterActionTypes.REGISTER_FIRST, registerFunction);
 }
-export function* acctionStateEmpty(): any {
+export function* acctionStateEmpty() {
   yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
 }
 
-function* registerSaga(): any {
+function* registerSaga() {
   yield all([fork(acctionRegister), fork(acctionStateEmpty)]);
 }
 
 export default registerSaga;
+

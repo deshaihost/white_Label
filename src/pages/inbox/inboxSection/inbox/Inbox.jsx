@@ -19,6 +19,10 @@ import { timeFormat } from "../../../../helper/commonFun";
 
 // Import the SVG icons
 import PmsIcon from "./mildeSection/message/icons/pms_icon.svg";
+import DetailsIconSvg from "./icons/Details_icon_for_right.svg";
+import UpdateIconSvg from "./mildeSection/message/icons/update_icon.svg";
+import DeleteRedIconSvg from "./mildeSection/message/icons/delete_red_icon.svg";
+import HelperIconNotesSvg from "./mildeSection/message/icons/helper_icon_notes.svg";
 import WhatsappIcon from "./mildeSection/message/icons/whatsapp_icon.svg";
 import OpenPhoneIcon from "./mildeSection/message/icons/openphone_icon.svg";
 import OpenIssueIcon from "./mildeSection/message/icons/openIssue_icon.svg";
@@ -1812,9 +1816,7 @@ const Inbox = ({
                       }
                     >
                       <img
-                        src={
-                          require("./icons/Details_icon_for_right.svg").default
-                        }
+                        src={DetailsIconSvg}
                         alt="Details"
                         style={{
                           width: "16px",
@@ -1966,9 +1968,6 @@ const Inbox = ({
                                 backgroundColor: "rgb(44 46 52)",
                                 color: "#A6A9B2",
                                 borderRadius: "50%",
-                                width: "18px",
-                                height: "18px",
-                                fontSize: "12px",
                                 width: "18px",
                                 height: "18px",
                                 fontSize: "12px",
@@ -2499,10 +2498,7 @@ const Inbox = ({
                                                       }}
                                                     >
                                                       <img
-                                                        src={
-                                                          require("./mildeSection/message/icons/update_icon.svg")
-                                                            .default
-                                                        }
+                                                        src={UpdateIconSvg}
                                                         alt="Update"
                                                         style={{
                                                           marginLeft: "8px",
@@ -2537,10 +2533,7 @@ const Inbox = ({
                                                       }}
                                                     >
                                                       <img
-                                                        src={
-                                                          require("./mildeSection/message/icons/delete_red_icon.svg")
-                                                            .default
-                                                        }
+                                                        src={DeleteRedIconSvg}
                                                         alt="Delete"
                                                         style={{
                                                           marginLeft: "8px",
@@ -2746,10 +2739,7 @@ const Inbox = ({
                                 }}
                               >
                                 <img
-                                  src={
-                                    require("./mildeSection/message/icons/helper_icon_notes.svg")
-                                      .default
-                                  }
+                                  src={HelperIconNotesSvg}
                                   alt="Help"
                                   style={{ width: "14px", height: "14px" }}
                                 />
@@ -3119,10 +3109,7 @@ const EditNoteModal = ({
                 }}
               >
                 <img
-                  src={
-                    require("./mildeSection/message/icons/helper_icon_notes.svg")
-                      .default
-                  }
+                  src={HelperIconNotesSvg}
                   alt="Help"
                   style={{ width: "14px", height: "14px" }}
                 />
@@ -3160,7 +3147,7 @@ const EditNoteModal = ({
             title="Delete note"
           >
             <img
-              src={require("./icons/delete_red_icon.svg").default}
+              src={DeleteRedIconSvg}
               alt="Delete"
               style={{
                 marginRight: "6px",

@@ -5,6 +5,8 @@ import { data } from "./data";
 import GcsUserdata from "./gcsData";
 import helpIcon from "../sideNavBarElements/sectionIndicatorComponent/navIcons/help-circle.svg";
 import Logo from "../../components/sideNavBarElements/logoComponent/logoComponentNav";
+import NewLogOutSvg from "../NavBarIcons/NewLogOut.svg";
+import ChevronLeftDoubleSvg from "../sideNavBarElements/sectionIndicatorComponent/navIcons/chevron-left-double.svg";
 import "../../components/sideNavBarElements/logoComponent/logoComponent.css";
 import { is_gcs_subaccount_user } from "../../../../pages/gcs/gcs_functionality";
 
@@ -359,10 +361,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                 {" "}
                 <span style={{ padding: "23px" }}>Back to users</span>
                 <img
-                  src={
-                    require("../sideNavBarElements/sectionIndicatorComponent/navIcons/chevron-left-double.svg")
-                      .default
-                  }
+                  src={ChevronLeftDoubleSvg}
                   alt="Back to users"
                   style={{
                     width: "20px",
@@ -408,7 +407,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
               }}
             >
               <img
-                src={require("../NavBarIcons/NewLogOut.svg").default}
+                src={NewLogOutSvg}
                 alt="Log Out"
                 style={{
                   width: "20px",
@@ -482,10 +481,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
               }}
             >
               <img
-                src={
-                  require("../sideNavBarElements/sectionIndicatorComponent/navIcons/chevron-left-double.svg")
-                    .default
-                }
+                src={ChevronLeftDoubleSvg}
                 alt="Collapse"
                 style={{
                   width: "20px",

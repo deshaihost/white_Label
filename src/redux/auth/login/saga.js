@@ -65,16 +65,17 @@ function* stateEmptyFunction() {
   });
 }
 
-export function* acctionLogin(): any {
+export function* acctionLogin() {
   yield takeEvery(LoginActionTypes.LOGIN_FIRST, loginFunction);
 }
 
-export function* acctionStateEmpty(): any {
+export function* acctionStateEmpty() {
   yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
 }
 
-function* loginSaga(): any {
+function* loginSaga() {
   yield all([fork(acctionLogin), fork(acctionStateEmpty)]);
 }
 
 export default loginSaga;
+

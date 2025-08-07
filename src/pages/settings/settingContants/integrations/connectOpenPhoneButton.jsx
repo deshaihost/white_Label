@@ -5,7 +5,7 @@ import './Integrations.css';
 import IntegrationCredentialsModal from './integrationCredentialsModal';
 import OpenPhonePng from './Icons/OpenPhone-Logo.png';
 import MountLogo from './Icons/Mount Logo.svg';
-import { ReactComponent as OpenphoneLogo } from './Icons/Openphone.svg';
+import OpenphoneLogoSvg from './Icons/Openphone.svg';
 
 const ConnectToOpenPhone = () => {
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +27,7 @@ const ConnectToOpenPhone = () => {
   return (
     <>
       <div className="partner-tile" onClick={handleConnectClick}>
-        <OpenphoneLogo className="partner-logo" style={{ width: '200px', height: '22px' }} />
+        <img src={OpenphoneLogoSvg} className="partner-logo" style={{ width: '200px', height: '22px' }} alt="OpenPhone Logo" />
         <p>Connect your OpenPhone Account to view your OpenPhone conversations in your inbox, and let HostBuddy automatically respond to your guests over OpenPhone.</p>
       </div>
       <IntegrationCredentialsModal show={showModal} handleClose={handleModalClose} onSuccess={handleSuccess} integration="openphone" title="Connect to OpenPhone"/>
