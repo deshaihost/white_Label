@@ -37,7 +37,21 @@ const IntegrationCredentialsModal = ({
           return (
             <Form.Group className="mb-3">
               <Form.Label>Enter your OpenPhone API key</Form.Label>
-              <Form.Control type="text" name="token" placeholder="Paste your token here" value={credentials.token} onChange={handleInputChange} />    
+              <Form.Control type="text" name="token" placeholder="Paste your token here" value={credentials.token} onChange={handleInputChange} />
+              <div className="mt-2">
+                <small className="text-muted">
+                  Don't use OpenPhone yet? Learn more and sign up{" "}
+                  <a 
+                    href="https://get.openphone.com/yxwod6h0hv4a" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ color: "#007bff", textDecoration: "none" }}
+                  >
+                    here
+                  </a>
+                  !
+                </small>
+              </div>
             </Form.Group>
           )
       // Add cases for future integrations here
