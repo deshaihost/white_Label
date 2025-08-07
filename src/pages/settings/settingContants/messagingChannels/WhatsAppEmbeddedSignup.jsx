@@ -27,7 +27,7 @@ const WhatsAppEmbeddedSignup = ({signupInProgress, setSignupInProgress, backendR
   };
 
 
-  const callBackendFinishSignupApi = async (phone_number, phone_number_id, waba_id) => {
+  const callBackendFinishSignupApi = async (phone_number, phone_number_id, waba_id, all_embedded_signup_data={}) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setBackendRegisterLoading(true);
@@ -38,7 +38,7 @@ const WhatsAppEmbeddedSignup = ({signupInProgress, setSignupInProgress, backendR
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
 
-      const response = await axios.post(`${baseUrl}/complete_whatsapp_signup`, {phone_number, phone_number_id, waba_id}, config);
+      const response = await axios.post(`${baseUrl}/complete_whatsapp_signup`, {phone_number, phone_number_id, waba_id, all_embedded_signup_data}, config);
 
       if (response.status === 200 || response.status === 201) {
         ToastHandle("Successfully completed signup", "success");
@@ -75,7 +75,7 @@ const WhatsAppEmbeddedSignup = ({signupInProgress, setSignupInProgress, backendR
             console.log('Finish event:', data);
             const {phone_number_id, waba_id} = data.data;
             //console.log('Phone number ID ', phone_number_id, ' WhatsApp business account ID ', waba_id);
-            callBackendFinishSignupApi(phoneNumberEntered, phone_number_id, waba_id);
+            callBackendFinishSignupApi(phoneNumberEntered, phone_number_id, waba_id, data.data);
             setSignupInProgress(false);
 
           // Handle cancellation

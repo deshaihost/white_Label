@@ -1595,7 +1595,7 @@ const OpenPhoneSection = ({
           ) : (
             // If no conversation is selected
             <p style={{ color: "#A6A9B2", fontSize: "16px" }}>
-              Select a conversation to view OpenPhone messages
+              You are connected to OpenPhone! As you message your guests on OpenPhone, you will now see those conversations in the HostBuddy inbox.
             </p>
           )}
         </div>

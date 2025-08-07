@@ -6,11 +6,11 @@ import "./smartTemplate.css";
 import "../../resources/upsells.css"
 import { prebuiltTemplates } from "./preBuiltTemplates";
 
-const PrebuiltTemplatesModal = ({modalShow, handleClose, saveTemplate, saveLoading, allPropertyNamesList, turno_user_id, minut_user_id}) => {
+const PrebuiltTemplatesModal = ({modalShow, handleClose, saveTemplate, saveLoading, allPropertyNamesList, hasCleaningManagementIntegration, minut_user_id}) => {
   const navigate = useNavigate();
 
   const handleTemplateClick = async (templateName, templateData) => {
-    if (!turno_user_id && templateName === "Property Ready message") {
+    if (!hasCleaningManagementIntegration && templateName === "Property Ready message") {
       navigate('/setting/integrations')
     } else {
       if (!saveLoading) {
@@ -38,8 +38,8 @@ const PrebuiltTemplatesModal = ({modalShow, handleClose, saveTemplate, saveLoadi
                   <div className="col-lg-11 col-12">
                     <label className="fs-5">{templateName !== "" ? templateName : <p className="text-danger">No Name</p>}</label>
                     <p className="settings-label">{templateDescription}</p>
-                    {templateName === "Property Ready message" && !turno_user_id && (
-                      <p className="settings-label" style={{marginTop:'10px', color:'rgb(255, 165, 0)'}}>This template requires a Turno integration. Click here to set one up.</p>
+                    {templateName === "Property Ready message" && !hasCleaningManagementIntegration && (
+                      <p className="settings-label" style={{marginTop:'10px', color:'rgb(255, 165, 0)'}}>This template requires a supported cleaning management software integration. Click here to set one up.</p>
                     )}
                   </div>
                 </div>
