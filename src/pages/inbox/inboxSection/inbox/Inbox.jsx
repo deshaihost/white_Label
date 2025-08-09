@@ -238,11 +238,6 @@ const responsiveStyles = `
     color: #676A73 !important;
   }
   
-  /* Action item textarea placeholder color */
-  .action-item-textarea::placeholder {
-    color: rgba(103, 106, 115, 1) !important;
-  }
-  
   /* Pin icon styles */
   .pin-icon-container {
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
@@ -2388,7 +2383,7 @@ const Inbox = ({
                           lineHeight: "1.4",
                           overflowY: "auto",
                         }}
-                        className="action-item-textarea"
+                        className="notes-textarea"
                         disabled={!selectedConversation?.conversation_id}
                       />
                       <div
