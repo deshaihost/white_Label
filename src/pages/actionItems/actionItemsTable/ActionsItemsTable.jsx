@@ -22,14 +22,14 @@ const ActionsItemsTable = () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setGetActionItemsLoading(true);
-  
+
     try {
       const config = {
         headers: { "X-API-Key": API_KEY },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
-      const response = await axios.get( `${baseUrl}/get_action_items?status=${status_query}&limit=200`, config);
-  
+      const response = await axios.get(`${baseUrl}/get_action_items?status=${status_query}&limit=200`, config);
+
       if (response.status === 200) {
         setActionItems(response.data.action_items);
       }
@@ -47,16 +47,16 @@ const ActionsItemsTable = () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setActionItemCompleting(actionItemId);
-  
+
     try {
       const config = {
         headers: { "X-API-Key": API_KEY },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
       const bodyData = { action_item_id: actionItemId };
-      const response = await axios.put( `${baseUrl}/complete_action_item`, bodyData, config);
-  
-      if (response.status === 200) { 
+      const response = await axios.put(`${baseUrl}/complete_action_item`, bodyData, config);
+
+      if (response.status === 200) {
         setActionItems(actionItems.filter((actionItem) => actionItem.id !== actionItemId)); // remove the completed action item from the state
       }
 
@@ -72,19 +72,19 @@ const ActionsItemsTable = () => {
     setGetConversationLoading(actionItemId);
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-  
+
     try {
       const config = {
         headers: { "X-API-Key": API_KEY },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
-      const body_data = { 'query_data': { 'conversation_id':conversationId } };
+      const body_data = { 'query_data': { 'conversation_id': conversationId } };
       console.log("body_data", body_data);
       console.log("conversationId", conversationId);
-      const response = await axios.post( `${baseUrl}/get_all_conversations`, body_data, config ); // it's a POST endpoint because it handles more complex queries
-  
+      const response = await axios.post(`${baseUrl}/get_all_conversations`, body_data, config); // it's a POST endpoint because it handles more complex queries
+
       if (response.status === 200) {
-        setConversationDataForModal({ conversationApiData:response.data.conversations[0], propertyName });
+        setConversationDataForModal({ conversationApiData: response.data.conversations[0], propertyName });
         setShowConversationTranscriptModal(true);
       }
       else { ToastHandle(response?.data?.error, "danger"); }
@@ -103,11 +103,10 @@ const ActionsItemsTable = () => {
 
   const createPropertiesName = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
   const allPropertyName = createPropertiesName !== undefined ? createPropertiesName : {};
-  const propertyOptions = Object.keys(allPropertyName).map((key) => ({ value:key, label:key })); // All property options as an array of objects, for the React Select component
+  const propertyOptions = Object.keys(allPropertyName).map((key) => ({ value: key, label: key })); // All property options as an array of objects, for the React Select component
 
   const [selectedStatus, setSelectedStatus] = useState("incomplete");
   const [selectedProperties, setSelectedProperties] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const [converSationId, setConverSationId] = useState("");
   const [propertyNameForConversationData, setPropertyNameForConversationData] = useState("");
@@ -121,6 +120,9 @@ const ActionsItemsTable = () => {
   const [getConversationLoading, setGetConversationLoading] = useState("");
   const [conversationDataForModal, setConversationDataForModal] = useState({});
   const [showConversationTranscriptModal, setShowConversationTranscriptModal] = useState(false);
+
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   // Apply the property name filter
   let filteredActionItems = actionItems?.filter((actionItem) => {
@@ -177,11 +179,51 @@ const ActionsItemsTable = () => {
     setSelectedProperties(selectedOptions);
   };
 
+  // Fetch categories from API
+  const fetchCategories = async () => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    try {
+      const response = await axios.get(
+        `${baseUrl}/get_action_item_categories`,
+        {
+          headers: {
+            "X-API-Key": API_KEY
+          }
+        }
+      );
+
+      if (response.status === 200) {
+        setCategories(response.data.categories);
+      } else {
+        console.error("Failed to load categories");
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
   // On page load, get user data and action items
   useEffect(() => {
     dispatch(getUserDataActions(false)); // false - don't need property data, just need the names
     callGetActionItemsApi('incomplete');
+    fetchCategories(); // Fetch categories when component loads
   }, []);
+
+  // Refresh categories periodically to catch any updates
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchCategories();
+    }, 60000); // Check for new categories every minute
+    
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Add this near the top of your component to debug state changes
+  useEffect(() => {
+    console.log("Categories state updated:", categories);
+  }, [categories]);
 
   // If property name is passed as a query param, set it as the selected property when the param populates
   useEffect(() => {
@@ -227,12 +269,6 @@ const ActionsItemsTable = () => {
   const lockedActionItems = filteredActionItems.filter(isLocked);
   const itemsToRender = unlockedActionItems;
 
-
-
-
-
-
-
   return (
     <>
       <Container>
@@ -246,14 +282,21 @@ const ActionsItemsTable = () => {
 
               {!isMountPlan && (
                 <div className="item-select">
-                  <select aria-label="Default select example" className="bg-dark form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                  <select
+                    aria-label="Default select example"
+                    className="bg-dark form-select"
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                  >
                     <option value="all">All Categories</option>
-                    <option value="CLEANLINESS">Cleanliness</option>
-                    <option value="MAINTENANCE">Maintenance</option>
-                    <option value="RESERVATION CHANGES">Reservation Changes</option>
-                    <option value="GUEST REQUESTS">Guest Requests</option>
-                    <option value="KNOWLEDGE BASE SUGGESTIONS">Knowledge Base Suggestions</option>
-                    <option value="OTHER">Other</option>
+                    {categories.map(category => (
+                      <option
+                        key={category.id || category.name}
+                        value={category.name}
+                      >
+                        {category.name} {/* Only display name, not definition */}
+                      </option>
+                    ))}
                   </select>
                 </div>
               )}
@@ -266,12 +309,13 @@ const ActionsItemsTable = () => {
                 </select>
               </div>
 
-              <div className="item-select" style={{width:"30%"}}>
-                <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false}/>
+              <div className="item-select" style={{ width: "30%" }}>
+                <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false} />
               </div>
 
             </div>
           </div>
+
           <div className="table-responsive" style={{ overflowY: "auto", marginBottom: "30px", position: 'relative' }}>
             {itemsToRender?.length > 0 ? (
               <div style={{ position: 'relative' }}>
@@ -314,7 +358,7 @@ const ActionsItemsTable = () => {
                             <div className={locked ? 'blurred-content' : ''}>{item}</div>
                           </td>
                           {selectedStatus === "completed" && (
-                            <td style={{minWidth:'130px'}}>
+                            <td style={{ minWidth: '130px' }}>
                               <div className={locked ? 'blurred-content' : ''}>{formatCompletedBy(actionItem?.completed_by)}</div>
                             </td>
                           )}
@@ -324,8 +368,8 @@ const ActionsItemsTable = () => {
                                 <BoxLoader />
                               ) : (
                                 <>
-                                  <FaExternalLinkAlt style={{marginRight:'10px', cursor:'pointer'}} onClick={() => { if (!locked) handleOpenConversation(conversation_id, id, property_name); }} />
-                                  <FaCircleCheck className="text-primary fs-6" style={{cursor:'pointer'}} onClick={() => { if (!locked) handleComplete(id); }} />
+                                  <FaExternalLinkAlt style={{ marginRight: '10px', cursor: 'pointer' }} onClick={() => { if (!locked) handleOpenConversation(conversation_id, id, property_name); }} />
+                                  <FaCircleCheck className="text-primary fs-6" style={{ cursor: 'pointer' }} onClick={() => { if (!locked) handleComplete(id); }} />
                                 </>
                               )}
                             </div>
@@ -338,17 +382,17 @@ const ActionsItemsTable = () => {
                 {/* Visual representation of locked items */}
                 {lockedActionItems.length > 0 && (
                   <div className="position-relative my-4">
-                    <table className="table text-white action-items-table mb-0" style={{filter:'blur(4px)', width:'100%'}}> {/* blurred table mimics layout */}
+                    <table className="table text-white action-items-table mb-0" style={{ filter: 'blur(4px)', width: '100%' }}> {/* blurred table mimics layout */}
                       <tbody>
-                        {lockedActionItems.slice(0,5).map((actionItem) => {
+                        {lockedActionItems.slice(0, 5).map((actionItem) => {
                           const { id, created_at, property_name, item } = actionItem;
                           return (
-                            <tr key={id} style={{ pointerEvents:'none' }}>
+                            <tr key={id} style={{ pointerEvents: 'none' }}>
                               <td style={{ whiteSpace: 'pre-line' }}>{formatDateTime(created_at)}</td>
-                              <td style={{paddingLeft:'30px'}}>{property_name}</td>
-                              <td style={{paddingLeft:'60px'}}>{actionItem?.category || ''}</td>
-                              <td style={{paddingLeft:'40px'}}>{item}</td>
-                              {selectedStatus === 'completed' && <td style={{paddingLeft:'30px'}}>{formatCompletedBy(actionItem?.completed_by)}</td>}
+                              <td style={{ paddingLeft: '30px' }}>{property_name}</td>
+                              <td style={{ paddingLeft: '60px' }}>{actionItem?.category || ''}</td>
+                              <td style={{ paddingLeft: '40px' }}>{item}</td>
+                              {selectedStatus === 'completed' && <td style={{ paddingLeft: '30px' }}>{formatCompletedBy(actionItem?.completed_by)}</td>}
                               <td></td>
                             </tr>
                           );
@@ -356,21 +400,21 @@ const ActionsItemsTable = () => {
                       </tbody>
                     </table>
                     {/* Overlay upgrade prompt */}
-                    <div className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{pointerEvents:'auto'}}>
+                    <div className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ pointerEvents: 'auto' }}>
                       <ActionItemsUpgrade onComparePlans={handleComparePlans} />
                     </div>
                   </div>
                 )}
               </div>
             ) : (
-              <span className="d-flex justify-content-center align-items-center" style={{ height:'500px', color:"#FFF" }}>
+              <span className="d-flex justify-content-center align-items-center" style={{ height: '500px', color: "#FFF" }}>
                 No Data Yet
               </span>
             )}
           </div>
         </div>
       </Container>
-      <AdditionalInformationModel show={modalShowAdditional} onHide={() => setModalShowAdditional(false)}/>
+      <AdditionalInformationModel show={modalShowAdditional} onHide={() => setModalShowAdditional(false)} />
       <ConversationTranscriptModal handleClose={() => setShowConversationTranscriptModal(false)} show={showConversationTranscriptModal} modalData={conversationDataForModal} />
     </>
   );
