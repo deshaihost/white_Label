@@ -122,9 +122,9 @@ export const getSubscriptionStatus = (userData) => {
       }
     }
 
-    // If user is on "The Works" (legacy plan) - interpret as Elite
+    // If user is on "The Works" (legacy plan) - interpret as Ultimate
     if (planName.toLowerCase().includes('works')) {
-      return { plan: 'HostBuddy Elite', props_allowed: propsAllowed, status: subscrStatus };
+      return { plan: 'HostBuddy Ultimate', props_allowed: propsAllowed, status: subscrStatus };
     }
 
     // For now: if user is on Pro or Elite and their account was created before the price change executed (Jul 5 2025): interpret their plan as Ultimate
