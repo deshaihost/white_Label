@@ -620,6 +620,10 @@ const Inbox = ({
   const [editingNoteText, setEditingNoteText] = useState("");
   const [editingNoteVisibleToHostbuddy, setEditingNoteVisibleToHostbuddy] =
     useState(false);
+
+  // Action item input state
+  const [newActionItem, setNewActionItem] = useState("");
+
   // Handle pending tab changes when view changes
   useEffect(() => {
     // If we have a pending tab change and we're in the messages view, apply it
@@ -977,7 +981,78 @@ const Inbox = ({
     } catch (error) {
       ToastHandle("Error completing action item", "danger");
     }
-  }; // No need to fetch global action items when the component mounts
+  };
+
+  // Function to call the API to add a new action item
+  const callAddActionItemApi = async (actionItemText) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
+      };
+
+      const bodyData = {
+        conversation_id: selectedConversation.conversation_id,
+        item: actionItemText,
+        category: "OTHERS",
+        guest_name: selectedConversation.guest_name || selectedConversation.name || "",
+        property_name: selectedConversation.property_name || "",
+        reservation_id: selectedConversation.reservation_id || "",
+        message_id: null, // Set to null as we're creating a manual action item
+      };
+
+      const response = await axios.post(
+        `${baseUrl}/add_action_item`,
+        bodyData,
+        config
+      );
+
+      if (response.status === 201) {
+        // Add the new action item to filteredActionItems state
+        const newActionItem = response.data.action_item;
+        setFilteredActionItems([newActionItem, ...filteredActionItems]);
+
+        // Update the selectedConversation with the new action item
+        if (selectedConversation && selectedConversation.action_items) {
+          const updatedActionItems = [newActionItem, ...selectedConversation.action_items];
+          setSelectedConversation({
+            ...selectedConversation,
+            action_items: updatedActionItems,
+            _apiCallMade: selectedConversation._apiCallMade,
+          });
+
+          // Also update the conversation in the conversations list
+          if (conversations && conversations.length > 0) {
+            const updatedConversations = conversations.map((convo) => {
+              if (convo.conversation_id === selectedConversation.conversation_id) {
+                return {
+                  ...convo,
+                  action_items: updatedActionItems,
+                };
+              }
+              return convo;
+            });
+            setConversations(updatedConversations);
+          }
+        }
+
+        // Clear the input
+        setNewActionItem("");
+        ToastHandle("Action item added successfully", "success");
+      } else {
+        ToastHandle(response?.data?.error || "Failed to add action item", "danger");
+      }
+    } catch (error) {
+      ToastHandle("Error adding action item", "danger");
+    }
+  };
+
+  // No need to fetch global action items when the component mounts
   // since we're now showing conversation-specific action items
   // When the activeTab changes to 'openIssue', ensure we have the latest action items from the selected conversation only
   useEffect(() => {
@@ -2095,15 +2170,24 @@ const Inbox = ({
                     height: "100%",
                   }}
                 >
-                  {" "}
                   <div
-                    className="action-items-container"
                     style={{
                       height: "100%",
-                      overflowY: "auto",
-                      padding: "5px",
+                      display: "flex",
+                      flexDirection: "column",
+                      backgroundColor: "#0F1117",
                     }}
                   >
+                    {/* Action Items List - Scrollable area */}
+                    <div
+                      className="action-items-container"
+                      style={{
+                        flex: 1,
+                        overflowY: "auto",
+                        padding: "5px",
+                        backgroundColor: "#0F1117",
+                      }}
+                    >
                     {/* Render action items from the selected conversation */}
                     {[]
                       .concat(filteredActionItems || [])
@@ -2256,6 +2340,101 @@ const Inbox = ({
                         <p>No open issues found for this conversation</p>
                       </div>
                     ) : null}
+                    </div>
+
+                    {/* Action Item Input Area - Fixed at bottom */}
+                    <div
+                      style={{
+                        border: "1px solid #222",
+                        padding: "8px 8px",
+                        backgroundColor: "#17191F",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <textarea
+                        value={newActionItem}
+                        onChange={(e) => setNewActionItem(e.target.value)}
+                        onKeyDown={(e) => {
+                          // Submit on Enter without Shift key
+                          if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            if (
+                              newActionItem.trim() &&
+                              selectedConversation?.conversation_id
+                            ) {
+                              callAddActionItemApi(newActionItem);
+                            }
+                          }
+                          // Allow normal behavior for Shift+Enter (new line)
+                        }}
+                        placeholder="Add Action Item..."
+                        style={{
+                          flex: 1,
+                          backgroundColor: "#17191F",
+                          border: "none",
+                          color: "#EEE",
+                          fontSize: "14px",
+                          outline: "none",
+                          resize: "none",
+                          minHeight: "40px",
+                          maxHeight: "100px",
+                          fontFamily: "inherit",
+                          lineHeight: "1.4",
+                          overflowY: "auto",
+                        }}
+                        className="notes-textarea"
+                        disabled={!selectedConversation?.conversation_id}
+                      />
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          alignItems: "center",
+                        }}
+                      >
+                        <button
+                          onClick={() => {
+                            if (
+                              newActionItem.trim() &&
+                              selectedConversation?.conversation_id
+                            ) {
+                              callAddActionItemApi(newActionItem);
+                            }
+                          }}
+                          style={{
+                            backgroundColor:
+                              selectedConversation?.conversation_id &&
+                              newActionItem.trim()
+                                ? "#1a73e8"
+                                : "rgba(15, 17, 23, 0.42)",
+                            color:
+                              selectedConversation?.conversation_id &&
+                              newActionItem.trim()
+                                ? "white"
+                                : "#4A4D54",
+                            height: "30px",
+                            border: "none",
+                            borderRadius: "4px",
+                            padding: "2px 12px",
+                            fontSize: "12px",
+                            fontWeight: "500",
+                            cursor:
+                              selectedConversation?.conversation_id &&
+                              newActionItem.trim()
+                                ? "pointer"
+                                : "not-allowed",
+                            opacity: "1",
+                          }}
+                          disabled={
+                            !selectedConversation?.conversation_id ||
+                            !newActionItem.trim()
+                          }
+                        >
+                          + Add Action Item
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 

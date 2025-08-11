@@ -436,10 +436,13 @@ const Works = () => {
               >
                 <HiChatBubbleLeftRight className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
-                  <h2 className="fs-2 fw-bold mb-0">1,500,000</h2>
+                  <span className="fs-6">over</span>
+                  <h2 className="fs-2 fw-bold mb-0">20 Million</h2>
+                  {/* plus icon
                   <span className="fs-6 ">
                     <i class="bi bi-plus"></i>
                   </span>
+                  */}
                 </div>
                 <p className="text-white fs-5 mb-0">
                   Total Messages Processed by HostBuddy

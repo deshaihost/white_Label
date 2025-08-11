@@ -12,7 +12,7 @@ import MultiSelect from "../../../../../../component/multiSelect/multiSelect";
 // Lazy load the InboxUpgrade component to avoid circular dependency
 const InboxUpgrade = React.lazy(() => import("../../../inbox/mildeSection/inbox_Upgrade/InboxUpgrade.js"));
 
-const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, turno_user_id, minut_user_id, userData, smartAllData}) => {
+const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, hasCleaningManagementIntegration, minut_user_id, userData, smartAllData}) => {
   const { type, smartTemplateData } = addEditSmart;
   const { triggers, conditions } = dataInput;
   const { minutTriggers, minutConditions } = minutDataInput;
@@ -490,7 +490,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         )}
       </div>
 
-      <TriggersTrargetsConditionsModel show={allData} handleClose={() => setAllData({ modelShow: false, modelShowType: "" }) } submitHndle={submitHndle} turno_user_id={turno_user_id} minut_user_id={minut_user_id}/>
+      <TriggersTrargetsConditionsModel show={allData} handleClose={() => setAllData({ modelShow: false, modelShowType: "" }) } submitHndle={submitHndle} hasCleaningManagementIntegration={hasCleaningManagementIntegration} minut_user_id={minut_user_id}/>
       <React.Suspense fallback={<div>Loading...</div>}>
         <InboxUpgrade show={showUpgradeModal} handleClose={() => setShowUpgradeModal(false)} />
       </React.Suspense>
