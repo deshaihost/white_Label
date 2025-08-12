@@ -10,6 +10,8 @@ import { getSubscriptionStatus } from "../../helper/Authorized";
 
 import MultiSelect from "../../component/multiSelect/multiSelect";
 
+import { fetchCategories } from "../actionItems/ActionItemsFetchCategories";
+
 // Location & Time Zone Section of account page
 const AccountNotificationSection = () => {
   const store = useSelector((state) => state);
@@ -64,16 +66,17 @@ const AccountNotificationSection = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedProperties, setSelectedProperties] = useState([]);
   const [editingRecipientIndex, setEditingRecipientIndex] = useState(null);
+  const [categories, setCategories] = useState([]);
 
   const categoryOptions = [
-    { value:'CLEANLINESS', label:'Cleanliness' },
-    { value:'MAINTENANCE', label:'Maintenance' },
-    { value:'RESERVATION CHANGES', label:'Reservation Changes' },
-    { value:'GUEST REQUESTS', label:'Guest Requests' },
-    { value:'OTHER', label:'Other' }
+    { value: 'CLEANLINESS', label: 'Cleanliness' },
+    { value: 'MAINTENANCE', label: 'Maintenance' },
+    { value: 'RESERVATION CHANGES', label: 'Reservation Changes' },
+    { value: 'GUEST REQUESTS', label: 'Guest Requests' },
+    { value: 'OTHER', label: 'Other' }
   ];
 
-  const propertyOptions = propertyNamesList.map((property) => ({ value:property, label:property }));
+  const propertyOptions = propertyNamesList.map((property) => ({ value: property, label: property }));
 
   const consent_bad = newRecipient.channel === "sms" && !newRecipient.consent_checked;
 
@@ -89,7 +92,7 @@ const AccountNotificationSection = () => {
         validateStatus: function (status) { return status >= 200 && status < 500; }, // don't throw an error for non-2xx responses
       };
 
-      const response = await axios.put( `${baseUrl}/set_notifications_settings`, dataToSend, config );
+      const response = await axios.put(`${baseUrl}/set_notifications_settings`, dataToSend, config);
 
       if (response.status === 200) {
         ToastHandle(response.data.message, "success");
@@ -322,6 +325,16 @@ const AccountNotificationSection = () => {
   useEffect(() => {
     dispatch(getUserDataActions(false));
     callGetNotificationSettingsApi();
+
+    const loadCategories = async () => {
+      const fetchedCategories = await fetchCategories();
+      if (fetchedCategories) {
+        setCategories(fetchedCategories);
+      } else {
+        ToastHandle("Failed to load categories", "danger");
+      }
+    };
+    loadCategories();
   }, []);
 
   /*
@@ -401,11 +414,11 @@ const AccountNotificationSection = () => {
                   <Tooltip id={`properties-tooltip-${index}`} place="top" effect="solid" />
                 </td>
                 <td>
-                  <div style={{ display:'flex', alignItems:'center' }}>
-                    <h6 style={{marginRight:'10px'}} className="clickable-text fs-14" onClick={() => editRecipient(index)}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <h6 style={{ marginRight: '10px' }} className="clickable-text fs-14" onClick={() => editRecipient(index)}>
                       Edit
                     </h6>
-                    <h6 style={{color:'red'}} className="clickable-text fs-14" onClick={() => removeRecipient(index)}>
+                    <h6 style={{ color: 'red' }} className="clickable-text fs-14" onClick={() => removeRecipient(index)}>
                       Remove
                     </h6>
                   </div>
@@ -420,7 +433,7 @@ const AccountNotificationSection = () => {
             <div className="row">
               <div className="col input_group">
                 <label htmlFor="FirstName">Recipient First Name</label>
-                <input type="text" id="FirstName" name="firstName" className="form-control" value={newRecipient.firstName} onChange={(e) => handleInputChange(e)}/>
+                <input type="text" id="FirstName" name="firstName" className="form-control" value={newRecipient.firstName} onChange={(e) => handleInputChange(e)} />
               </div>
 
               <div className="col input_group">
@@ -463,9 +476,9 @@ const AccountNotificationSection = () => {
               <div className="col input_group">
                 <label htmlFor={"Time"}>Receive Notification At:</label>
                 {newRecipient.timing === "daily" ? (
-                  <input type="time" id="Time" name="time" className="form-control" value={newRecipient.time} onChange={(e) => handleInputChange(e)}/>
+                  <input type="time" id="Time" name="time" className="form-control" value={newRecipient.time} onChange={(e) => handleInputChange(e)} />
                 ) : (
-                  <input type="text" id="Time" name="time" className="form-control disabled-input" value={newRecipient.timing === "hourly" ? "Hourly, On The Hour" : newRecipient.timing === "immediate" ? "Immediately" : "[Please select Timing first]"} disabled/>
+                  <input type="text" id="Time" name="time" className="form-control disabled-input" value={newRecipient.timing === "hourly" ? "Hourly, On The Hour" : newRecipient.timing === "immediate" ? "Immediately" : "[Please select Timing first]"} disabled />
                 )}
               </div>
             </div>
@@ -473,21 +486,31 @@ const AccountNotificationSection = () => {
             <div className="row" style={{ marginTop: "20px" }}>
               {!isMountPlan && (
                 <div className="col input_group">
-                  <label htmlFor="Categories" >Categories</label>
-                  <MultiSelect id="Categories" options={categoryOptions} selectedOptions={selectedCategories} setSelectedOptions={setSelectedCategories} placeholder="Select categories..."/>
+                  <label htmlFor="Categories">Categories</label>
+                  <MultiSelect
+                    id="Categories"
+                    options={categories.map((category) => ({
+                      label: category.name,
+                      value: category.id
+                    }))}
+                    selectedOptions={selectedCategories}
+                    setSelectedOptions={setSelectedCategories}
+                    placeholder="Select categories..."
+                  />
                 </div>
               )}
 
+
               <div className="col input_group">
                 <label htmlFor="Properties" >Properties</label>
-                <MultiSelect id="Properties" options={propertyOptions} selectedOptions={selectedProperties} setSelectedOptions={setSelectedProperties} placeholder="Select properties..."/>
+                <MultiSelect id="Properties" options={propertyOptions} selectedOptions={selectedProperties} setSelectedOptions={setSelectedProperties} placeholder="Select properties..." />
               </div>
             </div>
 
             {newRecipient.channel === "sms" && (
               <div className="row" style={{ marginTop: "20px" }}>
                 <div className="checkbox-container">
-                  <input className="form-check-input" type="checkbox" id="Consent" name="consent_checked" value={newRecipient.consent_checked} onChange={(e) => handleInputChange(e)} style={{ width: "32px" }}/>
+                  <input className="form-check-input" type="checkbox" id="Consent" name="consent_checked" value={newRecipient.consent_checked} onChange={(e) => handleInputChange(e)} style={{ width: "32px" }} />
                   <label htmlFor={"Consent"}>I consent to receiving account notifications for "Action Items" via text message (SMS), at the selected phone number, at the specified timing.</label>
                 </div>
               </div>

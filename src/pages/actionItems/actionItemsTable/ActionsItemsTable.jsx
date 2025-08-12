@@ -15,6 +15,7 @@ import ConversationTranscriptModal from "../../inbox/inboxSection/resources/Conv
 import customStyles from './selectStyles';
 import ActionItemsUpgrade from '../ActionItemsUpgrade/ActionItemsUpgrade';
 import { getSubscriptionStatus } from '../../../helper/Authorized';
+import { fetchCategories } from "../ActionItemsFetchCategories";
 
 const ActionsItemsTable = () => {
 
@@ -107,6 +108,7 @@ const ActionsItemsTable = () => {
 
   const [selectedStatus, setSelectedStatus] = useState("incomplete");
   const [selectedProperties, setSelectedProperties] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const [converSationId, setConverSationId] = useState("");
   const [propertyNameForConversationData, setPropertyNameForConversationData] = useState("");
@@ -122,7 +124,6 @@ const ActionsItemsTable = () => {
   const [showConversationTranscriptModal, setShowConversationTranscriptModal] = useState(false);
 
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("all");
 
   // Apply the property name filter
   let filteredActionItems = actionItems?.filter((actionItem) => {
@@ -179,51 +180,21 @@ const ActionsItemsTable = () => {
     setSelectedProperties(selectedOptions);
   };
 
-  // Fetch categories from API
-  const fetchCategories = async () => {
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-
-    try {
-      const response = await axios.get(
-        `${baseUrl}/get_action_item_categories`,
-        {
-          headers: {
-            "X-API-Key": API_KEY
-          }
-        }
-      );
-
-      if (response.status === 200) {
-        setCategories(response.data.categories);
-      } else {
-        console.error("Failed to load categories");
-      }
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-
   // On page load, get user data and action items
   useEffect(() => {
     dispatch(getUserDataActions(false)); // false - don't need property data, just need the names
     callGetActionItemsApi('incomplete');
-    fetchCategories(); // Fetch categories when component loads
-  }, []);
 
-  // Refresh categories periodically to catch any updates
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetchCategories();
-    }, 60000); // Check for new categories every minute
-    
-    return () => clearInterval(intervalId);
+    const loadCategories = async () => {
+      const fetchedCategories = await fetchCategories();
+      if (fetchedCategories) {
+        setCategories(fetchedCategories);
+      } else {
+        ToastHandle("Failed to load categories", "danger");
+      }
+    };
+    loadCategories();
   }, []);
-
-  // Add this near the top of your component to debug state changes
-  useEffect(() => {
-    console.log("Categories state updated:", categories);
-  }, [categories]);
 
   // If property name is passed as a query param, set it as the selected property when the param populates
   useEffect(() => {
@@ -282,19 +253,11 @@ const ActionsItemsTable = () => {
 
               {!isMountPlan && (
                 <div className="item-select">
-                  <select
-                    aria-label="Default select example"
-                    className="bg-dark form-select"
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                  >
+                  <select aria-label="Default select example" className="bg-dark form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
                     <option value="all">All Categories</option>
-                    {categories.map(category => (
-                      <option
-                        key={category.id || category.name}
-                        value={category.name}
-                      >
-                        {category.name} {/* Only display name, not definition */}
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.name}>
+                        {category.name}
                       </option>
                     ))}
                   </select>
@@ -315,7 +278,6 @@ const ActionsItemsTable = () => {
 
             </div>
           </div>
-
           <div className="table-responsive" style={{ overflowY: "auto", marginBottom: "30px", position: 'relative' }}>
             {itemsToRender?.length > 0 ? (
               <div style={{ position: 'relative' }}>
