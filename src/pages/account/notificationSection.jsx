@@ -9,8 +9,7 @@ import { Tooltip } from "react-tooltip";
 import { getSubscriptionStatus } from "../../helper/Authorized";
 
 import MultiSelect from "../../component/multiSelect/multiSelect";
-
-import { fetchCategories } from "../actionItems/ActionItemsFetchCategories";
+import MultiCategorySelect, { fetchCategoriesFromAPI } from "../../component/multiSelect/actionItemCategoriesMultiSelect";
 
 // Location & Time Zone Section of account page
 const AccountNotificationSection = () => {
@@ -18,6 +17,11 @@ const AccountNotificationSection = () => {
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const propertyNamesList = Object.keys(userDataGet?.property_data || {});
+
+  // Define categoryNamesList and categoryOptions
+  const categoryNamesList = Object.keys(userDataGet?.category_data || {});
+  const categoryOptions = categoryNamesList.map((category) => ({ value: category, label: category }));
+
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
 
   // Get user subscription plan
@@ -66,15 +70,6 @@ const AccountNotificationSection = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedProperties, setSelectedProperties] = useState([]);
   const [editingRecipientIndex, setEditingRecipientIndex] = useState(null);
-  const [categories, setCategories] = useState([]);
-
-  const categoryOptions = [
-    { value: 'CLEANLINESS', label: 'Cleanliness' },
-    { value: 'MAINTENANCE', label: 'Maintenance' },
-    { value: 'RESERVATION CHANGES', label: 'Reservation Changes' },
-    { value: 'GUEST REQUESTS', label: 'Guest Requests' },
-    { value: 'OTHER', label: 'Other' }
-  ];
 
   const propertyOptions = propertyNamesList.map((property) => ({ value: property, label: property }));
 
@@ -142,11 +137,22 @@ const AccountNotificationSection = () => {
 
   const showNewRecipientFields = () => {
     setNewRecipient({ firstName: "", channel: "", RecipientAddress: "", timing: "", time: "", consent_checked: false });
+
     if (!isMountPlan) {
-      setSelectedCategories(categoryOptions); // Populate with all category options by default
+      // Use available categories in this priority: 1) categoryOptions, 2) apiCategories
+      if (categoryOptions && categoryOptions.length > 0) {
+        setSelectedCategories(categoryOptions); // Use categories from Redux
+      } else if (apiCategories.length > 0) {
+        setSelectedCategories(apiCategories); // Use categories from API
+      } else {
+        // If no categories available yet, fetch them
+        fetchCategoriesIfNeeded();
+        setSelectedCategories([]);
+      }
     } else {
-      setSelectedCategories([]); // Set empty for Mount plan
+      setSelectedCategories([]);
     }
+
     setSelectedProperties(propertyOptions); // Populate with all property options by default
     setEditingRecipientIndex(null);
   };
@@ -247,16 +253,26 @@ const AccountNotificationSection = () => {
   const editRecipient = (index) => {
     const recipientToEdit = recipients[index];
     setNewRecipient(recipientToEdit);
+
     if (!isMountPlan) {
-      setSelectedCategories(
-        recipientToEdit.categories.map((category) =>
-          categoryOptions.find((option) => option.value === category)
-        )
-      );
+      // Handle categories based on availability
+      if (recipientToEdit.categories && recipientToEdit.categories.length > 0) {
+        // Use the categories from the recipient
+        setSelectedCategories(
+          recipientToEdit.categories.map((category) => ({
+            value: category,
+            label: category
+          }))
+        );
+      } else {
+        // For null/empty categories, leave selection empty
+        setSelectedCategories([]);
+      }
     } else {
       setSelectedCategories([]);
     }
-    setSelectedProperties(  // Add properties handling for edit
+
+    setSelectedProperties(
       recipientToEdit.properties?.map((property) =>
         propertyOptions.find((option) => option.value === property)
       ) || propertyOptions
@@ -325,16 +341,6 @@ const AccountNotificationSection = () => {
   useEffect(() => {
     dispatch(getUserDataActions(false));
     callGetNotificationSettingsApi();
-
-    const loadCategories = async () => {
-      const fetchedCategories = await fetchCategories();
-      if (fetchedCategories) {
-        setCategories(fetchedCategories);
-      } else {
-        ToastHandle("Failed to load categories", "danger");
-      }
-    };
-    loadCategories();
   }, []);
 
   /*
@@ -355,8 +361,52 @@ const AccountNotificationSection = () => {
     return `${convertedHour}:${minutes.padStart(2, "0")} ${ampm}`;
   }
 
+  // Add state to track whether categories have been fetched from API
+  const [apiCategories, setApiCategories] = useState([]);
+  const [fetchingCategories, setFetchingCategories] = useState(false);
+
+  // Fetch categories from API if needed
+  const fetchCategoriesIfNeeded = async () => {
+    if (fetchingCategories || apiCategories.length > 0 || (categoryOptions && categoryOptions.length > 0)) {
+      return;
+    }
+
+    setFetchingCategories(true);
+    try {
+      const categories = await fetchCategoriesFromAPI();
+      if (categories && categories.length > 0) {
+        const formattedCategories = categories.map(cat => ({
+          value: cat.name,
+          label: cat.name
+        }));
+        setApiCategories(formattedCategories);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    } finally {
+      setFetchingCategories(false);
+    }
+  };
+
+  // Load categories on component mount
+  useEffect(() => {
+    fetchCategoriesIfNeeded();
+  }, []);
+
+  // When categories are loaded from API, automatically select them all if creating a new recipient
+  useEffect(() => {
+    if (!isMountPlan &&
+      apiCategories.length > 0 &&
+      Object.keys(newRecipient).length > 0 &&
+      selectedCategories.length === 0 &&
+      editingRecipientIndex === null) { // Only auto-select for new recipients, not when editing
+      setSelectedCategories(apiCategories);
+    }
+  }, [apiCategories, newRecipient, isMountPlan, editingRecipientIndex]);
+
   return (
     <div className="account-content location-section">
+
       <h3 className="mb-4">Notification Settings</h3>
       <p style={{ marginLeft: "10px" }} className="fs-14">
         If your contact information is not showing up here, add it in the "Contact" section and make sure it is confirmed.
@@ -487,23 +537,28 @@ const AccountNotificationSection = () => {
               {!isMountPlan && (
                 <div className="col input_group">
                   <label htmlFor="Categories">Categories</label>
-                  <MultiSelect
-                    id="Categories"
-                    options={categories.map((category) => ({
-                      label: category.name,
-                      value: category.id
-                    }))}
-                    selectedOptions={selectedCategories}
-                    setSelectedOptions={setSelectedCategories}
-                    placeholder="Select categories..."
-                  />
+                  <div className="scrollable-dropdown">
+                    <MultiCategorySelect
+                      selectedCategories={selectedCategories}
+                      setSelectedCategories={setSelectedCategories}
+                      placeholder="Select categories..."
+                    />
+                  </div>
                 </div>
               )}
 
-
               <div className="col input_group">
-                <label htmlFor="Properties" >Properties</label>
-                <MultiSelect id="Properties" options={propertyOptions} selectedOptions={selectedProperties} setSelectedOptions={setSelectedProperties} placeholder="Select properties..." />
+                <label htmlFor="Properties">Properties</label>
+                <div className="scrollable-dropdown">
+                  <MultiSelect
+                    id="Properties"
+                    options={propertyOptions}
+                    selectedOptions={selectedProperties}
+                    setSelectedOptions={setSelectedProperties}
+                    placeholder="Select properties..."
+                    className="custom-select property_Custom_Select"
+                  />
+                </div>
               </div>
             </div>
 

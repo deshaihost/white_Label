@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { getUserDataActions } from "../../../redux/actions";
 import AdditionalInformationModel from "./additionalInformationModel/AdditionalInformationModel";
-import { Container, Form } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import ToastHandle from "../../../helper/ToastMessage";
 import { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
 import "./actionItem.css";
@@ -15,7 +15,7 @@ import ConversationTranscriptModal from "../../inbox/inboxSection/resources/Conv
 import customStyles from './selectStyles';
 import ActionItemsUpgrade from '../ActionItemsUpgrade/ActionItemsUpgrade';
 import { getSubscriptionStatus } from '../../../helper/Authorized';
-import { fetchCategories } from "../ActionItemsFetchCategories";
+import { fetchCategoriesFromAPI } from "../../../component/multiSelect/actionItemCategoriesMultiSelect";
 
 const ActionsItemsTable = () => {
 
@@ -106,9 +106,16 @@ const ActionsItemsTable = () => {
   const allPropertyName = createPropertiesName !== undefined ? createPropertiesName : {};
   const propertyOptions = Object.keys(allPropertyName).map((key) => ({ value: key, label: key })); // All property options as an array of objects, for the React Select component
 
+  // Add category data retrieval from Redux store
+  const createCategoriesName = store?.getUserDataReducer?.getUserData?.data?.user?.category_data;
+  const allCategoryName = createCategoriesName !== undefined ? createCategoriesName : {};
+  const categoryOptions = Object.keys(allCategoryName).map((key) => ({ value: key, label: key }));
+
   const [selectedStatus, setSelectedStatus] = useState("incomplete");
   const [selectedProperties, setSelectedProperties] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
 
   const [converSationId, setConverSationId] = useState("");
   const [propertyNameForConversationData, setPropertyNameForConversationData] = useState("");
@@ -123,16 +130,14 @@ const ActionsItemsTable = () => {
   const [conversationDataForModal, setConversationDataForModal] = useState({});
   const [showConversationTranscriptModal, setShowConversationTranscriptModal] = useState(false);
 
-  const [categories, setCategories] = useState([]);
-
   // Apply the property name filter
   let filteredActionItems = actionItems?.filter((actionItem) => {
     return (selectedProperties.length === 0 || selectedProperties.some((selectedProperty) => selectedProperty.value === actionItem.property_name));
   });
 
-  // Apply the category filter
+  // Apply the category filter - updated to handle multiple categories
   filteredActionItems = filteredActionItems?.filter((actionItem) => {
-    return (selectedCategory === "all" || actionItem.category === selectedCategory);
+    return (selectedCategories.length === 0 || selectedCategories.some((selectedCategory) => selectedCategory.value === actionItem.category));
   });
 
   // date format
@@ -180,20 +185,14 @@ const ActionsItemsTable = () => {
     setSelectedProperties(selectedOptions);
   };
 
-  // On page load, get user data and action items
-  useEffect(() => {
-    dispatch(getUserDataActions(false)); // false - don't need property data, just need the names
-    callGetActionItemsApi('incomplete');
+  const handleCategoryChange = (selectedOptions) => {
+    setSelectedCategories(selectedOptions);
+  };
 
-    const loadCategories = async () => {
-      const fetchedCategories = await fetchCategories();
-      if (fetchedCategories) {
-        setCategories(fetchedCategories);
-      } else {
-        ToastHandle("Failed to load categories", "danger");
-      }
-    };
-    loadCategories();
+  // On page load, get user data, action items and categories
+  useEffect(() => {
+    dispatch(getUserDataActions(false));
+    callGetActionItemsApi('incomplete');
   }, []);
 
   // If property name is passed as a query param, set it as the selected property when the param populates
@@ -240,6 +239,30 @@ const ActionsItemsTable = () => {
   const lockedActionItems = filteredActionItems.filter(isLocked);
   const itemsToRender = unlockedActionItems;
 
+  // Let's add a useEffect to fetch categories directly from API
+  useEffect(() => {
+    const loadCategories = async () => {
+      setCategoriesLoading(true);
+      try {
+        const fetchedCategories = await fetchCategoriesFromAPI();
+        if (fetchedCategories && fetchedCategories.length > 0) {
+          // Map categories to format needed for react-select
+          const formattedCategories = fetchedCategories.map(cat => ({
+            value: cat.name,
+            label: cat.name
+          }));
+          setCategories(formattedCategories);
+        }
+      } catch (error) {
+        console.error("Error loading categories:", error);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
+
+    loadCategories();
+  }, []); // Empty dependency array means this runs once on component mount
+
   return (
     <>
       <Container>
@@ -252,15 +275,18 @@ const ActionsItemsTable = () => {
             <div className="action-select">
 
               {!isMountPlan && (
-                <div className="item-select">
-                  <select aria-label="Default select example" className="bg-dark form-select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-                    <option value="all">All Categories</option>
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.name}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
+                <div className="item-select" style={{ width: "30%" }}>
+                  <Select 
+                    className="custom-select property_Custom_Select" 
+                    isMulti 
+                    options={categories} // Use locally fetched categories instead of categoryOptions
+                    value={selectedCategories} 
+                    styles={customStyles} 
+                    onChange={handleCategoryChange} 
+                    placeholder="All Categories" 
+                    closeMenuOnSelect={false}
+                    isLoading={categoriesLoading} // Show loading state
+                  />
                 </div>
               )}
 
