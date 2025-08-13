@@ -9,6 +9,7 @@ import { Tooltip } from "react-tooltip";
 import { getSubscriptionStatus } from "../../helper/Authorized";
 
 import MultiSelect from "../../component/multiSelect/multiSelect";
+import MultiCategorySelect, { fetchCategoriesFromAPI } from "../../component/multiSelect/actionItemCategoriesMultiSelect";
 
 // Location & Time Zone Section of account page
 const AccountNotificationSection = () => {
@@ -16,6 +17,11 @@ const AccountNotificationSection = () => {
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const propertyNamesList = Object.keys(userDataGet?.property_data || {});
+
+  // Define categoryNamesList and categoryOptions
+  const categoryNamesList = Object.keys(userDataGet?.category_data || {});
+  const categoryOptions = categoryNamesList.map((category) => ({ value: category, label: category }));
+
   const time_zone_name = userDataGet?.user_region?.time_zone_name;
 
   // Get user subscription plan
@@ -65,15 +71,7 @@ const AccountNotificationSection = () => {
   const [selectedProperties, setSelectedProperties] = useState([]);
   const [editingRecipientIndex, setEditingRecipientIndex] = useState(null);
 
-  const categoryOptions = [
-    { value:'CLEANLINESS', label:'Cleanliness' },
-    { value:'MAINTENANCE', label:'Maintenance' },
-    { value:'RESERVATION CHANGES', label:'Reservation Changes' },
-    { value:'GUEST REQUESTS', label:'Guest Requests' },
-    { value:'OTHER', label:'Other' }
-  ];
-
-  const propertyOptions = propertyNamesList.map((property) => ({ value:property, label:property }));
+  const propertyOptions = propertyNamesList.map((property) => ({ value: property, label: property }));
 
   const consent_bad = newRecipient.channel === "sms" && !newRecipient.consent_checked;
 
@@ -89,7 +87,7 @@ const AccountNotificationSection = () => {
         validateStatus: function (status) { return status >= 200 && status < 500; }, // don't throw an error for non-2xx responses
       };
 
-      const response = await axios.put( `${baseUrl}/set_notifications_settings`, dataToSend, config );
+      const response = await axios.put(`${baseUrl}/set_notifications_settings`, dataToSend, config);
 
       if (response.status === 200) {
         ToastHandle(response.data.message, "success");
@@ -139,11 +137,22 @@ const AccountNotificationSection = () => {
 
   const showNewRecipientFields = () => {
     setNewRecipient({ firstName: "", channel: "", RecipientAddress: "", timing: "", time: "", consent_checked: false });
+
     if (!isMountPlan) {
-      setSelectedCategories(categoryOptions); // Populate with all category options by default
+      // Use available categories in this priority: 1) categoryOptions, 2) apiCategories
+      if (categoryOptions && categoryOptions.length > 0) {
+        setSelectedCategories(categoryOptions); // Use categories from Redux
+      } else if (apiCategories.length > 0) {
+        setSelectedCategories(apiCategories); // Use categories from API
+      } else {
+        // If no categories available yet, fetch them
+        fetchCategoriesIfNeeded();
+        setSelectedCategories([]);
+      }
     } else {
-      setSelectedCategories([]); // Set empty for Mount plan
+      setSelectedCategories([]);
     }
+
     setSelectedProperties(propertyOptions); // Populate with all property options by default
     setEditingRecipientIndex(null);
   };
@@ -244,16 +253,26 @@ const AccountNotificationSection = () => {
   const editRecipient = (index) => {
     const recipientToEdit = recipients[index];
     setNewRecipient(recipientToEdit);
+
     if (!isMountPlan) {
-      setSelectedCategories(
-        recipientToEdit.categories.map((category) =>
-          categoryOptions.find((option) => option.value === category)
-        )
-      );
+      // Handle categories based on availability
+      if (recipientToEdit.categories && recipientToEdit.categories.length > 0) {
+        // Use the categories from the recipient
+        setSelectedCategories(
+          recipientToEdit.categories.map((category) => ({
+            value: category,
+            label: category
+          }))
+        );
+      } else {
+        // For null/empty categories, leave selection empty
+        setSelectedCategories([]);
+      }
     } else {
       setSelectedCategories([]);
     }
-    setSelectedProperties(  // Add properties handling for edit
+
+    setSelectedProperties(
       recipientToEdit.properties?.map((property) =>
         propertyOptions.find((option) => option.value === property)
       ) || propertyOptions
@@ -342,8 +361,52 @@ const AccountNotificationSection = () => {
     return `${convertedHour}:${minutes.padStart(2, "0")} ${ampm}`;
   }
 
+  // Add state to track whether categories have been fetched from API
+  const [apiCategories, setApiCategories] = useState([]);
+  const [fetchingCategories, setFetchingCategories] = useState(false);
+
+  // Fetch categories from API if needed
+  const fetchCategoriesIfNeeded = async () => {
+    if (fetchingCategories || apiCategories.length > 0 || (categoryOptions && categoryOptions.length > 0)) {
+      return;
+    }
+
+    setFetchingCategories(true);
+    try {
+      const categories = await fetchCategoriesFromAPI();
+      if (categories && categories.length > 0) {
+        const formattedCategories = categories.map(cat => ({
+          value: cat.name,
+          label: cat.name
+        }));
+        setApiCategories(formattedCategories);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    } finally {
+      setFetchingCategories(false);
+    }
+  };
+
+  // Load categories on component mount
+  useEffect(() => {
+    fetchCategoriesIfNeeded();
+  }, []);
+
+  // When categories are loaded from API, automatically select them all if creating a new recipient
+  useEffect(() => {
+    if (!isMountPlan &&
+      apiCategories.length > 0 &&
+      Object.keys(newRecipient).length > 0 &&
+      selectedCategories.length === 0 &&
+      editingRecipientIndex === null) { // Only auto-select for new recipients, not when editing
+      setSelectedCategories(apiCategories);
+    }
+  }, [apiCategories, newRecipient, isMountPlan, editingRecipientIndex]);
+
   return (
     <div className="account-content location-section">
+
       <h3 className="mb-4">Notification Settings</h3>
       <p style={{ marginLeft: "10px" }} className="fs-14">
         If your contact information is not showing up here, add it in the "Contact" section and make sure it is confirmed.
@@ -401,11 +464,11 @@ const AccountNotificationSection = () => {
                   <Tooltip id={`properties-tooltip-${index}`} place="top" effect="solid" />
                 </td>
                 <td>
-                  <div style={{ display:'flex', alignItems:'center' }}>
-                    <h6 style={{marginRight:'10px'}} className="clickable-text fs-14" onClick={() => editRecipient(index)}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <h6 style={{ marginRight: '10px' }} className="clickable-text fs-14" onClick={() => editRecipient(index)}>
                       Edit
                     </h6>
-                    <h6 style={{color:'red'}} className="clickable-text fs-14" onClick={() => removeRecipient(index)}>
+                    <h6 style={{ color: 'red' }} className="clickable-text fs-14" onClick={() => removeRecipient(index)}>
                       Remove
                     </h6>
                   </div>
@@ -420,7 +483,7 @@ const AccountNotificationSection = () => {
             <div className="row">
               <div className="col input_group">
                 <label htmlFor="FirstName">Recipient First Name</label>
-                <input type="text" id="FirstName" name="firstName" className="form-control" value={newRecipient.firstName} onChange={(e) => handleInputChange(e)}/>
+                <input type="text" id="FirstName" name="firstName" className="form-control" value={newRecipient.firstName} onChange={(e) => handleInputChange(e)} />
               </div>
 
               <div className="col input_group">
@@ -463,9 +526,9 @@ const AccountNotificationSection = () => {
               <div className="col input_group">
                 <label htmlFor={"Time"}>Receive Notification At:</label>
                 {newRecipient.timing === "daily" ? (
-                  <input type="time" id="Time" name="time" className="form-control" value={newRecipient.time} onChange={(e) => handleInputChange(e)}/>
+                  <input type="time" id="Time" name="time" className="form-control" value={newRecipient.time} onChange={(e) => handleInputChange(e)} />
                 ) : (
-                  <input type="text" id="Time" name="time" className="form-control disabled-input" value={newRecipient.timing === "hourly" ? "Hourly, On The Hour" : newRecipient.timing === "immediate" ? "Immediately" : "[Please select Timing first]"} disabled/>
+                  <input type="text" id="Time" name="time" className="form-control disabled-input" value={newRecipient.timing === "hourly" ? "Hourly, On The Hour" : newRecipient.timing === "immediate" ? "Immediately" : "[Please select Timing first]"} disabled />
                 )}
               </div>
             </div>
@@ -473,21 +536,36 @@ const AccountNotificationSection = () => {
             <div className="row" style={{ marginTop: "20px" }}>
               {!isMountPlan && (
                 <div className="col input_group">
-                  <label htmlFor="Categories" >Categories</label>
-                  <MultiSelect id="Categories" options={categoryOptions} selectedOptions={selectedCategories} setSelectedOptions={setSelectedCategories} placeholder="Select categories..."/>
+                  <label htmlFor="Categories">Categories</label>
+                  <div className="scrollable-dropdown">
+                    <MultiCategorySelect
+                      selectedCategories={selectedCategories}
+                      setSelectedCategories={setSelectedCategories}
+                      placeholder="Select categories..."
+                    />
+                  </div>
                 </div>
               )}
 
               <div className="col input_group">
-                <label htmlFor="Properties" >Properties</label>
-                <MultiSelect id="Properties" options={propertyOptions} selectedOptions={selectedProperties} setSelectedOptions={setSelectedProperties} placeholder="Select properties..."/>
+                <label htmlFor="Properties">Properties</label>
+                <div className="scrollable-dropdown">
+                  <MultiSelect
+                    id="Properties"
+                    options={propertyOptions}
+                    selectedOptions={selectedProperties}
+                    setSelectedOptions={setSelectedProperties}
+                    placeholder="Select properties..."
+                    className="custom-select property_Custom_Select"
+                  />
+                </div>
               </div>
             </div>
 
             {newRecipient.channel === "sms" && (
               <div className="row" style={{ marginTop: "20px" }}>
                 <div className="checkbox-container">
-                  <input className="form-check-input" type="checkbox" id="Consent" name="consent_checked" value={newRecipient.consent_checked} onChange={(e) => handleInputChange(e)} style={{ width: "32px" }}/>
+                  <input className="form-check-input" type="checkbox" id="Consent" name="consent_checked" value={newRecipient.consent_checked} onChange={(e) => handleInputChange(e)} style={{ width: "32px" }} />
                   <label htmlFor={"Consent"}>I consent to receiving account notifications for "Action Items" via text message (SMS), at the selected phone number, at the specified timing.</label>
                 </div>
               </div>
