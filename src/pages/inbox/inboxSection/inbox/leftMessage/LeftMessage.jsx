@@ -232,7 +232,7 @@ useEffect(() => {
       .filter(convo => 
         convo.reservation_id || 
         convo.contact_type === "External Contact" ||
-        (!convo.reservation_id && convo.conversation_id?.includes("openphone:"))
+        (!convo.reservation_id && convo.conversation_id?.includes("openphone:") && convo.last_message_time_utc)
       )
       .sort((a, b) => {
         // Sort by timestamp (newest first)
@@ -247,6 +247,14 @@ useEffect(() => {
     
     const filtered = allConversations
       .filter(convo => {
+        // Skip OpenPhone conversations that belong to another conversation
+  if (convo.conversation_id?.includes("openphone:") && 
+      !convo.last_message_time_utc &&
+      allConversations.some(c => 
+        c.openphone_conversations?.includes(convo.conversation_id))) {
+    return false;
+  }
+
         // Guest name matching
         const guestNameMatch = convo.guest_name?.toLowerCase().includes(inputLower);
         
@@ -568,16 +576,26 @@ const getConversationTimestamp = (conversation) => {
       setFilteredGuestsFromSearch(filteredGuests);
       setFilteredContactsFromPhoneSearch([]);
 
-      // Filter conversation tiles
+      // Filter conversation tiles with improved OpenPhone filtering
       const guestFiltered = allConversations.filter(
-        (convo) =>
-          convo.guest_name &&
-          convo.guest_name.toLowerCase().includes(searchVal.toLowerCase())
+        (convo) => {
+          // First check if this is a linked OpenPhone conversation that shouldn't be displayed separately
+          if (convo.conversation_id?.includes("openphone:") &&
+              !convo.last_message_time_utc &&
+              allConversations.some(c =>
+                c.openphone_conversations?.includes(convo.conversation_id))) {
+            return false;
+          }
+          
+          // Then check if guest name matches search term
+          return convo.guest_name &&
+            convo.guest_name.toLowerCase().includes(searchVal.toLowerCase());
+        }
       );
       setFilteredConversations(guestFiltered);
     }
   };
-
+                
   useEffect(() => {
     console.log("Input value changed:", searchInputValue);
     // If we just selected from phone search, don't filter anything - keep the selected conversation
@@ -587,7 +605,18 @@ const getConversationTimestamp = (conversation) => {
     }
 
     if (searchInputValue.trim() === "") {
-      setFilteredConversations(allConversations);
+      // Apply the OpenPhone filter even when showing all conversations
+      const filteredResults = allConversations.filter(convo => {
+        // Skip OpenPhone conversations that belong to another conversation
+        if (convo.conversation_id?.includes("openphone:") && 
+            !convo.last_message_time_utc &&
+            allConversations.some(c => 
+              c.openphone_conversations?.includes(convo.conversation_id))) {
+          return false;
+        }
+        return true;
+      });
+      setFilteredConversations(filteredResults);
     } else {
       const inputLower = searchInputValue.toLowerCase();
       const inputClean = searchInputValue.replace(/^\+/, ''); // Remove leading + for phone matching
@@ -595,6 +624,14 @@ const getConversationTimestamp = (conversation) => {
       console.log("All conversations for filtering:", allConversations);
 
       const filtered = allConversations.filter((convo) => {
+        // Skip OpenPhone conversations that belong to another conversation
+        if (convo.conversation_id?.includes("openphone:") && 
+            !convo.last_message_time_utc &&
+            allConversations.some(c => 
+              c.openphone_conversations?.includes(convo.conversation_id))) {
+          return false;
+        }
+
         // Guest name matching
         const guestNameMatch = convo.guest_name?.toLowerCase().includes(inputLower);
 
@@ -721,26 +758,51 @@ const getConversationTimestamp = (conversation) => {
   };
 
   const handleGuestSelectFromSearch = async (guest) => {
+    // Start loading state
     setFilterQueryLoading(true);
+    
+    // Clear guest search results dropdown
     setFilteredGuestsFromSearch([]);
+    
+    // Set search input to show the selected guest name
     setSearchInputValue(guest.name);
-    setGuestNameSearchVal(guest.name); // Clear all other filters when guest is selected
+    
+    // Update filters: set guest name filter and clear all other filters
+    setGuestNameSearchVal(guest.name);
     setPropertyFilterVal("");
     setPhaseFilterVal("");
     setUrgentFilterIsEnabled(false);
     setFromHostBuddyFilterVal(false);
+    setUserFilterVal("");
 
+    // Fetch conversations based on guest name
     await fetchConversations(
       10,
-      true,
-      false,
-      "",
-      "",
-      false,
-      guest.name,
-      true,
-      ""
+      true, // replace existing conversations
+      false, // urgent filter off
+      "", // property filter cleared
+      "", // phase filter cleared
+      false, // from hostbuddy filter off
+      guest.name, // search by guest name
+      true, // force refresh
+      "" // user filter cleared
     );
+    
+    // Apply additional filtering to exclude OpenPhone conversations that are linked to other conversations
+    const filteredResults = allConversations.filter(convo => {
+      // Skip OpenPhone conversations that belong to another conversation
+      if (convo.conversation_id?.includes("openphone:") && 
+          allConversations.some(c => 
+            c.openphone_conversations?.includes(convo.conversation_id))) {
+        return false;
+      }
+      return true;
+    });
+    
+    // Update the displayed conversations
+    setFilteredConversations(filteredResults);
+    
+    // End loading state
     setFilterQueryLoading(false);
   };
 
