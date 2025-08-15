@@ -74,7 +74,7 @@ const ConnectToMinut = () => {
 
     // Build the authorization URL
     const clientId = '39ce85e5b969749c';
-    const redirectUri = 'https://www.hostbuddy.ai/setting/integrations';
+    const redirectUri = 'https://www.hostbuddy.ai/setting/integrations?tab=third-party';
     const authorizationUrl = `https://api.minut.com/v8/oauth/authorize?response_type=code&client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
     // Redirect the user to Minut's authorization endpoint
