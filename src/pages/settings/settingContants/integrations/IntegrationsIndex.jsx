@@ -73,6 +73,37 @@ const IntegrationsIndex = (ApiUserData) => {
   const [mainTab, setMainTab] = useState('Communication channels');
   const mainTabs = ['Communication channels', 'Third-party apps', 'Webhooks'];
   
+  // Check for tab parameter in URL and set initial tab accordingly
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const tabParam = queryParams.get('tab');
+    
+    if (tabParam === 'third-party') {
+      setMainTab('Third-party apps');
+      // When returning from Third-party apps OAuth, select the first available integration
+      const filteredIntegrations = getFilteredIntegrations('Third-party apps');
+      if (filteredIntegrations.length > 0) {
+        setSelectedIntegration(filteredIntegrations[0]);
+      }
+    } else if (tabParam === 'communication') {
+      setMainTab('Communication channels');
+      // When returning from Communication channels OAuth, select the first available integration
+      const filteredIntegrations = getFilteredIntegrations('Communication channels');
+      if (filteredIntegrations.length > 0) {
+        setSelectedIntegration(filteredIntegrations[0]);
+      }
+    } else if (tabParam === 'webhooks') {
+      setMainTab('Webhooks');
+    }
+    
+    // Clean up the URL by removing the tab parameter if it exists
+    if (tabParam) {
+      const newUrl = new URL(window.location);
+      newUrl.searchParams.delete('tab');
+      window.history.replaceState({}, '', newUrl);
+    }
+  }, [location.search]);
+  
   // Filter integrations based on mainTab
   const getFilteredIntegrations = (tab) => {
     if (tab === 'Communication channels') {
@@ -111,7 +142,19 @@ const IntegrationsIndex = (ApiUserData) => {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const code = queryParams.get("code");
-    if (code) { setSlackOauthCode(code); }
+    const provider = queryParams.get("provider");
+    
+    // Only process as Slack OAuth if:
+    // 1. We have a code parameter
+    // 2. We're not on the Notion redirect path
+    // 3. The provider is not explicitly set to 'notion'
+    // 4. We're not in the webhooks tab (which might have other OAuth flows)
+    if (code && 
+        !location.pathname.includes('/notion') && 
+        provider !== 'notion' && 
+        !location.pathname.includes('/webhooks')) {
+      setSlackOauthCode(code);
+    }
   }, [location]);
   
   // Update selected integration when main tab changes or mountActive state changes

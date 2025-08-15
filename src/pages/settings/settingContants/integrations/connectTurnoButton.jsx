@@ -85,7 +85,7 @@ const ConnectToTurno = () => {
 
     // Build the authorization URL
     const clientId = '13';
-    const redirectUri = 'https://www.hostbuddy.ai/setting/integrations';
+    const redirectUri = 'https://www.hostbuddy.ai/setting/integrations?tab=third-party';
     const authorizationUrl = `https://app.turno.com/v2/oauth/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`; // prod
     // const authorizationUrl = `https://sandbox.turno.com/v2/oauth/authorize?client_id=${encodeURIComponent(clientId)}&response_type=code&state=${encodeURIComponent(state)}&redirect_uri=${encodeURIComponent(redirectUri)}`; // not prod
 

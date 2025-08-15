@@ -39,12 +39,15 @@ const ConnectToNotion = () => {
 
   useEffect(() => {
     const handleOauth = async () => {
-      // Only process if we're on the Notion redirect path
-      if (!location.pathname.endsWith('/notion')) {
+      // Only process if we're on the Notion redirect path or have provider=notion
+      const params = new URLSearchParams(location.search);
+      const provider = params.get('provider');
+      const isNotionRedirect = location.pathname.endsWith('/notion') || provider === 'notion';
+      
+      if (!isNotionRedirect) {
         return;
       }
       
-      const params = new URLSearchParams(location.search);
       const code = params.get('code');
 
       if (code) {
@@ -55,8 +58,8 @@ const ConnectToNotion = () => {
             ToastHandle('Successfully connected to Notion!', 'success');
             dispatch(getUserDataActions(false)); // update user data so we can show the new integration
             
-            // Redirect back to main integrations page after successful connection
-            window.location.href = '/setting/integrations';
+                         // Redirect back to main integrations page on the Third-party apps tab since Notion is there
+             window.location.href = '/setting/integrations?tab=third-party';
           } else {
             ToastHandle(`Failed to connect to Notion: ${result.error}`, 'danger');
           }
@@ -75,8 +78,8 @@ const ConnectToNotion = () => {
   const handleConnectClick = () => {
     if (isProcessing) { return; }
 
-    // Use the provided authorization URL
-    const authorizationUrl = "https://api.notion.com/v1/oauth/authorize?client_id=1eed872b-594c-8022-8cb4-00372c49bc69&response_type=code&owner=user&redirect_uri=https%3A%2F%2Fwww.hostbuddy.ai%2Fsetting%2Fintegrations%2Fnotion";
+    // Use the provided authorization URL with provider parameter
+    const authorizationUrl = "https://api.notion.com/v1/oauth/authorize?client_id=1eed872b-594c-8022-8cb4-00372c49bc69&response_type=code&owner=user&redirect_uri=https%3A%2F%2Fwww.hostbuddy.ai%2Fsetting%2Fintegrations%2Fnotion%3Fprovider%3Dnotion";
 
     // Redirect the user to Notion's authorization endpoint
     window.location.href = authorizationUrl;
