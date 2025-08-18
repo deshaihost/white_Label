@@ -500,8 +500,7 @@ function convertActionItemsToMetricData(actionItemData) {
       title: `Action Items - ${category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}`,
       data: [
         { number: receivedTotal, text: "Received" },
-        { number: closedTotal, text: "Closed" },
-        { number: closureRate, text: "Closure Rate (%)" }
+        { number: closedTotal, text: "Closed" }
       ]
     });
   });
@@ -514,8 +513,7 @@ function convertActionItemsToMetricData(actionItemData) {
     title: 'Action Items Received and Closed',
     data: [
       { number: totalReceived, text: "Received" },
-      { number: totalClosed, text: "Closed" },
-      { number: overallClosureRate, text: "Closure Rate (%)" }
+      { number: totalClosed, text: "Closed" }
     ]
   };
 
