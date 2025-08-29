@@ -58,10 +58,99 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
 
   // -------------------------------------------------------------------------------------------------------------------------------
 
+  // Sender API Logic ------------------------------------------------------------------------------------------
+  const [senders, setSenders] = useState([]);
+  const [selectedSenderId, setSelectedSenderId] = useState(null);
+  const [selectedSenderName, setSelectedSenderName] = useState(null);
+  const [sendersLoading, setSendersLoading] = useState(false);
+  const [setSenderLoading, setSetSenderLoading] = useState(false);
+  const [sendersDropdownOpen, setSendersDropdownOpen] = useState(false);
+
+  const callGetSendersApi = async () => {
+    setSendersLoading(true);
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; },
+        params: { property_name }
+      };
+
+      const response = await axios.get(`${baseUrl}/get_available_senders_for_property`, config);
+
+      if (response.status === 200) {
+        setSenders(response.data.senders || []);
+      } else {
+        ToastHandle(response?.data?.error || "Failed to fetch senders", "danger");
+      }
+    } catch (error) {
+      console.error("Error fetching senders:", error);
+      ToastHandle("Error fetching available senders", "danger");
+    } finally {
+      setSendersLoading(false);
+    }
+  };
+
+  const callSetSenderApi = async (senderId, senderName) => {
+    setSetSenderLoading(true);
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+
+      const jsonPayload = {
+        property_name,
+        sender_id: senderId,
+        sender_name: senderName
+      };
+      
+      const response = await axios.post(`${baseUrl}/set_sender_for_property`, jsonPayload, config);
+
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        getPropertyDataFromAPI(property_name);
+      } else {
+        ToastHandle(response?.data?.error || "Failed to set sender", "danger");
+      }
+    } catch (error) {
+      console.error("Error setting sender:", error);
+      ToastHandle("Error setting sender", "danger");
+    } finally {
+      setSetSenderLoading(false);
+    }
+  };
+
+  // When dropdown is opened for the first time, fetch senders
+  const handleSendersDropdownClick = () => {
+    if (!sendersDropdownOpen && senders.length === 0 && !sendersLoading) {
+      callGetSendersApi();
+    }
+    setSendersDropdownOpen(true);
+  };
+
   // When apiPropertyData populates (from parent), update prevLinkedIntegration
   useEffect(() => {
     if (apiPropertyData) {
       setPrevLinkedIntegration(apiPropertyData?.integration?.integration_property_name);
+      
+      // Set the current sender if available in property data
+      if (apiPropertyData.sender_name_airbnb) {
+        setSelectedSenderName(apiPropertyData.sender_name_airbnb);
+      } else {
+        setSelectedSenderName(null);
+      }
+      
+      if (apiPropertyData.sender_id_airbnb) {
+        setSelectedSenderId(apiPropertyData.sender_id_airbnb);
+      } else {
+        setSelectedSenderId("PRIMARY_HOST");
+      }
     }
   }, [apiPropertyData]);
 
@@ -131,6 +220,23 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
       ToastHandle("Error unlinking integration", "danger");
     } finally {
       setUnlinkIsLoading(false);
+    }
+  };
+
+  const handleSenderChange = (e) => {
+    const value = e.target.value;
+    
+    if (value === "PRIMARY_HOST") {
+      setSelectedSenderId("PRIMARY_HOST");
+      setSelectedSenderName(null);
+      callSetSenderApi("PRIMARY_HOST", null);
+    } else {
+      const sender = senders.find(s => s.id === value);
+      if (sender) {
+        setSelectedSenderId(sender.id);
+        setSelectedSenderName(sender.name);
+        callSetSenderApi(sender.id, sender.name);
+      }
     }
   };
 
@@ -219,6 +325,62 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
                   <p style={{ color: "white", marginTop: "20px" }}>Loading PMS integration information...</p>
                   {/* <BoxLoader /> */}
                 </>
+              )}
+
+              {/* Sender Selection */}
+              {apiPropertyData?.calry_property_id && apiPropertyData?.integration?.platform === 'hospitable' && (
+                <div style={{ marginTop: "30px" }}>
+                  <p className="text-white fs-15 fw-bold">Message Sender (Airbnb)</p>
+                  <div className="property_select">
+                    <select 
+                      id="sender_select" 
+                      style={{ marginTop: "5px", width: "70%" }} 
+                      className="form-select form-control" 
+                      onChange={handleSenderChange}
+                      onClick={handleSendersDropdownClick}
+                      value={selectedSenderId || "PRIMARY_HOST"}
+                    >
+                      {senders.length === 0 ? (
+                        <>
+                          {/* Ensure the current value is present as an option before senders are fetched */}
+                          {selectedSenderId && selectedSenderId !== "PRIMARY_HOST" ? (
+                            <option value={selectedSenderId}>
+                              {selectedSenderName || selectedSenderId}
+                            </option>
+                          ) : null}
+                          <option value="PRIMARY_HOST">Primary Host (Default)</option>
+                          {sendersLoading && (
+                            <option value="" disabled>Loading senders...</option>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <option value="PRIMARY_HOST">Primary Host (Default)</option>
+                          {senders.map(sender => (
+                            <option key={sender.id} value={sender.id}>
+                              {sender.name}
+                            </option>
+                          ))}
+                        </>
+                      )}
+                    </select>
+                  </div>
+                  
+                  {setSenderLoading && (
+                    <div style={{ marginTop: "10px" }}>
+                      <p style={{ color: "white" }}>Updating sender...</p>
+                      <BoxLoader />
+                    </div>
+                  )}
+                  
+                  {/*
+                  <p style={{ color: "white", marginTop: "10px", fontSize: "0.9rem" }}>
+                    {selectedSenderName 
+                      ? `Currently sending as: ${selectedSenderName}` 
+                      : "Currently sending as: Primary Host (Default)"}
+                  </p>
+                  */}
+                </div>
               )}
             </form>
           </div>
