@@ -32,6 +32,7 @@ const MildeSection = ({
   subscriptionPlan,
   accountAgeDays,
   setCurrentView,
+  userData,
 }) => {
   const eliteOrWorksPlan =
     (/elite|works|ultimate/i.test(subscriptionPlan) && !/mount|pro/i.test(subscriptionPlan)) || subscriptionPlan == "trial"; // Case-insensitive check for 'elite', 'works', or 'ultimate' in the plan name, but exclude 'mount' and 'pro'
@@ -40,6 +41,13 @@ const MildeSection = ({
   const propertyIsLocked = !!allConversationData?.is_locked;
   const accountAllowsGenerateButton =
     eliteFeaturesAvailable && !propertyIsLocked;
+
+  // Check if user has Hospitable integration
+  const hasHospitableIntegration = () => {
+    return !!(userData?.calry_integrations?.hospitable || 
+             (userData?.calry_integrations_old && 
+              userData.calry_integrations_old.some(integration => integration.hospitable)));
+  };
 
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -902,7 +910,7 @@ const MildeSection = ({
         setPropertyName(allConversationData.property_name);
 
         // Fetch available senders when a new conversation is selected
-        if (allConversationData.property_name) {
+        if (allConversationData.property_name && hasHospitableIntegration()) {
           getAvailableSendersApi(allConversationData.property_name);
         }
       }
@@ -1538,7 +1546,7 @@ const MildeSection = ({
                   </button>
 
                   {/* Sender Selection Dropdown */}
-                  {availableSenders.length > 0 && (
+                  {hasHospitableIntegration() && availableSenders.length > 0 && (
                     <div style={{ position: "relative" }}>
                       <button
                         ref={sendersButtonRef}
