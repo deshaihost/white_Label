@@ -24,15 +24,38 @@
   animation: slideDown 0.15s ease;
 }
 
+.senders-dropdown-item {
+  position: relative;
+}
+
+.senders-dropdown-item:hover {
+  background-color: rgba(1, 50, 128, 1) !important;
+}
+
+.senders-dropdown-item:hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background-color: rgba(62, 136, 247, 1);
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.senders-dropdown-item:active {
+  background-color: rgba(0, 19, 48, 1) !important;
+}
+
 .senders-dropdown-item:first-child {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 
 .senders-dropdown-item:last-child {
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  border-bottom: none;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 @keyframes slideDown {

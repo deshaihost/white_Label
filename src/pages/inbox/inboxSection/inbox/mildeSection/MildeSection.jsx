@@ -1592,14 +1592,14 @@ const MildeSection = ({
                             bottom: "100%",
                             right: "0",
                             marginBottom: "8px",
-                            backgroundColor: "#2B2E36",
-                            border: "1px solid #38383d",
-                            borderRadius: "8px",
-                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                            backgroundColor: "#262730",
+                            border: "1px solid #24262E",
+                            borderRadius: "4px",
                             zIndex: 1000,
                             minWidth: "200px",
                             maxHeight: "200px",
-                            overflowY: "auto"
+                            overflowY: "auto",
+                            overflow: "hidden"
                           }}
                         >
                           {availableSenders.map((sender) => (
@@ -1609,18 +1609,22 @@ const MildeSection = ({
                               onClick={() => handleSenderSelect(sender)}
                               style={{
                                 width: "100%",
-                                padding: "12px 16px",
+                                padding: "8px 16px",
                                 backgroundColor: "transparent",
                                 border: "none",
                                 color: "#D0D3DB",
                                 fontSize: "14px",
                                 textAlign: "left",
                                 cursor: "pointer",
-                                borderBottom: "1px solid #38383d",
-                                transition: "background-color 0.2s ease"
+                                transition: "background-color 0.2s ease",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                position: "relative",
+                                fontFamily: "DM Sans, Helvetica"
                               }}
                               onMouseEnter={(e) => {
-                                e.target.style.backgroundColor = "#3a3d47";
+                                e.target.style.backgroundColor = "rgba(1, 50, 128, 1)";
                               }}
                               onMouseLeave={(e) => {
                                 e.target.style.backgroundColor = "transparent";
