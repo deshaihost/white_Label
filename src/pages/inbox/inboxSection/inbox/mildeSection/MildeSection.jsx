@@ -7,7 +7,7 @@ import InboxUpgrade from "./inbox_Upgrade/InboxUpgrade";
 import "./index.css";
 import "./MildeSection.css";
 import { timeFormat } from "../../../../../helper/commonFun";
-import { callSendMessageApi } from "../../../../../helper/getConversationsTest/inboxApi";
+import { callSendMessageApi, callGetAvailableSendersApi, callSetSenderForConversationApi } from "../../../../../helper/getConversationsTest/inboxApi";
 import MessgFeedBckModel from "../../../../testProperty/banner/messages/messagesFeedBckModel/MessgFeedBckModel";
 import JustificationModal from "../../../../testProperty/banner/messages/justificationModal/justificationModal";
 import { Tooltip } from "react-tooltip";
@@ -32,6 +32,7 @@ const MildeSection = ({
   subscriptionPlan,
   accountAgeDays,
   setCurrentView,
+  userData,
 }) => {
   const eliteOrWorksPlan =
     (/elite|works|ultimate/i.test(subscriptionPlan) && !/mount|pro/i.test(subscriptionPlan)) || subscriptionPlan == "trial"; // Case-insensitive check for 'elite', 'works', or 'ultimate' in the plan name, but exclude 'mount' and 'pro'
@@ -40,6 +41,13 @@ const MildeSection = ({
   const propertyIsLocked = !!allConversationData?.is_locked;
   const accountAllowsGenerateButton =
     eliteFeaturesAvailable && !propertyIsLocked;
+
+  // Check if user has Hospitable integration
+  const hasHospitableIntegration = () => {
+    return !!(userData?.calry_integrations?.hospitable || 
+             (userData?.calry_integrations_old && 
+              userData.calry_integrations_old.some(integration => integration.hospitable)));
+  };
 
   const messageListRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -82,6 +90,46 @@ const MildeSection = ({
 
   // Add state for showing locked history
   const [showLocked, setShowLocked] = useState(false);
+
+  // Sender selection states
+  const [availableSenders, setAvailableSenders] = useState([]);
+  const [selectedSender, setSelectedSender] = useState(null);
+  const [sendersDropdownVisible, setSendersDropdownVisible] = useState(false);
+  const [loadingSenders, setLoadingSenders] = useState(false);
+  const sendersMenuRef = useRef(null);
+  const sendersButtonRef = useRef(null);
+
+  // API functions for sender management
+  const getAvailableSendersApi = async (propertyName) => {
+    setLoadingSenders(true);
+    try {
+      const result = await callGetAvailableSendersApi(propertyName);
+      if (result.senders) {
+        setAvailableSenders(result.senders);
+        return result;
+      } else {
+        return { error: result.error || "Failed to fetch available senders" };
+      }
+    } catch (error) {
+      return { error: "Internal server error" };
+    } finally {
+      setLoadingSenders(false);
+    }
+  };
+
+  const setSenderForConversationApi = async (conversationId, senderId, senderName) => {
+    try {
+      const result = await callSetSenderForConversationApi(conversationId, senderId, senderName);
+      if (!result.error) {
+        ToastHandle(`Sender set to ${senderName}`, "success");
+        return result;
+      } else {
+        return { error: result.error || "Failed to set sender" };
+      }
+    } catch (error) {
+      return { error: "Internal server error" };
+    }
+  };
 
   const callGenerateFromScratchApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -405,6 +453,30 @@ const MildeSection = ({
     }
   };
 
+  const handleSendersButtonClick = () => {
+    setSendersDropdownVisible(!sendersDropdownVisible);
+  };
+
+  const handleSenderSelect = async (sender) => {
+    setSendersDropdownVisible(false);
+    setSelectedSender(sender);
+    
+    if (conversationData?.conversation_id) {
+      const result = await setSenderForConversationApi(
+        conversationData.conversation_id,
+        sender.id,
+        sender.name
+      );
+      
+      if (!result.error) {
+        // Optionally refresh conversation data or update local state
+        if (updateConversationFromApi) {
+          await updateConversationFromApi(conversationData.conversation_id);
+        }
+      }
+    }
+  };
+
   const handleClickOutside = (event) => {
     // Close generate options menu when clicking outside
     if (
@@ -424,6 +496,16 @@ const MildeSection = ({
       !sendButtonRef.current.contains(event.target)
     ) {
       setSendOptionsVisible(false);
+    }
+
+    // Close senders dropdown when clicking outside
+    if (
+      sendersMenuRef.current &&
+      !sendersMenuRef.current.contains(event.target) &&
+      sendersButtonRef.current &&
+      !sendersButtonRef.current.contains(event.target)
+    ) {
+      setSendersDropdownVisible(false);
     }
   };
   // feed back functionality
@@ -826,6 +908,11 @@ const MildeSection = ({
         setConversationData(allConversationData);
         setMessages(newMessages);
         setPropertyName(allConversationData.property_name);
+
+        // Fetch available senders when a new conversation is selected
+        if (allConversationData.property_name && hasHospitableIntegration()) {
+          getAvailableSendersApi(allConversationData.property_name);
+        }
       }
     }
 
@@ -1393,7 +1480,7 @@ const MildeSection = ({
 
                 <div
                   className="send-container"
-                  style={{ position: "relative" }}
+                  style={{ position: "relative", display: "flex", gap: "8px", alignItems: "center" }}
                 >
                   <button
                     onClick={handleSendMessage}
@@ -1436,7 +1523,7 @@ const MildeSection = ({
                             fontSize: "12px",
                           }}
                         >
-                          Send
+                          Send 
                         </span>
                         <svg
                           width="15"
@@ -1454,24 +1541,111 @@ const MildeSection = ({
                             stroke-linejoin="round"
                           />
                         </svg>
-                        {/* <span>|</span> */}
-                        {/* <img 
-                        src={!inputValue.trim() ? ChevDownDisabledIcon : ChevDownEnabledIcon} 
-                        alt="Chevron Down Icon" 
-                        width="20" 
-                        height="20" 
-                        style={{ marginLeft: '0px', cursor: 'pointer' }}
-                        className={`send-button-chevron ${sendOptionsVisible ? 'active' : ''}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleSendButtonClick();
-                        }}
-                        ref={sendButtonRef} 
-                      /> */}
                       </>
                     )}
-                  </button>{" "}
+                  </button>
+
+                  {/* Sender Selection Dropdown */}
+                  {hasHospitableIntegration() && availableSenders.length > 0 && (
+                    <div style={{ position: "relative" }}>
+                      <button
+                        ref={sendersButtonRef}
+                        onClick={handleSendersButtonClick}
+                        className="senders-dropdown-button"
+                        disabled={loadingSenders}
+                        style={{
+                          backgroundColor: "#24262E",
+                          border: "1px solid #38383d",
+                          borderRadius: "4px",
+                          color: "#D0D3DB",
+                          padding: "8px 12px",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          minWidth: "140px",
+                          justifyContent: "space-between"
+                        }}
+                      >
+                        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {loadingSenders ? "Loading..." : selectedSender ? selectedSender.name : "Select Sender"}
+                        </span>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          style={{
+                            transform: sendersDropdownVisible ? "rotate(180deg)" : "rotate(0deg)",
+                            transition: "transform 0.2s ease"
+                          }}
+                        >
+                          <path
+                            d="M4 6L8 10L12 6"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+
+                      {sendersDropdownVisible && (
+                        <div
+                          ref={sendersMenuRef}
+                          className="senders-dropdown-menu"
+                          style={{
+                            position: "absolute",
+                            bottom: "100%",
+                            right: "0",
+                            marginBottom: "8px",
+                            backgroundColor: "#262730",
+                            border: "1px solid #24262E",
+                            borderRadius: "4px",
+                            zIndex: 1000,
+                            minWidth: "200px",
+                            maxHeight: "200px",
+                            overflowY: "auto",
+                            overflow: "hidden"
+                          }}
+                        >
+                          {availableSenders.map((sender) => (
+                            <button
+                              key={sender.id}
+                              className="senders-dropdown-item"
+                              onClick={() => handleSenderSelect(sender)}
+                              style={{
+                                width: "100%",
+                                padding: "8px 16px",
+                                backgroundColor: "transparent",
+                                border: "none",
+                                color: "#D0D3DB",
+                                fontSize: "14px",
+                                textAlign: "left",
+                                cursor: "pointer",
+                                transition: "background-color 0.2s ease",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                position: "relative",
+                                fontFamily: "DM Sans, Helvetica"
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = "transparent";
+                              }}
+                            >
+                              {sender.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {sendOptionsVisible && (
                     <div
                       ref={sendMenuRef}

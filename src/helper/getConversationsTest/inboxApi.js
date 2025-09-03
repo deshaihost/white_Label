@@ -160,3 +160,74 @@ export const callMarkConversationAsOpenedApi = async (conversationId, propertyNa
     return { error: "Internal server error" };
   }
 };
+
+// Get available senders for a property
+export const callGetAvailableSendersApi = async (propertyName) => {
+  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_KEY;
+
+  try {
+    const jwtToken = localStorage.getItem('jwt_token');
+    const headers = {
+      "X-API-Key": API_KEY
+    };
+    
+    // Only add Authorization header if we have a valid JWT token
+    if (jwtToken) {
+      headers['Authorization'] = `Bearer ${jwtToken}`;
+    }
+
+    const config = {
+      headers,
+      validateStatus: function (status) { return status >= 200 && status < 500; }
+    };
+    
+    const url = `${baseUrl}/get_available_senders_for_property?property_name=${encodeURIComponent(propertyName)}`;
+    const response = await axios.get(url, config);
+
+    if (response.status === 200) { }
+    else { ToastHandle(response?.data?.error, "danger"); }
+    return response.data;
+  } catch (error) {
+    ToastHandle("Internal server error", "danger");
+    return { error: "Internal server error" };
+  }
+};
+
+// Set sender for conversation
+export const callSetSenderForConversationApi = async (conversationId, senderId, senderName) => {
+  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_KEY;
+
+  try {
+    const jwtToken = localStorage.getItem('jwt_token');
+    const headers = {
+      "X-API-Key": API_KEY,
+      'Content-Type': 'application/json'
+    };
+    
+    // Only add Authorization header if we have a valid JWT token
+    if (jwtToken) {
+      headers['Authorization'] = `Bearer ${jwtToken}`;
+    }
+
+    const config = {
+      headers,
+      validateStatus: function (status) { return status >= 200 && status < 500; }
+    };
+    
+    const body_data = {
+      conversation_id: conversationId,
+      sender_id: senderId,
+      sender_name: senderName
+    };
+    const response = await axios.post(`${baseUrl}/set_sender_for_conversation`, body_data, config);
+
+    if (response.status === 200) { }
+    else { ToastHandle(response?.data?.error, "danger"); }
+    return response.data;
+  } catch (error) {
+    ToastHandle("Internal server error", "danger");
+    return { error: "Internal server error" };
+  }
+};
