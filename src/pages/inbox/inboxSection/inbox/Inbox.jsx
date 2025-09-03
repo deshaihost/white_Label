@@ -354,10 +354,10 @@ const Inbox = ({
         // First, check if we have comprehensive cached data from periodic updates
         const cachedConversation = conversationCache.get(conversationId);
         if (cachedConversation && cachedConversation._has_complete_data) {
-          console.log(
-            "Using comprehensive cached conversation data from periodic updates for:",
-            conversationId
-          );
+          // console.log(
+          //   "Using comprehensive cached conversation data from periodic updates for:",
+          //   conversationId
+          // );
 
           // Update pin status based on cached data
           const isPinnedValue = !!(
@@ -386,10 +386,10 @@ const Inbox = ({
 
         if (hasCompleteMessageData) {
           // Use the existing conversation data from the conversations array
-          console.log(
-            "Using complete conversation data from conversations array for:",
-            conversationId
-          );
+          // console.log(
+          //   "Using complete conversation data from conversations array for:",
+          //   conversationId
+          // );
 
           // Cache this conversation data for future use
           setConversationCache((prevCache) => {
@@ -417,10 +417,10 @@ const Inbox = ({
 
             if (cachedConversation) {
               // Use cached data instead of making API call, even if it's not marked as complete
-              console.log(
-                "Using fallback cached conversation data for:",
-                conversationId
-              );
+              // console.log(
+              //   "Using fallback cached conversation data for:",
+              //   conversationId
+              // );
 
               // Update pin status based on cached data
               const isPinnedValue = !!(
@@ -443,10 +443,10 @@ const Inbox = ({
               ...prev,
               _apiCallMade: true,
             })); // Only call API if we don't have cached data
-            console.log(
-              "No cached data found, making API call for:",
-              conversationId
-            );
+            // console.log(
+            //   "No cached data found, making API call for:",
+            //   conversationId
+            // );
             const result = await callGetSingleConversationApi(conversationId);
 
             if (
@@ -1174,9 +1174,9 @@ const Inbox = ({
         selectedConversation?.conversation_id === conversationId &&
         selectedConversation._apiCallMade
       ) {
-        console.log(
-          "Skipping duplicate API call for already loaded conversation"
-        );
+        // console.log(
+        //   "Skipping duplicate API call for already loaded conversation"
+        // );
         return; // Skip duplicate API call
       }
 
@@ -1184,10 +1184,10 @@ const Inbox = ({
       const updatedConversationData = await callGetSingleConversationApi(
         conversationId
       );
-      console.log(
-        "Updated conversation data:",
-        updatedConversationData.conversations[0].messages[0]
-      );
+      // console.log(
+      //   "Updated conversation data:",
+      //   updatedConversationData.conversations[0].messages[0]
+      // );
       if (
         updatedConversationData?.conversations &&
         updatedConversationData.conversations.length > 0
@@ -1218,7 +1218,7 @@ const Inbox = ({
       // If it doesn't exist in the list (which can happen after disassociation),
       // we need to add it
       if (!conversationExists) {
-        console.log("Adding newly disassociated conversation to list:", retrievedConversation);
+        // console.log("Adding newly disassociated conversation to list:", retrievedConversation);
         setConversations(prevConversations => 
           [retrievedConversation, ...prevConversations]
         );
@@ -1342,9 +1342,9 @@ const Inbox = ({
         }
       }
       if (removedCount > 0) {
-        console.log(
-          `Cache cleanup: Removed ${removedCount} old entries, ${newCache.size} entries remaining`
-        );
+        // console.log(
+        //   `Cache cleanup: Removed ${removedCount} old entries, ${newCache.size} entries remaining`
+        // );
       }
       return newCache;
     });
@@ -1357,25 +1357,25 @@ const Inbox = ({
 
   // Debug function to log cache statistics (can be called from browser console)
   window.logCacheStats = () => {
-    console.log(`Conversation Cache Statistics:
-      - Total cached conversations: ${conversationCache.size}
-      - Conversations with complete data: ${[...conversationCache.values()].filter((c) => c._has_complete_data)
-        .length
-      }
-      - Cache sources breakdown:
-        * From periodic updates: ${[...conversationCache.values()].filter((c) => c._from_periodic_update)
-        .length
-      }
-        * From API calls: ${[...conversationCache.values()].filter((c) => c._from_api_call).length
-      }
-        * From conversations array: ${[...conversationCache.values()].filter(
-        (c) => c._from_conversations_array
-      ).length
-      }
-        * From update API: ${[...conversationCache.values()].filter((c) => c._from_update_api)
-        .length
-      }
-    `);
+    // console.log(`Conversation Cache Statistics:
+    //   - Total cached conversations: ${conversationCache.size}
+    //   - Conversations with complete data: ${[...conversationCache.values()].filter((c) => c._has_complete_data)
+    //     .length
+    //   }
+    //   - Cache sources breakdown:
+    //     * From periodic updates: ${[...conversationCache.values()].filter((c) => c._from_periodic_update)
+    //     .length
+    //   }
+    //     * From API calls: ${[...conversationCache.values()].filter((c) => c._from_api_call).length
+    //   }
+    //     * From conversations array: ${[...conversationCache.values()].filter(
+    //     (c) => c._from_conversations_array
+    //   ).length
+    //   }
+    //     * From update API: ${[...conversationCache.values()].filter((c) => c._from_update_api)
+    //     .length
+    //   }
+    // `);
   };
 
   const updateSpecificConversation = (conversationId, updatedData) => {
@@ -1514,9 +1514,9 @@ const Inbox = ({
           const num_existing_convos = conversations.length;
           const num_convos_to_fetch = Math.max(num_existing_convos, 2); // always fetch at least 2 convos, even if we're only looking at one (e.g. due to filter), so if there's simultaneous updates we're more likely to catch it. 2 is still an arbitrary number tbh
 
-          console.log(
-            `Periodic update: Fetching ${num_convos_to_fetch} conversations to refresh cache`
-          );
+          // console.log(
+          //   `Periodic update: Fetching ${num_convos_to_fetch} conversations to refresh cache`
+          // );
           fetchConversations(
             num_convos_to_fetch,
             false,
@@ -1576,7 +1576,7 @@ const Inbox = ({
     // otherwise distribute space between items
     return rightSectionVisible ? "calc(100% - 290px)" : "100%";
   };
-  console.log("Selected conversation:", selectedConversation);
+  // console.log("Selected conversation:", selectedConversation);
   return (
     <>
       {" "}
