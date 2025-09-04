@@ -121,7 +121,17 @@ const MildeSection = ({
     try {
       const result = await callSetSenderForConversationApi(conversationId, senderId, senderName);
       if (!result.error) {
-        ToastHandle(`Sender set to ${senderName}`, "success");
+        // Custom toast messages based on sender type
+        let toastMessage;
+        if (senderId === "PRIMARY_HOST") {
+          toastMessage = "Sender set to Primary Host";
+        } else if (senderId === "CLEAR") {
+          toastMessage = "Sender set to Default sender";
+        } else {
+          toastMessage = `Sender set to ${senderName}`;
+        }
+        
+        ToastHandle(toastMessage, "success");
         return result;
       } else {
         return { error: result.error || "Failed to set sender" };
