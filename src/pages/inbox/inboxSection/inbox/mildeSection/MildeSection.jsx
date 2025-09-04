@@ -121,7 +121,17 @@ const MildeSection = ({
     try {
       const result = await callSetSenderForConversationApi(conversationId, senderId, senderName);
       if (!result.error) {
-        ToastHandle(`Sender set to ${senderName}`, "success");
+        // Custom toast messages based on sender type
+        let toastMessage;
+        if (senderId === "PRIMARY_HOST") {
+          toastMessage = "Sender set to Primary Host";
+        } else if (senderId === "CLEAR") {
+          toastMessage = "Sender set to Default sender";
+        } else {
+          toastMessage = `Sender set to ${senderName}`;
+        }
+        
+        ToastHandle(toastMessage, "success");
         return result;
       } else {
         return { error: result.error || "Failed to set sender" };
@@ -453,8 +463,33 @@ const MildeSection = ({
     }
   };
 
-  const handleSendersButtonClick = () => {
+  const handleSendersButtonClick = async () => {
     setSendersDropdownVisible(!sendersDropdownVisible);
+    
+    // Only fetch available senders when dropdown is clicked and opened
+    if (!sendersDropdownVisible && conversationData?.property_name && hasHospitableIntegration()) {
+      const result = await getAvailableSendersApi(conversationData.property_name);
+      
+      // Always include "Primary host" and "Default sender" options
+      let senderOptions = [
+        {
+          id: "PRIMARY_HOST",
+          name: "Primary host"
+        },
+        {
+          id: "default",
+          name: "Default sender"
+        }
+      ];
+      
+      // Add API senders if available
+      if (result && !result.error && result.senders && result.senders.length > 0) {
+        // Add API senders before the default options
+        senderOptions = [...result.senders, ...senderOptions];
+      }
+      
+      setAvailableSenders(senderOptions);
+    }
   };
 
   const handleSenderSelect = async (sender) => {
@@ -462,10 +497,27 @@ const MildeSection = ({
     setSelectedSender(sender);
     
     if (conversationData?.conversation_id) {
+      // Handle different sender types
+      let senderIdToSend, senderNameToSend;
+      
+      if (sender.id === "default") {
+        // If "Default sender" is selected, pass "CLEAR" to the API
+        senderIdToSend = "CLEAR";
+        senderNameToSend = "CLEAR";
+      } else if (sender.id === "PRIMARY_HOST") {
+        // If "Primary host" is selected, pass "PRIMARY_HOST" to the API
+        senderIdToSend = "PRIMARY_HOST";
+        senderNameToSend = "PRIMARY_HOST";
+      } else {
+        // Regular sender
+        senderIdToSend = sender.id;
+        senderNameToSend = sender.name;
+      }
+      
       const result = await setSenderForConversationApi(
         conversationData.conversation_id,
-        sender.id,
-        sender.name
+        senderIdToSend,
+        senderNameToSend
       );
       
       if (!result.error) {
@@ -909,9 +961,29 @@ const MildeSection = ({
         setMessages(newMessages);
         setPropertyName(allConversationData.property_name);
 
-        // Fetch available senders when a new conversation is selected
-        if (allConversationData.property_name && hasHospitableIntegration()) {
-          getAvailableSendersApi(allConversationData.property_name);
+        // Set the selected sender from conversation data and clear available senders
+        if (hasHospitableIntegration()) {
+          // Clear available senders - they will be loaded when dropdown is clicked
+          setAvailableSenders([]);
+          
+          if (allConversationData.sender_id_airbnb === "PRIMARY_HOST") {
+            // Handle PRIMARY_HOST case - show "Primary host"
+            setSelectedSender({
+              id: "PRIMARY_HOST",
+              name: "Primary host"
+            });
+          } else if (allConversationData.sender_name_airbnb) {
+            setSelectedSender({
+              id: allConversationData.sender_id_airbnb || "default",
+              name: allConversationData.sender_name_airbnb
+            });
+          } else {
+            // If no sender name in conversation, show "Default sender"
+            setSelectedSender({
+              id: "default",
+              name: "Default sender"
+            });
+          }
         }
       }
     }
@@ -1482,6 +1554,149 @@ const MildeSection = ({
                   className="send-container"
                   style={{ position: "relative", display: "flex", gap: "8px", alignItems: "center" }}
                 >
+                  {/* Sender Selection Dropdown */}
+                  {hasHospitableIntegration() && (
+                    <div style={{ position: "relative" }}>
+                      <button
+                        ref={sendersButtonRef}
+                        onClick={handleSendersButtonClick}
+                        className="senders-dropdown-button"
+                        disabled={loadingSenders}
+                        style={{
+                          backgroundColor: "#24262E",
+                          border: "1px solid #38383d",
+                          borderRadius: "4px",
+                          color: "#D0D3DB",
+                          padding: "3px 10px",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          minWidth: "140px",
+                          justifyContent: "space-between"
+                        }}
+                      >
+                        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {loadingSenders ? "Loading..." : selectedSender ? selectedSender.name : "Select Sender"}
+                        </span>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          style={{
+                            transform: sendersDropdownVisible ? "rotate(180deg)" : "rotate(0deg)",
+                            transition: "transform 0.2s ease"
+                          }}
+                        >
+                          <path
+                            d="M4 6L8 10L12 6"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+
+                      {sendersDropdownVisible && (
+                        <div
+                          ref={sendersMenuRef}
+                          className="senders-dropdown-menu"
+                          style={{
+                            position: "absolute",
+                            bottom: "100%",
+                            right: "0",
+                            marginBottom: "8px",
+                            backgroundColor: "#262730",
+                            border: "1px solid #24262E",
+                            borderRadius: "4px",
+                            zIndex: 1000,
+                            minWidth: "200px",
+                            maxHeight: "200px",
+                            overflowY: "auto",
+                            overflow: "hidden"
+                          }}
+                        >
+                          {loadingSenders ? (
+                            <div
+                              style={{
+                                padding: "8px 16px",
+                                color: "#D0D3DB",
+                                fontSize: "14px",
+                                textAlign: "center"
+                              }}
+                            >
+                              Loading...
+                            </div>
+                          ) : availableSenders.length > 0 ? (
+                            availableSenders.map((sender) => (
+                              <button
+                                key={sender.id}
+                                className="senders-dropdown-item"
+                                onClick={() => handleSenderSelect(sender)}
+                                style={{
+                                  width: "100%",
+                                  padding: "8px 16px",
+                                  backgroundColor: "transparent",
+                                  border: "none",
+                                  color: "#D0D3DB",
+                                  fontSize: "14px",
+                                  textAlign: "left",
+                                  cursor: "pointer",
+                                  transition: "background-color 0.2s ease",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
+                                  position: "relative",
+                                  fontFamily: "DM Sans, Helvetica"
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.target.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.target.style.backgroundColor = "transparent";
+                                }}
+                              >
+                                {sender.name}
+                              </button>
+                            ))
+                          ) : (
+                            <button
+                              className="senders-dropdown-item"
+                              onClick={() => handleSenderSelect({ id: "default", name: "Default sender" })}
+                              style={{
+                                width: "100%",
+                                padding: "8px 16px",
+                                backgroundColor: "transparent",
+                                border: "none",
+                                color: "#D0D3DB",
+                                fontSize: "14px",
+                                textAlign: "left",
+                                cursor: "pointer",
+                                transition: "background-color 0.2s ease",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                position: "relative",
+                                fontFamily: "DM Sans, Helvetica"
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = "transparent";
+                              }}
+                            >
+                              Default sender
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <button
                     onClick={handleSendMessage}
                     className="chat-send-button"
@@ -1544,107 +1759,6 @@ const MildeSection = ({
                       </>
                     )}
                   </button>
-
-                  {/* Sender Selection Dropdown */}
-                  {hasHospitableIntegration() && availableSenders.length > 0 && (
-                    <div style={{ position: "relative" }}>
-                      <button
-                        ref={sendersButtonRef}
-                        onClick={handleSendersButtonClick}
-                        className="senders-dropdown-button"
-                        disabled={loadingSenders}
-                        style={{
-                          backgroundColor: "#24262E",
-                          border: "1px solid #38383d",
-                          borderRadius: "4px",
-                          color: "#D0D3DB",
-                          padding: "8px 12px",
-                          fontSize: "12px",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                          minWidth: "140px",
-                          justifyContent: "space-between"
-                        }}
-                      >
-                        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {loadingSenders ? "Loading..." : selectedSender ? selectedSender.name : "Select Sender"}
-                        </span>
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          style={{
-                            transform: sendersDropdownVisible ? "rotate(180deg)" : "rotate(0deg)",
-                            transition: "transform 0.2s ease"
-                          }}
-                        >
-                          <path
-                            d="M4 6L8 10L12 6"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
-
-                      {sendersDropdownVisible && (
-                        <div
-                          ref={sendersMenuRef}
-                          className="senders-dropdown-menu"
-                          style={{
-                            position: "absolute",
-                            bottom: "100%",
-                            right: "0",
-                            marginBottom: "8px",
-                            backgroundColor: "#262730",
-                            border: "1px solid #24262E",
-                            borderRadius: "4px",
-                            zIndex: 1000,
-                            minWidth: "200px",
-                            maxHeight: "200px",
-                            overflowY: "auto",
-                            overflow: "hidden"
-                          }}
-                        >
-                          {availableSenders.map((sender) => (
-                            <button
-                              key={sender.id}
-                              className="senders-dropdown-item"
-                              onClick={() => handleSenderSelect(sender)}
-                              style={{
-                                width: "100%",
-                                padding: "8px 16px",
-                                backgroundColor: "transparent",
-                                border: "none",
-                                color: "#D0D3DB",
-                                fontSize: "14px",
-                                textAlign: "left",
-                                cursor: "pointer",
-                                transition: "background-color 0.2s ease",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                position: "relative",
-                                fontFamily: "DM Sans, Helvetica"
-                              }}
-                              onMouseEnter={(e) => {
-                                e.target.style.backgroundColor = "rgba(1, 50, 128, 1)";
-                              }}
-                              onMouseLeave={(e) => {
-                                e.target.style.backgroundColor = "transparent";
-                              }}
-                            >
-                              {sender.name}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
 
                   {sendOptionsVisible && (
                     <div
