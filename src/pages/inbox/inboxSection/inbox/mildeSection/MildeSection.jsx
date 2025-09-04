@@ -1567,7 +1567,7 @@ const MildeSection = ({
                           border: "1px solid #38383d",
                           borderRadius: "4px",
                           color: "#D0D3DB",
-                          padding: "8px 12px",
+                          padding: "3px 10px",
                           fontSize: "12px",
                           cursor: "pointer",
                           display: "flex",
