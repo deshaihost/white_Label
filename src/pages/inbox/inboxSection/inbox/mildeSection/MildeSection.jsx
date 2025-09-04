@@ -460,13 +460,25 @@ const MildeSection = ({
     if (!sendersDropdownVisible && conversationData?.property_name && hasHospitableIntegration()) {
       const result = await getAvailableSendersApi(conversationData.property_name);
       
-      // If no senders available from API, set "Default sender" option
-      if (!result || result.error || !result.senders || result.senders.length === 0) {
-        setAvailableSenders([{
+      // Always include "Primary host" and "Default sender" options
+      let senderOptions = [
+        {
+          id: "PRIMARY_HOST",
+          name: "Primary host"
+        },
+        {
           id: "default",
           name: "Default sender"
-        }]);
+        }
+      ];
+      
+      // Add API senders if available
+      if (result && !result.error && result.senders && result.senders.length > 0) {
+        // Add API senders before the default options
+        senderOptions = [...result.senders, ...senderOptions];
       }
+      
+      setAvailableSenders(senderOptions);
     }
   };
 
@@ -475,9 +487,22 @@ const MildeSection = ({
     setSelectedSender(sender);
     
     if (conversationData?.conversation_id) {
-      // If "Default sender" is selected, pass "CLEAR" to the API
-      const senderIdToSend = sender.id === "default" ? "CLEAR" : sender.id;
-      const senderNameToSend = sender.id === "default" ? "CLEAR" : sender.name;
+      // Handle different sender types
+      let senderIdToSend, senderNameToSend;
+      
+      if (sender.id === "default") {
+        // If "Default sender" is selected, pass "CLEAR" to the API
+        senderIdToSend = "CLEAR";
+        senderNameToSend = "CLEAR";
+      } else if (sender.id === "PRIMARY_HOST") {
+        // If "Primary host" is selected, pass "PRIMARY_HOST" to the API
+        senderIdToSend = "PRIMARY_HOST";
+        senderNameToSend = "PRIMARY_HOST";
+      } else {
+        // Regular sender
+        senderIdToSend = sender.id;
+        senderNameToSend = sender.name;
+      }
       
       const result = await setSenderForConversationApi(
         conversationData.conversation_id,
@@ -931,7 +956,13 @@ const MildeSection = ({
           // Clear available senders - they will be loaded when dropdown is clicked
           setAvailableSenders([]);
           
-          if (allConversationData.sender_name_airbnb) {
+          if (allConversationData.sender_id_airbnb === "PRIMARY_HOST") {
+            // Handle PRIMARY_HOST case - show "Primary host"
+            setSelectedSender({
+              id: "PRIMARY_HOST",
+              name: "Primary host"
+            });
+          } else if (allConversationData.sender_name_airbnb) {
             setSelectedSender({
               id: allConversationData.sender_id_airbnb || "default",
               name: allConversationData.sender_name_airbnb
