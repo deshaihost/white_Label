@@ -453,8 +453,21 @@ const MildeSection = ({
     }
   };
 
-  const handleSendersButtonClick = () => {
+  const handleSendersButtonClick = async () => {
     setSendersDropdownVisible(!sendersDropdownVisible);
+    
+    // Only fetch available senders when dropdown is clicked and opened
+    if (!sendersDropdownVisible && conversationData?.property_name && hasHospitableIntegration()) {
+      const result = await getAvailableSendersApi(conversationData.property_name);
+      
+      // If no senders available from API, set "Default sender" option
+      if (!result || result.error || !result.senders || result.senders.length === 0) {
+        setAvailableSenders([{
+          id: "default",
+          name: "Default sender"
+        }]);
+      }
+    }
   };
 
   const handleSenderSelect = async (sender) => {
@@ -462,10 +475,14 @@ const MildeSection = ({
     setSelectedSender(sender);
     
     if (conversationData?.conversation_id) {
+      // If "Default sender" is selected, pass "CLEAR" to the API
+      const senderIdToSend = sender.id === "default" ? "CLEAR" : sender.id;
+      const senderNameToSend = sender.id === "default" ? "CLEAR" : sender.name;
+      
       const result = await setSenderForConversationApi(
         conversationData.conversation_id,
-        sender.id,
-        sender.name
+        senderIdToSend,
+        senderNameToSend
       );
       
       if (!result.error) {
@@ -909,9 +926,23 @@ const MildeSection = ({
         setMessages(newMessages);
         setPropertyName(allConversationData.property_name);
 
-        // Fetch available senders when a new conversation is selected
-        if (allConversationData.property_name && hasHospitableIntegration()) {
-          getAvailableSendersApi(allConversationData.property_name);
+        // Set the selected sender from conversation data and clear available senders
+        if (hasHospitableIntegration()) {
+          // Clear available senders - they will be loaded when dropdown is clicked
+          setAvailableSenders([]);
+          
+          if (allConversationData.sender_name_airbnb) {
+            setSelectedSender({
+              id: allConversationData.sender_id_airbnb || "default",
+              name: allConversationData.sender_name_airbnb
+            });
+          } else {
+            // If no sender name in conversation, show "Default sender"
+            setSelectedSender({
+              id: "default",
+              name: "Default sender"
+            });
+          }
         }
       }
     }
@@ -1483,7 +1514,7 @@ const MildeSection = ({
                   style={{ position: "relative", display: "flex", gap: "8px", alignItems: "center" }}
                 >
                   {/* Sender Selection Dropdown */}
-                  {hasHospitableIntegration() && availableSenders.length > 0 && (
+                  {hasHospitableIntegration() && (
                     <div style={{ position: "relative" }}>
                       <button
                         ref={sendersButtonRef}
@@ -1547,11 +1578,53 @@ const MildeSection = ({
                             overflow: "hidden"
                           }}
                         >
-                          {availableSenders.map((sender) => (
+                          {loadingSenders ? (
+                            <div
+                              style={{
+                                padding: "8px 16px",
+                                color: "#D0D3DB",
+                                fontSize: "14px",
+                                textAlign: "center"
+                              }}
+                            >
+                              Loading...
+                            </div>
+                          ) : availableSenders.length > 0 ? (
+                            availableSenders.map((sender) => (
+                              <button
+                                key={sender.id}
+                                className="senders-dropdown-item"
+                                onClick={() => handleSenderSelect(sender)}
+                                style={{
+                                  width: "100%",
+                                  padding: "8px 16px",
+                                  backgroundColor: "transparent",
+                                  border: "none",
+                                  color: "#D0D3DB",
+                                  fontSize: "14px",
+                                  textAlign: "left",
+                                  cursor: "pointer",
+                                  transition: "background-color 0.2s ease",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
+                                  position: "relative",
+                                  fontFamily: "DM Sans, Helvetica"
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.target.style.backgroundColor = "rgba(1, 50, 128, 1)";
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.target.style.backgroundColor = "transparent";
+                                }}
+                              >
+                                {sender.name}
+                              </button>
+                            ))
+                          ) : (
                             <button
-                              key={sender.id}
                               className="senders-dropdown-item"
-                              onClick={() => handleSenderSelect(sender)}
+                              onClick={() => handleSenderSelect({ id: "default", name: "Default sender" })}
                               style={{
                                 width: "100%",
                                 padding: "8px 16px",
@@ -1575,9 +1648,9 @@ const MildeSection = ({
                                 e.target.style.backgroundColor = "transparent";
                               }}
                             >
-                              {sender.name}
+                              Default sender
                             </button>
-                          ))}
+                          )}
                         </div>
                       )}
                     </div>
