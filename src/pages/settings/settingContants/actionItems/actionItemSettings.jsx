@@ -639,7 +639,7 @@ const ActionItemsSettings = () => {
                 `}</style>
               </div>
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', marginBottom: '8px' }}>Description (optional)</label>
+                <label style={{ display: 'block', marginBottom: '8px' }}>Description</label>
                 <textarea
                   style={{
                     width: '100%',
@@ -702,159 +702,159 @@ const ActionItemsSettings = () => {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {categories
-                .filter(category => category.name?.toUpperCase() !== "OTHER")
-                .map(category => (
-                  <div
-                    key={category.id || category.name}
-                    style={{
-                      backgroundColor: 'rgba(255,255,255,0.05)',
-                      padding: '16px',
-                      borderRadius: '4px'
-                    }}
-                  >
-                    {editingCategory && editingCategory.id === (category.id || category.name) ? (
-                      <div>
-                        <div style={{ marginBottom: '16px' }}>
-                          <input
-                            type="text"
-                            style={{
-                              width: '100%',
-                              backgroundColor: '#0f1a36',
-                              border: '1px solid rgba(255,255,255,0.1)',
-                              borderRadius: '4px',
-                              color: '#fff',
-                              padding: '10px 15px',
-                              fontSize: '14px'
-                            }}
-                            value={editingCategory.name}
-                            onChange={(e) => setEditingCategory({ ...editingCategory, name: e.target.value })}
-                            className="custom-placeholder"
-                          />
-                        </div>
-                        <div style={{ marginBottom: '16px' }}>
-                          <textarea
-                            style={{
-                              width: '100%',
-                              backgroundColor: '#0f1a36',
-                              border: '1px solid rgba(255,255,255,0.1)',
-                              borderRadius: '4px',
-                              color: '#fff',
-                              padding: '10px 15px',
-                              minHeight: '100px',
-                              fontSize: '14px',
-                              resize: 'vertical',
-                              paddingLeft: '15px' // Fix left padding
-                            }}
-                            placeholder="Description"
-                            value={editingCategory.description || ''}
-                            onChange={(e) => setEditingCategory({ ...editingCategory, description: e.target.value })}
-                            rows={4}
-                            className="custom-placeholder"
-                          />
-                        </div>
-                        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                          <button
-                            style={{
-                              backgroundColor: '#28a745',
-                              color: '#fff',
-                              border: 'none',
-                              borderRadius: '20px',
-                              padding: '8px 24px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              fontWeight: '500',
-                              fontSize: '14px'
-                            }}
-                            onClick={handleUpdateCategory}
-                            disabled={isSubmitting}
-                          >
-                            Save Changes
-                          </button>
-                          <button
-                            style={{
-                              backgroundColor: '#6c757d',
-                              color: '#fff',
-                              border: 'none',
-                              borderRadius: '20px',
-                              padding: '8px 24px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              fontWeight: '500',
-                              fontSize: '14px'
-                            }}
-                            onClick={cancelEditing}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  .filter(category => category.name?.toUpperCase() !== "OTHER")
+                  .map(category => (
+                    <div
+                      key={category.id || category.name}
+                      style={{
+                        backgroundColor: 'rgba(255,255,255,0.05)',
+                        padding: '16px',
+                        borderRadius: '4px'
+                      }}
+                    >
+                      {editingCategory && editingCategory.id === (category.id || category.name) ? (
                         <div>
-                          <h4 style={{ fontSize: '16px', fontWeight: '500', color: '#fff', margin: '0 0 4px 0' }}>
-                            {category.name}
-                          </h4>
-                          {category.definition && (
-                            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px', margin: 0 }}>
-                              {category.definition}
-                            </p>
-                          )}
+                          <div style={{ marginBottom: '16px' }}>
+                            <label style={{ display: 'block', marginBottom: '8px' }}>Category Name</label>
+                            <div
+                              style={{
+                                width: '100%',
+                                backgroundColor: '#0f1a36',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                borderRadius: '4px',
+                                color: '#fff',
+                                padding: '10px 15px',
+                                fontSize: '14px',
+                                opacity: 0.8
+                              }}
+                            >
+                              {editingCategory.name}
+                            </div>
+                          </div>
+                          <div style={{ marginBottom: '16px' }}>
+                            <textarea
+                              style={{
+                                width: '100%',
+                                backgroundColor: '#0f1a36',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                borderRadius: '4px',
+                                color: '#fff',
+                                padding: '10px 15px',
+                                minHeight: '100px',
+                                fontSize: '14px',
+                                resize: 'vertical',
+                                paddingLeft: '15px' // Fix left padding
+                              }}
+                              placeholder="Description"
+                              value={editingCategory.description || ''}
+                              onChange={(e) => setEditingCategory({ ...editingCategory, description: e.target.value })}
+                              rows={4}
+                              className="custom-placeholder"
+                            />
+                          </div>
+                          <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                            <button
+                              style={{
+                                backgroundColor: '#28a745',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '20px',
+                                padding: '8px 24px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                fontWeight: '500',
+                                fontSize: '14px'
+                              }}
+                              onClick={handleUpdateCategory}
+                              disabled={isSubmitting}
+                            >
+                              Save Changes
+                            </button>
+                            <button
+                              style={{
+                                backgroundColor: '#6c757d',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '20px',
+                                padding: '8px 24px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                fontWeight: '500',
+                                fontSize: '14px'
+                              }}
+                              onClick={cancelEditing}
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </div>
-                        <div style={{ display: 'flex' }}>
-                          <button
-                            style={{
-                              width: '32px',
-                              height: '32px',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              border: '1px solid #3498ff',
-                              borderRadius: '50%',
-                              cursor: 'pointer',
-                              backgroundColor: 'transparent',
-                              color: '#3498ff',
-                              marginLeft: '8px'
-                            }}
-                            onClick={() => startEditing(category)}
-                            aria-label="Edit"
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            style={{
-                              width: '32px',
-                              height: '32px',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              border: '1px solid #ff3b30',
-                              borderRadius: '50%',
-                              cursor: 'pointer',
-                              backgroundColor: 'transparent',
-                              color: '#ff3b30',
-                              marginLeft: '8px',
-                              padding: 0,  // Add this to prevent padding issues
-                              overflow: 'hidden', // Add this to ensure content stays within circle
-                              boxShadow: 'none', // Prevent any default button shadows
-                              outline: 'none'  // Prevent default focus outlines
-                            }}
-                            onClick={() => {
-                              setCategoryToDelete({ id: category.id || category.name, name: category.name });
-                              setShowDeleteModal(true);
-                            }}
-                            aria-label="Delete"
-                          >
-                            <FaTrash style={{ fontSize: '14px' }} />
-                          </button>
+                      ) : (
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                          <div>
+                            <h4 style={{ fontSize: '16px', fontWeight: '500', color: '#fff', margin: '0 0 4px 0' }}>
+                              {category.name}
+                            </h4>
+                            {category.definition && (
+                              <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px', margin: 0 }}>
+                                {category.definition}
+                              </p>
+                            )}
+                          </div>
+                          <div style={{ display: 'flex' }}>
+                            <button
+                              style={{
+                                width: '32px',
+                                height: '32px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                border: '1px solid #3498ff',
+                                borderRadius: '50%',
+                                cursor: 'pointer',
+                                backgroundColor: 'transparent',
+                                color: '#3498ff',
+                                marginLeft: '8px'
+                              }}
+                              onClick={() => startEditing(category)}
+                              aria-label="Edit"
+                            >
+                              <FaEdit />
+                            </button>
+                            <button
+                              style={{
+                                width: '32px',
+                                height: '32px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                border: '1px solid #ff3b30',
+                                borderRadius: '50%',
+                                cursor: 'pointer',
+                                backgroundColor: 'transparent',
+                                color: '#ff3b30',
+                                marginLeft: '8px',
+                                padding: 0,  // Add this to prevent padding issues
+                                overflow: 'hidden', // Add this to ensure content stays within circle
+                                boxShadow: 'none', // Prevent any default button shadows
+                                outline: 'none'  // Prevent default focus outlines
+                              }}
+                              onClick={() => {
+                                setCategoryToDelete({ id: category.id || category.name, name: category.name });
+                                setShowDeleteModal(true);
+                              }}
+                              aria-label="Delete"
+                            >
+                              <FaTrash style={{ fontSize: '14px' }} />
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                      )}
+                    </div>
+                  ))}
               </div>
             )}
           </div>

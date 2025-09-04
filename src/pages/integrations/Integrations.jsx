@@ -143,6 +143,7 @@ const Integrations = () => {
               </div>
             </a>
           </div>
+          {/*
           <div className="col-lg-4 col-sm-6">
             <a href="https://www.avantio.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
@@ -150,6 +151,7 @@ const Integrations = () => {
               </div>
             </a>
           </div>
+          */}
           <div className="col-lg-4 col-sm-6">
             <a href="https://www.tokeet.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">

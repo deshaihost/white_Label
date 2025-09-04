@@ -2109,6 +2109,7 @@ const Inbox = ({
                     subscriptionPlan={subscriptionPlan}
                     accountAgeDays={accountAgeDays}
                     setCurrentView={setCurrentView}
+                    userData={userData}
                   />
                 </div>
 
@@ -3101,6 +3102,7 @@ const Inbox = ({
                 subscriptionPlan={subscriptionPlan}
                 accountAgeDays={accountAgeDays}
                 setCurrentView={setCurrentView}
+                userData={userData}
               />
             )}
             {currentView === "details" && (
