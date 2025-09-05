@@ -104,8 +104,15 @@ const LeftMessage = ({
   const dropdownRef = useRef(null);
 
   const [selectedConversationId, setSelectedConversationId] = useState("");
+  const [userHasManuallySelected, setUserHasManuallySelected] = useState(false); // Track if user has manually selected a conversation
+  const [initialAutoSelectionDone, setInitialAutoSelectionDone] = useState(false); // Track if initial auto-selection has been done
   const [nextBatchLoading, setNextBatchLoading] = useState(false);
+  
+  // Use ref to track manual selection immediately to prevent race conditions
+  const userHasManuallySelectedRef = useRef(false);
 
+  // State declarations that need to be available early
+  const [filteredConversations, setFilteredConversations] = useState([]);
   const [filteredGuests, setFilteredGuests] = useState([]);
   const [searchFocus, setSearchFocus] = useState(false);
   const [guestNameInputVal, setGuestNameInputVal] = useState(""); // currently typed text in the guest name search input
@@ -127,7 +134,6 @@ const LeftMessage = ({
 
   const [filterQueryLoading, setFilterQueryLoading] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
-  const [filteredConversations, setFilteredConversations] = useState([]);
   const [filteredGuestsFromSearch, setFilteredGuestsFromSearch] = useState([]);
   const [searchFocused, setSearchFocused] = useState(false);
   const searchDropdownRef = useRef(null);
@@ -205,7 +211,7 @@ const LeftMessage = ({
 
   useEffect(() => {
     if (contactType) {
-      console.log("Contact type changed:", contactType);
+      // console.log("Contact type changed:", contactType);
       const baseUrl = process.env.REACT_APP_API_ENDPOINT;
       const API_KEY = process.env.REACT_APP_API_KEY;
       const token = getActiveToken() || localStorage.getItem("authToken");
@@ -377,8 +383,12 @@ const getConversationTimestamp = (conversation) => {
     : new Date().getTime();
 };
 
-  const openConversationHandle = (data, id) => {
-  console.log("Opening conversation:", id, data);
+  const openConversationHandle = (data, id, isManualSelection = false) => {
+  // CRITICAL: If this is a manual selection, immediately set the flag to prevent auto-selection
+  if (isManualSelection) {
+    userHasManuallySelectedRef.current = true; // Set ref immediately
+    setUserHasManuallySelected(true); // Set state for UI
+  }
   
   // Enhanced cache-aware conversation selection
   const hasCompleteMessageData =
@@ -436,6 +446,7 @@ const getConversationTimestamp = (conversation) => {
   });
   
   setSelectedConversationId(id); // This is used to highlight the selected conversation
+  
   markConversationAsOpened(data.conversation_id, data.property_name);
 
   // On mobile, navigate to messages view
@@ -451,17 +462,53 @@ const getConversationTimestamp = (conversation) => {
         ? filteredConversations
         : allConversations;
 
-    if (
-      selectedConversationId === "" &&
+    console.log("🔍 Auto-selection useEffect triggered:", {
+      trigger: "useEffect dependency changed",
+      isMobile,
+      selectedConversationId,
+      userHasManuallySelected,
+      userHasManuallySelectedRef: userHasManuallySelectedRef.current,
+      initialAutoSelectionDone,
+      conversationsCount: conversationsToUse.length,
+      currentView,
+      firstConversation: conversationsToUse[0]?.guest_name || conversationsToUse[0]?.conversation_id,
+      conditions: {
+        "selectedConversationId === ''": selectedConversationId === "",
+        "conversationsToUse.length > 0": conversationsToUse.length > 0,
+        "(!isMobile || (currentView !== 'conversations' && currentView !== 'messages'))": (!isMobile || (currentView !== "conversations" && currentView !== "messages")),
+        "!userHasManuallySelected": !userHasManuallySelected,
+        "!userHasManuallySelectedRef.current": !userHasManuallySelectedRef.current,
+        "!initialAutoSelectionDone": !initialAutoSelectionDone
+      }
+    });
+
+    // MOBILE FIX: Only auto-select on initial load, never after user interaction or API updates
+    // Use ref to check manual selection immediately to prevent race conditions
+    // On mobile, don't auto-select if we're transitioning to messages view (user likely just selected something)
+    const shouldAutoSelect = selectedConversationId === "" &&
       conversationsToUse.length > 0 &&
-      (!isMobile || currentView !== "conversations")
-    ) {
+      (!isMobile || (currentView !== "conversations" && currentView !== "messages")) && // Prevent auto-selection when switching to messages view on mobile
+      !userHasManuallySelected &&
+      !userHasManuallySelectedRef.current && // Check ref immediately
+      !initialAutoSelectionDone;
+
+    console.log("❓ Should auto-select:", shouldAutoSelect);
+
+    if (shouldAutoSelect) {
+      console.log("✅ Auto-selecting first conversation:", {
+        conversationId: conversationsToUse[0]?.conversation_id,
+        guestName: conversationsToUse[0]?.guest_name
+      });
+      setInitialAutoSelectionDone(true); // Mark that we've done the initial auto-selection
       openConversationHandle(
         conversationsToUse[0],
-        conversationsToUse[0]?.conversation_id
+        conversationsToUse[0]?.conversation_id,
+        false // This is auto-selection, not manual
       );
+    } else {
+      console.log("❌ Auto-selection skipped");
     }
-  }, [filteredConversations, allConversations, currentView]);
+  }, [filteredConversations, allConversations, currentView, userHasManuallySelected, initialAutoSelectionDone, selectedConversationId]);
   // Add the listener for clicking outside the guest search dropdown (so it can be closed)
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -492,6 +539,11 @@ const getConversationTimestamp = (conversation) => {
     
     // Reset the flag when search is cleared
     setJustSelectedFromPhoneSearch(false);
+    
+    // Reset manual selection flag when search is cleared
+    setUserHasManuallySelected(false);
+    userHasManuallySelectedRef.current = false; // Reset ref too
+    setInitialAutoSelectionDone(false); // Allow auto-selection to work again after search is cleared
 
     // If there was a guest filter active, clear it and reload all conversations
     if (guestNameSearchVal) {
@@ -562,7 +614,7 @@ const getConversationTimestamp = (conversation) => {
       setFilteredGuestsFromSearch([]); // Clear guest name dropdown
       setFilteredContactsFromPhoneSearch(filteredContacts); // Show in phone dropdown
 
-      console.log("Filtered conversations from phone search:", allConversations);
+      // console.log("Filtered conversations from phone search:", allConversations);
     }
 
     // ======== GUEST NAME SEARCH LOGIC ========
@@ -597,10 +649,10 @@ const getConversationTimestamp = (conversation) => {
   };
                 
   useEffect(() => {
-    console.log("Input value changed:", searchInputValue);
+    // console.log("Input value changed:", searchInputValue);
     // If we just selected from phone search, don't filter anything - keep the selected conversation
     if (justSelectedFromPhoneSearch) {
-      console.log("Just selected from phone search, keeping current filtered conversations", setSearchInputValue);
+      // console.log("Just selected from phone search, keeping current filtered conversations", setSearchInputValue);
       return; // Don't change justSelectedFromPhoneSearch here
     }
 
@@ -621,7 +673,7 @@ const getConversationTimestamp = (conversation) => {
       const inputLower = searchInputValue.toLowerCase();
       const inputClean = searchInputValue.replace(/^\+/, ''); // Remove leading + for phone matching
 
-      console.log("All conversations for filtering:", allConversations);
+      // console.log("All conversations for filtering:", allConversations);
 
       const filtered = allConversations.filter((convo) => {
         // Skip OpenPhone conversations that belong to another conversation
@@ -665,29 +717,29 @@ const getConversationTimestamp = (conversation) => {
         const matched = guestNameMatch || phoneMatch || nameMatch || conversationIdMatch;
 
         if (searchInputValue.trim()) {
-          console.log(`Conversation ${convo.conversation_id} matched: ${matched}`, {
-            guestNameMatch, phoneMatch, nameMatch, conversationIdMatch,
-            searchInputValue, inputLower, inputClean, phoneFromId
-          });
+          // console.log(`Conversation ${convo.conversation_id} matched: ${matched}`, {
+          //   guestNameMatch, phoneMatch, nameMatch, conversationIdMatch,
+          //   searchInputValue, inputLower, inputClean, phoneFromId
+          // });
         }
 
         return matched;
       });
 
-      console.log("Filtered conversations based on search input:", filtered);
+      // console.log("Filtered conversations based on search input:", filtered);
       setFilteredConversations(filtered);
     }
   }, [allConversations, searchInputValue, justSelectedFromPhoneSearch]);
 
   const handleContactSelectFromPhoneSearch = async (contact) => {
-    console.log("Selected contact:", contact);
+    // console.log("Selected contact:", contact);
     setFilteredContactsFromPhoneSearch([]);
     setFilteredGuestsFromSearch([]);
 
     try {
       // Fetch the conversation from the API
       const apiResult = await callGetSingleConversationApi(contact.conversation_id);
-      console.log("API result for phone contact:", apiResult);
+      // console.log("API result for phone contact:", apiResult);
 
       const conversation =
         apiResult?.conversations && apiResult.conversations.length > 0
@@ -700,7 +752,7 @@ const getConversationTimestamp = (conversation) => {
         : contact.conversation_id;
 
       if (conversation) {
-        console.log("Found conversation:", conversation);
+        // console.log("Found conversation:", conversation);
 
         // Mark this conversation as complete to identify it later
         conversation._isCompleteConversation = true;
@@ -734,14 +786,14 @@ const getConversationTimestamp = (conversation) => {
         // Always set filtered conversations explicitly to make sure the tile appears
         setFilteredConversations([conversation]);
         
-        console.log("Set filtered conversations to:", [conversation]);
-        console.log("Updated all conversations:", updatedConversations);
+        // console.log("Set filtered conversations to:", [conversation]);
+        // console.log("Updated all conversations:", updatedConversations);
 
         // Open the conversation
         // openConversationHandle(conversation, conversation.conversation_id);
         
       } else {
-        console.log("No conversation found for contact");
+        // console.log("No conversation found for contact");
         setSearchInputValue(phoneNumber);
         setFilteredConversations([]);
       }
@@ -760,6 +812,11 @@ const getConversationTimestamp = (conversation) => {
   const handleGuestSelectFromSearch = async (guest) => {
     // Start loading state
     setFilterQueryLoading(true);
+    
+    // Reset manual selection flag when guest search is used
+    setUserHasManuallySelected(false);
+    userHasManuallySelectedRef.current = false; // Reset ref too
+    setInitialAutoSelectionDone(false); // Allow auto-selection to work again after guest search
     
     // Clear guest search results dropdown
     setFilteredGuestsFromSearch([]);
@@ -890,6 +947,11 @@ const getConversationTimestamp = (conversation) => {
 
     // Also immediately apply the reset by clearing actual filter states
     setFilterQueryLoading(true);
+    
+    // Reset manual selection flag when filters are reset
+    setUserHasManuallySelected(false);
+    userHasManuallySelectedRef.current = false; // Reset ref too
+    setInitialAutoSelectionDone(false); // Allow auto-selection to work again after filters reset
 
     // Clear the actual filter states
     setPropertyFilterVal("");
@@ -919,6 +981,11 @@ const getConversationTimestamp = (conversation) => {
       tempUserFilter !== userFilterVal
     ) {
       setFilterQueryLoading(true);
+      
+      // Reset manual selection flag when filters are applied
+      setUserHasManuallySelected(false);
+      userHasManuallySelectedRef.current = false; // Reset ref too
+      setInitialAutoSelectionDone(false); // Allow auto-selection to work again after filters applied
 
       // Update the actual filter states with temporary values
       setPropertyFilterVal(tempPropertyFilter);
@@ -1377,7 +1444,7 @@ const getConversationTimestamp = (conversation) => {
         >
           <div style={{ border: "1px solid #24262E", position: "relative" }}>
             {filteredConversations.map((message) => {
-              console.log("Rendering message:", message);
+              // console.log("Rendering message:", message);
               const {
                 property_name,
                 guest_name,
@@ -1451,12 +1518,13 @@ const getConversationTimestamp = (conversation) => {
                       ? "bg-dark"
                       : ""
                       } left-inner-tab`}
-                    onClick={() =>
+                    onClick={() => {
                       openConversationHandle(
                         allDataForConversation,
-                        conversation_id
-                      )
-                    }
+                        conversation_id,
+                        true // This is a manual selection by the user
+                      );
+                    }}
                   >
                     {conversation_id === selectedConversationId && (
                       <div className="sectionIndicatorBox">
