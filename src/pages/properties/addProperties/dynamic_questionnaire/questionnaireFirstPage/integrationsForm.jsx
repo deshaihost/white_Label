@@ -149,7 +149,7 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
       if (apiPropertyData.sender_id_airbnb) {
         setSelectedSenderId(apiPropertyData.sender_id_airbnb);
       } else {
-        setSelectedSenderId("PRIMARY_HOST");
+        setSelectedSenderId("LISTING_OWNER"); // Listing Owner is the default when no sender is explicitly set
       }
     }
   }, [apiPropertyData]);
@@ -226,10 +226,10 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
   const handleSenderChange = (e) => {
     const value = e.target.value;
     
-    if (value === "PRIMARY_HOST") {
-      setSelectedSenderId("PRIMARY_HOST");
+    if (value === "LISTING_OWNER") {
+      setSelectedSenderId("LISTING_OWNER");
       setSelectedSenderName(null);
-      callSetSenderApi("PRIMARY_HOST", null);
+      callSetSenderApi("LISTING_OWNER", null);
     } else {
       const sender = senders.find(s => s.id === value);
       if (sender) {
@@ -338,24 +338,24 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
                       className="form-select form-control" 
                       onChange={handleSenderChange}
                       onClick={handleSendersDropdownClick}
-                      value={selectedSenderId || "PRIMARY_HOST"}
+                      value={selectedSenderId || "LISTING_OWNER"} // Listing Owner is the default if none explicitly set
                     >
                       {senders.length === 0 ? (
                         <>
                           {/* Ensure the current value is present as an option before senders are fetched */}
-                          {selectedSenderId && selectedSenderId !== "PRIMARY_HOST" ? (
+                          {selectedSenderId && !["PRIMARY_HOST", "LISTING_OWNER"].includes(selectedSenderId) ? ( // "primary_host" is the legacy label, which we might receive from the backend. It means "Listing Owner"
                             <option value={selectedSenderId}>
                               {selectedSenderName || selectedSenderId}
                             </option>
                           ) : null}
-                          <option value="PRIMARY_HOST">Primary Host (Default)</option>
+                          <option value="LISTING_OWNER">Listing Owner (Default)</option>
                           {sendersLoading && (
                             <option value="" disabled>Loading senders...</option>
                           )}
                         </>
                       ) : (
                         <>
-                          <option value="PRIMARY_HOST">Primary Host (Default)</option>
+                          <option value="LISTING_OWNER">Listing Owner (Default)</option>
                           {senders.map(sender => (
                             <option key={sender.id} value={sender.id}>
                               {sender.name}

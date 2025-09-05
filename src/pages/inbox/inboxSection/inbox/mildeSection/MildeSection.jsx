@@ -123,10 +123,10 @@ const MildeSection = ({
       if (!result.error) {
         // Custom toast messages based on sender type
         let toastMessage;
-        if (senderId === "PRIMARY_HOST") {
-          toastMessage = "Sender set to Primary Host";
+        if (["PRIMARY_HOST", "LISTING_OWNER"].includes(senderId)) { // "primary_host" is the legacy label
+          toastMessage = "Sender set to listing owner";
         } else if (senderId === "CLEAR") {
-          toastMessage = "Sender set to Default sender";
+          toastMessage = "Sender set to default sender";
         } else {
           toastMessage = `Sender set to ${senderName}`;
         }
@@ -469,12 +469,12 @@ const MildeSection = ({
     // Only fetch available senders when dropdown is clicked and opened
     if (!sendersDropdownVisible && conversationData?.property_name && hasHospitableIntegration()) {
       const result = await getAvailableSendersApi(conversationData.property_name);
-      
-      // Always include "Primary host" and "Default sender" options
+
+      // Always include "Listing Owner" and "Default sender" options
       let senderOptions = [
         {
-          id: "PRIMARY_HOST",
-          name: "Primary host"
+          id: "LISTING_OWNER",
+          name: "Listing Owner"
         },
         {
           id: "default",
@@ -504,10 +504,10 @@ const MildeSection = ({
         // If "Default sender" is selected, pass "CLEAR" to the API
         senderIdToSend = "CLEAR";
         senderNameToSend = "CLEAR";
-      } else if (sender.id === "PRIMARY_HOST") {
-        // If "Primary host" is selected, pass "PRIMARY_HOST" to the API
-        senderIdToSend = "PRIMARY_HOST";
-        senderNameToSend = "PRIMARY_HOST";
+      } else if (sender.id === "LISTING_OWNER") {
+        // If "Listing Owner" is selected, pass "LISTING_OWNER" to the API
+        senderIdToSend = "LISTING_OWNER";
+        senderNameToSend = "LISTING_OWNER";
       } else {
         // Regular sender
         senderIdToSend = sender.id;
@@ -966,11 +966,11 @@ const MildeSection = ({
           // Clear available senders - they will be loaded when dropdown is clicked
           setAvailableSenders([]);
           
-          if (allConversationData.sender_id_airbnb === "PRIMARY_HOST") {
-            // Handle PRIMARY_HOST case - show "Primary host"
+          if (["PRIMARY_HOST", "LISTING_OWNER"].includes(allConversationData.sender_id_airbnb)) {
+            // Handle LISTING_OWNER case - show "Listing Owner" label
             setSelectedSender({
-              id: "PRIMARY_HOST",
-              name: "Primary host"
+              id: "LISTING_OWNER",
+              name: "Listing owner"
             });
           } else if (allConversationData.sender_name_airbnb) {
             setSelectedSender({
