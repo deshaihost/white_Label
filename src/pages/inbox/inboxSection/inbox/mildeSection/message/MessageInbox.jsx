@@ -109,9 +109,9 @@ const MessageInbox = ({
 
   // When the user clicks a message bubble: console.log the IDs so the support teams can easily access them from the frontend to use for troubleshooting and escalation.
   const handleMessageClick = () => {
-    // console.log('Message ID:', message_id);
-    // console.log('Conversation ID:', conversationId);
-    // console.log('Reservation ID: ', reservationId);
+    console.log('Message ID:', message_id);
+    console.log('Conversation ID:', conversationId);
+    console.log('Reservation ID: ', reservationId);
   };
 
   return (
