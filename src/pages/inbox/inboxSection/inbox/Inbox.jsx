@@ -358,10 +358,10 @@ const Inbox = ({
         // First, check if we have comprehensive cached data from periodic updates
         const cachedConversation = conversationCache.get(conversationId);
         if (cachedConversation && cachedConversation._has_complete_data) {
-          console.log(
-            "Using comprehensive cached conversation data from periodic updates for:",
-            conversationId
-          );
+          // console.log(
+          //   "Using comprehensive cached conversation data from periodic updates for:",
+          //   conversationId
+          // );
 
           // Update pin status based on cached data
           const isPinnedValue = !!(
@@ -390,10 +390,10 @@ const Inbox = ({
 
         if (hasCompleteMessageData) {
           // Use the existing conversation data from the conversations array
-          console.log(
-            "Using complete conversation data from conversations array for:",
-            conversationId
-          );
+          // console.log(
+          //   "Using complete conversation data from conversations array for:",
+          //   conversationId
+          // );
 
           // Cache this conversation data for future use
           setConversationCache((prevCache) => {
@@ -421,10 +421,10 @@ const Inbox = ({
 
             if (cachedConversation) {
               // Use cached data instead of making API call, even if it's not marked as complete
-              console.log(
-                "Using fallback cached conversation data for:",
-                conversationId
-              );
+              // console.log(
+              //   "Using fallback cached conversation data for:",
+              //   conversationId
+              // );
 
               // Update pin status based on cached data
               const isPinnedValue = !!(
@@ -447,10 +447,10 @@ const Inbox = ({
               ...prev,
               _apiCallMade: true,
             })); // Only call API if we don't have cached data
-            console.log(
-              "No cached data found, making API call for:",
-              conversationId
-            );
+            // console.log(
+            //   "No cached data found, making API call for:",
+            //   conversationId
+            // );
             const result = await callGetSingleConversationApi(conversationId);
 
             if (
@@ -624,6 +624,10 @@ const Inbox = ({
   const [editingNoteText, setEditingNoteText] = useState("");
   const [editingNoteVisibleToHostbuddy, setEditingNoteVisibleToHostbuddy] =
     useState(false);
+
+  // Action item input state
+  const [newActionItem, setNewActionItem] = useState("");
+
   // Handle pending tab changes when view changes
   useEffect(() => {
     // If we have a pending tab change and we're in the messages view, apply it
@@ -981,7 +985,78 @@ const Inbox = ({
     } catch (error) {
       ToastHandle("Error completing action item", "danger");
     }
-  }; // No need to fetch global action items when the component mounts
+  };
+
+  // Function to call the API to add a new action item
+  const callAddActionItemApi = async (actionItemText) => {
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) {
+          return status >= 200 && status < 500;
+        },
+      };
+
+      const bodyData = {
+        conversation_id: selectedConversation.conversation_id,
+        item: actionItemText,
+        category: "OTHERS",
+        guest_name: selectedConversation.guest_name || selectedConversation.name || "",
+        property_name: selectedConversation.property_name || "",
+        reservation_id: selectedConversation.reservation_id || "",
+        message_id: null, // Set to null as we're creating a manual action item
+      };
+
+      const response = await axios.post(
+        `${baseUrl}/add_action_item`,
+        bodyData,
+        config
+      );
+
+      if (response.status === 201) {
+        // Add the new action item to filteredActionItems state
+        const newActionItem = response.data.action_item;
+        setFilteredActionItems([newActionItem, ...filteredActionItems]);
+
+        // Update the selectedConversation with the new action item
+        if (selectedConversation && selectedConversation.action_items) {
+          const updatedActionItems = [newActionItem, ...selectedConversation.action_items];
+          setSelectedConversation({
+            ...selectedConversation,
+            action_items: updatedActionItems,
+            _apiCallMade: selectedConversation._apiCallMade,
+          });
+
+          // Also update the conversation in the conversations list
+          if (conversations && conversations.length > 0) {
+            const updatedConversations = conversations.map((convo) => {
+              if (convo.conversation_id === selectedConversation.conversation_id) {
+                return {
+                  ...convo,
+                  action_items: updatedActionItems,
+                };
+              }
+              return convo;
+            });
+            setConversations(updatedConversations);
+          }
+        }
+
+        // Clear the input
+        setNewActionItem("");
+        ToastHandle("Action item added successfully", "success");
+      } else {
+        ToastHandle(response?.data?.error || "Failed to add action item", "danger");
+      }
+    } catch (error) {
+      ToastHandle("Error adding action item", "danger");
+    }
+  };
+
+  // No need to fetch global action items when the component mounts
   // since we're now showing conversation-specific action items
   // When the activeTab changes to 'openIssue', ensure we have the latest action items from the selected conversation only
   useEffect(() => {
@@ -1103,9 +1178,9 @@ const Inbox = ({
         selectedConversation?.conversation_id === conversationId &&
         selectedConversation._apiCallMade
       ) {
-        console.log(
-          "Skipping duplicate API call for already loaded conversation"
-        );
+        // console.log(
+        //   "Skipping duplicate API call for already loaded conversation"
+        // );
         return; // Skip duplicate API call
       }
 
@@ -1113,10 +1188,10 @@ const Inbox = ({
       const updatedConversationData = await callGetSingleConversationApi(
         conversationId
       );
-      console.log(
-        "Updated conversation data:",
-        updatedConversationData.conversations[0].messages[0]
-      );
+      // console.log(
+      //   "Updated conversation data:",
+      //   updatedConversationData.conversations[0].messages[0]
+      // );
       if (
         updatedConversationData?.conversations &&
         updatedConversationData.conversations.length > 0
@@ -1147,7 +1222,7 @@ const Inbox = ({
       // If it doesn't exist in the list (which can happen after disassociation),
       // we need to add it
       if (!conversationExists) {
-        console.log("Adding newly disassociated conversation to list:", retrievedConversation);
+        // console.log("Adding newly disassociated conversation to list:", retrievedConversation);
         setConversations(prevConversations => 
           [retrievedConversation, ...prevConversations]
         );
@@ -1271,9 +1346,9 @@ const Inbox = ({
         }
       }
       if (removedCount > 0) {
-        console.log(
-          `Cache cleanup: Removed ${removedCount} old entries, ${newCache.size} entries remaining`
-        );
+        // console.log(
+        //   `Cache cleanup: Removed ${removedCount} old entries, ${newCache.size} entries remaining`
+        // );
       }
       return newCache;
     });
@@ -1286,25 +1361,25 @@ const Inbox = ({
 
   // Debug function to log cache statistics (can be called from browser console)
   window.logCacheStats = () => {
-    console.log(`Conversation Cache Statistics:
-      - Total cached conversations: ${conversationCache.size}
-      - Conversations with complete data: ${[...conversationCache.values()].filter((c) => c._has_complete_data)
-        .length
-      }
-      - Cache sources breakdown:
-        * From periodic updates: ${[...conversationCache.values()].filter((c) => c._from_periodic_update)
-        .length
-      }
-        * From API calls: ${[...conversationCache.values()].filter((c) => c._from_api_call).length
-      }
-        * From conversations array: ${[...conversationCache.values()].filter(
-        (c) => c._from_conversations_array
-      ).length
-      }
-        * From update API: ${[...conversationCache.values()].filter((c) => c._from_update_api)
-        .length
-      }
-    `);
+    // console.log(`Conversation Cache Statistics:
+    //   - Total cached conversations: ${conversationCache.size}
+    //   - Conversations with complete data: ${[...conversationCache.values()].filter((c) => c._has_complete_data)
+    //     .length
+    //   }
+    //   - Cache sources breakdown:
+    //     * From periodic updates: ${[...conversationCache.values()].filter((c) => c._from_periodic_update)
+    //     .length
+    //   }
+    //     * From API calls: ${[...conversationCache.values()].filter((c) => c._from_api_call).length
+    //   }
+    //     * From conversations array: ${[...conversationCache.values()].filter(
+    //     (c) => c._from_conversations_array
+    //   ).length
+    //   }
+    //     * From update API: ${[...conversationCache.values()].filter((c) => c._from_update_api)
+    //     .length
+    //   }
+    // `);
   };
 
   const updateSpecificConversation = (conversationId, updatedData) => {
@@ -1443,9 +1518,9 @@ const Inbox = ({
           const num_existing_convos = conversations.length;
           const num_convos_to_fetch = Math.max(num_existing_convos, 2); // always fetch at least 2 convos, even if we're only looking at one (e.g. due to filter), so if there's simultaneous updates we're more likely to catch it. 2 is still an arbitrary number tbh
 
-          console.log(
-            `Periodic update: Fetching ${num_convos_to_fetch} conversations to refresh cache`
-          );
+          // console.log(
+          //   `Periodic update: Fetching ${num_convos_to_fetch} conversations to refresh cache`
+          // );
           fetchConversations(
             num_convos_to_fetch,
             false,
@@ -1505,7 +1580,7 @@ const Inbox = ({
     // otherwise distribute space between items
     return rightSectionVisible ? "calc(100% - 290px)" : "100%";
   };
-  console.log("Selected conversation:", selectedConversation);
+  // console.log("Selected conversation:", selectedConversation);
   return (
     <>
       {" "}
@@ -2033,6 +2108,7 @@ const Inbox = ({
                     subscriptionPlan={subscriptionPlan}
                     accountAgeDays={accountAgeDays}
                     setCurrentView={setCurrentView}
+                    userData={userData}
                   />
                 </div>
 
@@ -2094,15 +2170,24 @@ const Inbox = ({
                     height: "100%",
                   }}
                 >
-                  {" "}
                   <div
-                    className="action-items-container"
                     style={{
                       height: "100%",
-                      overflowY: "auto",
-                      padding: "5px",
+                      display: "flex",
+                      flexDirection: "column",
+                      backgroundColor: "#0F1117",
                     }}
                   >
+                    {/* Action Items List - Scrollable area */}
+                    <div
+                      className="action-items-container"
+                      style={{
+                        flex: 1,
+                        overflowY: "auto",
+                        padding: "5px",
+                        backgroundColor: "#0F1117",
+                      }}
+                    >
                     {/* Render action items from the selected conversation */}
                     {[]
                       .concat(filteredActionItems || [])
@@ -2255,6 +2340,101 @@ const Inbox = ({
                         <p>No open issues found for this conversation</p>
                       </div>
                     ) : null}
+                    </div>
+
+                    {/* Action Item Input Area - Fixed at bottom */}
+                    <div
+                      style={{
+                        border: "1px solid #222",
+                        padding: "8px 8px",
+                        backgroundColor: "#17191F",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <textarea
+                        value={newActionItem}
+                        onChange={(e) => setNewActionItem(e.target.value)}
+                        onKeyDown={(e) => {
+                          // Submit on Enter without Shift key
+                          if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            if (
+                              newActionItem.trim() &&
+                              selectedConversation?.conversation_id
+                            ) {
+                              callAddActionItemApi(newActionItem);
+                            }
+                          }
+                          // Allow normal behavior for Shift+Enter (new line)
+                        }}
+                        placeholder="Add Action Item..."
+                        style={{
+                          flex: 1,
+                          backgroundColor: "#17191F",
+                          border: "none",
+                          color: "#EEE",
+                          fontSize: "14px",
+                          outline: "none",
+                          resize: "none",
+                          minHeight: "40px",
+                          maxHeight: "100px",
+                          fontFamily: "inherit",
+                          lineHeight: "1.4",
+                          overflowY: "auto",
+                        }}
+                        className="notes-textarea"
+                        disabled={!selectedConversation?.conversation_id}
+                      />
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          alignItems: "center",
+                        }}
+                      >
+                        <button
+                          onClick={() => {
+                            if (
+                              newActionItem.trim() &&
+                              selectedConversation?.conversation_id
+                            ) {
+                              callAddActionItemApi(newActionItem);
+                            }
+                          }}
+                          style={{
+                            backgroundColor:
+                              selectedConversation?.conversation_id &&
+                              newActionItem.trim()
+                                ? "#1a73e8"
+                                : "rgba(15, 17, 23, 0.42)",
+                            color:
+                              selectedConversation?.conversation_id &&
+                              newActionItem.trim()
+                                ? "white"
+                                : "#4A4D54",
+                            height: "30px",
+                            border: "none",
+                            borderRadius: "4px",
+                            padding: "2px 12px",
+                            fontSize: "12px",
+                            fontWeight: "500",
+                            cursor:
+                              selectedConversation?.conversation_id &&
+                              newActionItem.trim()
+                                ? "pointer"
+                                : "not-allowed",
+                            opacity: "1",
+                          }}
+                          disabled={
+                            !selectedConversation?.conversation_id ||
+                            !newActionItem.trim()
+                          }
+                        >
+                          + Add Action Item
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -2912,6 +3092,7 @@ const Inbox = ({
                 subscriptionPlan={subscriptionPlan}
                 accountAgeDays={accountAgeDays}
                 setCurrentView={setCurrentView}
+                userData={userData}
               />
             )}
             {currentView === "details" && (

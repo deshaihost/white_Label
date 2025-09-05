@@ -5,7 +5,6 @@ import { useLocation } from 'react-router-dom';
 import './Integrations.css';
 import axios from 'axios';
 import ToastHandle from "../../../../helper/ToastMessage";
-import NotionLogo from './Icons/Notion Logo.svg';
 
 const ConnectToNotion = () => {
   const dispatch = useDispatch();
@@ -85,7 +84,7 @@ const ConnectToNotion = () => {
 
   return (
     <div className="partner-tile" onClick={handleConnectClick}>
-      <img className="partner-logo" alt="Notion Logo" src={NotionLogo}/>
+      <img className="partner-logo" alt="Notion Logo" src={require('./Icons/Notion Logo.svg').default || ""}/>
       <p>Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy's knowledge base up to date in real time. (Coming soon)</p>
     </div>
   );

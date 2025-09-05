@@ -34,8 +34,8 @@ const NonGuestRightSection = ({
     reservation_id,
     action_items,
   } = rightSectionData ? rightSectionData : {};
-  console.log("Assigned Sub user ", assigned_sub_user_names);
-  console.log("assigned_sub_users", assigned_sub_users)
+  // console.log("Assigned Sub user ", assigned_sub_user_names);
+  // console.log("assigned_sub_users", assigned_sub_users)
 
   let { channel } = rightSectionData || {};
 
@@ -721,7 +721,7 @@ const NonGuestRightSection = ({
           if (updateConversationFromApi && typeof updateConversationFromApi === "function") {
             updateConversationFromApi(conversation_id);
           }
-          console.log("isLocked", isLocked);
+          // console.log("isLocked", isLocked);
 
           if (updateSpecificConversation && rightSectionData?.conversation_id) {
             updateSpecificConversation(rightSectionData.conversation_id, {
@@ -1808,7 +1808,7 @@ const NonGuestRightSection = ({
               const hasProperty = currentProperty && currentProperty.trim() !== "";
               const isPropertyLocked = isLocked && hasProperty;
 
-              console.log("Current Property:", currentProperty, "chatbotStatus:", chatbotStatus, "currentStatus:", currentStatus, "isPropertyLocked:", isPropertyLocked, "localStatus:", localStatus);
+              // console.log("Current Property:", currentProperty, "chatbotStatus:", chatbotStatus, "currentStatus:", currentStatus, "isPropertyLocked:", isPropertyLocked, "localStatus:", localStatus);
 
               if (isPropertyLocked) {
                 return (

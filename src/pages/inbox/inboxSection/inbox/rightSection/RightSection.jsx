@@ -88,8 +88,8 @@ const RightSection = ({
     user,
     action_items,
   } = rightSectionData ? rightSectionData : {};
-  console.log("Assigned Sub user ", assigned_sub_user_names);
-  console.log("assigned_sub_users", assigned_sub_users)
+  // console.log("Assigned Sub user ", assigned_sub_user_names);
+  // console.log("assigned_sub_users", assigned_sub_users)
 
   const until_formatted =
     guest_chatbot_status?.until_utc == "indefinitely"
@@ -1060,8 +1060,8 @@ const callGetGuestDataApi = async () => {
         const phoneNumber = contactData.phone_numbers?.[0] || '';
         const emailAddress = contactData.email_addresses?.[0] || '';
 
-        console.log('External Contact Phone Number:', phoneNumber);
-        console.log('External Contact Email Address:', emailAddress);
+        // console.log('External Contact Phone Number:', phoneNumber);
+        // console.log('External Contact Email Address:', emailAddress);
 
         setContactInfo({
           email: emailAddress || "not added",
@@ -1079,8 +1079,8 @@ const callGetGuestDataApi = async () => {
       const phoneNumber = guestData.phone_numbers?.[0] || '';
       const emailAddress = guestData.email_addresses?.[0] || '';
 
-      console.log('Guest Phone Number:', phoneNumber);
-      console.log('Guest Email Address:', emailAddress);
+      // console.log('Guest Phone Number:', phoneNumber);
+      // console.log('Guest Email Address:', emailAddress);
 
       setContactInfo({
         email: emailAddress || "not added",

@@ -16,6 +16,8 @@ import "./Integration.css";
 import ContactUs from "../meetHostBuddy/discover/contactUs/ContactUs";
 import { Helmet } from 'react-helmet';
 
+
+
 const HostexImg = 'https://hostbuddylb.com/partners/hostex_logo_en.webp';
 const ReslyImg = 'https://hostbuddylb.com/partners/resly_img.webp'
 const SmilyImg = 'https://hostbuddylb.com/partners/SmilyLogo.webp';
@@ -141,6 +143,7 @@ const Integrations = () => {
               </div>
             </a>
           </div>
+          {/*
           <div className="col-lg-4 col-sm-6">
             <a href="https://www.avantio.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
@@ -148,6 +151,7 @@ const Integrations = () => {
               </div>
             </a>
           </div>
+          */}
           <div className="col-lg-4 col-sm-6">
             <a href="https://www.tokeet.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">

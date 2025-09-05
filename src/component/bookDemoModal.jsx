@@ -8,7 +8,6 @@ import axios from "axios";
 const BookDemoModal = ({show, onHide, sourceMsg}) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showBackupLink, setShowBackupLink] = useState(false);
-  const [randomlySelectedDemoPerson, setRandomlySelectedDemoPerson] = useState({});
   const [redirectURL, setRedirectURL] = useState('');
   const [demoFormData, setDemoFormData] = useState({});
 
@@ -18,45 +17,20 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
   const [propertyCount, setPropertyCount] = useState('');
   const [source, setSource] = useState('');
   const [errors, setErrors] = useState({});
-  const [showDemoOptions, setShowDemoOptions] = useState(false);
+  const [showDemoOptions, setShowDemoOptions] = useState(null);
 
   // Synchronize demoFormData with input states
   useEffect(() => {
     setDemoFormData({ name, email, propertyCount, source });
   }, [name, email, propertyCount, source]);
 
-  // OLD LINKS
-  /*
-  const groupDemoLink = 'https://calendly.com/hostbuddy-/group-demo';
-  const oneOnOneNickOnlyDemoLink = 'https://calendly.com/d/cm2q-5ht-w5m/hostbuddy-ai-demo';
-  const oneOnOneNickOrSamDemoLink = 'https://calendly.com/d/cmyr-2pj-brv/hostbuddy-ai-product-demo';
-  const oneOnOneSamOnlyDemoLink = 'https://calendly.com/hostbuddy-ai/sam';
-  */
 
-  // NEW OLD LINKS
-  /*
-  const groupDemoLink = 'https://calendly.com/hostbuddy-/group-demo';
-  const midSizeDemoLink = 'https://calendly.com/d/cmyr-2pj-brv/hostbuddy-ai-product-demo';
-  const bigDemoLink = 'https://calendly.com/hostbuddy-/hostbuddy-1-1-demo';
-  */
+  // 1. SET DEMO LINKS
+  const camiloDemoLink = 'https://calendly.com/d/cm2q-5ht-w5m/hostbuddy-ai-demo';
+  const groupDemoLink = 'https://calendly.com/camilo-hostbuddy/hostbuddy-ai-group-demo';
+  const selfServiceDemoLink = 'https://www.loom.com/share/26fe773dbcc141699285b8f36cb7475b?sid=b645c6cd-7690-4e9d-bad5-610daa11fe36';
+  const tylerDemoLink = 'https://calendly.com/d/cwbc-cdz-84r/hostbuddy-ai-product-demo';
 
-  // NEW LINKS
-  const allOneOnOneDemosLink = 'https://calendly.com/d/cm2q-5ht-w5m/hostbuddy-ai-demo';
-  const groupDemoLink = 'https://calendly.com/hostbuddy-/group-demo';
-
-
-  // Once, on page load, randomly select the demo person
-  useEffect(() => {
-    const all_demo_URLs = {
-      'Sam': 'https://calendly.com/sam-hostbuddy/30min',
-      'Jay': 'https://calendly.com/jay-u6bh/30min',
-      'Nick': 'https://calendly.com/nick-hostbuddy/30min'
-    }; // Sam group demo is below
-    //const randomly_selected_demo_person = Object.keys(all_demo_URLs)[Math.floor(Math.random() * Object.keys(all_demo_URLs).length)];
-    const randomly_selected_demo_person = 'Nick';  // Always choose Nick
-    const randomly_selected_demo_URL = all_demo_URLs[randomly_selected_demo_person];
-    setRandomlySelectedDemoPerson({person:randomly_selected_demo_person, url:randomly_selected_demo_URL});
-  }, []);
 
   // Call the meta pixel tracking functionality added to the head in routes.jsx, to track the form submission
   const trackFormSubmission = () => {
@@ -70,7 +44,7 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
   const callSubmitApi = async (dataToSend, demoTypeChoice=null) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
-    dataToSend.message = "Demo Requested with " + randomlySelectedDemoPerson.person;
+    dataToSend.message = "Demo Requested";
     if (!dataToSend.source) dataToSend.source = "[Not provided]";
 
     dataToSend.message += "\nProperty count: " + dataToSend.propertyCount;
@@ -116,25 +90,22 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
     setIsSubmitted(true);
     trackFormSubmission();
 
-    let url = allOneOnOneDemosLink; // default for 51+ properties
-
-    if (parseInt(formData.propertyCount) <= 15) { 
-      url = allOneOnOneDemosLink; 
-    } else if (parseInt(formData.propertyCount) <= 50) { 
-      url = allOneOnOneDemosLink; 
-    } else { 
-      url = allOneOnOneDemosLink; 
+    // 2. SET THE APPROPRIATE LOGIC TO SELECT THE CORRECT 1:1 URL BASED ON PROPERTY COUNT
+    // Based on the property count: choose the appropriate demo link
+    let urlForOneOnOneDemos = camiloDemoLink; // default
+    if (parseInt(formData.propertyCount) < 40) {
+      urlForOneOnOneDemos = camiloDemoLink;
+    } else {
+      urlForOneOnOneDemos = tylerDemoLink;
     }
+    setRedirectURL(urlForOneOnOneDemos);
 
-    setRedirectURL(url);
-
-    if (parseInt(formData.propertyCount) <= 10) { // If it's a small fry, just send them to the group demo
-      //handleRedirectToDemoLink(url);
-      setShowDemoOptions(true); // actually, let small fish choose 1:1 also
-    } else if (parseInt(formData.propertyCount) > 99) { // For the biggest fish, make them do a 1:1
-      handleRedirectToDemoLink(url, '1:1');
-    } else { // If it's a medium fish, let them choose between group or 1:1
-      setShowDemoOptions(true);
+    // 3. SET APPROPRIATE LOGIC TO EITHER REDIRECT DIRECTLY (handleRedirectToDemoLink) OR SHOW OPTIONS BETWEEN 1:1, GROUP, OR SELF SERVICE (setShowDemoOptions) BASED ON PROPERTY COUNT
+    // Based on the property count: either redirect straight to the demo link chosen above, or show the user a choice
+    if ((parseInt(formData.propertyCount) < 40) || true) { // Always just let them choose
+      //handleRedirectToDemoLink(urlForOneOnOneDemos);
+      setShowDemoOptions({ groupLink:groupDemoLink, oneOnOneLink:urlForOneOnOneDemos, selfServiceLink:selfServiceDemoLink }); // actually, let small fish choose 1:1 also
+    } else {
     }
   };
 
@@ -238,14 +209,14 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
               Group Demo
             </p>
             <div className="text-center">
-              {showBackupLink ? ( // backup = use an a tag in case the browser blocks the window.open for some reason
-                <a href={groupDemoLink} target="_blank" rel="noopener noreferrer">
+              {showBackupLink ? (
+                <a href={showDemoOptions.groupLink} target="_blank" rel="noopener noreferrer">
                   <Button className="bg_theme_btn" style={{marginTop:'5px'}}>
                     Join a Group Demo
                   </Button>
                 </a>
               ) : (
-                <Button className="bg_theme_btn" onClick={() => handleRedirectToDemoLink(groupDemoLink, 'Group')} style={{marginTop:'5px'}}>
+                <Button className="bg_theme_btn" onClick={() => handleRedirectToDemoLink(showDemoOptions.groupLink, 'Group')} style={{marginTop:'5px'}}>
                   Join a Group Demo
                 </Button>
               )}
@@ -255,15 +226,32 @@ const BookDemoModal = ({show, onHide, sourceMsg}) => {
               1:1 Demo (Limited Availability)
             </p>
             <div className="text-center">
-              {showBackupLink ? ( // backup = use an a tag in case the browser blocks the window.open for some reason
-                <a href={redirectURL} target="_blank" rel="noopener noreferrer">
+              {showBackupLink ? (
+                <a href={showDemoOptions.oneOnOneLink} target="_blank" rel="noopener noreferrer">
                   <Button className="bg_theme_btn" style={{marginTop:'5px'}}>
                     Book a 1:1 Demo
                   </Button>
                 </a>
               ) : (
-                <Button className="bg_theme_btn" onClick={() => handleRedirectToDemoLink(redirectURL, '1:1')} style={{marginTop:'5px'}}>
+                <Button className="bg_theme_btn" onClick={() => handleRedirectToDemoLink(showDemoOptions.oneOnOneLink, '1:1')} style={{marginTop:'5px'}}>
                   Book a 1:1 Demo
+                </Button>
+              )}
+            </div>
+
+            <p style={{ marginTop: '35px', fontSize: '16px', color: 'white', textAlign: 'center' }}>
+              Watch Recorded Demo
+            </p>
+            <div className="text-center">
+              {showBackupLink ? (
+                <a href={showDemoOptions.selfServiceLink} target="_blank" rel="noopener noreferrer">
+                  <Button className="bg_theme_btn" style={{marginTop:'5px'}}>
+                    Watch Recording
+                  </Button>
+                </a>
+              ) : (
+                <Button className="bg_theme_btn" onClick={() => handleRedirectToDemoLink(showDemoOptions.selfServiceLink, 'Self-Service')} style={{marginTop:'5px'}}>
+                  Watch Recording
                 </Button>
               )}
             </div>

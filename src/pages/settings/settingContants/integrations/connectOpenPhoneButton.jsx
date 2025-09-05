@@ -7,22 +7,27 @@ import OpenPhonePng from './Icons/OpenPhone-Logo.png';
 import MountLogo from './Icons/Mount Logo.svg';
 import OpenphoneLogoSvg from './Icons/Openphone.svg';
 
+
 const ConnectToOpenPhone = () => {
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
+
 
   const handleConnectClick = () => {
     setShowModal(true);
   };
 
+
   const handleModalClose = () => {
     setShowModal(false);
   };
+
 
   // After successful connection, refresh user data to show the new integration
   const handleSuccess = () => {
     dispatch(getUserDataActions(false));
   };
+
 
   return (
     <>
@@ -35,4 +40,7 @@ const ConnectToOpenPhone = () => {
   );
 };
 
+
 export default ConnectToOpenPhone;
+
+
