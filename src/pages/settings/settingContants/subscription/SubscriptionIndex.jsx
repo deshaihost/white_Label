@@ -433,35 +433,42 @@ const SubscriptionIndex = () => {
                      Pricing ({billingPeriod === 'annual' ? 'Yearly' : 'Monthly'})
                     </span> */}
                   </div>
-                  <div style={{
-                    width: "1px",
-                    height: "40px",
-                    backgroundColor: "#ccc"
-                  }}></div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center"
-                  }}>
-                    <span
-                      className="samsung-sharp-sans samsung-sharp-sans"
-                      style={{
-                        fontWeight: "500",
-                        fontSize: "32px",
-                      }}
-                    >
-                      {numPropertiesAllowed}
-                    </span>
-                    <span
-                      className="samsung-sharp-sans samsung-sharp-sans"
-                      style={{
-                        fontWeight: "500",
-                        fontSize: "12px",
-                      }}
-                    >
-                     Total Properties
-                    </span>
-                  </div>
+                  {/* Only show Total Properties section for non-trial users */}
+                  {!subscriptionPlanName?.toLowerCase().includes('trial') && 
+                   subscriptionPlanName !== 'trial_over' && 
+                   subscriptionPlanName !== 'mount_trial' && (
+                    <>
+                      <div style={{
+                        width: "1px",
+                        height: "40px",
+                        backgroundColor: "#ccc"
+                      }}></div>
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center"
+                      }}>
+                        <span
+                          className="samsung-sharp-sans samsung-sharp-sans"
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "32px",
+                          }}
+                        >
+                          {numPropertiesAllowed}
+                        </span>
+                        <span
+                          className="samsung-sharp-sans samsung-sharp-sans"
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "12px",
+                          }}
+                        >
+                         Total Properties
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <p className="fs-14 mb-2" >
@@ -550,44 +557,48 @@ const SubscriptionIndex = () => {
             marginBottom: "30px",
           }}
         >
-          {/* Properties counter - Now positioned on the left */}
-          <div
-            style={{
-              backgroundColor: "#1E1E1E",
-              marginLeft: "30px",
-              borderRadius: "30px",
-              padding: "10px 20px",
-              display: "inline-flex",
-              alignItems: "center",
-            }}
-          >
-            <span
+          {/* Properties counter - Only show for non-trial users */}
+          {!subscriptionPlanName?.toLowerCase().includes('trial') && 
+           subscriptionPlanName !== 'trial_over' && 
+           subscriptionPlanName !== 'mount_trial' && (
+            <div
               style={{
-                color: "white",
-                fontSize: "14px",
+                backgroundColor: "#1E1E1E",
+                marginLeft: "30px",
+                borderRadius: "30px",
+                padding: "10px 20px",
+                display: "inline-flex",
+                alignItems: "center",
               }}
             >
-              # of {numProperties === 0 || numProperties === 1 ? 'Property' : 'Properties'}:
-            </span>
-            <input
-              type="number"
-              value={numProperties}
-              onChange={handlePropertiesChange}
-              min="0"
-              style={{
-                color: "white",
-                fontWeight: "bold",
-                marginLeft: "8px",
-                fontSize: "16px",
-                backgroundColor: "transparent",
-                border: "none",
-                outline: "none",
-                width: "60px",
-                textAlign: "left",
-              }}
-            />
-          </div>
-          {/* Monthly/Annual toggle - Now positioned on the right with added margin-right */}
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "14px",
+                }}
+              >
+                # of {numProperties === 0 || numProperties === 1 ? 'Property' : 'Properties'}:
+              </span>
+              <input
+                type="number"
+                value={numProperties}
+                onChange={handlePropertiesChange}
+                min="0"
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  marginLeft: "8px",
+                  fontSize: "16px",
+                  backgroundColor: "transparent",
+                  border: "none",
+                  outline: "none",
+                  width: "60px",
+                  textAlign: "left",
+                }}
+              />
+            </div>
+          )}
+          {/* Monthly/Annual toggle - Position based on whether properties counter is shown */}
           <div
             style={{
               backgroundColor: "#1E1E1E",
@@ -596,6 +607,10 @@ const SubscriptionIndex = () => {
               display: "inline-flex",
               alignItems: "center",
               marginRight: "200px",
+              // If trial user (properties counter hidden), center the toggle
+              marginLeft: (subscriptionPlanName?.toLowerCase().includes('trial') || 
+                          subscriptionPlanName === 'trial_over' || 
+                          subscriptionPlanName === 'mount_trial') ? "auto" : "0",
               cursor: "pointer",
             }}
             onClick={handleToggleClick}
