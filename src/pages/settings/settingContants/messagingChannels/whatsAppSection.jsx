@@ -20,7 +20,7 @@ const WhatsAppSection = (ApiUserData, refreshUserData) => {
   const isValidE164 = (num) => {
     if (!num.startsWith('+')) return false;
     const digitsOnly = num.slice(1); // Remove the '+' prefix for the check
-    if (digitsOnly.length < 11 || digitsOnly.length > 15) return false;
+    if (digitsOnly.length < 8 || digitsOnly.length > 15) return false;
     const e164Regex = /^\+[1-9]\d{1,14}$/;
     return e164Regex.test(num);
   };
