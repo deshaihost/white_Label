@@ -557,48 +557,44 @@ const SubscriptionIndex = () => {
             marginBottom: "30px",
           }}
         >
-          {/* Properties counter - Only show for non-trial users */}
-          {!subscriptionPlanName?.toLowerCase().includes('trial') && 
-           subscriptionPlanName !== 'trial_over' && 
-           subscriptionPlanName !== 'mount_trial' && (
-            <div
+          {/* Properties counter - Now positioned on the left */}
+          <div
+            style={{
+              backgroundColor: "#1E1E1E",
+              marginLeft: "30px",
+              borderRadius: "30px",
+              padding: "10px 20px",
+              display: "inline-flex",
+              alignItems: "center",
+            }}
+          >
+            <span
               style={{
-                backgroundColor: "#1E1E1E",
-                marginLeft: "30px",
-                borderRadius: "30px",
-                padding: "10px 20px",
-                display: "inline-flex",
-                alignItems: "center",
+                color: "white",
+                fontSize: "14px",
               }}
             >
-              <span
-                style={{
-                  color: "white",
-                  fontSize: "14px",
-                }}
-              >
-                # of {numProperties === 0 || numProperties === 1 ? 'Property' : 'Properties'}:
-              </span>
-              <input
-                type="number"
-                value={numProperties}
-                onChange={handlePropertiesChange}
-                min="0"
-                style={{
-                  color: "white",
-                  fontWeight: "bold",
-                  marginLeft: "8px",
-                  fontSize: "16px",
-                  backgroundColor: "transparent",
-                  border: "none",
-                  outline: "none",
-                  width: "60px",
-                  textAlign: "left",
-                }}
-              />
-            </div>
-          )}
-          {/* Monthly/Annual toggle - Position based on whether properties counter is shown */}
+              # of {numProperties === 0 || numProperties === 1 ? 'Property' : 'Properties'}:
+            </span>
+            <input
+              type="number"
+              value={numProperties}
+              onChange={handlePropertiesChange}
+              min="0"
+              style={{
+                color: "white",
+                fontWeight: "bold",
+                marginLeft: "8px",
+                fontSize: "16px",
+                backgroundColor: "transparent",
+                border: "none",
+                outline: "none",
+                width: "60px",
+                textAlign: "left",
+              }}
+            />
+          </div>
+          {/* Monthly/Annual toggle - Now positioned on the right with added margin-right */}
           <div
             style={{
               backgroundColor: "#1E1E1E",
@@ -607,10 +603,6 @@ const SubscriptionIndex = () => {
               display: "inline-flex",
               alignItems: "center",
               marginRight: "200px",
-              // If trial user (properties counter hidden), center the toggle
-              marginLeft: (subscriptionPlanName?.toLowerCase().includes('trial') || 
-                          subscriptionPlanName === 'trial_over' || 
-                          subscriptionPlanName === 'mount_trial') ? "auto" : "0",
               cursor: "pointer",
             }}
             onClick={handleToggleClick}
