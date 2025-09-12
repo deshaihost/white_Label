@@ -328,7 +328,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                   const { name, enabled } = smartItem;
                   const templateDescription = describeTemplate(smartItem);
                   return (
-                    <div className="row mt-5" style={{ 
+                    <div key={smartIndex} className="row mt-5" style={{ 
                       marginLeft: "0", 
                       marginRight: "0", 
                       border: "1px solid #045ce9", 
@@ -337,7 +337,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                       boxShadow: "0 4px 8px 0 rgba(255, 255, 255, 0.5)" 
                     }}>
                       <div className="col-lg-11 col-12">
-                        <label className="fs-5 d-flex justify-content-between">
+                        <div className="fs-5 d-flex justify-content-between">
                           {name !== "" ? name : <p className="text-danger">No Name</p>}
                           <div className="d-flex align-items-center gap-2">
                             <span className={`template-status ${enabled ? 'enabled' : 'not-enabled'}`}>
@@ -360,7 +360,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                               Edit
                             </button>
                           </div>
-                        </label>
+                        </div>
                         <p className="settings-label truncate-text">{templateDescription}</p>
                       </div>
                     </div>
