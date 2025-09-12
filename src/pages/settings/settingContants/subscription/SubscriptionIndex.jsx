@@ -31,14 +31,32 @@ const SubscriptionIndex = () => {
   }
 
   const numPropertiesAllowed = userSubscriptionStatus.props_allowed;
-  const [numProperties, setNumProperties] = useState(numPropertiesAllowed || 0);
+  
+  // Initialize numProperties - use 1 for trial users, actual allowed for others
+  const getInitialNumProperties = () => {
+    if (subscriptionPlanName?.toLowerCase().includes('trial') || 
+        subscriptionPlanName === 'trial_over' || 
+        subscriptionPlanName === 'mount_trial') {
+      return 1;
+    }
+    return numPropertiesAllowed || 0;
+  };
+  
+  const [numProperties, setNumProperties] = useState(getInitialNumProperties());
 
   // Update numProperties when numPropertiesAllowed changes (e.g., after Redux state loads)
   React.useEffect(() => {
     if (numPropertiesAllowed && numPropertiesAllowed > 0) {
-      setNumProperties(numPropertiesAllowed);
+      // For trial users, set to 1 instead of the actual allowed amount (which is 1000)
+      if (subscriptionPlanName?.toLowerCase().includes('trial') || 
+          subscriptionPlanName === 'trial_over' || 
+          subscriptionPlanName === 'mount_trial') {
+        setNumProperties(1);
+      } else {
+        setNumProperties(numPropertiesAllowed);
+      }
     }
-  }, [numPropertiesAllowed]);
+  }, [numPropertiesAllowed, subscriptionPlanName]);
 
   const paymentGoodUntil =
     userData?.subscr_payment_good_until ||
