@@ -16,3 +16,23 @@ div h2.samsung-sharp-sans-bold.samsung-sharp-sans-bold,
 h2.samsung-sharp-sans-bold.samsung-sharp-sans-bold {
   font-family: "Samsung Sharp Sans Bold", sans-serif !important;
 }
+
+/* Hide default number input spinners */
+.properties-counter-input {
+  -moz-appearance: textfield; /* Firefox */
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  appearance: textfield; /* Standard property */
+}
+
+.properties-counter-input::-webkit-outer-spin-button,
+.properties-counter-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+/* Ensure Firefox doesn't show spinners */
+.properties-counter-input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
