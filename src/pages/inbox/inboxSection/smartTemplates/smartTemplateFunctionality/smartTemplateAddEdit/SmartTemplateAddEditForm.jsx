@@ -203,17 +203,26 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
   // Handle adding a new follow-up
   const handleAddFollowUp = () => {
-    if (dataStructure?.follow_ups?.length < 3) {
-      const newFollowUp = {
-        message: '',
-        conditions: [],
-        after_mins: '', // Delay in minutes
-      };
-      const updatedFollowUps = [...dataStructure.follow_ups, newFollowUp];
-      setDataStructure({ ...dataStructure, follow_ups: updatedFollowUps });
-      setShowFollowUps(true);
-    }
+  // First ensure follow_ups is an array
+  const currentFollowUps = Array.isArray(dataStructure.follow_ups) ? 
+    dataStructure.follow_ups : [];
+    
+  // Create new follow-up
+  const newFollowUp = {
+    message: '',
+    conditions: [],
+    after_mins: '30', // Add a default value
   };
+  
+  // Update state without the setTimeout delay
+  setDataStructure({
+    ...dataStructure,
+    follow_ups: [...currentFollowUps, newFollowUp]
+  });
+  
+  // Then show the follow-ups section
+  setShowFollowUps(true);
+};
 
   // Handle removing a follow-up
   const handleRemoveFollowUp = (index) => {
