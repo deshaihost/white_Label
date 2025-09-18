@@ -40,20 +40,22 @@ const WhatsAppEmbeddedSignup = ({signupInProgress, setSignupInProgress, backendR
         "X-API-Key": API_KEY, 
         'Content-Type': 'application/json' 
       },
-      transformRequest: [(data) => {
-        // Custom transform to ensure phone_number is treated as string
-        return JSON.stringify({
-          ...data,
-          phone_number: String(phone_number)
-        });
-      }],
       validateStatus: function (status) { return status >= 200 && status < 500; }
     };
 
-    // Keep your existing payload structure
+    // Create the data object with explicitly stringified values
+    const data = {
+      phone_number: JSON.stringify(phone_number).replace(/"/g, ''), // Remove quotes from JSON string
+      phone_number_id: String(phone_number_id),
+      waba_id: String(waba_id),
+      all_embedded_signup_data: all_embedded_signup_data
+    };
+
+    console.log("Sending data with phone number:", data.phone_number);
+
     const response = await axios.post(
       `${baseUrl}/complete_whatsapp_signup`, 
-      {phone_number, phone_number_id, waba_id, all_embedded_signup_data}, 
+      data, 
       config
     );
 
