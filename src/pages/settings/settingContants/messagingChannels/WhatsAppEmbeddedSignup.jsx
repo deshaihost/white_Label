@@ -28,46 +28,28 @@ const WhatsAppEmbeddedSignup = ({signupInProgress, setSignupInProgress, backendR
 
 
   const callBackendFinishSignupApi = async (phone_number, phone_number_id, waba_id, all_embedded_signup_data={}) => {
-  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  setBackendRegisterLoading(true);
-  
-  console.log("Phone number before sending to backend:", phone_number);
-  
-  try {
-    const config = {
-      headers: { 
-        "X-API-Key": API_KEY, 
-        'Content-Type': 'application/json' 
-      },
-      validateStatus: function (status) { return status >= 200 && status < 500; }
-    };
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setBackendRegisterLoading(true);
 
-    // Create the data object with explicitly stringified values
-    const data = {
-      phone_number: JSON.stringify(phone_number).replace(/"/g, ''), // Remove quotes from JSON string
-      phone_number_id: String(phone_number_id),
-      waba_id: String(waba_id),
-      all_embedded_signup_data: all_embedded_signup_data
-    };
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
+      };
 
-    console.log("Sending data with phone number:", data.phone_number);
+      const response = await axios.post(`${baseUrl}/complete_whatsapp_signup`, {phone_number, phone_number_id, waba_id, all_embedded_signup_data}, config);
 
-    const response = await axios.post(
-      `${baseUrl}/complete_whatsapp_signup`, 
-      data, 
-      config
-    );
-
-    if (response.status === 200 || response.status === 201) {
-      ToastHandle("Successfully completed signup", "success");
-      refreshUserData();
+      if (response.status === 200 || response.status === 201) {
+        ToastHandle("Successfully completed signup", "success");
+        refreshUserData();
+      }
+      else { ToastHandle("Failed to complete signup: " + (response.data.error || "Unknown error"), "danger"); }
     }
-    else { ToastHandle("Failed to complete signup: " + (response.data.error || "Unknown error"), "danger"); }
-  }
-  catch (error) { ToastHandle("Failed to complete signup - an error occurred", "danger"); }
-  finally { setBackendRegisterLoading(false); }
-};
+    catch (error) { ToastHandle("Failed to complete signup - an error occurred", "danger"); }
+    finally { setBackendRegisterLoading(false); }
+  };
+
 
   useEffect(() => {
     window.fbAsyncInit = function() {
