@@ -23,7 +23,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   const conditionsName = "Conditions";
   const followUpConditionsName = "Follow-Up Conditions";
   
-  const dataStructurePayload = smartTemplateData?.smartItem ? smartTemplateData?.smartItem : { id:uuidv4(), name:'', enabled:false, message:'', properties:[], triggers:[], targets:[], conditions:[], follow_ups: [] }; // Data structure for just this one template. The structure for all templates is stored in the parent
+  const dataStructurePayload = smartTemplateData?.smartItem ? smartTemplateData?.smartItem : { id:uuidv4(), name:'', enabled:false, message:'', properties:[], triggers:[], targets:[], conditions:[], follow_ups: [], ai_context_check_instructions:'', ai_personalization_instructions:'' }; // Data structure for just this one template. The structure for all templates is stored in the parent
 
   const [allData, setAllData] = useState({ modelShow: false, modelShowType: "", formData: [] });
   const [dataStructure, setDataStructure] = useState(dataStructurePayload);
@@ -45,6 +45,10 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   
   // State to manage follow-up visibility
   const [showFollowUps, setShowFollowUps] = useState(dataStructure?.follow_ups?.length > 0);
+
+  // New UI state for "Customize..." expansions
+  const [showContextCustomize, setShowContextCustomize] = useState(!!dataStructurePayload.ai_context_check_instructions);
+  const [showPersonalizeCustomize, setShowPersonalizeCustomize] = useState(!!dataStructurePayload.ai_personalization_instructions);
 
   // Check subscription limits for enabling templates
   const checkSubscriptionLimits = (isEnabling) => {
@@ -474,6 +478,27 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         <p className="fs-14 text-muted">
           If this is enabled, HostBuddy will refrain from sending the message to a guest if the AI determines that the message is not contextually appropriate, based on the conversation history.
         </p>
+
+        {dataStructure?.ai_context_check && !showContextCustomize && (
+          <button
+            className="btn btn-link p-0"
+            style={{ color: '#146ef5' }}
+            onClick={() => setShowContextCustomize(true)}
+          >
+            Customize...
+          </button>
+        )}
+        {dataStructure?.ai_context_check && showContextCustomize && (
+          <div className="mt-3">
+            <label className="fs-6">(Optional) Add custom instructions to guide the AI context checking</label>
+            <textarea
+              className="form-control setting-textarea"
+              placeholder="Type instructions to guide the AI..."
+              value={dataStructure?.ai_context_check_instructions || ''}
+              onChange={(e) => setDataStructure({ ...dataStructure, ai_context_check_instructions: e.target.value })}
+            />
+          </div>
+        )}
       </div>
 
       <div className="ai-context-appropriate-section">
@@ -489,6 +514,27 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         <p className="fs-14 text-muted">
           If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
         </p>
+
+        {dataStructure?.ai_personalization && !showPersonalizeCustomize && (
+          <button
+            className="btn btn-link p-0"
+            style={{ color: '#146ef5' }}
+            onClick={() => setShowPersonalizeCustomize(true)}
+          >
+            Customize...
+          </button>
+        )}
+        {dataStructure?.ai_personalization && showPersonalizeCustomize && (
+          <div className="mt-3">
+            <label className="fs-6">(Optional) Add custom instructions to guide the AI personalization</label>
+            <textarea
+              className="form-control setting-textarea"
+              placeholder="Type instructions to guide the AI..."
+              value={dataStructure?.ai_personalization_instructions || ''}
+              onChange={(e) => setDataStructure({ ...dataStructure, ai_personalization_instructions: e.target.value })}
+            />
+          </div>
+        )}
       </div>
 
       <div className="d-flex justify-content-center mt-5">
