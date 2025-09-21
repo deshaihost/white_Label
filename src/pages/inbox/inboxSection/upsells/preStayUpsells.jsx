@@ -51,6 +51,8 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
     currentSettingsData.ai_personalization = true;
   }
 
+  const [showPersonalizeCustomize, setShowPersonalizeCustomize] = useState(!!currentSettingsData.ai_personalization_instructions);
+
   // Determine whether / how to show absolute discount, based on the PMS & the availability of currency
   const userData = JSON.parse(sessionStorage.getItem("userData")); // assumes that getUserDataActions has been dispatched at some point this session, which populates this session storage item
   const userPMS = userData?.calry_integrations ? Object.keys(userData.calry_integrations)[0] || null : null;
@@ -355,6 +357,26 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
         <p className="fs-14 text-muted">
           If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
         </p>
+        {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
+          <button
+            className="btn btn-link p-0"
+            style={{ color: '#146ef5' }}
+            onClick={() => setShowPersonalizeCustomize(true)}
+          >
+            Customize...
+          </button>
+        )}
+        {currentSettingsData?.ai_personalization && showPersonalizeCustomize && (
+          <div className="mt-3">
+            <label className="fs-6">(Optional) Add custom instructions to guide the AI personalization</label>
+            <textarea
+              className="form-control setting-textarea"
+              placeholder="Type instructions to guide the AI..."
+              value={currentSettingsData?.ai_personalization_instructions || ''}
+              onChange={(e) => setSetting('ai_personalization_instructions', e.target.value, currentSettingsData, setCurrentSettingsData)}
+            />
+          </div>
+        )}
       </div>
 
       <div className="row mt-5">
