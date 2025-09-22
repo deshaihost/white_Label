@@ -23,6 +23,7 @@ const ReslyImg = 'https://hostbuddylb.com/partners/resly_img.webp'
 const SmilyImg = 'https://hostbuddylb.com/partners/SmilyLogo.webp';
 const AvantioImg = 'https://hostbuddylb.com/partners/avantio_logo.svg';
 const RentalWiseImg = 'https://hostbuddylb.com/partners/RentalWise.webp';
+const HostToolsImg = 'https://hostbuddylb.com/partners/hosttoolslogo.webp';
 const TidyImg = 'https://hostbuddylb.com/partners/tidy_logo_black_text.svg';
 
 const Integrations = () => {
@@ -140,6 +141,13 @@ const Integrations = () => {
             <a href="https://beds24.com/" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
                 <img src={Beds} alt="" />
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-4 col-sm-6">
+            <a href="https://hosttools.com/" target="_blank" rel="noopener noreferrer">
+              <div className="image-boc-inter">
+                <img src={HostToolsImg} alt="" />
               </div>
             </a>
           </div>
