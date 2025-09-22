@@ -40,8 +40,8 @@ const HospitableSenderBlog = () => {
       <div className="blog-article-page">
         <BlogArticleHeader 
           title="HostBuddy Now Supports Hospitable Sender Selection for Airbnb" 
-          author="HostBuddy Team" 
-          date="November 20, 2024" 
+          author="Jay Ullrich" 
+          date="Sept 9, 2025" 
           headerImage={thumbnailImg}
         />    
         <div className="blog-article-sidebar-and-content">

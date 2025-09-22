@@ -4,7 +4,8 @@ import BookDemoModal from  '../component/bookDemoModal';
 
 const author_profiles = {
   "Jay Ullrich": "https://hostbuddylb.com/blog/jay_profile.webp",
-  "Sam": "https://hostbuddylb.com/blog/sam_profile.webp"
+  "Sam": "https://hostbuddylb.com/blog/sam_profile.webp",
+  "HostBuddy Team": "https://hostbuddylb.com/blog/hostbuddy_team_profile.webp"
 }
 
 export const BlogArticleSidebar = ({ contents }) => {
