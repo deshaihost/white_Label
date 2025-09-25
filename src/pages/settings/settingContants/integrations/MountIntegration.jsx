@@ -5,7 +5,7 @@ import axios from 'axios';
 import CustomTooltip from './components/CustomTooltip';
 
 // SVG import
-const ToolTipIcon = require('./Icons/ToolTip.svg').default;
+import ToolTipIcon from './Icons/ToolTip.svg';
 
 const MountIntegration = ({ ApiUserData }) => {
   const propertyData = ApiUserData?.ApiUserData?.property_data;

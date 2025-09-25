@@ -3,7 +3,7 @@ import * as URL from '../../../helper/apiEndPoint';
 
 const api = new APICore();
 
-function registerEndPoint(params: any): any {
+function registerEndPoint(params) {
     const { data } = params;
     return api.create(URL.REGISTER, data);
 }
@@ -12,3 +12,4 @@ function registerEndPoint(params: any): any {
 export {
     registerEndPoint,
 };
+

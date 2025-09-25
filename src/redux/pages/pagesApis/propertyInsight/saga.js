@@ -65,23 +65,23 @@ function* stateEmptyFunction() {
   });
 }
 
-export function* acctionGetPropertyInsightByName(): any {
+export function* acctionGetPropertyInsightByName() {
   yield takeEvery(
     propertyInsightActionTypes.GET_PROPERTY_INSIGHT_BY_NAME_FIRST,
     getPropertyByNameFunction
   );
 }
-export function* acctionPropertyGetConversation(): any {
+export function* acctionPropertyGetConversation() {
   yield takeEvery(
     propertyInsightActionTypes.PROPERTY_GET_CONVERSATION_FIRST,
     PropertyGetConversationFunction
   );
 }
-export function* acctionStateEmpty(): any {
+export function* acctionStateEmpty() {
   yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
 }
 
-function* propertyInsightSaga(): any {
+function* propertyInsightSaga() {
   yield all([
     fork(acctionGetPropertyInsightByName),
     fork(acctionStateEmpty),
@@ -90,3 +90,4 @@ function* propertyInsightSaga(): any {
 }
 
 export default propertyInsightSaga;
+

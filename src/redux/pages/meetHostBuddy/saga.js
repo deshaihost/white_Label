@@ -92,23 +92,24 @@ function* stateEmptyFunction() {
   });
 }
 
-export function* acctionChatBoxAI(): any {
+export function* acctionChatBoxAI() {
   yield takeEvery(MeetHostActionTypes.CHAT_BOX_AI_FIRST, chatBoxAIFunction);
 }
-export function* acctionGetSessionId(): any {
+export function* acctionGetSessionId() {
   yield takeEvery(MeetHostActionTypes.GET_SESSION_ID_FIRST, getSessionIdFunction);
 }
-export function* acctionMeesageFeedBack(): any {
+export function* acctionMeesageFeedBack() {
   yield takeEvery(MeetHostActionTypes.MESSAGE_FEEDBACK_FIRST, messageFeedBackFunction);
 }
 
 
-export function* acctionStateEmpty(): any {
+export function* acctionStateEmpty() {
   yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
 }
 
-function* meetHostBuddySaga(): any {
+function* meetHostBuddySaga() {
   yield all([fork(acctionChatBoxAI),fork(acctionGetSessionId), fork(acctionStateEmpty),fork(acctionMeesageFeedBack)]);
 }
 
 export default meetHostBuddySaga;
+

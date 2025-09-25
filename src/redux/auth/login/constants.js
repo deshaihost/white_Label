@@ -5,3 +5,4 @@ export const LoginActionTypes = {
     LOGIN_ERROR: '@@auth/LOGIN_ERROR',
     LOGIN_RESET: '@@auth/LOGIN_RESET',
 };
+

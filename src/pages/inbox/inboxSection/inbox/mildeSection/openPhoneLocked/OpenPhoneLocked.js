@@ -1,6 +1,6 @@
 import React from 'react';
 import './OpenPhoneLocked.css';
-import { ReactComponent as IntegrationsIcon } from './icons/Integrations Icon.svg';
+import IntegrationsIconSvg from './icons/Integrations Icon.svg';
 
 const OpenPhoneLocked = ({ onComparePlans }) => {
   return (
@@ -30,7 +30,7 @@ const OpenPhoneLocked = ({ onComparePlans }) => {
         </div> */}
         
         <div className="integrations-icon">
-          <IntegrationsIcon />
+          <img src={IntegrationsIconSvg} alt="Integrations Icon" />
         </div>
         
         <h3 className="locked-title">

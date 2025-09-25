@@ -9,6 +9,7 @@ import ToastHandle from "../../../../../helper/ToastMessage";
 import Loader from "../../../../../helper/Loader";
 import HostBuddyIcon from "./icons/hostbuddy_icon.svg";
 import NeutralIcon from "./icons/neutral_sentiment_icon.svg";
+import XCloseSvg from "./icons/x-close.svg";
 import PositiveIcon from "./icons/positive_sentiment_icon.svg";
 import NegativeIcon from "./icons/negative_sentiment_icon.svg";
 import ChevDownIcon from "./icons/chevDown_icon.svg";
@@ -1317,7 +1318,7 @@ const callUpdateGuestDataApi = async () => {
             }
           >
             <img
-              src={require("./icons/x-close.svg").default}
+              src={XCloseSvg}
               alt="Close"
               style={{
                 width: "18px",
