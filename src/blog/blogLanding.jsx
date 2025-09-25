@@ -18,6 +18,7 @@ const str_market_thumbnail = "https://hostbuddylb.com/blog/str_market_4-22/Offic
 const hostfully_guidebooks_thumbnail = "https://hostbuddylb.com/blog/hostfully_guidebooks/Blog%20Header%20(19).webp";
 const inbox_blog_thumbnail = "https://storage.googleapis.com/frontend_media/blog/inbox_blog/10%20Minute%20Demo%20Thumbnail%20(1).webp";
 const openphone_blog_thumbnail = "https://hostbuddylb.com/blog/OpenPhone_Blog/10%20Minute%20Demo%20Thumbnail.webp";
+const hospitable_sender_blog_thumbnail = "https://hostbuddylb.com/blog/Hospitable_Blog/Hospitable%20sender%20(2).webp";
 
 const BlogLandingPage = () => {
 
@@ -37,6 +38,7 @@ const BlogLandingPage = () => {
       { id:"hostfully_guidebooks_blog", title:"Integration Alert: Our New Hostfully Guidebook Integration Takes AI Messaging for Short Term Rentals to the Next Level", date:"May 30, 2025", img:hostfully_guidebooks_thumbnail, description:"Discover how our new Hostfully Digital Guidebook integration transforms AI messaging for short-term rentals with comprehensive knowledge bases and personalized guest responses." },
       { id:"inbox_blog", title:"The Future of Guest Communication is Here: Introducing the new HostBuddy Inbox 🚀", date:"June 11, 2025", img:inbox_blog_thumbnail, description:"Discover the most powerful inbox update in HostBuddy history. Complete UI transformation, WhatsApp integration, intelligent auto-tagging, and advanced filtering." },
       { id:"openphone_blog", title:"Revolutionary AI Messaging for OpenPhone: Transform Your Short Term Rental Communication 📞", date:"Aug 03, 2025", img:openphone_blog_thumbnail, description:"Discover how OpenPhone AI messaging integration revolutionizes short-term rental communication with automatic phone number matching, call summaries, and unified messaging." },
+      { id:"hospitable_sender_blog", title:"HostBuddy Now Supports Hospitable Sender Selection for Airbnb", date:"Sept 9, 2025", img:hospitable_sender_blog_thumbnail, description:"Finally, the control you've been asking for is here. Choose exactly which host profile sends your automated AI messages with HostBuddy's new Hospitable Sender Selection feature." },
     ];
 
     const reversedArticles = articles.reverse();

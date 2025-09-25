@@ -45,6 +45,8 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
     currentSettingsData.ai_personalization = true;
   }
 
+  const [showPersonalizeCustomize, setShowPersonalizeCustomize] = useState(!!currentSettingsData.ai_personalization_instructions);
+
   const total_hours_after = parseInt(currentSettingsData?.days_after_last_message || 0) * 24 + parseInt(currentSettingsData?.hours_after_last_message || 0);
 
   //const variables = {'guest_name':'Guest name', 'price_before_discount':'Price before discount', 'price_after_discount':'Price after discount', 'discount_percentage':'Discount percentage', 'absolute_discount':'Total discount amount', 'num_days_available':'Number of days available'};
@@ -319,6 +321,26 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         <p className="fs-14 text-muted">
           If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
         </p>
+        {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
+          <button
+            className="btn btn-link p-0"
+            style={{ color: '#146ef5' }}
+            onClick={() => setShowPersonalizeCustomize(true)}
+          >
+            Customize...
+          </button>
+        )}
+        {currentSettingsData?.ai_personalization && showPersonalizeCustomize && (
+          <div className="mt-3">
+            <label className="fs-6">(Optional) Add custom instructions to guide the AI personalization</label>
+            <textarea
+              className="form-control setting-textarea"
+              placeholder="Type instructions to guide the AI..."
+              value={currentSettingsData?.ai_personalization_instructions || ''}
+              onChange={(e) => setSetting('ai_personalization_instructions', e.target.value, currentSettingsData, setCurrentSettingsData)}
+            />
+          </div>
+        )}
       </div>
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
@@ -326,9 +348,9 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
       <p className="settings-label text-center">Showing the next 10</p>
       {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry follow-ups <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry follow-ups <span style={{color: 'rgb(0, 128, 0'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
       ) : (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry follow-ups <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
+        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry follow-ups <span style={{color: 'rgb(215, 0, 0'}}>not enabled</span>. These messages will not be sent.</p>
       )}
 
       <div className="col-12 mt-4">

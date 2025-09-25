@@ -7,6 +7,8 @@ const WhatsAppSection = (ApiUserData, refreshUserData) => {
   const [signupInProgress, setSignupInProgress] = useState(false);
   const [backendRegisterLoading, setBackendRegisterLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('+');
+  const [showFacebookSignup, setShowFacebookSignup] = useState(false);
+  const [pendingPhoneNumber, setPendingPhoneNumber] = useState('');
 
   // When ApiUserData populates, update the phone number in the state if needed
   useEffect(() => {
@@ -20,28 +22,32 @@ const WhatsAppSection = (ApiUserData, refreshUserData) => {
   const isValidE164 = (num) => {
     if (!num.startsWith('+')) return false;
     const digitsOnly = num.slice(1); // Remove the '+' prefix for the check
-    if (digitsOnly.length < 11 || digitsOnly.length > 15) return false;
+    if (digitsOnly.length < 8 || digitsOnly.length > 15) return false;
     const e164Regex = /^\+[1-9]\d{1,14}$/;
     return e164Regex.test(num);
   };
 
   const handlePhoneNumberChange = (e) => {
     let value = e.target.value;
-    
+    console.log('Input value:', value);
     // If the user tries to delete the plus sign, keep it
     if (!value.includes('+')) {
       value = '+' + value.replace(/\+/g, '');
+      console.log('Added plus sign:', value);
     }
-    
     // Remove any non-digit characters except the plus sign
+    let beforeClean = value;
     value = value.replace(/[^\d+]/g, '');
-    
+    if (beforeClean !== value) console.log('Cleaned non-digits:', value);
     // Ensure plus sign is always at the start
     if (value.indexOf('+') !== 0) {
       value = '+' + value.replace(/\+/g, '');
+      console.log('Ensured plus at start:', value);
     }
-    
+    console.log('Final phone number value:', value);
     setPhoneNumber(value);
+    setShowFacebookSignup(false);
+    setPendingPhoneNumber('');
   };
 
   return (
@@ -56,19 +62,45 @@ const WhatsAppSection = (ApiUserData, refreshUserData) => {
       {!registeredWhatsAppNumber ? (
         isValidE164(phoneNumber) ? (
           <div style={{marginBottom:'60px'}}>
-            <WhatsAppEmbeddedSignup signupInProgress={signupInProgress} setSignupInProgress={setSignupInProgress} backendRegisterLoading={backendRegisterLoading} setBackendRegisterLoading={setBackendRegisterLoading} phoneNumberEntered={phoneNumber} refreshUserData={refreshUserData}/>
+            {console.log('isValidE164 passed:', phoneNumber)}
+            {!showFacebookSignup ? (
+              <button 
+                onClick={() => {
+                  console.log('Continue to Facebook Login button clicked, phone number:', phoneNumber);
+                  setPendingPhoneNumber(phoneNumber);
+                  setShowFacebookSignup(true);
+                }} 
+                style={{backgroundColor:"#1877f2", border:0, borderRadius:4, color:"#fff", cursor:"pointer", fontFamily:"Helvetica, Arial, sans-serif", fontSize:16, fontWeight:"bold", height:40, padding:"0 24px"}}
+              >
+                Continue to Facebook Login
+              </button>
+            ) : (
+              <>
+                {console.log('Rendering WhatsAppEmbeddedSignup, phoneNumber:', pendingPhoneNumber)}
+                <WhatsAppEmbeddedSignup 
+                  signupInProgress={signupInProgress} 
+                  setSignupInProgress={setSignupInProgress} 
+                  backendRegisterLoading={backendRegisterLoading} 
+                  setBackendRegisterLoading={setBackendRegisterLoading} 
+                  phoneNumberEntered={pendingPhoneNumber} 
+                  refreshUserData={refreshUserData}
+                />
+              </>
+            )}
           </div>
         ) : (
           // Fake unclickable button while no valid phone number is entered
           <div style={{display:'flex', flexDirection:'column', gap:'8px', width:'fit-content', marginBottom:'60px'}}>
+            {console.log('isValidE164 failed:', phoneNumber)}
             <button onClick={() => {}} style={{backgroundColor:"#506c8f", border:0, borderRadius:4, color:"#CCC", cursor:"not-allowed", fontFamily:"Helvetica, Arial, sans-serif", fontSize:16, fontWeight:"bold", height:40, padding:"0 24px", alignSelf:'flex-start'}}>
-              Login with Facebook
+              Continue to Facebook Login
             </button>
             <label style={{color:'white', fontSize:'12px'}}>Please enter a valid phone number first, including the country code.</label>
           </div>
         )
       ) : (
         <div style={{marginBottom:'60px'}}>
+          {console.log('WhatsApp already connected:', registeredWhatsAppNumber)}
           <p style={{color:'#093', fontSize:'14px'}}>You have already connected your WhatsApp Business account!</p>
         </div>
       )}

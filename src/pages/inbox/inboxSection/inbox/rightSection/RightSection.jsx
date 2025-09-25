@@ -133,6 +133,7 @@ const RightSection = ({
   const assignUserDropdownRef = useRef(null);
   const hostbuddyDropdownRef = useRef(null);
   const rightSideRef = useRef(null);
+  const statusByConversationRef = useRef({});
   const navigate = useNavigate();
 
   // Cache to store user assignments per conversation
@@ -175,15 +176,94 @@ const RightSection = ({
     ? get_current_status()
     : null;
   const { curr_status, source } = current_status_get || {};
+
+useEffect(() => {
+  // Check if we have a previously modified status for this conversation
+  if (conversation_id && statusByConversationRef.current[conversation_id]) {
+    // Use the stored status instead of the API's curr_status
+    setLocalStatus(statusByConversationRef.current[conversation_id]);
+  } else if (curr_status !== undefined) {
+    // If no stored status, use the API's current status
+    setLocalStatus(curr_status);
+  }
+}, [conversation_id, curr_status]);
+
+const callSetStatusAPI = async (on_or_off, timing) => {
+  const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  setToggleStatusLoading(true);
+
+  // Store the status for this conversation immediately
+  if (conversation_id) {
+    statusByConversationRef.current[conversation_id] = on_or_off;
+  }
+  
+  // Update local status immediately for UI responsiveness
+  setLocalStatus(on_or_off);
+
+  const end_time_utc = calculateEndTimeUTC(timing);
+
+  try {
+    const config = {
+      headers: { "X-API-Key": API_KEY },
+      validateStatus: function (status) {
+        return status >= 200 && status < 500;
+      },
+    };
+    const body_data = {
+      conversation_id: rightSectionData.conversation_id,
+      status: on_or_off,
+      until_utc: end_time_utc,
+    };
+    const response = await axios.put(
+      `${baseUrl}/toggle_conversation_status`,
+      body_data,
+      config
+    );
+
+    if (response.status === 200) {
+      ToastHandle("Status updated successfully", "success");
+      
+      // After successful API update, get the new conversation data
+      if (updateConversationFromApi) {
+        await updateConversationFromApi(conversation_id);
+        
+        // The API succeeded, keep our stored status
+        statusByConversationRef.current[conversation_id] = on_or_off;
+      }
+    } else {
+      ToastHandle(response?.data?.error, "danger");
+      
+      // If API fails, remove our stored status and revert to API status
+      if (conversation_id) {
+        delete statusByConversationRef.current[conversation_id];
+      }
+      setLocalStatus(curr_status);
+    }
+    return response.data;
+  } catch (error) {
+    ToastHandle("Internal server error", "danger");
+    
+    // If API fails, remove our stored status and revert to API status
+    if (conversation_id) {
+      delete statusByConversationRef.current[conversation_id];
+    }
+    setLocalStatus(curr_status);
+    return { error: "Internal server error" };
+  } finally {
+    setToggleStatusLoading(false);
+  }
+};
+
   // Fetch action items when component mounts
   useEffect(() => {
     callGetActionItemsApi(setActionItems, setGetActionItemsLoading);
   }, []);
 
   // Initialize localStatus whenever curr_status changes
-  useEffect(() => {
-    setLocalStatus(curr_status);
-  }, [curr_status]);
+  //useEffect(() => {
+  //  setLocalStatus(curr_status);
+  //}, [curr_status]);
 
   // Refresh action items when conversation_id changes and there are no action_items in rightSectionData
   useEffect(() => {
@@ -883,53 +963,6 @@ const RightSection = ({
         throw new Error("Invalid timing value");
     }
     return now.toISOString();
-  };
-
-  const callSetStatusAPI = async (on_or_off, timing) => {
-    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    setToggleStatusLoading(true);
-
-    // Update local status immediately for better user experience
-    setLocalStatus(on_or_off);
-
-    const end_time_utc = calculateEndTimeUTC(timing);
-
-    try {
-      const config = {
-        headers: { "X-API-Key": API_KEY },
-        validateStatus: function (status) {
-          return status >= 200 && status < 500;
-        }, // don't throw an error for non-2xx responses
-      };
-      const body_data = {
-        conversation_id: rightSectionData.conversation_id,
-        status: on_or_off,
-        until_utc: end_time_utc,
-      };
-      const response = await axios.put(
-        `${baseUrl}/toggle_conversation_status`,
-        body_data,
-        config
-      );
-
-      if (response.status === 200) {
-        ToastHandle("Status updated successfully", "success");
-        await updateConversationFromApi(conversation_id); // Call the API to get the updated conversation with the new status. This will trigger re-render
-      } else {
-        ToastHandle(response?.data?.error, "danger");
-        // If API fails, revert local status to original
-        setLocalStatus(curr_status);
-      }
-      return response.data;
-    } catch (error) {
-      ToastHandle("Internal server error", "danger");
-      // If API fails, revert local status to original
-      setLocalStatus(curr_status);
-      return { error: "Internal server error" };
-    } finally {
-      setToggleStatusLoading(false);
-    }
   };
 
   const handleOpenContactModal = () => {

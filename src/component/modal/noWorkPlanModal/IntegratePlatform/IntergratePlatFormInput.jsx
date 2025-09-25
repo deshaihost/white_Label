@@ -26,7 +26,7 @@ const IntergratePlatFormInput = ({ PmsIntegrationData, handleNoPlanClose }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (type) {
-      dispatch(getCalryLinkActions({ platform: type.toLowerCase() }));
+      dispatch(getCalryLinkActions({ platform: type.toLowerCase().replace(/\s+/g, '-') }));  // usually, the "integration definition key" that this API expects is the lowercase version of the PMS name with spaces replaced by hyphens (this will break for Smily i.e. BookingSync, but as of sep 22 2025 we've never had a customer for that so don't care rn). https://docs.calry.app/docs/common-api-reference/link/create-link
     }
   }, [type]);
 

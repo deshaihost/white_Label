@@ -31,14 +31,32 @@ const SubscriptionIndex = () => {
   }
 
   const numPropertiesAllowed = userSubscriptionStatus.props_allowed;
-  const [numProperties, setNumProperties] = useState(numPropertiesAllowed || 0);
+  
+  // Initialize numProperties - use 1 for trial users, actual allowed for others
+  const getInitialNumProperties = () => {
+    if (subscriptionPlanName?.toLowerCase().includes('trial') || 
+        subscriptionPlanName === 'trial_over' || 
+        subscriptionPlanName === 'mount_trial') {
+      return 1;
+    }
+    return numPropertiesAllowed || 0;
+  };
+  
+  const [numProperties, setNumProperties] = useState(getInitialNumProperties());
 
   // Update numProperties when numPropertiesAllowed changes (e.g., after Redux state loads)
   React.useEffect(() => {
     if (numPropertiesAllowed && numPropertiesAllowed > 0) {
-      setNumProperties(numPropertiesAllowed);
+      // For trial users, set to 1 instead of the actual allowed amount (which is 1000)
+      if (subscriptionPlanName?.toLowerCase().includes('trial') || 
+          subscriptionPlanName === 'trial_over' || 
+          subscriptionPlanName === 'mount_trial') {
+        setNumProperties(1);
+      } else {
+        setNumProperties(numPropertiesAllowed);
+      }
     }
-  }, [numPropertiesAllowed]);
+  }, [numPropertiesAllowed, subscriptionPlanName]);
 
   const paymentGoodUntil =
     userData?.subscr_payment_good_until ||
@@ -433,35 +451,42 @@ const SubscriptionIndex = () => {
                      Pricing ({billingPeriod === 'annual' ? 'Yearly' : 'Monthly'})
                     </span> */}
                   </div>
-                  <div style={{
-                    width: "1px",
-                    height: "40px",
-                    backgroundColor: "#ccc"
-                  }}></div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center"
-                  }}>
-                    <span
-                      className="samsung-sharp-sans samsung-sharp-sans"
-                      style={{
-                        fontWeight: "500",
-                        fontSize: "32px",
-                      }}
-                    >
-                      {numPropertiesAllowed}
-                    </span>
-                    <span
-                      className="samsung-sharp-sans samsung-sharp-sans"
-                      style={{
-                        fontWeight: "500",
-                        fontSize: "12px",
-                      }}
-                    >
-                     Total Properties
-                    </span>
-                  </div>
+                  {/* Only show Total Properties section for non-trial users */}
+                  {!subscriptionPlanName?.toLowerCase().includes('trial') && 
+                   subscriptionPlanName !== 'trial_over' && 
+                   subscriptionPlanName !== 'mount_trial' && (
+                    <>
+                      <div style={{
+                        width: "1px",
+                        height: "40px",
+                        backgroundColor: "#ccc"
+                      }}></div>
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center"
+                      }}>
+                        <span
+                          className="samsung-sharp-sans samsung-sharp-sans"
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "32px",
+                          }}
+                        >
+                          {numPropertiesAllowed}
+                        </span>
+                        <span
+                          className="samsung-sharp-sans samsung-sharp-sans"
+                          style={{
+                            fontWeight: "500",
+                            fontSize: "12px",
+                          }}
+                        >
+                         Total Properties
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <p className="fs-14 mb-2" >
@@ -567,13 +592,14 @@ const SubscriptionIndex = () => {
                 fontSize: "14px",
               }}
             >
-              # of {numProperties === 0 || numProperties === 1 ? 'Property' : 'Properties'}:
+              # of Properties:
             </span>
             <input
               type="number"
               value={numProperties}
               onChange={handlePropertiesChange}
               min="0"
+              className="properties-counter-input"
               style={{
                 color: "white",
                 fontWeight: "bold",
@@ -583,9 +609,62 @@ const SubscriptionIndex = () => {
                 border: "none",
                 outline: "none",
                 width: "60px",
-                textAlign: "left",
+                textAlign: "center",
               }}
             />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginLeft: "4px",
+              }}
+            >
+              <button
+                onClick={() => {
+                  const newValue = numProperties + 1;
+                  setNumProperties(newValue);
+                }}
+                style={{
+                  color: "white",
+                  backgroundColor: "transparent",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  borderRadius: "2px",
+                  width: "16px",
+                  height: "12px",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: "1px",
+                }}
+              >
+                ▲
+              </button>
+              <button
+                onClick={() => {
+                  const newValue = Math.max(0, numProperties - 1);
+                  setNumProperties(newValue);
+                }}
+                style={{
+                  color: "white",
+                  backgroundColor: "transparent",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  borderRadius: "2px",
+                  width: "16px",
+                  height: "12px",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                ▼
+              </button>
+            </div>
           </div>
           {/* Monthly/Annual toggle - Now positioned on the right with added margin-right */}
           <div
