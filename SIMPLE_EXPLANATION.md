@@ -56,7 +56,7 @@ iframe.contentWindow.postMessage({
 
 ## How to Test:
 
-1. Visit: `http://localhost:3000/white-label-login?email=test@example.com&password=testpass`
+1. Visit: `http://localhost:3000/white-label-login?email=deshai@hostbuddy.ai&password=Ridhi@120$`
 2. Should automatically try to log you in
 3. If credentials are valid → goes to dashboard
 4. If invalid → shows error
