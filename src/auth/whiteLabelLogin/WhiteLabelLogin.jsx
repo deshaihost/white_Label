@@ -26,18 +26,25 @@ const WhiteLabelLogin = () => {
     setIsLoading(true);
     
     try {
-      // Extract the referrer domain to identify white-label client
-      const referrerDomain = document.referrer ? new URL(document.referrer).hostname : null;
+      // Get the current domain (this is where the request is coming from)
       const currentDomain = window.location.hostname;
       
-      // Check if this is coming from a white-label domain
-      const isWhiteLabel = referrerDomain && referrerDomain !== currentDomain && referrerDomain !== 'hostbuddy.ai';
+      // Extract referrer domain if available
+      const referrerDomain = document.referrer ? new URL(document.referrer).hostname : null;
+      
+      // Determine white-label domain: use current domain if it's not hostbuddy.ai
+      let whiteLabelDomain = null;
+      if (currentDomain !== 'hostbuddy.ai' && currentDomain !== 'localhost' && currentDomain !== '127.0.0.1') {
+        whiteLabelDomain = currentDomain;
+      } else if (referrerDomain && referrerDomain !== 'hostbuddy.ai' && referrerDomain !== currentDomain) {
+        whiteLabelDomain = referrerDomain;
+      }
       
       const loginPayload = {
         email,
         password,
         rememberMe: false,
-        whiteLabelDomain: isWhiteLabel ? referrerDomain : null
+        whiteLabelDomain
       };
       
       // Dispatch login action
@@ -76,7 +83,25 @@ const WhiteLabelLogin = () => {
       }
       
     } else if (loginStatus === 200) {
-      // Success - redirect to dashboard
+      // Success - store white-label domain info and redirect to dashboard
+      const currentDomain = window.location.hostname;
+      const referrerDomain = document.referrer ? new URL(document.referrer).hostname : null;
+      
+      // Determine white-label domain automatically from current URL
+      let whiteLabelDomain = null;
+      if (currentDomain !== 'hostbuddy.ai' && currentDomain !== 'localhost' && currentDomain !== '127.0.0.1') {
+        whiteLabelDomain = currentDomain;
+      } else if (referrerDomain && referrerDomain !== 'hostbuddy.ai' && referrerDomain !== currentDomain) {
+        whiteLabelDomain = referrerDomain;
+      }
+      
+      // Store white-label domain info in localStorage for dashboard use
+      if (whiteLabelDomain) {
+        localStorage.setItem('whiteLabelDomain', whiteLabelDomain);
+        localStorage.setItem('whiteLabelBrand', getDomainBrandName(whiteLabelDomain));
+        console.log('Stored white-label info:', whiteLabelDomain, getDomainBrandName(whiteLabelDomain));
+      }
+      
       if (store?.loginReducer?.login?.gcs) {
         navigate('/gcs-users');
       } else {
@@ -96,6 +121,19 @@ const WhiteLabelLogin = () => {
       setIsLoading(false);
     }
   }, [loginStatus, navigate, dispatch, loginData, location]);
+
+  // Function to get brand name from domain
+  const getDomainBrandName = (domain) => {
+    // Map of domains to brand names
+    const domainToBrandMap = {
+      'c.acental.com': 'Acental',
+      'app.acental.com': 'Acental',
+      'acental.com': 'Acental',
+      // Add more white-label domains and their brand names here
+    };
+    
+    return domainToBrandMap[domain] || domain.charAt(0).toUpperCase() + domain.slice(1).split('.')[0];
+  };
 
   // Check if already authenticated
   useEffect(() => {

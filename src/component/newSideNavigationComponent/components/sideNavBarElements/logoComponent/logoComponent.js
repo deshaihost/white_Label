@@ -1,13 +1,16 @@
 import PropTypes from "prop-types";
 import React from "react";
 import icon from "../sectionIndicatorComponent/navIcons/NewLogoCollapse.svg";
+import useWhiteLabelBranding from "../../../../../helper/useWhiteLabelBranding";
 import "./logoComponent.css";
 
 export const Logo = ({ type, colour, onlyIcon }) => {
+    const { isWhiteLabel, brandName } = useWhiteLabelBranding();
+    
     return (
         <div className="logo-container">
-            <img className="logo-icon" alt="HostBuddy Icon" src={icon} />
-            {/* {!onlyIcon && <span className="logo-text">HostBuddy AI</span>} */}
+            <img className="logo-icon" alt={`${brandName} Icon`} src={icon} />
+            {!onlyIcon && <span className="logo-text">{brandName} AI</span>}
         </div>
     );
 };

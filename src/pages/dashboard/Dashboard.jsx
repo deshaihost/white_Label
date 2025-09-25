@@ -19,6 +19,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/transcriptsModel/ConverSationtranscriptModel";
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
 import NoltWidget from "../../component/nolt/nolt";
+import useWhiteLabelBranding from "../../helper/useWhiteLabelBranding";
 
 import {
   MetricTile,
@@ -34,6 +35,7 @@ const Dashboard = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isWhiteLabel, brandName, displayName } = useWhiteLabelBranding();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const userDataLoading = store?.getUserDataReducer?.loading;
   const actionItemsConvertationData =
@@ -347,14 +349,14 @@ const Dashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Dashboard - HostBuddy AI</title>
+        <title>Dashboard - {isWhiteLabel ? `${displayName} AI` : 'HostBuddy AI'}</title>
       </Helmet>{" "}
       {propertiesConversationLoading && <FullScreenLoader />}
       {completeActionsItemLoading && <FullScreenLoader />}
       <div className="account-main">
         <div className="container">
           <div className="banner-heading">
-            <h2>My HostBuddy</h2>
+            <h2>My {brandName}</h2>
           </div>
           {userDataGet?.hospitable_permission_error && (
             <div style={{ marginBottom: "20px" }}>
@@ -457,13 +459,13 @@ const Dashboard = () => {
                 <div className="account_heading">
                   {first_name ? (
                     <h3>
-                      Welcome to HostBuddy, {!userDataLoading && first_name}
+                      Welcome to {brandName}, {!userDataLoading && first_name}
                     </h3>
                   ) : (
-                    <h3>Welcome to HostBuddy!</h3>
+                    <h3>Welcome to {brandName}!</h3>
                   )}
                   <h4>
-                    New to HostBuddy?{" "}
+                    New to {brandName}?{" "}
                     <Link
                       style={{ textDecoration: "underline", marginLeft: "5px" }}
                       to="/getstarted"

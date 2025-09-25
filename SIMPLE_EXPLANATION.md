@@ -29,8 +29,8 @@ fetch('https://hostbuddy.ai/api/login', {
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
         email: 'john@example.com',
-        password: 'mypassword',
-        whiteLabelDomain: 'c.acental.com'
+        password: 'mypassword'
+        // Domain is automatically detected from the request origin
     })
 })
 ```
@@ -60,6 +60,13 @@ iframe.contentWindow.postMessage({
 2. Should automatically try to log you in
 3. If credentials are valid → goes to dashboard
 4. If invalid → shows error
+5. Domain is automatically detected from the URL (localhost in this case)
+
+## For Real White-Label Testing:
+If you want to simulate c.acental.com, you can:
+1. Add `127.0.0.1 c.acental.com` to your hosts file
+2. Visit: `http://c.acental.com:3000/white-label-login?email=deshai@hostbuddy.ai&password=Ridhi@120$`
+3. Dashboard will show "Acental" branding automatically
 
 ## For c.acental.com Integration:
 
