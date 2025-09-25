@@ -33,6 +33,19 @@ const Login = () => {
   const isGcs = store?.loginReducer?.login?.gcs;
   const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: {login_remember:false}});
 
+  // Check if this is a white-label login request
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const isWhiteLabelLogin = urlParams.has('email') || urlParams.has('username') || urlParams.has('login');
+    const referrerDomain = document.referrer ? new URL(document.referrer).hostname : null;
+    const isFromWhiteLabelDomain = referrerDomain && referrerDomain !== 'hostbuddy.ai' && referrerDomain !== window.location.hostname;
+    
+    // If this looks like a white-label login request, redirect to the white-label login handler
+    if (isWhiteLabelLogin || isFromWhiteLabelDomain) {
+      navigate(`/white-label-login${location.search}`, { replace: true });
+    }
+  }, [location.search, navigate]);
+
   const onSubmit = (data) => {
     setEmailEntered(data.email);
     const rememberMe = data.login_remember;

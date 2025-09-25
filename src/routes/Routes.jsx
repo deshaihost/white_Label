@@ -6,6 +6,7 @@ import MeetHostBoddy from "../pages/meetHostBuddy/MeetHostBoddy";
 import Faqs from "../pages/faq/Faq";
 import AboutUs from "../pages/aboutUs";
 import Login from "../auth/login/Login";
+import WhiteLabelLogin from "../auth/whiteLabelLogin/WhiteLabelLogin";
 import Signup from "../auth/signup/Signup";
 import InviteSignup from "../auth/inviteSignup/inviteSignup";
 import NavBar from "../component/navBar/NavBar";
@@ -237,6 +238,7 @@ const Routing = () => {
         location.pathname !== "/reset-password" &&
         location.pathname !== "/accept-invitation" &&
         location.pathname !== "/forgot" &&
+        location.pathname !== "/white-label-login" &&
         location.pathname !== "/test-show-conversations" && 
         (!authData || shouldUseUserNavBar) && <NavBar />}
       <ScrollToTop />
@@ -247,6 +249,7 @@ const Routing = () => {
         <Route path="/faqs" element={<Faqs />}></Route>
         <Route path="/about-us" element={<AboutUs />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/white-label-login" element={<WhiteLabelLogin />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/accept-invitation" element={<InviteSignup />}></Route>
         <Route path="/forgot" element={<ForgotPass />}></Route>
@@ -493,6 +496,7 @@ const Routing = () => {
         location.pathname !== "/forgot" &&
         location.pathname !== "/accept-invitation" &&
         location.pathname !== "/pricing" &&
+        location.pathname !== "/white-label-login" &&
         !location.pathname.startsWith("/inbox") &&
         location.pathname !== "/test-show-conversations" &&
         !location.pathname.startsWith("/edit-multi-property") &&
