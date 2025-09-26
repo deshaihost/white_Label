@@ -85,12 +85,24 @@ export const logOut = () => {
     */
 
     // Instead of above, just call the API and continue. Don't wait for it, we don't care about the result
-    axios.post(logoutUrl, {}, { headers });
+    axios.post(logoutUrl, {}, { headers }).catch((error) => {
+      console.warn("Logout API call failed, but continuing with local cleanup:", error.message);
+    });
+    
+    // Always clear storage regardless of API result
     localStorage.clear();
     sessionStorage.removeItem("hostBuddy_auth");
     sessionStorage.removeItem("hostBuddy_active_token"); // Also clear the active token
   } catch (error) {
-    console.error(error);
+    console.error("Logout process error:", error);
+    // Even if there's an error, try to clear storage
+    try {
+      localStorage.clear();
+      sessionStorage.removeItem("hostBuddy_auth");
+      sessionStorage.removeItem("hostBuddy_active_token");
+    } catch (storageError) {
+      console.error("Storage cleanup error:", storageError);
+    }
   }
 };
 

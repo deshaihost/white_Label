@@ -25,8 +25,13 @@ const WhiteLabelLogin = () => {
     const params = new URLSearchParams(location.search);
     const email = params.get('email');
     const password = params.get('password');
+    const token = params.get('token');
+    const redirect = params.get('redirect');
 
-    if (email && password) {
+    if (token) {
+      // Handle direct token authentication (from POST API)
+      handleTokenAuth(token, redirect);
+    } else if (email && password) {
       // Auto-login with URL parameters
       handleLogin(email, password);
     } else {
@@ -34,6 +39,42 @@ const WhiteLabelLogin = () => {
       navigate('/login');
     }
   }, [location.search, navigate]);
+
+  const handleTokenAuth = (token, redirectTo = 'dashboard') => {
+    try {
+      setIsLoading(true);
+      
+      // Create user object in the same format as normal login
+      const user = {
+        token: token,
+        refreshToken: null,
+        data: "userData",
+        id: 1,
+        lastName: "User",
+        role: "userRole"
+      };
+      
+      // Store authentication data
+      localStorage.setItem('hostBuddy_auth', JSON.stringify(user));
+      localStorage.setItem('hostBuddy_active_token', token);
+      
+      // Set authorization header for future API calls
+      const { setAuthorization } = require('../../helper/apiCore');
+      setAuthorization(token);
+      
+      ToastHandle("success", "Authentication successful!");
+      
+      // Redirect to the specified page
+      setTimeout(() => {
+        navigate(`/${redirectTo}`);
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Token authentication error:', error);
+      ToastHandle("error", "Authentication failed.");
+      navigate('/login');
+    }
+  };
 
   const handleLogin = (email, password) => {
     setIsLoading(true);

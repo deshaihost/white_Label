@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acental - Property Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2c5aa0;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .credentials-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .credentials-info h3 {
+            color: #2c5aa0;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .credential-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .credential-value {
+            color: #666;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
+            margin: 10px;
+            min-width: 200px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(44, 90, 160, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.loading {
+            background: #e7f3ff;
+            color: #31708f;
+            border: 1px solid #bce8f1;
+        }
+
+        .method-selector {
+            margin-bottom: 20px;
+        }
+
+        .method-btn {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .method-btn.active {
+            background: #2c5aa0;
+            color: white;
+            border-color: #2c5aa0;
+        }
+
+        .method-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #2c5aa0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">🏠 Acental</div>
+        <div class="subtitle">Property Management Platform</div>
+        
+        <div class="credentials-info">
+            <h3>📋 Test Credentials</h3>
+            <div class="credential-item">
+                <span class="credential-label">Email:</span>
+                <span class="credential-value">deshai@hostbuddy.ai</span>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <span class="credential-value">Ridhi@120$</span>
+            </div>
+        </div>
+
+        <div class="method-selector">
+            <div class="method-btn active" onclick="selectMethod('post')">🔒 POST API (Secure)</div>
+            <div class="method-btn" onclick="selectMethod('iframe')">🖼️ iframe Method</div>
+            <div class="method-btn" onclick="selectMethod('url')">🔗 URL Method</div>
+        </div>
+
+        <div id="method-info" class="method-info">
+            <strong>POST API Method:</strong><br>
+            • Sends credentials securely in request body<br>
+            • Uses existing /login endpoint<br>
+            • Most secure approach<br>
+            • Professional API integration
+        </div>
+        
+        <button class="login-btn" id="loginBtn" onclick="handleLogin()">
+            🚀 Access Dashboard
+        </button>
+        
+        <div id="status" class="status"></div>
+        
+        <div style="margin-top: 30px; font-size: 12px; color: #666;">
+            <strong>API Configuration:</strong><br>
+            Backend: https://dev2-dot-select-stays-chatbot-v02.wl.r.appspot.com<br>
+            Frontend: http://localhost:3000<br><br>
+            <strong>Note:</strong> This simulates c.acental.com integrating with HostBuddy.<br>
+            The POST API method uses the real production backend with API key authentication.
+        </div>
+    </div>
+
+    <script>
+        let currentMethod = 'post';
+        const API_BASE = 'https://dev2-dot-select-stays-chatbot-v02.wl.r.appspot.com';
+        const API_KEY = '4hIYUIEW0mqka8Xi7bxaDKaswOh7ll1KUUyGL17THvtDho3ujR';
+        const FRONTEND_BASE = 'http://localhost:3000'; // React frontend URL
+        
+        const CREDENTIALS = {
+            email: 'deshai@hostbuddy.ai',
+            password: 'Ridhi@120$'
+        };
+
+        function selectMethod(method) {
+            currentMethod = method;
+            
+            // Update UI
+            document.querySelectorAll('.method-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update info
+            const infoDiv = document.getElementById('method-info');
+            const methodInfo = {
+                'post': '<strong>POST API Method:</strong><br>• Sends credentials securely in request body<br>• Uses existing /login endpoint<br>• Most secure approach<br>• Professional API integration',
+                'iframe': '<strong>iframe Method:</strong><br>• Creates hidden iframe<br>• Uses postMessage for security<br>• No credentials in URL<br>• Frontend-only solution',
+                'url': '<strong>URL Method:</strong><br>• Credentials in URL parameters<br>• Simple redirect method<br>• ⚠️ Less secure (visible in URL)<br>• Good for testing'
+            };
+            
+            infoDiv.innerHTML = methodInfo[method];
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+        }
+
+        function setButtonState(loading) {
+            const btn = document.getElementById('loginBtn');
+            if (loading) {
+                btn.innerHTML = '<span class="loading-spinner"></span>Logging in...';
+                btn.disabled = true;
+            } else {
+                btn.innerHTML = '🚀 Access Dashboard';
+                btn.disabled = false;
+            }
+        }
+
+        // Method 1: POST API (Most Secure) - using correct API endpoint
+        async function loginWithPostAPI() {
+            try {
+                showStatus('Making secure API call to HostBuddy backend...', 'loading');
+                
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': API_KEY,
+                        'Origin': window.location.origin,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(CREDENTIALS)
+                });
+
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const htmlResponse = await response.text();
+                    throw new Error(`Server returned HTML instead of JSON. Response: ${htmlResponse.substring(0, 200)}...`);
+                }
+
+                const data = await response.json();
+
+                if (response.ok && data.access_token) {
+                    showStatus('✅ Login successful! Preparing dashboard access...', 'success');
+                    
+                    // Instead of storing locally and hoping the new tab sees it,
+                    // we'll pass the token via URL to a special authentication handler
+                    const authUrl = `${FRONTEND_BASE}/white-label-login?token=${data.access_token}&redirect=dashboard`;
+                    
+                    showStatus('✅ Authentication complete! Opening dashboard...', 'success');
+                    
+                    // Open the authentication URL which will set the token and redirect to dashboard
+                    setTimeout(() => {
+                        window.open(authUrl, '_blank');
+                    }, 1500);
+                    
+                } else {
+                    showStatus(`❌ Login failed: ${data.message || 'Invalid credentials'}`, 'error');
+                    console.log('Full response:', data);
+                }
+            } catch (error) {
+                showStatus(`❌ API Error: ${error.message}`, 'error');
+                console.error('Login error:', error);
+            }
+        }
+
+        // Method 2: iframe Method  
+        function loginWithIframe() {
+            showStatus('Creating secure iframe connection...', 'loading');
+            
+            // Create hidden iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = `${FRONTEND_BASE}/white-label-login?mode=postapi`;
+            iframe.style.display = 'none';
+            iframe.name = 'hostbuddy-login-frame';
+            document.body.appendChild(iframe);
+
+            // Listen for messages from iframe
+            const handleMessage = (event) => {
+                if (!event.origin.includes('localhost:3000')) return;
+                
+                if (event.data.type === 'LOGIN_SUCCESS') {
+                    showStatus('✅ Login successful! Opening dashboard...', 'success');
+                    setTimeout(() => {
+                        window.open(`${FRONTEND_BASE}/dashboard`, '_blank');
+                        cleanup();
+                    }, 1500);
+                } else if (event.data.type === 'LOGIN_ERROR') {
+                    showStatus(`❌ Login failed: ${event.data.message}`, 'error');
+                    cleanup();
+                }
+            };
+
+            const cleanup = () => {
+                window.removeEventListener('message', handleMessage);
+                if (document.body.contains(iframe)) {
+                    document.body.removeChild(iframe);
+                }
+            };
+
+            window.addEventListener('message', handleMessage);
+
+            // Send credentials to iframe once loaded
+            iframe.onload = () => {
+                iframe.contentWindow.postMessage({
+                    type: 'SECURE_LOGIN_REQUEST',
+                    credentials: CREDENTIALS
+                }, FRONTEND_BASE);
+            };
+
+            // Cleanup after timeout
+            setTimeout(() => {
+                if (document.body.contains(iframe)) {
+                    showStatus('❌ Login timeout - please try again', 'error');
+                    cleanup();
+                }
+            }, 15000);
+        }
+
+        // Method 3: URL Method (Less Secure)
+        function loginWithURL() {
+            showStatus('🔗 Redirecting with URL parameters...', 'loading');
+            
+            const loginUrl = `${FRONTEND_BASE}/white-label-login?email=${encodeURIComponent(CREDENTIALS.email)}&password=${encodeURIComponent(CREDENTIALS.password)}`;
+            
+            setTimeout(() => {
+                window.open(loginUrl, '_blank');
+            }, 1000);
+        }
+
+        // Main login handler
+        function handleLogin() {
+            setButtonState(true);
+            
+            switch(currentMethod) {
+                case 'post':
+                    loginWithPostAPI();
+                    break;
+                case 'iframe':
+                    loginWithIframe();
+                    break;
+                case 'url':
+                    loginWithURL();
+                    break;
+                default:
+                    loginWithPostAPI();
+            }
+            
+            setTimeout(() => {
+                setButtonState(false);
+            }, 3000);
+        }
+
+        // Show initial method info
+        selectMethod('post');
+    </script>
+</body>
+</html>

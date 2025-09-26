@@ -16,9 +16,23 @@ const SideBar = () => {
       setLogoutLoader(true);
       logOut();
       setLogoutLoader(false);
-      navigate("/login");
+      
+      // Check if we're in a white-label scenario
+      const urlParams = new URLSearchParams(window.location.search);
+      const isWhiteLabel = urlParams.has('token') || urlParams.has('user_id') || localStorage.getItem('brandName');
+      
+      if (isWhiteLabel) {
+        // For white-label, redirect to white-label login with current parameters
+        navigate(`/white-label-login${window.location.search}`);
+      } else {
+        // For regular users, go to standard login
+        navigate("/login");
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Logout error:", error);
+      setLogoutLoader(false);
+      // Fallback navigation even if there's an error
+      navigate("/login");
     }
   };
 
