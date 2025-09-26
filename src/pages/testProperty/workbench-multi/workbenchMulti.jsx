@@ -33,16 +33,9 @@ const WorkbenchMulti = () => {
     setSessionId(session_id_str);
   };
 
-  const getSanitizedBaseUrl = () => {
-    const rawUrl = import.meta.env.VITE_API_ENDPOINT;
-    console.log("Url:", rawUrl);
-    // Remove any 'undefined' from the URL
-    return rawUrl;
-  };
-
   const callInitializeApi = async () => {
     setMessages([]);
-    const baseUrl = getSanitizedBaseUrl();
+    const baseUrl = import.meta.env.VITE_API_ENDPOINT;
     const API_KEY = import.meta.env.VITE_API_KEY;
 
     try {
@@ -51,8 +44,9 @@ const WorkbenchMulti = () => {
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
       const bodyData = { multi_property_id: multi_property_id };
-      const response = await axios.post(`${baseUrl}/initialize_multi`, bodyData, config);
-
+      const apiUrl = `${baseUrl}/initialize_multi`;
+      const response = await axios.post(apiUrl.replace(/undefined\/?/g, ""), bodyData, config);
+      
       if (response.status === 200) {
         initializeStateFromApiReturn(response);
       }
@@ -61,7 +55,7 @@ const WorkbenchMulti = () => {
   }
 
   const callSendMessageApi = async (messageText) => {
-    const baseUrl = getSanitizedBaseUrl();
+    const baseUrl = import.meta.env.VITE_API_ENDPOINT;
     const API_KEY = import.meta.env.VITE_API_KEY;
     setResponseIsLoading(true);
 
@@ -75,7 +69,8 @@ const WorkbenchMulti = () => {
         conversation_id: sessionId,
         message: messageText
       };
-      const response = await axios.post(`${baseUrl}/chat_multi`, bodyData, config);
+      const apiUrl = `${baseUrl}/chat_multi`;
+      const response = await axios.post(apiUrl.replace(/undefined\/?/g, ""), bodyData, config);
 
       if (response.status === 200) {
         const bot_message_str = response.data.response;
