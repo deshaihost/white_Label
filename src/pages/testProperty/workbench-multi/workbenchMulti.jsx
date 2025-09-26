@@ -33,14 +33,20 @@ const WorkbenchMulti = () => {
     setSessionId(session_id_str);
   };
 
+  const getSanitizedBaseUrl = () => {
+    const rawUrl = process.env.REACT_APP_API_ENDPOINT;
+    // Remove any 'undefined' from the URL
+    return rawUrl.replace(/undefined\/?/g, "");
+  };
+
   const callInitializeApi = async () => {
     setMessages([]);
-    const baseUrl = import.meta.env.VITE_API_ENDPOINT;
-    const API_KEY = import.meta.env.VITE_API_KEY;
-    
+    const baseUrl = getSanitizedBaseUrl();
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
     try {
       const config = {
-        headers: {"X-API-Key": API_KEY},
+        headers: { "X-API-Key": API_KEY },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
       const bodyData = { multi_property_id: multi_property_id };
@@ -50,17 +56,17 @@ const WorkbenchMulti = () => {
         initializeStateFromApiReturn(response);
       }
     }
-    catch (error) {  }
+    catch (error) { }
   }
 
   const callSendMessageApi = async (messageText) => {
-    const baseUrl = import.meta.env.VITE_API_ENDPOINT;
-    const API_KEY = import.meta.env.VITE_API_KEY;
+    const baseUrl = getSanitizedBaseUrl();
+    const API_KEY = process.env.REACT_APP_API_KEY;
     setResponseIsLoading(true);
 
     try {
       const config = {
-        headers: {"X-API-Key": API_KEY},
+        headers: { "X-API-Key": API_KEY },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
       const bodyData = {
@@ -78,7 +84,7 @@ const WorkbenchMulti = () => {
         setLastMessageJustification(justification);
       }
     }
-    catch (error) {  }
+    catch (error) { }
     finally { setResponseIsLoading(false); }
   }
 
@@ -119,7 +125,7 @@ const WorkbenchMulti = () => {
           <div className='header-information'>
             <div className='header-content'>
               <div className='header-text'>
-                <h2 style={{marginBottom:'5px'}}>{multiPropertyName}</h2>
+                <h2 style={{ marginBottom: '5px' }}>{multiPropertyName}</h2>
                 <Link to='/properties?multi=true'>&larr; Back to Multi Properties</Link>
               </div>
             </div>
@@ -133,11 +139,11 @@ const WorkbenchMulti = () => {
               ) : (
                 lastMessageJustification ? (
                   <>
-                    <h5 style={{marginTop:'0'}}>Where did this response come from?</h5>
+                    <h5 style={{ marginTop: '0' }}>Where did this response come from?</h5>
                     <p>{lastMessageJustification}</p>
                   </>
                 ) : (
-                  <p style={{color:'#AAA', fontStyle:'italic', fontSize:'16px'}}>Send HostBuddy a message to get started!</p>
+                  <p style={{ color: '#AAA', fontStyle: 'italic', fontSize: '16px' }}>Send HostBuddy a message to get started!</p>
                 )
               )}
             </div>
