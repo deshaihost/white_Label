@@ -34,7 +34,7 @@ const WorkbenchMulti = () => {
   };
 
   const getSanitizedBaseUrl = () => {
-    const rawUrl = process.env.REACT_APP_API_ENDPOINT;
+    const rawUrl = import.meta.env.VITE_API_ENDPOINT;
     // Remove any 'undefined' from the URL
     return rawUrl.replace(/undefined\/?/g, "");
   };
@@ -42,7 +42,7 @@ const WorkbenchMulti = () => {
   const callInitializeApi = async () => {
     setMessages([]);
     const baseUrl = getSanitizedBaseUrl();
-    const API_KEY = process.env.REACT_APP_API_KEY;
+    const API_KEY = import.meta.env.VITE_API_KEY;
 
     try {
       const config = {
@@ -61,7 +61,7 @@ const WorkbenchMulti = () => {
 
   const callSendMessageApi = async (messageText) => {
     const baseUrl = getSanitizedBaseUrl();
-    const API_KEY = process.env.REACT_APP_API_KEY;
+    const API_KEY = import.meta.VITE_API_KEY;
     setResponseIsLoading(true);
 
     try {
