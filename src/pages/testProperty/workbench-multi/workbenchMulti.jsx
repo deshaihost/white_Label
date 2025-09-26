@@ -36,7 +36,7 @@ const WorkbenchMulti = () => {
   const callInitializeApi = async () => {
     setMessages([]);
     const baseUrl = import.meta.env.VITE_API_ENDPOINT;
-    const API_KEY = import.meta.env.VITE_API_KEY;
+    const API_KEY = process.env.REACT_APP_API_KEY;
 
     try {
       const config = {
@@ -56,7 +56,7 @@ const WorkbenchMulti = () => {
 
   const callSendMessageApi = async (messageText) => {
     const baseUrl = import.meta.env.VITE_API_ENDPOINT;
-    const API_KEY = import.meta.env.VITE_API_KEY;
+    const API_KEY = process.env.REACT_APP_API_KEY;
     setResponseIsLoading(true);
 
     try {
