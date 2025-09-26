@@ -46,7 +46,7 @@ const WorkbenchMulti = () => {
       const bodyData = { multi_property_id: multi_property_id };
       const apiUrl = `${baseUrl}/initialize_multi`;
       const response = await axios.post(apiUrl.replace(/undefined\/?/g, ""), bodyData, config);
-      console.log(bodyData, API_KEY, config);
+      console.log(apiUrl.replace(/undefined\/?/g, ""), bodyData, API_KEY, config);
       
       if (response.status === 200) {
         initializeStateFromApiReturn(response);
@@ -72,7 +72,7 @@ const WorkbenchMulti = () => {
       };
       const apiUrl = `${baseUrl}/chat_multi`;
       const response = await axios.post(apiUrl.replace(/undefined\/?/g, ""), bodyData, config);
-      console.log(bodyData, API_KEY, config);
+      console.log(apiUrl.replace(/undefined\/?/g, ""), bodyData, API_KEY, config);
 
       if (response.status === 200) {
         const bot_message_str = response.data.response;
