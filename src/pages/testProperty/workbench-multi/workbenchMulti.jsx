@@ -61,7 +61,7 @@ const WorkbenchMulti = () => {
 
   const callSendMessageApi = async (messageText) => {
     const baseUrl = getSanitizedBaseUrl();
-    const API_KEY = import.meta.VITE_API_KEY;
+    const API_KEY = import.meta.env.VITE_API_KEY;
     setResponseIsLoading(true);
 
     try {
