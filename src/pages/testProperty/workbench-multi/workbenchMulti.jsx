@@ -34,7 +34,7 @@ const WorkbenchMulti = () => {
   };
 
   const getSanitizedBaseUrl = () => {
-    const rawUrl = import.meta.env.VITE_API_ENDPOINT;
+    const rawUrl = import.meta.env.VITE_API_ENDPOINT || "";
     // Remove any 'undefined' from the URL
     return rawUrl.replace(/undefined\/?/g, "");
   };
