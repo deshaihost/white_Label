@@ -5,7 +5,10 @@ import { loginActions } from "../../redux/actions";
 import Loader from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
 import Authorized from "../../helper/Authorized";
+import { APICore, setAuthorization } from "../../helper/apiCore";
 import useWhiteLabelBranding from "../../helper/useWhiteLabelBranding";
+
+const api = new APICore();
 
 const WhiteLabelLogin = () => {
   const store = useSelector((state) => state);
@@ -30,7 +33,8 @@ const WhiteLabelLogin = () => {
 
     if (token) {
       // Handle direct token authentication (from POST API)
-      handleTokenAuth(token, redirect);
+      // Always redirect to dashboard when token is provided
+      handleTokenAuth(token, redirect || 'dashboard');
     } else if (email && password) {
       // Auto-login with URL parameters
       handleLogin(email, password);
@@ -46,27 +50,24 @@ const WhiteLabelLogin = () => {
       
       // Create user object in the same format as normal login
       const user = {
-        token: token,
-        refreshToken: null,
         data: "userData",
         id: 1,
+        password: "test",
         lastName: "User",
-        role: "userRole"
+        role: "userRole",
+        token: token, // This is the main token used by the system
+        refreshToken: token, // Use token as refresh token for compatibility
       };
-      
-      // Store authentication data
-      localStorage.setItem('hostBuddy_auth', JSON.stringify(user));
-      localStorage.setItem('hostBuddy_active_token', token);
-      
-      // Set authorization header for future API calls
-      const { setAuthorization } = require('../../helper/apiCore');
+
+      // Use the same method as regular login to set the user session
+      api.setLoggedInUser(user, false); // false = don't remember me
       setAuthorization(token);
       
       ToastHandle("success", "Authentication successful!");
       
-      // Redirect to the specified page
+      // Always redirect to dashboard when token is provided
       setTimeout(() => {
-        navigate(`/${redirectTo}`);
+        navigate('/dashboard');
       }, 1000);
       
     } catch (error) {

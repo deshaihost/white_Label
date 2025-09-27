@@ -219,8 +219,11 @@
             Backend: https://dev2-dot-select-stays-chatbot-v02.wl.r.appspot.com<br>
             Frontend: http://localhost:3000<br><br>
             <strong>Note:</strong> This simulates c.acental.com integrating with HostBuddy.<br>
-            The POST API method uses the real production backend with API key authentication.
-        </div>
+            The POST API method uses the real production backend with API key authentication.<br><br>
+            <strong>AuthURL Pattern:</strong> <code>/white-label-login?token={TOKEN}&redirect=dashboard</code><br>
+            • Any URL with this pattern automatically opens the dashboard<br>
+            • Works regardless of domain (localhost, staging, production)<br>
+            • Perfect for external system integrations</div>
     </div>
 
     <script>
@@ -300,13 +303,13 @@
                 if (response.ok && data.access_token) {
                     showStatus('✅ Login successful! Preparing dashboard access...', 'success');
                     
-                    // Instead of storing locally and hoping the new tab sees it,
-                    // we'll pass the token via URL to a special authentication handler
+                    // Create the authentication URL with token
+                    // This pattern ensures that anyone hitting this URL with a token gets redirected to dashboard
                     const authUrl = `${FRONTEND_BASE}/white-label-login?token=${data.access_token}&redirect=dashboard`;
                     
                     showStatus('✅ Authentication complete! Opening dashboard...', 'success');
                     
-                    // Open the authentication URL which will set the token and redirect to dashboard
+                    // Open the authentication URL which will automatically set the token and redirect to dashboard
                     setTimeout(() => {
                         window.open(authUrl, '_blank');
                     }, 1500);
