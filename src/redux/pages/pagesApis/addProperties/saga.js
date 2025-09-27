@@ -346,90 +346,90 @@ function* stateEmptyFunction() {
 
 
 
-export function* acctionPostProperties(): any {
+export function* acctionPostProperties() {
   yield takeEvery(
     AddPropertiesActionTypes.POST_PROPERTIES_FIRST,
     postPropertiesFunction
   );
 }
 
-export function* acctionGetQuestionnaire(): any {
+export function* acctionGetQuestionnaire() {
   yield takeEvery(
     AddPropertiesActionTypes.GET_QUESTIONNAIRE_FIRST,
     getQuestionnaireFunction
   );
 }
 
-export function* acctionResetQuestionnaireState(): any {
+export function* acctionResetQuestionnaireState() {
   yield takeEvery(
     AddPropertiesActionTypes.GET_QUESTIONNAIRE_RESET,
     resetQuestionnaireStateFunction
   );
 }
 
-export function* acctionPullConversationData(): any {
+export function* acctionPullConversationData() {
   yield takeEvery(
     AddPropertiesActionTypes.PULL_CONVERSATION_DATA_FIRST,
     pullConversationDataFunction
   );
 }
 
-export function* acctionListIntegrationProperties(): any {
+export function* acctionListIntegrationProperties() {
   yield takeEvery(
     AddPropertiesActionTypes.LIST_INTEGRATION_PROPERTIES_FIRST,
     listIntegrationFunction
   );
 }
 
-export function* acctionDeleteListIntegration(): any {
+export function* acctionDeleteListIntegration() {
   yield takeEvery(
     AddPropertiesActionTypes.DELETE_LIST_INTEGRATION_PROPERTIES_FIRST,
     deleteListIntegrationFunction
   );
 }
 
-export function* acctionUpdateQuestionnaire(): any {
+export function* acctionUpdateQuestionnaire() {
   yield takeEvery(
     AddPropertiesActionTypes.UPDATE_QUESTIONNAIRE_FIRST,
     updateQuestionnaireFunction
   );
 }
-export function* acctionGoToBillingPortalPost(): any {
+export function* acctionGoToBillingPortalPost() {
   yield takeEvery(
     AddPropertiesActionTypes.GO_TO_BILLING_PORTAL_POST_FIRST,
     gotoBillingPortalPostFunction
   );
 }
-export function* acctionSupportingDocumentPost(): any {
+export function* acctionSupportingDocumentPost() {
   yield takeEvery(
     AddPropertiesActionTypes.SUPPORTING_DOCUMENT_POST_FIRST,
     supportingDocumentPostFunction
   );
 }
-export function* acctionUrlDocumentPost(): any {
+export function* acctionUrlDocumentPost() {
   yield takeEvery(
     AddPropertiesActionTypes.SUPPORTING_URL_POST_FIRST,
     supportingUrlPostFunction
   );
 }
 
-export function* acctionStateEmpty(): any {
+export function* acctionStateEmpty() {
   yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
 }
 
-export function* acctionToggleChatbotOnOff(): any {
+export function* acctionToggleChatbotOnOff() {
   yield takeEvery(AddPropertiesActionTypes.TOGGLE_CHATBOT_ONOFF_PUT_FIRST, toggleChatbotOnOffFunction);
 }
-export function* acctionCopyExistingProperty(): any {
+export function* acctionCopyExistingProperty() {
   yield takeEvery(AddPropertiesActionTypes.COPY_EXITING_PROPERTY_FIRST, copyExistingPropertyFunction);
 }
-export function* acctionRemoveSupportingDocs(): any {
+export function* acctionRemoveSupportingDocs() {
   yield takeEvery(AddPropertiesActionTypes.REMOVE_SUPPORTING_DOCS_FIRST, removeSupportingDocsFunction);
 }
 
 
 
-function* addPropertiesSaga(): any {
+function* addPropertiesSaga() {
   yield all([
     fork(acctionStateEmpty),
     fork(acctionPostProperties),
@@ -448,3 +448,4 @@ function* addPropertiesSaga(): any {
 }
 
 export default addPropertiesSaga;
+

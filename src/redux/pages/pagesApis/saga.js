@@ -289,65 +289,65 @@ function* stateEmptyFunction() {
   });
 }
 
-export function* acctionGetUserData(): any {
+export function* acctionGetUserData() {
   yield takeEvery(
     PagesApisActionTypes.GET_USER_DATA_FIRST,
     getUserDataFunction
   );
 }
-export function* acctionStateEmpty(): any {
+export function* acctionStateEmpty() {
   yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
 }
-export function* acctionCreateCheckoutSession(): any {
+export function* acctionCreateCheckoutSession() {
   yield takeEvery(
     PagesApisActionTypes.POST_CREATE_CHECKOUT_SESSION_FIRST,
     postCreateCheckoutSessionFunction
   );
 }
-export function* acctionUpdateAccountInfo(): any {
+export function* acctionUpdateAccountInfo() {
   yield takeEvery(
     PagesApisActionTypes.UPDATE_ACCOUNT_INFO_FIRST,
     updateAccountInfoFunction
   );
 }
-export function* acctionUpdateAccountUpdatePassword(): any {
+export function* acctionUpdateAccountUpdatePassword() {
   yield takeEvery(
     PagesApisActionTypes.UPDATE_ACCOUNT_UPDATE_PASSWORD_FIRST,
     updateAccountUpdatePasswordFunction
   );
 }
-export function* acctionPMSIntegrationGet(): any {
+export function* acctionPMSIntegrationGet() {
   yield takeEvery(
     PagesApisActionTypes.PMS_INTEGRATION_GET_FIRST,
     pmsIntegrationGetFunction
   );
 }
 
-export function* acctionPutCompleteActionItems(): any {
+export function* acctionPutCompleteActionItems() {
   yield takeEvery(
     PagesApisActionTypes.PUT_COMPLETE_ACTION_ITEMS_FIRST,
     putCompleteActionItemFunction
   );
 }
-export function* acctionGetCalryLink(): any {
+export function* acctionGetCalryLink() {
   yield takeEvery(
     PagesApisActionTypes.GET_CALRY_LINK_FIRST,
     getCalryLinkFunction
   );
 }
-export function* acctionRemoveIntegrationGet(): any {
+export function* acctionRemoveIntegrationGet() {
   yield takeEvery(
     PagesApisActionTypes.REMOVE_INTEGRATION_LIST_GET_FIRST,
     removeIntegrationGetFunction
   );
 }
-export function* acctionRemoveIntegration(): any {
+export function* acctionRemoveIntegration() {
   yield takeEvery(
     PagesApisActionTypes.REMOVE_INTEGRATION_FIRST,
     removeIntegrationFunction
   );
 }
-export function* acctionGetActionItems(): any {
+export function* acctionGetActionItems() {
   yield takeEvery(
     PagesApisActionTypes.GET_ACTIONS_ITEMS_FIRST,
     getActionsItemsFunction
@@ -356,7 +356,7 @@ export function* acctionGetActionItems(): any {
 
 
 
-function* pagesApisSaga(): any {
+function* pagesApisSaga() {
   yield all([
     fork(acctionGetUserData),
     fork(acctionStateEmpty),
@@ -373,3 +373,4 @@ function* pagesApisSaga(): any {
 }
 
 export default pagesApisSaga;
+

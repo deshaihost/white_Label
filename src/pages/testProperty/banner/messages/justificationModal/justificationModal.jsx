@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./customJustificationModal.css";
-import { ReactComponent as JustificationLogo } from "./icons/justificationLogo.svg";
+import JustificationLogoSvg from "./icons/justificationLogo.svg";
 
 // Utility function to format markdown-like text
 const formatMarkdownText = (text) => {
@@ -94,7 +94,7 @@ const JustificationModal = ({
         <div className="custom-modal-header">
           <div className="custom-modal-logo">
             <div className="logo-badge">
-              <JustificationLogo width="48" height="50" />
+              <img src={JustificationLogoSvg} width="48" height="50" alt="Justification Logo" />
             </div>
           </div>
           <h5 className="custom-modal-title heading-xsmall">

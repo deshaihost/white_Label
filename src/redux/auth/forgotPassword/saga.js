@@ -40,15 +40,16 @@ function* stateEmptyFunction() {
   });
 }
 
-export function* acctionSendPasswordRestEmail(): any {
+export function* acctionSendPasswordRestEmail() {
   yield takeEvery(ForgotPasswordActionTypes.SEND_PASSWORD_REST_EMAIL_FIRST, sendPasswordRestEmailFunction);
 }
-export function* acctionStateEmpty(): any {
+export function* acctionStateEmpty() {
   yield takeEvery(StateEmtpyActionTypes.STATE_EMPTY_FIRST, stateEmptyFunction);
 }
 
-function* forgotPasswordSaga(): any {
+function* forgotPasswordSaga() {
   yield all([fork(acctionSendPasswordRestEmail), fork(acctionStateEmpty)]);
 }
 
 export default forgotPasswordSaga;
+

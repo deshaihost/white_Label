@@ -24,6 +24,13 @@ import axios from 'axios';
 import ToastHandle from '../../../../helper/ToastMessage';
 import { useDispatch } from 'react-redux';
 import { getUserDataActions } from '../../../../redux/actions';
+import SlackLogo from './Icons/Slack.svg';
+import TurnoLogo from './Icons/Turno Logo.svg';
+import MinutLogo from './Icons/Minut Logo.svg';
+import TidyLogo from './Icons/Tidy Logo.svg';
+import HostfullyTileIcon from './Icons/Hostfully_tile_icon.svg';
+import MountLogoBlack from './Icons/Mount Logo black.svg';
+import NotionLogo from './Icons/Notion Logo.svg';
 
 const IntegrationsIndex = (ApiUserData) => {
   const dispatch = useDispatch();
@@ -402,10 +409,10 @@ const IntegrationsIndex = (ApiUserData) => {
 
               {/* Slack */}
               {isProPlan ? 
-                renderUpgradeTile(require('./Icons/Slack.svg').default, 'Slack Logo', 'Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.', { width: '82px', height: '50px' }) 
+                renderUpgradeTile(SlackLogo, 'Slack Logo', 'Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.', { width: '82px', height: '50px' }) 
                 : 
                 <div className="partner-tile" style={{ cursor: 'pointer' }} onClick={() => window.location.href = '/setting/contact'}>
-                  <img className="partner-logo" alt="Slack Logo" src={require('./Icons/Slack.svg').default} style={{ width: '83px', height: '50px' }} />
+                  <img className="partner-logo" alt="Slack Logo" src={SlackLogo} style={{ width: '83px', height: '50px' }} />
                   <p>Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.</p>
                 </div>
               }
@@ -416,7 +423,7 @@ const IntegrationsIndex = (ApiUserData) => {
             <>
               {/* Turno */}
               {!turnoUserId && (
-                isProPlan ? renderUpgradeTile(require('./Icons/Turno Logo.svg').default, 'Turno Logo', 'Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
+                isProPlan ? renderUpgradeTile(TurnoLogo, 'Turno Logo', 'Connecting your Turno account lets you use "Property Ready" in Smart Templates, so you can send messages to guests when their unit is ready for check-in.') : <ConnectToTurno />
               )}
               {/* Minut */}
               {/* {!minutUserId && (
@@ -424,22 +431,22 @@ const IntegrationsIndex = (ApiUserData) => {
               )} */}
 
                {!minutUserId && (
-                isProPlan ?renderUpgradeTile(require('./Icons/Minut Logo.svg').default, 'Minut Logo', 'Connect with Minut’s insights platform to automate and personalize guest messaging for noise or occupancy events. streamline your operations, keep your property protected, and enhance guest experience.') : <ConnectToMinut />
+                isProPlan ?renderUpgradeTile(MinutLogo, 'Minut Logo', 'Connect with Minut’s insights platform to automate and personalize guest messaging for noise or occupancy events. streamline your operations, keep your property protected, and enhance guest experience.') : <ConnectToMinut />
               )}
 
 
               {/* Tidy */}
               {!tidyUserId && (
-                isProPlan ? renderUpgradeTile(require('./Icons/Tidy Logo.svg').default, 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
+                isProPlan ? renderUpgradeTile(TidyLogo, 'Tidy Logo', "HostBuddy's groundbreaking partnership with Tidy allows you to completely automate the handling of early check-in / late check-out requests based on the real-time cleaning status of your properties. Contact us to get access!") : <ConnectToTidy />
               )}
               {/* Hostfully Guidebooks */}
               {!hostfullyGuidebooksUserId && (
-                isProPlan ? renderUpgradeTile(require('./Icons/Hostfully_tile_icon.svg').default, 'Hostfully Guidebooks Logo', 'Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.', { width: '50%', height: '50px' }) : <ConnectToHostfullyGuidebooks />
+                isProPlan ? renderUpgradeTile(HostfullyTileIcon, 'Hostfully Guidebooks Logo', 'Connect to Hostfully Guidebooks to allow HostBuddy to provide your guests with accurate, up-to-date information about your property and local recommendations directly from your Hostfully Guidebooks.', { width: '50%', height: '50px' }) : <ConnectToHostfullyGuidebooks />
               )}
               {/* Mount */}
               {isMountPlan && (
                 <div className="partner-tile">
-                  <img className="partner-logo" alt="Mount Logo" src={require('./Icons/Mount Logo black.svg').default} style={{ maxWidth: '150px', height: 'auto' }} />
+                  <img className="partner-logo" alt="Mount Logo" src={MountLogoBlack} style={{ maxWidth: '150px', height: 'auto' }} />
                   <p>Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area</p>
                   <div style={{ 
                     background: 'rgba(6, 9, 26, 1)',
@@ -491,7 +498,7 @@ const IntegrationsIndex = (ApiUserData) => {
               )}
               {/* Notion */}
               {!notionUserId && (
-                isProPlan ? renderUpgradeTile(require('./Icons/Notion Logo.svg').default, 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
+                isProPlan ? renderUpgradeTile(NotionLogo, 'Notion Logo', 'Connect with Notion to let HostBuddy reference your documents and databases when responding to guests, allowing you to easily keep HostBuddy\'s knowledge base up to date in real time. (Coming soon)') : <ConnectToNotion />
               )}
             </>
           )}

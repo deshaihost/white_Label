@@ -42,7 +42,7 @@ const OpenPhoneBlogArticle = () => (
     <div className="blog-article-page">
       <BlogArticleHeader 
         title="Revolutionary AI Messaging for OpenPhone: Transform Your Short Term Rental Communication 📞" 
-        author="HostBuddy Team" 
+        author="Jay Ullrich" 
         date="August 3, 2025" 
         headerImage={thumbnailUrl}
       />
