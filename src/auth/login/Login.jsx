@@ -37,14 +37,27 @@ const Login = () => {
   // Immediate white label detection and redirect
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const hasToken = urlParams.has('token');
-    const hasEmail = urlParams.has('email');
-    const hasUsername = urlParams.has('username');
-    const hasLogin = urlParams.has('login');
+    const tokenValue = urlParams.get('token');
+    const emailValue = urlParams.get('email');
+    const usernameValue = urlParams.get('username');
+    const loginValue = urlParams.get('login');
     const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
+    const isInRedirectLoop = sessionStorage.getItem('loginRedirectLoop');
+    
+    // Prevent redirect loops
+    if (isInRedirectLoop) {
+      sessionStorage.removeItem('loginRedirectLoop');
+      return;
+    }
+    
+    // Only redirect to white label if there are ACTUAL VALUES in the parameters, not just empty parameters
+    const hasValidToken = tokenValue && tokenValue.trim().length > 0;
+    const hasValidEmail = emailValue && emailValue.trim().length > 0;
+    const hasValidUsername = usernameValue && usernameValue.trim().length > 0;
+    const hasValidLogin = loginValue && loginValue.trim().length > 0;
     
     // Check if this should be handled by white label login
-    const shouldRedirectToWhiteLabel = !isLoggedOut && (hasToken || hasEmail || hasUsername || hasLogin);
+    const shouldRedirectToWhiteLabel = !isLoggedOut && (hasValidToken || hasValidEmail || hasValidUsername || hasValidLogin);
     
     if (shouldRedirectToWhiteLabel) {
       setIsRedirecting(true);
