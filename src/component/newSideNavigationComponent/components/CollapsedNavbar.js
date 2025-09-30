@@ -17,7 +17,7 @@ import logoutIcon from "./NavBarIcons/NewLogOut.svg";
 import "./CollapsedNavbar.css";
 import Logo from "../components/sideNavBarElements/logoComponent/logoComponent";
 const icons = [
-  { id: 0, component: <Logo colour="default" type="icon" onlyIcon={true} />, label: "Logo" },
+  { id: 0, component: <Logo colour="default" type="icon" onlyIcon={true} />, label: "HostBuddy" },
   { id: 1, component: <GetStarted />, label: "Get Started" },
   { id: 2, component: <DashBoardDefault />, label: "Dashboard" },
   { id: 3, component: <HomeSmileScreenDefault />, label: "Properties" },
@@ -182,8 +182,8 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   const gcsDataWithLogo = [
     {
       id: 0,
-      component: <Logo colour="default" type="icon" />,
-      label: "Logo",
+      component: <Logo colour="default" type="icon" onlyIcon={true} />,
+      label: "HostBuddy",
     },
     ...GcsUserdata,
   ];
