@@ -11,6 +11,8 @@ import useWhiteLabelBranding from "../../helper/useWhiteLabelBranding";
 const api = new APICore();
 
 const WhiteLabelLogin = () => {
+  console.log('🟡 WhiteLabelLogin component rendering');
+  
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,7 +26,16 @@ const WhiteLabelLogin = () => {
   const loginStatus = store?.loginReducer?.login?.status;
   const loginLoading = store?.loginReducer?.loading;
 
+  console.log('🟡 WhiteLabelLogin component state:', {
+    pathname: location.pathname,
+    search: location.search,
+    isLoading,
+    token: !!token
+  });
+
   useEffect(() => {
+    console.log('🟡 WhiteLabelLogin useEffect triggered');
+    
     const params = new URLSearchParams(location.search);
     const email = params.get('email');
     const password = params.get('password');
@@ -32,8 +43,18 @@ const WhiteLabelLogin = () => {
     const redirect = params.get('redirect');
     const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
 
+    console.log('🟡 WhiteLabelLogin useEffect params:', {
+      email,
+      password: password ? '***' : null,
+      token: token ? `${token.substring(0, 10)}...` : null,
+      redirect,
+      isLoggedOut: !!isLoggedOut,
+      paramsString: params.toString()
+    });
+
     // If user just logged out, clear the logout flag and stay on white label login page
     if (isLoggedOut) {
+      console.log('🟡 WhiteLabelLogin: User just logged out, staying on white label page');
       sessionStorage.removeItem('whiteLabelLoggedOut');
       // Show the login interface instead of redirecting
       setIsLoading(false);
@@ -44,14 +65,27 @@ const WhiteLabelLogin = () => {
     const hasValidToken = token && token.trim().length > 0;
     const hasValidEmailPassword = email && email.trim().length > 0 && password && password.trim().length > 0;
 
+    console.log('🟡 WhiteLabelLogin credential check:', {
+      hasValidToken,
+      hasValidEmailPassword
+    });
+
     if (hasValidToken) {
+      console.log('🟡 WhiteLabelLogin: Processing token authentication');
       // Handle direct token authentication (from POST API)
       // Keep loading true during token auth
       handleTokenAuth(token, redirect || 'dashboard');
     } else if (hasValidEmailPassword) {
+      console.log('🟡 WhiteLabelLogin: Processing email/password authentication');
       // Auto-login with URL parameters
       handleLogin(email, password);
     } else {
+      console.log('🟡 WhiteLabelLogin: No valid credentials - REDIRECT DISABLED FOR DEBUGGING');
+      // TEMPORARILY DISABLE REDIRECT FOR DEBUGGING
+      setIsLoading(false);
+      return;
+      
+      console.log('🟡 WhiteLabelLogin: No valid credentials, REDIRECTING to /login');
       // No valid white label credentials - redirect to regular login immediately
       // This prevents white label login from being accessed without proper credentials
       navigate('/login', { replace: true });

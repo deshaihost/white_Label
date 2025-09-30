@@ -19,6 +19,8 @@ const Logo = 'https://hostbuddylb.com/logo/logo_footer.webp';
 const AuthImage = 'https://hostbuddylb.com/home-new/_Signup.webp';
 
 const Login = () => {
+  console.log('🔵 Login component rendering');
+  
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,12 +36,35 @@ const Login = () => {
   const isGcs = store?.loginReducer?.login?.gcs;
   const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: {login_remember:false}});
 
+  console.log('🔵 Login component state:', {
+    pathname: location.pathname,
+    search: location.search,
+    isRedirecting,
+    token: !!token
+  });
+
   // Only redirect to white label if coming from a white label domain (referrer-based)
+  // TEMPORARILY DISABLED FOR DEBUGGING
   useEffect(() => {
+    console.log('🔵 Login useEffect triggered - REFERRER REDIRECT DISABLED');
+    
     const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
+    
+    console.log('🔵 Login useEffect checks:', {
+      isLoggedOut: !!isLoggedOut,
+      isRedirecting,
+      referrer: document.referrer,
+      pathname: location.pathname,
+      search: location.search
+    });
+    
+    // TEMPORARILY DISABLE ALL REDIRECTS FOR DEBUGGING
+    console.log('🔵 Login useEffect: All redirects disabled for debugging');
+    return;
     
     // Don't redirect if user just logged out or if already redirecting
     if (isLoggedOut || isRedirecting) {
+      console.log('🔵 Login useEffect: Early return - logged out or redirecting');
       return;
     }
     
@@ -53,10 +78,19 @@ const Login = () => {
                                    referrerDomain !== 'localhost' &&
                                    referrerDomain !== '127.0.0.1';
     
+    console.log('🔵 Login useEffect referrer check:', {
+      referrerDomain,
+      isFromWhiteLabelDomain,
+      currentHostname: window.location.hostname
+    });
+    
     // Only redirect if coming from a genuine white label domain
     if (isFromWhiteLabelDomain) {
+      console.log('🔵 Login useEffect: REDIRECTING to white-label-login');
       setIsRedirecting(true);
       navigate(`/white-label-login${location.search}`, { replace: true });
+    } else {
+      console.log('🔵 Login useEffect: Staying on regular login');
     }
   }, [location.search, navigate, isRedirecting]);
 
@@ -74,25 +108,6 @@ const Login = () => {
       </div>
     );
   }
-
-  // Check if this is a white-label login request (fallback for edge cases)
-  useEffect(() => {
-    // This is a simplified fallback - only redirect based on referrer
-    const referrerDomain = document.referrer ? new URL(document.referrer).hostname : null;
-    const isFromWhiteLabelDomain = referrerDomain && 
-                                   referrerDomain !== 'hostbuddy.ai' && 
-                                   referrerDomain !== 'www.hostbuddy.ai' && 
-                                   referrerDomain !== window.location.hostname &&
-                                   referrerDomain !== 'localhost' &&
-                                   referrerDomain !== '127.0.0.1';
-    const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
-    
-    // Only redirect if coming from a white label domain and not already redirected
-    if (isFromWhiteLabelDomain && !isLoggedOut && !isRedirecting) {
-      setIsRedirecting(true);
-      navigate(`/white-label-login${location.search}`, { replace: true });
-    }
-  }, [location.search, navigate, isRedirecting]);
 
   const onSubmit = (data) => {
     setEmailEntered(data.email);
