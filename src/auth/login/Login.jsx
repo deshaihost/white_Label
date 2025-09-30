@@ -35,6 +35,12 @@ const Login = () => {
 
   // Check if this is a white-label login request
   useEffect(() => {
+    // Don't redirect if user just logged out from white label
+    const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
+    if (isLoggedOut) {
+      return;
+    }
+    
     const urlParams = new URLSearchParams(location.search);
     const isWhiteLabelLogin = urlParams.has('email') || urlParams.has('username') || urlParams.has('login');
     const referrerDomain = document.referrer ? new URL(document.referrer).hostname : null;

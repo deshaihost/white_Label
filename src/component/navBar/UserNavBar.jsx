@@ -65,15 +65,16 @@ const UserNavBar = ({ gcsToken }) => {
   const logoutHandle = async (e) => {
     e.preventDefault();
     try {
+      // Check if we're in a white-label scenario before logout
+      const whiteLabelDomain = localStorage.getItem('whiteLabelDomain');
+      const whiteLabelBrand = localStorage.getItem('whiteLabelBrand');
+      const isWhiteLabel = whiteLabelDomain || whiteLabelBrand;
+      
       logOut();
       
-      // Check if we're in a white-label scenario
-      const urlParams = new URLSearchParams(window.location.search);
-      const isWhiteLabel = urlParams.has('token') || urlParams.has('user_id') || localStorage.getItem('brandName');
-      
       if (isWhiteLabel) {
-        // For white-label, redirect to white-label login with current parameters
-        navigate(`/white-label-login${window.location.search}`);
+        // For white-label, redirect to white-label login (logout function sets the flag)
+        navigate("/white-label-login");
       } else {
         // For regular users, go to standard login
         navigate("/login");

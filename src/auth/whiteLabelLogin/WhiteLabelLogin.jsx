@@ -30,6 +30,15 @@ const WhiteLabelLogin = () => {
     const password = params.get('password');
     const token = params.get('token');
     const redirect = params.get('redirect');
+    const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
+
+    // If user just logged out, clear the logout flag and stay on white label login page
+    if (isLoggedOut) {
+      sessionStorage.removeItem('whiteLabelLoggedOut');
+      // Show the login interface instead of redirecting
+      setIsLoading(false);
+      return;
+    }
 
     if (token) {
       // Handle direct token authentication (from POST API)
@@ -110,6 +119,52 @@ const WhiteLabelLogin = () => {
 
   if (isLoading || loginLoading) {
     return <Loader />;
+  }
+
+  const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
+  
+  if (isLoggedOut || (!isLoading && !loginLoading)) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontFamily: 'Arial, sans-serif',
+        backgroundColor: '#f5f5f5'
+      }}>
+        <div style={{ 
+          textAlign: 'center', 
+          backgroundColor: 'white',
+          padding: '2rem',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          maxWidth: '400px',
+          width: '90%'
+        }}>
+          <h2 style={{ marginBottom: '1rem', color: '#333' }}>
+            🔐 {brandName || "White Label"} Login
+          </h2>
+          <p style={{ marginBottom: '1.5rem', color: '#666' }}>
+            You have been logged out. Please contact your administrator to get new login credentials.
+          </p>
+          <button 
+            onClick={() => navigate('/login')}
+            style={{
+              backgroundColor: '#007bff',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            Go to Standard Login
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

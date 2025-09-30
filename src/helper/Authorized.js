@@ -93,6 +93,15 @@ export const logOut = () => {
     localStorage.clear();
     sessionStorage.removeItem("hostBuddy_auth");
     sessionStorage.removeItem("hostBuddy_active_token"); // Also clear the active token
+    
+    // Clear white label state but preserve domain information for future logins
+    const whiteLabelDomain = localStorage.getItem('whiteLabelDomain');
+    const whiteLabelBrand = localStorage.getItem('whiteLabelBrand');
+    
+    // Mark that user is logged out from white label to prevent redirect loops
+    if (whiteLabelDomain || whiteLabelBrand) {
+      sessionStorage.setItem('whiteLabelLoggedOut', 'true');
+    }
   } catch (error) {
     console.error("Logout process error:", error);
     // Even if there's an error, try to clear storage
@@ -100,6 +109,13 @@ export const logOut = () => {
       localStorage.clear();
       sessionStorage.removeItem("hostBuddy_auth");
       sessionStorage.removeItem("hostBuddy_active_token");
+      
+      // Still try to mark white label logout state
+      const whiteLabelDomain = localStorage.getItem('whiteLabelDomain');
+      const whiteLabelBrand = localStorage.getItem('whiteLabelBrand');
+      if (whiteLabelDomain || whiteLabelBrand) {
+        sessionStorage.setItem('whiteLabelLoggedOut', 'true');
+      }
     } catch (storageError) {
       console.error("Storage cleanup error:", storageError);
     }
