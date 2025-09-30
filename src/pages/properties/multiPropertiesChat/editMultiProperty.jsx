@@ -5,8 +5,6 @@ import axios from "axios";
 import ToastHandle from "../../../helper/ToastMessage";
 import { Link } from "react-router-dom";
 import Loader from "../../../helper/Loader";
-import Authorized from '../../../helper/Authorized';
-import { getActiveToken } from '../../../helper/apiCore';
 
 // This is just a container for the BasicInformationForm when adding a new property, to give it a header and padding.
 // Could just put all this in BasicInformationForm and have it apply when creating a new property (i.e. when property_name is null). But this works too
@@ -32,45 +30,14 @@ const EditMultiProperty = ( ) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
-    // Debug logs for authentication
-    console.log('🔍 [DEBUG] EditMultiProperty - callGetMultiPropApi');
-    console.log('🔑 API_KEY:', API_KEY ? `${API_KEY.substring(0, 10)}...` : 'MISSING');
-    console.log('🌐 Base URL:', baseUrl);
-    console.log('🆔 Multi Property ID:', id);
-
-    // Check authentication state
-    const authData = Authorized();
-    console.log('🔐 Auth Data:', authData ? 'Present' : 'MISSING');
-    if (authData) {
-      console.log('🎫 JWT Token:', authData.token ? `${authData.token.substring(0, 20)}...` : 'MISSING');
-    }
-
-    const activeToken = getActiveToken();
-    console.log('🔓 Active Token from helper:', activeToken ? `${activeToken.substring(0, 20)}...` : 'MISSING');
-
     try {
       const config = {
         headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
 
-      // Add Authorization header if we have a token
-      if (authData && authData.token) {
-        config.headers["Authorization"] = `Bearer ${authData.token}`;
-        console.log('✅ Added Authorization header to config');
-      } else {
-        console.log('❌ No JWT token available for Authorization header');
-      }
-
-      console.log('📤 Request Headers:', JSON.stringify(config.headers, null, 2));
-
       const apiUrl = `${baseUrl}/get_multi_properties?multi_property_id=${id}`;
-      console.log('🎯 API URL: GET', apiUrl);
-
       const response = await axios.get(apiUrl, config);
-
-      console.log('📥 Response Status:', response.status);
-      console.log('📥 Response Data:', JSON.stringify(response.data, null, 2));
 
       if (response.status === 200) {
         const multiProp = response.data?.multi_properties?.[id];
@@ -79,19 +46,12 @@ const EditMultiProperty = ( ) => {
           setSelectedProperties((multiProp.properties || []).map((prop) => ({value:prop, label:prop})));
           setToneInstructions(multiProp.tone_instructions || "");
           setContext(multiProp.context || "");
-          console.log('✅ Get multi property details successful');
         }
       } else {
-        console.log('⚠️ Get multi property details returned non-200 status:', response.status);
         ToastHandle(response?.data?.error || "An error occurred.", "danger");
       }
     }
     catch (error) { 
-      console.error('❌ Get multi property details failed:', error);
-      if (error.response) {
-        console.error('❌ Error Response Status:', error.response.status);
-        console.error('❌ Error Response Data:', error.response.data);
-      }
       ToastHandle("An error occurred", "danger"); 
     }
     finally { setCallGetApiLoading(false); }
