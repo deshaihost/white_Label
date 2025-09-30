@@ -7,11 +7,8 @@ import "./logoComponent.css";
 export const Logo = ({ type, colour, onlyIcon }) => {
     const { isWhiteLabel, brandName } = useWhiteLabelBranding();
     
-    console.log('🟠 Logo component rendering:', { type, colour, onlyIcon, isWhiteLabel, brandName });
-    
     // For collapsed navigation, always show just the HostBuddy icon
     if (onlyIcon) {
-        console.log('🟠 Logo: Rendering only icon (collapsed state)');
         return (
             <div className="logo-container">
                 <img className="logo-icon" alt="HostBuddy" src={icon} />
@@ -20,7 +17,6 @@ export const Logo = ({ type, colour, onlyIcon }) => {
     }
     
     // For expanded navigation, show branding text
-    console.log('🟠 Logo: Rendering with text (expanded state)');
     return (
         <div className="logo-container">
             <img className="logo-icon" alt={`${brandName} Icon`} src={icon} />

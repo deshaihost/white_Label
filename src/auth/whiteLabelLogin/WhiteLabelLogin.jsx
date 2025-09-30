@@ -41,6 +41,8 @@ const WhiteLabelLogin = () => {
     const password = params.get('password');
     const token = params.get('token');
     const redirect = params.get('redirect');
+    const userType = params.get('user'); // Check for user=gcs parameter
+    const isGcsUser = userType === 'gcs';
     const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
 
     console.log('🟡 WhiteLabelLogin useEffect params:', {
@@ -48,6 +50,8 @@ const WhiteLabelLogin = () => {
       password: password ? '***' : null,
       token: token ? `${token.substring(0, 10)}...` : null,
       redirect,
+      userType,
+      isGcsUser,
       isLoggedOut: !!isLoggedOut,
       paramsString: params.toString()
     });
@@ -67,24 +71,20 @@ const WhiteLabelLogin = () => {
 
     console.log('🟡 WhiteLabelLogin credential check:', {
       hasValidToken,
-      hasValidEmailPassword
+      hasValidEmailPassword,
+      isGcsUser
     });
 
     if (hasValidToken) {
-      console.log('🟡 WhiteLabelLogin: Processing token authentication');
+      console.log('🟡 WhiteLabelLogin: Processing token authentication', isGcsUser ? '(GCS User)' : '(Regular User)');
       // Handle direct token authentication (from POST API)
       // Keep loading true during token auth
-      handleTokenAuth(token, redirect || 'dashboard');
+      handleTokenAuth(token, redirect, isGcsUser);
     } else if (hasValidEmailPassword) {
-      console.log('🟡 WhiteLabelLogin: Processing email/password authentication');
+      console.log('🟡 WhiteLabelLogin: Processing email/password authentication', isGcsUser ? '(GCS User)' : '(Regular User)');
       // Auto-login with URL parameters
-      handleLogin(email, password);
+      handleLogin(email, password, isGcsUser);
     } else {
-      console.log('🟡 WhiteLabelLogin: No valid credentials - REDIRECT DISABLED FOR DEBUGGING');
-      // TEMPORARILY DISABLE REDIRECT FOR DEBUGGING
-      setIsLoading(false);
-      return;
-      
       console.log('🟡 WhiteLabelLogin: No valid credentials, REDIRECTING to /login');
       // No valid white label credentials - redirect to regular login immediately
       // This prevents white label login from being accessed without proper credentials
@@ -92,9 +92,11 @@ const WhiteLabelLogin = () => {
     }
   }, [location.search, navigate]);
 
-  const handleTokenAuth = (token, redirectTo = 'dashboard') => {
+  const handleTokenAuth = (token, redirectTo = 'dashboard', isGcsUser = false) => {
     try {
       setIsLoading(true);
+      
+      console.log('🟡 WhiteLabelLogin: handleTokenAuth', { token: `${token.substring(0, 10)}...`, redirectTo, isGcsUser });
       
       // Create user object in the same format as normal login
       const user = {
@@ -107,15 +109,24 @@ const WhiteLabelLogin = () => {
         refreshToken: token, // Use token as refresh token for compatibility
       };
 
+      // If this is a GCS user, add the GCS access token field
+      if (isGcsUser) {
+        user["gcs_access_token"] = token;
+        console.log('🟡 WhiteLabelLogin: Added GCS access token to user object');
+      }
+
       // Use the same method as regular login to set the user session
       api.setLoggedInUser(user, false); // false = don't remember me
       setAuthorization(token);
       
       ToastHandle("success", "Authentication successful!");
       
-      // Always redirect to dashboard when token is provided
+      // Redirect based on user type
+      const targetPath = isGcsUser ? '/gcs-users' : (redirectTo === 'dashboard' ? '/dashboard' : `/${redirectTo}`);
+      console.log('🟡 WhiteLabelLogin: Redirecting to', targetPath);
+      
       setTimeout(() => {
-        navigate('/dashboard');
+        navigate(targetPath);
       }, 1000);
       
     } catch (error) {
@@ -125,8 +136,10 @@ const WhiteLabelLogin = () => {
     }
   };
 
-  const handleLogin = (email, password) => {
+  const handleLogin = (email, password, isGcsUser = false) => {
     setIsLoading(true);
+    
+    console.log('🟡 WhiteLabelLogin: handleLogin', { email, isGcsUser });
     
     const loginPayload = {
       email,
@@ -134,27 +147,62 @@ const WhiteLabelLogin = () => {
       rememberMe: false
     };
     
+    // Store GCS user flag for handling login response
+    if (isGcsUser) {
+      sessionStorage.setItem('whiteLabelGcsLogin', 'true');
+    } else {
+      sessionStorage.removeItem('whiteLabelGcsLogin');
+    }
+    
     dispatch(loginActions(loginPayload));
   };
 
   // Handle login response
   useEffect(() => {
+    const isGcsLogin = sessionStorage.getItem('whiteLabelGcsLogin') === 'true';
+    
     if (loginStatus === 200) {
+      console.log('🟡 WhiteLabelLogin: Login successful', { isGcsLogin, isGcs: store?.loginReducer?.login?.gcs });
+      
       ToastHandle("success", "Login successful!");
       setIsLoading(false);
-      navigate("/dashboard");
+      
+      // Check if this is a GCS user from the login response or our stored flag
+      const isGcsUser = store?.loginReducer?.login?.gcs || isGcsLogin;
+      
+      if (isGcsUser) {
+        console.log('🟡 WhiteLabelLogin: Redirecting GCS user to /gcs-users');
+        navigate("/gcs-users");
+      } else {
+        console.log('🟡 WhiteLabelLogin: Redirecting regular user to /dashboard');
+        navigate("/dashboard");
+      }
+      
+      // Clean up the session storage flag
+      sessionStorage.removeItem('whiteLabelGcsLogin');
     } else if (loginStatus && loginStatus !== 200) {
       ToastHandle("error", "Login failed. Please check your credentials.");
       setIsLoading(false);
+      // Clean up the session storage flag on error
+      sessionStorage.removeItem('whiteLabelGcsLogin');
     }
-  }, [loginStatus, navigate]);
+  }, [loginStatus, navigate, store?.loginReducer?.login?.gcs]);
 
   // Redirect if already logged in
   useEffect(() => {
     if (token) {
-      navigate("/dashboard");
+      console.log('🟡 WhiteLabelLogin: User already logged in, checking user type');
+      
+      // Check if this is a GCS user by looking for gcs_access_token
+      if (getAuthToken?.gcs_access_token) {
+        console.log('🟡 WhiteLabelLogin: Existing GCS user, redirecting to /gcs-users');
+        navigate("/gcs-users");
+      } else {
+        console.log('🟡 WhiteLabelLogin: Existing regular user, redirecting to /dashboard');
+        navigate("/dashboard");
+      }
     }
-  }, [token, navigate]);
+  }, [token, navigate, getAuthToken]);
 
   if (isLoading || loginLoading) {
     return <Loader />;
@@ -162,7 +210,19 @@ const WhiteLabelLogin = () => {
 
   const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
   
+  // Check if this is a GCS user request
+  const params = new URLSearchParams(location.search);
+  const isGcsUser = params.get('user') === 'gcs';
+  
   if (isLoggedOut || (!isLoading && !loginLoading)) {
+    const loginTitle = isGcsUser ? 
+      `🔐 ${brandName || "White Label"} GCS Login` : 
+      `🔐 ${brandName || "White Label"} Login`;
+      
+    const loginMessage = isGcsUser ?
+      "You have been logged out from the GCS portal. Please contact your administrator to get new login credentials." :
+      "You have been logged out. Please contact your administrator to get new login credentials.";
+    
     return (
       <div style={{ 
         display: 'flex', 
@@ -182,10 +242,10 @@ const WhiteLabelLogin = () => {
           width: '90%'
         }}>
           <h2 style={{ marginBottom: '1rem', color: '#333' }}>
-            🔐 {brandName || "White Label"} Login
+            {loginTitle}
           </h2>
           <p style={{ marginBottom: '1.5rem', color: '#666' }}>
-            You have been logged out. Please contact your administrator to get new login credentials.
+            {loginMessage}
           </p>
           <button 
             onClick={() => navigate('/login')}
@@ -206,6 +266,13 @@ const WhiteLabelLogin = () => {
     );
   }
 
+  // Check if this is a GCS user request for loading screen
+  const loadingParams = new URLSearchParams(location.search);
+  const isGcsUserLoading = loadingParams.get('user') === 'gcs';
+  const loadingTitle = isGcsUserLoading ? 
+    `🔐 ${brandName || "White Label"} GCS Login` : 
+    `🔐 ${brandName || "White Label"} Login`;
+
   return (
     <div style={{ 
       display: 'flex', 
@@ -215,7 +282,7 @@ const WhiteLabelLogin = () => {
       fontFamily: 'Arial, sans-serif'
     }}>
       <div style={{ textAlign: 'center' }}>
-        <h2>🔐 {brandName || "White Label"} Login</h2>
+        <h2>{loadingTitle}</h2>
         <p>Authenticating your credentials...</p>
         <Loader />
       </div>
