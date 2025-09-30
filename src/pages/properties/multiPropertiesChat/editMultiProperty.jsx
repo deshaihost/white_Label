@@ -36,7 +36,8 @@ const EditMultiProperty = ( ) => {
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
 
-      const response = await axios.get(`${baseUrl}/get_multi_properties?multi_property_id=${id}`, config);
+      const apiUrl = `${baseUrl}/get_multi_properties?multi_property_id=${id}`;
+      const response = await axios.get(apiUrl, config);
 
       if (response.status === 200) {
         const multiProp = response.data?.multi_properties?.[id];
@@ -50,7 +51,9 @@ const EditMultiProperty = ( ) => {
         ToastHandle(response?.data?.error || "An error occurred.", "danger");
       }
     }
-    catch (error) { ToastHandle("An error occurred", "danger"); }
+    catch (error) { 
+      ToastHandle("An error occurred", "danger"); 
+    }
     finally { setCallGetApiLoading(false); }
   }
 

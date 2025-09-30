@@ -25,6 +25,8 @@ const WorkbenchMulti = () => {
   const [lastMessageJustification, setLastMessageJustification] = useState(null);
   const [multiPropertyName, setMultiPropertyName] = useState('');
 
+
+
   const initializeStateFromApiReturn = (response) => {
     const initial_bot_message_str = response.data.initial_message;
     const session_id_str = response.data.session_id;
@@ -35,7 +37,7 @@ const WorkbenchMulti = () => {
 
   const callInitializeApi = async () => {
     setMessages([]);
-    const baseUrl = import.meta.env.VITE_API_ENDPOINT;
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
     try {
@@ -55,7 +57,7 @@ const WorkbenchMulti = () => {
   }
 
   const callSendMessageApi = async (messageText) => {
-    const baseUrl = import.meta.env.VITE_API_ENDPOINT;
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
     setResponseIsLoading(true);
 
