@@ -27,30 +27,59 @@ const Login = () => {
   const { token } = getAuthToken ? getAuthToken : [];
   const [showPassword, setShowPassword] = useState(false);
   const [emailEntered, setEmailEntered] = useState("");
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
   const loginLoading = store?.loginReducer?.loading;
   const isGcs = store?.loginReducer?.login?.gcs;
   const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: {login_remember:false}});
 
-  // Check if this is a white-label login request
+  // Immediate white label detection and redirect
   useEffect(() => {
-    // Don't redirect if user just logged out from white label
-    const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
-    if (isLoggedOut) {
-      return;
-    }
-    
     const urlParams = new URLSearchParams(location.search);
-    const isWhiteLabelLogin = urlParams.has('email') || urlParams.has('username') || urlParams.has('login');
-    const referrerDomain = document.referrer ? new URL(document.referrer).hostname : null;
-    const isFromWhiteLabelDomain = referrerDomain && referrerDomain !== 'hostbuddy.ai' && referrerDomain !== window.location.hostname;
+    const hasToken = urlParams.has('token');
+    const hasEmail = urlParams.has('email');
+    const hasUsername = urlParams.has('username');
+    const hasLogin = urlParams.has('login');
+    const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
     
-    // If this looks like a white-label login request, redirect to the white-label login handler
-    if (isWhiteLabelLogin || isFromWhiteLabelDomain) {
+    // Check if this should be handled by white label login
+    const shouldRedirectToWhiteLabel = !isLoggedOut && (hasToken || hasEmail || hasUsername || hasLogin);
+    
+    if (shouldRedirectToWhiteLabel) {
+      setIsRedirecting(true);
       navigate(`/white-label-login${location.search}`, { replace: true });
     }
   }, [location.search, navigate]);
+
+  // Show loading screen while redirecting to prevent flash
+  if (isRedirecting) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        backgroundColor: '#f8f9fa'
+      }}>
+        <Loader />
+      </div>
+    );
+  }
+
+  // Check if this is a white-label login request (fallback for edge cases)
+  useEffect(() => {
+    // This useEffect is now mainly for edge cases since we handle most redirects early
+    const referrerDomain = document.referrer ? new URL(document.referrer).hostname : null;
+    const isFromWhiteLabelDomain = referrerDomain && referrerDomain !== 'hostbuddy.ai' && referrerDomain !== window.location.hostname;
+    const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
+    
+    // Only redirect if coming from a white label domain and not already redirected
+    if (isFromWhiteLabelDomain && !isLoggedOut && !isRedirecting) {
+      setIsRedirecting(true);
+      navigate(`/white-label-login${location.search}`, { replace: true });
+    }
+  }, [location.search, navigate, isRedirecting]);
 
   const onSubmit = (data) => {
     setEmailEntered(data.email);

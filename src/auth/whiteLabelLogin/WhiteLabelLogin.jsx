@@ -18,7 +18,7 @@ const WhiteLabelLogin = () => {
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];
   
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start with loading true for immediate token auth
   const { brandName } = useWhiteLabelBranding();
   
   const loginStatus = store?.loginReducer?.login?.status;
@@ -42,13 +42,14 @@ const WhiteLabelLogin = () => {
 
     if (token) {
       // Handle direct token authentication (from POST API)
-      // Always redirect to dashboard when token is provided
+      // Keep loading true during token auth
       handleTokenAuth(token, redirect || 'dashboard');
     } else if (email && password) {
       // Auto-login with URL parameters
       handleLogin(email, password);
     } else {
-      // Redirect to regular login if no credentials provided
+      // No credentials provided - redirect to regular login
+      setIsLoading(false); // Stop loading before redirect
       navigate('/login');
     }
   }, [location.search, navigate]);
