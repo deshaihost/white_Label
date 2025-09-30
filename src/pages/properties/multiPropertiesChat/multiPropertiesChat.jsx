@@ -7,6 +7,8 @@ import Loader from "../../../helper/Loader";
 import axios from "axios";
 import './multiProperties.css';
 import EmbedModal from "../listIntegrationProperties/embedModal/embedModal";
+import Authorized from '../../../helper/Authorized';
+import { getActiveToken } from '../../../helper/apiCore';
 
 const MultiPropertiesChat = () => {
   const navigate = useNavigate();
@@ -82,21 +84,59 @@ const MultiPropertiesChat = () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
     const API_KEY = process.env.REACT_APP_API_KEY;
 
+    // Debug logs for authentication
+    console.log('🔍 [DEBUG] MultiPropertiesChat - callGetMultiPropsApi');
+    console.log('🔑 API_KEY:', API_KEY ? `${API_KEY.substring(0, 10)}...` : 'MISSING');
+    console.log('🌐 Base URL:', baseUrl);
+
+    // Check authentication state
+    const authData = Authorized();
+    console.log('🔐 Auth Data:', authData ? 'Present' : 'MISSING');
+    if (authData) {
+      console.log('🎫 JWT Token:', authData.token ? `${authData.token.substring(0, 20)}...` : 'MISSING');
+    }
+
+    const activeToken = getActiveToken();
+    console.log('🔓 Active Token from helper:', activeToken ? `${activeToken.substring(0, 20)}...` : 'MISSING');
+
     try {
       const config = {
         headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
         validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
       };
 
+      // Add Authorization header if we have a token
+      if (authData && authData.token) {
+        config.headers["Authorization"] = `Bearer ${authData.token}`;
+        console.log('✅ Added Authorization header to config');
+      } else {
+        console.log('❌ No JWT token available for Authorization header');
+      }
+
+      console.log('📤 Request Headers:', JSON.stringify(config.headers, null, 2));
+      console.log('🎯 API URL: GET', `${baseUrl}/get_multi_properties`);
+
       const response = await axios.get(`${baseUrl}/get_multi_properties`, config);
+
+      console.log('📥 Response Status:', response.status);
+      console.log('📥 Response Data:', JSON.stringify(response.data, null, 2));
 
       if (response.status === 200) {
         setAllMultiProps(response.data.multi_properties);
+        console.log('✅ Get multi properties API call successful');
       } else {
+        console.log('⚠️ Get multi properties API call returned non-200 status:', response.status);
         ToastHandle(response?.data?.error || "An error occurred.", "danger");
       }
     }
-    catch (error) { ToastHandle("An error occurred", "danger"); }
+    catch (error) { 
+      console.error('❌ Get multi properties API call failed:', error);
+      if (error.response) {
+        console.error('❌ Error Response Status:', error.response.status);
+        console.error('❌ Error Response Data:', error.response.data);
+      }
+      ToastHandle("An error occurred", "danger"); 
+    }
     finally { setIsLoading(false); }
   }
 
