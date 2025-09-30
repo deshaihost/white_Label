@@ -40,28 +40,21 @@ const WhiteLabelLogin = () => {
       return;
     }
 
-    if (token && token.trim().length > 0) {
+    // Check if we have valid white label credentials
+    const hasValidToken = token && token.trim().length > 0;
+    const hasValidEmailPassword = email && email.trim().length > 0 && password && password.trim().length > 0;
+
+    if (hasValidToken) {
       // Handle direct token authentication (from POST API)
       // Keep loading true during token auth
       handleTokenAuth(token, redirect || 'dashboard');
-    } else if (email && email.trim().length > 0 && password && password.trim().length > 0) {
+    } else if (hasValidEmailPassword) {
       // Auto-login with URL parameters
       handleLogin(email, password);
     } else {
-      // No valid credentials provided - check if we should redirect to regular login
-      // Only redirect if we have some parameters but they're invalid
-      if (params.toString().length > 0) {
-        // Set flag to prevent redirect loop
-        sessionStorage.setItem('loginRedirectLoop', 'true');
-        // Add a small delay to prevent rapid redirects and potential loops
-        setTimeout(() => {
-          setIsLoading(false); // Stop loading before redirect
-          navigate('/login', { replace: true });
-        }, 100);
-      } else {
-        // No parameters at all, just show the logout interface
-        setIsLoading(false);
-      }
+      // No valid white label credentials - redirect to regular login immediately
+      // This prevents white label login from being accessed without proper credentials
+      navigate('/login', { replace: true });
     }
   }, [location.search, navigate]);
 

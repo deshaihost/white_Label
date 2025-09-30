@@ -34,36 +34,31 @@ const Login = () => {
   const isGcs = store?.loginReducer?.login?.gcs;
   const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: {login_remember:false}});
 
-  // Immediate white label detection and redirect
+  // Only redirect to white label if coming from a white label domain (referrer-based)
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const tokenValue = urlParams.get('token');
-    const emailValue = urlParams.get('email');
-    const usernameValue = urlParams.get('username');
-    const loginValue = urlParams.get('login');
     const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
-    const isInRedirectLoop = sessionStorage.getItem('loginRedirectLoop');
     
-    // Prevent redirect loops
-    if (isInRedirectLoop) {
-      sessionStorage.removeItem('loginRedirectLoop');
+    // Don't redirect if user just logged out or if already redirecting
+    if (isLoggedOut || isRedirecting) {
       return;
     }
     
-    // Only redirect to white label if there are ACTUAL VALUES in the parameters, not just empty parameters
-    const hasValidToken = tokenValue && tokenValue.trim().length > 0;
-    const hasValidEmail = emailValue && emailValue.trim().length > 0;
-    const hasValidUsername = usernameValue && usernameValue.trim().length > 0;
-    const hasValidLogin = loginValue && loginValue.trim().length > 0;
+    // Only redirect based on referrer domain, not URL parameters
+    // This ensures regular login users stay on regular login
+    const referrerDomain = document.referrer ? new URL(document.referrer).hostname : null;
+    const isFromWhiteLabelDomain = referrerDomain && 
+                                   referrerDomain !== 'hostbuddy.ai' && 
+                                   referrerDomain !== 'www.hostbuddy.ai' && 
+                                   referrerDomain !== window.location.hostname &&
+                                   referrerDomain !== 'localhost' &&
+                                   referrerDomain !== '127.0.0.1';
     
-    // Check if this should be handled by white label login
-    const shouldRedirectToWhiteLabel = !isLoggedOut && (hasValidToken || hasValidEmail || hasValidUsername || hasValidLogin);
-    
-    if (shouldRedirectToWhiteLabel) {
+    // Only redirect if coming from a genuine white label domain
+    if (isFromWhiteLabelDomain) {
       setIsRedirecting(true);
       navigate(`/white-label-login${location.search}`, { replace: true });
     }
-  }, [location.search, navigate]);
+  }, [location.search, navigate, isRedirecting]);
 
   // Show loading screen while redirecting to prevent flash
   if (isRedirecting) {
@@ -82,9 +77,14 @@ const Login = () => {
 
   // Check if this is a white-label login request (fallback for edge cases)
   useEffect(() => {
-    // This useEffect is now mainly for edge cases since we handle most redirects early
+    // This is a simplified fallback - only redirect based on referrer
     const referrerDomain = document.referrer ? new URL(document.referrer).hostname : null;
-    const isFromWhiteLabelDomain = referrerDomain && referrerDomain !== 'hostbuddy.ai' && referrerDomain !== window.location.hostname;
+    const isFromWhiteLabelDomain = referrerDomain && 
+                                   referrerDomain !== 'hostbuddy.ai' && 
+                                   referrerDomain !== 'www.hostbuddy.ai' && 
+                                   referrerDomain !== window.location.hostname &&
+                                   referrerDomain !== 'localhost' &&
+                                   referrerDomain !== '127.0.0.1';
     const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
     
     // Only redirect if coming from a white label domain and not already redirected
