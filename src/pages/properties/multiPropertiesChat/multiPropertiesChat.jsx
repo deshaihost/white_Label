@@ -96,7 +96,9 @@ const MultiPropertiesChat = () => {
         ToastHandle(response?.data?.error || "An error occurred.", "danger");
       }
     }
-    catch (error) { ToastHandle("An error occurred", "danger"); }
+    catch (error) { 
+      ToastHandle("An error occurred", "danger"); 
+    }
     finally { setIsLoading(false); }
   }
 
