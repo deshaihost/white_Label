@@ -104,6 +104,40 @@ const IntegrationsIndex = (ApiUserData) => {
   const [addingWebhook, setAddingWebhook] = useState(false);
   const [addWebhookError, setAddWebhookError] = useState('');
 
+  // Tidy disconnect modal states
+  const [showTidyDisconnectModal, setShowTidyDisconnectModal] = useState(false);
+  const [isTidyDisconnecting, setIsTidyDisconnecting] = useState(false);
+
+  // Handle Tidy disconnect
+  const handleTidyDisconnect = async () => {
+    setIsTidyDisconnecting(true);
+    try {
+      const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+      const API_KEY = process.env.REACT_APP_API_KEY;
+      
+      const config = {
+        headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+
+      const response = await axios.delete(`${baseUrl}/disconnect_tidy_integration`, config);
+      
+      if (response.status === 200) {
+        setShowTidyDisconnectModal(false);
+        ToastHandle('Tidy integration disconnected successfully', 'success');
+        if (typeof refreshUserData === 'function') refreshUserData();
+        dispatch(getUserDataActions(false));
+      } else {
+        ToastHandle(response.data?.error || 'Failed to disconnect Tidy integration', 'danger');
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      ToastHandle('Network error disconnecting Tidy integration', 'danger');
+    } finally {
+      setIsTidyDisconnecting(false);
+    }
+  };
+
   // Slack integration state
   const [slackOauthCode, setSlackOauthCode] = useState("");
   
@@ -304,7 +338,23 @@ const IntegrationsIndex = (ApiUserData) => {
 
             {selectedIntegration === 'Tidy' && (
               <div>
-                <h3 style={{marginTop:'40px'}}>Connected to Tidy!</h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '40px' }}>
+                  <h3 style={{ margin: 0 }}>Connected to Tidy!</h3>
+                  <button
+                    onClick={() => setShowTidyDisconnectModal(true)}
+                    style={{
+                      padding: '10px 20px',
+                      backgroundColor: '#dc3545',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      fontSize: '14px'
+                    }}
+                  >
+                    Disconnect Integration
+                  </button>
+                </div>
               </div>
             )}
 
@@ -718,6 +768,47 @@ const IntegrationsIndex = (ApiUserData) => {
             onClick={(e) => e.stopPropagation()}
           >
             <InboxUpgrade onClose={handleUpgradePopupClose} />
+          </div>
+        </div>
+      )}
+
+      {/* Tidy Disconnect Confirmation Modal */}
+      {showTidyDisconnectModal && (
+        <div className="modal fade show" style={{ display: "block", background: "rgba(0,0,0,0.5)" }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content" style={{ backgroundColor: "#0f1a36", color: "#fff" }}>
+              <div className="modal-header">
+                <h5 className="modal-title">Confirm Delete</h5>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white"
+                  onClick={() => setShowTidyDisconnectModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                Are you sure you want to disconnect the integration{" "}
+                <strong>Tidy</strong>?<br />
+                This action will remove the connection and you'll need to reconnect to use Tidy integration again.
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowTidyDisconnectModal(false)}
+                  disabled={isTidyDisconnecting}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={handleTidyDisconnect}
+                  disabled={isTidyDisconnecting}
+                >
+                  {isTidyDisconnecting ? "Disconnecting..." : "Delete"}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

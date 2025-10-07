@@ -12,6 +12,8 @@ const MinutIntegration = ({ ApiUserData }) => {
   const [selectedMinutProperties, setSelectedMinutProperties] = useState({});
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
   const [getMinutDataIsLoading, setGetMinutDataIsLoading] = useState(false);
+  const [showDisconnectModal, setShowDisconnectModal] = useState(false);
+  const [isDisconnecting, setIsDisconnecting] = useState(false);
 
   const callGetMinutPropsApi = async () => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -104,6 +106,35 @@ const MinutIntegration = ({ ApiUserData }) => {
     setSubmitIsLoading(false);
   };
 
+  const handleDisconnect = async () => {
+    setIsDisconnecting(true);
+    try {
+      const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+      const API_KEY = process.env.REACT_APP_API_KEY;
+      
+      const config = {
+        headers: { "X-API-Key": API_KEY, 'Content-Type': 'application/json' },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+
+      const response = await axios.delete(`${baseUrl}/disconnect_minut_integration`, config);
+      
+      if (response.status === 200) {
+        setApiPropertyMappings({});
+        setSelectedMinutProperties({});
+        setShowDisconnectModal(false);
+        ToastHandle('Minut integration disconnected successfully', 'success');
+      } else {
+        ToastHandle(response.data?.error || 'Failed to disconnect Minut integration', 'danger');
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      ToastHandle('Network error disconnecting Minut integration', 'danger');
+    } finally {
+      setIsDisconnecting(false);
+    }
+  };
+
   return (
     <div>
       <p style={{ fontSize: '14px', textAlign: 'left', width: '95%', marginTop: '20px' }}>
@@ -145,15 +176,79 @@ const MinutIntegration = ({ ApiUserData }) => {
         </tbody>
       </table>
 
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-        {!submitIsLoading ? (
-          <button type="button" className="btn btn-primary" style={{ borderRadius: '50px', padding: '10px 20px' }} onClick={handleSubmitClick}>
-            Submit
-          </button>
-        ) : (
-          <Loader />
-        )}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '40px' }}>
+        <div style={{ flex: 1 }}></div>
+        
+        <div style={{ display: 'flex', justifyContent: 'center', flex: 1 }}>
+          {!submitIsLoading ? (
+            <button type="button" className="btn btn-primary" style={{ borderRadius: '50px', padding: '10px 20px' }} onClick={handleSubmitClick}>
+              Submit
+            </button>
+          ) : (
+            <Loader />
+          )}
+        </div>
+
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+          {Object.keys(apiPropertyMappings).length > 0 && (
+            <button
+              onClick={() => setShowDisconnectModal(true)}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#dc3545',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              Disconnect Integration
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Disconnect Confirmation Modal */}
+      {showDisconnectModal && (
+        <div className="modal fade show" style={{ display: "block", background: "rgba(0,0,0,0.5)" }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content" style={{ backgroundColor: "#0f1a36", color: "#fff" }}>
+              <div className="modal-header">
+                <h5 className="modal-title">Confirm Delete</h5>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white"
+                  onClick={() => setShowDisconnectModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                Are you sure you want to disconnect the integration{" "}
+                <strong>Minut</strong>?<br />
+                This action will remove all property mappings and you'll need to reconfigure them if you reconnect.
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowDisconnectModal(false)}
+                  disabled={isDisconnecting}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={handleDisconnect}
+                  disabled={isDisconnecting}
+                >
+                  {isDisconnecting ? "Disconnecting..." : "Delete"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
