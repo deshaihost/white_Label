@@ -2,6 +2,7 @@ import Multiselect from "multiselect-react-dropdown";
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import toasthandle from "../../../../../../helper/ToastMessage";
 
 const TriggersTrargetsConditionsModel = (props) => {
   const { show, handleClose, submitHndle, hasCleaningManagementIntegration, minut_user_id } = props;
@@ -84,7 +85,49 @@ const TriggersTrargetsConditionsModel = (props) => {
   };
 
   const onSubmitHndle = () => {
+    // Validate required fields before submitting
+    if (!type) {
+      toasthandle("Please select a trigger type before confirming.", "danger");
+      return;
+    }
+
+    // Check if all required input fields are filled
+    const requiredFields = inputFiled?.filter(field => !field.optional) || [];
+    const emptyRequiredFields = requiredFields.filter(field => {
+      const value = inputDataGet[field.payloadType];
+      if (field.type === "multiSelecter") {
+        return !value || value.length === 0;
+      }
+      return !value || value === "";
+    });
+
+    if (emptyRequiredFields.length > 0) {
+      // Helper function to safely get field names
+      const getFieldName = (field) => {
+        const { inputLabel, payloadType } = field;
+        if (typeof inputLabel === 'string') {
+          return inputLabel;
+        }
+        if (Array.isArray(inputLabel)) {
+          return payloadType || 'Unknown field'; // Use payloadType as fallback for array labels
+        }
+        if (typeof inputLabel === 'object' && inputLabel !== null) {
+          return inputLabel.label || inputLabel.text || payloadType || 'Unknown field';
+        }
+        return payloadType || 'Unknown field';
+      };
+      
+      const missingFieldNames = emptyRequiredFields.map(field => getFieldName(field)).join(", ");
+      toasthandle(`Please fill the following required field(s): ${missingFieldNames}`, "danger");
+      return;
+    }
+
+    console.log("Submitting trigger data:", { type:type, data:inputDataGet }); // <-- Add this line
     const editAddTypeSubmitHndle = { typepAddEdit, editIndex, followUpIndex };
+    
+    // Show success message and remind user to save
+    toasthandle("Condition added successfully! Please save the template.", "success");
+    
     submitHndle({ type:type, data:inputDataGet, editAddTypeSubmitHndle, modelShowType, triggerFormData:selectGet });
     closeHndleModel();
     setIsMinutData(false); // Reset isMinutData when modal is closed after confirm
@@ -119,6 +162,199 @@ const TriggersTrargetsConditionsModel = (props) => {
       setInputDataGet(defaultInputData);
     }
   }, [editFormData, formData, isMinutData]);
+
+  const renderFormInput = (input, index) => {
+    const { type, inputLabel, payloadType, defaultVal, min, max, disableIf, onlyUsed } = input;
+    
+    // Helper function to safely render label text
+    const getLabelText = (label) => {
+      if (typeof label === 'string') {
+        return label;
+      }
+      if (Array.isArray(label)) {
+        return ''; // Don't render array labels directly as text
+      }
+      if (typeof label === 'object' && label !== null) {
+        return label.label || label.text || ''; // Try common object properties
+      }
+      return '';
+    };
+    
+    // Check if this field should be disabled based on another field
+    const isDisabled = disableIf && inputDataGet[disableIf] === true;
+
+    // Common styles for disabled fields - add visual masking effect
+    const disabledStyle = isDisabled ? {
+      opacity: 0.5,
+      pointerEvents: 'none',
+      backgroundColor: '#333',
+      position: 'relative'
+    } : {};
+
+    switch (type) {
+      case "number":
+        return (
+          <div key={index} className="mb-3">
+            <label className="form-label">{getLabelText(inputLabel)}</label>
+            <input
+              type={type}
+              className="form-control"
+              value={inputDataGet[payloadType] ?? ""}
+              name={payloadType}
+              onChange={(e) => OnchangeHndle(e, inputValue, onlyUsed)}
+              min={min}
+              max={max}
+              disabled={isDisabled}
+              style={isDisabled ? disabledStyle : {}}
+            />
+          </div>
+        );
+
+      case "time":
+        return (
+          <div key={index} className="mb-3" style={isDisabled ? { position: 'relative' } : {}}>
+            <label className="form-label" style={isDisabled ? { opacity: 0.6 } : {}}>
+              {getLabelText(inputLabel)}
+            </label>
+            <input
+              type="time"
+              className="form-control"
+              value={inputDataGet[payloadType] ?? ""}
+              name={payloadType}
+              onChange={(e) => OnchangeHndle(e, inputValue, onlyUsed)}
+              min={min}
+              max={max}
+              disabled={isDisabled}
+              style={disabledStyle}
+            />
+            {isDisabled && (
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                borderRadius: '4px',
+                zIndex: 1
+              }}></div>
+            )}
+          </div>
+        );
+        
+      case "select":
+        return (
+          <div key={index} className="mb-3">
+            <label className="form-label">{getLabelText(inputLabel)}</label>
+            <select
+              aria-label="Default select example"
+              className="bg-dark form-select form-control text-white"
+              name={payloadType}
+              value={inputDataGet[payloadType] || ""}
+              onChange={(e) => OnchangeHndle(e, selecter)}
+              disabled={isDisabled}
+            >
+              {inputLabel?.map((item) => {
+                const { value, label, selectLabel } = item;
+                const displayLabel = label || selectLabel;
+                return (
+                  <option value={value} key={value} disabled={value === ""}>
+                    {displayLabel}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        );
+        
+      case "multiSelecter":
+        return (
+          <div key={index} className="mb-3">
+            <label className="form-label">{getLabelText(inputLabel)}</label>
+            <Multiselect
+              className="multiselect_option"
+              displayValue="label"
+              options={inputLabel}
+              selectedValues={
+                (inputDataGet[payloadType] || []).map(value => { // Convert the selected values to the format expected by the Multiselect component
+                  const label = inputLabel.find(item => item.value === value)?.label || value;
+                  return { label, value };
+                })
+              }
+              onRemove={(selectedList) => {
+                const valuesList = selectedList.map(item => item.value);
+                setInputDataGet({ ...inputDataGet, [payloadType]: valuesList });
+              }}
+              onSelect={(selectedList) => { // Extract just the values from the selected items in the Multiselect format
+                const valuesList = selectedList.map(item => item.value);
+                setInputDataGet({ ...inputDataGet, [payloadType]: valuesList });
+              }}
+            />
+          </div>
+        );
+        
+      case "checkbox":
+        return (
+          <div key={index} className="mb-3">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id={`checkbox-${payloadType}`}
+                checked={inputDataGet[payloadType] || false}
+                onChange={(e) => {
+                  setInputDataGet({
+                    ...inputDataGet,
+                    [payloadType]: e.target.checked
+                  });
+                }}
+                disabled={isDisabled}
+              />
+              <label className="form-check-label" htmlFor={`checkbox-${payloadType}`}>
+                {getLabelText(inputLabel)}
+              </label>
+            </div>
+          </div>
+        );
+        
+      case "date":
+        return (
+          <div key={index} className="mb-3" style={isDisabled ? { position: 'relative' } : {}}>
+            <label className="form-label" style={isDisabled ? { opacity: 0.6 } : {}}>
+              {getLabelText(inputLabel)}
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              value={inputDataGet[payloadType] || ""}
+              onChange={(e) => {
+                setInputDataGet({
+                  ...inputDataGet,
+                  [payloadType]: e.target.value
+                });
+              }}
+              disabled={isDisabled}
+              style={disabledStyle}
+            />
+            {isDisabled && (
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                borderRadius: '4px',
+                zIndex: 1
+              }}></div>
+            )}
+          </div>
+        );
+        
+      default:
+        return null;
+    }
+  };
 
   return (
     <Modal show={modelShow} size="lg" onHide={closeHndleModel} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -155,48 +391,7 @@ const TriggersTrargetsConditionsModel = (props) => {
           <hr className="bg-primary my-4" style={{ height: "2px" }} />
 
           <>
-            {inputFiled?.map((inputFile) => {
-              const { type, inputLabel, payloadType, min, max, onlyUsed } = inputFile;
-              return (
-                <React.Fragment key={payloadType}>
-                  {type === "number" || type === "time" ? (
-                    <>
-                      <label htmlFor="">{inputLabel}</label>
-                      <input type={type} className="form-control mb-3" value={inputDataGet[payloadType] ?? ""} name={payloadType} onChange={(e) => OnchangeHndle(e, inputValue, onlyUsed)} min={min} max={max}/>
-                    </>
-                  ) : type === "select" ? (
-                    <div className="item-select">
-                      <select aria-label="Default select example" className="bg-dark form-select form-control mt-4 text-white" name={payloadType} value={inputDataGet[payloadType] || ""} onChange={(e) => OnchangeHndle(e, selecter)}>
-                        {inputLabel?.map((item) => {
-                          const { value, selectLabel } = item;
-                          return (
-                            <option value={value} key={value} disabled={value === ""}>
-                              {selectLabel}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </div>
-                  ) : type === "multiSelecter" ? (
-                    <Multiselect className="mb-3 multiselect_option" displayValue="label" options={inputLabel} selectedValues={
-                        (inputDataGet[payloadType] || []).map(value => { // Convert the selected values to the format expected by the Multiselect component
-                          const label = inputLabel.find(item => item.value === value)?.label || value;
-                          return { label, value };
-                        })
-                      }
-                      onRemove={(selectedList) => {
-                        const valuesList = selectedList.map(item => item.value);
-                        setInputDataGet({ ...inputDataGet, [payloadType]: valuesList });
-                      }}
-                      onSelect={(selectedList) => { // Extract just the values from the selected items in the Multiselect format
-                        const valuesList = selectedList.map(item => item.value);
-                        setInputDataGet({ ...inputDataGet, [payloadType]: valuesList });
-                      }}
-                    />
-                  ) : null}
-                </React.Fragment>
-              );
-            })}
+            {inputFiled?.map((inputFile, index) => renderFormInput(inputFile, index))}
           </>
         </div>
 
