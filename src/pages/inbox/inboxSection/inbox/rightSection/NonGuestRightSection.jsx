@@ -84,7 +84,7 @@ const NonGuestRightSection = ({
   const [showTopGradient, setShowTopGradient] = useState(false);
   const [showBottomGradient, setShowBottomGradient] = useState(false);
 
-  // Status calculation logic (moved here to avoid initialization issues)
+  // Status calculation logic - now as a function we can call
   const get_current_status = () => {
     const { until_utc } = guest_chatbot_status || {};
 
@@ -107,21 +107,40 @@ const NonGuestRightSection = ({
       }
     }
 
-    // Otherwise, use property status
+    // Otherwise, use property status if we have it
     const propertyStatus = property_chatbot_status || propertyChatbotStatus;
     const status = propertyStatus ? String(propertyStatus).toLowerCase() : "";
-    return { curr_status: status, source: "property" };
+    if (status) {
+      return { curr_status: status, source: "property" };
+    }
+
+    // Otherwise, if this is a multi-property chat: assume "on".
+    if (rightSectionData?.multi_property_id) {
+      return { curr_status: "on", source: "default" };
+    }
+
+    // Default fallback
+    return { curr_status: "off", source: "default" };
   };
 
-  const current_status_get = property_chatbot_status
-    ? get_current_status()
-    : null;
-  const { curr_status, source } = current_status_get || {};
-
-  // Initialize localStatus whenever curr_status changes
+  // Initialize and update localStatus based on get_current_status
   useEffect(() => {
-    setLocalStatus(curr_status);
-  }, [curr_status]);
+    if (rightSectionData) {
+      const currentStatusResult = get_current_status();
+      if (currentStatusResult) {
+        const { curr_status } = currentStatusResult;
+        if (curr_status !== undefined && curr_status !== null) {
+          setLocalStatus(String(curr_status).toLowerCase());
+        }
+      }
+    }
+  }, [
+    guest_chatbot_status,
+    property_chatbot_status,
+    propertyChatbotStatus,
+    rightSectionData?.multi_property_id,
+    property
+  ]);
 
   useEffect(() => {
     if (rightSectionData?.is_locked !== undefined) {
@@ -753,16 +772,6 @@ const NonGuestRightSection = ({
     }
   };
 
-  useEffect(() => {
-    if (curr_status !== null && curr_status !== undefined) {
-      const status = String(curr_status).toLowerCase();
-      setLocalStatus(status);
-    } else if (!property || property.trim() === "") {
-      setLocalStatus("off");
-    }
-  }, [curr_status]);
-
-  // Add this function to handle deselecting the property
   // Add this function to handle deselecting the property
   // Update the property deselection function to handle HostBuddy status better:
   const handlePropertyDeselect = async () => {
@@ -862,15 +871,6 @@ const NonGuestRightSection = ({
   useEffect(() => {
     fetchProperties();
   }, []);
-
-  useEffect(() => {
-    if (!property || property.trim() === "") {
-      setLocalStatus("off");
-    } else if (curr_status !== null && curr_status !== undefined) {
-      const status = String(curr_status).toLowerCase();
-      setLocalStatus(status);
-    }
-  }, [property, curr_status]);
 
   // Calculate end_time_utc based on timing, for toggle conversation status
   const calculateEndTimeUTC = (timing) => {
@@ -1803,7 +1803,8 @@ const NonGuestRightSection = ({
 
             {(() => {
               const currentProperty = property;
-              const chatbotStatus = propertyChatbotStatus ? String(propertyChatbotStatus).toLowerCase() : null;
+              //const chatbotStatus = propertyChatbotStatus ? String(propertyChatbotStatus).toLowerCase() : null;
+              const chatbotStatus = localStatus !== null ? String(localStatus).toLowerCase() : propertyChatbotStatus ? String(propertyChatbotStatus).toLowerCase() : null;
               const currentStatus = chatbotStatus ? String(chatbotStatus).toLowerCase() : null;
               const hasProperty = currentProperty && currentProperty.trim() !== "";
               const isPropertyLocked = isLocked && hasProperty;
@@ -1827,7 +1828,8 @@ const NonGuestRightSection = ({
                 );
               }
 
-              if (hasProperty && currentStatus) {
+              //if (hasProperty && currentStatus) {
+              if (currentStatus) {
                 return (
                   <>
                     <span>is</span>
