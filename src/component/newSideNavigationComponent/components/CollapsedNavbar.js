@@ -59,11 +59,21 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   useEffect(() => {
     console.log("🔍 CollapsedNavbar - Checking path:", location.pathname);
     
-    // Check White Label paths FIRST (before general /gcs-settings)
-    if (location.pathname.startsWith("/gcs-settings/white-label")) {
-      console.log("✅ CollapsedNavbar - WHITE LABEL path matched, setting selected to 8");
-      setSelected(8);
-      return;
+    // Check GCS-specific paths first
+    if (isInGcsPortal) {
+      // All Accounts page in GCS portal
+      if (location.pathname.startsWith("/gcs-users")) {
+        console.log("✅ CollapsedNavbar - GCS USERS (All Accounts) path matched, setting selected to 1");
+        setSelected(1);
+        return;
+      }
+      
+      // White Label paths (before general /gcs-settings)
+      if (location.pathname.startsWith("/gcs-settings/white-label")) {
+        console.log("✅ CollapsedNavbar - WHITE LABEL path matched, setting selected to 8");
+        setSelected(8);
+        return;
+      }
     }
     
     // Map paths to IDs based on navigation structure
@@ -87,7 +97,7 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
       console.log("📍 CollapsedNavbar - Path matched:", currentPath, "ID:", pathToIdMap[currentPath]);
       setSelected(pathToIdMap[currentPath]);
     }
-  }, [location.pathname]);
+  }, [location.pathname, isInGcsPortal]);
   // Handle mouse enter event for icons to expand the navbar after a short delay
   const handleIconMouseEnter = () => {
     // Don't trigger hover behavior on mobile devices
@@ -138,15 +148,15 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
     if (handleNavigation) {
       switch (iconId) {
-        case 1: // Get Started
-          handleNavigation("/getstarted");
-          break;
-        case 2: // Dashboard or All Accounts (in GCS Portal)
+        case 1: // Get Started (regular) or All Accounts (GCS)
           if (isInGcsPortal) {
             handleNavigation("/gcs-users");
           } else {
-            handleNavigation("/dashboard");
+            handleNavigation("/getstarted");
           }
+          break;
+        case 2: // Dashboard
+          handleNavigation("/dashboard");
           break;
         case 3: // Properties
           handleNavigation("/properties");
