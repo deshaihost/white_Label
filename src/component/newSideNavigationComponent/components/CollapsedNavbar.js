@@ -57,6 +57,15 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
   // Set selected based on current path
   useEffect(() => {
+    console.log("🔍 CollapsedNavbar - Checking path:", location.pathname);
+    
+    // Check White Label paths FIRST (before general /gcs-settings)
+    if (location.pathname.startsWith("/gcs-settings/white-label")) {
+      console.log("✅ CollapsedNavbar - WHITE LABEL path matched, setting selected to 8");
+      setSelected(8);
+      return;
+    }
+    
     // Map paths to IDs based on navigation structure
     const pathToIdMap = {
       "/getstarted": 1,
@@ -75,6 +84,7 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
     );
 
     if (currentPath) {
+      console.log("📍 CollapsedNavbar - Path matched:", currentPath, "ID:", pathToIdMap[currentPath]);
       setSelected(pathToIdMap[currentPath]);
     }
   }, [location.pathname]);
@@ -123,6 +133,7 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
   // Handle icon click with navigation
   const handleIconClick = (iconId) => {
+    console.log("🖱️ CollapsedNavbar - Icon clicked:", iconId);
     setSelected(iconId);
 
     if (handleNavigation) {
@@ -151,6 +162,9 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
           break;
         case 7: // Settings
           handleNavigation(isInGcsPortal ? "/gcs-settings" : "/setting");
+          break;
+        case 8: // White Label
+          handleNavigation("/gcs-settings/white-label-registration");
           break;
         default:
           break;
@@ -206,8 +220,8 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   // Check if an icon should have hover functionality
   const shouldHaveHover = (iconId) => {
     // Only these specific navigation icons should trigger navbar opening on hover
-    // 1=Get Started, 2=Dashboard, 3=Properties, 4=Action Items, 5=Messaging, 6=Insights, 7=Settings
-    return [1, 2, 3, 4, 5, 6, 7].includes(iconId);
+    // 1=Get Started, 2=Dashboard, 3=Properties, 4=Action Items, 5=Messaging, 6=Insights, 7=Settings, 8=White Label
+    return [1, 2, 3, 4, 5, 6, 7, 8].includes(iconId);
   };  return (
     <div
       className={`collapsed-navbar${isOpen ? " open" : ""}`}

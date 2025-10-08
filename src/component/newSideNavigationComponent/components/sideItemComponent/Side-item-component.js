@@ -59,7 +59,9 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
     }
 
     if (currentPath) {
-      setSelectedId(selectedPathId);      // Auto-expand Messaging dropdown when in inbox section
+      setSelectedId(selectedPathId);
+      console.log('🔍 Path matched:', currentPath, 'Setting selectedId to:', selectedPathId);
+      // Auto-expand Messaging dropdown when in inbox section
       if (currentPath === "/inbox") {
         setExpandedId(5); // 5 is the ID for Messaging
         
@@ -80,6 +82,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
       // Auto-expand White Label dropdown when in white label section
       // If we matched the white-label path, we're definitely in GCS portal
       if (location.pathname.startsWith("/gcs-settings/white-label")) {
+        console.log('✅ WHITE LABEL CHECK: Setting selectedId to 8, expandedId to 8');
         setSelectedId(8); // 8 is the ID for White Label (CRITICAL: This must stick!)
         setExpandedId(8); // Expand White Label dropdown
         
@@ -101,6 +104,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
       // Auto-expand Settings dropdown when in settings section
       // Only run this if we're NOT in white label section
       if ((currentPath === "/setting" || currentPath === "/gcs-settings") && !location.pathname.startsWith("/gcs-settings/white-label")) {
+        console.log('⚙️ SETTINGS CHECK: Running settings logic');
         setExpandedId(7); // 7 is the ID for Settings        // Map settings section from URL to tab ID based on portal type
         const settingsPathToId = isInGcsPortal
           ? {
@@ -388,6 +392,15 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         // For non-protected paths, don't show the navigation items
         return false;
       });
+
+  // Debug: Log current state
+  console.log('📊 RENDER STATE:', { 
+    pathname: location.pathname, 
+    selectedId, 
+    expandedId, 
+    isInGcsPortal,
+    whiteLabelActiveTab 
+  });
 
   return (
     <div
