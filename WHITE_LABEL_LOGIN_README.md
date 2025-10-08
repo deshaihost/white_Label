@@ -91,4 +91,4 @@ https://portal.testhostbuddy.live/white-label-login?email=user@domain.com&passwo
 Test the integration: `acental-client-demo.html`
 
 ## Support
-Contact: support@hostbuddy.ai
+Contact: support@hostbuddy.ai 

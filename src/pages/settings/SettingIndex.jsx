@@ -16,6 +16,7 @@ import DangerZone from '../account/dangerZone';
 import AccountNotificationSection from "../account/notificationSection";
 import MessagingChannels from "./settingContants/messagingChannels/messagingChannels";
 import ActionitemsSettings from "./settingContants/actionItems/actionItemSettings";
+import WhiteLabelRegistration from "./settingContants/whiteLabel/WhiteLabelRegistration";
 import { Link, useParams } from "react-router-dom";
 import HostDaddy from '../../component/hostDaddy/hostDaddy';
 import PMSSettings from "../account/pmsSettings";
@@ -37,7 +38,8 @@ const SettingIndex = () => {
     upsells: "upsells", 
     subscription: "subscription", 
     messagingChannels: "messaging-channels",
-    actionItems: "action-items"
+    actionItems: "action-items",
+    whiteLabelRegistration: "white-label-registration"
   };
 
   const ApiUserData = store?.getUserDataReducer?.getUserData?.data?.user;
@@ -123,6 +125,9 @@ const SettingIndex = () => {
                   )}
                   {interFaceTypes?.actionItems === interFaceSettings && (
                     <ActionitemsSettings />
+                  )}
+                  {interFaceTypes?.whiteLabelRegistration === interFaceSettings && (
+                    <WhiteLabelRegistration />
                   )}
                 </div>
               </div>
