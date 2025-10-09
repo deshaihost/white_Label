@@ -39,7 +39,7 @@ const MountBlog = () => {
           <BlogArticleSidebar contents={sideBarContents} />
           <div className="blog-article-content">
 
-            <p>We're excited to announce our partnership with <a href="https://www.getmount.com/" target='_blank' rel='noreferrer noopener'>Mount</a>, the local experience curation platform. If you're already using Mount to curate authentic local experiences for your guests, <a href="https://www.hostbuddy.ai/" target='_blank' rel='noreferrer noopener'>HostBuddy AI</a> can now handle all the communication and upselling for you – automatically, 24/7.</p>
+            <p>We're excited to announce our partnership with <a href="https://www.rentmount.com/" target='_blank' rel='noreferrer noopener'>rentMount.com</a>, the local experience curation platform. If you're already using Mount to curate authentic local experiences for your guests, <a href="https://www.hostbuddy.ai/" target='_blank' rel='noreferrer noopener'>HostBuddy AI</a> can now handle all the communication and upselling for you – automatically, 24/7.</p>
 
             <div id="automatic-upselling">
               <h2>Automatic Upselling for Mount Users</h2>
