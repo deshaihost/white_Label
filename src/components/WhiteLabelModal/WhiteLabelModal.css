@@ -1,0 +1,106 @@
+/* White Label Modal Styles - inheriting from contact-modal */
+.white-label-modal.contact-modal .modal-content {
+  background: linear-gradient(135deg, #1a2c42 0%, #0f1922 100%);
+  border: 2px solid #3d5a80;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+.white-label-modal.contact-modal .modal-header {
+  border-bottom: 1px solid #3d5a80;
+  padding: 2rem 2rem 1rem 2rem;
+}
+
+.white-label-modal.contact-modal .modal-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.white-label-modal.contact-modal .modal-body {
+  padding: 1rem 2rem 2rem 2rem;
+}
+
+.white-label-modal.contact-modal .input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.white-label-modal.contact-modal .input-group input,
+.white-label-modal.contact-modal .input-group textarea {
+  background-color: rgba(61, 90, 128, 0.1) !important;
+  border: 2px solid #3d5a80 !important;
+  border-radius: 20px !important;
+  color: #ffffff !important;
+  padding: 18px 24px !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+  min-height: 60px;
+}
+
+.white-label-modal.contact-modal .input-group input:focus,
+.white-label-modal.contact-modal .input-group textarea:focus {
+  background-color: rgba(61, 90, 128, 0.15) !important;
+  border-color: #5a8fc4 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(90, 143, 196, 0.2) !important;
+  outline: none !important;
+}
+
+.white-label-modal.contact-modal .input-group label {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8fa8c4;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  background: transparent;
+  padding: 0;
+}
+
+.white-label-modal.contact-modal .input-group input:focus + label,
+.white-label-modal.contact-modal .input-group input:not(:placeholder-shown) + label,
+.white-label-modal.contact-modal .input-group textarea:focus + label,
+.white-label-modal.contact-modal .input-group textarea:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 20px;
+  font-size: 0.85rem;
+  color: #5a8fc4;
+  background: linear-gradient(135deg, #1a2c42 0%, #0f1922 100%);
+  padding: 0 8px;
+}
+
+.white-label-modal.contact-modal .input-group textarea {
+  min-height: 120px !important;
+  resize: vertical;
+  padding-top: 18px !important;
+}
+
+.white-label-modal.contact-modal .input-group textarea + label {
+  top: 30px;
+}
+
+.white-label-modal.contact-modal .input-group textarea:focus + label,
+.white-label-modal.contact-modal .input-group textarea:not(:placeholder-shown) + label {
+  top: -8px;
+}
+
+.white-label-modal.contact-modal .bg_theme_btn {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%) !important;
+  border: none !important;
+  border-radius: 30px !important;
+  padding: 15px 50px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  transition: all 0.3s ease !important;
+  min-width: 200px;
+}
+
+.white-label-modal.contact-modal .bg_theme_btn:hover {
+  background: linear-gradient(135deg, #357abd 0%, #2968a3 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(74, 144, 226, 0.4) !important;
+}

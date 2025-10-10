@@ -13,6 +13,13 @@ const TriggersModal = ({ show, handleClose }) => {
           <p>These are all of the events you can use to trigger sending of a message. We want this to be as robust as possible, and we encourage our users to reach out to us if they have any specific timing they would like to see added.</p>
           <hr />
           <div className="condition-modal-list">
+            <p>Send Once
+              <ul>
+                <li style={{listStyleType:'disc', color:'white'}}>Send immediately</li>
+                <li style={{listStyleType:'disc', color:'white'}}>Schedule for a specific date and time</li>
+                <li style={{listStyleType:'disc', color:'white'}}>One-time message to selected guests</li>
+              </ul>
+            </p>
             <p>During reservation
               <ul>
                 <li style={{listStyleType:'disc', color:'white'}}>Days into reservation</li>

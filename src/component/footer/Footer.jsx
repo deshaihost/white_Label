@@ -60,16 +60,6 @@ const Footer = () => {
 
             <MDBCol md="3">
               <div className="footer-links">
-                <h6 className=" fw-bold mb-4 links-heading">Features</h6>
-                <p className="links">Industry leading AI technology</p>
-                <p className="links">Robust Customization</p>
-                <p className="links">Full Host Control</p>
-                <p className="links">Always Stay In The Loop</p>
-              </div>
-            </MDBCol>
-
-            <MDBCol md="3">
-              <div className="footer-links">
                 <h6 className=" fw-bold mb-4 links-heading">Contact</h6>
                 <p className="links">
                   <a style={{ display: 'inline-block', cursor: 'pointer', marginBottom: '10px' }} className="text-reset mb-0" target="_blank" rel="noopener noreferrer" onClick={(e) => {

@@ -62,13 +62,28 @@ const Banner = () => {
             </div>
             <div
               className="heading heading-center"
-              style={{ width: "75%", margin: "0 auto" }}
+              style={{ width: "65%", margin: "0 auto" }}
             >
               <h1>
                 Short Term Rental Messaging <strong>On Autopilot</strong>
               </h1>
             </div>
             <p>Welcome to the Future of Hosting</p>
+            <div style={{ marginBottom: "20px" }}>
+              <a
+                className="link-btn filled-btn"
+                style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "8px" }}
+                href="https://youtu.be/3qJSak6ZL8M"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="9" fill="#146ef5" stroke="white" strokeWidth="1"/>
+                  <path d="M10 8l6 4-6 4V8z" fill="#146ef5" stroke="white" strokeWidth="1"/>
+                </svg>
+                PLAY VIDEO
+              </a>
+            </div>
             <a
               className="link-btn filled-btn"
               style={{ cursor: "pointer", marginRight: "20px" }}
@@ -79,10 +94,10 @@ const Banner = () => {
                 setDemoModalShow(true);
               }}
             >
-              Book a Demo
+              BOOK A DEMO
             </a>
             <Link to="/signup" className="link-btn outline-btn">
-              Get Started For Free
+              GET STARTED FOR FREE
             </Link>
             <span className="bg-shadow"></span>
           </div>

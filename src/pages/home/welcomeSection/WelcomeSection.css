@@ -71,6 +71,41 @@
   text-align: left;
 }
 
+/* Add spacing between carousel rows */
+.welcome-boxes .slick-slider .slick-list .slick-track > div:nth-child(odd) {
+  margin-bottom: 20px;
+}
+
+/* Alternative approach - add margin to all carousel items */
+.welcome-boxes .welcome {
+  margin-bottom: 20px;
+}
+
+/* Ensure the last row doesn't have extra bottom margin */
+.welcome-boxes .slick-slider .slick-list .slick-track > div:nth-child(even) .welcome {
+  margin-bottom: 0;
+}
+
+/* Add spacing between carousel rows */
+.welcome-boxes .slick-slider .slick-list .slick-track .slick-slide {
+  margin-bottom: 20px;
+}
+
+/* Override for the last row to avoid extra bottom margin */
+.welcome-boxes .slick-slider .slick-list .slick-track .slick-slide:nth-child(even) {
+  margin-bottom: 0;
+}
+
+/* Alternative approach - targeting the welcome cards directly */
+.welcome-boxes .welcome {
+  margin-bottom: 20px !important;
+}
+
+/* Specific spacing for multi-row carousel */
+.welcome-boxes .slick-slider[data-rows="2"] .slick-slide {
+  margin-bottom: 20px;
+}
+
 .welcome {
   border: 3px solid #146ef5;
   border-radius: 20px;
@@ -140,5 +175,41 @@
   }
   .review-box1 img {
     max-width: 200px;
+  }
+}
+
+/* Position carousel arrows for multi-row layout */
+.welcome-boxes .slick-prev {
+  top: 25% !important; /* Position at top row */
+  left: -50px !important;
+  z-index: 10;
+}
+
+.welcome-boxes .slick-next {
+  top: 75% !important; /* Position at bottom row */
+  right: -50px !important;
+  z-index: 10;
+}
+
+/* Ensure arrows are visible on smaller screens */
+@media (max-width: 1200px) {
+  .welcome-boxes .slick-prev {
+    left: -30px !important;
+  }
+  
+  .welcome-boxes .slick-next {
+    right: -30px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-boxes .slick-prev {
+    left: -20px !important;
+    top: 30% !important;
+  }
+  
+  .welcome-boxes .slick-next {
+    right: -20px !important;
+    top: 70% !important;
   }
 }

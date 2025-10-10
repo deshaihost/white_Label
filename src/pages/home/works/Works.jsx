@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import "./works.css";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import TemplatedMessages from "../../../helper/staticImage/homePage/Templated-messages.webp";
 import Schedule from "../../../helper/staticImage/homePage/schdule.webp";
+
+// Import interactive schedule interface images
+import PropertyList from "../../../helper/staticImage/scheduleInterface/property-list.png";
+import ScheduleView from "../../../helper/staticImage/scheduleInterface/schedule-view.png";
+import AddStatusModal from "../../../helper/staticImage/scheduleInterface/add-status.png";
+import ScheduleConfig from "../../../helper/staticImage/scheduleInterface/schedule-config.png";
+import ScheduleComplete from "../../../helper/staticImage/scheduleInterface/schedule-complete.png";
+
 import FeOne from "../../../helper/staticImage/homePage/feature-logo/fe-1.webp";
 import FeTwo from "../../../helper/staticImage/homePage/feature-logo/fe-2.webp";
 import FeThree from "../../../helper/staticImage/homePage/feature-logo/fe-3.webp";
@@ -21,6 +29,21 @@ import ItemFive from "../../../helper/staticImage/homePage/trusted-logo/item14.w
 import ItemSix from "../../../helper/staticImage/homePage/trusted-logo/item15.webp";
 import ItemSeven from "../../../helper/staticImage/homePage/trusted-logo/item16.webp";
 import ItemEight from "../../../helper/staticImage/homePage/trusted-logo/item17.webp";
+import AlexS from "../../../helper/staticImage/homePage/trusted-logo/AlexS.webp";
+import CalliN from "../../../helper/staticImage/homePage/trusted-logo/CalliN.webp";
+import DanWise from "../../../helper/staticImage/homePage/trusted-logo/DanWise.webp";
+import DannyW from "../../../helper/staticImage/homePage/trusted-logo/DannyW.webp";
+import IsaacV from "../../../helper/staticImage/homePage/trusted-logo/IsaacV.webp";
+import JaveusB from "../../../helper/staticImage/homePage/trusted-logo/JaveusB.webp";
+import JodieO from "../../../helper/staticImage/homePage/trusted-logo/JodieO.webp";
+import KarenG from "../../../helper/staticImage/homePage/trusted-logo/KarenG.webp";
+import LisaD from "../../../helper/staticImage/homePage/trusted-logo/LisaD.webp";
+import MattM from "../../../helper/staticImage/homePage/trusted-logo/MattM.webp";
+import MichelL from "../../../helper/staticImage/homePage/trusted-logo/MichelL.webp";
+import MikeB from "../../../helper/staticImage/homePage/trusted-logo/MikeB.webp";
+import RebeccaB from "../../../helper/staticImage/homePage/trusted-logo/RebeccaB.webp";
+import RyanM from "../../../helper/staticImage/homePage/trusted-logo/RyanM.webp";
+import TanyaR from "../../../helper/staticImage/homePage/trusted-logo/TanyaR.webp";
 // import ItemNine from "../../../helper/staticImage/homePage/trusted-logo/item-9.webp";
 import { HiChatBubbleLeftRight } from "react-icons/hi2";
 import { Ri24HoursFill } from "react-icons/ri";
@@ -43,6 +66,21 @@ const imageTrustedLogo = [
   ItemSix,
   ItemSeven,
   ItemEight,
+  AlexS,
+  CalliN,
+  DanWise,
+  DannyW,
+  IsaacV,
+  JaveusB,
+  JodieO,
+  KarenG,
+  LisaD,
+  MattM,
+  MichelL,
+  MikeB,
+  RebeccaB,
+  RyanM,
+  TanyaR,
   // ItemNine,
 ];
 
@@ -80,7 +118,7 @@ const SmartTemlating =
 const actionItemsScreen =
   "https://storage.googleapis.com/frontend_media/home-new/action_items_screen.webp";
 const inboxScreen =
-  "https://storage.googleapis.com/frontend_media/home-new/inbox_screen.webp";
+  "https://storage.googleapis.com/frontend_media/home-new/smartInbox.webp";
 const reviewRemovalScreen =
   "https://storage.googleapis.com/frontend_media/home-new/review_removal_screen.webp";
 const statistics =
@@ -111,6 +149,186 @@ function SamplePrevArrow(props) {
     </div>
   );
 }
+
+// Interactive Schedule Gallery Component
+const InteractiveScheduleGallery = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [showCursor, setShowCursor] = useState(false);
+  const [isAutoClicking, setIsAutoClicking] = useState(false);
+
+  const scheduleImages = [
+    {
+      src: ScheduleView,
+      alt: "Schedule View",
+      hotspots: [
+        { x: 85, y: 88, width: 10, height: 6, nextImage: 1, label: "Add Button" }
+      ]
+    },
+    {
+      src: ScheduleView,
+      alt: "Schedule View",
+      hotspots: [
+        { x: 85, y: 88, width: 10, height: 6, nextImage: 2, label: "Add Button" }
+      ]
+    },
+    {
+      src: AddStatusModal,
+      alt: "Add Status Modal",
+      hotspots: [
+        { x: 53, y: 81, width: 12, height: 6, nextImage: 3, label: "Apply Button" }
+      ]
+    },
+    {
+      src: ScheduleConfig,
+      alt: "Schedule Configuration",
+      hotspots: [
+        { x: 53, y: 81, width: 12, height: 6, nextImage: 4, label: "Apply Button" }
+      ]
+    },
+    {
+      src: ScheduleComplete,
+      alt: "Schedule Complete",
+      hotspots: []
+    }
+  ];
+
+  // Auto-click functionality
+  useEffect(() => {
+    const currentImage = scheduleImages[currentImageIndex];
+    
+    if (currentImage.hotspots.length > 0) {
+      const hotspot = currentImage.hotspots[0];
+      
+      // Show cursor and move to hotspot after 1 second
+      const showCursorTimer = setTimeout(() => {
+        setCursorPosition({ 
+          x: hotspot.x + hotspot.width / 2, 
+          y: hotspot.y + hotspot.height / 2 
+        });
+        setShowCursor(true);
+        setIsAutoClicking(true);
+      }, 1000);
+
+      // Auto-click after 2.5 seconds
+      const clickTimer = setTimeout(() => {
+        setIsAutoClicking(false);
+        setShowCursor(false);
+        setCurrentImageIndex(hotspot.nextImage);
+      }, 2500);
+
+      return () => {
+        clearTimeout(showCursorTimer);
+        clearTimeout(clickTimer);
+      };
+    } else {
+      // If no hotspots, move to next image after 2 seconds
+      const timer = setTimeout(() => {
+        setCurrentImageIndex(0); // Reset to first image
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentImageIndex, scheduleImages]);
+
+  const handleImageHover = (e) => {
+    if (!isAutoClicking) {
+      const rect = e.target.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      setCursorPosition({ x, y });
+      setShowCursor(true);
+    }
+  };
+
+  return (
+    <div className="interactive-schedule-gallery" style={{ position: 'relative', width: '100%' }}>
+      <div style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+        <img
+          src={scheduleImages[currentImageIndex].src}
+          alt={scheduleImages[currentImageIndex].alt}
+          style={{ 
+            width: '100%', 
+            height: 'auto', 
+            objectFit: 'contain',
+            cursor: 'default',
+            borderRadius: '8px'
+          }}
+          onMouseMove={handleImageHover}
+          onMouseLeave={() => !isAutoClicking && setShowCursor(false)}
+        />
+        
+        {/* Render hotspot indicators during auto-clicking */}
+        {isAutoClicking && scheduleImages[currentImageIndex].hotspots.map((hotspot, index) => (
+          <div
+            key={index}
+            style={{
+              position: 'absolute',
+              left: `${hotspot.x}%`,
+              top: `${hotspot.y}%`,
+              width: `${hotspot.width}%`,
+              height: `${hotspot.height}%`,
+              border: '2px solid #146ef5',
+              borderRadius: '4px',
+              backgroundColor: 'rgba(20, 110, 245, 0.1)',
+              animation: 'pulse 1s infinite'
+            }}
+          />
+        ))}
+        
+        {/* Custom white arrow cursor */}
+        {showCursor && (
+          <div
+            style={{
+              position: 'absolute',
+              left: `${cursorPosition.x}%`,
+              top: `${cursorPosition.y}%`,
+              width: '20px',
+              height: '20px',
+              transform: 'translate(-50%, -50%)',
+              pointerEvents: 'none',
+              zIndex: 1000,
+              transition: isAutoClicking ? 'all 0.8s ease-in-out' : 'none'
+            }}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))',
+                animation: isAutoClicking ? 'clickPulse 0.3s ease-in-out' : 'none'
+              }}
+            >
+              <path
+                d="M3 3L21 12L12 13L8 21L3 3Z"
+                fill="white"
+                stroke="#333"
+                strokeWidth="1"
+              />
+            </svg>
+          </div>
+        )}
+      </div>
+
+      <style>{`
+        @keyframes pulse {
+          0% { opacity: 0.6; }
+          50% { opacity: 1; }
+          100% { opacity: 0.6; }
+        }
+        
+        @keyframes clickPulse {
+          0% { transform: translate(-50%, -50%) scale(1); }
+          50% { transform: translate(-50%, -50%) scale(1.3); }
+          100% { transform: translate(-50%, -50%) scale(1); }
+        }
+      `}</style>
+    </div>
+  );
+};
 
 const Works = () => {
   var settingsf = {
@@ -230,7 +448,7 @@ const Works = () => {
                       <img
                         src={images}
                         alt="feature-img"
-                        className="img-fluid w-100 h-100 mw-100 mh-100 rounded-0"
+                        className="img-fluid w-100 h-100 mw-100 mh-100 rounded-4"
                       />
                     </div>
                   );
@@ -254,6 +472,15 @@ const Works = () => {
                   database used to support your guests.
                 </p>
               </div>
+              <div className="nav-buttons" style={{ textAlign: "center", marginTop: "24px" }}>
+                <Link
+                  className="nav-btn nav-btn-outline link-btn filled-btn"
+                  to="/signup"
+                  style={{ marginRight: 10 }}
+                >
+                  Sign Up Now
+                </Link>
+              </div>
             </div>
             <div className="col-lg-6 blur-background-top-left">
               <img
@@ -266,13 +493,13 @@ const Works = () => {
           </div>
           <div className="row">
             <div className="col-lg-12">
-              <h2 className="fs-1 fw-bold text-white mb-5 text-center">
+              <h2 className="fs-1 fw-bold text-white mb-0 text-center">
                 What the Community is Saying
               </h2>
             </div>
           </div>
           <div className="row">
-            <div className="col-lg-12">
+            <div className="col-lg-12" style={{ marginTop: '-50px' }}>
               <Slider {...settingsf}>
                 <div className=" testimonial-slider">
                   <div className="testimonial-item p-3">
@@ -395,7 +622,7 @@ const Works = () => {
                 Trusted by Leading Property Managers
               </h2>
             </div>
-            <div className="col-lg-12">
+            <div className="col-lg-12" style = {{ marginBottom: '-50px' }}>
               <div>
                 <Slider {...settingsf}>
                   {imageTrustedLogo?.map((images) => {
@@ -413,11 +640,35 @@ const Works = () => {
               </div>
             </div>
           </div>
+          <div className="col-lg-12 d-flex justify-content-center">
+              <div
+                className="signup-button"
+                style={{
+                  margin: "32px 0 60px 0", // spacing above and below
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Link
+                  className="nav-btn nav-btn-outline link-btn filled-btn"
+                  to="/signup"
+                  style={{
+                    padding: "14px 40px",
+                    fontSize: "1.1rem",
+                    borderRadius: "32px",
+                    minWidth: "240px",
+                    textAlign: "center",
+                  }}
+                >
+                  Try it free for 14 days
+                </Link>
+              </div>
+            </div>
           <div className="row align-items-center justify-content-center">
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
+                style={{ borderRadius: "20px", backgroundColor: "#146ef5" }}
               >
                 <FaRegClock className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -432,7 +683,7 @@ const Works = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
+                style={{ borderRadius: "20px", backgroundColor: "#146ef5" }}
               >
                 <HiChatBubbleLeftRight className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -452,7 +703,7 @@ const Works = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
+                style={{ borderRadius: "20px", backgroundColor: "#146ef5" }}
               >
                 <Ri24HoursFill className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -467,7 +718,7 @@ const Works = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
+                style={{ borderRadius: "20px", backgroundColor: "#146ef5" }}
               >
                 <FaSackDollar className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -521,13 +772,18 @@ const Works = () => {
                   anytime you need support.
                 </p>
               </div>
+              <div className="nav-buttons">
+                <Link
+                  className="nav-btn nav-btn-outline link-btn filled-btn"
+                  to="/signup"
+                  style={{ marginRight: 10 }}
+                >
+                Sign Up
+                </Link>
+              </div>
             </div>
             <div className="col-lg-6 blur-background-top-left">
-              <img
-                src={Schedule}
-                style={{ objectFit: "contain" }}
-                alt="works-img"
-              />
+              <img src={schedule} alt="works-img" />
             </div>
           </div>
 
