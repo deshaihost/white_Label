@@ -10,7 +10,21 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import Andrew from "../../../helper/staticImage/homePage/Andrew.webp";
-import Maggie from "../../../helper/staticImage/homePage/Maggie.webp";
+import AlexS from "../../../helper/staticImage/homePage/AlexS.webp";
+import AllisonC from "../../../helper/staticImage/homePage/AllisonC.webp";
+import CalliN from "../../../helper/staticImage/homePage/CalliN.webp";
+import CoryD from "../../../helper/staticImage/homePage/CoryD.webp";
+import DannyW from "../../../helper/staticImage/homePage/DannyW.webp";
+import DanW from "../../../helper/staticImage/homePage/DanW.webp";
+import JaveusB from "../../../helper/staticImage/homePage/JaveusB.webp";
+import JodieO from "../../../helper/staticImage/homePage/JodieO.webp";
+import KarenG from "../../../helper/staticImage/homePage/KarenG.webp";
+import MaggieV from "../../../helper/staticImage/homePage/MaggieV.webp";
+import MattM from "../../../helper/staticImage/homePage/MattM.webp";
+import MichelL from "../../../helper/staticImage/homePage/MichelL.webp";
+import MikeB from "../../../helper/staticImage/homePage/MikeB.webp";
+import MikeH from "../../../helper/staticImage/homePage/MikeH.webp";
+import SteveA from "../../../helper/staticImage/homePage/SteveA.webp";
 import Steve from "../../../helper/staticImage/homePage/Steve.webp";
 import Jodie from "../../../helper/staticImage/homePage/whatTheCommunityIsSaying/Jodie.webp";
 
@@ -20,109 +34,169 @@ const Author2 = "https://hostbuddylb.com/home/introduction/author.webp";
 
 const welcomeBoxesData = [
   {
+    title: "Feels like magic",
+    text: (
+      <>
+        Right out of the box, this thing started annihilating. <strong>It’s brilliant...</strong> it's<strong> automated 90%</strong> of our responses in two weeks. Our guest negative sentiments have gone down significantly, probably like 25%. Positives have gone up.
+      </>
+    ),
+    authorImg: AlexS,
+    authorName: "Alex Self",
+    authorDetails: "Host Extraordinaires | 262 listings",
+  },
+  {
     title: "Far Superior AI",
     text: (
       <>
-        We were looking for an AI solution to help reduce the time required to
-        respond to guest inquiries, and Hostbuddy is actually the second
-        service/product we tried. It is
-        <strong> far superior</strong> to the previous AI we tried.
+        We were looking for an AI solution to help reduce the time required to respond to guest inquiries and Hostbuddy is actually the second service/product we tried.  It is <strong>far superior</strong> to the previous AI we tried.
       </>
     ),
-    authorImg: Steve,
+    authorImg: SteveA,
     authorName: "Steve A",
-    authorDetails: "Velo Vacation Rentals | 50 listings",
+    authorDetails: "Velo Vacation Rentals | 64 listings",
   },
   {
-    title: "Guest Messaging, Solved",
+    title: "A Game-Changer for Property Management Efficiency",
     text: (
       <>
-        HostBuddy has helped our guests with <strong> troubleshooting </strong>{" "}
-        WiFi, troubleshooting locks, and <strong> reducing confusion</strong>{" "}
-        for entry instructions at properties with multiple units.
+        Our overall experience has been <strong>excellent</strong>. HostBuddy AI has drastically <strong>reduced our response time</strong> to guests, improved <strong>booking conversions</strong>, and helped us maintain <strong>high reviews</strong>. It feels like having an extra team member working 24/7 without missing a beat.
       </>
     ),
-    authorImg: Andrew,
-    authorName: "Andrew",
-    authorDetails: "Stork STR | 21 listings",
+    authorImg: MattM,
+    authorName: "Matt M",
+    authorDetails: "Unwind Vacation Rentals | 50 Listings",
   },
   {
-    title: "Highly recommend it!",
+    title: "Highly Recommend",
     text: (
       <>
-        HostBuddy AI has allowed me to <strong> sleep at night</strong>!
-        HostBuddy has given me the peace of mind to turn off my phone at night
-        and rest assured any
-        <strong> guests will be taken care of</strong>. It’s a great,{" "}
-        <strong> inexpensive </strong> tool that allows me to keep expenses low
-        so I can <strong> focus on scaling </strong> my business.
+        Overall, I’ve had a <strong>great experience</strong> with HostBuddy and I would definitely recommend the program. The settings, program and support are <strong>fantastic</strong>.
       </>
     ),
-    authorImg: Maggie,
-    authorName: "Maggie V",
-    authorDetails: "Everly Vacation Homes | 13 listings",
+    authorImg: CalliN,
+    authorName: "Calli N",
+    authorDetails: " Callin & Co. | 29 Listings",
   },
-  /*
   {
-    title: "This Software is my Sleeping Pill",
+    title: "Game changer",
     text: (
       <>
-        HostBuddy <strong> solved my problem </strong> of having to reiterate
-        the same property information to every guest, allowing for my workload
-        to <strong> focus more on the growth </strong> of the company.
+        Whether it's upselling for early check-in, late checkout, or even selling the gap days the day before arrival or day after checkout at a discount to those guests, it's been a <strong>game changer</strong>.
       </>
     ),
-    authorImg: Author,
-    authorName: "Grant M",
-    authorDetails: " WestBound Rentals | 26 Listings",
+    authorImg: MikeB,
+    authorName: "Mike Brown",
+    authorDetails: "PBD Living | 27 Listings",
   },
-  */
-  /*
   {
-    title: "HostBuddy works",
+    title: "It answers better than me",
     text: (
       <>
-        HostBuddy has helped make my vacation rental business become{" "}
-        <strong> more passive </strong> since I no longer need to be available
-        for questions and help 24/7.
+        I really honestly can't say enough how awesome this software is. It answers things better than me... We're able to focus on pricing algorithms, advertising, and utilizing some different aspects that we didn't have time to before.
       </>
     ),
-    authorImg: Author1,
-    authorName: "Tim U",
-    authorDetails: "Aztec Getaways | 42 Listings",
+    authorImg: CoryD,
+    authorName: "Cory Davis",
+    authorDetails: "Summit Time Vacation Rentals | 24 listings",
   },
-  */
   {
-    title: "Incredible AI assistant",
+    title: "Superior to anything else",
     text: (
       <>
-        My favorite part about HostBuddy AI is how{" "}
-        <strong> easy it is to set up </strong> and use. It can import
-        properties from your <strong> PMS </strong> and integrating it is an{" "}
-        <strong> absolute breeze </strong>. Its responses are{" "}
-        <strong> very human-like </strong>
-        and it is a great tool to have especially when you are not available to
-        answer messages.
+        We tested two other platforms before HostBuddy, but the user interface that HostBuddy brings to the table was <strong>definitely superior</strong> to anything else that we've seen.
       </>
     ),
-    authorImg: Author2,
-    authorName: "Dylan W",
-    authorDetails: "ZoneSage | 3 Listings",
+    authorImg: DanW,
+    authorName: "Dan Wise",
+    authorDetails: " Wise Getaways | 18 Listings",
+  },
+  {
+    title: "The Game Changer That Freed My Time",
+    text: (
+      <>
+        From the moment I integrated HostBuddy AI into my PMS, it <strong>completely transformed</strong> how I handle guest communication. I used to spend my days tethered to my phone, constantly answering queries from guests and potential guests. Now, HostBuddy AI does it all and does it <strong>brilliantly</strong>.
+      </>
+    ),
+    authorImg: KarenG,
+    authorName: "Karen G",
+    authorDetails: "Stylish Stays | 16 Listings",
   },
   {
     title: "As Essential As Dynamic Pricing",
     text: (
       <>
-        <strong> HostBuddy has changed my business and my life. </strong>I have
-        a hundred percent response rate, and my reviews have gone right up in
-        communications. Everyone talks about how you have to have dynamic
-        pricing as a host - I think everyone should be talking about HostBuddy
-        the same way.
+        <strong>HostBuddy has changed my business and my life</strong>. I have a hundred percent response rate, and my reviews have gone right up in communications. Everyone talks about how you have to have dynamic pricing as a host - I think everyone should be talking about HostBuddy the same way.
       </>
     ),
-    authorImg: Jodie,
-    authorName: "Jodie O",
+    authorImg: JodieO,
+    authorName: "Jodie Odlin",
     authorDetails: "Tetbury Escapes | 15 Listings",
+  },
+  {
+    title: "You’ll thank me later!",
+    text: (
+      <>
+        I almost don’t want to share how amazing HostBuddy is because it gives me such an edge. But seriously, if you're a host and feeling overwhelmed, this is your answer. It's like hiring a superhost assistant that works 24/7 and never drops the ball. Get it now. You’ll thank me later!
+      </>
+    ),
+    authorImg: AllisonC,
+    authorName: "Allison C",
+    authorDetails: "Crafty Hosting | 15 listings",
+  },
+  {
+    title: "Highly recommend it!",
+    text: (
+      <>
+        HostBuddy AI has allowed me to sleep at night! HostBuddy has given me the peace of mind to turn off my phone at night and rest assured any <strong>guest will be taken care of</strong>. It’s a great, <strong>inexpensive tool</strong> that allows me to keep expenses low so I can <strong>focus on scaling</strong> my business.
+      </>
+    ),
+    authorImg: MaggieV,
+    authorName: "Maggie Vineyard",
+    authorDetails: "Everly Vacation Homes | 13 Listings",
+  },
+  {
+    title: "More Time for What Matters",
+    text: (
+      <>
+        HostBuddy has been a huge help with our guest messages. Their AI handles the day-to-day communication quickly and naturally, which <strong>lets us spend more time on growing our business</strong> and improving our properties.
+      </>
+    ),
+    authorImg: MichelL,
+    authorName: "Michel Lopez",
+    authorDetails: "Villa Paraiso Vacation Rentals | 13 Listings",
+  },
+  {
+    title: "Exceeded my expectations",
+    text: (
+      <>
+        I didn't expect it to come in and have such a dynamic impact on the business. It's definitely exceeded my expectations. HostBuddy is definitely a <strong>lifesaver</strong>.
+      </>
+    ),
+    authorImg: JaveusB,
+    authorName: "Javeus Boddie",
+    authorDetails: "Top Tier Estates | 11 Listings",
+  },
+  {
+    title: "Upgraded to HostBuddy",
+    text: (
+      <>
+        We transitioned from a competitor to upgrade, and our team has been loving using it, and it really just <strong>frees up a lot more time</strong> for them to be able to do higher-value tasks.
+      </>
+    ),
+    authorImg: MikeH,
+    authorName: "Mike High",
+    authorDetails: "Shaka Stays | 9 Listings",
+  },
+  {
+    title: "Easy to Use AI",
+    text: (
+      <>
+        This software is <strong>so amazing!</strong> It's easy to use - just feed it and it'll learn! I can copy it for multiple properties as well. I really enjoy watching it respond to my guests.
+      </>
+    ),
+    authorImg: DannyW,
+    authorName: "Danny W",
+    authorDetails: "My Blissful Retreats | 7 Listings",
   },
 ];
 
@@ -165,12 +239,16 @@ const WelcomeSection = () => {
     autoplaySpeed: 6000, // Pause for 6 seconds after all slides are visible
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
+    rows: 2,
+    slidesPerRow: 1,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
+          rows: 2,
+          slidesPerRow: 1,
           infinite: true,
         },
       },
@@ -180,6 +258,8 @@ const WelcomeSection = () => {
           slidesToShow: 1,
           slidesToScroll: 1,
           initialSlide: 1,
+          rows: 2,
+          slidesPerRow: 1,
         },
       },
     ],

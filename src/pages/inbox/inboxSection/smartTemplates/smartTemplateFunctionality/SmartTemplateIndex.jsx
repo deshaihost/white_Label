@@ -97,6 +97,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
       const template_id = template.id;
       delete template.id;
       const body_data = { template_id, template_data:template };
+      console.log("Saving template with data:", body_data);
       const response = await axios.post(`${baseUrl}/save_template`, body_data, config);
 
       if (response.status === 200) {
@@ -127,6 +128,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
       const templateToSave = { ...template };
       delete templateToSave.id;
       const body_data = { template_id, template_data: templateToSave };
+      console.log("Toggling template with data:", body_data);
       const response = await axios.post(`${baseUrl}/save_template`, body_data, config);
 
       if (response.status === 200) {

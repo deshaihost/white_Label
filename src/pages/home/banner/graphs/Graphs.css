@@ -45,17 +45,29 @@
   top: 212px;
   z-index: 1;
 }
-.graph-banner .image-container:nth-child(5) {
+/* Make the container a fixed size and remove width/height: 100% */
+.graph-banner .image-container:nth-child(5),
+.image-container.image-five {
   position: absolute;
   right: 420px;
-  max-width: 328px;
-  max-height: 162px;
-  width: 100%;
-  height: 100%;
   top: 357px;
-  z-index: 1;
+  width: 328px;      /* Use fixed width */
+  height: 200px;     /* Increased height to show full image */
+  max-width: none;   /* Remove max-width */
+  max-height: none;  /* Remove max-height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.image-container.image-five img,
+
+/* Make the image fill the container */
+.image-container.image-five img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important; /* Changed back to contain to show full image */
+  border: 1px solid #146ef5;
+  border-radius: 6px;
+}
 .image-container.image-third img {
   border: 1px solid #146ef5;
 }
@@ -66,6 +78,11 @@
   object-fit: contain;
   opacity: 0.1;
   transition: filter 1s ease, opacity 1s ease;
+}
+
+/* Override general styling specifically for image-five */
+.graph-banner .image-container:nth-child(5) img {
+  object-fit: cover !important;
 }
 
 .image-container.active img {

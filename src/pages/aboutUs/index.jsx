@@ -55,7 +55,7 @@ const AboutUs = () => {
         <img src={Logo} alt="Logo" />
       </div>
       <div className="founder">
-        <h2>Co-Founding Team</h2>
+        <h2>Founding Team</h2>
         <div className="row">
           <div className="col-lg-4 col-md-6">
             <div className="team-outer">
@@ -80,7 +80,7 @@ const AboutUs = () => {
                 </div>
                 <div className="partner">
                   <img src={Logo} alt="Logo" />
-                  <p>Partnership and Marketing</p>
+                  <p>CEO & Co-Founder</p>
                 </div>
               </div>
             </div>
@@ -108,7 +108,7 @@ const AboutUs = () => {
                 </div>
                 <div className="partner">
                   <img src={Logo} alt="Logo" />
-                  <p>Technical Lead</p>
+                  <p>CTO & Co-Founder</p>
                 </div>
               </div>
             </div>
@@ -136,7 +136,7 @@ const AboutUs = () => {
                 </div>
                 <div className="partner">
                   <img src={Logo} alt="Logo" />
-                  <p>Product and Customer Success</p>
+                  <p>CPO & Co-Founder</p>
                 </div>
               </div>
             </div>
