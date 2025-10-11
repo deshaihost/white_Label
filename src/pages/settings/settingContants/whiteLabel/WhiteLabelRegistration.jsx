@@ -4,15 +4,13 @@ import './WhiteLabelRegistration.css';
 const WhiteLabelRegistration = () => {
   const [formData, setFormData] = useState({
     companyName: '',
-    companyLogo: null,
-    primaryColor: '#146EF5',
-    secondaryColor: '#000426',
-    registrationUrl: '',
-    welcomeMessage: '',
-    termsAndConditions: '',
+    subDomain: '',
+    logo: null,
+    fullLogo: null,
   });
 
   const [logoPreview, setLogoPreview] = useState(null);
+  const [fullLogoPreview, setFullLogoPreview] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -25,15 +23,44 @@ const WhiteLabelRegistration = () => {
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Validate SVG file
+      if (!file.type.includes('svg')) {
+        alert('Please upload an SVG file');
+        return;
+      }
+      
       setFormData(prev => ({
         ...prev,
-        companyLogo: file
+        logo: file
       }));
       
       // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setLogoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFullLogoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate SVG file
+      if (!file.type.includes('svg')) {
+        alert('Please upload an SVG file');
+        return;
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        fullLogo: file
+      }));
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFullLogoPreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -49,28 +76,24 @@ const WhiteLabelRegistration = () => {
   const handleReset = () => {
     setFormData({
       companyName: '',
-      companyLogo: null,
-      primaryColor: '#146EF5',
-      secondaryColor: '#000426',
-      registrationUrl: '',
-      welcomeMessage: '',
-      termsAndConditions: '',
+      subDomain: '',
+      logo: null,
+      fullLogo: null,
     });
     setLogoPreview(null);
+    setFullLogoPreview(null);
   };
 
   return (
     <div className="white-label-registration">
       <div className="white-label-header">
         <h2>White Label Registration Page</h2>
-        <p className="subtitle">Customize the registration page for your white label solution</p>
+        <p className="subtitle">Configure your white label registration settings</p>
       </div>
 
       <form onSubmit={handleSubmit} className="white-label-form">
-        {/* Company Information Section */}
+        {/* Company Name Input */}
         <div className="form-section">
-          <h3 className="section-title">Company Information</h3>
-          
           <div className="form-group">
             <label htmlFor="companyName">Company Name *</label>
             <input
@@ -85,17 +108,39 @@ const WhiteLabelRegistration = () => {
             />
           </div>
 
+          {/* Sub Domain Input */}
           <div className="form-group">
-            <label htmlFor="companyLogo">Company Logo</label>
+            <label htmlFor="subDomain">Sub Domain *</label>
+            <input
+              type="text"
+              id="subDomain"
+              name="subDomain"
+              value={formData.subDomain}
+              onChange={handleInputChange}
+              placeholder="Enter subdomain"
+              className="form-input"
+              required
+            />
+            <small className="form-hint">Enter your custom subdomain</small>
+          </div>
+
+          {/* Logo Upload (SVG only) */}
+          <div className="form-group">
+            <label htmlFor="logo">Logo Upload (SVG) *</label>
             <div className="logo-upload-container">
               <input
                 type="file"
-                id="companyLogo"
-                name="companyLogo"
-                accept="image/*"
+                id="logo"
+                name="logo"
+                accept=".svg,image/svg+xml"
                 onChange={handleLogoUpload}
                 className="file-input"
+                required
               />
+              <label htmlFor="logo" className="file-input-label">
+                <span className="upload-icon">📁</span>
+                <span>{formData.logo ? formData.logo.name : 'Choose SVG file...'}</span>
+              </label>
               {logoPreview && (
                 <div className="logo-preview">
                   <img src={logoPreview} alt="Logo Preview" />
@@ -103,7 +148,8 @@ const WhiteLabelRegistration = () => {
                     type="button" 
                     onClick={() => {
                       setLogoPreview(null);
-                      setFormData(prev => ({ ...prev, companyLogo: null }));
+                      setFormData(prev => ({ ...prev, logo: null }));
+                      document.getElementById('logo').value = '';
                     }}
                     className="remove-logo-btn"
                   >
@@ -112,153 +158,51 @@ const WhiteLabelRegistration = () => {
                 </div>
               )}
             </div>
-            <small className="form-hint">Recommended size: 200x200px, Max file size: 2MB</small>
+            <small className="form-hint">SVG format only, recommended size: 200x200px</small>
           </div>
-        </div>
 
-        {/* Branding Section */}
-        <div className="form-section">
-          <h3 className="section-title">Branding Colors</h3>
-          
-          <div className="color-picker-row">
-            <div className="form-group">
-              <label htmlFor="primaryColor">Primary Color</label>
-              <div className="color-input-wrapper">
-                <input
-                  type="color"
-                  id="primaryColor"
-                  name="primaryColor"
-                  value={formData.primaryColor}
-                  onChange={handleInputChange}
-                  className="color-picker"
-                />
-                <input
-                  type="text"
-                  value={formData.primaryColor}
-                  onChange={handleInputChange}
-                  name="primaryColor"
-                  className="color-text-input"
-                />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="secondaryColor">Secondary Color</label>
-              <div className="color-input-wrapper">
-                <input
-                  type="color"
-                  id="secondaryColor"
-                  name="secondaryColor"
-                  value={formData.secondaryColor}
-                  onChange={handleInputChange}
-                  className="color-picker"
-                />
-                <input
-                  type="text"
-                  value={formData.secondaryColor}
-                  onChange={handleInputChange}
-                  name="secondaryColor"
-                  className="color-text-input"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Registration URL Section */}
-        <div className="form-section">
-          <h3 className="section-title">Registration Settings</h3>
-          
+          {/* Full Logo Upload (SVG only) */}
           <div className="form-group">
-            <label htmlFor="registrationUrl">Custom Registration URL (Subdomain)</label>
-            <div className="url-input-wrapper">
-              <span className="url-prefix">https://</span>
+            <label htmlFor="fullLogo">Full Logo Upload (SVG) *</label>
+            <div className="logo-upload-container">
               <input
-                type="text"
-                id="registrationUrl"
-                name="registrationUrl"
-                value={formData.registrationUrl}
-                onChange={handleInputChange}
-                placeholder="your-company"
-                className="form-input url-input"
+                type="file"
+                id="fullLogo"
+                name="fullLogo"
+                accept=".svg,image/svg+xml"
+                onChange={handleFullLogoUpload}
+                className="file-input"
+                required
               />
-              <span className="url-suffix">.hostbuddy.com/register</span>
+              <label htmlFor="fullLogo" className="file-input-label">
+                <span className="upload-icon">📁</span>
+                <span>{formData.fullLogo ? formData.fullLogo.name : 'Choose SVG file...'}</span>
+              </label>
+              {fullLogoPreview && (
+                <div className="logo-preview">
+                  <img src={fullLogoPreview} alt="Full Logo Preview" />
+                  <button 
+                    type="button" 
+                    onClick={() => {
+                      setFullLogoPreview(null);
+                      setFormData(prev => ({ ...prev, fullLogo: null }));
+                      document.getElementById('fullLogo').value = '';
+                    }}
+                    className="remove-logo-btn"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
             </div>
-            <small className="form-hint">This will be your custom registration URL</small>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="welcomeMessage">Welcome Message</label>
-            <textarea
-              id="welcomeMessage"
-              name="welcomeMessage"
-              value={formData.welcomeMessage}
-              onChange={handleInputChange}
-              placeholder="Enter a welcome message for new users..."
-              className="form-textarea"
-              rows="4"
-            />
-          </div>
-        </div>
-
-        {/* Terms and Conditions Section */}
-        <div className="form-section">
-          <h3 className="section-title">Legal</h3>
-          
-          <div className="form-group">
-            <label htmlFor="termsAndConditions">Terms and Conditions URL</label>
-            <input
-              type="url"
-              id="termsAndConditions"
-              name="termsAndConditions"
-              value={formData.termsAndConditions}
-              onChange={handleInputChange}
-              placeholder="https://yourcompany.com/terms"
-              className="form-input"
-            />
-            <small className="form-hint">Link to your company's terms and conditions</small>
-          </div>
-        </div>
-
-        {/* Preview Section */}
-        <div className="form-section preview-section">
-          <h3 className="section-title">Preview</h3>
-          <div className="registration-preview" style={{
-            borderColor: formData.primaryColor,
-            background: `linear-gradient(135deg, ${formData.secondaryColor}ee, ${formData.primaryColor}22)`
-          }}>
-            {logoPreview && (
-              <div className="preview-logo">
-                <img src={logoPreview} alt="Company Logo" />
-              </div>
-            )}
-            <h4 style={{ color: formData.primaryColor }}>
-              {formData.companyName || 'Your Company Name'}
-            </h4>
-            <p className="preview-welcome">
-              {formData.welcomeMessage || 'Welcome! Please register to get started.'}
-            </p>
-            <div className="preview-form">
-              <div className="preview-input">Email</div>
-              <div className="preview-input">Password</div>
-              <button 
-                type="button" 
-                className="preview-button"
-                style={{ 
-                  backgroundColor: formData.primaryColor,
-                  borderColor: formData.primaryColor
-                }}
-              >
-                Register
-              </button>
-            </div>
+            <small className="form-hint">SVG format only, full horizontal logo with text</small>
           </div>
         </div>
 
         {/* Action Buttons */}
         <div className="form-actions">
           <button type="button" onClick={handleReset} className="btn-secondary">
-            Reset to Default
+            Reset
           </button>
           <button type="submit" className="btn-primary">
             Save Configuration
