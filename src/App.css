@@ -23,17 +23,22 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 10px;
   height: 2px; /* for horizontal scroll bar */
-  display: none; /* this hides the scrollbar */
+  background: #e6f0ff;
 }
 
-/* ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: #146ef5;
-} */
+  border-radius: 8px;
+}
 
 ::-webkit-scrollbar-track {
   background: #020d29;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0d4bb5;
 }
 
 h1,
