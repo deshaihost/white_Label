@@ -209,6 +209,15 @@
   flex: 1;
 }
 
+.demo-config-bottom {
+  margin-bottom: 32px;
+}
+
+.demo-preview-full-width {
+  width: 100%;
+  margin-bottom: 32px;
+}
+
 .demo-config-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

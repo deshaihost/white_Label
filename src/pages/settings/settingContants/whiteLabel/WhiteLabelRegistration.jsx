@@ -198,95 +198,92 @@ const BrandingSetup = () => {
           </div>
         </div>
 
-        {/* Bottom Section - Live Preview */}
-        <div className="demo-config-grid">
-          {/* Left Panel - Other Configuration */}
-          <div className="demo-config-left">
-            <div className="demo-form-group">
-              <label>Color Palette</label>
-              <div className="demo-color-grid">
-                <ColorInput label="Primary" color="#7C3AED" description="Used for buttons and CTAs" />
-                <ColorInput label="Accent" color="#3B82F6" description="Used for highlights" />
-                <ColorInput label="Background" color="#0F172A" description="Main background" />
-                <ColorInput label="Surface" color="#1E293B" description="Cards and panels" />
-              </div>
-            </div>
-
-            <div className="demo-form-group">
-              <label>Typography</label>
-              <select className="demo-select">
-                <option>Inter (Recommended)</option>
-                <option>Roboto</option>
-                <option>Open Sans</option>
-                <option>Poppins</option>
-              </select>
-              <p className="demo-hint">Choose from approved font families</p>
+        {/* Bottom Section - Color Palette and Typography */}
+        <div className="demo-config-bottom">
+          <div className="demo-form-group">
+            <label>Color Palette</label>
+            <div className="demo-color-grid">
+              <ColorInput label="Primary" color="#7C3AED" description="Used for buttons and CTAs" />
+              <ColorInput label="Accent" color="#3B82F6" description="Used for highlights" />
+              <ColorInput label="Background" color="#0F172A" description="Main background" />
+              <ColorInput label="Surface" color="#1E293B" description="Cards and panels" />
             </div>
           </div>
 
-          {/* Right Panel - Live Preview */}
-          <div className="demo-config-right">
-            <div className="demo-preview-container">
-              <p className="demo-preview-label">Live Preview - ACME Rentals Branded Inbox</p>
-              
-              {/* Mock ACME Branded Inbox */}
-              <div className="demo-inbox-preview">
-                {/* Header */}
-                <div className="demo-inbox-header">
-                  <div className="demo-inbox-logo">
-                    <span>AR</span>
-                  </div>
-                  <div className="demo-inbox-title">
-                    <span>ACME Rentals</span>
-                    <p>Guest Messaging</p>
-                  </div>
-                </div>
+          <div className="demo-form-group">
+            <label>Typography</label>
+            <select className="demo-select">
+              <option>Inter (Recommended)</option>
+              <option>Roboto</option>
+              <option>Open Sans</option>
+              <option>Poppins</option>
+            </select>
+            <p className="demo-hint">Choose from approved font families</p>
+          </div>
+        </div>
 
-                {/* Inbox Content */}
-                <div className="demo-inbox-content">
-                  {/* Conversation List */}
-                  <div className="demo-inbox-list">
-                    <div className="demo-conversation active">
-                      <p className="demo-conv-name">Sarah Johnson</p>
-                      <p className="demo-conv-msg">Check-in question...</p>
-                    </div>
-                    <div className="demo-conversation">
-                      <p className="demo-conv-name">Mike Chen</p>
-                      <p className="demo-conv-msg">Parking info needed</p>
-                    </div>
-                    <div className="demo-conversation">
-                      <p className="demo-conv-name">Emma Davis</p>
-                      <p className="demo-conv-msg">Thank you message</p>
-                    </div>
-                  </div>
-                  
-                  {/* Message Thread */}
-                  <div className="demo-inbox-thread">
-                    <div className="demo-messages">
-                      <div className="demo-message-received">
-                        <p>Hi! What time is check-in?</p>
-                      </div>
-                      <div className="demo-message-sent">
-                        <p>Check-in is at 3:00 PM</p>
-                      </div>
-                    </div>
-                    <div className="demo-message-input">
-                      <input type="text" placeholder="Type a message..." readOnly />
-                    </div>
-                  </div>
+        {/* Full Width Live Preview Section */}
+        <div className="demo-preview-full-width">
+          <div className="demo-preview-container">
+            <p className="demo-preview-label">Live Preview - ACME Rentals Branded Inbox</p>
+            
+            {/* Mock ACME Branded Inbox */}
+            <div className="demo-inbox-preview">
+              {/* Header */}
+              <div className="demo-inbox-header">
+                <div className="demo-inbox-logo">
+                  <span>AR</span>
+                </div>
+                <div className="demo-inbox-title">
+                  <span>ACME Rentals</span>
+                  <p>Guest Messaging</p>
                 </div>
               </div>
 
-              <p className="demo-preview-note">
-                ✓ Updates reflect instantly as you make changes
-              </p>
+              {/* Inbox Content */}
+              <div className="demo-inbox-content">
+                {/* Conversation List */}
+                <div className="demo-inbox-list">
+                  <div className="demo-conversation active">
+                    <p className="demo-conv-name">Sarah Johnson</p>
+                    <p className="demo-conv-msg">Check-in question...</p>
+                  </div>
+                  <div className="demo-conversation">
+                    <p className="demo-conv-name">Mike Chen</p>
+                    <p className="demo-conv-msg">Parking info needed</p>
+                  </div>
+                  <div className="demo-conversation">
+                    <p className="demo-conv-name">Emma Davis</p>
+                    <p className="demo-conv-msg">Thank you message</p>
+                  </div>
+                </div>
+                
+                {/* Message Thread */}
+                <div className="demo-inbox-thread">
+                  <div className="demo-messages">
+                    <div className="demo-message-received">
+                      <p>Hi! What time is check-in?</p>
+                    </div>
+                    <div className="demo-message-sent">
+                      <p>Check-in is at 3:00 PM</p>
+                    </div>
+                  </div>
+                  <div className="demo-message-input">
+                    <input type="text" placeholder="Type a message..." readOnly />
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="demo-alert">
-              <p>
-                <strong>Accessibility Check:</strong> All color combinations meet WCAG 2.1 AA standards (4.5:1 contrast ratio)
-              </p>
-            </div>
+            <p className="demo-preview-note">
+              ✓ Updates reflect instantly as you make changes
+            </p>
+          </div>
+
+          <div className="demo-alert">
+            <p>
+              <strong>Accessibility Check:</strong> All color combinations meet WCAG 2.1 AA standards (4.5:1 contrast ratio)
+            </p>
           </div>
         </div>
       </div>
