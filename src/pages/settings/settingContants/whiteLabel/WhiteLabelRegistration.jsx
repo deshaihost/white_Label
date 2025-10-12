@@ -130,9 +130,10 @@ const BrandingSetup = () => {
       </div>
 
       <div className="demo-config-content">
-        <div className="demo-config-grid">
-          {/* Left Panel - Configuration */}
-          <div className="demo-config-left">
+        {/* Top Section - Two Configuration Panels Side by Side */}
+        <div className="demo-config-top-grid">
+          {/* Left Panel - Domain and Key Configuration */}
+          <div className="demo-config-panel">
             {/* Domain and Key Configuration Section */}
             <div className="demo-domain-key-section">
               <div className="demo-form-group">
@@ -157,7 +158,10 @@ const BrandingSetup = () => {
                 <button className="demo-btn-primary">Submit</button>
               </div>
             </div>
+          </div>
 
+          {/* Right Panel - Logo and Domain Configuration */}
+          <div className="demo-config-panel">
             {/* Logo and Domain Configuration Section */}
             <div className="demo-logo-domain-section">
               <div className="demo-form-group">
@@ -191,7 +195,13 @@ const BrandingSetup = () => {
                 <button className="demo-btn-primary">Submit</button>
               </div>
             </div>
+          </div>
+        </div>
 
+        {/* Bottom Section - Live Preview */}
+        <div className="demo-config-grid">
+          {/* Left Panel - Other Configuration */}
+          <div className="demo-config-left">
             <div className="demo-form-group">
               <label>Color Palette</label>
               <div className="demo-color-grid">
