@@ -158,20 +158,37 @@ const BrandingSetup = () => {
               </div>
             </div>
 
-            <div className="demo-form-group">
-              <label>Full Logo</label>
-              <div className="demo-upload-area">
-                <span className="demo-upload-icon">📁</span>
-                <p>Click to upload or drag and drop</p>
-                <p className="demo-upload-hint">SVG, PNG or JPG (max. 2MB)</p>
+            {/* Logo and Domain Configuration Section */}
+            <div className="demo-logo-domain-section">
+              <div className="demo-form-group">
+                <label>Full Logo</label>
+                <div className="demo-upload-area">
+                  <span className="demo-upload-icon">📁</span>
+                  <p>Click to upload or drag and drop</p>
+                  <p className="demo-upload-hint">SVG, PNG or JPG (max. 2MB)</p>
+                </div>
               </div>
-            </div>
 
-            <div className="demo-form-group">
-              <label>Favicon or Logo</label>
-              <div className="demo-upload-area-small">
-                <span className="demo-upload-icon-small">📁</span>
-                <p>Upload favicon.ico</p>
+              <div className="demo-form-group">
+                <label>Favicon or Logo</label>
+                <div className="demo-upload-area-small">
+                  <span className="demo-upload-icon-small">📁</span>
+                  <p>Upload favicon.ico</p>
+                </div>
+              </div>
+
+              <div className="demo-form-group">
+                <label>Domains</label>
+                <select className="demo-select">
+                  <option value="">Select a domain</option>
+                  <option value="domain1.hostbuddy.com">domain1.hostbuddy.com</option>
+                  <option value="domain2.hostbuddy.com">domain2.hostbuddy.com</option>
+                  <option value="domain3.hostbuddy.com">domain3.hostbuddy.com</option>
+                </select>
+              </div>
+
+              <div className="demo-actions">
+                <button className="demo-btn-primary">Submit</button>
               </div>
             </div>
 

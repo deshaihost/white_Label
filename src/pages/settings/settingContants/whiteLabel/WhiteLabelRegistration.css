@@ -233,6 +233,28 @@
   margin-bottom: 0;
 }
 
+/* Logo and Domain Section */
+.demo-logo-domain-section {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.demo-logo-domain-section .demo-form-group {
+  margin-bottom: 16px;
+}
+
+.demo-logo-domain-section .demo-form-group:last-of-type {
+  margin-bottom: 16px;
+}
+
+.demo-logo-domain-section .demo-actions {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
 .demo-upload-area {
   border: 2px dashed rgba(255, 255, 255, 0.2);
   border-radius: 8px;
