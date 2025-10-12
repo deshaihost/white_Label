@@ -133,6 +133,31 @@ const BrandingSetup = () => {
         <div className="demo-config-grid">
           {/* Left Panel - Configuration */}
           <div className="demo-config-left">
+            {/* Domain and Key Configuration Section */}
+            <div className="demo-domain-key-section">
+              <div className="demo-form-group">
+                <label>Full Domain Name</label>
+                <input 
+                  type="text" 
+                  className="demo-input" 
+                  placeholder="e.g., mycompany.hostbuddy.com"
+                />
+              </div>
+
+              <div className="demo-form-group">
+                <label>Key</label>
+                <input 
+                  type="text" 
+                  className="demo-input" 
+                  placeholder="Enter your key"
+                />
+              </div>
+
+              <div className="demo-actions">
+                <button className="demo-btn-primary">Submit</button>
+              </div>
+            </div>
+
             <div className="demo-form-group">
               <label>Full Logo</label>
               <div className="demo-upload-area">
@@ -169,11 +194,6 @@ const BrandingSetup = () => {
                 <option>Poppins</option>
               </select>
               <p className="demo-hint">Choose from approved font families</p>
-            </div>
-
-            <div className="demo-actions">
-              <button className="demo-btn-secondary">Preview in Sandbox</button>
-              <button className="demo-btn-primary">Publish Live</button>
             </div>
           </div>
 

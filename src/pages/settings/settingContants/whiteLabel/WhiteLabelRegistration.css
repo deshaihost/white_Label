@@ -211,6 +211,28 @@
   font-weight: 500;
 }
 
+/* Domain and Key Section */
+.demo-domain-key-section {
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.demo-domain-key-section .demo-form-group {
+  margin-bottom: 16px;
+}
+
+.demo-domain-key-section .demo-form-group:last-of-type {
+  margin-bottom: 16px;
+}
+
+.demo-domain-key-section .demo-actions {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
 .demo-upload-area {
   border: 2px dashed rgba(255, 255, 255, 0.2);
   border-radius: 8px;
@@ -315,6 +337,27 @@
   padding: 10px 16px;
   color: rgba(255, 255, 255, 0.9);
   font-size: 14px;
+}
+
+/* Input */
+.demo-input {
+  width: 100%;
+  background: #0F172A;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.demo-input:focus {
+  outline: none;
+  border-color: #7C3AED;
+}
+
+.demo-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .demo-hint {
