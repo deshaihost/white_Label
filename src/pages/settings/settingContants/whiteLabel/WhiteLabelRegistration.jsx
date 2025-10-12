@@ -134,7 +134,7 @@ const BrandingSetup = () => {
           {/* Left Panel - Configuration */}
           <div className="demo-config-left">
             <div className="demo-form-group">
-              <label>Company Logo</label>
+              <label>Full Logo</label>
               <div className="demo-upload-area">
                 <span className="demo-upload-icon">📁</span>
                 <p>Click to upload or drag and drop</p>
@@ -143,7 +143,7 @@ const BrandingSetup = () => {
             </div>
 
             <div className="demo-form-group">
-              <label>Favicon</label>
+              <label>Favicon or Logo</label>
               <div className="demo-upload-area-small">
                 <span className="demo-upload-icon-small">📁</span>
                 <p>Upload favicon.ico</p>
