@@ -137,6 +137,15 @@ const BrandingSetup = () => {
             {/* Domain and Key Configuration Section */}
             <div className="demo-domain-key-section">
               <div className="demo-form-group">
+                <label>Company Name</label>
+                <input 
+                  type="text" 
+                  className="demo-input" 
+                  placeholder="Enter your company name"
+                />
+              </div>
+
+              <div className="demo-form-group">
                 <label>Full Domain Name</label>
                 <input 
                   type="text" 
