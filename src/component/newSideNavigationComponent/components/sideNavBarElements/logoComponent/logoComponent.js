@@ -7,12 +7,35 @@ import "./logoComponent.css";
 
 export const Logo = ({ type, colour, onlyIcon }) => {
     const { isWhiteLabel, brandName } = useWhiteLabelBranding();
-    const { logo, fullLogo, loading } = useWhiteLabelLogos();
+    const { logo, fullLogo, loading, isHostBuddyDomain } = useWhiteLabelLogos();
     
     // For collapsed navigation, show the small logo (40x40)
     if (onlyIcon) {
-        // Use white label collapsed logo if available, otherwise use default
-        const logoSrc = logo || icon;
+        // Don't render anything while loading
+        if (loading) {
+            return (
+                <div className="logo-container">
+                    <div style={{ width: '40px', height: '40px' }}></div>
+                </div>
+            );
+        }
+
+        // Determine which logo to use
+        let logoSrc;
+        if (isHostBuddyDomain) {
+            // Use local HostBuddy logo for hostbuddy.ai domain
+            logoSrc = icon;
+        } else if (logo) {
+            // Use fetched white label logo for other domains
+            logoSrc = logo;
+        } else {
+            // Don't show any logo if not loaded and not hostbuddy domain
+            return (
+                <div className="logo-container">
+                    <div style={{ width: '40px', height: '40px' }}></div>
+                </div>
+            );
+        }
         
         return (
             <div className="logo-container">
@@ -31,12 +54,35 @@ export const Logo = ({ type, colour, onlyIcon }) => {
     }
     
     // For expanded navigation, show branding text
+    // Don't render while loading
+    if (loading) {
+        return (
+            <div className="logo-container">
+                <div style={{ width: '40px', height: '40px' }}></div>
+            </div>
+        );
+    }
+
+    // Determine which logo to use
+    let logoSrc;
+    if (isHostBuddyDomain) {
+        logoSrc = icon;
+    } else if (logo) {
+        logoSrc = logo;
+    } else {
+        return (
+            <div className="logo-container">
+                <div style={{ width: '40px', height: '40px' }}></div>
+            </div>
+        );
+    }
+
     return (
         <div className="logo-container">
             <img 
                 className="logo-icon" 
                 alt={`${brandName} Icon`} 
-                src={logo || icon}
+                src={logoSrc}
                 style={{
                     width: '40px',
                     height: '40px',

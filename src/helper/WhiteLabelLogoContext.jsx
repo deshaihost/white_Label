@@ -17,6 +17,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
     fullLogo: null, // Expanded navbar logo (134x34)
     loading: true,
     error: null,
+    isHostBuddyDomain: false, // Flag to indicate if it's hostbuddy domain
   });
 
   useEffect(() => {
@@ -29,16 +30,31 @@ export const WhiteLabelLogoProvider = ({ children }) => {
         console.log('Fetching white label logos for domain:', fullDomain);
         console.log('Domain hostname:', domainName);
 
-        // Prepare the request body
+        // Check if it's hostbuddy.ai domain (use local logos)
+        const isHostBuddy = domainName === 'hostbuddy.ai' || 
+                           domainName === 'www.hostbuddy.ai' || 
+                           domainName === 'localhost';
+        
+        if (isHostBuddy) {
+          console.log('HostBuddy domain detected - using local logos');
+          setLogos({
+            logo: null,
+            fullLogo: null,
+            loading: false,
+            error: null,
+            isHostBuddyDomain: true,
+          });
+          return;
+        }
+
+        // For white label domains, call the API
         const requestBody = {
-          domain: domainName // Send just the hostname without port
+          domain: domainName
         };
 
-        // Get the API endpoint from environment
         const baseUrl = process.env.REACT_APP_API_ENDPOINT;
         const apiUrl = `${baseUrl}/white_label/get_logo`;
 
-        // Make the POST request to get logos
         const response = await axios.post(apiUrl, requestBody, {
           headers: {
             'Content-Type': 'application/json',
@@ -48,7 +64,6 @@ export const WhiteLabelLogoProvider = ({ children }) => {
 
         console.log('White label logo API response:', response.data);
 
-        // Extract logos from response
         if (response.data && response.data.logos_available) {
           const { logo, full_logo } = response.data.logos_available;
           
@@ -57,38 +72,44 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             fullLogo: full_logo?.url || null,
             loading: false,
             error: null,
+            isHostBuddyDomain: false,
           });
 
-          console.log('Logos set successfully:', {
+          console.log('White label logos set successfully:', {
             logo: logo?.url,
             fullLogo: full_logo?.url,
           });
         } else {
-          // No logos available, use defaults
+          console.log('No custom logos available in response');
           setLogos({
             logo: null,
             fullLogo: null,
             loading: false,
-            error: null,
+            error: 'No logos available',
+            isHostBuddyDomain: false,
           });
-          console.log('No custom logos available, using defaults');
         }
       } catch (error) {
         console.error('Error fetching white label logos:', error);
         
-        // Set default logos on error
+        // On error, check if it's hostbuddy domain
+        const domainName = window.location.hostname;
+        const isHostBuddy = domainName === 'hostbuddy.ai' || 
+                           domainName === 'www.hostbuddy.ai' || 
+                           domainName === 'localhost';
+        
         setLogos({
           logo: null,
           fullLogo: null,
           loading: false,
           error: error.message,
+          isHostBuddyDomain: isHostBuddy,
         });
       }
     };
 
-    // Fetch logos immediately when provider mounts
     fetchWhiteLabelLogos();
-  }, []); // Empty dependency array means this runs once on mount
+  }, []);
 
   return (
     <WhiteLabelLogoContext.Provider value={logos}>
