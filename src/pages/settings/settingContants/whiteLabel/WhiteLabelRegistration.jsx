@@ -207,6 +207,30 @@ const BrandingSetup = () => {
           </div>
         </div>
 
+        {/* Domain Configuration Flow Section */}
+        <div className="demo-domain-flow">
+          <div className="demo-flow-card">
+            <h3>Domain Configuration Flow</h3>
+            <div className="demo-flow-steps">
+              <div className="demo-flow-step-with-input">
+                <label className="demo-flow-label">Full Domain</label>
+                <input 
+                  type="text" 
+                  className="demo-input demo-flow-input" 
+                  placeholder="e.g., portal.partnername.com"
+                />
+              </div>
+              <div className="demo-flow-arrow">→</div>
+              <button className="demo-btn-primary demo-flow-btn">Submit</button>
+              <div className="demo-flow-arrow">→</div>
+              <button className="demo-btn-status demo-flow-btn">Status</button>
+            </div>
+            <p className="demo-flow-note">
+              Configure domain settings and check the current status of your white label portal
+            </p>
+          </div>
+        </div>
+
         {/* Bottom Section - Color Palette and Typography */}
         <div className="demo-config-bottom">
           <div className="demo-form-group">

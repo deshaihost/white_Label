@@ -447,12 +447,16 @@
 }
 
 .demo-btn-primary {
-  background: #3B82F6;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
 }
 
 .demo-btn-primary:hover {
-  background: #2563EB;
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  transform: translateY(-2px);
 }
 
 .demo-btn-secondary {
@@ -934,12 +938,91 @@
 .demo-flow-arrow {
   color: rgba(255, 255, 255, 0.5);
   font-size: 18px;
+  align-self: flex-end;
+  margin-bottom: 10px;
 }
 
 .demo-flow-note {
   color: rgba(255, 255, 255, 0.6);
   margin: 0;
   font-size: 14px;
+}
+
+/* Domain Configuration Flow */
+.demo-domain-flow {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.demo-domain-flow .demo-flow-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.demo-domain-flow .demo-flow-card h3 {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 16px 0;
+  font-size: 18px;
+}
+
+.demo-flow-step-with-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+  align-self: flex-end;
+}
+
+.demo-flow-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.demo-flow-input {
+  margin: 0;
+}
+
+.demo-flow-btn {
+  white-space: nowrap;
+  min-width: auto;
+  align-self: flex-end;
+  height: 44px;
+}
+
+.demo-flow-actions {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0 12px 0;
+}
+
+.demo-btn-status {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+  transition: all 0.3s ease;
+}
+
+.demo-btn-status:hover {
+  background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+  box-shadow: 0 6px 20px rgba(240, 147, 251, 0.6);
+  transform: translateY(-2px);
+}
+
+.demo-flow-note code {
+  background: rgba(124, 58, 237, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #A78BFA;
 }
 
 .demo-flow-note code {
