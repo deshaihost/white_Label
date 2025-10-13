@@ -56,3 +56,45 @@ export const createDomainMapping = async (data) => {
     };
   }
 };
+
+/**
+ * Get all domains for white label configuration
+ * @returns {Promise} API response with domains list
+ */
+export const getDomains = async () => {
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/white_label/get_domains`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log('Get Domains Response:', response.data);
+
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    console.error('Get Domains API Error:', error);
+    
+    let errorMessage = 'Failed to fetch domains';
+    
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+    } else if (error.request) {
+      errorMessage = 'No response from server. Please check your connection.';
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+    
+    return {
+      success: false,
+      error: errorMessage,
+      data: null
+    };
+  }
+};

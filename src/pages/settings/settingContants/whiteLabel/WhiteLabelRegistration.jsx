@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './WhiteLabelRegistration.css';
-import { createDomainMapping } from './whiteLabelServices';
+import { createDomainMapping, getDomains } from './whiteLabelServices';
 
 const WhiteLabelRegistration = () => {
   const [activeTab, setActiveTab] = useState('setup');
+  const [domains, setDomains] = useState([]);
 
   // Print domain name on initial load
   useEffect(() => {
@@ -137,6 +138,34 @@ const BrandingSetup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  
+  // Domains state
+  const [domains, setDomains] = useState([]);
+  const [domainsLoading, setDomainsLoading] = useState(false);
+
+  // Fetch domains on component mount
+  useEffect(() => {
+    fetchDomains();
+  }, []);
+
+  // Fetch domains function
+  const fetchDomains = async () => {
+    setDomainsLoading(true);
+    try {
+      const result = await getDomains();
+      if (result.success && result.data) {
+        // Extract domain names from white_label.Domains object
+        const domainsList = result.data.white_label?.Domains 
+          ? Object.keys(result.data.white_label.Domains) 
+          : [];
+        setDomains(domainsList);
+      }
+    } catch (err) {
+      console.error('Error fetching domains:', err);
+    } finally {
+      setDomainsLoading(false);
+    }
+  };
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -189,6 +218,8 @@ const BrandingSetup = () => {
 
       if (result.success) {
         setSuccess('Domain mapping created successfully!');
+        // Fetch updated domains list
+        await fetchDomains();
         // Optionally reset form
         // setFormData({ companyName: '', fullDomainName: '', key: '' });
       } else {
@@ -304,11 +335,13 @@ const BrandingSetup = () => {
 
               <div className="demo-form-group">
                 <label>Domains</label>
-                <select className="demo-select">
-                  <option value="">Select a domain</option>
-                  <option value="domain1.hostbuddy.com">domain1.hostbuddy.com</option>
-                  <option value="domain2.hostbuddy.com">domain2.hostbuddy.com</option>
-                  <option value="domain3.hostbuddy.com">domain3.hostbuddy.com</option>
+                <select className="demo-select" disabled={domainsLoading}>
+                  <option value="">{domainsLoading ? 'Loading domains...' : 'Select a domain'}</option>
+                  {domains.map((domain, index) => (
+                    <option key={index} value={domain}>
+                      {domain}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -326,12 +359,13 @@ const BrandingSetup = () => {
             <div className="demo-flow-steps">
               <div className="demo-flow-step-with-input">
                 <label className="demo-flow-label">Full Domain</label>
-                <select className="demo-select demo-flow-input">
-                  <option value="">Select a domain</option>
-                  <option value="portal.partnername.com">portal.partnername.com</option>
-                  <option value="app.partnername.com">app.partnername.com</option>
-                  <option value="client.partnername.com">client.partnername.com</option>
-                  <option value="dashboard.partnername.com">dashboard.partnername.com</option>
+                <select className="demo-select demo-flow-input" disabled={domainsLoading}>
+                  <option value="">{domainsLoading ? 'Loading domains...' : 'Select a domain'}</option>
+                  {domains.map((domain, index) => (
+                    <option key={index} value={domain}>
+                      {domain}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="demo-flow-arrow">→</div>
