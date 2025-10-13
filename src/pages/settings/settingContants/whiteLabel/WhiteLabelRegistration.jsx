@@ -233,30 +233,6 @@ const BrandingSetup = () => {
           </div>
         </div>
 
-        {/* Bottom Section - Color Palette and Typography */}
-        <div className="demo-config-bottom">
-          <div className="demo-form-group">
-            <label>Color Palette</label>
-            <div className="demo-color-grid">
-              <ColorInput label="Primary" color="#7C3AED" description="Used for buttons and CTAs" />
-              <ColorInput label="Accent" color="#3B82F6" description="Used for highlights" />
-              <ColorInput label="Background" color="#0F172A" description="Main background" />
-              <ColorInput label="Surface" color="#1E293B" description="Cards and panels" />
-            </div>
-          </div>
-
-          <div className="demo-form-group">
-            <label>Typography</label>
-            <select className="demo-select">
-              <option>Inter (Recommended)</option>
-              <option>Roboto</option>
-              <option>Open Sans</option>
-              <option>Poppins</option>
-            </select>
-            <p className="demo-hint">Choose from approved font families</p>
-          </div>
-        </div>
-
         {/* Full Width Live Preview Section */}
         <div className="demo-preview-full-width">
           <div className="demo-preview-container">
@@ -319,6 +295,30 @@ const BrandingSetup = () => {
             <p>
               <strong>Accessibility Check:</strong> All color combinations meet WCAG 2.1 AA standards (4.5:1 contrast ratio)
             </p>
+          </div>
+        </div>
+
+        {/* Bottom Section - Color Palette and Typography */}
+        <div className="demo-config-bottom">
+          <div className="demo-form-group">
+            <label>Color Palette</label>
+            <div className="demo-color-grid">
+              <ColorInput label="Primary" color="#7C3AED" description="Used for buttons and CTAs" />
+              <ColorInput label="Accent" color="#3B82F6" description="Used for highlights" />
+              <ColorInput label="Background" color="#0F172A" description="Main background" />
+              <ColorInput label="Surface" color="#1E293B" description="Cards and panels" />
+            </div>
+          </div>
+
+          <div className="demo-form-group">
+            <label>Typography</label>
+            <select className="demo-select">
+              <option>Inter (Recommended)</option>
+              <option>Roboto</option>
+              <option>Open Sans</option>
+              <option>Poppins</option>
+            </select>
+            <p className="demo-hint">Choose from approved font families</p>
           </div>
         </div>
       </div>
