@@ -168,6 +168,9 @@ const BrandingSetup = () => {
   const [colorPaletteDomain, setColorPaletteDomain] = useState('');
   const [backgroundColor, setBackgroundColor] = useState('#0F172A');
 
+  // Preview iframe state
+  const [showPreview, setShowPreview] = useState(false);
+
   // Fetch domains on component mount
   useEffect(() => {
     fetchDomains();
@@ -694,53 +697,67 @@ const BrandingSetup = () => {
           <div className="demo-preview-container">
             <p className="demo-preview-label">Live Preview - ACME Rentals Branded Inbox</p>
             
-            {/* Mock ACME Branded Inbox */}
-            <div className="demo-inbox-preview">
-              {/* Header */}
-              <div className="demo-inbox-header">
-                <div className="demo-inbox-logo">
-                  <span>AR</span>
-                </div>
-                <div className="demo-inbox-title">
-                  <span>ACME Rentals</span>
-                  <p>Guest Messaging</p>
-                </div>
+            {!showPreview ? (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '60px 20px',
+                border: '2px dashed #ddd',
+                borderRadius: '8px',
+                backgroundColor: '#f9f9f9'
+              }}>
+                <button 
+                  className="demo-btn-primary" 
+                  onClick={() => setShowPreview(true)}
+                  style={{
+                    fontSize: '16px',
+                    padding: '12px 32px'
+                  }}
+                >
+                  Preview
+                </button>
+                <p style={{ marginTop: '15px', color: '#666', fontSize: '14px' }}>
+                  Click to load white label preview
+                </p>
               </div>
-
-              {/* Inbox Content */}
-              <div className="demo-inbox-content">
-                {/* Conversation List */}
-                <div className="demo-inbox-list">
-                  <div className="demo-conversation active">
-                    <p className="demo-conv-name">Sarah Johnson</p>
-                    <p className="demo-conv-msg">Check-in question...</p>
-                  </div>
-                  <div className="demo-conversation">
-                    <p className="demo-conv-name">Mike Chen</p>
-                    <p className="demo-conv-msg">Parking info needed</p>
-                  </div>
-                  <div className="demo-conversation">
-                    <p className="demo-conv-name">Emma Davis</p>
-                    <p className="demo-conv-msg">Thank you message</p>
-                  </div>
-                </div>
-                
-                {/* Message Thread */}
-                <div className="demo-inbox-thread">
-                  <div className="demo-messages">
-                    <div className="demo-message-received">
-                      <p>Hi! What time is check-in?</p>
-                    </div>
-                    <div className="demo-message-sent">
-                      <p>Check-in is at 3:00 PM</p>
-                    </div>
-                  </div>
-                  <div className="demo-message-input">
-                    <input type="text" placeholder="Type a message..." readOnly />
-                  </div>
-                </div>
+            ) : (
+              <div style={{ 
+                width: '100%', 
+                height: '600px',
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                position: 'relative'
+              }}>
+                <iframe
+                  src="https://testhostbuddy.online/white-label-login?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NjAzNzE2MjMsIm5iZiI6MTc2MDM3MTYyMywianRpIjoiOTZhOTU5Y2UtMWZkOS00Mzc4LWJjZDAtZWNkNTRhZmQ1YWVkIiwiZXhwIjoxNzYyOTYzNjIzLCJpZGVudGl0eSI6InRlc3RhY2NvdW50XzJfaG9zdGJ1ZGR5X2FpIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIiwidXNlcl9jbGFpbXMiOnsicm9sZSI6ImFkbWluIiwiZW1haWwiOiJ0ZXN0YWNjb3VudF8yQGhvc3RidWRkeS5haSJ9fQ.oa_3pIL1Oy9HttSUS--XEapryU_4aeFYGVHFOc84ftg&redirect=dashboard"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 'none'
+                  }}
+                  title="White Label Preview"
+                  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
+                />
+                <button
+                  onClick={() => setShowPreview(false)}
+                  style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    padding: '8px 16px',
+                    backgroundColor: '#fff',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    zIndex: 1000
+                  }}
+                >
+                  Close Preview
+                </button>
               </div>
-            </div>
+            )}
 
             <p className="demo-preview-note">
               ✓ Updates reflect instantly as you make changes
