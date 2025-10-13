@@ -69,7 +69,7 @@ export const Logo = ({ type, colour, onlyIcon }) => {
         style={{
           width: "134px",
           height: "34px",
-          objectFit: "contain",
+          objectFit: "fill",
         }}
       />
     </div>
