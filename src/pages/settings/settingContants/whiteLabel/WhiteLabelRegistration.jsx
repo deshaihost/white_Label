@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './WhiteLabelRegistration.css';
 import { createDomainMapping, getDomains, uploadCompanyLogo } from './whiteLabelServices';
+import { checkDomainOnly, checkAndAddDomain, checkDomainVerificationStatus } from './domainStatus';
 
 const WhiteLabelRegistration = () => {
   const [activeTab, setActiveTab] = useState('setup');
@@ -145,6 +146,11 @@ const BrandingSetup = () => {
   const [selectedDomain, setSelectedDomain] = useState('');
   const [fullLogo, setFullLogo] = useState(null);
   const [favicon, setFavicon] = useState(null);
+  
+  // Domain status state for flow section
+  const [flowDomainStatus, setFlowDomainStatus] = useState('Not Checked');
+  const [flowSelectedDomain, setFlowSelectedDomain] = useState('');
+  const [checkingStatus, setCheckingStatus] = useState(false);
 
   // Fetch domains on component mount
   useEffect(() => {
@@ -235,6 +241,88 @@ const BrandingSetup = () => {
   // Handle domain selection
   const handleDomainChange = (e) => {
     setSelectedDomain(e.target.value);
+  };
+
+  // Handle domain selection in flow section and check status
+  const handleFlowDomainChange = async (e) => {
+    const domain = e.target.value;
+    setFlowSelectedDomain(domain);
+    
+    if (!domain) {
+      setFlowDomainStatus('Not Checked');
+      return;
+    }
+
+    // Check domain status automatically when domain is selected
+    setCheckingStatus(true);
+    setFlowDomainStatus('Checking...');
+    
+    try {
+      const result = await checkDomainVerificationStatus(domain);
+      
+      if (result.success && result.exists) {
+        if (result.verified && result.working) {
+          setFlowDomainStatus('✅ Verified');
+        } else if (result.verified) {
+          setFlowDomainStatus('Added');
+        } else {
+          setFlowDomainStatus('⚠️ Not Verified');
+        }
+      } else {
+        setFlowDomainStatus('Not Added');
+      }
+    } catch (err) {
+      console.error('Error checking domain status:', err);
+      setFlowDomainStatus('Error');
+    } finally {
+      setCheckingStatus(false);
+    }
+  };
+
+  // Handle Submit button in Domain Configuration Flow
+  const handleDomainSubmit = async () => {
+    // Reset messages
+    setError('');
+    setSuccess('');
+
+    // Validate domain selection
+    if (!flowSelectedDomain) {
+      setError('Please select a domain from the dropdown');
+      return;
+    }
+
+    setCheckingStatus(true);
+    setFlowDomainStatus('Processing...');
+
+    try {
+      // Run the domain status script to add domain to Vercel
+      const result = await checkAndAddDomain(flowSelectedDomain);
+
+      if (result.success && result.added) {
+        // After adding, check verification status
+        const verifyResult = await checkDomainVerificationStatus(flowSelectedDomain);
+        
+        if (verifyResult.verified && verifyResult.working) {
+          setFlowDomainStatus('✅ Verified');
+          setSuccess(`Domain "${flowSelectedDomain}" is verified and configured! Add CNAME record in DNS for full functionality.`);
+        } else if (verifyResult.verified) {
+          setFlowDomainStatus('Added');
+          setSuccess(`Domain "${flowSelectedDomain}" has been added to Vercel!`);
+        } else {
+          setFlowDomainStatus('⚠️ Not Verified');
+          setSuccess(`Domain "${flowSelectedDomain}" added but needs verification.`);
+        }
+      } else {
+        setFlowDomainStatus('Not Added');
+        setError(result.message || 'Failed to add domain to Vercel');
+      }
+    } catch (err) {
+      console.error('Error submitting domain:', err);
+      setFlowDomainStatus('Error');
+      setError('An unexpected error occurred while adding domain to Vercel');
+    } finally {
+      setCheckingStatus(false);
+    }
   };
 
   // Handle logo upload submission
@@ -481,7 +569,12 @@ const BrandingSetup = () => {
             <div className="demo-flow-steps">
               <div className="demo-flow-step-with-input">
                 <label className="demo-flow-label">Full Domain</label>
-                <select className="demo-select demo-flow-input" disabled={domainsLoading}>
+                <select 
+                  className="demo-select demo-flow-input" 
+                  disabled={domainsLoading || checkingStatus}
+                  value={flowSelectedDomain}
+                  onChange={handleFlowDomainChange}
+                >
                   <option value="">{domainsLoading ? 'Loading domains...' : 'Select a domain'}</option>
                   {domains.map((domain, index) => (
                     <option key={index} value={domain}>
@@ -491,9 +584,26 @@ const BrandingSetup = () => {
                 </select>
               </div>
               <div className="demo-flow-arrow">→</div>
-              <button className="demo-btn-primary demo-flow-btn">Submit</button>
+              <button 
+                className="demo-btn-primary demo-flow-btn"
+                onClick={handleDomainSubmit}
+                disabled={checkingStatus || !flowSelectedDomain}
+              >
+                {checkingStatus ? 'Processing...' : 'Submit'}
+              </button>
               <div className="demo-flow-arrow">→</div>
-              <button className="demo-btn-status demo-flow-btn">Status</button>
+              <button 
+                className={`demo-btn-status demo-flow-btn ${
+                  flowDomainStatus.includes('✅') ? 'status-working' : 
+                  flowDomainStatus === 'Added' ? 'status-added' : 
+                  flowDomainStatus === 'Not Added' ? 'status-not-added' : 
+                  flowDomainStatus.includes('⚠️') ? 'status-warning' :
+                  ''
+                }`}
+                disabled={checkingStatus || !flowSelectedDomain}
+              >
+                {checkingStatus ? 'Checking...' : flowDomainStatus}
+              </button>
             </div>
             <p className="demo-flow-note">
               Configure domain settings and check the current status of your white label portal
