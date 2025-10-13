@@ -151,6 +151,9 @@ const BrandingSetup = () => {
   const [flowDomainStatus, setFlowDomainStatus] = useState('Not Checked');
   const [flowSelectedDomain, setFlowSelectedDomain] = useState('');
   const [checkingStatus, setCheckingStatus] = useState(false);
+  
+  // Color palette domain selection
+  const [colorPaletteDomain, setColorPaletteDomain] = useState('');
 
   // Fetch domains on component mount
   useEffect(() => {
@@ -680,12 +683,32 @@ const BrandingSetup = () => {
         <div className="demo-config-bottom">
           <div className="demo-form-group">
             <label>Color Palette</label>
-            <div className="demo-color-grid">
-              <ColorInput label="Primary" color="#7C3AED" description="Used for buttons and CTAs" />
-              <ColorInput label="Accent" color="#3B82F6" description="Used for highlights" />
-              <ColorInput label="Background" color="#0F172A" description="Main background" />
-              <ColorInput label="Surface" color="#1E293B" description="Cards and panels" />
+            
+            {/* Domains Dropdown */}
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ display: 'block', marginBottom: '8px' }}>Domains</label>
+              <select 
+                className="demo-select" 
+                disabled={domainsLoading}
+                value={colorPaletteDomain}
+                onChange={(e) => setColorPaletteDomain(e.target.value)}
+                style={{ width: 'auto', minWidth: '250px', display: 'inline-block' }}
+              >
+                <option value="">{domainsLoading ? 'Loading domains...' : 'Select a domain'}</option>
+                {domains.map((domain, index) => (
+                  <option key={index} value={domain}>
+                    {domain}
+                  </option>
+                ))}
+              </select>
             </div>
+            
+            <div className="demo-color-grid">
+              <ColorInput label="Background" color="#0F172A" description="Main background" />
+            </div>
+            <button className="demo-btn-primary" style={{ marginTop: '16px' }}>
+              Submit
+            </button>
           </div>
 
           <div className="demo-form-group">
@@ -706,12 +729,29 @@ const BrandingSetup = () => {
 
 // Color Input Component
 const ColorInput = ({ label, color, description }) => {
+  const [selectedColor, setSelectedColor] = React.useState(color);
+
+  const handleColorChange = (e) => {
+    setSelectedColor(e.target.value);
+  };
+
   return (
     <div className="demo-color-input">
       <label>{label}</label>
       <div className="demo-color-row">
-        <div className="demo-color-swatch" style={{ backgroundColor: color }}></div>
-        <input type="text" value={color} readOnly />
+        <div className="demo-color-swatch" style={{ backgroundColor: selectedColor }}></div>
+        <input 
+          type="color" 
+          value={selectedColor} 
+          onChange={handleColorChange}
+          style={{ cursor: 'pointer', height: '40px', border: 'none', borderRadius: '4px' }}
+        />
+        <input 
+          type="text" 
+          value={selectedColor} 
+          onChange={(e) => setSelectedColor(e.target.value)}
+          style={{ marginLeft: '8px', flex: 1 }}
+        />
       </div>
       <p className="demo-color-desc">{description}</p>
     </div>
