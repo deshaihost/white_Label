@@ -140,6 +140,18 @@ const BrandingSetup = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
+  // Logo upload messages
+  const [logoError, setLogoError] = useState('');
+  const [logoSuccess, setLogoSuccess] = useState('');
+  
+  // Domain flow messages
+  const [flowError, setFlowError] = useState('');
+  const [flowSuccess, setFlowSuccess] = useState('');
+  
+  // Color palette messages
+  const [colorError, setColorError] = useState('');
+  const [colorSuccess, setColorSuccess] = useState('');
+  
   // Domains state
   const [domains, setDomains] = useState([]);
   const [domainsLoading, setDomainsLoading] = useState(false);
@@ -286,12 +298,12 @@ const BrandingSetup = () => {
   // Handle Submit button in Domain Configuration Flow
   const handleDomainSubmit = async () => {
     // Reset messages
-    setError('');
-    setSuccess('');
+    setFlowError('');
+    setFlowSuccess('');
 
     // Validate domain selection
     if (!flowSelectedDomain) {
-      setError('Please select a domain from the dropdown');
+      setFlowError('Please select a domain from the dropdown');
       return;
     }
 
@@ -308,22 +320,22 @@ const BrandingSetup = () => {
         
         if (verifyResult.verified && verifyResult.working) {
           setFlowDomainStatus('✅ Verified');
-          setSuccess(`Domain "${flowSelectedDomain}" is verified and configured! Add CNAME record in DNS for full functionality.`);
+          setFlowSuccess(`Domain "${flowSelectedDomain}" is verified and configured! Add CNAME record in DNS for full functionality.`);
         } else if (verifyResult.verified) {
           setFlowDomainStatus('Added');
-          setSuccess(`Domain "${flowSelectedDomain}" has been added to Vercel!`);
+          setFlowSuccess(`Domain "${flowSelectedDomain}" has been added to Vercel!`);
         } else {
           setFlowDomainStatus('⚠️ Not Verified');
-          setSuccess(`Domain "${flowSelectedDomain}" added but needs verification.`);
+          setFlowSuccess(`Domain "${flowSelectedDomain}" added but needs verification.`);
         }
       } else {
         setFlowDomainStatus('Not Added');
-        setError(result.message || 'Failed to add domain to Vercel');
+        setFlowError(result.message || 'Failed to add domain to Vercel');
       }
     } catch (err) {
       console.error('Error submitting domain:', err);
       setFlowDomainStatus('Error');
-      setError('An unexpected error occurred while adding domain to Vercel');
+      setFlowError('An unexpected error occurred while adding domain to Vercel');
     } finally {
       setCheckingStatus(false);
     }
@@ -332,18 +344,18 @@ const BrandingSetup = () => {
   // Handle logo upload submission
   const handleLogoUpload = async () => {
     // Reset messages
-    setError('');
-    setSuccess('');
+    setLogoError('');
+    setLogoSuccess('');
 
     // Validate domain selection
     if (!selectedDomain) {
-      setError('Please select a domain');
+      setLogoError('Please select a domain');
       return;
     }
 
     // Validate at least one file is selected
     if (!fullLogo && !favicon) {
-      setError('Please select at least one logo file to upload');
+      setLogoError('Please select at least one logo file to upload');
       return;
     }
 
@@ -357,7 +369,7 @@ const BrandingSetup = () => {
       });
 
       if (result.success) {
-        setSuccess('Logo(s) uploaded successfully!');
+        setLogoSuccess('Logo(s) uploaded successfully!');
         // Reset file selections
         setFullLogo(null);
         setFavicon(null);
@@ -368,10 +380,10 @@ const BrandingSetup = () => {
         if (fullLogoInput) fullLogoInput.value = '';
         if (faviconInput) faviconInput.value = '';
       } else {
-        setError(result.error);
+        setLogoError(result.error);
       }
     } catch (err) {
-      setError('An unexpected error occurred while uploading. Please try again.');
+      setLogoError('An unexpected error occurred while uploading. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -380,18 +392,18 @@ const BrandingSetup = () => {
   // Handle dashboard color submission
   const handleDashboardColorSubmit = async () => {
     // Reset messages
-    setError('');
-    setSuccess('');
+    setColorError('');
+    setColorSuccess('');
 
     // Validate domain selection
     if (!colorPaletteDomain) {
-      setError('Please select a domain');
+      setColorError('Please select a domain');
       return;
     }
 
     // Validate color
     if (!backgroundColor) {
-      setError('Please select a background color');
+      setColorError('Please select a background color');
       return;
     }
 
@@ -404,12 +416,12 @@ const BrandingSetup = () => {
       });
 
       if (result.success) {
-        setSuccess(`Dashboard color updated successfully for ${colorPaletteDomain}!`);
+        setColorSuccess(`Dashboard color updated successfully for ${colorPaletteDomain}!`);
       } else {
-        setError(result.error);
+        setColorError(result.error);
       }
     } catch (err) {
-      setError('An unexpected error occurred while updating dashboard color. Please try again.');
+      setColorError('An unexpected error occurred while updating dashboard color. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -600,6 +612,18 @@ const BrandingSetup = () => {
                   {loading ? 'Uploading...' : 'Submit'}
                 </button>
               </div>
+
+              {/* Logo Upload Messages */}
+              {logoError && (
+                <div className="demo-message demo-message-error" style={{ marginTop: '15px' }}>
+                  {logoError}
+                </div>
+              )}
+              {logoSuccess && (
+                <div className="demo-message demo-message-success" style={{ marginTop: '15px' }}>
+                  {logoSuccess}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -650,6 +674,18 @@ const BrandingSetup = () => {
             <p className="demo-flow-note">
               Configure domain settings and check the current status of your white label portal
             </p>
+
+            {/* Domain Flow Messages */}
+            {flowError && (
+              <div className="demo-message demo-message-error" style={{ marginTop: '15px' }}>
+                {flowError}
+              </div>
+            )}
+            {flowSuccess && (
+              <div className="demo-message demo-message-success" style={{ marginTop: '15px' }}>
+                {flowSuccess}
+              </div>
+            )}
           </div>
         </div>
 
@@ -758,6 +794,18 @@ const BrandingSetup = () => {
             >
               {loading ? 'Submitting...' : 'Submit'}
             </button>
+
+            {/* Color Palette Messages */}
+            {colorError && (
+              <div className="demo-message demo-message-error" style={{ marginTop: '15px' }}>
+                {colorError}
+              </div>
+            )}
+            {colorSuccess && (
+              <div className="demo-message demo-message-success" style={{ marginTop: '15px' }}>
+                {colorSuccess}
+              </div>
+            )}
           </div>
 
           <div className="demo-form-group">
