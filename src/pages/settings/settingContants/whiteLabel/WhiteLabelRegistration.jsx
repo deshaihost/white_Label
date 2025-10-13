@@ -214,11 +214,13 @@ const BrandingSetup = () => {
             <div className="demo-flow-steps">
               <div className="demo-flow-step-with-input">
                 <label className="demo-flow-label">Full Domain</label>
-                <input 
-                  type="text" 
-                  className="demo-input demo-flow-input" 
-                  placeholder="e.g., portal.partnername.com"
-                />
+                <select className="demo-select demo-flow-input">
+                  <option value="">Select a domain</option>
+                  <option value="portal.partnername.com">portal.partnername.com</option>
+                  <option value="app.partnername.com">app.partnername.com</option>
+                  <option value="client.partnername.com">client.partnername.com</option>
+                  <option value="dashboard.partnername.com">dashboard.partnername.com</option>
+                </select>
               </div>
               <div className="demo-flow-arrow">→</div>
               <button className="demo-btn-primary demo-flow-btn">Submit</button>
