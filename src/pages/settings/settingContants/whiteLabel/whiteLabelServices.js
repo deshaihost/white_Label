@@ -98,3 +98,63 @@ export const getDomains = async () => {
     };
   }
 };
+
+/**
+ * Upload company logos for white label configuration
+ * @param {Object} data - Upload data
+ * @param {string} data.domain - Domain name
+ * @param {File} data.logo - Logo file
+ * @param {File} data.full_logo - Full logo file
+ * @returns {Promise} API response
+ */
+export const uploadCompanyLogo = async (data) => {
+  try {
+    // Create FormData for file upload
+    const formData = new FormData();
+    formData.append('domain', data.domain);
+    
+    if (data.logo) {
+      formData.append('logo', data.logo);
+    }
+    
+    if (data.full_logo) {
+      formData.append('full_logo', data.full_logo);
+    }
+
+    console.log('Uploading logos for domain:', data.domain);
+
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/upload_company_logo`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      }
+    );
+
+    console.log('Upload Logo Response:', response.data);
+
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    console.error('Upload Logo API Error:', error);
+    
+    let errorMessage = 'Failed to upload company logos';
+    
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+    } else if (error.request) {
+      errorMessage = 'No response from server. Please check your connection.';
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+    
+    return {
+      success: false,
+      error: errorMessage
+    };
+  }
+};

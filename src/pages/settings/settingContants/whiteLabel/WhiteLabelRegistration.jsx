@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './WhiteLabelRegistration.css';
-import { createDomainMapping, getDomains } from './whiteLabelServices';
+import { createDomainMapping, getDomains, uploadCompanyLogo } from './whiteLabelServices';
 
 const WhiteLabelRegistration = () => {
   const [activeTab, setActiveTab] = useState('setup');
@@ -142,6 +142,9 @@ const BrandingSetup = () => {
   // Domains state
   const [domains, setDomains] = useState([]);
   const [domainsLoading, setDomainsLoading] = useState(false);
+  const [selectedDomain, setSelectedDomain] = useState('');
+  const [fullLogo, setFullLogo] = useState(null);
+  const [favicon, setFavicon] = useState(null);
 
   // Fetch domains on component mount
   useEffect(() => {
@@ -194,6 +197,92 @@ const BrandingSetup = () => {
       return false;
     }
     return true;
+  };
+
+  // Handle file selection for full logo
+  const handleFullLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        setError('File size should not exceed 2MB');
+        return;
+      }
+      setFullLogo(file);
+      if (error) setError('');
+    }
+  };
+
+  // Handle file selection for favicon
+  const handleFaviconChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        setError('File size should not exceed 2MB');
+        return;
+      }
+      setFavicon(file);
+      if (error) setError('');
+    }
+  };
+
+  // Trigger file input click
+  const triggerFileInput = (inputId) => {
+    document.getElementById(inputId).click();
+  };
+
+  // Handle domain selection
+  const handleDomainChange = (e) => {
+    setSelectedDomain(e.target.value);
+  };
+
+  // Handle logo upload submission
+  const handleLogoUpload = async () => {
+    // Reset messages
+    setError('');
+    setSuccess('');
+
+    // Validate domain selection
+    if (!selectedDomain) {
+      setError('Please select a domain');
+      return;
+    }
+
+    // Validate at least one file is selected
+    if (!fullLogo && !favicon) {
+      setError('Please select at least one logo file to upload');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const result = await uploadCompanyLogo({
+        domain: selectedDomain,
+        logo: favicon,
+        full_logo: fullLogo
+      });
+
+      if (result.success) {
+        setSuccess('Logo(s) uploaded successfully!');
+        // Reset file selections
+        setFullLogo(null);
+        setFavicon(null);
+        setSelectedDomain('');
+        // Clear file inputs
+        const fullLogoInput = document.getElementById('fullLogoInput');
+        const faviconInput = document.getElementById('faviconInput');
+        if (fullLogoInput) fullLogoInput.value = '';
+        if (faviconInput) faviconInput.value = '';
+      } else {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred while uploading. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Handle form submission
@@ -318,24 +407,51 @@ const BrandingSetup = () => {
             <div className="demo-logo-domain-section">
               <div className="demo-form-group">
                 <label>Full Logo</label>
-                <div className="demo-upload-area">
+                <div 
+                  className="demo-upload-area" 
+                  onClick={() => triggerFileInput('fullLogoInput')}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <input
+                    type="file"
+                    id="fullLogoInput"
+                    accept="image/svg+xml,image/png,image/jpeg,image/jpg"
+                    onChange={handleFullLogoChange}
+                    style={{ display: 'none' }}
+                  />
                   <span className="demo-upload-icon">📁</span>
-                  <p>Click to upload or drag and drop</p>
+                  <p>{fullLogo ? fullLogo.name : 'Click to upload or drag and drop'}</p>
                   <p className="demo-upload-hint">SVG, PNG or JPG (max. 2MB)</p>
                 </div>
               </div>
 
               <div className="demo-form-group">
                 <label>Favicon or Logo</label>
-                <div className="demo-upload-area-small">
+                <div 
+                  className="demo-upload-area-small"
+                  onClick={() => triggerFileInput('faviconInput')}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <input
+                    type="file"
+                    id="faviconInput"
+                    accept="image/x-icon,image/png,image/jpeg,image/jpg"
+                    onChange={handleFaviconChange}
+                    style={{ display: 'none' }}
+                  />
                   <span className="demo-upload-icon-small">📁</span>
-                  <p>Upload favicon.ico</p>
+                  <p>{favicon ? favicon.name : 'Upload favicon.ico'}</p>
                 </div>
               </div>
 
               <div className="demo-form-group">
                 <label>Domains</label>
-                <select className="demo-select" disabled={domainsLoading}>
+                <select 
+                  className="demo-select" 
+                  disabled={domainsLoading}
+                  value={selectedDomain}
+                  onChange={handleDomainChange}
+                >
                   <option value="">{domainsLoading ? 'Loading domains...' : 'Select a domain'}</option>
                   {domains.map((domain, index) => (
                     <option key={index} value={domain}>
@@ -346,7 +462,13 @@ const BrandingSetup = () => {
               </div>
 
               <div className="demo-actions">
-                <button className="demo-btn-primary">Submit</button>
+                <button 
+                  className="demo-btn-primary" 
+                  onClick={handleLogoUpload}
+                  disabled={loading || domainsLoading}
+                >
+                  {loading ? 'Uploading...' : 'Submit'}
+                </button>
               </div>
             </div>
           </div>
