@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './WhiteLabelRegistration.css';
-import { createDomainMapping, getDomains, uploadCompanyLogo } from './whiteLabelServices';
+import { createDomainMapping, getDomains, uploadCompanyLogo, updateDashboardColor } from './whiteLabelServices';
 import { checkDomainOnly, checkAndAddDomain, checkDomainVerificationStatus } from './domainStatus';
 
 const WhiteLabelRegistration = () => {
@@ -154,6 +154,7 @@ const BrandingSetup = () => {
   
   // Color palette domain selection
   const [colorPaletteDomain, setColorPaletteDomain] = useState('');
+  const [backgroundColor, setBackgroundColor] = useState('#0F172A');
 
   // Fetch domains on component mount
   useEffect(() => {
@@ -371,6 +372,44 @@ const BrandingSetup = () => {
       }
     } catch (err) {
       setError('An unexpected error occurred while uploading. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle dashboard color submission
+  const handleDashboardColorSubmit = async () => {
+    // Reset messages
+    setError('');
+    setSuccess('');
+
+    // Validate domain selection
+    if (!colorPaletteDomain) {
+      setError('Please select a domain');
+      return;
+    }
+
+    // Validate color
+    if (!backgroundColor) {
+      setError('Please select a background color');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const result = await updateDashboardColor({
+        domain: colorPaletteDomain,
+        dashboardcolor: backgroundColor
+      });
+
+      if (result.success) {
+        setSuccess(`Dashboard color updated successfully for ${colorPaletteDomain}!`);
+      } else {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred while updating dashboard color. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -704,10 +743,20 @@ const BrandingSetup = () => {
             </div>
             
             <div className="demo-color-grid">
-              <ColorInput label="Background" color="#0F172A" description="Main background" />
+              <ColorInput 
+                label="Background" 
+                color={backgroundColor} 
+                description="Main background"
+                onChange={setBackgroundColor}
+              />
             </div>
-            <button className="demo-btn-primary" style={{ marginTop: '16px' }}>
-              Submit
+            <button 
+              className="demo-btn-primary" 
+              style={{ marginTop: '16px' }}
+              onClick={handleDashboardColorSubmit}
+              disabled={loading || domainsLoading}
+            >
+              {loading ? 'Submitting...' : 'Submit'}
             </button>
           </div>
 
@@ -728,11 +777,28 @@ const BrandingSetup = () => {
 };
 
 // Color Input Component
-const ColorInput = ({ label, color, description }) => {
+const ColorInput = ({ label, color, description, onChange }) => {
   const [selectedColor, setSelectedColor] = React.useState(color);
 
+  // Update local state when color prop changes
+  React.useEffect(() => {
+    setSelectedColor(color);
+  }, [color]);
+
   const handleColorChange = (e) => {
-    setSelectedColor(e.target.value);
+    const newColor = e.target.value;
+    setSelectedColor(newColor);
+    if (onChange) {
+      onChange(newColor);
+    }
+  };
+
+  const handleTextChange = (e) => {
+    const newColor = e.target.value;
+    setSelectedColor(newColor);
+    if (onChange) {
+      onChange(newColor);
+    }
   };
 
   return (
@@ -749,7 +815,7 @@ const ColorInput = ({ label, color, description }) => {
         <input 
           type="text" 
           value={selectedColor} 
-          onChange={(e) => setSelectedColor(e.target.value)}
+          onChange={handleTextChange}
           style={{ marginLeft: '8px', flex: 1 }}
         />
       </div>

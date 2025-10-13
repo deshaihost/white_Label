@@ -158,3 +158,53 @@ export const uploadCompanyLogo = async (data) => {
     };
   }
 };
+
+/**
+ * Update dashboard color for white label configuration
+ * @param {Object} data - Request body
+ * @param {string} data.domain - Domain name
+ * @param {string} data.dashboardcolor - Dashboard color in hex format (e.g., #FF5733)
+ * @returns {Promise} API response
+ */
+export const updateDashboardColor = async (data) => {
+  try {
+    console.log('Updating dashboard color:', data);
+
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/dashboard`,
+      {
+        domain: data.domain,
+        dashboardcolor: data.dashboardcolor
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log('Dashboard Color Response:', response.data);
+
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    console.error('Dashboard Color API Error:', error);
+    
+    let errorMessage = 'Failed to update dashboard color';
+    
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+    } else if (error.request) {
+      errorMessage = 'No response from server. Please check your connection.';
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+    
+    return {
+      success: false,
+      error: errorMessage
+    };
+  }
+};
