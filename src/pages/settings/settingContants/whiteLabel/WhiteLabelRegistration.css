@@ -259,6 +259,51 @@
   margin-bottom: 0;
 }
 
+/* Required Field Indicator */
+.demo-required {
+  color: #f5576c;
+  margin-left: 4px;
+}
+
+/* Messages */
+.demo-message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  animation: slideIn 0.3s ease;
+}
+
+.demo-message-error {
+  background: rgba(245, 87, 108, 0.15);
+  border: 1px solid rgba(245, 87, 108, 0.3);
+  color: #f5576c;
+}
+
+.demo-message-success {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Disabled State */
+.demo-input:disabled,
+.demo-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Logo and Domain Section */
 .demo-logo-domain-section {
   background: rgba(59, 130, 246, 0.1);

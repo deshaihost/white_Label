@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './WhiteLabelRegistration.css';
+import { createDomainMapping } from './whiteLabelServices';
 
 const WhiteLabelRegistration = () => {
   const [activeTab, setActiveTab] = useState('setup');
+
+  // Print domain name on initial load
+  useEffect(() => {
+    const fullDomain = window.location.hostname;
+    console.log('Full Domain:', fullDomain);
+  }, []);
 
   return (
     <div className="white-label-registration-demo">
@@ -119,6 +126,81 @@ const WhiteLabelRegistration = () => {
 
 // Branding Setup Component
 const BrandingSetup = () => {
+  // Form state
+  const [formData, setFormData] = useState({
+    companyName: '',
+    fullDomainName: '',
+    key: ''
+  });
+
+  // Loading and error states
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user starts typing
+    if (error) setError('');
+    if (success) setSuccess('');
+  };
+
+  // Validate form
+  const validateForm = () => {
+    if (!formData.companyName.trim()) {
+      setError('Company Name is required');
+      return false;
+    }
+    if (!formData.fullDomainName.trim()) {
+      setError('Full Domain Name is required');
+      return false;
+    }
+    if (!formData.key.trim()) {
+      setError('Key is required');
+      return false;
+    }
+    return true;
+  };
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    // Reset messages
+    setError('');
+    setSuccess('');
+
+    // Validate
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const result = await createDomainMapping({
+        fullDomainName: formData.fullDomainName,
+        key: formData.key,
+        company: formData.companyName
+      });
+
+      if (result.success) {
+        setSuccess('Domain mapping created successfully!');
+        // Optionally reset form
+        // setFormData({ companyName: '', fullDomainName: '', key: '' });
+      } else {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="demo-config-card">
       <div className="demo-config-header">
@@ -136,35 +218,65 @@ const BrandingSetup = () => {
           <div className="demo-config-panel">
             {/* Domain and Key Configuration Section */}
             <div className="demo-domain-key-section">
+              {/* Error/Success Messages */}
+              {error && (
+                <div className="demo-message demo-message-error">
+                  {error}
+                </div>
+              )}
+              {success && (
+                <div className="demo-message demo-message-success">
+                  {success}
+                </div>
+              )}
+
               <div className="demo-form-group">
-                <label>Company Name</label>
+                <label>Company Name <span className="demo-required">*</span></label>
                 <input 
                   type="text" 
+                  name="companyName"
                   className="demo-input" 
                   placeholder="Enter your company name"
+                  value={formData.companyName}
+                  onChange={handleInputChange}
+                  disabled={loading}
                 />
               </div>
 
               <div className="demo-form-group">
-                <label>Full Domain Name</label>
+                <label>Full Domain Name <span className="demo-required">*</span></label>
                 <input 
                   type="text" 
+                  name="fullDomainName"
                   className="demo-input" 
                   placeholder="e.g., mycompany.hostbuddy.com"
+                  value={formData.fullDomainName}
+                  onChange={handleInputChange}
+                  disabled={loading}
                 />
               </div>
 
               <div className="demo-form-group">
-                <label>Key</label>
+                <label>Key <span className="demo-required">*</span></label>
                 <input 
                   type="text" 
+                  name="key"
                   className="demo-input" 
                   placeholder="Enter your key"
+                  value={formData.key}
+                  onChange={handleInputChange}
+                  disabled={loading}
                 />
               </div>
 
               <div className="demo-actions">
-                <button className="demo-btn-primary">Submit</button>
+                <button 
+                  className="demo-btn-primary" 
+                  onClick={handleSubmit}
+                  disabled={loading}
+                >
+                  {loading ? 'Submitting...' : 'Submit'}
+                </button>
               </div>
             </div>
           </div>
