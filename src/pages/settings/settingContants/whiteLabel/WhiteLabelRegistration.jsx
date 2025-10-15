@@ -751,7 +751,7 @@ const BrandingSetup = () => {
                 position: 'relative'
               }}>
                 <iframe
-                  src="https://testhostbuddy.online/white-label-login?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NjAzNzE2MjMsIm5iZiI6MTc2MDM3MTYyMywianRpIjoiOTZhOTU5Y2UtMWZkOS00Mzc4LWJjZDAtZWNkNTRhZmQ1YWVkIiwiZXhwIjoxNzYyOTYzNjIzLCJpZGVudGl0eSI6InRlc3RhY2NvdW50XzJfaG9zdGJ1ZGR5X2FpIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIiwidXNlcl9jbGFpbXMiOnsicm9sZSI6ImFkbWluIiwiZW1haWwiOiJ0ZXN0YWNjb3VudF8yQGhvc3RidWRkeS5haSJ9fQ.oa_3pIL1Oy9HttSUS--XEapryU_4aeFYGVHFOc84ftg&redirect=dashboard"
+                  src={`https://${previewDomain || 'testhostbuddy.online'}/white-label-login?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NjAzNzE2MjMsIm5iZiI6MTc2MDM3MTYyMywianRpIjoiOTZhOTU5Y2UtMWZkOS00Mzc4LWJjZDAtZWNkNTRhZmQ1YWVkIiwiZXhwIjoxNzYyOTYzNjIzLCJpZGVudGl0eSI6InRlc3RhY2NvdW50XzJfaG9zdGJ1ZGR5X2FpIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIiwidXNlcl9jbGFpbXMiOnsicm9sZSI6ImFkbWluIiwiZW1haWwiOiJ0ZXN0YWNjb3VudF8yQGhvc3RidWRkeS5haSJ9fQ.oa_3pIL1Oy9HttSUS--XEapryU_4aeFYGVHFOc84ftg&redirect=dashboard`}
                   style={{
                     width: '100%',
                     height: '100%',
