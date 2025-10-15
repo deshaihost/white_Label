@@ -698,7 +698,9 @@ const BrandingSetup = () => {
         {/* Full Width Live Preview Section */}
         <div className="demo-preview-full-width">
           <div className="demo-preview-container">
-            <p className="demo-preview-label">Live Preview - ACME Rentals Branded Inbox</p>
+            <p className="demo-preview-label">
+              Live Preview - <span style={{ color: '#EA580C', fontWeight: '600' }}>{previewDomain || 'ACME Rentals'}</span>
+            </p>
             
             {/* Domain Selection Dropdown */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
