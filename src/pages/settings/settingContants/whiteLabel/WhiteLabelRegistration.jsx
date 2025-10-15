@@ -699,7 +699,12 @@ const BrandingSetup = () => {
         <div className="demo-preview-full-width">
           <div className="demo-preview-container">
             <p className="demo-preview-label">
-              Live Preview - <span style={{ color: '#EA580C', fontWeight: '600' }}>{previewDomain || 'ACME Rentals'}</span>
+              Live Preview - <span style={{ 
+                color: '#10B981', 
+                fontWeight: '600', 
+                fontSize: '18px',
+                textShadow: '0 0 10px rgba(16, 185, 129, 0.5), 0 0 20px rgba(16, 185, 129, 0.3)'
+              }}>{previewDomain || 'ACME Rentals'}</span>
             </p>
             
             {/* Domain Selection Dropdown */}
