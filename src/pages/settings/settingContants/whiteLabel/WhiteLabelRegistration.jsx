@@ -172,6 +172,7 @@ const BrandingSetup = () => {
 
   // Preview iframe state
   const [showPreview, setShowPreview] = useState(false);
+  const [previewDomain, setPreviewDomain] = useState('');
 
   // Fetch domains on component mount
   useEffect(() => {
@@ -698,6 +699,25 @@ const BrandingSetup = () => {
         <div className="demo-preview-full-width">
           <div className="demo-preview-container">
             <p className="demo-preview-label">Live Preview - ACME Rentals Branded Inbox</p>
+            
+            {/* Domain Selection Dropdown */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+              <label style={{ margin: 0, minWidth: '180px' }}>Select Domain for Preview</label>
+              <select 
+                className="demo-select" 
+                style={{ flex: 1, maxWidth: '400px' }}
+                disabled={domainsLoading}
+                value={previewDomain}
+                onChange={(e) => setPreviewDomain(e.target.value)}
+              >
+                <option value="">{domainsLoading ? 'Loading domains...' : 'Select a domain'}</option>
+                {domains.map((domain, index) => (
+                  <option key={index} value={domain}>
+                    {domain}
+                  </option>
+                ))}
+              </select>
+            </div>
             
             {!showPreview ? (
               <div style={{ 
