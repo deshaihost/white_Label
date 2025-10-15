@@ -137,6 +137,8 @@ const BrandingSetup = () => {
 
   // Loading and error states
   const [loading, setLoading] = useState(false);
+  const [logoLoading, setLogoLoading] = useState(false);
+  const [colorPaletteLoading, setColorPaletteLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
@@ -362,7 +364,7 @@ const BrandingSetup = () => {
       return;
     }
 
-    setLoading(true);
+    setLogoLoading(true);
 
     try {
       const result = await uploadCompanyLogo({
@@ -388,7 +390,7 @@ const BrandingSetup = () => {
     } catch (err) {
       setLogoError('An unexpected error occurred while uploading. Please try again.');
     } finally {
-      setLoading(false);
+      setLogoLoading(false);
     }
   };
 
@@ -410,7 +412,7 @@ const BrandingSetup = () => {
       return;
     }
 
-    setLoading(true);
+    setColorPaletteLoading(true);
 
     try {
       const result = await updateDashboardColor({
@@ -426,7 +428,7 @@ const BrandingSetup = () => {
     } catch (err) {
       setColorError('An unexpected error occurred while updating dashboard color. Please try again.');
     } finally {
-      setLoading(false);
+      setColorPaletteLoading(false);
     }
   };
 
@@ -610,9 +612,9 @@ const BrandingSetup = () => {
                 <button 
                   className="demo-btn-primary" 
                   onClick={handleLogoUpload}
-                  disabled={loading || domainsLoading}
+                  disabled={logoLoading || domainsLoading}
                 >
-                  {loading ? 'Uploading...' : 'Submit'}
+                  {logoLoading ? 'Uploading...' : 'Submit'}
                 </button>
               </div>
 
@@ -807,9 +809,9 @@ const BrandingSetup = () => {
               className="demo-btn-primary" 
               style={{ marginTop: '16px' }}
               onClick={handleDashboardColorSubmit}
-              disabled={loading || domainsLoading}
+              disabled={colorPaletteLoading || domainsLoading}
             >
-              {loading ? 'Submitting...' : 'Submit'}
+              {colorPaletteLoading ? 'Submitting...' : 'Submit'}
             </button>
 
             {/* Color Palette Messages */}
