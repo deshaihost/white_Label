@@ -554,7 +554,7 @@ const BrandingSetup = () => {
             {/* Logo and Domain Configuration Section */}
             <div className="demo-logo-domain-section">
               <div className="demo-form-group">
-                <label>Full Logo</label>
+                <label>Full Logo (134 × 34)</label>
                 <div 
                   className="demo-upload-area" 
                   onClick={() => triggerFileInput('fullLogoInput')}
@@ -563,18 +563,18 @@ const BrandingSetup = () => {
                   <input
                     type="file"
                     id="fullLogoInput"
-                    accept="image/svg+xml,image/png,image/jpeg,image/jpg"
+                    accept="image/png"
                     onChange={handleFullLogoChange}
                     style={{ display: 'none' }}
                   />
                   <span className="demo-upload-icon">📁</span>
                   <p>{fullLogo ? fullLogo.name : 'Click to upload or drag and drop'}</p>
-                  <p className="demo-upload-hint">SVG, PNG or JPG (max. 2MB)</p>
+                  <p className="demo-upload-hint">PNG  (134×34 pixels, max. 2MB)</p>
                 </div>
               </div>
 
               <div className="demo-form-group">
-                <label>Favicon or Logo</label>
+                <label>Favicon or Logo (40 × 40)</label>
                 <div 
                   className="demo-upload-area-small"
                   onClick={() => triggerFileInput('faviconInput')}
@@ -583,12 +583,12 @@ const BrandingSetup = () => {
                   <input
                     type="file"
                     id="faviconInput"
-                    accept="image/x-icon,image/png,image/jpeg,image/jpg"
+                    accept="image/png"
                     onChange={handleFaviconChange}
                     style={{ display: 'none' }}
                   />
                   <span className="demo-upload-icon-small">📁</span>
-                  <p>{favicon ? favicon.name : 'Upload favicon.ico'}</p>
+                  <p>{favicon ? favicon.name : 'Upload PNG (40×40 pixels)'}</p>
                 </div>
               </div>
 
