@@ -3,7 +3,7 @@ import image1 from "../../../../helper/staticImage/homePage/animated-banner/left
 import image2 from "../../../../helper/staticImage/homePage/animated-banner/center-1.webp";
 import image3 from "../../../../helper/staticImage/homePage/animated-banner/right-t.webp";
 import image4 from "../../../../helper/staticImage/homePage/animated-banner/left-b.webp";
-import image5 from "../../../../helper/staticImage/homePage/animated-banner/right-b.webp";
+import image5 from "../../../../helper/staticImage/homePage/animated-banner/inbox.webp";
 import "./Graphs.css";
 
 const imageConfig = [

@@ -79,7 +79,7 @@
 }
 
 .works .works-container .row:not(:last-child) {
-  margin-bottom: 100px;
+  margin-bottom: 120px;
 }
 
 .works .works-container .row h3 {
@@ -204,6 +204,35 @@
 }
 .slick-arrow::before {
   display: none;
+}
+
+/* Round corners for feature logos */
+.feature-logo-box img {
+  border-radius: 12px !important;
+}
+
+/* Round corners for trusted logos */
+.trusted-logo-box img {
+  border-radius: 12px !important;
+}
+
+/* Additional styling for consistent logo appearance */
+.feature-logo-box div,
+.trusted-logo-box {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Ensure images maintain aspect ratio with rounded corners */
+.feature-logo-box img,
+.trusted-logo-box img {
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.feature-logo-box img:hover,
+.trusted-logo-box img:hover {
+  transform: scale(1.05);
 }
 
 @media only screen and (min-width: 991px) {

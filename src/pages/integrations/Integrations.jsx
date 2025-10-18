@@ -66,7 +66,7 @@ const Integrations = () => {
         
         <div className="inter-box row">
           <div className="col-lg-4 col-sm-6">
-            <a href="https://hospitable.com/" target="_blank" rel="noopener noreferrer">
+            <a href="https://hospitable.com/?utm_source=HostBuddyAI&utm_medium=partner&utm_campaign=partner-referral&utm_content=listing%E2%80%8B" target="_blank" rel="noopener noreferrer">
               <div className="image-boc-inter">
                 <img src={Hospitable} alt="" />
               </div>

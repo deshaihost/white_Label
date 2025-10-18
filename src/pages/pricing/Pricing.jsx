@@ -315,7 +315,7 @@ const Pricing = () => {
             <span
               style={{
                 color: "white",
-                fontSize: "14px",
+                fontSize: "32px",
               }}
             >
               Properties:
@@ -363,7 +363,7 @@ const Pricing = () => {
                 color: "white",
                 fontWeight: "bold",
                 marginLeft: "8px",
-                fontSize: "16px",
+                fontSize: "32px",
                 backgroundColor: "transparent",
                 border: "none",
                 outline: "none",
@@ -390,8 +390,8 @@ const Pricing = () => {
                   border: "1px solid rgba(255, 255, 255, 0.3)",
                   borderRadius: "2px",
                   width: "16px",
-                  height: "12px",
-                  fontSize: "10px",
+                  height: "14px",
+                  fontSize: "13px",
                   fontWeight: "bold",
                   cursor: "pointer",
                   display: "flex",
@@ -414,8 +414,8 @@ const Pricing = () => {
                   border: "1px solid rgba(255, 255, 255, 0.3)",
                   borderRadius: "2px",
                   width: "16px",
-                  height: "12px",
-                  fontSize: "10px",
+                  height: "14px",
+                  fontSize: "13px",
                   fontWeight: "bold",
                   cursor: "pointer",
                   display: "flex",
@@ -593,7 +593,7 @@ const Pricing = () => {
 
           {/* Elite Card */}
           <div className="pricing-card elite-card">
-            <div className="best-value-tag">Best value</div>
+            <div className="most-popular-tag">Most Popular</div>
             <h2>Elite</h2>
             <p className="card-description">
               Advanced solution for growing property management businesses.

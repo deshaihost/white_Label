@@ -17,6 +17,7 @@ import hostfullyGuidebooksArticle from './blogArticles/hostfully_guidebooks_blog
 import inboxBlogArticle from './blogArticles/inbox_blog';
 import openPhoneBlogArticle from './blogArticles/openPhone_blog';
 import hospitableSenderBlog from './blogArticles/Hospitable_sender_blog';
+import MountBlog from './blogArticles/MountBlog';
 
 const BlogArticle = () => {
   const { article_name } = useParams(); // Get the article_name from the path param
@@ -38,7 +39,8 @@ const BlogArticle = () => {
     "hostfully_guidebooks_blog": hostfullyGuidebooksArticle,
     "inbox_blog": inboxBlogArticle,
     "openphone_blog": openPhoneBlogArticle,
-    "hospitable_sender_blog": hospitableSenderBlog
+    "hospitable_sender_blog": hospitableSenderBlog,
+    "mount_partnership": MountBlog
   };
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import "../becomen Affiliate/BecomeAnAffiliate.css"
 import { Col, Container, Row } from 'react-bootstrap'
+import WhiteLabelModal from '../../components/WhiteLabelModal/WhiteLabelModal'
 
 
 const LOGO = 'https://hostbuddylb.com/logo/logo_footer.webp';
@@ -10,9 +11,13 @@ const Horse = 'https://hostbuddylb.com/becomeAnAffiliate/horse.webp';
 const Rating = 'https://hostbuddylb.com/becomeAnAffiliate/rating.webp';
 
 const SoftwareSolutions = () => {
-    const [modalShow, setModalShow] = useState(false); // unused in this file
+    const [modalShow, setModalShow] = useState(false);
     return (
         <>
+            <WhiteLabelModal 
+                show={modalShow} 
+                onHide={() => setModalShow(false)} 
+            />
             <div className=''>
                 <div className='affilate custom-sections md:mb-5 mb-3 software-solution'>
                     <Container>
@@ -51,7 +56,7 @@ const SoftwareSolutions = () => {
                                     <strong className='text-white'>Automated Upsells: </strong>
                                     Automate gap night and slow season upsells, as well as inquiry follow-ups to provide additional value to your hosts.</p>
                                 <p className='text-white fw-bold'><strong>Early Feature Access: </strong>Enjoy access to new developments to our technology as they are deployed, ensuring you stay ahead of the competition.  </p>
-                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 md:my-5 mb-0 mt-5 display-btn'>PROVIDE MORE VALUE</button>
+                                <button className='emp-btn fw-bold text-black fs-3 w-100 md:my-5 mb-0 mt-5 display-btn'>PROVIDE MORE VALUE</button>
                             </Col>
                         </Row>
                     </Container>
@@ -78,7 +83,7 @@ const SoftwareSolutions = () => {
                             </Col>
                             <Col md={5} className='pe-md-5  text-center'>
                                 <img className='w-75' src={Rating} />
-                                <button className='emp-btn fw-bold text-black fs-3 w-100 md:my-5 mb-0 mt-5 display-btn-new BACKED'>BACKED BY HOSTBUDDY AI</button></Col>
+                                <button className='emp-btn fw-bold text-black fs-3 w-100 md:my-5 mb-0 mt-5 display-btn-new'>BACKED BY HOSTBUDDY AI</button></Col>
                         </Row>
                     </Container>
 
@@ -132,7 +137,7 @@ const SoftwareSolutions = () => {
                             </Col>
                             <Col md={5} className=' ps-md-5 text-center custom-order-1'>
                                 <img className='w-75' src={BecomeAff} />
-                                <button onClick={() => window.open('https://calendly.com/sam-hostbuddy/30min', '_blank')} className='emp-btn fw-bold text-black fs-3 w-100 md:my-5 mb-0 mt-5 display-btn-new'>BOOK A DEMO</button>
+                                <button onClick={() => setModalShow(true)} className='emp-btn fw-bold text-black fs-3 w-100 md:my-5 mb-0 mt-5 display-btn-new'>BOOK A DEMO</button>
                             </Col>
                         </Row>
                     </Container >

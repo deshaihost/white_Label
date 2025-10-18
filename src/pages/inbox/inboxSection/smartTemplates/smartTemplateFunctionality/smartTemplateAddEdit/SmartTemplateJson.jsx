@@ -2,6 +2,8 @@ let number = "number";
 let select = "select";
 let multiSelecter = "multiSelecter";
 let time = "time";
+let date = "date";
+let checkbox = "checkbox";
 
 const weeksData = [
   { label: "Monday", value: "monday" },
@@ -19,6 +21,16 @@ export const dataInput = {
       guesttype: "Choose when to send this message...",
       type: "",
       inputFiled: [],
+    },
+    {
+      guesttype: "Send Once",
+      type: "send_once",
+      label: "Send the message once, either immediately or at a scheduled date and time.",
+      inputFiled: [
+        { inputLabel: "Send Immediately", type: checkbox, payloadType: "send_immediately", defaultVal: false },
+        { inputLabel: "Date", type: date, payloadType: "scheduled_date", disableIf: "send_immediately" },
+        { inputLabel: "Time", type: time, payloadType: "scheduled_time", disableIf: "send_immediately" },
+      ]
     },
     {
       guesttype: "During reservation",
@@ -501,6 +513,9 @@ function describeTriggers(triggers) {
           case 'cleaning_complete':
               const cleaningTimeDesc = formatDuration(data.hours_after, data.minutes_after, 'after');
               return `${cleaningTimeDesc} cleaning is complete`;
+          case 'send_once':
+              const immediate = data.send_immediately ? 'immediately' : `on ${formatDate(data.scheduled_date)} at ${formatTime(data.scheduled_time)}`;
+              return `once, ${immediate}`;
           default:
               return '';
       }
@@ -591,4 +606,9 @@ function formatGuestTiming(guestType, minDays, maxDays, ago = false) {
     } else {
         return `${guestType} ${ago ? '' : 'in '}${minDays} to ${maxDays} days${ago ? ' ago' : ''}`;
     }
+}
+
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
 }

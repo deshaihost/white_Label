@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import "./works.css";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import TemplatedMessages from "../../../helper/staticImage/homePage/Templated-messages.webp";
 import Schedule from "../../../helper/staticImage/homePage/schdule.webp";
+
 import FeOne from "../../../helper/staticImage/homePage/feature-logo/fe-1.webp";
 import FeTwo from "../../../helper/staticImage/homePage/feature-logo/fe-2.webp";
 import FeThree from "../../../helper/staticImage/homePage/feature-logo/fe-3.webp";
@@ -21,6 +22,21 @@ import ItemFive from "../../../helper/staticImage/homePage/trusted-logo/item14.w
 import ItemSix from "../../../helper/staticImage/homePage/trusted-logo/item15.webp";
 import ItemSeven from "../../../helper/staticImage/homePage/trusted-logo/item16.webp";
 import ItemEight from "../../../helper/staticImage/homePage/trusted-logo/item17.webp";
+import AlexS from "../../../helper/staticImage/homePage/trusted-logo/AlexS.webp";
+import CalliN from "../../../helper/staticImage/homePage/trusted-logo/CalliN.webp";
+import DanWise from "../../../helper/staticImage/homePage/trusted-logo/DanWise.webp";
+import DannyW from "../../../helper/staticImage/homePage/trusted-logo/DannyW.webp";
+import IsaacV from "../../../helper/staticImage/homePage/trusted-logo/IsaacV.webp";
+import JaveusB from "../../../helper/staticImage/homePage/trusted-logo/JaveusB.webp";
+import JodieO from "../../../helper/staticImage/homePage/trusted-logo/JodieO.webp";
+import KarenG from "../../../helper/staticImage/homePage/trusted-logo/KarenG.webp";
+import LisaD from "../../../helper/staticImage/homePage/trusted-logo/LisaD.webp";
+import MattM from "../../../helper/staticImage/homePage/trusted-logo/MattM.webp";
+import MichelL from "../../../helper/staticImage/homePage/trusted-logo/MichelL.webp";
+import MikeB from "../../../helper/staticImage/homePage/trusted-logo/MikeB.webp";
+import RebeccaB from "../../../helper/staticImage/homePage/trusted-logo/RebeccaB.webp";
+import RyanM from "../../../helper/staticImage/homePage/trusted-logo/RyanM.webp";
+import TanyaR from "../../../helper/staticImage/homePage/trusted-logo/TanyaR.webp";
 // import ItemNine from "../../../helper/staticImage/homePage/trusted-logo/item-9.webp";
 import { HiChatBubbleLeftRight } from "react-icons/hi2";
 import { Ri24HoursFill } from "react-icons/ri";
@@ -43,6 +59,21 @@ const imageTrustedLogo = [
   ItemSix,
   ItemSeven,
   ItemEight,
+  AlexS,
+  CalliN,
+  DanWise,
+  DannyW,
+  IsaacV,
+  JaveusB,
+  JodieO,
+  KarenG,
+  LisaD,
+  MattM,
+  MichelL,
+  MikeB,
+  RebeccaB,
+  RyanM,
+  TanyaR,
   // ItemNine,
 ];
 
@@ -80,7 +111,7 @@ const SmartTemlating =
 const actionItemsScreen =
   "https://storage.googleapis.com/frontend_media/home-new/action_items_screen.webp";
 const inboxScreen =
-  "https://storage.googleapis.com/frontend_media/home-new/inbox_screen.webp";
+  "https://storage.googleapis.com/frontend_media/home-new/smartInbox.webp";
 const reviewRemovalScreen =
   "https://storage.googleapis.com/frontend_media/home-new/review_removal_screen.webp";
 const statistics =
@@ -230,7 +261,7 @@ const Works = () => {
                       <img
                         src={images}
                         alt="feature-img"
-                        className="img-fluid w-100 h-100 mw-100 mh-100 rounded-0"
+                        className="img-fluid w-100 h-100 mw-100 mh-100 rounded-4"
                       />
                     </div>
                   );
@@ -254,6 +285,15 @@ const Works = () => {
                   database used to support your guests.
                 </p>
               </div>
+              <div className="nav-buttons" style={{ textAlign: "center", marginTop: "24px" }}>
+                <Link
+                  className="nav-btn nav-btn-outline link-btn filled-btn"
+                  to="/signup"
+                  style={{ marginRight: 10 }}
+                >
+                  Sign Up Now
+                </Link>
+              </div>
             </div>
             <div className="col-lg-6 blur-background-top-left">
               <img
@@ -266,13 +306,13 @@ const Works = () => {
           </div>
           <div className="row">
             <div className="col-lg-12">
-              <h2 className="fs-1 fw-bold text-white mb-5 text-center">
+              <h2 className="fs-1 fw-bold text-white mb-0 text-center">
                 What the Community is Saying
               </h2>
             </div>
           </div>
           <div className="row">
-            <div className="col-lg-12">
+            <div className="col-lg-12" style={{ marginTop: '-50px' }}>
               <Slider {...settingsf}>
                 <div className=" testimonial-slider">
                   <div className="testimonial-item p-3">
@@ -395,7 +435,7 @@ const Works = () => {
                 Trusted by Leading Property Managers
               </h2>
             </div>
-            <div className="col-lg-12">
+            <div className="col-lg-12" style = {{ marginBottom: '-50px' }}>
               <div>
                 <Slider {...settingsf}>
                   {imageTrustedLogo?.map((images) => {
@@ -413,11 +453,35 @@ const Works = () => {
               </div>
             </div>
           </div>
+          <div className="col-lg-12 d-flex justify-content-center">
+              <div
+                className="signup-button"
+                style={{
+                  margin: "32px 0 60px 0", // spacing above and below
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Link
+                  className="nav-btn nav-btn-outline link-btn filled-btn"
+                  to="/signup"
+                  style={{
+                    padding: "14px 40px",
+                    fontSize: "1.1rem",
+                    borderRadius: "32px",
+                    minWidth: "240px",
+                    textAlign: "center",
+                  }}
+                >
+                  Try it free for 14 days
+                </Link>
+              </div>
+            </div>
           <div className="row align-items-center justify-content-center">
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
+                style={{ borderRadius: "20px", backgroundColor: "#146ef5" }}
               >
                 <FaRegClock className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -432,7 +496,7 @@ const Works = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
+                style={{ borderRadius: "20px", backgroundColor: "#146ef5" }}
               >
                 <HiChatBubbleLeftRight className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -452,7 +516,7 @@ const Works = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
+                style={{ borderRadius: "20px", backgroundColor: "#146ef5" }}
               >
                 <Ri24HoursFill className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -467,7 +531,7 @@ const Works = () => {
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <div
                 className="p-4 text-white w-100 h-full d-flex flex-column gap-2 mx-3"
-                style={{ borderRadius: "20px", backgroundColor: "#0a287a" }}
+                style={{ borderRadius: "20px", backgroundColor: "#146ef5" }}
               >
                 <FaSackDollar className="fs-1" />
                 <div className="d-flex align-items-end gap-1">
@@ -521,13 +585,18 @@ const Works = () => {
                   anytime you need support.
                 </p>
               </div>
+              <div className="nav-buttons">
+                <Link
+                  className="nav-btn nav-btn-outline link-btn filled-btn"
+                  to="/signup"
+                  style={{ marginRight: 10 }}
+                >
+                Sign Up
+                </Link>
+              </div>
             </div>
             <div className="col-lg-6 blur-background-top-left">
-              <img
-                src={Schedule}
-                style={{ objectFit: "contain" }}
-                alt="works-img"
-              />
+              <img src={schedule} alt="works-img" />
             </div>
           </div>
 
