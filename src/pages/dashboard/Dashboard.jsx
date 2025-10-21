@@ -487,10 +487,10 @@ const Dashboard = () => {
 
                   <div className="row">
                     {!actionItemsCovertationLoading ? (
-                      <>
-                        <div className="text-white pb-1 d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-md-0 gap-2">
+                      <div className="action-items-container">
+                        <div className="action-items-header d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-md-0 gap-2">
                           <div>
-                            <h5 className="" style={{ 
+                            <h5 className="mb-0" style={{ 
                               fontSize: "16px", 
                               fontFamily: "'DM Sans', sans-serif", 
                               fontWeight: 600,
@@ -533,13 +533,13 @@ const Dashboard = () => {
                             style={{ overflowY: "auto", height: "500px" }}
                           >
                             <table className="table text-white action-items-table">
-                              <thead style={{ background: "#020d29" }}>
+                              <thead>
                                 <tr>
                                   <th>Date/Time</th>
                                   <th>Property/Guest</th>
                                   <th>Action Item</th>
                                   {/* <th>View/Done</th> */}
-                                  <th>Complete</th>
+                                  <th className="text-center">Complete</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -555,22 +555,65 @@ const Dashboard = () => {
                                     propertyName: property_name,
                                     conversationID,
                                   };
+                                  
+                                  // Split date and time from formatDateTime
+                                  const dateTimeFormatted = formatDateTime(created_at);
+                                  const [datePart, timePart] = dateTimeFormatted.split('\n');
+                                  
                                   return (
                                     <tr key={id}>
-                                      <td style={{ whiteSpace: "pre-line" }}>
-                                        {" "}
-                                        {/* whiteSpace: 'pre-line' preserves the newline between date and time */}
-                                        {formatDateTime(created_at)}
+                                      <td>
+                                        <div style={{ 
+                                          fontFamily: "'DM Sans', sans-serif",
+                                          fontWeight: 500,
+                                          fontSize: "14px",
+                                          color: "white",
+                                          fontVariationSettings: "'opsz' 14"
+                                        }}>
+                                          {datePart}
+                                        </div>
+                                        <div style={{ 
+                                          fontFamily: "'DM Sans', sans-serif",
+                                          fontWeight: 400,
+                                          fontSize: "12px",
+                                          color: "#a6a9b2",
+                                          fontVariationSettings: "'opsz' 14"
+                                        }}>
+                                          {timePart}
+                                        </div>
                                       </td>
                                       <td>
-                                        {property_name}
-                                        <br />
-                                        {actionItem?.guest_name !== null
-                                          ? actionItem?.guest_name
-                                          : ""}
+                                        <div style={{ 
+                                          fontFamily: "'DM Sans', sans-serif",
+                                          fontWeight: 500,
+                                          fontSize: "14px",
+                                          color: "white",
+                                          fontVariationSettings: "'opsz' 14"
+                                        }}>
+                                          {property_name}
+                                        </div>
+                                        {actionItem?.guest_name && (
+                                          <div style={{ 
+                                            fontFamily: "'DM Sans', sans-serif",
+                                            fontWeight: 400,
+                                            fontSize: "12px",
+                                            color: "#a6a9b2",
+                                            fontVariationSettings: "'opsz' 14"
+                                          }}>
+                                            {actionItem.guest_name}
+                                          </div>
+                                        )}
                                       </td>
-                                      <td className="">
-                                        <div className="">{item}</div>
+                                      <td>
+                                        <div style={{ 
+                                          fontFamily: "'DM Sans', sans-serif",
+                                          fontWeight: 400,
+                                          fontSize: "14px",
+                                          color: "white",
+                                          fontVariationSettings: "'opsz' 14"
+                                        }}>
+                                          {item}
+                                        </div>
                                       </td>
                                       <td className="text-center">
                                         {/*\
@@ -598,14 +641,11 @@ const Dashboard = () => {
                             </table>
                           </div>
                         ) : (
-                          <span
-                            className="text-white d-flex justify-content-center align-items-center"
-                            style={{ height: "50px" }}
-                          >
+                          <div className="no-items-message">
                             No Incomplete Items
-                          </span>
+                          </div>
                         )}
-                      </>
+                      </div>
                     ) : (
                       <BoxLoader />
                     )}

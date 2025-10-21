@@ -325,47 +325,101 @@
   font-variation-settings: 'opsz' 14;
 }
 
+/* Action Items Table Container */
+.action-items-container {
+  background: #17191f;
+  border: 2px solid #013280;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(30, 75, 158, 0.2);
+}
+
+/* Action Items Table Header Section (Title and See All) */
+.action-items-header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #013280;
+}
+
+.action-items-table {
+  border: 0px !important;
+  font-family: 'DM Sans', sans-serif;
+  font-variation-settings: 'opsz' 14;
+  margin-bottom: 0 !important;
+}
+
 .action-items-table th,
 .action-items-table tr,
 .action-items-table td {
   border: 0px !important;
-  font-size: 14px;
-  font-weight: 500 !important;
   font-family: 'DM Sans', sans-serif;
   font-variation-settings: 'opsz' 14;
 }
 
 .action-items-table thead {
-  background: #0F1117;
-  border-bottom: 2px solid #013280;
+  background: #0F1117 !important;
+  border-bottom: 1px solid #013280 !important;
 }
 
 .action-items-table thead th {
   font-size: 12px !important;
   font-weight: 600 !important;
   text-transform: uppercase;
-  color: #a6a9b2;
-  padding: 12px 16px;
+  color: #a6a9b2 !important;
+  padding: 12px 24px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-variation-settings: 'opsz' 14 !important;
 }
 
 .action-items-table tbody tr {
-  border-bottom: 1px solid #013280;
+  border-bottom: 1px solid #013280 !important;
   transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .action-items-table tbody tr:hover {
-  background: #01255e;
+  background: #01255e !important;
 }
 
 .action-items-table tbody tr:last-child {
-  border-bottom: none;
+  border-bottom: 0 !important;
 }
 
 .action-items-table td {
   font-size: 14px !important;
-  color: white;
-  padding: 16px;
+  color: white !important;
+  padding: 16px 24px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 500 !important;
+  font-variation-settings: 'opsz' 14 !important;
+  vertical-align: middle !important;
 }
+
+/* Secondary text in table cells (time, guest name) */
+.action-items-table td br + span,
+.action-items-table td small {
+  color: #a6a9b2 !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}
+
+/* No items message styling */
+.dashboard-container .no-items-message,
+.action-items-container .no-items-message {
+  color: #a6a9b2 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  font-variation-settings: 'opsz' 14 !important;
+  text-align: center;
+  padding: 32px;
+  background: #17191f;
+}
+
+/* Table responsive wrapper inside action items container */
+.action-items-container .table-responsive {
+  background: #17191f;
+  border: 0;
+}
+
 .search {
   border: 2px solid #013280 !important;
   color: #a6a9b2;
