@@ -204,23 +204,58 @@
 }
 
 /* Icon styling in View/Done column */
-.action-items-table .text-primary {
+/* External link icon (view icon) - target by not having text-primary class */
+.action-items-table tbody td.text-center svg:not(.check-icon) {
+  color: #a6a9b2 !important;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.action-items-table tbody td.text-center svg:not(.check-icon):hover {
   color: #3e88f7 !important;
-  font-size: 20px;
-  transition: color 0.3s ease;
 }
 
-.action-items-table .text-primary:hover {
-  color: #5296f8 !important;
+/* Complete button - circular button with border */
+.action-items-table .complete-button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #3e88f7;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px rgba(62, 136, 247, 0.25);
+  padding: 0;
+  vertical-align: middle;
 }
 
-.action-items-table svg {
-  color: #a6a9b2;
-  transition: color 0.3s ease;
+.action-items-table .complete-button:hover {
+  background: #3e88f7;
 }
 
-.action-items-table svg:hover {
+.action-items-table .complete-button.completed {
+  background: #3e88f7;
+  border-color: #3e88f7;
+}
+
+/* Check icon inside the button */
+.action-items-table .complete-button .check-icon {
+  width: 16px;
+  height: 16px;
   color: #3e88f7;
+  transition: color 0.3s ease;
+  stroke-width: 2.5;
+}
+
+.action-items-table .complete-button:hover .check-icon {
+  color: white;
+}
+
+.action-items-table .complete-button.completed .check-icon {
+  color: white;
 }
 
 .pro-icon1 {

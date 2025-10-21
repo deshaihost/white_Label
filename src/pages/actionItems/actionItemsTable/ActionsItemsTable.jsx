@@ -8,8 +8,7 @@ import ToastHandle from "../../../helper/ToastMessage";
 import { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
 import "./actionItem.css";
 import axios from "axios";
-import { FaExternalLinkAlt } from "react-icons/fa";
-import { FaCircleCheck } from "react-icons/fa6";
+import { FaExternalLinkAlt, FaCheck } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import ConversationTranscriptModal from "../../inbox/inboxSection/resources/ConversationTranscriptModal";
 import customStyles from './selectStyles';
@@ -365,7 +364,13 @@ const ActionsItemsTable = () => {
                               ) : (
                                 <>
                                   <FaExternalLinkAlt style={{ marginRight: '10px', cursor: 'pointer' }} onClick={() => { if (!locked) handleOpenConversation(conversation_id, id, property_name); }} />
-                                  <FaCircleCheck className="text-primary fs-6" style={{ cursor: 'pointer' }} onClick={() => { if (!locked) handleComplete(id); }} />
+                                  <button 
+                                    className={`complete-button ${status === 'completed' ? 'completed' : ''}`}
+                                    onClick={() => { if (!locked) handleComplete(id); }}
+                                    title="Mark Complete"
+                                  >
+                                    <FaCheck className="check-icon" />
+                                  </button>
                                 </>
                               )}
                             </div>
