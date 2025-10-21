@@ -67,6 +67,14 @@
 .action-select select option {
   background: #17191f;
   color: #d0d3db;
+  padding: 8px 12px;
+}
+
+.action-select select option:hover,
+.action-select select option:focus,
+.action-select select option:checked {
+  background: #01255e;
+  color: #d0d3db;
 }
 
 .action-select .item-select {

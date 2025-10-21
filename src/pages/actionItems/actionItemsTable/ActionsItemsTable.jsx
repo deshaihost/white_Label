@@ -291,11 +291,19 @@ const ActionsItemsTable = () => {
               )}
 
               <div className="item-select">
-                <select aria-label="Default select example" className="bg-dark form-select" value={selectedStatus} onChange={handleSelectStatusChange}>
-                  <option value="incomplete">Incomplete</option>
-                  <option value="completed">Completed</option>
-                  <option value="expired">Expired</option>
-                </select>
+                <Select 
+                  className="custom-select property_Custom_Select" 
+                  options={[
+                    { value: 'incomplete', label: 'Incomplete' },
+                    { value: 'completed', label: 'Completed' },
+                    { value: 'expired', label: 'Expired' }
+                  ]} 
+                  value={{ value: selectedStatus, label: selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1) }} 
+                  styles={customStyles} 
+                  onChange={(selected) => handleSelectStatusChange({ target: { value: selected.value } })} 
+                  placeholder="Status"
+                  isSearchable={false}
+                />
               </div>
 
               <div className="item-select" style={{ width: "30%" }}>
