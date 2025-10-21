@@ -342,6 +342,11 @@
   margin-top: 16px;
 }
 
+/* Add left padding to rows inside account-content */
+.dashboard-container .account-content > .row {
+  padding-left: 10px;
+}
+
 /* Action Items Table Header Section (Title and See All) */
 .action-items-header {
   padding: 24px 24px 16px;
