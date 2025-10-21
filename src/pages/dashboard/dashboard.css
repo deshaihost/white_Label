@@ -453,7 +453,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
   box-shadow: 0 0 8px rgba(62, 136, 247, 0.25);
   padding: 0;
   flex-shrink: 0;
@@ -467,12 +467,12 @@
   width: 16px;
   height: 16px;
   color: #3e88f7;
-  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 0.3s ease;
   stroke-width: 2.5;
 }
 
 .complete-button:hover .complete-button-icon {
-  color: white;
+  color: white !important;
 }
 
 /* Completed state button (if needed for future) */
@@ -482,7 +482,7 @@
 }
 
 .complete-button.completed .complete-button-icon {
-  color: white;
+  color: white !important;
 }
 
 .search {

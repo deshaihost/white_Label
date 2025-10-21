@@ -251,11 +251,11 @@
 }
 
 .action-items-table .complete-button:hover .check-icon {
-  color: white;
+  color: white !important;
 }
 
 .action-items-table .complete-button.completed .check-icon {
-  color: white;
+  color: white !important;
 }
 
 .pro-icon1 {
