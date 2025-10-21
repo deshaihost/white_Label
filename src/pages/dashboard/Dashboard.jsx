@@ -490,19 +490,38 @@ const Dashboard = () => {
                       <>
                         <div className="text-white pb-1 d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-md-0 gap-2">
                           <div>
-                            <h5 className="">
+                            <h5 className="" style={{ 
+                              fontSize: "16px", 
+                              fontFamily: "'DM Sans', sans-serif", 
+                              fontWeight: 600,
+                              fontVariationSettings: "'opsz' 14",
+                              color: "white"
+                            }}>
                               Incomplete Action Items{" "}
-                              <small
-                                style={{ fontSize: "14px", color: "#AAA" }}
+                              <span
+                                style={{ 
+                                  fontSize: "14px", 
+                                  color: "#a6a9b2",
+                                  fontFamily: "'DM Sans', sans-serif",
+                                  fontWeight: 400,
+                                  fontVariationSettings: "'opsz' 14"
+                                }}
                               >
                                 (Most Recent)
-                              </small>
+                              </span>
                             </h5>
                           </div>
                           <div>
                             <Link
                               to={"/action-item"}
-                              style={{ fontSize: "16px" }}
+                              style={{ 
+                                fontSize: "14px",
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 500,
+                                fontVariationSettings: "'opsz' 14",
+                                color: "#3e88f7",
+                                textDecoration: "none"
+                              }}
                             >
                               See All
                             </Link>
