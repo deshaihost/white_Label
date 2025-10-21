@@ -95,14 +95,31 @@
   font-variation-settings: 'opsz' 14 !important;
 }
 
+/* Styling for histogram footer (date range and link) */
+.histogram-footer {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.histogram-date-range {
+  color: #a6a9b2 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  font-variation-settings: 'opsz' 14 !important;
+  margin-bottom: 4px !important;
+}
+
 /* Styling for statistics link container */
-.dashboard-container .account-content .statistics-link {
+.dashboard-container .account-content .statistics-link,
+.statistics-link {
   text-align: center;
   margin-top: 4px;
 }
 
 /* Styling for "See more statistics" link in dashboard */
-.dashboard-container .account-content .statistics-link a {
+.dashboard-container .account-content .statistics-link a,
+.statistics-link a {
   color: #3e88f7 !important;
   font-family: 'DM Sans', sans-serif !important;
   font-size: 12px !important;
@@ -112,7 +129,8 @@
   font-variation-settings: 'opsz' 14 !important;
 }
 
-.dashboard-container .account-content .statistics-link a:hover {
+.dashboard-container .account-content .statistics-link a:hover,
+.statistics-link a:hover {
   color: #98bffa !important;
 }
 

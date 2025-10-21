@@ -158,7 +158,7 @@ export const LineGraphTile = ({ dataSets, width, height }) => {
 };
 
 // HistogramTile component
-export const HistogramTile = ({ dataSets, width, height, blur }) => {
+export const HistogramTile = ({ dataSets, width, height, blur, dateRange, showStatisticsLink }) => {
   const [tileRef, tileWidth] = useElementWidth(); // Hook to get dynamic width of the tile
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0);
@@ -183,7 +183,7 @@ export const HistogramTile = ({ dataSets, width, height, blur }) => {
 
   return (
     <Grid size={width}>
-      <div className={`statistics-tile${blur ? ' blurred-tile' : ''}`} style={{ height, position: 'relative' }} ref={tileRef}>
+      <div className={`statistics-tile histogram-tile${blur ? ' blurred-tile' : ''}`} style={{ height, position: 'relative' }} ref={tileRef}>
         {blur && <div className="blurred-tile-overlay" style={{ height: '100%', width: '100%' }} />}
         {blur && (
           <div className="blurred-tile-message">
@@ -217,14 +217,31 @@ export const HistogramTile = ({ dataSets, width, height, blur }) => {
           </div>
           <div className={blur ? 'blurred-content' : ''}>
             {currentDataSet.data && currentDataSet.data.length > 0 ? (
-              <BarChart width={tileWidth - 40} height={heightAsInt-80} data={currentDataSet.data}>
-                {/* Adjust chart width dynamically */}
-                <XAxis dataKey="name" />
-                <YAxis />
-                <CartesianGrid stroke="#eee" strokeDasharray="1 5" />
-                <Tooltip />
-                <Bar dataKey="value" fill="#2196F3" />
-              </BarChart>
+              <>
+                <BarChart width={tileWidth - 40} height={heightAsInt-80} data={currentDataSet.data}>
+                  {/* Adjust chart width dynamically */}
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <CartesianGrid stroke="#eee" strokeDasharray="1 5" />
+                  <Tooltip />
+                  <Bar dataKey="value" fill="#2196F3" />
+                </BarChart>
+                {/* Date range and statistics link - right after chart SVG */}
+                {dateRange && (
+                  <div className="histogram-footer">
+                    <p className="histogram-date-range">
+                      Above data from {dateRange.start} to {dateRange.end}
+                    </p>
+                    {showStatisticsLink && (
+                      <div className="statistics-link">
+                        <a href="/statistics" onClick={(e) => { e.preventDefault(); navigate('/statistics'); }}>
+                          See more statistics
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
             ) : (
               <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
             )}

@@ -101,7 +101,9 @@ const Dashboard = () => {
       component: HistogramTile,
       dataSets: apiStatisticsData?.messageTimingData,
       width: 12,
-      height: "240px",
+      height: "250px",
+      dateRange: startDateDisplay && endDateDisplay ? { start: startDateDisplay, end: endDateDisplay } : null,
+      showStatisticsLink: true,
     },
   ];
 
@@ -481,24 +483,6 @@ const Dashboard = () => {
                     renderTiles(statisticsTiles)
                   ) : (
                     <BoxLoader />
-                  )}
-
-                  {!statisticsDataLoading && (
-                    <>
-                      {startDateDisplay && endDateDisplay && (
-                        <p style={{ textAlign: "center", marginBottom: "5px" }}>
-                          Above data from {startDateDisplay} to {endDateDisplay}
-                        </p>
-                      )}
-                      <div
-                        className="statistics-link"
-                        style={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <Link style={{ margin: "0" }} to="/statistics">
-                          See more statistics
-                        </Link>
-                      </div>
-                    </>
                   )}
 
                   <div className="row">
