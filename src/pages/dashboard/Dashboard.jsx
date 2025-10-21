@@ -101,7 +101,7 @@ const Dashboard = () => {
       component: HistogramTile,
       dataSets: apiStatisticsData?.messageTimingData,
       width: 12,
-      height: "250px",
+      height: "350px",
       dateRange: startDateDisplay && endDateDisplay ? { start: startDateDisplay, end: endDateDisplay } : null,
       showStatisticsLink: true,
     },

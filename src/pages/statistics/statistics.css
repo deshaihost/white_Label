@@ -417,6 +417,43 @@
   pointer-events: none;
 }
 
+/* Histogram footer styling */
+.histogram-footer {
+  margin-top: 16px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.histogram-date-range {
+  color: #a6a9b2 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  font-variation-settings: 'opsz' 14 !important;
+  margin-bottom: 4px !important;
+}
+
+/* Styling for statistics link container */
+.statistics-link {
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Styling for "See more statistics" link */
+.statistics-link a {
+  color: #3e88f7 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-decoration: underline !important;
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-variation-settings: 'opsz' 14 !important;
+}
+
+.statistics-link a:hover {
+  color: #98bffa !important;
+}
+
 /* MUI Menu styling to match new dashboard design */
 .MuiPaper-root.MuiMenu-paper {
   background-color: #17191f !important;

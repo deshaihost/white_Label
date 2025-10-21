@@ -218,8 +218,8 @@ export const HistogramTile = ({ dataSets, width, height, blur, dateRange, showSt
           <div className={blur ? 'blurred-content' : ''}>
             {currentDataSet.data && currentDataSet.data.length > 0 ? (
               <>
-                <BarChart width={tileWidth - 40} height={heightAsInt-80} data={currentDataSet.data}>
-                  {/* Adjust chart width dynamically */}
+                <BarChart width={tileWidth - 40} height={heightAsInt-140} data={currentDataSet.data}>
+                  {/* Adjust chart width dynamically - reduced height to make room for footer */}
                   <XAxis dataKey="name" />
                   <YAxis />
                   <CartesianGrid stroke="#eee" strokeDasharray="1 5" />
