@@ -233,11 +233,11 @@
 }
 
 .action-items-table .complete-button:hover {
-  background: #3e88f7;
+  background: #3e88f7 !important;
 }
 
 .action-items-table .complete-button.completed {
-  background: #3e88f7;
+  background: #3e88f7 !important;
   border-color: #3e88f7;
 }
 
@@ -245,17 +245,17 @@
 .action-items-table .complete-button .check-icon {
   width: 16px;
   height: 16px;
-  color: #3e88f7;
+  color: #3e88f7 !important;
   transition: color 0.3s ease;
   stroke-width: 2.5;
 }
 
 .action-items-table .complete-button:hover .check-icon {
-  color: white !important;
+  color: #ffffff !important;
 }
 
 .action-items-table .complete-button.completed .check-icon {
-  color: white !important;
+  color: #ffffff !important;
 }
 
 .pro-icon1 {

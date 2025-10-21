@@ -460,29 +460,29 @@
 }
 
 .complete-button:hover {
-  background: #3e88f7;
+  background: #3e88f7 !important;
 }
 
-.complete-button-icon {
+.complete-button .complete-button-icon {
   width: 16px;
   height: 16px;
-  color: #3e88f7;
+  color: #3e88f7 !important;
   transition: color 0.3s ease;
   stroke-width: 2.5;
 }
 
 .complete-button:hover .complete-button-icon {
-  color: white !important;
+  color: #ffffff !important;
 }
 
 /* Completed state button (if needed for future) */
 .complete-button.completed {
-  background: #3e88f7;
+  background: #3e88f7 !important;
   border-color: #3e88f7;
 }
 
 .complete-button.completed .complete-button-icon {
-  color: white !important;
+  color: #ffffff !important;
 }
 
 .search {
