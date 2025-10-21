@@ -86,6 +86,36 @@
   background: #0F1117;
 }
 
+/* Styling for "Above data from..." text in dashboard */
+.dashboard-container .account-content > p {
+  color: #a6a9b2 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  font-variation-settings: 'opsz' 14 !important;
+}
+
+/* Styling for statistics link container */
+.dashboard-container .account-content .statistics-link {
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Styling for "See more statistics" link in dashboard */
+.dashboard-container .account-content .statistics-link a {
+  color: #3e88f7 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-decoration: underline !important;
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-variation-settings: 'opsz' 14 !important;
+}
+
+.dashboard-container .account-content .statistics-link a:hover {
+  color: #98bffa !important;
+}
+
 .dashboard-container .account-content .account-box {
   border-radius: 12px;
   background: #17191f;

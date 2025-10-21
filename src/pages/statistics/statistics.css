@@ -8,6 +8,17 @@
   margin-bottom: 16px;
 }
 
+/* Tile header title styling - gray color like new dashboard */
+.tile-header h3 {
+  font-size: 14px;
+  color: #a6a9b2 !important;
+  margin-bottom: 0;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 14;
+}
+
 /* Styling for the three-dot icon */
 .tile-header .icon-button {
   color: #a6a9b2;
@@ -193,16 +204,26 @@
   font-size: 14px;
   color: #a6a9b2;
   margin-bottom: 16px;
-  text-align: left;
+  text-align: left !important;
   width: 100%;
   font-family: 'DM Sans', sans-serif;
   font-weight: 600;
   font-variation-settings: 'opsz' 14;
 }
 
+/* Chart/Histogram tiles should have white title text */
+.statistics-tile:not(.metric-tile) h3 {
+  color: white !important;
+}
+
 .statistics-tile p {
-  color: #CCC;
+  color: #a6a9b2;
   margin: auto 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 14;
+  text-align: center;
 }
 
 /* Styling for "No data yet" message */
@@ -227,8 +248,12 @@
 
 /* MetricTile specific styling */
 .metric-tile {
-  text-align: left;
+  text-align: left !important;
   padding: 24px !important;
+}
+
+.metric-tile * {
+  text-align: left !important;
 }
 
 .metric-content {
