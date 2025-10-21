@@ -15,7 +15,7 @@ import SubscriptionBanner from "../../component/accountNotifBanner/subscriptionB
 import "react-circular-progressbar/dist/styles.css";
 import ToastHandle from "../../helper/ToastMessage";
 import { Helmet } from "react-helmet";
-import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleCheck, FaCheck } from "react-icons/fa6";
 import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/transcriptsModel/ConverSationtranscriptModel";
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
 import NoltWidget from "../../component/nolt/nolt";
@@ -616,13 +616,8 @@ const Dashboard = () => {
                                         </div>
                                       </td>
                                       <td className="text-center">
-                                        {/*\
-                                        <span className="mainCursor" style={{ marginRight: "10px" }} onClick={() => { conversationCallOnDashboard( actionItemSend ); }}>
-                                          <GoArrowUpRight className="text-white fs-6" />
-                                        </span>
-                                        */}
-                                        <span
-                                          className="mainCursor"
+                                        <button
+                                          className="complete-button"
                                           onClick={() => {
                                             compeletHndle(
                                               id,
@@ -630,9 +625,10 @@ const Dashboard = () => {
                                               conversationID
                                             );
                                           }}
+                                          title="Mark Complete"
                                         >
-                                          <FaCircleCheck className="text-primary fs-6" />
-                                        </span>
+                                          <FaCheck className="complete-button-icon" />
+                                        </button>
                                       </td>
                                     </tr>
                                   );

@@ -420,6 +420,49 @@
   border: 0;
 }
 
+/* Complete Button Styling */
+.complete-button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #3e88f7;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px rgba(62, 136, 247, 0.25);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.complete-button:hover {
+  background: #3e88f7;
+}
+
+.complete-button-icon {
+  width: 16px;
+  height: 16px;
+  color: #3e88f7;
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  stroke-width: 2.5;
+}
+
+.complete-button:hover .complete-button-icon {
+  color: white;
+}
+
+/* Completed state button (if needed for future) */
+.complete-button.completed {
+  background: #3e88f7;
+  border-color: #3e88f7;
+}
+
+.complete-button.completed .complete-button-icon {
+  color: white;
+}
+
 .search {
   border: 2px solid #013280 !important;
   color: #a6a9b2;
