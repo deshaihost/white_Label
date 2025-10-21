@@ -275,11 +275,10 @@ const GetStarted = () => {
           </Row>
           <Row style={{ marginTop: "50px", marginBottom: "100px" }}>
             <Col lg={12} className="mx-auto">
-              <h3 className="fw-bold text-white fs-1 mb-4">
-                Explore <strong>HostBuddy's Features</strong>
+              <h3 className="explore-features-title">
+                Explore <span className="text-primary-blue">HostBuddy's Features</span>
               </h3>
-              {/* <p className="mb-3 fw-bold text-white fs-6">HostBuddy is packed with features that make it easy for you to automate your short term rental business. Read on to learn how to make the most of your AI companion.</p> */}
-              <p className="mb-3 fw-bold text-white fs-6">
+              <p className="explore-features-description">
                 HostBuddy is packed with features that make it easy for you to automate your short term rental business and drive more revenue. Check them out below.
               </p>
             </Col>

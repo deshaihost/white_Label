@@ -80,10 +80,11 @@
   width: fit-content;
   color: #3e88f7;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   border-bottom-color: #3e88f7;
   font-family: 'DM Sans', sans-serif;
   font-variation-settings: 'opsz' 14;
+  margin-bottom: 12px;
 }
 
 .get_started .get_started_featured .link_card_box {
@@ -91,6 +92,9 @@
   border-radius: 8px !important;
   padding: 24px !important;
   min-height: auto;
+  background: #17191f;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
 }
 
 .get_started .get_started_featured .link_card_box:hover {
@@ -100,7 +104,7 @@
 .get_started .link_card_box span:last-child {
   color: white;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.625;
   font-weight: 400;
   font-family: 'DM Sans', sans-serif;
   font-variation-settings: 'opsz' 14;
@@ -109,16 +113,13 @@
 .get_started .link_card_box {
   min-height: 185px;
   position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 20px rgba(62, 136, 247, 0.15);
   background: #17191f;
-  border: 2px solid #013280 !important;
+  border: 1px solid #013280 !important;
+  transition: border-color 0.3s ease;
 }
 
 .get_started .link_card_box:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(62, 136, 247, 0.3);
-  border-color: #3e88f7 !important;
+  border-color: rgba(62, 136, 247, 0.5) !important;
 }
 
 .get_started .more-coming-soon-box {
@@ -137,6 +138,7 @@
   color: #a6a9b2;
   font-family: 'DM Sans', sans-serif;
   font-variation-settings: 'opsz' 14;
+  margin: 0;
 }
 
 .get_started .samsung-bold {
@@ -599,6 +601,33 @@
 
 .check-progress-line.in-progress {
   background: #01255e;
+}
+
+/* ===== Explore Features Section ===== */
+
+.explore-features-title {
+  font-family: 'DM Sans', sans-serif;
+  font-variation-settings: 'opsz' 14;
+  font-size: 24px;
+  font-weight: 400;
+  color: white;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.text-primary-blue {
+  color: #3e88f7;
+}
+
+.explore-features-description {
+  font-family: 'DM Sans', sans-serif;
+  font-variation-settings: 'opsz' 14;
+  font-size: 13px;
+  font-weight: 400;
+  color: #a6a9b2;
+  line-height: 1.6;
+  max-width: 800px;
+  margin-bottom: 0;
 }
 .get-started-modal .modal-content .close:hover {
   background: transparent;
