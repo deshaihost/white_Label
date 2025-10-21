@@ -40,7 +40,6 @@
 .dashboard-container {
   height: 100%;
   border-radius: 12px;
-  border: 2px solid #013280;
   background: #0F1117;
   box-shadow: 0 0 25px rgba(30, 75, 158, 0.2);
 }
@@ -82,8 +81,8 @@
 }
 
 .dashboard-container .account-content {
-  padding: 32px;
-  background: #0F1117;
+  padding: 0;
+  background: #17191f;
 }
 
 /* Styling for "Above data from..." text in dashboard */
@@ -332,6 +331,13 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 0 25px rgba(30, 75, 158, 0.2);
+  margin-top: 16px;
+  width: 100%;
+}
+
+/* Add spacing to the row containing action items */
+.dashboard-container .account-content > .row:last-child {
+  margin-top: 16px;
 }
 
 /* Action Items Table Header Section (Title and See All) */
@@ -525,7 +531,7 @@ svg.p-icon.p-dropdown-trigger-icon.p-clickable {
   }
 
   .dashboard-container .account-content {
-    padding: 24px;
+    padding: 0;
   }
 
   .dashboard-container .account-content .account-box {
@@ -565,7 +571,7 @@ svg.p-icon.p-dropdown-trigger-icon.p-clickable {
 @media only screen and (max-width: 767px) {
   .dashboard-container > div:not(:last-child),
   .dashboard-container .account-content {
-    padding: 16px;
+    padding: 0;
   }
 
   .dashboard-container .account_heading h3 {
