@@ -98,6 +98,10 @@ const TriggersTrargetsConditionsModel = (props) => {
       if (field.type === "multiSelecter") {
         return !value || value.length === 0;
       }
+      // For number fields, allow 0 as a valid value
+      if (field.type === "number") {
+        return value === null || value === undefined || value === "";
+      }
       return !value || value === "";
     });
 
