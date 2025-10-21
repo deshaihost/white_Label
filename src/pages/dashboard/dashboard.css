@@ -45,13 +45,15 @@
 }
 
 .dashboard-container .account_heading {
-  padding: 16px 32px;
-  border-bottom: 2px solid #013280;
+  padding: 16px;
+  border: 1px solid #013280;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   background: #01255e;
+  margin-bottom: 24px;
 }
 
 .dashboard-container > div:not(:last-child) {
