@@ -262,9 +262,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           <p onClick={addEditClose} className="text-primary" style={{ cursor: "pointer" }}>&lt; Smart Templates </p>
         </div>
       
-        <div className="d-flex flex-column align-items-center">
+        <div className="d-flex align-items-center gap-3">
           {!saveTemplateLoading ? (
-            <button className="bg_theme_btn mb-3" onClick={() => { handleSaveTemplate(dataStructure); }}>Save</button>
+            <button className="bg_theme_btn" onClick={() => { handleSaveTemplate(dataStructure); }}>Save</button>
           ) : (
             <Loader />
           )}

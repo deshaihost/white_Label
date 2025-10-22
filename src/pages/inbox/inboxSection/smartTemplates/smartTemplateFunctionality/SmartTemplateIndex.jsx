@@ -320,7 +320,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
               <p style={{color:"#CCC", fontSize:'16px'}}>Highly customizable templated messages that let you contact the right guests at the right time. Automate friendly check-in messages, strategic upsells, policy reminders, and much more. Use AI to add context awareness and a personal touch to each message.</p>
               <Link to="/smart-templates?portal=true" style={{display:'inline-block', marginTop:'10px'}}>Learn more &rarr;</Link>
             </div>
-            <hr style={{ borderTop: "1px solid #013280", border: "none", marginBottom: "40px", marginTop: "10px" }} />
+            <div style={{ borderTop: "1px solid #013280", marginBottom: "40px" }}></div>
 
           {getTemplatesLoading ? (
               <Loader />

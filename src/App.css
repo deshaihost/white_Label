@@ -379,11 +379,11 @@ textarea.form-control {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  border-radius: 160px;
-  background: #146ef5;
+  border-radius: 6px;
+  background: #01255e;
   display: inline-block;
   padding: 13px 40px;
-  border: 1px solid #146ef5;
+  border: 1px solid #013280;
 }
 
 .upgrade-plan-box .bg_theme_btn {
