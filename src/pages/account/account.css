@@ -344,9 +344,16 @@
 
 /* Button Container */
 .button-container {
-    display: flex;
+    display: flex !important;
+    flex-direction: row !important;
     gap: 16px;
     margin-top: 24px;
+    align-items: center;
+}
+
+.button-container button {
+    margin: 0 !important;
+    flex-shrink: 0;
 }
 
 /* Location Section Specific */
