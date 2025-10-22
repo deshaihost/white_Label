@@ -580,6 +580,17 @@ const IntegrationsIndex = (ApiUserData) => {
                     </div>
                   </div>
 
+                  {/* Add Webhook Row - First Row */}
+                  {!showAddWebhook && (
+                    <div className="webhook-add-row">
+                      <div className="webhook-cell-full">
+                        <Link to="#" className="text-link" onClick={handleAddWebhookClick}>
+                          + Add Webhook
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Existing Webhooks */}
                   {Object.entries(webhooks).map(([url, details]) => (
                     <div key={url} className="webhook-data-row">
@@ -599,17 +610,6 @@ const IntegrationsIndex = (ApiUserData) => {
                       </div>
                     </div>
                   ))}
-
-                  {/* Add Webhook Row */}
-                  {!showAddWebhook && (
-                    <div className="webhook-add-row">
-                      <div className="webhook-cell-full">
-                        <Link to="#" className="text-link" onClick={handleAddWebhookClick}>
-                          + Add Webhook
-                        </Link>
-                      </div>
-                    </div>
-                  )}
 
                   {/* Empty State */}
                   {Object.keys(webhooks).length === 0 && !showAddWebhook && (
