@@ -30,6 +30,15 @@
     text-align: left;
 }
 
+.account-main .banner-heading p {
+    color: #a6a9b2;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-variation-settings: 'opsz' 14;
+    margin-bottom: 0;
+}
+
 .account-main .banner-heading {
     margin-bottom: 40px;
 }
