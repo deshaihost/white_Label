@@ -320,7 +320,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
               <p style={{color:"#CCC", fontSize:'16px'}}>Highly customizable templated messages that let you contact the right guests at the right time. Automate friendly check-in messages, strategic upsells, policy reminders, and much more. Use AI to add context awareness and a personal touch to each message.</p>
               <Link to="/smart-templates?portal=true" style={{display:'inline-block', marginTop:'10px'}}>Learn more &rarr;</Link>
             </div>
-            <hr style={{ backgroundColor: "white", height: "2px", border: "none" }} className="mt-1"/>
+            <hr style={{ borderTop: "1px solid #013280", border: "none", marginBottom: "40px", marginTop: "10px" }} />
 
             {getTemplatesLoading ? (
               <Loader />
@@ -330,40 +330,105 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                   const { name, enabled } = smartItem;
                   const templateDescription = describeTemplate(smartItem);
                   return (
-                    <div key={smartIndex} className="row mt-5" style={{ 
-                      marginLeft: "0", 
-                      marginRight: "0", 
-                      border: "1px solid #045ce9", 
-                      borderRadius: "15px", 
-                      padding: "15px 10px", 
-                      boxShadow: "0 4px 8px 0 rgba(255, 255, 255, 0.5)" 
+                    <div key={smartIndex} style={{ 
+                      backgroundColor: "#0F1117",
+                      border: "2px solid #013280",
+                      borderRadius: "12px",
+                      padding: "32px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      height: "140px",
+                      boxShadow: "0 0 25px rgba(1, 50, 128, 0.2)",
+                      marginTop: "20px"
                     }}>
-                      <div className="col-lg-11 col-12">
-                        <div className="fs-5 d-flex justify-content-between">
-                          {name !== "" ? name : <p className="text-danger">No Name</p>}
-                          <div className="d-flex align-items-center gap-2">
-                            <span className={`template-status ${enabled ? 'enabled' : 'not-enabled'}`}>
-                              {enabled ? 'Enabled' : 'Not enabled'}
-                            </span>
-                            <div className="form-check form-switch">
-                              <input 
-                                className="form-check-input" 
-                                type="checkbox" 
-                                checked={enabled} 
-                                onChange={(e) => handleToggleTemplate(smartItem, e)}
-                                id={`flexSwitchCheckChecked-${smartIndex}`}
-                              />
-                            </div>
-                            <button 
-                              className="btn btn-link text-primary p-0 ms-2"
-                              onClick={() => setAddEditSmart({type:{type:edit, index:smartIndex}, data: "", smartTemplateData:{smartItem}, description:templateDescription})}
-                              style={{ textDecoration: 'none', fontSize: '14px' }}
-                            >
-                              Edit
-                            </button>
-                          </div>
+                      <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                        <h3 style={{ 
+                          color: "white", 
+                          fontSize: "22px", 
+                          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                          fontWeight: "700",
+                          fontVariationSettings: "'opsz' 14",
+                          marginBottom: "12px"
+                        }}>
+                          {name !== "" ? name : <span style={{color: "#ef4444"}}>No Name</span>}
+                        </h3>
+                        <p style={{ 
+                          color: "#a6a9b2", 
+                          fontSize: "16px",
+                          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                          fontWeight: "400",
+                          fontVariationSettings: "'opsz' 14",
+                          lineHeight: "1.6",
+                          margin: "0",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          WebkitLineClamp: "2",
+                          WebkitBoxOrient: "vertical"
+                        }}>
+                          {templateDescription}
+                        </p>
+                      </div>
+                      
+                      <div style={{ display: "flex", alignItems: "center", gap: "24px", marginLeft: "32px", flexShrink: "0" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                          <span style={{ 
+                            fontSize: "15px",
+                            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                            fontWeight: "600",
+                            fontVariationSettings: "'opsz' 14",
+                            whiteSpace: "nowrap",
+                            color: enabled ? "#10b981" : "#ef4444"
+                          }}>
+                            {enabled ? 'Enabled' : 'Not enabled'}
+                          </span>
+                          <button
+                            onClick={(e) => handleToggleTemplate(smartItem, e)}
+                            style={{
+                              width: "56px",
+                              height: "28px",
+                              borderRadius: "9999px",
+                              position: "relative",
+                              backgroundColor: enabled ? "#3e88f7" : "#676a73",
+                              border: "none",
+                              cursor: "pointer",
+                              transition: "all 0.3s",
+                              boxShadow: enabled ? "0 0 12px rgba(62, 136, 247, 0.4)" : "none"
+                            }}
+                          >
+                            <div style={{
+                              position: "absolute",
+                              top: "2px",
+                              width: "24px",
+                              height: "24px",
+                              backgroundColor: "white",
+                              borderRadius: "50%",
+                              transition: "transform 0.3s",
+                              transform: enabled ? "translateX(28px)" : "translateX(2px)"
+                            }}></div>
+                          </button>
                         </div>
-                        <p className="settings-label truncate-text">{templateDescription}</p>
+                        
+                        <button
+                          onClick={() => setAddEditSmart({type:{type:edit, index:smartIndex}, data: "", smartTemplateData:{smartItem}, description:templateDescription})}
+                          style={{
+                            color: "#98bffa",
+                            fontSize: "16px",
+                            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                            fontWeight: "600",
+                            fontVariationSettings: "'opsz' 14",
+                            backgroundColor: "transparent",
+                            border: "none",
+                            cursor: "pointer",
+                            padding: "0 16px",
+                            transition: "color 0.2s"
+                          }}
+                          onMouseOver={(e) => e.target.style.color = "#3e88f7"}
+                          onMouseOut={(e) => e.target.style.color = "#98bffa"}
+                        >
+                          Edit
+                        </button>
                       </div>
                     </div>
                   );
