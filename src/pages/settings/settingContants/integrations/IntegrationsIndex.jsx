@@ -555,48 +555,73 @@ const IntegrationsIndex = (ApiUserData) => {
           {mainTab === 'Webhooks' && (
             <>
               <div style={{ width: '100%', marginTop: '20px' }}>
-                <h4 className="fs-14 mb-4 mt-5 d-flex align-items-center">
+                <h4 className="webhook-section-title">
                   {isProPlan && (
                     <img src={LockIcon} alt="lock" style={{ width: '14px', marginRight: '6px' }} />
                   )}
                   Webhook Endpoints
                 </h4>
-                {/* Webhook Table with headers */}
-                <div className="table-responsive">
-                  <table className="table">
-                    <colgroup>
-                      <col style={{ width: '25%' }} />
-                      <col style={{ width: '35%' }} />
-                      <col style={{ width: '20%' }} />
-                      <col style={{ width: '20%' }} />
-                    </colgroup>
-                    <thead>
-                      <tr>
-                        <th className="fs-14 text-white">Name</th>
-                        <th className="fs-14 text-white">Endpoint</th>
-                        <th className="fs-14 text-white">Status</th>
-                        <th className="fs-14 text-white">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Object.entries(webhooks).map(([url, details]) => (
-                        <tr key={url}>
-                          <td><h6 className="fs-14 text-white m-0">{details.name || url}</h6></td>
-                          <td><h6 className="fs-14 text-white m-0" style={{ wordBreak: 'break-all' }}>{url}</h6></td>
-                          <td><h6 className="fs-14 grey-text m-0">Confirmed</h6></td>
-                          <td>
-                            <Link to="#" style={{ color: "red", fontSize: "1rem", lineHeight: '1.2', margin: '0' }} className="text-link" onClick={() => handleDeleteWebhook(url)}>
-                              Delete
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                
+                {/* Webhook Table Container - Grid Layout */}
+                <div className="webhook-table-wrapper">
+                  {/* Table Header */}
+                  <div className="webhook-header-row">
+                    <div className="webhook-cell">
+                      <span>Name</span>
+                    </div>
+                    <div className="webhook-cell webhook-cell-bordered">
+                      <span>Endpoint</span>
+                    </div>
+                    <div className="webhook-cell webhook-cell-bordered">
+                      <span>Status</span>
+                    </div>
+                    <div className="webhook-cell webhook-cell-bordered">
+                      <span>Action</span>
+                    </div>
+                  </div>
+
+                  {/* Existing Webhooks */}
+                  {Object.entries(webhooks).map(([url, details]) => (
+                    <div key={url} className="webhook-data-row">
+                      <div className="webhook-cell">
+                        <span>{details.name || url}</span>
+                      </div>
+                      <div className="webhook-cell webhook-cell-bordered">
+                        <span style={{ wordBreak: 'break-all' }}>{url}</span>
+                      </div>
+                      <div className="webhook-cell webhook-cell-bordered">
+                        <span className="grey-text">Confirmed</span>
+                      </div>
+                      <div className="webhook-cell webhook-cell-bordered">
+                        <Link to="#" className="webhook-delete-link" onClick={() => handleDeleteWebhook(url)}>
+                          Delete
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Add Webhook Row */}
+                  {!showAddWebhook && (
+                    <div className="webhook-add-row">
+                      <div className="webhook-cell-full">
+                        <Link to="#" className="text-link" onClick={handleAddWebhookClick}>
+                          + Add Webhook
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Empty State */}
+                  {Object.keys(webhooks).length === 0 && !showAddWebhook && (
+                    <div className="webhook-empty-row">
+                      <p>No webhooks connected yet.</p>
+                    </div>
+                  )}
                 </div>
+
                 {/* Add Webhook Form */}
-                {showAddWebhook ? (
-                  <div className="recipient" style={{ marginBottom: '18px' }}>
+                {showAddWebhook && (
+                  <div className="recipient" style={{ marginTop: '16px', marginBottom: '18px' }}>
                     <div className="row">
                       <div className="col input_group">
                         <label htmlFor="webhookName">Name</label>
@@ -618,15 +643,6 @@ const IntegrationsIndex = (ApiUserData) => {
                       )}
                     </span>
                   </div>
-                ) : (
-                  <span className="d-flex justify-content-center" style={{ marginTop: '10px', marginBottom: '18px' }}>
-                    <Link to="#" className="text-link" onClick={handleAddWebhookClick}>
-                      + Add Webhook
-                    </Link>
-                  </span>
-                )}
-                {Object.keys(webhooks).length === 0 && (
-                  <div style={{ color: '#fff', padding: '16px' }}>No webhooks connected yet.</div>
                 )}
               </div>
               {/* Slack Accounts Section - Commented out as requested */}

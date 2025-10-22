@@ -189,3 +189,184 @@
   padding-right: 0;
   margin-right: 24px;
 }
+
+/* ============================================
+   WEBHOOK SECTION STYLING
+   ============================================ */
+
+/* Webhook Section Title */
+.settings-integrations .webhook-section-title {
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-variation-settings: 'opsz' 14;
+}
+
+/* Webhook Table Wrapper */
+.settings-integrations .webhook-table-wrapper {
+  background-color: #0f1826;
+  border: 1px solid #013280;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Webhook Header Row - Grid Layout */
+.settings-integrations .webhook-header-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  border-bottom: 1px solid #013280;
+  background-color: #0F1117;
+}
+
+/* Webhook Data Row - Grid Layout */
+.settings-integrations .webhook-data-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  border-bottom: 1px solid #013280;
+  background-color: transparent;
+}
+
+.settings-integrations .webhook-data-row:last-child {
+  border-bottom: none;
+}
+
+/* Webhook Add Row */
+.settings-integrations .webhook-add-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-bottom: 1px solid #013280;
+  background-color: transparent;
+}
+
+/* Webhook Cell */
+.settings-integrations .webhook-cell {
+  padding: 16px;
+  color: white;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-variation-settings: 'opsz' 14;
+}
+
+.settings-integrations .webhook-cell-bordered {
+  border-left: 1px solid #013280;
+}
+
+.settings-integrations .webhook-cell-full {
+  padding: 16px;
+  grid-column: 1 / -1;
+}
+
+/* Webhook Empty Row */
+.settings-integrations .webhook-empty-row {
+  padding: 24px;
+  background-color: transparent;
+}
+
+.settings-integrations .webhook-empty-row p {
+  color: #a6a9b2;
+  font-size: 13px;
+  margin: 0;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-variation-settings: 'opsz' 14;
+}
+
+/* Webhook Delete Link */
+.settings-integrations .webhook-delete-link {
+  color: #ef4444;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-variation-settings: 'opsz' 14;
+}
+
+.settings-integrations .webhook-delete-link:hover {
+  color: #f87171;
+  text-decoration: none;
+}
+
+/* Grey Text for Status */
+.settings-integrations .grey-text {
+  color: #a6a9b2 !important;
+}
+
+/* Add Webhook Link */
+.settings-integrations .text-link {
+  color: #3e88f7;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-variation-settings: 'opsz' 14;
+}
+
+.settings-integrations .text-link:hover {
+  color: #74A9F7;
+  text-decoration: none;
+}
+
+/* Webhook Form Container */
+.settings-integrations .recipient {
+  background-color: transparent;
+  padding: 0;
+  margin-top: 16px;
+}
+
+.settings-integrations .recipient .row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+/* Webhook Form Inputs */
+.settings-integrations .recipient .input_group {
+  margin-bottom: 0;
+}
+
+.settings-integrations .recipient .input_group label {
+  color: white;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: block;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-variation-settings: 'opsz' 14;
+}
+
+.settings-integrations .recipient .input_group .form-control {
+  background-color: #01255e;
+  border: 1px solid #013280;
+  border-radius: 6px;
+  color: white;
+  padding: 10px 14px;
+  height: 40px;
+  font-size: 14px;
+  width: 100%;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-variation-settings: 'opsz' 14;
+}
+
+.settings-integrations .recipient .input_group .form-control:focus {
+  background-color: #01255e;
+  border-color: #3e88f7;
+  color: white;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(62, 136, 247, 0.1);
+}
+
+.settings-integrations .recipient .input_group .form-control::placeholder {
+  color: #676A73;
+}
+
+/* Submit Button Container */
+.settings-integrations .d-flex.justify-content-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
