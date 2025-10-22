@@ -277,7 +277,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       </div>
       <p style={{color:'#AAA', fontSize:'16px', textAlign:'left'}}>Smart Templates lets you create highly customized templated messages to suit your exact needs. Choose specific triggers, target recipients, and conditions, and use AI to analyze context to send to the right guests at the right time.</p>
       
-      <hr className="bg-white opacity-100 my-5" style={{ height: "2px" , opacity:'75%'}} />
+      <div style={{ borderTop: "1px solid #013280", marginBottom: "40px", marginTop: "32px" }}></div>
 
       <div className="nameAndEnableSection">
         <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
