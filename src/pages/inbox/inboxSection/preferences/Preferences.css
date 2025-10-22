@@ -56,3 +56,27 @@
   color: #BBB;
   line-height: 18px;
 }
+
+/* Select dropdown hover state */
+.conversation-settings-inbox .setting-tab-select:hover {
+  background-color: #01255e !important;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.conversation-settings-inbox .setting-tab-select:focus {
+  background-color: #01255e !important;
+  outline: none;
+  box-shadow: none !important;
+}
+
+/* Select dropdown options styling */
+.conversation-settings-inbox .setting-tab-select option {
+  background-color: #0F1117 !important;
+  color: #fff !important;
+  padding: 10px 16px !important;
+}
+
+.conversation-settings-inbox .setting-tab-select option:hover {
+  background-color: #01255e !important;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
