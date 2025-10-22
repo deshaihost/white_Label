@@ -271,14 +271,26 @@
 
 /* Input Groups - Grid Layout */
 .account-content .row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
     gap: 16px;
     margin-bottom: 16px;
 }
 
 .account-content .input_group {
     margin-bottom: 0;
+    display: block;
+}
+
+.location-section .row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px;
+}
+
+.location-section .input_group {
+    display: block;
+    width: 100%;
 }
 
 /* Buttons */
@@ -362,6 +374,12 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 24px;
+}
+
+.location-section .row:last-of-type button {
+    width: auto !important;
+    min-width: 120px;
+    max-width: 150px;
 }
 
 .location-section h5:last-child {
