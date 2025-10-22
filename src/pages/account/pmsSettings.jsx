@@ -6,11 +6,14 @@ import Loader from '../../helper/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCalryLinkActions } from '../../redux/actions';
 import ReauthenticatePMSModal from '../../component/modal/reauthenticateModal/ReauthenticatePMSModal';
+import ConfirmationModal from '../../component/modal/ConfirmationModal';
 
 const PMSSettings = ({ ApiUserData }) => {
   const [pmsDisconnectLoading, setPmsDisconnectLoading] = useState(false);
   const [reauthenticateLoading, setReauthenticateLoading] = useState(false);
   const [showReauthModal, setShowReauthModal] = useState(false);
+  const [showReauthConfirm, setShowReauthConfirm] = useState(false);
+  const [showDisconnectConfirm, setShowDisconnectConfirm] = useState(false);
   const dispatch = useDispatch();
 
   const store = useSelector((state) => state);
@@ -72,9 +75,12 @@ const PMSSettings = ({ ApiUserData }) => {
   };
 
   const handleDisconnectPMS = () => {
-    if (window.confirm("Are you sure you want to disconnect your PMS? Your HostBuddy properties won't be deleted, but any data synced from your PMS (including guest conversations) will be deleted from HostBuddy and all data sync will be stopped.")) {
-      callDisconnectPMSAPI();
-    }
+    setShowDisconnectConfirm(true);
+  };
+
+  const confirmDisconnectPMS = () => {
+    callDisconnectPMSAPI();
+    setShowDisconnectConfirm(false);
   };
 
   const handleReauthenticatePMS = () => {
@@ -82,12 +88,14 @@ const PMSSettings = ({ ApiUserData }) => {
       ToastHandle("No PMS integration found", "danger");
       return;
     }
+    setShowReauthConfirm(true);
+  };
 
-    if (window.confirm(`Are you sure you want to reauthenticate to ${capitalizeFirstLetter(platform)}?\nNote: If you connect a different ${capitalizeFirstLetter(platform)} account, you'll need to individually re-link each HostBuddy property with the correct new listing on ${capitalizeFirstLetter(platform)}.`)) {
-      // Get the calry link and show the modal
-      dispatch(getCalryLinkActions({ platform }));
-      setShowReauthModal(true);
-    }
+  const confirmReauthenticatePMS = () => {
+    // Get the calry link and show the modal
+    dispatch(getCalryLinkActions({ platform }));
+    setShowReauthModal(true);
+    setShowReauthConfirm(false);
   };
 
   const handleCloseReauthModal = () => {
@@ -148,6 +156,28 @@ const PMSSettings = ({ ApiUserData }) => {
         calryLink={getCarlyLink}
         platformName={platform}
         loading={getCalryLinkLoading || reauthenticateLoading}
+      />
+
+      {/* Reauthenticate Confirmation Modal */}
+      <ConfirmationModal
+        show={showReauthConfirm}
+        onClose={() => setShowReauthConfirm(false)}
+        onConfirm={confirmReauthenticatePMS}
+        title="Reauthenticate PMS"
+        message={`Are you sure you want to reauthenticate to ${capitalizeFirstLetter(platform)}? If you connect a different ${capitalizeFirstLetter(platform)} account, you'll need to individually re-link each HostBuddy property with the correct new listing on ${capitalizeFirstLetter(platform)}.`}
+        confirmText="Continue"
+      />
+
+      {/* Disconnect Confirmation Modal */}
+      <ConfirmationModal
+        show={showDisconnectConfirm}
+        onClose={() => setShowDisconnectConfirm(false)}
+        onConfirm={confirmDisconnectPMS}
+        title="Disconnect PMS"
+        message="Are you sure you want to disconnect your PMS? Your HostBuddy properties won't be deleted, but any data synced from your PMS (including guest conversations) will be deleted from HostBuddy and all data sync will be stopped."
+        confirmText="Disconnect"
+        isDanger={true}
+        loading={pmsDisconnectLoading}
       />
     </>
   );
