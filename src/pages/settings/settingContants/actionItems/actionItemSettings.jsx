@@ -3,9 +3,29 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import Loader from "../../../../helper/Loader";
 import './actionItemSettings.css';
+import './actionItemsNew.css';
 import ToastHandle from "../../../../helper/ToastMessage";
 import MultiSelect from "../../../../component/multiSelect/multiSelect";
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+
+// Icon Components
+const Edit2Icon = () => (
+  <svg className="action-items-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+  </svg>
+);
+
+const Trash2Icon = () => (
+  <svg className="action-items-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+  </svg>
+);
+
+const XIcon = () => (
+  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+  </svg>
+);
 
 const ActionItemsSettings = () => {
   const [activeTab, setActiveTab] = useState('instructions');
@@ -395,464 +415,277 @@ const ActionItemsSettings = () => {
   };
 
   return (
-    <div style={{ color: '#fff', padding: '20px 0' }}>
-      <h2 style={{ color: '#fff', fontSize: '24px', fontWeight: '600', marginBottom: '24px' }}>Action Items Settings</h2>
+    <div className="action-items-new-container">
+      <h1 className="action-items-page-title">Action Items Settings</h1>
 
-      {/* Custom Tab Navigation */}
-      <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: '24px' }}>
-        <div
-          style={{
-            padding: '12px 20px',
-            cursor: 'pointer',
-            color: activeTab === 'instructions' ? '#3498ff' : 'rgba(255,255,255,0.7)',
-            textDecoration: 'none',
-            fontSize: '16px',
-            position: 'relative',
-            borderBottom: activeTab === 'instructions' ? '2px solid #3498ff' : 'none'
-          }}
+      {/* Tabs */}
+      <div className="action-items-tabs">
+        <button
+          className={`action-items-tab ${activeTab === 'instructions' ? 'active' : ''}`}
           onClick={() => setActiveTab('instructions')}
         >
           Action Item Instructions
-        </div>
-        <div
-          style={{
-            padding: '12px 20px',
-            cursor: 'pointer',
-            color: activeTab === 'categories' ? '#3498ff' : 'rgba(255,255,255,0.7)',
-            textDecoration: 'none',
-            fontSize: '16px',
-            position: 'relative',
-            borderBottom: activeTab === 'categories' ? '2px solid #3498ff' : 'none'
-          }}
+        </button>
+        <button
+          className={`action-items-tab ${activeTab === 'categories' ? 'active' : ''}`}
           onClick={() => setActiveTab('categories')}
         >
           Manage Categories
-        </div>
+        </button>
       </div>
 
       {/* Instructions Tab Content */}
       {activeTab === 'instructions' && (
         <div>
-          <p style={{ fontSize: "15px", marginBottom: '20px' }}>
-            By default, HostBuddy will raise an action item when it can't handle a matter, when it doesn't know the answer, or when it detects that something requires your attention.
-            You can add instructions here to influence how these items are identified.
+          {/* Explanation */}
+          <p className="action-items-explanation">
+            By default, HostBuddy will raise an action item when it can't handle a matter, when it doesn't know the answer, or when it detects that something requires your attention. You can add instructions here to influence how these items are identified.
           </p>
 
-          <div style={{ marginBottom: '24px' }}>
-            <h5 style={{ color: 'white', marginBottom: '16px' }}>{isEditing ? "Edit Instruction" : "Add New Instruction"}</h5>
-            <div className="form-design">
-              <div className="row">
-                <div className="col-md-12 mb-3">
-                  <label htmlFor="instruction">Instruction</label>
-                  <textarea
-                    id="instruction"
-                    className="form-control"
-                    style={{ borderRadius: '4px' }}
-                    placeholder="Enter instruction for identifying action items..."
-                    value={isEditing ? editingInstruction.instruction : newInstruction}
-                    onChange={(e) => isEditing
-                      ? setEditingInstruction({ ...editingInstruction, instruction: e.target.value })
-                      : setNewInstruction(e.target.value)
-                    }
-                  />
-                </div>
-              </div>
+          {/* Add New Instruction */}
+          <div className="action-items-add-form">
+            <h2 className="action-items-section-title">
+              {isEditing ? "Edit Instruction" : "Add New Instruction"}
+            </h2>
 
-              <div className="row mb-3">
-                <div className="col-md-12">
-                  {!showPropertySelector ? (
-                    <button
-                      type="button"
-                      className="property-toggle-link"
-                      onClick={() => setShowPropertySelector(true)}
-                    >
-                      Apply to specific properties...
-                    </button>
-                  ) : (
-                    <>
-                      <div className="d-flex justify-content-between align-items-center mb-2">
-                        <label htmlFor="Properties">Select Properties</label>
-                        <button
-                          type="button"
-                          className="property-toggle-link"
-                          onClick={() => {
-                            setShowPropertySelector(false);
-                            setSelectedProperties([]);
-                          }}
-                        >
-                          Apply to all properties
-                        </button>
-                      </div>
-                      <MultiSelect
-                        id="Properties"
-                        options={propertyOptions}
-                        selectedOptions={selectedProperties}
-                        setSelectedOptions={setSelectedProperties}
-                        placeholder="Select properties..."
-                      />
-                    </>
-                  )}
-                </div>
-              </div>
+            <div className="action-items-form-group">
+              <label className="action-items-form-label" htmlFor="instruction">
+                Instruction
+              </label>
+              <textarea
+                id="instruction"
+                className="action-items-textarea"
+                placeholder="Enter instruction for identifying action items..."
+                value={isEditing ? editingInstruction.instruction : newInstruction}
+                onChange={(e) => isEditing
+                  ? setEditingInstruction({ ...editingInstruction, instruction: e.target.value })
+                  : setNewInstruction(e.target.value)
+                }
+              />
+            </div>
 
-              <div className="d-flex justify-content-center">
-                {isEditing ? (
-                  <>
-                    <button
-                      type="button"
-                      className="link-btn outline-btn me-2"
-                      onClick={handleCancelEdit}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      className="bg_theme_btn"
-                      onClick={updateActionItemInstruction}
-                    >
-                      Update Instruction
-                    </button>
-                  </>
-                ) : (
+            {!showPropertySelector ? (
+              <button
+                type="button"
+                className="action-items-property-link"
+                onClick={() => setShowPropertySelector(true)}
+              >
+                Apply to specific properties...
+              </button>
+            ) : (
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <label className="action-items-form-label" htmlFor="Properties">
+                    Select Properties
+                  </label>
                   <button
                     type="button"
-                    className="bg_theme_btn"
-                    onClick={addActionItemInstruction}
+                    className="action-items-property-link"
+                    onClick={() => {
+                      setShowPropertySelector(false);
+                      setSelectedProperties([]);
+                    }}
                   >
-                    Add Instruction
+                    Apply to all properties
                   </button>
-                )}
+                </div>
+                <MultiSelect
+                  id="Properties"
+                  options={propertyOptions}
+                  selectedOptions={selectedProperties}
+                  setSelectedOptions={setSelectedProperties}
+                  placeholder="Select properties..."
+                />
               </div>
+            )}
+
+            <div className="action-items-add-btn-container">
+              {isEditing ? (
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <button
+                    type="button"
+                    className="action-items-add-btn"
+                    style={{ backgroundColor: '#6c757d' }}
+                    onClick={handleCancelEdit}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="action-items-add-btn"
+                    onClick={updateActionItemInstruction}
+                  >
+                    Update Instruction
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className="action-items-add-btn"
+                  onClick={addActionItemInstruction}
+                >
+                  Add Instruction
+                </button>
+              )}
             </div>
           </div>
 
-          <h5 style={{ color: 'white', marginBottom: '16px' }}>Current Instructions</h5>
-          {loading ? (
-            <div style={{ textAlign: 'center', padding: '20px 0' }}>
-              <Loader color="#146ef5" />
-            </div>
-          ) : instructions.length === 0 ? (
-            <p style={{ color: "#999" }}>
-              No instructions added yet. Add your first instruction above.
-            </p>
-          ) : (
-            <div className="instructions-grid">
-              {instructions.map((instruction) => (
-                <div className="instruction-tile" key={instruction.instruction_id}>
-                  <div className="instruction-content">
-                    <p>{instruction.instruction}</p>
+          {/* Current Instructions */}
+          <div>
+            <h2 className="action-items-section-title">Current Instructions</h2>
+            {loading ? (
+              <div className="action-items-loading">
+                <Loader color="#146ef5" />
+              </div>
+            ) : instructions.length === 0 ? (
+              <p className="action-items-empty-state">
+                No instructions added yet. Add your first instruction above.
+              </p>
+            ) : (
+              <div className="action-items-instructions-grid">
+                {instructions.map((instruction) => (
+                  <div className="action-items-instruction-card" key={instruction.instruction_id}>
+                    <p className="action-items-instruction-text">
+                      {instruction.instruction}
+                    </p>
+                    <p className="action-items-instruction-applied">
+                      {!instruction.properties || instruction.properties.length === 0
+                        ? "Applied to all properties"
+                        : instruction.properties.length > 5
+                          ? `Applied to: ${instruction.properties.slice(0, 5).join(", ")}, + ${instruction.properties.length - 5} more`
+                          : `Applied to: ${instruction.properties.join(", ")}`
+                      }
+                    </p>
 
-                    <div className="properties-tag">
-                      <small>
-                        {!instruction.properties || instruction.properties.length === 0
-                          ? "Applied to all properties"
-                          : instruction.properties.length > 5
-                            ? `Applied to: ${instruction.properties.slice(0, 5).join(", ")}, + ${instruction.properties.length - 5} more`
-                            : `Applied to: ${instruction.properties.join(", ")}`
-                        }
-                      </small>
+                    {/* Action Icons */}
+                    <div className="action-items-instruction-actions">
+                      {deletingInstructionId === instruction.instruction_id ? (
+                        <Loader color="#146ef5" />
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            className="action-items-icon-btn edit"
+                            onClick={() => handleEditClick(instruction)}
+                            aria-label="Edit"
+                          >
+                            <Edit2Icon />
+                          </button>
+                          <button
+                            type="button"
+                            className="action-items-icon-btn delete"
+                            onClick={() => deleteActionItemInstruction(instruction.instruction_id)}
+                            aria-label="Delete"
+                          >
+                            <Trash2Icon />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
-
-                  <div className="instruction-actions">
-                    {deletingInstructionId === instruction.instruction_id ? (
-                      <Loader color="#146ef5" />
-                    ) : (
-                      <>
-                        <button
-                          style={{
-                            width: '32px',
-                            height: '32px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            border: '1px solid #3498ff',
-                            borderRadius: '50%',
-                            cursor: 'pointer',
-                            backgroundColor: 'transparent',
-                            color: '#3498ff',
-                            marginLeft: '8px'
-                          }}
-                          onClick={() => handleEditClick(instruction)}
-                          aria-label="Edit"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          style={{
-                            width: '32px',
-                            height: '32px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            border: '1px solid #ff3b30',
-                            borderRadius: '50%',
-                            cursor: 'pointer',
-                            backgroundColor: 'transparent',
-                            color: '#ff3b30',
-                            marginLeft: '8px'
-                          }}
-                          onClick={() => deleteActionItemInstruction(instruction.instruction_id)}
-                          aria-label="Delete"
-                        >
-                          <FaTrash />
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
 
       {/* Categories Tab Content */}
       {activeTab === 'categories' && (
         <div>
-          {/* Add New Category Section */}
-          <div style={{ marginBottom: '30px' }}>
-            <h3 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '16px', color: '#fff' }}>Add New Category</h3>
-            <div>
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', marginBottom: '8px' }}>Category Name</label>
-                <input
-                  type="text"
-                  style={{
-                    width: '100%',
-                    backgroundColor: '#0f1a36',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '4px',
-                    color: '#fff',
-                    padding: '10px 15px',
-                    fontSize: '14px'
-                  }}
-                  placeholder="Enter category name"
-                  value={newCategory.name}
-                  onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-                  className="custom-placeholder"
-                />
-                <style jsx>{`
-                  .custom-placeholder::placeholder {
-                    color: rgba(255, 255, 255, 0.4);
-                  }
-                `}</style>
-              </div>
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', marginBottom: '8px' }}>Description</label>
-                <textarea
-                  style={{
-                    width: '100%',
-                    backgroundColor: '#0f1a36',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '4px',
-                    color: '#fff',
-                    padding: '10px 10px', // Increased horizontal padding
-                    minHeight: '100px',
-                    fontSize: '14px',
-                    resize: 'vertical',
-                    boxSizing: 'border-box', // Ensure padding doesn't affect width
-                    outline: 'none', // Remove the default focus outline
-                    caretColor: '#fff', // Make the cursor visible
-                    textIndent: '0px' // Prevent any text indentation
-                  }}
-                  placeholder="Enter description"
-                  value={newCategory.description}
-                  onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
-                  rows={4}
-                  className="custom-placeholder"
-                />
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
-                <button
-                  style={{
-                    backgroundColor: '#3498ff',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '20px',
-                    padding: '8px 24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: !newCategory.name.trim() || !newCategory.description.trim() ? 'not-allowed' : 'pointer',
-                    fontWeight: '500',
-                    fontSize: '14px',
-                    opacity: !newCategory.name.trim() || !newCategory.description.trim() ? 0.7 : 1
-                  }}
-                  onClick={handleAddCategory}
-                  disabled={isSubmitting || !newCategory.name.trim() || !newCategory.description.trim()}
-                >
-                  <FaPlus style={{ marginRight: '8px' }} /> Add Category
-                </button>
-              </div>
+          {/* Add New Category */}
+          <div className="action-items-category-add-form">
+            <h2 className="action-items-section-title">Add New Category</h2>
+
+            <div className="action-items-category-input-group">
+              <label className="action-items-form-label" htmlFor="categoryName">
+                Category Name
+              </label>
+              <input
+                type="text"
+                id="categoryName"
+                className="action-items-input"
+                placeholder="Enter category name"
+                value={newCategory.name}
+                onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+              />
+            </div>
+
+            <div className="action-items-category-input-group">
+              <label className="action-items-form-label" htmlFor="categoryDescription">
+                Description
+              </label>
+              <textarea
+                id="categoryDescription"
+                className="action-items-textarea"
+                style={{ minHeight: '100px' }}
+                placeholder="Enter description"
+                value={newCategory.description}
+                onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
+              />
+            </div>
+
+            <div className="action-items-add-btn-container">
+              <button
+                type="button"
+                className="action-items-add-category-btn"
+                onClick={handleAddCategory}
+                disabled={isSubmitting || !newCategory.name.trim() || !newCategory.description.trim()}
+              >
+                <span className="action-items-plus-icon">+</span>
+                Add Category
+              </button>
             </div>
           </div>
 
-          {/* Existing Categories Section */}
+          {/* Existing Categories */}
           <div>
-            <h3 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '16px', color: '#fff' }}>Existing Categories</h3>
+            <h2 className="action-items-section-title">Existing Categories</h2>
             {loadingCategories ? (
-              <div style={{ display: 'flex', justifyContent: 'center', padding: '30px' }}>
+              <div className="action-items-loading">
                 <Loader color="#146ef5" />
               </div>
             ) : categories.length === 0 ? (
-              <p style={{ color: '#999' }}>
+              <p className="action-items-empty-state">
                 No categories found. Add your first category above.
               </p>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div className="action-items-categories-list">
                 {categories
                   .filter(category => category.name?.toUpperCase() !== "OTHER")
                   .map(category => (
-                    <div
-                      key={category.id || category.name}
-                      style={{
-                        backgroundColor: 'rgba(255,255,255,0.05)',
-                        padding: '16px',
-                        borderRadius: '4px'
-                      }}
-                    >
-                      {editingCategory && editingCategory.id === (category.id || category.name) ? (
-                        <div>
-                          <div style={{ marginBottom: '16px' }}>
-                            <label style={{ display: 'block', marginBottom: '8px' }}>Category Name</label>
-                            <div
-                              style={{
-                                width: '100%',
-                                backgroundColor: '#0f1a36',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                borderRadius: '4px',
-                                color: '#fff',
-                                padding: '10px 15px',
-                                fontSize: '14px',
-                                opacity: 0.8
-                              }}
-                            >
-                              {editingCategory.name}
-                            </div>
-                          </div>
-                          <div style={{ marginBottom: '16px' }}>
-                            <textarea
-                              style={{
-                                width: '100%',
-                                backgroundColor: '#0f1a36',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                borderRadius: '4px',
-                                color: '#fff',
-                                padding: '10px 15px',
-                                minHeight: '100px',
-                                fontSize: '14px',
-                                resize: 'vertical',
-                                paddingLeft: '15px' // Fix left padding
-                              }}
-                              placeholder="Description"
-                              value={editingCategory.description || ''}
-                              onChange={(e) => setEditingCategory({ ...editingCategory, description: e.target.value })}
-                              rows={4}
-                              className="custom-placeholder"
-                            />
-                          </div>
-                          <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                            <button
-                              style={{
-                                backgroundColor: '#28a745',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '20px',
-                                padding: '8px 24px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                fontWeight: '500',
-                                fontSize: '14px'
-                              }}
-                              onClick={handleUpdateCategory}
-                              disabled={isSubmitting}
-                            >
-                              Save Changes
-                            </button>
-                            <button
-                              style={{
-                                backgroundColor: '#6c757d',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '20px',
-                                padding: '8px 24px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                fontWeight: '500',
-                                fontSize: '14px'
-                              }}
-                              onClick={cancelEditing}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                          <div>
-                            <h4 style={{ fontSize: '16px', fontWeight: '500', color: '#fff', margin: '0 0 4px 0' }}>
-                              {category.name}
-                            </h4>
-                            {category.definition && (
-                              <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px', margin: 0 }}>
-                                {category.definition}
-                              </p>
-                            )}
-                          </div>
-                          <div style={{ display: 'flex' }}>
-                            <button
-                              style={{
-                                width: '32px',
-                                height: '32px',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                border: '1px solid #3498ff',
-                                borderRadius: '50%',
-                                cursor: 'pointer',
-                                backgroundColor: 'transparent',
-                                color: '#3498ff',
-                                marginLeft: '8px'
-                              }}
-                              onClick={() => startEditing(category)}
-                              aria-label="Edit"
-                            >
-                              <FaEdit />
-                            </button>
-                            <button
-                              style={{
-                                width: '32px',
-                                height: '32px',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                border: '1px solid #ff3b30',
-                                borderRadius: '50%',
-                                cursor: 'pointer',
-                                backgroundColor: 'transparent',
-                                color: '#ff3b30',
-                                marginLeft: '8px',
-                                padding: 0,  // Add this to prevent padding issues
-                                overflow: 'hidden', // Add this to ensure content stays within circle
-                                boxShadow: 'none', // Prevent any default button shadows
-                                outline: 'none'  // Prevent default focus outlines
-                              }}
-                              onClick={() => {
-                                setCategoryToDelete({ id: category.id || category.name, name: category.name });
-                                setShowDeleteModal(true);
-                              }}
-                              aria-label="Delete"
-                            >
-                              <FaTrash style={{ fontSize: '14px' }} />
-                            </button>
-                          </div>
-                        </div>
-                      )}
+                    <div key={category.id || category.name} className="action-items-category-card">
+                      <div className="action-items-category-content">
+                        <h3 className="action-items-category-name">{category.name}</h3>
+                        {category.definition && (
+                          <p className="action-items-category-description">
+                            {category.definition}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Action Icons */}
+                      <div className="action-items-category-actions">
+                        <button
+                          type="button"
+                          className="action-items-icon-btn edit"
+                          onClick={() => startEditing(category)}
+                          aria-label="Edit"
+                        >
+                          <Edit2Icon />
+                        </button>
+                        <button
+                          type="button"
+                          className="action-items-icon-btn delete"
+                          onClick={() => {
+                            setCategoryToDelete({ id: category.id || category.name, name: category.name });
+                            setShowDeleteModal(true);
+                          }}
+                          aria-label="Delete"
+                        >
+                          <Trash2Icon />
+                        </button>
+                      </div>
                     </div>
                   ))}
               </div>
@@ -860,52 +693,52 @@ const ActionItemsSettings = () => {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="modal fade show" style={{ display: "block", background: "rgba(0,0,0,0.5)" }}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content" style={{ backgroundColor: "#0f1a36", color: "#fff" }}>
-              <div className="modal-header">
-                <h5 className="modal-title">Confirm Delete</h5>
-                <button
-                  type="button"
-                  className="btn-close btn-close-white"
-                  onClick={() => setShowDeleteModal(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                Are you sure you want to delete the category{" "}
-                <strong>{categoryToDelete?.name}</strong>?<br />
-                Action items with this category will be moved to <strong>OTHER</strong>.
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setShowDeleteModal(false)}
-                  disabled={isSubmitting}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={async () => {
-                    const success = await handleDeleteCategory(categoryToDelete.id, categoryToDelete.name);
-                    if (success) {
-                      setShowDeleteModal(false);
-                    }
-                    // If deletion fails, the modal stays open and the user can try again or cancel
-                  }}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Deleting..." : "Delete"}
-                </button>
-              </div>
+        <div className="action-items-delete-modal-overlay">
+          <div className="action-items-delete-modal">
+            <div className="action-items-delete-modal-header">
+              <h2 className="action-items-delete-modal-title">Delete Category</h2>
+              <button
+                type="button"
+                className="action-items-delete-modal-close"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                <XIcon />
+              </button>
+            </div>
+            <div className="action-items-delete-modal-body">
+              Are you sure you want to delete the category{" "}
+              <strong>{categoryToDelete?.name}</strong>?<br />
+              Action items with this category will be moved to <strong>OTHER</strong>.
+            </div>
+            <div className="action-items-delete-modal-footer">
+              <button
+                type="button"
+                className="action-items-modal-btn cancel"
+                onClick={() => setShowDeleteModal(false)}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="action-items-modal-btn delete"
+                onClick={async () => {
+                  const success = await handleDeleteCategory(categoryToDelete.id, categoryToDelete.name);
+                  if (success) {
+                    setShowDeleteModal(false);
+                  }
+                }}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Deleting..." : "Delete"}
+              </button>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 };
