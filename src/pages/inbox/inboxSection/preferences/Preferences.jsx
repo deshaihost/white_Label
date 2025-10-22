@@ -271,7 +271,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
   const isToneEditable = plan.includes('elite') || plan.includes('ultimate') || plan.includes('trial');
 
   return (
-    <div className="setting_index_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "40px 60px "}}>
+    <div className="setting_index_tab_grid text-white setting_tab_data p-3" style={{ margin: "40px 60px "}}>
       <div className="conversation-settings-inbox">
         {getSettingsLoading ? <FullScreenLoader /> : null}
 
@@ -281,7 +281,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
           </div>
           <div>
             <div className={`d-flex flex-wrap flex-md-nowrap gap-4 align-items-center ${!options ? 'justify-content-end' : ''}`}>
-              <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
+              <Button className="btn-primary fs-16" style={{ padding: '8px 16px', borderRadius: '5px', backgroundColor: '#01255e', borderColor: '#013280', borderWidth: '1px', borderStyle: 'solid', whiteSpace: 'nowrap' }} onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
                 Save Settings
               </Button>
             
