@@ -5,6 +5,53 @@
     padding: 50px 0px;
 }
 
+/* Header Section Styling */
+.smart-templates-landing .header-section {
+    margin-bottom: 40px;
+}
+
+.smart-templates-landing .main-title {
+    color: white;
+    font-size: 40px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-variation-settings: 'opsz' 14;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.smart-templates-landing .main-description {
+    color: #a6a9b2;
+    font-size: 17px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    font-variation-settings: 'opsz' 14;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.smart-templates-landing .learn-more-link {
+    color: #3e88f7;
+    font-size: 16px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 600;
+    font-variation-settings: 'opsz' 14;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.smart-templates-landing .learn-more-link:hover {
+    opacity: 0.8;
+}
+
 .smart-templates-landing .unmatched h1{
     color: #fff;
     font-size: 40px;

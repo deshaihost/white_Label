@@ -289,7 +289,7 @@ const InboxIndex = () => {
           </div>
         </div>
       )}
-      <div className="inbox-container">
+      <div className="inbox-container" style={{ backgroundColor: "#0F1117" }}>
         {" "}
         {interFaceComponent === 0 && (
           <Inbox

@@ -38,6 +38,40 @@
     margin-bottom: 10px;
     text-align: center;
 }
+
+/* Smart Template Header Styling - Matching Landing Page */
+.smart_templates_tab_grid h3 {
+    color: white;
+    font-size: 40px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-variation-settings: 'opsz' 14;
+    margin-bottom: 24px;
+}
+
+.smart_templates_tab_grid > div > p {
+    color: #a6a9b2;
+    font-size: 17px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    font-variation-settings: 'opsz' 14;
+    line-height: 1.6;
+}
+
+.smart_templates_tab_grid a {
+    color: #3e88f7;
+    font-size: 16px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 600;
+    font-variation-settings: 'opsz' 14;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.smart_templates_tab_grid a:hover {
+    opacity: 0.8;
+}
+
 .smartTemplateAddEdit .nameAndEnableSection {
     display: flex;
     align-items: start;

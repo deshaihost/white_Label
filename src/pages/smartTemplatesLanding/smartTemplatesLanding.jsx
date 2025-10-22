@@ -66,8 +66,15 @@ const SmartTemplatesLanding = () => {
       </Helmet>
       <div className="unmatched">
         <div className="container">
-          <h1>Templated Messages <span>For Everything</span>.</h1>
-          <h4>Supercharged with AI.</h4>
+          <div className="header-section">
+            <h1 className="main-title">Smart Templates</h1>
+            <p className="main-description">
+              Highly customizable templated messages that let you contact the right guests at the right time. Automate friendly check-in messages, strategic upsells, policy reminders, and much more. Use AI to add context awareness and a personal touch to each message.
+            </p>
+            <a href="#" className="learn-more-link">
+              Learn more →
+            </a>
+          </div>
           <div className="row first-section">
             <div className="col-lg-5 blur-background-top-left blur-background-bottom-right">
               <img src={NightHouse} alt="A luxury penthouse" />

@@ -308,7 +308,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
 
   return (
     <>
-      <div className="smart_templates_tab_grid text-white setting_tab_data upsells-settings border border-primary blur-background-top-right" style={{ borderRadius:"20px", margin:"40px 60px", background:"#000212" }}>
+      <div className="smart_templates_tab_grid text-white setting_tab_data upsells-settings blur-background-top-right" style={{ margin:"40px 60px", background:"#0F1117" }}>
         {addEditSmart?.type?.type === add || addEditSmart?.type?.type === edit ? (
           <SmartTemplateAddEditForm addEditSmart={addEditSmart} addEditClose={() => setAddEditSmart({type: "", data: ""})} handleSaveTemplate={handleSaveTemplate} allPropertyNamesList={allPropertyNamesList} saveTemplateLoading={saveTemplateLoading} handleDeleteTemplate={handleDeleteTemplate} deleteTemplateLoading={deleteTemplateLoading} hasCleaningManagementIntegration={hasCleaningManagementIntegration} minut_user_id={minut_user_id} userData={userData} smartAllData={smartAllData}/>
         ) : (
