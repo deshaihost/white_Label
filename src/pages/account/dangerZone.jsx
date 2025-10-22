@@ -45,28 +45,45 @@ const DangerZone = () => {
   };
 
   return (
-    <div className="account-content">
-      <h5>Danger Zone</h5>
-      <p style={{marginLeft:"10px", textAlign:"center", fontSize:"15px"}}>
-        These actions are destructive and cannot be undone. Please proceed with caution.
-      </p>
+    <>
+      {/* Danger Zone Section Divider */}
+      <div className="section-divider danger" style={{ marginTop: '40px', marginBottom: '24px' }}>
+        <div className="section-divider-line"></div>
+        <span className="section-divider-text">Danger Zone</span>
+        <div className="section-divider-line"></div>
+      </div>
 
-      {deleteAccountLoading ? (
-        <div className="row">
-          <div className="col text-center">
-            <Loader />
+      {/* Danger Zone Card */}
+      <div className="account-content">
+        <div className="account-section-card danger">
+          <div className="section-header-with-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#ef4444' }}>
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+              <line x1="12" x2="12" y1="9" y2="13"></line>
+              <line x1="12" x2="12.01" y1="17" y2="17"></line>
+            </svg>
+            <h3>Delete Account</h3>
           </div>
-        </div>
-      ) : (
-        <div className="row">
-          <div className="col text-center">
-            <button className="bg_theme_btn update_user_info" style={{backgroundColor: "#661111"}} onClick={handleDeleteAccount}>
+
+          <p className="section-description">
+            These actions are destructive and cannot be undone. Please proceed with caution.
+          </p>
+
+          {deleteAccountLoading ? (
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              <Loader />
+            </div>
+          ) : (
+            <button 
+              className="danger-button" 
+              onClick={handleDeleteAccount}
+            >
               Delete Account
             </button>
-          </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
+    </>
   );
 };
 
