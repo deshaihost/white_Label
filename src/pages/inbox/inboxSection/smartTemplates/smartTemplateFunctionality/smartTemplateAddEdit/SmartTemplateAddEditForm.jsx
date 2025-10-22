@@ -255,56 +255,215 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   };
 
   return (
-    <div className='smartTemplateAddEdit'>
-      <div className="d-flex gap-3 flex-wrap align-items-center justify-content-between mb-3">
-        <div>
-          <h1>{type?.type} Smart Template</h1>
-          <p onClick={addEditClose} className="text-primary" style={{ cursor: "pointer" }}>&lt; Smart Templates </p>
-        </div>
-      
-        <div className="d-flex align-items-center gap-3">
-          {!saveTemplateLoading ? (
-            <button className="bg_theme_btn" onClick={() => { handleSaveTemplate(dataStructure); }}>Save</button>
-          ) : (
-            <Loader />
-          )}
-          {!deleteTemplateLoading ? (
-            <a href="#" className="clickableLink" style={{ color: 'rgb(255,0,0)', fontSize: '14px' }} onClick={handleDeleteClick}>Delete Template</a>
-          ) : (
-            <Loader />
-          )}
+    <div className='smartTemplateAddEdit' style={{ maxWidth: '1400px', margin: '0 auto', padding: '48px' }}>
+      {/* Header Section */}
+      <div style={{ marginBottom: '32px' }}>
+        <button 
+          onClick={addEditClose}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: '#3e88f7',
+            fontSize: '15px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '600',
+            fontVariationSettings: "'opsz' 14",
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '0',
+            marginBottom: '16px',
+            transition: 'opacity 0.2s'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+          onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+        >
+          <span>&larr;</span> Back to Smart Templates
+        </button>
+        
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <div>
+            <h1 style={{
+              color: 'white',
+              fontSize: '40px',
+              fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontWeight: '700',
+              fontVariationSettings: "'opsz' 14",
+              marginBottom: '8px'
+            }}>
+              {type?.type} Smart Template
+            </h1>
+            <p style={{
+              color: '#3e88f7',
+              fontSize: '16px',
+              fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontWeight: '600',
+              fontVariationSettings: "'opsz' 14",
+              margin: '0'
+            }}>
+              Smart Template
+            </p>
+          </div>
+          
+          <div className="d-flex align-items-center gap-3">
+            {!saveTemplateLoading ? (
+              <button className="bg_theme_btn" onClick={() => { handleSaveTemplate(dataStructure); }}>Save</button>
+            ) : (
+              <Loader />
+            )}
+            {!deleteTemplateLoading ? (
+              <a href="#" className="clickableLink" style={{ 
+                color: '#ef4444', 
+                fontSize: '15px',
+                fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                fontWeight: '600',
+                fontVariationSettings: "'opsz' 14",
+                textDecoration: 'none'
+              }} onClick={handleDeleteClick}>Delete Template</a>
+            ) : (
+              <Loader />
+            )}
+          </div>
         </div>
       </div>
-      <p style={{color:'#AAA', fontSize:'16px', textAlign:'left'}}>Smart Templates lets you create highly customized templated messages to suit your exact needs. Choose specific triggers, target recipients, and conditions, and use AI to analyze context to send to the right guests at the right time.</p>
+
+      {/* Description */}
+      <p style={{
+        color: '#a6a9b2',
+        fontSize: '15px',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontWeight: '400',
+        fontVariationSettings: "'opsz' 14",
+        lineHeight: '1.6',
+        marginBottom: '32px'
+      }}>
+        Smart Templates lets you create highly customized templated messages to suit your exact needs. Choose specific triggers, target recipients, and conditions, and use AI to analyze context to send to the right guests at the right time.
+      </p>
       
-      <div style={{ borderTop: "1px solid #013280", marginBottom: "40px", marginTop: "32px" }}></div>
+      {/* Divider */}
+      <div style={{ borderTop: "1px solid #013280", marginBottom: "32px" }}></div>
 
-      <div className="nameAndEnableSection">
-        <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <p className="fs-5 fw-bold">Template Name</p>
-          <input type="text" className="form-control mt-2" value={dataStructure?.name} onChange={(e) => {setDataStructure({ ...dataStructure, name: e.target.value });}}/>
+      {/* Enable Toggle Section */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '32px',
+        paddingBottom: '24px',
+        borderBottom: '1px solid rgba(1, 50, 128, 0.4)'
+      }}>
+        <div>
+          <h3 style={{
+            color: 'white',
+            fontSize: '18px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '700',
+            fontVariationSettings: "'opsz' 14",
+            marginBottom: '4px'
+          }}>
+            Enable Template
+          </h3>
+          <p style={{
+            color: dataStructure?.enabled ? '#10b981' : '#ef4444',
+            fontSize: '14px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '400',
+            fontVariationSettings: "'opsz' 14",
+            margin: '0'
+          }}>
+            You currently have this template {dataStructure?.enabled ? 'enabled' : 'disabled'}
+          </p>
         </div>
+        <button
+          onClick={handleEnableToggle}
+          style={{
+            width: '56px',
+            height: '28px',
+            borderRadius: '9999px',
+            position: 'relative',
+            backgroundColor: dataStructure?.enabled ? '#3e88f7' : '#676a73',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.3s',
+            boxShadow: dataStructure?.enabled ? '0 0 12px rgba(62, 136, 247, 0.4)' : 'none'
+          }}
+        >
+          <div style={{
+            position: 'absolute',
+            top: '2px',
+            width: '24px',
+            height: '24px',
+            backgroundColor: 'white',
+            borderRadius: '50%',
+            transition: 'transform 0.3s',
+            transform: dataStructure?.enabled ? 'translateX(28px)' : 'translateX(2px)'
+          }}></div>
+        </button>
+      </div>
 
-        <div className="enableSection">
-          <p className="d-flex align-items-center gap-5">
-            Enable
-            <div className="form-check form-switch">
-              <input className="form-check-input" type="checkbox" checked={dataStructure?.enabled} onChange={handleEnableToggle} id="flexSwitchCheckChecked"/>
-            </div>
-          </p>
-          <p className="fs-14 text-muted">
-            You currently have this template <span className={dataStructure?.enabled ? "text-success" : "text-danger"}>{dataStructure?.enabled ? "enabled" : "disabled"}</span>
-          </p>
+      {/* Template Name and Properties */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', marginBottom: '32px' }}>
+        <div>
+          <label style={{
+            color: 'white',
+            fontSize: '18px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '700',
+            fontVariationSettings: "'opsz' 14",
+            marginBottom: '12px',
+            display: 'block'
+          }}>
+            Template Name
+          </label>
+          <input 
+            type="text" 
+            value={dataStructure?.name} 
+            onChange={(e) => {setDataStructure({ ...dataStructure, name: e.target.value });}}
+            placeholder="Enter template name"
+            style={{
+              width: '100%',
+              backgroundColor: '#0F1117',
+              border: '1px solid #013280',
+              borderRadius: '8px',
+              padding: '14px 20px',
+              color: 'white',
+              fontSize: '16px',
+              fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontWeight: '400',
+              fontVariationSettings: "'opsz' 14",
+              outline: 'none',
+              transition: 'all 0.2s'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#3e88f7';
+              e.target.style.boxShadow = '0 0 0 1px rgba(62, 136, 247, 0.5)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#013280';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
         </div>
 
         <div className="propertySelectSection">
-          <p style={{fontSize:"14px", textAlign:"center", marginBottom:'2px'}}>Applies to these properties:</p>
+          <label style={{
+            color: 'white',
+            fontSize: '18px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '700',
+            fontVariationSettings: "'opsz' 14",
+            marginBottom: '12px',
+            display: 'block'
+          }}>
+            Applies to these properties
+          </label>
           <MultiSelect
             options={options}
             selectedOptions={selectedOptions}
             setSelectedOptions={(options) => {
-              setSelectedOptions(options); // Update the UI
-              setDataStructure({ ...dataStructure, properties: options.map((option) => option.value) }); // Update the data structure
+              setSelectedOptions(options);
+              setDataStructure({ ...dataStructure, properties: options.map((option) => option.value) });
             }}
             placeholder="Select properties..."
             selectAllText="Select all"
@@ -312,71 +471,253 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         </div>
       </div>
       
-      <div className="triggersSection">
-        <p className="fs-5 fw-bold">Send When...</p>
-        <p className="fs-14 mt-1 mb-3 text-muted">This controls when the message will be sent to a guest.</p>
+      {/* Send When Section */}
+      <div style={{
+        marginBottom: '32px',
+        paddingBottom: '32px',
+        borderBottom: '1px solid rgba(1, 50, 128, 0.4)'
+      }}>
+        <label style={{
+          color: 'white',
+          fontSize: '18px',
+          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontWeight: '700',
+          fontVariationSettings: "'opsz' 14",
+          marginBottom: '8px',
+          display: 'block'
+        }}>
+          Send When...
+        </label>
+        <p style={{
+          color: '#a6a9b2',
+          fontSize: '14px',
+          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontWeight: '400',
+          fontVariationSettings: "'opsz' 14",
+          marginBottom: '16px'
+        }}>
+          This controls when the message will be sent to the guest.
+        </p>
         {dataStructure?.triggers?.length > 0 &&
           dataStructure?.triggers?.map((trigger, index) => {
             const { type } = trigger;
             return (
-              <div className="col-lg-4" key={index}>
-                <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                  <p className="fs-6">{nameMapping[type].guesttype}</p>
-                  <div className="d-flex align-items-center gap-3">
-                    <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, triggerName)}>
-                      Remove
-                    </p>
-                    <p className="text-primary mainCursor fs-6" onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, minutFormData:minutTriggers, editFormData:trigger, editIndex:index, typepAddEdit:edit })}>Edit</p>
-                  </div>
+              <div key={index} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                marginTop: '8px'
+              }}>
+                <div style={{
+                  flex: '1',
+                  backgroundColor: '#0F1117',
+                  border: '1px solid #013280',
+                  borderRadius: '8px',
+                  padding: '12px 16px',
+                  color: 'white',
+                  fontSize: '15px',
+                  fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                  fontWeight: '400',
+                  fontVariationSettings: "'opsz' 14",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <span>{nameMapping[type].guesttype}</span>
+                  <button 
+                    onClick={() => handleRemove(index, triggerName)}
+                    style={{
+                      color: '#ef4444',
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      padding: '0',
+                      transition: 'opacity 0.2s'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+                    onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+                  >
+                    ×
+                  </button>
                 </div>
+                <button 
+                  onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, minutFormData:minutTriggers, editFormData:trigger, editIndex:index, typepAddEdit:edit })}
+                  style={{
+                    color: '#98bffa',
+                    fontSize: '15px',
+                    fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                    fontWeight: '600',
+                    fontVariationSettings: "'opsz' 14",
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.color = '#3e88f7'}
+                  onMouseOut={(e) => e.currentTarget.style.color = '#98bffa'}
+                >
+                  Change Event
+                </button>
               </div>
             );
           })}
-        {dataStructure?.triggers?.length < 1 && ( // For now, only one trigger can be added
+        {dataStructure?.triggers?.length < 1 && (
           <button
-            className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
             onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, minutFormData:minutTriggers, typepAddEdit:add})}
+            style={{
+              color: '#98bffa',
+              fontSize: '15px',
+              fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontWeight: '600',
+              fontVariationSettings: "'opsz' 14",
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '0',
+              marginTop: '8px',
+              transition: 'color 0.2s'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.color = '#3e88f7'}
+            onMouseOut={(e) => e.currentTarget.style.color = '#98bffa'}
           >
-            <i className="bi bi-plus fs-3"></i> Add an Event
+            + Add an Event
           </button>
         )}
       </div>
 
-      <div className="conditionsSection">
-        <p className="fs-5 fw-bold">Send If...</p>
-        <p className="fs-14 mt-1 mb-3 text-muted">Add conditions to restrict message sending in certain situations, or to certain categories of guests. The conditions added ALL must be met for a guest in order for the message to be sent to them.</p>
-        {dataStructure?.conditions?.length > 0 &&
-          dataStructure?.conditions?.map((conditionsItem, index) => {
-            const { type } = conditionsItem;
-            return (
-              <div className="col-lg-4" key={index}>
-                <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                  <p className="fs-6">{nameMapping[type].guesttype}</p>
-                  <div className="d-flex align-items-center gap-3">
-                    <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, conditionsName)}>
-                      Remove
-                    </p>
-                    <p className="text-primary mainCursor fs-6"
-                      onClick={() => setAllData({modelShow:true, modelShowType:conditionsName, formData:conditions, minutFormData:minutConditions, editFormData:conditionsItem, editIndex:index, typepAddEdit:edit })}
+      {/* Send If Section */}
+      <div style={{
+        marginBottom: '32px',
+        paddingBottom: '32px',
+        borderBottom: '1px solid rgba(1, 50, 128, 0.4)'
+      }}>
+        <label style={{
+          color: 'white',
+          fontSize: '18px',
+          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontWeight: '700',
+          fontVariationSettings: "'opsz' 14",
+          marginBottom: '8px',
+          display: 'block'
+        }}>
+          Send If...
+        </label>
+        <p style={{
+          color: '#a6a9b2',
+          fontSize: '14px',
+          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontWeight: '400',
+          fontVariationSettings: "'opsz' 14",
+          marginBottom: '16px'
+        }}>
+          Add conditions to restrict message sending. Templated message will only be sent if all these conditions are met for the message to be sent to them.
+        </p>
+        {dataStructure?.conditions?.length > 0 && (
+          <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {dataStructure?.conditions?.map((conditionsItem, index) => {
+              const { type } = conditionsItem;
+              return (
+                <div key={index} style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px'
+                }}>
+                  <div style={{
+                    flex: '1',
+                    backgroundColor: '#0F1117',
+                    border: '1px solid #013280',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    color: 'white',
+                    fontSize: '15px',
+                    fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                    fontWeight: '400',
+                    fontVariationSettings: "'opsz' 14",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}>
+                    <span>{nameMapping[type].guesttype}</span>
+                    <button 
+                      onClick={() => handleRemove(index, conditionsName)}
+                      style={{
+                        color: '#ef4444',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        padding: '0',
+                        transition: 'opacity 0.2s'
+                      }}
+                      onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+                      onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
                     >
-                      Edit
-                    </p>
+                      ×
+                    </button>
                   </div>
+                  <button 
+                    onClick={() => setAllData({modelShow:true, modelShowType:conditionsName, formData:conditions, minutFormData:minutConditions, editFormData:conditionsItem, editIndex:index, typepAddEdit:edit })}
+                    style={{
+                      color: '#98bffa',
+                      fontSize: '15px',
+                      fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                      fontWeight: '600',
+                      fontVariationSettings: "'opsz' 14",
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      transition: 'color 0.2s'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.color = '#3e88f7'}
+                    onMouseOut={(e) => e.currentTarget.style.color = '#98bffa'}
+                  >
+                    Edit
+                  </button>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+        )}
         <button
-          className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
           onClick={() => setAllData({ modelShow:true, modelShowType:conditionsName, formData:conditions, minutFormData:minutConditions, typepAddEdit:add })}
+          style={{
+            color: '#98bffa',
+            fontSize: '15px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '600',
+            fontVariationSettings: "'opsz' 14",
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '0',
+            marginTop: '8px',
+            transition: 'color 0.2s'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.color = '#3e88f7'}
+          onMouseOut={(e) => e.currentTarget.style.color = '#98bffa'}
         >
-          <i className="bi bi-plus fs-3 "></i> Add a Condition
+          + Add a Condition
         </button>
       </div>
 
-      <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%'}} />
+      {/* Divider before Message Section */}
+      <div style={{ borderTop: "1px solid #013280", marginTop: "32px", marginBottom: "32px" }}></div>
       
-      <h3 className="available-variables-heading mt-5 text-center">Message</h3>
+      <h3 style={{
+        color: 'white',
+        fontSize: '24px',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontWeight: '700',
+        fontVariationSettings: "'opsz' 14",
+        textAlign: 'center',
+        marginTop: '40px',
+        marginBottom: '32px'
+      }}>
+        Message
+      </h3>
 
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 justify-content-between mt-5">
         <div className="available-variables-section" style={{justifyContent:'left'}}>
