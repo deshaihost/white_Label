@@ -322,7 +322,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
             </div>
             <hr style={{ borderTop: "1px solid #013280", border: "none", marginBottom: "40px", marginTop: "10px" }} />
 
-            {getTemplatesLoading ? (
+          {getTemplatesLoading ? (
               <Loader />
             ) : (
               smartAllData?.length > 0 && (
