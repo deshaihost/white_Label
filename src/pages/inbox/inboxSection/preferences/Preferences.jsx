@@ -314,6 +314,8 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
           </div>
         </div>
 
+        {/* <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/> */}
+
         <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
 
         <div className="row mt-4">
