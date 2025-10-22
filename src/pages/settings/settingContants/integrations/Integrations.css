@@ -41,11 +41,11 @@
   flex: 0 0 400px; /* Don't grow, don't shrink, stay at 400px */
   height: auto;
   min-height: 300px;
-  border: 2px solid rgba(40, 44, 72, 1);
+  border: 2px solid #013280;
   border-radius: 8px;
   padding: 20px;
   cursor: pointer;
-  background-color: rgba(23, 25, 41, 1);
+  background-color: #0f1826;
   /* box-shadow: 0 0 20px 5px rgba(0, 0, 200, 0.5); parameters: x-offset, y-offset, blur-radius, spread-radius, color */
   /* transition: transform 0.3s, box-shadow 0.3s; */
 }
