@@ -286,7 +286,23 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               </Button>
             
               {options && (
-                <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example" value={selectedConfig} onChange={handleConfigSelectChange}>
+                <select 
+                  className="form-select text-white shadow-none setting-tab-select mb-3 mb-md-0" 
+                  style={{ 
+                    backgroundColor: "#0F1117", 
+                    backgroundImage: "",
+                    border: "1px solid #013280",
+                    borderRadius: "8px",
+                    padding: "10px 24px",
+                    fontSize: "15px",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontWeight: "600",
+                    minWidth: "140px"
+                  }} 
+                  aria-label="Default select example" 
+                  value={selectedConfig} 
+                  onChange={handleConfigSelectChange}
+                >
                   {Object.keys(localSettingsData).map((key, index) => (
                     <option key={index} value={key}>{key}</option>              
                   ))}
