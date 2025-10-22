@@ -89,7 +89,7 @@ const SettingIndex = () => {
                   </Link>
                 </div> */}
               </div>
-              <div className="setting_tab_data border border-primary p-3 " style={{ borderRadius: "20px" }}>
+              <div className="setting_tab_data p-3" style={{ borderRadius: "20px" }}>
                 <div className="setting_tab_data_inner">
                   {interFaceTypes?.account === interFaceSettings && (
                     <>

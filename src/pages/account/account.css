@@ -1,95 +1,375 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
+/* Main Account Container */
 .account-main {
-    padding: 74px 0;
+    padding: 48px 0;
+    background-color: #0F1117;
+    min-height: 100vh;
 }
 
 .account-main form > div:not(:last-child) {
     margin-bottom: 15px;
 }
 
+/* Account Container */
+.account-container {
+    background-color: #0F1117;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 32px;
+}
 
+/* Page Header - Account Settings Title */
+.account-main .banner-heading h2 {
+    color: white;
+    font-size: 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-variation-settings: 'opsz' 14;
+    margin-bottom: 8px;
+    text-align: left;
+}
 
- .account-navbar .col {
+.account-main .banner-heading {
+    margin-bottom: 40px;
+}
+
+/* Account Navigation Bar */
+.account-navbar .col {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
- .account-navbar .nav-option {
+.account-navbar .nav-option {
     background: none;
     border: none;
     color: white;
-    font-size: 18px; /* Increase the font size */
-    font-weight: bold;
-    font-family: 'Roboto', sans-serif; /* Modern font */
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    font-variation-settings: 'opsz' 14;
     cursor: pointer;
+    padding: 12px 24px;
+    transition: color 0.3s ease;
 }
 
- .account-navbar .nav-option:hover {
-    color: #ccc;
+.account-navbar .nav-option:hover {
+    color: #3e88f7;
 }
 
- .account-navbar .nav-option.selected {
-    box-shadow: 0px -0px 10px 3px rgba(0, 0, 255, 1);
+.account-navbar .nav-option.selected {
+    color: #3e88f7;
+    border-bottom: 2px solid #3e88f7;
 }
 
-
-
-
-
-
- .account-content {
-    padding: 30px 40px;
+/* Section Divider */
+.section-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 40px 0 24px 0;
 }
 
- .account-content h3 {
+.section-divider-line {
+    height: 1px;
+    background: #3e88f7;
+    flex: 1;
+    opacity: 0.3;
+}
+
+.section-divider-text {
+    color: #74A9F7;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-variation-settings: 'opsz' 14;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Danger Zone Divider */
+.section-divider.danger .section-divider-line {
+    background: #ef4444;
+}
+
+.section-divider.danger .section-divider-text {
+    color: #ef4444;
+}
+
+/* Account Content Container */
+.account-content {
+    padding: 0;
+    margin-bottom: 40px;
+}
+
+/* Section Cards */
+.account-section-card {
+    background-color: #0a0d14 !important;
+    border: 1px solid #1a1d27;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.setting_tab_data .account-section-card {
+    background-color: #0a0d14 !important;
+}
+
+.account-content .account-section-card {
+    background-color: #0a0d14 !important;
+}
+
+/* Danger Zone Card */
+.account-section-card.danger {
+    border: 2px solid #7f1d1d;
+    box-shadow: 0 2px 8px rgba(127, 29, 29, 0.2);
+}
+
+/* Section Header with Icon */
+.section-header-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.section-header-with-icon svg {
+    width: 20px;
+    height: 20px;
+    color: #3e88f7;
+}
+
+.section-header-with-icon.danger svg {
+    color: #ef4444;
+}
+
+.section-header-with-icon h2,
+.account-content h3 {
     color: white;
-    text-align: center;
-    margin: 10px 0;
+    font-size: 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-variation-settings: 'opsz' 14;
+    margin: 0;
 }
 
- .account-content h4 {
+/* Section Description */
+.section-description {
+    color: #a6a9b2;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-variation-settings: 'opsz' 14;
+    margin-bottom: 24px;
+    margin-left: 30px;
+    line-height: 1.5;
+}
+
+.account-content h4 {
     color: white;
     margin-top: 20px;
     margin-bottom: 38px;
     font-size: 20px;
 }
 
- .account-content h5 {
+.account-content h5 {
     color: white;
     text-align: center;
     margin-top: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    font-variation-settings: 'opsz' 14;
 }
 
- .account-content h6 {
+.account-content h6 {
     color: white;
 }
 
- .account-content .disabled-input {
+.account-content .disabled-input {
     color: grey;
-  }
+}
 
- .account-content .warning-text {
+.account-content .warning-text {
     color: rgb(255, 165, 0);
 }
 
- .account-content .grey-text {
-    color: #AAA;
+.account-content .grey-text {
+    color: #a6a9b2;
 }
 
- .account-content .clickable-text {
-    color: rgb(0, 121, 247);
+.account-content .clickable-text {
+    color: #3e88f7;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
- .account-content p {
+.account-content .clickable-text:hover {
+    color: #74A9F7;
+}
+
+.account-content p {
+    color: #a6a9b2;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-variation-settings: 'opsz' 14;
+}
+
+/* Form Labels */
+.account-content form label {
     color: white;
-    /* margin-bottom: 30px; */
-    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    font-variation-settings: 'opsz' 14;
+    margin-bottom: 8px;
+    display: block;
 }
 
- .account-content .confirmation_code_input input {
+.account-content form label:not(.form-floating label) {
+    margin-bottom: 8px;
+}
+
+/* Form Inputs */
+.account-content form input,
+.account-content form input.form-control,
+.account-content form input#firstName,
+.account-content form input#lastName,
+.account-content form input#phone,
+.account-content form input#email {
+    background-color: #0F1117 !important;
+    border: 1px solid #3e88f7 !important;
+    border-radius: 8px !important;
+    color: white !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    font-variation-settings: 'opsz' 14 !important;
+    height: 44px !important;
+    padding: 10px 16px !important;
+    box-shadow: 0 0 10px rgba(62, 136, 247, 0.1) !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.account-content form input:focus,
+.account-content form input.form-control:focus,
+.account-content form input#firstName:focus,
+.account-content form input#lastName:focus,
+.account-content form input#phone:focus,
+.account-content form input#email:focus {
+    border-color: #74A9F7 !important;
+    box-shadow: 0 0 15px rgba(62, 136, 247, 0.2) !important;
+    outline: none !important;
+}
+
+.account-content form input::placeholder {
+    color: #676A73;
+}
+
+/* Input Groups - Grid Layout */
+.account-content .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.account-content .input_group {
+    margin-bottom: 0;
+}
+
+/* Buttons */
+.account-content .bg_theme_btn,
+.account-content button[type="submit"],
+.account-content button[type="button"] {
+    background-color: #3e88f7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 32px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-variation-settings: 'opsz' 14;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 15px rgba(62, 136, 247, 0.3);
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+}
+
+.account-content .bg_theme_btn:hover,
+.account-content button[type="submit"]:hover,
+.account-content button[type="button"]:hover {
+    background-color: #74A9F7;
+    box-shadow: 0 0 20px rgba(62, 136, 247, 0.4);
+}
+
+.account-content .bg_theme_btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Secondary Button (Change Password) */
+.account-content .show_password_fields,
+.account-content .secondary-button {
+    background-color: transparent;
+    border: 1px solid #3e88f7;
+    color: #3e88f7;
+    box-shadow: none;
+}
+
+.account-content .show_password_fields:hover,
+.account-content .secondary-button:hover {
+    background-color: rgba(62, 136, 247, 0.1);
+    box-shadow: none;
+}
+
+/* Danger Buttons */
+.danger-button {
+    background-color: #7f1d1d !important;
+    box-shadow: none !important;
+}
+
+.danger-button:hover {
+    background-color: #991b1b !important;
+    box-shadow: none !important;
+}
+
+/* Button Container */
+.button-container {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+/* Location Section Specific */
+.location-section .row:last-of-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+}
+
+.location-section h5:last-child {
+    text-align: right;
+    margin: 0;
+    font-size: 13px;
+    color: #a6a9b2;
+}
+
+.location-section h5:last-child span {
+    color: white;
+    font-weight: 500;
+}
+
+.account-content .confirmation_code_input input {
     border: 1px solid white;
     color: white;
     width: 100px;
@@ -97,7 +377,7 @@
     margin-right: 10px;
 }
 
- .account-content .recipient {
+.account-content .recipient {
     border: 1px solid #2C389E;
     padding: 20px;
     border-radius: 15px;
@@ -105,37 +385,18 @@
     box-shadow: 2px -2px 15px 1px rgba(255, 255, 255, 0.25);
 }
 
- .account-content .in-section-divider {
+.account-content .in-section-divider {
     border-color: white;
     border-style: solid;
     border-width: 2px;
 }
 
- .account-content link {
+.account-content link {
     margin-top:'10px';
     text-align:'center';
 }
 
- .account-content form label {
-    color: #FFF;
-    font-family: 'Samsung Sharp Sans Medium';
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 150%;
-}
-
- .account-content form label:not(.form-floating label) {
-    margin-bottom: 5px;
-}
-
- .account-content form input {
-    border-radius: 80px;
-    border: 1px solid rgba(255, 255, 255, 0.20);
-    background: #000212;
-}
-
- .checkbox-container {
+.checkbox-container {
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
@@ -145,7 +406,7 @@
     width: 80%;
 }
 
- .account-content .checkbox-container .form-check-input {
+.account-content .checkbox-container .form-check-input {
     width: 20px;
     height: 20px;
     border: 3px solid white;
@@ -153,12 +414,12 @@
     border-radius: 50%;
 }
 
- .account-content .checkbox-container label {
+.account-content .checkbox-container label {
     margin-top: 2px; /* Align the text label with the checkbox */
     font-size: 16px;
 }
 
- .account-content .slack-container {
+.account-content .slack-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -187,38 +448,40 @@
     width:20px;
     margin-right:12px;
 }
+
 .multiselector .search-option {
-   
     left: 14px;
     width: 95%;
     top:41px;
     background-color: #0a1a44;
-   }
-   .multiselector .search-multi{
+}
+
+.multiselector .search-multi{
     background-color: #0a1a44;
     border:1px solid #146EF5;
     border-radius: 50px;
-   }
-   .search-multi input {
+}
+
+.search-multi input {
     background: transparent !important;
     border: none !important;
 }
+
 .multioption {
     overflow-y: scroll;
     height: 150px;
 }
+
 input#multi-search {
-   
     width: 100%;
     height: 30px;
 }
+
 .multiselector.item-select input {
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: #0a1a44;
     padding: 9px 15px;
 }
-
-
 
 .action-items {
   display: flex;
@@ -226,16 +489,19 @@ input#multi-search {
   align-items: center;
   padding: 20px 0px;
 }
+
 .action-heading h3 {
     font-size: 25px;
     color: #fff;
 }
+
 .action-select {
   display: flex;
   gap: 10px;
   align-items: center;
   justify-content: end;
 }
+
 .action-select select {
   border: 1px solid #146ef5;
   border-radius: 50px;
@@ -243,15 +509,17 @@ input#multi-search {
   font-size: 14px;
   font-weight: 300;
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Cpath fill=%22none%22 stroke=%22%23ffffff%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%222%22 d=%22m2 5 6 6 6-6%22/%3E%3C/svg%3E");
+  appearance: none;
   -webkit-appearance: none;
   background-repeat: no-repeat;
-  background-position: right 10px center; /* Adjust position if needed */
+  background-position: right 10px center;
 }
 
 .action-select select:focus {
   outline: 0;
   box-shadow: none;
 }
+
 .search-wrapper.searchWrapper, .multiinputfirst1 input, .search-multi1{
   border: 1px solid #146ef5;
   border-radius: 50px;
@@ -259,10 +527,12 @@ input#multi-search {
   position: relative;
   background: #212529;
 }
+
 .search-multi input{
     background-color: transparent;
     border:none;
 }
+
 .multiinputfirst input{
     color:#fff;
     font-size:14px;
@@ -270,9 +540,11 @@ input#multi-search {
     padding-right:10px;
     width:100%;
 }
+
 .multiinputfirst, .search-multi {
   position: relative;
 }
+
 .pro-icon1 {
   position: absolute;
   top: 50%;
@@ -281,17 +553,18 @@ input#multi-search {
   transform: translateY(-50%);
   font-size: 14px;
   padding-left:10px;
-    padding-right:10px;
+  padding-right:10px;
 }
+
 .action-select .item-select {
     width: 23%;
-    
 }
+
 .multiselector.item-select{
     position: relative;
     width:23%;
-
 }
+
 .account-main .search-icon {
     position: absolute;
     top: 50%;
@@ -299,6 +572,7 @@ input#multi-search {
     left: 10px;
     color: #fff;
 }
+
 .account-main .search-option {
     position: absolute;
     top: 33px;
@@ -320,61 +594,69 @@ input#multi-search {
     gap: 10px;
 }
 
-
 input#multi-search {
     padding-left: 30px;
     color: #fff;
     font-size: 14px;
 }
 
-
-@media screen and (max-width:991px)
-{
+/* Responsive Design */
+@media screen and (max-width:991px) {
     .action-heading h3 {
         font-size: 20px;
-        
+    }
+    
+    .account-content .row {
+        grid-template-columns: 1fr;
     }
 }
-@media screen and (max-width:767px)
-{
+
+@media screen and (max-width:767px) {
     .action-heading h3 {
         font-size: 18px;
-        
     }
+    
     .action-items {
        flex-wrap:wrap;
-       
-       }
-       .action-select{
+    }
+    
+    .action-select{
         justify-content: start;
         padding-top:20px;
         flex-wrap:wrap;
-
-       }
+    }
+    
+    .button-container {
+        flex-direction: column;
+    }
 }
-@media screen and (max-width:575px)
-{
+
+@media screen and (max-width:575px) {
     .action-select .item-select {
         width: 100%;
     }
+    
     .search-option1, .multiselector1.item-select1 {
-        
         width: 100%;
     }
 }
 
 @media only screen and (max-width: 1199px) {
-     .account-content {
-        padding: 25px 20px;
+    .account-content {
+        padding: 0;
     }
 
     .account-main {
         padding: 40px 0;
     }
+    
+    .account-container {
+        padding: 0 24px;
+    }
 }
 
 @media only screen and (max-width: 991px) {
-     .account-content .get-started {
+    .account-content .get-started {
         margin-top: 20px;
     }
 }

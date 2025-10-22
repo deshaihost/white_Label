@@ -28,15 +28,17 @@ const Account = () => {
       </Helmet>
       <div className="container">
         <div className="banner-heading">
-          <h2>My HostBuddy</h2>
-          {/* <p>Manage your profile here </p> */}
+          <h2>Account Settings</h2>
+          <p style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', fontVariationSettings: "'opsz' 14", marginBottom: '0' }}>
+            Manage your personal information, location, and account security
+          </p>
         </div>
         <div className="row">
           <div className="col-lg-2 col-xl-2  col-xxl-2">
             <SideBar />
           </div>
           <div className="col-lg-10 col-xl-10 col-xxl-10">
-            <div className="account-container blur-background-top-right">
+            <div className="account-container">
               <AccountNavBar selectedSection={selectedSection} setSelectedSection={setSelectedSection} />
               
               {selectedSection === 'UserInformation' && <UserInformationSection />}
