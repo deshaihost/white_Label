@@ -436,8 +436,8 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
 
       <div className="row mt-5">
         <div className="col-lg-12">
-          <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-            Save Settings
+          <Button className="btn-primary fs-16 px-4" style={{ borderRadius: '10px' }} onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
+            Save Upsells
           </Button>
         </div>
       </div>
