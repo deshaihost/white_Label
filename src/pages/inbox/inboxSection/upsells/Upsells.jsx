@@ -169,25 +169,226 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
 
           <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }}></div>
 
-          <div className="row mt-4 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("postStayUpsells")}>
-            <div className="col-lg-11 col-12">
-              <label className="fs-5">Post-stay Gap Night</label>
-              <p className="settings-label">Send your guests an offer to depart later when there's a vacant night after their stay.</p>
+          <div 
+            style={{
+              width: '100%',
+              backgroundColor: '#0F1117',
+              border: '2px solid #013280',
+              borderRadius: '12px',
+              padding: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+              boxShadow: '0 0 25px rgba(1, 50, 128, 0.2)',
+              marginBottom: '20px'
+            }}
+            onClick={() => setSelectedSection("postStayUpsells")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#01255e';
+              e.currentTarget.style.borderColor = '#3e88f7';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(4px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#0F1117';
+              e.currentTarget.style.borderColor = '#013280';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(0)';
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <h3 
+                style={{ 
+                  color: 'white', 
+                  fontSize: '22px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '700',
+                  marginBottom: '12px',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Post-stay Gap Night
+              </h3>
+              <p 
+                style={{ 
+                  color: '#a6a9b2', 
+                  fontSize: '16px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Send your guests an offer to depart later when there's a vacant night after their stay.
+              </p>
             </div>
+            <svg 
+              className="arrow-icon"
+              style={{ 
+                width: '24px', 
+                height: '24px', 
+                color: '#3e88f7', 
+                marginLeft: '32px', 
+                flexShrink: 0,
+                transition: 'transform 0.3s'
+              }}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-7-7l7 7-7 7" />
+            </svg>
           </div>
 
-          <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("preStayUpsells")}>
-            <div className="col-lg-11 col-12">
-              <label className="fs-5">Pre-stay Gap Night</label>
-              <p className="settings-label">Send your guests an offer to arrive earlier when there's a vacant night before their stay.</p>
+          <div 
+            style={{
+              width: '100%',
+              backgroundColor: '#0F1117',
+              border: '2px solid #013280',
+              borderRadius: '12px',
+              padding: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+              boxShadow: '0 0 25px rgba(1, 50, 128, 0.2)',
+              marginBottom: '20px'
+            }}
+            onClick={() => setSelectedSection("preStayUpsells")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#01255e';
+              e.currentTarget.style.borderColor = '#3e88f7';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(4px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#0F1117';
+              e.currentTarget.style.borderColor = '#013280';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(0)';
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <h3 
+                style={{ 
+                  color: 'white', 
+                  fontSize: '22px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '700',
+                  marginBottom: '12px',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Pre-stay Gap Night
+              </h3>
+              <p 
+                style={{ 
+                  color: '#a6a9b2', 
+                  fontSize: '16px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Send your guests an offer to arrive earlier when there's a vacant night before their stay.
+              </p>
             </div>
+            <svg 
+              className="arrow-icon"
+              style={{ 
+                width: '24px', 
+                height: '24px', 
+                color: '#3e88f7', 
+                marginLeft: '32px', 
+                flexShrink: 0,
+                transition: 'transform 0.3s'
+              }}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-7-7l7 7-7 7" />
+            </svg>
           </div>
 
-          <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("inquiryWinbacks")}>
-            <div className="col-lg-11 col-12">
-              <label className="fs-5">Inquiry Follow-Ups</label>
-              <p className="settings-label">Send a message following up with guests who inquired but didn't book.</p>
+          <div 
+            style={{
+              width: '100%',
+              backgroundColor: '#0F1117',
+              border: '2px solid #013280',
+              borderRadius: '12px',
+              padding: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+              boxShadow: '0 0 25px rgba(1, 50, 128, 0.2)',
+              marginBottom: '20px'
+            }}
+            onClick={() => setSelectedSection("inquiryWinbacks")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#01255e';
+              e.currentTarget.style.borderColor = '#3e88f7';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(4px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#0F1117';
+              e.currentTarget.style.borderColor = '#013280';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(0)';
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <h3 
+                style={{ 
+                  color: 'white', 
+                  fontSize: '22px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '700',
+                  marginBottom: '12px',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Inquiry Follow-Ups
+              </h3>
+              <p 
+                style={{ 
+                  color: '#a6a9b2', 
+                  fontSize: '16px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Send a message following up with guests who inquired but didn't book.
+              </p>
             </div>
+            <svg 
+              className="arrow-icon"
+              style={{ 
+                width: '24px', 
+                height: '24px', 
+                color: '#3e88f7', 
+                marginLeft: '32px', 
+                flexShrink: 0,
+                transition: 'transform 0.3s'
+              }}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-7-7l7 7-7 7" />
+            </svg>
           </div>
         </div>
       )}
