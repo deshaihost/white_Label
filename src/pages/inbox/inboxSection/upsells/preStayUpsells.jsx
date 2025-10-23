@@ -217,7 +217,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
                 borderRadius: '5px',
                 borderWidth: '1px',
                 borderStyle: 'solid',
-                padding: '8px 24px'
+                padding: '10px 24px'
               }}
               onClick={handleSaveSettings} 
               disabled={Object.keys(settingsApiData).length === 0}
@@ -370,8 +370,30 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
 
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
-          <label className="fs-5">Number of Nights to Consider</label>
-          <p className="settings-label">HostBuddy will send a message each time there is a number of consecutive vacant nights between these values.</p>
+          <h3 
+            style={{ 
+              color: 'white', 
+              fontSize: '18px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '700',
+              marginBottom: '16px',
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            Number of Nights to Consider
+          </h3>
+          <p 
+            style={{ 
+              color: '#a6a9b2', 
+              fontSize: '14px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '400',
+              marginBottom: '24px',
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            HostBuddy will send a message each time there is a number of consecutive vacant nights between these values. Remove the maximum to allow HostBuddy to send messages to guests touching any open availability.
+          </p>
           <div className="d-flex align-items-center gap-3 mt-1">
             <div className="d-flex align-items-center gap-2">
               <label className="settings-label">Min:</label>
@@ -458,28 +480,32 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
-      <div className="ai-context-appropriate-section" style={{padding:'10px 50px'}}>
-        <p className="d-flex align-items-center gap-5">
-          Enable AI Personalization
-          <div className="form-check form-switch">
-            <input className="form-check-input" type="checkbox" checked={currentSettingsData?.ai_personalization || false} onChange={(e) => {setSetting('ai_personalization', e.target.checked, currentSettingsData, setCurrentSettingsData);}} id="flexSwitchCheckChecked"/>
+      <div className="ai-context-appropriate-section" style={{padding:'10px 50px', borderColor: '#013280', borderRadius: '8px', borderWidth: '1px', borderStyle: 'solid'}}>
+        <div className="d-flex align-items-start justify-content-between">
+          <div className="flex-grow-1">
+            <p className="d-flex align-items-center gap-3">
+              <div className="form-check form-switch">
+                <input className="form-check-input" type="checkbox" checked={currentSettingsData?.ai_personalization || false} onChange={(e) => {setSetting('ai_personalization', e.target.checked, currentSettingsData, setCurrentSettingsData);}} id="flexSwitchCheckChecked"/>
+              </div>
+              Enable AI Personalization
+            </p>
+            <p className="fs-14 text-muted">
+              You currently have AI personalization <span className={currentSettingsData?.ai_personalization ? "text-success" : "text-danger"}>{currentSettingsData?.ai_personalization ? "enabled" : "disabled"}</span>.
+            </p>
+            <p className="fs-14 text-muted">
+              If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
+            </p>
           </div>
-        </p>
-        <p className="fs-14 text-muted">
-          You currently have AI personalization <span className={currentSettingsData?.ai_personalization ? "text-success" : "text-danger"}>{currentSettingsData?.ai_personalization ? "enabled" : "disabled"}</span>.
-        </p>
-        <p className="fs-14 text-muted">
-          If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
-        </p>
-        {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
-          <button
-            className="btn btn-link p-0"
-            style={{ color: '#146ef5' }}
-            onClick={() => setShowPersonalizeCustomize(true)}
-          >
-            Customize...
-          </button>
-        )}
+          {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
+            <button
+              className="btn btn-link"
+              style={{ color: 'rgb(20, 110, 245)', borderColor: '#013280', padding: '8px 16px', borderRadius: '10px' }}
+              onClick={() => setShowPersonalizeCustomize(true)}
+            >
+              Customize
+            </button>
+          )}
+        </div>
         {currentSettingsData?.ai_personalization && showPersonalizeCustomize && (
           <div className="mt-3">
             <label className="fs-6">(Optional) Add custom instructions to guide the AI personalization</label>

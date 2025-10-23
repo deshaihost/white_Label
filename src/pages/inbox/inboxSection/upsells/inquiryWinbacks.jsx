@@ -366,8 +366,30 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
 
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
-          <label className="fs-5">Message Timing</label>
-          <p className="settings-label mb-2">How long should HostBuddy wait before following up?</p>
+          <h3 
+            style={{ 
+              color: 'white', 
+              fontSize: '18px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '700',
+              marginBottom: '16px',
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            Message Timing
+          </h3>
+          <p 
+            style={{ 
+              color: '#a6a9b2', 
+              fontSize: '14px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '400',
+              marginBottom: '24px',
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            How long should HostBuddy wait before following up?
+          </p>
           <div className="row mt-1">
             <div className="col-lg-2 col-3">
               <input type="number" className="form-control" value={currentSettingsData.days_after_last_message} onChange={(e) => setSetting('days_after_last_message', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
@@ -422,28 +444,32 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
-      <div className="ai-context-appropriate-section" style={{padding:'10px 50px'}}>
-        <p className="d-flex align-items-center gap-5">
-          Enable AI Personalization
-          <div className="form-check form-switch">
-            <input className="form-check-input" type="checkbox" checked={currentSettingsData?.ai_personalization || false} onChange={(e) => {setSetting('ai_personalization', e.target.checked, currentSettingsData, setCurrentSettingsData);}} id="flexSwitchCheckChecked"/>
+      <div className="ai-context-appropriate-section" style={{padding:'10px 50px', borderColor: '#013280', borderRadius: '8px', borderWidth: '1px', borderStyle: 'solid'}}>
+        <div className="d-flex align-items-start justify-content-between">
+          <div className="flex-grow-1">
+            <p className="d-flex align-items-center gap-3">
+              <div className="form-check form-switch">
+                <input className="form-check-input" type="checkbox" checked={currentSettingsData?.ai_personalization || false} onChange={(e) => {setSetting('ai_personalization', e.target.checked, currentSettingsData, setCurrentSettingsData);}} id="flexSwitchCheckChecked"/>
+              </div>
+              Enable AI Personalization
+            </p>
+            <p className="fs-14 text-muted">
+              You currently have AI personalization <span className={currentSettingsData?.ai_personalization ? "text-success" : "text-danger"}>{currentSettingsData?.ai_personalization ? "enabled" : "disabled"}</span>.
+            </p>
+            <p className="fs-14 text-muted">
+              If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
+            </p>
           </div>
-        </p>
-        <p className="fs-14 text-muted">
-          You currently have AI personalization <span className={currentSettingsData?.ai_personalization ? "text-success" : "text-danger"}>{currentSettingsData?.ai_personalization ? "enabled" : "disabled"}</span>.
-        </p>
-        <p className="fs-14 text-muted">
-          If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
-        </p>
-        {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
-          <button
-            className="btn btn-link p-0"
-            style={{ color: '#146ef5' }}
-            onClick={() => setShowPersonalizeCustomize(true)}
-          >
-            Customize...
-          </button>
-        )}
+          {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
+            <button
+              className="btn btn-link"
+              style={{ color: 'rgb(20, 110, 245)', borderColor: '#013280', padding: '8px 16px', borderRadius: '10px' }}
+              onClick={() => setShowPersonalizeCustomize(true)}
+            >
+              Customize
+            </button>
+          )}
+        </div>
         {currentSettingsData?.ai_personalization && showPersonalizeCustomize && (
           <div className="mt-3">
             <label className="fs-6">(Optional) Add custom instructions to guide the AI personalization</label>
