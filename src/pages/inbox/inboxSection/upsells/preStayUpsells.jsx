@@ -448,8 +448,6 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
         </div>
       </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
-
       <h3 className="available-variables-heading mt-5 text-center">Upsell Message</h3>
 
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
@@ -467,18 +465,18 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
         </div>
       </div>
 
-      <div className="row mt-4 justify-content-center">
-        <div className="col-lg-11">
-          <div className="d-flex align-items-center justify-content-center gap-5">
-            <label className="fs-5">Message</label>
-          </div>
-          <div className="d-flex justify-content-center">
-            <textarea id="upsellMessage" className="form-control setting-textarea" value={currentSettingsData.upsell_message} onChange={(e) => setSetting('upsell_message', e.target.value, currentSettingsData, setCurrentSettingsData)} />
-          </div>
+      <div style={{ padding: '10px 0' }}>
+        <div className="d-flex align-items-center justify-content-center gap-5">
+          <label className="fs-5">Message</label>
         </div>
+        <textarea
+          id="upsellMessage"
+          className="form-control setting-textarea"
+          style={{ width: '100%', boxSizing: 'border-box' }}
+          value={currentSettingsData.upsell_message}
+          onChange={(e) => setSetting('upsell_message', e.target.value, currentSettingsData, setCurrentSettingsData)}
+        />
       </div>
-
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
       <div className="ai-context-appropriate-section" style={{padding:'10px 50px', borderColor: '#013280', borderRadius: '8px', borderWidth: '1px', borderStyle: 'solid'}}>
         <div className="d-flex align-items-start justify-content-between">
@@ -565,8 +563,6 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
           </Button>
         </div>
       </div>
-
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
       <p className="settings-label text-center">Showing the next 10</p>
