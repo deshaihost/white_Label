@@ -476,18 +476,57 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
       <div className="ai-context-appropriate-section" style={{padding:'10px 50px', borderColor: '#013280', borderRadius: '8px', borderWidth: '1px', borderStyle: 'solid'}}>
         <div className="d-flex align-items-start justify-content-between">
           <div className="flex-grow-1">
-            <p className="d-flex align-items-center gap-3">
-              <div className="form-check form-switch">
-                <input className="form-check-input" type="checkbox" checked={currentSettingsData?.ai_personalization || false} onChange={(e) => {setSetting('ai_personalization', e.target.checked, currentSettingsData, setCurrentSettingsData);}} id="flexSwitchCheckChecked"/>
+            <div style={{ display: 'flex', alignItems: 'start', gap: '12px', marginBottom: '12px' }}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSetting('ai_personalization', !currentSettingsData?.ai_personalization, currentSettingsData, setCurrentSettingsData);
+                }}
+                style={{
+                  position: 'relative',
+                  width: '44px',
+                  height: '24px',
+                  borderRadius: '9999px',
+                  backgroundColor: currentSettingsData?.ai_personalization ? '#3e88f7' : '#013280',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s',
+                  flexShrink: 0,
+                  marginTop: '2px'
+                }}
+              >
+                <div 
+                  style={{
+                    position: 'absolute',
+                    top: '2px',
+                    left: currentSettingsData?.ai_personalization ? '22px' : '2px',
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: 'white',
+                    borderRadius: '50%',
+                    transition: 'left 0.3s'
+                  }}
+                />
+              </button>
+              <div style={{ flex: 1 }}>
+                <p style={{ color: 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', marginBottom: '4px', fontVariationSettings: "'opsz' 14" }}>
+                  Enable AI Personalization
+                </p>
+                <p style={{ 
+                  fontSize: '12px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '400',
+                  color: currentSettingsData?.ai_personalization ? '#4ade80' : '#a6a9b2',
+                  marginBottom: '8px',
+                  fontVariationSettings: "'opsz' 14"
+                }}>
+                  You currently have AI personalization {currentSettingsData?.ai_personalization ? 'enabled' : 'disabled'}.
+                </p>
+                <p style={{ color: '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', margin: 0, fontVariationSettings: "'opsz' 14" }}>
+                  If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
+                </p>
               </div>
-              Enable AI Personalization
-            </p>
-            <p className="fs-14 text-muted">
-              You currently have AI personalization <span className={currentSettingsData?.ai_personalization ? "text-success" : "text-danger"}>{currentSettingsData?.ai_personalization ? "enabled" : "disabled"}</span>.
-            </p>
-            <p className="fs-14 text-muted">
-              If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
-            </p>
+            </div>
           </div>
           {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
             <button
