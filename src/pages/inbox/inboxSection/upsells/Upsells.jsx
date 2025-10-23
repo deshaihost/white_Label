@@ -125,7 +125,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
 
 
   return (
-    <div className="upsells_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "40px 60px"}}>
+    <div className="upsells_tab_grid text-white setting_tab_data p-3" style={{ borderRadius: "20px", margin: "40px 60px"}}>
       {selectedSection === "preStayUpsells" && (
         <PreStayUpsells setSection={setSelectedSection} settingsApiData={preStaySettingsApiData} setSettingsApiData={setPreStaySettingsApiData} localSettingsData={preStayLocalSettingsData} setLocalSettingsData={setPreStayLocalSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPreStaySettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPreStayUpcomingMessagesLoading} upcomingMessagesData={preStayUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList}/>
       )}
@@ -140,14 +140,34 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
       
       {selectedSection === "index" && (
         <div className="upsells-settings">
-          <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between blur-background-top-right">
-            <h3>Upsells</h3>
-          </div>
-          <div style={{width:"95%", margin:"20px 5px"}}>
-            <p style={{color:"#CCC", fontSize:'16px'}}>Intelligent automations that help you maximize occupancy and leave less money on the table. Customize your upsell settings and messages to suit your property and guest preferences.</p>
+          <div style={{ marginBottom: '40px' }}>
+            <h1 
+              className="text-white mb-4" 
+              style={{ 
+                fontSize: '40px', 
+                fontFamily: "'DM Sans', sans-serif", 
+                fontWeight: '700',
+                fontVariationSettings: "'opsz' 14" 
+              }}
+            >
+              Upsells
+            </h1>
+            <p 
+              style={{ 
+                color: '#a6a9b2', 
+                fontSize: '16px', 
+                fontFamily: "'DM Sans', sans-serif", 
+                fontWeight: '400',
+                lineHeight: '1.6',
+                maxWidth: '900px',
+                fontVariationSettings: "'opsz' 14" 
+              }}
+            >
+              Intelligent automations that help you maximize occupancy and leave less money on the table. Customize your upsell settings and messages to suit your property and guest preferences.
+            </p>
           </div>
 
-          <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-1"/>
+          <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }}></div>
 
           <div className="row mt-4 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("postStayUpsells")}>
             <div className="col-lg-11 col-12">
