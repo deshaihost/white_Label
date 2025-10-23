@@ -589,7 +589,25 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             </div>
             <p className="settings-label">You can customize HostBuddy's responses by adding some instructions here to direct HostBuddy's tone. Make sure to test after you make changes here!</p>
             <p className="settings-label">HostBuddy is already optimized for friendly, hospitable conversation, so this is completely optional.</p>
-            <textarea className="form-control setting-textarea" placeholder="(Optional) Add instructions to direct HostBuddy's tone..." rows={1} value={currentSettingsData.tone_instructions || ''} onChange={(e) => setSetting('tone_instructions', e.target.value)} maxLength={1000} disabled={!isToneEditable}/>
+            <textarea 
+              className="form-control setting-textarea tone-textarea" 
+              placeholder="(Optional) Add instructions to direct HostBuddy's tone..." 
+              rows={1} 
+              value={currentSettingsData.tone_instructions || ''} 
+              onChange={(e) => setSetting('tone_instructions', e.target.value)} 
+              maxLength={1000} 
+              disabled={!isToneEditable}
+              style={{
+                backgroundColor: '#0F1117',
+                border: '1px solid #013280',
+                borderRadius: '8px',
+                padding: '12px 16px',
+                color: 'white',
+                fontSize: '15px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontVariationSettings: "'opsz' 14"
+              }}
+            />
           </div>
         </div>
 
