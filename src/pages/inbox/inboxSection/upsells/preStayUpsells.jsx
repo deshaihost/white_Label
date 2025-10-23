@@ -557,7 +557,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
       </div>
 
       <div className="row mt-5">
-        <div className="col-lg-12 text-center">
+        <div className="col-lg-12">
           <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
             Save Settings
           </Button>
