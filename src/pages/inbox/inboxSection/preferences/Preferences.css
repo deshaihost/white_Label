@@ -150,6 +150,25 @@
   cursor: not-allowed;
 }
 
+/* Language input styling */
+.conversation-settings-inbox .language-input {
+  background-color: #0F1117 !important;
+  border: 1px solid #013280 !important;
+  border-radius: 8px !important;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.conversation-settings-inbox .language-input::placeholder {
+  color: #8A8E98 !important;
+}
+
+.conversation-settings-inbox .language-input:focus {
+  outline: none !important;
+  border-color: #3e88f7 !important;
+  background-color: #0F1117 !important;
+  box-shadow: none !important;
+}
+
 /* Save Settings button hover */
 .conversation-settings-inbox .save-settings-btn:hover {
   background-color: #013a8a !important;

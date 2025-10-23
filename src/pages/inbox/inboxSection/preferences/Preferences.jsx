@@ -509,7 +509,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                 }}
               />
               <input 
-                className="form-control" 
+                className="form-control language-input" 
                 placeholder="ex. English" 
                 value={languageInputValue}
                 onChange={(e) => {
@@ -528,7 +528,15 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                   }
                 }}
                 style={{
-                  width: '300px', 
+                  width: '300px',
+                  backgroundColor: '#0F1117',
+                  border: '1px solid #013280',
+                  borderRadius: '8px',
+                  padding: '12px 16px',
+                  color: 'white',
+                  fontSize: '15px',
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontVariationSettings: "'opsz' 14",
                   opacity: currentSettingsData.language === undefined || currentSettingsData.language === 'guest_language' ? 0.6 : 1
                 }}
               />
