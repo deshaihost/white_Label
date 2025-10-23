@@ -242,11 +242,30 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
             >
               Back
             </Button>
-            <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example" value={selectedConfig} onChange={handleConfigSelectChange}>
+            <select 
+              className="form-select text-white shadow-none fs-14 mb-3 mb-md-0" 
+              style={{ 
+                backgroundColor: "#0F1117", 
+                borderColor: '#013280',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderRadius: '8px',
+                padding: '10px 24px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '15px',
+                fontWeight: '600',
+                fontVariationSettings: "'opsz' 14",
+                minWidth: '140px',
+                cursor: 'pointer'
+              }} 
+              aria-label="Configuration select" 
+              value={selectedConfig} 
+              onChange={handleConfigSelectChange}
+            >
               {Object.keys(localSettingsData).map((key, index) => (
-                <option key={index} value={key}>{key}</option>              
+                <option key={index} value={key} style={{ textTransform: 'capitalize' }}>{key}</option>              
               ))}
-              <option value="add">+ New Config</option>
+              <option value="add">+ New Configuration</option>
             </select>
           </div>
 
@@ -290,14 +309,63 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
 
       <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }}></div>
 
-      <div className="row mt-4">
-        <div className="col-lg-8">
-          <div className="d-flex align-items-center gap-5 mb-1">
-            <label className="fs-5">Enable Pre Stay Upsells</label>
-            <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked, currentSettingsData, setCurrentSettingsData)}/>
-          </div>
-          <p className="settings-label">You currently have pre-stay upsells {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
+      <div style={{ marginBottom: '40px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+          <h3 
+            style={{ 
+              color: 'white', 
+              fontSize: '18px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '700',
+              margin: 0,
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            Enable Pre Stay Upsells
+          </h3>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setSetting('enabled', !currentSettingsData.enabled, currentSettingsData, setCurrentSettingsData);
+            }}
+            style={{
+              position: 'relative',
+              width: '44px',
+              height: '24px',
+              borderRadius: '9999px',
+              backgroundColor: currentSettingsData.enabled ? '#3e88f7' : '#013280',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s',
+              flexShrink: 0
+            }}
+          >
+            <div 
+              style={{
+                position: 'absolute',
+                top: '2px',
+                left: currentSettingsData.enabled ? '22px' : '2px',
+                width: '20px',
+                height: '20px',
+                backgroundColor: 'white',
+                borderRadius: '50%',
+                transition: 'left 0.3s'
+              }}
+            />
+          </button>
         </div>
+        <p 
+          style={{ 
+            fontSize: '14px', 
+            fontFamily: "'DM Sans', sans-serif", 
+            fontWeight: '400',
+            color: currentSettingsData.enabled ? '#4ade80' : '#ef4444',
+            margin: 0,
+            fontVariationSettings: "'opsz' 14"
+          }}
+        >
+          You currently have pre-stay upsells {currentSettingsData.enabled ? 'enabled' : 'not enabled'}.
+        </p>
       </div>
 
       <div className="row mt-5">
