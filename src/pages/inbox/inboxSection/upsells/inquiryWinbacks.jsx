@@ -512,7 +512,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         )}
       </div>
 
-      <div className="mb-10">
+      <div className="mb-10 mt-5">
         <button
           onClick={handleSaveSettings}
           className="px-6 py-2.5 bg-[#3e88f7] rounded-lg text-white text-[15px] font-['DM_Sans:SemiBold',_sans-serif] hover:bg-[#74A9F7] transition-colors"
