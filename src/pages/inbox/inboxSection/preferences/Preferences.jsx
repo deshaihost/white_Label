@@ -281,7 +281,24 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
           </div>
           <div>
             <div className={`d-flex flex-wrap flex-md-nowrap gap-4 align-items-center ${!options ? 'justify-content-end' : ''}`}>
-              <Button className="btn-primary fs-16" style={{ padding: '8px 16px', borderRadius: '5px', backgroundColor: '#01255e', borderColor: '#013280', borderWidth: '1px', borderStyle: 'solid', whiteSpace: 'nowrap' }} onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
+              <Button 
+                className="btn-primary save-settings-btn" 
+                style={{ 
+                  padding: '10px 24px', 
+                  borderRadius: '8px', 
+                  backgroundColor: '#01255e', 
+                  borderColor: '#013280', 
+                  borderWidth: '1px', 
+                  borderStyle: 'solid', 
+                  whiteSpace: 'nowrap',
+                  fontSize: '15px',
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: '600',
+                  fontVariationSettings: "'opsz' 14"
+                }} 
+                onClick={handleSaveSettings} 
+                disabled={Object.keys(settingsApiData).length === 0}
+              >
                 Save Settings
               </Button>
             
@@ -332,7 +349,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         {/* <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/> */}
 
-        <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
+        <hr style={{ borderTop: '1px solid #013280', border: 'none', marginBottom: '40px' }} className="mt-4"/>
 
         <div className="row mt-4">
           <div className="col-lg-8">
@@ -394,7 +411,22 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
           <div className="col-lg-11">
             <label className="fs-5">Direct Contact</label>
             <p className="settings-label mb-2">If added, HostBuddy will provide this information to guests in the event of an emergency requiring immediate attention</p>
-            <input className="form-control" placeholder="ex. John Doe, (888-123-4567)" value={currentSettingsData.emergency_contact_instructions} onChange={(e) => setSetting('emergency_contact_instructions', e.target.value)}/>
+            <input 
+              className="form-control direct-contact-input" 
+              placeholder="ex. John Doe, (888-123-4567)" 
+              value={currentSettingsData.emergency_contact_instructions} 
+              onChange={(e) => setSetting('emergency_contact_instructions', e.target.value)}
+              style={{
+                backgroundColor: '#0F1117',
+                border: '1px solid #013280',
+                borderRadius: '8px',
+                padding: '12px 16px',
+                color: 'white',
+                fontSize: '15px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontVariationSettings: "'opsz' 14"
+              }}
+            />
           </div>
         </div>
 
@@ -410,7 +442,25 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               </div>
             </div>
             <p className="settings-label">If enabled, HostBuddy will append this to the end of each of its messages.</p>
-            <textarea className="form-control setting-textarea" placeholder="" rows={1} value={currentSettingsData.message_signature} onChange={(e) => setSetting('message_signature', e.target.value)} disabled={!currentSettingsData.message_signature_enabled} maxLength={500}/>
+            <textarea 
+              className="form-control setting-textarea signature-textarea" 
+              placeholder="" 
+              rows={1} 
+              value={currentSettingsData.message_signature} 
+              onChange={(e) => setSetting('message_signature', e.target.value)} 
+              disabled={!currentSettingsData.message_signature_enabled} 
+              maxLength={500}
+              style={{
+                backgroundColor: '#0F1117',
+                border: '1px solid #013280',
+                borderRadius: '8px',
+                padding: '12px 16px',
+                color: 'white',
+                fontSize: '15px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontVariationSettings: "'opsz' 14"
+              }}
+            />
             {/* <small className="text-muted">{(currentSettingsData.message_signature?.length || 0)}/500 characters</small> */}
           </div>
         </div>

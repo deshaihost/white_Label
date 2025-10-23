@@ -80,3 +80,58 @@
   background-color: #01255e !important;
   transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Direct Contact input styling */
+.conversation-settings-inbox .direct-contact-input {
+  background-color: #0F1117 !important;
+  border: 1px solid #013280 !important;
+  border-radius: 8px !important;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.conversation-settings-inbox .direct-contact-input::placeholder {
+  color: #8A8E98 !important;
+}
+
+.conversation-settings-inbox .direct-contact-input:focus {
+  outline: none !important;
+  border-color: #3e88f7 !important;
+  background-color: #0F1117 !important;
+  box-shadow: none !important;
+}
+
+/* Signature textarea styling */
+.conversation-settings-inbox .signature-textarea {
+  background-color: #0F1117 !important;
+  border: 1px solid #013280 !important;
+  border-radius: 8px !important;
+  transition: border-color 0.15s ease-in-out;
+  resize: none;
+}
+
+.conversation-settings-inbox .signature-textarea::placeholder {
+  color: #8A8E98 !important;
+}
+
+.conversation-settings-inbox .signature-textarea:focus {
+  outline: none !important;
+  border-color: #3e88f7 !important;
+  background-color: #0F1117 !important;
+  box-shadow: none !important;
+}
+
+.conversation-settings-inbox .signature-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Save Settings button hover */
+.conversation-settings-inbox .save-settings-btn:hover {
+  background-color: #013a8a !important;
+  transition: background-color 0.3s ease;
+}
+
+.conversation-settings-inbox .save-settings-btn:focus {
+  background-color: #01255e !important;
+  box-shadow: none !important;
+}
