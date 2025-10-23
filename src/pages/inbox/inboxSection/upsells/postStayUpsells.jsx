@@ -198,7 +198,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-start justify-content-between">
         <div>
           <h3>Post Stay Gap Night</h3>
-          <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
+          {/* <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a> */}
         </div>
         <div>
           <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
@@ -246,11 +246,11 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
           <div style={{marginTop:"10px"}}>
             {selectedConfig === "default" ? (
               <div style={{maxWidth:"400px"}}>
-                <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p>
+                {/* <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p> */}
               </div>
             ) : (
               <>
-                <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p>
+                {/* <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p> */}
                 <div ref={selectRef}>
                   <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
                 </div>
@@ -261,11 +261,27 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
       </div>
 
-      <div style={{width:"90%", margin:"20px 0"}}>
-        <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked before vacant night, offering them a late check-out or a discount to extend their stay. You can customize the message and parameters.</p>
+      <div style={{ marginTop: '20px', marginBottom: '40px' }}>
+        <p 
+          style={{ 
+            color: '#a6a9b2', 
+            fontSize: '16px', 
+            fontFamily: "'DM Sans', sans-serif", 
+            fontWeight: '400',
+            lineHeight: '1.6',
+            maxWidth: '900px',
+            fontVariationSettings: "'opsz' 14"
+          }}
+        >
+          HostBuddy will detect when there's a vacant night between two reservations. You'll send a message to the first guest with a gap night upsell offer, customizable by you, with AI personalization if you enable it. If they're interested, HostBuddy will automatically acknowledge and prompt you to manually extend their stay.
+        </p>
       </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
+      {/* <div style={{width:"90%", margin:"20px 0"}}>
+        <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked before vacant night, offering them a late check-out or a discount to extend their stay. You can customize the message and parameters.</p>
+      </div> */}
+
+      <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }}></div>
 
       <div className="row mt-4">
         <div className="col-lg-8">

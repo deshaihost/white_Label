@@ -201,7 +201,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-start justify-content-between">
         <div>
           <h3>Inquiry Follow-Ups</h3>
-          <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
+          {/* <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a> */}
         </div>
         <div>
           <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
@@ -249,11 +249,11 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
           <div style={{marginTop:"10px"}}>
             {selectedConfig === "default" ? (
               <div style={{maxWidth:"400px"}}>
-                <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p>
+                {/* <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p> */}
               </div>
             ) : (
               <>
-                <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p>
+                {/* <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p> */}
                 <div ref={selectRef}>
                   <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
                 </div>
@@ -264,11 +264,27 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
       </div>
 
-      <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
-        <p className="settings-label">HostBuddy can follow up with guests that inquired about your properties, but didn't book, if those dates are still available. You can choose not to send messages to guests who have given a firm pass on your property.</p>
+      <div style={{ marginTop: '20px', marginBottom: '40px' }}>
+        <p 
+          style={{ 
+            color: '#a6a9b2', 
+            fontSize: '16px', 
+            fontFamily: "'DM Sans', sans-serif", 
+            fontWeight: '400',
+            lineHeight: '1.6',
+            maxWidth: '900px',
+            fontVariationSettings: "'opsz' 14"
+          }}
+        >
+          HostBuddy can follow up with guests that inquired about your properties, but didn't book, if those dates are still available. You can choose not to send messages to guests who have given a firm pass on your property.
+        </p>
       </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
+      {/* <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
+        <p className="settings-label">HostBuddy can follow up with guests that inquired about your properties, but didn't book, if those dates are still available. You can choose not to send messages to guests who have given a firm pass on your property.</p>
+      </div> */}
+
+      <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }}></div>
 
       <div className="row mt-4">
         <div className="col-lg-8">
