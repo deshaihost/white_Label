@@ -574,11 +574,45 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <div className="row">
               <div className="col-lg-3">
                 <label className="fs-6">Min. Delay</label>
-                <input type="number" className="form-control" placeholder="0 mins" value={currentSettingsData.min_message_delay_minutes} onChange={(e) => setSetting('min_message_delay_minutes', e.target.value)} disabled={!isDelayEditable}/>
+                <input 
+                  type="number" 
+                  className="form-control delay-input" 
+                  placeholder="0 mins" 
+                  value={currentSettingsData.min_message_delay_minutes} 
+                  onChange={(e) => setSetting('min_message_delay_minutes', e.target.value)} 
+                  disabled={!isDelayEditable}
+                  style={{
+                    backgroundColor: '#0F1117',
+                    border: '1px solid #013280',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    color: 'white',
+                    fontSize: '15px',
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontVariationSettings: "'opsz' 14"
+                  }}
+                />
               </div>
               <div className="col-lg-3">
                 <label className="fs-6">Max. Delay</label>
-                <input type="number" className="form-control" placeholder="0 mins" value={currentSettingsData.max_message_delay_minutes} onChange={(e) => setSetting('max_message_delay_minutes', e.target.value)} disabled={!isDelayEditable}/>
+                <input 
+                  type="number" 
+                  className="form-control delay-input" 
+                  placeholder="0 mins" 
+                  value={currentSettingsData.max_message_delay_minutes} 
+                  onChange={(e) => setSetting('max_message_delay_minutes', e.target.value)} 
+                  disabled={!isDelayEditable}
+                  style={{
+                    backgroundColor: '#0F1117',
+                    border: '1px solid #013280',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    color: 'white',
+                    fontSize: '15px',
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontVariationSettings: "'opsz' 14"
+                  }}
+                />
               </div>
             </div>
           </div>
