@@ -1,17 +1,26 @@
 // Custom styles for React Select (property multiple select component)
 const customStyles = {
-  control: (provided) => ({
+  control: (provided, state) => ({
     ...provided,
-    border: '1px solid #146ef5',
+    border: '1px solid #013280',
     borderRadius: '50px',
     color: '#fff',
     fontSize: '14px',
     fontWeight: '300',
-    backgroundColor: '#212529',
+    backgroundColor: '#0f1117',
     display: 'flex',
     overflowX: 'auto',
     maxWidth: '250px',
-    margin: '0 auto'
+    margin: '0 auto',
+    boxShadow: 'none',
+    '&:hover': {
+      borderColor: '#013280',
+      backgroundColor: '#0f1117'
+    }
+  }),
+  input: (provided) => ({
+    ...provided,
+    color: '#fff',
   }),
   singleValue: (provided) => ({
     ...provided,
@@ -38,14 +47,20 @@ const customStyles = {
   }),
   menuList: (provided) => ({
     ...provided,
-    maxHeight: '450px'
+    maxHeight: '450px',
+    backgroundColor: '#0f1117'
+  }),
+  menu: (provided) => ({
+    ...provided,
+    backgroundColor: '#0f1117',
+    border: '1px solid #013280'
   }),
   option: (provided, state) => ({
     ...provided,
     fontSize: '12px',
     padding: '5px 10px',
     color: '#fff', // Ensure text is white
-    backgroundColor: state.isSelected ? '#146ef5' : state.isFocused ? '#0056b3' : '#212529', // Customize background color
+    backgroundColor: state.isSelected ? '#01255e' : state.isFocused ? '#01255e' : '#0f1117', // Customize background color
   }),
   placeholder: (provided) => ({
     ...provided,

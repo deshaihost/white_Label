@@ -203,3 +203,39 @@
   background-color: #01255e !important;
   box-shadow: none !important;
 }
+
+/* React-Select input override */
+.property_Custom_Select input {
+  background-color: #0f1117 !important;
+  border-color: #013280 !important;
+  color: #fff !important;
+}
+
+.property_Custom_Select .custom-select__control {
+  background-color: #0f1117 !important;
+  border-color: #013280 !important;
+}
+
+.property_Custom_Select .custom-select__control--is-focused {
+  background-color: #0f1117 !important;
+  border-color: #013280 !important;
+  box-shadow: none !important;
+}
+
+/* Override all form-control styles in conversation settings */
+.conversation-settings-inbox .form-control,
+.conversation-settings-inbox input.form-control,
+.conversation-settings-inbox input[type="number"].form-control {
+  background-color: #0f1117 !important;
+  background: #0f1117 !important;
+  border: 1px solid #013280 !important;
+  border-color: #013280 !important;
+}
+
+.conversation-settings-inbox .form-control:focus,
+.conversation-settings-inbox input.form-control:focus,
+.conversation-settings-inbox input[type="number"].form-control:focus {
+  background-color: #0f1117 !important;
+  background: #0f1117 !important;
+  border-color: #3e88f7 !important;
+}

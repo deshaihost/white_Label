@@ -139,12 +139,45 @@ const SchedulePopupModal = ({ show, setShow, responseObject, setResponseObject }
             <div class="row py-2">
               <div class="col">
                 <label>Start Time:</label>
-                <input type="time" name="st" id="startTime" class="form-control" value={data.startTime} onChange={handleInputChange}
+                <input 
+                  type="time" 
+                  name="st" 
+                  id="startTime" 
+                  className="form-control schedule-time-input" 
+                  value={data.startTime} 
+                  onChange={handleInputChange}
+                  style={{
+                    backgroundColor: '#0F1117',
+                    border: '1px solid #013280',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    color: 'white',
+                    fontSize: '15px',
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontVariationSettings: "'opsz' 14"
+                  }}
                 />
               </div>
               <div class="col">
                 <label>End Time:</label>
-                <input type="time" name="et" id="endTime" class="form-control" value={data.endTime} onChange={handleInputChange}/>
+                <input 
+                  type="time" 
+                  name="et" 
+                  id="endTime" 
+                  className="form-control schedule-time-input" 
+                  value={data.endTime} 
+                  onChange={handleInputChange}
+                  style={{
+                    backgroundColor: '#0F1117',
+                    border: '1px solid #013280',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    color: 'white',
+                    fontSize: '15px',
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontVariationSettings: "'opsz' 14"
+                  }}
+                />
               </div>
             </div>
 
