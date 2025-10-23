@@ -418,25 +418,34 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
 
       <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
 
-      <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
-      <p className="settings-label text-center">Showing the next 10</p>
-      {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have pre-stay upsells <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
-      ) : (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have pre-stay upsells <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
-      )}
+      <div>
+        <h3 style={{ color: 'white', fontSize: '18px', fontFamily: "'DM Sans', sans-serif", fontWeight: '700', marginBottom: '8px', fontVariationSettings: "'opsz' 14" }}>
+          Upcoming Messages
+        </h3>
+        <p style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+          Preview Scheduled
+        </p>
+        {!currentSettingsData.enabled ? (
+          <p style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+            Pre-stay upsells are currently off. Enable them to see upcoming messages.
+          </p>
+        ) : (
+          <p style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+            You currently have zero upcoming upsell messages. These messages will all show up here.
+          </p>
+        )}
 
       <div className="col-12 mt-4">
-        <div className="upcoming-messages">
-          <table className="table">
+        <div style={{ backgroundColor: '#0F1117', border: '2px solid #013280', borderRadius: '12px', overflow: 'hidden' }}>
+          <table style={{ width: '100%', marginBottom: '0', borderCollapse: 'separate', borderSpacing: '0', backgroundColor: '#0F1117', borderColor: '#013280', borderWidth: '1px' }}>
             <thead>
-              <tr>
-                <th>Sending at</th>
-                <th>Property</th>
-                <th>Guest</th>
-                <th>Vacant night</th>
+              <tr style={{ backgroundColor: '#0F1117' }}>
+                <th style={{ padding: '12px 24px', textAlign: 'left', color: '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', textTransform: 'uppercase', fontVariationSettings: "'opsz' 14", borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: '#013280', borderRightWidth: '1px', borderRightStyle: 'solid', borderRightColor: '#013280', borderColor: '#013280' }}>Sending on</th>
+                <th style={{ padding: '12px 24px', textAlign: 'left', color: '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', textTransform: 'uppercase', fontVariationSettings: "'opsz' 14", borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: '#013280', borderRightWidth: '1px', borderRightStyle: 'solid', borderRightColor: '#013280', borderColor: '#013280' }}>Property</th>
+                <th style={{ padding: '12px 24px', textAlign: 'left', color: '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', textTransform: 'uppercase', fontVariationSettings: "'opsz' 14", borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: '#013280', borderRightWidth: '1px', borderRightStyle: 'solid', borderRightColor: '#013280', borderColor: '#013280' }}>Guest</th>
+                <th style={{ padding: '12px 24px', textAlign: 'left', color: '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', textTransform: 'uppercase', fontVariationSettings: "'opsz' 14", borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: '#013280', borderRightWidth: '1px', borderRightStyle: 'solid', borderRightColor: '#013280', borderColor: '#013280' }}>Vacant Night</th>
                 {/* <th>Status</th> tbh there's no need for this, since current implementation only shows "waiting to send" messages to the user */}
-                <th>Action</th>
+                <th style={{ padding: '12px 24px', textAlign: 'left', color: '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', textTransform: 'uppercase', fontVariationSettings: "'opsz' 14", borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: '#013280', borderColor: '#013280' }}>Action</th>
               </tr>
             </thead>
             {!getUpcomingMessagesLoading ? (
@@ -444,12 +453,12 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
                 <tbody>
                   {upcomingMessagesData.slice(0, 10).map((message, index) => ( // only show the first 20
                     <tr key={index}>
-                      <td>{formatDateTime(message.time_to_send)}</td>
-                      <td>{truncateString(message.property_name, 25)}</td>
-                      <td>{`${truncateString(message.guest_first_name, 13)} (${formatDateRange(message.guest_check_in, message.guest_check_out)})`}</td>
-                      <td>{formatDateRange(message.start_date, message.end_date)}</td>
+                      <td style={{ padding: '12px 24px', color: 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', fontVariationSettings: "'opsz' 14", borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: '#013280', borderRightWidth: '1px', borderRightStyle: 'solid', borderRightColor: '#013280', borderColor: '#013280' }}>{formatDateTime(message.time_to_send)}</td>
+                      <td style={{ padding: '12px 24px', color: 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', fontVariationSettings: "'opsz' 14", borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: '#013280', borderRightWidth: '1px', borderRightStyle: 'solid', borderRightColor: '#013280', borderColor: '#013280' }}>{truncateString(message.property_name, 25)}</td>
+                      <td style={{ padding: '12px 24px', color: 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', fontVariationSettings: "'opsz' 14", borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: '#013280', borderRightWidth: '1px', borderRightStyle: 'solid', borderRightColor: '#013280', borderColor: '#013280' }}>{`${truncateString(message.guest_first_name, 13)} (${formatDateRange(message.guest_check_in, message.guest_check_out)})`}</td>
+                      <td style={{ padding: '12px 24px', color: 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', fontVariationSettings: "'opsz' 14", borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: '#013280', borderRightWidth: '1px', borderRightStyle: 'solid', borderRightColor: '#013280', borderColor: '#013280' }}>{formatDateRange(message.start_date, message.end_date)}</td>
                       {/* <td>Waiting to send</td> We could get the actual status of the message (message.status). But current implementation only shows messages with status "scheduled" */}
-                      <td>
+                      <td style={{ padding: '12px 24px', borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: '#013280', borderColor: '#013280' }}>
                         {cancelMessageLoading !== message.guest_key ? (
                           <>
                             <FaExternalLinkAlt style={{ marginRight:'10px', marginLeft:'10px', cursor:'pointer' }} onClick={() => handleOpenMessageModal(message)} />
@@ -465,14 +474,16 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
               ) : (
                 <tbody>
                   <tr>
-                    <td colSpan="6" className="text-center">No upcoming messages</td>
+                    <td colSpan="5" style={{ padding: '24px', textAlign: 'center', color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', fontVariationSettings: "'opsz' 14" }}>
+                      {!currentSettingsData.enabled ? 'Pre-stay upsells are off' : 'No upcoming messages'}
+                    </td>
                   </tr>
                 </tbody>
               )
             ) : (
               <tbody>
                 <tr>
-                  <td colSpan="6" className="text-center">
+                  <td colSpan="5" style={{ padding: '24px', textAlign: 'center' }}>
                     <BoxLoader />
                   </td>
                 </tr>
@@ -480,6 +491,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, curren
             )}
           </table>
         </div>
+      </div>
       </div>
       <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} />
     </div>

@@ -102,6 +102,38 @@
   color: white;
 }
 
+/* Override global table border reset for upsells tables */
+.upsells-settings .table {
+  border-radius: 10px !important;
+  overflow: hidden;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+.upsells-settings .table thead th,
+.upsells-settings .table tbody td {
+  border-color: #013280 !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+}
+
+/* Round the corner cells */
+.upsells-settings .table thead tr:first-child th:first-child {
+  border-top-left-radius: 10px !important;
+}
+
+.upsells-settings .table thead tr:first-child th:last-child {
+  border-top-right-radius: 10px !important;
+}
+
+.upsells-settings .table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 10px !important;
+}
+
+.upsells-settings .table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 10px !important;
+}
+
 .upsells-settings .clickable-div {
   cursor: pointer;
   border: 1px solid #045ce9;
