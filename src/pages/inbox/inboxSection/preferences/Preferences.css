@@ -195,12 +195,14 @@
 
 /* Save Settings button hover */
 .conversation-settings-inbox .save-settings-btn:hover {
-  background-color: #013a8a !important;
+  background-color: #2a6fd9 !important;
+  border-color: #2a6fd9 !important;
   transition: background-color 0.3s ease;
 }
 
 .conversation-settings-inbox .save-settings-btn:focus {
-  background-color: #01255e !important;
+  background-color: #3e88f7 !important;
+  border-color: #3e88f7 !important;
   box-shadow: none !important;
 }
 

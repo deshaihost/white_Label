@@ -285,9 +285,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                 className="btn-primary save-settings-btn" 
                 style={{ 
                   padding: '10px 24px', 
-                  borderRadius: '8px', 
-                  backgroundColor: '#01255e', 
-                  borderColor: '#013280', 
+                  borderRadius: '5px', 
+                  backgroundColor: '#3e88f7', 
+                  borderColor: '#3e88f7', 
                   borderWidth: '1px', 
                   borderStyle: 'solid', 
                   whiteSpace: 'nowrap',

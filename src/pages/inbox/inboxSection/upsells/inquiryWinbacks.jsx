@@ -205,7 +205,18 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
         <div>
           <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
-            <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
+            <Button 
+              className="px-5 text-nowrap fs-14" 
+              style={{
+                backgroundColor: '#3e88f7',
+                borderColor: '#3e88f7',
+                borderRadius: '5px',
+                borderWidth: '1px',
+                borderStyle: 'solid'
+              }}
+              onClick={handleSaveSettings} 
+              disabled={Object.keys(settingsApiData).length === 0}
+            >
               Save Settings
             </Button>
             <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example" value={selectedConfig} onChange={handleConfigSelectChange}>
