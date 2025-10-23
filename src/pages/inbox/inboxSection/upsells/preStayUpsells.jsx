@@ -210,18 +210,37 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
         <div>
           <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
             <Button 
-              className="px-5 text-nowrap fs-14" 
+              className="text-nowrap fs-14" 
               style={{
                 backgroundColor: '#3e88f7',
                 borderColor: '#3e88f7',
                 borderRadius: '5px',
                 borderWidth: '1px',
-                borderStyle: 'solid'
+                borderStyle: 'solid',
+                padding: '8px 24px'
               }}
               onClick={handleSaveSettings} 
               disabled={Object.keys(settingsApiData).length === 0}
             >
-              Save Settings
+              Save Upsell
+            </Button>
+            <Button 
+              className="text-nowrap fs-14" 
+              style={{
+                backgroundColor: '#0F1117',
+                borderColor: '#013280',
+                borderRadius: '5px',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                padding: '8px 24px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '15px',
+                fontWeight: '600',
+                fontVariationSettings: "'opsz' 14"
+              }}
+              onClick={() => setSection('index')}
+            >
+              Back
             </Button>
             <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example" value={selectedConfig} onChange={handleConfigSelectChange}>
               {Object.keys(localSettingsData).map((key, index) => (
