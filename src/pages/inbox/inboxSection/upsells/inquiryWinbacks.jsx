@@ -434,14 +434,6 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         />
       </div>
 
-      <div className="row mt-5">
-        <div className="col-lg-12">
-          <Button className="btn-primary fs-16 px-4" style={{ borderRadius: '10px' }} onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-            Save Upsells
-          </Button>
-        </div>
-      </div>
-
       <div className="ai-context-appropriate-section" style={{padding:'10px 50px', borderColor: '#013280', borderRadius: '8px', borderWidth: '1px', borderStyle: 'solid'}}>
         <div className="d-flex align-items-start justify-content-between">
           <div className="flex-grow-1">
@@ -518,6 +510,17 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
             />
           </div>
         )}
+      </div>
+
+      <div className="mb-10">
+        <button
+          onClick={handleSaveSettings}
+          className="px-6 py-2.5 bg-[#3e88f7] rounded-lg text-white text-[15px] font-['DM_Sans:SemiBold',_sans-serif] hover:bg-[#74A9F7] transition-colors"
+          style={{ fontVariationSettings: "'opsz' 14", backgroundColor: '#3e88f7', borderRadius: '10px', padding: '10px 24px', border: 'none', cursor: 'pointer', fontSize: '15px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600' }}
+          disabled={Object.keys(settingsApiData).length === 0}
+        >
+          Save Settings
+        </button>
       </div>
 
       <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>

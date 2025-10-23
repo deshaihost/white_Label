@@ -393,6 +393,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, curre
         </div>
       </div>
       </div>
+
       <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} />
     </div>
   );
