@@ -412,7 +412,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
         <div className="available-variables-section">
         <label className="fs-5">Variables</label>
-        <p className="settings-label">Click to add custom variables to your upsell message. These variables will change to match the data for each reservation.</p>
+        <p className="settings-label">Preview Scheduled</p>
           <div className="available-variables mt-3">
             {Object.keys(variables).map((key, index) => (
               <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('upsellMessage'), `[[${key}]]`, currentSettingsData, setCurrentSettingsData)}>{variables[key]}</span>
@@ -523,12 +523,12 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         </button>
       </div>
 
-      <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
-      <p className="settings-label text-center">Showing the next 10</p>
+      <h3 className="available-variables-heading mt-5">Upcoming Messages</h3>
+      <p className="settings-label">Preview Scheduled</p>
       {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry follow-ups <span style={{color: 'rgb(0, 128, 0'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
+        <p style={{marginTop:'10px'}} className="settings-label">You currently have inquiry follow-ups <span style={{color: 'rgb(0, 128, 0'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
       ) : (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry follow-ups <span style={{color: 'rgb(215, 0, 0'}}>not enabled</span>. These messages will not be sent.</p>
+        <p style={{marginTop:'10px'}} className="settings-label">You currently have inquiry follow-ups <span style={{color: 'rgb(215, 0, 0'}}>not enabled</span>. These messages will not be sent.</p>
       )}
 
       <div className="col-12 mt-4">

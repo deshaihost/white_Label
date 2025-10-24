@@ -564,12 +564,12 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
         </div>
       </div>
 
-      <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
-      <p className="settings-label text-center">Showing the next 10</p>
+      <h3 className="available-variables-heading mt-5">Upcoming Messages</h3>
+      <p className="settings-label">Preview Scheduled</p>
       {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have pre-stay upsells <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
+        <p style={{marginTop:'10px'}} className="settings-label">You currently have pre-stay upsells <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
       ) : (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have pre-stay upsells <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
+        <p style={{marginTop:'10px'}} className="settings-label">You currently have pre-stay upsells <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
       )}
 
       <div className="col-12 mt-4">
