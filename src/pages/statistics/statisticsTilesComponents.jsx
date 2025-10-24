@@ -373,42 +373,58 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
           <div className={`metric-content${blur ? ' blurred-content' : ''}`}>
             {currentDataSet && currentDataSet.length > 0 ? (
               isActionItemTile ? (
-                // Special layout for Action Items tile - 2 column grid
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '12px' }}>
-                  {currentDataSet.map((item, index) => (
-                    <div 
-                      key={index} 
-                      style={{
-                        backgroundColor: '#0F1117',
-                        border: '1px solid #013280',
-                        borderRadius: '8px',
-                        padding: '16px',
-                        textAlign: 'center'
-                      }}
-                    >
-                      <p style={{
-                        color: 'white',
-                        fontSize: '40px',
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontWeight: 700,
-                        fontVariationSettings: "'opsz' 14",
-                        marginBottom: '8px',
-                        lineHeight: '1'
-                      }}>
-                        {item.number}
-                      </p>
-                      <p style={{
-                        color: '#a6a9b2',
-                        fontSize: '14px',
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontWeight: 500,
-                        fontVariationSettings: "'opsz' 14",
-                        margin: 0
-                      }}>
-                        {item.text}
-                      </p>
-                    </div>
-                  ))}
+                // Special layout for Action Items tile - 2 column grid centered
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  height: '100%',
+                  width: '100%'
+                }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', width: '100%', maxWidth: '500px' }}>
+                    {currentDataSet.map((item, index) => (
+                      <div 
+                        key={index} 
+                        style={{
+                          backgroundColor: '#0F1117',
+                          border: '1px solid #013280',
+                          borderRadius: '8px',
+                          padding: '16px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        <p style={{
+                          color: 'white',
+                          fontSize: '40px',
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontWeight: 700,
+                          fontVariationSettings: "'opsz' 14",
+                          marginBottom: '8px',
+                          lineHeight: '1',
+                          margin: '0 0 8px 0',
+                          padding: 0,
+                          display: 'block'
+                        }}>
+                          {item.number}
+                        </p>
+                        <p style={{
+                          color: '#a6a9b2',
+                          fontSize: '14px',
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontWeight: 500,
+                          fontVariationSettings: "'opsz' 14",
+                          margin: 0,
+                          padding: 0,
+                          display: 'block'
+                        }}>
+                          {item.text}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 // Regular layout for other metric tiles

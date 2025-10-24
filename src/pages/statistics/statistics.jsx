@@ -86,8 +86,8 @@ const StatisticsPage = () => {
   ];
 
   const actionItemsTiles = [
-    { component: MetricTile, dataSets: apiStatisticsData?.actionItemMetrics, width: 3, height: "300px", blur: isProPlan },
-    { component: HistogramTile, dataSets: apiStatisticsData?.actionItemsReceived, width: 9, height: '300px', blur: isProPlan },
+    { component: MetricTile, dataSets: apiStatisticsData?.actionItemMetrics, width: 6, height: "300px", blur: isProPlan },
+    { component: HistogramTile, dataSets: apiStatisticsData?.actionItemsReceived, width: 6, height: '300px', blur: isProPlan },
   ];
 
   const upsellsTiles = [
