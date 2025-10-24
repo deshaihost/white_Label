@@ -266,7 +266,7 @@ function formatMessagesRespondedData(responseTimes) {
     identifier: 'Totals',
     title: 'Guest Messages Responded',
     data: [
-      { number: totalResponses, text: "" }, // Total shown as big number, no label
+      { number: host_response_times.count, text: "" }, // By Host shown as big number, no label
       { number: host_response_times.count, text: "By Host" },
       { number: hostbuddy_response_times.count, text: "By HostBuddy" },
       //{ number: not_responded_in_2h, text: "Not Responded (Within 2h)" }
@@ -347,7 +347,7 @@ function formatResponseTimes(responseTimes) {
       identifier: 'Average Response Times',
       title: 'Average Response Times (minutes)',
       data: [
-        { number: overallAvgTime.toFixed(1), text: "" }, // Overall average as big number, no label
+        { number: hostBuddyAvgTime.toFixed(1), text: "" }, // HostBuddy average as big number, no label
         { number: hostBuddyAvgTime.toFixed(1), text: "By HostBuddy" },
         { number: hostAvgTime.toFixed(1), text: "By Host" }
       ]
