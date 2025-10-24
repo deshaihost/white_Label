@@ -104,10 +104,11 @@ const StatisticsPage = () => {
       
       {dataLoading && <FullScreenLoader />}     
        <h1 className="page-header">
-        <h1>Business Insights</h1>
-        <span className="subtitle" style={{color:'#146ef5'}}>By HostBuddy</span>
+        {/* <h1>Business Insights</h1> */}
+        {/* <span className="subtitle" style={{color:'#146ef5'}}>By HostBuddy</span> */}
       </h1>
-
+       <h1 style={{color:"white" , marginBottom:"20px"}}>Business Insights</h1>  
+       <p1 style={{color:"#a6a9b2" , marginBottom:"20px"}}>On Dashboard</p1>
       <hr/>
 
       <div className="parameters-section">
