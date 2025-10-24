@@ -278,9 +278,12 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
     (dataSets[currentDataSetIndex].title.toLowerCase().includes('sentiment') ||
      dataSets[currentDataSetIndex].title.toLowerCase().includes('guest sentiment'));
 
+  const isActionItemTile = dataSets[currentDataSetIndex].title && 
+    dataSets[currentDataSetIndex].title.toLowerCase().includes('action items');
+
   return (
     <Grid size={width}>
-      <div className={`statistics-tile metric-tile${blur ? ' blurred-tile' : ''}${isSentimentTile ? ' sentiment-tile' : ''}`} style={{ height, position: 'relative' }}>
+      <div className={`statistics-tile metric-tile${blur ? ' blurred-tile' : ''}${isSentimentTile ? ' sentiment-tile' : ''}${isActionItemTile ? ' action-item-tile' : ''}`} style={{ height, position: 'relative' }}>
         {blur && <div className="blurred-tile-overlay" style={{ height: '100%', width: '100%' }} />}
         {blur && (
           <div className="blurred-tile-message">

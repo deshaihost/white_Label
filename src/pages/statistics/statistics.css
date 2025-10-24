@@ -346,6 +346,38 @@
   display: none;
 }
 
+/* Override for action items tiles - show all items the same way */
+.action-item-tile .metric-item:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.action-item-tile .metric-item:first-child .metric-number {
+  font-size: 13px;
+  color: white;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  font-variation-settings: 'opsz' 14;
+  margin-right: 0;
+  order: 2;
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+}
+
+.action-item-tile .metric-item:first-child .metric-text {
+  display: block;
+  font-size: 13px;
+  color: #a6a9b2;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 14;
+  flex: 1;
+  order: 1;
+}
+
 /* Subsequent items show breakdown with label on left, value on right */
 .metric-item:not(:first-child) {
   display: flex;
