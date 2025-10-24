@@ -559,10 +559,18 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
 
       <h3 className="available-variables-heading mt-5">Upcoming Messages</h3>
       <p className="settings-label">Preview Scheduled</p>
-      {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label">You currently have post-stay upsells <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
+      {!currentSettingsData.enabled ? (
+        <p className="settings-label" style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+          Post-stay upsells are currently off. Enable them to see upcoming messages.
+        </p>
+      ) : upcomingMessagesData && upcomingMessagesData.length > 0 ? (
+        <p className="settings-label" style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+          You currently have {upcomingMessagesData.length} upcoming upsell messages. These messages will all show up here.
+        </p>
       ) : (
-        <p style={{marginTop:'10px'}} className="settings-label">You currently have post-stay upsells <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
+        <p className="settings-label" style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+          You currently have zero upcoming upsell messages. These messages will all show up here.
+        </p>
       )}
 
       <div className="col-12 mt-4">
