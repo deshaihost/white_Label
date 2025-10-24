@@ -372,17 +372,58 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
           </div>
           <div className={`metric-content${blur ? ' blurred-content' : ''}`}>
             {currentDataSet && currentDataSet.length > 0 ? (
-              currentDataSet.map((item, index) => {
-                const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
-                const useSmallerNumbers = (heightAsInt < currentDataSet.length * 100);
+              isActionItemTile ? (
+                // Special layout for Action Items tile - 2 column grid
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '12px' }}>
+                  {currentDataSet.map((item, index) => (
+                    <div 
+                      key={index} 
+                      style={{
+                        backgroundColor: '#0F1117',
+                        border: '1px solid #013280',
+                        borderRadius: '8px',
+                        padding: '16px',
+                        textAlign: 'center'
+                      }}
+                    >
+                      <p style={{
+                        color: 'white',
+                        fontSize: '40px',
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontWeight: 700,
+                        fontVariationSettings: "'opsz' 14",
+                        marginBottom: '8px',
+                        lineHeight: '1'
+                      }}>
+                        {item.number}
+                      </p>
+                      <p style={{
+                        color: '#a6a9b2',
+                        fontSize: '14px',
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontWeight: 500,
+                        fontVariationSettings: "'opsz' 14",
+                        margin: 0
+                      }}>
+                        {item.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                // Regular layout for other metric tiles
+                currentDataSet.map((item, index) => {
+                  const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
+                  const useSmallerNumbers = (heightAsInt < currentDataSet.length * 100);
 
-                return (
-                  <div key={index} className="metric-item">
-                    <div className="metric-number" style={useSmallerNumbers ? { lineHeight: '1' } : {}}>{item.number}</div>
-                    <div className="metric-text">{item.text}</div>
-                  </div>
-                );
-              })
+                  return (
+                    <div key={index} className="metric-item">
+                      <div className="metric-number" style={useSmallerNumbers ? { lineHeight: '1' } : {}}>{item.number}</div>
+                      <div className="metric-text">{item.text}</div>
+                    </div>
+                  );
+                })
+              )
             ) : (
             <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
           )}
