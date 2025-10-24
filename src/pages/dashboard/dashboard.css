@@ -1,5 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
+/* Override grid layout for dashboard page - prevent half-width issue */
+.dashboard-container .account-content .row {
+  display: block !important;
+  grid-template-columns: none !important;
+}
+
+.dashboard-container .account-content .row > div {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 /* Custom Scrollbar Styling */
 * {
   scrollbar-width: thin;
