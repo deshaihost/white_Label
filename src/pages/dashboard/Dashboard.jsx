@@ -361,7 +361,7 @@ const Dashboard = () => {
             <div className="col-lg-10 col-xl-10 col-xxl-10">
               <div className="banner-heading">
                 {/* <h2>My {brandName}</h2> */}
-                <h2>Dashboard</h2>
+                {/* <h2>Dashboard</h2> */}
               </div>
             </div>
           </div>
@@ -462,6 +462,7 @@ const Dashboard = () => {
               <SideBar />
             </div>
             <div className="col-lg-10 col-xl-10 col-xxl-10">
+              <h1 style={{color:"white" , marginBottom:"20px"}}>Dashboard</h1>
               <div className="dashboard-container blur-background-top-right">
                 <div className="account_heading">
                   {first_name ? (
