@@ -357,8 +357,13 @@ const Dashboard = () => {
       {completeActionsItemLoading && <FullScreenLoader />}
       <div className="account-main">
         <div className="container">
-          <div className="banner-heading">
-            <h2>My {brandName}</h2>
+          <div className="row justify-content-center">
+            <div className="col-lg-10 col-xl-10 col-xxl-10">
+              <div className="banner-heading">
+                {/* <h2>My {brandName}</h2> */}
+                <h2>Dashboard</h2>
+              </div>
+            </div>
           </div>
           {userDataGet?.hospitable_permission_error && (
             <div style={{ marginBottom: "20px" }}>
