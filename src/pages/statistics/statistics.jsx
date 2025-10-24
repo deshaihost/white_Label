@@ -109,7 +109,7 @@ const StatisticsPage = () => {
       </h1>
        <h1 style={{color:"white" , marginBottom:"20px"}}>Business Insights</h1>  
        <p1 style={{color:"#a6a9b2" , marginBottom:"20px"}}>On Dashboard</p1>
-      <hr/>
+      <div style={{ borderTop: '1px solid #013280', marginBottom: '20px', marginTop: '20px' }}></div>
 
       <div className="parameters-section">
         <div className="parameters-left">
@@ -144,7 +144,7 @@ const StatisticsPage = () => {
         </div>
       </div>
 
-      <hr/>
+      <div style={{ borderTop: '1px solid #013280', marginBottom: '20px', marginTop: '20px' }}></div>
 
       <h2 className="section-header">Messaging</h2>
       {renderTiles(messagingTiles)}
