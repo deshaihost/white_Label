@@ -299,18 +299,70 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
           </div>
         )}
 
-        <div style={{ position: 'relative', zIndex: 0 }}>
-          <div className="tile-header">
-            <h3>{dataSets[currentDataSetIndex].title}</h3>
+        <div style={{ position: 'relative', zIndex: 0, width: '100%' }}>
+          <div className="tile-header" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <h3 style={{ margin: 0, flex: 1 }}>{dataSets[currentDataSetIndex].title}</h3>
             {dataSets && dataSets.length > 1 && (
-              <IconButton onClick={handleMenuOpen} className="icon-button">
-                <span style={{ fontSize: '24px' }}>⋮</span>
-              </IconButton>
+              <div style={{ position: 'relative' }}>
+                <IconButton 
+                  onClick={handleMenuOpen} 
+                  className="icon-button"
+                  style={{ 
+                    padding: '4px',
+                    color: '#a6a9b2',
+                    transition: 'color 0.2s'
+                  }}
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                      color: 'white'
+                    }
+                  }}
+                >
+                  <span style={{ fontSize: '16px', lineHeight: 1 }}>⋮</span>
+                </IconButton>
+              </div>
             )}
-            <Menu anchorEl={anchorEl} open={open} onClose={() => handleMenuClose()}>
+            <Menu 
+              anchorEl={anchorEl} 
+              open={open} 
+              onClose={() => handleMenuClose()}
+              PaperProps={{
+                style: {
+                  backgroundColor: '#17191f',
+                  border: '2px solid #013280',
+                  borderRadius: '8px',
+                  boxShadow: '0 0 30px rgba(30, 75, 158, 0.3)',
+                  minWidth: '180px'
+                }
+              }}
+            >
               {dataSets.map((dataset, index) => (
-                <MenuItem key={dataset.identifier} selected={index === currentDataSetIndex} onClick={() => handleMenuClose(index)}>
-                  {dataset.identifier}
+                <MenuItem 
+                  key={dataset.identifier} 
+                  selected={index === currentDataSetIndex} 
+                  onClick={() => handleMenuClose(index)}
+                  sx={{
+                    fontSize: '14px',
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontVariationSettings: "'opsz' 14",
+                    color: 'white',
+                    padding: '10px 16px',
+                    '&:hover': {
+                      backgroundColor: '#01255e'
+                    },
+                    '&.Mui-selected': {
+                      backgroundColor: 'transparent',
+                      '&:hover': {
+                        backgroundColor: '#01255e'
+                      }
+                    }
+                  }}
+                >
+                  <span style={{ flex: 1 }}>{dataset.identifier}</span>
+                  {index === currentDataSetIndex && (
+                    <span style={{ color: '#3e88f7', marginLeft: '12px', fontSize: '16px' }}>✓</span>
+                  )}
                 </MenuItem>
               ))}
             </Menu>

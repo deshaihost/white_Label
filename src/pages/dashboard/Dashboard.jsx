@@ -487,15 +487,29 @@ const Dashboard = () => {
 
                   <div className="row">
                     {!actionItemsCovertationLoading ? (
-                      <div className="action-items-container">
-                        <div className="action-items-header d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-md-0 gap-2">
+                      <div style={{
+                        backgroundColor: '#17191f',
+                        border: '2px solid #013280',
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        boxShadow: '0 0 25px rgba(30, 75, 158, 0.2)'
+                      }}>
+                        <div style={{
+                          padding: '24px',
+                          paddingBottom: '16px',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          borderBottom: '1px solid #013280'
+                        }}>
                           <div>
-                            <h5 className="mb-0" style={{ 
+                            <h5 style={{ 
                               fontSize: "16px", 
                               fontFamily: "'DM Sans', sans-serif", 
                               fontWeight: 600,
                               fontVariationSettings: "'opsz' 14",
-                              color: "white"
+                              color: "white",
+                              marginBottom: 0
                             }}>
                               Incomplete Action Items{" "}
                               <span
@@ -522,122 +536,188 @@ const Dashboard = () => {
                                 color: "#3e88f7",
                                 textDecoration: "none"
                               }}
+                              onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
+                              onMouseOut={(e) => e.target.style.textDecoration = 'none'}
                             >
                               See All
                             </Link>
                           </div>
                         </div>
                         {filteredSearchProperty?.length > 0 ? (
-                          <div
-                            className="table-responsive"
-                            style={{ overflowY: "auto", height: "500px" }}
-                          >
-                            <table className="table text-white action-items-table">
-                              <thead>
-                                <tr>
-                                  <th>Date/Time</th>
-                                  <th>Property/Guest</th>
-                                  <th>Action Item</th>
-                                  {/* <th>View/Done</th> */}
-                                  <th className="text-center">Complete</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {filteredSearchProperty?.map((actionItem) => {
-                                  const {
-                                    id,
-                                    created_at,
-                                    property_name,
-                                    conversationID,
-                                    item,
-                                  } = actionItem;
-                                  let actionItemSend = {
-                                    propertyName: property_name,
-                                    conversationID,
-                                  };
-                                  
-                                  // Split date and time from formatDateTime
-                                  const dateTimeFormatted = formatDateTime(created_at);
-                                  const [datePart, timePart] = dateTimeFormatted.split('\n');
-                                  
-                                  return (
-                                    <tr key={id}>
-                                      <td>
-                                        <div style={{ 
-                                          fontFamily: "'DM Sans', sans-serif",
-                                          fontWeight: 500,
-                                          fontSize: "14px",
-                                          color: "white",
-                                          fontVariationSettings: "'opsz' 14"
-                                        }}>
-                                          {datePart}
-                                        </div>
-                                        <div style={{ 
+                          <>
+                            {/* Table Header */}
+                            <div style={{
+                              display: 'grid',
+                              gridTemplateColumns: '100px 200px 1fr 80px',
+                              gap: '16px',
+                              padding: '12px 24px',
+                              backgroundColor: '#0F1117',
+                              borderBottom: '1px solid #013280'
+                            }}>
+                              <p style={{
+                                color: '#a6a9b2',
+                                fontSize: '12px',
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                fontVariationSettings: "'opsz' 14",
+                                margin: 0
+                              }}>
+                                Date/Time
+                              </p>
+                              <p style={{
+                                color: '#a6a9b2',
+                                fontSize: '12px',
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                fontVariationSettings: "'opsz' 14",
+                                margin: 0
+                              }}>
+                                Property/Guest
+                              </p>
+                              <p style={{
+                                color: '#a6a9b2',
+                                fontSize: '12px',
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                fontVariationSettings: "'opsz' 14",
+                                margin: 0
+                              }}>
+                                Action Item
+                              </p>
+                              <p style={{
+                                color: '#a6a9b2',
+                                fontSize: '12px',
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                textAlign: 'center',
+                                fontVariationSettings: "'opsz' 14",
+                                margin: 0
+                              }}>
+                                Complete
+                              </p>
+                            </div>
+
+                            {/* Table Rows */}
+                            <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                              {filteredSearchProperty?.map((actionItem) => {
+                                const {
+                                  id,
+                                  created_at,
+                                  property_name,
+                                  conversationID,
+                                  item,
+                                } = actionItem;
+                                
+                                // Split date and time from formatDateTime
+                                const dateTimeFormatted = formatDateTime(created_at);
+                                const [datePart, timePart] = dateTimeFormatted.split('\n');
+                                
+                                return (
+                                  <div
+                                    key={id}
+                                    style={{
+                                      display: 'grid',
+                                      gridTemplateColumns: '100px 200px 1fr 80px',
+                                      gap: '16px',
+                                      padding: '16px 24px',
+                                      borderBottom: '1px solid #013280',
+                                      transition: 'background-color 0.2s',
+                                      cursor: 'default'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01255e'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                  >
+                                    <div>
+                                      <p style={{ 
+                                        fontFamily: "'DM Sans', sans-serif",
+                                        fontWeight: 500,
+                                        fontSize: "14px",
+                                        color: "white",
+                                        fontVariationSettings: "'opsz' 14",
+                                        margin: 0,
+                                        marginBottom: '4px'
+                                      }}>
+                                        {datePart}
+                                      </p>
+                                      <p style={{ 
+                                        fontFamily: "'DM Sans', sans-serif",
+                                        fontWeight: 400,
+                                        fontSize: "12px",
+                                        color: "#a6a9b2",
+                                        fontVariationSettings: "'opsz' 14",
+                                        margin: 0
+                                      }}>
+                                        {timePart}
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p style={{ 
+                                        fontFamily: "'DM Sans', sans-serif",
+                                        fontWeight: 500,
+                                        fontSize: "14px",
+                                        color: "white",
+                                        fontVariationSettings: "'opsz' 14",
+                                        margin: 0,
+                                        marginBottom: actionItem?.guest_name ? '4px' : 0
+                                      }}>
+                                        {property_name}
+                                      </p>
+                                      {actionItem?.guest_name && (
+                                        <p style={{ 
                                           fontFamily: "'DM Sans', sans-serif",
                                           fontWeight: 400,
                                           fontSize: "12px",
                                           color: "#a6a9b2",
-                                          fontVariationSettings: "'opsz' 14"
+                                          fontVariationSettings: "'opsz' 14",
+                                          margin: 0
                                         }}>
-                                          {timePart}
-                                        </div>
-                                      </td>
-                                      <td>
-                                        <div style={{ 
-                                          fontFamily: "'DM Sans', sans-serif",
-                                          fontWeight: 500,
-                                          fontSize: "14px",
-                                          color: "white",
-                                          fontVariationSettings: "'opsz' 14"
-                                        }}>
-                                          {property_name}
-                                        </div>
-                                        {actionItem?.guest_name && (
-                                          <div style={{ 
-                                            fontFamily: "'DM Sans', sans-serif",
-                                            fontWeight: 400,
-                                            fontSize: "12px",
-                                            color: "#a6a9b2",
-                                            fontVariationSettings: "'opsz' 14"
-                                          }}>
-                                            {actionItem.guest_name}
-                                          </div>
-                                        )}
-                                      </td>
-                                      <td>
-                                        <div style={{ 
-                                          fontFamily: "'DM Sans', sans-serif",
-                                          fontWeight: 400,
-                                          fontSize: "14px",
-                                          color: "white",
-                                          fontVariationSettings: "'opsz' 14"
-                                        }}>
-                                          {item}
-                                        </div>
-                                      </td>
-                                      <td className="text-center">
-                                        <button
-                                          className="complete-button"
-                                          onClick={() => {
-                                            compeletHndle(
-                                              id,
-                                              property_name,
-                                              conversationID
-                                            );
-                                          }}
-                                          title="Mark Complete"
-                                        >
-                                          <FaCheck className="complete-button-icon" />
-                                        </button>
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                              </tbody>
-                            </table>
-                          </div>
+                                          {actionItem.guest_name}
+                                        </p>
+                                      )}
+                                    </div>
+                                    <p style={{ 
+                                      fontFamily: "'DM Sans', sans-serif",
+                                      fontWeight: 400,
+                                      fontSize: "14px",
+                                      color: "white",
+                                      fontVariationSettings: "'opsz' 14",
+                                      margin: 0
+                                    }}>
+                                      {item}
+                                    </p>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                      <button
+                                        className="complete-button"
+                                        onClick={() => {
+                                          compeletHndle(
+                                            id,
+                                            property_name,
+                                            conversationID
+                                          );
+                                        }}
+                                        title="Mark Complete"
+                                      >
+                                        <FaCheck className="complete-button-icon" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </>
                         ) : (
-                          <div className="no-items-message">
+                          <div style={{
+                            padding: '32px',
+                            textAlign: 'center',
+                            color: '#a6a9b2',
+                            fontSize: '14px',
+                            fontFamily: "'DM Sans', sans-serif",
+                            fontVariationSettings: "'opsz' 14"
+                          }}>
                             No Incomplete Items
                           </div>
                         )}

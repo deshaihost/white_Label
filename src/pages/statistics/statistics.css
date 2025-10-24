@@ -24,12 +24,73 @@
   color: #a6a9b2;
   font-size: 16px;
   cursor: pointer;
-  padding: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
   transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .tile-header .icon-button:hover {
   color: white;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.tile-header .MuiIconButton-root {
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+.tile-header .MuiIconButton-root:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.tile-header button {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: inline-flex !important;
+}
+
+.tile-header button:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.tile-header .MuiButtonBase-root {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+.tile-header .MuiButtonBase-root:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 /* Apply width 100% to the parent container of tile-header for all metric tiles */
@@ -186,16 +247,16 @@
   padding-bottom: 5px;
   padding-top: 15px;
   margin: 10px 0;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 /* Tile hover effect to make it pop */
 .statistics-tile:hover {
-  /* transform: translateY(-5px); */
   box-shadow: 0 0 30px rgba(30, 75, 158, 0.3);
 }
 
@@ -261,9 +322,6 @@
 }
 
 .metric-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-bottom: 8px;
 }
 
@@ -281,7 +339,7 @@
   font-family: 'DM Sans', sans-serif;
   font-variation-settings: 'opsz' 14;
   display: block;
-  margin-right: 0;
+  margin-bottom: 16px;
 }
 
 .metric-item:first-child .metric-text {
@@ -293,6 +351,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 8px;
 }
 
 .metric-item:not(:first-child) .metric-text {
