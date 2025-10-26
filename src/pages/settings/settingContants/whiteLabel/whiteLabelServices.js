@@ -208,3 +208,52 @@ export const updateDashboardColor = async (data) => {
     };
   }
 };
+
+/**
+ * Get CSS configuration for white label
+ * @param {Object} data - Request body
+ * @param {string} data.domain - Domain name (e.g., "Acental")
+ * @returns {Promise} API response with CSS configuration
+ */
+export const getCssConfig = async (data) => {
+  try {
+    console.log('Getting CSS config for domain:', data.domain);
+
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/get_css`,
+      {
+        domain: data.domain
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log('Get CSS Config Response:', response.data);
+
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    console.error('Get CSS Config API Error:', error);
+    
+    let errorMessage = 'Failed to get CSS configuration';
+    
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+    } else if (error.request) {
+      errorMessage = 'No response from server. Please check your connection.';
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+    
+    return {
+      success: false,
+      error: errorMessage,
+      data: null
+    };
+  }
+};
