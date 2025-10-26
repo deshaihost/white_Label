@@ -59,7 +59,8 @@ const GcsUserdata = [
         component: <WhiteLabelIcon/>,
         HasdropDown: "yes",
         dropdownItems: [
-            { id: 81, label: "Registration Page", HasdropDown: "no" }
+            { id: 81, label: "Registration Page", HasdropDown: "no" },
+            { id: 82, label: "Branding", HasdropDown: "no" }
         ]
     }
 ];

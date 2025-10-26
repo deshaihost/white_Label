@@ -17,6 +17,7 @@ import AccountNotificationSection from "../account/notificationSection";
 import MessagingChannels from "./settingContants/messagingChannels/messagingChannels";
 import ActionitemsSettings from "./settingContants/actionItems/actionItemSettings";
 import WhiteLabelRegistration from "./settingContants/whiteLabel/WhiteLabelRegistration";
+import WhiteLabelBranding from "./settingContants/whiteLabel/WhiteLabelBranding";
 import { Link, useParams } from "react-router-dom";
 import HostDaddy from '../../component/hostDaddy/hostDaddy';
 import PMSSettings from "../account/pmsSettings";
@@ -39,7 +40,8 @@ const SettingIndex = () => {
     subscription: "subscription", 
     messagingChannels: "messaging-channels",
     actionItems: "action-items",
-    whiteLabelRegistration: "white-label-registration"
+    whiteLabelRegistration: "white-label-registration",
+    whiteLabelBranding: "white-label-branding"
   };
 
   const ApiUserData = store?.getUserDataReducer?.getUserData?.data?.user;
@@ -136,6 +138,9 @@ const SettingIndex = () => {
                   )}
                   {interFaceTypes?.whiteLabelRegistration === interFaceSettings && (
                     <WhiteLabelRegistration />
+                  )}
+                  {interFaceTypes?.whiteLabelBranding === interFaceSettings && (
+                    <WhiteLabelBranding />
                   )}
                 </div>
               </div>

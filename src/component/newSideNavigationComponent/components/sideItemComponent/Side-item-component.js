@@ -89,6 +89,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         // Map white label section from URL to tab ID
         const whiteLabelPathToId = {
           "white-label-registration": 81,
+          "white-label-branding": 82,
         };
 
         // Extract the white label section from URL path
@@ -335,6 +336,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                         // Map white label dropdown items to their corresponding routes
                         const whiteLabelMap = {
                           81: "/gcs-settings/white-label-registration", // Registration Page
+                          82: "/gcs-settings/white-label-branding", // Branding
                         };
 
                         if (whiteLabelMap[dropdownItem.id]) {
