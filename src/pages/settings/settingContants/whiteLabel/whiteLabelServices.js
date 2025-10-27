@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getActiveToken } from '../../../../helper/apiCore';
 
 // Base URL - using the same environment variable as other parts of the app
 const API_BASE_URL = process.env.REACT_APP_API_ENDPOINT;
@@ -219,16 +220,23 @@ export const getCssConfig = async (data) => {
   try {
     console.log('Getting CSS config for domain:', data.domain);
 
+    // Get the auth token from session
+    const token = getActiveToken();
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    
+    // Add Authorization header if token exists
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const response = await axios.post(
       `${API_BASE_URL}/white_label/get_css`,
       {
         domain: data.domain
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
+      { headers }
     );
 
     console.log('Get CSS Config Response:', response.data);
@@ -238,7 +246,7 @@ export const getCssConfig = async (data) => {
       data: response.data
     };
   } catch (error) {
-    console.error('Get CSS Config API Error:', error);
+    console.error('Get CSS Config API Error:', error.response?.data || error.message);
     
     let errorMessage = 'Failed to get CSS configuration';
     

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getCssConfig } from '../pages/settings/settingContants/whiteLabel/whiteLabelServices';
+import { getActiveToken } from './apiCore';
 
 const WhiteLabelCssContext = createContext();
 
@@ -396,7 +397,43 @@ export const WhiteLabelCssProvider = ({ children }) => {
       }
     };
 
-    fetchWhiteLabelCss();
+    // Check if we have a token before fetching
+    // This prevents 401 errors during the login process
+    const token = getActiveToken();
+    if (token) {
+      fetchWhiteLabelCss();
+    } else {
+      // If no token yet, set loading to false and wait for authentication
+      console.log('⏳ [CSS API] No token found, waiting for authentication...');
+      setCssState(prevState => ({
+        ...prevState,
+        loading: false
+      }));
+      
+      // Poll for token availability with exponential backoff
+      let attempts = 0;
+      const maxAttempts = 10;
+      const checkForToken = () => {
+        attempts++;
+        const retryToken = getActiveToken();
+        if (retryToken) {
+          console.log('🔄 [CSS API] Token now available, fetching CSS...');
+          fetchWhiteLabelCss();
+        } else if (attempts < maxAttempts) {
+          // Retry with increasing delay: 100ms, 200ms, 400ms, 800ms, etc.
+          const delay = Math.min(100 * Math.pow(2, attempts - 1), 2000);
+          console.log(`⏳ [CSS API] Token check attempt ${attempts}/${maxAttempts}, retrying in ${delay}ms...`);
+          setTimeout(checkForToken, delay);
+        } else {
+          console.log('⏹️ [CSS API] Max token check attempts reached, giving up');
+        }
+      };
+      
+      // Start checking after a short initial delay
+      const initialTimer = setTimeout(checkForToken, 100);
+      
+      return () => clearTimeout(initialTimer);
+    }
   }, []);
 
   return (

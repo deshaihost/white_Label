@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { getActiveToken } from './apiCore';
 
 const WhiteLabelLogoContext = createContext();
 
@@ -313,12 +314,21 @@ export const WhiteLabelLogoProvider = ({ children }) => {
           timestamp: new Date().toISOString()
         });
 
+        // Get the auth token from session
+        const token = getActiveToken();
+        const headers = {
+          'Content-Type': 'application/json',
+          'X-API-Key': process.env.REACT_APP_API_KEY,
+        };
+        
+        // Add Authorization header if token exists
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const apiCallStart = performance.now();
         const response = await axios.post(apiUrl, requestBody, {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': process.env.REACT_APP_API_KEY,
-          },
+          headers,
           timeout: 5000 // 5 second timeout for faster failure recovery
         });
         const apiCallElapsed = performance.now() - apiCallStart;
@@ -434,7 +444,43 @@ export const WhiteLabelLogoProvider = ({ children }) => {
       }
     };
 
-    fetchWhiteLabelLogos();
+    // Check if we have a token before fetching
+    // This prevents 401 errors during the login process
+    const token = getActiveToken();
+    if (token) {
+      fetchWhiteLabelLogos();
+    } else {
+      // If no token yet, set loading to false and wait for authentication
+      console.log('⏳ [LOGO API] No token found, waiting for authentication...');
+      setLogos(prevState => ({
+        ...prevState,
+        loading: false
+      }));
+      
+      // Poll for token availability with exponential backoff
+      let attempts = 0;
+      const maxAttempts = 10;
+      const checkForToken = () => {
+        attempts++;
+        const retryToken = getActiveToken();
+        if (retryToken) {
+          console.log('🔄 [LOGO API] Token now available, fetching logos...');
+          fetchWhiteLabelLogos();
+        } else if (attempts < maxAttempts) {
+          // Retry with increasing delay: 100ms, 200ms, 400ms, 800ms, etc.
+          const delay = Math.min(100 * Math.pow(2, attempts - 1), 2000);
+          console.log(`⏳ [LOGO API] Token check attempt ${attempts}/${maxAttempts}, retrying in ${delay}ms...`);
+          setTimeout(checkForToken, delay);
+        } else {
+          console.log('⏹️ [LOGO API] Max token check attempts reached, giving up');
+        }
+      };
+      
+      // Start checking after a short initial delay
+      const initialTimer = setTimeout(checkForToken, 100);
+      
+      return () => clearTimeout(initialTimer);
+    }
   }, []);
 
   return (
