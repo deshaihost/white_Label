@@ -1,6 +1,5 @@
 /* Action Items Page - Updated to match new UI */
 .action-items-page {
-  background: #0F1117;
   min-height: 100vh;
   padding: 32px;
 }
@@ -105,7 +104,7 @@
 }
 
 .action-items-table thead {
-  background: #0F1117;
+  background: #0F1117 !important;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -124,6 +123,7 @@
   border-right: none;
   border-top: none;
   text-align: left;
+  background: #0F1117 !important;
 }
 
 .action-items-table thead th:last-child {
@@ -131,16 +131,21 @@
 }
 
 .action-items-table tbody {
-  background: #17191f;
+  background: #17191F;
 }
 
 .action-items-table tbody tr {
   border-bottom: 1px solid #013280;
   transition: background-color 0.3s ease;
+  background: #17191F;
 }
 
 .action-items-table tbody tr:hover {
-  background: #01255e;
+  background: #1f2129;
+}
+
+.action-items-table tbody td {
+  background: #17191F;
 }
 
 .action-items-table tbody tr:last-child {
