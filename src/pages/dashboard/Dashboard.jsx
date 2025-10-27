@@ -515,7 +515,9 @@ const Dashboard = () => {
                         border: '2px solid #013280',
                         borderRadius: '12px',
                         overflow: 'hidden',
-                        boxShadow: '0 0 25px rgba(30, 75, 158, 0.2)'
+                        boxShadow: '0 0 25px rgba(30, 75, 158, 0.2)',
+                        paddingLeft: '0',
+                        paddingRight: '0'
                       }}>
                         <div style={{
                           padding: '24px',
