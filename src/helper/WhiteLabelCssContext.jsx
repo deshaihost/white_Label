@@ -169,8 +169,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
     // Initialize with cached data if available
     const domainName = window.location.hostname;
     const isHostBuddy = domainName === 'hostbuddy.ai' || 
-                       domainName === 'www.hostbuddy.ai' || 
-                       domainName === 'localhost';
+                       domainName === 'www.hostbuddy.ai';
     
     if (isHostBuddy) {
       return {
@@ -221,8 +220,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
 
         // Check if it's hostbuddy.ai domain (use default styles)
         const isHostBuddy = domainName === 'hostbuddy.ai' || 
-                           domainName === 'www.hostbuddy.ai' || 
-                           domainName === 'localhost';
+                           domainName === 'www.hostbuddy.ai';
         
         if (isHostBuddy) {
           const elapsed = performance.now() - startTime;
@@ -340,8 +338,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
         // On error, check if it's hostbuddy domain
         const domainName = window.location.hostname;
         const isHostBuddy = domainName === 'hostbuddy.ai' || 
-                           domainName === 'www.hostbuddy.ai' || 
-                           domainName === 'localhost';
+                           domainName === 'www.hostbuddy.ai';
         
         setCssState({
           cssConfig: null,

@@ -46,7 +46,7 @@ const WhiteLabelBranding = () => {
     }}>
       {/* Full Screen Iframe */}
       <iframe
-        src="https://boisterous-salmiakki-f2fc70.netlify.app/"
+        src="https://whimsical-cranachan-2f9543.netlify.app/"
         title="White Label Branding Configuration"
         style={{
           position: 'absolute',

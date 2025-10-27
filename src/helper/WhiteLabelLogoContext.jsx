@@ -196,8 +196,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
     // Initialize with cached data if available
     const domainName = window.location.hostname;
     const isHostBuddy = domainName === 'hostbuddy.ai' || 
-                       domainName === 'www.hostbuddy.ai' || 
-                       domainName === 'localhost';
+                       domainName === 'www.hostbuddy.ai';
     
     if (isHostBuddy) {
       return {
@@ -256,8 +255,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
 
         // Check if it's hostbuddy.ai domain (use local logos)
         const isHostBuddy = domainName === 'hostbuddy.ai' || 
-                           domainName === 'www.hostbuddy.ai' || 
-                           domainName === 'localhost';
+                           domainName === 'www.hostbuddy.ai';
         
         if (isHostBuddy) {
           const elapsed = performance.now() - startTime;
@@ -424,8 +422,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
         // On error, check if it's hostbuddy domain
         const domainName = window.location.hostname;
         const isHostBuddy = domainName === 'hostbuddy.ai' || 
-                           domainName === 'www.hostbuddy.ai' || 
-                           domainName === 'localhost';
+                           domainName === 'www.hostbuddy.ai';
         
         setLogos({
           logo: null,
