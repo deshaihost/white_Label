@@ -219,7 +219,12 @@
   display: grid;
   grid-template-columns: 1fr 2fr 1fr 1fr;
   border-bottom: 1px solid #013280;
-  background-color: #17191F;
+  background-color: #0F1117;
+}
+
+/* Webhook Header Row Cells */
+.settings-integrations .webhook-header-row .webhook-cell {
+  background-color: #0F1117;
 }
 
 /* Webhook Data Row - Grid Layout */

@@ -420,7 +420,7 @@
 }
 
 .action-items-table thead {
-  background: var(--white-label-background-primary, #0F1117) !important;
+  background: #0F1117 !important;
   border-bottom: 1px solid #013280 !important;
 }
 
