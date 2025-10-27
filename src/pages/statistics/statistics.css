@@ -109,7 +109,7 @@
 /* Base container for the whole statistics page */
 .statistics-page {
   padding: 52px;
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
   min-height: 100vh;
   margin-bottom: 150px;
 }
@@ -246,7 +246,7 @@
 
 /* Style for each individual tile component */
 .statistics-tile {
-  background-color: #0F1117;
+  background-color: #17191F;
   border-radius: 12px;
   border: 2px solid #013280;
   box-shadow: 0 0 25px rgba(30, 75, 158, 0.2);

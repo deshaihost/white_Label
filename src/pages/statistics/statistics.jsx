@@ -7,12 +7,14 @@ import Select from "react-select";
 import customStyles from './selectStyles';
 import './statistics.css';
 import { getSubscriptionStatus } from '../../helper/Authorized';
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 import { MetricTile, LineGraphTile, HistogramTile, renderTiles } from './statisticsTilesComponents';
 import { lineGraphDataSets, histogramDataSets, callGetStatisticsApi, getStatisticsData, formatDateToReadable } from './dataManager';
 
 
 const StatisticsPage = () => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const [rawApiReturn, setRawApiReturn] = useState({}); // The raw data returned by the API
   const [apiStatisticsData, setApiStatisticsData] = useState({}); // The data structures for the statistics tiles, after populated by the API and formatted in dataManager
   const [dataLoading, setDataLoading] = useState(true);
@@ -100,7 +102,12 @@ const StatisticsPage = () => {
   }, []);
 
   return (
-    <div className="statistics-page">
+    <div 
+      className="statistics-page"
+      style={{
+        background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
+      }}
+    >
       
       {dataLoading && <FullScreenLoader />}     
        <h1 className="page-header">
