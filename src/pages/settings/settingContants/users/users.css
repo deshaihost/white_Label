@@ -47,7 +47,7 @@
 .users-table-header {
   display: grid;
   grid-template-columns: 3fr 2fr 1fr 1fr;
-  background-color: #24262e;
+  background-color: var(--white-label-background-primary, #0F1117);
   border-bottom: 1px solid #013280;
   padding: 16px;
 }
@@ -68,6 +68,7 @@
   padding: 16px;
   border-bottom: 1px solid #013280;
   transition: background-color 0.2s ease;
+  background-color: #17191F;
 }
 
 .users-table-row:last-child {
@@ -75,7 +76,7 @@
 }
 
 .users-table-row:hover {
-  background-color: #24262e;
+  background-color: #1f2129;
 }
 
 /* User Cell */
