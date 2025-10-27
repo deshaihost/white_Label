@@ -7,6 +7,7 @@ import './actionItemsNew.css';
 import ToastHandle from "../../../../helper/ToastMessage";
 import MultiSelect from "../../../../component/multiSelect/multiSelect";
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { useWhiteLabelCss } from "../../../../helper/WhiteLabelCssContext";
 
 // Icon Components
 const Edit2Icon = () => (
@@ -28,6 +29,7 @@ const XIcon = () => (
 );
 
 const ActionItemsSettings = () => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const [activeTab, setActiveTab] = useState('instructions');
   const [instructions, setInstructions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -415,7 +417,12 @@ const ActionItemsSettings = () => {
   };
 
   return (
-    <div className="action-items-new-container">
+    <div 
+      className="action-items-new-container"
+      style={{
+        backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#17191F') : '#17191F'
+      }}
+    >
       <h1 className="action-items-page-title">Action Items Settings</h1>
 
       {/* Tabs */}

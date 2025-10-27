@@ -5,7 +5,7 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 32px 24px;
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #17191F);
   min-height: 100vh;
 }
 
