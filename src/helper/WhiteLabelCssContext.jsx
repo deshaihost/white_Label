@@ -263,12 +263,12 @@ export const WhiteLabelCssProvider = ({ children }) => {
 
         // For white label domains, call the API
         console.log('📡 [CSS API] Sending API request...', {
-          domain: "Acental", // Hardcoded domain
+          domain: domainName,
           timestamp: new Date().toISOString()
         });
 
         const apiCallStart = performance.now();
-        const response = await getCssConfig({ domain: "Acental" }); // Hardcoded domain
+        const response = await getCssConfig({ domain: domainName });
         const apiCallElapsed = performance.now() - apiCallStart;
 
         console.log('✅ [CSS API] API response received', {
