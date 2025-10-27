@@ -8,9 +8,11 @@ import UserInformationSection from "./userInformationSection";
 import AccountContactSection from "./contactSection";
 import AccountRegionSection from "./regionSection";
 import AccountNotificationSection from "./notificationSection";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 
 const Account = () => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const [selectedSection, setSelectedSection] = useState('UserInformation');
   const location = useLocation();
 
@@ -22,7 +24,12 @@ const Account = () => {
   }, [location.pathname]);
 
   return (
-    <div className="account-main">
+    <div 
+      className="account-main"
+      style={{
+        background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
+      }}
+    >
       <Helmet>
         <title>Account - HostBuddy AI</title>
       </Helmet>
@@ -38,7 +45,12 @@ const Account = () => {
             <SideBar />
           </div>
           <div className="col-lg-10 col-xl-10 col-xxl-10">
-            <div className="account-container">
+            <div 
+              className="account-container"
+              style={{
+                background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
+              }}
+            >
               <AccountNavBar selectedSection={selectedSection} setSelectedSection={setSelectedSection} />
               
               {selectedSection === 'UserInformation' && <UserInformationSection />}

@@ -3,7 +3,7 @@
 /* Main Account Container */
 .account-main {
     padding: 48px 0;
-    background-color: #0F1117;
+    background-color: var(--white-label-background-primary, #0F1117);
     min-height: 100vh;
 }
 
@@ -13,7 +13,7 @@
 
 /* Account Container */
 .account-container {
-    background-color: #0F1117;
+    background-color: var(--white-label-background-primary, #0F1117);
     max-width: 1000px;
     margin: 0 auto;
     padding: 0 32px;
@@ -112,6 +112,12 @@
     margin-bottom: 40px;
 }
 
+/* Ensure nested divs inside account page rows have correct background */
+.account-container .row > div,
+.account-container .row > div > div {
+    background-color: #0F1117;
+}
+
 /* Section Cards */
 .account-section-card {
     background-color: #0a0d14 !important;
@@ -120,6 +126,11 @@
     padding: 24px;
     margin-bottom: 32px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Contact section cards should use #0F1117 */
+.account-section-card.contact-section {
+    background-color: #0F1117 !important;
 }
 
 .setting_tab_data .account-section-card {
@@ -249,7 +260,7 @@
 .account-content form input#lastName,
 .account-content form input#phone,
 .account-content form input#email {
-    background-color: #0F1117 !important;
+    background-color: var(--white-label-background-primary, #0F1117) !important;
     border: 1px solid #3e88f7 !important;
     border-radius: 8px !important;
     color: white !important;
@@ -289,6 +300,7 @@
 .account-content .input_group {
     margin-bottom: 0;
     display: block;
+    background-color: #0F1117;
 }
 
 .location-section .row {
@@ -782,7 +794,7 @@ input#multi-search {
 }
 
 .contact-modal .input-group .form-control {
-    background-color: #0F1117 !important;
+    background-color: var(--white-label-background-primary, #0F1117) !important;
     border: 1px solid #3e88f7 !important;
     border-radius: 8px !important;
     color: white !important;
@@ -797,7 +809,7 @@ input#multi-search {
 }
 
 .contact-modal .input-group .form-control:focus {
-    background-color: #0F1117 !important;
+    background-color: var(--white-label-background-primary, #0F1117) !important;
     border-color: #74A9F7 !important;
     box-shadow: 0 0 15px rgba(62, 136, 247, 0.2) !important;
     color: white !important;
@@ -815,7 +827,7 @@ input#multi-search {
     font-variation-settings: 'opsz' 14 !important;
     pointer-events: none;
     transition: all 0.3s ease;
-    background-color: #0F1117;
+    background-color: var(--white-label-background-primary, #0F1117);
     padding: 0 4px;
 }
 

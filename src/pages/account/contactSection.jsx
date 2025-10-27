@@ -348,7 +348,7 @@ const AccountContactSection = () => {
           return (
           <React.Fragment key={section}>
             {/* Section Card */}
-            <div className="account-section-card" style={{ marginBottom: '32px' }}>
+            <div className="account-section-card contact-section" style={{ marginBottom: '32px' }}>
               <div className="section-header-with-icon">
                 {section === 'email' && (
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -543,7 +543,7 @@ const AccountContactSection = () => {
           
           return (
             <React.Fragment key={section}>
-              <div className="account-section-card" style={{ marginBottom: '32px' }}>
+              <div className="account-section-card contact-section" style={{ marginBottom: '32px' }}>
                 <div className="section-header-with-icon">
                   {section === 'slack' && (
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

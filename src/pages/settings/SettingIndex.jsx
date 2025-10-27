@@ -21,8 +21,10 @@ import WhiteLabelBranding from "./settingContants/whiteLabel/WhiteLabelBranding"
 import { Link, useParams } from "react-router-dom";
 import HostDaddy from '../../component/hostDaddy/hostDaddy';
 import PMSSettings from "../account/pmsSettings";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 const SettingIndex = () => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const { section, subsec } = useParams();
@@ -91,7 +93,13 @@ const SettingIndex = () => {
                   </Link>
                 </div> */}
               </div>
-              <div className="setting_tab_data p-3" style={{ borderRadius: "20px" }}>
+              <div 
+                className="setting_tab_data p-3" 
+                style={{ 
+                  borderRadius: "20px",
+                  background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
+                }}
+              >
                 <div className="setting_tab_data_inner">
                   {interFaceTypes?.account === interFaceSettings && (
                     <>
