@@ -170,11 +170,11 @@
 }
 
 .upsells-settings .table thead tr {
-  background-color: #0F1117 !important;
+  background-color: var(--white-label-background-primary, #0F1117) !important;
 }
 
 .upsells-settings .table thead th {
-  background-color: #0F1117 !important;
+  background-color: var(--white-label-background-primary, #0F1117) !important;
 }
 
 .upsells-settings .table tbody {
