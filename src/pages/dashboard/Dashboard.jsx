@@ -20,6 +20,7 @@ import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/tra
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
 import NoltWidget from "../../component/nolt/nolt";
 import useWhiteLabelBranding from "../../helper/useWhiteLabelBranding";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 import {
   MetricTile,
@@ -36,6 +37,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isWhiteLabel, brandName, displayName } = useWhiteLabelBranding();
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const userDataLoading = store?.getUserDataReducer?.loading;
   const actionItemsConvertationData =
@@ -355,7 +357,12 @@ const Dashboard = () => {
       </Helmet>{" "}
       {propertiesConversationLoading && <FullScreenLoader />}
       {completeActionsItemLoading && <FullScreenLoader />}
-      <div className="account-main">
+      <div 
+        className="account-main"
+        style={{
+          background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
+        }}
+      >
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-lg-10 col-xl-10 col-xxl-10">
@@ -461,9 +468,19 @@ const Dashboard = () => {
             >
               <SideBar />
             </div>
-            <div className="col-lg-10 col-xl-10 col-xxl-10">
+            <div 
+              className="col-lg-10 col-xl-10 col-xxl-10"
+              style={{
+                background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
+              }}
+            >
               <h1 style={{color:"white" , marginBottom:"20px"}}>Dashboard</h1>
-              <div className="dashboard-container blur-background-top-right">
+              <div 
+                className="dashboard-container blur-background-top-right"
+                style={{
+                  background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : undefined
+                }}
+              >
                 <div className="account_heading">
                   {first_name ? (
                     <h3>
@@ -557,7 +574,7 @@ const Dashboard = () => {
                               gridTemplateColumns: '100px 200px 1fr 80px',
                               gap: '16px',
                               padding: '12px 24px',
-                              backgroundColor: '#0F1117',
+                              backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117',
                               borderBottom: '1px solid #013280'
                             }}>
                               <p style={{

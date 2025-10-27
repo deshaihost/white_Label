@@ -126,7 +126,54 @@ const applyCssVariables = (cssConfig) => {
   const root = document.documentElement;
   
   try {
-    // Apply custom CSS properties to :root
+    // Handle css_data structure from API response
+    if (cssConfig.css_data) {
+      const cssData = cssConfig.css_data;
+      
+      // Apply background colors
+      if (cssData.background) {
+        Object.entries(cssData.background).forEach(([key, value]) => {
+          root.style.setProperty(`--white-label-background-${key}`, value);
+        });
+      }
+      
+      // Apply border colors
+      if (cssData.borders) {
+        Object.entries(cssData.borders).forEach(([key, value]) => {
+          root.style.setProperty(`--white-label-border-${key}`, value);
+        });
+      }
+      
+      // Apply component colors
+      if (cssData.components) {
+        Object.entries(cssData.components).forEach(([key, value]) => {
+          root.style.setProperty(`--white-label-component-${key}`, value);
+        });
+      }
+      
+      // Apply interactive colors
+      if (cssData.interactive) {
+        Object.entries(cssData.interactive).forEach(([key, value]) => {
+          root.style.setProperty(`--white-label-interactive-${key}`, value);
+        });
+      }
+      
+      // Apply status colors
+      if (cssData.status) {
+        Object.entries(cssData.status).forEach(([key, value]) => {
+          root.style.setProperty(`--white-label-status-${key}`, value);
+        });
+      }
+      
+      // Apply text colors
+      if (cssData.text) {
+        Object.entries(cssData.text).forEach(([key, value]) => {
+          root.style.setProperty(`--white-label-text-${key}`, value);
+        });
+      }
+    }
+    
+    // Legacy support: Apply custom CSS properties to :root
     if (cssConfig.colors) {
       Object.entries(cssConfig.colors).forEach(([key, value]) => {
         root.style.setProperty(`--white-label-${key}`, value);

@@ -14,7 +14,7 @@
 /* Custom Scrollbar Styling */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #4a4d54 #0f1117;
+  scrollbar-color: #4a4d54 var(--white-label-background-primary, #0f1117);
 }
 
 *::-webkit-scrollbar {
@@ -23,7 +23,7 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: #0f1117;
+  background: var(--white-label-background-primary, #0f1117);
   border-radius: 8px;
 }
 
@@ -38,7 +38,7 @@
 
 .account-main {
   padding: 74px 0;
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
   min-height: 100vh;
 }
 
@@ -82,7 +82,7 @@
 .dashboard-container {
   height: 100%;
   border-radius: 0;
-  background: #0F1117;
+  background: var(--white-label-background-primary, #0F1117);
   box-shadow: none;
 }
 
@@ -126,7 +126,7 @@
 
 .dashboard-container .account-content {
   padding: 0;
-  background: #0F1117;
+  background: var(--white-label-background-primary, #0F1117);
 }
 
 /* Styling for "Above data from..." text in dashboard */
@@ -420,7 +420,7 @@
 }
 
 .action-items-table thead {
-  background: #0F1117 !important;
+  background: var(--white-label-background-primary, #0F1117) !important;
   border-bottom: 1px solid #013280 !important;
 }
 

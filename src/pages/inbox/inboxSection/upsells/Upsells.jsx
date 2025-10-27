@@ -167,8 +167,8 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
             </p>
           </div>
 
-          <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }}></div>
-
+   
+       <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }}></div>
           <div 
             style={{
               width: '100%',

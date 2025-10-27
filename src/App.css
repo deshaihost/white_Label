@@ -19,7 +19,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: "DM Sans", Helvetica !important;
-  background: #0F1117;
+  background: var(--white-label-background-primary, #0F1117);
 }
 
 ::-webkit-scrollbar {
