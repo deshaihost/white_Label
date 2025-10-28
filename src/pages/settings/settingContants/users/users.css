@@ -446,7 +446,7 @@
   width: 100%;
   min-height: 44px;
   padding: 10px 14px;
-  background-color: var(--white-label-background-secondary, #17191f);
+  background-color: var(--white-label-background-input, #17191f);
   border: 1px solid #3e88f7;
   border-radius: 8px;
   color: #ffffff;

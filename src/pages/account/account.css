@@ -260,7 +260,7 @@
 .account-content form input#lastName,
 .account-content form input#phone,
 .account-content form input#email {
-    background-color: var(--white-label-background-primary, #0F1117) !important;
+    background-color: var(--white-label-background-input, #0F1117) !important;
     border: 1px solid #3e88f7 !important;
     border-radius: 8px !important;
     color: white !important;

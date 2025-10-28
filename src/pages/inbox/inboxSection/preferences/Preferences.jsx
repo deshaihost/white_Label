@@ -12,6 +12,7 @@ import { FullScreenLoader } from "../../../../helper/Loader";
 import { useSelector } from "react-redux";
 import { getSubscriptionStatus } from '../../../../helper/Authorized';
 import { useNavigate } from "react-router-dom";
+import { useWhiteLabelCss } from "../../../../helper/WhiteLabelCssContext";
 
 /*
 default_settings = {
@@ -34,6 +35,7 @@ default_settings = {
 const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
   const navigate = useNavigate();
+  const { cssConfig, cssLoading } = useWhiteLabelCss();
   const [getSettingsLoading, setGetSettingsLoading] = useState(false);
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
   const [settingsApiData, setSettingsApiData] = useState({}); // Data retrieved directly from the API, for all settings configs
@@ -417,7 +419,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               value={currentSettingsData.emergency_contact_instructions} 
               onChange={(e) => setSetting('emergency_contact_instructions', e.target.value)}
               style={{
-                backgroundColor: '#0F1117',
+                backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)'),
                 border: '1px solid #013280',
                 borderRadius: '8px',
                 padding: '12px 16px',
@@ -451,7 +453,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               disabled={!currentSettingsData.message_signature_enabled} 
               maxLength={500}
               style={{
-                backgroundColor: '#0F1117',
+                backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.textarea || 'var(--white-label-background-textarea, #0F1117)'),
                 border: '1px solid #013280',
                 borderRadius: '8px',
                 padding: '12px 16px',
@@ -529,7 +531,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                 }}
                 style={{
                   width: '300px',
-                  backgroundColor: '#0F1117',
+                  backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)'),
                   border: '1px solid #013280',
                   borderRadius: '8px',
                   padding: '12px 16px',
@@ -582,7 +584,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                   onChange={(e) => setSetting('min_message_delay_minutes', e.target.value)} 
                   disabled={!isDelayEditable}
                   style={{
-                    backgroundColor: '#0F1117',
+                    backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)'),
                     border: '1px solid #013280',
                     borderRadius: '8px',
                     padding: '12px 16px',
@@ -603,7 +605,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                   onChange={(e) => setSetting('max_message_delay_minutes', e.target.value)} 
                   disabled={!isDelayEditable}
                   style={{
-                    backgroundColor: '#0F1117',
+                    backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)'),
                     border: '1px solid #013280',
                     borderRadius: '8px',
                     padding: '12px 16px',
@@ -640,7 +642,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               maxLength={1000} 
               disabled={!isToneEditable}
               style={{
-                backgroundColor: '#0F1117',
+                backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.textarea || 'var(--white-label-background-textarea, #0F1117)'),
                 border: '1px solid #013280',
                 borderRadius: '8px',
                 padding: '12px 16px',
