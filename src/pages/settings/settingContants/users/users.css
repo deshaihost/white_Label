@@ -350,7 +350,7 @@
 }
 
 .users-modal-content {
-  background-color: #0a0d14;
+  background-color: var(--white-label-background-secondary, #0a0d14) !important;
   border: 2px solid #3e88f7;
   border-radius: 12px;
   max-width: 550px;
