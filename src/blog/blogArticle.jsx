@@ -18,6 +18,7 @@ import inboxBlogArticle from './blogArticles/inbox_blog';
 import openPhoneBlogArticle from './blogArticles/openPhone_blog';
 import hospitableSenderBlog from './blogArticles/Hospitable_sender_blog';
 import MountBlog from './blogArticles/MountBlog';
+import ElevatePartnership from './blogArticles/elevate_partnership';
 
 const BlogArticle = () => {
   const { article_name } = useParams(); // Get the article_name from the path param
@@ -40,7 +41,8 @@ const BlogArticle = () => {
     "inbox_blog": inboxBlogArticle,
     "openphone_blog": openPhoneBlogArticle,
     "hospitable_sender_blog": hospitableSenderBlog,
-    "mount_partnership": MountBlog
+    "mount_partnership": MountBlog,
+    "elevate_partnership": ElevatePartnership
   };
 
   useEffect(() => {
