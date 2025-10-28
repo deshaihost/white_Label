@@ -283,7 +283,7 @@
 }
 
 .action-items-category-card {
-  background-color: #0F1117;
+  background-color: var(--white-label-background-secondary, #17191F);
   border: 1px solid #013280;
   border-radius: 8px;
   padding: 16px;
