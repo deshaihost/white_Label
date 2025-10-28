@@ -22,6 +22,7 @@ h2.samsung-sharp-sans-bold.samsung-sharp-sans-bold {
   -moz-appearance: textfield; /* Firefox */
   -webkit-appearance: none; /* Chrome, Safari, Edge */
   appearance: textfield; /* Standard property */
+  background-color: var(--white-label-background-input, transparent) !important;
 }
 
 .properties-counter-input::-webkit-outer-spin-button,

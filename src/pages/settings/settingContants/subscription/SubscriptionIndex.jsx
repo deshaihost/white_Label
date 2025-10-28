@@ -9,11 +9,15 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import Loader, { BoxLoader } from "../../../../helper/Loader";
 import SubscriptionFeatures from "./features/SubscriptionFeatures";
 import ArrowIcon from "./icons/arrow-narrow-right.svg";
+import { useWhiteLabelCss } from "../../../../helper/WhiteLabelCssContext";
 import "./subscription.css";
 
 const SubscriptionIndex = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
+
+  // White label CSS context for dynamic styling
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
 
   const [goToBillingPortalLoading, setGoToBillingPortalLoading] = React.useState(false);
   const [subscriptionNotFound, setSubscriptionNotFound] = useState(false);
@@ -578,7 +582,7 @@ const SubscriptionIndex = () => {
           {/* Properties counter - Now positioned on the left */}
           <div
             style={{
-              backgroundColor: "#1E1E1E",
+              backgroundColor: cssLoading ? "#1E1E1E" : (cssConfig?.css_data?.background?.input || "var(--white-label-background-input, #1E1E1E)"),
               marginLeft: "30px",
               borderRadius: "30px",
               padding: "10px 20px",
@@ -605,7 +609,7 @@ const SubscriptionIndex = () => {
                 fontWeight: "bold",
                 marginLeft: "8px",
                 fontSize: "16px",
-                backgroundColor: "transparent",
+                backgroundColor: cssLoading ? "transparent" : (cssConfig?.css_data?.background?.input || "var(--white-label-background-input, transparent)"),
                 border: "none",
                 outline: "none",
                 width: "60px",
@@ -626,7 +630,7 @@ const SubscriptionIndex = () => {
                 }}
                 style={{
                   color: "white",
-                  backgroundColor: "transparent",
+                  backgroundColor: cssLoading ? "transparent" : (cssConfig?.css_data?.background?.input || "var(--white-label-background-input, transparent)"),
                   border: "1px solid rgba(255, 255, 255, 0.3)",
                   borderRadius: "2px",
                   width: "16px",
@@ -649,7 +653,7 @@ const SubscriptionIndex = () => {
                 }}
                 style={{
                   color: "white",
-                  backgroundColor: "transparent",
+                  backgroundColor: cssLoading ? "transparent" : (cssConfig?.css_data?.background?.input || "var(--white-label-background-input, transparent)"),
                   border: "1px solid rgba(255, 255, 255, 0.3)",
                   borderRadius: "2px",
                   width: "16px",
