@@ -128,7 +128,7 @@
 .verification-code-input {
     width: 128px;
     padding: 6px 12px;
-    background-color: #0F1117;
+    background-color: var(--white-label-background-input, #0F1117);
     border: 1px solid #3e88f7;
     border-radius: 8px;
     color: white;
@@ -143,6 +143,7 @@
 .verification-code-input:focus {
     outline: none;
     border-color: #74A9F7;
+    background-color: var(--white-label-background-input, #0F1117);
 }
 
 .verification-code-input::placeholder {
@@ -179,7 +180,7 @@
 .add-contact-form-input {
     width: 100%;
     padding: 12px 16px;
-    background-color: #0F1117;
+    background-color: var(--white-label-background-input, #0F1117);
     border: 1px solid #3e88f7;
     border-radius: 8px;
     color: white;
@@ -194,6 +195,7 @@
 .add-contact-form-input:focus {
     outline: none;
     border-color: #74A9F7;
+    background-color: var(--white-label-background-input, #0F1117);
 }
 
 .add-contact-form-input::placeholder {

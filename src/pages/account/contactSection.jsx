@@ -10,12 +10,14 @@ import { getUserDataActions, stateEmptyActions } from "../../redux/actions";
 import InboxUpgrade from "./inbox_Upgrade/InboxUpgrade";
 import { getSubscriptionStatus } from "../../helper/Authorized";
 import LockIcon from "../inbox/inboxSection/preferences/icons/lock.svg";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 // Location & Time Zone Section of account page
 const AccountContactSection = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const location = useLocation();
+  const { cssConfig, cssLoading } = useWhiteLabelCss();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   
   const [confCodeSending, setConfCodeSending] = useState(false);
@@ -409,6 +411,9 @@ const AccountContactSection = () => {
                               value={confirmationCode}
                               onChange={e => setConfirmationCode(e.target.value)}
                               placeholder="Code"
+                              style={{
+                                backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                              }}
                             />
                             <button
                               onClick={() => submitConfirmationCode(contactIndex)}
@@ -448,6 +453,9 @@ const AccountContactSection = () => {
                       value={newContacts?.[section]?.name || ''}
                       onChange={e => handleInputChange(e, section)}
                       name="name"
+                      style={{
+                        backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                      }}
                     />
                   </div>
                   <div>
@@ -459,6 +467,9 @@ const AccountContactSection = () => {
                       onChange={e => handleInputChange(e, section)}
                       name="address"
                       placeholder={section === 'email' ? 'example@domain.com' : section === 'sms' || section === 'whatsapp' ? '+12345678901' : ''}
+                      style={{
+                        backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                      }}
                     />
                   </div>
                 </div>
@@ -639,6 +650,9 @@ const AccountContactSection = () => {
                               value={newContacts?.[section]?.name || ''}
                               onChange={e => handleInputChange(e, section)}
                               name="name"
+                              style={{
+                                backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                              }}
                             />
                           </div>
                           <div>
@@ -650,6 +664,9 @@ const AccountContactSection = () => {
                               onChange={e => handleInputChange(e, section)}
                               name="address"
                               placeholder="https://example.com/webhook"
+                              style={{
+                                backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                              }}
                             />
                           </div>
                         </div>
