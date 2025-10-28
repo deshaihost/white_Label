@@ -64,7 +64,7 @@
 }
 
 .action-select select option {
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
   color: #d0d3db;
   padding: 8px 12px;
 }
@@ -87,7 +87,7 @@
 
 /* Table Container */
 .action-items-page .table-responsive {
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
   border: 2px solid #013280;
   border-radius: 12px;
   overflow: hidden;
@@ -131,13 +131,13 @@
 }
 
 .action-items-table tbody {
-  background: #17191F;
+  background: var(--white-label-background-secondary, #17191F);
 }
 
 .action-items-table tbody tr {
   border-bottom: 1px solid #013280;
   transition: background-color 0.3s ease;
-  background: #17191F;
+  background: var(--white-label-background-secondary, #17191F);
 }
 
 .action-items-table tbody tr:hover {
@@ -145,7 +145,7 @@
 }
 
 .action-items-table tbody td {
-  background: #17191F;
+  background: var(--white-label-background-secondary, #17191F);
 }
 
 .action-items-table tbody tr:last-child {
