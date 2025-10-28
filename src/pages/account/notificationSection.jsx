@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions, stateEmptyActions } from "../../redux/actions";
 import { Tooltip } from "react-tooltip";
 import { getSubscriptionStatus } from "../../helper/Authorized";
-import { useWhiteLabelCss } from "../../helper/WhiteLabelLogoContext";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 import MultiSelect from "../../component/multiSelect/multiSelect";
 import MultiCategorySelect, { fetchCategoriesFromAPI } from "../../component/multiSelect/actionItemCategoriesMultiSelect";
@@ -175,7 +175,7 @@ const AccountNotificationSection = () => {
   const propertyNamesList = Object.keys(userDataGet?.property_data || {});
 
   // White label CSS context for dynamic styling
-  const { cssConfig, cssLoading } = useWhiteLabelCss();
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
 
   // Define categoryNamesList and categoryOptions
   const categoryNamesList = Object.keys(userDataGet?.category_data || {});
