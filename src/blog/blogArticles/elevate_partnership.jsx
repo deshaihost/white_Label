@@ -148,7 +148,7 @@ const ElevatePartnership = () => {
             <div id="about-elevate">
               <h2>About Elevate Software</h2>
               <p>
-                Elevate Software, based in Switzerland, develops the ELEV8 Suite – an all-in-one hospitality operating system that automates bookings, guest communication, check-ins, payments, cleaning coordination, and upselling.
+                <a href="https://elev8-suite.com/" target="_blank" rel="noopener noreferrer">Elevate Software</a>, based in Switzerland, develops the ELEV8 Suite – an all-in-one hospitality operating system that automates bookings, guest communication, check-ins, payments, cleaning coordination, and upselling.
               </p>
               <p>
                 While the PMS connection to ELEV8 Suite is handled via API, all other components such as smart lock control, cleaning management, communication, and guest experience tools are seamlessly and natively built into the ELEV8 Suite. This eliminates the technical hassle of connecting multiple systems and allows hosts and operators to manage their entire operation effortlessly from one place.
