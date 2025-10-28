@@ -233,6 +233,15 @@
   grid-template-columns: 1fr 2fr 1fr 1fr;
   border-bottom: 1px solid #013280;
   background-color: var(--white-label-background-secondary, #17191F);
+  transition: background-color 0.2s ease;
+}
+
+.settings-integrations .webhook-data-row:hover {
+  background-color: var(--white-label-background-hover, rgba(255, 255, 255, 0.08));
+}
+
+.settings-integrations .webhook-data-row:hover .webhook-cell {
+  background-color: var(--white-label-background-hover, rgba(255, 255, 255, 0.08));
 }
 
 .settings-integrations .webhook-data-row:last-child {
