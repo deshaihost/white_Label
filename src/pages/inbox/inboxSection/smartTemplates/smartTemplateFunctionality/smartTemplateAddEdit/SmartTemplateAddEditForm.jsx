@@ -423,7 +423,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
             placeholder="Enter template name"
             style={{
               width: '100%',
-              backgroundColor: '#0F1117',
+              backgroundColor: 'var(--white-label-background-secondary, #17191F)',
               border: '1px solid #013280',
               borderRadius: '8px',
               padding: '14px 20px',
@@ -510,7 +510,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
               }}>
                 <div style={{
                   flex: '1',
-                  backgroundColor: '#0F1117',
+                  backgroundColor: 'var(--white-label-background-secondary, #17191F)',
                   border: '1px solid #013280',
                   borderRadius: '8px',
                   padding: '12px 16px',
@@ -626,7 +626,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                 }}>
                   <div style={{
                     flex: '1',
-                    backgroundColor: '#0F1117',
+                    backgroundColor: 'var(--white-label-background-secondary, #17191F)',
                     border: '1px solid #013280',
                     borderRadius: '8px',
                     padding: '12px 16px',

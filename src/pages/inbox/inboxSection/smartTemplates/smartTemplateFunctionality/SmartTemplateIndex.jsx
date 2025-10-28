@@ -331,7 +331,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                   const templateDescription = describeTemplate(smartItem);
                   return (
                     <div key={smartIndex} style={{ 
-                      backgroundColor: "#0F1117",
+                      backgroundColor: "var(--white-label-background-secondary, #17191F)",
                       border: "2px solid #013280",
                       borderRadius: "12px",
                       padding: "32px",
