@@ -653,7 +653,7 @@ const Dashboard = () => {
                                       transition: 'background-color 0.2s',
                                       cursor: 'default'
                                     }}
-                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01255e'}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--white-label-background-hover, #01255e)'}
                                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                                   >
                                     <div>
