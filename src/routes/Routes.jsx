@@ -504,6 +504,7 @@ const Routing = () => {
         !location.pathname.startsWith("/edit-property/") &&
         location.pathname !== "/gcs-users" &&
         !location.pathname.startsWith("/property-chat") &&
+        (window.location.hostname === "hostbuddy.ai" || window.location.hostname === "www.hostbuddy.ai") &&
         <Footer />}
     </>
   );  // Wrap content with AuthenticatedLayout when the user is logged in AND not on public pages
