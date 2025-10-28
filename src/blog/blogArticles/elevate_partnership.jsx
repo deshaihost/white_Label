@@ -3,7 +3,7 @@ import { BlogArticleSidebar, BlogArticleHeader } from '../blogArticleComponents'
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 
-const thumbnailImg = "https://hostbuddylb.com/blog/elevate_blog/Ele.webp";
+const thumbnailImg = "https://hostbuddylb.com/blog/elevate_blog/1761305294766.webp";
 
 const sideBarContents = [
   { id: "partnership-announcement", name: "Partnership Announcement" },
@@ -27,13 +27,13 @@ const ElevatePartnership = () => {
         <meta property="og:url" content="https://www.hostbuddy.ai/blog/elevate_partnership" />
         <meta property="og:title" content="HostBuddy AI and Elevate Software Announce Strategic Partnership" />
         <meta property="og:description" content="HostBuddy AI and Elevate Software partner to create the most advanced hospitality ecosystem for short-term rentals, combining AI automation with seamless property management." />
-        <meta property="og:image" content="https://hostbuddylb.com/blog/elevate_blog/Ele.webp" />
+        <meta property="og:image" content="https://hostbuddylb.com/blog/elevate_blog/1761305294766.webp" />
 
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://www.hostbuddy.ai/blog/elevate_partnership" />
         <meta property="twitter:title" content="HostBuddy AI and Elevate Software Announce Strategic Partnership" />
         <meta property="twitter:description" content="HostBuddy AI and Elevate Software partner to create the most advanced hospitality ecosystem for short-term rentals, combining AI automation with seamless property management." />
-        <meta property="twitter:image" content="https://hostbuddylb.com/blog/elevate_blog/Ele.webp" />
+        <meta property="twitter:image" content="https://hostbuddylb.com/blog/elevate_blog/1761305294766.webp" />
         <link rel="canonical" href="https://www.hostbuddy.ai/blog/elevate_partnership" />
       </Helmet>
       <div className="blog-article-page">

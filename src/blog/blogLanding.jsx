@@ -20,7 +20,7 @@ const inbox_blog_thumbnail = "https://storage.googleapis.com/frontend_media/blog
 const openphone_blog_thumbnail = "https://hostbuddylb.com/blog/OpenPhone_Blog/10%20Minute%20Demo%20Thumbnail.webp";
 const hospitable_sender_blog_thumbnail = "https://hostbuddylb.com/blog/Hospitable_Blog/Hospitable%20sender%20(2).webp";
 const mount_blog_thumbnail = "https://storage.googleapis.com/frontend_media/blog/MountBlog/Mount%20%2B%20HostBuddy%20Partnership.png";
-const elevate_partnership_thumbnail = "https://hostbuddylb.com/blog/elevate_blog/Ele.webp";
+const elevate_partnership_thumbnail = "https://hostbuddylb.com/blog/elevate_blog/1761305294766.webp";
 
 const BlogLandingPage = () => {
 
