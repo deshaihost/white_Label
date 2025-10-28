@@ -75,7 +75,7 @@
 }
 
 .users-table-row:hover {
-  background-color: #1f2129;
+  background-color: var(--white-label-background-hover, #1f2129);
 }
 
 /* User Cell */
