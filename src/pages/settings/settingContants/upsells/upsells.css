@@ -166,7 +166,7 @@
 
 /* Upsells table background colors with !important */
 .upsells-settings .table {
-  background-color: #17191F !important;
+  background-color: var(--white-label-background-secondary, #17191F) !important;
 }
 
 .upsells-settings .table thead tr {
@@ -178,13 +178,13 @@
 }
 
 .upsells-settings .table tbody {
-  background-color: #17191F !important;
+  background-color: var(--white-label-background-secondary, #17191F) !important;
 }
 
 .upsells-settings .table tbody tr {
-  background-color: #17191F !important;
+  background-color: var(--white-label-background-secondary, #17191F) !important;
 }
 
 .upsells-settings .table tbody td {
-  background-color: #17191F !important;
+  background-color: var(--white-label-background-secondary, #17191F) !important;
 }

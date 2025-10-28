@@ -101,7 +101,7 @@ const customStyles = {
   }),
   menu: (provided) => ({
     ...provided,
-    background: '#17191f',
+    background: 'var(--white-label-background-secondary, #17191f)',
     border: '1px solid #013280',
     borderRadius: '4px',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
@@ -131,7 +131,7 @@ const customStyles = {
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isFocused ? '#01255e' : '#17191f',
+    backgroundColor: state.isFocused ? '#01255e' : 'var(--white-label-background-secondary, #17191f)',
     color: '#d0d3db',
     fontFamily: "'DM Sans', sans-serif",
     fontVariationSettings: "'opsz' 14",

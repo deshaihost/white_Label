@@ -332,7 +332,7 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
               onClose={() => handleMenuClose()}
               PaperProps={{
                 style: {
-                  backgroundColor: '#17191f',
+                  backgroundColor: 'var(--white-label-background-secondary, #17191f)',
                   border: '2px solid #013280',
                   borderRadius: '8px',
                   boxShadow: '0 0 30px rgba(30, 75, 158, 0.3)',

@@ -511,7 +511,7 @@ const Dashboard = () => {
                   <div className="row">
                     {!actionItemsCovertationLoading ? (
                       <div style={{
-                        backgroundColor: '#17191f',
+                        backgroundColor: 'var(--white-label-background-secondary, #17191f)',
                         border: '2px solid #013280',
                         borderRadius: '12px',
                         overflow: 'hidden',

@@ -179,7 +179,7 @@
 
 .dashboard-container .account-content .account-box {
   border-radius: 12px;
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
   border: 2px solid #013280;
   padding: 24px;
   height: 100%;
@@ -224,7 +224,7 @@
 .dashboard-container .account-content .property-status {
   border-radius: 12px;
   border: 2px solid #013280;
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
   box-shadow: 0 0 25px rgba(30, 75, 158, 0.2);
 }
 
@@ -268,7 +268,7 @@
 .dashboard-container .account-content .get-started {
   border-radius: 12px;
   border: 2px solid #013280;
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
   padding: 53px 16px;
   text-align: center;
   box-shadow: 0 0 25px rgba(30, 75, 158, 0.2);
@@ -309,7 +309,7 @@
 .property_status {
   border-radius: 12px;
   border: 2px solid #013280;
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
   box-shadow: 0 0 25px rgba(30, 75, 158, 0.2);
 }
 
@@ -370,7 +370,7 @@
 
 /* Action Items Table Container */
 .action-items-container {
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
   border: 2px solid #013280;
   border-radius: 12px;
   overflow: hidden;
@@ -475,12 +475,12 @@
   font-variation-settings: 'opsz' 14 !important;
   text-align: center;
   padding: 32px;
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
 }
 
 /* Table responsive wrapper inside action items container */
 .action-items-container .table-responsive {
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
   border: 0;
 }
 
@@ -531,12 +531,12 @@
   border: 2px solid #013280 !important;
   color: #a6a9b2;
   padding: 8px;
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
   border-radius: 8px;
 }
 
 .p-dropdown-panel {
-  background: #17191f;
+  background: var(--white-label-background-secondary, #17191f);
   padding: 8px;
   border: 2px solid #013280;
   border-radius: 8px;
