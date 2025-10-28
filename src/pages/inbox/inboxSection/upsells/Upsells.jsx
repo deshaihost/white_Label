@@ -186,7 +186,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
             }}
             onClick={() => setSelectedSection("postStayUpsells")}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#01255e';
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-hover, #01255e)';
               e.currentTarget.style.borderColor = '#3e88f7';
               const arrow = e.currentTarget.querySelector('.arrow-icon');
               if (arrow) arrow.style.transform = 'translateX(4px)';
@@ -260,7 +260,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
             }}
             onClick={() => setSelectedSection("preStayUpsells")}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#01255e';
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-hover, #01255e)';
               e.currentTarget.style.borderColor = '#3e88f7';
               const arrow = e.currentTarget.querySelector('.arrow-icon');
               if (arrow) arrow.style.transform = 'translateX(4px)';
@@ -334,7 +334,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
             }}
             onClick={() => setSelectedSection("inquiryWinbacks")}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#01255e';
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-hover, #01255e)';
               e.currentTarget.style.borderColor = '#3e88f7';
               const arrow = e.currentTarget.querySelector('.arrow-icon');
               if (arrow) arrow.style.transform = 'translateX(4px)';

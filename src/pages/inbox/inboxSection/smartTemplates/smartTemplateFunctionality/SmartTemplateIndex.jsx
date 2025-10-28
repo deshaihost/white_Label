@@ -330,18 +330,29 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                   const { name, enabled } = smartItem;
                   const templateDescription = describeTemplate(smartItem);
                   return (
-                    <div key={smartIndex} style={{ 
-                      backgroundColor: "var(--white-label-background-secondary, #17191F)",
-                      border: "2px solid #013280",
-                      borderRadius: "12px",
-                      padding: "32px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      height: "140px",
-                      boxShadow: "0 0 25px rgba(1, 50, 128, 0.2)",
-                      marginTop: "20px"
-                    }}>
+                    <div 
+                      key={smartIndex} 
+                      style={{ 
+                        backgroundColor: "var(--white-label-background-secondary, #17191F)",
+                        border: "2px solid #013280",
+                        borderRadius: "12px",
+                        padding: "32px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        height: "140px",
+                        boxShadow: "0 0 25px rgba(1, 50, 128, 0.2)",
+                        marginTop: "20px",
+                        cursor: "pointer",
+                        transition: "background-color 0.2s ease"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'var(--white-label-background-hover, rgba(255, 255, 255, 0.08))';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'var(--white-label-background-secondary, #17191F)';
+                      }}
+                    >
                       <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                         <h3 style={{ 
                           color: "white", 
