@@ -87,7 +87,7 @@
 }
 
 .side-nav-item:hover:not(.selected) {
-    background-color: var(--color-primitives-neutral-alpha-400a, rgba(255, 255, 255, 0.08));
+    background-color: var(--white-label-background-hover, rgba(255, 255, 255, 0.08));
 }
 
 /* Removed hover text color change - labels will maintain their original color on hover */
@@ -131,7 +131,7 @@
 }
 
 .side-nav-item.sub-item:hover {
-    background-color: rgba(55, 135, 255, 0.15); /* Lighter blue on hover */
+    background-color: var(--white-label-background-hover, rgba(55, 135, 255, 0.15)); /* Lighter blue on hover */
 }
 
 .side-nav-item.sub-item.selected {

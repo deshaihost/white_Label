@@ -69,7 +69,7 @@
 }
 
 .collapsed-navbar-icon:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: var(--white-label-background-hover, rgba(255, 255, 255, 0.08));
 }
 
 .collapsed-navbar-icon:active {
@@ -95,7 +95,7 @@
 }
 
 .collapsed-navbar-expand:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: var(--white-label-background-hover, rgba(255, 255, 255, 0.08));
   transform: scale(1.05);
 }
 
