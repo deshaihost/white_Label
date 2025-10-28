@@ -124,7 +124,7 @@
   display: flex;
   align-items: center;
   border-bottom: 2px solid #22253a;
-  background: #05061a;
+  background: var(--white-label-background-primary, #0F1117);
   padding-left: 10px;
   margin-bottom: 20px;
   height: 38px;
@@ -208,7 +208,7 @@
 
 /* Webhook Table Wrapper */
 .settings-integrations .webhook-table-wrapper {
-  background-color: #17191F;
+  background-color: var(--white-label-background-secondary, #17191F);
   border: 1px solid #013280;
   border-radius: 8px;
   overflow: hidden;
@@ -232,7 +232,7 @@
   display: grid;
   grid-template-columns: 1fr 2fr 1fr 1fr;
   border-bottom: 1px solid #013280;
-  background-color: #17191F;
+  background-color: var(--white-label-background-secondary, #17191F);
 }
 
 .settings-integrations .webhook-data-row:last-child {
@@ -244,7 +244,7 @@
   display: grid;
   grid-template-columns: 1fr;
   border-bottom: 1px solid #013280;
-  background-color: #17191F;
+  background-color: var(--white-label-background-secondary, #17191F);
 }
 
 /* Webhook Cell */
@@ -256,7 +256,7 @@
   align-items: center;
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-variation-settings: 'opsz' 14;
-  background-color: #17191F;
+  background-color: var(--white-label-background-secondary, #17191F);
 }
 
 .settings-integrations .webhook-cell-bordered {
@@ -271,7 +271,7 @@
 /* Webhook Empty Row */
 .settings-integrations .webhook-empty-row {
   padding: 24px;
-  background-color: #17191F;
+  background-color: var(--white-label-background-secondary, #17191F);
 }
 
 .settings-integrations .webhook-empty-row p {
