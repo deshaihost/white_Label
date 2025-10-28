@@ -386,7 +386,7 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
                       <div 
                         key={index} 
                         style={{
-                          backgroundColor: '#0F1117',
+                          backgroundColor: 'var(--white-label-background-secondary, #17191F)',
                           border: '1px solid #013280',
                           borderRadius: '8px',
                           padding: '16px',
