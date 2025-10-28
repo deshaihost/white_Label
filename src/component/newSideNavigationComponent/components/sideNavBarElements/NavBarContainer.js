@@ -307,7 +307,7 @@ function NavBarContainer() {
       className={`navbar-main-container ${sidebarClicked ? 'expanded-by-click' : ''} ${isMobileDevice() ? 'mobile-default-collapsed' : ''}`}
       style={{
         position: "fixed",
-        backgroundColor: sidebarOpen ? "rgba(23, 25, 31, 1)" : "transparent",        top: 0,
+        backgroundColor: sidebarOpen ? "var(--white-label-background-secondary, #17191F)" : "transparent",        top: 0,
         left: 0,
         zIndex: 1000,paddingTop: sidebarOpen ? "16px" : "0px",
         paddingBottom: sidebarOpen ? "16px" : "0px",
@@ -333,7 +333,7 @@ function NavBarContainer() {
       {sidebarOpen ? (        <div
           className="navbar-container-1600"
           style={{
-            backgroundColor: "rgba(23, 25, 31, 1)",
+            backgroundColor: "var(--white-label-background-secondary, #17191F)",
             width: "184px",
             overflowY: "auto",
             boxSizing: "border-box",
