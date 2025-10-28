@@ -20,6 +20,7 @@ const inbox_blog_thumbnail = "https://storage.googleapis.com/frontend_media/blog
 const openphone_blog_thumbnail = "https://hostbuddylb.com/blog/OpenPhone_Blog/10%20Minute%20Demo%20Thumbnail.webp";
 const hospitable_sender_blog_thumbnail = "https://hostbuddylb.com/blog/Hospitable_Blog/Hospitable%20sender%20(2).webp";
 const mount_blog_thumbnail = "https://storage.googleapis.com/frontend_media/blog/MountBlog/Mount%20%2B%20HostBuddy%20Partnership.png";
+const elevate_partnership_thumbnail = "https://hostbuddylb.com/blog/elevate_blog/Ele.webp";
 
 const BlogLandingPage = () => {
 
@@ -41,6 +42,7 @@ const BlogLandingPage = () => {
       { id:"openphone_blog", title:"Revolutionary AI Messaging for OpenPhone: Transform Your Short Term Rental Communication 📞", date:"Aug 03, 2025", img:openphone_blog_thumbnail, description:"Discover how OpenPhone AI messaging integration revolutionizes short-term rental communication with automatic phone number matching, call summaries, and unified messaging." },
       { id:"hospitable_sender_blog", title:"HostBuddy Now Supports Hospitable Sender Selection for Airbnb", date:"Sept 9, 2025", img:hospitable_sender_blog_thumbnail, description:"Finally, the control you've been asking for is here. Choose exactly which host profile sends your automated AI messages with HostBuddy's new Hospitable Sender Selection feature." },
       { id:"mount_partnership", title:"HostBuddy AI Partners with Mount to Automate Local Experience Upsells", date:"Oct 08, 2025", img:mount_blog_thumbnail, description:"Discover how HostBuddy AI's partnership with Mount enables automatic 24/7 upselling of local experiences through AI-powered guest communication." },
+      { id:"elevate_partnership", title:"HostBuddy AI and Elevate Software Announce Strategic Partnership", date:"Oct 28, 2025", img:elevate_partnership_thumbnail, description:"HostBuddy AI and Elevate Software partner to create the most advanced hospitality ecosystem for short-term rentals, combining AI automation with seamless property management." },
     ];
 
     const reversedArticles = articles.reverse();
