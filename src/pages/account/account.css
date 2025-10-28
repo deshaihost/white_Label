@@ -134,11 +134,11 @@
 }
 
 .setting_tab_data .account-section-card {
-    background-color: #0a0d14 !important;
+    background-color: var(--white-label-background-secondary, #17191f) !important;
 }
 
 .account-content .account-section-card {
-    background-color: #0a0d14 !important;
+    background-color: var(--white-label-background-secondary, #17191f) !important;
 }
 
 /* Danger Zone Card */
