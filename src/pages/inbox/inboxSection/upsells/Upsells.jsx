@@ -172,7 +172,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
           <div 
             style={{
               width: '100%',
-              backgroundColor: '#0F1117',
+              backgroundColor: 'var(--white-label-background-secondary, #17191F)',
               border: '2px solid #013280',
               borderRadius: '12px',
               padding: '32px',
@@ -192,7 +192,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
               if (arrow) arrow.style.transform = 'translateX(4px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#0F1117';
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-secondary, #17191F)';
               e.currentTarget.style.borderColor = '#013280';
               const arrow = e.currentTarget.querySelector('.arrow-icon');
               if (arrow) arrow.style.transform = 'translateX(0)';
@@ -246,7 +246,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
           <div 
             style={{
               width: '100%',
-              backgroundColor: '#0F1117',
+              backgroundColor: 'var(--white-label-background-secondary, #17191F)',
               border: '2px solid #013280',
               borderRadius: '12px',
               padding: '32px',
@@ -266,7 +266,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
               if (arrow) arrow.style.transform = 'translateX(4px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#0F1117';
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-secondary, #17191F)';
               e.currentTarget.style.borderColor = '#013280';
               const arrow = e.currentTarget.querySelector('.arrow-icon');
               if (arrow) arrow.style.transform = 'translateX(0)';
@@ -320,7 +320,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
           <div 
             style={{
               width: '100%',
-              backgroundColor: '#0F1117',
+              backgroundColor: 'var(--white-label-background-secondary, #17191F)',
               border: '2px solid #013280',
               borderRadius: '12px',
               padding: '32px',
@@ -340,7 +340,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
               if (arrow) arrow.style.transform = 'translateX(4px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#0F1117';
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-secondary, #17191F)';
               e.currentTarget.style.borderColor = '#013280';
               const arrow = e.currentTarget.querySelector('.arrow-icon');
               if (arrow) arrow.style.transform = 'translateX(0)';
