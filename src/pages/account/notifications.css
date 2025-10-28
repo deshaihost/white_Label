@@ -173,7 +173,11 @@
 }
 
 .notifications-table tbody tr:hover {
-  background-color: #1f2129;
+  background-color: var(--white-label-background-hover, #1f2129);
+}
+
+.notifications-table tbody tr:hover td {
+  background-color: var(--white-label-background-hover, #1f2129);
 }
 
 .notifications-table td {
