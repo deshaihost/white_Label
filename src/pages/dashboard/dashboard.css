@@ -440,7 +440,11 @@
 }
 
 .action-items-table tbody tr:hover {
-  background: #01255e !important;
+  background: var(--white-label-background-hover, #01255e) !important;
+}
+
+.action-items-table tbody tr:hover td {
+  background: var(--white-label-background-hover, #01255e) !important;
 }
 
 .action-items-table tbody tr:last-child {
