@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions, stateEmptyActions } from "../../redux/actions";
 import { Tooltip } from "react-tooltip";
 import { getSubscriptionStatus } from "../../helper/Authorized";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelLogoContext";
 
 import MultiSelect from "../../component/multiSelect/multiSelect";
 import MultiCategorySelect, { fetchCategoriesFromAPI } from "../../component/multiSelect/actionItemCategoriesMultiSelect";
@@ -172,6 +173,9 @@ const AccountNotificationSection = () => {
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const propertyNamesList = Object.keys(userDataGet?.property_data || {});
+
+  // White label CSS context for dynamic styling
+  const { cssConfig, cssLoading } = useWhiteLabelCss();
 
   // Define categoryNamesList and categoryOptions
   const categoryNamesList = Object.keys(userDataGet?.category_data || {});
@@ -718,6 +722,9 @@ const AccountNotificationSection = () => {
                   placeholder="Enter recipient name"
                   value={newRecipient.firstName || ''}
                   onChange={handleInputChange}
+                  style={{
+                    backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                  }}
                 />
               </div>
             </div>
@@ -753,6 +760,9 @@ const AccountNotificationSection = () => {
                     className="notifications-input"
                     value={newRecipient.RecipientAddress || ''}
                     onChange={handleInputChange}
+                    style={{
+                      backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                    }}
                   >
                     <option value="">-- Please select --</option>
                     {renderOptions()}
@@ -791,6 +801,9 @@ const AccountNotificationSection = () => {
                     className="notifications-input"
                     value={newRecipient.time || ''}
                     onChange={handleInputChange}
+                    style={{
+                      backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                    }}
                   />
                 ) : (
                   <input
@@ -805,6 +818,9 @@ const AccountNotificationSection = () => {
                         : '[Please select Timing first]'
                     }
                     disabled
+                    style={{
+                      backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                    }}
                   />
                 )}
               </div>
