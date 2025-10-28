@@ -115,6 +115,10 @@
   color: white;
 }
 
+.upsells-settings .table tbody tr:hover {
+  background-color: var(--white-label-background-hover, rgba(9, 251, 223, 0.1)) !important;
+}
+
 .upsells-settings .clickable-div {
   cursor: pointer;
   border: 1px solid #045ce9;

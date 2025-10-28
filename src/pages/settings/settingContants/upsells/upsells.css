@@ -90,7 +90,7 @@
 }
 
 .upsells-settings .variable:hover {
-  background-color: #f0f0f0;
+  background-color: var(--white-label-background-hover, rgba(9, 251, 223, 0.1));
 }
 
 .upsells-settings .table thead th {
@@ -187,4 +187,12 @@
 
 .upsells-settings .table tbody td {
   background-color: var(--white-label-background-secondary, #17191F) !important;
+}
+
+.upsells-settings .table tbody tr:hover {
+  background-color: var(--white-label-background-hover, rgba(9, 251, 223, 0.1)) !important;
+}
+
+.upsells-settings .table tbody tr:hover td {
+  background-color: var(--white-label-background-hover, rgba(9, 251, 223, 0.1)) !important;
 }
