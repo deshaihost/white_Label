@@ -96,6 +96,64 @@ const StatisticsPage = () => {
     { component: MetricTile, dataSets: apiStatisticsData?.upsellMetrics, width: 4, height: "320px" },
   ]
 
+  // Create dynamic styles with white label colors
+  const getDynamicSelectStyles = () => {
+    const dropdownBgColor = cssLoading ? "#17191f" : cssConfig?.css_data?.background?.dropdown || "#17191f";
+    const hoverBgColor = cssLoading ? "#01255e" : cssConfig?.css_data?.background?.hover || "#01255e";
+
+    return {
+      ...customStyles,
+      control: (provided, state) => ({
+        ...provided,
+        background: dropdownBgColor,
+        border: state.isFocused ? '1px solid #3e88f7' : '1px solid #013280',
+        borderRadius: '4px',
+        color: '#d0d3db',
+        fontSize: '14px',
+        fontWeight: '500',
+        fontFamily: "'DM Sans', sans-serif",
+        fontVariationSettings: "'opsz' 14",
+        minHeight: '40px',
+        height: '40px',
+        minWidth: '180px',
+        boxShadow: 'none',
+        cursor: 'pointer',
+        transition: 'border-color 0.3s ease',
+        '&:hover': {
+          borderColor: '#3e88f7'
+        }
+      }),
+      menu: (provided) => ({
+        ...provided,
+        background: dropdownBgColor,
+        border: '1px solid #013280',
+        borderRadius: '4px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+        marginTop: '4px',
+        overflow: 'hidden',
+        zIndex: 20
+      }),
+      option: (provided, state) => ({
+        ...provided,
+        backgroundColor: state.isFocused || state.isSelected ? hoverBgColor : 'transparent',
+        color: '#d0d3db',
+        fontFamily: "'DM Sans', sans-serif",
+        fontVariationSettings: "'opsz' 14",
+        fontSize: '14px',
+        fontWeight: '400',
+        padding: '8px 12px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease',
+        ':hover': {
+          backgroundColor: hoverBgColor
+        },
+        ':active': {
+          backgroundColor: hoverBgColor
+        }
+      }),
+    };
+  };
+
   // When the page loads, fetch the data and populate the charts
   useEffect(() => {
     getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading, {include_upsells:true});
@@ -145,7 +203,7 @@ const StatisticsPage = () => {
             )}
           </div>
           <div className="inputs-container">
-            <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false}/>
+            <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={getDynamicSelectStyles()} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false}/>
           </div>
           <button className="apply-button" onClick={handleApplyFilters}>Apply</button>
         </div>
