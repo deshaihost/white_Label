@@ -443,7 +443,12 @@ const AccountContactSection = () => {
 
             {/* Add new contact information, within a given section */}
             {Object.keys(newContacts[section] || {}).length > 0 && (
-              <div className="add-contact-form">
+              <div 
+                className="add-contact-form"
+                style={{
+                  backgroundColor: cssLoading ? '#17191f' : (cssConfig?.css_data?.background?.primary || 'var(--white-label-background-primary, #17191f)')
+                }}
+              >
                 <div className="add-contact-form-grid">
                   <div>
                     <label className="add-contact-form-label">Name</label>

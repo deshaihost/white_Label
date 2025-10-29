@@ -152,7 +152,7 @@
 
 /* Add Contact Form */
 .add-contact-form {
-    background-color: #17191f;
+    background-color: var(--white-label-background-primary, #17191f) !important;
     border: 1px solid #3e88f7;
     border-radius: 8px;
     padding: 24px;
