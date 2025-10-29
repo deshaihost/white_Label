@@ -2,7 +2,7 @@
 const customStyles = {
   control: (provided, state) => ({
     ...provided,
-    background: 'rgba(189, 193, 201, 0.08)',
+    background: 'var(--white-label-background-dropdown, rgba(189, 193, 201, 0.08))',
     border: state.isFocused ? '1px solid #3e88f7' : '1px solid #013280',
     borderRadius: '4px',
     color: '#d0d3db',

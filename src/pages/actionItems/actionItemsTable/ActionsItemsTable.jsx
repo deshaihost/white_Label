@@ -15,8 +15,11 @@ import customStyles from './selectStyles';
 import ActionItemsUpgrade from '../ActionItemsUpgrade/ActionItemsUpgrade';
 import { getSubscriptionStatus } from '../../../helper/Authorized';
 import { fetchCategoriesFromAPI } from "../../../component/multiSelect/actionItemCategoriesMultiSelect";
+import { useWhiteLabelCss } from "../../../helper/WhiteLabelCssContext";
 
 const ActionsItemsTable = () => {
+
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
 
   const callGetActionItemsApi = async (status_query) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -262,6 +265,31 @@ const ActionsItemsTable = () => {
     loadCategories();
   }, []); // Empty dependency array means this runs once on component mount
 
+  // Create dynamic styles with dropdown background color
+  const getDynamicStyles = () => {
+    const dropdownBgColor = cssLoading ? 'rgba(189, 193, 201, 0.08)' : (cssConfig?.css_data?.background?.dropdown || 'var(--white-label-background-dropdown, rgba(189, 193, 201, 0.08))');
+    const hoverColor = cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || 'var(--white-label-background-hover, #01255e)');
+    
+    return {
+      ...customStyles,
+      control: (provided, state) => ({
+        ...customStyles.control(provided, state),
+        background: dropdownBgColor,
+      }),
+      menu: (provided) => ({
+        ...customStyles.menu(provided),
+        background: dropdownBgColor,
+      }),
+      option: (provided, state) => ({
+        ...customStyles.option(provided, state),
+        backgroundColor: state.isFocused || state.isSelected ? hoverColor : 'transparent',
+        '&:hover': {
+          backgroundColor: hoverColor,
+        },
+      })
+    };
+  };
+
   return (
     <>
       <Container>
@@ -280,7 +308,7 @@ const ActionsItemsTable = () => {
                     isMulti 
                     options={categories} // Use locally fetched categories instead of categoryOptions
                     value={selectedCategories} 
-                    styles={customStyles} 
+                    styles={getDynamicStyles()} 
                     onChange={handleCategoryChange} 
                     placeholder="All Categories" 
                     closeMenuOnSelect={false}
@@ -298,7 +326,7 @@ const ActionsItemsTable = () => {
                     { value: 'expired', label: 'Expired' }
                   ]} 
                   value={{ value: selectedStatus, label: selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1) }} 
-                  styles={customStyles} 
+                  styles={getDynamicStyles()} 
                   onChange={(selected) => handleSelectStatusChange({ target: { value: selected.value } })} 
                   placeholder="Status"
                   isSearchable={false}
@@ -306,7 +334,7 @@ const ActionsItemsTable = () => {
               </div>
 
               <div className="item-select" style={{ width: "30%" }}>
-                <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false} />
+                <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={getDynamicStyles()} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false} />
               </div>
 
             </div>
