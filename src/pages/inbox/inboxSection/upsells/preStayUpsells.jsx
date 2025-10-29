@@ -8,6 +8,7 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import "../resources/upsells.css";
 import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
 import UpsellMessageModal from "../resources/upsellMessageModal";
+import { useWhiteLabelCss } from "../../../../helper/WhiteLabelCssContext";
 
 import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
@@ -33,7 +34,7 @@ default_settings = {
 
 const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localSettingsData, setLocalSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData, allPropertyNamesList}) => {
 
-
+  const { cssConfig, cssLoading } = useWhiteLabelCss();
   const [cancelMessageLoading, setCancelMessageLoading] = useState("");
   const [selectedConfig, setSelectedConfig] = useState("default"); // The currently selected config. All users have a "default" config
   const [messageModalHeaderText, setMessageModalHeaderText] = useState("");
@@ -242,31 +243,92 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
             >
               Back
             </Button>
-            <select 
-              className="form-select text-white shadow-none fs-14 mb-3 mb-md-0" 
-              style={{ 
-                backgroundColor: "#0F1117", 
-                borderColor: '#013280',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                borderRadius: '8px',
-                padding: '10px 24px',
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: '15px',
-                fontWeight: '600',
-                fontVariationSettings: "'opsz' 14",
-                minWidth: '140px',
-                cursor: 'pointer'
-              }} 
-              aria-label="Configuration select" 
-              value={selectedConfig} 
-              onChange={handleConfigSelectChange}
-            >
-              {Object.keys(localSettingsData).map((key, index) => (
-                <option key={index} value={key} style={{ textTransform: 'capitalize' }}>{key}</option>              
-              ))}
-              <option value="add">+ New Configuration</option>
-            </select>
+            <Select
+              className="config-select-upsells"
+              options={[
+                ...Object.keys(localSettingsData).map((key) => ({ value: key, label: key })),
+                { value: "add", label: "+ New Configuration" }
+              ]}
+              value={{ value: selectedConfig, label: selectedConfig }}
+              onChange={(selected) => {
+                const value = selected.value;
+                if (value === "add") {
+                  const newConfigName = window.prompt("Enter a name for the new config");
+                  if (newConfigName) {
+                    const dailySchedules = {monday: ['00:00', '23:59'], tuesday: ['00:00', '23:59'], wednesday: ['00:00', '23:59'], thursday: ['00:00', '23:59'], friday: ['00:00', '23:59'], saturday: ['00:00', '23:59'], sunday: ['00:00', '23:59']};
+                    let newConfigSettings = { enabled: false, properties: [], schedules: { ...dailySchedules } };
+                    setLocalSettingsData({ ...localSettingsData, [newConfigName]:newConfigSettings });
+                    setSelectedConfig(newConfigName);
+                  }
+                } else {
+                  setSelectedConfig(value);
+                  const selectedProperties = localSettingsData[value]?.properties || [];
+                  const selectedOptions = selectedProperties.map((propertyName) => ({ value: propertyName, label: propertyName }));
+                  setSelectedOptions(selectedOptions);
+                }
+              }}
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117'),
+                  border: '1px solid #013280',
+                  borderRadius: '8px',
+                  padding: '2px 8px',
+                  fontSize: '15px',
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  boxShadow: state.isFocused ? '0 0 0 1px #3e88f7' : 'none',
+                  '&:hover': {
+                    borderColor: '#013280'
+                  }
+                }),
+                menu: (provided) => ({
+                  ...provided,
+                  backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117'),
+                  border: '2px solid #013280',
+                  borderRadius: '8px',
+                  boxShadow: '0 0 20px rgba(30, 75, 158, 0.2)',
+                  marginTop: '8px'
+                }),
+                menuList: (provided) => ({
+                  ...provided,
+                  padding: '0',
+                  backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117')
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isFocused || state.isSelected 
+                    ? (cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e'))
+                    : 'transparent',
+                  color: '#fff',
+                  fontSize: '15px',
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: '600',
+                  padding: '10px 16px',
+                  cursor: 'pointer',
+                  textTransform: 'capitalize',
+                  '&:hover': {
+                    backgroundColor: cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e')
+                  }
+                }),
+                singleValue: (provided) => ({
+                  ...provided,
+                  color: '#fff',
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: '600',
+                  textTransform: 'capitalize'
+                }),
+                indicatorSeparator: () => ({ display: 'none' }),
+                dropdownIndicator: (provided) => ({
+                  ...provided,
+                  color: '#fff',
+                  '&:hover': {
+                    color: '#3e88f7'
+                  }
+                })
+              }}
+            />
           </div>
 
           <div style={{marginTop:"10px"}}>

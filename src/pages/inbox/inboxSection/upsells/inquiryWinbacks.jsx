@@ -8,6 +8,7 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import "../resources/upsells.css";
 import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
 import UpsellMessageModal from "../resources/upsellMessageModal";
+import { useWhiteLabelCss } from "../../../../helper/WhiteLabelCssContext";
 
 import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
@@ -25,6 +26,7 @@ default_settings = {
 
 const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, localSettingsData, setLocalSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData, allPropertyNamesList}) => {
 
+  const { cssConfig, cssLoading } = useWhiteLabelCss();
 
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
   const [cancelMessageLoading, setCancelMessageLoading] = useState("");
@@ -238,31 +240,90 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
             >
               Back
             </Button>
-            <select 
-              className="form-select text-white shadow-none fs-14 mb-3 mb-md-0" 
-              style={{ 
-                backgroundColor: "#0F1117", 
-                borderColor: '#013280',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                borderRadius: '8px',
-                padding: '10px 24px',
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: '15px',
-                fontWeight: '600',
-                fontVariationSettings: "'opsz' 14",
-                minWidth: '140px',
-                cursor: 'pointer'
-              }} 
-              aria-label="Configuration select" 
-              value={selectedConfig} 
-              onChange={handleConfigSelectChange}
-            >
-              {Object.keys(localSettingsData).map((key, index) => (
-                <option key={index} value={key} style={{ textTransform: 'capitalize' }}>{key}</option>              
-              ))}
-              <option value="add">+ New Configuration</option>
-            </select>
+            <Select
+              className="text-white shadow-none fs-14 mb-3 mb-md-0"
+              value={
+                selectedConfig === "add"
+                  ? { value: "add", label: "+ New Configuration" }
+                  : { value: selectedConfig, label: selectedConfig }
+              }
+              onChange={(selectedOption) => {
+                if (selectedOption.value === "add") {
+                  setMessageModalHeaderText("Add new configuration");
+                  setMessageModalTopText("Create a new configuration with unique settings for different property groups or scenarios");
+                  setMessageModalMainText("");
+                  setShowMessageModal(true);
+                  setStatusAndJustificationText("Please provide a name for the new configuration");
+                } else {
+                  setSelectedConfig(selectedOption.value);
+                }
+              }}
+              options={[
+                ...Object.keys(localSettingsData).map((key) => ({
+                  value: key,
+                  label: key,
+                })),
+                { value: "add", label: "+ New Configuration" },
+              ]}
+              styles={{
+                control: (base, state) => ({
+                  ...base,
+                  backgroundColor: cssLoading ? "#0F1117" : cssConfig?.css_data?.background?.dropdown || "#0F1117",
+                  borderColor: '#013280',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderRadius: '8px',
+                  padding: '2px 16px',
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  fontVariationSettings: "'opsz' 14",
+                  minWidth: '140px',
+                  cursor: 'pointer',
+                  boxShadow: 'none',
+                  '&:hover': {
+                    borderColor: '#013280',
+                  },
+                }),
+                menu: (base) => ({
+                  ...base,
+                  backgroundColor: cssLoading ? "#0F1117" : cssConfig?.css_data?.background?.dropdown || "#0F1117",
+                  borderColor: '#013280',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderRadius: '8px',
+                  marginTop: '4px',
+                }),
+                menuList: (base) => ({
+                  ...base,
+                  padding: '4px',
+                }),
+                option: (base, state) => ({
+                  ...base,
+                  backgroundColor: state.isFocused || state.isSelected
+                    ? (cssLoading ? "#01255e" : cssConfig?.css_data?.background?.hover || "#01255e")
+                    : 'transparent',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  textTransform: 'capitalize',
+                  '&:hover': {
+                    backgroundColor: cssLoading ? "#01255e" : cssConfig?.css_data?.background?.hover || "#01255e",
+                  },
+                }),
+                singleValue: (base) => ({
+                  ...base,
+                  color: '#fff',
+                  textTransform: 'capitalize',
+                }),
+                dropdownIndicator: (base) => ({
+                  ...base,
+                  color: '#fff',
+                }),
+                indicatorSeparator: () => ({
+                  display: 'none',
+                }),
+              }}
+            />
           </div>
 
           <div style={{marginTop:"10px"}}>
