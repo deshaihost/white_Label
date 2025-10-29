@@ -6,6 +6,7 @@ import { dataInput, minutDataInput, createTypeToGuesttypeMapping, getUseTriggere
 import Loader from "../../../../../../helper/Loader";
 import { v4 as uuidv4 } from 'uuid';
 import { getSubscriptionStatus } from '../../../../../../helper/Authorized';
+import { useWhiteLabelCss } from "../../../../../../helper/WhiteLabelCssContext";
 
 import MultiSelect from "../../../../../../component/multiSelect/multiSelect";
 
@@ -14,6 +15,10 @@ const InboxUpgrade = React.lazy(() => import("../../../inbox/mildeSection/inbox_
 
 const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, hasCleaningManagementIntegration, minut_user_id, userData, smartAllData}) => {
   const { type, smartTemplateData } = addEditSmart;
+  
+  // White label CSS context for dynamic styling
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  
   const { triggers, conditions } = dataInput;
   const { minutTriggers, minutConditions } = minutDataInput;
   const edit = "Edit";
@@ -423,7 +428,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
             placeholder="Enter template name"
             style={{
               width: '100%',
-              backgroundColor: 'var(--white-label-background-secondary, #17191F)',
+              backgroundColor: cssLoading ? 'var(--white-label-background-secondary, #17191F)' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #17191F)'),
               border: '1px solid #013280',
               borderRadius: '8px',
               padding: '14px 20px',
