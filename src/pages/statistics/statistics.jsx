@@ -15,6 +15,7 @@ import { lineGraphDataSets, histogramDataSets, callGetStatisticsApi, getStatisti
 
 const StatisticsPage = () => {
   const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  
   const [rawApiReturn, setRawApiReturn] = useState({}); // The raw data returned by the API
   const [apiStatisticsData, setApiStatisticsData] = useState({}); // The data structures for the statistics tiles, after populated by the API and formatted in dataManager
   const [dataLoading, setDataLoading] = useState(true);
@@ -163,11 +164,13 @@ const StatisticsPage = () => {
     <div 
       className="statistics-page"
       style={{
-        background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
+        background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117',
+        '--white-label-input': !cssLoading ? (cssConfig?.css_data?.background?.secondary || '#17191F') : '#17191F',
+        '--white-label-input-text': !cssLoading ? (cssConfig?.css_data?.text?.primary || '#FFF') : '#FFF'
       }}
     >
       
-      {dataLoading && <FullScreenLoader />}     
+      {dataLoading && <FullScreenLoader />}
        <h1 className="page-header">
         {/* <h1>Business Insights</h1> */}
         {/* <span className="subtitle" style={{color:'#146ef5'}}>By HostBuddy</span> */}
@@ -194,9 +197,29 @@ const StatisticsPage = () => {
             {showDatePickers ? (
               <>
                 <label className="date-label">Start Date</label>
-                <input type="date" className="date-input" placeholder="Start Date" value={selectedStartDate} onChange={(e) => setSelectedStartDate(e.target.value)} max={today} />
+                <input 
+                  type="date" 
+                  className="date-input" 
+                  placeholder="Start Date" 
+                  value={selectedStartDate} 
+                  onChange={(e) => setSelectedStartDate(e.target.value)} 
+                  max={today}
+                  style={{
+                    color: !cssLoading ? (cssConfig?.css_data?.text?.primary || '#FFF') : '#FFF'
+                  }}
+                />
                 <label className="date-label">End Date</label>
-                <input type="date" className="date-input" placeholder="End Date" value={selectedEndDate} onChange={(e) => setSelectedEndDate(e.target.value)} max={today} />
+                <input 
+                  type="date" 
+                  className="date-input" 
+                  placeholder="End Date" 
+                  value={selectedEndDate} 
+                  onChange={(e) => setSelectedEndDate(e.target.value)} 
+                  max={today}
+                  style={{
+                    color: !cssLoading ? (cssConfig?.css_data?.text?.primary || '#FFF') : '#FFF'
+                  }}
+                />
               </>
             ) : (
               <button className="adjust-dates-button" onClick={handleAdjustDatesClick}>Adjust Dates</button>

@@ -207,10 +207,39 @@
   max-width: 300px; /* Set a maximum width */
   padding: 8px;
   border: 1px solid #007bff;
-  border-radius: 20px;
+  border-radius: 8px;
   margin: 0; /* Reset margin to rely on gap */
-  background: #333;
-  color: #FFF;
+  background: var(--white-label-input, #333);
+  color: var(--white-label-input-text, #FFF) !important;
+  color-scheme: dark;
+}
+
+.statistics-page .date-input::placeholder {
+  color: var(--white-label-input-text, #FFF);
+  opacity: 0.7;
+}
+
+.statistics-page .date-input::-webkit-datetime-edit {
+  color: var(--white-label-input-text, #FFF);
+}
+
+.statistics-page .date-input::-webkit-datetime-edit-fields-wrapper {
+  color: var(--white-label-input-text, #FFF);
+}
+
+.statistics-page .date-input::-webkit-datetime-edit-text {
+  color: var(--white-label-input-text, #FFF);
+}
+
+.statistics-page .date-input::-webkit-datetime-edit-month-field,
+.statistics-page .date-input::-webkit-datetime-edit-day-field,
+.statistics-page .date-input::-webkit-datetime-edit-year-field {
+  color: var(--white-label-input-text, #FFF);
+}
+
+.statistics-page .date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
 }
 
 .statistics-page .adjust-dates-button {
