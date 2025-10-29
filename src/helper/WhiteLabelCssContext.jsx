@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { getCssConfig } from '../pages/settings/settingContants/whiteLabel/whiteLabelServices';
 import { getActiveToken } from './apiCore';
 
@@ -213,6 +213,10 @@ const applyCssVariables = (cssConfig) => {
 };
 
 export const WhiteLabelCssProvider = ({ children }) => {
+  // Add request deduplication to prevent multiple simultaneous API calls
+  const fetchingRef = useRef(false);
+  const mountCountRef = useRef(0);
+  
   const [cssState, setCssState] = useState(() => {
     // Initialize with cached data if available
     const domainName = window.location.hostname;
@@ -249,10 +253,36 @@ export const WhiteLabelCssProvider = ({ children }) => {
     };
   });
 
+  // Add retry tracking to prevent infinite retries
+  const retryCountRef = React.useRef(0);
+  const maxRetries = 5;
+
   useEffect(() => {
+    // Increment mount counter for debugging multiple instances
+    mountCountRef.current += 1;
+    const currentMount = mountCountRef.current;
+    
+    console.log('🔍 [CSS PROVIDER] WhiteLabelCssProvider mounted', {
+      mountNumber: currentMount,
+      isFetching: fetchingRef.current,
+      timestamp: new Date().toISOString()
+    });
+
     const fetchWhiteLabelCss = async () => {
+      // Prevent multiple simultaneous requests
+      if (fetchingRef.current) {
+        console.log('⏸️ [CSS API] Request already in progress, skipping duplicate', {
+          mountNumber: currentMount,
+          timestamp: new Date().toISOString()
+        });
+        return;
+      }
+      
+      fetchingRef.current = true;
+      
       const startTime = performance.now();
       console.log('🚀 [CSS API] Starting CSS config fetch process...', {
+        mountNumber: currentMount,
         timestamp: new Date().toISOString(),
         performanceStart: startTime
       });
@@ -263,6 +293,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
         
         console.log('🌐 [CSS API] Domain detected:', {
           domainName,
+          mountNumber: currentMount,
           timestamp: new Date().toISOString()
         });
 
@@ -275,6 +306,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
           console.log('✅ [CSS API] HostBuddy domain detected - using default styles', {
             domain: domainName,
             elapsed: `${elapsed.toFixed(2)}ms`,
+            mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
           setCssState({
@@ -283,6 +315,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             error: null,
             isHostBuddyDomain: true,
           });
+          fetchingRef.current = false; // Reset fetch flag
           return;
         }
 
@@ -297,8 +330,10 @@ export const WhiteLabelCssProvider = ({ children }) => {
             domain: domainName,
             cacheCheckTime: `${cacheCheckElapsed.toFixed(2)}ms`,
             totalElapsed: `${totalElapsed.toFixed(2)}ms`,
+            mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
+          fetchingRef.current = false; // Reset fetch flag
           // Already set in initial state, just return
           return;
         }
@@ -306,12 +341,14 @@ export const WhiteLabelCssProvider = ({ children }) => {
         console.log('❌ [CSS API] Cache MISS - Will fetch from API', {
           domain: domainName,
           cacheCheckTime: `${cacheCheckElapsed.toFixed(2)}ms`,
+          mountNumber: currentMount,
           timestamp: new Date().toISOString()
         });
 
         // For white label domains, call the API
         console.log('📡 [CSS API] Sending API request...', {
           domain: domainName,
+          mountNumber: currentMount,
           timestamp: new Date().toISOString()
         });
 
@@ -323,6 +360,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
           success: response.success,
           apiCallTime: `${apiCallElapsed.toFixed(2)}ms`,
           hasData: !!response.data,
+          mountNumber: currentMount,
           timestamp: new Date().toISOString()
         });
 
@@ -336,6 +374,9 @@ export const WhiteLabelCssProvider = ({ children }) => {
           
           // Apply CSS variables immediately
           applyCssVariables(cssConfig);
+          
+          // Reset retry counter on success
+          retryCountRef.current = 0;
           
           // Set state
           setCssState({
@@ -358,13 +399,17 @@ export const WhiteLabelCssProvider = ({ children }) => {
               apiCall: `${apiCallElapsed.toFixed(2)}ms`,
               cache: `${cacheElapsed.toFixed(2)}ms`
             },
+            mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
+          
+          fetchingRef.current = false; // Reset fetch flag
         } else {
           const totalElapsed = performance.now() - startTime;
           console.log('⚠️ [CSS API] No CSS config available in response', {
             error: response.error,
             totalTime: `${totalElapsed.toFixed(2)}ms`,
+            mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
           setCssState({
@@ -373,6 +418,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             error: response.error || 'No CSS config available',
             isHostBuddyDomain: false,
           });
+          fetchingRef.current = false; // Reset fetch flag
         }
       } catch (error) {
         const totalElapsed = performance.now() - startTime;
@@ -380,20 +426,57 @@ export const WhiteLabelCssProvider = ({ children }) => {
           error: error.message,
           errorType: error.name,
           totalTime: `${totalElapsed.toFixed(2)}ms`,
+          mountNumber: currentMount,
           timestamp: new Date().toISOString()
         });
         
-        // On error, check if it's hostbuddy domain
+        fetchingRef.current = false; // Reset fetch flag on error
+        
+        // On error for white label domains, don't fall back to HostBuddy styling
+        // Keep the loading state or show an error without changing isHostBuddyDomain
         const domainName = window.location.hostname;
         const isHostBuddy = domainName === 'hostbuddy.ai' || 
                            domainName === 'www.hostbuddy.ai';
         
-        setCssState({
-          cssConfig: null,
-          loading: false,
-          error: error.message,
-          isHostBuddyDomain: isHostBuddy,
-        });
+        if (isHostBuddy) {
+          setCssState({
+            cssConfig: null,
+            loading: false,
+            error: error.message,
+            isHostBuddyDomain: true,
+          });
+        } else {
+          // For white label domains, maintain loading state on network errors to prevent fallback to HostBuddy styling
+          setCssState({
+            cssConfig: null,
+            loading: true, // Keep loading to prevent fallback
+            error: error.message,
+            isHostBuddyDomain: false,
+          });
+          
+          // Retry after a delay for white label domains, with max retry limit
+          if (retryCountRef.current < maxRetries) {
+            retryCountRef.current += 1;
+            const retryDelay = Math.min(3000 * retryCountRef.current, 15000); // Exponential backoff, max 15s
+            console.log(`🔄 [CSS API] Retrying CSS fetch for white label domain after error (attempt ${retryCountRef.current}/${maxRetries}) in ${retryDelay}ms...`, {
+              mountNumber: currentMount
+            });
+            setTimeout(() => {
+              fetchingRef.current = false; // Reset fetch flag before retry
+              fetchWhiteLabelCss();
+            }, retryDelay);
+          } else {
+            console.log('❌ [CSS API] Max retries reached, stopping retry attempts', {
+              mountNumber: currentMount
+            });
+            setCssState({
+              cssConfig: null,
+              loading: false,
+              error: `Max retries reached: ${error.message}`,
+              isHostBuddyDomain: false,
+            });
+          }
+        }
       }
     };
 

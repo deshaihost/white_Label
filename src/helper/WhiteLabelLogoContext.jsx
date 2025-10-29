@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { getActiveToken } from './apiCore';
 
@@ -193,6 +193,14 @@ const preloadImage = (url) => {
 };
 
 export const WhiteLabelLogoProvider = ({ children }) => {
+  // Add request deduplication to prevent multiple simultaneous API calls
+  const fetchingRef = useRef(false);
+  const mountCountRef = useRef(0);
+  
+  // Add retry tracking to prevent infinite retries
+  const retryCountRef = useRef(0);
+  const maxRetries = 5;
+  
   const [logos, setLogos] = useState(() => {
     // Initialize with cached data if available
     const domainName = window.location.hostname;
@@ -236,9 +244,31 @@ export const WhiteLabelLogoProvider = ({ children }) => {
   });
 
   useEffect(() => {
+    // Increment mount counter for debugging multiple instances
+    mountCountRef.current += 1;
+    const currentMount = mountCountRef.current;
+    
+    console.log('🔍 [LOGO PROVIDER] WhiteLabelLogoProvider mounted', {
+      mountNumber: currentMount,
+      isFetching: fetchingRef.current,
+      timestamp: new Date().toISOString()
+    });
+
     const fetchWhiteLabelLogos = async () => {
+      // Prevent multiple simultaneous requests
+      if (fetchingRef.current) {
+        console.log('⏸️ [LOGO API] Request already in progress, skipping duplicate', {
+          mountNumber: currentMount,
+          timestamp: new Date().toISOString()
+        });
+        return;
+      }
+      
+      fetchingRef.current = true;
+      
       const startTime = performance.now();
       console.log('🚀 [LOGO API] Starting logo fetch process...', {
+        mountNumber: currentMount,
         timestamp: new Date().toISOString(),
         performanceStart: startTime
       });
@@ -251,6 +281,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
         console.log('🌐 [LOGO API] Domain detected:', {
           fullDomain,
           domainName,
+          mountNumber: currentMount,
           timestamp: new Date().toISOString()
         });
 
@@ -263,6 +294,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
           console.log('✅ [LOGO API] HostBuddy domain detected - using local logos', {
             domain: domainName,
             elapsed: `${elapsed.toFixed(2)}ms`,
+            mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
           setLogos({
@@ -272,6 +304,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             error: null,
             isHostBuddyDomain: true,
           });
+          fetchingRef.current = false; // Reset fetch flag
           return;
         }
 
@@ -288,8 +321,10 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             fullLogo: cached.fullLogo ? cached.fullLogo.substring(0, 50) + '...' : null,
             cacheCheckTime: `${cacheCheckElapsed.toFixed(2)}ms`,
             totalElapsed: `${totalElapsed.toFixed(2)}ms`,
+            mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
+          fetchingRef.current = false; // Reset fetch flag
           // Already set in initial state, just return
           return;
         }
@@ -297,6 +332,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
         console.log('❌ [LOGO API] Cache MISS - Will fetch from API', {
           domain: domainName,
           cacheCheckTime: `${cacheCheckElapsed.toFixed(2)}ms`,
+          mountNumber: currentMount,
           timestamp: new Date().toISOString()
         });
 
@@ -311,6 +347,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
         console.log('📡 [LOGO API] Sending API request...', {
           url: apiUrl,
           domain: domainName,
+          mountNumber: currentMount,
           timestamp: new Date().toISOString()
         });
 
@@ -357,6 +394,9 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             timestamp: new Date().toISOString()
           });
           
+          // Reset retry counter on success
+          retryCountRef.current = 0;
+          
           setLogos({
             logo: logoUrl,
             fullLogo: fullLogoUrl,
@@ -384,8 +424,11 @@ export const WhiteLabelLogoProvider = ({ children }) => {
               cache: `${cacheElapsed.toFixed(2)}ms`
             },
             note: 'Images will load in browser cache (non-blocking)',
+            mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
+          
+          fetchingRef.current = false; // Reset fetch flag
           
           // ⚡ Start preload in background (non-blocking)
           // This populates browser cache for future use
@@ -410,6 +453,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
           const totalElapsed = performance.now() - startTime;
           console.log('⚠️ [LOGO API] No custom logos available in response', {
             totalTime: `${totalElapsed.toFixed(2)}ms`,
+            mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
           setLogos({
@@ -419,6 +463,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             error: 'No logos available',
             isHostBuddyDomain: false,
           });
+          fetchingRef.current = false; // Reset fetch flag
         }
       } catch (error) {
         const totalElapsed = performance.now() - startTime;
@@ -426,21 +471,60 @@ export const WhiteLabelLogoProvider = ({ children }) => {
           error: error.message,
           errorType: error.name,
           totalTime: `${totalElapsed.toFixed(2)}ms`,
+          mountNumber: currentMount,
           timestamp: new Date().toISOString()
         });
         
-        // On error, check if it's hostbuddy domain
+        fetchingRef.current = false; // Reset fetch flag on error
+        
+        // On error for white label domains, don't fall back to HostBuddy styling
+        // Keep the loading state or show an error without changing isHostBuddyDomain
         const domainName = window.location.hostname;
         const isHostBuddy = domainName === 'hostbuddy.ai' || 
                            domainName === 'www.hostbuddy.ai';
         
-        setLogos({
-          logo: null,
-          fullLogo: null,
-          loading: false,
-          error: error.message,
-          isHostBuddyDomain: isHostBuddy,
-        });
+        if (isHostBuddy) {
+          setLogos({
+            logo: null,
+            fullLogo: null,
+            loading: false,
+            error: error.message,
+            isHostBuddyDomain: true,
+          });
+        } else {
+          // For white label domains, maintain loading state on network errors to prevent fallback to HostBuddy styling
+          setLogos({
+            logo: null,
+            fullLogo: null,
+            loading: true, // Keep loading to prevent fallback
+            error: error.message,
+            isHostBuddyDomain: false,
+          });
+          
+          // Retry after a delay for white label domains, with max retry limit
+          if (retryCountRef.current < maxRetries) {
+            retryCountRef.current += 1;
+            const retryDelay = Math.min(3000 * retryCountRef.current, 15000); // Exponential backoff, max 15s
+            console.log(`🔄 [LOGO API] Retrying logo fetch for white label domain after error (attempt ${retryCountRef.current}/${maxRetries}) in ${retryDelay}ms...`, {
+              mountNumber: currentMount
+            });
+            setTimeout(() => {
+              fetchingRef.current = false; // Reset fetch flag before retry
+              fetchWhiteLabelLogos();
+            }, retryDelay);
+          } else {
+            console.log('❌ [LOGO API] Max retries reached, stopping retry attempts', {
+              mountNumber: currentMount
+            });
+            setLogos({
+              logo: null,
+              fullLogo: null,
+              loading: false,
+              error: `Max retries reached: ${error.message}`,
+              isHostBuddyDomain: false,
+            });
+          }
+        }
       }
     };
 
