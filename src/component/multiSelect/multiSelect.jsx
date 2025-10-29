@@ -9,7 +9,9 @@ const MultiSelect = ({
   placeholder = 'Select options...',
   selectAllText = 'Select all',
   width = '250px',
-  customSelectStyles = null
+  customSelectStyles = null,
+  dropdownBgColor = '#0F1117',
+  hoverBgColor = '#01255e'
 }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const selectRef = useRef(null);
@@ -88,11 +90,11 @@ const MultiSelect = ({
             fontVariationSettings: "'opsz' 14",
             borderBottom: '1px solid #013280',
             cursor: 'pointer',
-            backgroundColor: '#0F1117',
+            backgroundColor: dropdownBgColor,
             transition: 'background-color 0.2s'
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#01255e'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0F1117'}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = hoverBgColor}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = dropdownBgColor}
         >
           {allSelected ? 'Deselect all' : 'Select all'}
         </div>

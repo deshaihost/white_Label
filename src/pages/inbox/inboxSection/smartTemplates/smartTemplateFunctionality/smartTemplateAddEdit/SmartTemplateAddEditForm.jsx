@@ -587,6 +587,8 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
             placeholder="Select properties..."
             selectAllText="Select all"
             customSelectStyles={getDynamicMultiSelectStyles()}
+            dropdownBgColor={cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117')}
+            hoverBgColor={cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e')}
           />
         </div>
       </div>
