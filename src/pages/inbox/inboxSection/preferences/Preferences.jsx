@@ -157,7 +157,8 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
   }
 
   const handleConfigSelectChange = (e) => {
-    if (e.target.value === "add") {
+    const value = e.target ? e.target.value : e.value; // Support both native select and React Select
+    if (value === "add") {
       const newConfigName = window.prompt("Enter a name for the new config");
       if (newConfigName) {
         const dailySchedules = {monday: ['00:00', '23:59'], tuesday: ['00:00', '23:59'], wednesday: ['00:00', '23:59'], thursday: ['00:00', '23:59'], friday: ['00:00', '23:59'], saturday: ['00:00', '23:59'], sunday: ['00:00', '23:59']};
@@ -166,8 +167,8 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
         setSelectedConfig(newConfigName);
       }
     } else {
-      setSelectedConfig(e.target.value);
-      const selectedProperties = localSettingsData[e.target.value]?.properties || [];
+      setSelectedConfig(value);
+      const selectedProperties = localSettingsData[value]?.properties || [];
       const selectedOptions = selectedProperties.map((propertyName) => ({ value: propertyName, label: propertyName }));
       setSelectedOptions(selectedOptions);
     }
@@ -305,28 +306,74 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               </Button>
             
               {options && (
-                <select 
-                  className="form-select text-white shadow-none setting-tab-select mb-3 mb-md-0" 
-                  style={{ 
-                    backgroundColor: "#0F1117", 
-                    backgroundImage: "",
-                    border: "1px solid #013280",
-                    borderRadius: "8px",
-                    padding: "10px 24px",
-                    fontSize: "15px",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontWeight: "600",
-                    minWidth: "140px"
-                  }} 
-                  aria-label="Default select example" 
-                  value={selectedConfig} 
-                  onChange={handleConfigSelectChange}
-                >
-                  {Object.keys(localSettingsData).map((key, index) => (
-                    <option key={index} value={key}>{key}</option>              
-                  ))}
-                  <option value="add">+ New Config</option>
-                </select>
+                <Select
+                  className="config-select"
+                  options={[
+                    ...Object.keys(localSettingsData).map((key) => ({ value: key, label: key })),
+                    { value: "add", label: "+ New Config" }
+                  ]}
+                  value={{ value: selectedConfig, label: selectedConfig }}
+                  onChange={(selected) => handleConfigSelectChange(selected)}
+                  styles={{
+                    control: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117'),
+                      border: '1px solid #013280',
+                      borderRadius: '8px',
+                      padding: '2px 8px',
+                      fontSize: '15px',
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: '600',
+                      minWidth: '140px',
+                      boxShadow: state.isFocused ? '0 0 0 1px #3e88f7' : 'none',
+                      '&:hover': {
+                        borderColor: '#013280'
+                      }
+                    }),
+                    menu: (provided) => ({
+                      ...provided,
+                      backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117'),
+                      border: '2px solid #013280',
+                      borderRadius: '8px',
+                      boxShadow: '0 0 20px rgba(30, 75, 158, 0.2)',
+                      marginTop: '8px'
+                    }),
+                    menuList: (provided) => ({
+                      ...provided,
+                      padding: '0',
+                      backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117')
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: state.isFocused || state.isSelected 
+                        ? (cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e'))
+                        : 'transparent',
+                      color: '#fff',
+                      fontSize: '15px',
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: '600',
+                      padding: '10px 16px',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        backgroundColor: cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e')
+                      }
+                    }),
+                    singleValue: (provided) => ({
+                      ...provided,
+                      color: '#fff',
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: '600'
+                    }),
+                    indicatorSeparator: () => ({ display: 'none' }),
+                    dropdownIndicator: (provided) => ({
+                      ...provided,
+                      color: '#fff',
+                      '&:hover': {
+                        color: '#3e88f7'
+                      }
+                    })
+                  }}
+                />
               )}
             </div>
 

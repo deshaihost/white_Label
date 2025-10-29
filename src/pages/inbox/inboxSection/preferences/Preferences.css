@@ -59,26 +59,50 @@
 
 /* Select dropdown hover state */
 .conversation-settings-inbox .setting-tab-select:hover {
-  background-color: #01255e !important;
+  background-color: var(--white-label-background-dropdown, #0F1117) !important;
   transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .conversation-settings-inbox .setting-tab-select:focus {
-  background-color: #01255e !important;
+  background-color: var(--white-label-background-dropdown, #0F1117) !important;
   outline: none;
   box-shadow: none !important;
 }
 
 /* Select dropdown options styling */
 .conversation-settings-inbox .setting-tab-select option {
-  background-color: #0F1117 !important;
+  background-color: var(--white-label-background-dropdown, #0F1117) !important;
+  background: var(--white-label-background-dropdown, #0F1117) !important;
   color: #fff !important;
   padding: 10px 16px !important;
 }
 
+/* Hover state for options */
 .conversation-settings-inbox .setting-tab-select option:hover {
-  background-color: #01255e !important;
+  background-color: var(--white-label-background-hover, #01255e) !important;
+  background: var(--white-label-background-hover, #01255e) !important;
+  color: #fff !important;
   transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.conversation-settings-inbox .setting-tab-select option:focus {
+  background-color: var(--white-label-background-hover, #01255e) !important;
+  background: var(--white-label-background-hover, #01255e) !important;
+  color: #fff !important;
+}
+
+/* Selected option default state */
+.conversation-settings-inbox .setting-tab-select option:checked {
+  background-color: var(--white-label-background-dropdown, #0F1117) !important;
+  background: var(--white-label-background-dropdown, #0F1117) !important;
+  color: #fff !important;
+}
+
+/* Selected option when hovered */
+.conversation-settings-inbox .setting-tab-select option:checked:hover {
+  background-color: var(--white-label-background-hover, #01255e) !important;
+  background: var(--white-label-background-hover, #01255e) !important;
+  color: #fff !important;
 }
 
 /* Direct Contact input styling */
