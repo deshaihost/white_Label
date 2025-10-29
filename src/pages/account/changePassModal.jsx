@@ -5,9 +5,11 @@ import React, { useState } from "react";
 import ToastHandle from "../../helper/ToastMessage";
 import axios from 'axios';
 import Loader from "../../helper/Loader";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 const ChangePassModal = ({ show, handleClose }) => {
   
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -55,31 +57,62 @@ const ChangePassModal = ({ show, handleClose }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} size="md" aria-labelledby="contained-modal-title-vcenter" centered className="contact-modal">
+    <Modal show={show} onHide={handleClose} size="md" aria-labelledby="contained-modal-title-vcenter" centered className="contact-modal change-password-modal">
       <Modal.Header closeButton>
         <div>
           <Modal.Title id="contained-modal-title-vcenter">Change Password</Modal.Title>
           <p style={{ marginTop: '15px', fontSize: '16px', color: 'white', textAlign: 'center' }}>Please enter your current password and the new password you would like to set.</p>
         </div>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body 
+        style={{
+          backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.secondary || '#17191f') : '#17191f'
+        }}
+      >
 
         <Form onSubmit={onSubmit}>
 
           <div className="input-group">
-            <Form.Control type="password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} maxLength="100" required />
+            <Form.Control 
+              type="password" 
+              value={oldPassword} 
+              onChange={(e) => setOldPassword(e.target.value)} 
+              maxLength="100" 
+              required
+              style={{
+                backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.input || '#0F1117') : '#0F1117'
+              }}
+            />
             <Form.Label>Old Password</Form.Label>
           </div>
 
           <div className="my-3">
             <div className="input-group">
-              <Form.Control type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} maxLength="100" required />
+              <Form.Control 
+                type="password" 
+                value={newPassword} 
+                onChange={(e) => setNewPassword(e.target.value)} 
+                maxLength="100" 
+                required
+                style={{
+                  backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.input || '#0F1117') : '#0F1117'
+                }}
+              />
               <Form.Label>New Password</Form.Label>
             </div>
           </div>
 
           <div className="input-group">
-            <Form.Control type="password" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} maxLength="100" required />
+            <Form.Control 
+              type="password" 
+              value={confirmNewPassword} 
+              onChange={(e) => setConfirmNewPassword(e.target.value)} 
+              maxLength="100" 
+              required
+              style={{
+                backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.input || '#0F1117') : '#0F1117'
+              }}
+            />
             <Form.Label>Confirm New Password</Form.Label>
           </div>
 

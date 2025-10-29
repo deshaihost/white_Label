@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import '../../pages/account/account.css';
+import { useWhiteLabelCss } from '../../helper/WhiteLabelCssContext';
 
 const ConfirmationModal = ({ 
   show, 
@@ -14,14 +15,21 @@ const ConfirmationModal = ({
   loading = false,
   icon = null
 }) => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  
   return (
     <Modal 
       show={show} 
       onHide={onClose}
       centered
-      className={isDanger ? "confirmation-modal danger-modal" : "confirmation-modal"}
+      className={isDanger ? "confirmation-modal danger-modal delete-account-modal" : "confirmation-modal account-confirmation-modal"}
     >
-      <Modal.Body className="confirmation-modal-body">
+      <Modal.Body 
+        className="confirmation-modal-body"
+        style={{
+          backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.secondary || '#17191f') : '#17191f'
+        }}
+      >
         <div className="confirmation-modal-header">
           <h3 className="confirmation-modal-title">
             {icon}

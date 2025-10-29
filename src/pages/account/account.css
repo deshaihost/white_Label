@@ -726,8 +726,9 @@ input#multi-search {
    ======================================== */
 
 /* Change Password Modal */
-.contact-modal .modal-content {
-    background-color: #17191f !important;
+.contact-modal .modal-content,
+.change-password-modal .modal-content {
+    background-color: var(--white-label-background-secondary, #17191f) !important;
     border: 1px solid #3e88f7 !important;
     border-radius: 12px !important;
     box-shadow: 0 0 30px rgba(62, 136, 247, 0.2) !important;
@@ -735,14 +736,16 @@ input#multi-search {
     margin: 0 auto;
 }
 
-.contact-modal .modal-header {
+.contact-modal .modal-header,
+.change-password-modal .modal-header {
     background-color: transparent !important;
     border-bottom: none !important;
     padding: 24px 24px 0 24px !important;
     position: relative;
 }
 
-.contact-modal .modal-header .btn-close {
+.contact-modal .modal-header .btn-close,
+.change-password-modal .modal-header .btn-close {
     position: absolute;
     right: 16px;
     top: 16px;
@@ -756,11 +759,13 @@ input#multi-search {
     transition: color 0.3s ease;
 }
 
-.contact-modal .modal-header .btn-close:hover {
+.contact-modal .modal-header .btn-close:hover,
+.change-password-modal .modal-header .btn-close:hover {
     color: white !important;
 }
 
-.contact-modal .modal-title {
+.contact-modal .modal-title,
+.change-password-modal .modal-title {
     color: white !important;
     font-size: 20px !important;
     font-family: 'DM Sans', sans-serif !important;
@@ -771,7 +776,8 @@ input#multi-search {
     margin-bottom: 8px !important;
 }
 
-.contact-modal .modal-header p {
+.contact-modal .modal-header p,
+.change-password-modal .modal-header p {
     color: #a6a9b2 !important;
     font-size: 13px !important;
     font-family: 'DM Sans', sans-serif !important;
@@ -781,19 +787,22 @@ input#multi-search {
     margin: 0 !important;
 }
 
-.contact-modal .modal-body {
+.contact-modal .modal-body,
+.change-password-modal .modal-body {
     padding: 24px !important;
-    background-color: transparent !important;
+    background-color: var(--white-label-background-secondary, #17191f) !important;
 }
 
 /* Modal Form Inputs */
-.contact-modal .input-group {
+.contact-modal .input-group,
+.change-password-modal .input-group {
     position: relative;
     margin-bottom: 16px;
 }
 
-.contact-modal .input-group .form-control {
-    background-color: var(--white-label-background-primary, #0F1117) !important;
+.contact-modal .input-group .form-control,
+.change-password-modal .input-group .form-control {
+    background-color: var(--white-label-background-input, #0F1117) !important;
     border: 1px solid #3e88f7 !important;
     border-radius: 8px !important;
     color: white !important;
@@ -807,15 +816,17 @@ input#multi-search {
     transition: border-color 0.3s ease !important;
 }
 
-.contact-modal .input-group .form-control:focus {
-    background-color: var(--white-label-background-primary, #0F1117) !important;
+.contact-modal .input-group .form-control:focus,
+.change-password-modal .input-group .form-control:focus {
+    background-color: var(--white-label-background-input, #0F1117) !important;
     border-color: #74A9F7 !important;
     box-shadow: 0 0 15px rgba(62, 136, 247, 0.2) !important;
     color: white !important;
     outline: none !important;
 }
 
-.contact-modal .input-group .form-label {
+.contact-modal .input-group .form-label,
+.change-password-modal .input-group .form-label {
     position: absolute;
     left: 16px;
     top: 12px;
@@ -826,20 +837,24 @@ input#multi-search {
     font-variation-settings: 'opsz' 14 !important;
     pointer-events: none;
     transition: all 0.3s ease;
-    background-color: var(--white-label-background-primary, #0F1117);
+    background-color: transparent !important;
     padding: 0 4px;
 }
 
 .contact-modal .input-group .form-control:focus ~ .form-label,
-.contact-modal .input-group .form-control:not(:placeholder-shown) ~ .form-label {
+.contact-modal .input-group .form-control:not(:placeholder-shown) ~ .form-label,
+.change-password-modal .input-group .form-control:focus ~ .form-label,
+.change-password-modal .input-group .form-control:not(:placeholder-shown) ~ .form-label {
     top: -10px;
     left: 12px;
     font-size: 12px;
     color: #3e88f7 !important;
+    background-color: transparent !important;
 }
 
 /* Modal Buttons */
-.contact-modal .bg_theme_btn {
+.contact-modal .bg_theme_btn,
+.change-password-modal .bg_theme_btn {
     background-color: #3e88f7 !important;
     color: white !important;
     border: none !important;
@@ -856,11 +871,13 @@ input#multi-search {
     min-width: 150px;
 }
 
-.contact-modal .bg_theme_btn:hover {
+.contact-modal .bg_theme_btn:hover,
+.change-password-modal .bg_theme_btn:hover {
     background-color: #74A9F7 !important;
 }
 
-.contact-modal .bg_theme_btn:disabled {
+.contact-modal .bg_theme_btn:disabled,
+.change-password-modal .bg_theme_btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
@@ -870,19 +887,22 @@ input#multi-search {
    ======================================== */
 
 /* Reauthenticate PMS Modal */
-.modal-content {
-    background-color: #17191f !important;
+.modal-content,
+.reauthenticate-pms-modal .modal-content {
+    background-color: var(--white-label-background-secondary, #17191f) !important;
     border: 1px solid #3e88f7 !important;
     border-radius: 12px !important;
     box-shadow: 0 0 30px rgba(62, 136, 247, 0.2) !important;
 }
 
-.modal-body {
+.modal-body,
+.reauthenticate-pms-modal .modal-body {
     padding: 24px !important;
-    background-color: transparent !important;
+    background-color: var(--white-label-background-secondary, #17191f) !important;
 }
 
-.modal-body h3 {
+.modal-body h3,
+.reauthenticate-pms-modal .modal-body h3 {
     color: white !important;
     font-size: 18px !important;
     font-family: 'DM Sans', sans-serif !important;
@@ -892,12 +912,14 @@ input#multi-search {
     margin-bottom: 16px !important;
 }
 
-.modal-body hr {
+.modal-body hr,
+.reauthenticate-pms-modal .modal-body hr {
     border-color: rgba(62, 136, 247, 0.2) !important;
     margin: 16px 0 !important;
 }
 
-.modal-body p {
+.modal-body p,
+.reauthenticate-pms-modal .modal-body p {
     color: #a6a9b2 !important;
     font-size: 14px !important;
     font-family: 'DM Sans', sans-serif !important;
@@ -907,7 +929,8 @@ input#multi-search {
     line-height: 1.6 !important;
 }
 
-.modal-body .btn-primary {
+.modal-body .btn-primary,
+.reauthenticate-pms-modal .modal-body .btn-primary {
     background-color: #3e88f7 !important;
     border: none !important;
     color: white !important;
@@ -921,17 +944,20 @@ input#multi-search {
     transition: background-color 0.3s ease !important;
 }
 
-.modal-body .btn-primary:hover {
+.modal-body .btn-primary:hover,
+.reauthenticate-pms-modal .modal-body .btn-primary:hover {
     background-color: #74A9F7 !important;
 }
 
-.modal-body a {
+.modal-body a,
+.reauthenticate-pms-modal .modal-body a {
     color: #3e88f7 !important;
     text-decoration: underline !important;
     transition: color 0.3s ease !important;
 }
 
-.modal-body a:hover {
+.modal-body a:hover,
+.reauthenticate-pms-modal .modal-body a:hover {
     color: #74A9F7 !important;
 }
 
@@ -939,8 +965,10 @@ input#multi-search {
    Confirmation Modals (Disconnect PMS, Delete Account, etc.)
    ======================================== */
 
-.confirmation-modal .modal-content {
-    background-color: #17191f !important;
+.confirmation-modal .modal-content,
+.account-confirmation-modal .modal-content,
+.delete-account-modal .modal-content {
+    background-color: var(--white-label-background-secondary, #17191f) !important;
     border: 1px solid #3e88f7 !important;
     border-radius: 12px !important;
     box-shadow: 0 0 30px rgba(62, 136, 247, 0.2) !important;
@@ -948,14 +976,17 @@ input#multi-search {
     margin: auto !important;
 }
 
-.confirmation-modal.danger-modal .modal-content {
+.confirmation-modal.danger-modal .modal-content,
+.delete-account-modal .modal-content {
     border: 2px solid #7f1d1d !important;
     box-shadow: 0 0 30px rgba(127, 29, 29, 0.3) !important;
 }
 
-.confirmation-modal-body {
+.confirmation-modal-body,
+.account-confirmation-modal .confirmation-modal-body,
+.delete-account-modal .confirmation-modal-body {
     padding: 24px !important;
-    background-color: transparent !important;
+    background-color: var(--white-label-background-secondary, #17191f) !important;
 }
 
 .confirmation-modal-header {
