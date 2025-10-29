@@ -31,6 +31,31 @@
     border-radius: 8px !important;
 }
 
+/* Send If Modal Secondary Background Color */
+.send-if-modal-body {
+    background-color: var(--white-label-background-secondary, inherit) !important;
+}
+
+/* Send If Modal Content Background Color - Targets the React Bootstrap modal-content */
+.send-if-modal .modal-content {
+    background-color: var(--white-label-background-secondary, inherit) !important;
+}
+
+/* Send If Modal Header Background Color */
+.send-if-modal .modal-header {
+    background-color: var(--white-label-background-secondary, inherit) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Alternative targeting for broader browser support */
+.modal-content .send-if-modal-body {
+    background-color: var(--white-label-background-secondary, inherit) !important;
+}
+
+.modal-content:has(.send-if-modal-body) {
+    background-color: var(--white-label-background-secondary, inherit) !important;
+}
+
 .modal_addition_des_button{
     max-width: 100%;
     padding: 13px 0px;
