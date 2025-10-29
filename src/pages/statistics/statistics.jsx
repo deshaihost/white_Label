@@ -165,7 +165,7 @@ const StatisticsPage = () => {
       className="statistics-page"
       style={{
         background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117',
-        '--white-label-input': !cssLoading ? (cssConfig?.css_data?.background?.secondary || '#17191F') : '#17191F',
+        '--white-label-input': !cssLoading ? (cssConfig?.css_data?.background?.input || '#0F1117') : '#0F1117',
         '--white-label-input-text': !cssLoading ? (cssConfig?.css_data?.text?.primary || '#FFF') : '#FFF'
       }}
     >
@@ -204,9 +204,6 @@ const StatisticsPage = () => {
                   value={selectedStartDate} 
                   onChange={(e) => setSelectedStartDate(e.target.value)} 
                   max={today}
-                  style={{
-                    color: !cssLoading ? (cssConfig?.css_data?.text?.primary || '#FFF') : '#FFF'
-                  }}
                 />
                 <label className="date-label">End Date</label>
                 <input 
@@ -216,9 +213,6 @@ const StatisticsPage = () => {
                   value={selectedEndDate} 
                   onChange={(e) => setSelectedEndDate(e.target.value)} 
                   max={today}
-                  style={{
-                    color: !cssLoading ? (cssConfig?.css_data?.text?.primary || '#FFF') : '#FFF'
-                  }}
                 />
               </>
             ) : (
