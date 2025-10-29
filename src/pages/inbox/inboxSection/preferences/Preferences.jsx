@@ -206,6 +206,97 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
   const options = allPropertyNamesList ? allPropertyNamesList.map((propertyName) => ({ value:propertyName, label:propertyName })) : null;
 
+  // Create dynamic styles with white label dropdown and hover colors for properties select
+  const getDynamicPropertySelectStyles = () => {
+    const dropdownBgColor = cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117');
+    const hoverColor = cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e');
+
+    return {
+      control: (provided, state) => ({
+        ...provided,
+        backgroundColor: dropdownBgColor,
+        border: `1px solid ${state.isFocused ? '#3e88f7' : '#013280'}`,
+        borderRadius: '8px',
+        padding: '4px 8px',
+        fontSize: '15px',
+        fontFamily: "'DM Sans', sans-serif",
+        fontWeight: '400',
+        boxShadow: state.isFocused ? '0 0 0 1px #3e88f7' : 'none',
+        '&:hover': {
+          borderColor: '#3e88f7'
+        }
+      }),
+      menu: (provided) => ({
+        ...provided,
+        backgroundColor: dropdownBgColor,
+        border: '2px solid #013280',
+        borderRadius: '8px',
+        boxShadow: '0 0 20px rgba(30, 75, 158, 0.2)',
+        marginTop: '8px'
+      }),
+      menuList: (provided) => ({
+        ...provided,
+        padding: '0',
+        backgroundColor: dropdownBgColor,
+        maxHeight: '300px'
+      }),
+      option: (provided, state) => ({
+        ...provided,
+        backgroundColor: state.isFocused || state.isSelected ? hoverColor : 'transparent',
+        color: '#fff',
+        fontSize: '15px',
+        fontFamily: "'DM Sans', sans-serif",
+        padding: '10px 16px',
+        cursor: 'pointer',
+        '&:hover': {
+          backgroundColor: hoverColor
+        }
+      }),
+      multiValue: (provided) => ({
+        ...provided,
+        backgroundColor: '#3e88f7',
+        borderRadius: '6px',
+        color: '#fff'
+      }),
+      multiValueLabel: (provided) => ({
+        ...provided,
+        color: '#fff',
+        fontFamily: "'DM Sans', sans-serif"
+      }),
+      multiValueRemove: (provided) => ({
+        ...provided,
+        color: '#fff',
+        '&:hover': {
+          backgroundColor: '#5a9bff',
+          color: '#fff'
+        }
+      }),
+      placeholder: (provided) => ({
+        ...provided,
+        color: '#676A73',
+        fontFamily: "'DM Sans', sans-serif"
+      }),
+      singleValue: (provided) => ({
+        ...provided,
+        color: '#fff',
+        fontFamily: "'DM Sans', sans-serif"
+      }),
+      indicatorSeparator: () => ({ display: 'none' }),
+      dropdownIndicator: (provided) => ({
+        ...provided,
+        color: '#a6a9b2',
+        '&:hover': {
+          color: '#3e88f7'
+        }
+      }),
+      input: (provided) => ({
+        ...provided,
+        color: '#fff',
+        fontFamily: "'DM Sans', sans-serif"
+      })
+    };
+  };
+
   const handleChange = (selected) => {
     setSelectedOptions(selected || []);
     if (selectedConfig !== "default") { // should always be true, but just to be sure
@@ -386,7 +477,21 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                 <>
                   <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p>
                   <div ref={selectRef}>
-                    <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
+                    <Select 
+                      className="custom-select property_Custom_Select" 
+                      isMulti 
+                      options={options} 
+                      value={selectedOptions} 
+                      onChange={handleChange} 
+                      placeholder="Select properties..." 
+                      components={{ ValueContainer, MultiValueContainer: () => null }} 
+                      hideSelectedOptions={false} 
+                      closeMenuOnSelect={false} 
+                      styles={getDynamicPropertySelectStyles()} 
+                      menuIsOpen={menuIsOpen} 
+                      onMenuOpen={() => setMenuIsOpen(true)} 
+                      onMenuClose={() => setMenuIsOpen(false)}
+                    />
                   </div>
                   <a href="#" style={{marginTop:'10px', fontSize:'16px', display:'block', textAlign:'center'}} onClick={handleScheduleClick}>Configure Timing</a>
                 </>
