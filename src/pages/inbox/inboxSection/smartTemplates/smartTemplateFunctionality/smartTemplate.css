@@ -6,6 +6,31 @@
 .addition_des .multiselect-container .optionListContainer {
     background: #020d29
 }
+
+/* Input Color Functionality for Send If Modal */
+.addition_des input[type="number"],
+.addition_des input[type="text"],
+.addition_des input[type="email"],
+.addition_des input[type="password"],
+.addition_des input[type="search"],
+.addition_des input[type="tel"],
+.addition_des input[type="url"],
+.addition_des input[type="date"],
+.addition_des input[type="datetime-local"],
+.addition_des input[type="time"],
+.addition_des select,
+.addition_des .form-control,
+.addition_des .form-select {
+    background-color: var(--white-label-background-input, #0F1117) !important;
+    border-radius: 8px !important;
+}
+
+/* Ensure Bootstrap overrides are handled */
+.addition_des .bg-dark {
+    background-color: var(--white-label-background-input, #0F1117) !important;
+    border-radius: 8px !important;
+}
+
 .modal_addition_des_button{
     max-width: 100%;
     padding: 13px 0px;
