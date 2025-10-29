@@ -8,7 +8,8 @@ const MultiSelect = ({
   setSelectedOptions,
   placeholder = 'Select options...',
   selectAllText = 'Select all',
-  width = '250px'
+  width = '250px',
+  customSelectStyles = null
 }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const selectRef = useRef(null);
@@ -157,7 +158,7 @@ const MultiSelect = ({
             }}
             hideSelectedOptions={false}
             closeMenuOnSelect={false}
-            styles={customStyles(width)}
+            styles={customSelectStyles || customStyles(width)}
             menuIsOpen={menuIsOpen}
             onMenuClose={() => setMenuIsOpen(false)}
           />

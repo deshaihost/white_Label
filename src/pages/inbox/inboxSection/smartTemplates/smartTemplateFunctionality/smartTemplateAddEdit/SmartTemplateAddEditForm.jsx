@@ -14,10 +14,8 @@ import MultiSelect from "../../../../../../component/multiSelect/multiSelect";
 const InboxUpgrade = React.lazy(() => import("../../../inbox/mildeSection/inbox_Upgrade/InboxUpgrade.js"));
 
 const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, hasCleaningManagementIntegration, minut_user_id, userData, smartAllData}) => {
-  const { type, smartTemplateData } = addEditSmart;
-  
-  // White label CSS context for dynamic styling
   const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  const { type, smartTemplateData } = addEditSmart;
   
   const { triggers, conditions } = dataInput;
   const { minutTriggers, minutConditions } = minutDataInput;
@@ -194,6 +192,122 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   // ------- Property multi select (TODO: move this to its own component & file) -------
   const [selectedOptions, setSelectedOptions] = useState([]);
   const options = allPropertyNamesList.map((propertyName) => ({ value: propertyName, label: propertyName }));
+  
+  // Create dynamic styles with white label dropdown and hover colors
+  const getDynamicMultiSelectStyles = () => {
+    const dropdownBgColor = cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || 'var(--white-label-background-dropdown, #0F1117)');
+    const hoverColor = cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || 'var(--white-label-background-hover, #01255e)');
+    
+    return {
+      control: (provided, state) => ({
+        ...provided,
+        border: `1px solid ${state.isFocused ? '#3e88f7' : '#013280'}`,
+        borderRadius: '8px',
+        color: '#a6a9b2',
+        fontSize: '16px',
+        fontWeight: '400',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14",
+        backgroundColor: dropdownBgColor,
+        display: 'flex',
+        overflowX: 'auto',
+        width: '250px',
+        padding: '6px 12px',
+        boxShadow: state.isFocused ? '0 0 0 1px rgba(62, 136, 247, 0.5)' : 'none',
+        transition: 'all 0.2s',
+        '&:hover': {
+          borderColor: '#3e88f7'
+        }
+      }),
+      menu: (provided) => ({
+        ...provided,
+        backgroundColor: dropdownBgColor,
+        border: '2px solid #013280',
+        borderRadius: '8px',
+        boxShadow: '0 0 20px rgba(30, 75, 158, 0.2)',
+        marginTop: '8px',
+        overflow: 'hidden'
+      }),
+      menuList: (provided) => ({
+        ...provided,
+        maxHeight: '450px',
+        padding: '0',
+        backgroundColor: dropdownBgColor
+      }),
+      option: (provided, state) => ({
+        ...provided,
+        fontSize: '15px',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14",
+        padding: '12px 16px',
+        color: '#fff',
+        backgroundColor: state.isFocused || state.isSelected ? hoverColor : 'transparent',
+        transition: 'background-color 0.2s',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        '&:hover': {
+          backgroundColor: hoverColor,
+        },
+      }),
+      singleValue: (provided) => ({
+        ...provided,
+        color: '#a6a9b2',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14"
+      }),
+      multiValue: (provided) => ({
+        ...provided,
+        backgroundColor: '#3e88f7',
+        borderRadius: '6px',
+        color: '#fff',
+        display: 'inline-flex',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14"
+      }),
+      multiValueLabel: (provided) => ({
+        ...provided,
+        color: '#fff',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14"
+      }),
+      multiValueRemove: (provided) => ({
+        ...provided,
+        color: '#fff',
+        ':hover': {
+          backgroundColor: '#5a9bff',
+          color: '#fff',
+        }
+      }),
+      placeholder: (provided) => ({
+        ...provided,
+        color: '#676A73',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14"
+      }),
+      dropdownIndicator: (provided) => ({
+        ...provided,
+        color: '#a6a9b2',
+        '&:hover': {
+          color: '#3e88f7'
+        }
+      }),
+      indicatorSeparator: () => ({
+        display: 'none'
+      }),
+      input: (provided) => ({
+        ...provided,
+        color: '#fff',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14"
+      }),
+      valueContainer: (provided) => ({
+        ...provided,
+        padding: '0'
+      })
+    };
+  };
 
   // When the data structure populates, update the selected options
   useEffect(() => {
@@ -472,6 +586,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
             }}
             placeholder="Select properties..."
             selectAllText="Select all"
+            customSelectStyles={getDynamicMultiSelectStyles()}
           />
         </div>
       </div>
