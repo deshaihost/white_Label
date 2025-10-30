@@ -231,7 +231,7 @@
 .settings-integrations .webhook-data-row {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr 1fr;
-  border-bottom: 1px solid #013280;
+  border-bottom: 1px solid var(--white-label-border-primary, #013280);
   background-color: var(--white-label-background-secondary, #17191F);
   transition: background-color 0.2s ease;
 }
@@ -252,7 +252,7 @@
 .settings-integrations .webhook-add-row {
   display: grid;
   grid-template-columns: 1fr;
-  border-bottom: 1px solid #013280;
+  border-bottom: 1px solid var(--white-label-border-primary, #013280);
   background-color: var(--white-label-background-secondary, #17191F);
 }
 
@@ -269,7 +269,7 @@
 }
 
 .settings-integrations .webhook-cell-bordered {
-  border-left: 1px solid #013280;
+  border-left: 1px solid var(--white-label-border-primary, #013280);
 }
 
 .settings-integrations .webhook-cell-full {
