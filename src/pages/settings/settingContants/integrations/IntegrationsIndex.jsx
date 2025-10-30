@@ -31,10 +31,12 @@ import TidyLogo from './Icons/Tidy Logo.svg';
 import HostfullyTileIcon from './Icons/Hostfully_tile_icon.svg';
 import MountLogoBlack from './Icons/Mount Logo black.svg';
 import NotionLogo from './Icons/Notion Logo.svg';
+import { useWhiteLabelCss } from '../../../../helper/WhiteLabelCssContext';
 
 const IntegrationsIndex = (ApiUserData) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const turnoUserId = Boolean(ApiUserData?.ApiUserData?.turno_user_id);
   const minutUserId = Boolean(ApiUserData?.ApiUserData?.minut_user_id);
   const tidyUserId = Boolean(ApiUserData?.ApiUserData?.tidy_user_id);
@@ -635,9 +637,26 @@ const IntegrationsIndex = (ApiUserData) => {
                     {addWebhookError && <div style={{ color: 'red', marginTop: '8px' }}>{addWebhookError}</div>}
                     <span className="d-flex justify-content-center">
                       {!addingWebhook ? (
-                        <Link to="#" className="text-link" style={{ marginTop: '20px', textAlign: 'center' }} onClick={addWebhook}>
+                        <button 
+                          className="webhook-submit-btn"
+                          style={{ 
+                            marginTop: '20px',
+                            padding: '10px 40px',
+                            backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+                            borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            fontFamily: "'DM Sans', sans-serif",
+                            transition: 'background-color 0.2s ease'
+                          }} 
+                          onClick={(e) => { e.preventDefault(); addWebhook(); }}
+                        >
                           Submit
-                        </Link>
+                        </button>
                       ) : (
                         <Loader />
                       )}

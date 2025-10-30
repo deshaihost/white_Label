@@ -223,7 +223,7 @@ const StatisticsPage = () => {
           <div className="inputs-container">
             <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={getDynamicSelectStyles()} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false}/>
           </div>
-          <button className="apply-button" onClick={handleApplyFilters}>Apply</button>
+          <button className="apply-button" style={{ backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7' }} onClick={handleApplyFilters}>Apply</button>
         </div>
       </div>
 

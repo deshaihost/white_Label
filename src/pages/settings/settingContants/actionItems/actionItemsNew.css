@@ -171,7 +171,7 @@
 .action-items-add-btn {
   padding: 8px 32px;
   border-radius: 4px;
-  background-color: #3e88f7;
+  background-color: var(--white-label-interactive-button_background, #3e88f7);
   border: none;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;
@@ -336,7 +336,7 @@
   gap: 8px;
   padding: 8px 24px;
   border-radius: 4px;
-  background-color: #3e88f7;
+  background-color: var(--white-label-interactive-button_background, #3e88f7);
   border: none;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;

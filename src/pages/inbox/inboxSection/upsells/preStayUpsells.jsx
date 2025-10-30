@@ -213,8 +213,8 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
             <Button 
               className="text-nowrap fs-14" 
               style={{
-                backgroundColor: '#3e88f7',
-                borderColor: '#3e88f7',
+                backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+                borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
                 borderRadius: '5px',
                 borderWidth: '1px',
                 borderStyle: 'solid',
@@ -228,8 +228,8 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
             <Button 
               className="text-nowrap fs-14" 
               style={{
-                backgroundColor: '#0F1117',
-                borderColor: '#013280',
+                backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#0F1117',
+                borderColor: cssConfig?.css_data?.borders?.primary || '#013280',
                 borderRadius: '5px',
                 borderWidth: '1px',
                 borderStyle: 'solid',
@@ -598,7 +598,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
           {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
             <button
               className="btn btn-link"
-              style={{ color: 'rgb(20, 110, 245)', borderColor: '#013280', padding: '8px 16px', borderRadius: '10px' }}
+              style={{ color: cssConfig?.css_data?.interactive?.button_background || 'rgb(20, 110, 245)', borderColor: cssConfig?.css_data?.borders?.primary || '#013280', padding: '8px 16px', borderRadius: '10px' }}
               onClick={() => setShowPersonalizeCustomize(true)}
             >
               Customize
@@ -620,7 +620,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
 
       <div className="row mt-5">
         <div className="col-lg-12">
-          <Button className="btn-primary fs-16 px-4" style={{ borderRadius: '10px' }} onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
+          <Button className="btn-primary fs-16 px-4" style={{ backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', borderRadius: '10px' }} onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
             Save Upsells
           </Button>
         </div>

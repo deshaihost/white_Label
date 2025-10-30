@@ -1460,9 +1460,9 @@
 }
 
 .btn-primary {
-  background: #146EF5;
+  background: var(--white-label-interactive-button_background, #146EF5);
   color: white;
-  border-color: #146EF5;
+  border-color: var(--white-label-interactive-button_background, #146EF5);
 }
 
 .btn-primary:hover {

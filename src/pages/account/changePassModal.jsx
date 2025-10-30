@@ -117,7 +117,7 @@ const ChangePassModal = ({ show, handleClose }) => {
           </div>
 
           <div className="text-center">
-            <Button type="submit" className="bg_theme_btn" style={{ marginTop: '20px' }} disabled={changePasswordApiLoading}>{!changePasswordApiLoading ? "Change Password" : <Loader />}</Button>
+            <Button type="submit" className="bg_theme_btn" style={{ backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', marginTop: '20px' }} disabled={changePasswordApiLoading}>{!changePasswordApiLoading ? "Change Password" : <Loader />}</Button>
           </div>
 
         </Form>

@@ -42,6 +42,10 @@ const ConfirmationModal = ({
         <div className="confirmation-modal-footer">
           <button 
             className="secondary-button"
+            style={{ 
+              backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+              borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7'
+            }}
             onClick={onClose}
             disabled={loading}
           >
@@ -49,6 +53,10 @@ const ConfirmationModal = ({
           </button>
           <button 
             className={isDanger ? "danger-button" : "bg_theme_btn"}
+            style={!isDanger ? { 
+              backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+              borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7'
+            } : {}}
             onClick={onConfirm}
             disabled={loading}
           >

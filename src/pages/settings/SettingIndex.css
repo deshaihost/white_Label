@@ -23,6 +23,7 @@
   padding: 10px 40px !important;
   font-size: 16px !important;
   margin-top: 0 !important;
+  background: var(--white-label-interactive-button_background, #01255e) !important;
 }
 .setting_tab_data_inner {
   padding-right: 10px;

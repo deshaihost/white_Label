@@ -12,10 +12,12 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import ChangePassModal from './changePassModal';
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 const UserInformationSection = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
 
   const [formData, setFormData] = useState({ firstName: '', lastName: '', phone: '', email: '', oldPassword: '', newPassword: '', confirmPassword: '' });
   const [errors, setErrors] = useState({});
@@ -173,7 +175,7 @@ const UserInformationSection = () => {
           </div>
 
           <div className="button-container">
-            <button type="button" className="secondary-button show_password_fields" onClick={() => setShowChangePassModal(true)}>
+            <button type="button" className="secondary-button show_password_fields" style={{ backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7' }} onClick={() => setShowChangePassModal(true)}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
                 <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>

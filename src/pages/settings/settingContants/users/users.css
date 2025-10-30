@@ -574,7 +574,7 @@
   gap: 8px;
   padding: 12px 32px;
   border-radius: 12px;
-  background-color: #3e88f7;
+  background-color: var(--white-label-interactive-button_background, #3e88f7);
   border: none;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;
@@ -587,8 +587,7 @@
 }
 
 .users-modal-submit-btn:hover:not(:disabled) {
-  background-color: #74A9F7;
-  transform: scale(1.05);
+  /* Hover effect removed */
 }
 
 .users-modal-submit-btn:disabled {

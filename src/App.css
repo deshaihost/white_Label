@@ -380,7 +380,7 @@ textarea.form-control {
   font-weight: 500;
   line-height: normal;
   border-radius: 6px;
-  background: #01255e;
+  background: var(--white-label-interactive-button_background, #01255e);
   display: inline-block;
   padding: 13px 40px;
   border: 1px solid #013280;

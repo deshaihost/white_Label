@@ -931,7 +931,7 @@ input#multi-search {
 
 .modal-body .btn-primary,
 .reauthenticate-pms-modal .modal-body .btn-primary {
-    background-color: #3e88f7 !important;
+    background-color: var(--white-label-interactive-button_background, #3e88f7) !important;
     border: none !important;
     color: white !important;
     font-size: 14px !important;
@@ -1050,7 +1050,7 @@ input#multi-search {
 
 .confirmation-modal-footer .bg_theme_btn {
     padding: 10px 24px !important;
-    background-color: #3e88f7 !important;
+    background-color: var(--white-label-interactive-button_background, #3e88f7) !important;
     border: none !important;
     color: white !important;
     font-size: 14px !important;

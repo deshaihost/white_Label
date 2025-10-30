@@ -380,8 +380,8 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                 style={{ 
                   padding: '10px 24px', 
                   borderRadius: '5px', 
-                  backgroundColor: '#3e88f7', 
-                  borderColor: '#3e88f7', 
+                  backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', 
+                  borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', 
                   borderWidth: '1px', 
                   borderStyle: 'solid', 
                   whiteSpace: 'nowrap',
@@ -809,7 +809,15 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="row mt-5">
           <div className="col-lg-12 text-center">
-            <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
+            <Button 
+              className="btn-primary fs-16 px-4 rounded-pill" 
+              style={{
+                backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+                borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7'
+              }}
+              onClick={handleSaveSettings} 
+              disabled={Object.keys(settingsApiData).length === 0}
+            >
               Save Settings
             </Button>
           </div>
