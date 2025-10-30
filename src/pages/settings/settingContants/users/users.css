@@ -271,7 +271,7 @@
 /* Role Permissions Card */
 .users-permissions-card {
   background-color: var(--white-label-background-secondary, #17191f);
-  border: 1px solid #013280;
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 32px;

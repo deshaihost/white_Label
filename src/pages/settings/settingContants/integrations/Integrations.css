@@ -218,7 +218,7 @@
 .settings-integrations .webhook-header-row {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr 1fr;
-  border-bottom: 1px solid #013280;
+  border-bottom: 1px solid var(--white-label-border-primary, #013280);
   background-color: var(--white-label-background-primary, #0F1117);
 }
 
