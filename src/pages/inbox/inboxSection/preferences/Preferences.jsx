@@ -503,7 +503,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         {/* <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/> */}
 
-        <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }} className="mt-4"></div>
+        <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: '40px' }} className="mt-4"></div>
 
         <div className="row mt-4">
           <div className="col-lg-8">
@@ -572,7 +572,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               onChange={(e) => setSetting('emergency_contact_instructions', e.target.value)}
               style={{
                 backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)'),
-                border: '1px solid #013280',
+                border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
                 borderRadius: '8px',
                 padding: '12px 16px',
                 color: 'white',
@@ -684,7 +684,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                 style={{
                   width: '300px',
                   backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)'),
-                  border: '1px solid #013280',
+                  border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
                   borderRadius: '8px',
                   padding: '12px 16px',
                   color: 'white',
@@ -737,7 +737,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                   disabled={!isDelayEditable}
                   style={{
                     backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)'),
-                    border: '1px solid #013280',
+                    border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
                     borderRadius: '8px',
                     padding: '12px 16px',
                     color: 'white',
@@ -758,7 +758,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                   disabled={!isDelayEditable}
                   style={{
                     backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)'),
-                    border: '1px solid #013280',
+                    border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
                     borderRadius: '8px',
                     padding: '12px 16px',
                     color: 'white',
