@@ -272,7 +272,7 @@
 
 .add-contact-submit-button {
     padding: 10px 32px;
-    background-color: #3e88f7;
+    background-color: var(--white-label-interactive-button_background, #3e88f7);
     border: none;
     color: white;
     font-size: 14px;
