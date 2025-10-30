@@ -41,7 +41,7 @@
   flex: 0 0 400px; /* Don't grow, don't shrink, stay at 400px */
   height: auto;
   min-height: 300px;
-  border: 2px solid #013280;
+  border: 2px solid var(--white-label-border-primary, #013280);
   border-radius: 8px;
   padding: 20px;
   cursor: pointer;

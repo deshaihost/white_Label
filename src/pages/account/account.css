@@ -82,7 +82,7 @@
 
 .section-divider-line {
     height: 1px;
-    background: #3e88f7;
+    background: var(--white-label-border-primary, #013280);
     flex: 1;
     opacity: 0.3;
 }
