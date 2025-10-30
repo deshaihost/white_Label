@@ -123,7 +123,7 @@
 .settings-integrations .main-tabs-bar {
   display: flex;
   align-items: center;
-  border-bottom: 2px solid #22253a;
+  border-bottom: 2px solid var(--white-label-border-primary, #013280);
   background: var(--white-label-background-primary, #0F1117);
   padding-left: 10px;
   margin-bottom: 20px;
@@ -209,7 +209,7 @@
 /* Webhook Table Wrapper */
 .settings-integrations .webhook-table-wrapper {
   background-color: var(--white-label-background-secondary, #17191F);
-  border: 1px solid #013280;
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 8px;
   overflow: hidden;
 }

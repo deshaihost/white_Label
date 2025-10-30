@@ -25,7 +25,7 @@
   display: flex;
   gap: 32px;
   margin-bottom: 32px;
-  border-bottom: 1px solid #013280;
+  border-bottom: 1px solid var(--white-label-border-primary, #013280);
 }
 
 .action-items-tab {
@@ -96,7 +96,7 @@
   min-height: 120px;
   padding: 12px 14px;
   background-color: var(--white-label-background-textarea, #01255e) !important;
-  border: 1px solid #013280;
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 8px;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;
@@ -121,7 +121,7 @@
   height: 40px;
   padding: 10px 14px;
   background-color: var(--white-label-background-input, #01255e) !important;
-  border: 1px solid #013280;
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 8px;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;
@@ -284,7 +284,7 @@
 
 .action-items-category-card {
   background-color: var(--white-label-background-secondary, #17191F);
-  border: 1px solid #013280;
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 8px;
   padding: 16px;
   display: flex;
