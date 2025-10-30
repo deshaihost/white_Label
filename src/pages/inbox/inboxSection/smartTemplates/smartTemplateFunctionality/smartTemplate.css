@@ -136,6 +136,9 @@
 .smartTemplateAddEdit .ai-context-appropriate-section {
     margin-top: 20px;
     margin-bottom: 20px;
+    padding: 10px 50px;
+    border: 1px solid var(--white-label-border-primary, #013280);
+    border-radius: 8px;
 }
 
 .smartTemplateAddEdit .triggersSection,

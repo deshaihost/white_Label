@@ -534,7 +534,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
         />
       </div>
 
-      <div className="ai-context-appropriate-section" style={{padding:'10px 50px', borderColor: '#013280', borderRadius: '8px', borderWidth: '1px', borderStyle: 'solid'}}>
+      <div className="ai-context-appropriate-section" style={{padding:'10px 50px', borderColor: cssConfig?.css_data?.borders?.primary || '#013280', borderRadius: '8px', borderWidth: '1px', borderStyle: 'solid'}}>
         <div className="d-flex align-items-start justify-content-between">
           <div className="flex-grow-1">
             <div style={{ display: 'flex', alignItems: 'start', gap: '12px', marginBottom: '12px' }}>
