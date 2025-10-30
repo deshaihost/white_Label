@@ -64,8 +64,8 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
       if (value < 0 || value > 720) {
         return
       }
-    } else if (key === 'tone_instructions' && value.length > 2000) {
-      value = value.substring(0, 2000);
+    } else if (key === 'tone_instructions' && value.length > 3000) {
+      value = value.substring(0, 3000);
     } else if (key === 'message_signature' && value.length > 500) {
       value = value.substring(0, 500);
     }
@@ -521,7 +521,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             </div>
             <p className="settings-label">You can customize HostBuddy's responses by adding some instructions here to direct HostBuddy's tone. Make sure to test after you make changes here!</p>
             <p className="settings-label">HostBuddy is already optimized for friendly, hospitable conversation, so this is completely optional.</p>
-            <textarea className="form-control setting-textarea" placeholder="(Optional) Add instructions to direct HostBuddy's tone..." rows={1} value={currentSettingsData.tone_instructions || ''} onChange={(e) => setSetting('tone_instructions', e.target.value)} maxLength={2000} disabled={!isToneEditable}/>
+            <textarea className="form-control setting-textarea" placeholder="(Optional) Add instructions to direct HostBuddy's tone..." rows={1} value={currentSettingsData.tone_instructions || ''} onChange={(e) => setSetting('tone_instructions', e.target.value)} maxLength={3000} disabled={!isToneEditable}/>
           </div>
         </div>
 
