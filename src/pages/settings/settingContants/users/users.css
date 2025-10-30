@@ -351,7 +351,7 @@
 
 .users-modal-content {
   background-color: var(--white-label-background-secondary, #0a0d14) !important;
-  border: 2px solid #3e88f7;
+  border: 2px solid var(--white-label-border-primary, #013280);
   border-radius: 12px;
   max-width: 550px;
   width: 100%;
@@ -447,7 +447,7 @@
   min-height: 44px;
   padding: 10px 14px;
   background-color: var(--white-label-background-input, #17191f);
-  border: 1px solid #3e88f7;
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 8px;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;
@@ -478,7 +478,7 @@
   min-height: 44px;
   padding: 10px 14px;
   background-color: var(--white-label-background-secondary, #17191f);
-  border: 1px solid #3e88f7;
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 8px;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;
