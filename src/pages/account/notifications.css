@@ -274,11 +274,6 @@
   box-shadow: 0 0 25px rgba(62, 136, 247, 0.4);
 }
 
-.notifications-add-btn:hover {
-  background-color: #74A9F7;
-  transform: scale(1.05);
-}
-
 .notifications-add-icon {
   width: 18px;
   height: 18px;
@@ -725,11 +720,6 @@
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 0 25px rgba(62, 136, 247, 0.4);
-}
-
-.notifications-submit-btn:hover:not(:disabled) {
-  background-color: #74A9F7;
-  transform: scale(1.05);
 }
 
 .notifications-submit-btn:disabled {

@@ -285,10 +285,6 @@
     transition: background-color 0.3s ease;
 }
 
-.add-contact-submit-button:hover {
-    background-color: #74A9F7;
-}
-
 .add-contact-submit-button:disabled {
     background-color: #676A73;
     cursor: not-allowed;
@@ -365,23 +361,20 @@
 
 .webhook-submit-button {
     padding: 10px 32px;
-    background-color: transparent;
+    background-color: var(--white-label-interactive-button_background, #3e88f7);
     border: none;
-    color: #3e88f7;
+    border-radius: 8px;
+    color: #ffffff;
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 600;
     font-variation-settings: 'opsz' 14;
     cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.webhook-submit-button:hover {
-    color: #74A9F7;
+    transition: background-color 0.3s ease;
 }
 
 .webhook-submit-button:disabled {
-    color: #676A73;
+    background-color: #676A73;
     cursor: not-allowed;
 }
 

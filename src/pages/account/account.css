@@ -871,11 +871,6 @@ input#multi-search {
     min-width: 150px;
 }
 
-.contact-modal .bg_theme_btn:hover,
-.change-password-modal .bg_theme_btn:hover {
-    background-color: #74A9F7 !important;
-}
-
 .contact-modal .bg_theme_btn:disabled,
 .change-password-modal .bg_theme_btn:disabled {
     opacity: 0.6;
@@ -939,14 +934,9 @@ input#multi-search {
     font-weight: 600 !important;
     font-variation-settings: 'opsz' 14 !important;
     padding: 10px 40px !important;
-    border-radius: 50px !important;
+    border-radius: 8px !important;
     box-shadow: 0 0 15px rgba(62, 136, 247, 0.3) !important;
     transition: background-color 0.3s ease !important;
-}
-
-.modal-body .btn-primary:hover,
-.reauthenticate-pms-modal .modal-body .btn-primary:hover {
-    background-color: #74A9F7 !important;
 }
 
 .modal-body a,
@@ -1062,10 +1052,6 @@ input#multi-search {
     transition: background-color 0.3s ease !important;
     cursor: pointer !important;
     height: auto !important;
-}
-
-.confirmation-modal-footer .bg_theme_btn:hover {
-    background-color: #74A9F7 !important;
 }
 
 .confirmation-modal-footer .danger-button {
