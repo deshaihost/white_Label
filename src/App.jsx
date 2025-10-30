@@ -4,6 +4,10 @@ import { WhiteLabelLogoProvider } from "./helper/WhiteLabelLogoContext";
 import { WhiteLabelCssProvider } from "./helper/WhiteLabelCssContext";
 
 function App() {
+  console.log("📱 STEP 0: App component rendering", {
+    timestamp: new Date().toISOString()
+  });
+
   return (
     <WhiteLabelCssProvider>
       <WhiteLabelLogoProvider>

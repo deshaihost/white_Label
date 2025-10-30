@@ -65,8 +65,8 @@ function NavBarContainer() {
       const isWhiteLabel = urlParams.has('token') || urlParams.has('user_id') || localStorage.getItem('brandName');
       
       if (isWhiteLabel) {
-        // For white-label, redirect to white-label login with current parameters
-        navigate(`/white-label-login${window.location.search}`);
+        // For white-label, redirect to client login with current parameters
+        navigate(`/client-login${window.location.search}`);
       } else {
         // For regular users, go to standard login
         navigate("/login");

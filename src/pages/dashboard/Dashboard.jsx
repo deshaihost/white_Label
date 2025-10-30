@@ -33,11 +33,25 @@ import {
 } from "../statistics/dataManager";
 
 const Dashboard = () => {
+  console.log("🎯 STEP 1: Dashboard component rendering", {
+    timestamp: new Date().toISOString()
+  });
+
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isWhiteLabel, brandName, displayName } = useWhiteLabelBranding();
   const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+
+  console.log("🎯 STEP 2: Dashboard hooks initialized", {
+    isWhiteLabel,
+    brandName,
+    displayName,
+    cssLoading,
+    hasCssConfig: !!cssConfig,
+    timestamp: new Date().toISOString()
+  });
+
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const userDataLoading = store?.getUserDataReducer?.loading;
   const actionItemsConvertationData =
@@ -72,6 +86,9 @@ const Dashboard = () => {
 
   // When the page loads, fetch the data and populate the charts
   useEffect(() => {
+    console.log("🎯 STEP 3: Dashboard useEffect - fetching statistics data", {
+      timestamp: new Date().toISOString()
+    });
     getStatisticsData(
       setRawApiReturn,
       setApiStatisticsData,
@@ -264,6 +281,9 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    console.log("🎯 STEP 4: Dashboard useEffect - dispatching getUserDataActions and getActionItemsActions", {
+      timestamp: new Date().toISOString()
+    });
     dispatch(getUserDataActions(false));
     dispatch(getActionItemsActions(8));
   }, []);
@@ -349,6 +369,31 @@ const Dashboard = () => {
       }
     }
   }, [propertiesConversationGetData]);
+
+  console.log("🎯 STEP 5: Dashboard about to render JSX", {
+    cssLoading,
+    hasCssConfig: !!cssConfig,
+    primaryBgColor: cssConfig?.css_data?.background?.primary,
+    calculatedBackgroundStyle: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117',
+    timestamp: new Date().toISOString()
+  });
+
+  console.log("🎯 STEP 6: Dashboard CSS Config Full Details", {
+    cssConfig: cssConfig,
+    cssData: cssConfig?.css_data,
+    background: cssConfig?.css_data?.background,
+    primaryColor: cssConfig?.css_data?.background?.primary,
+    timestamp: new Date().toISOString()
+  });
+
+  // Show loader while CSS is loading to prevent flash of default styling
+  if (cssLoading) {
+    console.log("🎯 STEP 7: Dashboard showing loader - waiting for CSS to load", {
+      cssLoading: true,
+      timestamp: new Date().toISOString()
+    });
+    return <FullScreenLoader />;
+  }
 
   return (
     <>

@@ -7,6 +7,7 @@ import ToastHandle from "../../helper/ToastMessage";
 import Authorized from "../../helper/Authorized";
 import { APICore, setAuthorization } from "../../helper/apiCore";
 import useWhiteLabelBranding from "../../helper/useWhiteLabelBranding";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 const api = new APICore();
 
@@ -19,6 +20,7 @@ const WhiteLabelLogin = () => {
   const location = useLocation();
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   
   const [isLoading, setIsLoading] = useState(true); // Start with loading true for immediate token auth
   const { brandName } = useWhiteLabelBranding();
@@ -204,7 +206,8 @@ const WhiteLabelLogin = () => {
     }
   }, [token, navigate, getAuthToken]);
 
-  if (isLoading || loginLoading) {
+  // Show loader while CSS is loading OR while authenticating
+  if (cssLoading || isLoading || loginLoading) {
     return <Loader />;
   }
 

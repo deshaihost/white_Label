@@ -7,7 +7,7 @@ const TestComponent = () => {
       <p>If you can see this, the React server is running correctly.</p>
       <p>Now let's test the white-label routes:</p>
       <div style={{margin: '20px 0'}}>
-        <a href="/white-label-login?email=deshai@hostbuddy.ai&password=Ridhi@120$" 
+        <a href="/client-login?email=deshai@hostbuddy.ai&password=Ridhi@120$" 
            style={{
              display: 'inline-block',
              padding: '12px 24px',

@@ -83,8 +83,18 @@ import Turno from "../pages/turno/Turno";
 import CustomerJourney from "../pages/customerJourney/customerJourney";
 
 const Routing = () => {
+  console.log("🚦 STEP X: Routing component rendering", {
+    timestamp: new Date().toISOString()
+  });
+
   const location = useLocation();
   const authData = Authorized();
+
+  console.log("🚦 STEP Y: Routing location check", {
+    pathname: location.pathname,
+    authData: !!authData,
+    timestamp: new Date().toISOString()
+  });
 
   // Add rb2b profiling script to the head of the document
   useEffect(() => {
@@ -238,7 +248,7 @@ const Routing = () => {
         location.pathname !== "/reset-password" &&
         location.pathname !== "/accept-invitation" &&
         location.pathname !== "/forgot" &&
-        location.pathname !== "/white-label-login" &&
+        location.pathname !== "/client-login" &&
         location.pathname !== "/test-show-conversations" && 
         (!authData || shouldUseUserNavBar) && <NavBar />}
       <ScrollToTop />
@@ -249,7 +259,7 @@ const Routing = () => {
         <Route path="/faqs" element={<Faqs />}></Route>
         <Route path="/about-us" element={<AboutUs />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/white-label-login" element={<WhiteLabelLogin />}></Route>
+        <Route path="/client-login" element={<WhiteLabelLogin />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/accept-invitation" element={<InviteSignup />}></Route>
         <Route path="/forgot" element={<ForgotPass />}></Route>
@@ -496,7 +506,7 @@ const Routing = () => {
         location.pathname !== "/forgot" &&
         location.pathname !== "/accept-invitation" &&
         location.pathname !== "/pricing" &&
-        location.pathname !== "/white-label-login" &&
+        location.pathname !== "/client-login" &&
         !location.pathname.startsWith("/inbox") &&
         location.pathname !== "/test-show-conversations" &&
         !location.pathname.startsWith("/edit-multi-property") &&
