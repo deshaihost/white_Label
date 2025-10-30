@@ -102,13 +102,14 @@ const useElementWidth = () => {
 };
 
 // LineGraphTile component
-export const LineGraphTile = ({ dataSets, width, height }) => {
+export const LineGraphTile = ({ dataSets, width, height, cssConfig }) => {
   const [tileRef, tileWidth] = useElementWidth(); // Hook to get dynamic width of the tile
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0);
   const open = Boolean(anchorEl);
 
   const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
+  const borderColor = cssConfig?.css_data?.borders?.primary || '#013280';
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -126,7 +127,7 @@ export const LineGraphTile = ({ dataSets, width, height }) => {
 
   return (
     <Grid size={width}>
-      <div className="statistics-tile" style={{ height }} ref={tileRef}>
+      <div className="statistics-tile" style={{ height, border: `2px solid ${borderColor}` }} ref={tileRef}>
         <div className="tile-header">
           <h3>{currentDataSet.title}</h3>
           <IconButton onClick={handleMenuOpen} className="icon-button">
@@ -158,7 +159,7 @@ export const LineGraphTile = ({ dataSets, width, height }) => {
 };
 
 // HistogramTile component
-export const HistogramTile = ({ dataSets, width, height, blur, dateRange, showStatisticsLink }) => {
+export const HistogramTile = ({ dataSets, width, height, blur, dateRange, showStatisticsLink, cssConfig }) => {
   const [tileRef, tileWidth] = useElementWidth(); // Hook to get dynamic width of the tile
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0);
@@ -166,6 +167,7 @@ export const HistogramTile = ({ dataSets, width, height, blur, dateRange, showSt
   const navigate = useNavigate();
 
   const heightAsInt = parseInt(height.replace('px', ''), 10); // e.g. "300px" -> 300
+  const borderColor = cssConfig?.css_data?.borders?.primary || '#013280';
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -183,7 +185,7 @@ export const HistogramTile = ({ dataSets, width, height, blur, dateRange, showSt
 
   return (
     <Grid size={width}>
-      <div className={`statistics-tile histogram-tile${blur ? ' blurred-tile' : ''}`} style={{ height, position: 'relative' }} ref={tileRef}>
+      <div className={`statistics-tile histogram-tile${blur ? ' blurred-tile' : ''}`} style={{ height, position: 'relative', border: `2px solid ${borderColor}` }} ref={tileRef}>
         {blur && <div className="blurred-tile-overlay" style={{ height: '100%', width: '100%' }} />}
         {blur && (
           <div className="blurred-tile-message">
@@ -253,11 +255,13 @@ export const HistogramTile = ({ dataSets, width, height, blur, dateRange, showSt
 };
 
 // Tile containing prominently displayed numbers and text labels
-export const MetricTile = ({ dataSets, width, height, blur }) => {
+export const MetricTile = ({ dataSets, width, height, blur, cssConfig }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+
+  const borderColor = cssConfig?.css_data?.borders?.primary || '#013280';
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -283,7 +287,7 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
 
   return (
     <Grid size={width}>
-      <div className={`statistics-tile metric-tile${blur ? ' blurred-tile' : ''}${isSentimentTile ? ' sentiment-tile' : ''}${isActionItemTile ? ' action-item-tile' : ''}`} style={{ height, position: 'relative' }}>
+      <div className={`statistics-tile metric-tile${blur ? ' blurred-tile' : ''}${isSentimentTile ? ' sentiment-tile' : ''}${isActionItemTile ? ' action-item-tile' : ''}`} style={{ height, position: 'relative', border: `2px solid ${borderColor}` }}>
         {blur && <div className="blurred-tile-overlay" style={{ height: '100%', width: '100%' }} />}
         {blur && (
           <div className="blurred-tile-message">
@@ -333,7 +337,7 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
               PaperProps={{
                 style: {
                   backgroundColor: 'var(--white-label-background-secondary, #17191f)',
-                  border: '2px solid #013280',
+                  border: `2px solid ${borderColor}`,
                   borderRadius: '8px',
                   boxShadow: '0 0 30px rgba(30, 75, 158, 0.3)',
                   minWidth: '180px'
@@ -387,7 +391,7 @@ export const MetricTile = ({ dataSets, width, height, blur }) => {
                         key={index} 
                         style={{
                           backgroundColor: 'var(--white-label-background-secondary, #17191F)',
-                          border: '1px solid #013280',
+                          border: `1px solid ${borderColor}`,
                           borderRadius: '8px',
                           padding: '16px',
                           display: 'flex',
@@ -463,13 +467,13 @@ export const TextTile = ({ title, content, width, height }) => {
 };
 
 // Takes in an array of tile specifications (like the one in statistics.jsx) and renders them
-export const renderTiles = (tiles) => (
+export const renderTiles = (tiles, cssConfig = null) => (
   <Grid container spacing={2}>
     {tiles.map((tile, index) => {
       if (!tile.dataSets) return null; // Render only if dataSets is available
       const TileComponent = tile.component;
       return (
-        <TileComponent {...tile} key={index} />
+        <TileComponent {...tile} cssConfig={cssConfig} key={index} />
       );
     })}
   </Grid>

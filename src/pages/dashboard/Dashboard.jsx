@@ -384,6 +384,8 @@ const Dashboard = () => {
     cssData: cssConfig?.css_data,
     background: cssConfig?.css_data?.background,
     primaryColor: cssConfig?.css_data?.background?.primary,
+    borders: cssConfig?.css_data?.borders,
+    borderPrimaryColor: cssConfig?.css_data?.borders?.primary,
     timestamp: new Date().toISOString()
   });
 
@@ -550,7 +552,7 @@ const Dashboard = () => {
                   <SubscriptionBanner userData={userDataGet} />
 
                   {!statisticsDataLoading ? (
-                    renderTiles(statisticsTiles)
+                    renderTiles(statisticsTiles, cssConfig)
                   ) : (
                     <BoxLoader />
                   )}
@@ -559,7 +561,7 @@ const Dashboard = () => {
                     {!actionItemsCovertationLoading ? (
                       <div style={{
                         backgroundColor: 'var(--white-label-background-secondary, #17191f)',
-                        border: '2px solid #013280',
+                        border: `2px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
                         borderRadius: '12px',
                         overflow: 'hidden',
                         boxShadow: '0 0 25px rgba(30, 75, 158, 0.2)',
@@ -572,7 +574,7 @@ const Dashboard = () => {
                           display: 'flex',
                           justifyContent: 'space-between',
                           alignItems: 'center',
-                          borderBottom: '1px solid #013280'
+                          borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`
                         }}>
                           <div>
                             <h5 style={{ 
@@ -624,7 +626,7 @@ const Dashboard = () => {
                               gap: '16px',
                               padding: '12px 24px',
                               backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117',
-                              borderBottom: '1px solid #013280'
+                              borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`
                             }}>
                               <p style={{
                                 color: '#a6a9b2',
@@ -696,7 +698,7 @@ const Dashboard = () => {
                                       gridTemplateColumns: '100px 200px 1fr 80px',
                                       gap: '16px',
                                       padding: '16px 24px',
-                                      borderBottom: '1px solid #013280',
+                                      borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
                                       transition: 'background-color 0.2s',
                                       cursor: 'default'
                                     }}

@@ -81,33 +81,34 @@ const StatisticsPage = () => {
   //const isMountPlan=true;
   // *** THIS contains the (static) definition of which tiles to render, and in which order *** //
   const messagingTiles = [
-    { component: MetricTile, dataSets: apiStatisticsData?.totalMessagesSent, width: 3, height: "300px" },
-    ...(isMountPlan ? [] : [{ component: MetricTile, dataSets: apiStatisticsData?.totalMessagesResponded, width: 3, height: "300px" }]),
-    { component: MetricTile, dataSets: apiStatisticsData?.responseTimes, width: 3, height: "300px" },
-    { component: MetricTile, dataSets: apiStatisticsData?.sentimentMetrics, width: 3, height: "300px" },
-    { component: HistogramTile, dataSets: apiStatisticsData?.messageTimingData, width: 12, height: '300px' },
+    { component: MetricTile, dataSets: apiStatisticsData?.totalMessagesSent, width: 3, height: "300px", cssConfig },
+    ...(isMountPlan ? [] : [{ component: MetricTile, dataSets: apiStatisticsData?.totalMessagesResponded, width: 3, height: "300px", cssConfig }]),
+    { component: MetricTile, dataSets: apiStatisticsData?.responseTimes, width: 3, height: "300px", cssConfig },
+    { component: MetricTile, dataSets: apiStatisticsData?.sentimentMetrics, width: 3, height: "300px", cssConfig },
+    { component: HistogramTile, dataSets: apiStatisticsData?.messageTimingData, width: 12, height: '300px', cssConfig },
   ];
 
   const actionItemsTiles = [
-    { component: MetricTile, dataSets: apiStatisticsData?.actionItemMetrics, width: 6, height: "300px", blur: isProPlan },
-    { component: HistogramTile, dataSets: apiStatisticsData?.actionItemsReceived, width: 6, height: '300px', blur: isProPlan },
+    { component: MetricTile, dataSets: apiStatisticsData?.actionItemMetrics, width: 6, height: "300px", blur: isProPlan, cssConfig },
+    { component: HistogramTile, dataSets: apiStatisticsData?.actionItemsReceived, width: 6, height: '300px', blur: isProPlan, cssConfig },
   ];
 
   const upsellsTiles = [
-    { component: MetricTile, dataSets: apiStatisticsData?.upsellMetrics, width: 4, height: "320px" },
+    { component: MetricTile, dataSets: apiStatisticsData?.upsellMetrics, width: 4, height: "320px", cssConfig },
   ]
 
   // Create dynamic styles with white label colors
   const getDynamicSelectStyles = () => {
     const dropdownBgColor = cssLoading ? "#17191f" : cssConfig?.css_data?.background?.dropdown || "#17191f";
     const hoverBgColor = cssLoading ? "#01255e" : cssConfig?.css_data?.background?.hover || "#01255e";
+    const borderPrimaryColor = cssLoading ? "#013280" : cssConfig?.css_data?.borders?.primary || "#013280";
 
     return {
       ...customStyles,
       control: (provided, state) => ({
         ...provided,
         background: dropdownBgColor,
-        border: state.isFocused ? '1px solid #3e88f7' : '1px solid #013280',
+        border: state.isFocused ? `1px solid ${borderPrimaryColor}` : `1px solid ${borderPrimaryColor}`,
         borderRadius: '4px',
         color: '#d0d3db',
         fontSize: '14px',
@@ -121,13 +122,13 @@ const StatisticsPage = () => {
         cursor: 'pointer',
         transition: 'border-color 0.3s ease',
         '&:hover': {
-          borderColor: '#3e88f7'
+          borderColor: borderPrimaryColor
         }
       }),
       menu: (provided) => ({
         ...provided,
         background: dropdownBgColor,
-        border: '1px solid #013280',
+        border: `1px solid ${borderPrimaryColor}`,
         borderRadius: '4px',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
         marginTop: '4px',
@@ -229,16 +230,16 @@ const StatisticsPage = () => {
       <div style={{ borderTop: '1px solid #013280', marginBottom: '20px', marginTop: '20px' }}></div>
 
       <h2 className="section-header">Messaging</h2>
-      {renderTiles(messagingTiles)}
+      {renderTiles(messagingTiles, cssConfig)}
 
       <h2 className="section-header">Action Items</h2>
-      {renderTiles(actionItemsTiles)}
+      {renderTiles(actionItemsTiles, cssConfig)}
 
       <h2 className="section-header">Upsells</h2>
       {(upsellsStartDate != dataStartDate || upsellsEndDate != dataEndDate) && (
         <p style={{color:'rgb(255, 125, 0)', marginTop:'-10px', marginBottom:'5px'}}>Showing upsell data from {upsellsStartDateDisplay} to {upsellsEndDateDisplay}</p>
       )}
-      {renderTiles(upsellsTiles)}
+      {renderTiles(upsellsTiles, cssConfig)}
 
     </div>
   );

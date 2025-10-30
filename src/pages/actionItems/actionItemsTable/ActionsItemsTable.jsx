@@ -269,16 +269,22 @@ const ActionsItemsTable = () => {
   const getDynamicStyles = () => {
     const dropdownBgColor = cssLoading ? 'rgba(189, 193, 201, 0.08)' : (cssConfig?.css_data?.background?.dropdown || 'var(--white-label-background-dropdown, rgba(189, 193, 201, 0.08))');
     const hoverColor = cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || 'var(--white-label-background-hover, #01255e)');
+    const borderPrimaryColor = cssLoading ? '#013280' : (cssConfig?.css_data?.borders?.primary || '#013280');
     
     return {
       ...customStyles,
       control: (provided, state) => ({
         ...customStyles.control(provided, state),
         background: dropdownBgColor,
+        border: `1px solid ${borderPrimaryColor}`,
+        '&:hover': {
+          borderColor: borderPrimaryColor,
+        },
       }),
       menu: (provided) => ({
         ...customStyles.menu(provided),
         background: dropdownBgColor,
+        border: `1px solid ${borderPrimaryColor}`,
       }),
       option: (provided, state) => ({
         ...customStyles.option(provided, state),
@@ -339,18 +345,26 @@ const ActionsItemsTable = () => {
 
             </div>
           </div>
-          <div className="table-responsive" style={{ overflowY: "auto", marginBottom: "30px", position: 'relative' }}>
+          <div 
+            className="table-responsive" 
+            style={{ 
+              overflowY: "auto", 
+              marginBottom: "30px", 
+              position: 'relative',
+              border: `2px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`
+            }}
+          >
             {itemsToRender?.length > 0 ? (
               <div style={{ position: 'relative' }}>
                 <table className="table text-white action-items-table">
                   <thead style={{ background: "#020d29" }}>
-                    <tr>
-                      <th>Date/Time</th>
-                      <th>Property/Guest</th>
-                      <th>Category</th>
-                      <th>Action Item</th>
-                      {selectedStatus === "completed" && <th>Completed By</th>}
-                      <th>View/Done</th>
+                    <tr style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>Date/Time</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>Property/Guest</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>Category</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>Action Item</th>
+                      {selectedStatus === "completed" && <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>Completed By</th>}
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>View/Done</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -359,7 +373,7 @@ const ActionsItemsTable = () => {
                       let actionItemSend = { propertyName: property_name, conversation_id };
                       const locked = false; // locked rows are not rendered
                       return (
-                        <tr key={id}>
+                        <tr key={id} style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>
                           <td style={{ whiteSpace: "pre-line" }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {formatDateTime(created_at)}
