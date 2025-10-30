@@ -108,11 +108,17 @@
 
 .upsells-settings .table thead th {
   color: #AAA;
+  border-bottom: 2px solid var(--white-label-border-primary, #013280) !important;
 }
 
 .upsells-settings .table tbody td {
   font-size: 14px;
   color: white;
+  border-top: 1px solid var(--white-label-border-primary, #013280) !important;
+}
+
+.upsells-settings .table {
+  border-color: var(--white-label-border-primary, #013280) !important;
 }
 
 .upsells-settings .table tbody tr:hover {

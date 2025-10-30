@@ -112,7 +112,7 @@
 
 .upsells-settings .table thead th,
 .upsells-settings .table tbody td {
-  border-color: #013280 !important;
+  border-color: var(--white-label-border-primary, #013280) !important;
   border-width: 1px !important;
   border-style: solid !important;
 }
