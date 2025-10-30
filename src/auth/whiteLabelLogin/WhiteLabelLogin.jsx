@@ -2,7 +2,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginActions } from "../../redux/actions";
-import Loader from "../../helper/Loader";
+import Loader, { ProgressLoader } from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
 import Authorized from "../../helper/Authorized";
 import { APICore, setAuthorization } from "../../helper/apiCore";
@@ -20,7 +20,7 @@ const WhiteLabelLogin = () => {
   const location = useLocation();
   const getAuthToken = Authorized();
   const { token } = getAuthToken ? getAuthToken : [];
-  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  const { cssConfig, loading: cssLoading, progress } = useWhiteLabelCss();
   
   const [isLoading, setIsLoading] = useState(true); // Start with loading true for immediate token auth
   const { brandName } = useWhiteLabelBranding();
@@ -208,7 +208,7 @@ const WhiteLabelLogin = () => {
 
   // Show loader while CSS is loading OR while authenticating
   if (cssLoading || isLoading || loginLoading) {
-    return <Loader />;
+    return <ProgressLoader progress={cssLoading ? progress : 50} message={cssLoading ? "Loading branding..." : "Authenticating..."} />;
   }
 
   const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');

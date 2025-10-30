@@ -9,7 +9,7 @@ import {
   putCompleteActionItemActions,
   stateEmptyActions,
 } from "../../redux/actions";
-import { BoxLoader, FullScreenLoader } from "../../helper/Loader";
+import { BoxLoader, FullScreenLoader, ProgressLoader } from "../../helper/Loader";
 import AccountNotifBanner from "../../component/accountNotifBanner/accountNotifBanner";
 import SubscriptionBanner from "../../component/accountNotifBanner/subscriptionBanner";
 import "react-circular-progressbar/dist/styles.css";
@@ -41,13 +41,14 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isWhiteLabel, brandName, displayName } = useWhiteLabelBranding();
-  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  const { cssConfig, loading: cssLoading, progress } = useWhiteLabelCss();
 
   console.log("🎯 STEP 2: Dashboard hooks initialized", {
     isWhiteLabel,
     brandName,
     displayName,
     cssLoading,
+    progress,
     hasCssConfig: !!cssConfig,
     timestamp: new Date().toISOString()
   });
@@ -390,9 +391,10 @@ const Dashboard = () => {
   if (cssLoading) {
     console.log("🎯 STEP 7: Dashboard showing loader - waiting for CSS to load", {
       cssLoading: true,
+      progress,
       timestamp: new Date().toISOString()
     });
-    return <FullScreenLoader />;
+    return <ProgressLoader progress={progress} message="Loading dashboard..." />;
   }
 
   return (

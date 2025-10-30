@@ -227,6 +227,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
       return {
         cssConfig: null,
         loading: false,
+        progress: 0,
         error: null,
         isHostBuddyDomain: true,
       };
@@ -240,6 +241,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
       return {
         cssConfig: cached.cssConfig,
         loading: false,
+        progress: 100,
         error: null,
         isHostBuddyDomain: false,
       };
@@ -248,6 +250,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
     return {
       cssConfig: null,
       loading: true,
+      progress: 0,
       error: null,
       isHostBuddyDomain: false,
     };
@@ -352,9 +355,19 @@ export const WhiteLabelCssProvider = ({ children }) => {
           timestamp: new Date().toISOString()
         });
 
+        // Simulate progress during fetch
+        const progressInterval = setInterval(() => {
+          setCssState(prev => ({
+            ...prev,
+            progress: Math.min(prev.progress + 10, 90) // Cap at 90% until actual response
+          }));
+        }, 100);
+
         const apiCallStart = performance.now();
         const response = await getCssConfig({ domain: domainName });
         const apiCallElapsed = performance.now() - apiCallStart;
+
+        clearInterval(progressInterval);
 
         console.log('✅ [CSS API] API response received', {
           success: response.success,
@@ -382,6 +395,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
           setCssState({
             cssConfig,
             loading: false,
+            progress: 100,
             error: null,
             isHostBuddyDomain: false,
           });
@@ -415,6 +429,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
           setCssState({
             cssConfig: null,
             loading: false,
+            progress: 0,
             error: response.error || 'No CSS config available',
             isHostBuddyDomain: false,
           });
@@ -442,6 +457,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
           setCssState({
             cssConfig: null,
             loading: false,
+            progress: 0,
             error: error.message,
             isHostBuddyDomain: true,
           });
@@ -450,6 +466,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
           setCssState({
             cssConfig: null,
             loading: true, // Keep loading to prevent fallback
+            progress: 0,
             error: error.message,
             isHostBuddyDomain: false,
           });
@@ -472,6 +489,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             setCssState({
               cssConfig: null,
               loading: false,
+              progress: 0,
               error: `Max retries reached: ${error.message}`,
               isHostBuddyDomain: false,
             });
