@@ -954,7 +954,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         </button>
       )}
 
-      <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%'}} />
+      {/* <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%', backgroundColor: cssConfig?.css_data?.borders?.primary || '#013280', border: 'none'}} /> */}
 
       <div className="ai-context-appropriate-section">
         <p className="d-flex align-items-center gap-5">
