@@ -358,13 +358,13 @@ const ActionsItemsTable = () => {
               <div style={{ position: 'relative' }}>
                 <table className="table text-white action-items-table">
                   <thead style={{ background: "#020d29" }}>
-                    <tr style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>
-                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>Date/Time</th>
-                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>Property/Guest</th>
-                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>Category</th>
-                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>Action Item</th>
-                      {selectedStatus === "completed" && <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>Completed By</th>}
-                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>View/Done</th>
+                    <tr style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>Date/Time</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>Property/Guest</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>Category</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>Action Item</th>
+                      {selectedStatus === "completed" && <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>Completed By</th>}
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>View/Done</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -372,34 +372,35 @@ const ActionsItemsTable = () => {
                       const { id, created_at, property_name, conversation_id, item } = actionItem;
                       let actionItemSend = { propertyName: property_name, conversation_id };
                       const locked = false; // locked rows are not rendered
+                      const borderColor = cssConfig?.css_data?.borders?.primary || '#013280';
                       return (
-                        <tr key={id} style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}` }}>
-                          <td style={{ whiteSpace: "pre-line" }}>
+                        <tr key={id} style={{ borderBottom: `1px solid ${borderColor} !important` }}>
+                          <td style={{ whiteSpace: "pre-line", borderBottom: `1px solid ${borderColor} !important` }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {formatDateTime(created_at)}
                             </div>
                           </td>
-                          <td>
+                          <td style={{ borderBottom: `1px solid ${borderColor} !important` }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {property_name}
                               <br />
                               {actionItem?.guest_name ? actionItem?.guest_name : ""}
                             </div>
                           </td>
-                          <td>
+                          <td style={{ borderBottom: `1px solid ${borderColor} !important` }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {actionItem?.category ? actionItem?.category : ""}
                             </div>
                           </td>
-                          <td className="">
+                          <td className="" style={{ borderBottom: `1px solid ${borderColor} !important` }}>
                             <div className={locked ? 'blurred-content' : ''}>{item}</div>
                           </td>
                           {selectedStatus === "completed" && (
-                            <td style={{ minWidth: '130px' }}>
+                            <td style={{ minWidth: '130px', borderBottom: `1px solid ${borderColor} !important` }}>
                               <div className={locked ? 'blurred-content' : ''}>{formatCompletedBy(actionItem?.completed_by)}</div>
                             </td>
                           )}
-                          <td className="text-center">
+                          <td className="text-center" style={{ borderBottom: `1px solid ${borderColor} !important` }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {actionItemCompleting === id || getConversationLoading === id ? (
                                 <BoxLoader />

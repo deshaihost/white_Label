@@ -32,7 +32,7 @@
 /* Native Select Dropdown Styling */
 .action-select select {
   background: rgba(189, 193, 201, 0.08);
-  border: 1px solid #013280;
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 4px;
   color: #d0d3db;
   font-size: 14px;
@@ -88,7 +88,7 @@
 /* Table Container */
 .action-items-page .table-responsive {
   background: var(--white-label-background-secondary, #17191f);
-  border: 2px solid #013280;
+  border: 2px solid var(--white-label-border-primary, #013280);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 0 25px rgba(30, 75, 158, 0.2);
@@ -118,7 +118,7 @@
   color: #a6a9b2;
   text-transform: uppercase;
   padding: 12px 24px;
-  border-bottom: 1px solid #013280;
+  border-bottom: 1px solid var(--white-label-border-primary, #013280);
   border-left: none;
   border-right: none;
   border-top: none;
@@ -135,7 +135,7 @@
 }
 
 .action-items-table tbody tr {
-  border-bottom: 1px solid #013280;
+  border-bottom: 1px solid var(--white-label-border-primary, #013280) !important;
   transition: background-color 0.3s ease;
   background: var(--white-label-background-secondary, #17191F);
 }
