@@ -197,11 +197,12 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   const getDynamicMultiSelectStyles = () => {
     const dropdownBgColor = cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || 'var(--white-label-background-dropdown, #0F1117)');
     const hoverColor = cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || 'var(--white-label-background-hover, #01255e)');
+    const borderPrimaryColor = cssLoading ? '#013280' : (cssConfig?.css_data?.borders?.primary || '#013280');
     
     return {
       control: (provided, state) => ({
         ...provided,
-        border: `1px solid ${state.isFocused ? '#3e88f7' : '#013280'}`,
+        border: `1px solid ${state.isFocused ? '#3e88f7' : borderPrimaryColor}`,
         borderRadius: '8px',
         color: '#a6a9b2',
         fontSize: '16px',
@@ -222,7 +223,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       menu: (provided) => ({
         ...provided,
         backgroundColor: dropdownBgColor,
-        border: '2px solid #013280',
+        border: `2px solid ${borderPrimaryColor}`,
         borderRadius: '8px',
         boxShadow: '0 0 20px rgba(30, 75, 158, 0.2)',
         marginTop: '8px',
@@ -461,7 +462,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       </p>
       
       {/* Divider */}
-      <div style={{ borderTop: "1px solid #013280", marginBottom: "32px" }}></div>
+      <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: "32px" }}></div>
 
       {/* Enable Toggle Section */}
       <div style={{
@@ -470,7 +471,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         justifyContent: 'space-between',
         marginBottom: '32px',
         paddingBottom: '24px',
-        borderBottom: '1px solid rgba(1, 50, 128, 0.4)'
+        borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary ? `${cssConfig.css_data.borders.primary}66` : 'rgba(1, 50, 128, 0.4)'}`
       }}>
         <div>
           <h3 style={{
@@ -543,7 +544,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
             style={{
               width: '100%',
               backgroundColor: cssLoading ? 'var(--white-label-background-secondary, #17191F)' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #17191F)'),
-              border: '1px solid #013280',
+              border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
               borderRadius: '8px',
               padding: '14px 20px',
               color: 'white',
@@ -559,7 +560,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
               e.target.style.boxShadow = '0 0 0 1px rgba(62, 136, 247, 0.5)';
             }}
             onBlur={(e) => {
-              e.target.style.borderColor = '#013280';
+              e.target.style.borderColor = cssConfig?.css_data?.borders?.primary || '#013280';
               e.target.style.boxShadow = 'none';
             }}
           />
@@ -597,7 +598,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       <div style={{
         marginBottom: '32px',
         paddingBottom: '32px',
-        borderBottom: '1px solid rgba(1, 50, 128, 0.4)'
+        borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary ? `${cssConfig.css_data.borders.primary}66` : 'rgba(1, 50, 128, 0.4)'}`
       }}>
         <label style={{
           color: 'white',
@@ -633,7 +634,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                 <div style={{
                   flex: '1',
                   backgroundColor: 'var(--white-label-background-secondary, #17191F)',
-                  border: '1px solid #013280',
+                  border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
                   borderRadius: '8px',
                   padding: '12px 16px',
                   color: 'white',
@@ -713,7 +714,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       <div style={{
         marginBottom: '32px',
         paddingBottom: '32px',
-        borderBottom: '1px solid rgba(1, 50, 128, 0.4)'
+        borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary ? `${cssConfig.css_data.borders.primary}66` : 'rgba(1, 50, 128, 0.4)'}`
       }}>
         <label style={{
           color: 'white',
@@ -749,7 +750,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                   <div style={{
                     flex: '1',
                     backgroundColor: 'var(--white-label-background-secondary, #17191F)',
-                    border: '1px solid #013280',
+                    border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
                     borderRadius: '8px',
                     padding: '12px 16px',
                     color: 'white',
@@ -826,7 +827,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       </div>
 
       {/* Divider before Message Section */}
-      <div style={{ borderTop: "1px solid #013280", marginTop: "32px", marginBottom: "32px" }}></div>
+      <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginTop: "32px", marginBottom: "32px" }}></div>
       
       <h3 style={{
         color: 'white',
@@ -855,7 +856,16 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
       <div className="mt-4 mb-5">
         <label className="fs-5">Message</label>
-        <textarea id="templateMessage" className="form-control setting-textarea" value={dataStructure?.message} onChange={(e) => handleTextAreaChange(e, 'message')} placeholder="Enter your message here..."/>
+        <textarea 
+          id="templateMessage" 
+          className="form-control setting-textarea" 
+          value={dataStructure?.message} 
+          onChange={(e) => handleTextAreaChange(e, 'message')} 
+          placeholder="Enter your message here..."
+          style={{
+            border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`
+          }}
+        />
         {!showFollowUps && (
           <button style={{ background: 'none', border: 'none', color: '#146ef5', cursor: 'pointer', margin: '5px auto 0 auto' }} onClick={handleAddFollowUp}>
             Follow-up...
@@ -866,11 +876,29 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       {showFollowUps && dataStructure.follow_ups.map((followUp, index) => (
         <div className="followUp px-5 py-4" key={index}>
           <label className="fs-5">Follow-Up Message {index + 1}</label>
-          <textarea id={`followUpMessage${index}`} className="form-control setting-textarea" value={followUp.message} onChange={(e) => handleFollowUpMessageChange(index, e.target.value)} placeholder="Enter your follow-up message here..." />
+          <textarea 
+            id={`followUpMessage${index}`} 
+            className="form-control setting-textarea" 
+            value={followUp.message} 
+            onChange={(e) => handleFollowUpMessageChange(index, e.target.value)} 
+            placeholder="Enter your follow-up message here..."
+            style={{
+              border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`
+            }}
+          />
 
           <div className="d-flex align-items-center mb-3 mt-3">
             <span className="fs-6 me-2">Send this follow-up</span>
-            <input type="number" className="form-control" style={{ width: '80px' }} value={followUp.after_mins} onChange={(e) => handleFollowUpDelayChange(index, e.target.value)} />
+            <input 
+              type="number" 
+              className="form-control" 
+              style={{ 
+                width: '80px',
+                border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`
+              }} 
+              value={followUp.after_mins} 
+              onChange={(e) => handleFollowUpDelayChange(index, e.target.value)} 
+            />
             <span className="fs-6 ms-2">minutes after the previous message.</span>
           </div>
 

@@ -82,7 +82,7 @@
 }
 
 .upsells-settings .variable {
-  border: 1px solid #045ce9;
+  border: 1px solid var(--white-label-border-primary, #045ce9);
   border-radius: 15px;
   padding: 8px 12px;
   cursor: pointer;

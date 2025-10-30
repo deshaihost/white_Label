@@ -113,7 +113,7 @@
     font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 600;
     font-variation-settings: 'opsz' 14;
-    border: 1px solid #013280;
+    border: 1px solid var(--white-label-border-primary, #013280);
     cursor: pointer;
     transition: background-color 0.2s;
 }
@@ -152,7 +152,7 @@
 
 /* Divider */
 .smart-templates-landing .divider {
-    border-top: 1px solid #013280;
+    border-top: 1px solid var(--white-label-border-primary, #013280);
     margin-bottom: 32px;
 }
 

@@ -39,7 +39,7 @@
 .setting_tab_data textarea.form-control {
   background-color: var(--white-label-background-textarea, #0f1117) !important;
   background: var(--white-label-background-textarea, #0f1117) !important;
-  border: 1px solid #013280 !important;
+  border: 1px solid var(--white-label-border-primary, #013280) !important;
   border-radius: 8px !important;
 }
 .setting_tab_data input.form-control:focus,

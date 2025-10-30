@@ -6,12 +6,14 @@ import InboxUpgrade from "../../inbox/mildeSection/inbox_Upgrade/InboxUpgrade";
 import Loader from "../../../../../helper/Loader";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import { getSubscriptionStatus } from "../../../../../helper/Authorized";
+import { useWhiteLabelCss } from "../../../../../helper/WhiteLabelCssContext";
 import axios from "axios";
 import "./smartTemplate.css";
 
 import { describeTemplate } from "./smartTemplateAddEdit/SmartTemplateJson";
 
 const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const add = "Add";
   const edit = "Edit";
   const { turno_user_id, tidy_user_id, minut_user_id } = userData || {};
@@ -320,7 +322,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
               <p style={{color:"#CCC", fontSize:'16px'}}>Highly customizable templated messages that let you contact the right guests at the right time. Automate friendly check-in messages, strategic upsells, policy reminders, and much more. Use AI to add context awareness and a personal touch to each message.</p>
               <Link to="/smart-templates?portal=true" style={{display:'inline-block', marginTop:'10px'}}>Learn more &rarr;</Link>
             </div>
-            <div style={{ borderTop: "1px solid #013280", marginBottom: "40px" }}></div>
+            <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: "40px" }}></div>
 
           {getTemplatesLoading ? (
               <Loader />
@@ -329,12 +331,13 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                 smartAllData?.map((smartItem, smartIndex) => {
                   const { name, enabled } = smartItem;
                   const templateDescription = describeTemplate(smartItem);
+                  const borderColor = cssConfig?.css_data?.borders?.primary || '#013280';
                   return (
                     <div 
                       key={smartIndex} 
                       style={{ 
                         backgroundColor: "var(--white-label-background-secondary, #17191F)",
-                        border: "2px solid #013280",
+                        border: `2px solid ${borderColor}`,
                         borderRadius: "12px",
                         padding: "32px",
                         display: "flex",
