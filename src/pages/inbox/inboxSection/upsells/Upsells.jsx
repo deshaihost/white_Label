@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "../resources/upsells.css";
+import { useWhiteLabelCss } from "../../../../helper/WhiteLabelCssContext";
 
 import PostStayUpsells from "./postStayUpsells";
 import PreStayUpsells from "./preStayUpsells";
@@ -27,6 +28,7 @@ default_settings = {
 
 const UpsellsIndex = ({allPropertyNamesList}) => {
 
+  const { cssConfig, cssLoading } = useWhiteLabelCss();
 
   const [selectedSection, setSelectedSection] = useState("index");
 
@@ -168,7 +170,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
           </div>
 
    
-       <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }}></div>
+       <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: '40px' }}></div>
           <div 
             style={{
               width: '100%',

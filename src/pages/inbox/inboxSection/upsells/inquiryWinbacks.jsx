@@ -364,7 +364,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         <p className="settings-label">HostBuddy can follow up with guests that inquired about your properties, but didn't book, if those dates are still available. You can choose not to send messages to guests who have given a firm pass on your property.</p>
       </div> */}
 
-      <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }}></div>
+      <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: '40px' }}></div>
 
       <div style={{ marginBottom: '40px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>

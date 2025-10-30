@@ -369,7 +369,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
         <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked after vacant night, offering them an early check-in or a discount to extend their stay. You can customize the message and parameters.</p>
       </div> */}
 
-      <div style={{ borderTop: '1px solid #013280', marginBottom: '40px' }}></div>
+      <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: '40px' }}></div>
 
       <div style={{ marginBottom: '40px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
