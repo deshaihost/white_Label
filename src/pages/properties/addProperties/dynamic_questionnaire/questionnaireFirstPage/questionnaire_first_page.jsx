@@ -45,7 +45,7 @@ const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, proper
 
       <AutoFillButtons property_name={property_name} apiPropertyData={apiPropertyData} />
       <div style={{ marginBottom: '80px' }}></div> {/* Spacer */}
-      
+
       {/* Prev and Next buttons */}
       <div className="d-flex justify-content-around my-5">
         {triggeredSaveLoading ? (
@@ -61,12 +61,14 @@ const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, proper
           </>
         )}
       </div>
+
+      {apiPropertyData?.calry_property_id && (
+        <p className="text-muted fs-14 text-center mt-4 mb-4">
+          Property ID: {apiPropertyData.calry_property_id}
+        </p>
+      )}
     </div>
   );
-
-
-
-
 };
 
 export default QuestionnaireFirstPage;

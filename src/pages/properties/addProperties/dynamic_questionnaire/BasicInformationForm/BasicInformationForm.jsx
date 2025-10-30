@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { copyExistingPropertyActions, postPropertiesActions } from "../../../../../redux/actions";
+import { copyExistingPropertyActions, postPropertiesActions, getUserDataActions } from "../../../../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { stateEmptyActions } from "../../../../../redux/actions";
@@ -18,9 +18,22 @@ const BasicInformationForm = ({ property_name }) => {
   const propertiesAddMessage = store?.postPropertiesReducer?.postProperties?.data?.error;
   const propertiesAddLoading = store?.postPropertiesReducer?.loading;
 
+  // Get user data to check if we should render the "Set Property ID" input.
+  // We only want to render it for accounts that are building a direct integration. For now, I am just adding this "uses_direct_integration" field manually into the database under each subaccount that is building a direct integration.
+  const userData = store?.getUserDataReducer?.getUserData?.data?.user;
+  const uses_direct_integration = userData?.uses_direct_integration ? true : false;
+
   const [uploadedFile, setFile] = useState(null);
   const [propertyName, setPropertyName] = useState(property_name); // allow property_name to be set when user creates a new property
+  const [propertyId, setPropertyId] = useState(""); // allow user to set a custom property ID
   const [imgIsUplaoding, setImgIsUplaoding] = useState(false);
+
+  // Fetch user data on component mount if not already loaded
+  useEffect(() => {
+    if (!userData) {
+      dispatch(getUserDataActions(false));
+    }
+  }, [dispatch, userData]);
 
   const add_thumbnail_image_API_call = async (propertyName, imgFile) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -58,7 +71,11 @@ const BasicInformationForm = ({ property_name }) => {
       ToastHandle("Please enter a property name", "danger");
       return;
     }
-    dispatch(postPropertiesActions({ property_name: propertyName }));
+    const payload = { property_name: propertyName };
+    if (propertyId && propertyId.trim()) {
+      payload.set_property_id = propertyId.trim();
+    }
+    dispatch(postPropertiesActions(payload));
   };
 
   // "Update" button click, for editing existing property. For now only thumbnail image is editable, but when we add support for changing the property name, handle that here too.
@@ -118,6 +135,21 @@ const BasicInformationForm = ({ property_name }) => {
                 </div>
               </div>
             </div>
+
+            {/* Property ID input (only shown when creating a new property AND user has sub_account_of) */}
+            {!property_name && uses_direct_integration && (
+              <div className="row mt-2">
+                <div className="col-md-12">
+                  <label className="text-white">Set a property ID</label>
+                  <div className="">
+                    <input className="form-control" type="text" value={propertyId} placeholder="eg. prop-123" onChange={(e) => { setPropertyId(e.target.value); }} />
+                  </div>
+                  <small className="text-white-50 mt-1 d-block">
+                    This will be used as the value for <code>property_id</code> in the direct integrations API, and will be treated as a string. For your own ease of use, we recommend using the same property identifier that you use for this property in your connected system.
+                  </small>
+                </div>
+              </div>
+            )}
 
             {/* Update (thumbnail image) button (only if editing existing property & new image selected). When we add support for changing the property name, this button should be changed to trigger that too. */}
             {property_name && uploadedFile && (
