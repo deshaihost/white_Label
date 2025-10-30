@@ -121,7 +121,7 @@
 /* Section Cards */
 .account-section-card {
     background-color: #0a0d14 !important;
-    border: 1px solid #1a1d27;
+    border: 1px solid var(--white-label-border-primary, #013280);
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 32px;
@@ -261,7 +261,7 @@
 .account-content form input#phone,
 .account-content form input#email {
     background-color: var(--white-label-background-input, #0F1117) !important;
-    border: 1px solid #3e88f7 !important;
+    border: 1px solid var(--white-label-border-primary, #013280) !important;
     border-radius: 8px !important;
     color: white !important;
     font-family: 'DM Sans', sans-serif !important;
@@ -729,7 +729,7 @@ input#multi-search {
 .contact-modal .modal-content,
 .change-password-modal .modal-content {
     background-color: var(--white-label-background-secondary, #17191f) !important;
-    border: 1px solid #3e88f7 !important;
+    border: 1px solid var(--white-label-border-primary, #013280) !important;
     border-radius: 12px !important;
     box-shadow: 0 0 30px rgba(62, 136, 247, 0.2) !important;
     max-width: 450px;
@@ -803,7 +803,7 @@ input#multi-search {
 .contact-modal .input-group .form-control,
 .change-password-modal .input-group .form-control {
     background-color: var(--white-label-background-input, #0F1117) !important;
-    border: 1px solid #3e88f7 !important;
+    border: 1px solid var(--white-label-border-primary, #013280) !important;
     border-radius: 8px !important;
     color: white !important;
     font-family: 'DM Sans', sans-serif !important;
