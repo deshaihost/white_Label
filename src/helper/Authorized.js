@@ -155,7 +155,7 @@ export const getSubscriptionStatus = (userData) => {
       return { plan: 'HostBuddy Ultimate', props_allowed: propsAllowed, status: subscrStatus };
     }
 
-    return { plan: planName, props_allowed: propsAllowed, status: subscrStatus };
+    return { plan: "HostBuddy pRo", props_allowed: propsAllowed, status: subscrStatus };
   }
 // "HostBuddy ultimate"
 // "HostBuddy pRo"
