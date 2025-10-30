@@ -390,7 +390,7 @@
   min-height: 44px;
   padding: 10px 14px;
   background-color: var(--white-label-background-input, #0F1117) !important;
-  border: 1px solid #3e88f7;
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 6px;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;
