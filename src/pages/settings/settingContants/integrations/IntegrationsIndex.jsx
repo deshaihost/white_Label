@@ -59,7 +59,12 @@ const IntegrationsIndex = (ApiUserData) => {
   const renderUpgradeTile = (logoSrc, altText, description = 'Available on HostBuddy Elite', imgStyle = {}) => (
     <div className="partner-tile">
       <img className="partner-logo" alt={altText} src={logoSrc} style={imgStyle} />
-      <p>{description}</p>
+      <p style={{
+        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+          cssConfig.css_data.text.secondary : 'rgba(204, 204, 204, 1)'
+      }}>
+        {description}
+      </p>
       <Link to="/setting/subscription" className="btn btn-primary" style={{ borderRadius: '50px', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
         <img src={LockIcon} alt="Lock" style={{ width: '16px', height: '16px' }} />
         Upgrade to unlock
@@ -325,7 +330,12 @@ const IntegrationsIndex = (ApiUserData) => {
     const filteredIntegrations = getFilteredIntegrations(mainTab);
     connectedIntegrationsSection = (
       <>
-        <h4 className="connected-title">Connected integrations</h4>
+        <h4 className="connected-title" style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+            cssConfig.css_data.text.primary : 'white'
+        }}>
+          Connected integrations
+        </h4>
         {filteredIntegrations.length > 0 ? (
           <>
             <div className="integrations-tabs">
@@ -388,7 +398,10 @@ const IntegrationsIndex = (ApiUserData) => {
             )}
           </>
         ) : (
-          <p className="no-integrations-message">
+          <p className="no-integrations-message" style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+              cssConfig.css_data.text.quaternary : '#AAA'
+          }}>
             No integrations connected yet. Connect to an integration above to get started.
           </p>
         )}
@@ -423,6 +436,10 @@ const IntegrationsIndex = (ApiUserData) => {
             key={tab}
             className={`main-tab-btn${mainTab === tab ? ' active' : ''}`}
             onClick={() => setMainTab(tab)}
+            style={{
+              color: mainTab === tab ? '#6b8aff' : (!cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                cssConfig.css_data.text.secondary : '#fff')
+            }}
           >
             {tab}
           </button>
@@ -465,7 +482,12 @@ const IntegrationsIndex = (ApiUserData) => {
                 : 
                 <div className="partner-tile" style={{ cursor: 'pointer' }} onClick={() => window.location.href = '/setting/contact'}>
                   <img className="partner-logo" alt="Slack Logo" src={SlackLogo} style={{ width: '83px', height: '50px' }} />
-                  <p>Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.</p>
+                  <p style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : 'rgba(204, 204, 204, 1)'
+                  }}>
+                    Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.
+                  </p>
                 </div>
               }
              
@@ -499,7 +521,12 @@ const IntegrationsIndex = (ApiUserData) => {
               {isMountPlan && (
                 <div className="partner-tile">
                   <img className="partner-logo" alt="Mount Logo" src={MountLogoBlack} style={{ maxWidth: '150px', height: 'auto' }} />
-                  <p>Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area</p>
+                  <p style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : 'rgba(204, 204, 204, 1)'
+                  }}>
+                    Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area
+                  </p>
                   <div style={{ 
                     background: 'rgba(6, 9, 26, 1)',
                     border: '1px solid rgba(37, 39, 54, 1)',
@@ -557,7 +584,10 @@ const IntegrationsIndex = (ApiUserData) => {
           {mainTab === 'Webhooks' && (
             <>
               <div style={{ width: '100%', marginTop: '20px' }}>
-                <h4 className="webhook-section-title">
+                <h4 className="webhook-section-title" style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                    cssConfig.css_data.text.primary : 'white'
+                }}>
                   {isProPlan && (
                     <img src={LockIcon} alt="lock" style={{ width: '14px', marginRight: '6px' }} />
                   )}
@@ -568,16 +598,28 @@ const IntegrationsIndex = (ApiUserData) => {
                 <div className="webhook-table-wrapper">
                   {/* Table Header */}
                   <div className="webhook-header-row">
-                    <div className="webhook-cell">
+                    <div className="webhook-cell" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                        cssConfig.css_data.text.primary : 'white'
+                    }}>
                       <span>Name</span>
                     </div>
-                    <div className="webhook-cell webhook-cell-bordered">
+                    <div className="webhook-cell webhook-cell-bordered" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                        cssConfig.css_data.text.primary : 'white'
+                    }}>
                       <span>Endpoint</span>
                     </div>
-                    <div className="webhook-cell webhook-cell-bordered">
+                    <div className="webhook-cell webhook-cell-bordered" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                        cssConfig.css_data.text.primary : 'white'
+                    }}>
                       <span>Status</span>
                     </div>
-                    <div className="webhook-cell webhook-cell-bordered">
+                    <div className="webhook-cell webhook-cell-bordered" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                        cssConfig.css_data.text.primary : 'white'
+                    }}>
                       <span>Action</span>
                     </div>
                   </div>
@@ -596,14 +638,25 @@ const IntegrationsIndex = (ApiUserData) => {
                   {/* Existing Webhooks */}
                   {Object.entries(webhooks).map(([url, details]) => (
                     <div key={url} className="webhook-data-row">
-                      <div className="webhook-cell">
+                      <div className="webhook-cell" style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                          cssConfig.css_data.text.secondary : 'white'
+                      }}>
                         <span>{details.name || url}</span>
                       </div>
-                      <div className="webhook-cell webhook-cell-bordered">
+                      <div className="webhook-cell webhook-cell-bordered" style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                          cssConfig.css_data.text.secondary : 'white'
+                      }}>
                         <span style={{ wordBreak: 'break-all' }}>{url}</span>
                       </div>
                       <div className="webhook-cell webhook-cell-bordered">
-                        <span className="grey-text">Confirmed</span>
+                        <span className="grey-text" style={{
+                          color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                            cssConfig.css_data.text.quaternary : '#a6a9b2'
+                        }}>
+                          Confirmed
+                        </span>
                       </div>
                       <div className="webhook-cell webhook-cell-bordered">
                         <Link to="#" className="webhook-delete-link" onClick={() => handleDeleteWebhook(url)}>
@@ -616,7 +669,12 @@ const IntegrationsIndex = (ApiUserData) => {
                   {/* Empty State */}
                   {Object.keys(webhooks).length === 0 && !showAddWebhook && (
                     <div className="webhook-empty-row">
-                      <p>No webhooks connected yet.</p>
+                      <p style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                          cssConfig.css_data.text.quaternary : '#a6a9b2'
+                      }}>
+                        No webhooks connected yet.
+                      </p>
                     </div>
                   )}
                 </div>
@@ -626,12 +684,45 @@ const IntegrationsIndex = (ApiUserData) => {
                   <div className="recipient" style={{ marginTop: '16px', marginBottom: '18px' }}>
                     <div className="row">
                       <div className="col input_group">
-                        <label htmlFor="webhookName">Name</label>
-                        <input type="text" id="webhookName" name="name" className="form-control" value={newWebhookName} onChange={e => setNewWebhookName(e.target.value)} />
+                        <label htmlFor="webhookName" style={{
+                          color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                            cssConfig.css_data.text.primary : 'white'
+                        }}>
+                          Name
+                        </label>
+                        <input 
+                          type="text" 
+                          id="webhookName" 
+                          name="name" 
+                          className="form-control" 
+                          value={newWebhookName} 
+                          onChange={e => setNewWebhookName(e.target.value)}
+                          style={{
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : 'white'
+                          }}
+                        />
                       </div>
                       <div className="col input_group">
-                        <label htmlFor="webhookUrl">Webhook URL</label>
-                        <input type="text" id="webhookUrl" name="url" className="form-control" placeholder="https://example.com/webhook" value={newWebhookUrl} onChange={e => setNewWebhookUrl(e.target.value)} />
+                        <label htmlFor="webhookUrl" style={{
+                          color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                            cssConfig.css_data.text.primary : 'white'
+                        }}>
+                          Webhook URL
+                        </label>
+                        <input 
+                          type="text" 
+                          id="webhookUrl" 
+                          name="url" 
+                          className="form-control" 
+                          placeholder="https://example.com/webhook" 
+                          value={newWebhookUrl} 
+                          onChange={e => setNewWebhookUrl(e.target.value)}
+                          style={{
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : 'white'
+                          }}
+                        />
                       </div>
                     </div>
                     {addWebhookError && <div style={{ color: 'red', marginTop: '8px' }}>{addWebhookError}</div>}

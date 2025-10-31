@@ -63,7 +63,7 @@
 
 .settings-integrations .partner-tile p {
   font-size: 16px;
-  color: rgba(204, 204, 204, 1); /* Updated description text color */
+  color: var(--white-label-text-secondary, rgba(204, 204, 204, 1)); /* Updated description text color */
   text-align: center;
 }
 
@@ -104,13 +104,13 @@
 }
 
 .settings-integrations .connected-title {
-  color: white;
+  color: var(--white-label-text-primary, white);
   font-size: 20px;
   margin-bottom: 20px;
 }
 
 .settings-integrations .no-integrations-message {
-  color: #AAA;
+  color: var(--white-label-text-quaternary, #AAA);
   font-size: 16px;
   text-align: center;
   padding: 30px;
@@ -133,7 +133,7 @@
   background: none;
   border: none;
   outline: none;
-  color: #fff;
+  color: var(--white-label-text-secondary, #fff);
   font-size: 15px;
   font-weight: 400;
   margin-right: 24px;
@@ -196,7 +196,7 @@
 
 /* Webhook Section Title */
 .settings-integrations .webhook-section-title {
-  color: white;
+  color: var(--white-label-text-primary, white);
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 16px;
@@ -259,7 +259,7 @@
 /* Webhook Cell */
 .settings-integrations .webhook-cell {
   padding: 16px;
-  color: white;
+  color: var(--white-label-text-secondary, white);
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -284,7 +284,7 @@
 }
 
 .settings-integrations .webhook-empty-row p {
-  color: #a6a9b2;
+  color: var(--white-label-text-quaternary, #a6a9b2);
   font-size: 13px;
   margin: 0;
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -308,7 +308,7 @@
 
 /* Grey Text for Status */
 .settings-integrations .grey-text {
-  color: #a6a9b2 !important;
+  color: var(--white-label-text-quaternary, #a6a9b2) !important;
 }
 
 /* Add Webhook Link */
@@ -346,7 +346,7 @@
 }
 
 .settings-integrations .recipient .input_group label {
-  color: white;
+  color: var(--white-label-text-primary, white);
   font-size: 14px;
   margin-bottom: 8px;
   display: block;
@@ -358,7 +358,7 @@
   background-color: #01255e;
   border: 1px solid #013280;
   border-radius: 6px;
-  color: white;
+  color: var(--white-label-text-secondary, white);
   padding: 10px 14px;
   height: 40px;
   font-size: 14px;
@@ -370,13 +370,23 @@
 .settings-integrations .recipient .input_group .form-control:focus {
   background-color: #01255e;
   border-color: #3e88f7;
-  color: white;
+  color: var(--white-label-text-secondary, white);
   outline: none;
   box-shadow: 0 0 0 2px rgba(62, 136, 247, 0.1);
 }
 
-.settings-integrations .recipient .input_group .form-control::placeholder {
-  color: #676A73;
+.settings-integrations .recipient .input_group .form-control::placeholder,
+.settings-integrations .recipient .input_group .form-control::-webkit-input-placeholder,
+.settings-integrations .recipient .input_group .form-control::-moz-placeholder,
+.settings-integrations .recipient .input_group .form-control:-ms-input-placeholder,
+.settings-integrations .recipient .input_group .form-control:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #676A73);
+}
+
+.settings-integrations .recipient .input_group .form-control:disabled {
+  color: var(--white-label-text-disabled, #666);
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* Submit Button Container */

@@ -7,6 +7,7 @@ import Loader from '../../../../helper/Loader';
 import axios from 'axios';
 import { getSubscriptionStatus } from '../../../../helper/Authorized';
 import './users.css';
+import { useWhiteLabelCss } from '../../../../helper/WhiteLabelCssContext';
 
 // Icon Components
 const UserPlusIcon = () => (
@@ -53,6 +54,7 @@ const ChevronDownIcon = () => (
 );
 
 const UsersTab = (userData) => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const mainUserEmail = userData?.userData?.email;
 
   const [getSubUsersIsLoading, setGetSubUsersIsLoading] = useState(false);
@@ -234,8 +236,16 @@ const UsersTab = (userData) => {
     <div className="users-container">
       {/* Page Header */}
       <div>
-        <h1 className="users-page-title">Your Team</h1>
-        <p className="users-page-subtitle">
+        <h1 className="users-page-title" style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+            cssConfig.css_data.text.primary : '#ffffff'
+        }}>
+          Your Team
+        </h1>
+        <p className="users-page-subtitle" style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+            cssConfig.css_data.text.secondary : '#a6a9b2'
+        }}>
           Manage team members and their access levels
         </p>
       </div>
@@ -245,10 +255,30 @@ const UsersTab = (userData) => {
         <div className="users-table-container">
           {/* Table Header */}
           <div className="users-table-header">
-            <div className="users-table-header-cell">User</div>
-            <div className="users-table-header-cell">Role</div>
-            <div className="users-table-header-cell">Status</div>
-            <div className="users-table-header-cell">Manage</div>
+            <div className="users-table-header-cell" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
+              User
+            </div>
+            <div className="users-table-header-cell" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
+              Role
+            </div>
+            <div className="users-table-header-cell" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
+              Status
+            </div>
+            <div className="users-table-header-cell" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
+              Manage
+            </div>
           </div>
 
           {/* User Rows */}
@@ -261,14 +291,29 @@ const UsersTab = (userData) => {
                 <div key={index} className="users-table-row">
                   {/* User Cell */}
                   <div className="users-table-user-cell">
-                    <span className="users-table-user-name">{email.split('@')[0] || 'User'}</span>
-                    <span className="users-table-user-email">{email}</span>
+                    <span className="users-table-user-name" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                        cssConfig.css_data.text.secondary : '#ffffff'
+                    }}>
+                      {email.split('@')[0] || 'User'}
+                    </span>
+                    <span className="users-table-user-email" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                        cssConfig.css_data.text.secondary : '#a6a9b2'
+                    }}>
+                      {email}
+                    </span>
                   </div>
 
                   {/* Role Cell */}
                   <div className="users-table-role-cell">
                     {getRoleIcon(role)}
-                    <span className="users-table-role-text">{role}</span>
+                    <span className="users-table-role-text" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                        cssConfig.css_data.text.secondary : '#ffffff'
+                    }}>
+                      {role}
+                    </span>
                   </div>
 
                   {/* Status Cell */}
@@ -302,7 +347,10 @@ const UsersTab = (userData) => {
               );
             })
           ) : (
-            <div className="users-empty-state">
+            <div className="users-empty-state" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                cssConfig.css_data.text.quaternary : '#a6a9b2'
+            }}>
               No team members yet. Click "Invite User" to add your first team member.
             </div>
           )}
@@ -327,26 +375,55 @@ const UsersTab = (userData) => {
 
       {/* Role Permissions Card */}
       <div className="users-permissions-card">
-        <h3 className="users-permissions-title">Role Permissions</h3>
+        <h3 className="users-permissions-title" style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+            cssConfig.css_data.text.primary : '#ffffff'
+        }}>
+          Role Permissions
+        </h3>
         
         <div className="users-permission-item">
           <ShieldIcon />
-          <p className="users-permission-text">
-            <span className="users-permission-role">ADMIN</span> users can perform any action on the account, including inviting new users, changing account settings, and updating payment information.
+          <p className="users-permission-text" style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+              cssConfig.css_data.text.secondary : '#d0d3db'
+          }}>
+            <span className="users-permission-role" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
+              ADMIN
+            </span> users can perform any action on the account, including inviting new users, changing account settings, and updating payment information.
           </p>
         </div>
 
         <div className="users-permission-item">
           <UsersIconSvg />
-          <p className="users-permission-text">
-            <span className="users-permission-role">OPERATOR</span> users can perform most actions on the account, including changing general settings. They cannot invite new users or update payment information.
+          <p className="users-permission-text" style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+              cssConfig.css_data.text.secondary : '#d0d3db'
+          }}>
+            <span className="users-permission-role" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
+              OPERATOR
+            </span> users can perform most actions on the account, including changing general settings. They cannot invite new users or update payment information.
           </p>
         </div>
 
         <div className="users-permission-item">
           <EyeIcon />
-          <p className="users-permission-text">
-            <span className="users-permission-role">READ ONLY</span> users can view all data in the account, but cannot make any changes. They cannot access the payment portal or view any payment/billing information.
+          <p className="users-permission-text" style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+              cssConfig.css_data.text.secondary : '#d0d3db'
+          }}>
+            <span className="users-permission-role" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
+              READ ONLY
+            </span> users can view all data in the account, but cannot make any changes. They cannot access the payment portal or view any payment/billing information.
           </p>
         </div>
       </div>
@@ -359,7 +436,12 @@ const UsersTab = (userData) => {
             <div className="users-modal-header">
               <div className="users-modal-title-wrapper">
                 <UserPlusIcon />
-                <h2 className="users-modal-title">Invite User</h2>
+                <h2 className="users-modal-title" style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                    cssConfig.css_data.text.primary : '#ffffff'
+                }}>
+                  Invite User
+                </h2>
               </div>
               <button
                 type="button"
@@ -376,13 +458,19 @@ const UsersTab = (userData) => {
 
             {/* Modal Body */}
             <div className="users-modal-body">
-              <p className="users-modal-description">
+              <p className="users-modal-description" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                  cssConfig.css_data.text.secondary : '#a6a9b2'
+              }}>
                 Invite a new team member by entering their details below. They'll receive an email with instructions to join your team.
               </p>
 
               {/* Full Name Input */}
               <div className="users-modal-input-group">
-                <label className="users-modal-label" htmlFor="inviteEmail">
+                <label className="users-modal-label" htmlFor="inviteEmail" style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                    cssConfig.css_data.text.primary : '#ffffff'
+                }}>
                   Email Address
                 </label>
                 <input
@@ -392,12 +480,19 @@ const UsersTab = (userData) => {
                   placeholder="john@example.com"
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
+                  style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : '#ffffff'
+                  }}
                 />
               </div>
 
               {/* Role Dropdown */}
               <div className="users-modal-input-group">
-                <label className="users-modal-label" htmlFor="inviteRole">
+                <label className="users-modal-label" htmlFor="inviteRole" style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                    cssConfig.css_data.text.primary : '#ffffff'
+                }}>
                   Role
                 </label>
                 <div className="users-role-dropdown-wrapper">
