@@ -36,7 +36,14 @@ const Account = () => {
       <div className="container">
         <div className="banner-heading">
           <h2>Account Settings</h2>
-          <p style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', fontVariationSettings: "'opsz' 14", marginBottom: '0' }}>
+          <p style={{ 
+            color: cssConfig?.css_data?.text?.secondary || '#a6a9b2', 
+            fontSize: '14px', 
+            fontFamily: "'DM Sans', sans-serif", 
+            fontWeight: '400', 
+            fontVariationSettings: "'opsz' 14", 
+            marginBottom: '0' 
+          }}>
             Manage your personal information, location, and account security
           </p>
         </div>
