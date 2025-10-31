@@ -151,7 +151,7 @@ export const LineGraphTile = ({ dataSets, width, height, cssConfig }) => {
             <Line type="monotone" dataKey="value" stroke="#8884d8" />
           </LineChart>
         ) : (
-          <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
+          <p className="no-data-message" style={{marginTop:"25%", color: cssConfig?.css_data?.text?.primary || "white"}}>No data yet</p>
         )}
       </div>
     </Grid>
@@ -189,8 +189,8 @@ export const HistogramTile = ({ dataSets, width, height, blur, dateRange, showSt
         {blur && <div className="blurred-tile-overlay" style={{ height: '100%', width: '100%' }} />}
         {blur && (
           <div className="blurred-tile-message">
-            <p className="blurred-tile-message-top">Action Items Received</p>
-            <div className="blurred-tile-message-middle">
+            <p className="blurred-tile-message-top" style={{color: cssConfig?.css_data?.text?.disabled || "rgba(208, 211, 219, 1)"}}>Action Items Received</p>
+            <div className="blurred-tile-message-middle" style={{color: cssConfig?.css_data?.text?.disabled || "rgba(208, 211, 219, 1)"}}>
               <img src={actionItemsLocked} alt="Locked" style={{ width: 40, height: 40, marginBottom: 8 }} />
               Upgrade to unlock this insight & much more!
               <div
@@ -231,7 +231,7 @@ export const HistogramTile = ({ dataSets, width, height, blur, dateRange, showSt
                 {/* Date range and statistics link - right after chart SVG */}
                 {dateRange && (
                   <div className="histogram-footer">
-                    <p className="histogram-date-range">
+                    <p className="histogram-date-range" style={{color: cssConfig?.css_data?.text?.secondary || '#a6a9b2'}}>
                       Above data from {dateRange.start} to {dateRange.end}
                     </p>
                     {showStatisticsLink && (
@@ -245,7 +245,7 @@ export const HistogramTile = ({ dataSets, width, height, blur, dateRange, showSt
                 )}
               </>
             ) : (
-              <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
+              <p className="no-data-message" style={{marginTop:"25%", color: cssConfig?.css_data?.text?.primary || "white"}}>No data yet</p>
             )}
           </div>
         </div>
@@ -291,8 +291,8 @@ export const MetricTile = ({ dataSets, width, height, blur, cssConfig }) => {
         {blur && <div className="blurred-tile-overlay" style={{ height: '100%', width: '100%' }} />}
         {blur && (
           <div className="blurred-tile-message">
-            <p className="blurred-tile-message-top">Action Items Received and Closed</p>
-            <div className="blurred-tile-message-middle">
+            <p className="blurred-tile-message-top" style={{color: cssConfig?.css_data?.text?.disabled || "rgba(208, 211, 219, 1)"}}>Action Items Received and Closed</p>
+            <div className="blurred-tile-message-middle" style={{color: cssConfig?.css_data?.text?.disabled || "rgba(208, 211, 219, 1)"}}>
               <img src={actionItemsLocked} alt="Locked" style={{ width: 40, height: 40, marginBottom: 8 }} />
               Upgrade to unlock this insight & much more!
               <div
@@ -316,13 +316,13 @@ export const MetricTile = ({ dataSets, width, height, blur, cssConfig }) => {
                   className="icon-button"
                   style={{ 
                     padding: '4px',
-                    color: '#a6a9b2',
+                    color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
                     transition: 'color 0.2s'
                   }}
                   sx={{
                     '&:hover': {
                       backgroundColor: 'transparent',
-                      color: 'white'
+                      color: cssConfig?.css_data?.text?.primary || 'white'
                     }
                   }}
                 >
@@ -353,7 +353,7 @@ export const MetricTile = ({ dataSets, width, height, blur, cssConfig }) => {
                     fontSize: '14px',
                     fontFamily: "'DM Sans', sans-serif",
                     fontVariationSettings: "'opsz' 14",
-                    color: 'white',
+                    color: cssConfig?.css_data?.text?.primary || 'white',
                     padding: '10px 16px',
                     '&:hover': {
                       backgroundColor: '#01255e'
@@ -401,7 +401,7 @@ export const MetricTile = ({ dataSets, width, height, blur, cssConfig }) => {
                         }}
                       >
                         <p style={{
-                          color: 'white',
+                          color: cssConfig?.css_data?.text?.primary || 'white',
                           fontSize: '40px',
                           fontFamily: "'DM Sans', sans-serif",
                           fontWeight: 700,
@@ -415,7 +415,7 @@ export const MetricTile = ({ dataSets, width, height, blur, cssConfig }) => {
                           {item.number}
                         </p>
                         <p style={{
-                          color: '#a6a9b2',
+                          color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
                           fontSize: '14px',
                           fontFamily: "'DM Sans', sans-serif",
                           fontWeight: 500,
@@ -445,7 +445,7 @@ export const MetricTile = ({ dataSets, width, height, blur, cssConfig }) => {
                 })
               )
             ) : (
-            <p className="no-data-message" style={{marginTop:"25%"}}>No data yet</p>
+            <p className="no-data-message" style={{marginTop:"25%", color: cssConfig?.css_data?.text?.primary || "white"}}>No data yet</p>
           )}
           </div>
         </div>

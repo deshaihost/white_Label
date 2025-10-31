@@ -40,7 +40,7 @@ const customStyles = {
   }),
   placeholder: (provided) => ({
     ...provided,
-    color: '#d0d3db',
+    color: 'var(--white-label-text-placeholder, #d0d3db)',
     fontFamily: "'DM Sans', sans-serif",
     fontVariationSettings: "'opsz' 14",
     fontSize: '14px',

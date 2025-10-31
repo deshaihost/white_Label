@@ -176,8 +176,8 @@ const StatisticsPage = () => {
         {/* <h1>Business Insights</h1> */}
         {/* <span className="subtitle" style={{color:'#146ef5'}}>By HostBuddy</span> */}
       </h1>
-       <h1 style={{color:"white" , marginBottom:"20px"}}>Business Insights</h1>  
-       <p1 style={{color:"#a6a9b2" , marginBottom:"20px"}}>On Dashboard</p1>
+       <h1 style={{color: cssConfig?.css_data?.text?.primary || "white", marginBottom:"20px"}}>Business Insights</h1>  
+       <p1 style={{color: cssConfig?.css_data?.text?.secondary || "#a6a9b2", marginBottom:"20px"}}>On Dashboard</p1>
       <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: '20px', marginTop: '20px' }}></div>
 
       <div className="parameters-section">
@@ -189,7 +189,7 @@ const StatisticsPage = () => {
               <p>Data not available yet</p>
             )}
             {!dataLoading && requestedStartDate && requestedStartDate !== dataStartDate && (
-              <p style={{color:'rgb(255, 125, 0)'}}>We could not find data for the entire date range you requested.</p>
+              <p style={{color: cssConfig?.css_data?.text?.quaternary || 'rgb(255, 125, 0)'}}>We could not find data for the entire date range you requested.</p>
             )}
           </div>
         </div>
@@ -237,7 +237,7 @@ const StatisticsPage = () => {
 
       <h2 className="section-header">Upsells</h2>
       {(upsellsStartDate != dataStartDate || upsellsEndDate != dataEndDate) && (
-        <p style={{color:'rgb(255, 125, 0)', marginTop:'-10px', marginBottom:'5px'}}>Showing upsell data from {upsellsStartDateDisplay} to {upsellsEndDateDisplay}</p>
+        <p style={{color: cssConfig?.css_data?.text?.quaternary || 'rgb(255, 125, 0)', marginTop:'-10px', marginBottom:'5px'}}>Showing upsell data from {upsellsStartDateDisplay} to {upsellsEndDateDisplay}</p>
       )}
       {renderTiles(upsellsTiles, cssConfig)}
 

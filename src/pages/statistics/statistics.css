@@ -11,7 +11,7 @@
 /* Tile header title styling - gray color like new dashboard */
 .tile-header h3 {
   font-size: 14px;
-  color: #a6a9b2 !important;
+  color: var(--white-label-text-secondary, #a6a9b2) !important;
   margin-bottom: 0;
   text-align: left;
   font-family: 'DM Sans', sans-serif;
@@ -21,7 +21,7 @@
 
 /* Styling for the three-dot icon */
 .tile-header .icon-button {
-  color: #a6a9b2;
+  color: var(--white-label-text-secondary, #a6a9b2);
   font-size: 16px;
   cursor: pointer;
   padding: 0 !important;
@@ -39,7 +39,7 @@
 }
 
 .tile-header .icon-button:hover {
-  color: white;
+  color: var(--white-label-text-primary, white);
   background-color: transparent !important;
   box-shadow: none !important;
 }
@@ -128,7 +128,7 @@
 }
 
 .page-header {
-  color: white;
+  color: var(--white-label-text-primary, white);
   text-align: center;
   margin-top: 20px;
   display: flex;
@@ -144,7 +144,7 @@
 }
 
 .statistics-page .section-header {
-  color: white;
+  color: var(--white-label-text-primary, white);
   margin-top: 40px;
   margin-bottom: 20px;
 }
@@ -169,7 +169,7 @@
 .statistics-page .date-info p {
   margin: 0;
   font-size: 18px;
-  color: #CCC;
+  color: var(--white-label-text-secondary, #CCC);
 }
 
 .statistics-page .parameters-right {
@@ -198,7 +198,7 @@
 
 .statistics-page .date-label {
   font-size: 14px;
-  color: #FFF;
+  color: var(--white-label-text-primary, #FFF);
   margin: 0; /* Reset margin to rely on gap */
 }
 
@@ -215,7 +215,27 @@
 }
 
 .statistics-page .date-input::placeholder {
-  color: var(--white-label-input-text, #FFF);
+  color: var(--white-label-text-placeholder, #FFF);
+  opacity: 0.7;
+}
+
+.statistics-page .date-input::-webkit-input-placeholder {
+  color: var(--white-label-text-placeholder, #FFF);
+  opacity: 0.7;
+}
+
+.statistics-page .date-input::-moz-placeholder {
+  color: var(--white-label-text-placeholder, #FFF);
+  opacity: 0.7;
+}
+
+.statistics-page .date-input:-ms-input-placeholder {
+  color: var(--white-label-text-placeholder, #FFF);
+  opacity: 0.7;
+}
+
+.statistics-page .date-input::-ms-input-placeholder {
+  color: var(--white-label-text-placeholder, #FFF);
   opacity: 0.7;
 }
 
@@ -242,6 +262,19 @@
   cursor: pointer;
 }
 
+.statistics-page .date-input:disabled {
+  background: var(--white-label-background-secondary, #17191f);
+  color: var(--white-label-text-disabled, #666);
+  cursor: not-allowed;
+  opacity: 0.5;
+  border-color: var(--white-label-text-disabled, #666);
+}
+
+.statistics-page .date-input:disabled::-webkit-calendar-picker-indicator {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .statistics-page .adjust-dates-button {
   background: none;
   border: none;
@@ -253,6 +286,12 @@
   height: 36px; /* Match the height of other input elements */
   display: flex;
   align-items: center;
+}
+
+.statistics-page .adjust-dates-button:disabled {
+  color: var(--white-label-text-disabled, #666);
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .statistics-page .apply-button {
@@ -271,6 +310,14 @@
 
 .statistics-page .apply-button:hover {
   background-color: #0056b3;
+}
+
+.statistics-page .apply-button:disabled {
+  background-color: var(--white-label-background-secondary, #17191f);
+  color: var(--white-label-text-disabled, #666);
+  cursor: not-allowed;
+  opacity: 0.5;
+  border: 1px solid var(--white-label-text-disabled, #666);
 }
 
 /* Style for each individual tile component */
@@ -299,7 +346,7 @@
 /* Common header styling for all tiles */
 .statistics-tile h3 {
   font-size: 14px;
-  color: #a6a9b2;
+  color: var(--white-label-text-secondary, #a6a9b2);
   margin-bottom: 16px;
   text-align: left !important;
   width: 100%;
@@ -310,11 +357,11 @@
 
 /* Chart/Histogram tiles should have white title text */
 .statistics-tile:not(.metric-tile) h3 {
-  color: white !important;
+  color: var(--white-label-text-primary, white) !important;
 }
 
 .statistics-tile p {
-  color: #a6a9b2;
+  color: var(--white-label-text-secondary, #a6a9b2);
   margin: auto 0;
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
@@ -325,7 +372,7 @@
 
 /* Styling for "No data yet" message */
 .statistics-tile .no-data-message {
-  color: white;
+  color: var(--white-label-text-primary, white);
   text-align: center;
   width: 100%;
   margin-top: auto;
@@ -378,7 +425,7 @@
 
 .metric-item:first-child .metric-number {
   font-size: 36px;
-  color: white;
+  color: var(--white-label-text-primary, white);
   font-weight: 700;
   line-height: normal;
   font-family: 'DM Sans', sans-serif;
@@ -401,7 +448,7 @@
 
 .action-item-tile .metric-item:first-child .metric-number {
   font-size: 13px;
-  color: white;
+  color: var(--white-label-text-primary, white);
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
   font-variation-settings: 'opsz' 14;
@@ -414,7 +461,7 @@
 .action-item-tile .metric-item:first-child .metric-text {
   display: block;
   font-size: 13px;
-  color: #a6a9b2;
+  color: var(--white-label-text-secondary, #a6a9b2);
   text-align: left;
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
@@ -433,7 +480,7 @@
 
 .metric-item:not(:first-child) .metric-text {
   font-size: 13px;
-  color: #a6a9b2;
+  color: var(--white-label-text-secondary, #a6a9b2);
   text-align: left;
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
@@ -444,7 +491,7 @@
 
 .metric-item:not(:first-child) .metric-number {
   font-size: 13px;
-  color: white;
+  color: var(--white-label-text-primary, white);
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
   font-variation-settings: 'opsz' 14;
@@ -508,7 +555,7 @@
   width: 100%;
   height: 100%;
   z-index: 3;
-  color: rgba(208, 211, 219, 1);
+  color: var(--white-label-text-disabled, rgba(208, 211, 219, 1));
   font-size: 14px;
   font-weight: 600;
   text-align: center;
@@ -561,7 +608,7 @@
 }
 
 .histogram-date-range {
-  color: #a6a9b2 !important;
+  color: var(--white-label-text-secondary, #a6a9b2) !important;
   font-family: 'DM Sans', sans-serif !important;
   font-size: 12px !important;
   font-weight: 400 !important;
@@ -600,7 +647,7 @@
 }
 
 .MuiMenuItem-root {
-  color: white !important;
+  color: var(--white-label-text-primary, white) !important;
   font-family: 'DM Sans', sans-serif !important;
   font-size: 14px !important;
   font-weight: 400 !important;

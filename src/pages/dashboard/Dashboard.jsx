@@ -523,7 +523,7 @@ const Dashboard = () => {
                 background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
               }}
             >
-              <h1 style={{color:"white" , marginBottom:"20px"}}>Dashboard</h1>
+              <h1 style={{color: cssConfig?.css_data?.text?.primary || "white", marginBottom:"20px"}}>Dashboard</h1>
               <div 
                 className="dashboard-container blur-background-top-right"
                 style={{
@@ -582,14 +582,14 @@ const Dashboard = () => {
                               fontFamily: "'DM Sans', sans-serif", 
                               fontWeight: 600,
                               fontVariationSettings: "'opsz' 14",
-                              color: "white",
+                              color: cssConfig?.css_data?.text?.primary || "white",
                               marginBottom: 0
                             }}>
                               Incomplete Action Items{" "}
                               <span
                                 style={{ 
                                   fontSize: "14px", 
-                                  color: "#a6a9b2",
+                                  color: cssConfig?.css_data?.text?.secondary || "#a6a9b2",
                                   fontFamily: "'DM Sans', sans-serif",
                                   fontWeight: 400,
                                   fontVariationSettings: "'opsz' 14"
@@ -629,7 +629,7 @@ const Dashboard = () => {
                               borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`
                             }}>
                               <p style={{
-                                color: '#a6a9b2',
+                                color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
                                 fontSize: '12px',
                                 fontFamily: "'DM Sans', sans-serif",
                                 fontWeight: 600,
@@ -640,7 +640,7 @@ const Dashboard = () => {
                                 Date/Time
                               </p>
                               <p style={{
-                                color: '#a6a9b2',
+                                color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
                                 fontSize: '12px',
                                 fontFamily: "'DM Sans', sans-serif",
                                 fontWeight: 600,
@@ -651,7 +651,7 @@ const Dashboard = () => {
                                 Property/Guest
                               </p>
                               <p style={{
-                                color: '#a6a9b2',
+                                color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
                                 fontSize: '12px',
                                 fontFamily: "'DM Sans', sans-serif",
                                 fontWeight: 600,
@@ -662,7 +662,7 @@ const Dashboard = () => {
                                 Action Item
                               </p>
                               <p style={{
-                                color: '#a6a9b2',
+                                color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
                                 fontSize: '12px',
                                 fontFamily: "'DM Sans', sans-serif",
                                 fontWeight: 600,
@@ -710,7 +710,7 @@ const Dashboard = () => {
                                         fontFamily: "'DM Sans', sans-serif",
                                         fontWeight: 500,
                                         fontSize: "14px",
-                                        color: "white",
+                                        color: cssConfig?.css_data?.text?.primary || "white",
                                         fontVariationSettings: "'opsz' 14",
                                         margin: 0,
                                         marginBottom: '4px'
@@ -721,7 +721,7 @@ const Dashboard = () => {
                                         fontFamily: "'DM Sans', sans-serif",
                                         fontWeight: 400,
                                         fontSize: "12px",
-                                        color: "#a6a9b2",
+                                        color: cssConfig?.css_data?.text?.secondary || "#a6a9b2",
                                         fontVariationSettings: "'opsz' 14",
                                         margin: 0
                                       }}>
@@ -733,7 +733,7 @@ const Dashboard = () => {
                                         fontFamily: "'DM Sans', sans-serif",
                                         fontWeight: 500,
                                         fontSize: "14px",
-                                        color: "white",
+                                        color: cssConfig?.css_data?.text?.primary || "white",
                                         fontVariationSettings: "'opsz' 14",
                                         margin: 0,
                                         marginBottom: actionItem?.guest_name ? '4px' : 0
@@ -745,7 +745,7 @@ const Dashboard = () => {
                                           fontFamily: "'DM Sans', sans-serif",
                                           fontWeight: 400,
                                           fontSize: "12px",
-                                          color: "#a6a9b2",
+                                          color: cssConfig?.css_data?.text?.secondary || "#a6a9b2",
                                           fontVariationSettings: "'opsz' 14",
                                           margin: 0
                                         }}>
@@ -757,7 +757,7 @@ const Dashboard = () => {
                                       fontFamily: "'DM Sans', sans-serif",
                                       fontWeight: 400,
                                       fontSize: "14px",
-                                      color: "white",
+                                      color: cssConfig?.css_data?.text?.primary || "white",
                                       fontVariationSettings: "'opsz' 14",
                                       margin: 0
                                     }}>
@@ -787,7 +787,7 @@ const Dashboard = () => {
                           <div style={{
                             padding: '32px',
                             textAlign: 'center',
-                            color: '#a6a9b2',
+                            color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
                             fontSize: '14px',
                             fontFamily: "'DM Sans', sans-serif",
                             fontVariationSettings: "'opsz' 14"
