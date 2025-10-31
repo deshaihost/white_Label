@@ -15,6 +15,7 @@ const TriggersModal = ({ show, handleClose }) => {
           <div className="condition-modal-list">
             <p>Send Once
               <ul>
+                <li style={{listStyleType:'disc', color:'white'}}>Send immediately</li>
                 <li style={{listStyleType:'disc', color:'white'}}>Schedule for a specific date and time</li>
                 <li style={{listStyleType:'disc', color:'white'}}>One-time message to selected guests</li>
               </ul>
