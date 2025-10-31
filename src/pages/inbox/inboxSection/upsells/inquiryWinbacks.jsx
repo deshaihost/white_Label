@@ -587,15 +587,15 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
       <h3 className="available-variables-heading mt-5">Upcoming Messages</h3>
       <p className="settings-label">Preview Scheduled</p>
       {!currentSettingsData.enabled ? (
-        <p className="settings-label" style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
           Inquiry follow-ups are currently off. Enable them to see upcoming messages.
         </p>
       ) : upcomingMessagesData && upcomingMessagesData.length > 0 ? (
-        <p className="settings-label" style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
           You currently have {upcomingMessagesData.length} upcoming inquiry follow-up messages. These messages will all show up here.
         </p>
       ) : (
-        <p className="settings-label" style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
           You currently have zero upcoming inquiry follow-up messages. These messages will all show up here.
         </p>
       )}
