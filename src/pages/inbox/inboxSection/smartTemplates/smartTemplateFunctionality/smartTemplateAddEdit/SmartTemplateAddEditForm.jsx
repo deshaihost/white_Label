@@ -204,7 +204,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         ...provided,
         border: `1px solid ${state.isFocused ? '#3e88f7' : borderPrimaryColor}`,
         borderRadius: '8px',
-        color: '#a6a9b2',
+        color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+          ? cssConfig.css_data.text.secondary 
+          : '#a6a9b2',
         fontSize: '16px',
         fontWeight: '400',
         fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
@@ -241,7 +243,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         fontVariationSettings: "'opsz' 14",
         padding: '12px 16px',
-        color: '#fff',
+        color: !cssLoading && cssConfig?.css_data?.text?.primary 
+          ? cssConfig.css_data.text.primary 
+          : '#fff',
         backgroundColor: state.isFocused || state.isSelected ? hoverColor : 'transparent',
         transition: 'background-color 0.2s',
         cursor: 'pointer',
@@ -254,7 +258,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       }),
       singleValue: (provided) => ({
         ...provided,
-        color: '#a6a9b2',
+        color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+          ? cssConfig.css_data.text.secondary 
+          : '#a6a9b2',
         fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         fontVariationSettings: "'opsz' 14"
       }),
@@ -283,7 +289,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       }),
       placeholder: (provided) => ({
         ...provided,
-        color: '#676A73',
+        color: !cssLoading && cssConfig?.css_data?.text?.placeholder 
+          ? cssConfig.css_data.text.placeholder 
+          : '#676A73',
         fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         fontVariationSettings: "'opsz' 14"
       }),
@@ -384,7 +392,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#3e88f7',
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : '#3e88f7',
             fontSize: '15px',
             fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             fontWeight: '600',
@@ -405,7 +415,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div>
             <h1 style={{
-              color: 'white',
+              color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                ? cssConfig.css_data.text.primary 
+                : 'white',
               fontSize: '40px',
               fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
               fontWeight: '700',
@@ -415,7 +427,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
               {type?.type} Smart Template
             </h1>
             <p style={{
-              color: '#3e88f7',
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : '#3e88f7',
               fontSize: '16px',
               fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
               fontWeight: '600',
@@ -450,7 +464,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
       {/* Description */}
       <p style={{
-        color: '#a6a9b2',
+        color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+          ? cssConfig.css_data.text.secondary 
+          : '#a6a9b2',
         fontSize: '15px',
         fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         fontWeight: '400',
@@ -475,7 +491,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       }}>
         <div>
           <h3 style={{
-            color: 'white',
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : 'white',
             fontSize: '18px',
             fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             fontWeight: '700',
@@ -526,7 +544,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', marginBottom: '32px' }}>
         <div>
           <label style={{
-            color: 'white',
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : 'white',
             fontSize: '18px',
             fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             fontWeight: '700',
@@ -547,7 +567,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
               border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
               borderRadius: '8px',
               padding: '14px 20px',
-              color: 'white',
+              color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                ? cssConfig.css_data.text.primary 
+                : 'white',
               fontSize: '16px',
               fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
               fontWeight: '400',
@@ -568,7 +590,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
         <div className="propertySelectSection">
           <label style={{
-            color: 'white',
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : 'white',
             fontSize: '18px',
             fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             fontWeight: '700',
@@ -601,7 +625,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary ? `${cssConfig.css_data.borders.primary}66` : 'rgba(1, 50, 128, 0.4)'}`
       }}>
         <label style={{
-          color: 'white',
+          color: !cssLoading && cssConfig?.css_data?.text?.primary 
+            ? cssConfig.css_data.text.primary 
+            : 'white',
           fontSize: '18px',
           fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           fontWeight: '700',
@@ -612,7 +638,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           Send When...
         </label>
         <p style={{
-          color: '#a6a9b2',
+          color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+            ? cssConfig.css_data.text.secondary 
+            : '#a6a9b2',
           fontSize: '14px',
           fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           fontWeight: '400',
@@ -637,7 +665,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                   border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
                   borderRadius: '8px',
                   padding: '12px 16px',
-                  color: 'white',
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                    ? cssConfig.css_data.text.primary 
+                    : 'white',
                   fontSize: '15px',
                   fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                   fontWeight: '400',
@@ -667,7 +697,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                 <button 
                   onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, minutFormData:minutTriggers, editFormData:trigger, editIndex:index, typepAddEdit:edit })}
                   style={{
-                    color: '#98bffa',
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                      ? cssConfig.css_data.text.secondary 
+                      : '#98bffa',
                     fontSize: '15px',
                     fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                     fontWeight: '600',
@@ -679,7 +711,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                     transition: 'color 0.2s'
                   }}
                   onMouseOver={(e) => e.currentTarget.style.color = '#3e88f7'}
-                  onMouseOut={(e) => e.currentTarget.style.color = '#98bffa'}
+                  onMouseOut={(e) => e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#98bffa'}
                 >
                   Change Event
                 </button>
@@ -690,7 +722,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           <button
             onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, minutFormData:minutTriggers, typepAddEdit:add})}
             style={{
-              color: '#98bffa',
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : '#98bffa',
               fontSize: '15px',
               fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
               fontWeight: '600',
@@ -703,7 +737,7 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
               transition: 'color 0.2s'
             }}
             onMouseOver={(e) => e.currentTarget.style.color = '#3e88f7'}
-            onMouseOut={(e) => e.currentTarget.style.color = '#98bffa'}
+            onMouseOut={(e) => e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#98bffa'}
           >
             + Add an Event
           </button>
@@ -717,7 +751,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary ? `${cssConfig.css_data.borders.primary}66` : 'rgba(1, 50, 128, 0.4)'}`
       }}>
         <label style={{
-          color: 'white',
+          color: !cssLoading && cssConfig?.css_data?.text?.primary 
+            ? cssConfig.css_data.text.primary 
+            : 'white',
           fontSize: '18px',
           fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           fontWeight: '700',
@@ -728,7 +764,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           Send If...
         </label>
         <p style={{
-          color: '#a6a9b2',
+          color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+            ? cssConfig.css_data.text.secondary 
+            : '#a6a9b2',
           fontSize: '14px',
           fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           fontWeight: '400',
@@ -753,7 +791,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                     border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
                     borderRadius: '8px',
                     padding: '12px 16px',
-                    color: 'white',
+                    color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                      ? cssConfig.css_data.text.primary 
+                      : 'white',
                     fontSize: '15px',
                     fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                     fontWeight: '400',
@@ -830,7 +870,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginTop: "32px", marginBottom: "32px" }}></div>
       
       <h3 style={{
-        color: 'white',
+        color: !cssLoading && cssConfig?.css_data?.text?.primary 
+          ? cssConfig.css_data.text.primary 
+          : 'white',
         fontSize: '24px',
         fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         fontWeight: '700',
@@ -844,8 +886,22 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 justify-content-between mt-5">
         <div className="available-variables-section" style={{justifyContent:'left'}}>
-          <label className="fs-5">Variables</label>
-          <p className="settings-label">Click to add custom variables to your message. These variables will change to match the data for each reservation.</p>
+          <label 
+            className="fs-5"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                ? cssConfig.css_data.text.primary 
+                : undefined
+            }}
+          >Variables</label>
+          <p 
+            className="settings-label"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : undefined
+            }}
+          >Click to add custom variables to your message. These variables will change to match the data for each reservation.</p>
           <div className="available-variables mt-3">
             {Object.keys(variables).map((key, index) => (
               <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('templateMessage'), `[[${key}]]`)}>{variables[key]}</span>
@@ -855,7 +911,14 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       </div>
 
       <div className="mt-4 mb-5">
-        <label className="fs-5">Message</label>
+        <label 
+          className="fs-5"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : undefined
+          }}
+        >Message</label>
         <textarea 
           id="templateMessage" 
           className="form-control setting-textarea" 
@@ -867,7 +930,18 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           }}
         />
         {!showFollowUps && (
-          <button style={{ background: 'none', border: 'none', color: '#146ef5', cursor: 'pointer', margin: '5px auto 0 auto' }} onClick={handleAddFollowUp}>
+          <button 
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : '#146ef5', 
+              cursor: 'pointer', 
+              margin: '5px auto 0 auto' 
+            }} 
+            onClick={handleAddFollowUp}
+          >
             Follow-up...
           </button>
         )}
@@ -875,7 +949,14 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
       {showFollowUps && dataStructure.follow_ups.map((followUp, index) => (
         <div className="followUp px-5 py-4" key={index}>
-          <label className="fs-5">Follow-Up Message {index + 1}</label>
+          <label 
+            className="fs-5"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                ? cssConfig.css_data.text.primary 
+                : undefined
+            }}
+          >Follow-Up Message {index + 1}</label>
           <textarea 
             id={`followUpMessage${index}`} 
             className="form-control setting-textarea" 
@@ -949,7 +1030,18 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       ))}
 
       {showFollowUps && dataStructure?.follow_ups?.length < 3 && (
-        <button style={{ background: 'none', border: 'none', color: '#146ef5', cursor: 'pointer', margin: '5px auto 0 auto' }} onClick={handleAddFollowUp}>
+        <button 
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : '#146ef5', 
+            cursor: 'pointer', 
+            margin: '5px auto 0 auto' 
+          }} 
+          onClick={handleAddFollowUp}
+        >
           Add another follow-up...
         </button>
       )}
@@ -957,23 +1049,48 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       {/* <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%', backgroundColor: cssConfig?.css_data?.borders?.primary || '#013280', border: 'none'}} /> */}
 
       <div className="ai-context-appropriate-section">
-        <p className="d-flex align-items-center gap-5">
+        <p 
+          className="d-flex align-items-center gap-5"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : undefined
+          }}
+        >
           Enable AI Context Checking
           <div className="form-check form-switch">
             <input className="form-check-input" type="checkbox" checked={dataStructure?.ai_context_check || false} onChange={(e) => {setDataStructure({...dataStructure, ai_context_check:e.target.checked});}} id="flexSwitchCheckChecked"/>
           </div>
         </p>
-        <p className="fs-14 text-muted">
+        <p 
+          className="fs-14 text-muted"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : undefined
+          }}
+        >
           You currently have AI context checking <span className={dataStructure?.ai_context_check ? "text-success" : "text-danger"}>{dataStructure?.ai_context_check ? "enabled" : "disabled"}</span>.
         </p>
-        <p className="fs-14 text-muted">
+        <p 
+          className="fs-14 text-muted"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : undefined
+          }}
+        >
           If this is enabled, HostBuddy will refrain from sending the message to a guest if the AI determines that the message is not contextually appropriate, based on the conversation history.
         </p>
 
         {dataStructure?.ai_context_check && !showContextCustomize && (
           <button
             className="btn btn-link p-0"
-            style={{ color: '#146ef5' }}
+            style={{ 
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : '#146ef5' 
+            }}
             onClick={() => setShowContextCustomize(true)}
           >
             Customize...
@@ -981,7 +1098,14 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         )}
         {dataStructure?.ai_context_check && showContextCustomize && (
           <div className="mt-3">
-            <label className="fs-6">(Optional) Add custom instructions to guide the AI context checking</label>
+            <label 
+              className="fs-6"
+              style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : undefined
+              }}
+            >(Optional) Add custom instructions to guide the AI context checking</label>
             <textarea
               className="form-control setting-textarea"
               placeholder="Type instructions to guide the AI..."
@@ -993,23 +1117,48 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       </div>
 
       <div className="ai-context-appropriate-section">
-        <p className="d-flex align-items-center gap-5">
+        <p 
+          className="d-flex align-items-center gap-5"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : undefined
+          }}
+        >
           Enable AI Personalization
           <div className="form-check form-switch">
             <input className="form-check-input" type="checkbox" checked={dataStructure?.ai_personalization || false} onChange={(e) => {setDataStructure({...dataStructure, ai_personalization:e.target.checked});}} id="flexSwitchCheckChecked"/>
           </div>
         </p>
-        <p className="fs-14 text-muted">
+        <p 
+          className="fs-14 text-muted"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : undefined
+          }}
+        >
           You currently have AI personalization <span className={dataStructure?.ai_personalization ? "text-success" : "text-danger"}>{dataStructure?.ai_personalization ? "enabled" : "disabled"}</span>.
         </p>
-        <p className="fs-14 text-muted">
+        <p 
+          className="fs-14 text-muted"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : undefined
+          }}
+        >
           If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
         </p>
 
         {dataStructure?.ai_personalization && !showPersonalizeCustomize && (
           <button
             className="btn btn-link p-0"
-            style={{ color: '#146ef5' }}
+            style={{ 
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : '#146ef5' 
+            }}
             onClick={() => setShowPersonalizeCustomize(true)}
           >
             Customize...
@@ -1017,7 +1166,14 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         )}
         {dataStructure?.ai_personalization && showPersonalizeCustomize && (
           <div className="mt-3">
-            <label className="fs-6">(Optional) Add custom instructions to guide the AI personalization</label>
+            <label 
+              className="fs-6"
+              style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : undefined
+              }}
+            >(Optional) Add custom instructions to guide the AI personalization</label>
             <textarea
               className="form-control setting-textarea"
               placeholder="Type instructions to guide the AI..."

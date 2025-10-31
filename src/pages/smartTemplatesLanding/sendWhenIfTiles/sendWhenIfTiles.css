@@ -46,14 +46,14 @@
   margin: 0;
   font-size: 1em;
   font-weight: bold;
-  color: #fff;
+  color: var(--white-label-text-primary, #fff);
 }
 
 .send-when-if-tile .tile-text {
   font-family: "Samsung Sharp Sans Medium";
   margin: 0px 0 0 0;
   font-size: 1em;
-  color: #ffffff;
+  color: var(--white-label-text-secondary, #ffffff);
 }
 
 .send-when-if-tile .tile-divider {

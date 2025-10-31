@@ -316,11 +316,28 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
         ) : (
           <>
             <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-              <h3>Smart Templates</h3>
+              <h3 style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                  ? cssConfig.css_data.text.primary 
+                  : 'white'
+              }}>Smart Templates</h3>
             </div>
             <div style={{width:"95%", margin:"20px 5px"}}>
-              <p style={{color:"#CCC", fontSize:'16px'}}>Highly customizable templated messages that let you contact the right guests at the right time. Automate friendly check-in messages, strategic upsells, policy reminders, and much more. Use AI to add context awareness and a personal touch to each message.</p>
-              <Link to="/smart-templates?portal=true" style={{display:'inline-block', marginTop:'10px'}}>Learn more &rarr;</Link>
+              <p style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : "#CCC", 
+                fontSize:'16px'
+              }}>Highly customizable templated messages that let you contact the right guests at the right time. Automate friendly check-in messages, strategic upsells, policy reminders, and much more. Use AI to add context awareness and a personal touch to each message.</p>
+              <Link 
+                to="/smart-templates?portal=true" 
+                style={{
+                  display:'inline-block', 
+                  marginTop:'10px',
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                    ? cssConfig.css_data.text.secondary 
+                    : '#3E88F7'
+                }}>Learn more &rarr;</Link>
             </div>
             <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: "40px" }}></div>
 
@@ -358,7 +375,9 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                     >
                       <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                         <h3 style={{ 
-                          color: "white", 
+                          color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                            ? cssConfig.css_data.text.primary 
+                            : "white", 
                           fontSize: "22px", 
                           fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                           fontWeight: "700",
@@ -368,7 +387,9 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                           {name !== "" ? name : <span style={{color: "#ef4444"}}>No Name</span>}
                         </h3>
                         <p style={{ 
-                          color: "#a6a9b2", 
+                          color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                            ? cssConfig.css_data.text.secondary 
+                            : "#a6a9b2", 
                           fontSize: "16px",
                           fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                           fontWeight: "400",
@@ -427,7 +448,9 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                         <button
                           onClick={() => setAddEditSmart({type:{type:edit, index:smartIndex}, data: "", smartTemplateData:{smartItem}, description:templateDescription})}
                           style={{
-                            color: "#98bffa",
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                              ? cssConfig.css_data.text.secondary 
+                              : "#98bffa",
                             fontSize: "16px",
                             fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                             fontWeight: "600",
@@ -439,7 +462,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                             transition: "color 0.2s"
                           }}
                           onMouseOver={(e) => e.target.style.color = "#3e88f7"}
-                          onMouseOut={(e) => e.target.style.color = "#98bffa"}
+                          onMouseOut={(e) => e.target.style.color = !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : "#98bffa"}
                         >
                           Edit
                         </button>
@@ -451,12 +474,32 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
             )}
 
             <div>
-              <button className="bg-none text-primary border-0 outline-0 fs-4 fw-bold p-2 mt-4" onClick={() => setAddEditSmart({ type: { type: add }, data: "" })}>
+              <button 
+                className="bg-none text-primary border-0 outline-0 fs-4 fw-bold p-2 mt-4" 
+                onClick={() => setAddEditSmart({ type: { type: add }, data: "" })}
+                style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                    ? cssConfig.css_data.text.primary 
+                    : undefined
+                }}
+              >
                 <i className="bi bi-plus fs-3 "></i> Add New
               </button>
             </div>
 
-            <p className='p-2 mt-2'> Or start from a <a href="#" onClick={() => setShowPrebuiltModal(true)}>pre-built template</a></p>
+            <p className='p-2 mt-2' style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : undefined
+            }}> Or start from a <a 
+              href="#" 
+              onClick={() => setShowPrebuiltModal(true)}
+              style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : undefined
+              }}
+            >pre-built template</a></p>
           </>
         )}
       </div>

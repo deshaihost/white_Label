@@ -84,14 +84,14 @@
 }
 .addition_des .trigger-label {
     font-size: 16px;
-    color: #fff;
+    color: var(--white-label-text-primary, #fff);
     margin-bottom: 10px;
     text-align: center;
 }
 
 /* Smart Template Header Styling - Matching Landing Page */
 .smart_templates_tab_grid h3 {
-    color: white;
+    color: var(--white-label-text-primary, white);
     font-size: 40px;
     font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 700;
@@ -100,7 +100,7 @@
 }
 
 .smart_templates_tab_grid > div > p {
-    color: #a6a9b2;
+    color: var(--white-label-text-secondary, #a6a9b2);
     font-size: 17px;
     font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 400;
@@ -109,7 +109,7 @@
 }
 
 .smart_templates_tab_grid a {
-    color: #3e88f7;
+    color: var(--white-label-text-secondary, #3e88f7);
     font-size: 16px;
     font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 600;
@@ -169,6 +169,7 @@
 .template-status {
     margin-left: auto;
     font-size: 14px;
+    color: var(--white-label-text-secondary, inherit);
 }
 
 .template-status.enabled {
