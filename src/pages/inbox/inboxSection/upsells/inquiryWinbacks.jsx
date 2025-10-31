@@ -429,7 +429,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         <div className="col-lg-11 col-12">
           <h3 
             style={{ 
-              color: 'white', 
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
               fontSize: '18px', 
               fontFamily: "'DM Sans', sans-serif", 
               fontWeight: '700',
@@ -441,7 +441,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
           </h3>
           <p 
             style={{ 
-              color: '#a6a9b2', 
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
               fontSize: '14px', 
               fontFamily: "'DM Sans', sans-serif", 
               fontWeight: '400',
@@ -531,7 +531,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
                 />
               </button>
               <div style={{ flex: 1 }}>
-                <p style={{ color: 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', marginBottom: '4px', fontVariationSettings: "'opsz' 14" }}>
+                <p style={{ color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', marginBottom: '4px', fontVariationSettings: "'opsz' 14" }}>
                   Enable AI Personalization
                 </p>
                 <p style={{ 
@@ -544,7 +544,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
                 }}>
                   You currently have AI personalization {currentSettingsData?.ai_personalization ? 'enabled' : 'disabled'}.
                 </p>
-                <p style={{ color: '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', margin: 0, fontVariationSettings: "'opsz' 14" }}>
+                <p style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', margin: 0, fontVariationSettings: "'opsz' 14" }}>
                   If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
                 </p>
               </div>
