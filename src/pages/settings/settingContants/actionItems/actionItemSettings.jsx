@@ -423,7 +423,12 @@ const ActionItemsSettings = () => {
         backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#17191F') : '#17191F'
       }}
     >
-      <h1 className="action-items-page-title">Action Items Settings</h1>
+      <h1 className="action-items-page-title" style={{
+        color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+          cssConfig.css_data.text.primary : '#ffffff'
+      }}>
+        Action Items Settings
+      </h1>
 
       {/* Tabs */}
       <div className="action-items-tabs">
@@ -445,18 +450,27 @@ const ActionItemsSettings = () => {
       {activeTab === 'instructions' && (
         <div>
           {/* Explanation */}
-          <p className="action-items-explanation">
+          <p className="action-items-explanation" style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+              cssConfig.css_data.text.secondary : '#a6a9b2'
+          }}>
             By default, HostBuddy will raise an action item when it can't handle a matter, when it doesn't know the answer, or when it detects that something requires your attention. You can add instructions here to influence how these items are identified.
           </p>
 
           {/* Add New Instruction */}
           <div className="action-items-add-form">
-            <h2 className="action-items-section-title">
+            <h2 className="action-items-section-title" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
               {isEditing ? "Edit Instruction" : "Add New Instruction"}
             </h2>
 
             <div className="action-items-form-group">
-              <label className="action-items-form-label" htmlFor="instruction">
+              <label className="action-items-form-label" htmlFor="instruction" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                  cssConfig.css_data.text.primary : '#ffffff'
+              }}>
                 Instruction
               </label>
               <textarea
@@ -468,6 +482,10 @@ const ActionItemsSettings = () => {
                   ? setEditingInstruction({ ...editingInstruction, instruction: e.target.value })
                   : setNewInstruction(e.target.value)
                 }
+                style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                    cssConfig.css_data.text.secondary : '#ffffff'
+                }}
               />
             </div>
 
@@ -482,7 +500,10 @@ const ActionItemsSettings = () => {
             ) : (
               <div style={{ marginBottom: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <label className="action-items-form-label" htmlFor="Properties">
+                  <label className="action-items-form-label" htmlFor="Properties" style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                      cssConfig.css_data.text.primary : '#ffffff'
+                  }}>
                     Select Properties
                   </label>
                   <button
@@ -539,23 +560,37 @@ const ActionItemsSettings = () => {
 
           {/* Current Instructions */}
           <div>
-            <h2 className="action-items-section-title">Current Instructions</h2>
+            <h2 className="action-items-section-title" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
+              Current Instructions
+            </h2>
             {loading ? (
               <div className="action-items-loading">
                 <Loader color="#146ef5" />
               </div>
             ) : instructions.length === 0 ? (
-              <p className="action-items-empty-state">
+              <p className="action-items-empty-state" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                  cssConfig.css_data.text.quaternary : '#999999'
+              }}>
                 No instructions added yet. Add your first instruction above.
               </p>
             ) : (
               <div className="action-items-instructions-grid">
                 {instructions.map((instruction) => (
                   <div className="action-items-instruction-card" key={instruction.instruction_id}>
-                    <p className="action-items-instruction-text">
+                    <p className="action-items-instruction-text" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                        cssConfig.css_data.text.secondary : '#ffffff'
+                    }}>
                       {instruction.instruction}
                     </p>
-                    <p className="action-items-instruction-applied">
+                    <p className="action-items-instruction-applied" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                        cssConfig.css_data.text.secondary : '#3e88f7'
+                    }}>
                       {!instruction.properties || instruction.properties.length === 0
                         ? "Applied to all properties"
                         : instruction.properties.length > 5
@@ -602,10 +637,18 @@ const ActionItemsSettings = () => {
         <div>
           {/* Add New Category */}
           <div className="action-items-category-add-form">
-            <h2 className="action-items-section-title">Add New Category</h2>
+            <h2 className="action-items-section-title" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
+              Add New Category
+            </h2>
 
             <div className="action-items-category-input-group">
-              <label className="action-items-form-label" htmlFor="categoryName">
+              <label className="action-items-form-label" htmlFor="categoryName" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                  cssConfig.css_data.text.primary : '#ffffff'
+              }}>
                 Category Name
               </label>
               <input
@@ -615,17 +658,28 @@ const ActionItemsSettings = () => {
                 placeholder="Enter category name"
                 value={newCategory.name}
                 onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                    cssConfig.css_data.text.secondary : '#ffffff'
+                }}
               />
             </div>
 
             <div className="action-items-category-input-group">
-              <label className="action-items-form-label" htmlFor="categoryDescription">
+              <label className="action-items-form-label" htmlFor="categoryDescription" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                  cssConfig.css_data.text.primary : '#ffffff'
+              }}>
                 Description
               </label>
               <textarea
                 id="categoryDescription"
                 className="action-items-textarea"
-                style={{ minHeight: '100px' }}
+                style={{ 
+                  minHeight: '100px',
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                    cssConfig.css_data.text.secondary : '#ffffff'
+                }}
                 placeholder="Enter description"
                 value={newCategory.description}
                 onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
@@ -647,13 +701,21 @@ const ActionItemsSettings = () => {
 
           {/* Existing Categories */}
           <div>
-            <h2 className="action-items-section-title">Existing Categories</h2>
+            <h2 className="action-items-section-title" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#ffffff'
+            }}>
+              Existing Categories
+            </h2>
             {loadingCategories ? (
               <div className="action-items-loading">
                 <Loader color="#146ef5" />
               </div>
             ) : categories.length === 0 ? (
-              <p className="action-items-empty-state">
+              <p className="action-items-empty-state" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                  cssConfig.css_data.text.quaternary : '#999999'
+              }}>
                 No categories found. Add your first category above.
               </p>
             ) : (
@@ -663,9 +725,17 @@ const ActionItemsSettings = () => {
                   .map(category => (
                     <div key={category.id || category.name} className="action-items-category-card">
                       <div className="action-items-category-content">
-                        <h3 className="action-items-category-name">{category.name}</h3>
+                        <h3 className="action-items-category-name" style={{
+                          color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                            cssConfig.css_data.text.secondary : '#ffffff'
+                        }}>
+                          {category.name}
+                        </h3>
                         {category.definition && (
-                          <p className="action-items-category-description">
+                          <p className="action-items-category-description" style={{
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : '#a6a9b2'
+                          }}>
                             {category.definition}
                           </p>
                         )}
@@ -706,7 +776,12 @@ const ActionItemsSettings = () => {
         <div className="action-items-delete-modal-overlay">
           <div className="action-items-delete-modal">
             <div className="action-items-delete-modal-header">
-              <h2 className="action-items-delete-modal-title">Delete Category</h2>
+              <h2 className="action-items-delete-modal-title" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                  cssConfig.css_data.text.primary : '#ffffff'
+              }}>
+                Delete Category
+              </h2>
               <button
                 type="button"
                 className="action-items-delete-modal-close"
@@ -715,7 +790,10 @@ const ActionItemsSettings = () => {
                 <XIcon />
               </button>
             </div>
-            <div className="action-items-delete-modal-body">
+            <div className="action-items-delete-modal-body" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                cssConfig.css_data.text.secondary : '#d0d3db'
+            }}>
               Are you sure you want to delete the category{" "}
               <strong>{categoryToDelete?.name}</strong>?<br />
               Action items with this category will be moved to <strong>OTHER</strong>.
