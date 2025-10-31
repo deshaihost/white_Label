@@ -346,7 +346,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
       <div style={{ marginTop: '20px', marginBottom: '40px' }}>
         <p 
           style={{ 
-            color: '#a6a9b2', 
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
             fontSize: '16px', 
             fontFamily: "'DM Sans', sans-serif", 
             fontWeight: '400',
@@ -369,7 +369,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
           <h3 
             style={{ 
-              color: 'white', 
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
               fontSize: '18px', 
               fontFamily: "'DM Sans', sans-serif", 
               fontWeight: '700',
@@ -428,7 +428,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
         <div className="col-lg-11 col-12">
           <h3 
             style={{ 
-              color: 'white', 
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
               fontSize: '18px', 
               fontFamily: "'DM Sans', sans-serif", 
               fontWeight: '700',
@@ -440,7 +440,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
           </h3>
           <p 
             style={{ 
-              color: '#a6a9b2', 
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
               fontSize: '14px', 
               fontFamily: "'DM Sans', sans-serif", 
               fontWeight: '400',
@@ -570,7 +570,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
                 />
               </button>
               <div style={{ flex: 1 }}>
-                <p style={{ color: 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', marginBottom: '4px', fontVariationSettings: "'opsz' 14" }}>
+                <p style={{ color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', marginBottom: '4px', fontVariationSettings: "'opsz' 14" }}>
                   Enable AI Personalization
                 </p>
                 <p style={{ 
@@ -583,7 +583,7 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
                 }}>
                   You currently have AI personalization {currentSettingsData?.ai_personalization ? 'enabled' : 'disabled'}.
                 </p>
-                <p style={{ color: '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', margin: 0, fontVariationSettings: "'opsz' 14" }}>
+                <p style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', margin: 0, fontVariationSettings: "'opsz' 14" }}>
                   If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
                 </p>
               </div>
@@ -623,15 +623,15 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
       <h3 className="available-variables-heading mt-5">Upcoming Messages</h3>
       <p className="settings-label">Preview Scheduled</p>
       {!currentSettingsData.enabled ? (
-        <p className="settings-label" style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
           Post-stay upsells are currently off. Enable them to see upcoming messages.
         </p>
       ) : upcomingMessagesData && upcomingMessagesData.length > 0 ? (
-        <p className="settings-label" style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
           You currently have {upcomingMessagesData.length} upcoming upsell messages. These messages will all show up here.
         </p>
       ) : (
-        <p className="settings-label" style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
           You currently have zero upcoming upsell messages. These messages will all show up here.
         </p>
       )}

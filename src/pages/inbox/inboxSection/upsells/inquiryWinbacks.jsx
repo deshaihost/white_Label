@@ -347,7 +347,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
       <div style={{ marginTop: '20px', marginBottom: '40px' }}>
         <p 
           style={{ 
-            color: '#a6a9b2', 
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
             fontSize: '16px', 
             fontFamily: "'DM Sans', sans-serif", 
             fontWeight: '400',
@@ -370,7 +370,7 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
           <h3 
             style={{ 
-              color: 'white', 
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
               fontSize: '18px', 
               fontFamily: "'DM Sans', sans-serif", 
               fontWeight: '700',

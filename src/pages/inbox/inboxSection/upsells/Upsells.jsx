@@ -146,6 +146,9 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
             <h1 
               className="text-white mb-4" 
               style={{ 
+                color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                  ? cssConfig.css_data.text.primary 
+                  : undefined,
                 fontSize: '40px', 
                 fontFamily: "'DM Sans', sans-serif", 
                 fontWeight: '700',
@@ -156,7 +159,9 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
             </h1>
             <p 
               style={{ 
-                color: '#a6a9b2', 
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : '#a6a9b2',
                 fontSize: '16px', 
                 fontFamily: "'DM Sans', sans-serif", 
                 fontWeight: '400',
@@ -203,7 +208,9 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
             <div style={{ flex: 1 }}>
               <h3 
                 style={{ 
-                  color: 'white', 
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                    ? cssConfig.css_data.text.primary 
+                    : 'white',
                   fontSize: '22px', 
                   fontFamily: "'DM Sans', sans-serif", 
                   fontWeight: '700',
@@ -215,7 +222,9 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
               </h3>
               <p 
                 style={{ 
-                  color: '#a6a9b2', 
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                    ? cssConfig.css_data.text.secondary 
+                    : '#a6a9b2',
                   fontSize: '16px', 
                   fontFamily: "'DM Sans', sans-serif", 
                   fontWeight: '400',
@@ -277,7 +286,9 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
             <div style={{ flex: 1 }}>
               <h3 
                 style={{ 
-                  color: 'white', 
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                    ? cssConfig.css_data.text.primary 
+                    : 'white',
                   fontSize: '22px', 
                   fontFamily: "'DM Sans', sans-serif", 
                   fontWeight: '700',
@@ -289,7 +300,9 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
               </h3>
               <p 
                 style={{ 
-                  color: '#a6a9b2', 
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                    ? cssConfig.css_data.text.secondary 
+                    : '#a6a9b2',
                   fontSize: '16px', 
                   fontFamily: "'DM Sans', sans-serif", 
                   fontWeight: '400',
@@ -351,7 +364,9 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
             <div style={{ flex: 1 }}>
               <h3 
                 style={{ 
-                  color: 'white', 
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                    ? cssConfig.css_data.text.primary 
+                    : 'white',
                   fontSize: '22px', 
                   fontFamily: "'DM Sans', sans-serif", 
                   fontWeight: '700',
@@ -363,7 +378,9 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
               </h3>
               <p 
                 style={{ 
-                  color: '#a6a9b2', 
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                    ? cssConfig.css_data.text.secondary 
+                    : '#a6a9b2',
                   fontSize: '16px', 
                   fontFamily: "'DM Sans', sans-serif", 
                   fontWeight: '400',
