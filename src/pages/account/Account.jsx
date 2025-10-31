@@ -16,6 +16,14 @@ const Account = () => {
   const [selectedSection, setSelectedSection] = useState('UserInformation');
   const location = useLocation();
 
+  // Debug: Log the text color value
+  console.log('🎨 Account Page CSS Config:', {
+    cssLoading,
+    hasCssConfig: !!cssConfig,
+    primaryTextColor: cssConfig?.css_data?.text?.primary,
+    secondaryTextColor: cssConfig?.css_data?.text?.secondary
+  });
+
   // If the URL points to "/contact", go to the contact section. This is necessary for handling oauth, e.g. when connecting Slack
   useEffect(() => {
     const path = location.pathname.split('/').pop();
@@ -35,16 +43,26 @@ const Account = () => {
       </Helmet>
       <div className="container">
         <div className="banner-heading">
-          <h2>Account Settings</h2>
+          <h2 style={{ 
+            color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white',
+            fontSize: '28px', 
+            fontFamily: "'DM Sans', sans-serif", 
+            fontWeight: '700', 
+            fontVariationSettings: "'opsz' 14", 
+            marginBottom: '8px',
+            textAlign: 'left'
+          }}>
+            Account Settings TEST
+          </h2>
           <p style={{ 
-            color: cssConfig?.css_data?.text?.secondary || '#a6a9b2', 
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
             fontSize: '14px', 
             fontFamily: "'DM Sans', sans-serif", 
             fontWeight: '400', 
             fontVariationSettings: "'opsz' 14", 
             marginBottom: '0' 
           }}>
-            Manage your personal information, location, and account security
+            manage your personal information, location, and account security
           </p>
         </div>
         <div className="row">

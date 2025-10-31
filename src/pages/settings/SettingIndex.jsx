@@ -104,10 +104,24 @@ const SettingIndex = () => {
                   {interFaceTypes?.account === interFaceSettings && (
                     <>
                       <div className="account-page-header">
-                        <h1 style={{ color: 'white', fontSize: '28px', fontFamily: "'DM Sans', sans-serif", fontWeight: '700', fontVariationSettings: "'opsz' 14", marginBottom: '8px' }}>
+                        <h1 style={{ 
+                          color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
+                          fontSize: '28px', 
+                          fontFamily: "'DM Sans', sans-serif", 
+                          fontWeight: '700', 
+                          fontVariationSettings: "'opsz' 14", 
+                          marginBottom: '8px' 
+                        }}>
                           Account Settings
                         </h1>
-                        <p style={{ color: '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', fontVariationSettings: "'opsz' 14", marginBottom: '40px' }}>
+                        <p style={{ 
+                          color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
+                          fontSize: '14px', 
+                          fontFamily: "'DM Sans', sans-serif", 
+                          fontWeight: '400', 
+                          fontVariationSettings: "'opsz' 14", 
+                          marginBottom: '40px' 
+                        }}>
                           Manage your personal information, location, and account security
                         </p>
                       </div>

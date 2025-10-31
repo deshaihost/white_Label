@@ -281,10 +281,20 @@ const AccountContactSection = () => {
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '48px 32px' }}>
-      <h1 className="contacts-page-title">
+      <h1 
+        className="contacts-page-title"
+        style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white'
+        }}
+      >
         Contact Information
       </h1>
-      <p className="contacts-page-subtitle">
+      <p 
+        className="contacts-page-subtitle"
+        style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2'
+        }}
+      >
         Manage your notification channels and integrations
       </p>
 
@@ -333,7 +343,14 @@ const AccountContactSection = () => {
       <div style={{ marginBottom: '40px' }}>
         <div className="section-divider" style={{ marginBottom: '24px' }}>
           <div className="section-divider-line"></div>
-          <span className="section-divider-text">Communication Methods</span>
+          <span 
+            className="section-divider-text"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#74A9F7'
+            }}
+          >
+            Communication Methods
+          </span>
           <div className="section-divider-line"></div>
         </div>
 
@@ -369,7 +386,8 @@ const AccountContactSection = () => {
                   </svg>
                 )}
                 <h3 style={{
-                  cursor: isProPlanUser && section === 'whatsapp' ? 'pointer' : 'default'
+                  cursor: isProPlanUser && section === 'whatsapp' ? 'pointer' : 'default',
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white'
                 }}
                 onClick={() => {
                   if (isProPlanUser && section === 'whatsapp') {
@@ -390,8 +408,22 @@ const AccountContactSection = () => {
                   contact.type === section && (
                     <div key={contactIndex} className="contact-list-item">
                       <div className="contact-list-item-left">
-                        <span className="contact-item-name">{contact.name}</span>
-                        <span className="contact-item-address">{contact.address}</span>
+                        <span 
+                          className="contact-item-name"
+                          style={{
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2'
+                          }}
+                        >
+                          {contact.name}
+                        </span>
+                        <span 
+                          className="contact-item-address"
+                          style={{
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2'
+                          }}
+                        >
+                          {contact.address}
+                        </span>
                       </div>
                       <div className="contact-list-item-right">
                         {!contact.confirmed && codeSentFor !== contact.address && (
@@ -423,7 +455,14 @@ const AccountContactSection = () => {
                             </button>
                           </div>
                         )}
-                        <span className={contact.confirmed ? 'contact-status-confirmed' : 'contact-status-unconfirmed'}>
+                        <span 
+                          className={contact.confirmed ? 'contact-status-confirmed' : 'contact-status-unconfirmed'}
+                          style={{
+                            color: contact.confirmed 
+                              ? (!cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white')
+                              : (!cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#f59e0b')
+                          }}
+                        >
                           {contact.confirmed ? 'Confirmed' : 'Not Confirmed'}
                         </span>
                         {contact.name !== 'Primary Email' && (
@@ -549,7 +588,14 @@ const AccountContactSection = () => {
       <div style={{ marginBottom: '40px' }}>
         <div className="section-divider" style={{ marginBottom: '24px' }}>
           <div className="section-divider-line"></div>
-          <span className="section-divider-text">Integrations</span>
+          <span 
+            className="section-divider-text"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#74A9F7'
+            }}
+          >
+            Integrations
+          </span>
           <div className="section-divider-line"></div>
         </div>
 
@@ -576,7 +622,8 @@ const AccountContactSection = () => {
                     </svg>
                   )}
                   <h3 style={{
-                    cursor: isProPlanUser && (section === 'slack' || section === 'webhook') ? 'pointer' : 'default'
+                    cursor: isProPlanUser && (section === 'slack' || section === 'webhook') ? 'pointer' : 'default',
+                    color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white'
                   }}
                   onClick={() => {
                     if (isProPlanUser && (section === 'slack' || section === 'webhook')) {
@@ -628,8 +675,22 @@ const AccountContactSection = () => {
                           contact.type === section && (
                             <div key={contactIndex} className="contact-list-item">
                               <div className="contact-list-item-left">
-                                <span className="contact-item-name">{contact.name}</span>
-                                <span className="contact-item-address">{contact.address}</span>
+                                <span 
+                                  className="contact-item-name"
+                                  style={{
+                                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2'
+                                  }}
+                                >
+                                  {contact.name}
+                                </span>
+                                <span 
+                                  className="contact-item-address"
+                                  style={{
+                                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2'
+                                  }}
+                                >
+                                  {contact.address}
+                                </span>
                               </div>
                               <button
                                 onClick={() => removeContact(contactIndex)}
