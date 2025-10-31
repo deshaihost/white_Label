@@ -121,15 +121,6 @@ const StatisticsPage = () => {
     },
   ]
 
-  // Debug logging for upsells
-  console.log('=== UPSELL DEBUG ===');
-  console.log('Requested date range:', selectedStartDate, 'to', selectedEndDate);
-  console.log('Data date range:', dataStartDate, 'to', dataEndDate);
-  console.log('Upsell date range:', upsellsStartDate, 'to', upsellsEndDate);
-  console.log('Raw upsell_data from API:', rawApiReturn?.statistics?.upsell_data);
-  console.log('Processed upsellMetrics:', apiStatisticsData?.upsellMetrics);
-  console.log('===================');
-
   // When the page loads, fetch the data and populate the charts
   useEffect(() => {
     getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading, {include_upsells:true});
