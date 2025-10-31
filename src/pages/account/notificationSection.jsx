@@ -568,13 +568,25 @@ const AccountNotificationSection = () => {
       {/* Page Header */}
       <div className="notifications-page-header">
         <BellIcon />
-        <h1 className="notifications-page-title">Notification Settings</h1>
+        <h1 
+          className="notifications-page-title"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+          }}
+        >
+          Notification Settings
+        </h1>
       </div>
 
       {/* Info Banner */}
       <div className="notifications-info-banner">
         <span className="notifications-info-banner-icon">💡</span>
-        <p className="notifications-info-banner-text">
+        <p 
+          className="notifications-info-banner-text"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+          }}
+        >
           If your contact information is not showing up here, add it in the{" "}
           <Link to="/setting/contact" className="notifications-info-banner-link">
             Contact
@@ -587,22 +599,51 @@ const AccountNotificationSection = () => {
       {!time_zone_name && (
         <div className="notifications-info-banner" style={{ borderColor: '#f87171' }}>
           <span className="notifications-info-banner-icon">⚠️</span>
-          <p className="notifications-info-banner-text">
-            <span className="notifications-warning-text">You have not set a time zone for your account.</span> Set your time zone in "Region" Settings in order to use daily notifications.
+          <p 
+            className="notifications-info-banner-text"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+            }}
+          >
+            <span 
+              className="notifications-warning-text"
+              style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#f87171'
+              }}
+            >
+              You have not set a time zone for your account.
+            </span> Set your time zone in "Region" Settings in order to use daily notifications.
           </p>
         </div>
       )}
 
       {/* Action Items Section */}
       <div className="notifications-section">
-        <h2 className="notifications-section-title">Action Items</h2>
-        <p className="notifications-section-description">
+        <h2 
+          className="notifications-section-title"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+          }}
+        >
+          Action Items
+        </h2>
+        <p 
+          className="notifications-section-description"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+          }}
+        >
           Get notifications when HostBuddy detects a new action item for the host in a guest conversation. Receive your notifications immediately, or get them all at the end of the hour, or at a certain time each day.
         </p>
 
         {/* Empty State */}
         {recipients.length === 0 && Object.keys(newRecipient || {}).length === 0 && (
-          <p className="notifications-empty-state">
+          <p 
+            className="notifications-empty-state"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#676A73'
+            }}
+          >
             No recipients added. This notification will not be sent.
           </p>
         )}
@@ -625,19 +666,43 @@ const AccountNotificationSection = () => {
               <tbody>
                 {recipients.map((recipient, index) => (
                   <tr key={index}>
-                    <td className="notifications-table-name">{recipient.firstName}</td>
+                    <td 
+                      className="notifications-table-name"
+                      style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+                      }}
+                    >
+                      {recipient.firstName}
+                    </td>
                     <td>
                       <span className="notifications-method-badge">
                         {recipient.channel}
                       </span>
                     </td>
-                    <td className="notifications-table-secondary">{recipient.RecipientAddress}</td>
-                    <td className="notifications-table-name">
+                    <td 
+                      className="notifications-table-secondary"
+                      style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+                      }}
+                    >
+                      {recipient.RecipientAddress}
+                    </td>
+                    <td 
+                      className="notifications-table-name"
+                      style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+                      }}
+                    >
                       {recipient.timing === "daily"
                         ? `${recipient.timing}, ${convertTimeTo12HourFormat(recipient.time_of_day)}`
                         : recipient.timing}
                     </td>
-                    <td className="notifications-table-secondary">
+                    <td 
+                      className="notifications-table-secondary"
+                      style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+                      }}
+                    >
                       {recipient.categories && recipient.categories.length > 0 ? (
                         <span
                           className="notifications-tooltip-trigger"
@@ -651,7 +716,12 @@ const AccountNotificationSection = () => {
                       )}
                       <Tooltip id={`categories-tooltip-${index}`} place="top" effect="solid" />
                     </td>
-                    <td className="notifications-table-secondary">
+                    <td 
+                      className="notifications-table-secondary"
+                      style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+                      }}
+                    >
                       {recipient.properties && recipient.properties.length > 0 ? (
                         <span
                           className="notifications-tooltip-trigger"
@@ -703,7 +773,12 @@ const AccountNotificationSection = () => {
           <div className="notifications-add-form">
             <div className="notifications-form-header">
               <UserPlusIcon />
-              <h3 className="notifications-form-title">
+              <h3 
+                className="notifications-form-title"
+                style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+                }}
+              >
                 {editingRecipientIndex !== null ? 'Edit Recipient' : 'Add Recipient'}
               </h3>
             </div>
