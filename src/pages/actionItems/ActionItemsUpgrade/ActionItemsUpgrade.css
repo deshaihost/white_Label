@@ -90,7 +90,7 @@
   font-size: 14px;
   line-height: 1.4;
   text-align: center;
-  color: #D0D3DB;
+  color: var(--white-label-text-disabled, #D0D3DB);
   margin: 0;
   width: 100%;
   max-height: 40px;

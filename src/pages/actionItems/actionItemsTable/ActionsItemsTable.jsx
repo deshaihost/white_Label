@@ -359,12 +359,12 @@ const ActionsItemsTable = () => {
                 <table className="table text-white action-items-table">
                   <thead style={{ background: "#020d29" }}>
                     <tr style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>
-                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>Date/Time</th>
-                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>Property/Guest</th>
-                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>Category</th>
-                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>Action Item</th>
-                      {selectedStatus === "completed" && <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>Completed By</th>}
-                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>View/Done</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>Date/Time</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>Property/Guest</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>Category</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>Action Item</th>
+                      {selectedStatus === "completed" && <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>Completed By</th>}
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>View/Done</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -451,7 +451,7 @@ const ActionsItemsTable = () => {
                 )}
               </div>
             ) : (
-              <span className="d-flex justify-content-center align-items-center" style={{ height: '500px', color: "#FFF" }}>
+              <span className="d-flex justify-content-center align-items-center" style={{ height: '500px', color: cssConfig?.css_data?.text?.secondary || "#FFF" }}>
                 No Data Yet
               </span>
             )}

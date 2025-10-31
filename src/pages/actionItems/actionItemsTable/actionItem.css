@@ -17,7 +17,7 @@
   font-variation-settings: 'opsz' 14;
   font-size: 32px;
   font-weight: 700;
-  color: white;
+  color: var(--white-label-text-primary, white);
   margin: 0;
 }
 
@@ -34,7 +34,7 @@
   background: rgba(189, 193, 201, 0.08);
   border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 4px;
-  color: #d0d3db;
+  color: var(--white-label-text-primary, #d0d3db);
   font-size: 14px;
   font-weight: 500;
   font-family: 'DM Sans', sans-serif;
@@ -65,7 +65,7 @@
 
 .action-select select option {
   background: var(--white-label-background-secondary, #17191f);
-  color: #d0d3db;
+  color: var(--white-label-text-primary, #d0d3db);
   padding: 8px 12px;
 }
 
@@ -73,7 +73,7 @@
 .action-select select option:focus,
 .action-select select option:checked {
   background: #01255e;
-  color: #d0d3db;
+  color: var(--white-label-text-primary, #d0d3db);
 }
 
 .action-select .item-select {
@@ -83,6 +83,14 @@
 
 .action-select .item-select:hover select {
   border-color: #3e88f7;
+}
+
+/* Disabled state for select dropdowns */
+.action-select select:disabled {
+  color: var(--white-label-text-disabled, #666);
+  cursor: not-allowed;
+  opacity: 0.5;
+  border-color: var(--white-label-text-disabled, #666);
 }
 
 /* Table Container */
@@ -115,7 +123,7 @@
   font-variation-settings: 'opsz' 14;
   font-size: 12px;
   font-weight: 600;
-  color: #a6a9b2;
+  color: var(--white-label-text-secondary, #a6a9b2);
   text-transform: uppercase;
   padding: 12px 24px;
   border-bottom: 1px solid var(--white-label-border-primary, #013280);
@@ -157,7 +165,7 @@
   font-variation-settings: 'opsz' 14;
   font-size: 14px;
   font-weight: 400;
-  color: white;
+  color: var(--white-label-text-primary, white);
   padding: 16px 24px;
   border: none;
   vertical-align: top;
@@ -170,7 +178,7 @@
 
 .action-items-table tbody td:first-child div:last-child {
   font-size: 12px;
-  color: #a6a9b2;
+  color: var(--white-label-text-secondary, #a6a9b2);
   font-weight: 400;
 }
 
@@ -181,7 +189,7 @@
 
 .action-items-table tbody td:nth-child(2) br + * {
   font-size: 12px;
-  color: #a6a9b2;
+  color: var(--white-label-text-secondary, #a6a9b2);
   font-weight: 400;
 }
 
@@ -211,7 +219,7 @@
 /* Icon styling in View/Done column */
 /* External link icon (view icon) - target by not having text-primary class */
 .action-items-table tbody td.text-center svg:not(.check-icon) {
-  color: #a6a9b2 !important;
+  color: var(--white-label-text-secondary, #a6a9b2) !important;
   cursor: pointer;
   transition: color 0.3s ease;
 }
@@ -261,6 +269,27 @@
 
 .action-items-table .complete-button.completed .check-icon {
   color: #ffffff !important;
+}
+
+/* Disabled state for complete button */
+.action-items-table .complete-button:disabled {
+  border-color: var(--white-label-text-disabled, #666);
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.action-items-table .complete-button:disabled .check-icon {
+  color: var(--white-label-text-disabled, #666) !important;
+}
+
+.action-items-table .complete-button:disabled:hover {
+  background: transparent !important;
+  border-color: var(--white-label-text-disabled, #666);
+}
+
+.action-items-table .complete-button:disabled:hover .check-icon {
+  color: var(--white-label-text-disabled, #666) !important;
 }
 
 .pro-icon1 {
@@ -396,4 +425,13 @@
   margin-top: -12px;
   margin-bottom: -24px;
   box-shadow: none;
+}
+
+/* No Data Yet message styling */
+.action-items-page .table-responsive > span {
+  color: var(--white-label-text-secondary, #FFF);
+  font-family: 'DM Sans', sans-serif;
+  font-variation-settings: 'opsz' 14;
+  font-size: 16px;
+  font-weight: 500;
 }
