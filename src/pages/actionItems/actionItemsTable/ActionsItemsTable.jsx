@@ -270,6 +270,7 @@ const ActionsItemsTable = () => {
     const dropdownBgColor = cssLoading ? 'rgba(189, 193, 201, 0.08)' : (cssConfig?.css_data?.background?.dropdown || 'var(--white-label-background-dropdown, rgba(189, 193, 201, 0.08))');
     const hoverColor = cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || 'var(--white-label-background-hover, #01255e)');
     const borderPrimaryColor = cssLoading ? '#013280' : (cssConfig?.css_data?.borders?.primary || '#013280');
+    const placeholderColor = cssLoading ? '#888' : (cssConfig?.css_data?.text?.placeholder || '#888');
     
     return {
       ...customStyles,
@@ -292,6 +293,10 @@ const ActionsItemsTable = () => {
         '&:hover': {
           backgroundColor: hoverColor,
         },
+      }),
+      placeholder: (provided) => ({
+        ...provided,
+        color: placeholderColor,
       })
     };
   };
@@ -303,7 +308,12 @@ const ActionsItemsTable = () => {
           {getActionItemsLoading && <FullScreenLoader />}
           <div className="action-items">
             <div className="action-heading">
-              <h3>Action Items</h3>
+              <h3 style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                  cssConfig.css_data.text.primary : '#ffffff'
+              }}>
+                Action Items
+              </h3>
             </div>
             <div className="action-select">
 
@@ -375,28 +385,55 @@ const ActionsItemsTable = () => {
                       const borderColor = cssConfig?.css_data?.borders?.primary || '#013280';
                       return (
                         <tr key={id} style={{ borderBottom: `1px solid ${borderColor} !important` }}>
-                          <td style={{ whiteSpace: "pre-line", borderBottom: `1px solid ${borderColor} !important` }}>
+                          <td style={{ 
+                            whiteSpace: "pre-line", 
+                            borderBottom: `1px solid ${borderColor} !important`,
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : '#ffffff'
+                          }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {formatDateTime(created_at)}
                             </div>
                           </td>
-                          <td style={{ borderBottom: `1px solid ${borderColor} !important` }}>
+                          <td style={{ 
+                            borderBottom: `1px solid ${borderColor} !important`,
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : '#ffffff'
+                          }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {property_name}
                               <br />
-                              {actionItem?.guest_name ? actionItem?.guest_name : ""}
+                              <span style={{
+                                color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                                  cssConfig.css_data.text.secondary : '#a6a9b2'
+                              }}>
+                                {actionItem?.guest_name ? actionItem?.guest_name : ""}
+                              </span>
                             </div>
                           </td>
-                          <td style={{ borderBottom: `1px solid ${borderColor} !important` }}>
+                          <td style={{ 
+                            borderBottom: `1px solid ${borderColor} !important`,
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : '#ffffff'
+                          }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {actionItem?.category ? actionItem?.category : ""}
                             </div>
                           </td>
-                          <td className="" style={{ borderBottom: `1px solid ${borderColor} !important` }}>
+                          <td className="" style={{ 
+                            borderBottom: `1px solid ${borderColor} !important`,
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : '#ffffff'
+                          }}>
                             <div className={locked ? 'blurred-content' : ''}>{item}</div>
                           </td>
                           {selectedStatus === "completed" && (
-                            <td style={{ minWidth: '130px', borderBottom: `1px solid ${borderColor} !important` }}>
+                            <td style={{ 
+                              minWidth: '130px', 
+                              borderBottom: `1px solid ${borderColor} !important`,
+                              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                                cssConfig.css_data.text.secondary : '#ffffff'
+                            }}>
                               <div className={locked ? 'blurred-content' : ''}>{formatCompletedBy(actionItem?.completed_by)}</div>
                             </td>
                           )}
@@ -426,16 +463,45 @@ const ActionsItemsTable = () => {
                 {/* Visual representation of locked items */}
                 {lockedActionItems.length > 0 && (
                   <div className="position-relative my-4">
-                    <table className="table text-white action-items-table mb-0" style={{ filter: 'blur(4px)', width: '100%' }}> {/* blurred table mimics layout */}
+                    <table className="table text-white action-items-table mb-0" style={{ 
+                      filter: 'blur(4px)', 
+                      width: '100%',
+                      color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                        cssConfig.css_data.text.quaternary : '#888'
+                    }}> {/* blurred table mimics layout */}
                       <tbody>
                         {lockedActionItems.slice(0, 5).map((actionItem) => {
                           const { id, created_at, property_name, item } = actionItem;
                           return (
                             <tr key={id} style={{ pointerEvents: 'none' }}>
-                              <td style={{ whiteSpace: 'pre-line' }}>{formatDateTime(created_at)}</td>
-                              <td style={{ paddingLeft: '30px' }}>{property_name}</td>
-                              <td style={{ paddingLeft: '60px' }}>{actionItem?.category || ''}</td>
-                              <td style={{ paddingLeft: '40px' }}>{item}</td>
+                              <td style={{ 
+                                whiteSpace: 'pre-line',
+                                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                                  cssConfig.css_data.text.quaternary : '#888'
+                              }}>
+                                {formatDateTime(created_at)}
+                              </td>
+                              <td style={{ 
+                                paddingLeft: '30px',
+                                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                                  cssConfig.css_data.text.quaternary : '#888'
+                              }}>
+                                {property_name}
+                              </td>
+                              <td style={{ 
+                                paddingLeft: '60px',
+                                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                                  cssConfig.css_data.text.quaternary : '#888'
+                              }}>
+                                {actionItem?.category || ''}
+                              </td>
+                              <td style={{ 
+                                paddingLeft: '40px',
+                                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                                  cssConfig.css_data.text.quaternary : '#888'
+                              }}>
+                                {item}
+                              </td>
                               {selectedStatus === 'completed' && <td style={{ paddingLeft: '30px' }}>{formatCompletedBy(actionItem?.completed_by)}</td>}
                               <td></td>
                             </tr>
