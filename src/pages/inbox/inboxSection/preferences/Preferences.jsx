@@ -371,7 +371,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-start justify-content-between">
           <div>
-            <h3>Conversation Settings</h3>
+            <h3 style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+            }}>Conversation Settings</h3>
           </div>
           <div>
             <div className={`d-flex flex-wrap flex-md-nowrap gap-4 align-items-center ${!options ? 'justify-content-end' : ''}`}>
@@ -471,11 +473,19 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <div style={{marginTop:"10px"}}>
               {(selectedConfig === "default") || !options ? (
                 <div style={{maxWidth:"400px"}}>
-                  <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p>
+                  <p style={{
+                    fontSize:"14px", 
+                    textAlign:"center",
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+                  }}>This is the default config. It applies to all properties that are not included in any other config.</p>
                 </div>
               ) : (
                 <>
-                  <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p>
+                  <p style={{
+                    fontSize:"14px", 
+                    textAlign:"center",
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+                  }}>Applies to these properties:</p>
                   <div ref={selectRef}>
                     <Select 
                       className="custom-select property_Custom_Select" 
@@ -518,8 +528,12 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
         </div>
         <div className="row mt-2">
           <div className="col-lg-12">
-            <label className="fs-5">Defer Behavior</label>
-            <p className="settings-label">How should HostBuddy respond when it's not able to resolve the guest's issue?</p>
+            <label className="fs-5" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+            }}>Defer Behavior</label>
+            <p className="settings-label" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+            }}>How should HostBuddy respond when it's not able to resolve the guest's issue?</p>
           </div>
         </div>
 
@@ -528,7 +542,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <Form.Check type="radio" aria-label="radio 1" name="group1" label="Defer to host" value="defer to host" checked={currentSettingsData.defer_behavior === 'defer to host'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
           </div>
           <div className="col-lg-8">
-            <p className="fs-12 text-muted">Ex. "...the host will assist once they're back online..."</p>
+            <p className="fs-12 text-muted" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#888'
+            }}>Ex. "...the host will assist once they're back online..."</p>
           </div>
         </div>
         <div className="row mt-1">
@@ -536,7 +552,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <Form.Check type="radio" aria-label="radio 2" name="group1" label="Defer to team" value="defer to team" checked={currentSettingsData.defer_behavior === 'defer to team'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
           </div>
           <div className="col-lg-8">
-            <p className="fs-12 text-muted">Ex. "...I'll have to check with the team..."</p>
+            <p className="fs-12 text-muted" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#888'
+            }}>Ex. "...I'll have to check with the team..."</p>
           </div>
         </div>
         <div className="row mt-1">
@@ -544,7 +562,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <Form.Check type="radio" aria-label="radio 3" name="group1" label="Embody host" value="embody host" checked={currentSettingsData.defer_behavior === 'embody host'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
           </div>
           <div className="col-lg-8">
-            <p className="fs-12 text-muted">Ex. "...I will check and get back to you..."</p>
+            <p className="fs-12 text-muted" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#888'
+            }}>Ex. "...I will check and get back to you..."</p>
           </div>
         </div>
         <div className="row mt-1">
@@ -552,7 +572,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <Form.Check type="radio" aria-label="radio 4" name="group1" label="Share direct contact" value="contact host" checked={currentSettingsData.defer_behavior === 'contact host'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
           </div>
           <div className="col-lg-8">
-            <p className="fs-12 text-muted">Ex. "...please contact the host at..."</p>
+            <p className="fs-12 text-muted" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#888'
+            }}>Ex. "...please contact the host at..."</p>
           </div>
         </div>
         <div className="row mt-1">
@@ -563,8 +585,12 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="row mt-5">
           <div className="col-lg-11">
-            <label className="fs-5">Direct Contact</label>
-            <p className="settings-label mb-2">If added, HostBuddy will provide this information to guests in the event of an emergency requiring immediate attention</p>
+            <label className="fs-5" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+            }}>Direct Contact</label>
+            <p className="settings-label mb-2" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+            }}>If added, HostBuddy will provide this information to guests in the event of an emergency requiring immediate attention</p>
             <input 
               className="form-control direct-contact-input" 
               placeholder="ex. John Doe, (888-123-4567)" 
@@ -587,7 +613,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
         <div className="row mt-5">
           <div className="col-lg-11">
             <div className="d-flex align-items-center gap-5 mt-4">
-              <label className="fs-5">Use Signature</label>
+              <label className="fs-5" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+              }}>Use Signature</label>
               <div className="d-flex align-items-center gap-2">
                 <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.message_signature_enabled} onChange={(e) => setSetting('message_signature_enabled', e.target.checked)}/>
                 <span className="switch-label" style={{color:currentSettingsData.message_signature_enabled ? 'rgb(0, 180, 0)' : '#888'}}>
@@ -595,7 +623,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                 </span>
               </div>
             </div>
-            <p className="settings-label">If enabled, HostBuddy will append this to the end of each of its messages.</p>
+            <p className="settings-label" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+            }}>If enabled, HostBuddy will append this to the end of each of its messages.</p>
             <textarea 
               className="form-control setting-textarea signature-textarea" 
               placeholder="" 
@@ -621,8 +651,12 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="row mt-5">
           <div className="col-lg-11">
-            <label className="fs-5">Conversation Closing</label>
-            <p className="settings-label mb-2">Can HostBuddy choose not to respond if it determines that a conversation is at its natural end?</p>
+            <label className="fs-5" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+            }}>Conversation Closing</label>
+            <p className="settings-label mb-2" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+            }}>Can HostBuddy choose not to respond if it determines that a conversation is at its natural end?</p>
             <Form.Check type="radio" aria-label="radio1" name="group2" label="Yes, HostBuddy can let conversations close when appropriate" value="can_close" checked={!currentSettingsData?.convo_closing || currentSettingsData.convo_closing === 'can_close'} onChange={(e) => setSetting('convo_closing', e.target.value)}/>
             <Form.Check type="radio" aria-label="radio2" name="group2" label="No, HostBuddy should always be the last to respond" value="always_respond" checked={currentSettingsData?.convo_closing === 'always_respond'} onChange={(e) => setSetting('convo_closing', e.target.value)}/>
           </div>
@@ -630,8 +664,12 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="row mt-5">
           <div className="col-lg-11">
-            <label className="fs-5">AI Transparency</label>
-            <p className="settings-label mb-2">Can HostBuddy communicate that it is an AI assistant?</p>
+            <label className="fs-5" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+            }}>AI Transparency</label>
+            <p className="settings-label mb-2" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+            }}>Can HostBuddy communicate that it is an AI assistant?</p>
             <Form.Check type="radio" aria-label="radio1" name="group3" label="Only if directly asked" value="only if asked" checked={currentSettingsData.reveal_ai === 'only if asked'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
             <Form.Check type="radio" aria-label="radio2" name="group3" label="Never" value="never" checked={currentSettingsData.reveal_ai === 'never'} onChange={(e) => setSetting('reveal_ai', e.target.value)}/>
           </div>
@@ -639,8 +677,12 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="row mt-5">
           <div className="col-lg-11">
-            <label className="fs-5">Language</label>
-            <p className="settings-label mb-2">What language should HostBuddy use when responding to guests?</p>
+            <label className="fs-5" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+            }}>Language</label>
+            <p className="settings-label mb-2" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+            }}>What language should HostBuddy use when responding to guests?</p>
             <Form.Check 
               type="radio" 
               aria-label="radio1" 
@@ -701,7 +743,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
         <div className="row mt-5">
           <div className="col-lg-11">
             <div className="d-flex align-items-center gap-5">
-              <label className="fs-5">Stop Responding When Sentiment Turns Negative</label>
+              <label className="fs-5" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+              }}>Stop Responding When Sentiment Turns Negative</label>
               <div className="d-flex align-items-center gap-2">
                 <Form.Check type="switch" id="negative-sentiment-switch" className="custom-switch" checked={currentSettingsData?.stop_responding_on_negative_sentiment} onChange={(e) => setSetting('stop_responding_on_negative_sentiment', e.target.checked)}/>
                 <span className="switch-label" style={{color: currentSettingsData?.stop_responding_on_negative_sentiment ? 'rgb(0, 180, 0)' : '#888'}}>
@@ -709,7 +753,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                 </span>
               </div>
             </div>
-            <p className="settings-label mb-2">If enabled, HostBuddy will stop responding to a guest and let you take over if their sentiment turns negative. An action item will be generated when this happens - make sure you have <a href='https://userguide.hostbuddy.ai/settings/notifications' target='_blank' style={{color:'#146ef5', fontSize:'14px'}}>notifications set up</a> so you're alerted! If HostBuddy stops responding to a guest, you can re-enable responses on the Inbox page.</p>
+            <p className="settings-label mb-2" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+            }}>If enabled, HostBuddy will stop responding to a guest and let you take over if their sentiment turns negative. An action item will be generated when this happens - make sure you have <a href='https://userguide.hostbuddy.ai/settings/notifications' target='_blank' style={{color:'#146ef5', fontSize:'14px'}}>notifications set up</a> so you're alerted! If HostBuddy stops responding to a guest, you can re-enable responses on the Inbox page.</p>
           </div>
         </div>
 
@@ -719,15 +765,21 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               { !isDelayEditable && (
                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight:'6px', display:'inline-block', verticalAlign:'middle', position:'relative', top:'2px'}}><g clipPath="url(#clip0_4408_17872)"><path d="M5.625 5.625V7.5H11.875V5.625C11.875 3.89844 10.4766 2.5 8.75 2.5C7.02344 2.5 5.625 3.89844 5.625 5.625ZM3.125 7.5V5.625C3.125 2.51953 5.64453 0 8.75 0C11.8555 0 14.375 2.51953 14.375 5.625V7.5H15C16.3789 7.5 17.5 8.62109 17.5 10V17.5C17.5 18.8789 16.3789 20 15 20H2.5C1.12109 20 0 18.8789 0 17.5V10C0 8.62109 1.12109 7.5 2.5 7.5H3.125Z" fill="#FF9F00"/></g><defs><clipPath id="clip0_4408_17872"><rect width="17.5" height="20" fill="white"/></clipPath></defs></svg>
               )}
-              <label className="fs-5 mb-0">Message Delay</label>
+              <label className="fs-5 mb-0" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+              }}>Message Delay</label>
               { !isDelayEditable && (
                 <span style={{color:'#5498FF', fontWeight:'bold', fontSize:'17px', cursor:'pointer', marginLeft:'6px'}} onClick={handleUpgradeClick}>Upgrade</span>
               )}
             </div>
-            <p className="settings-label mb-2">HostBuddy will delay its response to guests by a (random) number of minutes within this range. To have HostBuddy simply respond as quickly as possible, set min and max delay to 0.</p>
+            <p className="settings-label mb-2" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+            }}>HostBuddy will delay its response to guests by a (random) number of minutes within this range. To have HostBuddy simply respond as quickly as possible, set min and max delay to 0.</p>
             <div className="row">
               <div className="col-lg-3">
-                <label className="fs-6">Min. Delay</label>
+                <label className="fs-6" style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+                }}>Min. Delay</label>
                 <input 
                   type="number" 
                   className="form-control delay-input" 
@@ -748,7 +800,9 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
                 />
               </div>
               <div className="col-lg-3">
-                <label className="fs-6">Max. Delay</label>
+                <label className="fs-6" style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+                }}>Max. Delay</label>
                 <input 
                   type="number" 
                   className="form-control delay-input" 
@@ -778,13 +832,19 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               { !isToneEditable && (
                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight:'6px', display:'inline-block', verticalAlign:'middle', position:'relative', top:'2px'}}><g clipPath="url(#clip0_4408_17872)"><path d="M5.625 5.625V7.5H11.875V5.625C11.875 3.89844 10.4766 2.5 8.75 2.5C7.02344 2.5 5.625 3.89844 5.625 5.625ZM3.125 7.5V5.625C3.125 2.51953 5.64453 0 8.75 0C11.8555 0 14.375 2.51953 14.375 5.625V7.5H15C16.3789 7.5 17.5 8.62109 17.5 10V17.5C17.5 18.8789 16.3789 20 15 20H2.5C1.12109 20 0 18.8789 0 17.5V10C0 8.62109 1.12109 7.5 2.5 7.5H3.125Z" fill="#FF9F00"/></g><defs><clipPath id="clip0_4408_17872"><rect width="17.5" height="20" fill="white"/></clipPath></defs></svg>
               )}
-              <label className="fs-5 mb-0">Customize Tone</label>
+              <label className="fs-5 mb-0" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+              }}>Customize Tone</label>
               { !isToneEditable && (
                 <span style={{color:'#5498FF', fontWeight:'bold', fontSize:'17px', cursor:'pointer', marginLeft:'6px'}} onClick={handleUpgradeClick}>Upgrade</span>
               )}
             </div>
-            <p className="settings-label">You can customize HostBuddy's responses by adding some instructions here to direct HostBuddy's tone. Make sure to test after you make changes here!</p>
-            <p className="settings-label">HostBuddy is already optimized for friendly, hospitable conversation, so this is completely optional.</p>
+            <p className="settings-label" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+            }}>You can customize HostBuddy's responses by adding some instructions here to direct HostBuddy's tone. Make sure to test after you make changes here!</p>
+            <p className="settings-label" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#BBB'
+            }}>HostBuddy is already optimized for friendly, hospitable conversation, so this is completely optional.</p>
             <textarea 
               className="form-control setting-textarea tone-textarea" 
               placeholder="(Optional) Add instructions to direct HostBuddy's tone..." 

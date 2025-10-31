@@ -44,16 +44,22 @@
 
 .conversation-settings-inbox .switch-label {
   font-size: 14px;
-  color: #888;
+  color: var(--white-label-text-primary, #888);
+}
+
+/* Radio button and checkbox labels */
+.conversation-settings-inbox .form-check-label {
+  color: var(--white-label-text-secondary, #ffffff);
+  font-size: 15px;
 }
 
 .conversation-settings-inbox textarea.form-control.setting-textarea:disabled {
-  color: #AAA
+  color: var(--white-label-text-disabled, #AAA)
 }
 
 .conversation-settings-inbox .settings-label {
   font-size: 14px;
-  color: #BBB;
+  color: var(--white-label-text-secondary, #BBB);
   line-height: 18px;
 }
 
@@ -113,8 +119,12 @@
   transition: border-color 0.15s ease-in-out;
 }
 
-.conversation-settings-inbox .direct-contact-input::placeholder {
-  color: #8A8E98 !important;
+.conversation-settings-inbox .direct-contact-input::placeholder,
+.conversation-settings-inbox .direct-contact-input::-webkit-input-placeholder,
+.conversation-settings-inbox .direct-contact-input::-moz-placeholder,
+.conversation-settings-inbox .direct-contact-input:-ms-input-placeholder,
+.conversation-settings-inbox .direct-contact-input:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
 }
 
 .conversation-settings-inbox .direct-contact-input:focus {
@@ -133,8 +143,12 @@
   resize: none;
 }
 
-.conversation-settings-inbox .signature-textarea::placeholder {
-  color: #8A8E98 !important;
+.conversation-settings-inbox .signature-textarea::placeholder,
+.conversation-settings-inbox .signature-textarea::-webkit-input-placeholder,
+.conversation-settings-inbox .signature-textarea::-moz-placeholder,
+.conversation-settings-inbox .signature-textarea:-ms-input-placeholder,
+.conversation-settings-inbox .signature-textarea:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
 }
 
 .conversation-settings-inbox .signature-textarea:focus {
@@ -158,8 +172,12 @@
   resize: none;
 }
 
-.conversation-settings-inbox .tone-textarea::placeholder {
-  color: #8A8E98 !important;
+.conversation-settings-inbox .tone-textarea::placeholder,
+.conversation-settings-inbox .tone-textarea::-webkit-input-placeholder,
+.conversation-settings-inbox .tone-textarea::-moz-placeholder,
+.conversation-settings-inbox .tone-textarea:-ms-input-placeholder,
+.conversation-settings-inbox .tone-textarea:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
 }
 
 .conversation-settings-inbox .tone-textarea:focus {
@@ -170,6 +188,7 @@
 }
 
 .conversation-settings-inbox .tone-textarea:disabled {
+  color: var(--white-label-text-disabled, #AAA);
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -182,8 +201,12 @@
   transition: border-color 0.15s ease-in-out;
 }
 
-.conversation-settings-inbox .language-input::placeholder {
-  color: #8A8E98 !important;
+.conversation-settings-inbox .language-input::placeholder,
+.conversation-settings-inbox .language-input::-webkit-input-placeholder,
+.conversation-settings-inbox .language-input::-moz-placeholder,
+.conversation-settings-inbox .language-input:-ms-input-placeholder,
+.conversation-settings-inbox .language-input:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
 }
 
 .conversation-settings-inbox .language-input:focus {
@@ -201,8 +224,12 @@
   transition: border-color 0.15s ease-in-out;
 }
 
-.conversation-settings-inbox .delay-input::placeholder {
-  color: #8A8E98 !important;
+.conversation-settings-inbox .delay-input::placeholder,
+.conversation-settings-inbox .delay-input::-webkit-input-placeholder,
+.conversation-settings-inbox .delay-input::-moz-placeholder,
+.conversation-settings-inbox .delay-input:-ms-input-placeholder,
+.conversation-settings-inbox .delay-input:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
 }
 
 .conversation-settings-inbox .delay-input:focus {
