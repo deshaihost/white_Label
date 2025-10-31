@@ -27,6 +27,7 @@ default_settings = {
     'max_message_delay_minutes': 0,  // int, 0-8
     'convo_closing': 'can_close',  // 'can_close' or 'always_respond'
     'tone_instructions': '',  // optional instructions for customizing tone
+    'inbox_enter_key_behavior': 'send',  // 'send' or 'newline' - determines if Enter sends message or creates new line
 }
 */
 
@@ -480,6 +481,31 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               </div>
             </div>
             <p className="settings-label mb-2">If enabled, HostBuddy will stop responding to a guest and let you take over if their sentiment turns negative. An action item will be generated when this happens - make sure you have <a href='https://userguide.hostbuddy.ai/settings/notifications' target='_blank' style={{color:'#146ef5', fontSize:'14px'}}>notifications set up</a> so you're alerted! If HostBuddy stops responding to a guest, you can re-enable responses on the Inbox page.</p>
+          </div>
+        </div>
+
+        <div className="row mt-5">
+          <div className="col-lg-11">
+            <label className="fs-5">Inbox Send Message Input Behavior</label>
+            <p className="settings-label mb-2">Choose how the Enter key behaves when composing messages in the Inbox</p>
+            <Form.Check 
+              type="radio" 
+              aria-label="radio1" 
+              name="enter-key-behavior" 
+              label="Press Enter to send the message" 
+              value="send" 
+              checked={!currentSettingsData?.inbox_enter_key_behavior || currentSettingsData.inbox_enter_key_behavior === 'send'} 
+              onChange={(e) => setSetting('inbox_enter_key_behavior', e.target.value)}
+            />
+            <Form.Check 
+              type="radio" 
+              aria-label="radio2" 
+              name="enter-key-behavior" 
+              label="Press Enter to start a new line (click Send button to send message)" 
+              value="newline" 
+              checked={currentSettingsData?.inbox_enter_key_behavior === 'newline'} 
+              onChange={(e) => setSetting('inbox_enter_key_behavior', e.target.value)}
+            />
           </div>
         </div>
 
