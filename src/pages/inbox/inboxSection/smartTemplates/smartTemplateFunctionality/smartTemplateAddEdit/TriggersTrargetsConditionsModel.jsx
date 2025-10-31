@@ -94,10 +94,25 @@ const TriggersTrargetsConditionsModel = (props) => {
     // Check if all required input fields are filled
     const requiredFields = inputFiled?.filter(field => !field.optional) || [];
     const emptyRequiredFields = requiredFields.filter(field => {
+      // Skip validation for fields that should be disabled based on another field's value
+      if (field.disableIf) {
+        const disableConditionValue = inputDataGet[field.disableIf];
+        // If the condition field is true/checked, this field is disabled and should not be validated
+        if (disableConditionValue === true) {
+          return false; // Don't mark as empty/required since it's disabled
+        }
+      }
+      
       const value = inputDataGet[field.payloadType];
+      // For checkbox fields, false is a valid value (unchecked state), not empty
+      if (field.type === "checkbox") {
+        return false; // Checkboxes are never required to be checked
+      }
+      
       if (field.type === "multiSelecter") {
         return !value || value.length === 0;
       }
+      
       // For number fields, allow 0 as a valid value
       if (field.type === "number") {
         return value === null || value === undefined || value === "";
