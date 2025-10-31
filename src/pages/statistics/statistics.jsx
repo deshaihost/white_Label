@@ -28,10 +28,15 @@ const StatisticsPage = () => {
   const startDateDisplay = dataStartDate ? formatDateToReadable(dataStartDate) : '';
   const endDateDisplay = dataEndDate ? formatDateToReadable(dataEndDate) : '';
 
-  const upsellsStartDate = rawApiReturn?.statistics?.upsell_data?.start_date
-  const upsellsEndDate = rawApiReturn?.statistics?.upsell_data?.end_date
+  // Upsell dates: use upsell-specific dates if available, otherwise fall back to main date range
+  const upsellsStartDate = rawApiReturn?.statistics?.upsell_data?.start_date || dataStartDate
+  const upsellsEndDate = rawApiReturn?.statistics?.upsell_data?.end_date || dataEndDate
   const upsellsStartDateDisplay = upsellsStartDate ? formatDateToReadable(upsellsStartDate) : '';
   const upsellsEndDateDisplay = upsellsEndDate ? formatDateToReadable(upsellsEndDate) : '';
+  
+  // Check if API provided different dates for upsells (not just using fallback)
+  const hasSpecificUpsellDates = rawApiReturn?.statistics?.upsell_data?.start_date && rawApiReturn?.statistics?.upsell_data?.end_date;
+  const upsellDateRangeDiffers = hasSpecificUpsellDates && (upsellsStartDate !== dataStartDate || upsellsEndDate !== dataEndDate);
 
   // Store/dispatch logic to get the user property names for the multi select
       const store = useSelector((state) => state);
@@ -90,9 +95,40 @@ const StatisticsPage = () => {
     { component: HistogramTile, dataSets: apiStatisticsData?.actionItemsReceived, width: 9, height: '300px', blur: isProPlan },
   ];
 
+  // Create fallback data for upsells if no data is available
+  const fallbackUpsellsData = [
+    {
+      identifier: 'All Upsells',
+      title: 'Upsells - Total',
+      data: [
+        { number: 0, text: "Messages sent" },
+        { number: 0, text: "Acceptances detected" },
+        { number: "0.0%", text: "Detected acceptance rate" }
+      ]
+    }
+  ];
+
+  // Check if we have valid upsell data or if backend didn't return any
+  const hasUpsellData = apiStatisticsData?.upsellMetrics && apiStatisticsData.upsellMetrics.length > 0;
+  const upsellDataNotAvailable = !rawApiReturn?.statistics?.upsell_data && dataStartDate; // Backend didn't return upsell_data but did return other stats
+
   const upsellsTiles = [
-    { component: MetricTile, dataSets: apiStatisticsData?.upsellMetrics, width: 4, height: "320px" },
+    { 
+      component: MetricTile, 
+      dataSets: hasUpsellData ? apiStatisticsData.upsellMetrics : fallbackUpsellsData, 
+      width: 4, 
+      height: "320px" 
+    },
   ]
+
+  // Debug logging for upsells
+  console.log('=== UPSELL DEBUG ===');
+  console.log('Requested date range:', selectedStartDate, 'to', selectedEndDate);
+  console.log('Data date range:', dataStartDate, 'to', dataEndDate);
+  console.log('Upsell date range:', upsellsStartDate, 'to', upsellsEndDate);
+  console.log('Raw upsell_data from API:', rawApiReturn?.statistics?.upsell_data);
+  console.log('Processed upsellMetrics:', apiStatisticsData?.upsellMetrics);
+  console.log('===================');
 
   // When the page loads, fetch the data and populate the charts
   useEffect(() => {
@@ -152,8 +188,17 @@ const StatisticsPage = () => {
       {renderTiles(actionItemsTiles)}
 
       <h2 className="section-header">Upsells</h2>
-      {(upsellsStartDate != dataStartDate || upsellsEndDate != dataEndDate) && (
-        <p style={{color:'rgb(255, 125, 0)', marginTop:'-10px', marginBottom:'5px'}}>Showing upsell data from {upsellsStartDateDisplay} to {upsellsEndDateDisplay}</p>
+      {upsellDateRangeDiffers && (
+        <p style={{color:'rgb(255, 125, 0)', marginTop:'-10px', marginBottom:'5px'}}>
+          {upsellsStartDateDisplay && upsellsEndDateDisplay
+            ? `Showing upsell data from ${upsellsStartDateDisplay} to ${upsellsEndDateDisplay}`
+            : 'Upsell date range not available'}
+        </p>
+      )}
+      {upsellDataNotAvailable && (
+        <p style={{color:'rgb(255, 125, 0)', marginTop:'-10px', marginBottom:'5px'}}>
+          Upsell data not available for this date range. Try selecting a specific date range using "Adjust Dates".
+        </p>
       )}
       {renderTiles(upsellsTiles)}
 

@@ -526,7 +526,19 @@ function convertActionItemsToMetricData(actionItemData) {
 // - A total tile combining all upsells with the same metrics
 // Revenue is only shown if all upsells have the same currency and there is nonzero revenue
 function formatUpsellMetrics(retrievedUpsellsStatistics) {
+  console.log('=== formatUpsellMetrics DEBUG ===');
+  console.log('Input data:', JSON.stringify(retrievedUpsellsStatistics, null, 2));
+  
+  if (!retrievedUpsellsStatistics || !retrievedUpsellsStatistics.totals) {
+    console.log('No upsells data available, returning empty array');
+    console.log('================================');
+    return [];
+  }
+  
   const totals = retrievedUpsellsStatistics.totals;
+  console.log('Upsell totals object:', totals);
+  console.log('Number of upsell types:', Object.keys(totals).length);
+  
   let metricDataSets = [];
   
   // Track totals across all upsells for the summary tile
@@ -539,15 +551,22 @@ function formatUpsellMetrics(retrievedUpsellsStatistics) {
   // Process each upsell type separately
   for (const upsellId in totals) {
     const upsell = totals[upsellId];
+    console.log(`Processing upsell ${upsellId}:`, JSON.stringify(upsell, null, 2));
     const { num_messages, num_accepted, source, total_value, currency } = upsell;
+    
+    console.log(`  - num_messages: ${num_messages} (type: ${typeof num_messages})`);
+    console.log(`  - num_accepted: ${num_accepted} (type: ${typeof num_accepted})`);
+    console.log(`  - source: ${source}`);
 
-    // Accumulate totals for the summary tile
-    totalMessagesSent += num_messages;
-    totalAccepted += num_accepted;
+    // Accumulate totals for the summary tile, defaulting to 0 if undefined
+    totalMessagesSent += num_messages || 0;
+    totalAccepted += num_accepted || 0;
+    
+    console.log(`  - Running totals: messages=${totalMessagesSent}, accepted=${totalAccepted}`);
 
     // Handle revenue calculations and currency consistency checking
     if (total_value && currency) {
-      totalRevenue += total_value;
+      totalRevenue += total_value || 0;
       // Track the first currency we see and ensure all subsequent ones match
       if (!totalCurrency) {
         totalCurrency = currency;
@@ -559,15 +578,15 @@ function formatUpsellMetrics(retrievedUpsellsStatistics) {
     }
 
     // Calculate acceptance rate for this upsell type
-    const acceptanceRate = num_messages > 0 ? ((num_accepted / num_messages) * 100).toFixed(1) : "0.0";
+    const acceptanceRate = (num_messages || 0) > 0 ? (((num_accepted || 0) / (num_messages || 0)) * 100).toFixed(1) : "0.0";
     
     // Create metric tile data for this upsell type
     const dataItem = {
       identifier: source,
       title: `Upsells - ${source}`,
       data: [
-        { number: num_messages, text: "Messages sent" },
-        { number: num_accepted, text: "Acceptances detected" },
+        { number: num_messages || 0, text: "Messages sent" },
+        { number: num_accepted || 0, text: "Acceptances detected" },
         { number: `${acceptanceRate}%`, text: "Detected acceptance rate" }
       ]
     };
@@ -602,6 +621,9 @@ function formatUpsellMetrics(retrievedUpsellsStatistics) {
   // Put the summary tile first in the array
   metricDataSets.unshift(totalDataItem);
 
+  console.log('Final upsell metrics data sets:', metricDataSets);
+  console.log('Total across all upsells: messages=' + totalMessagesSent + ', accepted=' + totalAccepted);
+  console.log('================================');
   return metricDataSets;
 }
 
@@ -657,8 +679,13 @@ export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, s
   } catch (error) {}
 
   try { // Upsell tiles: number of upsell messages sent and accepted
+    console.log('Raw upsells statistics:', retrievedUpsellsStatistics);
+    console.log('Raw upsells statistics (stringified):', JSON.stringify(retrievedUpsellsStatistics, null, 2));
     upsellMetrics = formatUpsellMetrics(retrievedUpsellsStatistics);
-  } catch (error) {}
+    console.log('Processed upsell metrics:', upsellMetrics);
+  } catch (error) {
+    console.error('Error processing upsell metrics:', error);
+  }
 
   setApiStatisticsData({ messageTimingData, totalMessagesSent, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemsReceived, actionItemMetrics, actionItemsClosed, upsellMetrics });
   setDataLoading(false);
