@@ -542,7 +542,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <Form.Check type="radio" aria-label="radio 1" name="group1" label="Defer to host" value="defer to host" checked={currentSettingsData.defer_behavior === 'defer to host'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
           </div>
           <div className="col-lg-8">
-            <p className="fs-12 text-muted" style={{
+            <p className="fs-12" style={{
               color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#888'
             }}>Ex. "...the host will assist once they're back online..."</p>
           </div>
@@ -552,7 +552,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <Form.Check type="radio" aria-label="radio 2" name="group1" label="Defer to team" value="defer to team" checked={currentSettingsData.defer_behavior === 'defer to team'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
           </div>
           <div className="col-lg-8">
-            <p className="fs-12 text-muted" style={{
+            <p className="fs-12" style={{
               color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#888'
             }}>Ex. "...I'll have to check with the team..."</p>
           </div>
@@ -562,7 +562,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <Form.Check type="radio" aria-label="radio 3" name="group1" label="Embody host" value="embody host" checked={currentSettingsData.defer_behavior === 'embody host'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
           </div>
           <div className="col-lg-8">
-            <p className="fs-12 text-muted" style={{
+            <p className="fs-12" style={{
               color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#888'
             }}>Ex. "...I will check and get back to you..."</p>
           </div>
@@ -572,7 +572,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
             <Form.Check type="radio" aria-label="radio 4" name="group1" label="Share direct contact" value="contact host" checked={currentSettingsData.defer_behavior === 'contact host'} onChange={(e) => setSetting('defer_behavior', e.target.value)}/>
           </div>
           <div className="col-lg-8">
-            <p className="fs-12 text-muted" style={{
+            <p className="fs-12" style={{
               color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#888'
             }}>Ex. "...please contact the host at..."</p>
           </div>
