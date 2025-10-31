@@ -25,8 +25,9 @@ export const dataInput = {
     {
       guesttype: "Send Once",
       type: "send_once",
-      label: "Send the message once at a scheduled date and time.",
+      label: "Send the message once, either immediately or at a scheduled date and time.",
       inputFiled: [
+        { inputLabel: "Send Immediately", type: checkbox, payloadType: "send_immediately", defaultVal: false },
         { inputLabel: "Date", type: date, payloadType: "scheduled_date", disableIf: "send_immediately" },
         { inputLabel: "Time", type: time, payloadType: "scheduled_time", disableIf: "send_immediately" },
       ]

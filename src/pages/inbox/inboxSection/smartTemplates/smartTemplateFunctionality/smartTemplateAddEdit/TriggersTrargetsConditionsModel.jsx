@@ -95,6 +95,12 @@ const TriggersTrargetsConditionsModel = (props) => {
     const requiredFields = inputFiled?.filter(field => !field.optional) || [];
     const emptyRequiredFields = requiredFields.filter(field => {
       const value = inputDataGet[field.payloadType];
+      
+      // For checkbox fields, false is a valid value (unchecked state), not empty
+      if (field.type === "checkbox") {
+        return false; // Checkboxes are never required to be checked
+      }
+      
       if (field.type === "multiSelecter") {
         return !value || value.length === 0;
       }
