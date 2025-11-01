@@ -117,7 +117,7 @@
     margin-left: 0;
 }
 .message.bot p {
-    background: #24262E;
+    background: var(--white-label-background-cards, #24262E);
     padding: 10px;
     font-size: 16px !important;
     font-family: "DM Sans", Helvetica !important;
