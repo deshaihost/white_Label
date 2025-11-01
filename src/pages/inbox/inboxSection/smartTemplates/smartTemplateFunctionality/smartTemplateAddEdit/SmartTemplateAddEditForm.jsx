@@ -823,7 +823,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                   <button 
                     onClick={() => setAllData({modelShow:true, modelShowType:conditionsName, formData:conditions, minutFormData:minutConditions, editFormData:conditionsItem, editIndex:index, typepAddEdit:edit })}
                     style={{
-                      color: '#98bffa',
+                      color: !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                        ? cssConfig.css_data.text.navigation_text 
+                        : '#98bffa',
                       fontSize: '15px',
                       fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                       fontWeight: '600',
@@ -834,8 +836,16 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
                       whiteSpace: 'nowrap',
                       transition: 'color 0.2s'
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.color = '#3e88f7'}
-                    onMouseOut={(e) => e.currentTarget.style.color = '#98bffa'}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.interactive?.light_blue 
+                        ? cssConfig.css_data.interactive.light_blue 
+                        : '#3e88f7';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                        ? cssConfig.css_data.text.navigation_text 
+                        : '#98bffa';
+                    }}
                   >
                     Edit
                   </button>
@@ -847,7 +857,9 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         <button
           onClick={() => setAllData({ modelShow:true, modelShowType:conditionsName, formData:conditions, minutFormData:minutConditions, typepAddEdit:add })}
           style={{
-            color: '#98bffa',
+            color: !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+              ? cssConfig.css_data.text.navigation_text 
+              : '#98bffa',
             fontSize: '15px',
             fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             fontWeight: '600',
@@ -859,8 +871,16 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
             marginTop: '8px',
             transition: 'color 0.2s'
           }}
-          onMouseOver={(e) => e.currentTarget.style.color = '#3e88f7'}
-          onMouseOut={(e) => e.currentTarget.style.color = '#98bffa'}
+          onMouseOver={(e) => {
+            e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.interactive?.light_blue 
+              ? cssConfig.css_data.interactive.light_blue 
+              : '#3e88f7';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+              ? cssConfig.css_data.text.navigation_text 
+              : '#98bffa';
+          }}
         >
           + Add a Condition
         </button>
@@ -1017,8 +1037,13 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           )}
 
           <button
-            className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
+            className="bg-none border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
             onClick={() => setAllData({ modelShow:true, modelShowType:followUpConditionsName, formData:conditions, minutFormData:minutConditions, typepAddEdit:add, followUpIndex:index })}
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                ? cssConfig.css_data.text.navigation_text 
+                : '#3e88f7'
+            }}
           >
             <i className="bi bi-plus fs-3"></i> {followUp?.conditions?.length > 0 ? "Add another follow-up condition" : "Add a condition for following up"}
           </button>
