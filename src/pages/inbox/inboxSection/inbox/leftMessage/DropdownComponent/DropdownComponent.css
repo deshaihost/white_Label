@@ -76,7 +76,7 @@
   font-weight: 400;
   cursor: pointer;
   transition: all 0.15s ease;
-  background-color: transparent;
+  background-color: var(--white-label-background-dropdown, #2B2E36);
   position: relative;
   display: flex;
   align-items: center;
@@ -89,7 +89,8 @@
   color: #D0D3DB;
 }
 
-.dropdown-option:active {
+.dropdown-option:active,
+.dropdown-option--pressed {
   background-color: var(--white-label-background-hover, #001330);
   color: #D0D3DB;
 }

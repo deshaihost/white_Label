@@ -127,24 +127,10 @@ const DropdownComponent = ({
                   selectedOption?.id === option.id
                     ? "dropdown-option--selected"
                     : ""
-                } ${hoveredIndex === index ? "dropdown-option--hovered" : ""}`}                style={{
-                  padding: "10px 12px",
+                } ${hoveredIndex === index ? "dropdown-option--hovered" : ""} ${
+                  pressedIndex === index ? "dropdown-option--pressed" : ""
+                }`}                style={{
                   paddingLeft: "20px", // Add extra left padding for selection indicator
-                  color: "#D0D3DB",
-                  cursor: "pointer",
-                  backgroundColor:
-                    pressedIndex === index
-                      ? "#001330"
-                      : selectedOption?.id === option.id
-                      ? "#01255E"
-                      : hoveredIndex === index
-                      ? "#013280"
-                      : "transparent",
-                  borderRadius: "4px",
-                  margin: "2px 0",
-                  fontSize: "14px",
-                  transition: "background-color 0.15s ease",
-                  position: "relative", // Ensure relative positioning for absolute selection indicator
                 }}                onClick={() => handleOptionSelect(option, index)}
                 onMouseEnter={() => handleMouseEnter(index)}
                 onMouseLeave={handleMouseLeave}
