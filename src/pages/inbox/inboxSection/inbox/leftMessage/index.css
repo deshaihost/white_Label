@@ -86,7 +86,7 @@
 }
 
 .left-bar .left-inner-tab:hover {
-    background-color: #24262E;
+    background-color: var(--white-label-background-hover, #24262E);
     cursor: pointer;
 }
 
