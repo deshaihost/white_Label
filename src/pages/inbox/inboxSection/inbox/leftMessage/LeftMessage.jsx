@@ -1096,7 +1096,6 @@ const getConversationTimestamp = (conversation) => {
         className="message-filter"
         style={{
           padding: "12px",
-          backgroundColor: "#17191F",
           display: "flex",
           flexDirection: "column",
           flexShrink: 0, // Prevent this from shrinking

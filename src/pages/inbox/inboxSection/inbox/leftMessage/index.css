@@ -4,7 +4,7 @@
 } */
 .left-bar-chat::-webkit-scrollbar {
   width: 4px;
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 .left-bar-chat::-webkit-scrollbar-thumb {
@@ -13,13 +13,13 @@
 }
 
 .left-bar-chat::-webkit-scrollbar-track {
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 /* For Firefox */
 .left-bar-chat {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) #0F1117;
+  scrollbar-color: rgba(255, 255, 255, 0.15) var(--white-label-background-primary, #0F1117);
 }
 
 /* Pin badge styling */
@@ -35,7 +35,7 @@
   height: 24px;
   background-color: #F26C0C;
   border-radius: 50%;
-  border: 2px solid #17191f;
+  border: 2px solid var(--white-label-background-secondary, #17191f);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,7 +62,7 @@
   height: 24px;
   background-color: #F26C0C;
   border-radius: 50%;
-  border: 2px solid #17191f;
+  border: 2px solid var(--white-label-background-secondary, #17191f);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -82,7 +82,7 @@
     /* width: 368px; */
     margin: 0 auto;
      border: 1px solid #24262E;
-     background-color: #17191F;
+     background-color: var(--white-label-background-secondary, #17191F);
 }
 
 .left-bar .left-inner-tab:hover {
@@ -91,19 +91,19 @@
 }
 
 .left-bar .left-inner-tab:active {
-    background-color: #0F1117;
+    background-color: var(--white-label-background-primary, #0F1117);
 }
 
 .left-bar .conversation-item.bg-dark,
 .left-bar .left-inner-tab.bg-dark {
-    background-color: #0F1117 !important;
+    background-color: var(--white-label-background-primary, #0F1117) !important;
     border: 1px solid #24262E !important;
     position: relative;
 }
 
 /* Make sure hover doesn't override the selected state */
 .left-bar .left-inner-tab.bg-dark:hover {
-    background-color: #0F1117 !important;
+    background-color: var(--white-label-background-primary, #0F1117) !important;
 }
 
 /* Selection indicator box and selection indicator styles */
@@ -195,6 +195,7 @@
 .message-filter{    
     /* padding: 1px 2px;
     margin: 5px; */
+    background-color: var(--white-label-background-secondary, #17191F);
     border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
 .messsage-search {
@@ -411,7 +412,7 @@
   overflow: visible;
 }
 .filter-modal-content {
-  background-color: #17191f;
+  background-color: var(--white-label-background-secondary, #17191f);
   /* padding: 28px 20px 20px 20px; */
   color: rgb(187, 187, 187) !important;
   border-radius: 4px;

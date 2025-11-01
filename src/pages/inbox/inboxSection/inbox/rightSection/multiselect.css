@@ -48,7 +48,7 @@
   display: inline-flex;
    color:#D0D3DB;
   align-items: center;
-  background-color: rgba(36, 38, 46, 1);
+  background-color: var(--white-label-background-input, rgba(36, 38, 46, 1));
   /* border-radius: 4px; */
   padding: 2px 8px;
   margin-right: 4px;
@@ -98,7 +98,7 @@
   top: 100%;
   left: 0;
   right: 0;
-  background-color: #262730;
+  background-color: var(--white-label-background-input, #262730);
   border-radius: 4px;
   margin-top: 4px;
   z-index: 100;
@@ -161,7 +161,7 @@
   right: 0;
   padding: 10px;
   text-align: center;
-  background-color: #262730;
+  background-color: var(--white-label-background-input, #262730);
   border-radius: 4px;
   margin-top: 4px;
   z-index: 100;
@@ -174,7 +174,7 @@
 }
 
 .user-tags-container::-webkit-scrollbar-track {
-  background: #262730;
+  background: var(--white-label-background-input, #262730);
   border-radius: 4px;
 }
 

@@ -88,7 +88,7 @@ const responsiveStyles = `
       top: 0 !important;
       height: 100% !important;
       z-index: 1000 !important;
-      background-color: #17191F !important;
+      background-color: var(--white-label-background-secondary, #17191F) !important;
       border: 1px solid #24262E !important;
       border-radius: 4px !important;
       transition: all 0.3s ease !important;
@@ -147,7 +147,7 @@ const responsiveStyles = `
       flex: none !important;
       position: relative !important;
       height: 100% !important;
-      background-color: #17191F !important;
+      background-color: var(--white-label-background-secondary, #17191F) !important;
       border: 1px solid #24262E !important;
       border-radius: 4px !important;
       transition: all 0.3s ease !important;
@@ -203,7 +203,7 @@ const responsiveStyles = `
       flex: none !important;
       position: relative !important;
       height: 100% !important;
-      background-color: #17191F !important;
+      background-color: var(--white-label-background-secondary, #17191F) !important;
       border: 1px solid #24262E !important;
       border-radius: 4px !important;
       transition: all 0.3s ease !important;
@@ -1654,12 +1654,12 @@ const Inbox = ({
               style={{ flex: "1", height: "100%", border: "1px solid #24262E" }}
             >
               <div
+                className="guest-header-container"
                 style={{
                   display: "flex",
-                  backgroundColor: "#17191f",
                   padding: "5px",
                   borderRadius: "0px",
-                  marginBottom: "4px",
+                  // marginBottom: "4px",
                   flexDirection: "column",
                   border: "1px solid",
                   borderColor: "#24262E",
@@ -2082,7 +2082,7 @@ const Inbox = ({
               {/* Tab content rendered inside the div container */}
               <div
                 style={{
-                  height: "calc(100% - 85.101111px)",
+                  height: "calc(100% - 79.1011px)",
                   width: "100%",
                   position: "relative",
                 }}

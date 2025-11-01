@@ -1,5 +1,10 @@
 /* Custom styles for MildeSection component */
 
+/* Guest header container */
+.guest-header-container {
+  background-color: var(--white-label-background-secondary, #17191F);
+}
+
 /* Textarea placeholder color */
 .custom-textarea::placeholder {
   color: #676A73 !important;

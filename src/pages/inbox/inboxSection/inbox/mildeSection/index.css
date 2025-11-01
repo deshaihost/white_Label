@@ -92,7 +92,7 @@
     margin-bottom: 0px;
 }
 .user.mesaage-box p {
-    background-color: #17191F !important;
+    background-color: var(--white-label-background-secondary, #17191F) !important;
     font-family: "DM Sans", Helvetica !important;
     font-weight: 400 !important;
     font-style: normal !important;
@@ -131,7 +131,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    background-color: #17191f !important;
+    background-color: var(--white-label-background-secondary, #17191f) !important;
     
 }
 .ai-input .input-container {
@@ -378,7 +378,7 @@
 /* Message list scroll bar styling - matching left-bar-chat */
 .message-list::-webkit-scrollbar {
   width: 4px;
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 .message-list::-webkit-scrollbar-thumb {
@@ -387,13 +387,13 @@
 }
 
 .message-list::-webkit-scrollbar-track {
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 /* For Firefox */
 .message-list {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) #0F1117;
+  scrollbar-color: rgba(255, 255, 255, 0.15) var(--white-label-background-primary, #0F1117);
   height: 100%;
   overflow-y: auto;
 }
