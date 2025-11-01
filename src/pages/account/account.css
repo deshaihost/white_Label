@@ -870,7 +870,7 @@ input#multi-search {
     top: -10px;
     left: 12px;
     font-size: 12px;
-    color: #3e88f7 !important;
+    color: var(--white-label-text-secondary, #3e88f7) !important;
     background-color: transparent !important;
 }
 
