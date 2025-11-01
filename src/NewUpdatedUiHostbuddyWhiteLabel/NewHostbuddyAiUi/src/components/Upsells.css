@@ -1,9 +1,11 @@
 /* Override text colors with white label variables */
-.upsells-container h1 {
+.upsells-container h1,
+.upsells-container h1.text-white {
   color: var(--white-label-text-primary, #ffffff) !important;
 }
 
-.upsells-container h3 {
+.upsells-container h3,
+.upsells-container h3.text-white {
   color: var(--white-label-text-primary, #ffffff) !important;
 }
 

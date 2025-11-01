@@ -54,7 +54,7 @@
 .upsells-settings h2,
 .upsells-settings h3,
 .upsells-settings h4 {
-  color: var(--white-label-text-primary, #ffffff);
+  color: var(--white-label-text-primary, #ffffff) !important;
 }
 
 /* Label styles with secondary color */

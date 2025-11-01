@@ -160,7 +160,7 @@ const UpsellsIndex = () => {
       {selectedSection === "index" && (
         <div className="upsells-settings">
           <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-            <h3>Upsells</h3>
+            <h3>dfgUpsells</h3>
           </div>
           <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
             <p style={{color:"#CCC"}}>Intelligent, context-aware proactive messaging. Drive sales, get positive reviews, and increase guest satisfaction.</p>

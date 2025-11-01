@@ -40,7 +40,7 @@ export default function Upsells({ onNavigateToUpsell }: UpsellsProps) {
         {/* Header */}
         <div className="mb-10">
           <h1 className="text-[40px] font-['DM_Sans:Bold',_sans-serif] mb-4" style={{ fontVariationSettings: "'opsz' 14", color: 'var(--white-label-text-primary, #ffffff)' }}>
-            Upsells
+           dg Upsells
           </h1>
           <p className="text-[16px] font-['DM_Sans:Regular',_sans-serif] leading-relaxed max-w-[900px]" style={{ fontVariationSettings: "'opsz' 14", color: 'var(--white-label-text-secondary, #a6a9b2)' }}>
             Intelligent automations that help you maximize occupancy and leave less money on the table. Customize your upsell settings and messages to suit your property and guest preferences.
@@ -61,7 +61,7 @@ export default function Upsells({ onNavigateToUpsell }: UpsellsProps) {
             >
               <div className="flex-1">
                 <h3 className="text-[22px] font-['DM_Sans:Bold',_sans-serif] mb-3" style={{ fontVariationSettings: "'opsz' 14", color: 'var(--white-label-text-primary, #ffffff)' }}>
-                  {upsell.title}
+                {upsell.title}
                 </h3>
                 <p className="text-[16px] font-['DM_Sans:Regular',_sans-serif] leading-relaxed" style={{ fontVariationSettings: "'opsz' 14", color: 'var(--white-label-text-secondary, #a6a9b2)' }}>
                   {upsell.description}
