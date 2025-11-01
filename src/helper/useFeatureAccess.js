@@ -19,8 +19,17 @@ export const useFeatureAccess = () => {
     }
 
     // Check if feature settings exist
-    const featuresSettings = cssConfig?.features_settings || {};
+    // Note: features_settings comes from API as arrays: [features_object, status_code]
+    let featuresSettings = cssConfig?.features_settings;
     
+    // If it's an array, extract the first element (the actual features object)
+    if (Array.isArray(featuresSettings) && featuresSettings.length > 0) {
+      featuresSettings = featuresSettings[0];
+    }
+    
+    // Ensure we have an object, fallback to empty object if not
+    featuresSettings = featuresSettings || {};
+
     // If no feature settings found, allow access by default
     if (Object.keys(featuresSettings).length === 0) {
       return true;
@@ -31,6 +40,7 @@ export const useFeatureAccess = () => {
     
     // If feature not found in settings, allow access by default
     if (!feature) {
+      console.log('⚠️ [FEATURE ACCESS] Feature not found in settings - defaulting to ALLOW: ' + featureId);
       return true;
     }
 

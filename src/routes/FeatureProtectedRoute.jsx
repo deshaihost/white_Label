@@ -43,7 +43,16 @@ const FeatureProtectedRoute = ({ featureId, children }) => {
   }
 
   // Check if feature settings exist
-  const featuresSettings = cssConfig?.features_settings || {};
+  // Note: features_settings comes from API as [features_object, status_code]
+  let featuresSettings = cssConfig?.features_settings;
+  
+  // If it's an array, extract the first element (the actual features object)
+  if (Array.isArray(featuresSettings) && featuresSettings.length > 0) {
+    featuresSettings = featuresSettings[0];
+  }
+  
+  // Ensure we have an object, fallback to empty object if not
+  featuresSettings = featuresSettings || {};
   
   // If no feature settings found, allow access by default
   if (Object.keys(featuresSettings).length === 0) {

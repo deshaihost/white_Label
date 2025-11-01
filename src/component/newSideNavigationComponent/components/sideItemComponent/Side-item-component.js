@@ -420,8 +420,12 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
     const featureId = itemToFeatureMap[item.id];
     
     // If item has a feature mapping and feature is disabled, filter it out
-    if (featureId && !isFeatureEnabled(featureId)) {
-      return null; // Filter out this item
+    if (featureId) {
+      const enabled = isFeatureEnabled(featureId);
+      
+      if (!enabled) {
+        return null; // Filter out this item
+      }
     }
 
     // If item has dropdown items, filter those as well
@@ -430,8 +434,12 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         const dropdownFeatureId = itemToFeatureMap[dropdownItem.id];
         
         // If dropdown item has a feature mapping and feature is disabled, filter it out
-        if (dropdownFeatureId && !isFeatureEnabled(dropdownFeatureId)) {
-          return false;
+        if (dropdownFeatureId) {
+          const enabled = isFeatureEnabled(dropdownFeatureId);
+          
+          if (!enabled) {
+            return false;
+          }
         }
         
         return true;
