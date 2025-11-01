@@ -143,7 +143,7 @@
   transition: color 0.2s;
 }
 .settings-integrations .main-tab-btn.active {
-  color: #6b8aff;
+  color: var(--white-label-text-navigation_text, #6b8aff);
 }
 .settings-integrations .main-tab-btn.active::after {
   content: '';
@@ -153,11 +153,11 @@
   right: 0;
   bottom: -2px;
   height: 3px;
-  background: #2563eb;
+  background: var(--white-label-text-navigation_text, #2563eb);
   border-radius: 2px 2px 0 0;
 }
 .settings-integrations .main-tab-btn:hover {
-  color: #6b8aff;
+  color: var(--white-label-text-navigation_text, #6b8aff);
 }
 
 .settings-integrations .table {

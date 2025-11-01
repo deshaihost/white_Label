@@ -437,8 +437,13 @@ const IntegrationsIndex = (ApiUserData) => {
             className={`main-tab-btn${mainTab === tab ? ' active' : ''}`}
             onClick={() => setMainTab(tab)}
             style={{
-              color: mainTab === tab ? '#6b8aff' : (!cssLoading && cssConfig?.css_data?.text?.secondary ? 
-                cssConfig.css_data.text.secondary : '#fff')
+              color: mainTab === tab 
+                ? (!cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                  ? cssConfig.css_data.text.navigation_text 
+                  : '#6b8aff')
+                : (!cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : '#fff')
             }}
           >
             {tab}
