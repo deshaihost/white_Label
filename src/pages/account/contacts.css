@@ -317,7 +317,7 @@
 
 /* Add Button */
 .add-contact-button {
-    color: #3e88f7;
+    color: var(--white-label-text-navigation_text, #3e88f7);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
@@ -332,7 +332,7 @@
 }
 
 .add-contact-button:hover {
-    color: #74A9F7;
+    color: var(--white-label-interactive-light_blue, #74A9F7);
 }
 
 .add-contact-button-icon {
