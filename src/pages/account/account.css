@@ -87,7 +87,7 @@
 }
 
 .section-divider-text {
-    color: #74A9F7;
+    color: var(--white-label-text-navigation_text, #74A9F7);
     font-size: 12px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 600;
