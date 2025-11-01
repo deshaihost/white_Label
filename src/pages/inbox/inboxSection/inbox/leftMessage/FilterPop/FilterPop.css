@@ -1,7 +1,7 @@
 .filter-pop-container {
   padding: 20px;
   border-radius: 8px;
-  background-color: #2B2E36;
+  background-color: var(--white-label-background-secondary, #2B2E36);
   margin: 20px 0;
   min-height: 441px;
   width: 480px;

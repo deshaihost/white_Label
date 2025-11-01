@@ -269,8 +269,8 @@
     resize: none; /* Prevent manual resizing */
     overflow: auto; /* Hide scrollbars */
     max-height: 145px;
-    background-color: #17191f !important;
-    border-color: #17191f;
+    background-color: var(--white-label-background-secondary, #17191f) !important;
+    border-color: var(--white-label-background-secondary, #17191f);
     border-width: 0px;
 }
 
