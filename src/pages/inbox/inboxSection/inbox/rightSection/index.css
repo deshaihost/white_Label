@@ -195,7 +195,7 @@
   /* Fixed styles that should never change */
   width: 100% !important;
   padding: 8px 12px !important;
-  background-color: var(--white-label-background-input, #262730) !important;
+  background-color: var(--white-label-background-dropdown, #262730) !important;
   border: 1px solid rgb(57, 61, 70) !important;
   border-radius: 4px !important;
   color: #D0D3DB !important;
@@ -216,7 +216,7 @@
 .assign-user-dropdown:focus-visible,
 .right-side .assign-user-dropdown:hover {
   /* No style changes on hover */
-  background-color: var(--white-label-background-input, #262730) !important;
+  background-color: var(--white-label-background-dropdown, #262730) !important;
   border: 1px solid rgb(57, 61, 70) !important;
   color: #D0D3DB !important;
   outline: none !important;
@@ -226,7 +226,7 @@
 .assign-user-dropdown:focus,
 .right-side .assign-user-dropdown:focus {
   outline: none !important;
-  background-color: var(--white-label-background-input, #262730) !important;
+  background-color: var(--white-label-background-dropdown, #262730) !important;
   border: 1px solid rgb(57, 61, 70) !important;
   color: #D0D3DB !important;
   box-shadow: none !important;
@@ -235,7 +235,7 @@
 /* Ensure option colors match with the select */
 .assign-user-dropdown option {
   color: #D0D3DB !important;
-  background-color: var(--white-label-background-input, #2B2E36) !important;
+  background-color: var(--white-label-background-dropdown, #2B2E36) !important;
   padding: 8px 16px !important;
 }
 
@@ -247,7 +247,7 @@
 /* Ensure option colors match with the select - added for consistency */
 .assign-user-dropdown option {
   color: #D0D3DB;
-  background-color: var(--white-label-background-input, #2B2E36);
+  background-color: var(--white-label-background-dropdown, #2B2E36);
 }
 
 /* Close button for right section in medium screens */

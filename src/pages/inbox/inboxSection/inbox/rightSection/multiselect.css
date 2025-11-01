@@ -98,7 +98,7 @@
   top: 100%;
   left: 0;
   right: 0;
-  background-color: var(--white-label-background-input, #262730);
+  background-color: var(--white-label-background-dropdown, #262730);
   border-radius: 4px;
   margin-top: 4px;
   z-index: 100;
@@ -120,7 +120,7 @@
 }
 
 .user-dropdown-item:hover {
-  background-color: rgba(1, 50, 128, 1);
+  background-color: var(--white-label-background-hover, rgba(1, 50, 128, 1));
 }
 
 .user-dropdown-item:hover::before {
@@ -136,7 +136,7 @@
 }
 
 .user-dropdown-item:active {
-  background-color: rgba(0, 19, 48, 1);
+  background-color: var(--white-label-background-hover, rgba(0, 19, 48, 1));
 }
 
 .user-dropdown-item-selected {
