@@ -44,9 +44,45 @@
 
 .upsells-settings input:disabled {
   background-color: #e0e0e0;
-  color: #a0a0a0;
+  color: var(--white-label-text-disabled, #a0a0a0);
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+/* Heading styles with primary color */
+.upsells-settings h1,
+.upsells-settings h2,
+.upsells-settings h3,
+.upsells-settings h4 {
+  color: var(--white-label-text-primary, #ffffff);
+}
+
+/* Label styles with secondary color */
+.upsells-settings label {
+  color: var(--white-label-text-secondary, #a6a9b2);
+}
+
+/* Paragraph styles with secondary color */
+.upsells-settings p {
+  color: var(--white-label-text-secondary, #a6a9b2);
+}
+
+/* Span styles with secondary color */
+.upsells-settings span {
+  color: var(--white-label-text-secondary, #a6a9b2);
+}
+
+/* Placeholder styles */
+.upsells-settings input::placeholder,
+.upsells-settings textarea::placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
+}
+
+/* Disabled input text */
+.upsells-settings input:disabled,
+.upsells-settings select:disabled,
+.upsells-settings textarea:disabled {
+  color: var(--white-label-text-disabled, #676A73) !important;
 }
 
 .upsells-settings .setting-textarea {
@@ -54,12 +90,12 @@
 }
 
 .upsells-settings textarea.form-control.setting-textarea:disabled {
-  color: #AAA
+  color: var(--white-label-text-disabled, #AAA);
 }
 
 .upsells-settings .settings-label {
   font-size: 14px;
-  color: #BBB;
+  color: var(--white-label-text-secondary, #BBB);
   line-height: 18px;
 }
 
@@ -72,6 +108,7 @@
 .upsells-settings .available-variables-heading {
   font-size: 1.5rem;
   margin-bottom: 10px;
+  color: var(--white-label-text-primary, #ffffff);
 }
 
 .upsells-settings .available-variables {
@@ -94,12 +131,12 @@
 }
 
 .upsells-settings .table thead th {
-  color: #AAA;
+  color: var(--white-label-text-primary, #AAA);
 }
 
 .upsells-settings .table tbody td {
   font-size: 14px;
-  color: white;
+  color: var(--white-label-text-secondary, white);
 }
 
 /* Override global table border reset for upsells tables */
@@ -161,7 +198,7 @@
 .upsell-message-modal p {
   font-size: 18px;
   margin-bottom: 25px;
-  color: white;
+  color: var(--white-label-text-secondary, white);
 }
 
 /* Upsells table background colors with !important */

@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import './Upsells.css';
 
 interface UpsellCard {
   id: string;
@@ -34,14 +35,14 @@ export default function Upsells({ onNavigateToUpsell }: UpsellsProps) {
   };
 
   return (
-    <div className="h-screen bg-[#0F1117] overflow-y-auto">
+    <div className="h-screen bg-[#0F1117] overflow-y-auto upsells-container">
       <div className="max-w-[1200px] mx-auto px-12 py-12">
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-white text-[40px] font-['DM_Sans:Bold',_sans-serif] mb-4" style={{ fontVariationSettings: "'opsz' 14" }}>
+          <h1 className="text-[40px] font-['DM_Sans:Bold',_sans-serif] mb-4" style={{ fontVariationSettings: "'opsz' 14", color: 'var(--white-label-text-primary, #ffffff)' }}>
             Upsells
           </h1>
-          <p className="text-[#a6a9b2] text-[16px] font-['DM_Sans:Regular',_sans-serif] leading-relaxed max-w-[900px]" style={{ fontVariationSettings: "'opsz' 14" }}>
+          <p className="text-[16px] font-['DM_Sans:Regular',_sans-serif] leading-relaxed max-w-[900px]" style={{ fontVariationSettings: "'opsz' 14", color: 'var(--white-label-text-secondary, #a6a9b2)' }}>
             Intelligent automations that help you maximize occupancy and leave less money on the table. Customize your upsell settings and messages to suit your property and guest preferences.
           </p>
         </div>
@@ -59,10 +60,10 @@ export default function Upsells({ onNavigateToUpsell }: UpsellsProps) {
               style={{ boxShadow: '0 0 25px rgba(1, 50, 128, 0.2)' }}
             >
               <div className="flex-1">
-                <h3 className="text-white text-[22px] font-['DM_Sans:Bold',_sans-serif] mb-3" style={{ fontVariationSettings: "'opsz' 14" }}>
+                <h3 className="text-[22px] font-['DM_Sans:Bold',_sans-serif] mb-3" style={{ fontVariationSettings: "'opsz' 14", color: 'var(--white-label-text-primary, #ffffff)' }}>
                   {upsell.title}
                 </h3>
-                <p className="text-[#a6a9b2] text-[16px] font-['DM_Sans:Regular',_sans-serif] leading-relaxed" style={{ fontVariationSettings: "'opsz' 14" }}>
+                <p className="text-[16px] font-['DM_Sans:Regular',_sans-serif] leading-relaxed" style={{ fontVariationSettings: "'opsz' 14", color: 'var(--white-label-text-secondary, #a6a9b2)' }}>
                   {upsell.description}
                 </p>
               </div>
