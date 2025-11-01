@@ -4,7 +4,7 @@
 
 /* Page Header */
 .contacts-page-title {
-    color: white;
+    color: var(--white-label-text-primary, white);
     font-size: 28px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 700;
@@ -13,7 +13,7 @@
 }
 
 .contacts-page-subtitle {
-    color: #a6a9b2;
+    color: var(--white-label-text-secondary, #a6a9b2);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
@@ -37,7 +37,7 @@
 }
 
 .contact-item-name {
-    color: white;
+    color: var(--white-label-text-secondary, #a6a9b2);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
@@ -47,7 +47,7 @@
 }
 
 .contact-item-address {
-    color: white;
+    color: var(--white-label-text-secondary, #a6a9b2);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
@@ -62,7 +62,7 @@
 
 /* Contact Status */
 .contact-status-confirmed {
-    color: #a6a9b2;
+    color: var(--white-label-text-primary, white);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
@@ -70,7 +70,7 @@
 }
 
 .contact-status-unconfirmed {
-    color: #f59e0b;
+    color: var(--white-label-text-quaternary, #f59e0b);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
@@ -118,7 +118,7 @@
 }
 
 .verification-code-label {
-    color: white;
+    color: var(--white-label-text-primary, white);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
@@ -131,7 +131,7 @@
     background-color: var(--white-label-background-input, #0F1117);
     border: 1px solid #3e88f7;
     border-radius: 8px;
-    color: white;
+    color: var(--white-label-text-primary, white);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
@@ -147,7 +147,19 @@
 }
 
 .verification-code-input::placeholder {
-    color: #676A73;
+    color: var(--white-label-text-placeholder, #676A73);
+}
+.verification-code-input::-webkit-input-placeholder {
+    color: var(--white-label-text-placeholder, #676A73);
+}
+.verification-code-input::-moz-placeholder {
+    color: var(--white-label-text-placeholder, #676A73);
+}
+.verification-code-input:-ms-input-placeholder {
+    color: var(--white-label-text-placeholder, #676A73);
+}
+.verification-code-input:-moz-placeholder {
+    color: var(--white-label-text-placeholder, #676A73);
 }
 
 /* Add Contact Form */
@@ -168,7 +180,7 @@
 }
 
 .add-contact-form-label {
-    color: white;
+    color: var(--white-label-text-primary, white) !important;
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
@@ -183,7 +195,7 @@
     background-color: var(--white-label-background-input, #0F1117);
     border: 1px solid var(--white-label-border-primary, #013280);
     border-radius: 8px;
-    color: white;
+    color: var(--white-label-text-primary, white);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
@@ -199,7 +211,19 @@
 }
 
 .add-contact-form-input::placeholder {
-    color: #676A73;
+    color: var(--white-label-text-placeholder, #676A73);
+}
+.add-contact-form-input::-webkit-input-placeholder {
+    color: var(--white-label-text-placeholder, #676A73);
+}
+.add-contact-form-input::-moz-placeholder {
+    color: var(--white-label-text-placeholder, #676A73);
+}
+.add-contact-form-input:-ms-input-placeholder {
+    color: var(--white-label-text-placeholder, #676A73);
+}
+.add-contact-form-input:-moz-placeholder {
+    color: var(--white-label-text-placeholder, #676A73);
 }
 
 /* Consent Checkbox */
@@ -238,7 +262,7 @@
 }
 
 .consent-checkbox-label {
-    color: white;
+    color: var(--white-label-text-primary, white);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
@@ -317,7 +341,7 @@
 
 /* Slack Integration */
 .slack-integration-description {
-    color: #a6a9b2;
+    color: var(--white-label-text-secondary, #a6a9b2);
     font-size: 14px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
