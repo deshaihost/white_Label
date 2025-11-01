@@ -1325,7 +1325,7 @@ const OpenPhoneSection = ({
                 flexDirection: "column",
                 width: "100%",
                 backgroundColor: "#17191F",
-                borderTop: "1px solid #24262E",
+                borderTop: `1px solid var(--white-label-border-primary, #24262E)`,
               }}
             >
               <div
