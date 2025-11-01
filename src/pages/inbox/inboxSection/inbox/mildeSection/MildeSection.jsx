@@ -1219,7 +1219,6 @@ const MildeSection = ({
           margin: "0px",
           width: "100%",
           padding: "0px",
-          backgroundColor: "#0F1117",
           height: window.innerWidth < 992 ? mobileHeight : "100%",
         }}
       >

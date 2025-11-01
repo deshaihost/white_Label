@@ -32,6 +32,7 @@
     border-radius: 0px !important;
     /* border-color: #24262E !important; */
     padding: 0px !important;
+    background-color: var(--white-label-background-primary, #0F1117);
     
     
 }
