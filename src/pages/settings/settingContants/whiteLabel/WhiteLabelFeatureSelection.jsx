@@ -79,8 +79,8 @@ const WhiteLabelFeatureSelection = () => {
       id: 'insights', 
       name: 'Insights', 
       description: 'Analytics and reporting dashboard', 
-      enabled: false, 
-      available: false, 
+      enabled: true, 
+      available: true, 
       version: 'v1',
       link: '/insights',
       path: '/statistics'
@@ -89,8 +89,8 @@ const WhiteLabelFeatureSelection = () => {
       id: 'action-item-settings', 
       name: 'Action Item Settings', 
       description: 'Configure AI task generation rules', 
-      enabled: false, 
-      available: false, 
+      enabled: true, 
+      available: true, 
       version: 'v1', 
       link: '/actionitemsettings',
       path: '/setting/action-item-settings'
@@ -610,7 +610,8 @@ const WhiteLabelFeatureSelection = () => {
               <button onClick={() => setApiModalOpen(false)} className="api-modal-close">×</button>
             </div>
             <div className="api-modal-body">
-              <p>API documentation for {selectedFeatureForApi} will be available here.</p>
+              {/* <p>API documentation for {selectedFeatureForApi} will be available here.</p> */}
+              <p>API documentation is coming soon. Stay tuned!</p>
             </div>
           </div>
         </div>
