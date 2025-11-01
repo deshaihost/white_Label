@@ -163,7 +163,7 @@
 /* Styling for "See more statistics" link in dashboard */
 .dashboard-container .account-content .statistics-link a,
 .statistics-link a {
-  color: #3e88f7 !important;
+  color: var(--white-label-text-navigation_text, #3e88f7) !important;
   font-family: 'DM Sans', sans-serif !important;
   font-size: 12px !important;
   font-weight: 600 !important;
@@ -174,7 +174,7 @@
 
 .dashboard-container .account-content .statistics-link a:hover,
 .statistics-link a:hover {
-  color: #98bffa !important;
+  color: var(--white-label-interactive-light_blue, #98bffa) !important;
 }
 
 .dashboard-container .account-content .account-box {

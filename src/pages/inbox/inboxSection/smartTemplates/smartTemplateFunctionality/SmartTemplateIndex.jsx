@@ -448,8 +448,8 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                         <button
                           onClick={() => setAddEditSmart({type:{type:edit, index:smartIndex}, data: "", smartTemplateData:{smartItem}, description:templateDescription})}
                           style={{
-                            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
-                              ? cssConfig.css_data.text.secondary 
+                            color: !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                              ? cssConfig.css_data.text.navigation_text 
                               : "#98bffa",
                             fontSize: "16px",
                             fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
@@ -462,7 +462,7 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
                             transition: "color 0.2s"
                           }}
                           onMouseOver={(e) => e.target.style.color = "#3e88f7"}
-                          onMouseOut={(e) => e.target.style.color = !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : "#98bffa"}
+                          onMouseOut={(e) => e.target.style.color = !cssLoading && cssConfig?.css_data?.text?.navigation_text ? cssConfig.css_data.text.navigation_text : "#98bffa"}
                         >
                           Edit
                         </button>
@@ -475,12 +475,12 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
 
             <div>
               <button 
-                className="bg-none text-primary border-0 outline-0 fs-4 fw-bold p-2 mt-4" 
+                className="bg-none border-0 outline-0 fs-4 fw-bold p-2 mt-4" 
                 onClick={() => setAddEditSmart({ type: { type: add }, data: "" })}
                 style={{
-                  color: !cssLoading && cssConfig?.css_data?.text?.primary 
-                    ? cssConfig.css_data.text.primary 
-                    : undefined
+                  color: !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                    ? cssConfig.css_data.text.navigation_text 
+                    : "#3e88f7"
                 }}
               >
                 <i className="bi bi-plus fs-3 "></i> Add New

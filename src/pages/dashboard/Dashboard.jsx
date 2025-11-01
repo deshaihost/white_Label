@@ -607,7 +607,7 @@ const Dashboard = () => {
                                 fontFamily: "'DM Sans', sans-serif",
                                 fontWeight: 500,
                                 fontVariationSettings: "'opsz' 14",
-                                color: "#3e88f7",
+                                color: !cssLoading ? (cssConfig?.css_data?.text?.navigation_text || "#3e88f7") : "#3e88f7",
                                 textDecoration: "none"
                               }}
                               onMouseOver={(e) => e.target.style.textDecoration = 'underline'}

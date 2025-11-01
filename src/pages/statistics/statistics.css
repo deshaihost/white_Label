@@ -624,7 +624,7 @@
 
 /* Styling for "See more statistics" link */
 .statistics-link a {
-  color: #3e88f7 !important;
+  color: var(--white-label-text-navigation_text, #3e88f7) !important;
   font-family: 'DM Sans', sans-serif !important;
   font-size: 12px !important;
   font-weight: 600 !important;
@@ -634,7 +634,7 @@
 }
 
 .statistics-link a:hover {
-  color: #98bffa !important;
+  color: var(--white-label-interactive-light_blue, #98bffa) !important;
 }
 
 /* MUI Menu styling to match new dashboard design */
