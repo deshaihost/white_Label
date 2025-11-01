@@ -30,8 +30,9 @@ export const useWhiteLabelBranding = () => {
       // Only consider it white-label if it's not the main hostbuddy domains
       if (currentDomain !== 'hostbuddy.ai' && 
           currentDomain !== 'www.hostbuddy.ai' && 
-          currentDomain !== 'localhost' && 
-          currentDomain !== '127.0.0.1') {
+          //currentDomain !== 'localhost' && 
+          //currentDomain !== '127.0.0.1') &&
+          true) {
         
         const brandName = getDomainBrandName(currentDomain);
         setBrandInfo({

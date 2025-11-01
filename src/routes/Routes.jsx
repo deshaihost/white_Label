@@ -25,6 +25,7 @@ import HostawaySetup from "../pages/setupGuide/HostawaySetup";
 import Dashboard from "../pages/dashboard/Dashboard";
 import StatisticsPage from "../pages/statistics/statistics";
 import ProtectedRoute from "./ProtectedRoute";
+import FeatureProtectedRoute from "./FeatureProtectedRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import QuestionnairePage from "../pages/properties/addProperties/dynamic_questionnaire/complete_questionnaire";
 import GuidedSetup from "../pages/properties/addProperties/guided_setup/guidedSetup";
@@ -384,7 +385,9 @@ const Routing = () => {
           path="/statistics"
           element={
             <ProtectedRoute>
-              <StatisticsPage />
+              <FeatureProtectedRoute featureId="insights">
+                <StatisticsPage />
+              </FeatureProtectedRoute>
             </ProtectedRoute>
           }
         />
@@ -392,7 +395,9 @@ const Routing = () => {
           path="/properties"
           element={
             <ProtectedRoute>
-              <Properties />
+              <FeatureProtectedRoute featureId="properties">
+                <Properties />
+              </FeatureProtectedRoute>
             </ProtectedRoute>
           }
         />
@@ -448,7 +453,9 @@ const Routing = () => {
           path="/edit-property/:property_name"
           element={
             <ProtectedRoute>
-              <QuestionnairePage />
+              <FeatureProtectedRoute featureId="property-profile">
+                <QuestionnairePage />
+              </FeatureProtectedRoute>
             </ProtectedRoute>
           }
         />
@@ -464,7 +471,9 @@ const Routing = () => {
           path="/inbox/:section?"
           element={
             <ProtectedRoute>
-              <InboxIndex />
+              <FeatureProtectedRoute featureId="messaging-inbox">
+                <InboxIndex />
+              </FeatureProtectedRoute>
             </ProtectedRoute>
           }
         />
@@ -472,7 +481,9 @@ const Routing = () => {
           path="/action-item"
           element={
             <ProtectedRoute>
-              <ActionItemsIndex />
+              <FeatureProtectedRoute featureId="action-items">
+                <ActionItemsIndex />
+              </FeatureProtectedRoute>
             </ProtectedRoute>
           }
         />

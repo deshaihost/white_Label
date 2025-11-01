@@ -47,8 +47,9 @@ const Login = () => {
     const currentDomain = window.location.hostname;
     const isMainDomain = currentDomain === 'hostbuddy.ai' || 
                         currentDomain === 'www.hostbuddy.ai' || 
-                        currentDomain === 'localhost' || 
-                        currentDomain === '127.0.0.1';
+                        //currentDomain === 'localhost' || 
+                        //currentDomain === '127.0.0.1' ||
+                        false;
     
     if (isMainDomain) {
       return;
