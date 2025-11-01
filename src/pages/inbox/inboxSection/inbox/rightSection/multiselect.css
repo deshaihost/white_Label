@@ -102,7 +102,7 @@
   border-radius: 4px;
   margin-top: 4px;
   z-index: 100;
-  border: 1px solid #24262E;
+  border: 1px solid var(--white-label-border-primary, #24262E);
   overflow: hidden;
   max-height: 200px;
   overflow-y: auto;

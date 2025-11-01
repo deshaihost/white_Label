@@ -60,7 +60,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 2px solid #2B2E36;
+  border: 2px solid var(--white-label-border-primary, #2B2E36);
   display: flex;
   justify-content: center;
   align-items: center;

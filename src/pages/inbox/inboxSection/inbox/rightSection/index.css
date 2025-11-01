@@ -196,7 +196,7 @@
   width: 100% !important;
   padding: 8px 12px !important;
   background-color: var(--white-label-background-dropdown, #262730) !important;
-  border: 1px solid rgb(57, 61, 70) !important;
+  border: 1px solid var(--white-label-border-primary, rgb(57, 61, 70)) !important;
   border-radius: 4px !important;
   color: #D0D3DB !important;
   font-family: "DM Sans", Helvetica !important;
@@ -217,7 +217,7 @@
 .right-side .assign-user-dropdown:hover {
   /* No style changes on hover */
   background-color: var(--white-label-background-dropdown, #262730) !important;
-  border: 1px solid rgb(57, 61, 70) !important;
+  border: 1px solid var(--white-label-border-primary, rgb(57, 61, 70)) !important;
   color: #D0D3DB !important;
   outline: none !important;
 }
@@ -227,7 +227,7 @@
 .right-side .assign-user-dropdown:focus {
   outline: none !important;
   background-color: var(--white-label-background-dropdown, #262730) !important;
-  border: 1px solid rgb(57, 61, 70) !important;
+  border: 1px solid var(--white-label-border-primary, rgb(57, 61, 70)) !important;
   color: #D0D3DB !important;
   box-shadow: none !important;
 }

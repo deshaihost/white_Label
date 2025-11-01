@@ -89,7 +89,7 @@ const responsiveStyles = `
       height: 100% !important;
       z-index: 1000 !important;
       background-color: var(--white-label-background-secondary, #17191F) !important;
-      border: 1px solid #24262E !important;
+      border: 1px solid var(--white-label-border-primary, #24262E) !important;
       border-radius: 4px !important;
       transition: all 0.3s ease !important;
     }
@@ -148,7 +148,7 @@ const responsiveStyles = `
       position: relative !important;
       height: 100% !important;
       background-color: var(--white-label-background-secondary, #17191F) !important;
-      border: 1px solid #24262E !important;
+      border: 1px solid var(--white-label-border-primary, #24262E) !important;
       border-radius: 4px !important;
       transition: all 0.3s ease !important;
     }
@@ -204,7 +204,7 @@ const responsiveStyles = `
       position: relative !important;
       height: 100% !important;
       background-color: var(--white-label-background-secondary, #17191F) !important;
-      border: 1px solid #24262E !important;
+      border: 1px solid var(--white-label-border-primary, #24262E) !important;
       border-radius: 4px !important;
       transition: all 0.3s ease !important;
     }
@@ -1651,7 +1651,7 @@ const Inbox = ({
             />
             <div
               className="middleSectionContainer"
-              style={{ flex: "1", height: "100%", border: "1px solid #24262E" }}
+              style={{ flex: "1", height: "100%", border: `1px solid var(--white-label-border-primary, #24262E)` }}
             >
               <div
                 className="guest-header-container"
@@ -1662,7 +1662,7 @@ const Inbox = ({
                   // marginBottom: "4px",
                   flexDirection: "column",
                   border: "1px solid",
-                  borderColor: "#24262E",
+                  borderColor: `var(--white-label-border-primary, #24262E)`,
                 }}
               >
                 {" "}
@@ -2198,7 +2198,7 @@ const Inbox = ({
                           // className="action-item-card"
                           style={{
                             backgroundColor: "rgb(32 33 39)",
-                            border: "1px solid #24262E",
+                            border: `1px solid var(--white-label-border-primary, #24262E)`,
                             borderRadius: "8px",
                             padding: "10px",
                             marginBottom: "8px",
@@ -2542,7 +2542,7 @@ const Inbox = ({
                                       flex: 1,
                                       position: "relative",
                                       border: "1px solid",
-                                      borderColor: "#24262E",
+                                      borderColor: `var(--white-label-border-primary, #24262E)`,
                                     }}
                                   >
                                     <div
@@ -2987,7 +2987,7 @@ const Inbox = ({
                 flex: "none",
                 height: "100%",
                 padding: "11px",
-                border: "1px solid #24262E",
+                border: `1px solid var(--white-label-border-primary, #24262E)`,
               }}
             >
               {" "}
@@ -3345,7 +3345,7 @@ const EditNoteModal = ({
               style={{
                 backgroundColor: "transparent",
                 color: "#D0D3DB",
-                border: "0px solid #24262E",
+                border: `0px solid var(--white-label-border-primary, #24262E)`,
                 height: "36px",
                 borderRadius: "4px",
                 padding: "0 16px",

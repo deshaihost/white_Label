@@ -1807,7 +1807,7 @@ const callUpdateGuestDataApi = async () => {
                         style={{
                           alignItems: "center",
                           display: "flex",
-                          backgroundColor: "#24262E",
+                          backgroundColor: "var(--white-label-background-dropdown, #24262E)",
                           // border: '1px solid',
                           // borderColor: 'rgba(57, 61, 70, 1)',
                           borderRadius: "4px",
@@ -1871,7 +1871,7 @@ const callUpdateGuestDataApi = async () => {
                             top: "100%",
                             left: "0",
                             right: "0",
-                            backgroundColor: "#262730",
+                            backgroundColor: "var(--white-label-background-dropdown, #262730)",
                             borderRadius: "4px",
                             marginTop: "4px",
                             zIndex: 100,
@@ -2016,11 +2016,11 @@ const callUpdateGuestDataApi = async () => {
                                 tabIndex={0}
                                 onMouseDown={(e) =>
                                 (e.currentTarget.style.backgroundColor =
-                                  "rgba(0, 19, 48, 1)")
+                                  getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2032,7 +2032,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2044,7 +2044,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2056,7 +2056,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2111,11 +2111,11 @@ const callUpdateGuestDataApi = async () => {
                                 tabIndex={0}
                                 onMouseDown={(e) =>
                                 (e.currentTarget.style.backgroundColor =
-                                  "rgba(0, 19, 48, 1)")
+                                  getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2127,7 +2127,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2139,7 +2139,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2151,7 +2151,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2206,11 +2206,11 @@ const callUpdateGuestDataApi = async () => {
                                 tabIndex={0}
                                 onMouseDown={(e) =>
                                 (e.currentTarget.style.backgroundColor =
-                                  "rgba(0, 19, 48, 1)")
+                                  getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2222,7 +2222,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2234,7 +2234,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2246,7 +2246,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2301,11 +2301,11 @@ const callUpdateGuestDataApi = async () => {
                                 tabIndex={0}
                                 onMouseDown={(e) =>
                                 (e.currentTarget.style.backgroundColor =
-                                  "rgba(0, 19, 48, 1)")
+                                  getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2317,7 +2317,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2329,7 +2329,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2341,7 +2341,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2607,11 +2607,11 @@ const callUpdateGuestDataApi = async () => {
                   position: "absolute",
                   left: "0",
                   right: "0",
-                  backgroundColor: "#262730",
+                  backgroundColor: "var(--white-label-background-dropdown, #262730)",
                   borderRadius: "4px",
                   marginTop: "4px",
                   zIndex: 100,
-                  border: "1px solid #24262E",
+                  border: "1px solid var(--white-label-border-primary, #24262E)",
                   overflow: "hidden",
                 }}
               >
@@ -2621,7 +2621,7 @@ const callUpdateGuestDataApi = async () => {
                   onClick={() => handleSentimentSelect("neutral")}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2629,7 +2629,7 @@ const callUpdateGuestDataApi = async () => {
                     }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2638,11 +2638,11 @@ const callUpdateGuestDataApi = async () => {
                   }}
                   onMouseDown={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(0, 19, 48, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
@@ -2676,7 +2676,7 @@ const callUpdateGuestDataApi = async () => {
                   onClick={() => handleSentimentSelect("positive")}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2684,7 +2684,7 @@ const callUpdateGuestDataApi = async () => {
                     }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2693,11 +2693,11 @@ const callUpdateGuestDataApi = async () => {
                   }}
                   onMouseDown={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(0, 19, 48, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
@@ -2731,7 +2731,7 @@ const callUpdateGuestDataApi = async () => {
                   onClick={() => handleSentimentSelect("negative")}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2739,7 +2739,7 @@ const callUpdateGuestDataApi = async () => {
                     }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2748,11 +2748,11 @@ const callUpdateGuestDataApi = async () => {
                   }}
                   onMouseDown={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(0, 19, 48, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
@@ -2786,7 +2786,7 @@ const callUpdateGuestDataApi = async () => {
                   onClick={() => handleSentimentSelect("clear")}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2794,7 +2794,7 @@ const callUpdateGuestDataApi = async () => {
                     }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2803,11 +2803,11 @@ const callUpdateGuestDataApi = async () => {
                   }}
                   onMouseDown={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(0, 19, 48, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
@@ -2882,7 +2882,7 @@ const callUpdateGuestDataApi = async () => {
         <div
           className="user-dropdown-container"
           ref={assignUserDropdownRef}
-          style={{ border: "1px solid #24262E" }}
+          style={{ border: "1px solid var(--white-label-border-primary, #24262E)" }}
         >
           {/* Custom dropdown that looks like the sentiment dropdown */}
           <div
@@ -3241,7 +3241,7 @@ const callUpdateGuestDataApi = async () => {
               borderRadius: "4px", // Setting border radius to 4px as requested
               padding: "20px",
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-              border: "1px solid rgb(67 70 78)",
+              border: "1px solid var(--white-label-border-primary, rgb(67, 70, 78))",
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -3303,7 +3303,7 @@ const callUpdateGuestDataApi = async () => {
                       width: "100%",
                       padding: "8px",
                       backgroundColor: "#24262E",
-                      border: "1px solid #393d46",
+                      border: "1px solid var(--white-label-border-primary, #393d46)",
                       borderRadius: "4px",
                       color: "#D0D3DB", // Setting input text color as requested
                       fontSize: "14px",
@@ -3333,7 +3333,7 @@ const callUpdateGuestDataApi = async () => {
                       width: "100%",
                       padding: "8px",
                       backgroundColor: "#24262E",
-                      border: "1px solid #393d46",
+                      border: "1px solid var(--white-label-border-primary, #393d46)",
                       borderRadius: "4px",
                       color: "#D0D3DB", // Setting input text color as requested
                       fontSize: "14px",

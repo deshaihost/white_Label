@@ -1847,7 +1847,7 @@ const NonGuestRightSection = ({
                           style={{
                             alignItems: "center",
                             display: "flex",
-                            backgroundColor: "#24262E",
+                            backgroundColor: "var(--white-label-background-dropdown, #24262E)",
                             borderRadius: "4px",
                             gap: "6px",
                             height: "32px",
@@ -1887,7 +1887,7 @@ const NonGuestRightSection = ({
                               top: "100%",
                               left: "0",
                               right: "0",
-                              backgroundColor: "#262730",
+                              backgroundColor: "var(--white-label-background-dropdown, #262730)",
                               borderRadius: "4px",
                               marginTop: "4px",
                               zIndex: 100,

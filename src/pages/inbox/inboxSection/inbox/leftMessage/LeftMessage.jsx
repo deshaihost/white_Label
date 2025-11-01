@@ -1086,7 +1086,7 @@ const getConversationTimestamp = (conversation) => {
       style={{
         height: "100%",
         border: "1px solid",
-        borderColor: "#24262E",
+        borderColor: `var(--white-label-border-primary, #24262E)`,
         backgroundColor: "#17191F",
         display: "flex",
         flexDirection: "column",
