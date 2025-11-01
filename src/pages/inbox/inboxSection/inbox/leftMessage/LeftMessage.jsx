@@ -1441,7 +1441,7 @@ const getConversationTimestamp = (conversation) => {
             position: "relative",
           }}
         >
-          <div style={{ border: "1px solid #24262E", position: "relative" }}>
+          <div style={{ border: `1px solid var(--white-label-border-primary, #24262E)`, position: "relative" }}>
             {filteredConversations.map((message) => {
               // console.log("Rendering message:", message);
               const {
