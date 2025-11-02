@@ -92,53 +92,81 @@ const BasicInformationForm = ({ property_name }) => {
   return (
     <div>
       <div>
-        <h3 className="text-white fw-bold mb-3 fs-4">Property Name & Thumbnail</h3>
+        <h3 className="modern-section-heading">Property Name & Thumbnail</h3>
       </div>
       <div className="row">
-        <div className="col-12 mx-auto form-design">
-          <div className="container" style={{ marginLeft: '0px', marginRight: '0px', paddingLeft: '0px', paddingRight: '0px' }}>
-            <div className="row mt-2">
+        <div className="col-12 mx-auto">
+          <div className="row mt-2" style={{ gap: '16px 0' }}>
 
-              {/* Property Name input (if editing existing property, shows the property name and is unchangeable) */}
-              <div className="col-md-6">
-                <label className="text-white">Property Name</label>
-                <div className="">
-                  <input className="form-control" type="text" value={propertyName || null} readOnly={!!property_name} placeholder="eg. smith villa"
-                  onChange={(e) => { setPropertyName(e.target.value); }} />
-                </div>
-              </div>
-
-              {/* Thumbnail Image input */}
-              <div className="col-md-6">
-                <label className="text-white">
-                  Thumbnail Photo <span>(.png, .jpg, .jpeg supported)</span>
-                </label>
-                <div className="">
-                  <input className="form-control" type="file" placeholder="" onChange={(e) => { setFile(e.target.files); }} />
-                </div>
+            {/* Property Name input (if editing existing property, shows the property name and is unchangeable) */}
+            <div className="col-md-6">
+              <label className="modern-label">Property Name</label>
+              <div>
+                <input 
+                  className="modern-input" 
+                  type="text" 
+                  value={propertyName || ''} 
+                  readOnly={!!property_name} 
+                  placeholder="eg. smith villa"
+                  onChange={(e) => { setPropertyName(e.target.value); }} 
+                />
               </div>
             </div>
 
-            {/* Update (thumbnail image) button (only if editing existing property & new image selected). When we add support for changing the property name, this button should be changed to trigger that too. */}
-            {property_name && uploadedFile && (
-              <div className="col-md-12 mt-4">
-                <div className="d-flex justify-content-center">
-                  <button className="mw-auto" disabled={propertiesAddLoading ? true : false}
-                    onClick={() => handleUpdateForExistingProp()}>
-                    {!imgIsUplaoding ? <>Update</> : <Loader />}
-                  </button>
+            {/* Thumbnail Image input */}
+            <div className="col-md-6">
+              <label className="modern-label">
+                Thumbnail Photo <span style={{ color: '#676a73', fontSize: '11px' }}>(.png, .jpg, .jpeg supported)</span>
+              </label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <label 
+                  htmlFor="thumbnail-upload"
+                  className="modern-btn-primary" 
+                  style={{ cursor: 'pointer', display: 'inline-block', textAlign: 'center', whiteSpace: 'nowrap' }}
+                >
+                  Choose File
+                </label>
+                <input 
+                  id="thumbnail-upload"
+                  type="file" 
+                  style={{ display: 'none' }}
+                  accept=".png,.jpg,.jpeg"
+                  onChange={(e) => { setFile(e.target.files); }} 
+                />
+                <div className="modern-card" style={{ flex: 1, display: 'flex', alignItems: 'center', padding: '12px 16px' }}>
+                  <span style={{ color: uploadedFile && uploadedFile.length > 0 ? 'white' : '#676a73', fontSize: '13px' }}>
+                    {uploadedFile && uploadedFile.length > 0 ? uploadedFile[0].name : 'No file chosen'}
+                  </span>
                 </div>
               </div>
-            )}
+            </div>
           </div>
+
+          {/* Update (thumbnail image) button (only if editing existing property & new image selected). When we add support for changing the property name, this button should be changed to trigger that too. */}
+          {property_name && uploadedFile && (
+            <div className="col-md-12 mt-4">
+              <div className="d-flex justify-content-center">
+                <button 
+                  className="modern-btn-primary" 
+                  disabled={propertiesAddLoading || imgIsUplaoding}
+                  onClick={() => handleUpdateForExistingProp()}
+                >
+                  {!imgIsUplaoding ? 'Update' : <Loader />}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Save & Next button, only shown if adding a property */}
           {!property_name && (
             <div className="col-md-12 mt-5">
               <div className="d-flex justify-content-center">
-                <button className="mw-auto" disabled={propertiesAddLoading ? true : false}
-                  onClick={() => onSubmit()}>
-                  {!propertiesAddLoading ? <>Create New Property</> : <Loader />}
+                <button 
+                  className="modern-btn-primary" 
+                  disabled={propertiesAddLoading}
+                  onClick={() => onSubmit()}
+                >
+                  {!propertiesAddLoading ? 'Create New Property' : <Loader />}
                 </button>
               </div>
             </div>
