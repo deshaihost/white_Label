@@ -246,24 +246,28 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
         <div className="row">
           <div className="col-12 form-design">
             <form>
-              <h1 className="text-white mb-3 fs-4 fw-bold">PMS Integration</h1>
+              <h2 className="modern-section-heading">PMS Integration</h2>
               {apiPropertyData != null ? (
                 prevLinkedIntegration ? ( // If already linked to an integration property: show the name of the linked integration property and option to unlink
                   <>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginTop: '10px' }}>
-                      <p style={{ color: "white", margin: 0 }}>
-                        Linked to PMS property: {prevLinkedIntegration}
+                    <div className="modern-card" style={{ padding: '16px' }}>
+                      <p style={{ color: "#a6a9b2", fontSize: "13px", fontFamily: "'DM Sans', sans-serif", marginBottom: '8px' }}>
+                        Linked to {apiPropertyData?.integration?.platform || 'PMS'} property: <span style={{ color: 'white', fontWeight: 600 }}>{prevLinkedIntegration}</span>
                       </p>
                       {unlinkIsLoading ? (
                         <>
-                          <p style={{ color: "white", marginLeft: '10px' }} >
+                          <p style={{ color: "white", fontSize: "13px", marginTop: '8px' }}>
                             Unlinking...
                           </p>
                           <BoxLoader />
                         </>
                       ) : (
-                        <button style={{ background:'none', color:'#AAA', border:'none', marginTop:'5px', cursor:'pointer', textDecoration:'underline', width:'auto', padding:'0' }} onClick={(e) => unlink_integration(e, property_name)}>
-                          (Unlink)
+                        <button 
+                          className="modern-text-link" 
+                          style={{ fontSize: '13px', fontWeight: 600, marginTop: '4px', background: 'none', border: 'none', padding: 0, textTransform: 'uppercase', display: 'inline-block', width: 'auto' }} 
+                          onClick={(e) => unlink_integration(e, property_name)}
+                        >
+                          UNLINK
                         </button>
                       )}
                     </div>
@@ -273,113 +277,112 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
                   <>
                     {!integrationPropertiesLoading ? (
                       <>
-                        <div className="col-12 mt-4 ">
-                          {/* Vertical spacer */}
-                        </div>
-                        <div className="property_select">
+                        <div className="modern-card-highlighted" style={{ padding: '16px', border: '2px solid #d4183d', boxShadow: '0 0 15px rgba(212, 24, 61, 0.2)' }}>
                           {integrationPropertyList?.length > 0 ? (
-                            <select id="integration_property_select" style={{ marginTop: "20px", width: "70%" }} className="form-select form-control" onChange={(e) => setSelectedIntegrationPropertyId(e.target.value.toString())}>
-                              <option value="" disabled selected>Click to select property...</option>
-                              {integrationPropertyList?.map((property) => {
-                                return (
-                                  <option key={property.id} value={property.id}>
-                                    {property?.internal_name ? property.internal_name : property?.name}
-                                  </option>
-                                );
-                              })}
-                            </select>
+                            <>
+                              <select 
+                                id="integration_property_select" 
+                                className="modern-input" 
+                                style={{ marginBottom: '16px' }}
+                                onChange={(e) => setSelectedIntegrationPropertyId(e.target.value.toString())}
+                                defaultValue=""
+                              >
+                                <option value="" disabled>Click to select property...</option>
+                                {integrationPropertyList?.map((property) => {
+                                  return (
+                                    <option key={property.id} value={property.id}>
+                                      {property?.internal_name ? property.internal_name : property?.name}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                              {linkIsLoading ? (
+                                <>
+                                  <p style={{ color: "white", fontSize: "13px" }}> Linking... </p>
+                                  <BoxLoader />
+                                </>
+                              ) : (
+                                <button 
+                                  className="modern-btn-primary" 
+                                  style={{ width: '100%' }} 
+                                  onClick={(e) => link_integration(e, property_name, selectedIntegrationPropertyId)} 
+                                  disabled={!selectedIntegrationPropertyId}
+                                >
+                                  Link To This Property
+                                </button>
+                              )}
+                            </>
                           ) : (
-                            <div style={{ color: "white", marginTop: "20px", wordWrap: "break-word", width: "100%" }}>
+                            <div style={{ color: "white", fontSize: "13px", fontFamily: "'DM Sans', sans-serif" }}>
                               User account does not have a PMS integration. Connect your account to a PMS from the Properties page.
                             </div>
                           )}
                         </div>
-                        <div className="col-12 mt-4 ">
-                          {integrationPropertyList?.length > 0 &&
-                            (linkIsLoading ? (
-                              <>
-                                <p style={{ color: "white", marginTop: "20px" }}> Linking... </p>
-                                <BoxLoader />
-                              </>
-                            ) : (
-                              <button className="LinkPMSButton" style={{maxWidth:'300px'}} onClick={(e) => link_integration(e, property_name, selectedIntegrationPropertyId)} disabled={!selectedIntegrationPropertyId}>
-                                Link To This Property
-                              </button>
-                            ))}
-                        </div>
                       </>
                     ) : (
                       <>
-                        <div className="col-12 mt-4 "> </div> {/* Vertical spacer */}
-                        <p style={{ color: "white", marginTop: "20px" }}>
-                          Loading PMS properties...
-                        </p>
-                        <BoxLoader />
+                        <div style={{ marginTop: '16px' }}>
+                          <p style={{ color: "white", fontSize: "13px", fontFamily: "'DM Sans', sans-serif" }}>
+                            Loading PMS properties...
+                          </p>
+                          <BoxLoader />
+                        </div>
                       </>
                     )}
                   </>
                 )
               ) : (
                 <>
-                  <div className="col-12 mt-4 "> </div> {/* Vertical spacer */}
-                  <p style={{ color: "white", marginTop: "20px" }}>Loading PMS integration information...</p>
-                  {/* <BoxLoader /> */}
+                  <div style={{ marginTop: '16px' }}>
+                    <p style={{ color: "white", fontSize: "13px", fontFamily: "'DM Sans', sans-serif" }}>Loading PMS integration information...</p>
+                  </div>
                 </>
               )}
 
               {/* Sender Selection */}
               {apiPropertyData?.calry_property_id && apiPropertyData?.integration?.platform === 'hospitable' && (
-                <div style={{ marginTop: "30px" }}>
-                  <p className="text-white fs-15 fw-bold">Message Sender (Airbnb)</p>
-                  <div className="property_select">
-                    <select 
-                      id="sender_select" 
-                      style={{ marginTop: "5px", width: "70%" }} 
-                      className="form-select form-control" 
-                      onChange={handleSenderChange}
-                      onClick={handleSendersDropdownClick}
-                      value={selectedSenderId || "LISTING_OWNER"} // Listing Owner is the default if none explicitly set
-                    >
-                      {senders.length === 0 ? (
-                        <>
-                          {/* Ensure the current value is present as an option before senders are fetched */}
-                          {selectedSenderId && !["PRIMARY_HOST", "LISTING_OWNER"].includes(selectedSenderId) ? ( // "primary_host" is the legacy label, which we might receive from the backend. It means "Listing Owner"
-                            <option value={selectedSenderId}>
-                              {selectedSenderName || selectedSenderId}
-                            </option>
-                          ) : null}
-                          <option value="LISTING_OWNER">Listing Owner (Default)</option>
-                          {sendersLoading && (
-                            <option value="" disabled>Loading senders...</option>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          <option value="LISTING_OWNER">Listing Owner (Default)</option>
-                          {senders.map(sender => (
-                            <option key={sender.id} value={sender.id}>
-                              {sender.name}
-                            </option>
-                          ))}
-                        </>
-                      )}
-                    </select>
-                  </div>
+                <div style={{ marginTop: "24px" }}>
+                  <label className="modern-label" style={{ marginBottom: '8px', display: 'block' }}>
+                    Message Sender (Airbnb)
+                  </label>
+                  <select 
+                    id="sender_select" 
+                    className="modern-input" 
+                    onChange={handleSenderChange}
+                    onClick={handleSendersDropdownClick}
+                    value={selectedSenderId || "LISTING_OWNER"} // Listing Owner is the default if none explicitly set
+                  >
+                    {senders.length === 0 ? (
+                      <>
+                        {/* Ensure the current value is present as an option before senders are fetched */}
+                        {selectedSenderId && !["PRIMARY_HOST", "LISTING_OWNER"].includes(selectedSenderId) ? ( // "primary_host" is the legacy label, which we might receive from the backend. It means "Listing Owner"
+                          <option value={selectedSenderId}>
+                            {selectedSenderName || selectedSenderId}
+                          </option>
+                        ) : null}
+                        <option value="LISTING_OWNER">Listing Owner (Default)</option>
+                        {sendersLoading && (
+                          <option value="" disabled>Loading senders...</option>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <option value="LISTING_OWNER">Listing Owner (Default)</option>
+                        {senders.map(sender => (
+                          <option key={sender.id} value={sender.id}>
+                            {sender.name}
+                          </option>
+                        ))}
+                      </>
+                    )}
+                  </select>
                   
                   {setSenderLoading && (
                     <div style={{ marginTop: "10px" }}>
-                      <p style={{ color: "white" }}>Updating sender...</p>
+                      <p style={{ color: "white", fontSize: "13px", fontFamily: "'DM Sans', sans-serif" }}>Updating sender...</p>
                       <BoxLoader />
                     </div>
                   )}
-                  
-                  {/*
-                  <p style={{ color: "white", marginTop: "10px", fontSize: "0.9rem" }}>
-                    {selectedSenderName 
-                      ? `Currently sending as: ${selectedSenderName}` 
-                      : "Currently sending as: Primary Host (Default)"}
-                  </p>
-                  */}
                 </div>
               )}
             </form>
