@@ -7,15 +7,15 @@
 }
 
 .pst .setup-tile {
-  background: #000212;
-  border: 1px solid var(--main-Color, #146EF5);
+  background: var(--white-label-background-primary, #000212);
+  border: 1px solid var(--white-label-interactive-primary, #146EF5);
   border-radius: 30px;
   box-shadow: 0 0 15px 0 rgba(255, 255, 255, 0.4);
   padding: 30px 60px 40px 60px;
 }
 
 .pst h2 {
-  color: #146ef5;
+  color: var(--white-label-interactive-primary, #146ef5);
   font-family: "Samsung Sharp Sans Bold";
   font-size: 26px;
   font-style: normal;
@@ -26,8 +26,8 @@
 
 .pst .accordion-item {
     border-radius: 15px;
-    border: 1px solid var(--main-Color, #146EF5);
-    background: linear-gradient(180deg, #000426 0%, #00031A 100%);
+    border: 1px solid var(--white-label-interactive-primary, #146EF5);
+    background: linear-gradient(180deg, var(--white-label-background-secondary, #000426) 0%, var(--white-label-background-primary, #00031A) 100%);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     transition: box-shadow 0.3s ease;
 }
@@ -43,7 +43,7 @@
 }
 
 .pst .accordion-item.completed {
-    border: 1px solid #4CAF50;
+    border: 1px solid var(--white-label-status-success, #4CAF50);
 }
 
 .pst .accordion-item.completed .accordion-header .accordion-button::before {
@@ -79,7 +79,7 @@
     word-break: break-word;
     background: transparent;
     padding: 20px 15px; /* Add padding to the button */
-    color: #FFF;
+    color: var(--white-label-text-primary, #FFF);
     font-family: 'Samsung Sharp Sans Bold';
     font-size: 18px;
     font-style: normal;
@@ -100,7 +100,7 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 14px;
     font-weight: 400;
-    color: #CCC;
+    color: var(--white-label-text-tertiary, #CCC);
     margin-top: 5px;
     max-width: 94%;
     display: block;
@@ -134,7 +134,7 @@
 
 .pst .accordion-item .accordion-body {
     padding: 20px 15px;
-    color: #CCC !important;
+    color: var(--white-label-text-tertiary, #CCC) !important;
     leading-trim: both;
     text-edge: cap;
     font-family: 'DM Sans', sans-serif;
@@ -145,8 +145,8 @@
 }
 
 .pst .accordion-content-tile {
-    background: #151530;
-    border: 1px solid #146EF5;
+    background: var(--white-label-background-secondary, #151530);
+    border: 1px solid var(--white-label-interactive-primary, #146EF5);
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     padding: 20px;
@@ -161,8 +161,8 @@
 }
 
 .pst .other-content-tile {
-  background: #151530;
-  border: 1px solid #146EF5;
+  background: var(--white-label-background-secondary, #151530);
+  border: 1px solid var(--white-label-interactive-primary, #146EF5);
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   margin-top: 30px;
@@ -198,14 +198,14 @@
 }
 
 .pst .header-text h2 {
-    color: #fff;
+    color: var(--white-label-text-primary, #fff);
     margin-bottom: 5px;
     font-family: 'Samsung Sharp Sans Bold';
     font-size: 36px;
 }
 
 .pst .header-text a {
-    color: #146ef5 !important;
+    color: var(--white-label-interactive-primary, #146ef5) !important;
     transition: transform 0.2s;
     cursor: pointer;
 }
@@ -238,7 +238,7 @@
 }
 
 .pst .primary-btn {
-    background: #0d6efd;
+    background: var(--white-label-interactive-primary, #0d6efd);
     color: white;
     border: none;
     border-radius: 25px;
@@ -253,11 +253,11 @@
 }
 
 .pst .primary-btn:hover {
-    background: #0b5ed7;
+    background: var(--white-label-interactive-hover, #0b5ed7);
 }
 
 .pst .underline-btn {
-  color: #146EF5;
+  color: var(--white-label-interactive-primary, #146EF5);
   font-family: 'Samsung Sharp Sans Medium';
   font-size: 18px;
   font-style: normal;

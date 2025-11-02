@@ -26,17 +26,17 @@ const DochideForReservationsModel = ({ show, setShow, documentUploadMainHndle, b
       <Modal show={show} size="lg" onHide={() => setShow(false)} centered aria-labelledby="contained-modal-title-vcenter">
         <Modal.Body>
 
-          <h4 className="text-center" style={{ color: 'white', marginBottom: '20px' }}>Hide For Reservation Stages</h4>
-          <p className="text-center" style={{ color: 'rgb(200, 200, 200)', marginBottom: '25px' }}>
+          <h4 className="text-center" style={{ color: 'var(--white-label-text-primary, white)', marginBottom: '20px' }}>Hide For Reservation Stages</h4>
+          <p className="text-center" style={{ color: 'var(--white-label-text-tertiary, rgb(200, 200, 200))', marginBottom: '25px' }}>
             You can de-select reservation stages below to prevent HostBuddy from sharing this document's information with guests in those stages.
           </p>
 
-          <p className="text-center" style={{ color: 'rgb(200, 200, 200)', marginBottom: '30px' }}>
+          <p className="text-center" style={{ color: 'var(--white-label-text-tertiary, rgb(200, 200, 200))', marginBottom: '30px' }}>
             With this selection, HostBuddy
-            { hideGetArray.length === 0 ? <> can share this document's information with <span style={{ color: 'rgb(0, 180, 0)' }}>all guests</span> for this property.</> :
-              hideGetArray.length === 1 ? <> <span style={{ color: 'rgb(200, 0, 0)' }}>cannot</span> share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[0]}</span> guests.</> :
-              hideGetArray.length === 2 ? <> <span style={{ color: 'rgb(200, 0, 0)' }}>cannot</span> share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[0]}</span> or <span style={{ color: 'rgb(200, 0, 0)' }}>{hideGetArray[1]}</span> guests.</> :
-              hideGetArray.length === 3 ? <> <span style={{ color: 'rgb(200, 0, 0)' }}>cannot</span> share this document's information with <span style={{ color: 'rgb(200, 0, 0)' }}>any guests</span>.</>
+            { hideGetArray.length === 0 ? <> can share this document's information with <span style={{ color: 'var(--white-label-status-success, rgb(0, 180, 0))' }}>all guests</span> for this property.</> :
+              hideGetArray.length === 1 ? <> <span style={{ color: 'var(--white-label-status-error, rgb(200, 0, 0))' }}>cannot</span> share this document's information with <span style={{ color: 'var(--white-label-status-error, rgb(200, 0, 0))' }}>{hideGetArray[0]}</span> guests.</> :
+              hideGetArray.length === 2 ? <> <span style={{ color: 'var(--white-label-status-error, rgb(200, 0, 0))' }}>cannot</span> share this document's information with <span style={{ color: 'var(--white-label-status-error, rgb(200, 0, 0))' }}>{hideGetArray[0]}</span> or <span style={{ color: 'var(--white-label-status-error, rgb(200, 0, 0))' }}>{hideGetArray[1]}</span> guests.</> :
+              hideGetArray.length === 3 ? <> <span style={{ color: 'var(--white-label-status-error, rgb(200, 0, 0))' }}>cannot</span> share this document's information with <span style={{ color: 'var(--white-label-status-error, rgb(200, 0, 0))' }}>any guests</span>.</>
               : null
             }
           </p>
@@ -46,7 +46,7 @@ const DochideForReservationsModel = ({ show, setShow, documentUploadMainHndle, b
               <button key={index}
                 className={`btn ${ hideGetArray.includes(item) ? "btn-unselected" : "btn-primary" } d-block w-100 rounded-pill`}
                 onClick={() => handleButtonClick(item)}
-                style={hideGetArray.includes(item) ? { borderColor: '#0078f0', color: '#0078f0' } : {}}
+                style={hideGetArray.includes(item) ? { borderColor: 'var(--white-label-interactive-primary, #0078f0)', color: 'var(--white-label-interactive-primary, #0078f0)' } : {}}
               >
                 {item}
               </button>

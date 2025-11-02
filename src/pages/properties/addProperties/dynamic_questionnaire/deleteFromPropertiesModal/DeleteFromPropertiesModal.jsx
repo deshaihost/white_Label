@@ -25,7 +25,7 @@ const DeleteFromPropertiesModal = ({ show, setShow, sectionName, subSectionName,
 
   const colourStyles = {
     option: (styles) => {
-      return { ...styles, color: "#000" };
+      return { ...styles, color: "var(--white-label-text-primary, #000)" };
     }
   };
 
@@ -98,7 +98,7 @@ const DeleteFromPropertiesModal = ({ show, setShow, sectionName, subSectionName,
             </div>
           </div>
 
-          <p style={{ textAlign: 'center', color: 'rgb(255, 165, 0)' }}>Warning: This will permanently delete this question from the selected properties.</p>
+          <p style={{ textAlign: 'center', color: 'var(--white-label-status-warning, rgb(255, 165, 0))' }}>Warning: This will permanently delete this question from the selected properties.</p>
         
           <div style={{marginTop: "150px"}}></div>
 

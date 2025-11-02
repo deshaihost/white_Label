@@ -43,7 +43,7 @@ function GuidedSetup({ property_name:propPropertyName }) {
     // Add this helper component at the top of the function
     const LoadingSubtitle = () => (
         <div className="subtitle loading">
-            <Loader color="#CCC" />
+            <Loader color="var(--white-label-text-tertiary, #CCC)" />
         </div>
     );
 

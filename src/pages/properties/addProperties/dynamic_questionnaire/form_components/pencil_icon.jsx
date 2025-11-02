@@ -6,13 +6,16 @@ const PencilIcon = ({ sec_name, subsec_name, q_ind, checkbox_group_option, handl
   return (
     <Button style={{ width:'auto', position:'relative' }} className="bg-none p-0 border-0 d-inline shadow-none" onClick={() => handlePencilIconClick(sec_name, subsec_name, q_ind, checkbox_group_option)}>
 
-      {/* Green dot that appears if the pencil icon has extra text entered */}
-      {extraTextIsAdded && <span style={{ position:'absolute', top:'-2px', right:'-12px', width:'12px', height:'12px', borderRadius:'50%', backgroundColor:'rgb(0,175,0)' }}></span>}
+      {/* Orange dot that appears if reservation stages are modified */}
+      {someResStageIsSelected && <span style={{ position:'absolute', top:'-2px', right:'-12px', width:'8px', height:'8px', borderRadius:'50%', backgroundColor:'var(--white-label-status-warning, #FB923C)' }}></span>}
+      
+      {/* Blue dot that appears if the pencil icon has extra text entered */}
+      {extraTextIsAdded && !someResStageIsSelected && <span style={{ position:'absolute', top:'-2px', right:'-12px', width:'8px', height:'8px', borderRadius:'50%', backgroundColor:'var(--white-label-interactive-primary, #3e88f7)' }}></span>}
 
       {/* Pencil icon */}
       <svg className="ms-2" style={{ maxWidth: "16px" }} width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" >
         <path d="M17.71 4.03957C18.1 3.64957 18.1 2.99957 17.71 2.62957L15.37 0.28957C15 -0.10043 14.35 -0.10043 13.96 0.28957L12.12 2.11957L15.87 5.86957M0 14.2496V17.9996H3.75L14.81 6.92957L11.06 3.17957L0 14.2496Z"
-          fill={someResStageIsSelected ? "#ffc107" : "#146EF5"}></path>
+          fill={someResStageIsSelected ? "var(--white-label-status-warning, #ffc107)" : "var(--white-label-interactive-primary, #146EF5)"}></path>
       </svg>
 
     </Button>

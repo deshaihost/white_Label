@@ -137,7 +137,7 @@ const BasicInformationForm = ({ property_name }) => {
         {/* Thumbnail Image input */}
         <div>
           <label className="modern-label">
-            Thumbnail Photo <span style={{ color: '#676a73', fontSize: '11px' }}>(.png, .jpg, .jpeg supported)</span>
+            Thumbnail Photo <span style={{ color: 'var(--white-label-text-quaternary, #676a73)', fontSize: '11px' }}>(.png, .jpg, .jpeg supported)</span>
           </label>
           <div style={{ display: 'flex', gap: '8px' }}>
             <label 
@@ -166,12 +166,12 @@ const BasicInformationForm = ({ property_name }) => {
               display: 'flex', 
               alignItems: 'center', 
               padding: '12px 16px',
-              backgroundColor: '#17191f',
-              border: '1px solid #013280',
+              backgroundColor: 'var(--white-label-background-secondary, #17191f)',
+              border: '1px solid var(--white-label-border-primary, #013280)',
               borderRadius: '8px'
             }}>
               <span style={{ 
-                color: uploadedFile && uploadedFile.length > 0 ? 'white' : '#676a73', 
+                color: uploadedFile && uploadedFile.length > 0 ? 'var(--white-label-text-primary, white)' : 'var(--white-label-text-quaternary, #676a73)', 
                 fontSize: '13px',
                 fontFamily: '"DM Sans", sans-serif'
               }}>
@@ -194,7 +194,7 @@ const BasicInformationForm = ({ property_name }) => {
             onChange={(e) => { setPropertyId(e.target.value); }} 
           />
           <small style={{ 
-            color: '#676a73', 
+            color: 'var(--white-label-text-quaternary, #676a73)', 
             fontSize: '11px', 
             fontFamily: '"DM Sans", sans-serif',
             display: 'block',

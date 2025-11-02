@@ -69,15 +69,15 @@ const QuestionnaireHeader = ({ property_name, section_names, selectedSection, se
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: isActive ? '#3e88f7' : '#17191f',
-                    border: isActive ? 'none' : '1px solid #013280',
+                    background: isActive ? 'var(--white-label-interactive-primary, #3e88f7)' : 'var(--white-label-background-secondary, #17191f)',
+                    border: isActive ? 'none' : '1px solid var(--white-label-border-primary, #013280)',
                     boxShadow: isActive ? '0 0 10px rgba(62, 136, 247, 0.3)' : 'none',
                     transition: 'all 0.2s ease'
                   }}
                 >
                   <Icon 
                     size={24} 
-                    color={isActive ? 'white' : '#676a73'}
+                    color={isActive ? 'var(--white-label-text-primary, white)' : 'var(--white-label-text-quaternary, #676a73)'}
                     style={{ transition: 'color 0.2s ease' }}
                   />
                 </div>
@@ -86,7 +86,7 @@ const QuestionnaireHeader = ({ property_name, section_names, selectedSection, se
                 <span style={{
                   fontSize: '13px',
                   fontWeight: 500,
-                  color: isActive ? '#3e88f7' : '#676a73',
+                  color: isActive ? 'var(--white-label-interactive-primary, #3e88f7)' : 'var(--white-label-text-quaternary, #676a73)',
                   fontFamily: '"DM Sans", sans-serif',
                   transition: 'color 0.2s ease',
                   textAlign: 'center',

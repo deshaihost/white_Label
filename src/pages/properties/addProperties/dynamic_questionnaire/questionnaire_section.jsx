@@ -109,19 +109,19 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
       {/* Instructions text */}
       {questionnaire_section_name === "Topics to Avoid" ? (
         <>
-          <p style={{marginBottom:'30px', color:'#a6a9b2', fontSize: '13px'}}>
-            In this section, you can <span style={{color:'#FB923C'}}>add any conversation topics that you want HostBuddy to avoid</span> while communicating with your guests. If a guest's message relates to any of the topics you add here, HostBuddy will not respond to it.
+          <p style={{marginBottom:'30px', color:'var(--white-label-text-tertiary, #a6a9b2)', fontSize: '13px'}}>
+            In this section, you can <span style={{color:'var(--white-label-status-warning, #FB923C)'}}>add any conversation topics that you want HostBuddy to avoid</span> while communicating with your guests. If a guest's message relates to any of the topics you add here, HostBuddy will not respond to it.
           </p>
-          <p style={{marginBottom:'30px', color:'#a6a9b2', fontSize: '13px'}}>
-            Unsure what topics to avoid? View the full guide with examples and setup tips in the <a href="https://userguide.hostbuddy.ai/property-profile-setup/setting-topics-to-avoid" target="_blank" rel="noopener noreferrer" style={{color: '#3e88f7'}}>HostBuddy User Guide</a>.
+          <p style={{marginBottom:'30px', color:'var(--white-label-text-tertiary, #a6a9b2)', fontSize: '13px'}}>
+            Unsure what topics to avoid? View the full guide with examples and setup tips in the <a href="https://userguide.hostbuddy.ai/property-profile-setup/setting-topics-to-avoid" target="_blank" rel="noopener noreferrer" style={{color: 'var(--white-label-interactive-primary, #3e88f7)'}}>HostBuddy User Guide</a>.
           </p>
         </>
       ) : questionnaire_section_name === "SOPs" ? (
-        <p style={{marginBottom:'30px', color:'#a6a9b2', fontSize: '13px'}}>
-          Need help writing SOPs? View the full guide with step-by-step instructions in the <a href="https://userguide.hostbuddy.ai/property-profile-setup/building-standard-operating-procedures" target="_blank" rel="noopener noreferrer" style={{color: '#3e88f7'}}>HostBuddy User Guide</a>.
+        <p style={{marginBottom:'30px', color:'var(--white-label-text-tertiary, #a6a9b2)', fontSize: '13px'}}>
+          Need help writing SOPs? View the full guide with step-by-step instructions in the <a href="https://userguide.hostbuddy.ai/property-profile-setup/building-standard-operating-procedures" target="_blank" rel="noopener noreferrer" style={{color: 'var(--white-label-interactive-primary, #3e88f7)'}}>HostBuddy User Guide</a>.
         </p>
       ) : (
-        <p style={{marginBottom:'30px', color:'#a6a9b2', fontSize: '13px'}}>
+        <p style={{marginBottom:'30px', color:'var(--white-label-text-tertiary, #a6a9b2)', fontSize: '13px'}}>
           All fields are optional, but the more details you provide, the better HostBuddy can serve your guests.
         </p>
       )}
@@ -136,9 +136,9 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
             key={subsectionName}
             style={{
               marginBottom: '24px',
-              background: '#17191f',
+              background: 'var(--white-label-background-secondary, #17191f)',
               borderRadius: '8px',
-              border: '1px solid #013280',
+              border: '1px solid var(--white-label-border-primary, #013280)',
               overflow: 'hidden'
             }}
           >
@@ -151,14 +151,14 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                background: '#17191f',
-                borderBottom: isExpanded ? '1px solid #013280' : 'none'
+                background: 'var(--white-label-background-secondary, #17191f)',
+                borderBottom: isExpanded ? '1px solid var(--white-label-border-primary, #013280)' : 'none'
               }}
             >
               <h3 style={{ 
                 fontSize: '18px',
                 fontWeight: '500',
-                color: '#fff',
+                color: 'var(--white-label-text-primary, #fff)',
                 margin: 0
               }}>
                 {subsectionName}
@@ -181,9 +181,9 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
                   </button>
                 )}
                 {isExpanded ? (
-                  <ChevronUp size={20} color="#676a73" />
+                  <ChevronUp size={20} color="var(--white-label-text-quaternary, #676a73)" />
                 ) : (
-                  <ChevronDown size={20} color="#676a73" />
+                  <ChevronDown size={20} color="var(--white-label-text-quaternary, #676a73)" />
                 )}
               </div>
             </div>
