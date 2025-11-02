@@ -6,17 +6,27 @@ import ThumbsUpIcon from "./thumbsComponent/icons/Thumbs_Up_Icon.svg";
 import ThumbsDownIcon from "./thumbsComponent/icons/Thumbs_Down_Icon.svg";
 import HelpCircleIcon from "./thumbsComponent/icons/help_circle.svg";
 import HostBuddyIcon from "./thumbsComponent/icons/hostBuddy_icon.svg"; // Import HostBuddy icon
+import { useWhiteLabelCss } from "../../../../../../helper/WhiteLabelCssContext";
+import { useWhiteLabelLogos } from "../../../../../../helper/WhiteLabelLogoContext";
 
 const WhatsAppInbox = ({ message, guestName, guestImageUrl, feedBackDataGet, feedBckModelOpen, prevMsgText, handleJustificationClick }) => {
   // Handle image loading error
   const [imageError, setImageError] = useState(false);
+
+  // White label hooks
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  const logos = useWhiteLabelLogos();
+  
+  // Get branding name and logo with fallbacks
+  const brandingName = cssConfig?.Branding_name || "HostBuddy";
+  const brandLogo = logos?.logo || HostBuddyIcon;
 
   // Extract message details
   const { id, text, time, time_utc, sender, justification, response } = message || {};
   const isHost = sender === "host" || sender === "hostbuddy";
   const message_id = id ? id : [];
   const sendByFormatted =
-    sender === "hostbuddy" ? "HostBuddy" : sender === "host" ? "Host" : sender;
+    sender === "hostbuddy" ? brandingName : sender === "host" ? "Host" : sender;
 
   // Determine message sender for CSS class - guest messages use "bot", host messages use "user"
   const messageSender = isHost ? "user" : "bot";  // Format time
@@ -146,8 +156,8 @@ const WhatsAppInbox = ({ message, guestName, guestImageUrl, feedBackDataGet, fee
           <p className="text-end timing">
             {sender === "hostbuddy" && (
               <img
-                src={HostBuddyIcon}
-                alt="HostBuddy"
+                src={brandLogo}
+                alt={brandingName}
                 style={{
                   width: "21px",
                   height: "21px",
