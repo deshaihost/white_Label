@@ -1291,7 +1291,7 @@ const callUpdateGuestDataApi = async () => {
           alignItems: "center",
         }}
       >
-        <h1>Reservation details</h1>
+        <h1 style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff" }}>Reservation details</h1>
         {setRightSectionVisible && (
           <button
             className="close-right-section-btn"
