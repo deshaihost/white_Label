@@ -1399,7 +1399,7 @@ const OpenPhoneSection = ({
                             sendMessageLoading
                           )
                           ? "rgba(15, 17, 23, 0.42)"
-                          : "#007bff",
+                          : getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#007bff",
                       color:
                         !inputValue.trim() &&
                           !(

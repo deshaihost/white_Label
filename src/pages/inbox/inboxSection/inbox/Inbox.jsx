@@ -2438,7 +2438,7 @@ const Inbox = ({
                             backgroundColor:
                               selectedConversation?.conversation_id &&
                               newActionItem.trim()
-                                ? "#1a73e8"
+                                ? getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#1a73e8"
                                 : "rgba(15, 17, 23, 0.42)",
                             color:
                               selectedConversation?.conversation_id &&
@@ -2977,7 +2977,7 @@ const Inbox = ({
                               backgroundColor:
                                 selectedConversation?.conversation_id &&
                                   newNote.trim()
-                                  ? "#1a73e8"
+                                  ? getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#1a73e8"
                                   : "rgba(15, 17, 23, 0.42)",
                               color:
                                 selectedConversation?.conversation_id &&
@@ -3392,7 +3392,7 @@ const EditNoteModal = ({
             <button
               onClick={onSave}
               style={{
-                backgroundColor: "#1a73e8",
+                backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#1a73e8",
                 color: "white",
                 border: "none",
                 height: "36px",

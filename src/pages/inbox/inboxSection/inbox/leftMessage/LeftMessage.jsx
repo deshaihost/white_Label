@@ -2076,6 +2076,10 @@ const getConversationTimestamp = (conversation) => {
             <button
               className="btn btn-primary load-more-button"
               onClick={loadNextBatch}
+              style={{
+                backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#0d6efd",
+                borderColor: getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#0d6efd",
+              }}
             >
               Load More
             </button>
