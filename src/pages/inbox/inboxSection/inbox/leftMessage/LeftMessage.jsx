@@ -1105,7 +1105,7 @@ const getConversationTimestamp = (conversation) => {
           style={{
             fontWeight: "700",
             fontSize: "24px",
-            color: "white",
+            color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
             marginLeft: "5px",
             marginBottom: "3px",
             fontFamily: "Poppins-Bold, Helvetica",

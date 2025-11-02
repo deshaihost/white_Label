@@ -1734,7 +1734,7 @@ const Inbox = ({
                     <span
                       className="poppins-font"
                       style={{
-                        color: "white",
+                        color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                         fontSize: "18px",
                         fontWeight: "700",
                       }}
@@ -1969,7 +1969,9 @@ const Inbox = ({
                           justifyContent: "space-between",
                           borderBottom:
                             tab.id === activeTab ? "2px solid #007bff" : "none",
-                          color: tab.id === activeTab ? "#FFFFFF" : "#D0D3DB",
+                          color: tab.id === activeTab 
+                            ? getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-navigation_text').trim() || "#FFFFFF"
+                            : getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                           fontWeight: tab.id === activeTab ? "600" : "500",
                           transition: "color 0.2s ease",
                         }}
