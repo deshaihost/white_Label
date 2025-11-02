@@ -230,6 +230,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
         progress: 0,
         error: null,
         isHostBuddyDomain: true,
+        featuresSettings: null,
       };
     }
     
@@ -244,6 +245,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
         progress: 100,
         error: null,
         isHostBuddyDomain: false,
+        featuresSettings: cached.cssConfig?.features_settings || null,
       };
     }
     
@@ -253,6 +255,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
       progress: 0,
       error: null,
       isHostBuddyDomain: false,
+      featuresSettings: null,
     };
   });
 
@@ -317,6 +320,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             loading: false,
             error: null,
             isHostBuddyDomain: true,
+            featuresSettings: null,
           });
           fetchingRef.current = false; // Reset fetch flag
           return;
@@ -398,6 +402,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             progress: 100,
             error: null,
             isHostBuddyDomain: false,
+            featuresSettings: cssConfig?.features_settings || null,
           });
 
           // Cache the CSS config
@@ -432,6 +437,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             progress: 0,
             error: response.error || 'No CSS config available',
             isHostBuddyDomain: false,
+            featuresSettings: null,
           });
           fetchingRef.current = false; // Reset fetch flag
         }
@@ -460,6 +466,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             progress: 0,
             error: error.message,
             isHostBuddyDomain: true,
+            featuresSettings: null,
           });
         } else {
           // For white label domains, maintain loading state on network errors to prevent fallback to HostBuddy styling
@@ -469,6 +476,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             progress: 0,
             error: error.message,
             isHostBuddyDomain: false,
+            featuresSettings: null,
           });
           
           // Retry after a delay for white label domains, with max retry limit
@@ -492,6 +500,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
               progress: 0,
               error: `Max retries reached: ${error.message}`,
               isHostBuddyDomain: false,
+              featuresSettings: null,
             });
           }
         }

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import SideNavItem2 from "../sideNavBarElements/sectionIndicatorComponent/section";
 import { data } from "./data";
 import GcsUserdata from "./gcsData";
+import { useFeatureAccess } from "../../../../helper/useFeatureAccess";
 import helpIcon from "../sideNavBarElements/sectionIndicatorComponent/navIcons/help-circle.svg";
 import Logo from "../../components/sideNavBarElements/logoComponent/logoComponentNav";
 import NewLogOutSvg from "../NavBarIcons/NewLogOut.svg";
@@ -17,6 +18,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
   const [whiteLabelActiveTab, setWhiteLabelActiveTab] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const { isFeatureEnabled, isHostBuddyDomain } = useFeatureAccess();
 
   const {
     isProtectedPath,
@@ -90,6 +92,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         const whiteLabelPathToId = {
           "white-label-registration": 81,
           "white-label-branding": 82,
+          "white-label-feature-selection": 83,
         };
 
         // Extract the white label section from URL path
@@ -337,6 +340,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                         const whiteLabelMap = {
                           81: "/gcs-settings/white-label-registration", // Registration Page
                           82: "/gcs-settings/white-label-branding", // Branding
+                          83: "/gcs-settings/white-label-feature-selection", // Feature Selection
                         };
 
                         if (whiteLabelMap[dropdownItem.id]) {
@@ -395,6 +399,67 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         return false;
       });
 
+  // Apply feature-based filtering for white label domains
+  // Map of navigation item IDs to feature IDs
+  const itemToFeatureMap = {
+    3: 'properties',           // Properties
+    4: 'action-items',         // Action Items
+    5: 'messaging-inbox',      // Messaging (parent)
+    51: 'messaging-inbox',     // Inbox (sub-item)
+    52: 'smart-templates',     // Smart Templates (sub-item)
+    53: 'messaging-inbox',     // Preferences (sub-item) - tied to messaging
+    54: 'upsells',             // Upsells (sub-item)
+    6: 'insights',             // Insights
+    75: 'action-item-settings', // Action Items Settings (in Settings dropdown)
+    76: 'integrations',        // Integrations (in Settings dropdown)
+  };
+
+  // Filter navigation items based on feature settings
+  const featureFilteredData = filteredData.map(item => {
+    // Check if this item should be filtered based on features
+    const featureId = itemToFeatureMap[item.id];
+    
+    // If item has a feature mapping and feature is disabled, filter it out
+    if (featureId) {
+      const enabled = isFeatureEnabled(featureId);
+      
+      if (!enabled) {
+        return null; // Filter out this item
+      }
+    }
+
+    // If item has dropdown items, filter those as well
+    if (item.dropdownItems && item.dropdownItems.length > 0) {
+      const filteredDropdownItems = item.dropdownItems.filter(dropdownItem => {
+        const dropdownFeatureId = itemToFeatureMap[dropdownItem.id];
+        
+        // If dropdown item has a feature mapping and feature is disabled, filter it out
+        if (dropdownFeatureId) {
+          const enabled = isFeatureEnabled(dropdownFeatureId);
+          
+          if (!enabled) {
+            return false;
+          }
+        }
+        
+        return true;
+      });
+
+      // If all dropdown items are filtered out, hide the parent item too
+      if (filteredDropdownItems.length === 0) {
+        return null;
+      }
+
+      // Return item with filtered dropdown items
+      return {
+        ...item,
+        dropdownItems: filteredDropdownItems
+      };
+    }
+
+    return item;
+  }).filter(item => item !== null); // Remove null items
+
   // Debug: Log current state
   console.log('📊 RENDER STATE:', { 
     pathname: location.pathname, 
@@ -419,7 +484,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         <Logo colour="default" type="icon" />
       </div>{" "}
       <div style={{ flex: 1 }}>
-        {filteredData.map((item) => renderItem(item))}
+        {featureFilteredData.map((item) => renderItem(item))}
       </div>{" "}
       {/* Back to users button - only shown when viewing a subaccount */}
       {is_gcs_subaccount_user() && (

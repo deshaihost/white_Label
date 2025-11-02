@@ -248,6 +248,7 @@ export const getCssConfig = async (data) => {
   } catch (error) {
     console.error('Get CSS Config API Error:', error.response?.data || error.message);
     
+    
     let errorMessage = 'Failed to get CSS configuration';
     
     if (error.response) {
@@ -265,3 +266,61 @@ export const getCssConfig = async (data) => {
     };
   }
 };
+
+/**
+ * Set feature settings for white label configuration
+ * @param {Object} data - Request body
+ * @param {string} data.domain - Domain name
+ * @param {Object} data.features_settings - Feature settings object
+ * @returns {Promise} API response
+ */
+export const setFeatures = async (data) => {
+  try {
+    console.log('Setting feature settings for domain:', data.domain);
+
+    // Get the auth token from session
+    const token = getActiveToken();
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    
+    // Add Authorization header if token exists
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/set_features`,
+      {
+        domain: data.domain,
+        features_settings: data.features_settings
+      },
+      { headers }
+    );
+
+    console.log('Set Features Response:', response.data);
+
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    console.error('Set Features API Error:', error.response?.data || error.message);
+    
+    let errorMessage = 'Failed to set feature settings';
+    
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+    } else if (error.request) {
+      errorMessage = 'No response from server. Please check your connection.';
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+    
+    return {
+      success: false,
+      error: errorMessage
+    };
+  }
+};
+
