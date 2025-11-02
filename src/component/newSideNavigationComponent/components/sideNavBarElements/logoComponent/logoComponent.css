@@ -44,6 +44,16 @@
     }
 }
 
+/* Pulse effect for retry states */
+@keyframes pulse {
+    0% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}
+
 .logo-skeleton {
     background: linear-gradient(
         to right,

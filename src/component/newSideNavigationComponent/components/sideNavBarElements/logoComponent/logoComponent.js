@@ -7,12 +7,14 @@ import "./logoComponent.css";
 
 const LogoComponent = ({ type, colour, onlyIcon }) => {
     const { isWhiteLabel, brandName } = useWhiteLabelBranding();
-    const { logo, fullLogo, loading, isHostBuddyDomain } = useWhiteLabelLogos();
+    const { logo, fullLogo, loading, isHostBuddyDomain, isRetrying } = useWhiteLabelLogos();
     const [imageLoaded, setImageLoaded] = useState(false);
     const [imageError, setImageError] = useState(false);
     
-    // Determine which logo to use
-    const logoSrc = isHostBuddyDomain ? icon : (logo || icon);
+    // CRITICAL: For white label domains, never show default HostBuddy icon during loading/retry
+    // Only show the icon if we're actually on HostBuddy domain OR we have a successful logo URL
+    const shouldShowIcon = isHostBuddyDomain || (!loading && !isRetrying && logo);
+    const logoSrc = isHostBuddyDomain ? icon : logo;
     
     // Track component mount/unmount
     useEffect(() => {
@@ -21,6 +23,8 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
             loading,
             isHostBuddyDomain,
             hasLogo: !!logo,
+            isRetrying,
+            shouldShowIcon,
             timestamp: new Date().toISOString()
         });
         
@@ -33,11 +37,12 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
     
     // Preload and decode image when logo URL changes
     useEffect(() => {
-        if (logoSrc) {
+        if (logoSrc && shouldShowIcon) {
             const loadStart = performance.now();
             console.log('⏳ [LOGO COMPONENT - Collapsed] Starting image load...', {
                 logoSrc: logoSrc.substring(0, 60) + (logoSrc.length > 60 ? '...' : ''),
                 isLocalIcon: logoSrc === icon,
+                shouldShowIcon,
                 timestamp: new Date().toISOString()
             });
             
@@ -96,24 +101,47 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
             };
             
             img.src = logoSrc;
+        } else {
+            // Reset states when we shouldn't show icon (white label domain loading)
+            setImageLoaded(false);
+            setImageError(false);
         }
-    }, [logoSrc]);
+    }, [logoSrc, shouldShowIcon]);
     
     // Track when image actually renders (becomes visible)
     useEffect(() => {
-        if (imageLoaded && !loading) {
+        if (imageLoaded && !loading && shouldShowIcon) {
             console.log('👁️ [LOGO COMPONENT - Collapsed] Image now VISIBLE to user', {
                 onlyIcon,
+                isHostBuddyDomain,
                 timestamp: new Date().toISOString()
             });
         }
-    }, [imageLoaded, loading, onlyIcon]);
+    }, [imageLoaded, loading, onlyIcon, shouldShowIcon, isHostBuddyDomain]);
     
     // For collapsed navigation, show the small logo (40x40)
     if (onlyIcon) {
+        // If we're on white label domain and still loading/retrying, show skeleton only
+        if (!isHostBuddyDomain && (loading || isRetrying || !shouldShowIcon)) {
+            return (
+                <div className="logo-container" style={{ willChange: 'opacity' }}>
+                    <div 
+                        className="logo-skeleton"
+                        style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '4px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            animation: 'pulse 1.5s ease-in-out infinite alternate'
+                        }}
+                    />
+                </div>
+            );
+        }
+
         return (
             <div className="logo-container" style={{ willChange: 'opacity' }}>
-                {(loading || !imageLoaded) && (
+                {(loading || !imageLoaded) && shouldShowIcon && (
                     <div 
                         className="logo-skeleton"
                         style={{
@@ -124,6 +152,71 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
                         }}
                     />
                 )}
+                {shouldShowIcon && (
+                    <img 
+                        className="logo-icon" 
+                        alt={`${brandName} Icon`} 
+                        src={logoSrc}
+                        style={{
+                            width: '40px',
+                            height: '40px',
+                            objectFit: 'contain',
+                            opacity: (loading || !imageLoaded) ? 0 : 1,
+                            transition: 'opacity 0.15s ease-in-out',
+                            willChange: 'opacity'
+                        }}
+                        loading="eager"
+                        fetchpriority="high"
+                        decoding="async"
+                    />
+                )}
+            </div>
+        );
+    }
+    
+    // For expanded navigation, show branding text
+    // If we're on white label domain and still loading/retrying, show skeleton only
+    if (!isHostBuddyDomain && (loading || isRetrying || !shouldShowIcon)) {
+        return (
+            <div className="logo-container" style={{ willChange: 'opacity' }}>
+                <div 
+                    className="logo-skeleton"
+                    style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '4px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        animation: 'pulse 1.5s ease-in-out infinite alternate'
+                    }}
+                />
+                <div
+                    style={{
+                        width: '60px',
+                        height: '20px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        borderRadius: '4px',
+                        marginLeft: '8px',
+                        animation: 'pulse 1.5s ease-in-out infinite alternate'
+                    }}
+                />
+            </div>
+        );
+    }
+
+    return (
+        <div className="logo-container" style={{ willChange: 'opacity' }}>
+            {(loading || !imageLoaded) && shouldShowIcon && (
+                <div 
+                    className="logo-skeleton"
+                    style={{
+                        width: '40px',
+                        height: '40px',
+                        position: 'absolute',
+                        borderRadius: '4px'
+                    }}
+                />
+            )}
+            {shouldShowIcon && (
                 <img 
                     className="logo-icon" 
                     alt={`${brandName} Icon`} 
@@ -140,47 +233,16 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
                     fetchpriority="high"
                     decoding="async"
                 />
-            </div>
-        );
-    }
-    
-    // For expanded navigation, show branding text
-    return (
-        <div className="logo-container" style={{ willChange: 'opacity' }}>
-            {(loading || !imageLoaded) && (
-                <div 
-                    className="logo-skeleton"
-                    style={{
-                        width: '40px',
-                        height: '40px',
-                        position: 'absolute',
-                        borderRadius: '4px'
-                    }}
-                />
             )}
-            <img 
-                className="logo-icon" 
-                alt={`${brandName} Icon`} 
-                src={logoSrc}
-                style={{
-                    width: '40px',
-                    height: '40px',
-                    objectFit: 'contain',
+            {shouldShowIcon && (
+                <span className="logo-text" style={{
                     opacity: (loading || !imageLoaded) ? 0 : 1,
                     transition: 'opacity 0.15s ease-in-out',
                     willChange: 'opacity'
-                }}
-                loading="eager"
-                fetchpriority="high"
-                decoding="async"
-            />
-            <span className="logo-text" style={{
-                opacity: (loading || !imageLoaded) ? 0 : 1,
-                transition: 'opacity 0.15s ease-in-out',
-                willChange: 'opacity'
-            }}>
-                {brandName} AI
-            </span>
+                }}>
+                    {brandName} AI
+                </span>
+            )}
         </div>
     );
 };

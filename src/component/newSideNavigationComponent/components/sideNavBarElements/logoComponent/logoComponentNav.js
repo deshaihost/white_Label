@@ -5,12 +5,14 @@ import { useWhiteLabelLogos } from "../../../../../helper/WhiteLabelLogoContext"
 import "./logoComponent.css";
 
 const LogoNavComponent = ({ type, colour, onlyIcon }) => {
-  const { fullLogo, loading, isHostBuddyDomain } = useWhiteLabelLogos();
+  const { fullLogo, loading, isHostBuddyDomain, isRetrying } = useWhiteLabelLogos();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   
-  // Determine which logo to use
-  const logoSrc = isHostBuddyDomain ? logoHeading : (fullLogo || logoHeading);
+  // CRITICAL: For white label domains, never show default HostBuddy logo during loading/retry
+  // Only show the logo if we're actually on HostBuddy domain OR we have a successful logo URL
+  const shouldShowLogo = isHostBuddyDomain || (!loading && !isRetrying && fullLogo);
+  const logoSrc = isHostBuddyDomain ? logoHeading : fullLogo;
   
   // Track component mount/unmount
   useEffect(() => {
@@ -18,6 +20,8 @@ const LogoNavComponent = ({ type, colour, onlyIcon }) => {
       loading,
       isHostBuddyDomain,
       hasFullLogo: !!fullLogo,
+      isRetrying,
+      shouldShowLogo,
       timestamp: new Date().toISOString()
     });
     
@@ -30,11 +34,12 @@ const LogoNavComponent = ({ type, colour, onlyIcon }) => {
   
   // Preload and decode image when logo URL changes
   useEffect(() => {
-    if (logoSrc) {
+    if (logoSrc && shouldShowLogo) {
       const loadStart = performance.now();
       console.log('⏳ [LOGO COMPONENT - Expanded] Starting image load...', {
         logoSrc: logoSrc.substring(0, 60) + (logoSrc.length > 60 ? '...' : ''),
         isLocalIcon: logoSrc === logoHeading,
+        shouldShowLogo,
         timestamp: new Date().toISOString()
       });
       
@@ -93,18 +98,52 @@ const LogoNavComponent = ({ type, colour, onlyIcon }) => {
       };
       
       img.src = logoSrc;
+    } else {
+      // Reset states when we shouldn't show logo (white label domain loading)
+      setImageLoaded(false);
+      setImageError(false);
     }
-  }, [logoSrc]);
+  }, [logoSrc, shouldShowLogo]);
   
   // Track when image actually renders (becomes visible)
   useEffect(() => {
-    if (imageLoaded && !loading) {
+    if (imageLoaded && !loading && shouldShowLogo) {
       console.log('👁️ [LOGO COMPONENT - Expanded] Image now VISIBLE to user', {
+        isHostBuddyDomain,
         timestamp: new Date().toISOString()
       });
     }
-  }, [imageLoaded, loading]);
+  }, [imageLoaded, loading, shouldShowLogo, isHostBuddyDomain]);
   
+  // If we're on white label domain and still loading/retrying, show skeleton only
+  if (!isHostBuddyDomain && (loading || isRetrying || !shouldShowLogo)) {
+    return (
+      <div
+        className="logo-container"
+        style={{
+          width: "184px",
+          height: "34px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          willChange: "opacity",
+          position: "relative"
+        }}
+      >
+        <div 
+          className="logo-skeleton"
+          style={{
+            width: "134px",
+            height: "34px",
+            borderRadius: "4px",
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            animation: 'pulse 1.5s ease-in-out infinite alternate'
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       className="logo-container"
@@ -118,7 +157,7 @@ const LogoNavComponent = ({ type, colour, onlyIcon }) => {
         position: "relative"
       }}
     >
-      {(loading || !imageLoaded) && (
+      {(loading || !imageLoaded) && shouldShowLogo && (
         <div 
           className="logo-skeleton"
           style={{
@@ -129,22 +168,24 @@ const LogoNavComponent = ({ type, colour, onlyIcon }) => {
           }}
         />
       )}
-      <img
-        className="logo-icon"
-        alt="Logo"
-        src={logoSrc}
-        style={{
-          width: "134px",
-          height: "34px",
-          objectFit: "fill",
-          opacity: (loading || !imageLoaded) ? 0 : 1,
-          transition: 'opacity 0.15s ease-in-out',
-          willChange: "opacity"
-        }}
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-      />
+      {shouldShowLogo && (
+        <img
+          className="logo-icon"
+          alt="Logo"
+          src={logoSrc}
+          style={{
+            width: "134px",
+            height: "34px",
+            objectFit: "fill",
+            opacity: (loading || !imageLoaded) ? 0 : 1,
+            transition: 'opacity 0.15s ease-in-out',
+            willChange: "opacity"
+          }}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      )}
     </div>
   );
 };

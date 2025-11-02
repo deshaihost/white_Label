@@ -214,6 +214,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
         loading: false,
         error: null,
         isHostBuddyDomain: true,
+        isRetrying: false,
       };
     }
     
@@ -231,6 +232,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
         loading: false,
         error: null,
         isHostBuddyDomain: false,
+        isRetrying: false,
       };
     }
     
@@ -240,6 +242,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
       loading: true,
       error: null,
       isHostBuddyDomain: false,
+      isRetrying: false,
     };
   });
 
@@ -303,6 +306,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             loading: false,
             error: null,
             isHostBuddyDomain: true,
+            isRetrying: false,
           });
           fetchingRef.current = false; // Reset fetch flag
           return;
@@ -403,6 +407,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             loading: false,
             error: null,
             isHostBuddyDomain: false,
+            isRetrying: false,
           });
 
           // Cache the logos immediately
@@ -462,6 +467,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             loading: false,
             error: 'No logos available',
             isHostBuddyDomain: false,
+            isRetrying: false,
           });
           fetchingRef.current = false; // Reset fetch flag
         }
@@ -490,15 +496,18 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             loading: false,
             error: error.message,
             isHostBuddyDomain: true,
+            isRetrying: false,
           });
         } else {
           // For white label domains, maintain loading state on network errors to prevent fallback to HostBuddy styling
+          // CRITICAL: Keep loading=true and provide placeholder URLs to prevent default logo flash
           setLogos({
             logo: null,
             fullLogo: null,
             loading: true, // Keep loading to prevent fallback
             error: error.message,
             isHostBuddyDomain: false,
+            isRetrying: true, // New flag to indicate retry state
           });
           
           // Retry after a delay for white label domains, with max retry limit
@@ -506,7 +515,9 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             retryCountRef.current += 1;
             const retryDelay = Math.min(3000 * retryCountRef.current, 15000); // Exponential backoff, max 15s
             console.log(`🔄 [LOGO API] Retrying logo fetch for white label domain after error (attempt ${retryCountRef.current}/${maxRetries}) in ${retryDelay}ms...`, {
-              mountNumber: currentMount
+              mountNumber: currentMount,
+              retryDelay,
+              timestamp: new Date().toISOString()
             });
             setTimeout(() => {
               fetchingRef.current = false; // Reset fetch flag before retry
@@ -514,14 +525,17 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             }, retryDelay);
           } else {
             console.log('❌ [LOGO API] Max retries reached, stopping retry attempts', {
-              mountNumber: currentMount
+              mountNumber: currentMount,
+              timestamp: new Date().toISOString()
             });
+            // Only after max retries, allow fallback (but still mark as white label domain)
             setLogos({
               logo: null,
               fullLogo: null,
               loading: false,
               error: `Max retries reached: ${error.message}`,
               isHostBuddyDomain: false,
+              isRetrying: false,
             });
           }
         }
@@ -538,7 +552,8 @@ export const WhiteLabelLogoProvider = ({ children }) => {
       console.log('⏳ [LOGO API] No token found, waiting for authentication...');
       setLogos(prevState => ({
         ...prevState,
-        loading: false
+        loading: false,
+        isRetrying: false
       }));
       
       // Poll for token availability with exponential backoff
