@@ -1695,7 +1695,7 @@ const callUpdateGuestDataApi = async () => {
             <span
               onClick={handleOpenContactModal}
               style={{
-                color: "#74A9F7",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-navigation_text').trim() || "#74A9F7",
                 fontSize: "14px",
                 cursor: "pointer",
                 fontFamily: '"DM Sans", Helvetica',
