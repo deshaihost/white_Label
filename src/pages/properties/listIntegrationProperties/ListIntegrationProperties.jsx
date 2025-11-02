@@ -350,7 +350,7 @@ const ListIntegrationProperties = () => {
   // const isMountPlan = subscription_data?.plan === "HostBuddy x Mount - Guest Experience Concierge" || subscription_data?.plan === "Mount - Guest Experience Concierge";
   const isMountPlan = subscription_data?.plan?.toLowerCase().includes("mount");
   return (
-    <div>
+    <div className="properties-list-container">
       {chatBoxGetByNameLoading && <FullScreenLoader />}
       {propertiesDeleteLoading && <FullScreenLoader />}
       {((!userDataGetLoading) && (propertyDataIsReady)) ? (
@@ -361,185 +361,216 @@ const ListIntegrationProperties = () => {
             let chatbot_key = PropertiesExtraData?.[properties]?.chatbot_key;
 
             return (
-              <div className="row" key={properties}>
-                <div className="col-lg-12">
-                  <div className="d-flex gap-1 align-items-center justify-content-between property_lisiting mb-4">
-                    <div className="d-flex gap-1 align-items-center property_listing_item">
-                      <div className="img-with-title">
-                        <img src={PropertiesExtraData?.[properties]?.thumbnail_image || dummyPropertyImg} alt="" onError={(e) => { e.target.onerror = null; e.target.src = dummyPropertyImg; }}/>
-                      </div>
-                      <div className="property_listing_detail">
-                        <div className="property-detail">
-                          <h4 style={{fontWeight:'bold', fontSize: '1.3em'}}>{properties}</h4>
-                          {!is_locked && (
-                            <div className="d-flex gap-2">
-                              {PropertStop === "FORCED_OFF" ? (
-                                <button className="bg-danger text-white rounded-pill border-danger btn border" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(true, index);}}>
-                                  STOPPED
-                                </button>
-                              ) : (
-                                <button className="bg-dark text-primary border-primary btn border rounded-pill" style={{ padding: '4px 12px', fontSize: '0.8em' }} onClick={(e) => {toggleChatBotHndle(false, index);}}>
-                                  STOP
-                                </button>
-                              )}
-                              <Button className="border-0 shadow-none bg-none p-0 fs-5" onClick={() => handleCalenderModalOpen(properties)} style={{cursor:'pointer'}}>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                  <CiCalendar className="text-primary" />
-                                  <p style={{margin:'2px 0 0 4px', fontSize:'14px', color:'#146ef5', cursor:'pointer'}}>Schedule</p>
-                                </div>
-                              </Button>
-                            </div>
-                          )}
-                          {is_locked ? (
-                            <h6 style={{ marginTop:'13px', color: 'rgb(135,135,135)', fontSize:'0.84em', fontWeight:'normal' }}>
-                              This property is locked.{' '}
-                              <button className="text-primary border-0 bg-none p-0" onClick={() => { selectedHandle("UnlockProperty", [properties]); }}>Unlock it</button>
-                              {' '}to access options for responding to guests.
-                            </h6>
-                          ) : (
-                            <h6 style={{ marginTop:'13px', color: 'rgb(135,135,135)', fontSize:'0.84em', fontWeight:'normal' }}>
-                              {PropertiesExtraData?.[properties]?.status_statement?.split(' ').map((word, index) => 
-                                <React.Fragment key={index}>
-                                  {word === 'RESPONDING' ? <span style={{ color: 'rgb(0,200,0)' }}>{word}</span> :
-                                  word === 'OFF' ? <span style={{ color: 'rgb(255,0,0)' }}>{word}</span> :
-                                  word}
-                                  {' '}
-                                </React.Fragment>
-                              ) || 'Status not available'}
-                            </h6>
-                          )}
-                        </div>
-                      </div>
+              <div className="property-card" key={properties}>
+                <div className="property-card-content">
+                  {/* Property Image and Info */}
+                  <div className="property-main-info">
+                    <div className="property-thumbnail">
+                      <img 
+                        src={PropertiesExtraData?.[properties]?.thumbnail_image || dummyPropertyImg} 
+                        alt={properties}
+                        onError={(e) => { e.target.onerror = null; e.target.src = dummyPropertyImg; }}
+                      />
                     </div>
-
-                    <div className="property_listing_btn">
-                      {isMountPlan ? (
-                        <Button className="property-edit-btn" onClick={() => { navigate('/setting/integrations'); }}>
-                          Configure Upsells
-                        </Button>
+                    <div className="property-details">
+                      <h4 className="property-name">{properties}</h4>
+                      {is_locked ? (
+                        <p className="property-locked-message">
+                          This property is locked.{' '}
+                          <button 
+                            className="unlock-link" 
+                            onClick={() => { selectedHandle("UnlockProperty", [properties]); }}
+                          >
+                            Unlock it
+                          </button>
+                          {' '}to access options for responding to guests.
+                        </p>
                       ) : (
                         <>
-                          <Button className="property-edit-btn" onClick={() => {selectedHandle(editProperty, properties);}}>
-                            Property Setup
-                          </Button>
-                          <Button className="test-property-btn border-0" onClick={() => { navigate(`/workbench/${properties}`); }}>
-                            Test Property
-                          </Button>
+                          <div className="property-controls">
+                            {PropertStop === "FORCED_OFF" ? (
+                              <button 
+                                className="property-status-btn stopped" 
+                                onClick={(e) => {toggleChatBotHndle(true, index);}}
+                              >
+                                STOPPED
+                              </button>
+                            ) : (
+                              <button 
+                                className="property-status-btn stop" 
+                                onClick={(e) => {toggleChatBotHndle(false, index);}}
+                              >
+                                STOP
+                              </button>
+                            )}
+                            <Button 
+                              className="schedule-btn" 
+                              onClick={() => handleCalenderModalOpen(properties)}
+                            >
+                              <CiCalendar className="schedule-icon" />
+                              <span>Schedule</span>
+                            </Button>
+                          </div>
+                          {PropertiesExtraData?.[properties]?.pms_linked === false && (
+                            <span className="pms-not-connected-badge">PMS Not Connected</span>
+                          )}
+                          <p className="property-status-text">
+                            {PropertiesExtraData?.[properties]?.status_statement?.split(' ').map((word, index) => 
+                              <React.Fragment key={index}>
+                                {word === 'RESPONDING' ? <span className="status-responding">{word}</span> :
+                                word === 'OFF' ? <span className="status-off">{word}</span> :
+                                word}
+                                {' '}
+                              </React.Fragment>
+                            ) || 'Status not available'}
+                          </p>
                         </>
                       )}
                     </div>
-
-                    <Dropdown className="property-dropdown">
-                      <Dropdown.Toggle className="dropdown-toggle-vertical" id="dropdown-button-drop-down-centered">
-                        <HiOutlineDotsVertical />
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        {!isMountPlan && (
-                          <Dropdown.Item onClick={() => { selectedHandle(editProperty, properties); }}>
-                            Edit Property
-                          </Dropdown.Item>
-                        )}
-                        {!is_locked && (
-                          <>
-                            {!isMountPlan && (
-                              <Dropdown.Item
-                                style={{
-                                  opacity: isPro ? 0.5 : 1,
-                                  pointerEvents: isPro ? "none" : "auto",
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  alignItems: 'center'
-                                }}
-                                disabled={isPro}
-                                onClick={(e) => {
-                                  if (isPro) return;
-                                  handleEmbedClick(chatbot_key);
-                                }}
-                              >
-                                Get Chat Link or Embed
-                                {isPro && (
-                                  <span
-                                    style={{ color: '#146ef5', fontWeight: 500, fontSize: '0.95em', marginLeft: 'auto', cursor: 'pointer', pointerEvents: 'auto', textDecoration: 'underline' }}
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                      navigate('/setting/subscription');
-                                    }}
-                                  >
-                                    Upgrade
-                                  </span>
-                                )}
-                              </Dropdown.Item>
-                            )}
-                            {!isMountPlan && (
-                              <Dropdown.Item
-                                style={{
-                                  opacity: isPro ? 0.5 : 1,
-                                  pointerEvents: isPro ? "none" : "auto",
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  alignItems: 'center'
-                                }}
-                                disabled={isPro}
-                                onClick={(e) => {
-                                  if (isPro) return;
-                                  selectedHandle(regenerateChatbotLink, properties);
-                                }}
-                              >
-                                Regenerate Chat Link
-                                {isPro && (
-                                  <span
-                                    style={{ color: '#146ef5', fontWeight: 500, fontSize: '0.95em', marginLeft: 'auto', cursor: 'pointer', pointerEvents: 'auto', textDecoration: 'underline' }}
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                      navigate('/setting/subscription');
-                                    }}
-                                  >
-                                    Upgrade
-                                  </span>
-                                )}
-                              </Dropdown.Item>
-                            )}
-                            {!lockPropertyLoading ? (
-                              <Dropdown.Item onClick={() => { selectedHandle(lockProperty, properties); }}>
-                                Lock Property
-                              </Dropdown.Item>
-                            ) : (
-                              <Dropdown.Item>
-                                <BoxLoader />
-                              </Dropdown.Item>
-                            )}
-                          </>
-                        )}
-                        <Dropdown.Item onClick={() => { selectedHandle(deleteProperty, properties); }}>
-                          Delete Property
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
                   </div>
+
+                  {/* Action Buttons */}
+                  <div className="property-actions">
+                    {isMountPlan ? (
+                      <Button 
+                        className="property-setup-btn" 
+                        onClick={() => { navigate('/setting/integrations'); }}
+                      >
+                        Configure Upsells
+                      </Button>
+                    ) : (
+                      <>
+                        <Button 
+                          className="property-setup-btn" 
+                          onClick={() => {selectedHandle(editProperty, properties);}}
+                        >
+                          Property Setup
+                        </Button>
+                        <Button 
+                          className="test-property-btn" 
+                          onClick={() => { navigate(`/workbench/${properties}`); }}
+                        >
+                          Test Property
+                        </Button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Dropdown Menu */}
+                  <Dropdown className="property-menu-dropdown">
+                    <Dropdown.Toggle className="property-menu-toggle">
+                      <HiOutlineDotsVertical />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="property-menu">
+                      {!isMountPlan && (
+                        <Dropdown.Item onClick={() => { selectedHandle(editProperty, properties); }}>
+                          Edit Property
+                        </Dropdown.Item>
+                      )}
+                      {!is_locked && (
+                        <>
+                          {!isMountPlan && (
+                            <Dropdown.Item
+                              style={{
+                                opacity: isPro ? 0.5 : 1,
+                                pointerEvents: isPro ? "none" : "auto",
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                              }}
+                              disabled={isPro}
+                              onClick={(e) => {
+                                if (isPro) return;
+                                handleEmbedClick(chatbot_key);
+                              }}
+                            >
+                              Get Chat Link or Embed
+                              {isPro && (
+                                <span
+                                  className="upgrade-link"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    navigate('/setting/subscription');
+                                  }}
+                                >
+                                  Upgrade
+                                </span>
+                              )}
+                            </Dropdown.Item>
+                          )}
+                          {!isMountPlan && (
+                            <Dropdown.Item
+                              style={{
+                                opacity: isPro ? 0.5 : 1,
+                                pointerEvents: isPro ? "none" : "auto",
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                              }}
+                              disabled={isPro}
+                              onClick={(e) => {
+                                if (isPro) return;
+                                selectedHandle(regenerateChatbotLink, properties);
+                              }}
+                            >
+                              Regenerate Chat Link
+                              {isPro && (
+                                <span
+                                  className="upgrade-link"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    navigate('/setting/subscription');
+                                  }}
+                                >
+                                  Upgrade
+                                </span>
+                              )}
+                            </Dropdown.Item>
+                          )}
+                          {!lockPropertyLoading ? (
+                            <Dropdown.Item onClick={() => { selectedHandle(lockProperty, properties); }}>
+                              Lock Property
+                            </Dropdown.Item>
+                          ) : (
+                            <Dropdown.Item>
+                              <BoxLoader />
+                            </Dropdown.Item>
+                          )}
+                        </>
+                      )}
+                      <Dropdown.Item 
+                        className="delete-item" 
+                        onClick={() => { selectedHandle(deleteProperty, properties); }}
+                      >
+                        Delete Property
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </div>
               </div>
             );
           })}
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="d-flex gap-1 align-items-center justify-content-between property_lisiting mb-4">
-                <div className="d-flex gap-1 align-items-center property_listing_item">
-                  <div className="img-with-title">
-                    <img src={dummyPropertyImg} alt=""/>
-                  </div>
-                  <div className="property_listing_detail">
-                    <div className="property-detail">
-                      <h4 style={{ color: 'rgb(128, 128, 128)', fontStyle: 'italic' }}>Add New Property (Without PMS)</h4>
-                    </div>
-                  </div>
+
+          {/* Add New Property Card */}
+          <div className="property-card add-property-card">
+            <div className="property-card-content">
+              <div className="property-main-info">
+                <div className="property-thumbnail">
+                  <img src={dummyPropertyImg} alt="Add property"/>
                 </div>
-                <div className="property_listing_btn">
-                  <div className="d-flex">
-                    <Button className="property-edit-btn" onClick={() => { selectedHandle( dummySubscriptionCount, null ); }}>
-                      <i class="bi bi-pen"></i>
-                    </Button>
-                  </div>
+                <div className="property-details">
+                  <h4 className="property-name add-property-text">Add New Property (Without PMS)</h4>
                 </div>
+              </div>
+              <div className="property-actions">
+                <Button 
+                  className="add-property-btn" 
+                  onClick={() => { selectedHandle( dummySubscriptionCount, null ); }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </Button>
               </div>
             </div>
           </div>

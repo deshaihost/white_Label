@@ -1,184 +1,379 @@
-/* .form-switch .form-check-input {
-    background-image: url("../../../public/img/wrong_check2.png");
-    border: 1px solid #fff;
-    background-color: #4F090B;
-    background-size: 40% 78%;
-    background-position-x: 4px;
-} */
-.property_listing_detail {
+/* Properties List Container */
+.properties-list-container {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 16px;
 }
-.img-with-title {
-  width: 140px;
-  height: 110px;
-  margin-right: 15px;
+
+/* Property Card */
+.property-card {
+  background: var(--white-label-background-secondary, #17191f);
+  border: 1px solid var(--white-label-border-primary, #013280);
+  border-radius: 12px;
+  padding: 16px;
+  transition: background 0.2s ease;
+}
+
+.property-card:hover {
+  background: var(--white-label-background-hover, #1a1c24);
+}
+
+.property-card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   position: relative;
-  border-radius: 7px;
-  overflow: hidden;
 }
-.img-with-title img {
+
+/* Property Main Info Section */
+.property-main-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0; /* Allow text truncation */
+}
+
+.property-thumbnail {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.property-thumbnail img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.img-with-title span {
-  position: absolute;
-  top: 7px;
-  left: 7px;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 100%;
-  letter-spacing: -0.55px;
+
+.property-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.property-name {
+  color: var(--white-label-text-primary, white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  font-variation-settings: 'opsz' 14;
+}
+
+/* Property Controls */
+.property-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.property-status-btn {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
   text-transform: uppercase;
-  border-radius: 6px;
-  background: #146ef5;
-  display: inline-block;
-  padding: 7px 8px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  font-variation-settings: 'opsz' 14;
 }
-.property-detail h4 {
-  font-size: 18px;
-  margin-bottom: 7px;
-  color: #fff;
+
+.property-status-btn:hover {
+  opacity: 0.9;
 }
-/*
-.property-edit-btn {
-  border-radius: 160px;
-  border: 1px solid #1a5fb4 !important;
-  margin-right: 0 !important;
-  color: #fff !important;
-  background: #1a5fb4 !important;
-  padding: 4px 20px;
-  display: inline-block;
+
+.property-status-btn.stopped {
+  background: var(--white-label-status-error, #d4183d);
+  color: var(--white-label-text-primary, white);
+}
+
+.property-status-btn.stop {
+  background: var(--white-label-interactive-primary, #3e88f7);
+  color: var(--white-label-text-primary, white);
+}
+
+.schedule-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none !important;
+  border: none !important;
+  color: var(--white-label-interactive-primary, #3e88f7) !important;
+  padding: 0 !important;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
   box-shadow: none !important;
-  transition: all 0.3s ease;
+  font-variation-settings: 'opsz' 14;
 }
-.property-edit-btn:hover {
-  background: #0d4899 !important;
-  border-color: #0d4899 !important;
-  transform: translateY(-1px);
+
+.schedule-btn:hover {
+  opacity: 0.8;
 }
-*/
-.property-dropdown {
-  margin-left: auto; /* Aligns the dropdown to the far right */
-  position: absolute; /* Change to absolute */
+
+.schedule-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* PMS Badge */
+.pms-not-connected-badge {
+  display: inline-block;
+  background: var(--white-label-status-error, #d4183d);
+  border: 1px solid var(--white-label-status-error, #d4183d);
+  color: var(--white-label-text-primary, white);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 14;
+}
+
+/* Property Status Text */
+.property-status-text {
+  color: var(--white-label-text-secondary, #a6a9b2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+  font-variation-settings: 'opsz' 14;
+}
+
+.status-responding {
+  color: var(--white-label-status-success, #4ade80);
+  font-weight: 600;
+}
+
+.status-off {
+  color: var(--white-label-status-error, #d4183d);
+  font-weight: 600;
+}
+
+/* Property Locked Message */
+.property-locked-message {
+  color: var(--white-label-text-secondary, #a6a9b2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  font-variation-settings: 'opsz' 14;
+}
+
+.unlock-link {
+  color: var(--white-label-interactive-primary, #3e88f7);
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  font-variation-settings: 'opsz' 14;
+}
+
+.unlock-link:hover {
+  text-decoration: underline;
+}
+
+/* Property Actions */
+.property-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  margin-right: 40px;
+}
+
+.property-setup-btn,
+.test-property-btn {
+  background: var(--white-label-interactive-secondary, #01255e) !important;
+  color: var(--white-label-interactive-primary, #3e88f7) !important;
+  border: none !important;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  box-shadow: none !important;
+  font-variation-settings: 'opsz' 14;
+}
+
+.property-setup-btn:hover,
+.test-property-btn:hover {
+  background: var(--white-label-interactive-hover, #013a8a) !important;
+}
+
+.test-property-btn {
+  background: var(--white-label-interactive-primary, #3e88f7) !important;
+  color: var(--white-label-text-primary, white) !important;
+}
+
+.test-property-btn:hover {
+  background: var(--white-label-interactive-hover, #5296f8) !important;
+}
+
+/* Property Menu Dropdown */
+.property-menu-dropdown {
+  position: absolute;
   top: 0;
   right: 0;
 }
-.property-dropdown-old .btn {
-  border-radius: 160px;
-  border: 1px solid #146ef5 !important;
-  margin-right: 12px;
-  color: #fff;
-  background: #146ef5 !important;
-  padding: 4px 20px;
-  display: inline-block;
-  box-shadow: none !important;
-}
-/* This is the little down arrow after the vertical "...". Remove this block to show the arrow; keep it to hide the arrow */
-/*
-.property-dropdown .dropdown-toggle::after {
-  display: none;
-}
-*/
-.test-property-btn, .property-edit-btn {
-  color: #146ef5;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  border-radius: 40px;
-  background: rgba(20, 110, 245, 0.2);
-  display: inline-block;
-  padding: 9px 20px;
-  margin-top: 0;  /* Remove top margin since we're using gap */
-  box-shadow: none !important;
-  border: none;
-}
-.property-dropdown .dropdown-menu.show {
-  border-radius: 30px;
-  background: #020d29;
-  width: 262px;
-  padding: 16px !important;
-}
-.property-dropdown .dropdown-menu.show a {
-  color: #fff !important;
-  background: none !important;
-  padding: 0;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 150%;
-  letter-spacing: -0.45px;
-  margin-bottom: 15px;
-}
-.property-dropdown .dropdown-menu.show a:hover {
-  color: #146ef5 !important;
-}
-.progressBar {
-  height: 50px;
-  width: 50px;
-}
 
-.dropdown-toggle-vertical {
+.property-menu-toggle {
   background: none !important;
   border: none !important;
-  padding: 0 !important;
-  color: #fff; /* White color for the icon */
+  color: var(--white-label-text-secondary, #a6a9b2) !important;
+  padding: 8px !important;
+  cursor: pointer;
+  box-shadow: none !important;
 }
 
-.dropdown-toggle-vertical:hover {
+.property-menu-toggle:hover {
+  color: var(--white-label-text-primary, white) !important;
+}
+
+.property-menu-toggle::after {
+  display: none !important;
+}
+
+.property-menu {
+  background: var(--white-label-background-secondary, #17191f) !important;
+  border: 1px solid var(--white-label-border-primary, #013280) !important;
+  border-radius: 8px !important;
+  padding: 4px !important;
+  min-width: 200px !important;
+}
+
+.property-menu .dropdown-item {
+  color: var(--white-label-text-secondary, #d0d3db) !important;
   background: none !important;
+  padding: 8px 12px !important;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  font-variation-settings: 'opsz' 14;
 }
 
-.property_lisiting {
-  position: relative; /* Add this */
+.property-menu .dropdown-item:hover {
+  background: var(--white-label-background-primary, #0F1117) !important;
+  color: var(--white-label-text-primary, white) !important;
 }
 
-.property_listing_item {
-  flex: 1; /* Add this */
+.property-menu .dropdown-item.delete-item {
+  color: var(--white-label-status-error, #d4183d) !important;
 }
 
-.property_listing_btn {
+.property-menu .dropdown-item.delete-item:hover {
+  background: var(--white-label-background-primary, #0F1117) !important;
+}
+
+.upgrade-link {
+  color: var(--white-label-interactive-primary, #3e88f7);
+  font-weight: 500;
+  font-size: 0.95em;
+  margin-left: auto;
+  cursor: pointer;
+  pointer-events: auto;
+  text-decoration: underline;
+}
+
+/* Add Property Card */
+.add-property-card {
+  cursor: pointer;
+}
+
+.add-property-card:hover {
+  background: var(--white-label-background-hover, #24262e);
+}
+
+.add-property-text {
+  color: var(--white-label-text-disabled, #676a73) !important;
+  font-style: italic;
+}
+
+.add-property-btn {
+  background: var(--white-label-interactive-secondary, #01255e) !important;
+  color: var(--white-label-interactive-primary, #3e88f7) !important;
+  border: none !important;
+  border-radius: 8px;
+  padding: 8px !important;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  box-shadow: none !important;
   display: flex;
-  flex-direction: column;  /* Stack buttons vertically */
-  align-items: flex-end;   /* Right align buttons */
-  gap: 10px;              /* Space between buttons */
-  margin-right: 40px;     /* Space for the vertical dots */
+  align-items: center;
+  justify-content: center;
 }
 
-@media screen and (max-width: 767px) {
-  .property_lisiting {
+.add-property-btn:hover {
+  background: var(--white-label-background-primary, #0F1117) !important;
+}
+
+.add-property-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+  .property-actions {
+    margin-right: 36px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .property-card-content {
     flex-wrap: wrap;
   }
-  .property_listing_item {
-    display: grid !important;
-    grid-template-columns: 140px auto;
-    gap: 20px !important;
-    margin-bottom: 20px;
+
+  .property-main-info {
     width: 100%;
   }
-  .property_listing_detail {
-    justify-content: space-between;
+
+  .property-actions {
+    margin-right: 40px;
+    width: auto;
   }
-  .test-property-btn {
-    margin-top: 0;
-  }
-  .property_listing_btn {
-    flex-direction: row;    /* Revert to horizontal on mobile */
-    align-items: center;    /* Center align on mobile */
-    justify-content: flex-end; /* Right align on mobile */
-    width: auto;            /* Remove 100% width */
-    margin-right: 40px;     /* Keep space for dots menu */
-  }
-  .test-property-btn {
-    font-size: 14px;
-    font-weight: 500;
-    padding: 9px 13px;
+
+  .property-menu-dropdown {
+    position: static;
+    margin-left: auto;
   }
 }
+
 @media screen and (max-width: 575px) {
-  .chart-circle {
-    display: none;
+  .property-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+
+  .property-name {
+    font-size: 14px;
+  }
+
+  .property-actions {
+    gap: 8px;
+  }
+
+  .property-setup-btn,
+  .test-property-btn {
+    font-size: 13px;
+    padding: 6px 12px;
   }
 }
