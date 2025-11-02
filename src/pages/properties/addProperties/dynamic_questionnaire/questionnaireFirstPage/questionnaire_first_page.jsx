@@ -27,15 +27,10 @@ const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, proper
       <div style={{ marginBottom: '70px' }}></div> {/* Spacer */}
 
       {/* PMS Integration & document stuff */}
-      <div className="row">
-        <div className="col-6">
-        <IntegrationsForm property_name={property_name} apiPropertyData={apiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
-        </div>
-
-        <div className="col-6">
-        <DocumentForm property_name={property_name} apiPropertyData={apiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
-        </div>
-      </div>
+      <IntegrationsForm property_name={property_name} apiPropertyData={apiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
+      <div style={{ marginBottom: '40px' }}></div> {/* Spacer */}
+      
+      <DocumentForm property_name={property_name} apiPropertyData={apiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
       <div style={{ marginBottom: '70px' }}></div> {/* Spacer */}
 
       {/* HostBuddy Knowledge Base */}
