@@ -229,8 +229,10 @@
 /* Property Menu Dropdown */
 .property-menu-dropdown {
   position: absolute;
-  top: 0;
+  top: 50%;
   right: 0;
+  transform: translateY(-50%);
+  z-index: 10;
 }
 
 .property-menu-toggle {
@@ -256,6 +258,7 @@
   border-radius: 8px !important;
   padding: 4px !important;
   min-width: 200px !important;
+  z-index: 1000 !important;
 }
 
 .property-menu .dropdown-item {
