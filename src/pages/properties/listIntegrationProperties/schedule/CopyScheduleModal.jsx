@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Check } from 'lucide-react';
+import { X, Check } from '../../../../components/Icons';
 import axios from 'axios';
 import ToastHandle from '../../../../helper/ToastMessage';
 

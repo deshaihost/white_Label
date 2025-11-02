@@ -5,7 +5,7 @@ import CheckboxGroupComponent from "./form_components/checkbox_group";
 import React, { useState } from "react";
 import Loader from "../../../../helper/Loader";
 import AddQuestionModal from "./AddQuestionModal";
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from '../../../../components/Icons';
 
 // Code for the input components in a single section in the dynamic questionnaire (but NOT "Basics" or "External Resources")
 const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData, handleInputComponentChange, handlePencilIconClick, handleSaveAndNext, triggeredSaveLoading, property_name, section_num, num_total_sections}) => {

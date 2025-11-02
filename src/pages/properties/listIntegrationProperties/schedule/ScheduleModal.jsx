@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Clock, Trash2, Plus, Calendar } from 'lucide-react';
+import { X, Clock, Trash2, Plus, Calendar } from '../../../../components/Icons';
 import CopyScheduleModal from './CopyScheduleModal';
 import TimeInput from './TimeInput';
 import ToastHandle from '../../../../helper/ToastMessage';

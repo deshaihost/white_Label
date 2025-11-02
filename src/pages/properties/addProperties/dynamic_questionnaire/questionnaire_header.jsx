@@ -1,5 +1,5 @@
 import React from "react";
-import { File, Home, List, ConciergeBell, FileText, ShieldAlert } from 'lucide-react';
+import { File, Home, List, ConciergeBell, FileText, ShieldAlert } from '../../../../components/Icons';
 
 // Icon mapping for sections based on design reference PropertySetup.tsx
 const getSectionIcon = (sectionName) => {
