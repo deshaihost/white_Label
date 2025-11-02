@@ -541,7 +541,13 @@ function convertActionItemsToMetricData(actionItemData) {
 // - A total tile combining all upsells with the same metrics
 // Revenue is only shown if all upsells have the same currency and there is nonzero revenue
 function formatUpsellMetrics(retrievedUpsellsStatistics) {
+  
+  if (!retrievedUpsellsStatistics || !retrievedUpsellsStatistics.totals) {
+    return [];
+  }
+  
   const totals = retrievedUpsellsStatistics.totals;
+  
   let metricDataSets = [];
   
   // Track totals across all upsells for the summary tile
@@ -555,14 +561,14 @@ function formatUpsellMetrics(retrievedUpsellsStatistics) {
   for (const upsellId in totals) {
     const upsell = totals[upsellId];
     const { num_messages, num_accepted, source, total_value, currency } = upsell;
-
-    // Accumulate totals for the summary tile
-    totalMessagesSent += num_messages;
-    totalAccepted += num_accepted;
-
+    
+    // Accumulate totals for the summary tile, defaulting to 0 if undefined
+    totalMessagesSent += num_messages || 0;
+    totalAccepted += num_accepted || 0;
+    
     // Handle revenue calculations and currency consistency checking
     if (total_value && currency) {
-      totalRevenue += total_value;
+      totalRevenue += total_value || 0;
       // Track the first currency we see and ensure all subsequent ones match
       if (!totalCurrency) {
         totalCurrency = currency;
@@ -574,15 +580,15 @@ function formatUpsellMetrics(retrievedUpsellsStatistics) {
     }
 
     // Calculate acceptance rate for this upsell type
-    const acceptanceRate = num_messages > 0 ? ((num_accepted / num_messages) * 100).toFixed(1) : "0.0";
+    const acceptanceRate = (num_messages || 0) > 0 ? (((num_accepted || 0) / (num_messages || 0)) * 100).toFixed(1) : "0.0";
     
     // Create metric tile data for this upsell type
     const dataItem = {
       identifier: source,
       title: `Upsells - ${source}`,
       data: [
-        { number: num_messages, text: "Messages sent" },
-        { number: num_accepted, text: "Acceptances detected" },
+        { number: num_messages || 0, text: "Messages sent" },
+        { number: num_accepted || 0, text: "Acceptances detected" },
         { number: `${acceptanceRate}%`, text: "Detected acceptance rate" }
       ]
     };
@@ -616,7 +622,6 @@ function formatUpsellMetrics(retrievedUpsellsStatistics) {
 
   // Put the summary tile first in the array
   metricDataSets.unshift(totalDataItem);
-
   return metricDataSets;
 }
 
@@ -673,7 +678,9 @@ export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, s
 
   try { // Upsell tiles: number of upsell messages sent and accepted
     upsellMetrics = formatUpsellMetrics(retrievedUpsellsStatistics);
-  } catch (error) {}
+  } catch (error) {
+    console.error('Error processing upsell metrics:', error);
+  }
 
   setApiStatisticsData({ messageTimingData, totalMessagesSent, totalMessagesResponded, responseTimes, sentimentMetrics, actionItemsReceived, actionItemMetrics, actionItemsClosed, upsellMetrics });
   setDataLoading(false);

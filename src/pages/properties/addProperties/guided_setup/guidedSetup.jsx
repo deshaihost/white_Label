@@ -279,6 +279,12 @@ function GuidedSetup({ property_name:propPropertyName }) {
 
                         <div style={{ marginBottom: '50px' }}></div> {/* Spacer */}
                         <HostBuddyKnowledgeBase apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI} property_name={property_name}/>
+
+                        {apiPropertyData?.calry_property_id && (
+                            <p className="text-muted mt-6 fs-14 text-center">
+                                Property ID: {apiPropertyData.calry_property_id}
+                            </p>
+                        )}
                     </div>
                 </div>
             )}

@@ -33,6 +33,7 @@ const MildeSection = ({
   accountAgeDays,
   setCurrentView,
   userData,
+  enterKeyBehavior = 'send', // Default to 'send' if not provided
 }) => {
   const eliteOrWorksPlan =
     (/elite|works|ultimate/i.test(subscriptionPlan) && !/mount|pro/i.test(subscriptionPlan)) || subscriptionPlan == "trial"; // Case-insensitive check for 'elite', 'works', or 'ultimate' in the plan name, but exclude 'mount' and 'pro'
@@ -388,20 +389,27 @@ const MildeSection = ({
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" || e.keyCode === 13) {
-      if (e.shiftKey) {
-        // Insert a new line when shift+enter is pressed instead of sending the message
-        e.preventDefault();
-        const { selectionStart, selectionEnd, value } = e.target;
-        const newValue =
-          value.substring(0, selectionStart) +
-          "\n" +
-          value.substring(selectionEnd);
-        setInputValue(newValue);
-        setTimeout(() => {
-          e.target.selectionStart = e.target.selectionEnd = selectionStart + 1;
-        }, 0); // Move the cursor to the new position
+      if (enterKeyBehavior === 'newline') {
+        // When setting is 'newline', Enter always creates a new line
+        // User must click Send button to send message
+        return; // Allow default behavior (new line)
       } else {
-        handleSendMessage();
+        // When setting is 'send' (default), Enter sends message unless Shift is pressed
+        if (e.shiftKey) {
+          // Insert a new line when shift+enter is pressed instead of sending the message
+          e.preventDefault();
+          const { selectionStart, selectionEnd, value } = e.target;
+          const newValue =
+            value.substring(0, selectionStart) +
+            "\n" +
+            value.substring(selectionEnd);
+          setInputValue(newValue);
+          setTimeout(() => {
+            e.target.selectionStart = e.target.selectionEnd = selectionStart + 1;
+          }, 0); // Move the cursor to the new position
+        } else {
+          handleSendMessage();
+        }
       }
     }
   };

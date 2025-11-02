@@ -28,6 +28,7 @@ default_settings = {
     'max_message_delay_minutes': 0,  // int, 0-8
     'convo_closing': 'can_close',  // 'can_close' or 'always_respond'
     'tone_instructions': '',  // optional instructions for customizing tone
+    'inbox_enter_key_behavior': 'send',  // 'send' or 'newline' - determines if Enter sends message or creates new line
 }
 */
 
@@ -66,8 +67,8 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
       if (value < 0 || value > 720) {
         return
       }
-    } else if (key === 'tone_instructions' && value.length > 1000) {
-      value = value.substring(0, 1000);
+    } else if (key === 'tone_instructions' && value.length > 3000) {
+      value = value.substring(0, 3000);
     } else if (key === 'message_signature' && value.length > 500) {
       value = value.substring(0, 500);
     }
@@ -761,6 +762,31 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
 
         <div className="row mt-5">
           <div className="col-lg-11">
+            <label className="fs-5">Inbox Send Message Input Behavior</label>
+            <p className="settings-label mb-2">Choose how the Enter key behaves when composing messages in the Inbox</p>
+            <Form.Check 
+              type="radio" 
+              aria-label="radio1" 
+              name="enter-key-behavior" 
+              label="Press Enter to send the message" 
+              value="send" 
+              checked={!currentSettingsData?.inbox_enter_key_behavior || currentSettingsData.inbox_enter_key_behavior === 'send'} 
+              onChange={(e) => setSetting('inbox_enter_key_behavior', e.target.value)}
+            />
+            <Form.Check 
+              type="radio" 
+              aria-label="radio2" 
+              name="enter-key-behavior" 
+              label="Press Enter to start a new line (click Send button to send message)" 
+              value="newline" 
+              checked={currentSettingsData?.inbox_enter_key_behavior === 'newline'} 
+              onChange={(e) => setSetting('inbox_enter_key_behavior', e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="row mt-5">
+          <div className="col-lg-11">
             <div className="d-flex align-items-center gap-2">
               { !isDelayEditable && (
                 <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight:'6px', display:'inline-block', verticalAlign:'middle', position:'relative', top:'2px'}}><g clipPath="url(#clip0_4408_17872)"><path d="M5.625 5.625V7.5H11.875V5.625C11.875 3.89844 10.4766 2.5 8.75 2.5C7.02344 2.5 5.625 3.89844 5.625 5.625ZM3.125 7.5V5.625C3.125 2.51953 5.64453 0 8.75 0C11.8555 0 14.375 2.51953 14.375 5.625V7.5H15C16.3789 7.5 17.5 8.62109 17.5 10V17.5C17.5 18.8789 16.3789 20 15 20H2.5C1.12109 20 0 18.8789 0 17.5V10C0 8.62109 1.12109 7.5 2.5 7.5H3.125Z" fill="#FF9F00"/></g><defs><clipPath id="clip0_4408_17872"><rect width="17.5" height="20" fill="white"/></clipPath></defs></svg>
@@ -851,7 +877,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
               rows={1} 
               value={currentSettingsData.tone_instructions || ''} 
               onChange={(e) => setSetting('tone_instructions', e.target.value)} 
-              maxLength={1000} 
+              maxLength={3000} 
               disabled={!isToneEditable}
               style={{
                 backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.textarea || 'var(--white-label-background-textarea, #0F1117)'),

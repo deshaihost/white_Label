@@ -295,6 +295,33 @@ const Inbox = ({
   const [contactType, setContactType] = useState("");
   // State for tracking pin status
   const [isPinned, setIsPinned] = useState(false);
+  // State for conversation settings - specifically for enter key behavior
+  const [conversationSettings, setConversationSettings] = useState({});
+
+  // Fetch conversation settings on component mount
+  useEffect(() => {
+    const fetchConversationSettings = async () => {
+      const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+      const API_KEY = process.env.REACT_APP_API_KEY;
+
+      try {
+        const config = {
+          headers: { "X-API-Key": API_KEY },
+          validateStatus: function (status) { return status >= 200 && status < 500; }
+        };
+
+        const response = await axios.get(`${baseUrl}/get_conversation_settings`, config);
+
+        if (response.status === 200) {
+          setConversationSettings(response?.data?.conversation_settings?.default || {});
+        }
+      } catch (error) {
+        console.error("Error fetching conversation settings:", error);
+      }
+    };
+
+    fetchConversationSettings();
+  }, []);
 
   // Function to handle pin/unpin action
   const handlePinToggle = async () => {
@@ -2109,6 +2136,7 @@ const Inbox = ({
                     accountAgeDays={accountAgeDays}
                     setCurrentView={setCurrentView}
                     userData={userData}
+                    enterKeyBehavior={conversationSettings?.inbox_enter_key_behavior || 'send'}
                   />
                 </div>
 
@@ -2132,6 +2160,7 @@ const Inbox = ({
                     updateSpecificConversation={updateSpecificConversation}
                     propertyName={selectedConversation?.property_name}
                     subscriptionPlan={subscriptionPlan}
+                    enterKeyBehavior={conversationSettings?.inbox_enter_key_behavior || 'send'}
                   />
                 </div>
 
@@ -2155,6 +2184,7 @@ const Inbox = ({
                     updateSpecificConversation={updateSpecificConversation}
                     propertyName={selectedConversation?.property_name}
                     subscriptionPlan={subscriptionPlan}
+                    enterKeyBehavior={conversationSettings?.inbox_enter_key_behavior || 'send'}
                   />
                 </div>
 
@@ -3093,6 +3123,7 @@ const Inbox = ({
                 accountAgeDays={accountAgeDays}
                 setCurrentView={setCurrentView}
                 userData={userData}
+                enterKeyBehavior={conversationSettings?.inbox_enter_key_behavior || 'send'}
               />
             )}
             {currentView === "details" && (
