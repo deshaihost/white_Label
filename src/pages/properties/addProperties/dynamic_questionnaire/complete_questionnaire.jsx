@@ -364,36 +364,97 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
   }, [scrollToBottom, apiQuestionnaireData]);
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} style={{ minHeight: '100vh', background: '#0F1117' }}>
       <Helmet>
         <title>Edit Property</title>
       </Helmet>
-      <Container className="py-3">
+      <Container className="py-3" style={{ maxWidth: '100%', padding: '0' }}>
         {apiQuestionnaireData ? (
           <>
-            {/* Header, with section names and progress bar */}
-            <div className="row">
-              <div className="col-lg-8 mx-auto">
-                <hr className="border-secondary" style={{ opacity: "1" }} />
-              </div>
-              <div className="col-12">
-                <QuestionnaireHeader property_name={property_name} section_names={questionnaire_section_names} selectedSection={selectedSection} setSelectedSection={setSelectedSection} />
+            {/* Header with Tab Navigation */}
+            <div style={{ 
+              borderBottom: '1px solid #013280',
+              marginBottom: '32px',
+              background: '#0F1117'
+            }}>
+              <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px' }}>
+                <QuestionnaireHeader 
+                  property_name={property_name} 
+                  section_names={questionnaire_section_names} 
+                  selectedSection={selectedSection} 
+                  setSelectedSection={setSelectedSection} 
+                />
               </div>
             </div>
 
-            {/* Form for questionnaire section (whichever is selected - render one at a time) and next/prev buttons */}
-            <div className="row">
-              <div className="col-lg-10 mx-auto mt-5 form_multisteps">
+
+            {/* Form for questionnaire section - Content Area */}
+            <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px' }}>
+              <div style={{ 
+                minHeight: 'calc(100vh - 400px)',
+                paddingBottom: '120px' // Space for fixed bottom buttons
+              }}>
                 {selectedSection !== "External Resources" ? (
                   selectedSection === "Resources" ? (
-                    <QuestionnaireFirstPage handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} apiPropertyData={apiPropertyData} setApiPropertyData={setApiPropertyData} getPropertyDataFromAPI={getPropertyDataFromAPI}/>
+                    <QuestionnaireFirstPage 
+                      handleSaveAndNext={handleSaveAndNext} 
+                      triggeredSaveLoading={triggeredSaveLoading} 
+                      property_name={property_name} 
+                      apiPropertyData={apiPropertyData} 
+                      setApiPropertyData={setApiPropertyData} 
+                      getPropertyDataFromAPI={getPropertyDataFromAPI}
+                    />
                   ) : (
                     selectedSection && Object.keys(liveQuestionnaireData).length > 0 &&
-                      <QuestionnaireSection questionnaire_section_name={selectedSection} liveQuestionnaireData={liveQuestionnaireData} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} handleSaveAndNext={handleSaveAndNext} triggeredSaveLoading={triggeredSaveLoading} property_name={property_name} section_num={curr_sec_num} num_total_sections={num_total_sections}/>
+                      <QuestionnaireSection 
+                        questionnaire_section_name={selectedSection} 
+                        liveQuestionnaireData={liveQuestionnaireData} 
+                        handleInputComponentChange={handleInputComponentChange} 
+                        handlePencilIconClick={handlePencilIconClick} 
+                        handleSaveAndNext={handleSaveAndNext} 
+                        triggeredSaveLoading={triggeredSaveLoading} 
+                        property_name={property_name} 
+                        section_num={curr_sec_num} 
+                        num_total_sections={num_total_sections}
+                      />
                   )
                 ) : (
-                  <ExternalResourcesForm property_name={property_name} handleSaveAndNext={handleSaveAndNext}/>
+                  <ExternalResourcesForm 
+                    property_name={property_name} 
+                    handleSaveAndNext={handleSaveAndNext}
+                  />
                 )}
+              </div>
+            </div>
+
+            {/* Fixed Bottom Action Buttons */}
+            <div style={{
+              position: 'fixed',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              borderTop: '1px solid #013280',
+              background: '#0F1117',
+              padding: '24px',
+              zIndex: 100
+            }}>
+              <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', justifyContent: 'space-between' }}>
+                <button 
+                  onClick={() => handleSaveAndNext(true)}
+                  disabled={triggeredSaveLoading}
+                  className="modern-btn-secondary"
+                  style={{ paddingLeft: '32px', paddingRight: '32px' }}
+                >
+                  Save & Exit
+                </button>
+                <button 
+                  onClick={() => handleSaveAndNext()}
+                  disabled={triggeredSaveLoading}
+                  className="modern-btn-primary"
+                  style={{ paddingLeft: '32px', paddingRight: '32px' }}
+                >
+                  {triggeredSaveLoading ? 'Saving...' : 'Save & Next'}
+                </button>
               </div>
             </div>
 

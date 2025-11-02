@@ -282,6 +282,11 @@
 
 /* ==================== NEW DESIGN SYSTEM STYLES ==================== */
 
+/* Questionnaire Modern Header */
+.questionnaire-modern-header {
+  padding: 0;
+}
+
 /* Field Edit Button Component */
 .field-edit-button {
   background: transparent;

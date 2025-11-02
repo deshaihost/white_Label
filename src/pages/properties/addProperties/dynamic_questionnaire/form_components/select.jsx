@@ -13,23 +13,29 @@ const SelectComponent = ({ question_object, sec_name, subsec_name, q_ind, handle
   const field_id = `${sec_name}_${subsec_name}_${q_ind}`;
   
   return (
-      <div className="col-6 mt-3" key={field_id}>
-        <label className="text-white">
-          {question_text}
-          <PencilIcon sec_name={sec_name} subsec_name={subsec_name} q_ind={q_ind} handlePencilIconClick={handlePencilIconClick} someResStageIsSelected={someResStageIsSelected} extraTextIsAdded={extraTextIsAdded} />
-        </label>
-        <select className="form-select form-control" aria-label="Default select example" id={field_id} value={response_option}
-        onChange={(e) => handleInputComponentChange(e, sec_name, subsec_name, q_ind, "select")}>
-          {options.map((option_item, option_index) => {
-            return (
-              <option key={option_index} value={option_item ? option_item : ''}>
-                {option_item}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-    );
-  }
+    <div style={{ marginBottom: '0' }}>
+      <label className="modern-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        {question_text}
+        <PencilIcon sec_name={sec_name} subsec_name={subsec_name} q_ind={q_ind} handlePencilIconClick={handlePencilIconClick} someResStageIsSelected={someResStageIsSelected} extraTextIsAdded={extraTextIsAdded} />
+      </label>
+      <select 
+        className="modern-input" 
+        aria-label="Default select example" 
+        id={field_id} 
+        value={response_option}
+        onChange={(e) => handleInputComponentChange(e, sec_name, subsec_name, q_ind, "select")}
+        style={{ cursor: 'pointer' }}
+      >
+        {options.map((option_item, option_index) => {
+          return (
+            <option key={option_index} value={option_item ? option_item : ''}>
+              {option_item}
+            </option>
+          );
+        })}
+      </select>
+    </div>
+  );
+}
 
 export default SelectComponent;

@@ -264,7 +264,7 @@ const IntegrationsForm = ({ property_name, apiPropertyData, getPropertyDataFromA
                       ) : (
                         <button 
                           className="modern-text-link" 
-                          style={{ fontSize: '13px', fontWeight: 600, marginTop: '4px', background: 'none', border: 'none', padding: 0, textTransform: 'uppercase' }} 
+                          style={{ fontSize: '13px', fontWeight: 600, marginTop: '4px', background: 'none', border: 'none', padding: 0, textTransform: 'uppercase', display: 'inline-block', width: 'auto' }} 
                           onClick={(e) => unlink_integration(e, property_name)}
                         >
                           UNLINK

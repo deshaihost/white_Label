@@ -39,29 +39,9 @@ const QuestionnaireFirstPage = ({handleSaveAndNext, triggeredSaveLoading, proper
       
 
       <AutoFillButtons property_name={property_name} apiPropertyData={apiPropertyData} />
-      <div style={{ marginBottom: '80px' }}></div> {/* Spacer */}
-      
-      {/* Prev and Next buttons */}
-      <div className="d-flex justify-content-around my-5">
-        {triggeredSaveLoading ? (
-          <Loader />
-        ) : (
-          <>
-            <button className="btn btn-primary" onClick={() => handleSaveAndNext(true)}>
-              Save & Exit
-            </button>
-            <button className="border_theme_btn previous" onClick={() => handleSaveAndNext()}>
-              Save & Next &gt;
-            </button>
-          </>
-        )}
-      </div>
+      {/* Removed Save buttons - now in fixed footer */}
     </div>
   );
-
-
-
-
 };
 
 export default QuestionnaireFirstPage;

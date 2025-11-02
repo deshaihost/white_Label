@@ -10,16 +10,21 @@ const LongAnswerComponent = ({ question_object, sec_name, subsec_name, q_ind, ha
   const field_id = `${sec_name}_${subsec_name}_${q_ind}`;
 
   return (
-    <div className="col-12 mt-4 form-design" key={field_id}>
-      <label className="text-white">
+    <div style={{ marginBottom: '0' }}>
+      <label className="modern-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         {question_text}
         <PencilIcon sec_name={sec_name} subsec_name={subsec_name} q_ind={q_ind} handlePencilIconClick={handlePencilIconClick} someResStageIsSelected={someResStageIsSelected}/>
       </label>
-      <div className="">
-        <textarea className="bg-dark form-control" type="text" id={field_id}
-          onChange={(e) => handleInputComponentChange(e, sec_name, subsec_name, q_ind, "long_answer")}
-          placeholder={placeholder_text} value={response_text} />
-      </div>
+      <textarea 
+        className="modern-input" 
+        type="text" 
+        id={field_id}
+        onChange={(e) => handleInputComponentChange(e, sec_name, subsec_name, q_ind, "long_answer")}
+        placeholder={placeholder_text} 
+        value={response_text}
+        rows="4"
+        style={{ minHeight: '100px' }}
+      />
     </div>
   )
 }

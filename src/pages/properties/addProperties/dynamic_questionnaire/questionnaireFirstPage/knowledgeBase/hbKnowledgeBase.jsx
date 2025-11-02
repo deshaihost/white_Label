@@ -131,7 +131,8 @@ const HostBuddyKnowledgeBase = ({apiPropertyData, setApiPropertyData, getPropert
       const localSelections = {};
       
       // PMS Integration sources - populate if property is connected to PMS
-      if (integrationPlatform) {
+      // Use apiPropertyData.integration directly instead of integrationPlatform state
+      if (apiPropertyData?.integration?.platform) {
         localSelections['integration_data'] = {
           use_for_knowledge_base: integrationDataToSet['integration_data']?.use_for_knowledge_base,
           hide_for_reservations: integrationDataToSet['integration_data']?.hide_for_reservations || []

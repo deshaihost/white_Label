@@ -5,12 +5,14 @@ import CheckboxGroupComponent from "./form_components/checkbox_group";
 import React, { useState } from "react";
 import Loader from "../../../../helper/Loader";
 import AddQuestionModal from "./AddQuestionModal";
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 // Code for the input components in a single section in the dynamic questionnaire (but NOT "Basics" or "External Resources")
 const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData, handleInputComponentChange, handlePencilIconClick, handleSaveAndNext, triggeredSaveLoading, property_name, section_num, num_total_sections}) => {
 
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [currentSubsection, setCurrentSubsection] = useState("");
+  const [expandedSections, setExpandedSections] = useState(new Set()); // Start with all collapsed
 
   const questionnaire_section_data = liveQuestionnaireData.questionnaire[questionnaire_section_name];
   const subsection_order = liveQuestionnaireData.metadata.subsection_order[questionnaire_section_name];
@@ -21,6 +23,18 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
   const isTopicsToAvoid = questionnaire_section_name === "Topics to Avoid";
   const isSOPs = questionnaire_section_name === "SOPs";
   const shouldShowAddItem = isTopicsToAvoid || isSOPs;
+
+  const toggleSection = (subsectionName) => {
+    setExpandedSections(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(subsectionName)) {
+        newSet.delete(subsectionName);
+      } else {
+        newSet.add(subsectionName);
+      }
+      return newSet;
+    });
+  };
 
   const handleAddButtonClick = (subsectionName) => {
     setCurrentSubsection(subsectionName);
@@ -88,66 +102,151 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
   };
 
   return (
-    <div className="form-design">
+    <div style={{ 
+      fontFamily: '"DM Sans", sans-serif',
+      paddingBottom: '120px'
+    }}>
+      {/* Instructions text */}
       {questionnaire_section_name === "Topics to Avoid" ? (
         <>
-          <p style={{marginBottom:'50px', color:'#AAA'}}>In this section, you can <span style={{color:'rgb(255,165,0)'}}>add any conversation topics that you want HostBuddy to avoid</span> while communicating with your guests. If a guest's message relates to any of the topics you add here, HostBuddy will not respond to it.</p>
-          <p style={{marginBottom:'50px', color:'#AAA'}}>Unsure what topics to avoid? View the full guide with examples and setup tips in the <a href="https://userguide.hostbuddy.ai/property-profile-setup/setting-topics-to-avoid" target="_blank" rel="noopener noreferrer">HostBuddy User Guide</a>.</p>
+          <p style={{marginBottom:'30px', color:'#a6a9b2', fontSize: '13px'}}>
+            In this section, you can <span style={{color:'#FB923C'}}>add any conversation topics that you want HostBuddy to avoid</span> while communicating with your guests. If a guest's message relates to any of the topics you add here, HostBuddy will not respond to it.
+          </p>
+          <p style={{marginBottom:'30px', color:'#a6a9b2', fontSize: '13px'}}>
+            Unsure what topics to avoid? View the full guide with examples and setup tips in the <a href="https://userguide.hostbuddy.ai/property-profile-setup/setting-topics-to-avoid" target="_blank" rel="noopener noreferrer" style={{color: '#3e88f7'}}>HostBuddy User Guide</a>.
+          </p>
         </>
       ) : questionnaire_section_name === "SOPs" ? (
-          <p style={{marginBottom:'50px', color:'#AAA'}}>Need help writing SOPs? View the full guide with step-by-step instructions in the <a href="https://userguide.hostbuddy.ai/property-profile-setup/building-standard-operating-procedures" target="_blank" rel="noopener noreferrer">HostBuddy User Guide</a>.</p>
+        <p style={{marginBottom:'30px', color:'#a6a9b2', fontSize: '13px'}}>
+          Need help writing SOPs? View the full guide with step-by-step instructions in the <a href="https://userguide.hostbuddy.ai/property-profile-setup/building-standard-operating-procedures" target="_blank" rel="noopener noreferrer" style={{color: '#3e88f7'}}>HostBuddy User Guide</a>.
+        </p>
       ) : (
-        <p style={{marginBottom:'50px', color:'#AAA'}}>All fields are optional, but the more details you provide, the better HostBuddy can serve your guests.</p>
+        <p style={{marginBottom:'30px', color:'#a6a9b2', fontSize: '13px'}}>
+          All fields are optional, but the more details you provide, the better HostBuddy can serve your guests.
+        </p>
       )}
 
-      {/* Form for this questionnaire section (map thru each subsection & question) */}
+      {/* Subsections with collapsible headers */}
       {questionnaire_section_data && subsection_order.map((subsectionName) => {
         const subsection = questionnaire_section_data[subsectionName];
+        const isExpanded = expandedSections.has(subsectionName);
+
         return (
-          <React.Fragment key={subsectionName}>
-            <h1 className="text-white mb-3 fs-4 fw-bold">{subsectionName}</h1>
-              <div className="row my-3">
+          <div
+            key={subsectionName}
+            style={{
+              marginBottom: '24px',
+              background: '#17191f',
+              borderRadius: '8px',
+              border: '1px solid #013280',
+              overflow: 'hidden'
+            }}
+          >
+            {/* Subsection Header - Clickable to expand/collapse */}
+            <div
+              onClick={() => toggleSection(subsectionName)}
+              style={{
+                padding: '20px 24px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                background: '#17191f',
+                borderBottom: isExpanded ? '1px solid #013280' : 'none'
+              }}
+            >
+              <h3 style={{ 
+                fontSize: '18px',
+                fontWeight: '500',
+                color: '#fff',
+                margin: 0
+              }}>
+                {subsectionName}
+              </h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                {shouldShowAddItem && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddButtonClick(subsectionName);
+                    }}
+                    className="modern-btn-secondary"
+                    style={{
+                      fontSize: '13px',
+                      padding: '6px 16px',
+                      height: 'auto'
+                    }}
+                  >
+                    Add more
+                  </button>
+                )}
+                {isExpanded ? (
+                  <ChevronUp size={20} color="#676a73" />
+                ) : (
+                  <ChevronDown size={20} color="#676a73" />
+                )}
+              </div>
+            </div>
+
+            {/* Subsection Content - Only show when expanded */}
+            {isExpanded && (
+              <div style={{ padding: '24px' }}>
                 {subsection && subsection.map((question, index) => {
-                  if (question.question_type === 'select') {
-                    return <SelectComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} key={index} />;
-                  } else if (question.question_type === 'short_answer') {
-                    return <ShortAnswerComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} key={index} />;
-                  } else if (question.question_type === 'long_answer') {
-                    return <LongAnswerComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} key={index} />;
-                  } else if (question.question_type === 'checkbox_group') {
-                    return <CheckboxGroupComponent question_object={question} sec_name={questionnaire_section_name} subsec_name={subsectionName} q_ind={index} handleInputComponentChange={handleInputComponentChange} handlePencilIconClick={handlePencilIconClick} key={index} />;
-                  }
+                  return (
+                    <div 
+                      key={index}
+                      style={{
+                        marginBottom: index < subsection.length - 1 ? '24px' : 0
+                      }}
+                    >
+                      {question.question_type === 'select' && (
+                        <SelectComponent 
+                          question_object={question} 
+                          sec_name={questionnaire_section_name} 
+                          subsec_name={subsectionName} 
+                          q_ind={index} 
+                          handleInputComponentChange={handleInputComponentChange} 
+                          handlePencilIconClick={handlePencilIconClick} 
+                        />
+                      )}
+                      {question.question_type === 'short_answer' && (
+                        <ShortAnswerComponent 
+                          question_object={question} 
+                          sec_name={questionnaire_section_name} 
+                          subsec_name={subsectionName} 
+                          q_ind={index} 
+                          handleInputComponentChange={handleInputComponentChange} 
+                          handlePencilIconClick={handlePencilIconClick} 
+                        />
+                      )}
+                      {question.question_type === 'long_answer' && (
+                        <LongAnswerComponent 
+                          question_object={question} 
+                          sec_name={questionnaire_section_name} 
+                          subsec_name={subsectionName} 
+                          q_ind={index} 
+                          handleInputComponentChange={handleInputComponentChange} 
+                          handlePencilIconClick={handlePencilIconClick} 
+                        />
+                      )}
+                      {question.question_type === 'checkbox_group' && (
+                        <CheckboxGroupComponent 
+                          question_object={question} 
+                          sec_name={questionnaire_section_name} 
+                          subsec_name={subsectionName} 
+                          q_ind={index} 
+                          handleInputComponentChange={handleInputComponentChange} 
+                          handlePencilIconClick={handlePencilIconClick} 
+                        />
+                      )}
+                    </div>
+                  );
                 })}
               </div>
-              
-              {/* Add Question Button - Now visible in Topics to Avoid AND SOPs sections */}
-              {shouldShowAddItem && (
-                <div className="d-flex justify-content-start mb-4">
-                  <a className="add-item-link" onClick={() => handleAddButtonClick(subsectionName)}>
-                    <i className="fas fa-plus me-1"></i> + Add Item
-                  </a>
-                </div>
-              )}
-            <div style={{ marginBottom: '50px' }}></div>
-          </React.Fragment>
+            )}
+          </div>
         );
       })}
-      
-      {/* Prev and Next buttons */}
-      <div className="d-flex justify-content-around my-5">
-        {triggeredSaveLoading ? (
-          <Loader />
-        ) : (
-          <>
-            <button className="btn btn-primary" onClick={() => handleSaveAndNext(true)}>
-              {is_first_section ? "Save & Exit" : " < Save & Previous"}
-            </button>
-            <button className="border_theme_btn previous" onClick={() => handleSaveAndNext()}>
-              {is_last_section ? "Save & Finish" : "Save & Next >"}
-            </button>
-          </>
-        )}
-      </div>
 
       <AddQuestionModal 
         show={showAddQuestionModal} 
