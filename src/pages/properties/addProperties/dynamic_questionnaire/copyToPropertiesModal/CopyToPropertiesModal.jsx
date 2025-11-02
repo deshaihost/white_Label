@@ -39,7 +39,7 @@ const CopyToPropertiesModal = ({ show, setShow, question_obj, sectionName, subSe
 
   const colourStyles = {
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-      return { ...styles, color: "#000" };
+      return { ...styles, color: "var(--white-label-text-primary, #000)" };
     }
   };
 

@@ -47,22 +47,22 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
       }}
     >
       <div style={{
-        background: '#0F1117',
-        border: '1px solid #013280',
+        background: 'var(--white-label-background-primary, #0F1117)',
+        border: '1px solid var(--white-label-border-primary, #013280)',
         borderRadius: '8px',
         overflow: 'hidden'
       }}>
         <Modal.Header 
           style={{
-            background: '#17191f',
-            borderBottom: '1px solid #013280',
+            background: 'var(--white-label-background-secondary, #17191f)',
+            borderBottom: '1px solid var(--white-label-border-primary, #013280)',
             padding: '20px 24px'
           }}
         >
           <Modal.Title style={{ 
             fontSize: '18px',
             fontWeight: '500',
-            color: '#fff',
+            color: 'var(--white-label-text-primary, #fff)',
             margin: 0
           }}>
             Add Item to {subsectionName}
@@ -72,7 +72,7 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
             style={{
               background: 'none',
               border: 'none',
-              color: '#676a73',
+              color: 'var(--white-label-text-quaternary, #676a73)',
               fontSize: '24px',
               cursor: 'pointer',
               padding: 0,
@@ -83,25 +83,25 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
           </button>
         </Modal.Header>
         
-        <Modal.Body style={{ padding: '24px', background: '#0F1117' }}>
+        <Modal.Body style={{ padding: '24px', background: 'var(--white-label-background-primary, #0F1117)' }}>
           <Form>
             {!skipPresets && (
               <Form.Group style={{ marginBottom: '24px' }}>
                 <div style={{
                   display: 'flex',
                   gap: '12px',
-                  background: '#17191f',
+                  background: 'var(--white-label-background-secondary, #17191f)',
                   padding: '4px',
                   borderRadius: '6px',
-                  border: '1px solid #013280'
+                  border: '1px solid var(--white-label-border-primary, #013280)'
                 }}>
                   <div 
                     style={{
                       flex: 1,
                       padding: '10px 16px',
                       textAlign: 'center',
-                      background: questionType === "preset" ? '#3e88f7' : 'transparent',
-                      color: questionType === "preset" ? '#fff' : '#a6a9b2',
+                      background: questionType === "preset" ? 'var(--white-label-interactive-primary, #3e88f7)' : 'transparent',
+                      color: questionType === "preset" ? 'var(--white-label-text-primary, #fff)' : 'var(--white-label-text-tertiary, #a6a9b2)',
                       borderRadius: '4px',
                       cursor: 'pointer',
                       fontSize: '14px',
@@ -117,8 +117,8 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
                       flex: 1,
                       padding: '10px 16px',
                       textAlign: 'center',
-                      background: questionType === "free" ? '#3e88f7' : 'transparent',
-                      color: questionType === "free" ? '#fff' : '#a6a9b2',
+                      background: questionType === "free" ? 'var(--white-label-interactive-primary, #3e88f7)' : 'transparent',
+                      color: questionType === "free" ? 'var(--white-label-text-primary, #fff)' : 'var(--white-label-text-tertiary, #a6a9b2)',
                       borderRadius: '4px',
                       cursor: 'pointer',
                       fontSize: '14px',
@@ -149,22 +149,50 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
                 <Form.Group style={{ marginBottom: '16px' }}>
                   <Form.Label className="modern-label">Select a topic</Form.Label>
                   <Form.Select 
-                    value={selectedPreset}
+                    value={selectedPreset} 
                     onChange={(e) => setSelectedPreset(e.target.value)}
-                    className="modern-input"
-                    style={{ cursor: 'pointer' }}
+                    style={{
+                      background: 'var(--white-label-background-secondary, #17191f)',
+                      border: '1px solid var(--white-label-border-primary, #013280)',
+                      borderRadius: '8px',
+                      padding: '12px 16px',
+                      fontSize: '14px'
+                    }}
                   >
-                    <option value="">Choose...</option>
+                    <option value="" style={{
+                        color: 'var(--white-label-text-quaternary, #676a73)', 
+                        background: 'transparent'
+                    }}>
+                      -- Select a Topic --
+                    </option>
                     {conversationTopics.map((topic, index) => (
-                      <option key={index} value={topic.topic}>{topic.topic}</option>
+                      <option 
+                        key={index} 
+                        value={topic.topic}
+                        style={{ 
+                          color: 'var(--white-label-text-tertiary, #a6a9b2)',
+                          background: 'transparent'
+                        }}
+                      >
+                        {topic.topic}
+                      </option>
                     ))}
                   </Form.Select>
-                </Form.Group>
-                
+                  {selectedPreset && (
+                    <Form.Text style={{ 
+                      display: 'block', 
+                      marginTop: '8px',
+                      color: 'var(--white-label-text-quaternary, #676a73)',
+                      fontSize: '13px'
+                    }}>
+                      {conversationTopics.find(t => t.topic === selectedPreset)?.description || ''}
+                    </Form.Text>
+                  )}
+                </Form.Group>                                
                 <div style={{
                   padding: '16px',
-                  background: '#17191f',
-                  border: '1px solid #013280',
+                  background: 'var(--white-label-background-secondary, #17191f)',
+                  border: '1px solid var(--white-label-border-primary, #013280)',
                   borderRadius: '6px',
                   minHeight: '120px'
                 }}>
@@ -172,7 +200,7 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
                     <>
                       <p style={{ 
                         fontSize: '12px', 
-                        color: '#676a73', 
+                        color: 'var(--white-label-text-quaternary, #676a73)', 
                         marginBottom: '8px',
                         textTransform: 'uppercase',
                         letterSpacing: '0.5px'
@@ -181,7 +209,7 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
                       </p>
                       <p style={{ 
                         fontSize: '14px',
-                        color: '#a6a9b2',
+                        color: 'var(--white-label-text-tertiary, #a6a9b2)',
                         lineHeight: '1.6',
                         margin: 0
                       }}>
@@ -191,7 +219,7 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
                   ) : (
                     <p style={{ 
                       fontSize: '14px',
-                      color: '#676a73',
+                      color: 'var(--white-label-text-quaternary, #676a73)',
                       textAlign: 'center',
                       margin: '32px 0'
                     }}>
@@ -204,14 +232,16 @@ const AddQuestionModal = ({ show, handleClose, handleAddQuestion, subsectionName
           </Form>
         </Modal.Body>
         
-        <Modal.Footer style={{
-          background: '#0F1117',
-          borderTop: '1px solid #013280',
-          padding: '16px 24px',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: '12px'
-        }}>
+                <Modal.Footer 
+          style={{
+            padding: '20px 24px',
+            borderTop: '1px solid var(--white-label-border-primary, #013280)',
+            background: 'var(--white-label-background-primary, #0F1117)',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: '12px'
+          }}
+        >
           <button
             onClick={handleClose}
             className="modern-btn-secondary"

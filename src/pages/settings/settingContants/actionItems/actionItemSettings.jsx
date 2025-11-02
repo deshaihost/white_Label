@@ -48,6 +48,7 @@ const ActionItemsSettings = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
 
   const store = useSelector((state) => state);
@@ -351,6 +352,7 @@ const ActionItemsSettings = () => {
       if (response.status === 200) {
         ToastHandle("Category updated successfully", "success");
         setEditingCategory(null);
+        setShowEditModal(false);
         fetchCategories();
       } else {
         ToastHandle(response.data?.error || "Failed to update category", "danger");
@@ -401,10 +403,12 @@ const ActionItemsSettings = () => {
       name: category.name,
       description: category.definition || ''
     });
+    setShowEditModal(true);
   };
 
   const cancelEditing = () => {
     setEditingCategory(null);
+    setShowEditModal(false);
   };
 
   useEffect(() => {
@@ -819,6 +823,90 @@ const ActionItemsSettings = () => {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Category Modal */}
+      {showEditModal && editingCategory && (
+        <div className="action-items-edit-modal-overlay">
+          <div className="action-items-edit-modal">
+            <div className="action-items-edit-modal-header">
+              <h2 className="action-items-edit-modal-title" style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                  cssConfig.css_data.text.primary : '#ffffff'
+              }}>
+                Edit Category
+              </h2>
+              <button
+                type="button"
+                className="action-items-edit-modal-close"
+                onClick={cancelEditing}
+              >
+                <XIcon />
+              </button>
+            </div>
+            <div className="action-items-edit-modal-body">
+              <div className="action-items-category-input-group">
+                <label className="action-items-form-label" htmlFor="editCategoryName" style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                    cssConfig.css_data.text.primary : '#ffffff'
+                }}>
+                  Category Name
+                </label>
+                <input
+                  type="text"
+                  id="editCategoryName"
+                  className="action-items-input"
+                  placeholder="Enter category name"
+                  value={editingCategory.name}
+                  onChange={(e) => setEditingCategory({ ...editingCategory, name: e.target.value })}
+                  style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : '#ffffff'
+                  }}
+                />
+              </div>
+
+              <div className="action-items-category-input-group">
+                <label className="action-items-form-label" htmlFor="editCategoryDescription" style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                    cssConfig.css_data.text.primary : '#ffffff'
+                }}>
+                  Description
+                </label>
+                <textarea
+                  id="editCategoryDescription"
+                  className="action-items-textarea"
+                  style={{ 
+                    minHeight: '100px',
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : '#ffffff'
+                  }}
+                  placeholder="Enter description"
+                  value={editingCategory.description}
+                  onChange={(e) => setEditingCategory({ ...editingCategory, description: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="action-items-edit-modal-footer">
+              <button
+                type="button"
+                className="action-items-modal-btn cancel"
+                onClick={cancelEditing}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="action-items-modal-btn save"
+                onClick={handleUpdateCategory}
+                disabled={isSubmitting || !editingCategory.name.trim()}
+              >
+                {isSubmitting ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </div>

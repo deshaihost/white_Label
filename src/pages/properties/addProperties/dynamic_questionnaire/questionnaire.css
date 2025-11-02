@@ -7,27 +7,27 @@
 
 /* Add Question Button Styling */
 .add-question-btn {
-  color: #146EF5;
+  color: var(--white-label-interactive-primary, #146EF5);
   font-family: 'Samsung Sharp Sans Medium';
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
   background: transparent;
-  border: 1px solid #146EF5;
+  border: 1px solid var(--white-label-interactive-primary, #146EF5);
   border-radius: 20px;
   padding: 8px 15px;
   transition: all 0.3s ease;
 }
 
 .add-question-btn:hover {
-  background-color: rgba(20, 110, 245, 0.1);
-  color: #146EF5;
+  background-color: var(--white-label-background-hover, rgba(20, 110, 245, 0.1));
+  color: var(--white-label-interactive-primary, #146EF5);
 }
 
 .questionnaire-first-page .underline-btn,
 .auto-fill-buttons-container .underline-btn {
-  color: #146EF5;
+  color: var(--white-label-interactive-primary, #146EF5);
   font-family: 'Samsung Sharp Sans Medium';
   font-size: 18px;
   font-style: normal;
@@ -52,11 +52,11 @@
   margin-bottom: 10px;
   font-size: 20px;
   text-align: center;
-  color: #AAA;
+  color: var(--white-label-text-tertiary, #AAA);
 }
 
 .auto-fill-modal label span {
-  color: #AAA;
+  color: var(--white-label-text-tertiary, #AAA);
 }
 
 .auto-fill-modal {
@@ -73,21 +73,21 @@
 }
 
 .auto-fill-modal .sources-container .form-check-input {
-  background-color: white;
+  background-color: var(--white-label-background-primary, white);
   margin-right: 8px;
 }
 
 .auto-fill-modal .sources-container .form-check-input:checked {
-  background-color: blue;
-  border-color: blue;
+  background-color: var(--white-label-interactive-primary, blue);
+  border-color: var(--white-label-interactive-primary, blue);
 }
 
 /* Modal Form Styling for Add Question */
 .auto-fill-modal .form-select {
   border-radius: 20px !important;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: #0a1a44 !important;
-  color: #fff;
+  border: 1px solid var(--white-label-border-secondary, rgba(255, 255, 255, 0.2));
+  background: var(--white-label-background-input, #0a1a44) !important;
+  color: var(--white-label-text-primary, #fff);
   font-family: "Samsung Sharp Sans Medium";
   font-size: 15px;
   padding: 16px 20px;
@@ -112,9 +112,9 @@
   text-align: center;
   padding: 12px 15px;
   cursor: pointer;
-  background-color: #212529;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #aaa;
+  background-color: var(--white-label-background-secondary, #212529);
+  border: 1px solid var(--white-label-border-secondary, rgba(255, 255, 255, 0.2));
+  color: var(--white-label-text-tertiary, #aaa);
   transition: all 0.3s ease;
 }
 
@@ -131,9 +131,9 @@
 }
 
 .question-type-tabs .tab-option.active {
-  background-color: #146EF5;
-  color: white;
-  border-color: #146EF5;
+  background-color: var(--white-label-interactive-primary, #146EF5);
+  color: var(--white-label-text-primary, white);
+  border-color: var(--white-label-interactive-primary, #146EF5);
 }
 
 /* Center modal footer buttons */
@@ -147,8 +147,8 @@
   border-radius: 15px !important;
   margin-top: 20px;
   padding: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: #0a1a44;
+  border: 1px solid var(--white-label-border-secondary, rgba(255, 255, 255, 0.2));
+  background-color: var(--white-label-background-input, #0a1a44);
 }
 
 .description-box p.text-white {
@@ -169,11 +169,11 @@
   text-align: left;
   margin: 0 auto;
   padding: 24px;
-  border: 2px solid #013280;
+  border: 2px solid var(--white-label-border-primary, #013280);
   border-radius: 12px;
   max-width: 900px;
   width: 100%;
-  background: #0F1117;
+  background: var(--white-label-background-primary, #0F1117);
   box-shadow: 0 0 14px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -181,7 +181,7 @@
   text-align: right;
   margin-bottom: -10px;
   margin-top: -8px;
-  color: #3e88f7;
+  color: var(--white-label-interactive-primary, #3e88f7);
   font-size: 13px;
   font-weight: 600;
 }
@@ -190,7 +190,7 @@
   margin-bottom: 20px;
   padding: 10px 30px;
   text-align: center;
-  color: white;
+  color: var(--white-label-text-primary, white);
   font-size: 20px;
   font-weight: 700;
 }
@@ -200,7 +200,7 @@
   font-weight: 600;
   margin-top: 24px;
   margin-bottom: 16px;
-  color: #a6a9b2;
+  color: var(--white-label-text-tertiary, #a6a9b2);
 }
 
 .hostbuddy-knowledge-base h5 {
@@ -212,15 +212,15 @@
 
 .hostbuddy-knowledge-base h5 small {
   font-size: 14px;
-  color: #676a73;
+  color: var(--white-label-text-quaternary, #676a73);
 }
 
 .hostbuddy-knowledge-base .text-confirmed {
-  color: white;
+  color: var(--white-label-text-primary, white);
 }
 
 .hostbuddy-knowledge-base .text-negative {
-  color: #676a73;
+  color: var(--white-label-text-quaternary, #676a73);
   font-style: italic;
 }
 
@@ -231,9 +231,9 @@
   height: 20px;
   line-height: 20px;
   text-align: center;
-  background-color: #3e88f7;
+  background-color: var(--white-label-interactive-primary, #3e88f7);
   border-radius: 4px;
-  color: white;
+  color: var(--white-label-text-primary, white);
   margin-right: 12px;
   font-size: 12px;
   font-weight: bold;
@@ -245,18 +245,18 @@
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 1px solid #013280;
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 4px;
-  background-color: #17191f;
+  background-color: var(--white-label-background-secondary, #17191f);
   margin-right: 12px;
 }
 
 .hostbuddy-knowledge-base .text-neutral {
-  color: #676a73;
+  color: var(--white-label-text-quaternary, #676a73);
 }
 
 .hostbuddy-knowledge-base span {
-  color: #007bff;
+  color: var(--white-label-interactive-primary, #007bff);
   cursor: pointer;
   margin-left: 5px;
   font-style: normal; /* Removes italicization */
@@ -270,7 +270,7 @@
 
 /* Add Item Link Styling */
 .add-item-link {
-  color: #146EF5;
+  color: var(--white-label-interactive-primary, #146EF5);
   cursor: pointer;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -300,7 +300,7 @@
 }
 
 .field-edit-button:hover .field-edit-icon {
-  color: #3e88f7;
+  color: var(--white-label-interactive-primary, #3e88f7);
 }
 
 .field-edit-button-content {
@@ -313,7 +313,7 @@
 .field-edit-icon {
   width: 16px;
   height: 16px;
-  color: #146EF5;
+  color: var(--white-label-interactive-primary, #146EF5);
   transition: color 0.2s ease;
 }
 
@@ -325,23 +325,23 @@
 }
 
 .field-indicator-orange {
-  background-color: #FB923C;
+  background-color: var(--white-label-status-warning, #FB923C);
   box-shadow: 0 0 4px rgba(251, 146, 60, 0.4);
 }
 
 .field-indicator-blue {
-  background-color: #3e88f7;
+  background-color: var(--white-label-interactive-primary, #3e88f7);
   box-shadow: 0 0 4px rgba(62, 136, 247, 0.4);
 }
 
 /* Modern Input Styling */
 .modern-input {
   width: 100%;
-  background-color: #01255e;
-  border: 1px solid #013280;
+  background-color: var(--white-label-background-input, #01255e);
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 8px;
   padding: 12px 16px;
-  color: white;
+  color: var(--white-label-text-primary, white);
   font-size: 14px;
   font-family: "DM Sans", sans-serif;
   transition: all 0.2s ease;
@@ -349,18 +349,18 @@
 
 .modern-input:focus {
   outline: none;
-  border-color: #3e88f7;
-  box-shadow: 0 0 0 1px #3e88f7;
+  border-color: var(--white-label-interactive-primary, #3e88f7);
+  box-shadow: 0 0 0 1px var(--white-label-interactive-primary, #3e88f7);
 }
 
 .modern-input::placeholder {
-  color: #676a73;
+  color: var(--white-label-text-placeholder, #676a73);
 }
 
 /* Modern Label Styling */
 .modern-label {
   display: block;
-  color: #a6a9b2;
+  color: var(--white-label-text-tertiary, #a6a9b2);
   font-size: 12px;
   font-weight: 500;
   margin-bottom: 8px;
@@ -369,8 +369,8 @@
 
 /* Modern Button Styling */
 .modern-btn-primary {
-  background-color: #3e88f7;
-  color: white;
+  background-color: var(--white-label-interactive-button_background, #3e88f7);
+  color: var(--white-label-text-primary, white);
   border: none;
   border-radius: 8px;
   padding: 12px 24px;
@@ -383,20 +383,20 @@
 }
 
 .modern-btn-primary:hover {
-  background-color: #5296f8;
+  background-color: var(--white-label-interactive-button_background_hover, #5296f8);
 }
 
 .modern-btn-primary:disabled {
-  background-color: #17191f;
-  color: #676a73;
+  background-color: var(--white-label-background-secondary, #17191f);
+  color: var(--white-label-text-disabled, #676a73);
   cursor: not-allowed;
   box-shadow: none;
 }
 
 .modern-btn-secondary {
-  background-color: #01255e;
-  color: #3e88f7;
-  border: 1px solid #013280;
+  background-color: var(--white-label-background-input, #01255e);
+  color: var(--white-label-interactive-primary, #3e88f7);
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 8px;
   padding: 12px 24px;
   font-size: 13px;
@@ -407,20 +407,20 @@
 }
 
 .modern-btn-secondary:hover {
-  background-color: #013280;
+  background-color: var(--white-label-background-hover, #013280);
 }
 
 /* Modern Card/Container Styling */
 .modern-card {
-  background-color: #17191f;
-  border: 1px solid #013280;
+  background-color: var(--white-label-background-secondary, #17191f);
+  border: 1px solid var(--white-label-border-primary, #013280);
   border-radius: 12px;
   padding: 20px;
 }
 
 .modern-card-highlighted {
-  background-color: #0F1117;
-  border: 2px solid #013280;
+  background-color: var(--white-label-background-primary, #0F1117);
+  border: 2px solid var(--white-label-border-primary, #013280);
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 0 14px 0 rgba(255, 255, 255, 0.1);
@@ -428,7 +428,7 @@
 
 /* Modern Section Heading */
 .modern-section-heading {
-  color: white;
+  color: var(--white-label-text-primary, white);
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 16px;
@@ -436,7 +436,7 @@
 }
 
 .modern-subsection-heading {
-  color: #a6a9b2;
+  color: var(--white-label-text-tertiary, #a6a9b2);
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 12px;
@@ -445,7 +445,7 @@
 
 /* Modern Text Link */
 .modern-text-link {
-  color: #3e88f7;
+  color: var(--white-label-interactive-primary, #3e88f7);
   font-size: 14px;
   text-decoration: none;
   cursor: pointer;
@@ -469,15 +469,15 @@
 }
 
 .modern-checkbox-container:hover {
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 .modern-checkbox {
   width: 20px;
   height: 20px;
   border-radius: 4px;
-  border: 1px solid #013280;
-  background-color: #17191f;
+  border: 1px solid var(--white-label-border-primary, #013280);
+  background-color: var(--white-label-background-secondary, #17191f);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -487,13 +487,13 @@
 }
 
 .modern-checkbox.checked {
-  background-color: #3e88f7;
-  border-color: #3e88f7;
+  background-color: var(--white-label-interactive-primary, #3e88f7);
+  border-color: var(--white-label-interactive-primary, #3e88f7);
   box-shadow: 0 0 5px rgba(62, 136, 247, 0.25);
 }
 
 .modern-checkbox-label {
-  color: #676a73;
+  color: var(--white-label-text-quaternary, #676a73);
   font-size: 14px;
   font-family: "DM Sans", sans-serif;
   cursor: pointer;
@@ -501,7 +501,7 @@
 }
 
 .modern-checkbox.checked + .modern-checkbox-label {
-  color: white;
+  color: var(--white-label-text-primary, white);
 }
 
 /* Spacer utilities */

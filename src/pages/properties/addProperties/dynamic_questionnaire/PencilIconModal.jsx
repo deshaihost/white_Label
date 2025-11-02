@@ -168,15 +168,15 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
         style={{ fontFamily: '"DM Sans", sans-serif' }}
       >
         <div style={{
-          background: '#0F1117',
-          border: '1px solid #013280',
+          background: 'var(--white-label-background-primary, #0F1117)',
+          border: '1px solid var(--white-label-border-primary, #013280)',
           borderRadius: '8px',
           overflow: 'hidden'
         }}>
           <Modal.Header 
             style={{
-              background: '#17191f',
-              borderBottom: '1px solid #013280',
+              background: 'var(--white-label-background-secondary, #17191f)',
+              borderBottom: '1px solid var(--white-label-border-primary, #013280)',
               padding: '20px 24px'
             }}
           >
@@ -184,7 +184,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
               <Modal.Title style={{ 
                 fontSize: '18px',
                 fontWeight: '500',
-                color: '#fff',
+                color: 'var(--white-label-text-primary, #fff)',
                 margin: 0,
                 marginBottom: '4px'
               }}>
@@ -192,7 +192,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
               </Modal.Title>
               <p style={{
                 fontSize: '12px',
-                color: '#a6a9b2',
+                color: 'var(--white-label-text-tertiary, #a6a9b2)',
                 margin: 0
               }}>
                 Configure visibility and management options
@@ -203,7 +203,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#676a73',
+                color: 'var(--white-label-text-quaternary, #676a73)',
                 fontSize: '24px',
                 cursor: 'pointer',
                 padding: 0,
@@ -214,7 +214,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
             </button>
           </Modal.Header>
           
-          <Modal.Body style={{ padding: '24px', background: '#0F1117' }}>
+          <Modal.Body style={{ padding: '24px', background: 'var(--white-label-background-primary, #0F1117)' }}>
             <div>
               {/* Question Label */}
               <label className="modern-label" style={{ 
@@ -243,7 +243,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
               {/* Divider */}
               <div style={{ 
                 height: '1px', 
-                background: '#013280', 
+                background: 'var(--white-label-border-primary, #013280)', 
                 margin: '24px 0' 
               }} />
 
@@ -258,7 +258,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                   <div style={{
                     fontSize: '14px',
                     fontWeight: '600',
-                    color: '#fff',
+                    color: 'var(--white-label-text-primary, #fff)',
                     margin: '0',
                     padding: '0',
                     lineHeight: '1.2'
@@ -267,8 +267,8 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                   </div>
                   {arePhasesModified && (
                     <span style={{
-                      background: '#FB923C',
-                      color: '#fff',
+                      background: 'var(--white-label-status-warning, #FB923C)',
+                      color: 'var(--white-label-text-primary, #fff)',
                       fontSize: '10px',
                       fontWeight: '700',
                       padding: '4px 8px',
@@ -290,7 +290,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                   marginBottom: '16px',
                   fontSize: '12px',
                   lineHeight: '1.5',
-                  color: '#a6a9b2',
+                  color: 'var(--white-label-text-tertiary, #a6a9b2)',
                   fontWeight: '400'
                 }}>
                   Select which reservation stages should have access to this information. Deselected stages will not see this information.
@@ -324,9 +324,9 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                           width: '100%',
                           padding: '12px 16px',
                           textAlign: 'center',
-                          background: isSelected ? '#3e88f7' : '#0F1117',
-                          color: isSelected ? '#fff' : '#676a73',
-                          border: `2px solid ${isSelected ? '#3e88f7' : '#013280'}`,
+                          background: isSelected ? 'var(--white-label-interactive-primary, #3e88f7)' : 'var(--white-label-background-primary, #0F1117)',
+                          color: isSelected ? 'var(--white-label-text-primary, #fff)' : 'var(--white-label-text-quaternary, #676a73)',
+                          border: `2px solid ${isSelected ? 'var(--white-label-interactive-primary, #3e88f7)' : 'var(--white-label-border-primary, #013280)'}`,
                           borderRadius: '8px',
                           cursor: 'pointer',
                           fontSize: '13px',
@@ -347,7 +347,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
               {/* Divider */}
               <div style={{ 
                 height: '1px', 
-                background: '#013280', 
+                background: 'var(--white-label-border-primary, #013280)', 
                 margin: '24px 0' 
               }} />
 
@@ -356,7 +356,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                 <h3 style={{
                   fontSize: '14px',
                   fontWeight: '600',
-                  color: '#fff',
+                  color: 'var(--white-label-text-primary, #fff)',
                   margin: '0 0 12px 0'
                 }}>
                   Management Options
@@ -368,9 +368,9 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                     onClick={() => setShowCopyToProperties(!showCopyToProperties)}
                     style={{
                       width: '100%',
-                      background: '#0F1117',
-                      border: `1px solid ${showCopyToProperties ? '#3e88f7' : '#013280'}`,
-                      color: '#3e88f7',
+                      background: 'var(--white-label-background-primary, #0F1117)',
+                      border: `1px solid ${showCopyToProperties ? 'var(--white-label-interactive-primary, #3e88f7)' : 'var(--white-label-border-primary, #013280)'}`,
+                      color: 'var(--white-label-interactive-primary, #3e88f7)',
                       padding: '12px 16px',
                       borderRadius: '8px',
                       fontSize: '13px',
@@ -397,8 +397,8 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                     <div style={{
                       marginTop: '12px',
                       padding: '16px',
-                      background: '#17191f',
-                      border: '1px solid #013280',
+                      background: 'var(--white-label-background-secondary, #17191f)',
+                      border: '1px solid var(--white-label-border-primary, #013280)',
                       borderRadius: '8px'
                     }}>
                       <label className="modern-label" style={{ marginBottom: '8px', display: 'block' }}>
@@ -414,36 +414,36 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                         styles={{
                           control: (base) => ({
                             ...base,
-                            background: '#01255e',
-                            borderColor: '#013280',
-                            color: '#fff',
+                            background: 'var(--white-label-background-input, #01255e)',
+                            borderColor: 'var(--white-label-border-primary, #013280)',
+                            color: 'var(--white-label-text-primary, #fff)',
                             minHeight: '42px'
                           }),
                           menu: (base) => ({
                             ...base,
-                            background: '#01255e',
-                            border: '1px solid #013280'
+                            background: 'var(--white-label-background-input, #01255e)',
+                            border: '1px solid var(--white-label-border-primary, #013280)'
                           }),
                           option: (base, state) => ({
                             ...base,
-                            background: state.isFocused ? '#013280' : '#01255e',
-                            color: '#fff',
+                            background: state.isFocused ? 'var(--white-label-border-primary, #013280)' : 'var(--white-label-background-input, #01255e)',
+                            color: 'var(--white-label-text-primary, #fff)',
                             cursor: 'pointer'
                           }),
                           multiValue: (base) => ({
                             ...base,
-                            background: '#013280'
+                            background: 'var(--white-label-border-primary, #013280)'
                           }),
                           multiValueLabel: (base) => ({
                             ...base,
-                            color: '#fff'
+                            color: 'var(--white-label-text-primary, #fff)'
                           }),
                           multiValueRemove: (base) => ({
                             ...base,
-                            color: '#a6a9b2',
+                            color: 'var(--white-label-text-tertiary, #a6a9b2)',
                             ':hover': {
-                              background: '#3e88f7',
-                              color: '#fff'
+                              background: 'var(--white-label-interactive-primary, #3e88f7)',
+                              color: 'var(--white-label-text-primary, #fff)'
                             }
                           })
                         }}
@@ -454,7 +454,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                           marginTop: '8px',
                           background: 'transparent',
                           border: 'none',
-                          color: '#3e88f7',
+                          color: 'var(--white-label-interactive-primary, #3e88f7)',
                           fontSize: '13px',
                           cursor: 'pointer',
                           padding: '4px 0',
@@ -465,7 +465,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                       </button>
                       <p style={{
                         fontSize: '12px',
-                        color: '#a6a9b2',
+                        color: 'var(--white-label-text-tertiary, #a6a9b2)',
                         margin: '12px 0',
                         textAlign: 'center'
                       }}>
@@ -495,9 +495,9 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                       onClick={() => handleDeleteQuestion(true)}
                       style={{
                         width: '100%',
-                        background: '#0F1117',
-                        border: '1px solid #013280',
-                        color: '#ef4444',
+                        background: 'var(--white-label-background-primary, #0F1117)',
+                        border: '1px solid var(--white-label-border-primary, #013280)',
+                        color: 'var(--white-label-status-error, #ef4444)',
                         padding: '12px 16px',
                         borderRadius: '8px',
                         fontSize: '13px',
@@ -511,11 +511,11 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                       }}
                       onMouseEnter={(e) => {
                         e.target.style.background = '#4a1616';
-                        e.target.style.borderColor = '#ef4444';
+                        e.target.style.borderColor = 'var(--white-label-status-error, #ef4444)';
                       }}
                       onMouseLeave={(e) => {
-                        e.target.style.background = '#0F1117';
-                        e.target.style.borderColor = '#013280';
+                        e.target.style.background = 'var(--white-label-background-primary, #0F1117)';
+                        e.target.style.borderColor = 'var(--white-label-border-primary, #013280)';
                       }}
                     >
                       <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -528,9 +528,9 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                       onClick={() => setShowDeleteFromPropertiesModal(true)}
                       style={{
                         width: '100%',
-                        background: '#0F1117',
-                        border: '1px solid #013280',
-                        color: '#ef4444',
+                        background: 'var(--white-label-background-primary, #0F1117)',
+                        border: '1px solid var(--white-label-border-primary, #013280)',
+                        color: 'var(--white-label-status-error, #ef4444)',
                         padding: '12px 16px',
                         borderRadius: '8px',
                         fontSize: '13px',
@@ -544,11 +544,11 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
                       }}
                       onMouseEnter={(e) => {
                         e.target.style.background = '#4a1616';
-                        e.target.style.borderColor = '#ef4444';
+                        e.target.style.borderColor = 'var(--white-label-status-error, #ef4444)';
                       }}
                       onMouseLeave={(e) => {
-                        e.target.style.background = '#0F1117';
-                        e.target.style.borderColor = '#013280';
+                        e.target.style.background = 'var(--white-label-background-primary, #0F1117)';
+                        e.target.style.borderColor = 'var(--white-label-border-primary, #013280)';
                       }}
                     >
                       <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -563,7 +563,7 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
               {/* Divider */}
               <div style={{ 
                 height: '1px', 
-                background: '#013280', 
+                background: 'var(--white-label-border-primary, #013280)', 
                 margin: '24px 0 16px 0' 
               }} />
 
