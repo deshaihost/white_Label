@@ -8,7 +8,7 @@
   background-color: rgba(255, 165, 0, 0.1);
   border-radius: 5px;
   font-size: 14px;
-  color: #f0f0f0;
+  color: var(--white-label-text-primary, #f0f0f0);
 }
 
 .passed-message-banner a {
@@ -47,7 +47,7 @@
     font-size: 14px;
     margin-right: 8px;
     padding-right: 10px;
-    color: #a6a9b2;
+    color: var(--white-label-text-secondary, #a6a9b2);
     font-weight: 600;
     left: 0;
     letter-spacing: 0;
@@ -98,7 +98,7 @@
     font-weight: 400 !important;
     font-style: normal !important;
     font-size: 16px !important;
-    color: #FFFFFF !important;
+    color: var(--white-label-text-primary, #FFFFFF) !important;
     border: 1px solid rgba(189, 193, 201, 0.15) !important;
     padding: 10px !important;
     border-radius: 14px !important;
@@ -185,7 +185,7 @@
 }
 
 .main-chat .generate-button.greyed-out i {
-    color: #555;
+    color: var(--white-label-text-placeholder, #555);
 }
 
 .main-chat .generate-container {
@@ -216,14 +216,14 @@
     padding: 10px 5px;
     cursor: pointer;
     text-align: left;
-    color: #D0D3DB !important;
+    color: var(--white-label-text-secondary, #D0D3DB) !important;
     border-radius: 10px;
     font-size: 14px;
 }
 
 .main-chat .generate-menu-item.greyed-out {
     cursor: default;
-    color: #555;
+    color: var(--white-label-text-placeholder, #555);
 }
   
 .main-chat .generate-menu-item:not(.greyed-out):hover {
@@ -254,7 +254,7 @@
     padding: 10px 5px;
     cursor: pointer;
     text-align: left;
-    color: #D0D3DB !important;
+    color: var(--white-label-text-secondary, #D0D3DB) !important;
     border-radius: 10px;
     font-size: 14px;
 }
@@ -299,14 +299,14 @@
 
 .chat-send-button:disabled {
     background-color: rgba(15, 17, 23, 0.42);
-    color: #4A4D54;
+    color: var(--white-label-text-disabled, #4A4D54);
     cursor: not-allowed;
 }
 
 .date-separator {
   display: flex;
   align-items: center;
-  color: #a6a9b2;
+  color: var(--white-label-text-secondary, #a6a9b2);
     font-family: "DM Sans-SemiBold", Helvetica;
     font-size: 12px;
     font-weight: 600;

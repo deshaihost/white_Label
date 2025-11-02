@@ -30,7 +30,7 @@
 }
 
 .dropdown-trigger__text {
-  color: var(--colors-color-text-default, #D0D3DB);
+  color: var(--white-label-text-secondary, #D0D3DB);
   font-size: var(--body-medium-reg-400-font-size, 14px);
   font-weight: var(--body-medium-reg-400-font-weight, 400);
   flex: 1;
@@ -70,7 +70,7 @@
 
 .dropdown-option {
   padding: 10px 12px;
-  color: var(--colors-color-text-default, #D0D3DB);
+  color: var(--white-label-text-secondary, #D0D3DB);
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -86,13 +86,13 @@
 .dropdown-option:hover,
 .dropdown-option--hovered {
   background-color: var(--white-label-background-hover, #013280);
-  color: #D0D3DB;
+  color: var(--white-label-text-secondary, #D0D3DB);
 }
 
 .dropdown-option:active,
 .dropdown-option--pressed {
   background-color: var(--white-label-background-hover, #001330);
-  color: #D0D3DB;
+  color: var(--white-label-text-secondary, #D0D3DB);
 }
 
 .dropdown-option:hover .dropdown-option__selection-indicator,
@@ -119,7 +119,7 @@
 
 .dropdown-option--selected {
   background-color: var(--white-label-background-dropdown, #01255E);
-   color: #D0D3DB;
+   color: var(--white-label-text-secondary, #D0D3DB);
   font-weight: var(--body-medium-semibold-600-font-weight, 600);
 }
 
@@ -130,7 +130,7 @@
 .dropdown-option--selected:hover,
 .dropdown-option--selected.dropdown-option--hovered {
   background-color: var(--white-label-background-hover, #4F94F8);
-    color: #D0D3DB;
+    color: var(--white-label-text-secondary, #D0D3DB);
 }
 
 /* Animation for menu appearance */

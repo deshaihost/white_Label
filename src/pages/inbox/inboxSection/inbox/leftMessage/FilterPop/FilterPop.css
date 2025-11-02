@@ -10,7 +10,7 @@
 }
 
 .filter-pop-heading {
-  color: #D0D3DB;
+  color: var(--white-label-text-secondary, #D0D3DB);
   font-size: 24px;
   margin: 0;
 }
@@ -30,7 +30,7 @@
 
 .filter-pop-label {
   display: block;
-  color: #A6A9B2;
+  color: var(--white-label-text-secondary, #A6A9B2);
   font-size: 16px;
   margin-bottom: 8px;
   font-weight: 500;
@@ -65,7 +65,7 @@
 .filter-pop-button--reset {
   background-color: #BDC1C914;
   font-size: 14px;
-  color: #D0D3DB;
+  color: var(--white-label-text-secondary, #D0D3DB);
   font-weight: 600;
   font-style: "DM Sans", sans-serif;
   /* border: 1px solid #3A3A3A; */
@@ -78,7 +78,7 @@
 
 .filter-pop-button--cancel {
   background-color: transparent;
-  color: #FFFFFF;
+  color: var(--white-label-text-primary, #FFFFFF);
   /* border: 1px solid #3A3A3A; */
   flex: 1;
 }

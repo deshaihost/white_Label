@@ -77,7 +77,7 @@
   font-weight: 600;
   font-size: 14px;
   line-height: 1.4;
-  color: #D0D3DB;
+  color: var(--white-label-text-secondary, #D0D3DB);
   margin: 0;
   text-align: center;
 }

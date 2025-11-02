@@ -46,7 +46,7 @@
 
 .user-tag {
   display: inline-flex;
-   color:#D0D3DB;
+   color: var(--white-label-text-secondary, #D0D3DB);
   align-items: center;
   background-color: var(--white-label-background-input, rgba(36, 38, 46, 1));
   /* border-radius: 4px; */
@@ -59,7 +59,7 @@
 
 .user-tag-text {
   font-size: 14px;
-  color:#D0D3DB;
+  color: var(--white-label-text-secondary, #D0D3DB);
   margin-right: 6px;
   white-space: nowrap;
   overflow: hidden;
@@ -71,17 +71,17 @@
 .user-tag-close {
   cursor: pointer;
   font-size: 14px;
-  color: #8b8d94;
+  color: var(--white-label-text-placeholder, #8b8d94);
   font-weight: bold;
   transition: color 0.2s ease;
 }
 
 .user-tag-close:hover {
-  color: #ffffff;
+  color: var(--white-label-text-primary, #ffffff);
 }
 
 .user-dropdown-placeholder {
-  color: #BBB;
+  color: var(--white-label-text-disabled, #BBB);
   flex-grow: 1;
   font-size: 14px;
 }
@@ -114,7 +114,7 @@
   transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
-  color:#D0D3DB;
+  color: var(--white-label-text-secondary, #D0D3DB);
   justify-content: space-between;
   position: relative;
 }

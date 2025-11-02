@@ -1445,7 +1445,7 @@ const WhatsAppSection = ({
                 </svg>
                   <p
                     style={{
-                      color: "rgba(208, 211, 219, 1)",
+                      color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "rgba(208, 211, 219, 1)",
                       fontSize: "14px",
                       fontWeight: "600",
                       marginBottom: "10px",

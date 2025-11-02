@@ -1,6 +1,6 @@
 .channel_name{
   display:inline-block;
-  color: #BDC1C9;
+  color: var(--white-label-text-secondary, #BDC1C9);
   font-family: "DM Sans", Helvetica;
   font-size: 14px;
   font-style: normal;
@@ -143,7 +143,7 @@
     font-size: 14px;
     margin-bottom: 0px;
     display: inline-block;
-    color:#D0D3DB;
+    color: var(--white-label-text-secondary, #D0D3DB);
 }
 
 .guest h2 {
@@ -151,13 +151,13 @@
     padding: 0px;
     margin: 3px 0;
     border: 0px;
-    color: #D0D3DB;
+    color: var(--white-label-text-secondary, #D0D3DB);
 }
 .guest_date,
 .guest p {
     font-size: 14px;
     line-height: 1.4;
-    color: #D0D3DB;
+    color: var(--white-label-text-secondary, #D0D3DB);
 }
 .right-side .row {
     width: 100%;
@@ -198,7 +198,7 @@
   background-color: var(--white-label-background-dropdown, #262730) !important;
   border: 1px solid var(--white-label-border-primary, rgb(57, 61, 70)) !important;
   border-radius: 4px !important;
-  color: #D0D3DB !important;
+  color: var(--white-label-text-secondary, #D0D3DB) !important;
   font-family: "DM Sans", Helvetica !important;
   font-size: 16px !important;
   appearance: none !important;
@@ -218,7 +218,7 @@
   /* No style changes on hover */
   background-color: var(--white-label-background-dropdown, #262730) !important;
   border: 1px solid var(--white-label-border-primary, rgb(57, 61, 70)) !important;
-  color: #D0D3DB !important;
+  color: var(--white-label-text-secondary, #D0D3DB) !important;
   outline: none !important;
 }
 
@@ -228,13 +228,13 @@
   outline: none !important;
   background-color: var(--white-label-background-dropdown, #262730) !important;
   border: 1px solid var(--white-label-border-primary, rgb(57, 61, 70)) !important;
-  color: #D0D3DB !important;
+  color: var(--white-label-text-secondary, #D0D3DB) !important;
   box-shadow: none !important;
 }
 
 /* Ensure option colors match with the select */
 .assign-user-dropdown option {
-  color: #D0D3DB !important;
+  color: var(--white-label-text-secondary, #D0D3DB) !important;
   background-color: var(--white-label-background-dropdown, #2B2E36) !important;
   padding: 8px 16px !important;
 }
@@ -274,6 +274,12 @@
     font-weight: 600;
     margin-bottom: 3px;
     font-family:"Poppins", Helvetica !important;
+}
+
+.view-all-link {
+    color: var(--white-label-text-secondary, #146ef5);
+    font-size: 14px;
+    cursor: pointer;
 }
 
 @media (min-width: 1280px) {

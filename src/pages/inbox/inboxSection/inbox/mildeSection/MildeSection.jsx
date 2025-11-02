@@ -1389,7 +1389,7 @@ const MildeSection = ({
                       <span
                         style={{
                           marginRight: "1px",
-                          color: "rgba(208, 211, 219, 1)",
+                          color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "rgba(208, 211, 219, 1)",
                           fontWeight: "500",
                           fontSize: "14px"
                         }}
