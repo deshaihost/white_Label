@@ -1384,7 +1384,7 @@ const getConversationTimestamp = (conversation) => {
             onClick={openFilterModal}
             style={{
               whiteSpace: "nowrap",
-              backgroundColor: "#0B5ED7",
+              backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#0B5ED7",
               color: "white",
               border: "none",
               borderRadius: "4px",

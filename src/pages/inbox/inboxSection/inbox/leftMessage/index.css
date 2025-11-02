@@ -282,7 +282,7 @@
 /* Override styles for filters-button with high specificity */
 .messsage-search button.filters-button,
 .filters-button {
-  background-color: #146ef5 !important; /* Blue background color */
+  background-color: var(--white-label-interactive-button_background, #146ef5) !important;
   color: var(--white-label-text-primary, #ffffff);
   border: none;
   border-radius: 4px;
@@ -302,7 +302,7 @@
 
 .messsage-search button.filters-button:hover,
 .filters-button:hover {
-  background-color: #0e5dd7 !important;
+  background-color: var(--white-label-interactive-button_background, #0e5dd7) !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
