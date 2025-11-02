@@ -44,6 +44,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
       ["/properties", 3],
       ["/action-item", 4],
       ["/inbox", 5],
+      ["/webhook-logs", 7], // Webhook Logs (treat as part of settings/integrations)
       ["/setting", 7],
       ["/gcs-settings", 7], // GCS settings (general, checked after white-label)
     ];
@@ -107,7 +108,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
 
       // Auto-expand Settings dropdown when in settings section
       // Only run this if we're NOT in white label section
-      if ((currentPath === "/setting" || currentPath === "/gcs-settings") && !location.pathname.startsWith("/gcs-settings/white-label")) {
+      if ((currentPath === "/setting" || currentPath === "/gcs-settings" || currentPath === "/webhook-logs") && !location.pathname.startsWith("/gcs-settings/white-label")) {
         console.log('⚙️ SETTINGS CHECK: Running settings logic');
         setExpandedId(7); // 7 is the ID for Settings        // Map settings section from URL to tab ID based on portal type
         const settingsPathToId = isInGcsPortal
@@ -136,6 +137,9 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         // Set the active settings tab based on URL path
         if (settingsSection && settingsPathToId[settingsSection]) {
           setSettingsActiveTab(settingsPathToId[settingsSection]);
+        } else if (location.pathname === "/webhook-logs") {
+          // Webhook logs page - highlight Integrations tab
+          setSettingsActiveTab(isInGcsPortal ? 75 : 76);
         } else {
           // Default to Account tab if no specific section
           setSettingsActiveTab(71);

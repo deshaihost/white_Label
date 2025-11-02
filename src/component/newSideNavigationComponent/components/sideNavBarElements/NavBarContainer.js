@@ -194,6 +194,7 @@ function NavBarContainer() {
     "/guided-setup",
     "/inbox",
     "/action-item",
+    "/webhook-logs",
     "/getstarted",
     "/journey",
     "/gcs-users",

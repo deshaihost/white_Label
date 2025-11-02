@@ -58,6 +58,7 @@ import SettingIndex from "../pages/settings/SettingIndex";
 import InboxIndex from "../pages/inbox/InboxIndex";
 import GetConversationsTest from "../helper/getConversationsTest/getConversationsTest";
 import ActionItemsIndex from "../pages/actionItems/ActionItemsIndex";
+import WebhookLogs from "../pages/webhookLogs/WebhookLogs";
 //import TestShowConvIndex from "../pages/testShowConversations/TestShowConvIndex";
 import AiMessaging from "../pages/aiMessaging/AiMessaging";
 import SmartTemplatesLanding from "../pages/smartTemplatesLanding/smartTemplatesLanding";
@@ -484,6 +485,14 @@ const Routing = () => {
               <FeatureProtectedRoute featureId="action-items">
                 <ActionItemsIndex />
               </FeatureProtectedRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/webhook-logs"
+          element={
+            <ProtectedRoute>
+              <WebhookLogs />
             </ProtectedRoute>
           }
         />

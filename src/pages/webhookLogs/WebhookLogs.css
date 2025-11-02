@@ -1,0 +1,202 @@
+.webhook-logs-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.webhook-logs-header {
+  margin-bottom: 32px;
+}
+
+.webhook-logs-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.webhook-logs-subtitle {
+  font-size: 16px;
+  margin: 0;
+}
+
+.webhook-logs-empty {
+  text-align: center;
+  padding: 48px;
+  font-size: 16px;
+}
+
+.webhook-logs-table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  background: var(--white-label-background-secondary, #0f1117);
+  border: 1px solid var(--white-label-border-primary, #2d3548);
+}
+
+.webhook-logs-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.webhook-logs-table thead {
+  background: var(--white-label-background-tertiary, #1a1f36);
+  border-bottom: 1px solid var(--white-label-border-primary, #2d3548);
+}
+
+.webhook-logs-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.webhook-logs-table td {
+  padding: 16px 20px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--white-label-border-secondary, #1f2937);
+}
+
+.webhook-log-row {
+  transition: background-color 0.2s ease;
+}
+
+.webhook-log-row:hover {
+  background: var(--white-label-background-hover, rgba(255, 255, 255, 0.05));
+}
+
+.webhook-status-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.webhook-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Modal styles */
+.webhook-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.webhook-modal-content {
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.webhook-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--white-label-border-primary, #2d3548);
+}
+
+.webhook-modal-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.webhook-modal-close {
+  background: none;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: opacity 0.2s ease;
+}
+
+.webhook-modal-close:hover {
+  opacity: 0.7;
+}
+
+.webhook-modal-body {
+  padding: 24px 28px;
+}
+
+.webhook-detail-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--white-label-border-secondary, #1f2937);
+}
+
+.webhook-detail-row:last-child {
+  border-bottom: none;
+}
+
+.webhook-detail-label {
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: capitalize;
+  word-break: break-word;
+}
+
+.webhook-detail-value {
+  font-size: 14px;
+  word-break: break-all;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+.webhook-json-display {
+  background: var(--white-label-background-input, #0f1117);
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0;
+  font-size: 12px;
+  border: 1px solid var(--white-label-border-secondary, #1f2937);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .webhook-logs-container {
+    padding: 24px 16px;
+  }
+
+  .webhook-logs-title {
+    font-size: 24px;
+  }
+
+  .webhook-logs-subtitle {
+    font-size: 14px;
+  }
+
+  .webhook-logs-table th,
+  .webhook-logs-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .webhook-detail-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .webhook-modal-header h2 {
+    font-size: 20px;
+  }
+}
