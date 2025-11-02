@@ -16,6 +16,8 @@ import ChevDownIcon from "./icons/chevDown_icon.svg";
 import CheckBoxIcon from "../mildeSection/message/icons/check_box.svg";
 import CheckIconOpenIssue from "./icons/Check_icon_for_open_issue.svg";
 import { getActiveToken } from "../../../../../helper/apiCore";
+import { useWhiteLabelCss } from "../../../../../helper/WhiteLabelCssContext";
+import { useWhiteLabelLogos } from "../../../../../helper/WhiteLabelLogoContext";
 
 // Channel Icons
 import AIRBNB_ICON_FOR_RIGHT from "./icons/AIRBNB_ICON_FOR_RIGHT.svg";
@@ -135,6 +137,67 @@ const RightSection = ({
   const rightSideRef = useRef(null);
   const statusByConversationRef = useRef({});
   const navigate = useNavigate();
+
+  // White label branding context
+  const { cssConfig, loading: cssLoading, isHostBuddyDomain } = useWhiteLabelCss();
+  const { logo: logoUrl, loading: logoLoading } = useWhiteLabelLogos();
+
+  // More robust state management to prevent flashing
+  const [brandingReady, setBrandingReady] = useState(false);
+  const [stableData, setStableData] = useState({
+    name: null,
+    logo: null,
+    isReady: false
+  });
+  
+  // Effect to determine when branding is truly ready with debouncing
+  useEffect(() => {
+    let timeoutId;
+    
+    if (isHostBuddyDomain) {
+      // For HostBuddy domains, show immediately
+      setStableData({
+        name: "HostBuddy",
+        logo: HostBuddyIcon,
+        isReady: true
+      });
+      setBrandingReady(true);
+    } else {
+      // For white label domains, debounce to prevent rapid changes
+      if (cssConfig?.Branding_name && !cssLoading && !logoLoading) {
+        timeoutId = setTimeout(() => {
+          setStableData({
+            name: cssConfig.Branding_name,
+            logo: logoUrl || HostBuddyIcon,
+            isReady: true
+          });
+          setBrandingReady(true);
+        }, 150); // Debounce delay
+      }
+    }
+    
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [cssConfig?.Branding_name, cssLoading, logoLoading, logoUrl, isHostBuddyDomain]);
+  
+  // Use stable data instead of reactive data
+  const brandingName = stableData.name || "HostBuddy";
+  const brandLogo = stableData.logo || HostBuddyIcon;
+
+  // Debug logging for logo
+  console.log('[RightSection] Branding debug:', {
+    logoFromContext: logoUrl,
+    fallbackLogo: HostBuddyIcon,
+    finalLogo: brandLogo,
+    brandingName: brandingName,
+    isHostBuddyDomain: isHostBuddyDomain,
+    cssLoading: cssLoading,
+    logoLoading: logoLoading,
+    brandingReady: brandingReady,
+    hasCssConfig: !!cssConfig,
+    hasBrandingName: !!cssConfig?.Branding_name
+  });
 
   // Cache to store user assignments per conversation
   const assignmentsByConversation = useRef({});
@@ -1774,22 +1837,38 @@ const callUpdateGuestDataApi = async () => {
                     marginBottom: "10px",
                   }}
                 >
-                  {" "}
-                  <img
-                    src={HostBuddyIcon}
-                    alt="HostBuddy"
-                    style={{ width: "25px", height: "25px" }}
-                  />
-                  <span
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      fontFamily: "Poppins Helvetica",
-                    }}
-                  >
-                    HostBuddy{" "}
-                  </span>
-                  <span>is</span>
+                  {stableData.isReady ? (
+                    <>
+                      <img
+                        src={brandLogo}
+                        alt={brandingName}
+                        style={{ width: "25px", height: "25px" }}
+                        onError={(e) => {
+                          e.target.src = HostBuddyIcon;
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          fontFamily: "Poppins Helvetica",
+                        }}
+                      >
+                        {brandingName}{" "}
+                      </span>
+                      <span>is</span>
+                    </>
+                  ) : (
+                    // Show nothing during loading to prevent flash
+                    <div style={{ 
+                      height: "25px", 
+                      display: "flex", 
+                      alignItems: "center",
+                      opacity: 0.4 
+                    }}>
+                      <span style={{ fontSize: "12px" }}>•••</span>
+                    </div>
+                  )}
                   {!toggleStatusLoading ? (
                     <div
                       ref={hostbuddyDropdownRef}
@@ -2443,7 +2522,7 @@ const callUpdateGuestDataApi = async () => {
         ) : (
           <div className="toggle">
             <p style={{ fontSize: "12px" }}>
-              HostBuddy is{" "}
+              {showBranding ? brandingName : "..."} is{" "}
               <span style={{ color: "rgb(200,0,0)" }}>NOT RESPONDING</span> to
               this guest.
             </p>
