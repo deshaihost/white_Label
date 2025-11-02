@@ -10,16 +10,19 @@ const ShortAnswerComponent = ({ question_object, sec_name, subsec_name, q_ind, h
   const field_id = `${sec_name}_${subsec_name}_${q_ind}`;
 
   return (
-    <div className="col-6 mt-3" key={field_id}>
-      <label className="text-white">
+    <div style={{ marginBottom: '0' }}>
+      <label className="modern-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         {question_text}
         <PencilIcon sec_name={sec_name} subsec_name={subsec_name} q_ind={q_ind} handlePencilIconClick={handlePencilIconClick} someResStageIsSelected={someResStageIsSelected}/>
       </label>
-      <div className="">
-        <input className="bg-dark form-control" type="text" id={field_id}
-          onChange={(e) => handleInputComponentChange(e, sec_name, subsec_name, q_ind, "short_answer")}
-          placeholder={placeholder_text} value={response_text} />
-      </div>
+      <input 
+        className="modern-input" 
+        type="text" 
+        id={field_id}
+        onChange={(e) => handleInputComponentChange(e, sec_name, subsec_name, q_ind, "short_answer")}
+        placeholder={placeholder_text} 
+        value={response_text} 
+      />
     </div>
   )
 }

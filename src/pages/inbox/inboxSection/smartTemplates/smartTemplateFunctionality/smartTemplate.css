@@ -1,11 +1,61 @@
 .addition_des .multiselect-container .search-wrapper{
     padding: 11px 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--white-label-border-primary, rgba(255, 255, 255, 0.2));
     background: #0a1a44 ;
 }
 .addition_des .multiselect-container .optionListContainer {
     background: #020d29
 }
+
+/* Input Color Functionality for Send If Modal */
+.addition_des input[type="number"],
+.addition_des input[type="text"],
+.addition_des input[type="email"],
+.addition_des input[type="password"],
+.addition_des input[type="search"],
+.addition_des input[type="tel"],
+.addition_des input[type="url"],
+.addition_des input[type="date"],
+.addition_des input[type="datetime-local"],
+.addition_des input[type="time"],
+.addition_des select,
+.addition_des .form-control,
+.addition_des .form-select {
+    background-color: var(--white-label-background-input, #0F1117) !important;
+    border-radius: 8px !important;
+}
+
+/* Ensure Bootstrap overrides are handled */
+.addition_des .bg-dark {
+    background-color: var(--white-label-background-input, #0F1117) !important;
+    border-radius: 8px !important;
+}
+
+/* Send If Modal Secondary Background Color */
+.send-if-modal-body {
+    background-color: var(--white-label-background-secondary, inherit) !important;
+}
+
+/* Send If Modal Content Background Color - Targets the React Bootstrap modal-content */
+.send-if-modal .modal-content {
+    background-color: var(--white-label-background-secondary, inherit) !important;
+}
+
+/* Send If Modal Header Background Color */
+.send-if-modal .modal-header {
+    background-color: var(--white-label-background-secondary, inherit) !important;
+    border-bottom: 1px solid var(--white-label-border-primary, rgba(255, 255, 255, 0.2));
+}
+
+/* Alternative targeting for broader browser support */
+.modal-content .send-if-modal-body {
+    background-color: var(--white-label-background-secondary, inherit) !important;
+}
+
+.modal-content:has(.send-if-modal-body) {
+    background-color: var(--white-label-background-secondary, inherit) !important;
+}
+
 .modal_addition_des_button{
     max-width: 100%;
     padding: 13px 0px;
@@ -34,10 +84,44 @@
 }
 .addition_des .trigger-label {
     font-size: 16px;
-    color: #fff;
+    color: var(--white-label-text-primary, #fff);
     margin-bottom: 10px;
     text-align: center;
 }
+
+/* Smart Template Header Styling - Matching Landing Page */
+.smart_templates_tab_grid h3 {
+    color: var(--white-label-text-primary, white);
+    font-size: 40px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-variation-settings: 'opsz' 14;
+    margin-bottom: 24px;
+}
+
+.smart_templates_tab_grid > div > p {
+    color: var(--white-label-text-secondary, #a6a9b2);
+    font-size: 17px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    font-variation-settings: 'opsz' 14;
+    line-height: 1.6;
+}
+
+.smart_templates_tab_grid a {
+    color: var(--white-label-text-secondary, #3e88f7);
+    font-size: 16px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 600;
+    font-variation-settings: 'opsz' 14;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.smart_templates_tab_grid a:hover {
+    opacity: 0.8;
+}
+
 .smartTemplateAddEdit .nameAndEnableSection {
     display: flex;
     align-items: start;
@@ -52,6 +136,9 @@
 .smartTemplateAddEdit .ai-context-appropriate-section {
     margin-top: 20px;
     margin-bottom: 20px;
+    padding: 10px 50px;
+    border: 1px solid var(--white-label-border-primary, #013280);
+    border-radius: 8px;
 }
 
 .smartTemplateAddEdit .triggersSection,
@@ -60,7 +147,7 @@
 .smartTemplateAddEdit .propertiesSection,
 .smartTemplateAddEdit .followUp {
     margin: 40px 0 40px 0;
-    border: 1px solid #0d6efd;
+    border: 1px solid var(--white-label-border-primary, #0d6efd);
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 0 8px 0px rgba(255, 255, 255, 0.5); /* parameters: h-shadow v-shadow blur spread color */
@@ -82,6 +169,7 @@
 .template-status {
     margin-left: auto;
     font-size: 14px;
+    color: var(--white-label-text-secondary, inherit);
 }
 
 .template-status.enabled {
@@ -90,6 +178,22 @@
 
 .template-status.not-enabled {
     color: red;
+}
+
+/* Variable pill styling */
+.smart_templates_tab_grid .variable,
+.upsells-settings .variable {
+    border: 1px solid var(--white-label-border-primary, #045ce9);
+    border-radius: 15px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: var(--white-label-text-secondary, white);
+}
+
+.smart_templates_tab_grid .variable:hover,
+.upsells-settings .variable:hover {
+    background-color: var(--white-label-background-hover, rgba(9, 251, 223, 0.1));
 }
 
 @media screen and (min-width:1024px){

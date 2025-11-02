@@ -85,12 +85,40 @@ export const logOut = () => {
     */
 
     // Instead of above, just call the API and continue. Don't wait for it, we don't care about the result
-    axios.post(logoutUrl, {}, { headers });
+    axios.post(logoutUrl, {}, { headers }).catch((error) => {
+      console.warn("Logout API call failed, but continuing with local cleanup:", error.message);
+    });
+    
+    // Always clear storage regardless of API result
     localStorage.clear();
     sessionStorage.removeItem("hostBuddy_auth");
     sessionStorage.removeItem("hostBuddy_active_token"); // Also clear the active token
+    
+    // Clear white label state but preserve domain information for future logins
+    const whiteLabelDomain = localStorage.getItem('whiteLabelDomain');
+    const whiteLabelBrand = localStorage.getItem('whiteLabelBrand');
+    
+    // Mark that user is logged out from white label to prevent redirect loops
+    if (whiteLabelDomain || whiteLabelBrand) {
+      sessionStorage.setItem('whiteLabelLoggedOut', 'true');
+    }
   } catch (error) {
-    console.error(error);
+    console.error("Logout process error:", error);
+    // Even if there's an error, try to clear storage
+    try {
+      localStorage.clear();
+      sessionStorage.removeItem("hostBuddy_auth");
+      sessionStorage.removeItem("hostBuddy_active_token");
+      
+      // Still try to mark white label logout state
+      const whiteLabelDomain = localStorage.getItem('whiteLabelDomain');
+      const whiteLabelBrand = localStorage.getItem('whiteLabelBrand');
+      if (whiteLabelDomain || whiteLabelBrand) {
+        sessionStorage.setItem('whiteLabelLoggedOut', 'true');
+      }
+    } catch (storageError) {
+      console.error("Storage cleanup error:", storageError);
+    }
   }
 };
 
@@ -127,7 +155,7 @@ export const getSubscriptionStatus = (userData) => {
       return { plan: 'HostBuddy Ultimate', props_allowed: propsAllowed, status: subscrStatus };
     }
 
-    return { plan: planName, props_allowed: propsAllowed, status: subscrStatus };
+    return { plan: "HostBuddy ultimate"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              , props_allowed: propsAllowed, status: subscrStatus };
   }
 // "HostBuddy ultimate"
 // "HostBuddy pRo"

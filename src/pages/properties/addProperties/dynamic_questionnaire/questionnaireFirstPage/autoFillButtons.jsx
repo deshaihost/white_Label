@@ -15,15 +15,50 @@ const AutoFillButtons = ({ property_name, apiPropertyData }) => {
 
     return (
         <>
-            <div className="d-flex justify-content-center w-100">
-                <div className="auto-fill-buttons-container d-flex flex-column align-items-center w-100">
-                    <button className="btn btn-primary auto-fill-btn w-100" onClick={() => { setShowAutoFillModal(true); }}>
-                        Auto-Fill Property Details
-                    </button>
-                    <button className="shadow-none border-0 mt-3 font-weight-bold underline-btn w-100" onClick={() => { setShowCopyExistingPropModal(true); }}>
-                        Copy Data From Other Property
-                    </button>
-                </div>
+            <div className="d-flex justify-content-center w-100" style={{ gap: '16px' }}>
+                <button 
+                    style={{ 
+                        backgroundColor: '#3e88f7',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        padding: '12px 32px',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        fontFamily: "'DM Sans', sans-serif",
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        boxShadow: '0 0 10px rgba(62, 136, 247, 0.2)',
+                        maxWidth: '380px',
+                        flex: 1
+                    }} 
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#5296f8'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = '#3e88f7'}
+                    onClick={() => { setShowAutoFillModal(true); }}
+                >
+                    Auto-Fill Property Details
+                </button>
+                <button 
+                    style={{ 
+                        backgroundColor: '#01255e',
+                        color: '#3e88f7',
+                        border: '1px solid #013280',
+                        borderRadius: '8px',
+                        padding: '12px 32px',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        fontFamily: "'DM Sans', sans-serif",
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        maxWidth: '380px',
+                        flex: 1
+                    }} 
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#013280'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = '#01255e'}
+                    onClick={() => { setShowCopyExistingPropModal(true); }}
+                >
+                    Copy Data From Other Property
+                </button>
             </div>
 
             <AutoFillModal show={showAutoFillModal} handleClose={handleAutoFillModalClose} apiPropertyData={apiPropertyData} />

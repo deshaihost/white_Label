@@ -8,16 +8,18 @@ import ToastHandle from "../../../helper/ToastMessage";
 import { BoxLoader, FullScreenLoader } from "../../../helper/Loader";
 import "./actionItem.css";
 import axios from "axios";
-import { FaExternalLinkAlt } from "react-icons/fa";
-import { FaCircleCheck } from "react-icons/fa6";
+import { FaExternalLinkAlt, FaCheck } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import ConversationTranscriptModal from "../../inbox/inboxSection/resources/ConversationTranscriptModal";
 import customStyles from './selectStyles';
 import ActionItemsUpgrade from '../ActionItemsUpgrade/ActionItemsUpgrade';
 import { getSubscriptionStatus } from '../../../helper/Authorized';
 import { fetchCategoriesFromAPI } from "../../../component/multiSelect/actionItemCategoriesMultiSelect";
+import { useWhiteLabelCss } from "../../../helper/WhiteLabelCssContext";
 
 const ActionsItemsTable = () => {
+
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
 
   const callGetActionItemsApi = async (status_query) => {
     const baseUrl = process.env.REACT_APP_API_ENDPOINT;
@@ -263,6 +265,42 @@ const ActionsItemsTable = () => {
     loadCategories();
   }, []); // Empty dependency array means this runs once on component mount
 
+  // Create dynamic styles with dropdown background color
+  const getDynamicStyles = () => {
+    const dropdownBgColor = cssLoading ? 'rgba(189, 193, 201, 0.08)' : (cssConfig?.css_data?.background?.dropdown || 'var(--white-label-background-dropdown, rgba(189, 193, 201, 0.08))');
+    const hoverColor = cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || 'var(--white-label-background-hover, #01255e)');
+    const borderPrimaryColor = cssLoading ? '#013280' : (cssConfig?.css_data?.borders?.primary || '#013280');
+    const placeholderColor = cssLoading ? '#888' : (cssConfig?.css_data?.text?.placeholder || '#888');
+    
+    return {
+      ...customStyles,
+      control: (provided, state) => ({
+        ...customStyles.control(provided, state),
+        background: dropdownBgColor,
+        border: `1px solid ${borderPrimaryColor}`,
+        '&:hover': {
+          borderColor: borderPrimaryColor,
+        },
+      }),
+      menu: (provided) => ({
+        ...customStyles.menu(provided),
+        background: dropdownBgColor,
+        border: `1px solid ${borderPrimaryColor}`,
+      }),
+      option: (provided, state) => ({
+        ...customStyles.option(provided, state),
+        backgroundColor: state.isFocused || state.isSelected ? hoverColor : 'transparent',
+        '&:hover': {
+          backgroundColor: hoverColor,
+        },
+      }),
+      placeholder: (provided) => ({
+        ...provided,
+        color: placeholderColor,
+      })
+    };
+  };
+
   return (
     <>
       <Container>
@@ -270,7 +308,12 @@ const ActionsItemsTable = () => {
           {getActionItemsLoading && <FullScreenLoader />}
           <div className="action-items">
             <div className="action-heading">
-              <h3>Action Items</h3>
+              <h3 style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                  cssConfig.css_data.text.primary : '#ffffff'
+              }}>
+                Action Items
+              </h3>
             </div>
             <div className="action-select">
 
@@ -281,7 +324,7 @@ const ActionsItemsTable = () => {
                     isMulti 
                     options={categories} // Use locally fetched categories instead of categoryOptions
                     value={selectedCategories} 
-                    styles={customStyles} 
+                    styles={getDynamicStyles()} 
                     onChange={handleCategoryChange} 
                     placeholder="All Categories" 
                     closeMenuOnSelect={false}
@@ -291,31 +334,47 @@ const ActionsItemsTable = () => {
               )}
 
               <div className="item-select">
-                <select aria-label="Default select example" className="bg-dark form-select" value={selectedStatus} onChange={handleSelectStatusChange}>
-                  <option value="incomplete">Incomplete</option>
-                  <option value="completed">Completed</option>
-                  <option value="expired">Expired</option>
-                </select>
+                <Select 
+                  className="custom-select property_Custom_Select" 
+                  options={[
+                    { value: 'incomplete', label: 'Incomplete' },
+                    { value: 'completed', label: 'Completed' },
+                    { value: 'expired', label: 'Expired' }
+                  ]} 
+                  value={{ value: selectedStatus, label: selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1) }} 
+                  styles={getDynamicStyles()} 
+                  onChange={(selected) => handleSelectStatusChange({ target: { value: selected.value } })} 
+                  placeholder="Status"
+                  isSearchable={false}
+                />
               </div>
 
               <div className="item-select" style={{ width: "30%" }}>
-                <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false} />
+                <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={getDynamicStyles()} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false} />
               </div>
 
             </div>
           </div>
-          <div className="table-responsive" style={{ overflowY: "auto", marginBottom: "30px", position: 'relative' }}>
+          <div 
+            className="table-responsive" 
+            style={{ 
+              overflowY: "auto", 
+              marginBottom: "30px", 
+              position: 'relative',
+              border: `2px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`
+            }}
+          >
             {itemsToRender?.length > 0 ? (
               <div style={{ position: 'relative' }}>
                 <table className="table text-white action-items-table">
                   <thead style={{ background: "#020d29" }}>
-                    <tr>
-                      <th>Date/Time</th>
-                      <th>Property/Guest</th>
-                      <th>Category</th>
-                      <th>Action Item</th>
-                      {selectedStatus === "completed" && <th>Completed By</th>}
-                      <th>View/Done</th>
+                    <tr style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important` }}>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>Date/Time</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>Property/Guest</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>Category</th>
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>Action Item</th>
+                      {selectedStatus === "completed" && <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>Completed By</th>}
+                      <th style={{ borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`, color: cssConfig?.css_data?.text?.secondary || '#a6a9b2' }}>View/Done</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -323,41 +382,75 @@ const ActionsItemsTable = () => {
                       const { id, created_at, property_name, conversation_id, item } = actionItem;
                       let actionItemSend = { propertyName: property_name, conversation_id };
                       const locked = false; // locked rows are not rendered
+                      const borderColor = cssConfig?.css_data?.borders?.primary || '#013280';
                       return (
-                        <tr key={id}>
-                          <td style={{ whiteSpace: "pre-line" }}>
+                        <tr key={id} style={{ borderBottom: `1px solid ${borderColor} !important` }}>
+                          <td style={{ 
+                            whiteSpace: "pre-line", 
+                            borderBottom: `1px solid ${borderColor} !important`,
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : '#ffffff'
+                          }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {formatDateTime(created_at)}
                             </div>
                           </td>
-                          <td>
+                          <td style={{ 
+                            borderBottom: `1px solid ${borderColor} !important`,
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : '#ffffff'
+                          }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {property_name}
                               <br />
-                              {actionItem?.guest_name ? actionItem?.guest_name : ""}
+                              <span style={{
+                                color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                                  cssConfig.css_data.text.secondary : '#a6a9b2'
+                              }}>
+                                {actionItem?.guest_name ? actionItem?.guest_name : ""}
+                              </span>
                             </div>
                           </td>
-                          <td>
+                          <td style={{ 
+                            borderBottom: `1px solid ${borderColor} !important`,
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : '#ffffff'
+                          }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {actionItem?.category ? actionItem?.category : ""}
                             </div>
                           </td>
-                          <td className="">
+                          <td className="" style={{ 
+                            borderBottom: `1px solid ${borderColor} !important`,
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : '#ffffff'
+                          }}>
                             <div className={locked ? 'blurred-content' : ''}>{item}</div>
                           </td>
                           {selectedStatus === "completed" && (
-                            <td style={{ minWidth: '130px' }}>
+                            <td style={{ 
+                              minWidth: '130px', 
+                              borderBottom: `1px solid ${borderColor} !important`,
+                              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                                cssConfig.css_data.text.secondary : '#ffffff'
+                            }}>
                               <div className={locked ? 'blurred-content' : ''}>{formatCompletedBy(actionItem?.completed_by)}</div>
                             </td>
                           )}
-                          <td className="text-center">
+                          <td className="text-center" style={{ borderBottom: `1px solid ${borderColor} !important` }}>
                             <div className={locked ? 'blurred-content' : ''}>
                               {actionItemCompleting === id || getConversationLoading === id ? (
                                 <BoxLoader />
                               ) : (
                                 <>
                                   <FaExternalLinkAlt style={{ marginRight: '10px', cursor: 'pointer' }} onClick={() => { if (!locked) handleOpenConversation(conversation_id, id, property_name); }} />
-                                  <FaCircleCheck className="text-primary fs-6" style={{ cursor: 'pointer' }} onClick={() => { if (!locked) handleComplete(id); }} />
+                                  <button 
+                                    className={`complete-button ${status === 'completed' ? 'completed' : ''}`}
+                                    onClick={() => { if (!locked) handleComplete(id); }}
+                                    title="Mark Complete"
+                                  >
+                                    <FaCheck className="check-icon" />
+                                  </button>
                                 </>
                               )}
                             </div>
@@ -370,16 +463,45 @@ const ActionsItemsTable = () => {
                 {/* Visual representation of locked items */}
                 {lockedActionItems.length > 0 && (
                   <div className="position-relative my-4">
-                    <table className="table text-white action-items-table mb-0" style={{ filter: 'blur(4px)', width: '100%' }}> {/* blurred table mimics layout */}
+                    <table className="table text-white action-items-table mb-0" style={{ 
+                      filter: 'blur(4px)', 
+                      width: '100%',
+                      color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                        cssConfig.css_data.text.quaternary : '#888'
+                    }}> {/* blurred table mimics layout */}
                       <tbody>
                         {lockedActionItems.slice(0, 5).map((actionItem) => {
                           const { id, created_at, property_name, item } = actionItem;
                           return (
                             <tr key={id} style={{ pointerEvents: 'none' }}>
-                              <td style={{ whiteSpace: 'pre-line' }}>{formatDateTime(created_at)}</td>
-                              <td style={{ paddingLeft: '30px' }}>{property_name}</td>
-                              <td style={{ paddingLeft: '60px' }}>{actionItem?.category || ''}</td>
-                              <td style={{ paddingLeft: '40px' }}>{item}</td>
+                              <td style={{ 
+                                whiteSpace: 'pre-line',
+                                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                                  cssConfig.css_data.text.quaternary : '#888'
+                              }}>
+                                {formatDateTime(created_at)}
+                              </td>
+                              <td style={{ 
+                                paddingLeft: '30px',
+                                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                                  cssConfig.css_data.text.quaternary : '#888'
+                              }}>
+                                {property_name}
+                              </td>
+                              <td style={{ 
+                                paddingLeft: '60px',
+                                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                                  cssConfig.css_data.text.quaternary : '#888'
+                              }}>
+                                {actionItem?.category || ''}
+                              </td>
+                              <td style={{ 
+                                paddingLeft: '40px',
+                                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                                  cssConfig.css_data.text.quaternary : '#888'
+                              }}>
+                                {item}
+                              </td>
                               {selectedStatus === 'completed' && <td style={{ paddingLeft: '30px' }}>{formatCompletedBy(actionItem?.completed_by)}</td>}
                               <td></td>
                             </tr>
@@ -395,7 +517,7 @@ const ActionsItemsTable = () => {
                 )}
               </div>
             ) : (
-              <span className="d-flex justify-content-center align-items-center" style={{ height: '500px', color: "#FFF" }}>
+              <span className="d-flex justify-content-center align-items-center" style={{ height: '500px', color: cssConfig?.css_data?.text?.secondary || "#FFF" }}>
                 No Data Yet
               </span>
             )}

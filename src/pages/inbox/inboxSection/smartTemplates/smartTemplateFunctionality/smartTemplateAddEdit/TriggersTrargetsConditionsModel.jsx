@@ -3,10 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import toasthandle from "../../../../../../helper/ToastMessage";
+import { useWhiteLabelCss } from "../../../../../../helper/WhiteLabelCssContext";
 
 const TriggersTrargetsConditionsModel = (props) => {
   const { show, handleClose, submitHndle, hasCleaningManagementIntegration, minut_user_id } = props;
   const { modelShow, modelShowType, formData, minutFormData, editFormData, typepAddEdit, editIndex, followUpIndex } = show;
+
+  // White Label CSS Context for secondary background color
+  const cssContext = useWhiteLabelCss();
 
   const [selectGet, setSelectGet] = useState({}); // Selected trigger/target/condition obj from the dataInput json
   const [inputDataGet, setInputDataGet] = useState({});
@@ -376,12 +380,24 @@ const TriggersTrargetsConditionsModel = (props) => {
   };
 
   return (
-    <Modal show={modelShow} size="lg" onHide={closeHndleModel} aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal 
+      show={modelShow} 
+      size="lg" 
+      onHide={closeHndleModel} 
+      aria-labelledby="contained-modal-title-vcenter" 
+      centered
+      className="send-if-modal"
+    >
       <Modal.Header closeButton>
         {/* <h5 className="modal-title">{typepAddEdit} New {modelShowType}</h5> */}
         <h5 className="modal-title">{typeToTileMapping?.[modelShowType]}</h5>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body 
+        className="send-if-modal-body"
+        style={{
+          backgroundColor: cssContext?.cssConfig ? 'var(--white-label-background-secondary)' : undefined,
+        }}
+      >
         <div className="addition_des">
           <div className='item-select my-3'>
             <select aria-label="Default select example" className="bg-dark form-control form-select text-white" value={selectGet?.type || ""} onChange={(e) => OnchangeHndle(e, selectInterface)}>

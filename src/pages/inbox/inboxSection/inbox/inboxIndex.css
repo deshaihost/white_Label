@@ -72,7 +72,7 @@
   .rightSectionContainer {
     width: 296px !important;
     flex: none !important;
-    background-color: #17191F;
+    background-color: var(--white-label-background-secondary, #17191F);
     
   }
 }
@@ -80,7 +80,7 @@
 /* Action items container scroll bar styling - matching left-bar-chat and message-list */
 .action-items-container::-webkit-scrollbar {
   width: 4px;
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 .action-items-container::-webkit-scrollbar-thumb {
@@ -89,19 +89,19 @@
 }
 
 .action-items-container::-webkit-scrollbar-track {
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 /* For Firefox */
 .action-items-container {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) #0F1117;
+  scrollbar-color: rgba(255, 255, 255, 0.15) var(--white-label-background-primary, #0F1117);
 }
 
 /* Notes container's scroll area styling - matching other scrollable components */
 .notes-scroll-area::-webkit-scrollbar {
   width: 4px;
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 .notes-scroll-area::-webkit-scrollbar-thumb {
@@ -110,12 +110,12 @@
 }
 
 .notes-scroll-area::-webkit-scrollbar-track {
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 /* For Firefox */
 .notes-scroll-area {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) #0F1117;
+  scrollbar-color: rgba(255, 255, 255, 0.15) var(--white-label-background-primary, #0F1117);
 }
 

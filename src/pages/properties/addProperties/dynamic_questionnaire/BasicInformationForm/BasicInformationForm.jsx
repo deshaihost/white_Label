@@ -108,75 +108,129 @@ const BasicInformationForm = ({ property_name }) => {
   
   return (
     <div>
-      <div>
-        <h3 className="text-white fw-bold mb-3 fs-4">Property Name & Thumbnail</h3>
+      <div style={{ marginBottom: '24px' }}>
+        <h2 style={{
+          color: 'white',
+          fontSize: '20px',
+          fontWeight: 700,
+          fontFamily: '"DM Sans", sans-serif',
+          marginBottom: '16px'
+        }}>
+          Property Name & Thumbnail
+        </h2>
       </div>
-      <div className="row">
-        <div className="col-12 mx-auto form-design">
-          <div className="container" style={{ marginLeft: '0px', marginRight: '0px', paddingLeft: '0px', paddingRight: '0px' }}>
-            <div className="row mt-2">
+      
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+        {/* Property Name input (if editing existing property, shows the property name and is unchangeable) */}
+        <div>
+          <label className="modern-label">Property Name</label>
+          <input 
+            className="modern-input" 
+            type="text" 
+            value={propertyName || ''} 
+            readOnly={!!property_name} 
+            placeholder="eg. smith villa"
+            onChange={(e) => { setPropertyName(e.target.value); }} 
+          />
+        </div>
 
-              {/* Property Name input (if editing existing property, shows the property name and is unchangeable) */}
-              <div className="col-md-6">
-                <label className="text-white">Property Name</label>
-                <div className="">
-                  <input className="form-control" type="text" value={propertyName || null} readOnly={!!property_name} placeholder="eg. smith villa"
-                  onChange={(e) => { setPropertyName(e.target.value); }} />
-                </div>
-              </div>
-
-              {/* Thumbnail Image input */}
-              <div className="col-md-6">
-                <label className="text-white">
-                  Thumbnail Photo <span>(.png, .jpg, .jpeg supported)</span>
-                </label>
-                <div className="">
-                  <input className="form-control" type="file" placeholder="" onChange={(e) => { setFile(e.target.files); }} />
-                </div>
-              </div>
+        {/* Thumbnail Image input */}
+        <div>
+          <label className="modern-label">
+            Thumbnail Photo <span style={{ color: '#676a73', fontSize: '11px' }}>(.png, .jpg, .jpeg supported)</span>
+          </label>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <label 
+              htmlFor="thumbnail-upload"
+              className="modern-btn-primary" 
+              style={{ 
+                cursor: 'pointer', 
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                whiteSpace: 'nowrap',
+                flexShrink: 0
+              }}
+            >
+              Choose File
+            </label>
+            <input 
+              id="thumbnail-upload"
+              type="file" 
+              style={{ display: 'none' }}
+              accept=".png,.jpg,.jpeg"
+              onChange={(e) => { setFile(e.target.files); }} 
+            />
+            <div style={{ 
+              flex: 1, 
+              display: 'flex', 
+              alignItems: 'center', 
+              padding: '12px 16px',
+              backgroundColor: '#17191f',
+              border: '1px solid #013280',
+              borderRadius: '8px'
+            }}>
+              <span style={{ 
+                color: uploadedFile && uploadedFile.length > 0 ? 'white' : '#676a73', 
+                fontSize: '13px',
+                fontFamily: '"DM Sans", sans-serif'
+              }}>
+                {uploadedFile && uploadedFile.length > 0 ? uploadedFile[0].name : 'No file chosen'}
+              </span>
             </div>
-
-            {/* Property ID input (only shown when creating a new property AND user has sub_account_of) */}
-            {!property_name && uses_direct_integration && (
-              <div className="row mt-2">
-                <div className="col-md-12">
-                  <label className="text-white">Set a property ID</label>
-                  <div className="">
-                    <input className="form-control" type="text" value={propertyId} placeholder="eg. prop-123" onChange={(e) => { setPropertyId(e.target.value); }} />
-                  </div>
-                  <small className="text-white-50 mt-1 d-block">
-                    This will be used as the value for <code>property_id</code> in the direct integrations API, and will be treated as a string. For your own ease of use, we recommend using the same property identifier that you use for this property in your connected system.
-                  </small>
-                </div>
-              </div>
-            )}
-
-            {/* Update (thumbnail image) button (only if editing existing property & new image selected). When we add support for changing the property name, this button should be changed to trigger that too. */}
-            {property_name && uploadedFile && (
-              <div className="col-md-12 mt-4">
-                <div className="d-flex justify-content-center">
-                  <button className="mw-auto" disabled={propertiesAddLoading ? true : false}
-                    onClick={() => handleUpdateForExistingProp()}>
-                    {!imgIsUplaoding ? <>Update</> : <Loader />}
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
-
-          {/* Save & Next button, only shown if adding a property */}
-          {!property_name && (
-            <div className="col-md-12 mt-5">
-              <div className="d-flex justify-content-center">
-                <button className="mw-auto" disabled={propertiesAddLoading ? true : false}
-                  onClick={() => onSubmit()}>
-                  {!propertiesAddLoading ? <>Create New Property</> : <Loader />}
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Property ID input (only shown when creating a new property AND user has direct integration) */}
+      {!property_name && uses_direct_integration && (
+        <div style={{ marginBottom: '24px' }}>
+          <label className="modern-label">Set a property ID</label>
+          <input 
+            className="modern-input" 
+            type="text" 
+            value={propertyId} 
+            placeholder="eg. prop-123" 
+            onChange={(e) => { setPropertyId(e.target.value); }} 
+          />
+          <small style={{ 
+            color: '#676a73', 
+            fontSize: '11px', 
+            fontFamily: '"DM Sans", sans-serif',
+            display: 'block',
+            marginTop: '4px'
+          }}>
+            This will be used as the value for <code>property_id</code> in the direct integrations API, and will be treated as a string. For your own ease of use, we recommend using the same property identifier that you use for this property in your connected system.
+          </small>
+        </div>
+      )}
+
+      {/* Update (thumbnail image) button (only if editing existing property & new image selected). When we add support for changing the property name, this button should be changed to trigger that too. */}
+      {property_name && uploadedFile && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
+          <button 
+            className="modern-btn-primary" 
+            disabled={propertiesAddLoading || imgIsUplaoding}
+            onClick={() => handleUpdateForExistingProp()}
+          >
+            {!imgIsUplaoding ? 'Update Thumbnail' : <Loader />}
+          </button>
+        </div>
+      )}
+
+      {/* Save & Next button, only shown if adding a property */}
+      {!property_name && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
+          <button 
+            className="modern-btn-primary"
+            style={{ paddingLeft: '48px', paddingRight: '48px' }}
+            disabled={propertiesAddLoading}
+            onClick={() => onSubmit()}
+          >
+            {!propertiesAddLoading ? 'Create New Property' : <Loader />}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

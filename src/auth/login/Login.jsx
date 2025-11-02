@@ -27,11 +27,64 @@ const Login = () => {
   const { token } = getAuthToken ? getAuthToken : [];
   const [showPassword, setShowPassword] = useState(false);
   const [emailEntered, setEmailEntered] = useState("");
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
   const loginLoading = store?.loginReducer?.loading;
   const isGcs = store?.loginReducer?.login?.gcs;
   const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: {login_remember:false}});
+
+  // Only redirect to white label if explicitly coming from a known white label domain
+  useEffect(() => {
+    const isLoggedOut = sessionStorage.getItem('whiteLabelLoggedOut');
+    
+    // Don't redirect if user just logged out, already redirecting, or came via normal navigation
+    if (isLoggedOut || isRedirecting) {
+      return;
+    }
+    
+    // Never redirect if we're on the main hostbuddy domain
+    const currentDomain = window.location.hostname;
+    const isMainDomain = currentDomain === 'hostbuddy.ai' || 
+                        currentDomain === 'www.hostbuddy.ai' || 
+                        currentDomain === 'localhost' || 
+                        currentDomain === '127.0.0.1';
+    
+    if (isMainDomain) {
+      return;
+    }
+    
+    // Only redirect if current hostname is a known white-label domain
+    const knownWhiteLabelDomains = [
+      'c.acental.com',
+      'app.acental.com',
+      'acental.com'
+      // Add other known white label domains here
+    ];
+    
+    // Only redirect if we're currently on a known white-label domain
+    const isOnWhiteLabelDomain = knownWhiteLabelDomains.includes(currentDomain);
+    
+    if (isOnWhiteLabelDomain) {
+      setIsRedirecting(true);
+      navigate(`/white-label-login${location.search}`, { replace: true });
+    }
+  }, [location.search, navigate, isRedirecting]);
+
+  // Show loading screen while redirecting to prevent flash
+  if (isRedirecting) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        backgroundColor: '#f8f9fa'
+      }}>
+        <Loader />
+      </div>
+    );
+  }
 
   const onSubmit = (data) => {
     setEmailEntered(data.email);

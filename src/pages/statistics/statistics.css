@@ -1,17 +1,96 @@
 /* Tile header styling */
 .tile-header {
   display: flex;
-  justify-content: space-between; /* Space out title and icon */
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
   width: 100%;
-  position: relative; /* To allow for absolute positioning of icon */
+  position: relative;
+  margin-bottom: 16px;
+}
+
+/* Tile header title styling - gray color like new dashboard */
+.tile-header h3 {
+  font-size: 14px;
+  color: var(--white-label-text-secondary, #a6a9b2) !important;
+  margin-bottom: 0;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 14;
 }
 
 /* Styling for the three-dot icon */
 .tile-header .icon-button {
-  color: white; /* Make the icon white */
-  font-size: 28px; /* Make the icon larger */
+  color: var(--white-label-text-secondary, #a6a9b2);
+  font-size: 16px;
   cursor: pointer;
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.tile-header .icon-button:hover {
+  color: var(--white-label-text-primary, white);
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.tile-header .MuiIconButton-root {
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+.tile-header .MuiIconButton-root:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.tile-header button {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: inline-flex !important;
+}
+
+.tile-header button:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.tile-header .MuiButtonBase-root {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+.tile-header .MuiButtonBase-root:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 /* Apply width 100% to the parent container of tile-header for all metric tiles */
@@ -29,20 +108,27 @@
 
 /* Base container for the whole statistics page */
 .statistics-page {
-  padding: 52px; /* Adds padding around the entire page */
-  background-color: #000212;
-  min-height: 100vh; /* Ensure the page takes up at least full screen height */
+  padding: 52px;
+  background-color: var(--white-label-background-primary, #0F1117);
+  min-height: 100vh;
   margin-bottom: 150px;
 }
 
 .statistics-page hr {
   border: none;
-  border-top: 2px solid #2c38ae;
+  border-top: 2px solid #013280;
+  margin: 20px 0;
+}
+
+/* Specific selector for the hr element after the header */
+#root > div.App > div > div > div:nth-child(2) > div > hr:nth-child(4) {
+  border: none;
+  border-top: 2px solid #013280;
   margin: 20px 0;
 }
 
 .page-header {
-  color: white;
+  color: var(--white-label-text-primary, white);
   text-align: center;
   margin-top: 20px;
   display: flex;
@@ -58,7 +144,7 @@
 }
 
 .statistics-page .section-header {
-  color: white;
+  color: var(--white-label-text-primary, white);
   margin-top: 40px;
   margin-bottom: 20px;
 }
@@ -83,7 +169,7 @@
 .statistics-page .date-info p {
   margin: 0;
   font-size: 18px;
-  color: #CCC;
+  color: var(--white-label-text-secondary, #CCC);
 }
 
 .statistics-page .parameters-right {
@@ -112,7 +198,7 @@
 
 .statistics-page .date-label {
   font-size: 14px;
-  color: #FFF;
+  color: var(--white-label-text-primary, #FFF);
   margin: 0; /* Reset margin to rely on gap */
 }
 
@@ -121,10 +207,72 @@
   max-width: 300px; /* Set a maximum width */
   padding: 8px;
   border: 1px solid #007bff;
-  border-radius: 20px;
+  border-radius: 8px;
   margin: 0; /* Reset margin to rely on gap */
-  background: #333;
-  color: #FFF;
+  background: var(--white-label-input, #333);
+  color: var(--white-label-input-text, #FFF) !important;
+  color-scheme: dark;
+}
+
+.statistics-page .date-input::placeholder {
+  color: var(--white-label-text-placeholder, #FFF);
+  opacity: 0.7;
+}
+
+.statistics-page .date-input::-webkit-input-placeholder {
+  color: var(--white-label-text-placeholder, #FFF);
+  opacity: 0.7;
+}
+
+.statistics-page .date-input::-moz-placeholder {
+  color: var(--white-label-text-placeholder, #FFF);
+  opacity: 0.7;
+}
+
+.statistics-page .date-input:-ms-input-placeholder {
+  color: var(--white-label-text-placeholder, #FFF);
+  opacity: 0.7;
+}
+
+.statistics-page .date-input::-ms-input-placeholder {
+  color: var(--white-label-text-placeholder, #FFF);
+  opacity: 0.7;
+}
+
+.statistics-page .date-input::-webkit-datetime-edit {
+  color: var(--white-label-input-text, #FFF);
+}
+
+.statistics-page .date-input::-webkit-datetime-edit-fields-wrapper {
+  color: var(--white-label-input-text, #FFF);
+}
+
+.statistics-page .date-input::-webkit-datetime-edit-text {
+  color: var(--white-label-input-text, #FFF);
+}
+
+.statistics-page .date-input::-webkit-datetime-edit-month-field,
+.statistics-page .date-input::-webkit-datetime-edit-day-field,
+.statistics-page .date-input::-webkit-datetime-edit-year-field {
+  color: var(--white-label-input-text, #FFF);
+}
+
+.statistics-page .date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.statistics-page .date-input:disabled {
+  background: var(--white-label-background-secondary, #17191f);
+  color: var(--white-label-text-disabled, #666);
+  cursor: not-allowed;
+  opacity: 0.5;
+  border-color: var(--white-label-text-disabled, #666);
+}
+
+.statistics-page .date-input:disabled::-webkit-calendar-picker-indicator {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .statistics-page .adjust-dates-button {
@@ -138,6 +286,12 @@
   height: 36px; /* Match the height of other input elements */
   display: flex;
   align-items: center;
+}
+
+.statistics-page .adjust-dates-button:disabled {
+  color: var(--white-label-text-disabled, #666);
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .statistics-page .apply-button {
@@ -158,46 +312,67 @@
   background-color: #0056b3;
 }
 
+.statistics-page .apply-button:disabled {
+  background-color: var(--white-label-background-secondary, #17191f);
+  color: var(--white-label-text-disabled, #666);
+  cursor: not-allowed;
+  opacity: 0.5;
+  border: 1px solid var(--white-label-text-disabled, #666);
+}
+
 /* Style for each individual tile component */
 .statistics-tile {
-  background-color: #020d29;
-  border-radius: 15px;
-  border: 1px solid #2c38ae;
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.4);
-  padding: 20px;
+  background-color: var(--white-label-background-secondary, #17191F);
+  border-radius: 12px;
+  border: 2px solid #013280;
+  box-shadow: 0 0 25px rgba(30, 75, 158, 0.2);
+  padding: 24px;
   padding-bottom: 5px;
   padding-top: 15px;
   margin: 10px 0;
-  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animation for hover effects */
-  display: flex; /* Use flexbox for alignment */
-  flex-direction: column; /* Arrange children vertically */
-  align-items: center; /* Center children horizontally */
-  justify-content: space-between; /* Space out children vertically */
+  transition: box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
 }
 
 /* Tile hover effect to make it pop */
 .statistics-tile:hover {
-  /* transform: translateY(-5px); /* Move the tile slightly up when hovered */
-  box-shadow: 0 6px 12px rgba(255, 255, 255, 0.15); /* White box shadow */
+  box-shadow: 0 0 30px rgba(30, 75, 158, 0.3);
 }
 
 /* Common header styling for all tiles */
 .statistics-tile h3 {
-  font-size: 1.2em; /* Slightly larger font for the tile headers */
-  color: #EEE;
-  margin-bottom: 10px; /* Space between header and content */
-  text-align: center; /* Center the title text */
-  width: 100%; /* Ensure the title spans the full width */
+  font-size: 14px;
+  color: var(--white-label-text-secondary, #a6a9b2);
+  margin-bottom: 16px;
+  text-align: left !important;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 14;
+}
+
+/* Chart/Histogram tiles should have white title text */
+.statistics-tile:not(.metric-tile) h3 {
+  color: var(--white-label-text-primary, white) !important;
 }
 
 .statistics-tile p {
-  color: #CCC;
+  color: var(--white-label-text-secondary, #a6a9b2);
   margin: auto 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 14;
+  text-align: center;
 }
 
 /* Styling for "No data yet" message */
 .statistics-tile .no-data-message {
-  color: white;
+  color: var(--white-label-text-primary, white);
   text-align: center;
   width: 100%;
   margin-top: auto;
@@ -217,45 +392,113 @@
 
 /* MetricTile specific styling */
 .metric-tile {
-  text-align: center; /* Center align everything inside the metric tile */
+  text-align: left !important;
+  padding: 24px !important;
+}
+
+.metric-tile * {
+  text-align: left !important;
 }
 
 .metric-content {
   width: 100%;
 }
 
+/* Action item tile metric-content should take full height for centering */
+.action-item-tile .metric-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .metric-item {
+  margin-bottom: 8px;
+}
+
+/* First item shows the main metric number prominently */
+.metric-item:first-child {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.metric-item:first-child .metric-number {
+  font-size: 36px;
+  color: var(--white-label-text-primary, white);
+  font-weight: 700;
+  line-height: normal;
+  font-family: 'DM Sans', sans-serif;
+  font-variation-settings: 'opsz' 14;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.metric-item:first-child .metric-text {
+  display: none;
+}
+
+/* Override for action items tiles - show all items the same way */
+.action-item-tile .metric-item:first-child {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
-/* from here  */
-
-/* Add gap between metric number and text for sentiment metrics */
-/* .sentiment-tile .metric-item {
-  justify-content: flex-start;
-} */
-
-/* Add specific spacing for sentiment metric numbers */
-/* Use relative units for responsive spacing with higher specificity */
-/* .sentiment-tile.metric-tile .metric-number {
-  margin-right: 8rem; 
-} */
-/* from here dash board  */
-
-.metric-tile .metric-number {
-  font-size: 35px;
-  color: #2196F3; /* Blue color for the number */
-  font-weight: bold; /* Make the number bold */
-  margin-right: 10px;
+.action-item-tile .metric-item:first-child .metric-number {
+  font-size: 13px;
+  color: var(--white-label-text-primary, white);
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  font-variation-settings: 'opsz' 14;
+  margin-right: 0;
+  order: 2;
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
 }
 
-.metric-tile .metric-text {
-  font-size: 16px;
-  color: #AAA; /* color for the description */
-  text-align: right;
+.action-item-tile .metric-item:first-child .metric-text {
+  display: block;
+  font-size: 13px;
+  color: var(--white-label-text-secondary, #a6a9b2);
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 14;
+  flex: 1;
+  order: 1;
+}
+
+/* Subsequent items show breakdown with label on left, value on right */
+.metric-item:not(:first-child) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.metric-item:not(:first-child) .metric-text {
+  font-size: 13px;
+  color: var(--white-label-text-secondary, #a6a9b2);
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 14;
+  flex: 1;
+  order: 1;
+}
+
+.metric-item:not(:first-child) .metric-number {
+  font-size: 13px;
+  color: var(--white-label-text-primary, white);
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  font-variation-settings: 'opsz' 14;
+  margin-right: 0;
+  order: 2;
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
 }
 
 /* TextTile specific styling */
@@ -312,7 +555,7 @@
   width: 100%;
   height: 100%;
   z-index: 3;
-  color: rgba(208, 211, 219, 1);
+  color: var(--white-label-text-disabled, rgba(208, 211, 219, 1));
   font-size: 14px;
   font-weight: 600;
   text-align: center;
@@ -355,4 +598,72 @@
 .blurred-content {
   filter: blur(8px);
   pointer-events: none;
+}
+
+/* Histogram footer styling */
+.histogram-footer {
+  margin-top: 16px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.histogram-date-range {
+  color: var(--white-label-text-secondary, #a6a9b2) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  font-variation-settings: 'opsz' 14 !important;
+  margin-bottom: 4px !important;
+}
+
+/* Styling for statistics link container */
+.statistics-link {
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Styling for "See more statistics" link */
+.statistics-link a {
+  color: var(--white-label-text-navigation_text, #3e88f7) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-decoration: underline !important;
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-variation-settings: 'opsz' 14 !important;
+}
+
+.statistics-link a:hover {
+  color: var(--white-label-interactive-light_blue, #98bffa) !important;
+}
+
+/* MUI Menu styling to match new dashboard design */
+.MuiPaper-root.MuiMenu-paper {
+  background-color: var(--white-label-background-secondary, #17191f) !important;
+  border: 2px solid #013280 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 30px rgba(30, 75, 158, 0.3) !important;
+  margin-top: 8px !important;
+}
+
+.MuiMenuItem-root {
+  color: var(--white-label-text-primary, white) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  padding: 10px 16px !important;
+  font-variation-settings: 'opsz' 14 !important;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.MuiMenuItem-root:hover {
+  background-color: #01255e !important;
+}
+
+.MuiMenuItem-root.Mui-selected {
+  background-color: #01255e !important;
+}
+
+.MuiMenuItem-root.Mui-selected:hover {
+  background-color: #013280 !important;
 }

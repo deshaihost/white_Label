@@ -1,8 +1,11 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { BoxLoader } from "../../../helper/Loader";
+import { useWhiteLabelCss } from "../../../helper/WhiteLabelCssContext";
 
 function ReauthenticatePMSModal({ showModal, handleClose, calryLink, platformName, loading }) {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  
   const goToCalryLink = () => {
     if (calryLink) {
       window.open(calryLink, "_blank");
@@ -14,8 +17,12 @@ function ReauthenticatePMSModal({ showModal, handleClose, calryLink, platformNam
   const capitalizedPlatformName = platformName ? platformName.charAt(0).toUpperCase() + platformName.slice(1) : "";
 
   return (
-    <Modal show={showModal} size="md" onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
-      <Modal.Body>
+    <Modal show={showModal} size="md" onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered className="reauthenticate-pms-modal">
+      <Modal.Body 
+        style={{
+          backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.secondary || '#17191f') : '#17191f'
+        }}
+      >
         <h3 className="text-white text-center mb-4 fw-bold fs-4">Reconnect Your PMS</h3>
         <hr />
         {!loading ? (

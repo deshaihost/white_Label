@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from "react";
 import NavBarContainer from "../newSideNavigationComponent/components/sideNavBarElements/NavBarContainer";
 import Authorized from "../../helper/Authorized";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
+import { ProgressLoader } from "../../helper/Loader";
 
 // This layout component renders the NavBarContainer for authenticated users
 // and wraps the children components
 const AuthenticatedLayout = ({ children }) => {
-  const authData = Authorized();  // Initialize with responsive width based on screen size
+  console.log("🏗️ STEP A: AuthenticatedLayout rendering", {
+    timestamp: new Date().toISOString()
+  });
+
+  const authData = Authorized();
+  const { cssConfig, loading: cssLoading, progress } = useWhiteLabelCss();
+
+  console.log("🏗️ STEP A2: AuthenticatedLayout CSS state", {
+    cssLoading,
+    progress,
+    hasCssConfig: !!cssConfig,
+    timestamp: new Date().toISOString()
+  });  // Initialize with responsive width based on screen size
   const getInitialSidebarWidth = () => {
     return window.innerWidth >= 1600 ? 240 : 200;
   };
@@ -81,6 +95,25 @@ const AuthenticatedLayout = ({ children }) => {
       return '200px';
     }
   };
+
+  console.log("🏗️ STEP B: AuthenticatedLayout about to render children", {
+    authData: !!authData,
+    sidebarWidth,
+    sidebarOpen,
+    sidebarClicked,
+    effectiveSidebarWidth,
+    timestamp: new Date().toISOString()
+  });
+
+  // Show loader while CSS is loading to prevent flash of default styling on sidebar/navbar
+  if (cssLoading) {
+    console.log("🏗️ STEP C: AuthenticatedLayout showing loader - waiting for CSS to load", {
+      cssLoading: true,
+      progress,
+      timestamp: new Date().toISOString()
+    });
+    return <ProgressLoader progress={progress} message="Loading your workspace..." />;
+  }
 
   return (
     <div className="authenticated-layout" style={{ 

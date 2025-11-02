@@ -58,24 +58,84 @@ const CheckboxGroupComponent = ({ question_object, sec_name, subsec_name, q_ind,
   return (
     <div className="row ">
       <div className="col-lg-12">
-        {placeholder_text && <label className="text-white">{placeholder_text}</label>}
-        <ul className="amenties-list">
+        {placeholder_text && (
+          <label className="modern-label" style={{ marginBottom: '16px', display: 'block' }}>
+            {placeholder_text}
+          </label>
+        )}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(2, 1fr)', 
+          gap: '12px' 
+        }}>
           {options.map((option, option_index) => {
+            const isChecked = checkboxStatuses[option_index];
             return (
-              <li className="amenties-list-item">
-                <div className={ checkboxStatuses[option_index] ? "form-checkbox bg-light text-dark" : "form-checkbox" } key={`${field_id_prefix}_${option_index}`}>
-                  <input className="form-check-input" type="checkbox" value={option} checked={checkboxStatuses[option_index]} id={`${field_id_prefix}_${option_index}`}
-                  onChange={(e) => handleCheckboxClick(e, sec_name, subsec_name, q_ind, option_index)}/>
-                  <label className="form-check-label" onClick={() => {} } 
-                  style={{ color: checkboxStatuses[option_index] ? "black" : "rgb(255 255 255 / 60%)", fontSize: "15px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", cursor: "pointer", marginBottom: "0px" }}>
-                    {option}
-                  </label>
-                  {checkboxStatuses[option_index] && <PencilIcon sec_name={sec_name} subsec_name={subsec_name} q_ind={q_ind} checkbox_group_option={option} handlePencilIconClick={handlePencilIconClick} someResStageIsSelected={someResStageIsSelected[option_index]} extraTextIsAdded={extraTextIsAdded[option_index]} />}
-                </div>
-              </li>
+              <div 
+                key={`${field_id_prefix}_${option_index}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 16px',
+                  background: isChecked ? '#013280' : '#17191f',
+                  border: `1px solid ${isChecked ? '#3e88f7' : '#013280'}`,
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onClick={() => {
+                  const checkbox = document.getElementById(`${field_id_prefix}_${option_index}`);
+                  if (checkbox) {
+                    checkbox.click();
+                  }
+                }}
+              >
+                <input 
+                  className="form-check-input" 
+                  type="checkbox" 
+                  value={option} 
+                  checked={isChecked} 
+                  id={`${field_id_prefix}_${option_index}`}
+                  onChange={(e) => handleCheckboxClick(e, sec_name, subsec_name, q_ind, option_index)}
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    cursor: 'pointer',
+                    margin: 0,
+                    flexShrink: 0
+                  }}
+                />
+                <label 
+                  className="form-check-label" 
+                  htmlFor={`${field_id_prefix}_${option_index}`}
+                  style={{ 
+                    color: isChecked ? '#fff' : '#a6a9b2',
+                    fontSize: '14px',
+                    fontWeight: isChecked ? '500' : '400',
+                    cursor: 'pointer',
+                    margin: 0,
+                    flex: 1,
+                    userSelect: 'none'
+                  }}
+                >
+                  {option}
+                </label>
+                {isChecked && (
+                  <PencilIcon 
+                    sec_name={sec_name} 
+                    subsec_name={subsec_name} 
+                    q_ind={q_ind} 
+                    checkbox_group_option={option} 
+                    handlePencilIconClick={handlePencilIconClick} 
+                    someResStageIsSelected={someResStageIsSelected[option_index]} 
+                    extraTextIsAdded={extraTextIsAdded[option_index]} 
+                  />
+                )}
+              </div>
             );
           })}
-        </ul>
+        </div>
       </div>
     </div>
   );

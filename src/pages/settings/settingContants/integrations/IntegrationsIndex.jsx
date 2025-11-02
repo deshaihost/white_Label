@@ -31,10 +31,12 @@ import TidyLogo from './Icons/Tidy Logo.svg';
 import HostfullyTileIcon from './Icons/Hostfully_tile_icon.svg';
 import MountLogoBlack from './Icons/Mount Logo black.svg';
 import NotionLogo from './Icons/Notion Logo.svg';
+import { useWhiteLabelCss } from '../../../../helper/WhiteLabelCssContext';
 
 const IntegrationsIndex = (ApiUserData) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const turnoUserId = Boolean(ApiUserData?.ApiUserData?.turno_user_id);
   const minutUserId = Boolean(ApiUserData?.ApiUserData?.minut_user_id);
   const tidyUserId = Boolean(ApiUserData?.ApiUserData?.tidy_user_id);
@@ -57,7 +59,12 @@ const IntegrationsIndex = (ApiUserData) => {
   const renderUpgradeTile = (logoSrc, altText, description = 'Available on HostBuddy Elite', imgStyle = {}) => (
     <div className="partner-tile">
       <img className="partner-logo" alt={altText} src={logoSrc} style={imgStyle} />
-      <p>{description}</p>
+      <p style={{
+        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+          cssConfig.css_data.text.secondary : 'rgba(204, 204, 204, 1)'
+      }}>
+        {description}
+      </p>
       <Link to="/setting/subscription" className="btn btn-primary" style={{ borderRadius: '50px', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
         <img src={LockIcon} alt="Lock" style={{ width: '16px', height: '16px' }} />
         Upgrade to unlock
@@ -323,7 +330,12 @@ const IntegrationsIndex = (ApiUserData) => {
     const filteredIntegrations = getFilteredIntegrations(mainTab);
     connectedIntegrationsSection = (
       <>
-        <h4 className="connected-title">Connected integrations</h4>
+        <h4 className="connected-title" style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+            cssConfig.css_data.text.primary : 'white'
+        }}>
+          Connected integrations
+        </h4>
         {filteredIntegrations.length > 0 ? (
           <>
             <div className="integrations-tabs">
@@ -386,7 +398,10 @@ const IntegrationsIndex = (ApiUserData) => {
             )}
           </>
         ) : (
-          <p className="no-integrations-message">
+          <p className="no-integrations-message" style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+              cssConfig.css_data.text.quaternary : '#AAA'
+          }}>
             No integrations connected yet. Connect to an integration above to get started.
           </p>
         )}
@@ -421,6 +436,15 @@ const IntegrationsIndex = (ApiUserData) => {
             key={tab}
             className={`main-tab-btn${mainTab === tab ? ' active' : ''}`}
             onClick={() => setMainTab(tab)}
+            style={{
+              color: mainTab === tab 
+                ? (!cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                  ? cssConfig.css_data.text.navigation_text 
+                  : '#6b8aff')
+                : (!cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : '#fff')
+            }}
           >
             {tab}
           </button>
@@ -463,7 +487,12 @@ const IntegrationsIndex = (ApiUserData) => {
                 : 
                 <div className="partner-tile" style={{ cursor: 'pointer' }} onClick={() => window.location.href = '/setting/contact'}>
                   <img className="partner-logo" alt="Slack Logo" src={SlackLogo} style={{ width: '83px', height: '50px' }} />
-                  <p>Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.</p>
+                  <p style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : 'rgba(204, 204, 204, 1)'
+                  }}>
+                    Connect your Slack account to allow HostBuddy to send action item notifications to your Slack channels. Reply to guests directly through Slack from your instruction.
+                  </p>
                 </div>
               }
              
@@ -497,7 +526,12 @@ const IntegrationsIndex = (ApiUserData) => {
               {isMountPlan && (
                 <div className="partner-tile">
                   <img className="partner-logo" alt="Mount Logo" src={MountLogoBlack} style={{ maxWidth: '150px', height: 'auto' }} />
-                  <p>Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area</p>
+                  <p style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : 'rgba(204, 204, 204, 1)'
+                  }}>
+                    Activate Mount Upsells to automatically provide your guests with a trip planning concierge! When activated, HostBuddy will guide your guests through the trip planning process, based on upsells in your area
+                  </p>
                   <div style={{ 
                     background: 'rgba(6, 9, 26, 1)',
                     border: '1px solid rgba(37, 39, 54, 1)',
@@ -555,78 +589,175 @@ const IntegrationsIndex = (ApiUserData) => {
           {mainTab === 'Webhooks' && (
             <>
               <div style={{ width: '100%', marginTop: '20px' }}>
-                <h4 className="fs-14 mb-4 mt-5 d-flex align-items-center">
+                <h4 className="webhook-section-title" style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                    cssConfig.css_data.text.primary : 'white'
+                }}>
                   {isProPlan && (
                     <img src={LockIcon} alt="lock" style={{ width: '14px', marginRight: '6px' }} />
                   )}
                   Webhook Endpoints
                 </h4>
-                {/* Webhook Table with headers */}
-                <div className="table-responsive">
-                  <table className="table">
-                    <colgroup>
-                      <col style={{ width: '25%' }} />
-                      <col style={{ width: '35%' }} />
-                      <col style={{ width: '20%' }} />
-                      <col style={{ width: '20%' }} />
-                    </colgroup>
-                    <thead>
-                      <tr>
-                        <th className="fs-14 text-white">Name</th>
-                        <th className="fs-14 text-white">Endpoint</th>
-                        <th className="fs-14 text-white">Status</th>
-                        <th className="fs-14 text-white">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Object.entries(webhooks).map(([url, details]) => (
-                        <tr key={url}>
-                          <td><h6 className="fs-14 text-white m-0">{details.name || url}</h6></td>
-                          <td><h6 className="fs-14 text-white m-0" style={{ wordBreak: 'break-all' }}>{url}</h6></td>
-                          <td><h6 className="fs-14 grey-text m-0">Confirmed</h6></td>
-                          <td>
-                            <Link to="#" style={{ color: "red", fontSize: "1rem", lineHeight: '1.2', margin: '0' }} className="text-link" onClick={() => handleDeleteWebhook(url)}>
-                              Delete
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                
+                {/* Webhook Table Container - Grid Layout */}
+                <div className="webhook-table-wrapper">
+                  {/* Table Header */}
+                  <div className="webhook-header-row">
+                    <div className="webhook-cell" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                        cssConfig.css_data.text.primary : 'white'
+                    }}>
+                      <span>Name</span>
+                    </div>
+                    <div className="webhook-cell webhook-cell-bordered" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                        cssConfig.css_data.text.primary : 'white'
+                    }}>
+                      <span>Endpoint</span>
+                    </div>
+                    <div className="webhook-cell webhook-cell-bordered" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                        cssConfig.css_data.text.primary : 'white'
+                    }}>
+                      <span>Status</span>
+                    </div>
+                    <div className="webhook-cell webhook-cell-bordered" style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                        cssConfig.css_data.text.primary : 'white'
+                    }}>
+                      <span>Action</span>
+                    </div>
+                  </div>
+
+                  {/* Add Webhook Row - First Row */}
+                  {!showAddWebhook && (
+                    <div className="webhook-add-row">
+                      <div className="webhook-cell-full">
+                        <Link to="#" className="text-link" onClick={handleAddWebhookClick}>
+                          + Add Webhook
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Existing Webhooks */}
+                  {Object.entries(webhooks).map(([url, details]) => (
+                    <div key={url} className="webhook-data-row">
+                      <div className="webhook-cell" style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                          cssConfig.css_data.text.secondary : 'white'
+                      }}>
+                        <span>{details.name || url}</span>
+                      </div>
+                      <div className="webhook-cell webhook-cell-bordered" style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                          cssConfig.css_data.text.secondary : 'white'
+                      }}>
+                        <span style={{ wordBreak: 'break-all' }}>{url}</span>
+                      </div>
+                      <div className="webhook-cell webhook-cell-bordered">
+                        <span className="grey-text" style={{
+                          color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                            cssConfig.css_data.text.quaternary : '#a6a9b2'
+                        }}>
+                          Confirmed
+                        </span>
+                      </div>
+                      <div className="webhook-cell webhook-cell-bordered">
+                        <Link to="#" className="webhook-delete-link" onClick={() => handleDeleteWebhook(url)}>
+                          Delete
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Empty State */}
+                  {Object.keys(webhooks).length === 0 && !showAddWebhook && (
+                    <div className="webhook-empty-row">
+                      <p style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? 
+                          cssConfig.css_data.text.quaternary : '#a6a9b2'
+                      }}>
+                        No webhooks connected yet.
+                      </p>
+                    </div>
+                  )}
                 </div>
+
                 {/* Add Webhook Form */}
-                {showAddWebhook ? (
-                  <div className="recipient" style={{ marginBottom: '18px' }}>
+                {showAddWebhook && (
+                  <div className="recipient" style={{ marginTop: '16px', marginBottom: '18px' }}>
                     <div className="row">
                       <div className="col input_group">
-                        <label htmlFor="webhookName">Name</label>
-                        <input type="text" id="webhookName" name="name" className="form-control" value={newWebhookName} onChange={e => setNewWebhookName(e.target.value)} />
+                        <label htmlFor="webhookName" style={{
+                          color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                            cssConfig.css_data.text.primary : 'white'
+                        }}>
+                          Name
+                        </label>
+                        <input 
+                          type="text" 
+                          id="webhookName" 
+                          name="name" 
+                          className="form-control" 
+                          value={newWebhookName} 
+                          onChange={e => setNewWebhookName(e.target.value)}
+                          style={{
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : 'white'
+                          }}
+                        />
                       </div>
                       <div className="col input_group">
-                        <label htmlFor="webhookUrl">Webhook URL</label>
-                        <input type="text" id="webhookUrl" name="url" className="form-control" placeholder="https://example.com/webhook" value={newWebhookUrl} onChange={e => setNewWebhookUrl(e.target.value)} />
+                        <label htmlFor="webhookUrl" style={{
+                          color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                            cssConfig.css_data.text.primary : 'white'
+                        }}>
+                          Webhook URL
+                        </label>
+                        <input 
+                          type="text" 
+                          id="webhookUrl" 
+                          name="url" 
+                          className="form-control" 
+                          placeholder="https://example.com/webhook" 
+                          value={newWebhookUrl} 
+                          onChange={e => setNewWebhookUrl(e.target.value)}
+                          style={{
+                            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                              cssConfig.css_data.text.secondary : 'white'
+                          }}
+                        />
                       </div>
                     </div>
                     {addWebhookError && <div style={{ color: 'red', marginTop: '8px' }}>{addWebhookError}</div>}
                     <span className="d-flex justify-content-center">
                       {!addingWebhook ? (
-                        <Link to="#" className="text-link" style={{ marginTop: '20px', textAlign: 'center' }} onClick={addWebhook}>
+                        <button 
+                          className="webhook-submit-btn"
+                          style={{ 
+                            marginTop: '20px',
+                            padding: '10px 40px',
+                            backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+                            borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            fontFamily: "'DM Sans', sans-serif",
+                            transition: 'background-color 0.2s ease'
+                          }} 
+                          onClick={(e) => { e.preventDefault(); addWebhook(); }}
+                        >
                           Submit
-                        </Link>
+                        </button>
                       ) : (
                         <Loader />
                       )}
                     </span>
                   </div>
-                ) : (
-                  <span className="d-flex justify-content-center" style={{ marginTop: '10px', marginBottom: '18px' }}>
-                    <Link to="#" className="text-link" onClick={handleAddWebhookClick}>
-                      + Add Webhook
-                    </Link>
-                  </span>
-                )}
-                {Object.keys(webhooks).length === 0 && (
-                  <div style={{ color: '#fff', padding: '16px' }}>No webhooks connected yet.</div>
                 )}
               </div>
               {/* Slack Accounts Section - Commented out as requested */}

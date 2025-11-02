@@ -266,6 +266,7 @@ function formatMessagesRespondedData(responseTimes) {
     identifier: 'Totals',
     title: 'Guest Messages Responded',
     data: [
+      { number: host_response_times.count, text: "" }, // By Host shown as big number, no label
       { number: host_response_times.count, text: "By Host" },
       { number: hostbuddy_response_times.count, text: "By HostBuddy" },
       //{ number: not_responded_in_2h, text: "Not Responded (Within 2h)" }
@@ -277,6 +278,7 @@ function formatMessagesRespondedData(responseTimes) {
     identifier: 'Percentages',
     title: 'Guest Messages Responded',
     data: [
+      { number: "100%", text: "" }, // Total percentage as big number, no label
       { number: `${hostProportion.toFixed(1)}%`, text: "By Host" },
       { number: `${hostbuddyProportion.toFixed(1)}%`, text: "By HostBuddy" },
       //{ number: `${notRespondedProportion.toFixed(1)}%`, text: "Not Responded (Within 2h)" }
@@ -303,6 +305,7 @@ function formatMessagesSentData(messagesSent) {
     identifier: 'Totals',
     title: 'Messages Sent (Total)',
     data: [
+      { number: totalResponses, text: "" }, // Total shown as big number, no label
       { number: host, text: "By Host" },
       { number: hostbuddy, text: "By HostBuddy" }
     ]
@@ -313,6 +316,7 @@ function formatMessagesSentData(messagesSent) {
     identifier: 'Percentages',
     title: 'Messages Sent',
     data: [
+      { number: "100%", text: "" }, // Total percentage as big number, no label
       { number: `${hostProportion.toFixed(1)}%`, text: "By Host" },
       { number: `${hostbuddyProportion.toFixed(1)}%`, text: "By HostBuddy" }
     ]
@@ -328,6 +332,14 @@ function formatResponseTimes(responseTimes) {
   // Extract average times from responseTimes object
   const hostAvgTime = responseTimes.host_response_times.average / 60; // Convert to minutes
   const hostBuddyAvgTime = responseTimes.hostbuddy_response_times.average / 60; // Convert to minutes
+  
+  // Calculate overall average (weighted by count)
+  const totalCount = responseTimes.host_response_times.count + responseTimes.hostbuddy_response_times.count;
+  const overallAvgTime = totalCount > 0 
+    ? ((responseTimes.host_response_times.average * responseTimes.host_response_times.count + 
+        responseTimes.hostbuddy_response_times.average * responseTimes.hostbuddy_response_times.count) / 
+       totalCount) / 60
+    : 0;
 
   // Format the data according to the template
   const formattedData = [
@@ -335,8 +347,9 @@ function formatResponseTimes(responseTimes) {
       identifier: 'Average Response Times',
       title: 'Average Response Times (minutes)',
       data: [
-        { number: hostBuddyAvgTime.toFixed(1), text: "HostBuddy" },
-        { number: hostAvgTime.toFixed(1), text: "Other Senders" }
+        { number: hostBuddyAvgTime.toFixed(1), text: "" }, // HostBuddy average as big number, no label
+        { number: hostBuddyAvgTime.toFixed(1), text: "By HostBuddy" },
+        { number: hostAvgTime.toFixed(1), text: "By Host" }
       ]
     }
   ];
@@ -367,9 +380,10 @@ function formatSentimentData(sentimentData) {
       identifier: `${category.charAt(0).toUpperCase() + category.slice(1)} Guests`,
       title: `Sentiment for ${category.charAt(0).toUpperCase() + category.slice(1)} Guests`,
       data: [
-        { number: isNaN(positivePercentage) ? "0" : `${positivePercentage}%`, text: 'Positive' },
-        { number: isNaN(neutralPercentage) ? "0" : `${neutralPercentage}%`, text: 'Neutral' },
-        { number: isNaN(negativePercentage) ? "0" : `${negativePercentage}%`, text: 'Negative' }
+        { number: isNaN(positivePercentage) ? "0%" : `${positivePercentage}%`, text: "" }, // Main percentage as big number, no label
+        { number: isNaN(positivePercentage) ? "0%" : `${positivePercentage}%`, text: 'Positive' },
+        { number: isNaN(neutralPercentage) ? "0%" : `${neutralPercentage}%`, text: 'Neutral' },
+        { number: isNaN(negativePercentage) ? "0%" : `${negativePercentage}%`, text: 'Negative' }
       ]
     };
   }
@@ -393,9 +407,10 @@ function formatSentimentData(sentimentData) {
     identifier: 'All Guests',
     title: 'Guest Sentiment',
     data: [
-      { number: isNaN(positiveAggregatedPercentage) ? "0" : `${positiveAggregatedPercentage}%`, text: 'Positive' },
-      { number: isNaN(neutralAggregatedPercentage) ? "0" : `${neutralAggregatedPercentage}%`, text: 'Neutral' },
-      { number: isNaN(negativeAggregatedPercentage) ? "0" : `${negativeAggregatedPercentage}%`, text: 'Negative' }
+      { number: isNaN(positiveAggregatedPercentage) ? "0%" : `${positiveAggregatedPercentage}%`, text: "" }, // Main percentage as big number, no label
+      { number: isNaN(positiveAggregatedPercentage) ? "0%" : `${positiveAggregatedPercentage}%`, text: 'Positive' },
+      { number: isNaN(neutralAggregatedPercentage) ? "0%" : `${neutralAggregatedPercentage}%`, text: 'Neutral' },
+      { number: isNaN(negativeAggregatedPercentage) ? "0%" : `${negativeAggregatedPercentage}%`, text: 'Negative' }
     ]
   };
 

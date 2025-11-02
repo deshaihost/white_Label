@@ -44,15 +44,251 @@
 
 .conversation-settings-inbox .switch-label {
   font-size: 14px;
-  color: #888;
+  color: var(--white-label-text-primary, #888);
+}
+
+/* Radio button and checkbox labels */
+.conversation-settings-inbox .form-check-label {
+  color: var(--white-label-text-secondary, #ffffff);
+  font-size: 15px;
 }
 
 .conversation-settings-inbox textarea.form-control.setting-textarea:disabled {
-  color: #AAA
+  color: var(--white-label-text-disabled, #AAA)
 }
 
 .conversation-settings-inbox .settings-label {
   font-size: 14px;
-  color: #BBB;
+  color: var(--white-label-text-secondary, #BBB);
   line-height: 18px;
+}
+
+/* Select dropdown hover state */
+.conversation-settings-inbox .setting-tab-select:hover {
+  background-color: var(--white-label-background-dropdown, #0F1117) !important;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.conversation-settings-inbox .setting-tab-select:focus {
+  background-color: var(--white-label-background-dropdown, #0F1117) !important;
+  outline: none;
+  box-shadow: none !important;
+}
+
+/* Select dropdown options styling */
+.conversation-settings-inbox .setting-tab-select option {
+  background-color: var(--white-label-background-dropdown, #0F1117) !important;
+  background: var(--white-label-background-dropdown, #0F1117) !important;
+  color: #fff !important;
+  padding: 10px 16px !important;
+}
+
+/* Hover state for options */
+.conversation-settings-inbox .setting-tab-select option:hover {
+  background-color: var(--white-label-background-hover, #01255e) !important;
+  background: var(--white-label-background-hover, #01255e) !important;
+  color: #fff !important;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.conversation-settings-inbox .setting-tab-select option:focus {
+  background-color: var(--white-label-background-hover, #01255e) !important;
+  background: var(--white-label-background-hover, #01255e) !important;
+  color: #fff !important;
+}
+
+/* Selected option default state */
+.conversation-settings-inbox .setting-tab-select option:checked {
+  background-color: var(--white-label-background-dropdown, #0F1117) !important;
+  background: var(--white-label-background-dropdown, #0F1117) !important;
+  color: #fff !important;
+}
+
+/* Selected option when hovered */
+.conversation-settings-inbox .setting-tab-select option:checked:hover {
+  background-color: var(--white-label-background-hover, #01255e) !important;
+  background: var(--white-label-background-hover, #01255e) !important;
+  color: #fff !important;
+}
+
+/* Direct Contact input styling */
+.conversation-settings-inbox .direct-contact-input {
+  background-color: var(--white-label-background-input, #0F1117) !important;
+  border: 1px solid #013280 !important;
+  border-radius: 8px !important;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.conversation-settings-inbox .direct-contact-input::placeholder,
+.conversation-settings-inbox .direct-contact-input::-webkit-input-placeholder,
+.conversation-settings-inbox .direct-contact-input::-moz-placeholder,
+.conversation-settings-inbox .direct-contact-input:-ms-input-placeholder,
+.conversation-settings-inbox .direct-contact-input:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
+}
+
+.conversation-settings-inbox .direct-contact-input:focus {
+  outline: none !important;
+  border-color: #3e88f7 !important;
+  background-color: var(--white-label-background-input, #0F1117) !important;
+  box-shadow: none !important;
+}
+
+/* Signature textarea styling */
+.conversation-settings-inbox .signature-textarea {
+  background-color: var(--white-label-background-textarea, #0F1117) !important;
+  border: 1px solid #013280 !important;
+  border-radius: 8px !important;
+  transition: border-color 0.15s ease-in-out;
+  resize: none;
+}
+
+.conversation-settings-inbox .signature-textarea::placeholder,
+.conversation-settings-inbox .signature-textarea::-webkit-input-placeholder,
+.conversation-settings-inbox .signature-textarea::-moz-placeholder,
+.conversation-settings-inbox .signature-textarea:-ms-input-placeholder,
+.conversation-settings-inbox .signature-textarea:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
+}
+
+.conversation-settings-inbox .signature-textarea:focus {
+  outline: none !important;
+  border-color: #3e88f7 !important;
+  background-color: var(--white-label-background-textarea, #0F1117) !important;
+  box-shadow: none !important;
+}
+
+.conversation-settings-inbox .signature-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Tone textarea styling */
+.conversation-settings-inbox .tone-textarea {
+  background-color: var(--white-label-background-textarea, #0F1117) !important;
+  border: 1px solid #013280 !important;
+  border-radius: 8px !important;
+  transition: border-color 0.15s ease-in-out;
+  resize: none;
+}
+
+.conversation-settings-inbox .tone-textarea::placeholder,
+.conversation-settings-inbox .tone-textarea::-webkit-input-placeholder,
+.conversation-settings-inbox .tone-textarea::-moz-placeholder,
+.conversation-settings-inbox .tone-textarea:-ms-input-placeholder,
+.conversation-settings-inbox .tone-textarea:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
+}
+
+.conversation-settings-inbox .tone-textarea:focus {
+  outline: none !important;
+  border-color: #3e88f7 !important;
+  background-color: var(--white-label-background-textarea, #0F1117) !important;
+  box-shadow: none !important;
+}
+
+.conversation-settings-inbox .tone-textarea:disabled {
+  color: var(--white-label-text-disabled, #AAA);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Language input styling */
+.conversation-settings-inbox .language-input {
+  background-color: var(--white-label-background-input, #0F1117) !important;
+  border: 1px solid #013280 !important;
+  border-radius: 8px !important;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.conversation-settings-inbox .language-input::placeholder,
+.conversation-settings-inbox .language-input::-webkit-input-placeholder,
+.conversation-settings-inbox .language-input::-moz-placeholder,
+.conversation-settings-inbox .language-input:-ms-input-placeholder,
+.conversation-settings-inbox .language-input:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
+}
+
+.conversation-settings-inbox .language-input:focus {
+  outline: none !important;
+  border-color: #3e88f7 !important;
+  background-color: var(--white-label-background-input, #0F1117) !important;
+  box-shadow: none !important;
+}
+
+/* Message delay inputs styling */
+.conversation-settings-inbox .delay-input {
+  background-color: var(--white-label-background-input, #0F1117) !important;
+  border: 1px solid #013280 !important;
+  border-radius: 8px !important;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.conversation-settings-inbox .delay-input::placeholder,
+.conversation-settings-inbox .delay-input::-webkit-input-placeholder,
+.conversation-settings-inbox .delay-input::-moz-placeholder,
+.conversation-settings-inbox .delay-input:-ms-input-placeholder,
+.conversation-settings-inbox .delay-input:-moz-placeholder {
+  color: var(--white-label-text-placeholder, #8A8E98) !important;
+}
+
+.conversation-settings-inbox .delay-input:focus {
+  outline: none !important;
+  border-color: #3e88f7 !important;
+  background-color: var(--white-label-background-input, #0F1117) !important;
+  box-shadow: none !important;
+}
+
+.conversation-settings-inbox .delay-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Save Settings button hover */
+.conversation-settings-inbox .save-settings-btn:hover {
+  background-color: #2a6fd9 !important;
+  border-color: #2a6fd9 !important;
+  transition: background-color 0.3s ease;
+}
+
+.conversation-settings-inbox .save-settings-btn:focus {
+  background-color: #3e88f7 !important;
+  border-color: #3e88f7 !important;
+  box-shadow: none !important;
+}
+
+/* React-Select input override */
+.property_Custom_Select input {
+  background-color: #0f1117 !important;
+  border-color: #013280 !important;
+  color: #fff !important;
+}
+
+.property_Custom_Select .custom-select__control {
+  background-color: #0f1117 !important;
+  border-color: #013280 !important;
+}
+
+.property_Custom_Select .custom-select__control--is-focused {
+  background-color: #0f1117 !important;
+  border-color: #013280 !important;
+  box-shadow: none !important;
+}
+
+/* Override all form-control styles in conversation settings */
+.conversation-settings-inbox .form-control,
+.conversation-settings-inbox input.form-control,
+.conversation-settings-inbox input[type="number"].form-control {
+  background-color: var(--white-label-background-input, #0f1117) !important;
+  background: var(--white-label-background-input, #0f1117) !important;
+  border: 1px solid var(--white-label-border-primary, #013280) !important;
+  border-color: var(--white-label-border-primary, #013280) !important;
+}
+
+.conversation-settings-inbox .form-control:focus,
+.conversation-settings-inbox input.form-control:focus,
+.conversation-settings-inbox input[type="number"].form-control:focus {
+  background-color: var(--white-label-background-input, #0f1117) !important;
+  background: var(--white-label-background-input, #0f1117) !important;
+  border-color: #3e88f7 !important;
 }

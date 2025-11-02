@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import "./smartTemplatesLanding.css";
 import { Helmet } from 'react-helmet';
 import { Link } from "react-router-dom";
+import { useWhiteLabelCss } from '../../helper/WhiteLabelCssContext';
 
 import SendWhenIfTile from "./sendWhenIfTiles/sendWhenIfTiles";
 import ConditionsModal from "./modals/conditionsModal";
@@ -13,6 +14,18 @@ const NightHouse = "https://hostbuddylb.com/new-landing-pages/penthouse-prop.web
 
 
 const SmartTemplatesLanding = () => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  
+  // Debug logging
+  console.log('🎨 [SmartTemplates] White Label CSS State:', {
+    cssLoading,
+    hasCssConfig: !!cssConfig,
+    hasTextConfig: !!cssConfig?.css_data?.text,
+    textColors: cssConfig?.css_data?.text,
+    primaryColor: cssConfig?.css_data?.text?.primary,
+    secondaryColor: cssConfig?.css_data?.text?.secondary
+  });
+  
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const fromPortal = queryParams.get('portal') === 'true'; // fromPortal true iff param "portal" is true (put when user is redirected here from within the portal). If not specified, defaults to false.
@@ -66,19 +79,47 @@ const SmartTemplatesLanding = () => {
       </Helmet>
       <div className="unmatched">
         <div className="container">
-          <h1>Templated Messages <span>For Everything</span>.</h1>
-          <h4>Supercharged with AI.</h4>
+          <div className="header-section">
+            <h1 className="main-title" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : 'white'
+            }}>
+              Smart Templates
+            </h1>
+            <p className="main-description" style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                cssConfig.css_data.text.secondary : '#a6a9b2'
+            }}>
+              Highly customizable templated messages that let you contact the right guests at the right time. Automate friendly check-in messages, strategic upsells, policy reminders, and much more. Use AI to add context awareness and a personal touch to each message.
+            </p>
+            <a href="#" className="learn-more-link">
+              Learn more →
+            </a>
+          </div>
           <div className="row first-section">
             <div className="col-lg-5 blur-background-top-left blur-background-bottom-right">
               <img src={NightHouse} alt="A luxury penthouse" />
             </div>
             <div className="col-lg-7">
-              <p>HostBuddy provides the most advanced templated messaging support in short-term rentals. Target any subset of your guests by choosing from a multitude of timing options and conditions. Use AI to bring context awareness and add a human-like touch to each message.</p>
-              <p>Smart Templates makes it easy for you to set up automations that earn you value. Automate strategic upsells that make money, timely check-ins that make your guests feel special, policy reminders, and so much more.</p>
+              <p style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                  cssConfig.css_data.text.secondary : '#FFF'
+              }}>
+                HostBuddy provides the most advanced templated messaging support in short-term rentals. Target any subset of your guests by choosing from a multitude of timing options and conditions. Use AI to bring context awareness and add a human-like touch to each message.
+              </p>
+              <p style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                  cssConfig.css_data.text.secondary : '#FFF'
+              }}>
+                Smart Templates makes it easy for you to set up automations that earn you value. Automate strategic upsells that make money, timely check-ins that make your guests feel special, policy reminders, and so much more.
+              </p>
             </div>
           </div>
           <div className="trust">
-            <h2>
+            <h2 style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                cssConfig.css_data.text.primary : '#fff'
+            }}>
               How It <span className="color-change">Works</span>
             </h2>
             {/*
@@ -91,22 +132,67 @@ const SmartTemplatesLanding = () => {
             <div className="row">
               <div className="col-lg-7 col-md-7 left-column">
                 <div className="icon-boc-con" style={{marginTop:'0px'}}>
-                  <h2>1. <span className="color-change">Compose</span></h2>
-                  <p>Write your message, and add variables to match the data for each reservation.</p>
+                  <h2 style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                      cssConfig.css_data.text.primary : '#fff'
+                  }}>
+                    1. <span className="color-change">Compose</span>
+                  </h2>
+                  <p style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : '#FFF'
+                  }}>
+                    Write your message, and add variables to match the data for each reservation.
+                  </p>
                 </div>
                 <div className="icon-boc-con">
-                  <h2>2. <span className="color-change">Target</span></h2>
-                  <p>Choose from a myriad of conditions and parameters to narrow down on the specific set of guests you want to message. <a href="#" onClick={(e) => handleShowModalClick(e, setShowConditionsModal)}>See all the conditions</a> you can target by.</p>
+                  <h2 style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                      cssConfig.css_data.text.primary : '#fff'
+                  }}>
+                    2. <span className="color-change">Target</span>
+                  </h2>
+                  <p style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : '#FFF'
+                  }}>
+                    Choose from a myriad of conditions and parameters to narrow down on the specific set of guests you want to message. <a href="#" onClick={(e) => handleShowModalClick(e, setShowConditionsModal)}>See all the conditions</a> you can target by.
+                  </p>
                 </div>
                 <div className="icon-boc-con">
-                  <h2>3. <span className="color-change">Schedule</span></h2>
-                  <p>Schedule for anytime before, during, or after the guest’s reservation; a specific weekday or calendar date; or when a specific event happens, such as a booking. <a href="#" onClick={(e) => handleShowModalClick(e, setShowTriggersModal)}>See all the events</a> you can schedule by.</p>
+                  <h2 style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                      cssConfig.css_data.text.primary : '#fff'
+                  }}>
+                    3. <span className="color-change">Schedule</span>
+                  </h2>
+                  <p style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : '#FFF'
+                  }}>
+                    Schedule for anytime before, during, or after the guest's reservation; a specific weekday or calendar date; or when a specific event happens, such as a booking. <a href="#" onClick={(e) => handleShowModalClick(e, setShowTriggersModal)}>See all the events</a> you can schedule by.
+                  </p>
                 </div>
                 <div className="icon-boc-con">
-                  <h2>4. Enable <span className="color-change">AI</span></h2>
-                  <p>HostBuddy can use AI stop your message from sending if it is not relevant to a guest or not contextually appropriate - for example, if you’re asking a guest to leave a review when they already told you they have.</p>
+                  <h2 style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.primary ? 
+                      cssConfig.css_data.text.primary : '#fff'
+                  }}>
+                    4. Enable <span className="color-change">AI</span>
+                  </h2>
+                  <p style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : '#FFF'
+                  }}>
+                    HostBuddy can use AI stop your message from sending if it is not relevant to a guest or not contextually appropriate - for example, if you're asking a guest to leave a review when they already told you they have.
+                  </p>
                   {/* <p>HostBuddy can also use AI to personalize each message to each guest, making it sound less like a robotic templated message and more like a friendly, human gesture. <a href="#" onClick={(e) => handleShowModalClick(e, setShowAiExamplesModal)}>See examples</a>.</p> */}
-                  <p>HostBuddy can also use AI to personalize each message to each guest, making it sound less like a robotic templated message and more like a friendly, human gesture.</p>
+                  <p style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary ? 
+                      cssConfig.css_data.text.secondary : '#FFF'
+                  }}>
+                    HostBuddy can also use AI to personalize each message to each guest, making it sound less like a robotic templated message and more like a friendly, human gesture.
+                  </p>
                 </div>
               </div>
               <div className="col-lg-5 col-md-5 right-column blur-background-top-left blur-background-bottom-right">

@@ -171,18 +171,16 @@ const Properties = () => {
       <Helmet>
         <title>Properties - HostBuddy AI</title>
       </Helmet>
-      <div className="account-main">
-        <div className="container">
-          <div className="banner-heading">{/* <h2>My HostBuddy</h2> */}</div>
-
+      <div className="properties-page-container">
+        <div className="properties-max-width">
           {userData?.hospitable_permission_error && (
-            <div style={{marginBottom:'20px', marginTop:'-30px'}}>
+            <div style={{marginBottom:'20px'}}>
               <AccountNotifBanner title='Messaging Permissions Needed' theme='error' message={<>Your HostBuddy messages aren't going through because your messaging permissions have not been enabled within Hospitable. Follow <a target="_blank" rel="noreferrer" href="https://userguide.hostbuddy.ai/pms-integration-guides/hospitable">these steps</a> to obtain the needed permissions for your account.</>} />
             </div>
           )}
 
           {hospitableWhReminder && (
-            <div style={{marginBottom:'20px', marginTop:(userData?.hospitable_permission_error ? '0px' : '-30px')}}>
+            <div style={{marginBottom:'20px'}}>
               {!hospitableWhReminderMoreThan24hAgo ? (
                 <AccountNotifBanner title='Set Up Your Webhooks In Hospitable' theme='default' message={
                   <>
@@ -201,126 +199,100 @@ const Properties = () => {
             </div>
           )}
           
-          <SubscriptionBanner userData={userData} bottomMargin={'20px'} topMargin={(userData?.hospitable_permission_error || hospitableWhReminder) ? '0px' : '-30px'} />          <div className="row justify-content-center">
-            {/* <div className="col-lg-2 col-xl-2 col-xxl-2">
-              
-              <SideBar />
-            </div> */}
-            <div className="col-lg-10 col-xl-10 col-xxl-10">
-              <div className="account-container blur-background-top-right">
-                <div className="account_heading">
-                  <h3>Properties</h3>
-                  <div className="property-heading-right">
-                    {propertiesExtraData && intergrations &&
-                     Object.keys(propertiesExtraData).length > 0 &&
-                     Object.keys(intergrations).length > 0 && (
-                        <>
-                          <p>HostBuddy Status</p>
-                          {toggleChatLoading && <FullScreenLoader />}
-                          {!anyPropertyNotForcedOff ? (
-                            <button className="bg-danger text-white rounded-pill border-danger btn border" onClick={(e) => {toggleChatBotHndle(true);}}>
-                              ALL STOPPED
-                            </button>
-                          ) : (
-                            <button className="bg-dark text-primary border-primary btn border rounded-pill" onClick={(e) => {toggleChatBotHndle(false);}}>
-                              STOP ALL
-                            </button>
-                          )}
-                        </>
-                      )}
-                  </div>
+          <SubscriptionBanner userData={userData} bottomMargin={'20px'} topMargin={(userData?.hospitable_permission_error || hospitableWhReminder) ? '0px' : '0px'} />
+          
+          {/* Header */}
+          <div className="properties-header">
+            <h1 className="properties-title">Properties</h1>
+            <div className="properties-header-actions">
+
+              {/*
+              {propertiesExtraData && Object.keys(propertiesExtraData).length > 0 && (
+                <div className="hostbuddy-status-indicator">
+                  <div className={`status-dot ${anyPropertyNotForcedOff ? 'status-online' : 'status-offline'}`}></div>
+                  <span className="status-label">HostBuddy Status</span>
                 </div>
-                <div className="addproperty_links text-center">
-                  <div className="tiles-container">
-                    {(!intergrations || Object.keys(intergrations).length === 0) ? (
-                      <div className="tile" onClick={() => handleModelOpen("pmsIntegrationOpen")}>
-                        <h3>Connect Your PMS</h3>
-                        <p>Connect your Property Management Software to import your properties.</p>
-                      </div>
-                    ) : (
-                      <>
-                        {/* Original connected statement layout - kept for reference
-                        <div
-                          className="ConnectedStatement"
-                          style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-                          <p style={{ color: "white" }}>
-                            {`Connected to ${
-                              Object.keys(intergrations)[0] === "ownerrez" ? "OwnerRez" :
-                              Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)
-                            }`}
-                          </p>
-                          <div
-                            className="IntegrationsOptions"
-                            style={{display: "flex", flexDirection: "row", justifyContent: "center"}}
-                          >
-                            <button
-                              style={{fontSize: "0.9em", marginRight: "0px", color: "#146EF5", background: "none", border: "none"}}
-                              onClick={() => handleModelOpen("importPropertiesOpen")}
-                            >
-                              Import Properties
-                            </button>
-                            <p
-                              style={{fontSize: "0.9em", color: "white", marginLeft: "20px", marginRight: "20px"}}>
-                              |
-                            </p>
-                            <button
-                              style={{fontSize: "0.9em", marginLeft: "0px", color: "#146EF5", background: "none", border: "none"}}
-                              onClick={() => handleModelOpen("disconnectIntegrationOpen")}
-                            >
-                              Disconnect
-                            </button>
-                          </div>
-                        </div>
-                        */}
-                        <div className="tile" onClick={() => handleModelOpen("importPropertiesOpen")}>
-                          <h3>Import Properties</h3>
-                          <p>Connected to {
-                            Object.keys(intergrations)[0] === "ownerrez" ? "OwnerRez" :
-                            Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)
-                          }. Click to import your properties.</p>
-                        </div>
-                      </>
-                    )}
-                    {(['trial', 'trial_over', 'subscription_over'].includes(subscription_data.plan) || ['canceled'].includes(subscription_data.status)) && (
-                      <div className="tile" onClick={() => handleModelOpen("addPropertyOpen")}>
-                        <h3>Subscribe</h3>
-                        <p>Get HostBuddy plugged in to your guest communication.</p>
-                      </div>
-                    )}
-                  </div>
-                  {numPropsStillLocked > 0 &&
-                    remainingUnlocksAllowed >= numPropsStillLocked && (
-                      <button type="button" className="unlock-all-button" onClick={() => {handleUnlockAllClick();}}>
-                        Unlock All Properties
-                      </button>
+              )}
+              */}
+
+              {toggleChatLoading && <FullScreenLoader />}
+              {numPropsStillLocked > 0 && remainingUnlocksAllowed >= numPropsStillLocked && (
+                <button className="unlock-all-btn" onClick={() => {handleUnlockAllClick();}}>
+                  <svg className="lock-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <rect x="3" y="7" width="10" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M5 7V5C5 3.34315 6.34315 2 8 2C9.65685 2 11 3.34315 11 5V7" stroke="currentColor" strokeWidth="1.5"/>
+                  </svg>
+                  Unlock All
+                </button>
+              )}
+              {propertiesExtraData &&
+               Object.keys(propertiesExtraData).length > 0 && (
+                <>
+                  {!anyPropertyNotForcedOff ? (
+                    <button className="stop-all-btn resumed" onClick={(e) => {toggleChatBotHndle(true);}}>
+                      RESUME ALL
+                    </button>
+                  ) : (
+                    <button className="stop-all-btn" onClick={(e) => {toggleChatBotHndle(false);}}>
+                      STOP ALL
+                    </button>
                   )}
-                </div>
+                </>
+              )}
+            </div>
+          </div>
 
-                {userData?.allow_multiprop ? (
-                  <div className="addproperty_links text-center">
-                    <div className="tabs-container">
-                      <button
-                        className={activeTab === 'properties' ? 'tab-button active' : 'tab-button'}
-                        onClick={() => setActiveTab('properties')}
-                      >
-                        Your Properties
-                      </button>
-                      <button
-                        className={activeTab === 'chat' ? 'tab-button active' : 'tab-button'}
-                        onClick={() => setActiveTab('chat')}
-                      >
-                        Multi-Property Chat
-                      </button>
-                    </div>
-                  </div>
-                ) : null}
-
-                <div className="property_list">
-                  {(userData?.allow_multiprop && activeTab === 'chat') ? <MultiPropertiesChat /> : <ListIntegrationProperties />}
+          {/* Action Tiles */}
+          <div className="properties-tiles-section">
+            <div className="properties-tiles-container">
+              {(!intergrations || Object.keys(intergrations).length === 0) ? (
+                <div className="properties-action-tile" onClick={() => handleModelOpen("pmsIntegrationOpen")}>
+                  <h3 className="tile-title">Connect Your PMS</h3>
+                  <p className="tile-description">Connect your Property Management Software to import your properties.</p>
                 </div>
-                <div className="load_more"></div>
+              ) : (
+                <div className="properties-action-tile" onClick={() => handleModelOpen("importPropertiesOpen")}>
+                  <h3 className="tile-title">Import Properties</h3>
+                  <p className="tile-description">
+                    Connected to {
+                      Object.keys(intergrations)[0] === "ownerrez" ? "OwnerRez" :
+                      Object.keys(intergrations)[0].charAt(0).toUpperCase() + Object.keys(intergrations)[0].slice(1)
+                    }. Click to import your properties.
+                  </p>
+                </div>
+              )}
+              {(['trial', 'trial_over', 'subscription_over'].includes(subscription_data.plan) || ['canceled'].includes(subscription_data.status)) && (
+                <div className="properties-action-tile" onClick={() => handleModelOpen("addPropertyOpen")}>
+                  <h3 className="tile-title">Subscribe</h3>
+                  <p className="tile-description">Get HostBuddy plugged in to your guest communication.</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Tabs (if multi-property enabled) */}
+          {userData?.allow_multiprop ? (
+            <div className="properties-tabs-section">
+              <div className="properties-tabs-container">
+                <button
+                  className={activeTab === 'properties' ? 'properties-tab-button active' : 'properties-tab-button'}
+                  onClick={() => setActiveTab('properties')}
+                >
+                  Your Properties
+                </button>
+                <button
+                  className={activeTab === 'chat' ? 'properties-tab-button active' : 'properties-tab-button'}
+                  onClick={() => setActiveTab('chat')}
+                >
+                  Multi-Property Chat
+                </button>
               </div>
             </div>
+          ) : null}
+
+          {/* Properties List */}
+          <div className="properties-list-section">
+            {(userData?.allow_multiprop && activeTab === 'chat') ? <MultiPropertiesChat /> : <ListIntegrationProperties />}
           </div>
         </div>
       </div>

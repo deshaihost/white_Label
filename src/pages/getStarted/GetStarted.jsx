@@ -1,20 +1,9 @@
 import React, { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import "./GetStarted.css";
-import IconOne from "../../helper/staticImage/icon1.webp";
-import IconTwo from "../../helper/staticImage/icon2.webp";
-import IconThree from "../../helper/staticImage/icon3.webp";
-import IconFour from "../../helper/staticImage/icon4.webp";
-// import GetStartConnect from "./model/GetStartConnect";
-import { Link } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
 import HostDaddy from '../../component/hostDaddy/hostDaddy';
-
-const step1img = "https://hostbuddylb.com/get-started/1.%20Connect%20your%20PMS.webp";
-const step2img = "https://hostbuddylb.com/get-started/2.%20Add%20your%20properties.webp";
-const step3img = "https://hostbuddylb.com/get-started/3.%20Set%20Knowledge%20Base.webp";
-const step4img = "https://hostbuddylb.com/get-started/4.%20Try%20it%20out.webp";
-const step5img = "https://hostbuddylb.com/get-started/5.%20Schedule.webp";
+import faviconImage from "../../public/img/logo/logoGraphicOnlySquare.png";
 
 const featureData = [
   /*
@@ -95,56 +84,189 @@ const GetStarted = () => {
             </Col>
 
             <div className="new-get row">
-              <div className="col-lg-6 ">
+              {/* Step 1: Connect your PMS */}
+              <div className="col-lg-6">
                 <div
-                  className="px-4 py-3 border border-primary rounded-15 d-flex mainCursor flex-column link_card_box"
+                  className="px-4 py-3 border border-primary rounded-15 d-flex mainCursor flex-column link_card_box position-relative"
                   onClick={() => handleTileClick(connectYourPMS)}
                 >
-                  <div className="icon-con ">
-                    <h2>1</h2>
-                    <div className="icon-right">
-                      <span>Connect your PMS</span>
-                      <img src={IconOne} alt="" />
+                  <div className="card-number">1</div>
+                  <div className="card-title-top">Connect your PMS</div>
+                  <div className="step-card-visual-main">
+                    {/* PMS System - Cloud Server */}
+                    <div className="visual-item-v2">
+                      <div className="icon-wrapper-64">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                          {/* Cloud */}
+                          <path d="M48 28C48 24 45 20 40 20C40 14 35 10 28 10C21 10 16 14 16 20C11 20 8 24 8 28C8 32 11 36 16 36H48C53 36 56 32 56 28C56 24 53 20 48 20V28Z" fill="#01255e" opacity="0.3"/>
+                          <path d="M48 28C48 24 45 20 40 20C40 14 35 10 28 10C21 10 16 14 16 20C11 20 8 24 8 28C8 32 11 36 16 36H48C53 36 56 32 56 28C56 24 53 20 48 20V28Z" stroke="#3e88f7" strokeWidth="2.5"/>
+                          {/* Server lines */}
+                          <rect x="16" y="42" width="32" height="8" rx="2" fill="#3e88f7" opacity="0.6"/>
+                          <rect x="16" y="52" width="32" height="8" rx="2" fill="#3e88f7"/>
+                          <circle cx="20" cy="46" r="1.5" fill="white"/>
+                          <circle cx="20" cy="56" r="1.5" fill="white"/>
+                        </svg>
+                      </div>
+                      <span className="visual-label-v2">Your PMS</span>
+                    </div>
+                    
+                    {/* Sync Arrow */}
+                    <div className="visual-arrow-v2">
+                      <FaArrowRightLong style={{ width: '40px', height: '40px', color: '#3e88f7' }} strokeWidth={2.5} />
+                    </div>
+                    
+                    {/* HostBuddy Icon */}
+                    <div className="visual-item-v2">
+                      <div className="hostbuddy-icon-v2">
+                        <img src={faviconImage} alt="HostBuddy AI" />
+                      </div>
+                      <span className="visual-label-v2">HostBuddy AI</span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6 ">
+
+              {/* Step 2: Import your Properties */}
+              <div className="col-lg-6">
                 <div
-                  className="px-4 py-3 border mainCursor border-primary rounded-15 d-flex flex-column link_card_box"
+                  className="px-4 py-3 border mainCursor border-primary rounded-15 d-flex flex-column link_card_box position-relative"
                   onClick={() => handleTileClick(importYourProperties)}>
-                  <div className="icon-con ">
-                    <h2>2</h2>
-                    <div className="icon-right">
-                      <span>Import your Properties</span>
-                      <img src={IconTwo} alt="" />
+                  <div className="card-number">2</div>
+                  <div className="card-title-top">Import your Properties</div>
+                  <div className="step-card-visual-main">
+                    {/* Multiple property cards */}
+                    <div className="property-cards-container">
+                      {/* Property card 1 */}
+                      <div className="property-card-v2 card-v2-1">
+                        <div className="card-header-img"></div>
+                        <div className="card-text-lines">
+                          <div className="text-line"></div>
+                          <div className="text-line short-line"></div>
+                        </div>
+                      </div>
+                      {/* Property card 2 */}
+                      <div className="property-card-v2 card-v2-2">
+                        <div className="card-header-img"></div>
+                        <div className="card-text-lines">
+                          <div className="text-line"></div>
+                          <div className="text-line short-line"></div>
+                        </div>
+                      </div>
+                      {/* Property card 3 */}
+                      <div className="property-card-v2 card-v2-3">
+                        <div className="card-header-img"></div>
+                        <div className="card-text-lines">
+                          <div className="text-line"></div>
+                          <div className="text-line short-line"></div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="visual-arrow-v2">
+                      <FaArrowRightLong style={{ width: '40px', height: '40px', color: '#3e88f7' }} strokeWidth={2.5} />
+                    </div>
+                    
+                    {/* HostBuddy with badge */}
+                    <div className="visual-item-v2">
+                      <div className="hostbuddy-icon-v2 position-relative">
+                        <img src={faviconImage} alt="HostBuddy AI" />
+                        <div className="property-count-badge">3</div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6 ">
+
+              {/* Step 3: Test */}
+              <div className="col-lg-6">
                 <div
-                  className="px-4 py-3 border mainCursor border-primary rounded-15 d-flex flex-column link_card_box"
+                  className="px-4 py-3 border mainCursor border-primary rounded-15 d-flex flex-column link_card_box position-relative"
                   onClick={() => handleTileClick(test)}>
-                  <div className="icon-con ">
-                    <h2>3</h2>
-                    <div className="icon-right">
-                      <span>Test</span>
-                      <img src={IconThree} alt="" />
+                  <div className="card-number">3</div>
+                  <div className="card-title-top">Test</div>
+                  <div className="step-card-visual-main">
+                    {/* Chat bubbles with AI */}
+                    <div className="chat-wrapper">
+                      {/* User message */}
+                      <div className="chat-bubble-v2 user-bubble">
+                        <div className="bubble-dots">
+                          <div className="bubble-dot"></div>
+                          <div className="bubble-dot"></div>
+                          <div className="bubble-dot"></div>
+                        </div>
+                      </div>
+                      {/* AI response */}
+                      <div className="chat-bubble-v2 ai-bubble position-relative">
+                        <div className="bubble-dots">
+                          <div className="bubble-dot ai-dot"></div>
+                          <div className="bubble-dot ai-dot"></div>
+                          <div className="bubble-dot ai-dot"></div>
+                        </div>
+                        {/* AI badge */}
+                        <div className="ai-badge-avatar">
+                          <img src={faviconImage} alt="AI" />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Testing checklist */}
+                    <div className="test-checklist-box">
+                      <div className="checklist-row">
+                        <div className="check-icon completed">
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                            <path d="M2 5L4 7L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <div className="check-progress-line completed"></div>
+                      </div>
+                      <div className="checklist-row">
+                        <div className="check-icon completed">
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                            <path d="M2 5L4 7L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <div className="check-progress-line completed"></div>
+                      </div>
+                      <div className="checklist-row">
+                        <div className="check-icon in-progress">
+                          <div className="pulse-dot-v2"></div>
+                        </div>
+                        <div className="check-progress-line in-progress"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6 ">
+
+              {/* Step 4: Go Live */}
+              <div className="col-lg-6">
                 <div
-                  className="px-4 py-3 border border-primary mainCursor rounded-15 d-flex flex-column link_card_box "
+                  className="px-4 py-3 border border-primary mainCursor rounded-15 d-flex flex-column link_card_box position-relative"
                   onClick={() => handleTileClick(goLive)}>
-                  <div className="icon-con">
-                    <h2>4</h2>
-                    <div className="icon-right">
-                      <span>Go Live</span>
-                      <img src={IconFour} alt="" />
-                    </div>
+                  <div className="card-number">4</div>
+                  <div className="card-title-top">Go Live</div>
+                  <div className="step-card-visual-main justify-content-center">
+                    {/* Simple Rocket Launch SVG */}
+                    <svg width="120" height="80" viewBox="0 0 120 80" fill="none">
+                      {/* Rocket body */}
+                      <path d="M60 15L50 35H70L60 15Z" fill="#3e88f7"/>
+                      <rect x="50" y="35" width="20" height="25" rx="2" fill="#3e88f7"/>
+                      {/* Window */}
+                      <circle cx="60" cy="45" r="4" fill="#98bffa"/>
+                      {/* Fins */}
+                      <path d="M50 50L40 65L50 60Z" fill="#01255e"/>
+                      <path d="M70 50L80 65L70 60Z" fill="#01255e"/>
+                      {/* Flame */}
+                      <path d="M55 60L52 70L60 65L68 70L65 60Z" fill="#5296f8" opacity="0.6"/>
+                      <path d="M57 60L55 68L60 64L65 68L63 60Z" fill="#98bffa" opacity="0.8"/>
+                      {/* Motion lines */}
+                      <path d="M20 25L30 25" stroke="#3e88f7" strokeWidth="2" strokeLinecap="round" opacity="0.4"/>
+                      <path d="M15 35L25 35" stroke="#3e88f7" strokeWidth="2" strokeLinecap="round" opacity="0.4"/>
+                      <path d="M18 45L28 45" stroke="#3e88f7" strokeWidth="2" strokeLinecap="round" opacity="0.4"/>
+                      <path d="M90 25L100 25" stroke="#3e88f7" strokeWidth="2" strokeLinecap="round" opacity="0.4"/>
+                      <path d="M95 35L105 35" stroke="#3e88f7" strokeWidth="2" strokeLinecap="round" opacity="0.4"/>
+                      <path d="M92 45L102 45" stroke="#3e88f7" strokeWidth="2" strokeLinecap="round" opacity="0.4"/>
+                    </svg>
                   </div>
                 </div>
               </div>
@@ -153,11 +275,10 @@ const GetStarted = () => {
           </Row>
           <Row style={{ marginTop: "50px", marginBottom: "100px" }}>
             <Col lg={12} className="mx-auto">
-              <h3 className="fw-bold text-white fs-1 mb-4">
-                Explore <strong>HostBuddy's Features</strong>
+              <h3 className="explore-features-title">
+                Explore <span className="text-primary-blue">HostBuddy's Features</span>
               </h3>
-              {/* <p className="mb-3 fw-bold text-white fs-6">HostBuddy is packed with features that make it easy for you to automate your short term rental business. Read on to learn how to make the most of your AI companion.</p> */}
-              <p className="mb-3 fw-bold text-white fs-6">
+              <p className="explore-features-description">
                 HostBuddy is packed with features that make it easy for you to automate your short term rental business and drive more revenue. Check them out below.
               </p>
             </Col>

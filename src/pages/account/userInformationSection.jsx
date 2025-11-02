@@ -12,10 +12,12 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import ChangePassModal from './changePassModal';
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 const UserInformationSection = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
 
   const [formData, setFormData] = useState({ firstName: '', lastName: '', phone: '', email: '', oldPassword: '', newPassword: '', confirmPassword: '' });
   const [errors, setErrors] = useState({});
@@ -125,50 +127,68 @@ const UserInformationSection = () => {
 
   return (
     <div className="account-content">
-      <h3 className="mb-3">Account</h3>
+      {/* Section Divider */}
+      <div className="section-divider">
+        <div className="section-divider-line"></div>
+        <span className="section-divider-text">Personal Information</span>
+        <div className="section-divider-line"></div>
+      </div>
 
-      <form>
-
-        <div className="row">
-          <div className="col-lg-6 input_group mb-3 mb-lg-0">
-            <label htmlFor="firstName">First Name</label>
-            <input type="text" id="firstName" name="firstName" className="form-control" value={formData.firstName} onChange={handleChange} />
-            {errors.firstName && <>{ErrorMessageShow(errors.firstName)}</>}
-          </div>
-          <div className="col-lg-6 input_group">
-            <label htmlFor="lastName">Last Name</label>
-            <input type="text" id="lastName" name="lastName" className="form-control" value={formData.lastName} onChange={handleChange} />
-            {errors.lastName && <>{ErrorMessageShow(errors.lastName)}</>}
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-6 input_group mb-3 mb-lg-0">
-            <label htmlFor="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" className="form-control" maxLength="10" value={formData.phone} onChange={handleChange} />
-            {errors.phone && <>{ErrorMessageShow(errors.phone)}</>}
-          </div>
-          <div className="col-lg-6 input_group">
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" name="email" className="form-control" value={formData.email} onChange={handleChange} />
-          </div>
+      {/* Account Details Card */}
+      <div className="account-section-card">
+        <div className="section-header-with-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <h3>Account Details</h3>
         </div>
 
-        <div className="row">
-          <div className="col-12 text-center d-lg-flex align-items-center justify-content-center gap-3 mt-3">
-            <div style={{ width: "320px" }} className="d-flex justify-content-end">
-              <button type="button" className="bg_theme_btn show_password_fields" onClick={() => setShowChangePassModal(true)}>
-                Change Password
-              </button>
-            </div>
-            <div style={{ width: "320px" }} className="d-flex justify-content-start">
-              <button className="bg_theme_btn update_user_info ms-0 ms-lg-3" onClick={handleSubmit} disabled={updateApiLoading}>
-                {!updateApiLoading ? <>Save</> : <Loader />}
-              </button>
+        <form>
+          <div style={{ marginBottom: '16px' }}>
+            <div className="row">
+              <div className="input_group">
+                <label htmlFor="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" className="form-control" value={formData.firstName} onChange={handleChange} />
+                {errors.firstName && <>{ErrorMessageShow(errors.firstName)}</>}
+              </div>
+              <div className="input_group">
+                <label htmlFor="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" className="form-control" value={formData.lastName} onChange={handleChange} />
+                {errors.lastName && <>{ErrorMessageShow(errors.lastName)}</>}
+              </div>
             </div>
           </div>
-        </div>
 
-      </form>
+          <div style={{ marginBottom: '24px' }}>
+            <div className="row">
+              <div className="input_group">
+                <label htmlFor="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" className="form-control" maxLength="10" value={formData.phone} onChange={handleChange} placeholder="(555) 123-4567" />
+                {errors.phone && <>{ErrorMessageShow(errors.phone)}</>}
+              </div>
+              <div className="input_group">
+                <label htmlFor="email">Email</label>
+                <input type="email" id="email" name="email" className="form-control" value={formData.email} onChange={handleChange} />
+              </div>
+            </div>
+          </div>
+
+          <div className="button-container">
+            <button type="button" className="secondary-button show_password_fields" style={{ backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7' }} onClick={() => setShowChangePassModal(true)}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              Change Password
+            </button>
+            <button className="bg_theme_btn update_user_info" onClick={handleSubmit} disabled={updateApiLoading} type="button">
+              {!updateApiLoading ? <>Save</> : <Loader />}
+            </button>
+          </div>
+        </form>
+      </div>
+
       <ChangePassModal show={showChangePassModal} handleClose={() => setShowChangePassModal(false)} />
     </div>
   );

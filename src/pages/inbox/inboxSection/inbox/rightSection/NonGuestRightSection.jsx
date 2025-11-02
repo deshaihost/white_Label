@@ -1361,7 +1361,7 @@ const NonGuestRightSection = ({
             style={{
               background: "transparent",
               border: "none",
-              color: "#D0D3DB",
+              color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
               cursor: "pointer",
               fontSize: "24px",
               padding: "6px 12px",
@@ -1406,7 +1406,7 @@ const NonGuestRightSection = ({
               style={{
                 margin: 0,
                 marginBottom: "5px",
-                color: "#ffffff",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff",
                 fontFamily: '"Poppins-SemiBold", Helvetica',
                 fontSize: "16px",
                 fontWeight: 600,
@@ -1433,7 +1433,7 @@ const NonGuestRightSection = ({
           <div>
             <span
               style={{
-                color: "#A6A9B2",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1443,7 +1443,7 @@ const NonGuestRightSection = ({
             </span>
             <span
               style={{
-                color: "#D0D3DB",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1456,7 +1456,7 @@ const NonGuestRightSection = ({
           <div>
             <span
               style={{
-                color: "#A6A9B2",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1466,7 +1466,7 @@ const NonGuestRightSection = ({
             </span>
             <span
               style={{
-                color: "#D0D3DB",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1479,7 +1479,7 @@ const NonGuestRightSection = ({
           <div>
             <span
               style={{
-                color: "#A6A9B2",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1489,7 +1489,7 @@ const NonGuestRightSection = ({
             </span>
             <span
               style={{
-                color: "#D0D3DB",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1502,7 +1502,7 @@ const NonGuestRightSection = ({
           <div>
             <span
               style={{
-                color: "#A6A9B2",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1512,7 +1512,7 @@ const NonGuestRightSection = ({
             </span>
             <span
               style={{
-                color: "#D0D3DB",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1525,7 +1525,7 @@ const NonGuestRightSection = ({
           <div>
             <span
               style={{
-                color: "#A6A9B2",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1535,7 +1535,7 @@ const NonGuestRightSection = ({
             </span>
             <span
               style={{
-                color: "#D0D3DB",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1548,7 +1548,7 @@ const NonGuestRightSection = ({
           <div style={{ marginBottom: "5px" }}>
             <span
               style={{
-                color: "#A6A9B2",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1558,7 +1558,7 @@ const NonGuestRightSection = ({
             </span>
             <span
               style={{
-                color: "#D0D3DB",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1584,7 +1584,7 @@ const NonGuestRightSection = ({
           style={{
             margin: 0,
             marginBottom: "5px",
-            color: "#ffffff",
+            color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff",
             fontFamily: '"Poppins-SemiBold", Helvetica',
             fontSize: "16px",
             fontWeight: 600,
@@ -1608,7 +1608,7 @@ const NonGuestRightSection = ({
               style={{
                 fontSize: "14px",
                 fontFamily: '"DM Sans", Helvetica',
-                color: "#D0D3DB"
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB"
               }}
             >
               {contactType || "Select"}
@@ -1667,7 +1667,7 @@ const NonGuestRightSection = ({
           style={{
             margin: 0,
             marginBottom: "5px",
-            color: "#ffffff",
+            color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff",
             fontFamily: '"Poppins-SemiBold", Helvetica',
             fontSize: "16px",
             fontWeight: 600,
@@ -1692,7 +1692,9 @@ const NonGuestRightSection = ({
               style={{
                 fontSize: "14px",
                 fontFamily: '"DM Sans", Helvetica',
-                color: property ? "#D0D3DB" : "#A6A9B2",
+                color: property 
+                  ? getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB"
+                  : getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 flex: 1
               }}
             >
@@ -1761,7 +1763,7 @@ const NonGuestRightSection = ({
           {/* Loading indicator */}
           {propertyDropdownOpen && propertiesLoading && (
             <div className="user-dropdown-loading">
-              <span style={{ color: "white" }}>Loading...</span>
+              <span style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white" }}>Loading...</span>
             </div>
           )}
         </div>
@@ -1847,7 +1849,7 @@ const NonGuestRightSection = ({
                           style={{
                             alignItems: "center",
                             display: "flex",
-                            backgroundColor: "#24262E",
+                            backgroundColor: "var(--white-label-background-dropdown, #24262E)",
                             borderRadius: "4px",
                             gap: "6px",
                             height: "32px",
@@ -1887,7 +1889,7 @@ const NonGuestRightSection = ({
                               top: "100%",
                               left: "0",
                               right: "0",
-                              backgroundColor: "#262730",
+                              backgroundColor: "var(--white-label-background-dropdown, #262730)",
                               borderRadius: "4px",
                               marginTop: "4px",
                               zIndex: 100,
@@ -1903,7 +1905,7 @@ const NonGuestRightSection = ({
                                 style={{
                                   padding: "8px 16px",
                                   display: "block",
-                                  color: "white",
+                                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                   fontWeight: "500",
                                 }}
                                 role="option"
@@ -1924,7 +1926,7 @@ const NonGuestRightSection = ({
                                   padding: "8px 16px",
                                   cursor: "pointer",
                                   transition: "background-color 0.2s ease",
-                                  color: "white",
+                                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                   display: "flex",
                                   alignItems: "center",
                                   position: "relative",
@@ -1962,7 +1964,7 @@ const NonGuestRightSection = ({
                                     paddingLeft: "24px",
                                     cursor: "pointer",
                                     transition: "background-color 0.2s ease",
-                                    color: "white",
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                     display: "flex",
                                     alignItems: "center",
                                   }}
@@ -1995,7 +1997,7 @@ const NonGuestRightSection = ({
                                     paddingLeft: "24px",
                                     cursor: "pointer",
                                     transition: "background-color 0.2s ease",
-                                    color: "white",
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                     display: "flex",
                                     alignItems: "center",
                                   }}
@@ -2028,7 +2030,7 @@ const NonGuestRightSection = ({
                                     paddingLeft: "24px",
                                     cursor: "pointer",
                                     transition: "background-color 0.2s ease",
-                                    color: "white",
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                     display: "flex",
                                     alignItems: "center",
                                   }}
@@ -2061,7 +2063,7 @@ const NonGuestRightSection = ({
                                     paddingLeft: "24px",
                                     cursor: "pointer",
                                     transition: "background-color 0.2s ease",
-                                    color: "white",
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                     display: "flex",
                                     alignItems: "center",
                                   }}
@@ -2099,14 +2101,14 @@ const NonGuestRightSection = ({
 
               if (!hasProperty) {
                 return (
-                  <span style={{ color: "#A6A9B2", fontSize: "12px" }}>
+                  <span style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2", fontSize: "12px" }}>
                     Select a property to manage HostBuddy status
                   </span>
                 );
               }
 
               return (
-                <span style={{ color: "#A6A9B2", fontSize: "12px" }}>
+                <span style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2", fontSize: "12px" }}>
                   Loading status...
                 </span>
               );
@@ -2120,7 +2122,7 @@ const NonGuestRightSection = ({
           style={{
             margin: 0,
             marginBottom: "5px",
-            color: "#ffffff",
+            color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff",
             fontFamily: '"Poppins-SemiBold", Helvetica',
             fontSize: "16px",
             fontWeight: 600,
@@ -2210,7 +2212,7 @@ const NonGuestRightSection = ({
           {/* Loading indicator */}
           {subUserLoading && (
             <div className="user-dropdown-loading">
-              <span style={{ color: "white" }}>Loading...</span>
+              <span style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white" }}>Loading...</span>
             </div>
           )}
         </div>

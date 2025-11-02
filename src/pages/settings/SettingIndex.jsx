@@ -16,11 +16,16 @@ import DangerZone from '../account/dangerZone';
 import AccountNotificationSection from "../account/notificationSection";
 import MessagingChannels from "./settingContants/messagingChannels/messagingChannels";
 import ActionitemsSettings from "./settingContants/actionItems/actionItemSettings";
+import WhiteLabelRegistration from "./settingContants/whiteLabel/WhiteLabelRegistration";
+import WhiteLabelBranding from "./settingContants/whiteLabel/WhiteLabelBranding";
+import WhiteLabelFeatureSelection from "./settingContants/whiteLabel/WhiteLabelFeatureSelection";
 import { Link, useParams } from "react-router-dom";
 import HostDaddy from '../../component/hostDaddy/hostDaddy';
 import PMSSettings from "../account/pmsSettings";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 const SettingIndex = () => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const { section, subsec } = useParams();
@@ -37,7 +42,10 @@ const SettingIndex = () => {
     upsells: "upsells", 
     subscription: "subscription", 
     messagingChannels: "messaging-channels",
-    actionItems: "action-items"
+    actionItems: "action-items",
+    whiteLabelRegistration: "white-label-registration",
+    whiteLabelBranding: "white-label-branding",
+    whiteLabelFeatureSelection: "white-label-feature-selection"
   };
 
   const ApiUserData = store?.getUserDataReducer?.getUserData?.data?.user;
@@ -87,10 +95,38 @@ const SettingIndex = () => {
                   </Link>
                 </div> */}
               </div>
-              <div className="setting_tab_data border border-primary p-3 " style={{ borderRadius: "20px" }}>
+              <div 
+                className="setting_tab_data p-3" 
+                style={{ 
+                  borderRadius: "20px",
+                  background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
+                }}
+              >
                 <div className="setting_tab_data_inner">
                   {interFaceTypes?.account === interFaceSettings && (
                     <>
+                      <div className="account-page-header">
+                        <h1 style={{ 
+                          color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
+                          fontSize: '28px', 
+                          fontFamily: "'DM Sans', sans-serif", 
+                          fontWeight: '700', 
+                          fontVariationSettings: "'opsz' 14", 
+                          marginBottom: '8px' 
+                        }}>
+                          Account Settings
+                        </h1>
+                        <p style={{ 
+                          color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
+                          fontSize: '14px', 
+                          fontFamily: "'DM Sans', sans-serif", 
+                          fontWeight: '400', 
+                          fontVariationSettings: "'opsz' 14", 
+                          marginBottom: '40px' 
+                        }}>
+                          Manage your personal information, location, and account security
+                        </p>
+                      </div>
                       <UserInformationSection ApiUserData={userData} refreshUserData={refreshUserData} />
                       <AccountRegionSection ApiUserData={userData} refreshUserData={refreshUserData} />
                       <PMSSettings ApiUserData={userData} />
@@ -123,6 +159,15 @@ const SettingIndex = () => {
                   )}
                   {interFaceTypes?.actionItems === interFaceSettings && (
                     <ActionitemsSettings />
+                  )}
+                  {interFaceTypes?.whiteLabelRegistration === interFaceSettings && (
+                    <WhiteLabelRegistration />
+                  )}
+                  {interFaceTypes?.whiteLabelBranding === interFaceSettings && (
+                    <WhiteLabelBranding />
+                  )}
+                  {interFaceTypes?.whiteLabelFeatureSelection === interFaceSettings && (
+                    <WhiteLabelFeatureSelection />
                   )}
                 </div>
               </div>

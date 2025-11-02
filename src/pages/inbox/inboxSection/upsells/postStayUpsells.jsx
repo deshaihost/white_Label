@@ -8,6 +8,7 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import "../resources/upsells.css";
 import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
 import UpsellMessageModal from "../resources/upsellMessageModal";
+import { useWhiteLabelCss } from "../../../../helper/WhiteLabelCssContext";
 
 import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
@@ -33,6 +34,7 @@ default_settings = {
 
 const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localSettingsData, setLocalSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData, allPropertyNamesList}) => {
 
+  const { cssConfig, cssLoading } = useWhiteLabelCss();
   const [cancelMessageLoading, setCancelMessageLoading] = useState("");
   const [selectedConfig, setSelectedConfig] = useState("default"); // The currently selected config. All users have a "default" config
   const [messageModalHeaderText, setMessageModalHeaderText] = useState("");
@@ -198,29 +200,139 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-start justify-content-between">
         <div>
           <h3>Post Stay Gap Night</h3>
-          <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
+          {/* <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a> */}
         </div>
         <div>
           <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
-            <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-              Save Settings
+            <Button 
+              className="text-nowrap fs-14" 
+              style={{
+                backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+                borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+                borderRadius: '5px',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                padding: '8px 24px'
+              }}
+              onClick={handleSaveSettings} 
+              disabled={Object.keys(settingsApiData).length === 0}
+            >
+              Save Upsell
             </Button>
-            <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example" value={selectedConfig} onChange={handleConfigSelectChange}>
-              {Object.keys(localSettingsData).map((key, index) => (
-                <option key={index} value={key}>{key}</option>              
-              ))}
-              <option value="add">+ New Config</option>
-            </select>
+            <Button 
+              className="text-nowrap fs-14" 
+              style={{
+                backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#0F1117',
+                borderColor: cssConfig?.css_data?.borders?.primary || '#013280',
+                borderRadius: '5px',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                padding: '8px 24px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '15px',
+                fontWeight: '600',
+                fontVariationSettings: "'opsz' 14"
+              }}
+              onClick={() => setSection('index')}
+            >
+              Back
+            </Button>
+            <Select
+              className="config-select-upsells"
+              options={[
+                ...Object.keys(localSettingsData).map((key) => ({ value: key, label: key })),
+                { value: "add", label: "+ New Configuration" }
+              ]}
+              value={{ value: selectedConfig, label: selectedConfig }}
+              onChange={(selected) => {
+                const value = selected.value;
+                if (value === "add") {
+                  const newConfigName = window.prompt("Enter a name for the new config");
+                  if (newConfigName) {
+                    const dailySchedules = {monday: ['00:00', '23:59'], tuesday: ['00:00', '23:59'], wednesday: ['00:00', '23:59'], thursday: ['00:00', '23:59'], friday: ['00:00', '23:59'], saturday: ['00:00', '23:59'], sunday: ['00:00', '23:59']};
+                    let newConfigSettings = { enabled: false, properties: [], schedules: { ...dailySchedules } };
+                    setLocalSettingsData({ ...localSettingsData, [newConfigName]:newConfigSettings });
+                    setSelectedConfig(newConfigName);
+                  }
+                } else {
+                  setSelectedConfig(value);
+                  const selectedProperties = localSettingsData[value]?.properties || [];
+                  const selectedOptions = selectedProperties.map((propertyName) => ({ value: propertyName, label: propertyName }));
+                  setSelectedOptions(selectedOptions);
+                }
+              }}
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117'),
+                  border: '1px solid #013280',
+                  borderRadius: '8px',
+                  padding: '2px 8px',
+                  fontSize: '15px',
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: '600',
+                  minWidth: '140px',
+                  boxShadow: state.isFocused ? '0 0 0 1px #3e88f7' : 'none',
+                  '&:hover': {
+                    borderColor: '#013280'
+                  }
+                }),
+                menu: (provided) => ({
+                  ...provided,
+                  backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117'),
+                  border: '2px solid #013280',
+                  borderRadius: '8px',
+                  boxShadow: '0 0 20px rgba(30, 75, 158, 0.2)',
+                  marginTop: '8px'
+                }),
+                menuList: (provided) => ({
+                  ...provided,
+                  padding: '0',
+                  backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117')
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isFocused || state.isSelected 
+                    ? (cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e'))
+                    : 'transparent',
+                  color: '#fff',
+                  fontSize: '15px',
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: '600',
+                  padding: '10px 16px',
+                  cursor: 'pointer',
+                  textTransform: 'capitalize',
+                  '&:hover': {
+                    backgroundColor: cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e')
+                  }
+                }),
+                singleValue: (provided) => ({
+                  ...provided,
+                  color: '#fff',
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: '600',
+                  textTransform: 'capitalize'
+                }),
+                indicatorSeparator: () => ({ display: 'none' }),
+                dropdownIndicator: (provided) => ({
+                  ...provided,
+                  color: '#fff',
+                  '&:hover': {
+                    color: '#3e88f7'
+                  }
+                })
+              }}
+            />
           </div>
 
           <div style={{marginTop:"10px"}}>
             {selectedConfig === "default" ? (
               <div style={{maxWidth:"400px"}}>
-                <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p>
+                {/* <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p> */}
               </div>
             ) : (
               <>
-                <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p>
+                {/* <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p> */}
                 <div ref={selectRef}>
                   <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
                 </div>
@@ -231,26 +343,113 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
       </div>
 
-      <div style={{width:"90%", margin:"20px 0"}}>
-        <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked before vacant night, offering them a late check-out or a discount to extend their stay. You can customize the message and parameters.</p>
+      <div style={{ marginTop: '20px', marginBottom: '40px' }}>
+        <p 
+          style={{ 
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
+            fontSize: '16px', 
+            fontFamily: "'DM Sans', sans-serif", 
+            fontWeight: '400',
+            lineHeight: '1.6',
+            maxWidth: '900px',
+            fontVariationSettings: "'opsz' 14"
+          }}
+        >
+          HostBuddy will detect when there's a vacant night between two reservations. You'll send a message to the first guest with a gap night upsell offer, customizable by you, with AI personalization if you enable it. If they're interested, HostBuddy will automatically acknowledge and prompt you to manually extend their stay.
+        </p>
       </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
+      {/* <div style={{width:"90%", margin:"20px 0"}}>
+        <p className="settings-label">HostBuddy can detect when you have vacant nights between two reservations. You can have a message send to the guest booked before vacant night, offering them a late check-out or a discount to extend their stay. You can customize the message and parameters.</p>
+      </div> */}
 
-      <div className="row mt-4">
-        <div className="col-lg-8">
-          <div className="d-flex align-items-center gap-5 mb-1">
-            <label className="fs-5">Enable Post Stay Upsells</label>
-            <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked, currentSettingsData, setCurrentSettingsData)}/>
-          </div>
-          <p className="settings-label">You currently have post-stay upsells {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
+      <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: '40px' }}></div>
+
+      <div style={{ marginBottom: '40px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+          <h3 
+            style={{ 
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
+              fontSize: '18px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '700',
+              margin: 0,
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            Enable Post Stay Upsells
+          </h3>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setSetting('enabled', !currentSettingsData.enabled, currentSettingsData, setCurrentSettingsData);
+            }}
+            style={{
+              position: 'relative',
+              width: '44px',
+              height: '24px',
+              borderRadius: '9999px',
+              backgroundColor: currentSettingsData.enabled ? '#3e88f7' : '#013280',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s',
+              flexShrink: 0
+            }}
+          >
+            <div 
+              style={{
+                position: 'absolute',
+                top: '2px',
+                left: currentSettingsData.enabled ? '22px' : '2px',
+                width: '20px',
+                height: '20px',
+                backgroundColor: 'white',
+                borderRadius: '50%',
+                transition: 'left 0.3s'
+              }}
+            />
+          </button>
         </div>
+        <p 
+          style={{ 
+            fontSize: '14px', 
+            fontFamily: "'DM Sans', sans-serif", 
+            fontWeight: '400',
+            color: currentSettingsData.enabled ? '#4ade80' : '#ef4444',
+            margin: 0,
+            fontVariationSettings: "'opsz' 14"
+          }}
+        >
+          You currently have post-stay upsells {currentSettingsData.enabled ? 'enabled' : 'not enabled'}.
+        </p>
       </div>
 
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
-          <label className="fs-5">Number of Nights to Consider</label>
-          <p className="settings-label">HostBuddy will send a message each time there is a number of consecutive vacant nights between these values.</p>
+          <h3 
+            style={{ 
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
+              fontSize: '18px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '700',
+              marginBottom: '16px',
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            Number of Nights to Consider
+          </h3>
+          <p 
+            style={{ 
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
+              fontSize: '14px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '400',
+              marginBottom: '24px',
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            HostBuddy will send a message each time there is a number of consecutive vacant nights between these values. Remove the maximum to allow HostBuddy to send messages to guests touching any open availability.
+          </p>
           <div className="d-flex align-items-center gap-3 mt-1">
             <div className="d-flex align-items-center gap-2">
               <label className="settings-label">Min:</label>
@@ -305,8 +504,6 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
       </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
-
       <h3 className="available-variables-heading mt-5 text-center">Upsell Message</h3>
 
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
@@ -324,41 +521,84 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
       </div>
 
-      <div className="row mt-4 justify-content-center">
-        <div className="col-lg-11">
-          <div className="d-flex align-items-center justify-content-center gap-5">
-            <label className="fs-5">Message</label>
-          </div>
-          <div className="d-flex justify-content-center">
-            <textarea id="upsellMessage" className="form-control setting-textarea" value={currentSettingsData.upsell_message} onChange={(e) => setSetting('upsell_message', e.target.value, currentSettingsData, setCurrentSettingsData)} />
-          </div>
+      <div style={{ padding: '10px 0' }}>
+        <div className="d-flex align-items-center justify-content-center gap-5">
+          <label className="fs-5">Message</label>
         </div>
+        <textarea
+          id="upsellMessage"
+          className="form-control setting-textarea"
+          style={{ width: '100%', boxSizing: 'border-box' }}
+          value={currentSettingsData.upsell_message}
+          onChange={(e) => setSetting('upsell_message', e.target.value, currentSettingsData, setCurrentSettingsData)}
+        />
       </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
-
-      <div className="ai-context-appropriate-section" style={{padding:'10px 50px'}}>
-        <p className="d-flex align-items-center gap-5">
-          Enable AI Personalization
-          <div className="form-check form-switch">
-            <input className="form-check-input" type="checkbox" checked={currentSettingsData?.ai_personalization || false} onChange={(e) => {setSetting('ai_personalization', e.target.checked, currentSettingsData, setCurrentSettingsData);}} id="flexSwitchCheckChecked"/>
+      <div className="ai-context-appropriate-section" style={{padding:'10px 50px', borderColor: cssConfig?.css_data?.borders?.primary || '#013280', borderRadius: '8px', borderWidth: '1px', borderStyle: 'solid'}}>
+        <div className="d-flex align-items-start justify-content-between">
+          <div className="flex-grow-1">
+            <div style={{ display: 'flex', alignItems: 'start', gap: '12px', marginBottom: '12px' }}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSetting('ai_personalization', !currentSettingsData?.ai_personalization, currentSettingsData, setCurrentSettingsData);
+                }}
+                style={{
+                  position: 'relative',
+                  width: '44px',
+                  height: '24px',
+                  borderRadius: '9999px',
+                  backgroundColor: currentSettingsData?.ai_personalization ? '#3e88f7' : '#013280',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s',
+                  flexShrink: 0,
+                  marginTop: '2px'
+                }}
+              >
+                <div 
+                  style={{
+                    position: 'absolute',
+                    top: '2px',
+                    left: currentSettingsData?.ai_personalization ? '22px' : '2px',
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: 'white',
+                    borderRadius: '50%',
+                    transition: 'left 0.3s'
+                  }}
+                />
+              </button>
+              <div style={{ flex: 1 }}>
+                <p style={{ color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', marginBottom: '4px', fontVariationSettings: "'opsz' 14" }}>
+                  Enable AI Personalization
+                </p>
+                <p style={{ 
+                  fontSize: '12px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '400',
+                  color: currentSettingsData?.ai_personalization ? '#4ade80' : '#a6a9b2',
+                  marginBottom: '8px',
+                  fontVariationSettings: "'opsz' 14"
+                }}>
+                  You currently have AI personalization {currentSettingsData?.ai_personalization ? 'enabled' : 'disabled'}.
+                </p>
+                <p style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', margin: 0, fontVariationSettings: "'opsz' 14" }}>
+                  If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
+                </p>
+              </div>
+            </div>
           </div>
-        </p>
-        <p className="fs-14 text-muted">
-          You currently have AI personalization <span className={currentSettingsData?.ai_personalization ? "text-success" : "text-danger"}>{currentSettingsData?.ai_personalization ? "enabled" : "disabled"}</span>.
-        </p>
-        <p className="fs-14 text-muted">
-          If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
-        </p>
-        {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
-          <button
-            className="btn btn-link p-0"
-            style={{ color: '#146ef5' }}
-            onClick={() => setShowPersonalizeCustomize(true)}
-          >
-            Customize...
-          </button>
-        )}
+          {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
+            <button
+              className="btn btn-link"
+              style={{ color: cssConfig?.css_data?.interactive?.button_background || 'rgb(20, 110, 245)', borderColor: cssConfig?.css_data?.borders?.primary || '#013280', padding: '8px 16px', borderRadius: '10px' }}
+              onClick={() => setShowPersonalizeCustomize(true)}
+            >
+              Customize
+            </button>
+          )}
+        </div>
         {currentSettingsData?.ai_personalization && showPersonalizeCustomize && (
           <div className="mt-3">
             <label className="fs-6">(Optional) Add custom instructions to guide the AI personalization</label>
@@ -373,21 +613,27 @@ const PostStayUpsells = ({setSection, settingsApiData, setSettingsApiData, local
       </div>
 
       <div className="row mt-5">
-        <div className="col-lg-12 text-center">
-          <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-            Save Settings
+        <div className="col-lg-12">
+          <Button className="btn-primary fs-16 px-4" style={{ backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', borderRadius: '10px' }} onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
+            Save Upsells
           </Button>
         </div>
       </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
-
-      <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
-      <p className="settings-label text-center">Showing the next 10</p>
-      {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay upsells <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
+      <h3 className="available-variables-heading mt-5">Upcoming Messages</h3>
+      <p className="settings-label">Preview Scheduled</p>
+      {!currentSettingsData.enabled ? (
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+          Post-stay upsells are currently off. Enable them to see upcoming messages.
+        </p>
+      ) : upcomingMessagesData && upcomingMessagesData.length > 0 ? (
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+          You currently have {upcomingMessagesData.length} upcoming upsell messages. These messages will all show up here.
+        </p>
       ) : (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have post-stay upsells <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>. These messages will not be sent.</p>
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+          You currently have zero upcoming upsell messages. These messages will all show up here.
+        </p>
       )}
 
       <div className="col-12 mt-4">

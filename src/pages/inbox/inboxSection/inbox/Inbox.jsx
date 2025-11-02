@@ -88,8 +88,8 @@ const responsiveStyles = `
       top: 0 !important;
       height: 100% !important;
       z-index: 1000 !important;
-      background-color: #17191F !important;
-      border: 1px solid #24262E !important;
+      background-color: var(--white-label-background-secondary, #17191F) !important;
+      border: 1px solid var(--white-label-border-primary, #24262E) !important;
       border-radius: 4px !important;
       transition: all 0.3s ease !important;
     }
@@ -147,8 +147,8 @@ const responsiveStyles = `
       flex: none !important;
       position: relative !important;
       height: 100% !important;
-      background-color: #17191F !important;
-      border: 1px solid #24262E !important;
+      background-color: var(--white-label-background-secondary, #17191F) !important;
+      border: 1px solid var(--white-label-border-primary, #24262E) !important;
       border-radius: 4px !important;
       transition: all 0.3s ease !important;
     }
@@ -203,8 +203,8 @@ const responsiveStyles = `
       flex: none !important;
       position: relative !important;
       height: 100% !important;
-      background-color: #17191F !important;
-      border: 1px solid #24262E !important;
+      background-color: var(--white-label-background-secondary, #17191F) !important;
+      border: 1px solid var(--white-label-border-primary, #24262E) !important;
       border-radius: 4px !important;
       transition: all 0.3s ease !important;
     }
@@ -1678,18 +1678,18 @@ const Inbox = ({
             />
             <div
               className="middleSectionContainer"
-              style={{ flex: "1", height: "100%", border: "1px solid #24262E" }}
+              style={{ flex: "1", height: "100%", border: `1px solid var(--white-label-border-primary, #24262E)` }}
             >
               <div
+                className="guest-header-container"
                 style={{
                   display: "flex",
-                  backgroundColor: "#17191f",
                   padding: "5px",
                   borderRadius: "0px",
-                  marginBottom: "4px",
+                  // marginBottom: "4px",
                   flexDirection: "column",
                   border: "1px solid",
-                  borderColor: "#24262E",
+                  borderColor: `var(--white-label-border-primary, #24262E)`,
                 }}
               >
                 {" "}
@@ -1734,7 +1734,7 @@ const Inbox = ({
                     <span
                       className="poppins-font"
                       style={{
-                        color: "white",
+                        color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                         fontSize: "18px",
                         fontWeight: "700",
                       }}
@@ -1969,7 +1969,9 @@ const Inbox = ({
                           justifyContent: "space-between",
                           borderBottom:
                             tab.id === activeTab ? "2px solid #007bff" : "none",
-                          color: tab.id === activeTab ? "#FFFFFF" : "#D0D3DB",
+                          color: tab.id === activeTab 
+                            ? getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-navigation_text').trim() || "#FFFFFF"
+                            : getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                           fontWeight: tab.id === activeTab ? "600" : "500",
                           transition: "color 0.2s ease",
                         }}
@@ -2109,7 +2111,7 @@ const Inbox = ({
               {/* Tab content rendered inside the div container */}
               <div
                 style={{
-                  height: "calc(100% - 85.101111px)",
+                  height: "calc(100% - 79.1011px)",
                   width: "100%",
                   position: "relative",
                 }}
@@ -2228,7 +2230,7 @@ const Inbox = ({
                           // className="action-item-card"
                           style={{
                             backgroundColor: "rgb(32 33 39)",
-                            border: "1px solid #24262E",
+                            border: `1px solid var(--white-label-border-primary, #24262E)`,
                             borderRadius: "8px",
                             padding: "10px",
                             marginBottom: "8px",
@@ -2249,7 +2251,7 @@ const Inbox = ({
                               className="action-item-date"
                               style={{
                                 fontSize: "14px",
-                                color: "#A6A9B2",
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                                 fontWeight: "500"
                               }}
                             >
@@ -2270,7 +2272,7 @@ const Inbox = ({
                               •{" "}
                               <span style={{
                                 fontSize: "14px",
-                                color: "#A6A9B2",
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                                 fontWeight: "500"
                               }}>
                                 {actionItem.category
@@ -2287,7 +2289,7 @@ const Inbox = ({
                             style={{
                               fontSize: "14px",
                               fontWeight: "400",
-                              color: "#D0D3DB",
+                              color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                               lineHeight: "1.4",
                               display: "flex",
                               justifyContent: "space-between",
@@ -2295,7 +2297,7 @@ const Inbox = ({
                             }}
                           >
                             <div style={{
-                              color: "#D0D3DB",
+                              color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                               flex: 1,
                               fontSize: "16px",
                               fontWeight: "400"
@@ -2341,7 +2343,7 @@ const Inbox = ({
                         style={{
                           padding: "20px",
                           textAlign: "center",
-                          color: "#a4a6aa",
+                          color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#a4a6aa",
                         }}
                       >
                         <p>Loading...</p>
@@ -2352,7 +2354,7 @@ const Inbox = ({
                         style={{
                           padding: "20px",
                           textAlign: "center",
-                          color: "#a4a6aa",
+                          color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#a4a6aa",
                         }}
                       >
                         <p>Select a conversation to view open issues</p>
@@ -2364,7 +2366,7 @@ const Inbox = ({
                         style={{
                           padding: "20px",
                           textAlign: "center",
-                          color: "#a4a6aa",
+                          color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#a4a6aa",
                         }}
                       >
                         <p>No open issues found for this conversation</p>
@@ -2436,7 +2438,7 @@ const Inbox = ({
                             backgroundColor:
                               selectedConversation?.conversation_id &&
                               newActionItem.trim()
-                                ? "#1a73e8"
+                                ? getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#1a73e8"
                                 : "rgba(15, 17, 23, 0.42)",
                             color:
                               selectedConversation?.conversation_id &&
@@ -2527,7 +2529,7 @@ const Inbox = ({
                             style={{
                               textAlign: "center",
                               padding: "20px",
-                              color: "#888",
+                              color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#888",
                             }}
                           >
                             Select a conversation to view notes
@@ -2537,7 +2539,7 @@ const Inbox = ({
                             style={{
                               textAlign: "center",
                               padding: "20px",
-                              color: "#888",
+                              color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#888",
                             }}
                           >
                             No notes found for this conversation
@@ -2549,7 +2551,7 @@ const Inbox = ({
                                 key={note.note_id}
                                 style={{
                                   marginBottom: "5px",
-                                  color: "#D0D3DB",
+                                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                                   fontSize: "14px",
                                   fontWeight: "400",
                                   fontFamily: "DM Sans",
@@ -2572,7 +2574,7 @@ const Inbox = ({
                                       flex: 1,
                                       position: "relative",
                                       border: "1px solid",
-                                      borderColor: "#24262E",
+                                      borderColor: `var(--white-label-border-primary, #24262E)`,
                                     }}
                                   >
                                     <div
@@ -2604,7 +2606,7 @@ const Inbox = ({
                                         <div
                                           style={{
                                             fontSize: "16px",
-                                            color: "#D0D3DB",
+                                            color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                                             fontWeight: 400,
                                             whiteSpace: "pre-wrap",
                                           }}
@@ -2640,7 +2642,7 @@ const Inbox = ({
                                               style={{
                                                 background: "none",
                                                 border: "none",
-                                                color: "#FFFFFF",
+                                                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#FFFFFF",
                                                 cursor: "pointer",
                                                 padding: "4px",
                                                 fontSize: "14px",
@@ -2700,7 +2702,7 @@ const Inbox = ({
                                                         width: "100%",
                                                         textAlign: "left",
                                                         padding: "8px 8px",
-                                                        color: "#D0D3DB",
+                                                        color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                                                         cursor: "pointer",
                                                         fontSize: "14px",
                                                         fontFamily:
@@ -2775,7 +2777,7 @@ const Inbox = ({
                                       <div
                                         style={{
                                           width: "auto",
-                                          color: "#A6A9B2",
+                                          color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                                           height: "20px",
                                           display: "flex",
                                           fontFamily:
@@ -2804,7 +2806,7 @@ const Inbox = ({
                                       {/* Date and time text in the requested format: Month Short name Date . Time */}
                                       <div
                                         style={{
-                                          color: "#A6A9B2",
+                                          color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                                           fontFamily:
                                             '"DM Sans-Regular", Helvetica',
                                           fontSize: "14px",
@@ -2975,7 +2977,7 @@ const Inbox = ({
                               backgroundColor:
                                 selectedConversation?.conversation_id &&
                                   newNote.trim()
-                                  ? "#1a73e8"
+                                  ? getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#1a73e8"
                                   : "rgba(15, 17, 23, 0.42)",
                               color:
                                 selectedConversation?.conversation_id &&
@@ -3017,7 +3019,7 @@ const Inbox = ({
                 flex: "none",
                 height: "100%",
                 padding: "11px",
-                border: "1px solid #24262E",
+                border: `1px solid var(--white-label-border-primary, #24262E)`,
               }}
             >
               {" "}
@@ -3376,7 +3378,7 @@ const EditNoteModal = ({
               style={{
                 backgroundColor: "transparent",
                 color: "#D0D3DB",
-                border: "0px solid #24262E",
+                border: `0px solid var(--white-label-border-primary, #24262E)`,
                 height: "36px",
                 borderRadius: "4px",
                 padding: "0 16px",
@@ -3390,7 +3392,7 @@ const EditNoteModal = ({
             <button
               onClick={onSave}
               style={{
-                backgroundColor: "#1a73e8",
+                backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#1a73e8",
                 color: "white",
                 border: "none",
                 height: "36px",

@@ -8,7 +8,7 @@
   background-color: rgba(255, 165, 0, 0.1);
   border-radius: 5px;
   font-size: 14px;
-  color: #f0f0f0;
+  color: var(--white-label-text-primary, #f0f0f0);
 }
 
 .passed-message-banner a {
@@ -32,6 +32,7 @@
     border-radius: 0px !important;
     /* border-color: #24262E !important; */
     padding: 0px !important;
+    background-color: var(--white-label-background-primary, #0F1117);
     
     
 }
@@ -46,7 +47,7 @@
     font-size: 14px;
     margin-right: 8px;
     padding-right: 10px;
-    color: #a6a9b2;
+    color: var(--white-label-text-secondary, #a6a9b2);
     font-weight: 600;
     left: 0;
     letter-spacing: 0;
@@ -92,12 +93,12 @@
     margin-bottom: 0px;
 }
 .user.mesaage-box p {
-    background-color: #17191F !important;
+    background-color: var(--white-label-background-secondary, #17191F) !important;
     font-family: "DM Sans", Helvetica !important;
     font-weight: 400 !important;
     font-style: normal !important;
     font-size: 16px !important;
-    color: #FFFFFF !important;
+    color: var(--white-label-text-primary, #FFFFFF) !important;
     border: 1px solid rgba(189, 193, 201, 0.15) !important;
     padding: 10px !important;
     border-radius: 14px !important;
@@ -116,7 +117,7 @@
     margin-left: 0;
 }
 .message.bot p {
-    background: #24262E;
+    background: var(--white-label-background-cards, #24262E);
     padding: 10px;
     font-size: 16px !important;
     font-family: "DM Sans", Helvetica !important;
@@ -131,7 +132,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    background-color: #17191f !important;
+    background-color: var(--white-label-background-secondary, #17191f) !important;
     
 }
 .ai-input .input-container {
@@ -184,7 +185,7 @@
 }
 
 .main-chat .generate-button.greyed-out i {
-    color: #555;
+    color: var(--white-label-text-placeholder, #555);
 }
 
 .main-chat .generate-container {
@@ -215,14 +216,14 @@
     padding: 10px 5px;
     cursor: pointer;
     text-align: left;
-    color: #D0D3DB !important;
+    color: var(--white-label-text-secondary, #D0D3DB) !important;
     border-radius: 10px;
     font-size: 14px;
 }
 
 .main-chat .generate-menu-item.greyed-out {
     cursor: default;
-    color: #555;
+    color: var(--white-label-text-placeholder, #555);
 }
   
 .main-chat .generate-menu-item:not(.greyed-out):hover {
@@ -253,7 +254,7 @@
     padding: 10px 5px;
     cursor: pointer;
     text-align: left;
-    color: #D0D3DB !important;
+    color: var(--white-label-text-secondary, #D0D3DB) !important;
     border-radius: 10px;
     font-size: 14px;
 }
@@ -268,8 +269,8 @@
     resize: none; /* Prevent manual resizing */
     overflow: auto; /* Hide scrollbars */
     max-height: 145px;
-    background-color: #17191f !important;
-    border-color: #17191f;
+    background-color: var(--white-label-background-secondary, #17191f) !important;
+    border-color: var(--white-label-background-secondary, #17191f);
     border-width: 0px;
 }
 
@@ -298,14 +299,14 @@
 
 .chat-send-button:disabled {
     background-color: rgba(15, 17, 23, 0.42);
-    color: #4A4D54;
+    color: var(--white-label-text-disabled, #4A4D54);
     cursor: not-allowed;
 }
 
 .date-separator {
   display: flex;
   align-items: center;
-  color: #a6a9b2;
+  color: var(--white-label-text-secondary, #a6a9b2);
     font-family: "DM Sans-SemiBold", Helvetica;
     font-size: 12px;
     font-weight: 600;
@@ -378,7 +379,7 @@
 /* Message list scroll bar styling - matching left-bar-chat */
 .message-list::-webkit-scrollbar {
   width: 4px;
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 .message-list::-webkit-scrollbar-thumb {
@@ -387,13 +388,13 @@
 }
 
 .message-list::-webkit-scrollbar-track {
-  background-color: #0F1117;
+  background-color: var(--white-label-background-primary, #0F1117);
 }
 
 /* For Firefox */
 .message-list {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) #0F1117;
+  scrollbar-color: rgba(255, 255, 255, 0.15) var(--white-label-background-primary, #0F1117);
   height: 100%;
   overflow-y: auto;
 }

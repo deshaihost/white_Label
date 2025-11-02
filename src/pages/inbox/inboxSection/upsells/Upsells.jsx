@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "../resources/upsells.css";
+import { useWhiteLabelCss } from "../../../../helper/WhiteLabelCssContext";
 
 import PostStayUpsells from "./postStayUpsells";
 import PreStayUpsells from "./preStayUpsells";
@@ -27,6 +28,7 @@ default_settings = {
 
 const UpsellsIndex = ({allPropertyNamesList}) => {
 
+  const { cssConfig, cssLoading } = useWhiteLabelCss();
 
   const [selectedSection, setSelectedSection] = useState("index");
 
@@ -125,7 +127,7 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
 
 
   return (
-    <div className="upsells_tab_grid text-white setting_tab_data border border-primary p-3" style={{ borderRadius: "20px", margin: "40px 60px"}}>
+    <div className="upsells_tab_grid text-white setting_tab_data p-3" style={{ borderRadius: "20px", margin: "40px 60px"}}>
       {selectedSection === "preStayUpsells" && (
         <PreStayUpsells setSection={setSelectedSection} settingsApiData={preStaySettingsApiData} setSettingsApiData={setPreStaySettingsApiData} localSettingsData={preStayLocalSettingsData} setLocalSettingsData={setPreStayLocalSettingsData} callGetSettingsApi={callGetSettingsApi} getSettingsLoading={getPreStaySettingsLoading} callGetUpcomingMessagesApi={callGetUpcomingMessagesApi} getUpcomingMessagesLoading={getPreStayUpcomingMessagesLoading} upcomingMessagesData={preStayUpcomingMessagesData} allPropertyNamesList={allPropertyNamesList}/>
       )}
@@ -140,34 +142,272 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
       
       {selectedSection === "index" && (
         <div className="upsells-settings">
-          <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between blur-background-top-right">
-            <h3>Upsells</h3>
-          </div>
-          <div style={{width:"95%", margin:"20px 5px"}}>
-            <p style={{color:"#CCC", fontSize:'16px'}}>Intelligent automations that help you maximize occupancy and leave less money on the table. Customize your upsell settings and messages to suit your property and guest preferences.</p>
+          <div style={{ marginBottom: '40px' }}>
+            <h1 
+              className="text-white mb-4" 
+              style={{ 
+                color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                  ? cssConfig.css_data.text.primary 
+                  : undefined,
+                fontSize: '40px', 
+                fontFamily: "'DM Sans', sans-serif", 
+                fontWeight: '700',
+                fontVariationSettings: "'opsz' 14" 
+              }}
+            >
+              Upsells
+            </h1>
+            <p 
+              style={{ 
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : '#a6a9b2',
+                fontSize: '16px', 
+                fontFamily: "'DM Sans', sans-serif", 
+                fontWeight: '400',
+                lineHeight: '1.6',
+                maxWidth: '900px',
+                fontVariationSettings: "'opsz' 14" 
+              }}
+            >
+              Intelligent automations that help you maximize occupancy and leave less money on the table. Customize your upsell settings and messages to suit your property and guest preferences.
+            </p>
           </div>
 
-          <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-1"/>
-
-          <div className="row mt-4 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("postStayUpsells")}>
-            <div className="col-lg-11 col-12">
-              <label className="fs-5">Post-stay Gap Night</label>
-              <p className="settings-label">Send your guests an offer to depart later when there's a vacant night after their stay.</p>
+   
+       <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: '40px' }}></div>
+          <div 
+            style={{
+              width: '100%',
+              backgroundColor: 'var(--white-label-background-secondary, #17191F)',
+              border: '2px solid #013280',
+              borderRadius: '12px',
+              padding: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+              boxShadow: '0 0 25px rgba(1, 50, 128, 0.2)',
+              marginBottom: '20px'
+            }}
+            onClick={() => setSelectedSection("postStayUpsells")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-hover, #01255e)';
+              e.currentTarget.style.borderColor = '#3e88f7';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(4px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-secondary, #17191F)';
+              e.currentTarget.style.borderColor = '#013280';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(0)';
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <h3 
+                style={{ 
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                    ? cssConfig.css_data.text.primary 
+                    : 'white',
+                  fontSize: '22px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '700',
+                  marginBottom: '12px',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Post-stay Gap Night
+              </h3>
+              <p 
+                style={{ 
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                    ? cssConfig.css_data.text.secondary 
+                    : '#a6a9b2',
+                  fontSize: '16px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Send your guests an offer to depart later when there's a vacant night after their stay.
+              </p>
             </div>
+            <svg 
+              className="arrow-icon"
+              style={{ 
+                width: '24px', 
+                height: '24px', 
+                color: '#3e88f7', 
+                marginLeft: '32px', 
+                flexShrink: 0,
+                transition: 'transform 0.3s'
+              }}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-7-7l7 7-7 7" />
+            </svg>
           </div>
 
-          <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("preStayUpsells")}>
-            <div className="col-lg-11 col-12">
-              <label className="fs-5">Pre-stay Gap Night</label>
-              <p className="settings-label">Send your guests an offer to arrive earlier when there's a vacant night before their stay.</p>
+          <div 
+            style={{
+              width: '100%',
+              backgroundColor: 'var(--white-label-background-secondary, #17191F)',
+              border: '2px solid #013280',
+              borderRadius: '12px',
+              padding: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+              boxShadow: '0 0 25px rgba(1, 50, 128, 0.2)',
+              marginBottom: '20px'
+            }}
+            onClick={() => setSelectedSection("preStayUpsells")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-hover, #01255e)';
+              e.currentTarget.style.borderColor = '#3e88f7';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(4px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-secondary, #17191F)';
+              e.currentTarget.style.borderColor = '#013280';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(0)';
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <h3 
+                style={{ 
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                    ? cssConfig.css_data.text.primary 
+                    : 'white',
+                  fontSize: '22px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '700',
+                  marginBottom: '12px',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Pre-stay Gap Night
+              </h3>
+              <p 
+                style={{ 
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                    ? cssConfig.css_data.text.secondary 
+                    : '#a6a9b2',
+                  fontSize: '16px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Send your guests an offer to arrive earlier when there's a vacant night before their stay.
+              </p>
             </div>
+            <svg 
+              className="arrow-icon"
+              style={{ 
+                width: '24px', 
+                height: '24px', 
+                color: '#3e88f7', 
+                marginLeft: '32px', 
+                flexShrink: 0,
+                transition: 'transform 0.3s'
+              }}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-7-7l7 7-7 7" />
+            </svg>
           </div>
 
-          <div className="row mt-5 clickable-div" style={{marginLeft:"0", marginRight:"0"}} onClick={() => setSelectedSection("inquiryWinbacks")}>
-            <div className="col-lg-11 col-12">
-              <label className="fs-5">Inquiry Follow-Ups</label>
-              <p className="settings-label">Send a message following up with guests who inquired but didn't book.</p>
+          <div 
+            style={{
+              width: '100%',
+              backgroundColor: 'var(--white-label-background-secondary, #17191F)',
+              border: '2px solid #013280',
+              borderRadius: '12px',
+              padding: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+              boxShadow: '0 0 25px rgba(1, 50, 128, 0.2)',
+              marginBottom: '20px'
+            }}
+            onClick={() => setSelectedSection("inquiryWinbacks")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-hover, #01255e)';
+              e.currentTarget.style.borderColor = '#3e88f7';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(4px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--white-label-background-secondary, #17191F)';
+              e.currentTarget.style.borderColor = '#013280';
+              const arrow = e.currentTarget.querySelector('.arrow-icon');
+              if (arrow) arrow.style.transform = 'translateX(0)';
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <h3 
+                style={{ 
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                    ? cssConfig.css_data.text.primary 
+                    : 'white',
+                  fontSize: '22px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '700',
+                  marginBottom: '12px',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Inquiry Follow-Ups
+              </h3>
+              <p 
+                style={{ 
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                    ? cssConfig.css_data.text.secondary 
+                    : '#a6a9b2',
+                  fontSize: '16px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  fontVariationSettings: "'opsz' 14"
+                }}
+              >
+                Send a message following up with guests who inquired but didn't book.
+              </p>
             </div>
+            <svg 
+              className="arrow-icon"
+              style={{ 
+                width: '24px', 
+                height: '24px', 
+                color: '#3e88f7', 
+                marginLeft: '32px', 
+                flexShrink: 0,
+                transition: 'transform 0.3s'
+              }}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-7-7l7 7-7 7" />
+            </svg>
           </div>
         </div>
       )}

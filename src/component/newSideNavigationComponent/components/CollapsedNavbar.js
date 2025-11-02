@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useFeatureAccess } from "../../../helper/useFeatureAccess";
 import DashBoardDefault from "./sideNavBarElements/sectionIndicatorComponent/iconComponents/dashboardComponent/dashboard";
 import GetStarted from "./sideNavBarElements/sectionIndicatorComponent/iconComponents/getStartedComponent/getStarted";
 import HomeSmileScreenDefault from "./sideNavBarElements/sectionIndicatorComponent/iconComponents/homeSimileComponent/homeSimile";
@@ -17,7 +18,7 @@ import logoutIcon from "./NavBarIcons/NewLogOut.svg";
 import "./CollapsedNavbar.css";
 import Logo from "../components/sideNavBarElements/logoComponent/logoComponent";
 const icons = [
-  { id: 0, component: <Logo colour="default" type="icon" />, label: "Logo" },
+  { id: 0, component: <Logo colour="default" type="icon" onlyIcon={true} />, label: "HostBuddy" },
   { id: 1, component: <GetStarted />, label: "Get Started" },
   { id: 2, component: <DashBoardDefault />, label: "Dashboard" },
   { id: 3, component: <HomeSmileScreenDefault />, label: "Properties" },
@@ -41,6 +42,7 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   const [selected, setSelected] = useState(null);
   const location = useLocation();
   const [hoverTimer, setHoverTimer] = useState(null);
+  const { isFeatureEnabled, isHostBuddyDomain } = useFeatureAccess();
 
   const {
     isProtectedPath,
@@ -57,6 +59,25 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
   // Set selected based on current path
   useEffect(() => {
+    console.log("🔍 CollapsedNavbar - Checking path:", location.pathname);
+    
+    // Check GCS-specific paths first
+    if (isInGcsPortal) {
+      // All Accounts page in GCS portal
+      if (location.pathname.startsWith("/gcs-users")) {
+        console.log("✅ CollapsedNavbar - GCS USERS (All Accounts) path matched, setting selected to 1");
+        setSelected(1);
+        return;
+      }
+      
+      // White Label paths (before general /gcs-settings)
+      if (location.pathname.startsWith("/gcs-settings/white-label")) {
+        console.log("✅ CollapsedNavbar - WHITE LABEL path matched, setting selected to 8");
+        setSelected(8);
+        return;
+      }
+    }
+    
     // Map paths to IDs based on navigation structure
     const pathToIdMap = {
       "/getstarted": 1,
@@ -75,9 +96,10 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
     );
 
     if (currentPath) {
+      console.log("📍 CollapsedNavbar - Path matched:", currentPath, "ID:", pathToIdMap[currentPath]);
       setSelected(pathToIdMap[currentPath]);
     }
-  }, [location.pathname]);
+  }, [location.pathname, isInGcsPortal]);
   // Handle mouse enter event for icons to expand the navbar after a short delay
   const handleIconMouseEnter = () => {
     // Don't trigger hover behavior on mobile devices
@@ -123,19 +145,20 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
   // Handle icon click with navigation
   const handleIconClick = (iconId) => {
+    console.log("🖱️ CollapsedNavbar - Icon clicked:", iconId);
     setSelected(iconId);
 
     if (handleNavigation) {
       switch (iconId) {
-        case 1: // Get Started
-          handleNavigation("/getstarted");
-          break;
-        case 2: // Dashboard or All Accounts (in GCS Portal)
+        case 1: // Get Started (regular) or All Accounts (GCS)
           if (isInGcsPortal) {
             handleNavigation("/gcs-users");
           } else {
-            handleNavigation("/dashboard");
+            handleNavigation("/getstarted");
           }
+          break;
+        case 2: // Dashboard
+          handleNavigation("/dashboard");
           break;
         case 3: // Properties
           handleNavigation("/properties");
@@ -151,6 +174,9 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
           break;
         case 7: // Settings
           handleNavigation(isInGcsPortal ? "/gcs-settings" : "/setting");
+          break;
+        case 8: // White Label
+          handleNavigation("/gcs-settings/white-label-registration");
           break;
         default:
           break;
@@ -182,13 +208,21 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   const gcsDataWithLogo = [
     {
       id: 0,
-      component: <Logo colour="default" type="icon" />,
-      label: "Logo",
+      component: <Logo colour="default" type="icon" onlyIcon={true} />,
+      label: "HostBuddy",
     },
     ...GcsUserdata,
   ];
 
   const iconsToRender = isInGcsPortal ? gcsDataWithLogo : icons;
+
+  // Feature-based filtering mapping
+  const iconToFeatureMap = {
+    3: 'properties',           // Properties
+    4: 'action-items',         // Action Items
+    5: 'messaging-inbox',      // Messaging
+    6: 'insights',             // Insights
+  };
 
   // Filter icons based on user state
   const filteredIcons = iconsToRender.filter((icon) => {
@@ -197,6 +231,17 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
     // In protected paths or logged in conditional paths
     if (isProtectedPath || (isConditionalPath && token)) {
+      // Check feature-based filtering
+      const featureId = iconToFeatureMap[icon.id];
+      
+      if (featureId) {
+        const enabled = isFeatureEnabled(featureId);
+        
+        if (!enabled) {
+          return false; // Filter out this icon
+        }
+      }
+      
       return true;
     }
     // For non-protected paths, don't show the navigation items
@@ -206,8 +251,8 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
   // Check if an icon should have hover functionality
   const shouldHaveHover = (iconId) => {
     // Only these specific navigation icons should trigger navbar opening on hover
-    // 1=Get Started, 2=Dashboard, 3=Properties, 4=Action Items, 5=Messaging, 6=Insights, 7=Settings
-    return [1, 2, 3, 4, 5, 6, 7].includes(iconId);
+    // 1=Get Started, 2=Dashboard, 3=Properties, 4=Action Items, 5=Messaging, 6=Insights, 7=Settings, 8=White Label
+    return [1, 2, 3, 4, 5, 6, 7, 8].includes(iconId);
   };  return (
     <div
       className={`collapsed-navbar${isOpen ? " open" : ""}`}

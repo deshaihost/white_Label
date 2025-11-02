@@ -1086,7 +1086,7 @@ const getConversationTimestamp = (conversation) => {
       style={{
         height: "100%",
         border: "1px solid",
-        borderColor: "#24262E",
+        borderColor: `var(--white-label-border-primary, #24262E)`,
         backgroundColor: "#17191F",
         display: "flex",
         flexDirection: "column",
@@ -1096,7 +1096,6 @@ const getConversationTimestamp = (conversation) => {
         className="message-filter"
         style={{
           padding: "12px",
-          backgroundColor: "#17191F",
           display: "flex",
           flexDirection: "column",
           flexShrink: 0, // Prevent this from shrinking
@@ -1106,7 +1105,7 @@ const getConversationTimestamp = (conversation) => {
           style={{
             fontWeight: "700",
             fontSize: "24px",
-            color: "white",
+            color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
             marginLeft: "5px",
             marginBottom: "3px",
             fontFamily: "Poppins-Bold, Helvetica",
@@ -1385,7 +1384,7 @@ const getConversationTimestamp = (conversation) => {
             onClick={openFilterModal}
             style={{
               whiteSpace: "nowrap",
-              backgroundColor: "#0B5ED7",
+              backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#0B5ED7",
               color: "white",
               border: "none",
               borderRadius: "4px",
@@ -1442,7 +1441,7 @@ const getConversationTimestamp = (conversation) => {
             position: "relative",
           }}
         >
-          <div style={{ border: "1px solid #24262E", position: "relative" }}>
+          <div style={{ border: `1px solid var(--white-label-border-primary, #24262E)`, position: "relative" }}>
             {filteredConversations.map((message) => {
               // console.log("Rendering message:", message);
               const {
@@ -2077,6 +2076,10 @@ const getConversationTimestamp = (conversation) => {
             <button
               className="btn btn-primary load-more-button"
               onClick={loadNextBatch}
+              style={{
+                backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#0d6efd",
+                borderColor: getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#0d6efd",
+              }}
             >
               Load More
             </button>

@@ -1291,7 +1291,7 @@ const callUpdateGuestDataApi = async () => {
           alignItems: "center",
         }}
       >
-        <h1>Reservation details</h1>
+        <h1 style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff" }}>Reservation details</h1>
         {setRightSectionVisible && (
           <button
             className="close-right-section-btn"
@@ -1299,7 +1299,7 @@ const callUpdateGuestDataApi = async () => {
             style={{
               background: "transparent",
               border: "none",
-              color: "#D0D3DB",
+              color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
               cursor: "pointer",
               fontSize: "24px",
               padding: "6px 12px",
@@ -1389,7 +1389,7 @@ const callUpdateGuestDataApi = async () => {
             <div
               style={{
                 display: "inline-block",
-                color: "#BDC1C9",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#BDC1C9",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontStyle: "normal",
@@ -1438,7 +1438,7 @@ const callUpdateGuestDataApi = async () => {
                   fontSize: "14px",
                   fontWeight: "600",
                   fontFamily: '"DM Sans", Helvetica',
-                  color: "#D0D3DB",
+                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                 }}
               >
                 {property_name}
@@ -1449,7 +1449,7 @@ const callUpdateGuestDataApi = async () => {
                   fontSize: "14px",
                   fontWeight: "600",
                   fontFamily: '"DM Sans", Helvetica',
-                  color: "#D0D3DB",
+                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                 }}
               >
                 {arrival_date &&
@@ -1683,7 +1683,7 @@ const callUpdateGuestDataApi = async () => {
             <h2
               style={{
                 margin: 0,
-                color: "#ffffff",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff",
                 fontFamily: '"Poppins-SemiBold", Helvetica',
                 fontSize: "14px",
                 fontWeight: 600,
@@ -1695,7 +1695,7 @@ const callUpdateGuestDataApi = async () => {
             <span
               onClick={handleOpenContactModal}
               style={{
-                color: "#74A9F7",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-navigation_text').trim() || "#74A9F7",
                 fontSize: "14px",
                 cursor: "pointer",
                 fontFamily: '"DM Sans", Helvetica',
@@ -1707,7 +1707,7 @@ const callUpdateGuestDataApi = async () => {
           <div style={{ marginBottom: "5px" }}>
             <span
               style={{
-                color: "#A6A9B2",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1717,7 +1717,7 @@ const callUpdateGuestDataApi = async () => {
             </span>
             <span
               style={{
-                color: "#D0D3DB",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1730,7 +1730,7 @@ const callUpdateGuestDataApi = async () => {
           <div>
             <span
               style={{
-                color: "#A6A9B2",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1740,7 +1740,7 @@ const callUpdateGuestDataApi = async () => {
             </span>
             <span
               style={{
-                color: "#D0D3DB",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
                 fontWeight: 400,
@@ -1807,7 +1807,7 @@ const callUpdateGuestDataApi = async () => {
                         style={{
                           alignItems: "center",
                           display: "flex",
-                          backgroundColor: "#24262E",
+                          backgroundColor: "var(--white-label-background-dropdown, #24262E)",
                           // border: '1px solid',
                           // borderColor: 'rgba(57, 61, 70, 1)',
                           borderRadius: "4px",
@@ -1871,7 +1871,7 @@ const callUpdateGuestDataApi = async () => {
                             top: "100%",
                             left: "0",
                             right: "0",
-                            backgroundColor: "#262730",
+                            backgroundColor: "var(--white-label-background-dropdown, #262730)",
                             borderRadius: "4px",
                             marginTop: "4px",
                             zIndex: 100,
@@ -1887,7 +1887,7 @@ const callUpdateGuestDataApi = async () => {
                                 padding: "8px 16px",
                                 display: "block",
                                 // backgroundColor: "#353840",
-                                color: "white",
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                 fontWeight: "500",
                                 // borderLeft: "3px solid #0B5FDE",
                               }}
@@ -1907,7 +1907,7 @@ const callUpdateGuestDataApi = async () => {
                                 padding: "8px 16px",
                                 cursor: "pointer",
                                 transition: "background-color 0.2s ease",
-                                color: "white",
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                 hoverBackgroundColor: "rgba(1, 50, 128, 1)",
                                 display: "flex",
                                 alignItems: "center",
@@ -2007,7 +2007,7 @@ const callUpdateGuestDataApi = async () => {
                                   padding: "8px 16px",
                                   cursor: "pointer",
                                   transition: "background-color 0.2s ease",
-                                  color: "white",
+                                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                   display: "flex",
                                   alignItems: "center",
                                   position: "relative",
@@ -2016,11 +2016,11 @@ const callUpdateGuestDataApi = async () => {
                                 tabIndex={0}
                                 onMouseDown={(e) =>
                                 (e.currentTarget.style.backgroundColor =
-                                  "rgba(0, 19, 48, 1)")
+                                  getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2032,7 +2032,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2044,7 +2044,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2056,7 +2056,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2102,7 +2102,7 @@ const callUpdateGuestDataApi = async () => {
                                   padding: "8px 16px",
                                   cursor: "pointer",
                                   transition: "background-color 0.2s ease",
-                                  color: "white",
+                                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                   display: "flex",
                                   alignItems: "center",
                                   position: "relative",
@@ -2111,11 +2111,11 @@ const callUpdateGuestDataApi = async () => {
                                 tabIndex={0}
                                 onMouseDown={(e) =>
                                 (e.currentTarget.style.backgroundColor =
-                                  "rgba(0, 19, 48, 1)")
+                                  getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2127,7 +2127,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2139,7 +2139,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2151,7 +2151,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2197,7 +2197,7 @@ const callUpdateGuestDataApi = async () => {
                                   padding: "8px 16px",
                                   cursor: "pointer",
                                   transition: "background-color 0.2s ease",
-                                  color: "white",
+                                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                   display: "flex",
                                   alignItems: "center",
                                   position: "relative",
@@ -2206,11 +2206,11 @@ const callUpdateGuestDataApi = async () => {
                                 tabIndex={0}
                                 onMouseDown={(e) =>
                                 (e.currentTarget.style.backgroundColor =
-                                  "rgba(0, 19, 48, 1)")
+                                  getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2222,7 +2222,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2234,7 +2234,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2246,7 +2246,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2292,7 +2292,7 @@ const callUpdateGuestDataApi = async () => {
                                   padding: "8px 16px",
                                   cursor: "pointer",
                                   transition: "background-color 0.2s ease",
-                                  color: "white",
+                                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                                   display: "flex",
                                   alignItems: "center",
                                   position: "relative",
@@ -2301,11 +2301,11 @@ const callUpdateGuestDataApi = async () => {
                                 tabIndex={0}
                                 onMouseDown={(e) =>
                                 (e.currentTarget.style.backgroundColor =
-                                  "rgba(0, 19, 48, 1)")
+                                  getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)")
                                 }
                                 onMouseOver={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2317,7 +2317,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2329,7 +2329,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onFocus={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "rgba(1, 50, 128, 1)";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2341,7 +2341,7 @@ const callUpdateGuestDataApi = async () => {
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.backgroundColor =
-                                    "transparent";
+                                    getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                                   const indicator =
                                     e.currentTarget.querySelector(
                                       ".section-indicator"
@@ -2457,7 +2457,7 @@ const callUpdateGuestDataApi = async () => {
         ))}{" "}
       {!(channel == "Chat Window") && (
         <div className="satisfy">
-          <h2>Sentiment</h2>
+          <h2 style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff" }}>Sentiment</h2>
           <div ref={dropdownRef} style={{ position: "relative" }}>
             {/* Sentiment Dropdown Button */}{" "}
             <div
@@ -2607,11 +2607,11 @@ const callUpdateGuestDataApi = async () => {
                   position: "absolute",
                   left: "0",
                   right: "0",
-                  backgroundColor: "#262730",
+                  backgroundColor: "var(--white-label-background-dropdown, #262730)",
                   borderRadius: "4px",
                   marginTop: "4px",
                   zIndex: 100,
-                  border: "1px solid #24262E",
+                  border: "1px solid var(--white-label-border-primary, #24262E)",
                   overflow: "hidden",
                 }}
               >
@@ -2621,7 +2621,7 @@ const callUpdateGuestDataApi = async () => {
                   onClick={() => handleSentimentSelect("neutral")}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2629,7 +2629,7 @@ const callUpdateGuestDataApi = async () => {
                     }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2638,17 +2638,17 @@ const callUpdateGuestDataApi = async () => {
                   }}
                   onMouseDown={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(0, 19, 48, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
                     cursor: "pointer",
                     transition: "background-color 0.2s ease",
-                    color: "#D0D3DB",
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                     position: "relative",
                   }}
                 >
@@ -2667,7 +2667,7 @@ const callUpdateGuestDataApi = async () => {
                       transition: "background-color 0.2s ease",
                     }}
                   />
-                  <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
+                  <span style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB", fontSize: "14px" }}>
                     Neutral
                   </span>
                 </div>{" "}
@@ -2676,7 +2676,7 @@ const callUpdateGuestDataApi = async () => {
                   onClick={() => handleSentimentSelect("positive")}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2684,7 +2684,7 @@ const callUpdateGuestDataApi = async () => {
                     }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2693,17 +2693,17 @@ const callUpdateGuestDataApi = async () => {
                   }}
                   onMouseDown={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(0, 19, 48, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
                     cursor: "pointer",
                     transition: "background-color 0.2s ease",
-                    color: "#D0D3DB",
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                     position: "relative",
                   }}
                 >
@@ -2722,7 +2722,7 @@ const callUpdateGuestDataApi = async () => {
                       transition: "background-color 0.2s ease",
                     }}
                   />
-                  <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
+                  <span style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB", fontSize: "14px" }}>
                     Positive
                   </span>
                 </div>{" "}
@@ -2731,7 +2731,7 @@ const callUpdateGuestDataApi = async () => {
                   onClick={() => handleSentimentSelect("negative")}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2739,7 +2739,7 @@ const callUpdateGuestDataApi = async () => {
                     }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2748,17 +2748,17 @@ const callUpdateGuestDataApi = async () => {
                   }}
                   onMouseDown={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(0, 19, 48, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
                     cursor: "pointer",
                     transition: "background-color 0.2s ease",
-                    color: "#D0D3DB",
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                     position: "relative",
                   }}
                 >
@@ -2777,7 +2777,7 @@ const callUpdateGuestDataApi = async () => {
                       transition: "background-color 0.2s ease",
                     }}
                   />
-                  <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
+                  <span style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB", fontSize: "14px" }}>
                     Negative
                   </span>
                 </div>{" "}
@@ -2786,7 +2786,7 @@ const callUpdateGuestDataApi = async () => {
                   onClick={() => handleSentimentSelect("clear")}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2794,7 +2794,7 @@ const callUpdateGuestDataApi = async () => {
                     }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-dropdown').trim() || "transparent";
                     const indicator =
                       e.currentTarget.querySelector(".section-indicator");
                     if (indicator) {
@@ -2803,17 +2803,17 @@ const callUpdateGuestDataApi = async () => {
                   }}
                   onMouseDown={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(0, 19, 48, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(0, 19, 48, 1)";
                   }}
                   onMouseUp={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      "rgba(1, 50, 128, 1)";
+                      getComputedStyle(document.documentElement).getPropertyValue('--white-label-background-hover').trim() || "rgba(1, 50, 128, 1)";
                   }}
                   style={{
                     padding: "8px 16px",
                     cursor: "pointer",
                     transition: "background-color 0.2s ease",
-                    color: "#D0D3DB",
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                     position: "relative",
                   }}
                 >
@@ -2832,7 +2832,7 @@ const callUpdateGuestDataApi = async () => {
                       transition: "background-color 0.2s ease",
                     }}
                   />
-                  <span style={{ color: "#D0D3DB", fontSize: "14px" }}>
+                  <span style={{ color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB", fontSize: "14px" }}>
                     Auto-detect
                   </span>
                 </div>
@@ -2843,7 +2843,7 @@ const callUpdateGuestDataApi = async () => {
                 style={{
                   fontSize: "14px",
                   marginTop: "3px",
-                  color: "#D0D3DB",
+                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                   fontWeight: "400",
                   fontFamily: "DM Sans",
                 }}
@@ -2870,7 +2870,7 @@ const callUpdateGuestDataApi = async () => {
           style={{
             margin: 0,
             marginBottom: "5px",
-            color: "#ffffff",
+            color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff",
             fontFamily: '"Poppins-SemiBold", Helvetica',
             fontSize: "16px",
             fontWeight: 600,
@@ -2882,7 +2882,7 @@ const callUpdateGuestDataApi = async () => {
         <div
           className="user-dropdown-container"
           ref={assignUserDropdownRef}
-          style={{ border: "1px solid #24262E" }}
+          style={{ border: "1px solid var(--white-label-border-primary, #24262E)" }}
         >
           {/* Custom dropdown that looks like the sentiment dropdown */}
           <div
@@ -2989,7 +2989,7 @@ const callUpdateGuestDataApi = async () => {
               <h1
                 style={{
                   margin: 0,
-                  color: "#ffffff",
+                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff",
                   fontFamily: '"Poppins-SemiBold", Helvetica',
                   fontSize: "14px",
                   fontWeight: 600,
@@ -3011,7 +3011,7 @@ const callUpdateGuestDataApi = async () => {
                       alignItems: "center",
                       justifyContent: "center",
                       backgroundColor: "#24262E",
-                      color: "white",
+                      color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "white",
                       borderRadius: "50%",
                       width: "20px",
                       height: "20px",
@@ -3028,11 +3028,7 @@ const callUpdateGuestDataApi = async () => {
             {/* View All link - always rendered and navigates to action items page */}
             <span
               onClick={navigateToActionItems}
-              style={{
-                color: "#146ef5",
-                fontSize: "14px",
-                cursor: "pointer",
-              }}
+              className="view-all-link"
             >
               View All
             </span>{" "}
@@ -3046,7 +3042,7 @@ const callUpdateGuestDataApi = async () => {
                 <div
                   style={{
                     fontSize: "12px",
-                    color: "#808080",
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#808080",
                     marginBottom: "2px",
                   }}
                 >
@@ -3064,7 +3060,7 @@ const callUpdateGuestDataApi = async () => {
                   <p
                     style={{
                       margin: 0,
-                      color: "#d0d3db",
+                      color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#d0d3db",
                       fontFamily: '"DM Sans-Regular", Helvetica',
                       fontSize: "14px",
                       fontWeight: 400,
@@ -3118,7 +3114,7 @@ const callUpdateGuestDataApi = async () => {
                         <div
                           style={{
                             fontSize: "12px",
-                            color: "#A6A9B2",
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                             marginBottom: "2px",
                             fontWeight: 600,
                           }}
@@ -3138,7 +3134,7 @@ const callUpdateGuestDataApi = async () => {
                           <p
                             style={{
                               margin: 0,
-                              color: "#D0D3DB",
+                              color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                               fontFamily: '"DM Sans-Regular", Helvetica',
                               fontSize: "14px",
                               fontWeight: 400,
@@ -3183,7 +3179,7 @@ const callUpdateGuestDataApi = async () => {
                 <span
                   onClick={() => setIssuesExpanded(true)}
                   style={{
-                    color: "#A6A9B2",
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                     fontFamily: '"DM Sans", Helvetica',
                     fontSize: "14px",
                     fontWeight: 400,
@@ -3207,7 +3203,7 @@ const callUpdateGuestDataApi = async () => {
           ) : (
             <p
               style={{
-                color: "#A6A9B2",
+                color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 fontFamily: '"DM Sans", Helvetica',
                 fontSize: "14px",
               }}
@@ -3241,7 +3237,7 @@ const callUpdateGuestDataApi = async () => {
               borderRadius: "4px", // Setting border radius to 4px as requested
               padding: "20px",
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-              border: "1px solid rgb(67 70 78)",
+              border: "1px solid var(--white-label-border-primary, rgb(67, 70, 78))",
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -3256,7 +3252,7 @@ const callUpdateGuestDataApi = async () => {
               <h2
                 style={{
                   margin: 0,
-                  color: "#D0D3DB",
+                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#D0D3DB",
                   fontFamily: '"Poppins-SemiBold", Helvetica',
                   fontSize: "24px",
                   fontWeight: 700,
@@ -3269,7 +3265,7 @@ const callUpdateGuestDataApi = async () => {
                 style={{
                   cursor: "pointer",
                   fontSize: "20px",
-                  color: "#A6A9B2",
+                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2",
                 }}
               >
                 &times;
@@ -3288,7 +3284,7 @@ const callUpdateGuestDataApi = async () => {
                       display: "block",
                       // marginBottom: '5px',
                       fontSize: "14px",
-                      color: "#A6A9B2", // Setting label color as requested
+                      color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2", // Setting label color as requested
                     }}
                   >
                     Email
@@ -3303,9 +3299,9 @@ const callUpdateGuestDataApi = async () => {
                       width: "100%",
                       padding: "8px",
                       backgroundColor: "#24262E",
-                      border: "1px solid #393d46",
+                      border: "1px solid var(--white-label-border-primary, #393d46)",
                       borderRadius: "4px",
-                      color: "#D0D3DB", // Setting input text color as requested
+                      color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB", // Setting input text color as requested
                       fontSize: "14px",
                     }}
                   />
@@ -3318,7 +3314,7 @@ const callUpdateGuestDataApi = async () => {
                       display: "block",
                       // marginBottom: '5px',
                       fontSize: "14px",
-                      color: "#A6A9B2", // Setting label color as requested
+                      color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#A6A9B2", // Setting label color as requested
                     }}
                   >
                     Phone
@@ -3333,9 +3329,9 @@ const callUpdateGuestDataApi = async () => {
                       width: "100%",
                       padding: "8px",
                       backgroundColor: "#24262E",
-                      border: "1px solid #393d46",
+                      border: "1px solid var(--white-label-border-primary, #393d46)",
                       borderRadius: "4px",
-                      color: "#D0D3DB", // Setting input text color as requested
+                      color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB", // Setting input text color as requested
                       fontSize: "14px",
                     }}
                   />
@@ -3358,7 +3354,7 @@ const callUpdateGuestDataApi = async () => {
                   padding: "8px 16px",
                   border: "none",
                   backgroundColor: "transparent",
-                  color: "#D0D3DB",
+                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "#D0D3DB",
                   cursor: "pointer",
                   fontSize: "14px",
                 }}
@@ -3374,7 +3370,7 @@ const callUpdateGuestDataApi = async () => {
                   backgroundColor: updateGuestDataLoading
                     ? "#4A5568"
                     : "#0B5FDE",
-                  color: "#ffffff",
+                  color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-primary').trim() || "#ffffff",
                   borderRadius: "4px",
                   cursor: updateGuestDataLoading ? "not-allowed" : "pointer",
                   fontSize: "14px",

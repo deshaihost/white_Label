@@ -8,7 +8,10 @@ const MultiSelect = ({
   setSelectedOptions,
   placeholder = 'Select options...',
   selectAllText = 'Select all',
-  width = '250px'
+  width = '250px',
+  customSelectStyles = null,
+  dropdownBgColor = '#0F1117',
+  hoverBgColor = '#01255e'
 }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const selectRef = useRef(null);
@@ -20,22 +23,87 @@ const MultiSelect = ({
     const displayText =
       selectedValues.length > 0
         ? `${selectedValues.length} item${selectedValues.length === 1 ? '' : 's'} selected`
-        : '';
+        : placeholder;
     return (
       <components.ValueContainer {...props}>
-        <div>{displayText}</div>
+        <div style={{
+          color: selectedValues.length > 0 ? '#a6a9b2' : '#676A73',
+          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontVariationSettings: "'opsz' 14"
+        }}>{displayText}</div>
         {children}
-
       </components.ValueContainer>
     );
   };
 
-  const handleChange = (options) => {
-    setSelectedOptions(options);
+  // Custom Option with checkbox
+  const Option = (props) => {
+    const isSelected = props.isSelected;
+    return (
+      <components.Option {...props}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%' }}>
+          <div style={{
+            width: '20px',
+            height: '20px',
+            borderRadius: '4px',
+            border: `2px solid ${isSelected ? '#3e88f7' : '#013280'}`,
+            backgroundColor: isSelected ? '#3e88f7' : 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            {isSelected && (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            )}
+          </div>
+          <span>{props.label}</span>
+        </div>
+      </components.Option>
+    );
   };
 
-  const handleSelectAllClick = (e) => {
-    e.preventDefault();
+  // Custom MenuList with Select All button at the top
+  const MenuList = (props) => {
+    const allSelected = selectedOptions.length === options.length;
+    
+    return (
+      <components.MenuList {...props}>
+        <div
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (allSelected) {
+              setSelectedOptions([]);
+            } else {
+              setSelectedOptions(options);
+            }
+          }}
+          style={{
+            padding: '12px 16px',
+            color: '#3e88f7',
+            fontSize: '14px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '600',
+            fontVariationSettings: "'opsz' 14",
+            borderBottom: '1px solid #013280',
+            cursor: 'pointer',
+            backgroundColor: dropdownBgColor,
+            transition: 'background-color 0.2s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = hoverBgColor}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = dropdownBgColor}
+        >
+          {allSelected ? 'Deselect all' : 'Select all'}
+        </div>
+        {props.children}
+      </components.MenuList>
+    );
+  };
+
+  const handleChange = (options) => {
     setSelectedOptions(options);
   };
 
@@ -84,17 +152,19 @@ const MultiSelect = ({
             value={selectedOptions}
             onChange={handleChange}
             placeholder={placeholder}
-            components={{ ValueContainer, MultiValueContainer: () => null }}
+            components={{ 
+              ValueContainer, 
+              MultiValueContainer: () => null,
+              Option,
+              MenuList
+            }}
             hideSelectedOptions={false}
             closeMenuOnSelect={false}
-            styles={customStyles(width)}
+            styles={customSelectStyles || customStyles(width)}
             menuIsOpen={menuIsOpen}
             onMenuClose={() => setMenuIsOpen(false)}
           />
         </div>
-        <a href="#" className="clickableLink" onClick={handleSelectAllClick} style={{fontSize:'14px', margin:'2px auto 0 auto', display:'block', textAlign:'center'}}>
-          {selectAllText}
-        </a>
       </div>
     </>
   );

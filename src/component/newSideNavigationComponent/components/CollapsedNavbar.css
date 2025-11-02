@@ -2,7 +2,7 @@
 .collapsed-navbar {
   flex-direction: column;
   align-items: center;
-  background-color: rgba(23, 25, 31, 1);
+  background-color: var(--white-label-background-secondary, #17191F);
   width: 56px;
   height: 100vh;
   /* Safari mobile fix - use CSS fallbacks for proper viewport height */
@@ -69,7 +69,7 @@
 }
 
 .collapsed-navbar-icon:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: var(--white-label-background-hover, rgba(255, 255, 255, 0.08));
 }
 
 .collapsed-navbar-icon:active {
@@ -95,7 +95,7 @@
 }
 
 .collapsed-navbar-expand:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: var(--white-label-background-hover, rgba(255, 255, 255, 0.08));
   transform: scale(1.05);
 }
 

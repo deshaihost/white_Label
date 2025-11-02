@@ -138,40 +138,65 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
 
   return (
     <Modal show={show} size="lg" onHide={() => closeHndle()} aria-labelledby="contained-modal-title-vcenter" centered>
-      <Modal.Header closeButton>
-        <h5 className="modal-title">Manage knowledge Base</h5>
+      <Modal.Header closeButton style={{ backgroundColor: '#0F1117', borderColor: '#013280' }}>
+        <h5 className="modal-title" style={{ color: 'white', fontWeight: 600 }}>Manage Knowledge Base</h5>
       </Modal.Header>
-      <Modal.Body>
-        <div className="auto-fill-modal text-white">
+      <Modal.Body style={{ backgroundColor: '#0F1117' }}>
+        <div className="text-white">
           <div>
             <div className="text-center">
-              <p>Choose what information HostBuddy can access directly.</p>
-              {/* <p>For better manageability of data and more efficient processing, it is recommended to use property documents and past conversations only for auto-fill, and leave them un-checked here.</p> */}
+              <p style={{ color: '#a6a9b2', fontSize: '14px', marginBottom: '24px' }}>
+                Choose what information HostBuddy can access directly.
+              </p>
             </div>
-            <hr style={{width: "90%", margin: "0 auto"}}/>
+            <hr style={{width: "90%", margin: "0 auto 24px", borderColor: "#013280"}}/>
 
             {Object.keys(sourceAndSelectionData).map((section) => (
-              <div key={section}>
-                <h4>{section}</h4>
+              <div key={section} style={{ marginBottom: '24px' }}>
+                <h4 style={{ color: '#a6a9b2', fontSize: '16px', fontWeight: 600, marginBottom: '12px' }}>{section}</h4>
                 {Object.keys(sourceAndSelectionData[section]).length > 0 ? (
-                  <div className="sources-container">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {Object.keys(sourceAndSelectionData[section]).map((source) => (
-                      <div key={source.id}>
+                      <div key={source.id} className="modern-checkbox-container">
                         {section === "Property Profile" ? (
                           <>
-                            <input className="form-check-input" type="checkbox" value={sourceAndSelectionData[section][source].id} id={sourceAndSelectionData[section][source].id} checked onChange={(e) => e.preventDefault()} style={{opacity:0.5}} disabled/>
-                            <label className="form-check-label" htmlFor={sourceAndSelectionData[section][source].id} style={{opacity: 1}}>
+                            <div className="modern-checkbox checked" style={{opacity:0.5}}>
+                              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M2 6L5 9L10 3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            </div>
+                            <label className="modern-checkbox-label" style={{opacity: 1, color: 'white'}}>
                               {sourceAndSelectionData[section][source].label}
                             </label>
                           </>
                         ) : (
                           <>
-                            <input className="form-check-input" type="checkbox" value={sourceAndSelectionData[section][source].id} id={sourceAndSelectionData[section][source].id} checked={sourceAndSelectionData[section][source].use_for_knowledge_base} onChange={(e) => handleCheckboxChange(section, sourceAndSelectionData[section][source].id, e.target.checked)}/>
-                            <label className="form-check-label" htmlFor={sourceAndSelectionData[section][source].id}>
+                            <div 
+                              className={`modern-checkbox ${sourceAndSelectionData[section][source].use_for_knowledge_base ? 'checked' : ''}`}
+                              onClick={() => handleCheckboxChange(section, sourceAndSelectionData[section][source].id, !sourceAndSelectionData[section][source].use_for_knowledge_base)}
+                            >
+                              {sourceAndSelectionData[section][source].use_for_knowledge_base && (
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                  <path d="M2 6L5 9L10 3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                              )}
+                            </div>
+                            <label 
+                              className="modern-checkbox-label"
+                              style={{ color: sourceAndSelectionData[section][source].use_for_knowledge_base ? 'white' : '#676a73' }}
+                              onClick={() => handleCheckboxChange(section, sourceAndSelectionData[section][source].id, !sourceAndSelectionData[section][source].use_for_knowledge_base)}
+                            >
                               {sourceAndSelectionData[section][source].label}
-                              {sourceAndSelectionData[section][source].id === 'conversation_data' && <span> (last 6 months)</span>}
+                              {sourceAndSelectionData[section][source].id === 'conversation_data' && <span style={{ color: '#676a73' }}> (last 6 months)</span>}
                             </label>
-                            {!['guest_data', 'availability_data'].includes(sourceAndSelectionData[section][source].id) && <KnowledgeBasePencil handlePencilIconClick={() => setResStageModalData({show:true, section:section, sourceId:sourceAndSelectionData[section][source].id, hiddenResStages:sourceAndSelectionData[section][source].hidden_res_stages})} someResStageIsHidden={sourceAndSelectionData[section][source].hidden_res_stages.length > 0} />}
+                            {!['guest_data', 'availability_data'].includes(sourceAndSelectionData[section][source].id) && (
+                              <div style={{ marginLeft: 'auto' }}>
+                                <KnowledgeBasePencil 
+                                  handlePencilIconClick={() => setResStageModalData({show:true, section:section, sourceId:sourceAndSelectionData[section][source].id, hiddenResStages:sourceAndSelectionData[section][source].hidden_res_stages})} 
+                                  someResStageIsHidden={sourceAndSelectionData[section][source].hidden_res_stages.length > 0} 
+                                />
+                              </div>
+                            )}
                           </>
                         )}
                       </div>
@@ -179,20 +204,24 @@ const KnowledgeBaseSourcesModal = ({ handleClose, show, propertyName, sources, i
                   </div>
                 ) : (
                   <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <p style={{margin:"0", fontSize:"16px", color:"#AAA", fontStyle:"italic"}}>No {section.toLowerCase()} added</p>
+                    <p style={{margin:"0", fontSize:"14px", color:"#676a73", fontStyle:"italic"}}>No {section.toLowerCase()} added</p>
                   </div>
                 )}
               </div>
             ))}
             
             {!apiLoading ? (
-              <div className="text-center">
-                <button className="mw-auto btn btn-primary text-white border border-primary rounded-pill px-5 mt-3" onClick={() => callSetKnowledgeBaseApi()}>
+              <div className="text-center" style={{ marginTop: '32px' }}>
+                <button 
+                  className="modern-btn-primary" 
+                  style={{ minWidth: '150px' }}
+                  onClick={() => callSetKnowledgeBaseApi()}
+                >
                   Save
                 </button>
               </div>
-              ) : (
-              <div className="text-center">
+            ) : (
+              <div className="text-center" style={{ marginTop: '32px' }}>
                 <Loader />
               </div>
             )}

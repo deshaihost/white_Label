@@ -8,9 +8,9 @@
   height: 100%;
   min-height: 400px;
   background-color: #0F1117;
-  border: 2px solid #24262E;
-  border-bottom: 1px solid #24262E;
-  border-left: 2px solid #24262E;
+  border: 2px solid var(--white-label-border-primary, #24262E);
+  border-bottom: 1px solid var(--white-label-border-primary, #24262E);
+  border-left: 2px solid var(--white-label-border-primary, #24262E);
 }
 
 .openphone-locked-content {
@@ -77,7 +77,7 @@
   font-weight: 600;
   font-size: 14px;
   line-height: 1.4;
-  color: #D0D3DB;
+  color: var(--white-label-text-secondary, #D0D3DB);
   margin: 0;
   text-align: center;
 }

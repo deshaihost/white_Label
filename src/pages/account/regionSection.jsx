@@ -68,44 +68,58 @@ const AccountRegionSection = ({ApiUserData, refreshUserData}) => {
 
   return (
     <div className="account-content location-section">
-      <h5>Location / Region Settings</h5>
-      <p style={{marginLeft:"10px", textAlign:"center", fontSize:"15px"}}>This information is used to determine your time zone and other regional configuration. You must add sufficient information to determine your time zone before enabling certain features, such as daily notifications.</p>
-
-      <form action="">
-        <div className="row">
-          <div className="col input_group">
-            <label htmlFor="City">City</label>
-            <input type="text" id="City" name="City" className="form-control" value={city} onChange={e => setCity(e.target.value)} />
-          </div>
-          <div className="col input_group">
-            <label htmlFor="State">State</label>
-            <input type="text" id="State" name="State" className="form-control" value={state} onChange={e => setState(e.target.value)} />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col input_group">
-            <label htmlFor="">Postal Code</label>
-            <input type="text" id="Postal Code" name="Postal Code" className="form-control" value={postalCode} onChange={e => setPostalCode(e.target.value)} />
-          </div>
-          <div className="col input_group">
-            <label htmlFor="Country">Country</label>
-            <input type="text" id="Country" name="Country" className="form-control" value={country} onChange={e => setCountry(e.target.value)} />
-          </div>
+      {/* Location / Region Settings Card */}
+      <div className="account-section-card">
+        <div className="section-header-with-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <h3>Location / Region Settings</h3>
         </div>
 
-        <div className="row">
-          <div className="col text-center">
+        <p className="section-description">
+          This information is used to determine your time zone and other regional configuration. You must add sufficient information to determine your time zone before enabling certain features, such as daily notifications.
+        </p>
+
+        <form action="">
+          <div style={{ marginBottom: '16px' }}>
+            <div className="row">
+              <div className="input_group">
+                <label htmlFor="City">City</label>
+                <input type="text" id="City" name="City" className="form-control" value={city} onChange={e => setCity(e.target.value)} />
+              </div>
+              <div className="input_group">
+                <label htmlFor="State">State</label>
+                <input type="text" id="State" name="State" className="form-control" value={state} onChange={e => setState(e.target.value)} />
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '24px' }}>
+            <div className="row">
+              <div className="input_group">
+                <label htmlFor="Postal Code">Postal Code</label>
+                <input type="text" id="Postal Code" name="Postal Code" className="form-control" value={postalCode} onChange={e => setPostalCode(e.target.value)} />
+              </div>
+              <div className="input_group">
+                <label htmlFor="Country">Country</label>
+                <input type="text" id="Country" name="Country" className="form-control" value={country} onChange={e => setCountry(e.target.value)} />
+              </div>
+            </div>
+          </div>
+
+          <div className="row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px' }}>
             <button type="submit" className="bg_theme_btn update_user_info" onClick={(event) => handleSubmit(event)}>
               {!updateRegionApiLoading ? <>Update</> : <Loader />}
             </button>
+
+            <p style={{ margin: 0, fontSize: '13px', color: '#a6a9b2', fontFamily: "'DM Sans', sans-serif" }}>
+              Your time zone: {time_zone_name ? <span style={{ color: 'white', fontWeight: '500' }}>{time_zone_name}</span> : <span className="warning-text">Not Determined</span>}
+            </p>
           </div>
-        </div>
-
-        <h5>
-          Your time zone: {time_zone_name ? <span className="grey-text">{time_zone_name}</span> : <span className="warning-text">Not Determined</span>}
-        </h5>
-
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

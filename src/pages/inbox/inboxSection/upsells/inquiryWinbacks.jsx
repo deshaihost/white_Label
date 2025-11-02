@@ -8,6 +8,7 @@ import ToastHandle from "../../../../helper/ToastMessage";
 import "../resources/upsells.css";
 import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
 import UpsellMessageModal from "../resources/upsellMessageModal";
+import { useWhiteLabelCss } from "../../../../helper/WhiteLabelCssContext";
 
 import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
@@ -25,6 +26,7 @@ default_settings = {
 
 const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, localSettingsData, setLocalSettingsData, callGetSettingsApi, getSettingsLoading, callGetUpcomingMessagesApi, getUpcomingMessagesLoading, upcomingMessagesData, allPropertyNamesList}) => {
 
+  const { cssConfig, cssLoading } = useWhiteLabelCss();
 
   const [setSettingsLoading, setSetSettingsLoading] = useState(false);
   const [cancelMessageLoading, setCancelMessageLoading] = useState("");
@@ -201,29 +203,137 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-start justify-content-between">
         <div>
           <h3>Inquiry Follow-Ups</h3>
-          <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a>
+          {/* <a href="#" onClick={handleReturn} style={{ display:'inline-block', marginTop:"20px" }}>&lt; Upsells</a> */}
         </div>
         <div>
           <div className="d-flex flex-wrap flex-md-nowrap gap-4 align-items-center">
-            <Button className="rounded-pill px-5 text-nowrap fs-14" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-              Save Settings
+            <Button 
+              className="text-nowrap fs-14" 
+              style={{
+                backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+                borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7',
+                borderRadius: '5px',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                padding: '8px 24px'
+              }}
+              onClick={handleSaveSettings} 
+              disabled={Object.keys(settingsApiData).length === 0}
+            >
+              Save Upsell
             </Button>
-            <select className="form-select rounded-pill border-primary text-white shadow-none fs-14 setting-tab-select mb-3 mb-md-0" style={{ backgroundColor: "#000212", backgroundImage: "" }} aria-label="Default select example" value={selectedConfig} onChange={handleConfigSelectChange}>
-              {Object.keys(localSettingsData).map((key, index) => (
-                <option key={index} value={key}>{key}</option>              
-              ))}
-              <option value="add">+ New Config</option>
-            </select>
+            <Button 
+              className="text-nowrap fs-14" 
+              style={{
+                backgroundColor: '#0F1117',
+                borderColor: '#013280',
+                borderRadius: '5px',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                padding: '8px 24px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '15px',
+                fontWeight: '600',
+                fontVariationSettings: "'opsz' 14"
+              }}
+              onClick={() => setSection('index')}
+            >
+              Back
+            </Button>
+            <Select
+              className="text-white shadow-none fs-14 mb-3 mb-md-0"
+              value={
+                selectedConfig === "add"
+                  ? { value: "add", label: "+ New Configuration" }
+                  : { value: selectedConfig, label: selectedConfig }
+              }
+              onChange={(selectedOption) => {
+                if (selectedOption.value === "add") {
+                  setMessageModalHeaderText("Add new configuration");
+                  setMessageModalTopText("Create a new configuration with unique settings for different property groups or scenarios");
+                  setMessageModalMainText("");
+                  setShowMessageModal(true);
+                  setStatusAndJustificationText("Please provide a name for the new configuration");
+                } else {
+                  setSelectedConfig(selectedOption.value);
+                }
+              }}
+              options={[
+                ...Object.keys(localSettingsData).map((key) => ({
+                  value: key,
+                  label: key,
+                })),
+                { value: "add", label: "+ New Configuration" },
+              ]}
+              styles={{
+                control: (base, state) => ({
+                  ...base,
+                  backgroundColor: cssLoading ? "#0F1117" : cssConfig?.css_data?.background?.dropdown || "#0F1117",
+                  borderColor: '#013280',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderRadius: '8px',
+                  padding: '2px 16px',
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  fontVariationSettings: "'opsz' 14",
+                  minWidth: '140px',
+                  cursor: 'pointer',
+                  boxShadow: 'none',
+                  '&:hover': {
+                    borderColor: '#013280',
+                  },
+                }),
+                menu: (base) => ({
+                  ...base,
+                  backgroundColor: cssLoading ? "#0F1117" : cssConfig?.css_data?.background?.dropdown || "#0F1117",
+                  borderColor: '#013280',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderRadius: '8px',
+                  marginTop: '4px',
+                }),
+                menuList: (base) => ({
+                  ...base,
+                  padding: '4px',
+                }),
+                option: (base, state) => ({
+                  ...base,
+                  backgroundColor: state.isFocused || state.isSelected
+                    ? (cssLoading ? "#01255e" : cssConfig?.css_data?.background?.hover || "#01255e")
+                    : 'transparent',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  textTransform: 'capitalize',
+                  '&:hover': {
+                    backgroundColor: cssLoading ? "#01255e" : cssConfig?.css_data?.background?.hover || "#01255e",
+                  },
+                }),
+                singleValue: (base) => ({
+                  ...base,
+                  color: '#fff',
+                  textTransform: 'capitalize',
+                }),
+                dropdownIndicator: (base) => ({
+                  ...base,
+                  color: '#fff',
+                }),
+                indicatorSeparator: () => ({
+                  display: 'none',
+                }),
+              }}
+            />
           </div>
 
           <div style={{marginTop:"10px"}}>
             {selectedConfig === "default" ? (
               <div style={{maxWidth:"400px"}}>
-                <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p>
+                {/* <p style={{fontSize:"14px", textAlign:"center"}}>This is the default config. It applies to all properties that are not included in any other config.</p> */}
               </div>
             ) : (
               <>
-                <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p>
+                {/* <p style={{fontSize:"14px", textAlign:"center"}}>Applies to these properties:</p> */}
                 <div ref={selectRef}>
                   <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
                 </div>
@@ -234,26 +344,113 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
       </div>
 
-      <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
-        <p className="settings-label">HostBuddy can follow up with guests that inquired about your properties, but didn't book, if those dates are still available. You can choose not to send messages to guests who have given a firm pass on your property.</p>
+      <div style={{ marginTop: '20px', marginBottom: '40px' }}>
+        <p 
+          style={{ 
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
+            fontSize: '16px', 
+            fontFamily: "'DM Sans', sans-serif", 
+            fontWeight: '400',
+            lineHeight: '1.6',
+            maxWidth: '900px',
+            fontVariationSettings: "'opsz' 14"
+          }}
+        >
+          HostBuddy can follow up with guests that inquired about your properties, but didn't book, if those dates are still available. You can choose not to send messages to guests who have given a firm pass on your property.
+        </p>
       </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-4"/>
+      {/* <div style={{width:"90%", margin:"20px auto", textAlign:"center"}}>
+        <p className="settings-label">HostBuddy can follow up with guests that inquired about your properties, but didn't book, if those dates are still available. You can choose not to send messages to guests who have given a firm pass on your property.</p>
+      </div> */}
 
-      <div className="row mt-4">
-        <div className="col-lg-8">
-          <div className="d-flex align-items-center gap-5 mb-1">
-            <label className="fs-5">Enable Inquiry Follow-Ups</label>
-            <Form.Check type="switch" id="custom-switch" className="custom-switch" checked={currentSettingsData.enabled} onChange={(e) => setSetting('enabled', e.target.checked, currentSettingsData, setCurrentSettingsData)}/>
-          </div>
-          <p className="settings-label">You currently have inquiry follow-ups {currentSettingsData.enabled ? <span style={{color: 'rgb(0, 128, 0)'}}>enabled</span> : <span style={{color: 'rgb(215, 0, 0)'}}>not enabled</span>}.</p>
+      <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: '40px' }}></div>
+
+      <div style={{ marginBottom: '40px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+          <h3 
+            style={{ 
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
+              fontSize: '18px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '700',
+              margin: 0,
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            Enable Inquiry Follow-Ups
+          </h3>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setSetting('enabled', !currentSettingsData.enabled, currentSettingsData, setCurrentSettingsData);
+            }}
+            style={{
+              position: 'relative',
+              width: '44px',
+              height: '24px',
+              borderRadius: '9999px',
+              backgroundColor: currentSettingsData.enabled ? '#3e88f7' : '#013280',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s',
+              flexShrink: 0
+            }}
+          >
+            <div 
+              style={{
+                position: 'absolute',
+                top: '2px',
+                left: currentSettingsData.enabled ? '22px' : '2px',
+                width: '20px',
+                height: '20px',
+                backgroundColor: 'white',
+                borderRadius: '50%',
+                transition: 'left 0.3s'
+              }}
+            />
+          </button>
         </div>
+        <p 
+          style={{ 
+            fontSize: '14px', 
+            fontFamily: "'DM Sans', sans-serif", 
+            fontWeight: '400',
+            color: currentSettingsData.enabled ? '#4ade80' : '#ef4444',
+            margin: 0,
+            fontVariationSettings: "'opsz' 14"
+          }}
+        >
+          You currently have inquiry follow-ups {currentSettingsData.enabled ? 'enabled' : 'not enabled'}.
+        </p>
       </div>
 
       <div className="row mt-5">
         <div className="col-lg-11 col-12">
-          <label className="fs-5">Message Timing</label>
-          <p className="settings-label mb-2">How long should HostBuddy wait before following up?</p>
+          <h3 
+            style={{ 
+              color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
+              fontSize: '18px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '700',
+              marginBottom: '16px',
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            Message Timing
+          </h3>
+          <p 
+            style={{ 
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
+              fontSize: '14px', 
+              fontFamily: "'DM Sans', sans-serif", 
+              fontWeight: '400',
+              marginBottom: '24px',
+              fontVariationSettings: "'opsz' 14"
+            }}
+          >
+            How long should HostBuddy wait before following up?
+          </p>
           <div className="row mt-1">
             <div className="col-lg-2 col-3">
               <input type="number" className="form-control" value={currentSettingsData.days_after_last_message} onChange={(e) => setSetting('days_after_last_message', e.target.value, currentSettingsData, setCurrentSettingsData)}/>
@@ -271,14 +468,12 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
       </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
-
-      <h3 className="available-variables-heading mt-5 text-center">Follow-Up Message</h3>
+      <h3 className="available-variables-heading mt-5 text-center">Winback Message</h3>
 
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between mt-5">
         <div className="available-variables-section">
         <label className="fs-5">Variables</label>
-        <p className="settings-label">Click to add custom variables to your upsell message. These variables will change to match the data for each reservation.</p>
+        <p className="settings-label">Preview Scheduled</p>
           <div className="available-variables mt-3">
             {Object.keys(variables).map((key, index) => (
               <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('upsellMessage'), `[[${key}]]`, currentSettingsData, setCurrentSettingsData)}>{variables[key]}</span>
@@ -287,49 +482,84 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         </div>
       </div>
 
-      <div className="row mt-4 justify-content-center">
-        <div className="col-lg-11">
-          <div className="d-flex align-items-center justify-content-center gap-5">
-            <label className="fs-5">Message</label>
-          </div>
-          <div className="d-flex justify-content-center">
-            <textarea id="upsellMessage" className="form-control setting-textarea" value={currentSettingsData.upsell_message} onChange={(e) => setSetting('upsell_message', e.target.value, currentSettingsData, setCurrentSettingsData)} />
-          </div>
+      <div style={{ padding: '10px 0' }}>
+        <div className="d-flex align-items-center justify-content-center gap-5">
+          <label className="fs-5">Message</label>
         </div>
+        <textarea
+          id="upsellMessage"
+          className="form-control setting-textarea"
+          style={{ width: '100%', boxSizing: 'border-box' }}
+          value={currentSettingsData.upsell_message}
+          onChange={(e) => setSetting('upsell_message', e.target.value, currentSettingsData, setCurrentSettingsData)}
+        />
       </div>
 
-      <div className="row mt-5">
-        <div className="col-lg-12 text-center">
-          <Button className="btn-primary fs-16 px-4 rounded-pill" onClick={handleSaveSettings} disabled={Object.keys(settingsApiData).length === 0}>
-            Save Settings
-          </Button>
-        </div>
-      </div>
-
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
-
-      <div className="ai-context-appropriate-section" style={{padding:'10px 50px'}}>
-        <p className="d-flex align-items-center gap-5">
-          Enable AI Personalization
-          <div className="form-check form-switch">
-            <input className="form-check-input" type="checkbox" checked={currentSettingsData?.ai_personalization || false} onChange={(e) => {setSetting('ai_personalization', e.target.checked, currentSettingsData, setCurrentSettingsData);}} id="flexSwitchCheckChecked"/>
+      <div className="ai-context-appropriate-section" style={{padding:'10px 50px', borderColor: cssConfig?.css_data?.borders?.primary || '#013280', borderRadius: '8px', borderWidth: '1px', borderStyle: 'solid'}}>
+        <div className="d-flex align-items-start justify-content-between">
+          <div className="flex-grow-1">
+            <div style={{ display: 'flex', alignItems: 'start', gap: '12px', marginBottom: '12px' }}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSetting('ai_personalization', !currentSettingsData?.ai_personalization, currentSettingsData, setCurrentSettingsData);
+                }}
+                style={{
+                  position: 'relative',
+                  width: '44px',
+                  height: '24px',
+                  borderRadius: '9999px',
+                  backgroundColor: currentSettingsData?.ai_personalization ? '#3e88f7' : '#013280',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s',
+                  flexShrink: 0,
+                  marginTop: '2px'
+                }}
+              >
+                <div 
+                  style={{
+                    position: 'absolute',
+                    top: '2px',
+                    left: currentSettingsData?.ai_personalization ? '22px' : '2px',
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: 'white',
+                    borderRadius: '50%',
+                    transition: 'left 0.3s'
+                  }}
+                />
+              </button>
+              <div style={{ flex: 1 }}>
+                <p style={{ color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600', marginBottom: '4px', fontVariationSettings: "'opsz' 14" }}>
+                  Enable AI Personalization
+                </p>
+                <p style={{ 
+                  fontSize: '12px', 
+                  fontFamily: "'DM Sans', sans-serif", 
+                  fontWeight: '400',
+                  color: currentSettingsData?.ai_personalization ? '#4ade80' : '#a6a9b2',
+                  marginBottom: '8px',
+                  fontVariationSettings: "'opsz' 14"
+                }}>
+                  You currently have AI personalization {currentSettingsData?.ai_personalization ? 'enabled' : 'disabled'}.
+                </p>
+                <p style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontWeight: '400', margin: 0, fontVariationSettings: "'opsz' 14" }}>
+                  If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
+                </p>
+              </div>
+            </div>
           </div>
-        </p>
-        <p className="fs-14 text-muted">
-          You currently have AI personalization <span className={currentSettingsData?.ai_personalization ? "text-success" : "text-danger"}>{currentSettingsData?.ai_personalization ? "enabled" : "disabled"}</span>.
-        </p>
-        <p className="fs-14 text-muted">
-          If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
-        </p>
-        {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
-          <button
-            className="btn btn-link p-0"
-            style={{ color: '#146ef5' }}
-            onClick={() => setShowPersonalizeCustomize(true)}
-          >
-            Customize...
-          </button>
-        )}
+          {currentSettingsData?.ai_personalization && !showPersonalizeCustomize && (
+            <button
+              className="btn btn-link"
+              style={{ color: cssConfig?.css_data?.interactive?.button_background || 'rgb(20, 110, 245)', borderColor: cssConfig?.css_data?.borders?.primary || '#013280', padding: '8px 16px', borderRadius: '10px' }}
+              onClick={() => setShowPersonalizeCustomize(true)}
+            >
+              Customize
+            </button>
+          )}
+        </div>
         {currentSettingsData?.ai_personalization && showPersonalizeCustomize && (
           <div className="mt-3">
             <label className="fs-6">(Optional) Add custom instructions to guide the AI personalization</label>
@@ -343,14 +573,31 @@ const InquiryWinbacks = ({setSection, settingsApiData, setSettingsApiData, local
         )}
       </div>
 
-      <hr style={{ backgroundColor: 'white', height: '2px', border: 'none' }} className="mt-5"/>
+      <div className="mb-10 mt-5">
+        <button
+          onClick={handleSaveSettings}
+          className="px-6 py-2.5 bg-[#3e88f7] rounded-lg text-white text-[15px] font-['DM_Sans:SemiBold',_sans-serif] hover:bg-[#74A9F7] transition-colors"
+          style={{ fontVariationSettings: "'opsz' 14", backgroundColor: '#3e88f7', borderRadius: '10px', padding: '10px 24px', border: 'none', cursor: 'pointer', fontSize: '15px', fontFamily: "'DM Sans', sans-serif", fontWeight: '600' }}
+          disabled={Object.keys(settingsApiData).length === 0}
+        >
+          Save Settings
+        </button>
+      </div>
 
-      <h3 className="available-variables-heading mt-5 text-center">Upcoming Messages</h3>
-      <p className="settings-label text-center">Showing the next 10</p>
-      {currentSettingsData.enabled ? (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry follow-ups <span style={{color: 'rgb(0, 128, 0'}}>enabled</span>. Your templated message will send at the scheduled time.</p>
+      <h3 className="available-variables-heading mt-5">Upcoming Messages</h3>
+      <p className="settings-label">Preview Scheduled</p>
+      {!currentSettingsData.enabled ? (
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+          Inquiry follow-ups are currently off. Enable them to see upcoming messages.
+        </p>
+      ) : upcomingMessagesData && upcomingMessagesData.length > 0 ? (
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+          You currently have {upcomingMessagesData.length} upcoming inquiry follow-up messages. These messages will all show up here.
+        </p>
       ) : (
-        <p style={{marginTop:'10px'}} className="settings-label text-center">You currently have inquiry follow-ups <span style={{color: 'rgb(215, 0, 0'}}>not enabled</span>. These messages will not be sent.</p>
+        <p className="settings-label" style={{ color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", marginBottom: '24px', fontVariationSettings: "'opsz' 14" }}>
+          You currently have zero upcoming inquiry follow-up messages. These messages will all show up here.
+        </p>
       )}
 
       <div className="col-12 mt-4">

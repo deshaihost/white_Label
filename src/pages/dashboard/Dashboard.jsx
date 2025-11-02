@@ -9,16 +9,18 @@ import {
   putCompleteActionItemActions,
   stateEmptyActions,
 } from "../../redux/actions";
-import { BoxLoader, FullScreenLoader } from "../../helper/Loader";
+import { BoxLoader, FullScreenLoader, ProgressLoader } from "../../helper/Loader";
 import AccountNotifBanner from "../../component/accountNotifBanner/accountNotifBanner";
 import SubscriptionBanner from "../../component/accountNotifBanner/subscriptionBanner";
 import "react-circular-progressbar/dist/styles.css";
 import ToastHandle from "../../helper/ToastMessage";
 import { Helmet } from "react-helmet";
-import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleCheck, FaCheck } from "react-icons/fa6";
 import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/transcriptsModel/ConverSationtranscriptModel";
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
 import NoltWidget from "../../component/nolt/nolt";
+import useWhiteLabelBranding from "../../helper/useWhiteLabelBranding";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 import {
   MetricTile,
@@ -31,9 +33,26 @@ import {
 } from "../statistics/dataManager";
 
 const Dashboard = () => {
+  console.log("🎯 STEP 1: Dashboard component rendering", {
+    timestamp: new Date().toISOString()
+  });
+
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isWhiteLabel, brandName, displayName } = useWhiteLabelBranding();
+  const { cssConfig, loading: cssLoading, progress } = useWhiteLabelCss();
+
+  console.log("🎯 STEP 2: Dashboard hooks initialized", {
+    isWhiteLabel,
+    brandName,
+    displayName,
+    cssLoading,
+    progress,
+    hasCssConfig: !!cssConfig,
+    timestamp: new Date().toISOString()
+  });
+
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const userDataLoading = store?.getUserDataReducer?.loading;
   const actionItemsConvertationData =
@@ -68,6 +87,9 @@ const Dashboard = () => {
 
   // When the page loads, fetch the data and populate the charts
   useEffect(() => {
+    console.log("🎯 STEP 3: Dashboard useEffect - fetching statistics data", {
+      timestamp: new Date().toISOString()
+    });
     getStatisticsData(
       setRawApiReturn,
       setApiStatisticsData,
@@ -99,7 +121,9 @@ const Dashboard = () => {
       component: HistogramTile,
       dataSets: apiStatisticsData?.messageTimingData,
       width: 12,
-      height: "240px",
+      height: "350px",
+      dateRange: startDateDisplay && endDateDisplay ? { start: startDateDisplay, end: endDateDisplay } : null,
+      showStatisticsLink: true,
     },
   ];
 
@@ -258,6 +282,9 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    console.log("🎯 STEP 4: Dashboard useEffect - dispatching getUserDataActions and getActionItemsActions", {
+      timestamp: new Date().toISOString()
+    });
     dispatch(getUserDataActions(false));
     dispatch(getActionItemsActions(8));
   }, []);
@@ -344,17 +371,55 @@ const Dashboard = () => {
     }
   }, [propertiesConversationGetData]);
 
+  console.log("🎯 STEP 5: Dashboard about to render JSX", {
+    cssLoading,
+    hasCssConfig: !!cssConfig,
+    primaryBgColor: cssConfig?.css_data?.background?.primary,
+    calculatedBackgroundStyle: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117',
+    timestamp: new Date().toISOString()
+  });
+
+  console.log("🎯 STEP 6: Dashboard CSS Config Full Details", {
+    cssConfig: cssConfig,
+    cssData: cssConfig?.css_data,
+    background: cssConfig?.css_data?.background,
+    primaryColor: cssConfig?.css_data?.background?.primary,
+    borders: cssConfig?.css_data?.borders,
+    borderPrimaryColor: cssConfig?.css_data?.borders?.primary,
+    timestamp: new Date().toISOString()
+  });
+
+  // Show loader while CSS is loading to prevent flash of default styling
+  if (cssLoading) {
+    console.log("🎯 STEP 7: Dashboard showing loader - waiting for CSS to load", {
+      cssLoading: true,
+      progress,
+      timestamp: new Date().toISOString()
+    });
+    return <ProgressLoader progress={progress} message="Loading dashboard..." />;
+  }
+
   return (
     <>
       <Helmet>
-        <title>Dashboard - HostBuddy AI</title>
+        <title>Dashboard - {isWhiteLabel ? `${displayName} AI` : 'HostBuddy AI'}</title>
       </Helmet>{" "}
       {propertiesConversationLoading && <FullScreenLoader />}
       {completeActionsItemLoading && <FullScreenLoader />}
-      <div className="account-main">
+      <div 
+        className="account-main"
+        style={{
+          background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
+        }}
+      >
         <div className="container">
-          <div className="banner-heading">
-            <h2>My HostBuddy</h2>
+          <div className="row justify-content-center">
+            <div className="col-lg-10 col-xl-10 col-xxl-10">
+              <div className="banner-heading">
+                {/* <h2>My {brandName}</h2> */}
+                {/* <h2>Dashboard</h2> */}
+              </div>
+            </div>
           </div>
           {userDataGet?.hospitable_permission_error && (
             <div style={{ marginBottom: "20px" }}>
@@ -452,18 +517,29 @@ const Dashboard = () => {
             >
               <SideBar />
             </div>
-            <div className="col-lg-10 col-xl-10 col-xxl-10">
-              <div className="dashboard-container blur-background-top-right">
+            <div 
+              className="col-lg-10 col-xl-10 col-xxl-10"
+              style={{
+                background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
+              }}
+            >
+              <h1 style={{color: cssConfig?.css_data?.text?.primary || "white", marginBottom:"20px"}}>Dashboard</h1>
+              <div 
+                className="dashboard-container blur-background-top-right"
+                style={{
+                  background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : undefined
+                }}
+              >
                 <div className="account_heading">
                   {first_name ? (
                     <h3>
-                      Welcome to HostBuddy, {!userDataLoading && first_name}
+                      Welcome to {brandName}, {!userDataLoading && first_name}
                     </h3>
                   ) : (
-                    <h3>Welcome to HostBuddy!</h3>
+                    <h3>Welcome to {brandName}!</h3>
                   )}
                   <h4>
-                    New to HostBuddy?{" "}
+                    New to {brandName}?{" "}
                     <Link
                       style={{ textDecoration: "underline", marginLeft: "5px" }}
                       to="/getstarted"
@@ -476,131 +552,250 @@ const Dashboard = () => {
                   <SubscriptionBanner userData={userDataGet} />
 
                   {!statisticsDataLoading ? (
-                    renderTiles(statisticsTiles)
+                    renderTiles(statisticsTiles, cssConfig)
                   ) : (
                     <BoxLoader />
                   )}
 
-                  {!statisticsDataLoading && (
-                    <>
-                      {startDateDisplay && endDateDisplay && (
-                        <p style={{ textAlign: "center", marginBottom: "5px" }}>
-                          Above data from {startDateDisplay} to {endDateDisplay}
-                        </p>
-                      )}
-                      <div
-                        className="statistics-link"
-                        style={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <Link style={{ margin: "0" }} to="/statistics">
-                          See more statistics
-                        </Link>
-                      </div>
-                    </>
-                  )}
-
                   <div className="row">
                     {!actionItemsCovertationLoading ? (
-                      <>
-                        <div className="text-white pb-1 d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-md-0 gap-2">
+                      <div style={{
+                        backgroundColor: 'var(--white-label-background-secondary, #17191f)',
+                        border: `2px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        boxShadow: '0 0 25px rgba(30, 75, 158, 0.2)',
+                        paddingLeft: '0',
+                        paddingRight: '0'
+                      }}>
+                        <div style={{
+                          padding: '24px',
+                          paddingBottom: '16px',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`
+                        }}>
                           <div>
-                            <h5 className="">
+                            <h5 style={{ 
+                              fontSize: "16px", 
+                              fontFamily: "'DM Sans', sans-serif", 
+                              fontWeight: 600,
+                              fontVariationSettings: "'opsz' 14",
+                              color: cssConfig?.css_data?.text?.primary || "white",
+                              marginBottom: 0
+                            }}>
                               Incomplete Action Items{" "}
-                              <small
-                                style={{ fontSize: "14px", color: "#AAA" }}
+                              <span
+                                style={{ 
+                                  fontSize: "14px", 
+                                  color: cssConfig?.css_data?.text?.secondary || "#a6a9b2",
+                                  fontFamily: "'DM Sans', sans-serif",
+                                  fontWeight: 400,
+                                  fontVariationSettings: "'opsz' 14"
+                                }}
                               >
                                 (Most Recent)
-                              </small>
+                              </span>
                             </h5>
                           </div>
                           <div>
                             <Link
                               to={"/action-item"}
-                              style={{ fontSize: "16px" }}
+                              style={{ 
+                                fontSize: "14px",
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 500,
+                                fontVariationSettings: "'opsz' 14",
+                                color: !cssLoading ? (cssConfig?.css_data?.text?.navigation_text || "#3e88f7") : "#3e88f7",
+                                textDecoration: "none"
+                              }}
+                              onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
+                              onMouseOut={(e) => e.target.style.textDecoration = 'none'}
                             >
                               See All
                             </Link>
                           </div>
                         </div>
                         {filteredSearchProperty?.length > 0 ? (
-                          <div
-                            className="table-responsive"
-                            style={{ overflowY: "auto", height: "500px" }}
-                          >
-                            <table className="table text-white action-items-table">
-                              <thead style={{ background: "#020d29" }}>
-                                <tr>
-                                  <th>Date/Time</th>
-                                  <th>Property/Guest</th>
-                                  <th>Action Item</th>
-                                  {/* <th>View/Done</th> */}
-                                  <th>Complete</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {filteredSearchProperty?.map((actionItem) => {
-                                  const {
-                                    id,
-                                    created_at,
-                                    property_name,
-                                    conversationID,
-                                    item,
-                                  } = actionItem;
-                                  let actionItemSend = {
-                                    propertyName: property_name,
-                                    conversationID,
-                                  };
-                                  return (
-                                    <tr key={id}>
-                                      <td style={{ whiteSpace: "pre-line" }}>
-                                        {" "}
-                                        {/* whiteSpace: 'pre-line' preserves the newline between date and time */}
-                                        {formatDateTime(created_at)}
-                                      </td>
-                                      <td>
+                          <>
+                            {/* Table Header */}
+                            <div style={{
+                              display: 'grid',
+                              gridTemplateColumns: '100px 200px 1fr 80px',
+                              gap: '16px',
+                              padding: '12px 24px',
+                              backgroundColor: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117',
+                              borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`
+                            }}>
+                              <p style={{
+                                color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
+                                fontSize: '12px',
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                fontVariationSettings: "'opsz' 14",
+                                margin: 0
+                              }}>
+                                Date/Time
+                              </p>
+                              <p style={{
+                                color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
+                                fontSize: '12px',
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                fontVariationSettings: "'opsz' 14",
+                                margin: 0
+                              }}>
+                                Property/Guest
+                              </p>
+                              <p style={{
+                                color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
+                                fontSize: '12px',
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                fontVariationSettings: "'opsz' 14",
+                                margin: 0
+                              }}>
+                                Action Item
+                              </p>
+                              <p style={{
+                                color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
+                                fontSize: '12px',
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                textAlign: 'center',
+                                fontVariationSettings: "'opsz' 14",
+                                margin: 0
+                              }}>
+                                Complete
+                              </p>
+                            </div>
+
+                            {/* Table Rows */}
+                            <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                              {filteredSearchProperty?.map((actionItem) => {
+                                const {
+                                  id,
+                                  created_at,
+                                  property_name,
+                                  conversationID,
+                                  item,
+                                } = actionItem;
+                                
+                                // Split date and time from formatDateTime
+                                const dateTimeFormatted = formatDateTime(created_at);
+                                const [datePart, timePart] = dateTimeFormatted.split('\n');
+                                
+                                return (
+                                  <div
+                                    key={id}
+                                    style={{
+                                      display: 'grid',
+                                      gridTemplateColumns: '100px 200px 1fr 80px',
+                                      gap: '16px',
+                                      padding: '16px 24px',
+                                      borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
+                                      transition: 'background-color 0.2s',
+                                      cursor: 'default'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--white-label-background-hover, #01255e)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                  >
+                                    <div>
+                                      <p style={{ 
+                                        fontFamily: "'DM Sans', sans-serif",
+                                        fontWeight: 500,
+                                        fontSize: "14px",
+                                        color: cssConfig?.css_data?.text?.primary || "white",
+                                        fontVariationSettings: "'opsz' 14",
+                                        margin: 0,
+                                        marginBottom: '4px'
+                                      }}>
+                                        {datePart}
+                                      </p>
+                                      <p style={{ 
+                                        fontFamily: "'DM Sans', sans-serif",
+                                        fontWeight: 400,
+                                        fontSize: "12px",
+                                        color: cssConfig?.css_data?.text?.secondary || "#a6a9b2",
+                                        fontVariationSettings: "'opsz' 14",
+                                        margin: 0
+                                      }}>
+                                        {timePart}
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p style={{ 
+                                        fontFamily: "'DM Sans', sans-serif",
+                                        fontWeight: 500,
+                                        fontSize: "14px",
+                                        color: cssConfig?.css_data?.text?.primary || "white",
+                                        fontVariationSettings: "'opsz' 14",
+                                        margin: 0,
+                                        marginBottom: actionItem?.guest_name ? '4px' : 0
+                                      }}>
                                         {property_name}
-                                        <br />
-                                        {actionItem?.guest_name !== null
-                                          ? actionItem?.guest_name
-                                          : ""}
-                                      </td>
-                                      <td className="">
-                                        <div className="">{item}</div>
-                                      </td>
-                                      <td className="text-center">
-                                        {/*\
-                                        <span className="mainCursor" style={{ marginRight: "10px" }} onClick={() => { conversationCallOnDashboard( actionItemSend ); }}>
-                                          <GoArrowUpRight className="text-white fs-6" />
-                                        </span>
-                                        */}
-                                        <span
-                                          className="mainCursor"
-                                          onClick={() => {
-                                            compeletHndle(
-                                              id,
-                                              property_name,
-                                              conversationID
-                                            );
-                                          }}
-                                        >
-                                          <FaCircleCheck className="text-primary fs-6" />
-                                        </span>
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                              </tbody>
-                            </table>
-                          </div>
+                                      </p>
+                                      {actionItem?.guest_name && (
+                                        <p style={{ 
+                                          fontFamily: "'DM Sans', sans-serif",
+                                          fontWeight: 400,
+                                          fontSize: "12px",
+                                          color: cssConfig?.css_data?.text?.secondary || "#a6a9b2",
+                                          fontVariationSettings: "'opsz' 14",
+                                          margin: 0
+                                        }}>
+                                          {actionItem.guest_name}
+                                        </p>
+                                      )}
+                                    </div>
+                                    <p style={{ 
+                                      fontFamily: "'DM Sans', sans-serif",
+                                      fontWeight: 400,
+                                      fontSize: "14px",
+                                      color: cssConfig?.css_data?.text?.primary || "white",
+                                      fontVariationSettings: "'opsz' 14",
+                                      margin: 0
+                                    }}>
+                                      {item}
+                                    </p>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                      <button
+                                        className="complete-button"
+                                        onClick={() => {
+                                          compeletHndle(
+                                            id,
+                                            property_name,
+                                            conversationID
+                                          );
+                                        }}
+                                        title="Mark Complete"
+                                      >
+                                        <FaCheck className="complete-button-icon" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </>
                         ) : (
-                          <span
-                            className="text-white d-flex justify-content-center align-items-center"
-                            style={{ height: "50px" }}
-                          >
+                          <div style={{
+                            padding: '32px',
+                            textAlign: 'center',
+                            color: cssConfig?.css_data?.text?.secondary || '#a6a9b2',
+                            fontSize: '14px',
+                            fontFamily: "'DM Sans', sans-serif",
+                            fontVariationSettings: "'opsz' 14"
+                          }}>
                             No Incomplete Items
-                          </span>
+                          </div>
                         )}
-                      </>
+                      </div>
                     ) : (
                       <BoxLoader />
                     )}

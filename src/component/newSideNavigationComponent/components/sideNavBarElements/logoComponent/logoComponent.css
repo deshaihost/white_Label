@@ -33,3 +33,36 @@
     font-weight: 500;
     line-height: 24px;
 }
+
+/* Shimmer effect for loading state */
+@keyframes shimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+/* Pulse effect for retry states */
+@keyframes pulse {
+    0% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}
+
+.logo-skeleton {
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.15) 20%,
+        rgba(255, 255, 255, 0.05) 40%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+    background-size: 800px 104px;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 4px;
+}

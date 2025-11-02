@@ -14,8 +14,7 @@
   border-radius: 10px;
 }
 .setting_tab_data {
-  background: #000212;
-  box-shadow: 2px 0px 8px 0px rgba(255, 255, 255, 0.5); /* x-offset, y-offset, blur-radius, spread-radius, color */
+  background: var(--white-label-background-primary, #0f1117);
 }
 .setting_tab_data .form-control {
   padding: 8px 15px !important;
@@ -24,6 +23,7 @@
   padding: 10px 40px !important;
   font-size: 16px !important;
   margin-top: 0 !important;
+  background: var(--white-label-interactive-button_background, #01255e) !important;
 }
 .setting_tab_data_inner {
   padding-right: 10px;

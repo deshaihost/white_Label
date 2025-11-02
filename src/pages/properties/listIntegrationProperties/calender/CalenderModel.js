@@ -4,6 +4,7 @@ import "./calenderModel.css";
 import Calendar from "./Calender";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import ScheduleCalender from "../schedule/ScheduleCalender";
+import ScheduleModal from "../schedule/ScheduleModal";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -76,77 +77,73 @@ const CalenderModel = ({
 
   return (
     <div>
-      <Modal
-        show={showCalender}
-        size="xl"
-        className="custom-calendar-modal"
-        onHide={handleCalenderClose}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Body className="p-0">
-          <div>
-            <div className="">
-              <div
-                className="d-flex justify-content-between px-3 calenderHeader"
-                style={{ fontSize: "14px", color: "#fff" }}
-              >
-                <div className="d-flex justify-between">
-                  <Button
-                    className={`bg-none border-0 shadow-none fs-3 ${
-                      scheduleButton && "invisible"
-                    }`}
-                    onClick={handlePrevMonth}
-                  >
-                    <FiChevronLeft />
-                  </Button>
-                  <Button
-                    onClick={handleNextMonth}
-                    className={`bg-none border-0 shadow-none fs-3 ${
-                      scheduleButton && "invisible"
-                    }`}
-                  >
-                    <FiChevronRight />
-                  </Button>
-                </div>
-                {monthButton && (
+      {/* New Schedule Modal - takes over when Schedule tab is selected */}
+      {scheduleButton && (
+        <ScheduleModal
+          isOpen={showCalender}
+          onClose={handleCalenderClose}
+          propertyName={selectedProperty}
+          allProperties={allProperties}
+          currTimeZone={timeZone}
+        />
+      )}
+
+      {/* Keep existing Month modal */}
+      {monthButton && (
+        <Modal
+          show={showCalender}
+          size="xl"
+          className="custom-calendar-modal"
+          onHide={handleCalenderClose}
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Body className="p-0">
+            <div>
+              <div className="">
+                <div
+                  className="d-flex justify-content-between px-3 calenderHeader"
+                  style={{ fontSize: "14px", color: "#fff" }}
+                >
+                  <div className="d-flex justify-between">
+                    <Button
+                      className="bg-none border-0 shadow-none fs-3"
+                      onClick={handlePrevMonth}
+                    >
+                      <FiChevronLeft />
+                    </Button>
+                    <Button
+                      onClick={handleNextMonth}
+                      className="bg-none border-0 shadow-none fs-3"
+                    >
+                      <FiChevronRight />
+                    </Button>
+                  </div>
                   <h3>
                     {`${date.toLocaleString("default", {
                       month: "long",
                     })} ${date.getFullYear()}`}
                   </h3>
-                )}
 
-                {scheduleButton && <h3>Schedule</h3>}
-
-                <div className="d-flex ">
-                  <button
-                    type="button"
-                    onClick={() => handleButtonToggle("schedule")}
-                    className={`shadow-none btn ${
-                      scheduleButton
-                        ? "btn-primary"
-                        : "btn-tranparent border border-primary text-light"
-                    } rounded-0`}
-                  >
-                    Schedule
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleButtonToggle("month")}
-                    className={`shadow-none btn ${
-                      monthButton
-                        ? "btn-primary"
-                        : "btn-tranparent border border-primary text-light"
-                    } rounded-0`}
-                  >
-                    Month
-                  </button>
+                  <div className="d-flex ">
+                    <button
+                      type="button"
+                      onClick={() => handleButtonToggle("schedule")}
+                      className="shadow-none btn btn-tranparent border border-primary text-light rounded-0"
+                    >
+                      Schedule
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleButtonToggle("month")}
+                      className="shadow-none btn btn-primary rounded-0"
+                    >
+                      Month
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {monthButton && (
               <Calendar
                 getScheduleAPI={calenderSchedule}
                 allProperties={allProperties}
@@ -158,30 +155,19 @@ const CalenderModel = ({
                 currentMonth={currentMonth}
                 propTimeZone={timeZone}
               />
-            )}
 
-            {scheduleButton && (
-              <ScheduleCalender
-                getScheduleAPI={calenderSchedule}
-                allProperties={allProperties}
-                setShowCalender={setShowCalender}
-                selectedProperty={selectedProperty}
-                scheduleData={calendarSchedule}
-                setScheduleChanged={setScheduleChanged}
-                
-              />
-            )}
-          </div>
-          {timeZone ? (
-            <div className="d-flex flex-column justify-content-center align-items-center">
-              <p className="text-center mb-3" style={{color:"rgb(128, 128, 128)"}}>
-                Property time zone: {timeZone}
-              </p>
-              <a href='https://userguide.hostbuddy.ai/quick-start/4-go-live' target="_blank" style={{marginBottom:'20px', fontSize:'16px'}}>Learn More About Scheduling</a>
+              {timeZone ? (
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <p className="text-center mb-3" style={{color:"rgb(128, 128, 128)"}}>
+                    Property time zone: {timeZone}
+                  </p>
+                  <a href='https://userguide.hostbuddy.ai/quick-start/4-go-live' target="_blank" style={{marginBottom:'20px', fontSize:'16px'}}>Learn More About Scheduling</a>
+                </div>
+              ) : null}
             </div>
-          ) : null}
-        </Modal.Body>
-      </Modal>
+          </Modal.Body>
+        </Modal>
+      )}
     </div>
   );
 };

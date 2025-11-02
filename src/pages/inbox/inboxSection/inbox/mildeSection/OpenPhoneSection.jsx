@@ -1325,7 +1325,7 @@ const OpenPhoneSection = ({
                 flexDirection: "column",
                 width: "100%",
                 backgroundColor: "#17191F",
-                borderTop: "1px solid #24262E",
+                borderTop: `1px solid var(--white-label-border-primary, #24262E)`,
               }}
             >
               <div
@@ -1399,7 +1399,7 @@ const OpenPhoneSection = ({
                             sendMessageLoading
                           )
                           ? "rgba(15, 17, 23, 0.42)"
-                          : "#007bff",
+                          : getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#007bff",
                       color:
                         !inputValue.trim() &&
                           !(
@@ -1536,7 +1536,7 @@ const OpenPhoneSection = ({
                 </svg>
                   <p
                     style={{
-                      color: "rgba(208, 211, 219, 1)",
+                      color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "rgba(208, 211, 219, 1)",
                       fontSize: "14px",
                       fontWeight: "600",
                       marginBottom: "10px",

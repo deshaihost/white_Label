@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import CopyToPropertiesModal from "./copyToPropertiesModal/CopyToPropertiesModal";
+import { useSelector } from "react-redux";
+import Select from "react-select";
+import axios from "axios";
+import ToastHandle from "../../../../helper/ToastMessage";
+import { BoxLoader } from "../../../../helper/Loader";
 import DeleteFromPropertiesModal from "./deleteFromPropertiesModal/DeleteFromPropertiesModal";
 
 const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSectionName, checkbox_group_option, handleModalSave, callDeleteQuestionApi, questionIndex, propertyName }) => {
@@ -26,9 +30,24 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
 
   const [reservationStageData, setReservationStageData] = useState(initialReservationStageSelections);
   const [extraNoteData, setextraNoteData] = useState("");
-  const [showCopyToPropertiesModal, setShowCopyToPropertiesModal] = useState(false);
   const [showDeleteFromPropertiesModal, setShowDeleteFromPropertiesModal] = useState(false);
   const [questionDeleted, setQuestionDeleted] = useState(false);
+  
+  // Copy to properties state
+  const [showCopyToProperties, setShowCopyToProperties] = useState(false);
+  const [selectedProperties, setSelectedProperties] = useState([]);
+  const [copyToPropertiesLoading, setCopyToPropertiesLoading] = useState(false);
+  
+  // Get properties from Redux store
+  const store = useSelector((state) => state);
+  const property_data = store?.getUserDataReducer?.getUserData?.data?.user?.property_data;
+  const allPropertyName = property_data !== undefined ? Object.keys(property_data) : [];
+  const allPropertyNameList = allPropertyName?.map((property) => {
+    return { value: property, label: property };
+  });
+
+  // Check if phases are modified (any stage is deselected)
+  const arePhasesModified = Object.values(reservationStageData).some(value => value === true);
 
   // When the modal is opened, populate the textArea and set reservationStageData according to any previous input
   useEffect(() => {
@@ -58,12 +77,73 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
     }
   }
 
+  // Copy to properties functionality
+  const callCopyToPropertiesApi = async () => {
+    // Construct dataToSend. If it's not a checkbox_group question, it's just the question obj. Otherwise, need to reformat
+    let questionDataToSend;
+    if (question_type !== "checkbox_group") {
+      questionDataToSend = {...question_obj, response_text: extraNoteData};
+    } else {
+      const index = response_options.indexOf(checkbox_group_option);
+      const response_text_data = extraNoteData || "";
+      const hide_for_reservations_formatted = hide_for_reservations[index] || "";
+      questionDataToSend = { 
+        option: checkbox_group_option, 
+        response_text: response_text_data, 
+        hide_for_reservations: hide_for_reservations_formatted, 
+        question_type: question_type 
+      };
+    }
+    
+    const dataToSend = {
+      section_name: sectionName, 
+      subsection_name: subSectionName, 
+      question: questionDataToSend, 
+      to_properties: selectedProperties.map(property => property.value)
+    };
+
+    const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    setCopyToPropertiesLoading(true);
+
+    try {
+      const config = {
+        headers: { "X-API-Key": API_KEY },
+        validateStatus: function (status) { return status >= 200 && status < 500; }
+      };
+
+      const response = await axios.put(`${baseUrl}/copy_questionnaire_question`, dataToSend, config);
+
+      if (response.status === 200) {
+        ToastHandle(response.data.message, "success");
+        setShowCopyToProperties(false);
+        setSelectedProperties([]);
+      } else { 
+        ToastHandle(response?.data?.error, "danger"); 
+      }
+    } catch (error) {
+      ToastHandle("An error occurred.", "danger");
+    } finally {
+      setCopyToPropertiesLoading(false);
+    }
+  };
+
+  const handleCopyToProperties = () => {
+    if (selectedProperties.length === 0) {
+      ToastHandle("Please select at least one property", "warning");
+      return;
+    }
+    callCopyToPropertiesApi();
+  };
+
   // Reset modal variables, to make sure we don't get old data when the modal is opened again
   const modalCleanup = () => {
     hide_for_reservations_data = null; // this is important. Otherwise the next time the modal is opened (show set to true), the useEffect might run and set the old hide_for_reservations_data values
     setReservationStageData(initialReservationStageSelections);
     setextraNoteData("");
     setQuestionDeleted(false);
+    setShowCopyToProperties(false);
+    setSelectedProperties([]);
   }
 
   const saveAndClose = () => {
@@ -78,65 +158,437 @@ const PencilIconModal = ({ show, setShowModal, question_obj, sectionName, subSec
 
   return (
     <>
-      <Modal size="md" show={show} onHide={() => saveAndClose()} aria-labelledby="contained-modal-title-vcenter" centered className="contact-modal" >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Additional Information
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="form-design mb-4">
-            <label style={{ display: 'block', textAlign: 'center' }}>{question_text}</label>
-            {["select", "checkbox_group"].includes(question_type) && (
-              <textarea className="form-control" name={question_text} id="" cols="30" rows="10" placeholder="Enter note here..." value={extraNoteData} onChange={(e) => setextraNoteData(e.target.value)}></textarea>
-            )}
-            <hr style={{ borderTop: "0px solid #0078F0" }} />
-            <label>Information from this question will only be provided to guests at the selected (blue) reservation stages. You can de-select stages below to prevent HostBuddy from sharing this information with those guests.</label>
+      <Modal 
+        size="md" 
+        show={show} 
+        onHide={() => saveAndClose()} 
+        aria-labelledby="contained-modal-title-vcenter" 
+        centered 
+        contentClassName="modern-modal"
+        style={{ fontFamily: '"DM Sans", sans-serif' }}
+      >
+        <div style={{
+          background: '#0F1117',
+          border: '1px solid #013280',
+          borderRadius: '8px',
+          overflow: 'hidden'
+        }}>
+          <Modal.Header 
+            style={{
+              background: '#17191f',
+              borderBottom: '1px solid #013280',
+              padding: '20px 24px'
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <Modal.Title style={{ 
+                fontSize: '18px',
+                fontWeight: '500',
+                color: '#fff',
+                margin: 0,
+                marginBottom: '4px'
+              }}>
+                Additional Information
+              </Modal.Title>
+              <p style={{
+                fontSize: '12px',
+                color: '#a6a9b2',
+                margin: 0
+              }}>
+                Configure visibility and management options
+              </p>
+            </div>
+            <button
+              onClick={() => saveAndClose()}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#676a73',
+                fontSize: '24px',
+                cursor: 'pointer',
+                padding: 0,
+                marginLeft: 'auto'
+              }}
+            >
+              ×
+            </button>
+          </Modal.Header>
+          
+          <Modal.Body style={{ padding: '24px', background: '#0F1117' }}>
+            <div>
+              {/* Question Label */}
+              <label className="modern-label" style={{ 
+                display: 'block', 
+                textAlign: 'center',
+                marginBottom: '16px',
+                fontSize: '16px'
+              }}>
+                {question_text}
+              </label>
+              
+              {/* Extra Note Textarea - only for select and checkbox_group */}
+              {["select", "checkbox_group"].includes(question_type) && (
+                <textarea 
+                  className="modern-input" 
+                  name={question_text} 
+                  cols="30" 
+                  rows="6" 
+                  placeholder="Enter note here..." 
+                  value={extraNoteData} 
+                  onChange={(e) => setextraNoteData(e.target.value)}
+                  style={{ marginBottom: '24px', minHeight: '120px' }}
+                />
+              )}
 
-            <div className=" d-flex justify-content-between mt-3">
+              {/* Divider */}
+              <div style={{ 
+                height: '1px', 
+                background: '#013280', 
+                margin: '24px 0' 
+              }} />
 
-              {/* Generate the reservation stage buttons dynamically */}
-              {all_possible_res_stages.map((stage, index) => (
-                <div className="col text-center" key={stage}>
-                  <input type="checkbox" checked={reservationStageData[stage]} className="btn-check" id={stage} autoComplete="off" onChange={(e) => {
-                    setReservationStageData(prevState => ({ ...prevState, [stage]: e.target.checked }));
-                  }}/>
-                  <label className={`btn btn-primary rounded-pill px-4 tab-btn-stage ${reservationStageData[stage] ? "btn-unselected" : ""}`} htmlFor={stage}>
-                    {stage}
-                  </label>
+              {/* Reservation Stages Section with Badge */}
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '12px', 
+                  marginBottom: '12px' 
+                }}>
+                  <div style={{
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    color: '#fff',
+                    margin: '0',
+                    padding: '0',
+                    lineHeight: '1.2'
+                  }}>
+                    Reservation Stages
+                  </div>
+                  {arePhasesModified && (
+                    <span style={{
+                      background: '#FB923C',
+                      color: '#fff',
+                      fontSize: '10px',
+                      fontWeight: '700',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                      lineHeight: '1',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      height: '18px',
+                      margin: '0'
+                    }}>
+                      Phases Modified
+                    </span>
+                  )}
                 </div>
-              ))}
+                <label className="modern-label" style={{ 
+                  display: 'block',
+                  marginBottom: '16px',
+                  fontSize: '12px',
+                  lineHeight: '1.5',
+                  color: '#a6a9b2',
+                  fontWeight: '400'
+                }}>
+                  Select which reservation stages should have access to this information. Deselected stages will not see this information.
+                </label>
+              </div>
 
+              {/* Reservation Stage Buttons */}
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(3, 1fr)', 
+                gap: '12px',
+                marginBottom: '24px'
+              }}>
+                {all_possible_res_stages.map((stage) => {
+                  const isSelected = !reservationStageData[stage]; // inverted logic from original
+                  return (
+                    <div key={stage}>
+                      <input 
+                        type="checkbox" 
+                        checked={reservationStageData[stage]} 
+                        id={stage} 
+                        autoComplete="off" 
+                        onChange={(e) => {
+                          setReservationStageData(prevState => ({ ...prevState, [stage]: e.target.checked }));
+                        }}
+                        style={{ display: 'none' }}
+                      />
+                      <label 
+                        htmlFor={stage}
+                        style={{
+                          width: '100%',
+                          padding: '12px 16px',
+                          textAlign: 'center',
+                          background: isSelected ? '#3e88f7' : '#0F1117',
+                          color: isSelected ? '#fff' : '#676a73',
+                          border: `2px solid ${isSelected ? '#3e88f7' : '#013280'}`,
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          fontSize: '13px',
+                          fontWeight: '500',
+                          transition: 'all 0.2s ease',
+                          userSelect: 'none',
+                          display: 'block',
+                          boxShadow: isSelected ? '0 0 12px rgba(62, 136, 247, 0.15)' : 'none'
+                        }}
+                      >
+                        {stage}
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Divider */}
+              <div style={{ 
+                height: '1px', 
+                background: '#013280', 
+                margin: '24px 0' 
+              }} />
+
+              {/* Management Options Section */}
+              <div>
+                <h3 style={{
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  color: '#fff',
+                  margin: '0 0 12px 0'
+                }}>
+                  Management Options
+                </h3>
+
+                <div style={{ marginBottom: '12px' }}>
+                  {/* Copy to Properties Toggle */}
+                  <button
+                    onClick={() => setShowCopyToProperties(!showCopyToProperties)}
+                    style={{
+                      width: '100%',
+                      background: '#0F1117',
+                      border: `1px solid ${showCopyToProperties ? '#3e88f7' : '#013280'}`,
+                      color: '#3e88f7',
+                      padding: '12px 16px',
+                      borderRadius: '8px',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    Copy to Other Properties
+                    <span style={{ marginLeft: 'auto', fontSize: '18px' }}>
+                      {showCopyToProperties ? '−' : '+'}
+                    </span>
+                  </button>
+
+                  {/* Copy to Properties Expanded Section */}
+                  {showCopyToProperties && (
+                    <div style={{
+                      marginTop: '12px',
+                      padding: '16px',
+                      background: '#17191f',
+                      border: '1px solid #013280',
+                      borderRadius: '8px'
+                    }}>
+                      <label className="modern-label" style={{ marginBottom: '8px', display: 'block' }}>
+                        Choose Properties
+                      </label>
+                      <Select
+                        isMulti
+                        options={allPropertyNameList}
+                        value={selectedProperties}
+                        onChange={setSelectedProperties}
+                        closeMenuOnSelect={false}
+                        placeholder="--Select Properties--"
+                        styles={{
+                          control: (base) => ({
+                            ...base,
+                            background: '#01255e',
+                            borderColor: '#013280',
+                            color: '#fff',
+                            minHeight: '42px'
+                          }),
+                          menu: (base) => ({
+                            ...base,
+                            background: '#01255e',
+                            border: '1px solid #013280'
+                          }),
+                          option: (base, state) => ({
+                            ...base,
+                            background: state.isFocused ? '#013280' : '#01255e',
+                            color: '#fff',
+                            cursor: 'pointer'
+                          }),
+                          multiValue: (base) => ({
+                            ...base,
+                            background: '#013280'
+                          }),
+                          multiValueLabel: (base) => ({
+                            ...base,
+                            color: '#fff'
+                          }),
+                          multiValueRemove: (base) => ({
+                            ...base,
+                            color: '#a6a9b2',
+                            ':hover': {
+                              background: '#3e88f7',
+                              color: '#fff'
+                            }
+                          })
+                        }}
+                      />
+                      <button
+                        onClick={() => setSelectedProperties(allPropertyNameList)}
+                        style={{
+                          marginTop: '8px',
+                          background: 'transparent',
+                          border: 'none',
+                          color: '#3e88f7',
+                          fontSize: '13px',
+                          cursor: 'pointer',
+                          padding: '4px 0',
+                          textDecoration: 'underline'
+                        }}
+                      >
+                        Select All
+                      </button>
+                      <p style={{
+                        fontSize: '12px',
+                        color: '#a6a9b2',
+                        margin: '12px 0',
+                        textAlign: 'center'
+                      }}>
+                        This will overwrite any existing data for this question in the selected properties.
+                      </p>
+                      {copyToPropertiesLoading ? (
+                        <div style={{ display: 'flex', justifyContent: 'center', padding: '12px' }}>
+                          <BoxLoader />
+                        </div>
+                      ) : (
+                        <button
+                          onClick={handleCopyToProperties}
+                          className="modern-btn-primary"
+                          style={{ width: '100%', marginTop: '8px' }}
+                        >
+                          Copy to Selected Properties
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Delete Options - only for certain sections */}
+                {((sectionName === 'SOPs' || (sectionName === 'Extras' && subSectionName === 'Other') || sectionName === 'Topics to Avoid')) && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <button
+                      onClick={() => handleDeleteQuestion(true)}
+                      style={{
+                        width: '100%',
+                        background: '#0F1117',
+                        border: '1px solid #013280',
+                        color: '#ef4444',
+                        padding: '12px 16px',
+                        borderRadius: '8px',
+                        fontSize: '13px',
+                        fontWeight: '500',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = '#4a1616';
+                        e.target.style.borderColor = '#ef4444';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = '#0F1117';
+                        e.target.style.borderColor = '#013280';
+                      }}
+                    >
+                      <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Delete Entry
+                    </button>
+                    
+                    <button
+                      onClick={() => setShowDeleteFromPropertiesModal(true)}
+                      style={{
+                        width: '100%',
+                        background: '#0F1117',
+                        border: '1px solid #013280',
+                        color: '#ef4444',
+                        padding: '12px 16px',
+                        borderRadius: '8px',
+                        fontSize: '13px',
+                        fontWeight: '500',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = '#4a1616';
+                        e.target.style.borderColor = '#ef4444';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = '#0F1117';
+                        e.target.style.borderColor = '#013280';
+                      }}
+                    >
+                      <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Delete from Multiple Properties
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Divider */}
+              <div style={{ 
+                height: '1px', 
+                background: '#013280', 
+                margin: '24px 0 16px 0' 
+              }} />
+
+              {/* Save Button */}
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button 
+                  onClick={() => saveAndClose()}
+                  className="modern-btn-secondary"
+                  style={{ flex: 1 }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="modern-btn-primary"
+                  onClick={() => { saveAndClose() }}
+                  style={{ flex: 1 }}
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
-            <hr style={{ borderTop: "2px solid #0078F0", margin: "20px 0 30px 0" }} />
-
-            <div className="d-flex justify-content-center mt-3">
-              <button className="mw-auto" onClick={() => { saveAndClose() }}>
-                Save
-              </button>
-            </div>
-
-            <a style={{ color:'#146EF5', textDecoration:'none', display:'block', textAlign:'center', marginTop:'15px', cursor:'pointer' }} onClick={() => setShowCopyToPropertiesModal(true)}>
-              Copy To Other Properties
-            </a>
-
-            {((sectionName === 'SOPs' || (sectionName === 'Extras' && subSectionName === 'Other') || sectionName === 'Topics to Avoid')) && (
-              <>
-                <a style={{ color:'red', textDecoration:'none', display:'block', textAlign:'center', marginTop:'15px', cursor:'pointer' }} onClick={() => handleDeleteQuestion(true)}>
-                  Delete Question
-                </a>
-                <a style={{ color:'red', textDecoration:'none', display:'block', textAlign:'center', marginTop:'15px', cursor:'pointer' }} onClick={() => setShowDeleteFromPropertiesModal(true)}>
-                  Delete From Multiple Properties
-                </a>
-              </>
-            )}
-
-          </div>
-        </Modal.Body>
+          </Modal.Body>
+        </div>
       </Modal>
-      {showCopyToPropertiesModal && (
-        <CopyToPropertiesModal show={showCopyToPropertiesModal} setShow={setShowCopyToPropertiesModal} question_obj={question_obj} sectionName={sectionName} subSectionName={subSectionName} checkbox_group_option={checkbox_group_option} liveTextData={extraNoteData} liveHideForReservationsData={reservationStageData} />
-      )}
+      
       {showDeleteFromPropertiesModal && (
         <DeleteFromPropertiesModal 
           show={showDeleteFromPropertiesModal} 

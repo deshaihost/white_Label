@@ -57,8 +57,25 @@ function NavBarContainer() {
 
   const logoutHandle = async (e) => {
     e.preventDefault();
-    logOut();
-    navigate("/login");
+    try {
+      logOut();
+      
+      // Check if we're in a white-label scenario
+      const urlParams = new URLSearchParams(window.location.search);
+      const isWhiteLabel = urlParams.has('token') || urlParams.has('user_id') || localStorage.getItem('brandName');
+      
+      if (isWhiteLabel) {
+        // For white-label, redirect to client login with current parameters
+        navigate(`/client-login${window.location.search}`);
+      } else {
+        // For regular users, go to standard login
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Fallback navigation even if there's an error
+      navigate("/login");
+    }
   };
 
   const handlebackToUsersClick = (e) => {
@@ -290,7 +307,7 @@ function NavBarContainer() {
       className={`navbar-main-container ${sidebarClicked ? 'expanded-by-click' : ''} ${isMobileDevice() ? 'mobile-default-collapsed' : ''}`}
       style={{
         position: "fixed",
-        backgroundColor: sidebarOpen ? "rgba(23, 25, 31, 1)" : "transparent",        top: 0,
+        backgroundColor: sidebarOpen ? "var(--white-label-background-secondary, #17191F)" : "transparent",        top: 0,
         left: 0,
         zIndex: 1000,paddingTop: sidebarOpen ? "16px" : "0px",
         paddingBottom: sidebarOpen ? "16px" : "0px",
@@ -316,7 +333,7 @@ function NavBarContainer() {
       {sidebarOpen ? (        <div
           className="navbar-container-1600"
           style={{
-            backgroundColor: "rgba(23, 25, 31, 1)",
+            backgroundColor: "var(--white-label-background-secondary, #17191F)",
             width: "184px",
             overflowY: "auto",
             boxSizing: "border-box",

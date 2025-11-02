@@ -6,6 +6,7 @@ import { dataInput, minutDataInput, createTypeToGuesttypeMapping, getUseTriggere
 import Loader from "../../../../../../helper/Loader";
 import { v4 as uuidv4 } from 'uuid';
 import { getSubscriptionStatus } from '../../../../../../helper/Authorized';
+import { useWhiteLabelCss } from "../../../../../../helper/WhiteLabelCssContext";
 
 import MultiSelect from "../../../../../../component/multiSelect/multiSelect";
 
@@ -13,7 +14,9 @@ import MultiSelect from "../../../../../../component/multiSelect/multiSelect";
 const InboxUpgrade = React.lazy(() => import("../../../inbox/mildeSection/inbox_Upgrade/InboxUpgrade.js"));
 
 const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplate, allPropertyNamesList, saveTemplateLoading, handleDeleteTemplate, deleteTemplateLoading, hasCleaningManagementIntegration, minut_user_id, userData, smartAllData}) => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const { type, smartTemplateData } = addEditSmart;
+  
   const { triggers, conditions } = dataInput;
   const { minutTriggers, minutConditions } = minutDataInput;
   const edit = "Edit";
@@ -189,6 +192,131 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   // ------- Property multi select (TODO: move this to its own component & file) -------
   const [selectedOptions, setSelectedOptions] = useState([]);
   const options = allPropertyNamesList.map((propertyName) => ({ value: propertyName, label: propertyName }));
+  
+  // Create dynamic styles with white label dropdown and hover colors
+  const getDynamicMultiSelectStyles = () => {
+    const dropdownBgColor = cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || 'var(--white-label-background-dropdown, #0F1117)');
+    const hoverColor = cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || 'var(--white-label-background-hover, #01255e)');
+    const borderPrimaryColor = cssLoading ? '#013280' : (cssConfig?.css_data?.borders?.primary || '#013280');
+    
+    return {
+      control: (provided, state) => ({
+        ...provided,
+        border: `1px solid ${state.isFocused ? '#3e88f7' : borderPrimaryColor}`,
+        borderRadius: '8px',
+        color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+          ? cssConfig.css_data.text.secondary 
+          : '#a6a9b2',
+        fontSize: '16px',
+        fontWeight: '400',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14",
+        backgroundColor: dropdownBgColor,
+        display: 'flex',
+        overflowX: 'auto',
+        width: '250px',
+        padding: '6px 12px',
+        boxShadow: state.isFocused ? '0 0 0 1px rgba(62, 136, 247, 0.5)' : 'none',
+        transition: 'all 0.2s',
+        '&:hover': {
+          borderColor: '#3e88f7'
+        }
+      }),
+      menu: (provided) => ({
+        ...provided,
+        backgroundColor: dropdownBgColor,
+        border: `2px solid ${borderPrimaryColor}`,
+        borderRadius: '8px',
+        boxShadow: '0 0 20px rgba(30, 75, 158, 0.2)',
+        marginTop: '8px',
+        overflow: 'hidden'
+      }),
+      menuList: (provided) => ({
+        ...provided,
+        maxHeight: '450px',
+        padding: '0',
+        backgroundColor: dropdownBgColor
+      }),
+      option: (provided, state) => ({
+        ...provided,
+        fontSize: '15px',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14",
+        padding: '12px 16px',
+        color: !cssLoading && cssConfig?.css_data?.text?.primary 
+          ? cssConfig.css_data.text.primary 
+          : '#fff',
+        backgroundColor: state.isFocused || state.isSelected ? hoverColor : 'transparent',
+        transition: 'background-color 0.2s',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        '&:hover': {
+          backgroundColor: hoverColor,
+        },
+      }),
+      singleValue: (provided) => ({
+        ...provided,
+        color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+          ? cssConfig.css_data.text.secondary 
+          : '#a6a9b2',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14"
+      }),
+      multiValue: (provided) => ({
+        ...provided,
+        backgroundColor: '#3e88f7',
+        borderRadius: '6px',
+        color: '#fff',
+        display: 'inline-flex',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14"
+      }),
+      multiValueLabel: (provided) => ({
+        ...provided,
+        color: '#fff',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14"
+      }),
+      multiValueRemove: (provided) => ({
+        ...provided,
+        color: '#fff',
+        ':hover': {
+          backgroundColor: '#5a9bff',
+          color: '#fff',
+        }
+      }),
+      placeholder: (provided) => ({
+        ...provided,
+        color: !cssLoading && cssConfig?.css_data?.text?.placeholder 
+          ? cssConfig.css_data.text.placeholder 
+          : '#676A73',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14"
+      }),
+      dropdownIndicator: (provided) => ({
+        ...provided,
+        color: '#a6a9b2',
+        '&:hover': {
+          color: '#3e88f7'
+        }
+      }),
+      indicatorSeparator: () => ({
+        display: 'none'
+      }),
+      input: (provided) => ({
+        ...provided,
+        color: '#fff',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontVariationSettings: "'opsz' 14"
+      }),
+      valueContainer: (provided) => ({
+        ...provided,
+        padding: '0'
+      })
+    };
+  };
 
   // When the data structure populates, update the selected options
   useEffect(() => {
@@ -255,133 +383,545 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   };
 
   return (
-    <div className='smartTemplateAddEdit'>
-      <div className="d-flex gap-3 flex-wrap align-items-center justify-content-between mb-3">
-        <div>
-          <h1>{type?.type} Smart Template</h1>
-          <p onClick={addEditClose} className="text-primary" style={{ cursor: "pointer" }}>&lt; Smart Templates </p>
-        </div>
-      
-        <div className="d-flex flex-column align-items-center">
-          {!saveTemplateLoading ? (
-            <button className="bg_theme_btn mb-3" onClick={() => { handleSaveTemplate(dataStructure); }}>Save</button>
-          ) : (
-            <Loader />
-          )}
-          {!deleteTemplateLoading ? (
-            <a href="#" className="clickableLink" style={{ color: 'rgb(255,0,0)', fontSize: '14px' }} onClick={handleDeleteClick}>Delete Template</a>
-          ) : (
-            <Loader />
-          )}
+    <div className='smartTemplateAddEdit' style={{ maxWidth: '1400px', margin: '0 auto', padding: '48px' }}>
+      {/* Header Section */}
+      <div style={{ marginBottom: '32px' }}>
+        <button 
+          onClick={addEditClose}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : '#3e88f7',
+            fontSize: '15px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '600',
+            fontVariationSettings: "'opsz' 14",
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '0',
+            marginBottom: '16px',
+            transition: 'opacity 0.2s'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+          onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+        >
+          <span>&larr;</span> Back to Smart Templates
+        </button>
+        
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <div>
+            <h1 style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                ? cssConfig.css_data.text.primary 
+                : 'white',
+              fontSize: '40px',
+              fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontWeight: '700',
+              fontVariationSettings: "'opsz' 14",
+              marginBottom: '8px'
+            }}>
+              {type?.type} Smart Template
+            </h1>
+            <p style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : '#3e88f7',
+              fontSize: '16px',
+              fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontWeight: '600',
+              fontVariationSettings: "'opsz' 14",
+              margin: '0'
+            }}>
+              Smart Template
+            </p>
+          </div>
+          
+          <div className="d-flex align-items-center gap-3">
+            {!saveTemplateLoading ? (
+              <button className="bg_theme_btn" onClick={() => { handleSaveTemplate(dataStructure); }}>Save</button>
+            ) : (
+              <Loader />
+            )}
+            {!deleteTemplateLoading ? (
+              <a href="#" className="clickableLink" style={{ 
+                color: '#ef4444', 
+                fontSize: '15px',
+                fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                fontWeight: '600',
+                fontVariationSettings: "'opsz' 14",
+                textDecoration: 'none'
+              }} onClick={handleDeleteClick}>Delete Template</a>
+            ) : (
+              <Loader />
+            )}
+          </div>
         </div>
       </div>
-      <p style={{color:'#AAA', fontSize:'16px', textAlign:'left'}}>Smart Templates lets you create highly customized templated messages to suit your exact needs. Choose specific triggers, target recipients, and conditions, and use AI to analyze context to send to the right guests at the right time.</p>
+
+      {/* Description */}
+      <p style={{
+        color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+          ? cssConfig.css_data.text.secondary 
+          : '#a6a9b2',
+        fontSize: '15px',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontWeight: '400',
+        fontVariationSettings: "'opsz' 14",
+        lineHeight: '1.6',
+        marginBottom: '32px'
+      }}>
+        Smart Templates lets you create highly customized templated messages to suit your exact needs. Choose specific triggers, target recipients, and conditions, and use AI to analyze context to send to the right guests at the right time.
+      </p>
       
-      <hr className="bg-white opacity-100 my-5" style={{ height: "2px" , opacity:'75%'}} />
+      {/* Divider */}
+      <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: "32px" }}></div>
 
-      <div className="nameAndEnableSection">
-        <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <p className="fs-5 fw-bold">Template Name</p>
-          <input type="text" className="form-control mt-2" value={dataStructure?.name} onChange={(e) => {setDataStructure({ ...dataStructure, name: e.target.value });}}/>
+      {/* Enable Toggle Section */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '32px',
+        paddingBottom: '24px',
+        borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary ? `${cssConfig.css_data.borders.primary}66` : 'rgba(1, 50, 128, 0.4)'}`
+      }}>
+        <div>
+          <h3 style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : 'white',
+            fontSize: '18px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '700',
+            fontVariationSettings: "'opsz' 14",
+            marginBottom: '4px'
+          }}>
+            Enable Template
+          </h3>
+          <p style={{
+            color: dataStructure?.enabled ? '#10b981' : '#ef4444',
+            fontSize: '14px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '400',
+            fontVariationSettings: "'opsz' 14",
+            margin: '0'
+          }}>
+            You currently have this template {dataStructure?.enabled ? 'enabled' : 'disabled'}
+          </p>
         </div>
+        <button
+          onClick={handleEnableToggle}
+          style={{
+            width: '56px',
+            height: '28px',
+            borderRadius: '9999px',
+            position: 'relative',
+            backgroundColor: dataStructure?.enabled ? '#3e88f7' : '#676a73',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.3s',
+            boxShadow: dataStructure?.enabled ? '0 0 12px rgba(62, 136, 247, 0.4)' : 'none'
+          }}
+        >
+          <div style={{
+            position: 'absolute',
+            top: '2px',
+            width: '24px',
+            height: '24px',
+            backgroundColor: 'white',
+            borderRadius: '50%',
+            transition: 'transform 0.3s',
+            transform: dataStructure?.enabled ? 'translateX(28px)' : 'translateX(2px)'
+          }}></div>
+        </button>
+      </div>
 
-        <div className="enableSection">
-          <p className="d-flex align-items-center gap-5">
-            Enable
-            <div className="form-check form-switch">
-              <input className="form-check-input" type="checkbox" checked={dataStructure?.enabled} onChange={handleEnableToggle} id="flexSwitchCheckChecked"/>
-            </div>
-          </p>
-          <p className="fs-14 text-muted">
-            You currently have this template <span className={dataStructure?.enabled ? "text-success" : "text-danger"}>{dataStructure?.enabled ? "enabled" : "disabled"}</span>
-          </p>
+      {/* Template Name and Properties */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', marginBottom: '32px' }}>
+        <div>
+          <label style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : 'white',
+            fontSize: '18px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '700',
+            fontVariationSettings: "'opsz' 14",
+            marginBottom: '12px',
+            display: 'block'
+          }}>
+            Template Name
+          </label>
+          <input 
+            type="text" 
+            value={dataStructure?.name} 
+            onChange={(e) => {setDataStructure({ ...dataStructure, name: e.target.value });}}
+            placeholder="Enter template name"
+            style={{
+              width: '100%',
+              backgroundColor: cssLoading ? 'var(--white-label-background-secondary, #17191F)' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #17191F)'),
+              border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
+              borderRadius: '8px',
+              padding: '14px 20px',
+              color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                ? cssConfig.css_data.text.primary 
+                : 'white',
+              fontSize: '16px',
+              fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontWeight: '400',
+              fontVariationSettings: "'opsz' 14",
+              outline: 'none',
+              transition: 'all 0.2s'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#3e88f7';
+              e.target.style.boxShadow = '0 0 0 1px rgba(62, 136, 247, 0.5)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = cssConfig?.css_data?.borders?.primary || '#013280';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
         </div>
 
         <div className="propertySelectSection">
-          <p style={{fontSize:"14px", textAlign:"center", marginBottom:'2px'}}>Applies to these properties:</p>
+          <label style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : 'white',
+            fontSize: '18px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '700',
+            fontVariationSettings: "'opsz' 14",
+            marginBottom: '12px',
+            display: 'block'
+          }}>
+            Applies to these properties
+          </label>
           <MultiSelect
             options={options}
             selectedOptions={selectedOptions}
             setSelectedOptions={(options) => {
-              setSelectedOptions(options); // Update the UI
-              setDataStructure({ ...dataStructure, properties: options.map((option) => option.value) }); // Update the data structure
+              setSelectedOptions(options);
+              setDataStructure({ ...dataStructure, properties: options.map((option) => option.value) });
             }}
             placeholder="Select properties..."
             selectAllText="Select all"
+            customSelectStyles={getDynamicMultiSelectStyles()}
+            dropdownBgColor={cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117')}
+            hoverBgColor={cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e')}
           />
         </div>
       </div>
       
-      <div className="triggersSection">
-        <p className="fs-5 fw-bold">Send When...</p>
-        <p className="fs-14 mt-1 mb-3 text-muted">This controls when the message will be sent to a guest.</p>
+      {/* Send When Section */}
+      <div style={{
+        marginBottom: '32px',
+        paddingBottom: '32px',
+        borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary ? `${cssConfig.css_data.borders.primary}66` : 'rgba(1, 50, 128, 0.4)'}`
+      }}>
+        <label style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.primary 
+            ? cssConfig.css_data.text.primary 
+            : 'white',
+          fontSize: '18px',
+          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontWeight: '700',
+          fontVariationSettings: "'opsz' 14",
+          marginBottom: '8px',
+          display: 'block'
+        }}>
+          Send When...
+        </label>
+        <p style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+            ? cssConfig.css_data.text.secondary 
+            : '#a6a9b2',
+          fontSize: '14px',
+          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontWeight: '400',
+          fontVariationSettings: "'opsz' 14",
+          marginBottom: '16px'
+        }}>
+          This controls when the message will be sent to the guest.
+        </p>
         {dataStructure?.triggers?.length > 0 &&
           dataStructure?.triggers?.map((trigger, index) => {
             const { type } = trigger;
             return (
-              <div className="col-lg-4" key={index}>
-                <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                  <p className="fs-6">{nameMapping[type].guesttype}</p>
-                  <div className="d-flex align-items-center gap-3">
-                    <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, triggerName)}>
-                      Remove
-                    </p>
-                    <p className="text-primary mainCursor fs-6" onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, minutFormData:minutTriggers, editFormData:trigger, editIndex:index, typepAddEdit:edit })}>Edit</p>
-                  </div>
+              <div key={index} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                marginTop: '8px'
+              }}>
+                <div style={{
+                  flex: '1',
+                  backgroundColor: 'var(--white-label-background-secondary, #17191F)',
+                  border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
+                  borderRadius: '8px',
+                  padding: '12px 16px',
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                    ? cssConfig.css_data.text.primary 
+                    : 'white',
+                  fontSize: '15px',
+                  fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                  fontWeight: '400',
+                  fontVariationSettings: "'opsz' 14",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <span>{nameMapping[type].guesttype}</span>
+                  <button 
+                    onClick={() => handleRemove(index, triggerName)}
+                    style={{
+                      color: '#ef4444',
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      padding: '0',
+                      transition: 'opacity 0.2s'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+                    onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+                  >
+                    ×
+                  </button>
                 </div>
+                <button 
+                  onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, minutFormData:minutTriggers, editFormData:trigger, editIndex:index, typepAddEdit:edit })}
+                  style={{
+                    color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                      ? cssConfig.css_data.text.secondary 
+                      : '#98bffa',
+                    fontSize: '15px',
+                    fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                    fontWeight: '600',
+                    fontVariationSettings: "'opsz' 14",
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.color = '#3e88f7'}
+                  onMouseOut={(e) => e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#98bffa'}
+                >
+                  Change Event
+                </button>
               </div>
             );
           })}
-        {dataStructure?.triggers?.length < 1 && ( // For now, only one trigger can be added
+        {dataStructure?.triggers?.length < 1 && (
           <button
-            className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
             onClick={() => setAllData({modelShow:true, modelShowType:triggerName, formData:triggers, minutFormData:minutTriggers, typepAddEdit:add})}
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : '#98bffa',
+              fontSize: '15px',
+              fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontWeight: '600',
+              fontVariationSettings: "'opsz' 14",
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '0',
+              marginTop: '8px',
+              transition: 'color 0.2s'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.color = '#3e88f7'}
+            onMouseOut={(e) => e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#98bffa'}
           >
-            <i className="bi bi-plus fs-3"></i> Add an Event
+            + Add an Event
           </button>
         )}
       </div>
 
-      <div className="conditionsSection">
-        <p className="fs-5 fw-bold">Send If...</p>
-        <p className="fs-14 mt-1 mb-3 text-muted">Add conditions to restrict message sending in certain situations, or to certain categories of guests. The conditions added ALL must be met for a guest in order for the message to be sent to them.</p>
-        {dataStructure?.conditions?.length > 0 &&
-          dataStructure?.conditions?.map((conditionsItem, index) => {
-            const { type } = conditionsItem;
-            return (
-              <div className="col-lg-4" key={index}>
-                <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
-                  <p className="fs-6">{nameMapping[type].guesttype}</p>
-                  <div className="d-flex align-items-center gap-3">
-                    <p className="text-danger mainCursor fs-6" onClick={() => handleRemove(index, conditionsName)}>
-                      Remove
-                    </p>
-                    <p className="text-primary mainCursor fs-6"
-                      onClick={() => setAllData({modelShow:true, modelShowType:conditionsName, formData:conditions, minutFormData:minutConditions, editFormData:conditionsItem, editIndex:index, typepAddEdit:edit })}
+      {/* Send If Section */}
+      <div style={{
+        marginBottom: '32px',
+        paddingBottom: '32px',
+        borderBottom: `1px solid ${cssConfig?.css_data?.borders?.primary ? `${cssConfig.css_data.borders.primary}66` : 'rgba(1, 50, 128, 0.4)'}`
+      }}>
+        <label style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.primary 
+            ? cssConfig.css_data.text.primary 
+            : 'white',
+          fontSize: '18px',
+          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontWeight: '700',
+          fontVariationSettings: "'opsz' 14",
+          marginBottom: '8px',
+          display: 'block'
+        }}>
+          Send If...
+        </label>
+        <p style={{
+          color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+            ? cssConfig.css_data.text.secondary 
+            : '#a6a9b2',
+          fontSize: '14px',
+          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontWeight: '400',
+          fontVariationSettings: "'opsz' 14",
+          marginBottom: '16px'
+        }}>
+          Add conditions to restrict message sending. Templated message will only be sent if all these conditions are met for the message to be sent to them.
+        </p>
+        {dataStructure?.conditions?.length > 0 && (
+          <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {dataStructure?.conditions?.map((conditionsItem, index) => {
+              const { type } = conditionsItem;
+              return (
+                <div key={index} style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px'
+                }}>
+                  <div style={{
+                    flex: '1',
+                    backgroundColor: 'var(--white-label-background-secondary, #17191F)',
+                    border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                      ? cssConfig.css_data.text.primary 
+                      : 'white',
+                    fontSize: '15px',
+                    fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                    fontWeight: '400',
+                    fontVariationSettings: "'opsz' 14",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}>
+                    <span>{nameMapping[type].guesttype}</span>
+                    <button 
+                      onClick={() => handleRemove(index, conditionsName)}
+                      style={{
+                        color: '#ef4444',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        padding: '0',
+                        transition: 'opacity 0.2s'
+                      }}
+                      onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+                      onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
                     >
-                      Edit
-                    </p>
+                      ×
+                    </button>
                   </div>
+                  <button 
+                    onClick={() => setAllData({modelShow:true, modelShowType:conditionsName, formData:conditions, minutFormData:minutConditions, editFormData:conditionsItem, editIndex:index, typepAddEdit:edit })}
+                    style={{
+                      color: !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                        ? cssConfig.css_data.text.navigation_text 
+                        : '#98bffa',
+                      fontSize: '15px',
+                      fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                      fontWeight: '600',
+                      fontVariationSettings: "'opsz' 14",
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      transition: 'color 0.2s'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.interactive?.light_blue 
+                        ? cssConfig.css_data.interactive.light_blue 
+                        : '#3e88f7';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                        ? cssConfig.css_data.text.navigation_text 
+                        : '#98bffa';
+                    }}
+                  >
+                    Edit
+                  </button>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+        )}
         <button
-          className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
           onClick={() => setAllData({ modelShow:true, modelShowType:conditionsName, formData:conditions, minutFormData:minutConditions, typepAddEdit:add })}
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+              ? cssConfig.css_data.text.navigation_text 
+              : '#98bffa',
+            fontSize: '15px',
+            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontWeight: '600',
+            fontVariationSettings: "'opsz' 14",
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '0',
+            marginTop: '8px',
+            transition: 'color 0.2s'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.interactive?.light_blue 
+              ? cssConfig.css_data.interactive.light_blue 
+              : '#3e88f7';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.color = !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+              ? cssConfig.css_data.text.navigation_text 
+              : '#98bffa';
+          }}
         >
-          <i className="bi bi-plus fs-3 "></i> Add a Condition
+          + Add a Condition
         </button>
       </div>
 
-      <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%'}} />
+      {/* Divider before Message Section */}
+      <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginTop: "32px", marginBottom: "32px" }}></div>
       
-      <h3 className="available-variables-heading mt-5 text-center">Message</h3>
+      <h3 style={{
+        color: !cssLoading && cssConfig?.css_data?.text?.primary 
+          ? cssConfig.css_data.text.primary 
+          : 'white',
+        fontSize: '24px',
+        fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontWeight: '700',
+        fontVariationSettings: "'opsz' 14",
+        textAlign: 'center',
+        marginTop: '40px',
+        marginBottom: '32px'
+      }}>
+        Message
+      </h3>
 
       <div className="d-flex flex-wrap flex-md-nowrap gap-2 justify-content-between mt-5">
         <div className="available-variables-section" style={{justifyContent:'left'}}>
-          <label className="fs-5">Variables</label>
-          <p className="settings-label">Click to add custom variables to your message. These variables will change to match the data for each reservation.</p>
+          <label 
+            className="fs-5"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                ? cssConfig.css_data.text.primary 
+                : undefined
+            }}
+          >Variables</label>
+          <p 
+            className="settings-label"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : undefined
+            }}
+          >Click to add custom variables to your message. These variables will change to match the data for each reservation.</p>
           <div className="available-variables mt-3">
             {Object.keys(variables).map((key, index) => (
               <span key={index} className="variable" onClick={() => insertVariableAtCursor(document.getElementById('templateMessage'), `[[${key}]]`)}>{variables[key]}</span>
@@ -391,10 +931,37 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       </div>
 
       <div className="mt-4 mb-5">
-        <label className="fs-5">Message</label>
-        <textarea id="templateMessage" className="form-control setting-textarea" value={dataStructure?.message} onChange={(e) => handleTextAreaChange(e, 'message')} placeholder="Enter your message here..."/>
+        <label 
+          className="fs-5"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : undefined
+          }}
+        >Message</label>
+        <textarea 
+          id="templateMessage" 
+          className="form-control setting-textarea" 
+          value={dataStructure?.message} 
+          onChange={(e) => handleTextAreaChange(e, 'message')} 
+          placeholder="Enter your message here..."
+          style={{
+            border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`
+          }}
+        />
         {!showFollowUps && (
-          <button style={{ background: 'none', border: 'none', color: '#146ef5', cursor: 'pointer', margin: '5px auto 0 auto' }} onClick={handleAddFollowUp}>
+          <button 
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : '#146ef5', 
+              cursor: 'pointer', 
+              margin: '5px auto 0 auto' 
+            }} 
+            onClick={handleAddFollowUp}
+          >
             Follow-up...
           </button>
         )}
@@ -402,12 +969,37 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
 
       {showFollowUps && dataStructure.follow_ups.map((followUp, index) => (
         <div className="followUp px-5 py-4" key={index}>
-          <label className="fs-5">Follow-Up Message {index + 1}</label>
-          <textarea id={`followUpMessage${index}`} className="form-control setting-textarea" value={followUp.message} onChange={(e) => handleFollowUpMessageChange(index, e.target.value)} placeholder="Enter your follow-up message here..." />
+          <label 
+            className="fs-5"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                ? cssConfig.css_data.text.primary 
+                : undefined
+            }}
+          >Follow-Up Message {index + 1}</label>
+          <textarea 
+            id={`followUpMessage${index}`} 
+            className="form-control setting-textarea" 
+            value={followUp.message} 
+            onChange={(e) => handleFollowUpMessageChange(index, e.target.value)} 
+            placeholder="Enter your follow-up message here..."
+            style={{
+              border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`
+            }}
+          />
 
           <div className="d-flex align-items-center mb-3 mt-3">
             <span className="fs-6 me-2">Send this follow-up</span>
-            <input type="number" className="form-control" style={{ width: '80px' }} value={followUp.after_mins} onChange={(e) => handleFollowUpDelayChange(index, e.target.value)} />
+            <input 
+              type="number" 
+              className="form-control" 
+              style={{ 
+                width: '80px',
+                border: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'} !important`
+              }} 
+              value={followUp.after_mins} 
+              onChange={(e) => handleFollowUpDelayChange(index, e.target.value)} 
+            />
             <span className="fs-6 ms-2">minutes after the previous message.</span>
           </div>
 
@@ -445,8 +1037,13 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
           )}
 
           <button
-            className="bg-none text-primary border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
+            className="bg-none border-0 outline-0 mt-3 fs-6 fw-bold px-2 mt-1 d-flex align-items-center"
             onClick={() => setAllData({ modelShow:true, modelShowType:followUpConditionsName, formData:conditions, minutFormData:minutConditions, typepAddEdit:add, followUpIndex:index })}
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                ? cssConfig.css_data.text.navigation_text 
+                : '#3e88f7'
+            }}
           >
             <i className="bi bi-plus fs-3"></i> {followUp?.conditions?.length > 0 ? "Add another follow-up condition" : "Add a condition for following up"}
           </button>
@@ -458,31 +1055,67 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       ))}
 
       {showFollowUps && dataStructure?.follow_ups?.length < 3 && (
-        <button style={{ background: 'none', border: 'none', color: '#146ef5', cursor: 'pointer', margin: '5px auto 0 auto' }} onClick={handleAddFollowUp}>
+        <button 
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : '#146ef5', 
+            cursor: 'pointer', 
+            margin: '5px auto 0 auto' 
+          }} 
+          onClick={handleAddFollowUp}
+        >
           Add another follow-up...
         </button>
       )}
 
-      <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%'}} />
+      {/* <hr className="bg-white opacity-100" style={{height:"2px", marginTop:'50px', opacity:'75%', backgroundColor: cssConfig?.css_data?.borders?.primary || '#013280', border: 'none'}} /> */}
 
       <div className="ai-context-appropriate-section">
-        <p className="d-flex align-items-center gap-5">
+        <p 
+          className="d-flex align-items-center gap-5"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : undefined
+          }}
+        >
           Enable AI Context Checking
           <div className="form-check form-switch">
             <input className="form-check-input" type="checkbox" checked={dataStructure?.ai_context_check || false} onChange={(e) => {setDataStructure({...dataStructure, ai_context_check:e.target.checked});}} id="flexSwitchCheckChecked"/>
           </div>
         </p>
-        <p className="fs-14 text-muted">
+        <p 
+          className="fs-14 text-muted"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : undefined
+          }}
+        >
           You currently have AI context checking <span className={dataStructure?.ai_context_check ? "text-success" : "text-danger"}>{dataStructure?.ai_context_check ? "enabled" : "disabled"}</span>.
         </p>
-        <p className="fs-14 text-muted">
+        <p 
+          className="fs-14 text-muted"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : undefined
+          }}
+        >
           If this is enabled, HostBuddy will refrain from sending the message to a guest if the AI determines that the message is not contextually appropriate, based on the conversation history.
         </p>
 
         {dataStructure?.ai_context_check && !showContextCustomize && (
           <button
             className="btn btn-link p-0"
-            style={{ color: '#146ef5' }}
+            style={{ 
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : '#146ef5' 
+            }}
             onClick={() => setShowContextCustomize(true)}
           >
             Customize...
@@ -490,7 +1123,14 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         )}
         {dataStructure?.ai_context_check && showContextCustomize && (
           <div className="mt-3">
-            <label className="fs-6">(Optional) Add custom instructions to guide the AI context checking</label>
+            <label 
+              className="fs-6"
+              style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : undefined
+              }}
+            >(Optional) Add custom instructions to guide the AI context checking</label>
             <textarea
               className="form-control setting-textarea"
               placeholder="Type instructions to guide the AI..."
@@ -502,23 +1142,48 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
       </div>
 
       <div className="ai-context-appropriate-section">
-        <p className="d-flex align-items-center gap-5">
+        <p 
+          className="d-flex align-items-center gap-5"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary 
+              ? cssConfig.css_data.text.primary 
+              : undefined
+          }}
+        >
           Enable AI Personalization
           <div className="form-check form-switch">
             <input className="form-check-input" type="checkbox" checked={dataStructure?.ai_personalization || false} onChange={(e) => {setDataStructure({...dataStructure, ai_personalization:e.target.checked});}} id="flexSwitchCheckChecked"/>
           </div>
         </p>
-        <p className="fs-14 text-muted">
+        <p 
+          className="fs-14 text-muted"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : undefined
+          }}
+        >
           You currently have AI personalization <span className={dataStructure?.ai_personalization ? "text-success" : "text-danger"}>{dataStructure?.ai_personalization ? "enabled" : "disabled"}</span>.
         </p>
-        <p className="fs-14 text-muted">
+        <p 
+          className="fs-14 text-muted"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+              ? cssConfig.css_data.text.secondary 
+              : undefined
+          }}
+        >
           If this is enabled, HostBuddy may adjust the wording of each message slightly to make it sound more natural and personalized given the context of the conversation.
         </p>
 
         {dataStructure?.ai_personalization && !showPersonalizeCustomize && (
           <button
             className="btn btn-link p-0"
-            style={{ color: '#146ef5' }}
+            style={{ 
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : '#146ef5' 
+            }}
             onClick={() => setShowPersonalizeCustomize(true)}
           >
             Customize...
@@ -526,7 +1191,14 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
         )}
         {dataStructure?.ai_personalization && showPersonalizeCustomize && (
           <div className="mt-3">
-            <label className="fs-6">(Optional) Add custom instructions to guide the AI personalization</label>
+            <label 
+              className="fs-6"
+              style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : undefined
+              }}
+            >(Optional) Add custom instructions to guide the AI personalization</label>
             <textarea
               className="form-control setting-textarea"
               placeholder="Type instructions to guide the AI..."

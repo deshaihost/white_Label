@@ -1,15 +1,171 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./account.css";
+import "./notifications.css";
 import ToastHandle from "../../helper/ToastMessage";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDataActions, stateEmptyActions } from "../../redux/actions";
 import { Tooltip } from "react-tooltip";
 import { getSubscriptionStatus } from "../../helper/Authorized";
+import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
 
 import MultiSelect from "../../component/multiSelect/multiSelect";
 import MultiCategorySelect, { fetchCategoriesFromAPI } from "../../component/multiSelect/actionItemCategoriesMultiSelect";
+
+// Icon Components
+const BellIcon = () => (
+  <svg className="notifications-bell-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+  </svg>
+);
+
+const UserPlusIcon = () => (
+  <svg className="notifications-form-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+  </svg>
+);
+
+const Trash2Icon = () => (
+  <svg className="notifications-delete-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+  </svg>
+);
+
+const ChevronDownIcon = ({ className }) => (
+  <svg className={className || "notifications-dropdown-icon"} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+  </svg>
+);
+
+const CheckIcon = () => (
+  <svg className="notifications-dropdown-checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+  </svg>
+);
+
+const XIcon = () => (
+  <svg className="notifications-tag-remove-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+  </svg>
+);
+
+// Single Select Dropdown Component
+const SingleSelectDropdown = ({ value, onChange, options, placeholder }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedOption = options.find(opt => opt.value === value);
+
+  return (
+    <div className="notifications-dropdown-wrapper">
+      {isOpen && <div className="notifications-dropdown-overlay" onClick={() => setIsOpen(false)} />}
+      <button
+        type="button"
+        className={`notifications-dropdown-button ${!value ? 'placeholder' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span>{selectedOption ? selectedOption.label : placeholder}</span>
+        <ChevronDownIcon className={`notifications-dropdown-icon ${isOpen ? 'open' : ''}`} />
+      </button>
+      {isOpen && (
+        <div className="notifications-dropdown-menu">
+          {options.map((option) => (
+            <div
+              key={option.value}
+              className="notifications-dropdown-item"
+              onClick={() => {
+                onChange(option.value);
+                setIsOpen(false);
+              }}
+            >
+              <span>{option.label}</span>
+              {value === option.value && <CheckIcon />}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Multi Select Dropdown Component
+const MultiSelectDropdown = ({ selectedValues, onChange, options, placeholder }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const allSelected = selectedValues.length === options.length && options.length > 0;
+
+  const handleToggleItem = (value) => {
+    const isSelected = selectedValues.some(v => v.value === value);
+    if (isSelected) {
+      onChange(selectedValues.filter(v => v.value !== value));
+    } else {
+      const option = options.find(opt => opt.value === value);
+      if (option) {
+        onChange([...selectedValues, option]);
+      }
+    }
+  };
+
+  const handleSelectAll = () => {
+    if (allSelected) {
+      onChange([]);
+    } else {
+      onChange(options);
+    }
+  };
+
+  const handleRemoveTag = (e, value) => {
+    e.stopPropagation();
+    onChange(selectedValues.filter(v => v.value !== value));
+  };
+
+  return (
+    <div className="notifications-dropdown-wrapper">
+      {isOpen && <div className="notifications-dropdown-overlay" onClick={() => setIsOpen(false)} />}
+      <div
+        className={`notifications-multiselect-tags ${selectedValues.length === 0 ? 'placeholder' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {selectedValues.length === 0 ? (
+          <span>{placeholder}</span>
+        ) : (
+          selectedValues.map((item) => (
+            <div key={item.value} className="notifications-tag-chip">
+              <span>{item.label}</span>
+              <button
+                type="button"
+                className="notifications-tag-remove"
+                onClick={(e) => handleRemoveTag(e, item.value)}
+              >
+                <XIcon />
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+      {isOpen && (
+        <div className="notifications-multiselect-menu">
+          <div className="notifications-multiselect-select-all" onClick={handleSelectAll}>
+            {allSelected ? 'Deselect All' : 'Select All'}
+          </div>
+          {options.map((option) => {
+            const isSelected = selectedValues.some(v => v.value === option.value);
+            return (
+              <div
+                key={option.value}
+                className="notifications-multiselect-item"
+                onClick={() => handleToggleItem(option.value)}
+              >
+                <div className={`notifications-multiselect-checkbox ${isSelected ? 'checked' : ''}`}>
+                  {isSelected && <CheckIcon />}
+                </div>
+                <span>{option.label}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
 
 // Location & Time Zone Section of account page
 const AccountNotificationSection = () => {
@@ -17,6 +173,9 @@ const AccountNotificationSection = () => {
   const dispatch = useDispatch();
   const userDataGet = store?.getUserDataReducer?.getUserData?.data?.user;
   const propertyNamesList = Object.keys(userDataGet?.property_data || {});
+
+  // White label CSS context for dynamic styling
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
 
   // Define categoryNamesList and categoryOptions
   const categoryNamesList = Object.keys(userDataGet?.category_data || {});
@@ -405,105 +564,281 @@ const AccountNotificationSection = () => {
   }, [apiCategories, newRecipient, isMountPlan, editingRecipientIndex]);
 
   return (
-    <div className="account-content location-section">
+    <div className="notifications-container">
+      {/* Page Header */}
+      <div className="notifications-page-header">
+        <BellIcon />
+        <h1 
+          className="notifications-page-title"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+          }}
+        >
+          Notification Settings
+        </h1>
+      </div>
 
-      <h3 className="mb-4">Notification Settings</h3>
-      <p style={{ marginLeft: "10px" }} className="fs-14">
-        If your contact information is not showing up here, add it in the "Contact" section and make sure it is confirmed.
-      </p>
-      {!time_zone_name && (
-        <p className="fs-14" style={{ marginLeft: "10px" }}>
-          <span className="warning-text">You have not set a time zone for your account.</span> Set your time zone in "Region" Settings in order to use daily notifications.
+      {/* Info Banner */}
+      <div className="notifications-info-banner">
+        <span className="notifications-info-banner-icon">💡</span>
+        <p 
+          className="notifications-info-banner-text"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+          }}
+        >
+          If your contact information is not showing up here, add it in the{" "}
+          <Link to="/setting/contact" className="notifications-info-banner-link">
+            Contact
+          </Link>{" "}
+          section and make sure it is confirmed.
         </p>
+      </div>
+
+      {/* Time Zone Warning */}
+      {!time_zone_name && (
+        <div className="notifications-info-banner" style={{ borderColor: '#f87171' }}>
+          <span className="notifications-info-banner-icon">⚠️</span>
+          <p 
+            className="notifications-info-banner-text"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+            }}
+          >
+            <span 
+              className="notifications-warning-text"
+              style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#f87171'
+              }}
+            >
+              You have not set a time zone for your account.
+            </span> Set your time zone in "Region" Settings in order to use daily notifications.
+          </p>
+        </div>
       )}
 
-      <form action="">
-        <hr className="in-section-divider" />
-        <h5 className="mb-2">Action Items</h5>
-        <p style={{ marginLeft: "10px" }} className="fs-14">Get notifications when HostBuddy detects a new action item for the host in a guest conversation. Receive your notifications immediately, or get them all at the end of the hour, or at a certain time each day.</p>
+      {/* Action Items Section */}
+      <div className="notifications-section">
+        <h2 
+          className="notifications-section-title"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+          }}
+        >
+          Action Items
+        </h2>
+        <p 
+          className="notifications-section-description"
+          style={{
+            color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+          }}
+        >
+          Get notifications when HostBuddy detects a new action item for the host in a guest conversation. Receive your notifications immediately, or get them all at the end of the hour, or at a certain time each day.
+        </p>
 
-        {recipients.length === 0 && (
-          <p style={{ marginLeft: "10px" }} className="fs-14">
-            <span className="grey-text">No recipients added. This notification will not be sent.</span>
+        {/* Empty State */}
+        {recipients.length === 0 && Object.keys(newRecipient || {}).length === 0 && (
+          <p 
+            className="notifications-empty-state"
+            style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.quaternary ? cssConfig.css_data.text.quaternary : '#676A73'
+            }}
+          >
+            No recipients added. This notification will not be sent.
           </p>
         )}
-        <table className="table">
-          <tbody>
-            {recipients.map((recipient, index) => (
-              <tr key={index}>
-                <td><h6 className="fs-14">{recipient.firstName}</h6></td>
-                <td><h6 className="fs-14">{recipient.channel}</h6></td>
-                <td><h6 className="fs-14">{recipient.RecipientAddress}</h6></td>
-                <td>
-                  <h6 className="fs-14">
-                    {recipient.timing === "daily" ? `${recipient.timing}, ${convertTimeTo12HourFormat(recipient.time_of_day)}` : recipient.timing}
-                  </h6>
-                </td>
-                <td>
-                  <h6 className="fs-14">
-                    {recipient.categories.length ? (
-                      <span data-tooltip-id={`categories-tooltip-${index}`} data-tooltip-content={recipient.categories.join(", ")}>
-                        {`${recipient.categories.length} categories`}
-                      </span>
-                    ) : (
-                      "All categories"
-                    )}
-                  </h6>
-                  <Tooltip id={`categories-tooltip-${index}`} place="top" effect="solid" />
-                </td>
-                <td>
-                  <h6 className="fs-14">
-                    {recipient.properties?.length ? (
-                      <span data-tooltip-id={`properties-tooltip-${index}`} data-tooltip-content={recipient.properties.join(", ")}>
-                        {`${recipient.properties.length} properties`}
-                      </span>
-                    ) : (
-                      "All properties"
-                    )}
-                  </h6>
-                  <Tooltip id={`properties-tooltip-${index}`} place="top" effect="solid" />
-                </td>
-                <td>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <h6 style={{ marginRight: '10px' }} className="clickable-text fs-14" onClick={() => editRecipient(index)}>
-                      Edit
-                    </h6>
-                    <h6 style={{ color: 'red' }} className="clickable-text fs-14" onClick={() => removeRecipient(index)}>
-                      Remove
-                    </h6>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
 
+        {/* Recipients Table */}
+        {recipients.length > 0 && (
+          <div className="notifications-table-container">
+            <table className="notifications-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Method</th>
+                  <th>Contact</th>
+                  <th>Timing</th>
+                  <th>Categories</th>
+                  <th>Properties</th>
+                  <th>Manage</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recipients.map((recipient, index) => (
+                  <tr key={index}>
+                    <td 
+                      className="notifications-table-name"
+                      style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+                      }}
+                    >
+                      {recipient.firstName}
+                    </td>
+                    <td>
+                      <span className="notifications-method-badge">
+                        {recipient.channel}
+                      </span>
+                    </td>
+                    <td 
+                      className="notifications-table-secondary"
+                      style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+                      }}
+                    >
+                      {recipient.RecipientAddress}
+                    </td>
+                    <td 
+                      className="notifications-table-name"
+                      style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+                      }}
+                    >
+                      {recipient.timing === "daily"
+                        ? `${recipient.timing}, ${convertTimeTo12HourFormat(recipient.time_of_day)}`
+                        : recipient.timing}
+                    </td>
+                    <td 
+                      className="notifications-table-secondary"
+                      style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+                      }}
+                    >
+                      {recipient.categories && recipient.categories.length > 0 ? (
+                        <span
+                          className="notifications-tooltip-trigger"
+                          data-tooltip-id={`categories-tooltip-${index}`}
+                          data-tooltip-content={recipient.categories.join(", ")}
+                        >
+                          {`${recipient.categories.length} categories`}
+                        </span>
+                      ) : (
+                        "All categories"
+                      )}
+                      <Tooltip id={`categories-tooltip-${index}`} place="top" effect="solid" />
+                    </td>
+                    <td 
+                      className="notifications-table-secondary"
+                      style={{
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#d0d3db'
+                      }}
+                    >
+                      {recipient.properties && recipient.properties.length > 0 ? (
+                        <span
+                          className="notifications-tooltip-trigger"
+                          data-tooltip-id={`properties-tooltip-${index}`}
+                          data-tooltip-content={recipient.properties.join(", ")}
+                        >
+                          {`${recipient.properties.length} properties`}
+                        </span>
+                      ) : (
+                        "All properties"
+                      )}
+                      <Tooltip id={`properties-tooltip-${index}`} place="top" effect="solid" />
+                    </td>
+                    <td>
+                      <div className="notifications-manage-actions">
+                        <button
+                          type="button"
+                          className="notifications-delete-btn"
+                          onClick={() => removeRecipient(index)}
+                          title="Delete"
+                        >
+                          <Trash2Icon />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Add Recipient Button */}
+        {Object.keys(newRecipient || {}).length === 0 && (
+          <div className="notifications-add-btn-container">
+            <button
+              type="button"
+              className="notifications-add-btn"
+              onClick={showNewRecipientFields}
+            >
+              <UserPlusIcon />
+              <span>{recipients.length === 0 ? 'Add Recipient' : 'Add Another Recipient'}</span>
+            </button>
+          </div>
+        )}
+
+        {/* Add Recipient Form */}
         {Object.keys(newRecipient || {}).length > 0 && (
-          <div className="recipient fs-14" key="recipientInput">
-            <div className="row">
-              <div className="col input_group">
-                <label htmlFor="FirstName">Recipient First Name</label>
-                <input type="text" id="FirstName" name="firstName" className="form-control" value={newRecipient.firstName} onChange={(e) => handleInputChange(e)} />
-              </div>
+          <div className="notifications-add-form">
+            <div className="notifications-form-header">
+              <UserPlusIcon />
+              <h3 
+                className="notifications-form-title"
+                style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : '#ffffff'
+                }}
+              >
+                {editingRecipientIndex !== null ? 'Edit Recipient' : 'Add Recipient'}
+              </h3>
+            </div>
 
-              <div className="col input_group">
-                <label htmlFor="Channel">Channel</label>
-                <select id="Channel" name="channel" className="form-control" value={newRecipient.channel} onChange={(e) => handleInputChange(e)}>
-                  <option value="">-- Please select --</option>
-                  <option value="email">Email</option>
-                  <option value="sms">Text message (SMS)</option>
-                  <option value="slack">Slack</option>
-                  <option value="whatsapp">WhatsApp</option>
-                  <option value="webhook">Webhook</option>
-                </select>
+            {/* Recipient Name Input */}
+            <div className="notifications-form-grid-full">
+              <div className="notifications-input-group">
+                <label className="notifications-input-label" htmlFor="firstName">
+                  Recipient Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  className="notifications-input"
+                  placeholder="Enter recipient name"
+                  value={newRecipient.firstName || ''}
+                  onChange={handleInputChange}
+                  style={{
+                    backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Channel and Contact Row */}
+            <div className="notifications-form-grid">
+              <div className="notifications-input-group">
+                <label className="notifications-input-label" htmlFor="channel">
+                  Channel
+                </label>
+                <SingleSelectDropdown
+                  value={newRecipient.channel || ''}
+                  onChange={(value) => handleInputChange({ target: { name: 'channel', value } })}
+                  options={[
+                    { value: 'email', label: 'Email' },
+                    { value: 'sms', label: 'Text message (SMS)' },
+                    { value: 'slack', label: 'Slack' },
+                    { value: 'whatsapp', label: 'WhatsApp' },
+                    { value: 'webhook', label: 'Webhook' }
+                  ]}
+                  placeholder="Select channel"
+                />
               </div>
 
               {newRecipient.channel && (
-                <div className="col input_group">
-                  <label htmlFor="RecipientAddress">
+                <div className="notifications-input-group">
+                  <label className="notifications-input-label" htmlFor="RecipientAddress">
                     {getLabel(newRecipient.channel)}
                   </label>
-                  <select id={"RecipientAddress"} name="RecipientAddress" className="form-control" value={newRecipient.RecipientAddress} onChange={(e) => handleInputChange(e)}>
+                  <select
+                    id="RecipientAddress"
+                    name="RecipientAddress"
+                    className="notifications-input"
+                    value={newRecipient.RecipientAddress || ''}
+                    onChange={handleInputChange}
+                    style={{
+                      backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                    }}
+                  >
                     <option value="">-- Please select --</option>
                     {renderOptions()}
                   </select>
@@ -511,87 +846,138 @@ const AccountNotificationSection = () => {
               )}
             </div>
 
-            <div className="row" style={{ marginTop: "20px" }}>
-              <div className="col input_group">
-                <label htmlFor="Timing">Timing</label>
-                <select id="Timing" name="timing" className="form-control" value={newRecipient.timing} onChange={(e) => handleInputChange(e)}>
-                  <option value="">-- Please select --</option>
-                  <option value="immediate">Immediate</option>
-                  <option value="hourly">Hourly</option>
-                  <option value="daily" disabled={!time_zone_name}>
-                    Daily
-                  </option>
-                </select>
+            {/* Timing and Time Row */}
+            <div className="notifications-form-grid">
+              <div className="notifications-input-group">
+                <label className="notifications-input-label" htmlFor="timing">
+                  Timing
+                </label>
+                <SingleSelectDropdown
+                  value={newRecipient.timing || ''}
+                  onChange={(value) => handleInputChange({ target: { name: 'timing', value } })}
+                  options={[
+                    { value: 'immediate', label: 'Immediate' },
+                    { value: 'hourly', label: 'Hourly' },
+                    ...(time_zone_name ? [{ value: 'daily', label: 'Daily' }] : [])
+                  ]}
+                  placeholder="Select timing"
+                />
               </div>
-              <div className="col input_group">
-                <label htmlFor={"Time"}>Receive Notification At:</label>
-                {newRecipient.timing === "daily" ? (
-                  <input type="time" id="Time" name="time" className="form-control" value={newRecipient.time} onChange={(e) => handleInputChange(e)} />
+
+              <div className="notifications-input-group">
+                <label className="notifications-input-label" htmlFor="time">
+                  Receive Notification At
+                </label>
+                {newRecipient.timing === 'daily' ? (
+                  <input
+                    type="time"
+                    id="time"
+                    name="time"
+                    className="notifications-input"
+                    value={newRecipient.time || ''}
+                    onChange={handleInputChange}
+                    style={{
+                      backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                    }}
+                  />
                 ) : (
-                  <input type="text" id="Time" name="time" className="form-control disabled-input" value={newRecipient.timing === "hourly" ? "Hourly, On The Hour" : newRecipient.timing === "immediate" ? "Immediately" : "[Please select Timing first]"} disabled />
+                  <input
+                    type="text"
+                    id="time"
+                    className="notifications-input"
+                    value={
+                      newRecipient.timing === 'hourly'
+                        ? 'Hourly, On The Hour'
+                        : newRecipient.timing === 'immediate'
+                        ? 'Immediately'
+                        : '[Please select Timing first]'
+                    }
+                    disabled
+                    style={{
+                      backgroundColor: cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.input || 'var(--white-label-background-input, #0F1117)')
+                    }}
+                  />
                 )}
               </div>
             </div>
 
-            <div className="row" style={{ marginTop: "20px" }}>
+            {/* Categories and Properties Row */}
+            <div className="notifications-form-grid">
               {!isMountPlan && (
-                <div className="col input_group">
-                  <label htmlFor="Categories">Categories</label>
-                  <div className="scrollable-dropdown">
-                    <MultiCategorySelect
-                      selectedCategories={selectedCategories}
-                      setSelectedCategories={setSelectedCategories}
-                      placeholder="Select categories..."
-                    />
-                  </div>
+                <div className="notifications-input-group">
+                  <label className="notifications-input-label" htmlFor="categories">
+                    Categories
+                  </label>
+                  <MultiSelectDropdown
+                    selectedValues={selectedCategories}
+                    onChange={setSelectedCategories}
+                    options={categoryOptions.length > 0 ? categoryOptions : apiCategories}
+                    placeholder="Select categories..."
+                  />
                 </div>
               )}
 
-              <div className="col input_group">
-                <label htmlFor="Properties">Properties</label>
-                <div className="scrollable-dropdown">
-                  <MultiSelect
-                    id="Properties"
-                    options={propertyOptions}
-                    selectedOptions={selectedProperties}
-                    setSelectedOptions={setSelectedProperties}
-                    placeholder="Select properties..."
-                    className="custom-select property_Custom_Select"
-                  />
-                </div>
+              <div className="notifications-input-group">
+                <label className="notifications-input-label" htmlFor="properties">
+                  Properties
+                </label>
+                <MultiSelectDropdown
+                  selectedValues={selectedProperties}
+                  onChange={setSelectedProperties}
+                  options={propertyOptions}
+                  placeholder="Select properties..."
+                />
               </div>
             </div>
 
-            {newRecipient.channel === "sms" && (
-              <div className="row" style={{ marginTop: "20px" }}>
-                <div className="checkbox-container">
-                  <input className="form-check-input" type="checkbox" id="Consent" name="consent_checked" value={newRecipient.consent_checked} onChange={(e) => handleInputChange(e)} style={{ width: "32px" }} />
-                  <label htmlFor={"Consent"}>I consent to receiving account notifications for "Action Items" via text message (SMS), at the selected phone number, at the specified timing.</label>
+            {/* SMS Consent Checkbox */}
+            {newRecipient.channel === 'sms' && (
+              <div className="notifications-consent-container">
+                <div className="notifications-consent-checkbox-wrapper">
+                  <input
+                    type="checkbox"
+                    id="consent_checked"
+                    name="consent_checked"
+                    className="notifications-consent-checkbox-input"
+                    checked={newRecipient.consent_checked || false}
+                    onChange={handleInputChange}
+                  />
+                  <div className="notifications-consent-checkbox-custom">
+                    <div className="notifications-consent-checkbox-inner"></div>
+                  </div>
                 </div>
+                <label htmlFor="consent_checked" className="notifications-consent-label">
+                  I consent to receiving account notifications for "Action Items" via text message (SMS), at the selected phone number, at the specified timing.
+                </label>
               </div>
             )}
 
-            <span className="d-flex justify-content-center">
-              <Link to="#" className="text-link"
-                style={{ marginTop: "20px", textAlign: "center", pointerEvents: consent_bad ? "none" : "auto", opacity: consent_bad ? "0.5" : "1" }}
+            {/* Form Actions */}
+            <div className="notifications-form-actions">
+              <button
+                type="button"
+                className="notifications-cancel-btn"
                 onClick={() => {
-                  if (!consent_bad) { addRecipient(); }
+                  setNewRecipient({});
+                  setSelectedCategories([]);
+                  setSelectedProperties([]);
+                  setEditingRecipientIndex(null);
                 }}
               >
-                {editingRecipientIndex !== null ? "Update" : "Submit"}
-              </Link>
-            </span>
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="notifications-submit-btn"
+                onClick={addRecipient}
+                disabled={consent_bad}
+              >
+                {editingRecipientIndex !== null ? 'Update Recipient' : 'Add Recipient'}
+              </button>
+            </div>
           </div>
         )}
-
-        {Object.keys(newRecipient || {}).length === 0 && (
-          <span className="d-flex justify-content-center" style={{ marginTop: "20px", marginBottom: "20px" }}>
-            <Link to="#" className="text-link" onClick={showNewRecipientFields}>
-              {recipients.length === 0 ? "+ Add A Notifications Recipient" : "+ Add Another Recipient"}
-            </Link>
-          </span>
-        )}
-      </form>
+      </div>
     </div>
   );
 };

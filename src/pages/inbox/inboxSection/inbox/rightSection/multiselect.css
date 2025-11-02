@@ -46,9 +46,9 @@
 
 .user-tag {
   display: inline-flex;
-   color:#D0D3DB;
+   color: var(--white-label-text-secondary, #D0D3DB);
   align-items: center;
-  background-color: rgba(36, 38, 46, 1);
+  background-color: var(--white-label-background-input, rgba(36, 38, 46, 1));
   /* border-radius: 4px; */
   padding: 2px 8px;
   margin-right: 4px;
@@ -59,7 +59,7 @@
 
 .user-tag-text {
   font-size: 14px;
-  color:#D0D3DB;
+  color: var(--white-label-text-secondary, #D0D3DB);
   margin-right: 6px;
   white-space: nowrap;
   overflow: hidden;
@@ -71,17 +71,17 @@
 .user-tag-close {
   cursor: pointer;
   font-size: 14px;
-  color: #8b8d94;
+  color: var(--white-label-text-placeholder, #8b8d94);
   font-weight: bold;
   transition: color 0.2s ease;
 }
 
 .user-tag-close:hover {
-  color: #ffffff;
+  color: var(--white-label-text-primary, #ffffff);
 }
 
 .user-dropdown-placeholder {
-  color: #BBB;
+  color: var(--white-label-text-disabled, #BBB);
   flex-grow: 1;
   font-size: 14px;
 }
@@ -98,11 +98,11 @@
   top: 100%;
   left: 0;
   right: 0;
-  background-color: #262730;
+  background-color: var(--white-label-background-dropdown, #262730);
   border-radius: 4px;
   margin-top: 4px;
   z-index: 100;
-  border: 1px solid #24262E;
+  border: 1px solid var(--white-label-border-primary, #24262E);
   overflow: hidden;
   max-height: 200px;
   overflow-y: auto;
@@ -114,13 +114,13 @@
   transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
-  color:#D0D3DB;
+  color: var(--white-label-text-secondary, #D0D3DB);
   justify-content: space-between;
   position: relative;
 }
 
 .user-dropdown-item:hover {
-  background-color: rgba(1, 50, 128, 1);
+  background-color: var(--white-label-background-hover, rgba(1, 50, 128, 1));
 }
 
 .user-dropdown-item:hover::before {
@@ -136,7 +136,7 @@
 }
 
 .user-dropdown-item:active {
-  background-color: rgba(0, 19, 48, 1);
+  background-color: var(--white-label-background-hover, rgba(0, 19, 48, 1));
 }
 
 .user-dropdown-item-selected {
@@ -161,7 +161,7 @@
   right: 0;
   padding: 10px;
   text-align: center;
-  background-color: #262730;
+  background-color: var(--white-label-background-input, #262730);
   border-radius: 4px;
   margin-top: 4px;
   z-index: 100;
@@ -174,7 +174,7 @@
 }
 
 .user-tags-container::-webkit-scrollbar-track {
-  background: #262730;
+  background: var(--white-label-background-input, #262730);
   border-radius: 4px;
 }
 

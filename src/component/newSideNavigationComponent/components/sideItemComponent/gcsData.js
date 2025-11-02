@@ -19,6 +19,19 @@ const UsersIcon = () => (
   </div>
 );
 
+// Define a custom component for White Label icon (tag/label with sparkle)
+const WhiteLabelIcon = () => (
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px' }}>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Tag/Label shape */}
+      <path d="M20.59 13.41L13.42 20.58C13.2343 20.766 13.0137 20.9135 12.7709 21.0141C12.5281 21.1148 12.2678 21.1666 12.005 21.1666C11.7422 21.1666 11.4819 21.1148 11.2391 21.0141C10.9963 20.9135 10.7757 20.766 10.59 20.58L2 12V2H12L20.59 10.59C20.9625 10.9647 21.1716 11.4716 21.1716 12C21.1716 12.5284 20.9625 13.0353 20.59 13.41Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="7" cy="7" r="1.5" fill="white"/>
+      {/* Sparkle effect */}
+      <path d="M16 2L17 4L19 5L17 6L16 8L15 6L13 5L15 4L16 2Z" fill="white" opacity="0.9"/>
+    </svg>
+  </div>
+);
+
 const GcsUserdata = [
     {
         id: 1,
@@ -37,7 +50,18 @@ const GcsUserdata = [
             { id: 73, label: "Notifications", HasdropDown: "no" },
             { id: 75, label: "Integration", HasdropDown: "no" } ,
             { id: 76, label: "Users", HasdropDown: "no" } ,
-            { id: 77, label: "Subscription", HasdropDown: "no" } 
+            { id: 77, label: "Subscription", HasdropDown: "no" }
+        ]
+    },
+    {
+        id: 8,
+        label: "White Label",
+        component: <WhiteLabelIcon/>,
+        HasdropDown: "yes",
+        dropdownItems: [
+            { id: 81, label: "Registration Page", HasdropDown: "no" },
+            { id: 82, label: "Branding", HasdropDown: "no" },
+            { id: 83, label: "Feature Selection", HasdropDown: "no" }
         ]
     }
 ];

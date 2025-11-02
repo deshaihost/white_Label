@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useSearchParams, useLocation } from "react-router-dom";
+import { useParams, useSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { getUserDataActions } from "../../redux/actions";
 import { getSubscriptionStatus } from "../../helper/Authorized";
+import { useFeatureAccess } from "../../helper/useFeatureAccess";
 import Inbox from "./inboxSection/inbox/Inbox";
 import SmartTemplateIndex from "./inboxSection/smartTemplates/smartTemplateFunctionality/SmartTemplateIndex";
 import ReviewRemoval from "./inboxSection/reviewRemoval/ReviewRemoval";
 import Preferences from "./inboxSection/preferences/Preferences";
 import Upsells from "./inboxSection/upsells/Upsells";
+import ThankError from "../../component/thankError/ThankError";
+import ErrorImg from "../../public/img/404.png";
 import "./inboxSection/inbox/inboxIndex.css";
 import axios from "axios";
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
@@ -18,6 +21,7 @@ const InboxIndex = () => {
   const { section } = useParams();
   const [searchParams] = useSearchParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const conversationIdFromUrl = searchParams.get("conversationId");
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -27,6 +31,8 @@ const InboxIndex = () => {
   const [showBanner, setShowBanner] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [allExternalContactNumbers, setAllExternalContactNumbers] = useState([]);
+  const { isFeatureEnabled, isHostBuddyDomain } = useFeatureAccess();
+  const [showFeatureError, setShowFeatureError] = useState(false);
 
   const handleWatchLetter = () => {
     // Handle the watch letter click event
@@ -50,6 +56,12 @@ const InboxIndex = () => {
     upsells: 3,
     "review-removal": 4,
   }; // for URL path params
+
+  // Map sections to feature IDs for feature-based access control
+  const sectionToFeatureMap = {
+    1: 'smart-templates',    // Smart Templates
+    3: 'upsells',            // Upsells
+  };
 
   // accountCreatedDate expected in format 'MM/DD/YYYY HH:MM:SS'
   const calculateAccountAgeInDays = (accountCreatedDate) => {
@@ -222,12 +234,46 @@ const InboxIndex = () => {
         location.state.originalPath
       );
     }
+    
+    let targetComponent;
     if (componentFromLocation !== undefined) {
-      setInterFaceComponent(componentFromLocation);
+      targetComponent = componentFromLocation;
     } else {
-      setInterFaceComponent(sectionMapping[section] || 0);
+      targetComponent = sectionMapping[section] || 0;
     }
-  }, [section, location.state]); // Added section and location.state as dependencies
+    
+    // Check if the target component requires a feature that's disabled
+    const featureId = sectionToFeatureMap[targetComponent];
+    if (featureId && !isHostBuddyDomain) {
+      console.log('🔐 [INBOX SECTION] Checking feature access for section:', {
+        section,
+        targetComponent,
+        featureId,
+        timestamp: new Date().toISOString()
+      });
+      
+      const isEnabled = isFeatureEnabled(featureId);
+      if (!isEnabled) {
+        console.log('❌ [INBOX SECTION] Feature disabled - showing error:', featureId);
+        setShowFeatureError(true);
+        return;
+      }
+    }
+    
+    setShowFeatureError(false);
+    setInterFaceComponent(targetComponent);
+  }, [section, location.state, isHostBuddyDomain]); // Added section and location.state as dependencies
+  
+  // If trying to access a disabled feature, show error
+  if (showFeatureError) {
+    return (
+      <ThankError
+        imgSrc={ErrorImg}
+        text="This feature is not available on your plan"
+      />
+    );
+  }
+  
   return (
     <>
       {" "}
@@ -289,7 +335,9 @@ const InboxIndex = () => {
           </div>
         </div>
       )}
-      <div className="inbox-container">
+      <div className="inbox-container" 
+      // style={{ backgroundColor: "#0F1117" }}
+      >
         {" "}
         {interFaceComponent === 0 && (
           <Inbox

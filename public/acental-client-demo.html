@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acental - Property Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2c5aa0;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .credentials-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .credentials-info h3 {
+            color: #2c5aa0;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .credential-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .credential-value {
+            color: #666;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
+            margin: 10px;
+            min-width: 200px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(44, 90, 160, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.loading {
+            background: #e7f3ff;
+            color: #31708f;
+            border: 1px solid #bce8f1;
+        }
+
+        .method-selector {
+            margin-bottom: 20px;
+        }
+
+        .method-btn {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .method-btn.active {
+            background: #2c5aa0;
+            color: white;
+            border-color: #2c5aa0;
+        }
+
+        .method-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #2c5aa0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">🏠 Acental</div>
+        <div class="subtitle">Property Management Platform</div>
+        
+        <!-- User Type Selector -->
+        <!-- <div class="method-selector">
+            <div class="method-btn active" onclick="selectUserType('regular')">👤 Regular User</div>
+            <div class="method-btn" onclick="selectUserType('gcs')">🏢 GCS User</div>
+        </div> -->
+
+        <div class="credentials-info" id="credentials-info">
+            <!-- <h3 id="credentials-title">📋 Regular User Test Credentials</h3> -->
+            <!-- <div class="credential-item">
+                <span class="credential-label">Email:</span>
+                <span class="credential-value" id="email-value">deshai@hostbuddy.ai</span>
+            </div> -->
+            <!-- <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <span class="credential-value" id="password-value">Ridhi@120$</span>
+            </div> -->
+        </div>
+
+        <div class="method-info" id="method-info">
+            <strong>POST API Method (Regular User):</strong><br>
+            • Sends credentials securely in request body<br>
+            • Uses existing /login endpoint<br>
+            • Redirects to main dashboard<br>
+            • Professional API integration<br>
+            • <strong>Auto-detection:</strong> If API returns <code>"gcs": true</code>, automatically redirects to GCS portal
+        </div>
+        
+        <button class="login-btn" id="loginBtn" onclick="handleLogin()">
+            🚀 Access Dashboard
+        </button>
+        
+        <div id="status" class="status"></div>
+        
+        <div style="margin-top: 30px; font-size: 12px; color: #666;">
+            <strong>API Configuration:</strong><br>
+            Backend: https://dev2-dot-select-stays-chatbot-v02.wl.r.appspot.com<br>
+            Frontend: https://portal.testhostbuddy.live<br><br>
+            <strong>Note:</strong> This simulates c.acental.com integrating with HostBuddy.<br>
+            The POST API method uses the real production backend with API key authentication.<br><br>
+            <strong>Auto-Detection Logic:</strong><br>
+            • The system automatically detects user type from the login API response<br>
+            • If response contains <code>"gcs": true</code>, user is redirected to GCS portal<br>
+            • If no <code>gcs</code> field or <code>"gcs": false</code>, user is redirected to regular dashboard<br>
+            • User type selection above is for testing different credentials<br><br>
+            <strong>User Types:</strong><br>
+            • <strong>Regular User:</strong> Access to main dashboard with property management features<br>
+            • <strong>GCS User:</strong> Access to GCS portal for managing sub-accounts and host properties<br><br>
+            <strong>AuthURL Pattern:</strong> <code>/white-label-login?token={TOKEN}&redirect={TARGET}&user={TYPE}</code><br>
+            • Any URL with this pattern automatically opens the appropriate portal<br>
+            • Works regardless of domain (localhost, staging, production)<br>
+            • Perfect for external system integrations<br>
+            • <code>user=gcs</code> parameter is automatically added based on API response</div>
+    </div>
+
+    <script>
+        let currentUserType = 'regular';
+        const API_BASE = 'https://dev2-dot-select-stays-chatbot-v02.wl.r.appspot.com';
+        const API_KEY = '4hIYUIEW0mqka8Xi7bxaDKaswOh7ll1KUUyGL17THvtDho3ujR';
+        const FRONTEND_BASE = 'https://portal.testhostbuddy.live'; // Fixed: Added https:// protocol
+        
+        const CREDENTIALS = {
+            regular: {
+                email: 'deshai@hostbuddy.ai',
+                password: 'Ridhi@120$'
+            },
+            gcs: {
+                email: '00master@test.city',
+                password: 'testPass1!'
+            }
+        };
+
+        // User type selector function
+        function selectUserType(userType) {
+            currentUserType = userType;
+            
+            // Update UI
+            document.querySelectorAll('.method-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update credentials display
+            const credentials = CREDENTIALS[userType];
+            document.getElementById('email-value').textContent = credentials.email;
+            document.getElementById('password-value').textContent = credentials.password;
+            
+            // Update titles and info
+            const isGcs = userType === 'gcs';
+            document.getElementById('credentials-title').textContent = isGcs ? 
+                '📋 GCS User Test Credentials' : '📋 Regular User Test Credentials';
+            
+            const methodInfo = isGcs ?
+                '<strong>POST API Method (GCS User):</strong><br>• Sends credentials securely in request body<br>• Uses existing /login endpoint<br>• Redirects to GCS user management portal<br>• Manages sub-accounts and host properties<br>• <strong>Auto-detection:</strong> API response confirms GCS user with <code>"gcs": true</code>' :
+                '<strong>POST API Method (Regular User):</strong><br>• Sends credentials securely in request body<br>• Uses existing /login endpoint<br>• Redirects to main dashboard<br>• Professional API integration<br>• <strong>Auto-detection:</strong> If API returns <code>"gcs": true</code>, automatically redirects to GCS portal';
+            
+            document.getElementById('method-info').innerHTML = methodInfo;
+            
+            // Update button text
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.innerHTML = isGcs ? '🏢 Access GCS Portal' : '🚀 Access Dashboard';
+        }
+
+        // COMMENTED OUT: Method selector function
+        /*
+        function selectMethod(method) {
+            currentMethod = method;
+            
+            // Update UI
+            document.querySelectorAll('.method-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update info
+            const infoDiv = document.getElementById('method-info');
+            const methodInfo = {
+                'post': '<strong>POST API Method:</strong><br>• Sends credentials securely in request body<br>• Uses existing /login endpoint<br>• Most secure approach<br>• Professional API integration',
+                'iframe': '<strong>iframe Method:</strong><br>• Creates hidden iframe<br>• Uses postMessage for security<br>• No credentials in URL<br>• Frontend-only solution',
+                'url': '<strong>URL Method:</strong><br>• Credentials in URL parameters<br>• Simple redirect method<br>• ⚠️ Less secure (visible in URL)<br>• Good for testing'
+            };
+            
+            infoDiv.innerHTML = methodInfo[method];
+        }
+        */
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+        }
+
+        function setButtonState(loading) {
+            const btn = document.getElementById('loginBtn');
+            const isGcs = currentUserType === 'gcs';
+            
+            if (loading) {
+                btn.innerHTML = `<span class="loading-spinner"></span>Logging in${isGcs ? ' to GCS' : ''}...`;
+                btn.disabled = true;
+            } else {
+                btn.innerHTML = isGcs ? '🏢 Access GCS Portal' : '🚀 Access Dashboard';
+                btn.disabled = false;
+            }
+        }
+
+        // Method 1: POST API (Most Secure) - using correct API endpoint
+        async function loginWithPostAPI() {
+            try {
+                const selectedUserType = currentUserType === 'gcs' ? 'GCS user' : 'regular user';
+                const credentials = CREDENTIALS[currentUserType];
+                
+                showStatus(`Making secure API call to HostBuddy backend (${selectedUserType})...`, 'loading');
+                
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': API_KEY,
+                        'Origin': window.location.origin,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(credentials)
+                });
+
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const htmlResponse = await response.text();
+                    throw new Error(`Server returned HTML instead of JSON. Response: ${htmlResponse.substring(0, 200)}...`);
+                }
+
+                const data = await response.json();
+
+                if (response.ok && data.access_token) {
+                    // Check if the API response indicates this is a GCS user
+                    const isGcsFromAPI = data.gcs === true;
+                    const actualUserType = isGcsFromAPI ? 'GCS user' : 'regular user';
+                    
+                    // Create URL parameters - declare these BEFORE using them in console.log
+                    const userParam = isGcsFromAPI ? '&user=gcs' : '';
+                    const redirectParam = isGcsFromAPI ? 'gcs-users' : 'dashboard';
+                    const authUrl = `${FRONTEND_BASE}/white-label-login?token=${data.access_token}&redirect=${redirectParam}${userParam}`;
+                    
+                    console.log('Login API Response:', {
+                        hasGcsField: 'gcs' in data,
+                        gcsValue: data.gcs,
+                        isGcsUser: isGcsFromAPI,
+                        selectedType: selectedUserType,
+                        actualType: actualUserType
+                    });
+                    
+                    console.log('URL Construction:', {
+                        FRONTEND_BASE: FRONTEND_BASE,
+                        userParam: userParam,
+                        redirectParam: redirectParam,
+                        token: `${data.access_token.substring(0, 20)}...`
+                    });
+                    
+                    console.log('Generated Auth URL:', authUrl);
+                    
+                    showStatus(`✅ ${actualUserType} login successful! Preparing ${isGcsFromAPI ? 'GCS portal' : 'dashboard'} access...`, 'success');
+                    
+                    // Update UI if the detected user type differs from selected type
+                    if (isGcsFromAPI !== (currentUserType === 'gcs')) {
+                        const detectedType = isGcsFromAPI ? 'GCS' : 'regular';
+                        showStatus(`ℹ️ Detected ${detectedType} user from API response. Redirecting to appropriate portal...`, 'success');
+                    }
+                    
+                    // Open the authentication URL which will automatically set the token and redirect
+                    setTimeout(() => {
+                        console.log('Opening URL:', authUrl);
+                        console.log('FRONTEND_BASE:', FRONTEND_BASE);
+                        
+                        // Ensure we're using the correct base URL
+                        if (authUrl.startsWith('http://') || authUrl.startsWith('https://')) {
+                            window.open(authUrl, '_blank');
+                        } else {
+                            console.error('Invalid URL format:', authUrl);
+                            showStatus('❌ Error: Invalid URL format generated', 'error');
+                        }
+                    }, 1500);
+                    
+                } else {
+                    showStatus(`❌ ${selectedUserType} login failed: ${data.message || 'Invalid credentials'}`, 'error');
+                    console.log('Full response:', data);
+                }
+            } catch (error) {
+                showStatus(`❌ API Error: ${error.message}`, 'error');
+                console.error('Login error:', error);
+            }
+        }
+
+        // COMMENTED OUT: iframe Method
+        /*
+        function loginWithIframe() {
+            showStatus('Creating secure iframe connection...', 'loading');
+            
+            // Create hidden iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = `${FRONTEND_BASE}/white-label-login?mode=postapi`;
+            iframe.style.display = 'none';
+            iframe.name = 'hostbuddy-login-frame';
+            document.body.appendChild(iframe);
+
+            // Listen for messages from iframe
+            const handleMessage = (event) => {
+                if (!event.origin.includes('localhost:3000')) return;
+                
+                if (event.data.type === 'LOGIN_SUCCESS') {
+                    showStatus('✅ Login successful! Opening dashboard...', 'success');
+                    setTimeout(() => {
+                        window.open(`${FRONTEND_BASE}/dashboard`, '_blank');
+                        cleanup();
+                    }, 1500);
+                } else if (event.data.type === 'LOGIN_ERROR') {
+                    showStatus(`❌ Login failed: ${event.data.message}`, 'error');
+                    cleanup();
+                }
+            };
+
+            const cleanup = () => {
+                window.removeEventListener('message', handleMessage);
+                if (document.body.contains(iframe)) {
+                    document.body.removeChild(iframe);
+                }
+            };
+
+            window.addEventListener('message', handleMessage);
+
+            // Send credentials to iframe once loaded
+            iframe.onload = () => {
+                iframe.contentWindow.postMessage({
+                    type: 'SECURE_LOGIN_REQUEST',
+                    credentials: CREDENTIALS
+                }, FRONTEND_BASE);
+            };
+
+            // Cleanup after timeout
+            setTimeout(() => {
+                if (document.body.contains(iframe)) {
+                    showStatus('❌ Login timeout - please try again', 'error');
+                    cleanup();
+                }
+            }, 15000);
+        }
+        */
+
+        // COMMENTED OUT: URL Method
+        /*
+        function loginWithURL() {
+            showStatus('🔗 Redirecting with URL parameters...', 'loading');
+            
+            const loginUrl = `${FRONTEND_BASE}/white-label-login?email=${encodeURIComponent(CREDENTIALS.email)}&password=${encodeURIComponent(CREDENTIALS.password)}`;
+            
+            setTimeout(() => {
+                window.open(loginUrl, '_blank');
+            }, 1000);
+        }
+        */
+
+        // Main login handler
+        function handleLogin() {
+            setButtonState(true);
+            
+            // Only use POST API method (other methods commented out)
+            loginWithPostAPI();
+            
+            // COMMENTED OUT: Method switching logic
+            /*
+            switch(currentMethod) {
+                case 'post':
+                    loginWithPostAPI();
+                    break;
+                case 'iframe':
+                    loginWithIframe();
+                    break;
+                case 'url':
+                    loginWithURL();
+                    break;
+                default:
+                    loginWithPostAPI();
+            }
+            */
+            
+            setTimeout(() => {
+                setButtonState(false);
+            }, 3000);
+        }
+
+        // Initialize with regular user type selected
+        selectUserType('regular');
+    </script>
+</body>
+</html>

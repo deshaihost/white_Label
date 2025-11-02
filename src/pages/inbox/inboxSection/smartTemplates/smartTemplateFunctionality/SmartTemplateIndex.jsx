@@ -6,12 +6,14 @@ import InboxUpgrade from "../../inbox/mildeSection/inbox_Upgrade/InboxUpgrade";
 import Loader from "../../../../../helper/Loader";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import { getSubscriptionStatus } from "../../../../../helper/Authorized";
+import { useWhiteLabelCss } from "../../../../../helper/WhiteLabelCssContext";
 import axios from "axios";
 import "./smartTemplate.css";
 
 import { describeTemplate } from "./smartTemplateAddEdit/SmartTemplateJson";
 
 const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
   const add = "Add";
   const edit = "Edit";
   const { turno_user_id, tidy_user_id, minut_user_id } = userData || {};
@@ -308,62 +310,162 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
 
   return (
     <>
-      <div className="smart_templates_tab_grid text-white setting_tab_data upsells-settings border border-primary blur-background-top-right" style={{ borderRadius:"20px", margin:"40px 60px", background:"#000212" }}>
+      <div className="smart_templates_tab_grid text-white setting_tab_data upsells-settings blur-background-top-right" style={{ margin:"40px 60px" }}>
         {addEditSmart?.type?.type === add || addEditSmart?.type?.type === edit ? (
           <SmartTemplateAddEditForm addEditSmart={addEditSmart} addEditClose={() => setAddEditSmart({type: "", data: ""})} handleSaveTemplate={handleSaveTemplate} allPropertyNamesList={allPropertyNamesList} saveTemplateLoading={saveTemplateLoading} handleDeleteTemplate={handleDeleteTemplate} deleteTemplateLoading={deleteTemplateLoading} hasCleaningManagementIntegration={hasCleaningManagementIntegration} minut_user_id={minut_user_id} userData={userData} smartAllData={smartAllData}/>
         ) : (
           <>
             <div className="d-flex flex-wrap flex-md-nowrap gap-2 align-items-center justify-content-between">
-              <h3>Smart Templates</h3>
+              <h3 style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                  ? cssConfig.css_data.text.primary 
+                  : 'white'
+              }}>Smart Templates</h3>
             </div>
             <div style={{width:"95%", margin:"20px 5px"}}>
-              <p style={{color:"#CCC", fontSize:'16px'}}>Highly customizable templated messages that let you contact the right guests at the right time. Automate friendly check-in messages, strategic upsells, policy reminders, and much more. Use AI to add context awareness and a personal touch to each message.</p>
-              <Link to="/smart-templates?portal=true" style={{display:'inline-block', marginTop:'10px'}}>Learn more &rarr;</Link>
+              <p style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : "#CCC", 
+                fontSize:'16px'
+              }}>Highly customizable templated messages that let you contact the right guests at the right time. Automate friendly check-in messages, strategic upsells, policy reminders, and much more. Use AI to add context awareness and a personal touch to each message.</p>
+              <Link 
+                to="/smart-templates?portal=true" 
+                style={{
+                  display:'inline-block', 
+                  marginTop:'10px',
+                  color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                    ? cssConfig.css_data.text.secondary 
+                    : '#3E88F7'
+                }}>Learn more &rarr;</Link>
             </div>
-            <hr style={{ backgroundColor: "white", height: "2px", border: "none" }} className="mt-1"/>
+            <div style={{ borderTop: `1px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`, marginBottom: "40px" }}></div>
 
-            {getTemplatesLoading ? (
+          {getTemplatesLoading ? (
               <Loader />
             ) : (
               smartAllData?.length > 0 && (
                 smartAllData?.map((smartItem, smartIndex) => {
                   const { name, enabled } = smartItem;
                   const templateDescription = describeTemplate(smartItem);
+                  const borderColor = cssConfig?.css_data?.borders?.primary || '#013280';
                   return (
-                    <div key={smartIndex} className="row mt-5" style={{ 
-                      marginLeft: "0", 
-                      marginRight: "0", 
-                      border: "1px solid #045ce9", 
-                      borderRadius: "15px", 
-                      padding: "15px 10px", 
-                      boxShadow: "0 4px 8px 0 rgba(255, 255, 255, 0.5)" 
-                    }}>
-                      <div className="col-lg-11 col-12">
-                        <div className="fs-5 d-flex justify-content-between">
-                          {name !== "" ? name : <p className="text-danger">No Name</p>}
-                          <div className="d-flex align-items-center gap-2">
-                            <span className={`template-status ${enabled ? 'enabled' : 'not-enabled'}`}>
-                              {enabled ? 'Enabled' : 'Not enabled'}
-                            </span>
-                            <div className="form-check form-switch">
-                              <input 
-                                className="form-check-input" 
-                                type="checkbox" 
-                                checked={enabled} 
-                                onChange={(e) => handleToggleTemplate(smartItem, e)}
-                                id={`flexSwitchCheckChecked-${smartIndex}`}
-                              />
-                            </div>
-                            <button 
-                              className="btn btn-link text-primary p-0 ms-2"
-                              onClick={() => setAddEditSmart({type:{type:edit, index:smartIndex}, data: "", smartTemplateData:{smartItem}, description:templateDescription})}
-                              style={{ textDecoration: 'none', fontSize: '14px' }}
-                            >
-                              Edit
-                            </button>
-                          </div>
+                    <div 
+                      key={smartIndex} 
+                      style={{ 
+                        backgroundColor: "var(--white-label-background-secondary, #17191F)",
+                        border: `2px solid ${borderColor}`,
+                        borderRadius: "12px",
+                        padding: "32px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        height: "140px",
+                        boxShadow: "0 0 25px rgba(1, 50, 128, 0.2)",
+                        marginTop: "20px",
+                        cursor: "pointer",
+                        transition: "background-color 0.2s ease"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'var(--white-label-background-hover, rgba(255, 255, 255, 0.08))';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'var(--white-label-background-secondary, #17191F)';
+                      }}
+                    >
+                      <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                        <h3 style={{ 
+                          color: !cssLoading && cssConfig?.css_data?.text?.primary 
+                            ? cssConfig.css_data.text.primary 
+                            : "white", 
+                          fontSize: "22px", 
+                          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                          fontWeight: "700",
+                          fontVariationSettings: "'opsz' 14",
+                          marginBottom: "12px"
+                        }}>
+                          {name !== "" ? name : <span style={{color: "#ef4444"}}>No Name</span>}
+                        </h3>
+                        <p style={{ 
+                          color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                            ? cssConfig.css_data.text.secondary 
+                            : "#a6a9b2", 
+                          fontSize: "16px",
+                          fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                          fontWeight: "400",
+                          fontVariationSettings: "'opsz' 14",
+                          lineHeight: "1.6",
+                          margin: "0",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          WebkitLineClamp: "2",
+                          WebkitBoxOrient: "vertical"
+                        }}>
+                          {templateDescription}
+                        </p>
+                      </div>
+                      
+                      <div style={{ display: "flex", alignItems: "center", gap: "24px", marginLeft: "32px", flexShrink: "0" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                          <span style={{ 
+                            fontSize: "15px",
+                            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                            fontWeight: "600",
+                            fontVariationSettings: "'opsz' 14",
+                            whiteSpace: "nowrap",
+                            color: enabled ? "#10b981" : "#ef4444"
+                          }}>
+                            {enabled ? 'Enabled' : 'Not enabled'}
+                          </span>
+                          <button
+                            onClick={(e) => handleToggleTemplate(smartItem, e)}
+                            style={{
+                              width: "56px",
+                              height: "28px",
+                              borderRadius: "9999px",
+                              position: "relative",
+                              backgroundColor: enabled ? "#3e88f7" : "#676a73",
+                              border: "none",
+                              cursor: "pointer",
+                              transition: "all 0.3s",
+                              boxShadow: enabled ? "0 0 12px rgba(62, 136, 247, 0.4)" : "none"
+                            }}
+                          >
+                            <div style={{
+                              position: "absolute",
+                              top: "2px",
+                              width: "24px",
+                              height: "24px",
+                              backgroundColor: "white",
+                              borderRadius: "50%",
+                              transition: "transform 0.3s",
+                              transform: enabled ? "translateX(28px)" : "translateX(2px)"
+                            }}></div>
+                          </button>
                         </div>
-                        <p className="settings-label truncate-text">{templateDescription}</p>
+                        
+                        <button
+                          onClick={() => setAddEditSmart({type:{type:edit, index:smartIndex}, data: "", smartTemplateData:{smartItem}, description:templateDescription})}
+                          style={{
+                            color: !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                              ? cssConfig.css_data.text.navigation_text 
+                              : "#98bffa",
+                            fontSize: "16px",
+                            fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                            fontWeight: "600",
+                            fontVariationSettings: "'opsz' 14",
+                            backgroundColor: "transparent",
+                            border: "none",
+                            cursor: "pointer",
+                            padding: "0 16px",
+                            transition: "color 0.2s"
+                          }}
+                          onMouseOver={(e) => e.target.style.color = "#3e88f7"}
+                          onMouseOut={(e) => e.target.style.color = !cssLoading && cssConfig?.css_data?.text?.navigation_text ? cssConfig.css_data.text.navigation_text : "#98bffa"}
+                        >
+                          Edit
+                        </button>
                       </div>
                     </div>
                   );
@@ -372,12 +474,32 @@ const SmartTemplateIndex = ({allPropertyNamesList, userData}) => {
             )}
 
             <div>
-              <button className="bg-none text-primary border-0 outline-0 fs-4 fw-bold p-2 mt-4" onClick={() => setAddEditSmart({ type: { type: add }, data: "" })}>
+              <button 
+                className="bg-none border-0 outline-0 fs-4 fw-bold p-2 mt-4" 
+                onClick={() => setAddEditSmart({ type: { type: add }, data: "" })}
+                style={{
+                  color: !cssLoading && cssConfig?.css_data?.text?.navigation_text 
+                    ? cssConfig.css_data.text.navigation_text 
+                    : "#3e88f7"
+                }}
+              >
                 <i className="bi bi-plus fs-3 "></i> Add New
               </button>
             </div>
 
-            <p className='p-2 mt-2'> Or start from a <a href="#" onClick={() => setShowPrebuiltModal(true)}>pre-built template</a></p>
+            <p className='p-2 mt-2' style={{
+              color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                ? cssConfig.css_data.text.secondary 
+                : undefined
+            }}> Or start from a <a 
+              href="#" 
+              onClick={() => setShowPrebuiltModal(true)}
+              style={{
+                color: !cssLoading && cssConfig?.css_data?.text?.secondary 
+                  ? cssConfig.css_data.text.secondary 
+                  : undefined
+              }}
+            >pre-built template</a></p>
           </>
         )}
       </div>

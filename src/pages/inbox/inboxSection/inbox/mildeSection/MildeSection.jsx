@@ -1227,7 +1227,6 @@ const MildeSection = ({
           margin: "0px",
           width: "100%",
           padding: "0px",
-          backgroundColor: "#0F1117",
           height: window.innerWidth < 992 ? mobileHeight : "100%",
         }}
       >
@@ -1321,7 +1320,7 @@ const MildeSection = ({
                 flexDirection: "column",
                 width: "100%",
                 backgroundColor: "#17191F",
-                borderTop: "1px solid #24262E",
+                borderTop: `1px solid var(--white-label-border-primary, #24262E)`,
               }}
             >
               <div
@@ -1390,7 +1389,7 @@ const MildeSection = ({
                       <span
                         style={{
                           marginRight: "1px",
-                          color: "rgba(208, 211, 219, 1)",
+                          color: getComputedStyle(document.documentElement).getPropertyValue('--white-label-text-secondary').trim() || "rgba(208, 211, 219, 1)",
                           fontWeight: "500",
                           fontSize: "14px"
                         }}
@@ -1723,7 +1722,7 @@ const MildeSection = ({
                           sendMessageLoading
                         )
                           ? "rgba(15, 17, 23, 0.42)"
-                          : "#007bff",
+                          : getComputedStyle(document.documentElement).getPropertyValue('--white-label-interactive-button_background').trim() || "#007bff",
                       color:
                         !inputValue.trim() &&
                         !(
