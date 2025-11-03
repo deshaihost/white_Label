@@ -6,6 +6,7 @@ import "./SelectPropertiesModal.css"
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import Loader from "../../../../../helper/Loader";
+import MultiSelect from "../../../../../component/multiSelect/multiSelect";
 
 const SelectPropertiesModal = ({ show, setShow, currentProperty, handleSave }) => {
   const store = useSelector((state) => state);
@@ -63,21 +64,15 @@ const SelectPropertiesModal = ({ show, setShow, currentProperty, handleSave }) =
             <div class="row py-2">
               <div class="col">
                 <label className="fw-normal pb-2">Choose Properties</label>
-                <Select className="custom-select property_Custom_Select" isMulti options={allPropertyNameList} value={selectedProperties} styles={colourStyles} onChange={handleDaySelect} closeMenuOnSelect={false} placeholder="--Select Properties--" isOptionDisabled={(option) => option.value === currentProperty}/>
+                <MultiSelect
+                  options={allPropertyNameList.filter(option => option.value !== currentProperty)}
+                  selectedOptions={selectedProperties}
+                  setSelectedOptions={setSelectedProperties}
+                  placeholder="--Select Properties--"
+                  selectAllText="Select All"
+                  width="100%"
+                />
               </div>
-            </div>
-            <div className="select-all-container">
-              <button className="select-btn" onClick={() => {
-                const allOptionsWithoutDuplicates = allPropertyNameList.filter(option =>
-                  option.value !== currentProperty
-                );
-                if (currentProperty && allPropertyName.includes(currentProperty)) {
-                  allOptionsWithoutDuplicates.push({ value: currentProperty, label: currentProperty });
-                }
-                setSelectedProperties(allOptionsWithoutDuplicates);
-              }}>
-                Select All
-              </button>
             </div>
           </div>
 

@@ -7,6 +7,7 @@ import ViolationModal from './violationModal';
 import GenerateReportModal from './generateReportModal';
 import "./index.css";
 import customStyles from './selectStyles';
+import MultiSelect from '../../../../component/multiSelect/multiSelect';
 
 const ReviewRemoval = ({allPropertyNamesList}) => {
 
@@ -262,7 +263,18 @@ const ReviewRemoval = ({allPropertyNamesList}) => {
         </div>
 
         <div className="item-select" style={{width:"280px"}}>
-          <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={customStyles} onChange={propertyOnChange} onMenuClose={handlePropertyFiltersApplied} placeholder="All Properties" closeMenuOnSelect={false}/>
+          <MultiSelect
+            options={propertyOptions}
+            selectedOptions={selectedProperties}
+            setSelectedOptions={(options) => {
+              propertyOnChange(options);
+              handlePropertyFiltersApplied();
+            }}
+            placeholder="All Properties"
+            selectAllText="Select all properties"
+            width="280px"
+            customSelectStyles={customStyles}
+          />
         </div>
       </div>
 

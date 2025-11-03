@@ -30,7 +30,7 @@ const featureData = [
     description: "Leverage HostBuddy's advanced templating system to automate strategic upsells, friendly check-ins, policy reminders, and much more.",
     //link: "/smart-templates?portal=true", // not sure if we're in the user portal. TODO: dynamically determine whether user is logged in and put the query param if so
     //link: "/smart-templates",
-    link: 'https://userguide.hostbuddy.ai/messaging-overview/smart-templating'
+    link: 'https://userguide.hostbuddy.ai/messaging-overview/smart-templates'
   },
   {
     title: "Upsells",
@@ -44,7 +44,7 @@ const featureData = [
     // description: "Ensure every potential issue is covered using these best practices for structuring and improving the knowledge base.",
     description: "A quick guide to best practices for structuring and improving the knowledge base, ensuring every potential issue is covered.",
     //link: "/best-practices",
-    link: 'https://userguide.hostbuddy.ai/detailed-setup-instructions/build-your-property-profiles'
+    link: 'https://userguide.hostbuddy.ai/property-profile-setup/building-standard-operating-procedures'
   },
 ];
 
@@ -58,7 +58,7 @@ const GetStarted = () => {
 
   const mainTileLinks = {
     connectYourPMS: "https://userguide.hostbuddy.ai/quick-start/1-connect-your-pms",
-    importYourProperties: "https://userguide.hostbuddy.ai/quick-start/2-import-your-properties",
+    importYourProperties: "https://userguide.hostbuddy.ai/quick-start/1-connect-your-pms#pms-integration-guides",
     test: "https://userguide.hostbuddy.ai/quick-start/3-test",
     goLive: "https://userguide.hostbuddy.ai/quick-start/4-go-live",
   }

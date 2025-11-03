@@ -8,6 +8,7 @@ import customStyles from './selectStyles';
 import './statistics.css';
 import { getSubscriptionStatus } from '../../helper/Authorized';
 import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
+import MultiSelect from "../../component/multiSelect/multiSelect";
 
 import { MetricTile, LineGraphTile, HistogramTile, renderTiles } from './statisticsTilesComponents';
 import { lineGraphDataSets, histogramDataSets, callGetStatisticsApi, getStatisticsData, formatDateToReadable } from './dataManager';
@@ -253,7 +254,17 @@ const StatisticsPage = () => {
             )}
           </div>
           <div className="inputs-container">
-            <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={getDynamicSelectStyles()} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false}/>
+            <MultiSelect
+              options={propertyOptions}
+              selectedOptions={selectedProperties}
+              setSelectedOptions={setSelectedProperties}
+              placeholder="All Properties"
+              selectAllText="Select all properties"
+              width="100%"
+              customSelectStyles={getDynamicSelectStyles()}
+              dropdownBgColor={cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117')}
+              hoverBgColor={cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e')}
+            />
           </div>
           <button className="apply-button" style={{ backgroundColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7', borderColor: cssConfig?.css_data?.interactive?.button_background || '#3e88f7' }} onClick={handleApplyFilters}>Apply</button>
         </div>

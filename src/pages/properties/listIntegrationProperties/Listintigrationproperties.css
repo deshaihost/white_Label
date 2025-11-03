@@ -12,10 +12,17 @@
   border-radius: 12px;
   padding: 16px;
   transition: background 0.2s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .property-card:hover {
   background: var(--white-label-background-hover, #1a1c24);
+}
+
+/* Elevate property card when dropdown is open */
+.property-card:has(.property-menu-dropdown.show) {
+  z-index: 9997;
 }
 
 .property-card-content {
@@ -242,6 +249,8 @@
   padding: 8px !important;
   cursor: pointer;
   box-shadow: none !important;
+  position: relative;
+  z-index: 10;
 }
 
 .property-menu-toggle:hover {
@@ -258,7 +267,12 @@
   border-radius: 8px !important;
   padding: 4px !important;
   min-width: 200px !important;
-  z-index: 1000 !important;
+  z-index: 9999 !important;
+}
+
+/* Ensure dropdown parent has elevated z-index when open */
+.property-menu-dropdown.show {
+  z-index: 9998;
 }
 
 .property-menu .dropdown-item {
