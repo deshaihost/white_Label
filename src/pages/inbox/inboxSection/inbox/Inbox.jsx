@@ -3036,6 +3036,7 @@ const Inbox = ({
                   setActiveTab={setActiveTab}
                   setPendingTabChange={setPendingTabChange}
                   setRightSectionVisible={setRightSectionVisible}
+                  inboxLoading={conversationsNotYetFetched}
                 />
               ) : (
                 <NonGuestRightSection
@@ -3142,6 +3143,7 @@ const Inbox = ({
                   setActiveTab={setActiveTab}
                   setPendingTabChange={setPendingTabChange}
                   setRightSectionVisible={setRightSectionVisible}
+                  inboxLoading={conversationsNotYetFetched}
                 />
               ) : (
                 <NonGuestRightSection

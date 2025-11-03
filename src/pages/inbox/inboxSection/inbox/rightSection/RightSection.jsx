@@ -71,6 +71,7 @@ const RightSection = ({
   setActiveTab,
   setPendingTabChange,
   setRightSectionVisible,
+  inboxLoading = false, // New prop to track inbox loading state
 }) => {
   const {
     arrival_date,
@@ -149,21 +150,89 @@ const RightSection = ({
     logo: null,
     isReady: false
   });
+  const [hasCompletedInitialLoad, setHasCompletedInitialLoad] = useState(false);
+
+  // Reset state on component mount/unmount to ensure clean navigation
+  useEffect(() => {
+    console.log('[RightSection] Component mounted - resetting branding state');
+    setStableData({
+      name: null,
+      logo: null,
+      isReady: false
+    });
+    setBrandingReady(false);
+    setHasCompletedInitialLoad(false);
+    
+    // Set a minimum delay before allowing branding to show
+    // This prevents flash during navigation from Properties -> Inbox
+    const minimumDelayTimer = setTimeout(() => {
+      console.log('[RightSection] Minimum initial delay completed');
+      setHasCompletedInitialLoad(true);
+    }, 500); // 500ms minimum delay to ensure inbox loader has time to appear/disappear
+    
+    return () => {
+      console.log('[RightSection] Component unmounting');
+      clearTimeout(minimumDelayTimer);
+    };
+  }, []); // Run only on mount/unmount
   
   // Effect to determine when branding is truly ready with debouncing
   useEffect(() => {
     let timeoutId;
     
-    if (isHostBuddyDomain) {
-      // For HostBuddy domains, show immediately
-      setStableData({
-        name: "HostBuddy",
-        logo: HostBuddyIcon,
-        isReady: true
+    console.log('[RightSection] Branding effect:', {
+      isHostBuddyDomain,
+      cssConfig: !!cssConfig,
+      brandingName: cssConfig?.Branding_name,
+      cssLoading,
+      logoLoading,
+      logoUrl,
+      rightSectionData: !!rightSectionData,
+      conversationId: rightSectionData?.conversation_id,
+      inboxLoading,
+      hasCompletedInitialLoad,
+      currentStableReady: stableData.isReady
+    });
+    
+    // Always reset state first to ensure clean state
+    setStableData({
+      name: null,
+      logo: null,
+      isReady: false
+    });
+    setBrandingReady(false);
+    
+    // CRITICAL: Don't show ANY branding until minimum initial delay has passed
+    if (!hasCompletedInitialLoad) {
+      console.log('[RightSection] Waiting for initial load delay to complete...');
+      return;
+    }
+    
+    // CRITICAL: Wait for inbox to not be loading AND have data before showing branding
+    const shouldWaitForInbox = inboxLoading || !rightSectionData || !rightSectionData.conversation_id;
+    
+    if (shouldWaitForInbox) {
+      console.log('[RightSection] Waiting for inbox to fully load...', {
+        inboxLoading,
+        hasRightSectionData: !!rightSectionData,
+        hasConversationId: !!rightSectionData?.conversation_id
       });
-      setBrandingReady(true);
+      return; // Don't show branding until inbox is fully loaded
+    }
+    
+    if (isHostBuddyDomain) {
+      // For HostBuddy domains, show after delays are complete
+      timeoutId = setTimeout(() => {
+        setStableData({
+          name: "HostBuddy",
+          logo: HostBuddyIcon,
+          isReady: true
+        });
+        setBrandingReady(true);
+        console.log('[RightSection] HostBuddy branding ready');
+      }, 100); // Short additional delay
     } else {
-      // For white label domains, debounce to prevent rapid changes
+      // For white label domains, wait for branding data
       if (cssConfig?.Branding_name && !cssLoading && !logoLoading) {
         timeoutId = setTimeout(() => {
           setStableData({
@@ -172,18 +241,19 @@ const RightSection = ({
             isReady: true
           });
           setBrandingReady(true);
-        }, 150); // Debounce delay
+          console.log('[RightSection] White label branding ready');
+        }, 150); // Slightly longer for white label
       }
     }
     
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [cssConfig?.Branding_name, cssLoading, logoLoading, logoUrl, isHostBuddyDomain]);
+  }, [cssConfig?.Branding_name, cssLoading, logoLoading, logoUrl, isHostBuddyDomain, rightSectionData, inboxLoading, hasCompletedInitialLoad]);
   
-  // Use stable data instead of reactive data
-  const brandingName = stableData.name || "HostBuddy";
-  const brandLogo = stableData.logo || HostBuddyIcon;
+  // Use stable data instead of reactive data - only when truly ready
+  const brandingName = stableData.isReady ? stableData.name : null;
+  const brandLogo = stableData.isReady ? stableData.logo : null;
 
   // Debug logging for logo
   console.log('[RightSection] Branding debug:', {
@@ -195,6 +265,8 @@ const RightSection = ({
     cssLoading: cssLoading,
     logoLoading: logoLoading,
     brandingReady: brandingReady,
+    stableDataReady: stableData.isReady,
+    stableDataName: stableData.name,
     hasCssConfig: !!cssConfig,
     hasBrandingName: !!cssConfig?.Branding_name
   });
@@ -1825,8 +1897,14 @@ const callUpdateGuestDataApi = async () => {
       </div>
       {!(channel == "Chat Window") &&
         (!is_locked ? (
-          curr_status && (
+          curr_status && stableData.isReady && brandingName && brandLogo && !cssLoading && !logoLoading && !inboxLoading && (
             <div className="toggle">
+              {console.log('[RightSection] ✅ RENDERING ENTIRE BRANDING SECTION:', {
+                stableDataReady: stableData.isReady,
+                brandingName,
+                brandLogo,
+                timestamp: new Date().toISOString().split('T')[1]
+              })}
               {curr_status && (
                 <div
                   style={{
@@ -1837,8 +1915,7 @@ const callUpdateGuestDataApi = async () => {
                     marginBottom: "10px",
                   }}
                 >
-                  {stableData.isReady ? (
-                    <>
+                  {/* BRANDING SECTION - All conditional checks moved to parent level */}
                       <img
                         src={brandLogo}
                         alt={brandingName}
@@ -1857,19 +1934,7 @@ const callUpdateGuestDataApi = async () => {
                         {brandingName}{" "}
                       </span>
                       <span>is</span>
-                    </>
-                  ) : (
-                    // Show nothing during loading to prevent flash
-                    <div style={{ 
-                      height: "25px", 
-                      display: "flex", 
-                      alignItems: "center",
-                      opacity: 0.4 
-                    }}>
-                      <span style={{ fontSize: "12px" }}>•••</span>
-                    </div>
-                  )}
-                  {!toggleStatusLoading ? (
+                      {!toggleStatusLoading ? (
                     <div
                       ref={hostbuddyDropdownRef}
                       style={{
