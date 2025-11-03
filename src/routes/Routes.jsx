@@ -521,23 +521,58 @@ const Routing = () => {
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>
         <Route path="/workbench-multi/:multi_property_id" element={<WorkbenchMulti />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
-      </Routes>      { location.pathname !== "/login" &&
-        location.pathname !== "/signup" &&
-        location.pathname !== "/forgot" &&
-        location.pathname !== "/accept-invitation" &&
-        location.pathname !== "/pricing" &&
-        location.pathname !== "/client-login" &&
-        !location.pathname.startsWith("/inbox") &&
-        location.pathname !== "/test-show-conversations" &&
-        !location.pathname.startsWith("/edit-multi-property") &&
-        !location.pathname.startsWith("/workbench/") &&
-        !location.pathname.startsWith("/edit-property/") &&
-        location.pathname !== "/gcs-users" &&
-        !location.pathname.startsWith("/property-chat") &&
-        (window.location.hostname === "hostbuddy.ai" || window.location.hostname === "www.hostbuddy.ai") &&
-        <Footer />}
+      </Routes>
+      {shouldShowFooter(location.pathname) && <Footer />}
     </>
-  );  // Wrap content with AuthenticatedLayout when the user is logged in AND not on public pages
+  );
+
+  // Helper function to determine if footer should be shown (whitelist approach)
+  function shouldShowFooter(pathname) {
+    // Only show footer on hostbuddy.ai domain
+    if (window.location.hostname !== "hostbuddy.ai" && window.location.hostname !== "www.hostbuddy.ai") {
+      return false;
+    }
+
+    // List of front-facing pages where footer should appear (whitelist)
+    const footerPages = [
+      "/",
+      "/pricing",
+      "/meet-hostbuddy",
+      "/faqs",
+      "/about-us",
+      "/blog",
+      "/privacy-policy",
+      "/termsof-service",
+      "/data-processing-agreement",
+      "/subprocessors",
+      "/scheduling-walkthrough",
+      "/tips-and-tricks",
+      "/best-practices",
+      "/schedule-guide",
+      "/notifications-guide",
+      "/customize-hostbuddy-guide",
+      "/hostbuddy-for-guesty",
+      "/hostbuddy-for-tidy",
+      "/testing-questions",
+      "/setup-guide",
+      "/getstarted",
+      "/hostaway-setup",
+      "/pms-instructions",
+      "/ai-messaging",
+      "/smart-templates",
+      "/become-an-affiliate",
+      "/software-solutions",
+      "/integrations",
+      "/turno"
+    ];
+
+    // Check if pathname matches any whitelisted page exactly or starts with certain prefixes
+    return footerPages.some(page => pathname === page) ||
+           pathname.startsWith("/blog/") ||
+           pathname.startsWith("/pms-instructions/");
+  }
+
+  // Wrap content with AuthenticatedLayout when the user is logged in AND not on public pages
   return (
     <div className="routes" style={{ height: "100%" }}>
       {authData && !shouldUseUserNavBar ? (

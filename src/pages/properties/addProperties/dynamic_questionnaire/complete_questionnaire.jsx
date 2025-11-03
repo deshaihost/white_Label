@@ -28,6 +28,15 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
 
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
+
+  // Track sidebar state for responsive layout
+  const [sidebarWidth, setSidebarWidth] = useState(() => {
+    if (window.getSidebarState) {
+      const state = window.getSidebarState();
+      return state.open ? (window.innerWidth >= 1600 ? 240 : 200) : 56;
+    }
+    return window.innerWidth >= 1600 ? 240 : 200;
+  });
   const apiQuestionnaireData = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire;
   const section_order_data = store?.getQuestionnaireReducer?.getQuestionnaire?.data?.questionnaire?.metadata?.section_order
 
@@ -55,6 +64,22 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
 
   const curr_sec_num = questionnaire_section_names.indexOf(selectedSection);
   const num_total_sections = questionnaire_section_names.length;
+
+  // Listen for sidebar state changes to adjust button positioning
+  useEffect(() => {
+    const handleSidebarStateChange = (event) => {
+      const { open, width, clicked } = event.detail;
+      // Calculate effective width based on whether sidebar is clicked/open
+      const effectiveWidth = (clicked && open) ? width : 56;
+      setSidebarWidth(effectiveWidth);
+    };
+
+    document.addEventListener("sidebarStateChanged", handleSidebarStateChange);
+
+    return () => {
+      document.removeEventListener("sidebarStateChanged", handleSidebarStateChange);
+    };
+  }, []);
 
   // Get the questionnaire data from the API. Should run once, immediately when the page loads
   useEffect(() => {
@@ -364,7 +389,7 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
   }, [scrollToBottom, apiQuestionnaireData]);
 
   return (
-    <div ref={containerRef} style={{ minHeight: '100vh', background: '#0F1117' }}>
+    <div ref={containerRef} style={{ minHeight: '100vh', background: 'var(--white-label-background-primary, #0F1117)' }}>
       <Helmet>
         <title>Edit Property</title>
       </Helmet>
@@ -373,9 +398,9 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
           <>
             {/* Header with Tab Navigation */}
             <div style={{ 
-              borderBottom: '1px solid #013280',
+              borderBottom: '1px solid var(--white-label-border-primary, #013280)',
               marginBottom: '32px',
-              background: '#0F1117'
+              background: 'var(--white-label-background-primary, #0F1117)'
             }}>
               <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px' }}>
                 <QuestionnaireHeader 
@@ -431,12 +456,13 @@ const QuestionnairePage = ({ startAtPage=0, property_name:propPropertyName, jump
             <div style={{
               position: 'fixed',
               bottom: 0,
-              left: 0,
+              left: `${sidebarWidth}px`,
               right: 0,
-              borderTop: '1px solid #013280',
-              background: '#0F1117',
+              borderTop: '1px solid var(--white-label-border-primary, #013280)',
+              background: 'var(--white-label-background-primary, #0F1117)',
               padding: '24px',
-              zIndex: 100
+              zIndex: 100,
+              transition: 'left 0.3s ease-in-out'
             }}>
               <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', justifyContent: 'space-between' }}>
                 <button 
