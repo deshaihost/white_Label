@@ -280,7 +280,7 @@ const AccountContactSection = () => {
 
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '48px 32px' }}>
+    <div style={{ maxWidth: '1000px', margin: '0 auto'}}>
       <h1 
         className="contacts-page-title"
         style={{
