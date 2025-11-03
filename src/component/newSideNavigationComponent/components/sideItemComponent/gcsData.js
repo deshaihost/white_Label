@@ -60,6 +60,7 @@ const GcsUserdata = [
         HasdropDown: "yes",
         dropdownItems: [
             { id: 81, label: "Registration Page", HasdropDown: "no" },
+            { id: 84, label: "Registration (New)", HasdropDown: "no" },
             { id: 82, label: "Branding", HasdropDown: "no" },
             { id: 83, label: "Feature Selection", HasdropDown: "no" }
         ]
