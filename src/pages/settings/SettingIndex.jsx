@@ -16,7 +16,6 @@ import DangerZone from '../account/dangerZone';
 import AccountNotificationSection from "../account/notificationSection";
 import MessagingChannels from "./settingContants/messagingChannels/messagingChannels";
 import ActionitemsSettings from "./settingContants/actionItems/actionItemSettings";
-import WhiteLabelRegistration from "./settingContants/whiteLabel/WhiteLabelRegistration";
 import RegistrationPageNewDesign from "./settingContants/whiteLabel/RegistrationPageNewDesign";
 import WhiteLabelBranding from "./settingContants/whiteLabel/WhiteLabelBranding";
 import WhiteLabelFeatureSelection from "./settingContants/whiteLabel/WhiteLabelFeatureSelection";
@@ -45,7 +44,6 @@ const SettingIndex = () => {
     messagingChannels: "messaging-channels",
     actionItems: "action-items",
     whiteLabelRegistration: "white-label-registration",
-    whiteLabelRegistrationNew: "white-label-registration-new",
     whiteLabelBranding: "white-label-branding",
     whiteLabelFeatureSelection: "white-label-feature-selection"
   };
@@ -162,9 +160,6 @@ const SettingIndex = () => {
                     <ActionitemsSettings />
                   )}
                   {interFaceTypes?.whiteLabelRegistration === interFaceSettings && (
-                    <WhiteLabelRegistration />
-                  )}
-                  {interFaceTypes?.whiteLabelRegistrationNew === interFaceSettings && (
                     <RegistrationPageNewDesign />
                   )}
                   {interFaceTypes?.whiteLabelBranding === interFaceSettings && (

@@ -185,14 +185,14 @@ const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 
 ---
 
-## Registration Page
+## Domain Registration Page
 
 ### Overview
-GCS users can configure white label settings via the Registration Page at `/gcs-settings/white-label-registration`.
+GCS users can configure white label settings via the Domain Registration Page at `/gcs-settings/white-label-registration`.
 
 ### Navigation
 ```
-GCS Portal → Settings → White Label → Registration Page
+GCS Portal → Settings → White Label → Domain Registration
 ```
 
 ### Form Fields
@@ -210,8 +210,8 @@ The registration page also includes an interactive demo showcasing:
 - Live Preview Panel
 
 ### Key Files
-- `src/pages/settings/settingContants/whiteLabel/WhiteLabelRegistration.jsx`
-- `src/pages/settings/settingContants/whiteLabel/WhiteLabelRegistration.css`
+- `src/pages/settings/settingContants/whiteLabel/RegistrationPageNewDesign.jsx`
+- `src/pages/settings/settingContants/whiteLabel/RegistrationPageNewDesign.css`
 - `src/component/newSideNavigationComponent/.../gcsData.js` - Navigation config
 - `src/pages/settings/SettingIndex.jsx` - Settings router
 
@@ -285,8 +285,8 @@ src/
 │       ├── logoComponentNav.js (134×34)
 │       └── logoComponent.css
 ├── pages/settings/settingContants/whiteLabel/
-│   ├── WhiteLabelRegistration.jsx
-│   └── WhiteLabelRegistration.css
+│   ├── RegistrationPageNewDesign.jsx
+│   └── RegistrationPageNewDesign.css
 └── redux/auth/whiteLabelLogin/
     └── api.js
 ```
