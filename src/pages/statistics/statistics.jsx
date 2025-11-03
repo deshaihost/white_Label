@@ -70,7 +70,9 @@ const StatisticsPage = () => {
       setRequestedStartDate(selectedStartDate);
     }
 
-    getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading, queryData);
+    // Extract branding name from CSS config
+    const brandingName = cssConfig?.Branding_name || "HostBuddy";
+    getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading, queryData, brandingName);
     if (!selectedEndDate && !selectedStartDate) { setShowDatePickers(false); }
   }
 
@@ -187,8 +189,10 @@ const StatisticsPage = () => {
 
   // When the page loads, fetch the data and populate the charts
   useEffect(() => {
-    getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading, {include_upsells:true});
-  }, []);
+    // Extract branding name from CSS config
+    const brandingName = cssConfig?.Branding_name || "HostBuddy";
+    getStatisticsData(setRawApiReturn, setApiStatisticsData, setDataLoading, {include_upsells:true}, brandingName);
+  }, [cssConfig]); // Add cssConfig as dependency to re-run when branding data is available
 
   return (
     <div 

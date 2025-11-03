@@ -248,7 +248,7 @@ function createMessageTimingData(guest_message_received_times, startDate, endDat
 
 // Create the data structure for the total messages responded tile, using the response times data.
 // This is NO LONGER USED since the data only includes responses (not all messages) - replaced by below funct which uses the all messages sent data
-function formatMessagesRespondedData(responseTimes) {
+function formatMessagesRespondedData(responseTimes, brandingName = "HostBuddy") {
   const { host_response_times, hostbuddy_response_times, not_responded_in_2h } = responseTimes;
 
   // Calculate total responses
@@ -268,7 +268,7 @@ function formatMessagesRespondedData(responseTimes) {
     data: [
       { number: host_response_times.count, text: "" }, // By Host shown as big number, no label
       { number: host_response_times.count, text: "By Host" },
-      { number: hostbuddy_response_times.count, text: "By HostBuddy" },
+      { number: hostbuddy_response_times.count, text: `By ${brandingName}` },
       //{ number: not_responded_in_2h, text: "Not Responded (Within 2h)" }
     ]
   };
@@ -280,7 +280,7 @@ function formatMessagesRespondedData(responseTimes) {
     data: [
       { number: "100%", text: "" }, // Total percentage as big number, no label
       { number: `${hostProportion.toFixed(1)}%`, text: "By Host" },
-      { number: `${hostbuddyProportion.toFixed(1)}%`, text: "By HostBuddy" },
+      { number: `${hostbuddyProportion.toFixed(1)}%`, text: `By ${brandingName}` },
       //{ number: `${notRespondedProportion.toFixed(1)}%`, text: "Not Responded (Within 2h)" }
     ]
   };
@@ -290,7 +290,7 @@ function formatMessagesRespondedData(responseTimes) {
 }
 
 // From the total messages sent data: create the data structure for the total messages sent tile
-function formatMessagesSentData(messagesSent) {
+function formatMessagesSentData(messagesSent, brandingName = "HostBuddy") {
   const { host, hostbuddy } = messagesSent;
 
   // Calculate total responses
@@ -307,7 +307,7 @@ function formatMessagesSentData(messagesSent) {
     data: [
       { number: totalResponses, text: "" }, // Total shown as big number, no label
       { number: host, text: "By Host" },
-      { number: hostbuddy, text: "By HostBuddy" }
+      { number: hostbuddy, text: `By ${brandingName}` }
     ]
   };
 
@@ -318,7 +318,7 @@ function formatMessagesSentData(messagesSent) {
     data: [
       { number: "100%", text: "" }, // Total percentage as big number, no label
       { number: `${hostProportion.toFixed(1)}%`, text: "By Host" },
-      { number: `${hostbuddyProportion.toFixed(1)}%`, text: "By HostBuddy" }
+      { number: `${hostbuddyProportion.toFixed(1)}%`, text: `By ${brandingName}` }
     ]
   };
 
@@ -328,7 +328,7 @@ function formatMessagesSentData(messagesSent) {
 
 
 // Given the same host / hostbuddy response times data as above, create the data structure for the tile that shows host vs hostbuddy response times
-function formatResponseTimes(responseTimes) {
+function formatResponseTimes(responseTimes, brandingName = "HostBuddy") {
   // Extract average times from responseTimes object
   const hostAvgTime = responseTimes.host_response_times.average / 60; // Convert to minutes
   const hostBuddyAvgTime = responseTimes.hostbuddy_response_times.average / 60; // Convert to minutes
@@ -348,7 +348,7 @@ function formatResponseTimes(responseTimes) {
       title: 'Average Response Times (minutes)',
       data: [
         { number: hostBuddyAvgTime.toFixed(1), text: "" }, // HostBuddy average as big number, no label
-        { number: hostBuddyAvgTime.toFixed(1), text: "By HostBuddy" },
+        { number: hostBuddyAvgTime.toFixed(1), text: `By ${brandingName}` },
         { number: hostAvgTime.toFixed(1), text: "By Host" }
       ]
     }
@@ -626,7 +626,7 @@ function formatUpsellMetrics(retrievedUpsellsStatistics) {
 }
 
 // Get the statistics from the API, and populate the data structures to be used for the charts
-export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, setDataLoading, queryData={}) => {
+export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, setDataLoading, queryData={}, brandingName = "HostBuddy") => {
   setDataLoading(true);
   const response = await callGetStatisticsApi(queryData);
   if (response.error) { return { error: response.error }; }
@@ -646,17 +646,17 @@ export const getStatisticsData = async (setRawApiReturn, setApiStatisticsData, s
 
   try { // Host / hostbuddy total messages sent (metric tiles)
     const messagesSent = retrievedStatistics.messages_sent;
-    totalMessagesSent = formatMessagesSentData(messagesSent);
+    totalMessagesSent = formatMessagesSentData(messagesSent, brandingName);
   } catch {}
 
   try { // Host / HostBuddy total guest messages responded (metric tiles)
     const responseTimesData = { host_response_times:retrievedStatistics.host_response_times, hostbuddy_response_times:retrievedStatistics.hostbuddy_response_times, not_responded_in_2h:retrievedStatistics.not_responded_in_2h };
-    totalMessagesResponded = formatMessagesRespondedData(responseTimesData);
+    totalMessagesResponded = formatMessagesRespondedData(responseTimesData, brandingName);
   } catch {}
 
   try { // Host vs HostBuddy response times (metric tiles)
     const responseTimesData = { host_response_times:retrievedStatistics.host_response_times, hostbuddy_response_times:retrievedStatistics.hostbuddy_response_times, not_responded_in_2h:retrievedStatistics.not_responded_in_2h };
-    responseTimes = formatResponseTimes(responseTimesData);
+    responseTimes = formatResponseTimes(responseTimesData, brandingName);
   } catch {}
 
   try { // Sentiment (metric tiles)

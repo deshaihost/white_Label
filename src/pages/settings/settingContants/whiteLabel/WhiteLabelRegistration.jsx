@@ -213,7 +213,7 @@ const BrandingSetup = () => {
   // Validate form
   const validateForm = () => {
     if (!formData.companyName.trim()) {
-      setError('Company Name is required');
+      setError('Branding Name is required');
       return false;
     }
     if (!formData.fullDomainName.trim()) {
@@ -499,12 +499,12 @@ const BrandingSetup = () => {
               )}
 
               <div className="demo-form-group">
-                <label>Company Name <span className="demo-required">*</span></label>
+                <label>Branding Name <span className="demo-required">*</span></label>
                 <input 
                   type="text" 
                   name="companyName"
                   className="demo-input" 
-                  placeholder="Enter your company name"
+                  placeholder="Enter your branding name"
                   value={formData.companyName}
                   onChange={handleInputChange}
                   disabled={loading}

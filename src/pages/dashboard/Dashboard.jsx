@@ -90,12 +90,15 @@ const Dashboard = () => {
     console.log("🎯 STEP 3: Dashboard useEffect - fetching statistics data", {
       timestamp: new Date().toISOString()
     });
+    const brandingName = cssConfig?.Branding_name || "HostBuddy";
     getStatisticsData(
       setRawApiReturn,
       setApiStatisticsData,
-      setStatisticsDataLoading
+      setStatisticsDataLoading,
+      {},
+      brandingName
     );
-  }, []);
+  }, [cssConfig]);
 
   // *** THIS contains the (static) definition of which tiles to render, and in which order *** //
   const statisticsTiles = [
