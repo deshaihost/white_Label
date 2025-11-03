@@ -92,7 +92,6 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
         // Map white label section from URL to tab ID
         const whiteLabelPathToId = {
           "white-label-registration": 81,
-          "white-label-registration-new": 84,
           "white-label-branding": 82,
           "white-label-feature-selection": 83,
         };
@@ -343,8 +342,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
                       if (handleNavigation) {
                         // Map white label dropdown items to their corresponding routes
                         const whiteLabelMap = {
-                          81: "/gcs-settings/white-label-registration", // Registration Page
-                          84: "/gcs-settings/white-label-registration-new", // Registration Page (New Design)
+                          81: "/gcs-settings/white-label-registration", // Domain Registration
                           82: "/gcs-settings/white-label-branding", // Branding
                           83: "/gcs-settings/white-label-feature-selection", // Feature Selection
                         };
