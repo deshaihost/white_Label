@@ -45,7 +45,8 @@ export const createDomainMapping = async (data) => {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
       // Request was made but no response received
-      errorMessage = 'No response from server. Please check your connection.';
+      console.error('Response content:', error.request);
+      errorMessage = 'No response from server. Please check your connection. (POST domain mapping)';
     } else {
       // Error setting up the request
       errorMessage = error.message || errorMessage;
@@ -87,7 +88,7 @@ export const getDomains = async () => {
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
-      errorMessage = 'No response from server. Please check your connection.';
+      errorMessage = 'No response from server. Please check your connection. (GET domains)';
     } else {
       errorMessage = error.message || errorMessage;
     }
@@ -148,7 +149,7 @@ export const uploadCompanyLogo = async (data) => {
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
-      errorMessage = 'No response from server. Please check your connection.';
+      errorMessage = 'No response from server. Please check your connection. (POST upload logo)';
     } else {
       errorMessage = error.message || errorMessage;
     }
@@ -198,7 +199,7 @@ export const updateDashboardColor = async (data) => {
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
-      errorMessage = 'No response from server. Please check your connection.';
+      errorMessage = 'No response from server. Please check your connection. (POST dashboard color)';
     } else {
       errorMessage = error.message || errorMessage;
     }
@@ -254,7 +255,7 @@ export const getCssConfig = async (data) => {
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
-      errorMessage = 'No response from server. Please check your connection.';
+      errorMessage = 'No response from server. Please check your connection. (POST get CSS)';
     } else {
       errorMessage = error.message || errorMessage;
     }
@@ -312,7 +313,7 @@ export const setFeatures = async (data) => {
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
-      errorMessage = 'No response from server. Please check your connection.';
+      errorMessage = 'No response from server. Please check your connection. (POST set features)';
     } else {
       errorMessage = error.message || errorMessage;
     }

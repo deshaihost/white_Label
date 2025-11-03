@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './RegistrationPageNewDesign.css';
 import { createDomainMapping, uploadCompanyLogo, getDomains } from './whiteLabelServices';
-import { checkDomainVerificationStatus } from './domainStatus';
+import { checkDomainVerificationStatus, checkAndAddDomain } from './domainStatus';
 import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_ENDPOINT;
@@ -326,9 +326,24 @@ const RegistrationPageNewDesign = () => {
         return;
       }
 
+      // Step 3: Add domain to Vercel
+      const vercelResult = await checkAndAddDomain(fullSubdomain);
+      
+      if (!vercelResult.success) {
+        // Log warning but don't fail completely - domain was added to Firestore
+        console.warn('Vercel registration warning:', vercelResult.message);
+        setError(`Domain registered but Vercel setup incomplete: ${vercelResult.message || 'Please contact support.'}`);
+        setRegistrationComplete(true);
+        setShowRegistrationReminder(true);
+        setLoading(false);
+        return;
+      }
+
       // Success!
       setSuccess('Registration completed successfully! Please proceed to configure your DNS settings below.');
       setRegistrationComplete(true);
+      setDomainRegisteredWithVercel(true);
+      setShowRegistrationReminder(false);
       
       // Refresh domain list to get updated details
       await fetchDomains();
@@ -511,7 +526,7 @@ const RegistrationPageNewDesign = () => {
                 value={formData.productName}
                 onChange={handleInputChange}
                 placeholder="e.g., ACME Rentals"
-                disabled={loading || registrationComplete}
+                disabled={loading || (registrationComplete && !showRegistrationReminder)}
                 className="form-input"
               />
               <span className="input-hint">This is your brand name that will appear in the portal</span>
@@ -575,7 +590,7 @@ const RegistrationPageNewDesign = () => {
                 value={formData.key}
                 onChange={handleInputChange}
                 placeholder="Enter your configuration key"
-                disabled={loading || registrationComplete}
+                disabled={loading || (registrationComplete && !showRegistrationReminder)}
                 className="form-input"
               />
               <span className="input-hint">Your unique configuration key for this domain</span>
@@ -592,14 +607,14 @@ const RegistrationPageNewDesign = () => {
                   id="fullLogoInput"
                   accept="image/png,image/jpeg,image/jpg,image/svg+xml"
                   onChange={handleFullLogoChange}
-                  disabled={loading || registrationComplete}
+                  disabled={loading || (registrationComplete && !showRegistrationReminder)}
                   style={{ display: 'none' }}
                 />
                 {!fullLogoPreview ? (
                   <button
                     type="button"
                     onClick={() => document.getElementById('fullLogoInput').click()}
-                    disabled={loading || registrationComplete}
+                    disabled={loading || (registrationComplete && !showRegistrationReminder)}
                     className="upload-button"
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -616,7 +631,7 @@ const RegistrationPageNewDesign = () => {
                     <button
                       type="button"
                       onClick={removeFullLogo}
-                      disabled={loading || registrationComplete}
+                      disabled={loading || (registrationComplete && !showRegistrationReminder)}
                       className="remove-button"
                     >
                       Remove
@@ -638,14 +653,14 @@ const RegistrationPageNewDesign = () => {
                   id="faviconInput"
                   accept="image/png,image/jpeg,image/jpg,image/svg+xml"
                   onChange={handleFaviconChange}
-                  disabled={loading || registrationComplete}
+                  disabled={loading || (registrationComplete && !showRegistrationReminder)}
                   style={{ display: 'none' }}
                 />
                 {!faviconPreview ? (
                   <button
                     type="button"
                     onClick={() => document.getElementById('faviconInput').click()}
-                    disabled={loading || registrationComplete}
+                    disabled={loading || (registrationComplete && !showRegistrationReminder)}
                     className="upload-button"
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -658,11 +673,11 @@ const RegistrationPageNewDesign = () => {
                   </button>
                 ) : (
                   <div className="preview-container">
-                    <img src={faviconPreview} alt="Favicon preview" className="favicon-preview" />
+                    <img src={faviconPreview} alt="Favicon preview" className="logo-preview" />
                     <button
                       type="button"
                       onClick={removeFavicon}
-                      disabled={loading || registrationComplete}
+                      disabled={loading || (registrationComplete && !showRegistrationReminder)}
                       className="remove-button"
                     >
                       Remove
@@ -700,7 +715,7 @@ const RegistrationPageNewDesign = () => {
 
             <button
               type="submit"
-              disabled={loading || registrationComplete}
+              disabled={loading || (registrationComplete && !showRegistrationReminder)}
               className="submit-button"
             >
               {loading ? (
@@ -708,13 +723,21 @@ const RegistrationPageNewDesign = () => {
                   <span className="spinner"></span>
                   <span>Registering...</span>
                 </>
-              ) : registrationComplete ? (
+              ) : (registrationComplete && !showRegistrationReminder) ? (
                 <>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
                     <path d="M8 12L11 15L16 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   <span>Registration Complete</span>
+                </>
+              ) : showRegistrationReminder ? (
+                <>
+                  <span>Retry Domain Registration</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </>
               ) : (
                 <>
