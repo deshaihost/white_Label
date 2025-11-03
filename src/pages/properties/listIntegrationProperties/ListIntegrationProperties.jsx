@@ -410,10 +410,10 @@ const ListIntegrationProperties = () => {
                               <CiCalendar className="schedule-icon" />
                               <span>Schedule</span>
                             </Button>
+                            {!PropertiesExtraData?.[properties]?.calry_property_id && (
+                              <span className="pms-not-connected-badge">PMS Not Connected</span>
+                            )}
                           </div>
-                          {PropertiesExtraData?.[properties]?.pms_linked === false && (
-                            <span className="pms-not-connected-badge">PMS Not Connected</span>
-                          )}
                           <p className="property-status-text">
                             {PropertiesExtraData?.[properties]?.status_statement?.split(' ').map((word, index) => 
                               <React.Fragment key={index}>

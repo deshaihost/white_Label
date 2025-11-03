@@ -12,10 +12,12 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
 
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [currentSubsection, setCurrentSubsection] = useState("");
-  const [expandedSections, setExpandedSections] = useState(new Set()); // Start with all collapsed
 
   const questionnaire_section_data = liveQuestionnaireData.questionnaire[questionnaire_section_name];
   const subsection_order = liveQuestionnaireData.metadata.subsection_order[questionnaire_section_name];
+
+  // Initialize with all sections expanded by default
+  const [expandedSections, setExpandedSections] = useState(new Set(subsection_order || []));
 
   const is_first_section = section_num === 0;
   const is_last_section = section_num === num_total_sections - 1;
@@ -164,22 +166,6 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
                 {subsectionName}
               </h3>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                {shouldShowAddItem && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAddButtonClick(subsectionName);
-                    }}
-                    className="modern-btn-secondary"
-                    style={{
-                      fontSize: '13px',
-                      padding: '6px 16px',
-                      height: 'auto'
-                    }}
-                  >
-                    Add more
-                  </button>
-                )}
                 {isExpanded ? (
                   <ChevronUp size={20} color="var(--white-label-text-quaternary, #676a73)" />
                 ) : (
@@ -242,6 +228,23 @@ const QuestionnaireSection = ({questionnaire_section_name, liveQuestionnaireData
                     </div>
                   );
                 })}
+                
+                {/* Add More button at the bottom for Topics to Avoid and SOPs sections */}
+                {shouldShowAddItem && (
+                  <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center' }}>
+                    <button
+                      onClick={() => handleAddButtonClick(subsectionName)}
+                      className="modern-btn-secondary"
+                      style={{
+                        fontSize: '13px',
+                        padding: '8px 20px',
+                        height: 'auto'
+                      }}
+                    >
+                      Add more
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

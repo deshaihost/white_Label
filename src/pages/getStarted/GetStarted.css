@@ -228,8 +228,11 @@
   border-radius: 16px !important;
   margin-bottom: 24px;
   max-width: 499px;
+  min-height: 280px;
   background: #17191f;
   border-color: #013280 !important;
+  display: flex;
+  flex-direction: column;
 }
 
 .new-get .link_card_box:hover {
@@ -323,6 +326,7 @@
   flex: 1;
   padding: 0;
   margin-top: 48px;
+  min-height: 120px;
 }
 
 /* Visual items (PMS, HostBuddy icons) */
