@@ -472,6 +472,8 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid;
+  flex-shrink: 0;
+  width: 100%;
 }
 
 .preview-title {
@@ -526,8 +528,9 @@
 
 .preview-content {
   flex: 1;
-  overflow: auto;
   display: flex;
+  overflow: hidden;
+  width: 100%;
 }
 
 .preview-sidebar {
@@ -602,7 +605,9 @@
 .preview-main {
   flex: 1;
   padding: 2rem;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-width: 100%;
   min-height: 100vh;
 }
 
