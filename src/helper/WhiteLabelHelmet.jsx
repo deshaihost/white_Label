@@ -45,6 +45,47 @@ const WhiteLabelHelmet = () => {
   const { logo: logoUrl, loading: logoLoading } = useWhiteLabelLogos();
   const location = useLocation();
   
+  // State to track if logo component has rendered (for white-label domains)
+  const [logoComponentVisible, setLogoComponentVisible] = useState(false);
+  
+  // Listen for logo component visibility events
+  useEffect(() => {
+    const handleLogoVisible = () => {
+      console.log('🎯 [WhiteLabelHelmet] Logo component is now VISIBLE - favicon can be shown');
+      setLogoComponentVisible(true);
+    };
+    
+    const handleLogoHidden = () => {
+      console.log('🎯 [WhiteLabelHelmet] Logo component is HIDDEN - favicon should be hidden');
+      setLogoComponentVisible(false);
+    };
+    
+    // Listen for custom events from logo component
+    document.addEventListener('logoComponentVisible', handleLogoVisible);
+    document.addEventListener('logoComponentHidden', handleLogoHidden);
+    
+    return () => {
+      document.removeEventListener('logoComponentVisible', handleLogoVisible);
+      document.removeEventListener('logoComponentHidden', handleLogoHidden);
+    };
+  }, []);
+  
+  // Monitor console logs to detect when logo component is visible
+  useEffect(() => {
+    if (!cssLoading && !logoLoading && logoUrl && !isHostBuddyDomain) {
+      // For white-label domains, set visible when logo data is ready
+      // This assumes logo component will render shortly after data is available
+      const timer = setTimeout(() => {
+        setLogoComponentVisible(true);
+      }, 100); // Small delay to allow logo component to render
+      
+      return () => clearTimeout(timer);
+    } else if (isHostBuddyDomain) {
+      // For HostBuddy domains, immediately allow favicon
+      setLogoComponentVisible(true);
+    }
+  }, [cssLoading, logoLoading, logoUrl, isHostBuddyDomain]);
+  
   // Helper function to get page name from route
   const getPageName = (pathname) => {
     // Remove leading slash and get first segment
@@ -102,18 +143,26 @@ const WhiteLabelHelmet = () => {
   const defaultBrandName = "HostBuddy AI";
   const defaultFavicon = "/favicon-hostbuddy.ico"; // Renamed to prevent auto-loading
   
-  // DOMAIN-BASED LOGIC:
-  // -------------------
-  // 1. HostBuddy Domain (hostbuddy.ai): isHostBuddyDomain=true, logoUrl=null
-  //    → Result: Shows DEFAULT favicon and title
+  // DOMAIN-BASED LOGIC WITH LOGO VISIBILITY:
+  // ----------------------------------------
+  // 1. HostBuddy Domain (hostbuddy.ai): 
+  //    → Show default favicon IMMEDIATELY (no waiting)
   // 
-  // 2. Custom Domain (yourbrand.com): isHostBuddyDomain=false, logoUrl=<custom_url>
-  //    → Result: Shows CUSTOM favicon and title
+  // 2. White-Label Domain (yourbrand.com): 
+  //    → NO favicon initially
+  //    → Show custom favicon ONLY when logo component is visible
   // 
-  // 3. localhost: Treated as custom domain, uses database branding if configured
-  //    → Result: Shows CUSTOM if configured, DEFAULT if not
-  
-  // Determine brand name with proper fallbacks
+  // 3. localhost: Treated as white-label domain
+  //    → Wait for logo visibility before showing favicon
+
+  // Determine if favicon should be shown based on domain and logo visibility
+  const shouldShowFavicon = isHostBuddyDomain || 
+    (!isHostBuddyDomain && logoComponentVisible && !cssLoading && !logoLoading);
+
+  // For favicon: Use custom logo ONLY if should show favicon and conditions are met
+  const faviconUrl = shouldShowFavicon 
+    ? ((!logoLoading && logoUrl && !isHostBuddyDomain) ? logoUrl : defaultFavicon)
+    : null; // No favicon for white-label domains until logo is visible  // Determine brand name with proper fallbacks
   // Only use custom branding if NOT loading AND data exists AND not HostBuddy domain
   const finalBrandName = (!cssLoading && brandingName && !isHostBuddyDomain) 
     ? brandingName 
@@ -121,19 +170,15 @@ const WhiteLabelHelmet = () => {
   
   // Build complete page title: "PageName - BrandName"
   const pageTitle = `${pageName} - ${finalBrandName}`;
-  
-  // For favicon: Use custom logo ONLY if not HostBuddy domain and logo exists
-  // This ensures HostBuddy domain ALWAYS shows default favicon
-  const faviconUrl = (!logoLoading && logoUrl && !isHostBuddyDomain) 
-    ? logoUrl 
-    : defaultFavicon;
-  
+
   console.log('🎭 [WhiteLabelHelmet] COMPUTED VALUES:', {
     pageName,
     brandingName,
     finalBrandName,
     pageTitle,
     faviconUrl,
+    shouldShowFavicon,
+    logoComponentVisible,
     usingCustomFavicon: faviconUrl !== defaultFavicon,
     usingCustomBrand: finalBrandName !== defaultBrandName,
     timestamp: new Date().toISOString()
@@ -159,11 +204,14 @@ const WhiteLabelHelmet = () => {
       cssLoading,
       logoLoading,
       faviconUrl,
-      willUpdate: !cssLoading && !logoLoading && !!faviconUrl,
+      shouldShowFavicon,
+      logoComponentVisible,
+      willUpdate: shouldShowFavicon && !!faviconUrl,
       timestamp: new Date().toISOString()
     });
     
-    if (!cssLoading && !logoLoading && faviconUrl) {
+    // Only update favicon if we should show it and we have a URL
+    if (shouldShowFavicon && faviconUrl) {
       const updateFavicon = () => {
         console.log('🔧 [WhiteLabelHelmet] BEFORE favicon update:', {
           faviconUrl,
@@ -171,8 +219,16 @@ const WhiteLabelHelmet = () => {
           timestamp: new Date().toISOString()
         });
         
-        // Remove all existing favicon links
+        // 🔧 FIX: Check if favicon actually needs updating to prevent unnecessary DOM manipulation
         const existingLinks = document.querySelectorAll('link[rel*="icon"]');
+        const currentFaviconHref = existingLinks.length > 0 ? existingLinks[0].href : null;
+        
+        if (currentFaviconHref === faviconUrl) {
+          console.log('⏭️ [WhiteLabelHelmet] Favicon already correct, skipping update');
+          return;
+        }
+        
+        // Remove all existing favicon links
         existingLinks.forEach(link => {
           console.log('🗑️ [WhiteLabelHelmet] Removing link:', {
             rel: link.rel,
@@ -208,22 +264,32 @@ const WhiteLabelHelmet = () => {
         });
       };
       
-      updateFavicon();
+      // 🔧 FIX: Add small delay to prevent rapid successive updates that cause browser freeze
+      setTimeout(updateFavicon, 50);
+    } else if (!shouldShowFavicon) {
+      // Remove favicon for white-label domains when logo is not visible
+      console.log('🚫 [WhiteLabelHelmet] Removing favicon - logo not visible yet');
+      const existingLinks = document.querySelectorAll('link[rel*="icon"]');
+      existingLinks.forEach(link => {
+        console.log('🗑️ [WhiteLabelHelmet] (Hide) Removing link:', link.href);
+        link.remove();
+      });
     }
-  }, [faviconUrl, cssLoading, logoLoading]); // Re-run whenever favicon URL changes
+  }, [faviconUrl, shouldShowFavicon, logoComponentVisible]); // Re-run whenever favicon URL or visibility changes
   
   // ADDITIONAL: Listen to route changes and force favicon update
   // This handles lazy-loaded routes and async component mounting
+  // 🔧 FIX: Only update if favicon has actually changed to prevent redundant DOM operations
   useLayoutEffect(() => {
     console.log('🚦 [WhiteLabelHelmet] Route change effect TRIGGERED:', {
       pathname: location.pathname,
-      cssLoading,
-      logoLoading,
+      shouldShowFavicon,
       faviconUrl,
+      logoComponentVisible,
       timestamp: new Date().toISOString()
     });
     
-    if (!cssLoading && !logoLoading && faviconUrl) {
+    if (shouldShowFavicon && faviconUrl) {
       // Force immediate update on route change
       const existingLinks = document.querySelectorAll('link[rel*="icon"]');
       const needsUpdate = !existingLinks.length || 
@@ -240,48 +306,64 @@ const WhiteLabelHelmet = () => {
       if (needsUpdate) {
         console.log('🔄 [WhiteLabelHelmet] Route change - updating favicon...');
         
-        existingLinks.forEach(link => {
-          console.log('🗑️ [WhiteLabelHelmet] (Route) Removing link:', link.href);
-          link.remove();
-        });
-        
-        const createLink = (rel, type) => {
-          const link = document.createElement('link');
-          link.rel = rel;
-          if (type) link.type = type;
-          link.href = faviconUrl;
-          document.head.appendChild(link);
-          console.log('➕ [WhiteLabelHelmet] (Route) Added link:', rel, faviconUrl);
-        };
-        
-        createLink('icon', 'image/png');
-        createLink('shortcut icon', 'image/png');
-        createLink('apple-touch-icon');
-        
-        console.log('✅ [WhiteLabelHelmet] Route change favicon update COMPLETE:', {
-          pathname: location.pathname,
-          faviconUrl,
-          timestamp: new Date().toISOString()
-        });
+        // 🔧 FIX: Add timeout to prevent conflict with main favicon update effect
+        setTimeout(() => {
+          const currentLinks = document.querySelectorAll('link[rel*="icon"]');
+          const stillNeedsUpdate = !currentLinks.length || 
+                                  Array.from(currentLinks).every(link => link.href !== faviconUrl);
+          
+          if (stillNeedsUpdate) {
+            currentLinks.forEach(link => {
+              console.log('🗑️ [WhiteLabelHelmet] (Route) Removing link:', link.href);
+              link.remove();
+            });
+            
+            const createLink = (rel, type) => {
+              const link = document.createElement('link');
+              link.rel = rel;
+              if (type) link.type = type;
+              link.href = faviconUrl;
+              document.head.appendChild(link);
+              console.log('➕ [WhiteLabelHelmet] (Route) Added link:', rel, faviconUrl);
+            };
+            
+            createLink('icon', 'image/png');
+            createLink('shortcut icon', 'image/png');
+            createLink('apple-touch-icon');
+            
+            console.log('✅ [WhiteLabelHelmet] Route change favicon update COMPLETE:', {
+              pathname: location.pathname,
+              faviconUrl,
+              timestamp: new Date().toISOString()
+            });
+          } else {
+            console.log('⏭️ [WhiteLabelHelmet] Route change - favicon already updated by main effect');
+          }
+        }, 100);
       } else {
         console.log('⏭️ [WhiteLabelHelmet] Route change - favicon already correct, skipping update');
       }
     }
-  }, [location.pathname, faviconUrl, cssLoading, logoLoading]); // Re-run on route change
+  }, [location.pathname, faviconUrl, shouldShowFavicon, logoComponentVisible]); // Re-run on route change
   
   // CRITICAL: MutationObserver to watch for other Helmet components trying to override
   // This prevents individual page Helmets from resetting the favicon
+  // 🔧 FIX: Add throttling to prevent infinite loops and browser freeze
   useEffect(() => {
     console.log('👁️ [WhiteLabelHelmet] MutationObserver setup:', {
-      cssLoading,
-      logoLoading,
+      shouldShowFavicon,
       faviconUrl,
-      willObserve: !cssLoading && !logoLoading && !!faviconUrl,
+      logoComponentVisible,
+      willObserve: shouldShowFavicon && !!faviconUrl,
       timestamp: new Date().toISOString()
     });
     
-    if (!cssLoading && !logoLoading && faviconUrl) {
+    if (shouldShowFavicon && faviconUrl) {
+      let isRestoring = false; // 🔧 FIX: Prevent infinite loops
+      
       const observer = new MutationObserver((mutations) => {
+        if (isRestoring) return; // 🔧 FIX: Skip if already restoring
+        
         mutations.forEach((mutation) => {
           if (mutation.type === 'childList') {
             mutation.removedNodes.forEach((node) => {
@@ -298,20 +380,31 @@ const WhiteLabelHelmet = () => {
                   timestamp: new Date().toISOString()
                 });
                 
-                const createLink = (rel, type) => {
-                  const link = document.createElement('link');
-                  link.rel = rel;
-                  if (type) link.type = type;
-                  link.href = faviconUrl;
-                  document.head.appendChild(link);
-                  console.log('🔄 [WhiteLabelHelmet] (Observer) Restored link:', rel, faviconUrl);
-                };
-                
-                createLink('icon', 'image/png');
-                createLink('shortcut icon', 'image/png');
-                createLink('apple-touch-icon');
-                
-                console.log('✅ [WhiteLabelHelmet] (Observer) Favicon restored successfully');
+                // 🔧 FIX: Use timeout and flag to prevent rapid restoration cycles
+                if (!isRestoring) {
+                  isRestoring = true;
+                  setTimeout(() => {
+                    const createLink = (rel, type) => {
+                      const link = document.createElement('link');
+                      link.rel = rel;
+                      if (type) link.type = type;
+                      link.href = faviconUrl;
+                      document.head.appendChild(link);
+                      console.log('🔄 [WhiteLabelHelmet] (Observer) Restored link:', rel, faviconUrl);
+                    };
+                    
+                    createLink('icon', 'image/png');
+                    createLink('shortcut icon', 'image/png');
+                    createLink('apple-touch-icon');
+                    
+                    console.log('✅ [WhiteLabelHelmet] (Observer) Favicon restored successfully');
+                    
+                    // Reset flag after restoration
+                    setTimeout(() => {
+                      isRestoring = false;
+                    }, 200);
+                  }, 100);
+                }
               }
             });
           }
@@ -330,7 +423,7 @@ const WhiteLabelHelmet = () => {
         console.log('🛑 [WhiteLabelHelmet] MutationObserver DISCONNECTED');
       };
     }
-  }, [faviconUrl, cssLoading, logoLoading]);
+  }, [faviconUrl, shouldShowFavicon, logoComponentVisible]);
   
   // Debug logging (same pattern as RightSection)
   useEffect(() => {
@@ -342,21 +435,27 @@ const WhiteLabelHelmet = () => {
         logoUrl: logoUrl || 'default favicon',
         finalTitle: pageTitle,
         faviconUrl,
+        shouldShowFavicon,
+        logoComponentVisible,
         usingCustomBranding: !!brandingName && !!logoUrl,
         timestamp: new Date().toISOString()
       });
     }
-  }, [cssLoading, logoLoading, brandingName, logoUrl, isHostBuddyDomain, pageTitle, faviconUrl, pageName]);
+  }, [cssLoading, logoLoading, brandingName, logoUrl, isHostBuddyDomain, pageTitle, faviconUrl, pageName, shouldShowFavicon, logoComponentVisible]);
   
   return (
     <Helmet>
       {/* Dynamic Page Title - Format: "PageName - BrandName" */}
       <title>{pageTitle}</title>
       
-      {/* Dynamic Favicon - uses SAME logo as RightSection inbox */}
-      <link rel="icon" type="image/png" href={faviconUrl} />
-      <link rel="shortcut icon" type="image/png" href={faviconUrl} />
-      <link rel="apple-touch-icon" href={faviconUrl} />
+      {/* Dynamic Favicon - only render if shouldShowFavicon is true */}
+      {shouldShowFavicon && faviconUrl && (
+        <>
+          <link rel="icon" type="image/png" href={faviconUrl} />
+          <link rel="shortcut icon" type="image/png" href={faviconUrl} />
+          <link rel="apple-touch-icon" href={faviconUrl} />
+        </>
+      )}
       
       {/* Meta tags for branding */}
       <meta name="application-name" content={finalBrandName} />

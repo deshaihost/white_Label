@@ -112,8 +112,20 @@ const LogoNavComponent = ({ type, colour, onlyIcon }) => {
         isHostBuddyDomain,
         timestamp: new Date().toISOString()
       });
+      
+      // Dispatch event to notify WhiteLabelHelmet that logo is visible
+      const event = new CustomEvent('logoComponentVisible', {
+        detail: { isHostBuddyDomain, logoUrl: logoSrc }
+      });
+      document.dispatchEvent(event);
+    } else if (!shouldShowLogo || loading) {
+      // Logo is hidden or loading
+      const event = new CustomEvent('logoComponentHidden', {
+        detail: { isHostBuddyDomain }
+      });
+      document.dispatchEvent(event);
     }
-  }, [imageLoaded, loading, shouldShowLogo, isHostBuddyDomain]);
+  }, [imageLoaded, loading, shouldShowLogo, isHostBuddyDomain, logoSrc]);
   
   // If we're on white label domain and still loading/retrying, show skeleton only
   if (!isHostBuddyDomain && (loading || isRetrying || !shouldShowLogo)) {
