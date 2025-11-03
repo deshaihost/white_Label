@@ -45,7 +45,8 @@ export const createDomainMapping = async (data) => {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
       // Request was made but no response received
-      errorMessage = 'No response from server. Please check your connection.';
+      console.error('Response content:', error.request);
+      errorMessage = 'No response from server. Please check your connection. (POST domain mapping)';
     } else {
       // Error setting up the request
       errorMessage = error.message || errorMessage;
@@ -87,7 +88,7 @@ export const getDomains = async () => {
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
-      errorMessage = 'No response from server. Please check your connection.';
+      errorMessage = 'No response from server. Please check your connection. (GET domains)';
     } else {
       errorMessage = error.message || errorMessage;
     }
@@ -101,8 +102,56 @@ export const getDomains = async () => {
 };
 
 /**
- * Upload company logos for white label configuration
- * @param {Object} data - Upload data
+ * Get logo for white label domain
+ * @param {Object} data - Request body
+ * @param {string} data.domain - Domain name
+ * @returns {Promise} API response
+ */
+export const getLogo = async (data) => {
+  try {
+    console.log('Getting logo for domain:', data.domain);
+
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/get_logo`,
+      {
+        domain: data.domain
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log('Get Logo Response:', response.data);
+
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    console.error('Get Logo API Error:', error);
+    
+    let errorMessage = 'Failed to get logo';
+    
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+    } else if (error.request) {
+      errorMessage = 'No response from server. Please check your connection. (POST get logo)';
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+    
+    return {
+      success: false,
+      error: errorMessage
+    };
+  }
+};
+
+/**
+ * Upload company logo
+ * @param {Object} data - Request body
  * @param {string} data.domain - Domain name
  * @param {File} data.logo - Logo file
  * @param {File} data.full_logo - Full logo file
@@ -148,7 +197,7 @@ export const uploadCompanyLogo = async (data) => {
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
-      errorMessage = 'No response from server. Please check your connection.';
+      errorMessage = 'No response from server. Please check your connection. (POST upload logo)';
     } else {
       errorMessage = error.message || errorMessage;
     }
@@ -198,7 +247,7 @@ export const updateDashboardColor = async (data) => {
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
-      errorMessage = 'No response from server. Please check your connection.';
+      errorMessage = 'No response from server. Please check your connection. (POST dashboard color)';
     } else {
       errorMessage = error.message || errorMessage;
     }
@@ -254,7 +303,68 @@ export const getCssConfig = async (data) => {
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
-      errorMessage = 'No response from server. Please check your connection.';
+      errorMessage = 'No response from server. Please check your connection. (POST get CSS)';
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+    
+    return {
+      success: false,
+      error: errorMessage,
+      data: null
+    };
+  }
+};
+
+/**
+ * Save CSS configuration for white label
+ * @param {Object} data - Request body
+ * @param {string} data.domain - Domain name
+ * @param {string} data.key - Authentication key for the domain
+ * @param {Object} data.css_properties - CSS properties object with nested structure
+ * @returns {Promise} API response
+ */
+export const saveCssConfig = async (data) => {
+  try {
+    console.log('Saving CSS config for domain:', data.domain);
+
+    // Get the auth token from session
+    const token = getActiveToken();
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    
+    // Add Authorization header if token exists
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/css`,
+      {
+        domain: data.domain,
+        key: data.key,
+        css_properties: data.css_properties,
+        dark_mode_css_properties: data.dark_mode_css_properties
+      },
+      { headers }
+    );
+
+    console.log('Save CSS Config Response:', response.data);
+
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    console.error('Save CSS Config API Error:', error.response?.data || error.message);
+    
+    let errorMessage = 'Failed to save CSS configuration';
+    
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+    } else if (error.request) {
+      errorMessage = 'No response from server. Please check your connection. (POST save CSS)';
     } else {
       errorMessage = error.message || errorMessage;
     }
@@ -312,7 +422,7 @@ export const setFeatures = async (data) => {
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
     } else if (error.request) {
-      errorMessage = 'No response from server. Please check your connection.';
+      errorMessage = 'No response from server. Please check your connection. (POST set features)';
     } else {
       errorMessage = error.message || errorMessage;
     }

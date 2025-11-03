@@ -74,108 +74,101 @@ const SettingIndex = () => {
   }, [ApiUserData]);
 
   return (
-    <div className="account-main">
+    <>
       {/* REMOVED: WhiteLabelHelmet handles title/favicon globally
       <Helmet>
         <title>Settings - HostBuddy AI</title>
       </Helmet>
       */}
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12 col-xl-12 col-xxl-12">
-            <div className="text-white blur-background-top-right">
-              <div className="setting_tab_title">
-                {/* SettingSideBarIndex component rendering has been disabled 
-                <SettingSideBarIndex interFaceTypes={interFaceTypes} changeHndl={setInterFaceSettings} activeTab={interFaceSettings} isAdmin={isAdmin}/>
-                */}
-                {/* <div style={{ marginTop: "20px", textAlign: "center" }}>
-                  <Link to="/dashboard" className="text-link">
-                    &lt; Dashboard
-                  </Link>
-                </div> */}
-              </div>
-              <div 
-                className="setting_tab_data p-3" 
-                style={{ 
-                  borderRadius: "20px",
-                  background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117'
-                }}
-              >
-                <div className="setting_tab_data_inner">
-                  {interFaceTypes?.account === interFaceSettings && (
-                    <>
-                      <div className="account-page-header">
-                        <h1 style={{ 
-                          color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
-                          fontSize: '28px', 
-                          fontFamily: "'DM Sans', sans-serif", 
-                          fontWeight: '700', 
-                          fontVariationSettings: "'opsz' 14", 
-                          marginBottom: '8px' 
-                        }}>
-                          Account Settings
-                        </h1>
-                        <p style={{ 
-                          color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
-                          fontSize: '14px', 
-                          fontFamily: "'DM Sans', sans-serif", 
-                          fontWeight: '400', 
-                          fontVariationSettings: "'opsz' 14", 
-                          marginBottom: '40px' 
-                        }}>
-                          Manage your personal information, location, and account security
-                        </p>
-                      </div>
-                      <UserInformationSection ApiUserData={userData} refreshUserData={refreshUserData} />
-                      <AccountRegionSection ApiUserData={userData} refreshUserData={refreshUserData} />
-                      <PMSSettings ApiUserData={userData} />
-                      <DangerZone />
-                    </>
-                  )}
-                  {interFaceTypes?.contact === interFaceSettings && (
-                    <AccountContactSection />
-                  )}
-                  {interFaceTypes?.notifications === interFaceSettings && (
-                    <AccountNotificationSection />
-                  )}
-                  {(interFaceSettings === "ai-preferences" || interFaceSettings === "conversation-preferences") && (
-                    <AdvancedSettingsIndex />
-                  )}
-                  {interFaceTypes?.upsells === interFaceSettings && (
-                    <UpsellsIndex />
-                  )}
-                  {interFaceTypes?.integrations === interFaceSettings && (
-                    <IntegrationsIndex ApiUserData={userData} />
-                  )}
-                  {interFaceTypes?.subscription === interFaceSettings && (
-                    <SubscriptionIndex />
-                  )}
-                  {interFaceTypes?.users === interFaceSettings && (
-                    <UsersTab userData={userData}/>
-                  )}
-                  {interFaceTypes?.messagingChannels === interFaceSettings && (
-                    <MessagingChannels ApiUserData={userData} refreshUserData={refreshUserData} subsec={subsec}/>
-                  )}
-                  {interFaceTypes?.actionItems === interFaceSettings && (
-                    <ActionitemsSettings />
-                  )}
-                  {interFaceTypes?.whiteLabelRegistration === interFaceSettings && (
-                    <RegistrationPageNewDesign />
-                  )}
-                  {interFaceTypes?.whiteLabelBranding === interFaceSettings && (
-                    <WhiteLabelBranding />
-                  )}
-                  {interFaceTypes?.whiteLabelFeatureSelection === interFaceSettings && (
-                    <WhiteLabelFeatureSelection />
-                  )}
-                </div>
+        <div className="text-white blur-background-top-right">
+          <div className="setting_tab_title">
+            {/* SettingSideBarIndex component rendering has been disabled 
+            <SettingSideBarIndex interFaceTypes={interFaceTypes} changeHndl={setInterFaceSettings} activeTab={interFaceSettings} isAdmin={isAdmin}/>
+            */}
+            {/* <div style={{ marginTop: "20px", textAlign: "center" }}>
+              <Link to="/dashboard" className="text-link">
+                &lt; Dashboard
+              </Link>
+            </div> */}
+          </div>
+          <div 
+            className="" 
+            style={{ background: !cssLoading ? (cssConfig?.css_data?.background?.primary || '#0F1117') : '#0F1117' }}
+          >
+            <div className={['account', 'ai-preferences', 'conversation-preferences', 'action-items', 'integrations', 'users', 'subscription'].includes(interFaceSettings) ? 'x-padding-70px' : ''}>
+              <div className={['account', 'contact', 'notifications', 'action-items', 'integrations', 'users', 'subscription'].includes(interFaceSettings) ? 'y-padding-50px' : ''}>
+                {interFaceTypes?.account === interFaceSettings && (
+                  <>
+                    <div className="account-page-header">
+                      <h1 style={{ 
+                        color: !cssLoading && cssConfig?.css_data?.text?.primary ? cssConfig.css_data.text.primary : 'white', 
+                        fontSize: '28px', 
+                        fontFamily: "'DM Sans', sans-serif", 
+                        fontWeight: '700', 
+                        fontVariationSettings: "'opsz' 14", 
+                        marginBottom: '8px' 
+                      }}>
+                        Account Settings
+                      </h1>
+                      <p style={{ 
+                        color: !cssLoading && cssConfig?.css_data?.text?.secondary ? cssConfig.css_data.text.secondary : '#a6a9b2', 
+                        fontSize: '14px', 
+                        fontFamily: "'DM Sans', sans-serif", 
+                        fontWeight: '400', 
+                        fontVariationSettings: "'opsz' 14", 
+                        marginBottom: '40px' 
+                      }}>
+                        Manage your personal information, location, and account security
+                      </p>
+                    </div>
+                    <UserInformationSection ApiUserData={userData} refreshUserData={refreshUserData} />
+                    <AccountRegionSection ApiUserData={userData} refreshUserData={refreshUserData} />
+                    <PMSSettings ApiUserData={userData} />
+                    <DangerZone />
+                  </>
+                )}
+                {interFaceTypes?.contact === interFaceSettings && (
+                  <AccountContactSection />
+                )}
+                {interFaceTypes?.notifications === interFaceSettings && (
+                  <AccountNotificationSection />
+                )}
+                {(interFaceSettings === "ai-preferences" || interFaceSettings === "conversation-preferences") && (
+                  <AdvancedSettingsIndex />
+                )}
+                {interFaceTypes?.upsells === interFaceSettings && (
+                  <UpsellsIndex />
+                )}
+                {interFaceTypes?.integrations === interFaceSettings && (
+                  <IntegrationsIndex ApiUserData={userData} />
+                )}
+                {interFaceTypes?.subscription === interFaceSettings && (
+                  <SubscriptionIndex />
+                )}
+                {interFaceTypes?.users === interFaceSettings && (
+                  <UsersTab userData={userData}/>
+                )}
+                {interFaceTypes?.messagingChannels === interFaceSettings && (
+                  <MessagingChannels ApiUserData={userData} refreshUserData={refreshUserData} subsec={subsec}/>
+                )}
+                {interFaceTypes?.actionItems === interFaceSettings && (
+                  <ActionitemsSettings />
+                )}
+                {interFaceTypes?.whiteLabelRegistration === interFaceSettings && (
+                  <RegistrationPageNewDesign />
+                )}
+                {interFaceTypes?.whiteLabelBranding === interFaceSettings && (
+                  <WhiteLabelBranding />
+                )}
+                {interFaceTypes?.whiteLabelFeatureSelection === interFaceSettings && (
+                  <WhiteLabelFeatureSelection />
+                )}
               </div>
             </div>
           </div>
         </div>
-      </div>
       <HostDaddy />
-    </div>
+    </>
   );
 };
 
