@@ -22,20 +22,32 @@
     </style>
     <title>Loading...</title>
 
-    <!-- Early Favicon Preload Script - Prevents default favicon flash -->
+    <!-- Early Favicon Setup - ZERO FLASH even on first visit -->
     <script>
       (function() {
+        var hostname = window.location.hostname;
+        var isHostBuddy = hostname === 'hostbuddy.ai' || hostname === 'www.hostbuddy.ai';
+        
+        // STEP 1: Immediately set a favicon to prevent browser from loading default
+        // This runs synchronously BEFORE any default favicon can load
+        var initialLink = document.createElement('link');
+        initialLink.rel = 'icon';
+        initialLink.id = 'dynamic-favicon';
+        
+        if (isHostBuddy) {
+          // HostBuddy domain - set default favicon immediately
+          initialLink.href = '/favicon-hostbuddy.ico';
+          document.head.appendChild(initialLink);
+          return; // Done for HostBuddy
+        }
+        
+        // For white-label domains: Set transparent placeholder immediately
+        // This prevents ANY default favicon from showing
+        initialLink.href = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>';
+        document.head.appendChild(initialLink);
+        
+        // STEP 2: Try to load from cache and replace placeholder
         try {
-          // Check if domain is hostbuddy.ai (use default favicon)
-          var hostname = window.location.hostname;
-          var isHostBuddy = hostname === 'hostbuddy.ai' || hostname === 'www.hostbuddy.ai';
-          
-          if (isHostBuddy) {
-            // HostBuddy domain - use default favicon
-            return;
-          }
-          
-          // For white-label domains, check IndexedDB cache for logo
           var dbName = 'WhiteLabelCache';
           var storeName = 'logos';
           var cacheKey = 'logo_' + hostname;
@@ -45,6 +57,7 @@
           request.onsuccess = function(event) {
             var db = event.target.result;
             if (!db.objectStoreNames.contains(storeName)) {
+              console.log('⚠️ [EARLY FAVICON] No cache store, waiting for React Helmet');
               return;
             }
             
@@ -59,22 +72,31 @@
                 var age = now - cached.timestamp;
                 var maxAge = 60 * 60 * 1000; // 1 hour
                 
-                // If cache is valid, set favicon immediately
                 if (age < maxAge) {
-                  var link = document.createElement('link');
-                  link.rel = 'icon';
-                  link.type = 'image/png';
-                  link.href = cached.data.logo;
-                  document.head.appendChild(link);
-                  
-                  console.log('✅ [EARLY FAVICON] Loaded from cache:', cached.data.logo);
+                  // Update the favicon with cached logo
+                  var faviconLink = document.getElementById('dynamic-favicon');
+                  if (faviconLink) {
+                    faviconLink.href = cached.data.logo;
+                    console.log('✅ [EARLY FAVICON] Loaded from cache:', cached.data.logo);
+                  }
+                } else {
+                  console.log('⚠️ [EARLY FAVICON] Cache expired, waiting for React Helmet');
                 }
+              } else {
+                console.log('⚠️ [EARLY FAVICON] No cached logo, waiting for React Helmet');
               }
             };
+            
+            getRequest.onerror = function() {
+              console.log('⚠️ [EARLY FAVICON] Cache read error, waiting for React Helmet');
+            };
+          };
+          
+          request.onerror = function() {
+            console.log('⚠️ [EARLY FAVICON] IndexedDB error, waiting for React Helmet');
           };
         } catch (e) {
-          // Silently fail - React Helmet will handle it
-          console.log('⚠️ [EARLY FAVICON] Failed to load from cache, React Helmet will handle it');
+          console.log('⚠️ [EARLY FAVICON] Exception:', e.message);
         }
       })();
     </script>

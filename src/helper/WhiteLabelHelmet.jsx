@@ -99,7 +99,7 @@ const WhiteLabelHelmet = () => {
   
   // Fallback values - ALWAYS have defaults
   const defaultBrandName = "HostBuddy AI";
-  const defaultFavicon = "/favicon.ico";
+  const defaultFavicon = "/favicon-hostbuddy.ico"; // Renamed to prevent auto-loading
   
   // DOMAIN-BASED LOGIC:
   // -------------------
