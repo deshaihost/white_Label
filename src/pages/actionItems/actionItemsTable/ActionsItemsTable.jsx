@@ -16,6 +16,8 @@ import ActionItemsUpgrade from '../ActionItemsUpgrade/ActionItemsUpgrade';
 import { getSubscriptionStatus } from '../../../helper/Authorized';
 import { fetchCategoriesFromAPI } from "../../../component/multiSelect/actionItemCategoriesMultiSelect";
 import { useWhiteLabelCss } from "../../../helper/WhiteLabelCssContext";
+import MultiSelect from "../../../component/multiSelect/multiSelect";
+import multiSelectBaseStyles from "../../../component/multiSelect/selectStyles";
 
 const ActionsItemsTable = () => {
 
@@ -301,6 +303,43 @@ const ActionsItemsTable = () => {
     };
   };
 
+  // Create dynamic styles for MultiSelect component
+  const getMultiSelectDynamicStyles = () => {
+    const dropdownBgColor = cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117');
+    const hoverColor = cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e');
+    const borderPrimaryColor = cssLoading ? '#013280' : (cssConfig?.css_data?.borders?.primary || '#013280');
+    const placeholderColor = cssLoading ? '#676A73' : (cssConfig?.css_data?.text?.placeholder || '#676A73');
+    
+    // Use the imported base styles from the multiSelect selectStyles
+    const baseStyles = multiSelectBaseStyles('100%');
+    
+    return {
+      ...baseStyles,
+      control: (provided, state) => ({
+        ...baseStyles.control(provided, state),
+        backgroundColor: dropdownBgColor,
+        border: `1px solid ${state.isFocused ? '#3e88f7' : borderPrimaryColor}`,
+      }),
+      menu: (provided) => ({
+        ...baseStyles.menu(provided),
+        backgroundColor: dropdownBgColor,
+        border: `2px solid ${borderPrimaryColor}`,
+      }),
+      menuList: (provided) => ({
+        ...baseStyles.menuList(provided),
+        backgroundColor: dropdownBgColor,
+      }),
+      option: (provided, state) => ({
+        ...baseStyles.option(provided, state),
+        backgroundColor: state.isFocused ? hoverColor : dropdownBgColor,
+      }),
+      placeholder: (provided) => ({
+        ...baseStyles.placeholder(provided),
+        color: placeholderColor,
+      })
+    };
+  };
+
   return (
     <>
       <Container>
@@ -318,17 +357,17 @@ const ActionsItemsTable = () => {
             <div className="action-select">
 
               {!isMountPlan && (
-                <div className="item-select" style={{ width: "30%" }}>
-                  <Select 
-                    className="custom-select property_Custom_Select" 
-                    isMulti 
-                    options={categories} // Use locally fetched categories instead of categoryOptions
-                    value={selectedCategories} 
-                    styles={getDynamicStyles()} 
-                    onChange={handleCategoryChange} 
-                    placeholder="All Categories" 
-                    closeMenuOnSelect={false}
-                    isLoading={categoriesLoading} // Show loading state
+                <div className="item-select" style={{ width: "auto", minWidth: "180px" }}>
+                  <MultiSelect
+                    options={categories}
+                    selectedOptions={selectedCategories}
+                    setSelectedOptions={handleCategoryChange}
+                    placeholder="All Categories"
+                    selectAllText="Select all categories"
+                    width="100%"
+                    customSelectStyles={getMultiSelectDynamicStyles()}
+                    dropdownBgColor={cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117')}
+                    hoverBgColor={cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e')}
                   />
                 </div>
               )}
@@ -349,8 +388,18 @@ const ActionsItemsTable = () => {
                 />
               </div>
 
-              <div className="item-select" style={{ width: "30%" }}>
-                <Select className="custom-select property_Custom_Select" isMulti options={propertyOptions} value={selectedProperties} styles={getDynamicStyles()} onChange={handlePropertyChange} placeholder="All Properties" closeMenuOnSelect={false} />
+              <div className="item-select" style={{ width: "auto", minWidth: "180px" }}>
+                <MultiSelect
+                  options={propertyOptions}
+                  selectedOptions={selectedProperties}
+                  setSelectedOptions={handlePropertyChange}
+                  placeholder="All Properties"
+                  selectAllText="Select all properties"
+                  width="100%"
+                  customSelectStyles={getMultiSelectDynamicStyles()}
+                  dropdownBgColor={cssLoading ? '#0F1117' : (cssConfig?.css_data?.background?.dropdown || '#0F1117')}
+                  hoverBgColor={cssLoading ? '#01255e' : (cssConfig?.css_data?.background?.hover || '#01255e')}
+                />
               </div>
 
             </div>

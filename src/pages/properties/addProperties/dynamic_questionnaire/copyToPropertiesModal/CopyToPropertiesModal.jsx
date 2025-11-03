@@ -6,6 +6,7 @@ import "./CopyToPropertiesModel.css"
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
 import Loader, { BoxLoader } from "../../../../../helper/Loader";
+import MultiSelect from "../../../../../component/multiSelect/multiSelect";
 
 // TODO: convert liveHideForReservationsData into whatever format it needs to be for the questionnaire, both for regular questions and checkbox_group. For now, that data just doesn't copy if it isn't saved first
 const CopyToPropertiesModal = ({ show, setShow, question_obj, sectionName, subSectionName, checkbox_group_option, liveTextData, liveHideForReservationsData }) => {
@@ -82,13 +83,15 @@ const CopyToPropertiesModal = ({ show, setShow, question_obj, sectionName, subSe
             <div class="row py-2">
               <div class="col">
                 <label className="fw-normal pb-2">Choose Properties</label>
-                <Select className="custom-select property_Custom_Select" isMulti options={allPropertyNameList} value={selectedProperties} styles={colourStyles} onChange={handleDaySelect} closeMenuOnSelect={false} placeholder="--Select Properties--"/>
+                <MultiSelect
+                  options={allPropertyNameList}
+                  selectedOptions={selectedProperties}
+                  setSelectedOptions={setSelectedProperties}
+                  placeholder="--Select Properties--"
+                  selectAllText="Select All"
+                  width="100%"
+                />
               </div>
-            </div>
-            <div className="select-all-container">
-              <button className="select-btn" onClick={() => { setSelectedProperties(allPropertyNameList); }}>
-                Select All
-              </button>
             </div>
           </div>
 

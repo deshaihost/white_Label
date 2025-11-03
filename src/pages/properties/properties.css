@@ -126,10 +126,21 @@
 }
 
 .properties-tiles-container {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
-    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* When there's only one tile, make it span full width */
+.properties-tiles-container:has(.properties-action-tile:only-child) {
+    grid-template-columns: 1fr;
+}
+
+/* When there's only one tile, give it a dashed border */
+.properties-tiles-container:has(.properties-action-tile:only-child) .properties-action-tile {
+    border-style: dashed;
 }
 
 .properties-action-tile {
@@ -137,7 +148,6 @@
     border: 2px solid var(--white-label-border-primary, #013280);
     border-radius: 16px;
     padding: 32px 24px;
-    width: 350px;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 0 20px rgba(62, 136, 247, 0.15);
@@ -220,19 +230,11 @@
     .properties-title {
         font-size: 28px;
     }
-
-    .properties-action-tile {
-        width: 300px;
-    }
 }
 
 @media only screen and (max-width: 991px) {
     .properties-max-width {
         padding: 0 20px;
-    }
-
-    .properties-action-tile {
-        width: 280px;
     }
 }
 
@@ -257,8 +259,9 @@
         width: 100%;
     }
 
-    .properties-action-tile {
-        width: 100%;
+    /* Stack tiles vertically on mobile */
+    .properties-tiles-container {
+        grid-template-columns: 1fr;
     }
 
     .properties-tabs-section {

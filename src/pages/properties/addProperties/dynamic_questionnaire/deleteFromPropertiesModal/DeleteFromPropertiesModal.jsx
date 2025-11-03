@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 import { Modal } from "react-bootstrap";
-import "../copyToPropertiesModal/CopyToPropertiesModel.css";
+import "./DeleteFromPropertiesModal.css"
 import axios from "axios";
 import ToastHandle from "../../../../../helper/ToastMessage";
-import { BoxLoader } from "../../../../../helper/Loader";
+import Loader, { BoxLoader } from "../../../../../helper/Loader";
+import MultiSelect from "../../../../../component/multiSelect/multiSelect";
 
 const DeleteFromPropertiesModal = ({ show, setShow, sectionName, subSectionName, questionText, currentPropertyName, onDeleteSuccess }) => {
   const store = useSelector((state) => state);
@@ -88,13 +89,15 @@ const DeleteFromPropertiesModal = ({ show, setShow, sectionName, subSectionName,
             <div className="row py-2">
               <div className="col">
                 <label className="fw-normal pb-2">Choose Properties</label>
-                <Select className="custom-select property_Custom_Select" isMulti options={allPropertyNameList} value={selectedProperties} styles={colourStyles} onChange={handlePropertySelect} closeMenuOnSelect={false} placeholder="--Select Properties--"/>
+                <MultiSelect
+                  options={allPropertyNameList}
+                  selectedOptions={selectedProperties}
+                  setSelectedOptions={setSelectedProperties}
+                  placeholder="--Select Properties--"
+                  selectAllText="Select All"
+                  width="100%"
+                />
               </div>
-            </div>
-            <div className="select-all-container">
-              <button className="select-btn" onClick={() => { setSelectedProperties(allPropertyNameList); }}>
-                Select All
-              </button>
             </div>
           </div>
 
