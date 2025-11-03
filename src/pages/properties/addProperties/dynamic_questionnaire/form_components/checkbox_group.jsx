@@ -84,10 +84,16 @@ const CheckboxGroupComponent = ({ question_object, sec_name, subsec_name, q_ind,
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
                 }}
-                onClick={() => {
-                  const checkbox = document.getElementById(`${field_id_prefix}_${option_index}`);
-                  if (checkbox) {
-                    checkbox.click();
+                onClick={(e) => {
+                  // If already checked, open pencil modal instead of deselecting
+                  if (isChecked) {
+                    handlePencilIconClick(sec_name, subsec_name, q_ind, option);
+                  } else {
+                    // If not checked, select it
+                    const checkbox = document.getElementById(`${field_id_prefix}_${option_index}`);
+                    if (checkbox) {
+                      checkbox.click();
+                    }
                   }
                 }}
               >
@@ -98,6 +104,10 @@ const CheckboxGroupComponent = ({ question_object, sec_name, subsec_name, q_ind,
                   checked={isChecked} 
                   id={`${field_id_prefix}_${option_index}`}
                   onChange={(e) => handleCheckboxClick(e, sec_name, subsec_name, q_ind, option_index)}
+                  onClick={(e) => {
+                    // Stop propagation so checkbox can still be clicked to deselect when checked
+                    e.stopPropagation();
+                  }}
                   style={{
                     width: '18px',
                     height: '18px',
@@ -108,7 +118,6 @@ const CheckboxGroupComponent = ({ question_object, sec_name, subsec_name, q_ind,
                 />
                 <label 
                   className="form-check-label" 
-                  htmlFor={`${field_id_prefix}_${option_index}`}
                   style={{ 
                     color: isChecked ? '#fff' : '#a6a9b2',
                     fontSize: '14px',
@@ -116,21 +125,24 @@ const CheckboxGroupComponent = ({ question_object, sec_name, subsec_name, q_ind,
                     cursor: 'pointer',
                     margin: 0,
                     flex: 1,
-                    userSelect: 'none'
+                    userSelect: 'none',
+                    pointerEvents: 'none'
                   }}
                 >
                   {option}
                 </label>
                 {isChecked && (
-                  <PencilIcon 
-                    sec_name={sec_name} 
-                    subsec_name={subsec_name} 
-                    q_ind={q_ind} 
-                    checkbox_group_option={option} 
-                    handlePencilIconClick={handlePencilIconClick} 
-                    someResStageIsSelected={someResStageIsSelected[option_index]} 
-                    extraTextIsAdded={extraTextIsAdded[option_index]} 
-                  />
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <PencilIcon 
+                      sec_name={sec_name} 
+                      subsec_name={subsec_name} 
+                      q_ind={q_ind} 
+                      checkbox_group_option={option} 
+                      handlePencilIconClick={handlePencilIconClick} 
+                      someResStageIsSelected={someResStageIsSelected[option_index]} 
+                      extraTextIsAdded={extraTextIsAdded[option_index]} 
+                    />
+                  </div>
                 )}
               </div>
             );

@@ -31,10 +31,15 @@ const MultiSelect = ({
           fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           fontVariationSettings: "'opsz' 14"
         }}>{displayText}</div>
-        {children}
+        {React.Children.toArray(children).filter(
+          child => child.type !== components.Placeholder && child.type !== components.Input
+        )}
       </components.ValueContainer>
     );
   };
+
+  // Hide the default placeholder component
+  const Placeholder = () => null;
 
   // Custom Option with checkbox
   const Option = (props) => {
@@ -155,6 +160,7 @@ const MultiSelect = ({
             components={{ 
               ValueContainer, 
               MultiValueContainer: () => null,
+              Placeholder,
               Option,
               MenuList
             }}

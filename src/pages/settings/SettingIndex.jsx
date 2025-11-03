@@ -79,12 +79,9 @@ const SettingIndex = () => {
         <title>Settings - HostBuddy AI</title>
       </Helmet>
       <div className="container">
-        <div className="banner-heading" style={{margin:"0"}}>
-          {/* <h2>My HostBuddy</h2> */}
-        </div>
         <div className="row">
           <div className="col-lg-12 col-xl-12 col-xxl-12">
-            <div className="setting_index_tab_grid text-white blur-background-top-right">
+            <div className="text-white blur-background-top-right">
               <div className="setting_tab_title">
                 {/* SettingSideBarIndex component rendering has been disabled 
                 <SettingSideBarIndex interFaceTypes={interFaceTypes} changeHndl={setInterFaceSettings} activeTab={interFaceSettings} isAdmin={isAdmin}/>

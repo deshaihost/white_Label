@@ -13,9 +13,6 @@
   background: #0b2872c4;
   border-radius: 10px;
 }
-.setting_tab_data {
-  padding: 30px 50px;
-}
 .setting_tab_data .form-control {
   padding: 8px 15px !important;
   background-color: #0f1117 !important;

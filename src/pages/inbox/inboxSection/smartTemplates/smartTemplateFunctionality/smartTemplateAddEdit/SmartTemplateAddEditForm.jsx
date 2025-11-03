@@ -85,8 +85,8 @@ const SmartTemplateAddEditForm = ({addEditSmart, addEditClose, handleSaveTemplat
   };
 
   // Handle enable toggle with subscription check
-  const handleEnableToggle = (e) => {
-    const isEnabling = e.target.checked;
+  const handleEnableToggle = () => {
+    const isEnabling = !dataStructure?.enabled;
     
     // Check subscription limits before enabling
     if (!checkSubscriptionLimits(isEnabling)) {
