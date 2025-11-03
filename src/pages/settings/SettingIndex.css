@@ -48,3 +48,14 @@
     width: 100%;
   }
 }
+
+/* Conditional padding classes for settings pages */
+.x-padding-70px {
+  padding-left: 70px;
+  padding-right: 70px;
+}
+
+.y-padding-50px {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
