@@ -2,55 +2,50 @@
  * Script: Add a domain to Vercel and check its status
  * ----------------------------------------------------
  * This script:
- * 1. Adds a domain/subdomain to a Vercel project
+ * 1. Adds a domain/subdomain to a Vercel project via backend API
  * 2. Checks if it was successfully added
  * 3. Reports the current status
  *
  * Requirements:
- * - Browser fetch API (no node-fetch needed for React)
+ * - Backend API endpoints for Vercel operations
+ * - Authentication token
  *
  * Usage:
  * - Import functions and pass domain name dynamically
  */
 
-// ---------------- CONFIGURATION ----------------
-const VERCEL_TOKEN = "qdJmOtq5k289ypVbOoht8Mo9"; // Get from: https://vercel.com/account/tokens
-const TEAM_ID = "team_YFMF8LVQMFSbL1PHOGMYIwYL"; // Found in your Vercel team settings (e.g., team_xxxxx)
-const PROJECT_ID = "prj_9L9S6JjH131BoxO6O6QN0KYvyOEn"; // Found in project settings (e.g., prj_xxxxx)
-// DOMAIN_NAME is now passed as a parameter to functions
+import axios from 'axios';
 
-// ---------------- ADD DOMAIN ----------------
-async function addDomain(domain) {
+// Base URL - using the same environment variable as other parts of the app
+const API_BASE_URL = process.env.REACT_APP_API_ENDPOINT;
+
+// ---------------- INTERNAL API CALL FUNCTIONS ----------------
+
+/**
+ * Add a domain to Vercel via backend API
+ * @param {string} domain - The domain to add
+ * @returns {Promise<Object>} - Result object
+ */
+async function addDomainViaBackend(domain) {
   try {
     console.log(`\n🔄 Adding domain: ${domain}...`);
     
-    const res = await fetch(
-      `https://api.vercel.com/v10/projects/${PROJECT_ID}/domains?teamId=${TEAM_ID}`,
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/vercel/add_domain`,
+      { domain },
       {
-        method: "POST",
         headers: {
-          Authorization: `Bearer ${VERCEL_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: domain,
-        }),
+          'Content-Type': 'application/json',
+        }
       }
     );
 
-    const data = await res.json();
+    const data = response.data;
 
     // Check if domain was added or already exists
-    if (data.error) {
-      if (data.error.code === "domain_already_in_use") {
-        console.log(`\n⚠️  Domain already exists in your project`);
-        return { success: true, alreadyExists: true, data: data.error.domain };
-      } else {
-        console.log(`\n❌ Error adding domain:`);
-        console.log(`   Code: ${data.error.code}`);
-        console.log(`   Message: ${data.error.message}`);
-        return { success: false, error: data.error };
-      }
+    if (data.alreadyExists) {
+      console.log(`\n⚠️  Domain already exists in your project`);
+      return { success: true, alreadyExists: true, data: data.data };
     }
 
     // Domain successfully added
@@ -58,101 +53,81 @@ async function addDomain(domain) {
     return { success: true, alreadyExists: false, data };
   } catch (err) {
     console.error("\n❌ Error adding domain:", err.message);
-    return { success: false, error: err };
+    const errorData = err.response?.data;
+    return { 
+      success: false, 
+      error: errorData?.error || { message: err.message }
+    };
   }
 }
 
-// ---------------- CHECK DOMAIN STATUS ----------------
-async function checkDomainStatus(domain) {
+/**
+ * Check domain status via backend API
+ * @param {string} domain - The domain to check
+ * @returns {Promise<Object>} - Status object
+ */
+async function checkDomainStatusViaBackend(domain) {
   try {
     console.log(`\n🔍 Checking domain status...`);
     
-    const res = await fetch(
-      `https://api.vercel.com/v9/projects/${PROJECT_ID}/domains/${domain}?teamId=${TEAM_ID}`,
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/vercel/check_domain`,
+      { domain },
       {
-        method: "GET",
         headers: {
-          Authorization: `Bearer ${VERCEL_TOKEN}`,
-          "Content-Type": "application/json",
-        },
+          'Content-Type': 'application/json',
+        }
       }
     );
 
-    const data = await res.json();
-
-    if (data.error) {
-      console.log(`\n❌ Domain not found or error occurred`);
-      return { exists: false, error: data.error };
-    }
-
-    return { exists: true, data };
+    const data = response.data;
+    return { exists: true, data: data.data };
   } catch (err) {
+    if (err.response?.status === 404) {
+      console.log(`\n❌ Domain not found`);
+      return { exists: false, error: err.response.data.error };
+    }
     console.error("\n❌ Error checking domain:", err.message);
-    return { exists: false, error: err };
+    return { exists: false, error: { message: err.message } };
   }
 }
 
-// ---------------- CHECK DOMAIN VERIFICATION & DNS CONFIGURATION ----------------
-async function checkDomainVerification(domain) {
+/**
+ * Check domain verification via backend API
+ * @param {string} domain - The domain to check
+ * @returns {Promise<Object>} - Verification object
+ */
+async function checkDomainVerificationViaBackend(domain) {
   try {
     console.log(`\n🔍 Checking domain verification and DNS configuration...`);
     
-    const res = await fetch(
-      `https://api.vercel.com/v9/projects/${PROJECT_ID}/domains/${domain}?teamId=${TEAM_ID}`,
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/vercel/check_verification`,
+      { domain },
       {
-        method: "GET",
         headers: {
-          Authorization: `Bearer ${VERCEL_TOKEN}`,
-          "Content-Type": "application/json",
-        },
+          'Content-Type': 'application/json',
+        }
       }
     );
 
-    const data = await res.json();
-
-    if (data.error) {
-      console.log(`\n❌ Error: ${data.error.message || 'Domain not found'}`);
-      return {
-        success: false,
-        exists: false,
-        verified: false,
-        dnsConfigured: false,
-        working: false,
-        error: data.error
-      };
-    }
-
-    // Note: Vercel API v9 returns 'verified' when domain is added and working
-    // The presence of 'verified: true' means domain is added to project
-    // DNS configuration is implied when domain is verified
-    const verified = data.verified || false;
-    const dnsConfigured = verified; // If verified, DNS is configured
-    const working = verified;
-
+    const data = response.data;
+    
     console.log(`\n🌐 Domain: ${domain}`);
-    console.log(`Verified: ${verified}`);
-    console.log(`Status: ${working ? "✅ Working → Domain is verified and configured" : "⚠️ Not configured"}`);
+    console.log(`Verified: ${data.verified}`);
+    console.log(`Status: ${data.working ? "✅ Working → Domain is verified and configured" : "⚠️ Not configured"}`);
 
-    return {
-      success: true,
-      exists: true,
-      verified: verified,
-      dnsConfigured: dnsConfigured,
-      working: working,
-      cnameVerified: verified, // Set to same as verified for compatibility
-      aRecordsVerified: verified, // Set to same as verified for compatibility
-      data: data
-    };
-
+    return data;
   } catch (err) {
     console.error("\n❌ Error checking domain verification:", err.message);
+    const errorData = err.response?.data;
     return {
       success: false,
       exists: false,
       verified: false,
       dnsConfigured: false,
       working: false,
-      error: err
+      error: errorData?.error || { message: err.message }
     };
   }
 }
@@ -208,7 +183,7 @@ export async function checkAndAddDomain(domainName) {
     console.log(`${"=".repeat(50)}`);
 
     // Step 1: Check if domain already exists
-    const statusResult = await checkDomainStatus(domainName);
+    const statusResult = await checkDomainStatusViaBackend(domainName);
 
     if (statusResult.exists) {
       console.log(`\n✅ Domain already added to Vercel`);
@@ -224,7 +199,7 @@ export async function checkAndAddDomain(domainName) {
 
     // Step 2: Domain doesn't exist, try to add it
     console.log(`\n📝 Domain not found. Attempting to add...`);
-    const addResult = await addDomain(domainName);
+    const addResult = await addDomainViaBackend(domainName);
 
     if (!addResult.success) {
       return {
@@ -237,7 +212,7 @@ export async function checkAndAddDomain(domainName) {
     }
 
     // Step 3: Check status after adding
-    const newStatusResult = await checkDomainStatus(domainName);
+    const newStatusResult = await checkDomainStatusViaBackend(domainName);
     displayStatus(newStatusResult);
 
     console.log(`\n${"=".repeat(50)}`);
@@ -271,7 +246,7 @@ export async function checkAndAddDomain(domainName) {
  */
 export async function checkDomainOnly(domainName) {
   try {
-    const statusResult = await checkDomainStatus(domainName);
+    const statusResult = await checkDomainStatusViaBackend(domainName);
     
     if (statusResult.exists) {
       const verified = statusResult.data.verified || false;
@@ -315,5 +290,5 @@ export async function checkDomainOnly(domainName) {
  * @returns {Promise<Object>} - Detailed verification status
  */
 export async function checkDomainVerificationStatus(domainName) {
-  return await checkDomainVerification(domainName);
+  return await checkDomainVerificationViaBackend(domainName);
 }
