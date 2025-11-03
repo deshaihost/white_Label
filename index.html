@@ -22,6 +22,63 @@
     </style>
     <title>Loading...</title>
 
+    <!-- Early Favicon Preload Script - Prevents default favicon flash -->
+    <script>
+      (function() {
+        try {
+          // Check if domain is hostbuddy.ai (use default favicon)
+          var hostname = window.location.hostname;
+          var isHostBuddy = hostname === 'hostbuddy.ai' || hostname === 'www.hostbuddy.ai';
+          
+          if (isHostBuddy) {
+            // HostBuddy domain - use default favicon
+            return;
+          }
+          
+          // For white-label domains, check IndexedDB cache for logo
+          var dbName = 'WhiteLabelCache';
+          var storeName = 'logos';
+          var cacheKey = 'logo_' + hostname;
+          
+          var request = indexedDB.open(dbName, 1);
+          
+          request.onsuccess = function(event) {
+            var db = event.target.result;
+            if (!db.objectStoreNames.contains(storeName)) {
+              return;
+            }
+            
+            var transaction = db.transaction([storeName], 'readonly');
+            var objectStore = transaction.objectStore(storeName);
+            var getRequest = objectStore.get(cacheKey);
+            
+            getRequest.onsuccess = function() {
+              var cached = getRequest.result;
+              if (cached && cached.data && cached.data.logo) {
+                var now = Date.now();
+                var age = now - cached.timestamp;
+                var maxAge = 60 * 60 * 1000; // 1 hour
+                
+                // If cache is valid, set favicon immediately
+                if (age < maxAge) {
+                  var link = document.createElement('link');
+                  link.rel = 'icon';
+                  link.type = 'image/png';
+                  link.href = cached.data.logo;
+                  document.head.appendChild(link);
+                  
+                  console.log('✅ [EARLY FAVICON] Loaded from cache:', cached.data.logo);
+                }
+              }
+            };
+          };
+        } catch (e) {
+          // Silently fail - React Helmet will handle it
+          console.log('⚠️ [EARLY FAVICON] Failed to load from cache, React Helmet will handle it');
+        }
+      })();
+    </script>
+
     <!-- Google Ads Event snippet, to measure & report actions. -->
     <script>
       function gtag_report_conversion(action_type) {
