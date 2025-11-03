@@ -304,8 +304,8 @@ function DashboardPreview({ brandColors }: { brandColors: BrandColors }) {
       {/* Metrics Cards */}
       <div className="grid grid-cols-3 gap-5 mb-6">
         {[
-          { title: 'Guest Messages Responded (Total)', value: '513', stats: [['By Host:', '513'], ['By HostBuddy:', '2042']] },
-          { title: 'Average Response Times (Minutes)', value: '0.5', stats: [['By HostBuddy:', '0.5'], ['By Host:', '18.1']] },
+          { title: 'Guest Messages Responded (Total)', value: '513', stats: [['By Host:', '513'], [`By ${brandingName}:`, '2042']] },
+          { title: 'Average Response Times (Minutes)', value: '0.5', stats: [[`By ${brandingName}:`, '0.5'], ['By Host:', '18.1']] },
           { title: 'Guest Sentiment (Percent)', value: '33.2%', stats: [['Positive:', '33.2%'], ['Neutral:', '58.6%'], ['Negative:', '7.0%']] }
         ].map((card, idx) => (
           <div 
@@ -1238,9 +1238,10 @@ type ConfigSection = 'branding' | 'feature-selection' | 'domain-configuration';
 
 interface WhiteLabelProps {
   view?: ConfigSection;
+  brandingName?: string;
 }
 
-export default function WhiteLabel({ view = 'branding' }: WhiteLabelProps) {
+export default function WhiteLabel({ view = 'branding', brandingName = "HostBuddy" }: WhiteLabelProps) {
   const configSection = view;
   const [currentPreset, setCurrentPreset] = useState<PresetType>('hostbuddy-original-dark');
   const [brandColors, setBrandColors] = useState<BrandColors>(HOSTBUDDY_ORIGINAL_DARK);

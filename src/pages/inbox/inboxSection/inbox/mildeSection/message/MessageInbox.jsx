@@ -4,6 +4,8 @@ import ThumbsDownIcon from "./thumbsComponent/icons/Thumbs_Down_Icon.svg";
 import HelpCircleIcon from "./thumbsComponent/icons/help_circle.svg";
 import HostBuddyIcon from "./thumbsComponent/icons/hostBuddy_icon.svg";
 import dummyPropertyImg from "../../../../../../public/img/dummyPropertyImg.png";
+import { useWhiteLabelCss } from "../../../../../../helper/WhiteLabelCssContext";
+import { useWhiteLabelLogos } from "../../../../../../helper/WhiteLabelLogoContext";
 
 
 const MessageInbox = ({
@@ -24,9 +26,17 @@ const MessageInbox = ({
   const { typeThumbs, messageId } = feedBackDataGet ? feedBackDataGet : {};
   const { timeFormatConvert, sendBy, id, justification, response } = messageData;
   
+  // White label hooks
+  const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  const logos = useWhiteLabelLogos();
+  
+  // Get branding name and logo with fallbacks
+  const brandingName = cssConfig?.Branding_name || "HostBuddy";
+  const brandLogo = logos?.logo || HostBuddyIcon;
+  
   const message_id = id ? id : [];
   const sendByFormatted =
-    sendBy === "hostbuddy" ? "HostBuddy" : sendBy === "host" ? "Host" : sendBy;
+    sendBy === "hostbuddy" ? brandingName : sendBy === "host" ? "Host" : sendBy;
 
   // Handle image loading error
   const [imageError, setImageError] = useState(false);  // Extract only the time in h:mm format
@@ -161,8 +171,8 @@ const MessageInbox = ({
         <p className="text-end timing">
           {sendBy === "hostbuddy" && (
             <img
-              src={HostBuddyIcon}
-              alt="HostBuddy"
+              src={brandLogo}
+              alt={brandingName}
               style={{
                 width: "21px",
                 height: "21px",

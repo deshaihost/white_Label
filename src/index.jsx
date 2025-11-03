@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from "./redux/stores"; 
 import { ReactNotifications } from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css'
+import { HelmetProvider } from 'react-helmet-async';
 
 // Import App component properly
 import App from "./App";
@@ -22,12 +23,14 @@ console.log('='.repeat(60));
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Provider store={configureStore({})}>
-      <BrowserRouter>
-        <ReactNotifications />
-        <App />
-      </BrowserRouter>
-    </Provider>
+    <HelmetProvider>
+      <Provider store={configureStore({})}>
+        <BrowserRouter>
+          <ReactNotifications />
+          <App />
+        </BrowserRouter>
+      </Provider>
+    </HelmetProvider>
   </React.StrictMode>
 );
 

@@ -99,7 +99,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+  background-color: var(--white-label-background-primary, #1A1C23); /* Solid dark background to prevent see-through */
   display: flex;
   justify-content: center;
   align-items: center;

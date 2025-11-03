@@ -55,7 +55,7 @@ const actionItemsReceivedData = [
   { date: '10/22', value: 0 },
 ];
 
-export default function Insights() {
+export default function Insights({ brandingName = "HostBuddy" }: { brandingName?: string }) {
   const [dateRange, setDateRange] = useState('Sept 9, 2025 to Oct 12, 2025');
   const [showDateModal, setShowDateModal] = useState(false);
   
@@ -156,7 +156,7 @@ export default function Insights() {
               </p>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[#a6a9b2] text-[13px] font-['DM_Sans:Regular',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>By HostBuddy:</span>
+                  <span className="text-[#a6a9b2] text-[13px] font-['DM_Sans:Regular',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>By {brandingName}:</span>
                   <span className="text-white text-[13px] font-['DM_Sans:SemiBold',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>
                     {messagesSentView === 'total' ? '136' : '80%'}
                   </span>
@@ -214,7 +214,7 @@ export default function Insights() {
               </p>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[#a6a9b2] text-[13px] font-['DM_Sans:Regular',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>By HostBuddy:</span>
+                  <span className="text-[#a6a9b2] text-[13px] font-['DM_Sans:Regular',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>By {brandingName}:</span>
                   <span className="text-white text-[13px] font-['DM_Sans:SemiBold',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>
                     {messagesRespondedView === 'total' ? '68' : '80%'}
                   </span>
@@ -240,7 +240,7 @@ export default function Insights() {
               </p>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[#a6a9b2] text-[13px] font-['DM_Sans:Regular',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>By HostBuddy:</span>
+                  <span className="text-[#a6a9b2] text-[13px] font-['DM_Sans:Regular',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>By {brandingName}:</span>
                   <span className="text-white text-[13px] font-['DM_Sans:SemiBold',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>0.5</span>
                 </div>
                 <div className="flex items-center justify-between">

@@ -31,7 +31,7 @@ const chartData = [
   { hour: '11pm', value: 3 },
 ];
 
-export default function Dashboard({ onNavigate }: { onNavigate?: (page: string) => void }) {
+export default function Dashboard({ onNavigate, brandingName = "HostBuddy" }: { onNavigate?: (page: string) => void, brandingName?: string }) {
   const [actionItems, setActionItems] = useState<ActionItem[]>([]);
   
   // Metric card view states
@@ -137,7 +137,7 @@ export default function Dashboard({ onNavigate }: { onNavigate?: (page: string) 
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[#a6a9b2] text-[13px] font-['DM_Sans:Regular',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>By HostBuddy:</span>
+                <span className="text-[#a6a9b2] text-[13px] font-['DM_Sans:Regular',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>By {brandingName}:</span>
                 <span className="text-white text-[13px] font-['DM_Sans:SemiBold',_sans-serif] tabular-nums" style={{ fontVariationSettings: "'opsz' 14" }}>
                   {messagesRespondedView === 'total' ? '2042' : '79.9%'}
                 </span>
@@ -157,7 +157,7 @@ export default function Dashboard({ onNavigate }: { onNavigate?: (page: string) 
             </p>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[#a6a9b2] text-[13px] font-['DM_Sans:Regular',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>By HostBuddy:</span>
+                <span className="text-[#a6a9b2] text-[13px] font-['DM_Sans:Regular',_sans-serif]" style={{ fontVariationSettings: "'opsz' 14" }}>By {brandingName}:</span>
                 <span className="text-white text-[13px] font-['DM_Sans:SemiBold',_sans-serif] tabular-nums" style={{ fontVariationSettings: "'opsz' 14" }}>0.5</span>
               </div>
               <div className="flex items-center justify-between">

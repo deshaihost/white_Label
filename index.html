@@ -2,10 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="/favicon.ico" />
+    <!-- Favicon and title are dynamically set by WhiteLabelHelmet component -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <link rel="apple-touch-icon" href="/favicon.ico" />
     
     <!-- DNS Prefetch & Preconnect for faster API calls -->
     <link rel="dns-prefetch" href="https://storage.googleapis.com" />
@@ -21,7 +20,86 @@
         padding: 0;
       }
     </style>
-    <title id="title">HostBuddy AI</title>
+    <title>Loading...</title>
+
+    <!-- Early Favicon Setup - ZERO FLASH even on first visit -->
+    <script>
+      (function() {
+        var hostname = window.location.hostname;
+        var isHostBuddy = hostname === 'hostbuddy.ai' || hostname === 'www.hostbuddy.ai';
+        
+        // STEP 1: Immediately set a favicon to prevent browser from loading default
+        // This runs synchronously BEFORE any default favicon can load
+        var initialLink = document.createElement('link');
+        initialLink.rel = 'icon';
+        initialLink.id = 'dynamic-favicon';
+        
+        if (isHostBuddy) {
+          // HostBuddy domain - set default favicon immediately
+          initialLink.href = '/favicon-hostbuddy.ico';
+          document.head.appendChild(initialLink);
+          return; // Done for HostBuddy
+        }
+        
+        // For white-label domains: Set transparent placeholder immediately
+        // This prevents ANY default favicon from showing
+        initialLink.href = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>';
+        document.head.appendChild(initialLink);
+        
+        // STEP 2: Try to load from cache and replace placeholder
+        try {
+          var dbName = 'WhiteLabelCache';
+          var storeName = 'logos';
+          var cacheKey = 'logo_' + hostname;
+          
+          var request = indexedDB.open(dbName, 1);
+          
+          request.onsuccess = function(event) {
+            var db = event.target.result;
+            if (!db.objectStoreNames.contains(storeName)) {
+              console.log('⚠️ [EARLY FAVICON] No cache store, waiting for React Helmet');
+              return;
+            }
+            
+            var transaction = db.transaction([storeName], 'readonly');
+            var objectStore = transaction.objectStore(storeName);
+            var getRequest = objectStore.get(cacheKey);
+            
+            getRequest.onsuccess = function() {
+              var cached = getRequest.result;
+              if (cached && cached.data && cached.data.logo) {
+                var now = Date.now();
+                var age = now - cached.timestamp;
+                var maxAge = 60 * 60 * 1000; // 1 hour
+                
+                if (age < maxAge) {
+                  // Update the favicon with cached logo
+                  var faviconLink = document.getElementById('dynamic-favicon');
+                  if (faviconLink) {
+                    faviconLink.href = cached.data.logo;
+                    console.log('✅ [EARLY FAVICON] Loaded from cache:', cached.data.logo);
+                  }
+                } else {
+                  console.log('⚠️ [EARLY FAVICON] Cache expired, waiting for React Helmet');
+                }
+              } else {
+                console.log('⚠️ [EARLY FAVICON] No cached logo, waiting for React Helmet');
+              }
+            };
+            
+            getRequest.onerror = function() {
+              console.log('⚠️ [EARLY FAVICON] Cache read error, waiting for React Helmet');
+            };
+          };
+          
+          request.onerror = function() {
+            console.log('⚠️ [EARLY FAVICON] IndexedDB error, waiting for React Helmet');
+          };
+        } catch (e) {
+          console.log('⚠️ [EARLY FAVICON] Exception:', e.message);
+        }
+      })();
+    </script>
 
     <!-- Google Ads Event snippet, to measure & report actions. -->
     <script>

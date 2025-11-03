@@ -16,6 +16,8 @@ import ChevDownIcon from "./icons/chevDown_icon.svg";
 import CheckBoxIcon from "../mildeSection/message/icons/check_box.svg";
 import CheckIconOpenIssue from "./icons/Check_icon_for_open_issue.svg";
 import { getActiveToken } from "../../../../../helper/apiCore";
+import { useWhiteLabelCss } from "../../../../../helper/WhiteLabelCssContext";
+import { useWhiteLabelLogos } from "../../../../../helper/WhiteLabelLogoContext";
 
 // Channel Icons
 import AIRBNB_ICON_FOR_RIGHT from "./icons/AIRBNB_ICON_FOR_RIGHT.svg";
@@ -69,6 +71,7 @@ const RightSection = ({
   setActiveTab,
   setPendingTabChange,
   setRightSectionVisible,
+  inboxLoading = false, // New prop to track inbox loading state
 }) => {
   const {
     arrival_date,
@@ -135,6 +138,138 @@ const RightSection = ({
   const rightSideRef = useRef(null);
   const statusByConversationRef = useRef({});
   const navigate = useNavigate();
+
+  // White label branding context
+  const { cssConfig, loading: cssLoading, isHostBuddyDomain } = useWhiteLabelCss();
+  const { logo: logoUrl, loading: logoLoading } = useWhiteLabelLogos();
+
+  // More robust state management to prevent flashing
+  const [brandingReady, setBrandingReady] = useState(false);
+  const [stableData, setStableData] = useState({
+    name: null,
+    logo: null,
+    isReady: false
+  });
+  const [hasCompletedInitialLoad, setHasCompletedInitialLoad] = useState(false);
+
+  // Reset state on component mount/unmount to ensure clean navigation
+  useEffect(() => {
+    console.log('[RightSection] Component mounted - resetting branding state');
+    setStableData({
+      name: null,
+      logo: null,
+      isReady: false
+    });
+    setBrandingReady(false);
+    setHasCompletedInitialLoad(false);
+    
+    // Set a minimum delay before allowing branding to show
+    // This prevents flash during navigation from Properties -> Inbox
+    const minimumDelayTimer = setTimeout(() => {
+      console.log('[RightSection] Minimum initial delay completed');
+      setHasCompletedInitialLoad(true);
+    }, 500); // 500ms minimum delay to ensure inbox loader has time to appear/disappear
+    
+    return () => {
+      console.log('[RightSection] Component unmounting');
+      clearTimeout(minimumDelayTimer);
+    };
+  }, []); // Run only on mount/unmount
+  
+  // Effect to determine when branding is truly ready with debouncing
+  useEffect(() => {
+    let timeoutId;
+    
+    console.log('[RightSection] Branding effect:', {
+      isHostBuddyDomain,
+      cssConfig: !!cssConfig,
+      brandingName: cssConfig?.Branding_name,
+      cssLoading,
+      logoLoading,
+      logoUrl,
+      rightSectionData: !!rightSectionData,
+      conversationId: rightSectionData?.conversation_id,
+      inboxLoading,
+      hasCompletedInitialLoad,
+      currentStableReady: stableData.isReady
+    });
+    
+    // Always reset state first to ensure clean state
+    setStableData({
+      name: null,
+      logo: null,
+      isReady: false
+    });
+    setBrandingReady(false);
+    
+    // CRITICAL: Don't show ANY branding until minimum initial delay has passed
+    if (!hasCompletedInitialLoad) {
+      console.log('[RightSection] Waiting for initial load delay to complete...');
+      return;
+    }
+    
+    // CRITICAL: Wait for inbox to not be loading AND have data before showing branding
+    const shouldWaitForInbox = inboxLoading || !rightSectionData || !rightSectionData.conversation_id;
+    
+    if (shouldWaitForInbox) {
+      console.log('[RightSection] Waiting for inbox to fully load...', {
+        inboxLoading,
+        hasRightSectionData: !!rightSectionData,
+        hasConversationId: !!rightSectionData?.conversation_id
+      });
+      return; // Don't show branding until inbox is fully loaded
+    }
+    
+    if (isHostBuddyDomain) {
+      // For HostBuddy domains, show after delays are complete
+      timeoutId = setTimeout(() => {
+        setStableData({
+          name: "HostBuddy",
+          logo: HostBuddyIcon,
+          isReady: true
+        });
+        setBrandingReady(true);
+        console.log('[RightSection] HostBuddy branding ready');
+      }, 100); // Short additional delay
+    } else {
+      // For white label domains, wait for branding data
+      if (cssConfig?.Branding_name && !cssLoading && !logoLoading) {
+        timeoutId = setTimeout(() => {
+          setStableData({
+            name: cssConfig.Branding_name,
+            logo: logoUrl || HostBuddyIcon,
+            isReady: true
+          });
+          setBrandingReady(true);
+          console.log('[RightSection] White label branding ready');
+        }, 150); // Slightly longer for white label
+      }
+    }
+    
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [cssConfig?.Branding_name, cssLoading, logoLoading, logoUrl, isHostBuddyDomain, rightSectionData, inboxLoading, hasCompletedInitialLoad]);
+  
+  // Use stable data instead of reactive data - only when truly ready
+  const brandingName = stableData.isReady ? stableData.name : null;
+  const brandLogo = stableData.isReady ? stableData.logo : null;
+
+  // Debug logging for logo
+  console.log('[RightSection] Branding debug:', {
+    logoFromContext: logoUrl,
+    fallbackLogo: HostBuddyIcon,
+    finalLogo: brandLogo,
+    brandingName: brandingName,
+    isHostBuddyDomain: isHostBuddyDomain,
+    cssLoading: cssLoading,
+    logoLoading: logoLoading,
+    brandingReady: brandingReady,
+    stableDataReady: stableData.isReady,
+    stableDataName: stableData.name,
+    hasCssConfig: !!cssConfig,
+    hasBrandingName: !!cssConfig?.Branding_name
+  });
 
   // Cache to store user assignments per conversation
   const assignmentsByConversation = useRef({});
@@ -1762,8 +1897,14 @@ const callUpdateGuestDataApi = async () => {
       </div>
       {!(channel == "Chat Window") &&
         (!is_locked ? (
-          curr_status && (
+          curr_status && stableData.isReady && brandingName && brandLogo && !cssLoading && !logoLoading && !inboxLoading && (
             <div className="toggle">
+              {console.log('[RightSection] ✅ RENDERING ENTIRE BRANDING SECTION:', {
+                stableDataReady: stableData.isReady,
+                brandingName,
+                brandLogo,
+                timestamp: new Date().toISOString().split('T')[1]
+              })}
               {curr_status && (
                 <div
                   style={{
@@ -1774,23 +1915,26 @@ const callUpdateGuestDataApi = async () => {
                     marginBottom: "10px",
                   }}
                 >
-                  {" "}
-                  <img
-                    src={HostBuddyIcon}
-                    alt="HostBuddy"
-                    style={{ width: "25px", height: "25px" }}
-                  />
-                  <span
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      fontFamily: "Poppins Helvetica",
-                    }}
-                  >
-                    HostBuddy{" "}
-                  </span>
-                  <span>is</span>
-                  {!toggleStatusLoading ? (
+                  {/* BRANDING SECTION - All conditional checks moved to parent level */}
+                      <img
+                        src={brandLogo}
+                        alt={brandingName}
+                        style={{ width: "25px", height: "25px" }}
+                        onError={(e) => {
+                          e.target.src = HostBuddyIcon;
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          fontFamily: "Poppins Helvetica",
+                        }}
+                      >
+                        {brandingName}{" "}
+                      </span>
+                      <span>is</span>
+                      {!toggleStatusLoading ? (
                     <div
                       ref={hostbuddyDropdownRef}
                       style={{
@@ -2443,7 +2587,7 @@ const callUpdateGuestDataApi = async () => {
         ) : (
           <div className="toggle">
             <p style={{ fontSize: "12px" }}>
-              HostBuddy is{" "}
+              {showBranding ? brandingName : "..."} is{" "}
               <span style={{ color: "rgb(200,0,0)" }}>NOT RESPONDING</span> to
               this guest.
             </p>
