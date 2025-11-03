@@ -102,8 +102,56 @@ export const getDomains = async () => {
 };
 
 /**
- * Upload company logos for white label configuration
- * @param {Object} data - Upload data
+ * Get logo for white label domain
+ * @param {Object} data - Request body
+ * @param {string} data.domain - Domain name
+ * @returns {Promise} API response
+ */
+export const getLogo = async (data) => {
+  try {
+    console.log('Getting logo for domain:', data.domain);
+
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/get_logo`,
+      {
+        domain: data.domain
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    console.log('Get Logo Response:', response.data);
+
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    console.error('Get Logo API Error:', error);
+    
+    let errorMessage = 'Failed to get logo';
+    
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+    } else if (error.request) {
+      errorMessage = 'No response from server. Please check your connection. (POST get logo)';
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+    
+    return {
+      success: false,
+      error: errorMessage
+    };
+  }
+};
+
+/**
+ * Upload company logo
+ * @param {Object} data - Request body
  * @param {string} data.domain - Domain name
  * @param {File} data.logo - Logo file
  * @param {File} data.full_logo - Full logo file

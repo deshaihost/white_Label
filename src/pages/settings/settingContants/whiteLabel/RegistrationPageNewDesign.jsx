@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './RegistrationPageNewDesign.css';
-import { createDomainMapping, uploadCompanyLogo, getDomains } from './whiteLabelServices';
+import { createDomainMapping, getDomains } from './whiteLabelServices';
 import { checkDomainVerificationStatus, checkAndAddDomain } from './domainStatus';
 import axios from 'axios';
 
@@ -14,12 +14,6 @@ const RegistrationPageNewDesign = () => {
     subdomain: '',
     key: ''
   });
-
-  // File uploads
-  const [fullLogo, setFullLogo] = useState(null);
-  const [favicon, setFavicon] = useState(null);
-  const [fullLogoPreview, setFullLogoPreview] = useState(null);
-  const [faviconPreview, setFaviconPreview] = useState(null);
 
   // UI states
   const [loading, setLoading] = useState(false);
@@ -96,10 +90,6 @@ const RegistrationPageNewDesign = () => {
         subdomain: '',
         key: ''
       });
-      setFullLogo(null);
-      setFavicon(null);
-      setFullLogoPreview(null);
-      setFaviconPreview(null);
       setError('');
       setSuccess('');
       setVerificationResult(null);
@@ -195,64 +185,6 @@ const RegistrationPageNewDesign = () => {
     if (success) setSuccess('');
   };
 
-  // Handle full logo selection
-  const handleFullLogoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        setError('Full logo file size should not exceed 10MB');
-        return;
-      }
-      setFullLogo(file);
-      
-      // Create preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFullLogoPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-      
-      if (error) setError('');
-    }
-  };
-
-  // Handle favicon selection
-  const handleFaviconChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        setError('Favicon file size should not exceed 10MB');
-        return;
-      }
-      setFavicon(file);
-      
-      // Create preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFaviconPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-      
-      if (error) setError('');
-    }
-  };
-
-  // Remove logo
-  const removeFullLogo = () => {
-    setFullLogo(null);
-    setFullLogoPreview(null);
-    const fileInput = document.getElementById('fullLogoInput');
-    if (fileInput) fileInput.value = '';
-  };
-
-  // Remove favicon
-  const removeFavicon = () => {
-    setFavicon(null);
-    setFaviconPreview(null);
-    const fileInput = document.getElementById('faviconInput');
-    if (fileInput) fileInput.value = '';
-  };
-
   // Validate form
   const validateForm = () => {
     if (!formData.productName.trim()) {
@@ -269,14 +201,6 @@ const RegistrationPageNewDesign = () => {
     }
     if (!formData.key.trim()) {
       setError('Key is required');
-      return false;
-    }
-    if (!fullLogo) {
-      setError('Full logo is required');
-      return false;
-    }
-    if (!favicon) {
-      setError('Small logo / favicon is required');
       return false;
     }
     return true;
@@ -300,7 +224,7 @@ const RegistrationPageNewDesign = () => {
     setLoading(true);
 
     try {
-      // Step 1: Create domain mapping
+      // Create domain mapping
       const domainResult = await createDomainMapping({
         fullDomainName: fullSubdomain,
         key: formData.key,
@@ -313,20 +237,7 @@ const RegistrationPageNewDesign = () => {
         return;
       }
 
-      // Step 2: Upload logos
-      const logoResult = await uploadCompanyLogo({
-        domain: fullSubdomain,
-        logo: favicon,
-        full_logo: fullLogo
-      });
-
-      if (!logoResult.success) {
-        setError(logoResult.error || 'Failed to upload logos');
-        setLoading(false);
-        return;
-      }
-
-      // Step 3: Add domain to Vercel
+      // Add domain to Vercel
       const vercelResult = await checkAndAddDomain(fullSubdomain);
       
       if (!vercelResult.success) {
@@ -453,9 +364,8 @@ const RegistrationPageNewDesign = () => {
           </div>
           <h1>White Label Domain Registration</h1>
           <p className="header-description">
-            Set up your branded portal by registering your custom domain, uploading your logos, 
-            and configuring DNS settings. This allows your users to access a fully white-labeled 
-            version of HostBuddy under your own domain.
+            Set up your branded portal by registering your custom domain and configuring DNS settings. 
+            After domain registration, configure your branding (logos, colors, typography) in the Branding Configuration page.
           </p>
         </div>
 
@@ -594,98 +504,6 @@ const RegistrationPageNewDesign = () => {
                 className="form-input"
               />
               <span className="input-hint">Your unique configuration key for this domain</span>
-            </div>
-
-            {/* Full Logo Upload */}
-            <div className="form-group">
-              <label htmlFor="fullLogoInput">
-                Full Logo <span className="required">*</span>
-              </label>
-              <div className="upload-area">
-                <input
-                  type="file"
-                  id="fullLogoInput"
-                  accept="image/png,image/jpeg,image/jpg,image/svg+xml"
-                  onChange={handleFullLogoChange}
-                  disabled={loading || (registrationComplete && !showRegistrationReminder)}
-                  style={{ display: 'none' }}
-                />
-                {!fullLogoPreview ? (
-                  <button
-                    type="button"
-                    onClick={() => document.getElementById('fullLogoInput').click()}
-                    disabled={loading || (registrationComplete && !showRegistrationReminder)}
-                    className="upload-button"
-                  >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M17 8L12 3L7 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M12 3V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span>Click to upload full logo</span>
-                    <span className="upload-hint">PNG, JPG, SVG (max 10MB)</span>
-                  </button>
-                ) : (
-                  <div className="preview-container">
-                    <img src={fullLogoPreview} alt="Full logo preview" className="logo-preview" />
-                    <button
-                      type="button"
-                      onClick={removeFullLogo}
-                      disabled={loading || (registrationComplete && !showRegistrationReminder)}
-                      className="remove-button"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                )}
-              </div>
-              <span className="input-hint">Recommended: 134 × 34 pixels</span>
-            </div>
-
-            {/* Favicon Upload */}
-            <div className="form-group">
-              <label htmlFor="faviconInput">
-                Small Logo / Favicon <span className="required">*</span>
-              </label>
-              <div className="upload-area">
-                <input
-                  type="file"
-                  id="faviconInput"
-                  accept="image/png,image/jpeg,image/jpg,image/svg+xml"
-                  onChange={handleFaviconChange}
-                  disabled={loading || (registrationComplete && !showRegistrationReminder)}
-                  style={{ display: 'none' }}
-                />
-                {!faviconPreview ? (
-                  <button
-                    type="button"
-                    onClick={() => document.getElementById('faviconInput').click()}
-                    disabled={loading || (registrationComplete && !showRegistrationReminder)}
-                    className="upload-button"
-                  >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M17 8L12 3L7 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M12 3V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span>Click to upload favicon</span>
-                    <span className="upload-hint">PNG, JPG, SVG (max 10MB)</span>
-                  </button>
-                ) : (
-                  <div className="preview-container">
-                    <img src={faviconPreview} alt="Favicon preview" className="logo-preview" />
-                    <button
-                      type="button"
-                      onClick={removeFavicon}
-                      disabled={loading || (registrationComplete && !showRegistrationReminder)}
-                      className="remove-button"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                )}
-              </div>
-              <span className="input-hint">Recommended: 40 × 40 pixels</span>
             </div>
           </div>
 

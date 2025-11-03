@@ -248,12 +248,14 @@ export function PropertiesPreview({ brandColors }) {
           Properties
         </h1>
         <div className="properties-header-actions">
+          {/* Status dot and text
           <div className="status-indicator" style={{ borderColor: brandColors.primaryBorder, backgroundColor: brandColors.secondaryBg }}>
             <div className="status-dot" style={{ backgroundColor: brandColors.successGreen, boxShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }} />
             <span className="status-text" style={{ color: brandColors.secondaryText }}>
-              HostBuddy Status
+              AI Status
             </span>
           </div>
+          */}
           <button 
             className="stop-all-button"
             style={{ 

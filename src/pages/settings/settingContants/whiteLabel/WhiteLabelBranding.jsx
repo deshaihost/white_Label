@@ -8,7 +8,7 @@ import {
   InsightsPreview,
   SettingsPreview
 } from './WhiteLabelPreviewPages';
-import { getDomains, getCssConfig, saveCssConfig } from './whiteLabelServices';
+import { getDomains, getCssConfig, saveCssConfig, uploadCompanyLogo, getLogo } from './whiteLabelServices';
 
 // SVG Icon Components
 const UploadIcon = ({ className, size = 24 }) => (
@@ -211,6 +211,13 @@ const WhiteLabelBranding = () => {
   const [faviconUrl, setFaviconUrl] = useState('');
   const [previewPage, setPreviewPage] = useState('dashboard');
   
+  // Logo file management
+  const [fullLogoFile, setFullLogoFile] = useState(null);
+  const [faviconFile, setFaviconFile] = useState(null);
+  const [uploadingLogos, setUploadingLogos] = useState(false);
+  const [logoUploadSuccess, setLogoUploadSuccess] = useState('');
+  const [logoUploadError, setLogoUploadError] = useState('');
+  
   // Track which mode we're editing (light or dark)
   const [editingMode, setEditingMode] = useState('light'); // 'light' or 'dark'
   
@@ -412,6 +419,11 @@ const WhiteLabelBranding = () => {
     };
 
     loadCssForDomain();
+  }, [selectedDomain]);
+  
+  // Load logos when domain is selected
+  useEffect(() => {
+    loadLogos();
   }, [selectedDomain]);
 
   // Convert brandColors to API format
@@ -645,14 +657,31 @@ const WhiteLabelBranding = () => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/svg+xml,image/png,image/jpeg';
-    input.onchange = (e) => {
+    input.onchange = async (e) => {
       const file = e.target.files?.[0];
       if (file) {
+        // Validate file size (max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          setLogoUploadError('Logo file size should not exceed 10MB');
+          return;
+        }
+        
+        // Clear any previous messages
+        setLogoUploadError('');
+        setLogoUploadSuccess('');
+        
+        // Set file and create preview
+        setFullLogoFile(file);
         const reader = new FileReader();
         reader.onload = (e) => {
           setLogoUrl(e.target?.result);
         };
         reader.readAsDataURL(file);
+        
+        // Upload to backend if domain is selected
+        if (selectedDomain) {
+          await uploadLogos({ full_logo: file });
+        }
       }
     };
     input.click();
@@ -662,17 +691,103 @@ const WhiteLabelBranding = () => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/x-icon,image/png';
-    input.onchange = (e) => {
+    input.onchange = async (e) => {
       const file = e.target.files?.[0];
       if (file) {
+        // Validate file size (max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          setLogoUploadError('Favicon file size should not exceed 10MB');
+          return;
+        }
+        
+        // Clear any previous messages
+        setLogoUploadError('');
+        setLogoUploadSuccess('');
+        
+        // Set file and create preview
+        setFaviconFile(file);
         const reader = new FileReader();
         reader.onload = (e) => {
           setFaviconUrl(e.target?.result);
         };
         reader.readAsDataURL(file);
+        
+        // Upload to backend if domain is selected
+        if (selectedDomain) {
+          await uploadLogos({ logo: file });
+        }
       }
     };
     input.click();
+  };
+  
+  
+  // Function to load logos from backend
+  const loadLogos = async () => {
+    if (!selectedDomain) return;
+    
+    try {
+      const response = await getLogo({ domain: selectedDomain });
+      if (response.success && response.data && response.data.logos_available) {
+        const logos = response.data.logos_available;
+        
+        // Set logo URLs if available
+        if (logos.full_logo && logos.full_logo.url) {
+          setLogoUrl(logos.full_logo.url);
+        } else {
+          setLogoUrl('');
+        }
+        
+        if (logos.logo && logos.logo.url) {
+          setFaviconUrl(logos.logo.url);
+        } else {
+          setFaviconUrl('');
+        }
+      } else {
+        // No logos available for this domain
+        setLogoUrl('');
+        setFaviconUrl('');
+      }
+    } catch (error) {
+      console.error('Error loading logos:', error);
+      // Don't show error for missing logos, just clear the URLs
+      setLogoUrl('');
+      setFaviconUrl('');
+    }
+  };
+  
+  // Function to upload logos to backend
+  const uploadLogos = async ({ logo = null, full_logo = null }) => {
+    if (!selectedDomain) {
+      setLogoUploadError('Please select a domain first');
+      return;
+    }
+    
+    setUploadingLogos(true);
+    setLogoUploadError('');
+    setLogoUploadSuccess('');
+    
+    try {
+      const result = await uploadCompanyLogo({
+        domain: selectedDomain,
+        logo: logo || faviconFile,
+        full_logo: full_logo || fullLogoFile
+      });
+      
+      if (result.success) {
+        setLogoUploadSuccess('Logo uploaded successfully');
+        
+        // Reload logos to get the updated URLs from backend
+        await loadLogos();
+      } else {
+        setLogoUploadError(result.error || 'Failed to upload logo');
+      }
+    } catch (error) {
+      console.error('Error uploading logo:', error);
+      setLogoUploadError('An error occurred while uploading');
+    } finally {
+      setUploadingLogos(false);
+    }
   };
 
   return (
@@ -690,6 +805,24 @@ const WhiteLabelBranding = () => {
             {/* Logo Upload */}
             <div className="config-section">
               <h3 className="section-title">Company Logo</h3>
+              
+              {/* Upload Status Messages */}
+              {logoUploadError && (
+                <div style={{ marginBottom: '12px', padding: '10px', background: '#4C1D1D', border: '1px solid #EF4444', borderRadius: '6px', color: '#FCA5A5', fontSize: '13px' }}>
+                  {logoUploadError}
+                </div>
+              )}
+              {logoUploadSuccess && (
+                <div style={{ marginBottom: '12px', padding: '10px', background: '#1D4336', border: '1px solid #10B981', borderRadius: '6px', color: '#6EE7B7', fontSize: '13px' }}>
+                  {logoUploadSuccess}
+                </div>
+              )}
+              {uploadingLogos && (
+                <div style={{ marginBottom: '12px', padding: '10px', background: '#01255E', borderRadius: '6px', color: '#98bffa', fontSize: '13px', textAlign: 'center' }}>
+                  Uploading logos...
+                </div>
+              )}
+              
               <div className="upload-area" onClick={handleLogoUpload}>
                 {logoUrl ? (
                   <div className="upload-preview">
@@ -701,7 +834,7 @@ const WhiteLabelBranding = () => {
                     <UploadIcon className="upload-icon" size={32} />
                     <div className="upload-text">
                       <p className="upload-main-text">Click to upload or drag and drop</p>
-                      <p className="upload-sub-text">SVG, PNG or JPG (max. 2MB)</p>
+                      <p className="upload-sub-text">SVG, PNG or JPG (max. 10MB)</p>
                     </div>
                   </div>
                 )}
@@ -1034,10 +1167,12 @@ const WhiteLabelBranding = () => {
                   Visual representation of our various pages - not an exact rendition
                 </p>
               </div>
+              {/* Status Indicator
               <div className="preview-status">
                 <div className="preview-status-dot"></div>
                 <span className="preview-status-text">LIVE</span>
               </div>
+              */}
             </div>
 
             {/* Preview Content */}
