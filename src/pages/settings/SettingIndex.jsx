@@ -8,7 +8,7 @@ import UpsellsIndex from './settingContants/upsells/upsells';
 import SubscriptionIndex from "./settingContants/subscription/SubscriptionIndex";
 import IntegrationsIndex from "./settingContants/integrations/IntegrationsIndex";
 import UsersTab from './settingContants/users/usersTab';
-import { Helmet } from "react-helmet";
+// import { Helmet } from "react-helmet"; // REMOVED: WhiteLabelHelmet handles title/favicon globally
 import UserInformationSection from "../account/userInformationSection";
 import AccountContactSection from "../account/contactSection";
 import AccountRegionSection from "../account/regionSection";
@@ -75,9 +75,11 @@ const SettingIndex = () => {
 
   return (
     <div className="account-main">
+      {/* REMOVED: WhiteLabelHelmet handles title/favicon globally
       <Helmet>
         <title>Settings - HostBuddy AI</title>
       </Helmet>
+      */}
       <div className="container">
         <div className="row">
           <div className="col-lg-12 col-xl-12 col-xxl-12">

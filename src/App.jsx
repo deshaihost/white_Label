@@ -2,6 +2,7 @@ import './App.css';
 import Routing from "./routes/Routes";
 import { WhiteLabelLogoProvider } from "./helper/WhiteLabelLogoContext";
 import { WhiteLabelCssProvider } from "./helper/WhiteLabelCssContext";
+import WhiteLabelHelmet from "./helper/WhiteLabelHelmet";
 
 function App() {
   console.log("📱 STEP 0: App component rendering", {
@@ -11,6 +12,7 @@ function App() {
   return (
     <WhiteLabelCssProvider>
       <WhiteLabelLogoProvider>
+        <WhiteLabelHelmet />
         <div className="App">
           <Routing />
         </div>

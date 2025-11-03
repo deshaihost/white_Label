@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import SideBar from '../../component/sideBar/SideBar';
-import { Helmet } from 'react-helmet';
+// import { Helmet } from 'react-helmet'; // REMOVED: WhiteLabelHelmet handles title/favicon globally
 import Authorized from '../../helper/Authorized';
 
 
@@ -20,9 +20,11 @@ const SetupGuide = () => {
 
   return (
     <div className="account-main">
+      {/* REMOVED: WhiteLabelHelmet handles title/favicon globally
       <Helmet>
-    <title>Set Up Guide - HostBuddy AI</title>
-  </Helmet>
+        <title>Set Up Guide - HostBuddy AI</title>
+      </Helmet>
+      */}
       <div className="container">
         <div className="banner-heading">
           <h2>My HostBuddy</h2>
