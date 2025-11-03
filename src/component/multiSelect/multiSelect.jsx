@@ -41,6 +41,25 @@ const MultiSelect = ({
   // Hide the default placeholder component
   const Placeholder = () => null;
 
+  // Custom Control component to handle clicks on the entire control
+  const Control = ({ children, ...props }) => {
+    return (
+      <components.Control {...props}>
+        <div
+          onClick={(e) => {
+            // Don't toggle if clicking on clear indicator (X button)
+            if (!e.target.closest('.custom-select__clear-indicator')) {
+              handleMenuClick();
+            }
+          }}
+          style={{ width: '100%', display: 'flex', alignItems: 'center' }}
+        >
+          {children}
+        </div>
+      </components.Control>
+    );
+  };
+
   // Custom Option with checkbox
   const Option = (props) => {
     const isSelected = props.isSelected;
@@ -112,6 +131,11 @@ const MultiSelect = ({
     setSelectedOptions(options);
   };
 
+  // Toggle menu open/closed when clicking on the control
+  const handleMenuClick = () => {
+    setMenuIsOpen(!menuIsOpen);
+  };
+
   // Handle clicks outside the select component
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -125,30 +149,9 @@ const MultiSelect = ({
     };
   }, []);
 
-  const handleMouseDown = (event) => {
-    if (selectRef.current && selectRef.current.contains(event.target)) {
-      setMenuIsOpen(true);
-    }
-  };
-
-  const handleMouseUp = (event) => {
-    if (selectRef.current && selectRef.current.contains(event.target)) {
-      setMenuIsOpen(true);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, []);
-
   return (
     <>
-      <div className="select-and-button" style={{width:width}}>
+      <div className="select-and-button" style={{width:width, position: 'relative', zIndex: menuIsOpen ? 9999 : 1}}>
         <div ref={selectRef} className="select-wrapper" style={{ width:width }}>
           <Select
             className="custom-select"
@@ -161,6 +164,7 @@ const MultiSelect = ({
               ValueContainer, 
               MultiValueContainer: () => null,
               Placeholder,
+              Control,
               Option,
               MenuList
             }}
@@ -169,6 +173,7 @@ const MultiSelect = ({
             styles={customSelectStyles || customStyles(width)}
             menuIsOpen={menuIsOpen}
             onMenuClose={() => setMenuIsOpen(false)}
+            blurInputOnSelect={false}
           />
         </div>
       </div>
