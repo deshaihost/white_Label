@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './WhiteLabelBranding.css';
 import {
   DashboardPreview,
@@ -8,6 +8,7 @@ import {
   InsightsPreview,
   SettingsPreview
 } from './WhiteLabelPreviewPages';
+import { getDomains, getCssConfig, saveCssConfig } from './whiteLabelServices';
 
 // SVG Icon Components
 const UploadIcon = ({ className, size = 24 }) => (
@@ -209,6 +210,370 @@ const WhiteLabelBranding = () => {
   const [logoUrl, setLogoUrl] = useState('');
   const [faviconUrl, setFaviconUrl] = useState('');
   const [previewPage, setPreviewPage] = useState('dashboard');
+  
+  // Track which mode we're editing (light or dark)
+  const [editingMode, setEditingMode] = useState('light'); // 'light' or 'dark'
+  
+  // Store both light and dark mode configurations separately
+  const [lightModeColors, setLightModeColors] = useState(HOSTBUDDY_ORIGINAL_LIGHT);
+  const [darkModeColors, setDarkModeColors] = useState(HOSTBUDDY_ORIGINAL_DARK);
+  
+  // Domain and key management
+  const [domains, setDomains] = useState([]);
+  const [selectedDomain, setSelectedDomain] = useState('');
+  const [domainKey, setDomainKey] = useState('');
+  const [loadingDomains, setLoadingDomains] = useState(true);
+  
+  // Loading and save states
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState('');
+  const [saveError, setSaveError] = useState('');
+  const [loadError, setLoadError] = useState('');
+
+  // Load domains on mount
+  useEffect(() => {
+    const fetchDomains = async () => {
+      setLoadingDomains(true);
+      try {
+        const response = await getDomains();
+        if (response.success && response.data) {
+          const domainList = response.data.domains || [];
+          setDomains(domainList);
+          
+          // Auto-select first domain if available
+          if (domainList.length > 0) {
+            setSelectedDomain(domainList[0]);
+          }
+        } else {
+          setLoadError(response.error || 'Failed to load domains');
+        }
+      } catch (error) {
+        console.error('Error fetching domains:', error);
+        setLoadError('Error fetching domains');
+      } finally {
+        setLoadingDomains(false);
+      }
+    };
+
+    fetchDomains();
+  }, []);
+
+  // Load CSS config when domain is selected
+  useEffect(() => {
+    const loadCssForDomain = async () => {
+      if (!selectedDomain) return;
+      
+      setLoading(true);
+      setLoadError('');
+      
+      try {
+        const response = await getCssConfig({ domain: selectedDomain });
+        if (response.success && response.data && response.data.css_data) {
+          const cssData = response.data.css_data;
+          
+          // Map CSS data from API to brandColors structure for LIGHT mode
+          const loadedLightColors = {
+            // Backgrounds
+            primaryBg: cssData.background?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryBg,
+            secondaryBg: cssData.background?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryBg,
+            cardBg: cssData.background?.cards || HOSTBUDDY_ORIGINAL_DARK.cardBg,
+            hoverBg: cssData.background?.hover || HOSTBUDDY_ORIGINAL_DARK.hoverBg,
+            inputBg: cssData.background?.input || HOSTBUDDY_ORIGINAL_DARK.inputBg,
+            textareaBg: cssData.background?.textarea || HOSTBUDDY_ORIGINAL_DARK.textareaBg,
+            dropdownBg: cssData.background?.dropdown || HOSTBUDDY_ORIGINAL_DARK.dropdownBg,
+            modalBg: cssData.background?.modal || HOSTBUDDY_ORIGINAL_DARK.modalBg,
+            modalOverlay: cssData.background?.modal_overlay || HOSTBUDDY_ORIGINAL_DARK.modalOverlay,
+            
+            // Text
+            primaryText: cssData.text?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryText,
+            secondaryText: cssData.text?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryText,
+            tertiaryText: cssData.text?.tertiary || HOSTBUDDY_ORIGINAL_DARK.tertiaryText,
+            quaternaryText: cssData.text?.quaternary || HOSTBUDDY_ORIGINAL_DARK.quaternaryText,
+            placeholderText: cssData.text?.placeholder || HOSTBUDDY_ORIGINAL_DARK.placeholderText,
+            linkText: cssData.text?.link || HOSTBUDDY_ORIGINAL_DARK.linkText,
+            linkHoverText: cssData.text?.link_hover || HOSTBUDDY_ORIGINAL_DARK.linkHoverText,
+            
+            // Borders
+            primaryBorder: cssData.borders?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryBorder,
+            secondaryBorder: cssData.borders?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryBorder,
+            activeBorder: cssData.borders?.active || HOSTBUDDY_ORIGINAL_DARK.activeBorder,
+            errorBorder: cssData.borders?.error || HOSTBUDDY_ORIGINAL_DARK.errorBorder,
+            
+            // Buttons
+            primaryBlue: cssData.buttons?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryBlue,
+            primaryBlueHover: cssData.buttons?.primary_hover || HOSTBUDDY_ORIGINAL_DARK.primaryBlueHover,
+            lightBlue: cssData.buttons?.light_blue || HOSTBUDDY_ORIGINAL_DARK.lightBlue,
+            secondaryButtonBg: cssData.buttons?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonBg,
+            secondaryButtonHover: cssData.buttons?.secondary_hover || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonHover,
+            
+            // Status
+            successGreen: cssData.status?.success || HOSTBUDDY_ORIGINAL_DARK.successGreen,
+            currentGreen: cssData.status?.current || HOSTBUDDY_ORIGINAL_DARK.currentGreen,
+            errorRed: cssData.status?.error || HOSTBUDDY_ORIGINAL_DARK.errorRed,
+            warningOrange: cssData.status?.warning || HOSTBUDDY_ORIGINAL_DARK.warningOrange,
+            infoBlue: cssData.status?.info || HOSTBUDDY_ORIGINAL_DARK.infoBlue,
+            
+            // Components
+            toggleBgOff: cssData.components?.toggle_off || HOSTBUDDY_ORIGINAL_DARK.toggleBgOff,
+            cancelButton: cssData.components?.cancel_button || HOSTBUDDY_ORIGINAL_DARK.cancelButton,
+            cancelButtonHover: cssData.components?.cancel_hover || HOSTBUDDY_ORIGINAL_DARK.cancelButtonHover,
+            dropdownSelect: cssData.components?.dropdown_select || HOSTBUDDY_ORIGINAL_DARK.dropdownSelect,
+            tableHeaderBg: cssData.components?.table_header || HOSTBUDDY_ORIGINAL_DARK.tableHeaderBg,
+            tableRowHover: cssData.components?.table_row_hover || HOSTBUDDY_ORIGINAL_DARK.tableRowHover,
+            
+            // Typography
+            headingFont: cssData.typography?.heading || HOSTBUDDY_ORIGINAL_DARK.headingFont,
+            bodyFont: cssData.typography?.body || HOSTBUDDY_ORIGINAL_DARK.bodyFont,
+          };
+          
+          setLightModeColors(loadedLightColors);
+          
+          // Load DARK mode if available
+          if (response.data.has_dark_mode && response.data.dark_mode_css_data) {
+            const darkCssData = response.data.dark_mode_css_data;
+            const loadedDarkColors = {
+              // Backgrounds
+              primaryBg: darkCssData.background?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryBg,
+              secondaryBg: darkCssData.background?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryBg,
+              cardBg: darkCssData.background?.cards || HOSTBUDDY_ORIGINAL_DARK.cardBg,
+              hoverBg: darkCssData.background?.hover || HOSTBUDDY_ORIGINAL_DARK.hoverBg,
+              inputBg: darkCssData.background?.input || HOSTBUDDY_ORIGINAL_DARK.inputBg,
+              textareaBg: darkCssData.background?.textarea || HOSTBUDDY_ORIGINAL_DARK.textareaBg,
+              dropdownBg: darkCssData.background?.dropdown || HOSTBUDDY_ORIGINAL_DARK.dropdownBg,
+              modalBg: darkCssData.background?.modal || HOSTBUDDY_ORIGINAL_DARK.modalBg,
+              modalOverlay: darkCssData.background?.modal_overlay || HOSTBUDDY_ORIGINAL_DARK.modalOverlay,
+              
+              // Text
+              primaryText: darkCssData.text?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryText,
+              secondaryText: darkCssData.text?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryText,
+              tertiaryText: darkCssData.text?.tertiary || HOSTBUDDY_ORIGINAL_DARK.tertiaryText,
+              quaternaryText: darkCssData.text?.quaternary || HOSTBUDDY_ORIGINAL_DARK.quaternaryText,
+              placeholderText: darkCssData.text?.placeholder || HOSTBUDDY_ORIGINAL_DARK.placeholderText,
+              linkText: darkCssData.text?.link || HOSTBUDDY_ORIGINAL_DARK.linkText,
+              linkHoverText: darkCssData.text?.link_hover || HOSTBUDDY_ORIGINAL_DARK.linkHoverText,
+              
+              // Borders
+              primaryBorder: darkCssData.borders?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryBorder,
+              secondaryBorder: darkCssData.borders?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryBorder,
+              activeBorder: darkCssData.borders?.active || HOSTBUDDY_ORIGINAL_DARK.activeBorder,
+              errorBorder: darkCssData.borders?.error || HOSTBUDDY_ORIGINAL_DARK.errorBorder,
+              
+              // Buttons
+              primaryBlue: darkCssData.buttons?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryBlue,
+              primaryBlueHover: darkCssData.buttons?.primary_hover || HOSTBUDDY_ORIGINAL_DARK.primaryBlueHover,
+              lightBlue: darkCssData.buttons?.light_blue || HOSTBUDDY_ORIGINAL_DARK.lightBlue,
+              secondaryButtonBg: darkCssData.buttons?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonBg,
+              secondaryButtonHover: darkCssData.buttons?.secondary_hover || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonHover,
+              
+              // Status
+              successGreen: darkCssData.status?.success || HOSTBUDDY_ORIGINAL_DARK.successGreen,
+              currentGreen: darkCssData.status?.current || HOSTBUDDY_ORIGINAL_DARK.currentGreen,
+              errorRed: darkCssData.status?.error || HOSTBUDDY_ORIGINAL_DARK.errorRed,
+              warningOrange: darkCssData.status?.warning || HOSTBUDDY_ORIGINAL_DARK.warningOrange,
+              infoBlue: darkCssData.status?.info || HOSTBUDDY_ORIGINAL_DARK.infoBlue,
+              
+              // Components
+              toggleBgOff: darkCssData.components?.toggle_off || HOSTBUDDY_ORIGINAL_DARK.toggleBgOff,
+              cancelButton: darkCssData.components?.cancel_button || HOSTBUDDY_ORIGINAL_DARK.cancelButton,
+              cancelButtonHover: darkCssData.components?.cancel_hover || HOSTBUDDY_ORIGINAL_DARK.cancelButtonHover,
+              dropdownSelect: darkCssData.components?.dropdown_select || HOSTBUDDY_ORIGINAL_DARK.dropdownSelect,
+              tableHeaderBg: darkCssData.components?.table_header || HOSTBUDDY_ORIGINAL_DARK.tableHeaderBg,
+              tableRowHover: darkCssData.components?.table_row_hover || HOSTBUDDY_ORIGINAL_DARK.tableRowHover,
+              
+              // Typography
+              headingFont: darkCssData.typography?.heading || HOSTBUDDY_ORIGINAL_DARK.headingFont,
+              bodyFont: darkCssData.typography?.body || HOSTBUDDY_ORIGINAL_DARK.bodyFont,
+            };
+            setDarkModeColors(loadedDarkColors);
+          } else {
+            // No dark mode saved, use default dark preset
+            setDarkModeColors(HOSTBUDDY_ORIGINAL_DARK);
+          }
+          
+          // Set brandColors based on current editing mode
+          if (editingMode === 'light') {
+            setBrandColors(loadedLightColors);
+          } else {
+            setBrandColors(response.data.has_dark_mode ? loadedDarkColors : HOSTBUDDY_ORIGINAL_DARK);
+          }
+          
+          setCurrentPreset('custom');
+        } else {
+          // No CSS config found, use defaults
+          console.log('No CSS config found for domain, using defaults');
+        }
+      } catch (error) {
+        console.error('Error loading CSS config:', error);
+        setLoadError('Failed to load CSS configuration');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCssForDomain();
+  }, [selectedDomain]);
+
+  // Convert brandColors to API format
+  const convertColorsToApiFormat = () => {
+    return {
+      background: {
+        primary: brandColors.primaryBg,
+        secondary: brandColors.secondaryBg,
+        cards: brandColors.cardBg,
+        hover: brandColors.hoverBg,
+        input: brandColors.inputBg,
+        textarea: brandColors.textareaBg,
+        dropdown: brandColors.dropdownBg,
+        modal: brandColors.modalBg,
+        modal_overlay: brandColors.modalOverlay,
+      },
+      text: {
+        primary: brandColors.primaryText,
+        secondary: brandColors.secondaryText,
+        tertiary: brandColors.tertiaryText,
+        quaternary: brandColors.quaternaryText,
+        placeholder: brandColors.placeholderText,
+        link: brandColors.linkText,
+        link_hover: brandColors.linkHoverText,
+      },
+      borders: {
+        primary: brandColors.primaryBorder,
+        secondary: brandColors.secondaryBorder,
+        active: brandColors.activeBorder,
+        error: brandColors.errorBorder,
+      },
+      buttons: {
+        primary: brandColors.primaryBlue,
+        primary_hover: brandColors.primaryBlueHover,
+        light_blue: brandColors.lightBlue,
+        secondary: brandColors.secondaryButtonBg,
+        secondary_hover: brandColors.secondaryButtonHover,
+      },
+      status: {
+        success: brandColors.successGreen,
+        current: brandColors.currentGreen,
+        error: brandColors.errorRed,
+        warning: brandColors.warningOrange,
+        info: brandColors.infoBlue,
+      },
+      components: {
+        toggle_off: brandColors.toggleBgOff,
+        cancel_button: brandColors.cancelButton,
+        cancel_hover: brandColors.cancelButtonHover,
+        dropdown_select: brandColors.dropdownSelect,
+        table_header: brandColors.tableHeaderBg,
+        table_row_hover: brandColors.tableRowHover,
+      },
+      typography: {
+        heading: brandColors.headingFont,
+        body: brandColors.bodyFont,
+      }
+    };
+  };
+
+  // Save CSS configuration
+  const handleSave = async () => {
+    if (!selectedDomain) {
+      setSaveError('Please select a domain');
+      return;
+    }
+    
+    if (!domainKey) {
+      setSaveError('Please enter the domain key');
+      return;
+    }
+    
+    setSaving(true);
+    setSaveError('');
+    setSaveSuccess('');
+    
+    try {
+      // Convert light mode colors to API format
+      const light_css_properties = convertColorsForMode(lightModeColors);
+      
+      // Convert dark mode colors to API format
+      const dark_css_properties = convertColorsForMode(darkModeColors);
+      
+      const response = await saveCssConfig({
+        domain: selectedDomain,
+        key: domainKey,
+        css_properties: light_css_properties,
+        dark_mode_css_properties: dark_css_properties
+      });
+      
+      if (response.success) {
+        setSaveSuccess('CSS configuration saved successfully for both light and dark modes!');
+        setTimeout(() => setSaveSuccess(''), 3000);
+      } else {
+        setSaveError(response.error || 'Failed to save CSS configuration');
+      }
+    } catch (error) {
+      console.error('Error saving CSS config:', error);
+      setSaveError('An error occurred while saving');
+    } finally {
+      setSaving(false);
+    }
+  };
+  
+  // Helper function to convert any color set to API format
+  const convertColorsForMode = (colors) => {
+    return {
+      background: {
+        primary: colors.primaryBg,
+        secondary: colors.secondaryBg,
+        cards: colors.cardBg,
+        hover: colors.hoverBg,
+        input: colors.inputBg,
+        textarea: colors.textareaBg,
+        dropdown: colors.dropdownBg,
+        modal: colors.modalBg,
+        modal_overlay: colors.modalOverlay,
+      },
+      text: {
+        primary: colors.primaryText,
+        secondary: colors.secondaryText,
+        tertiary: colors.tertiaryText,
+        quaternary: colors.quaternaryText,
+        disabled: colors.disabledText,
+        placeholder: colors.placeholderText,
+        link: colors.linkText,
+        link_hover: colors.linkHoverText,
+      },
+      borders: {
+        primary: colors.primaryBorder,
+        secondary: colors.secondaryBorder,
+        active: colors.activeBorder,
+        inactive: colors.inactiveBorder,
+      },
+      buttons: {
+        primary: colors.primaryBlue,
+        primary_hover: colors.primaryBlueHover,
+        light_blue: colors.lightBlue,
+        secondary: colors.secondaryButtonBg,
+        secondary_hover: colors.secondaryButtonHover,
+      },
+      status: {
+        success: colors.successGreen,
+        current: colors.currentGreen,
+        warning: colors.warningOrange,
+        error: colors.errorRed,
+        destructive: colors.destructiveRed,
+      },
+      components: {
+        toggle_off: colors.toggleBgOff,
+        cancel_button: colors.cancelButton,
+        cancel_hover: colors.cancelButtonHover,
+        dropdown_select: colors.dropdownSelect,
+        table_header: colors.tableHeaderBg,
+        table_row_hover: colors.tableRowHover,
+      },
+      typography: {
+        heading: colors.headingFont,
+        body: colors.bodyFont,
+      }
+    };
+  };
 
   const handlePresetChange = (preset) => {
     setCurrentPreset(preset);
@@ -220,10 +585,25 @@ const WhiteLabelBranding = () => {
   };
 
   const handleColorChange = (key, value) => {
+    // Update brandColors for immediate visual feedback
     setBrandColors(prev => ({
       ...prev,
       [key]: value
     }));
+    
+    // Also update the appropriate mode's configuration
+    if (editingMode === 'light') {
+      setLightModeColors(prev => ({
+        ...prev,
+        [key]: value
+      }));
+    } else {
+      setDarkModeColors(prev => ({
+        ...prev,
+        [key]: value
+      }));
+    }
+    
     if (currentPreset !== 'custom') {
       setCurrentPreset('custom');
     }
@@ -240,9 +620,25 @@ const WhiteLabelBranding = () => {
   };
 
   const handleResetAll = () => {
+    // Show confirmation dialog
+    const confirmed = window.confirm(
+      'Are you sure you want to reset all colors to the HostBuddy Original preset? This will discard all your custom color changes.'
+    );
+    
+    if (!confirmed) {
+      return; // User cancelled, do nothing
+    }
+    
     const resetPreset = currentPreset === 'hostbuddy-original-light' ? 'hostbuddy-original-light' : 'hostbuddy-original-dark';
     setCurrentPreset(resetPreset);
     setBrandColors(resetPreset === 'hostbuddy-original-dark' ? HOSTBUDDY_ORIGINAL_DARK : HOSTBUDDY_ORIGINAL_LIGHT);
+    
+    // Also reset the mode-specific colors
+    if (editingMode === 'light') {
+      setLightModeColors(HOSTBUDDY_ORIGINAL_LIGHT);
+    } else {
+      setDarkModeColors(HOSTBUDDY_ORIGINAL_DARK);
+    }
   };
 
   const handleLogoUpload = () => {
@@ -388,21 +784,147 @@ const WhiteLabelBranding = () => {
                 </button>
               </div>
 
-              {/* Preset Selector */}
-              <div className="preset-selector">
-                <button
-                  onClick={() => handlePresetChange('hostbuddy-original-dark')}
-                  className={`preset-button ${currentPreset === 'hostbuddy-original-dark' ? 'preset-button-active' : ''}`}
-                >
-                  Dark Mode
-                </button>
-                <button
-                  onClick={() => handlePresetChange('hostbuddy-original-light')}
-                  className={`preset-button ${currentPreset === 'hostbuddy-original-light' ? 'preset-button-active' : ''}`}
-                >
-                  Light Mode
-                </button>
+              {/* Domain Selection and Key */}
+              <div style={{ marginBottom: '24px', padding: '16px', background: '#17191F', borderRadius: '8px', border: '2px solid #013280' }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', marginBottom: '8px', color: '#98bffa', fontSize: '13px', fontWeight: 600, textTransform: 'uppercase' }}>
+                    Select Domain
+                  </label>
+                  {loadingDomains ? (
+                    <div style={{ color: '#a6a9b2', fontSize: '14px' }}>Loading domains...</div>
+                  ) : domains.length === 0 ? (
+                    <div style={{ color: '#EF4444', fontSize: '14px' }}>No domains found. Please create a domain first in the Registration page.</div>
+                  ) : (
+                    <select
+                      value={selectedDomain}
+                      onChange={(e) => setSelectedDomain(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '10px 12px',
+                        background: '#0F1117',
+                        border: '2px solid #013280',
+                        borderRadius: '6px',
+                        color: '#d0d3db',
+                        fontSize: '14px',
+                        fontFamily: 'DM Sans, sans-serif',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {domains.map((domain, index) => (
+                        <option key={index} value={domain}>
+                          {domain}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+                
+                <div>
+                  <label style={{ display: 'block', marginBottom: '8px', color: '#98bffa', fontSize: '13px', fontWeight: 600, textTransform: 'uppercase' }}>
+                    Domain Key
+                  </label>
+                  <input
+                    type="text"
+                    value={domainKey}
+                    onChange={(e) => setDomainKey(e.target.value)}
+                    placeholder="Enter your domain key"
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      background: '#0F1117',
+                      border: '2px solid #013280',
+                      borderRadius: '6px',
+                      color: '#d0d3db',
+                      fontSize: '14px',
+                      fontFamily: 'DM Sans, sans-serif',
+                      outline: 'none'
+                    }}
+                  />
+                  <p style={{ marginTop: '6px', color: '#676a73', fontSize: '12px' }}>Required to save changes to this domain</p>
+                </div>
               </div>
+
+              {/* Mode Switcher */}
+              <div style={{ marginBottom: '24px', padding: '16px', background: '#17191F', borderRadius: '8px', border: '2px solid #013280' }}>
+                <label style={{ display: 'block', marginBottom: '12px', color: '#98bffa', fontSize: '13px', fontWeight: 600, textTransform: 'uppercase' }}>
+                  Editing Mode
+                </label>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <button
+                    onClick={() => {
+                      setEditingMode('light');
+                      setBrandColors(lightModeColors);
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '10px 16px',
+                      background: editingMode === 'light' ? '#3e88f7' : '#0F1117',
+                      border: `2px solid ${editingMode === 'light' ? '#3e88f7' : '#013280'}`,
+                      borderRadius: '6px',
+                      color: editingMode === 'light' ? '#FFFFFF' : '#a6a9b2',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    ☀️ Light Mode
+                  </button>
+                  <button
+                    onClick={() => {
+                      setEditingMode('dark');
+                      setBrandColors(darkModeColors);
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '10px 16px',
+                      background: editingMode === 'dark' ? '#3e88f7' : '#0F1117',
+                      border: `2px solid ${editingMode === 'dark' ? '#3e88f7' : '#013280'}`,
+                      borderRadius: '6px',
+                      color: editingMode === 'dark' ? '#FFFFFF' : '#a6a9b2',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    🌙 Dark Mode
+                  </button>
+                </div>
+                <p style={{ marginTop: '8px', color: '#676a73', fontSize: '12px' }}>
+                  Currently editing: <strong style={{ color: editingMode === 'light' ? '#F59E0B' : '#8B5CF6' }}>
+                    {editingMode === 'light' ? 'Light Mode' : 'Dark Mode'}
+                  </strong> colors
+                </p>
+              </div>
+
+              {/* Loading State */}
+              {loading && (
+                <div style={{ marginBottom: '16px', padding: '12px', background: '#01255E', borderRadius: '6px', color: '#98bffa', fontSize: '14px', textAlign: 'center' }}>
+                  Loading CSS configuration for {selectedDomain}...
+                </div>
+              )}
+
+              {/* Error Messages */}
+              {loadError && (
+                <div style={{ marginBottom: '16px', padding: '12px', background: '#2D1B1B', borderRadius: '6px', color: '#EF4444', fontSize: '14px', border: '2px solid #EF4444' }}>
+                  {loadError}
+                </div>
+              )}
+
+              {/* Success Messages */}
+              {saveSuccess && (
+                <div style={{ marginBottom: '16px', padding: '12px', background: '#1B2D1B', borderRadius: '6px', color: '#10B981', fontSize: '14px', border: '2px solid #10B981' }}>
+                  {saveSuccess}
+                </div>
+              )}
+
+              {/* Save Error Messages */}
+              {saveError && (
+                <div style={{ marginBottom: '16px', padding: '12px', background: '#2D1B1B', borderRadius: '6px', color: '#EF4444', fontSize: '14px', border: '2px solid #EF4444' }}>
+                  {saveError}
+                </div>
+              )}
 
               {/* Color Groups */}
               <div className="color-groups">
@@ -482,16 +1004,18 @@ const WhiteLabelBranding = () => {
 
                 {/* Action Buttons */}
                 <div className="action-buttons">
-                  <button className="action-button action-button-save">
+                  {/* Currently there is only one save functionality, so no need for three separate buttons
+                  <button className="action-button action-button-save" onClick={handleSave} disabled={saving || !selectedDomain || !domainKey}>
                     <SaveIcon className="button-icon" size={16} />
-                    Save
+                    {saving ? 'Saving...' : 'Save'}
                   </button>
                   <button className="action-button action-button-preview">
                     <EyeIcon className="button-icon" size={16} />
                     Preview in Sandbox
                   </button>
-                  <button className="action-button action-button-publish">
-                    Publish Live
+                  */}
+                  <button className="action-button action-button-publish" onClick={handleSave} disabled={saving || !selectedDomain || !domainKey}>
+                    {saving ? 'Publishing...' : 'Save And Publish Changes'}
                   </button>
                 </div>
               </div>

@@ -269,6 +269,67 @@ export const getCssConfig = async (data) => {
 };
 
 /**
+ * Save CSS configuration for white label
+ * @param {Object} data - Request body
+ * @param {string} data.domain - Domain name
+ * @param {string} data.key - Authentication key for the domain
+ * @param {Object} data.css_properties - CSS properties object with nested structure
+ * @returns {Promise} API response
+ */
+export const saveCssConfig = async (data) => {
+  try {
+    console.log('Saving CSS config for domain:', data.domain);
+
+    // Get the auth token from session
+    const token = getActiveToken();
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    
+    // Add Authorization header if token exists
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await axios.post(
+      `${API_BASE_URL}/white_label/css`,
+      {
+        domain: data.domain,
+        key: data.key,
+        css_properties: data.css_properties,
+        dark_mode_css_properties: data.dark_mode_css_properties
+      },
+      { headers }
+    );
+
+    console.log('Save CSS Config Response:', response.data);
+
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    console.error('Save CSS Config API Error:', error.response?.data || error.message);
+    
+    let errorMessage = 'Failed to save CSS configuration';
+    
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+    } else if (error.request) {
+      errorMessage = 'No response from server. Please check your connection. (POST save CSS)';
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+    
+    return {
+      success: false,
+      error: errorMessage,
+      data: null
+    };
+  }
+};
+
+/**
  * Set feature settings for white label configuration
  * @param {Object} data - Request body
  * @param {string} data.domain - Domain name
