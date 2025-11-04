@@ -1,6 +1,21 @@
 import React from 'react';
 import './WhiteLabelPreviewPages.css';
 
+// Import icons from existing inbox
+import ThumbsUpIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/thumbsComponent/icons/Thumbs_Up_Icon.svg';
+import ThumbsDownIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/thumbsComponent/icons/Thumbs_Down_Icon.svg';
+import HelpCircleIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/thumbsComponent/icons/help_circle.svg';
+import HostBuddyIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/thumbsComponent/icons/hostBuddy_icon.svg';
+import AiMessageIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/icons/ai_messsage_icon.svg';
+import SendTemplateIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/icons/sendTemplate_icon.svg';
+import ChevDownIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/icons/chevDown.svg';
+import SendIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/icons/send_icon.svg';
+import PmsIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/icons/pms_icon.svg';
+import WhatsAppIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/icons/whatsapp_icon.svg';
+import NotesIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/icons/notes_icon.svg';
+import OpenIssueIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/icons/openIssue_icon.svg';
+import DefaultPinIcon from '../../../inbox/inboxSection/inbox/mildeSection/message/icons/default_pin.svg';
+
 // Custom SVG Icons
 const CheckIcon = ({ size = 16, strokeWidth = 2.5, color }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
@@ -372,273 +387,649 @@ export function PropertiesPreview({ brandColors }) {
 
 // Messaging Preview Component
 export function MessagingPreview({ brandColors }) {
+  // Sample conversation data matching design reference
   const conversations = [
     {
-      name: 'Brolin Cox',
-      message: 'Hi Brolin, welcome to Hidden Haven...',
-      timestamp: '10/17 4:32 PM',
-      dateRange: 'Oct 17 - 19',
-      property: 'Chalcedony',
+      name: 'Brooklyn Simmons',
+      message: 'Hi, I would like to know if there is parking available?',
+      timestamp: '2/12 10:00 AM',
+      dateRange: 'Feb 12-15',
+      property: '4517 Washington Ave. Manchester, Kentucky 39495',
       status: 'Guest',
-      checkIn: 'Check-in today',
-      platform: '🟠',
+      checkIn: 'Check-out today',
+      platform: 'Airbnb',
       starred: true,
-      unread: 0,
+      unread: 4,
       urgent: true,
-      image: 'https://images.unsplash.com/photo-1667584523543-d1d9cc828a15?w=200&h=150&fit=crop'
+      image: 'https://images.unsplash.com/photo-1667584523543-d1d9cc828a15?w=160&h=160&fit=crop'
     },
     {
-      name: 'Hallie Swartzbaeker',
-      message: 'Of course! The entrance to th...',
-      timestamp: '10/17 4:59 PM',
-      dateRange: 'Oct 17 - 20',
-      property: '831 A',
+      name: 'Floyd Miles',
+      message: 'Hi, I would like to know if there is parking available?',
+      timestamp: '2/12 10:00 AM',
+      dateRange: 'Feb 12-15',
+      property: '4517 Washington Ave. Manchester, Kentucky 39495',
       status: 'Guest',
       checkIn: 'Check-in today',
-      platform: '🔵',
-      unread: 18,
-      image: 'https://images.unsplash.com/photo-1742039953129-e4edcc82d319?w=200&h=150&fit=crop'
+      platform: 'Vrbo',
+      unread: 1,
+      selected: true,
+      badges: ['pinned', 'same-day-booking', 'same-day-turnover'],
+      image: 'https://images.unsplash.com/photo-1742039953129-e4edcc82d319?w=160&h=160&fit=crop'
     },
     {
-      name: 'Unknown Contact...',
-      message: 'Kindly return the key in the lo...',
-      timestamp: '10/17 4:47 PM',
+      name: 'Cody Fisher',
+      message: 'Hi, I would like to know if there is parking available?',
+      timestamp: '2/12 10:00 AM',
       dateRange: 'External Contact',
       property: '',
-      status: 'Guest',
-      platform: '🟠',
-      starred: true,
-      unread: 1,
-      image: 'https://images.unsplash.com/photo-1623300025008-ccbe3e8501aa?w=200&h=150&fit=crop'
+      status: 'External contact',
+      platform: 'SMS',
+      urgent: true,
+      image: 'https://images.unsplash.com/photo-1623300025008-ccbe3e8501aa?w=160&h=160&fit=crop'
     },
   ];
 
+  // Sample messages matching design reference structure
   const messages = [
-    { sender: 'host', text: 'Hi Brolin, just wanted to confirm your early arrival for today!', time: 'Host 3:05 PM' },
-    { sender: 'host', text: 'You can check in now unit is ready. Thank you!', time: 'Host 3:12 PM' },
-    { sender: 'guest', text: 'Awesome. Thank you we are about 15 minutes away! I appreciate it', time: 'Brolin Cox 3:20 PM' },
-    { sender: 'host', text: "That's great to hear! Safe travels for the last stretch of your drive. We hope you have a fantastic stay!", time: 'HostBuddy 3:23 PM', hostBuddy: true },
-    { sender: 'host', text: 'Hi Brolin, welcome to Hidden Haven! I hope you and your group are settling in comfortably after your early arrival. If you need anything at all during your stay, just let us know. Enjoy your time in San Diego!', time: 'HostBuddy 4:32 PM', hostBuddy: true }
+    { type: 'divider', text: 'Feb 12' },
+    { 
+      sender: 'host', 
+      text: "Hi Floyd, here's your lock box code is 721539205🔓", 
+      time: '11:30 AM',
+      showFeedback: true
+    },
+    { 
+      sender: 'guest', 
+      text: 'Ok thank you', 
+      time: '11:30 AM',
+      guestName: 'Floyd Miles'
+    },
+    { type: 'divider', text: 'Today' },
+    { 
+      sender: 'host', 
+      text: 'Hi Floyd, we hope you were able to get settled in okay and found the parking spaces near the laundry room without any trouble. Please let us know if there is anything we can do to make your stay more comfortable!', 
+      time: '11:30 AM',
+      smartTemplate: true,
+      showFeedback: true
+    },
+    { 
+      sender: 'guest', 
+      text: 'Hello Sam we were interested in extending our stay I notice that tomorrow Saturday only is booked? Is it possible to extend through the weekend', 
+      time: '11:30 AM',
+      guestName: 'Floyd Miles'
+    },
   ];
 
   return (
-    <div className="messaging-preview">
-      {/* Conversations List */}
-      <div className="conversations-sidebar" style={{ borderColor: brandColors.primaryBorder, backgroundColor: brandColors.secondaryBg }}>
-        {/* Header */}
-        <div className="conversations-header" style={{ borderColor: brandColors.primaryBorder }}>
-          <h2 className="conversations-title" style={{ color: brandColors.primaryText }}>
-            Inbox
-          </h2>
-          <div className="conversations-search">
-            <div className="search-input-wrapper">
-              <MessageSquareIcon className="search-icon" size={16} style={{ color: brandColors.tertiaryText }} />
-              <input
-                type="text"
-                placeholder="Search by guest name or p..."
-                className="search-input"
-                style={{ 
-                  backgroundColor: brandColors.inputBg,
-                  borderColor: brandColors.primaryBorder,
-                  color: brandColors.primaryText
-                }}
+    <>
+      {/* CSS Override styles - CRITICAL for matching design reference. TODO: Move to the CSS file */}
+      <style>{`
+        /* Override messaging preview layout to match design reference */
+        #messaging-preview-root {
+          display: flex;
+          flex-direction: column;
+          margin: -32px;
+          height: calc(100vh - 120px);
+          overflow: hidden;
+          background-color: ${brandColors.primaryBg};
+        }
+        
+        /* Chat Header - matches ChatHeader.tsx from design reference */
+        #messaging-preview-root .msg-chat-header {
+          background-color: ${brandColors.secondaryBg};
+          border-bottom: 1px solid ${brandColors.primaryBorder};
+          padding: 12px;
+          flex-shrink: 0;
+        }
+        
+        #messaging-preview-root .msg-header-content {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        
+        #messaging-preview-root .msg-name-buttons {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        
+        #messaging-preview-root .msg-guest-avatar {
+          width: 32px;
+          height: 32px;
+          border-radius: 4px;
+          object-fit: cover;
+          flex-shrink: 0;
+        }
+        
+        #messaging-preview-root .msg-guest-name {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 700;
+          font-size: 18px;
+          line-height: 1.4;
+          color: ${brandColors.primaryText};
+          flex: 1;
+        }
+        
+        #messaging-preview-root .msg-details-button {
+          background-color: ${brandColors.hoverBg};
+          color: ${brandColors.lightBlue};
+          border: none;
+          padding: 6px 12px;
+          border-radius: 4px;
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 600;
+          font-size: 14px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        
+        #messaging-preview-root .msg-pin-button {
+          background: transparent;
+          border: none;
+          padding: 4px;
+          border-radius: 4px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          height: 28px;
+        }
+        
+        #messaging-preview-root .msg-pin-button:hover {
+          background-color: ${brandColors.hoverBg};
+        }
+        
+        #messaging-preview-root .msg-tab-menu {
+          height: 32px;
+          border-bottom: 1px solid ${brandColors.primaryBorder};
+          display: flex;
+          gap: 4px;
+        }
+        
+        #messaging-preview-root .msg-tab {
+          background: transparent;
+          border: none;
+          padding: 8px 4px;
+          border-radius: 4px 4px 0 0;
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 600;
+          font-size: 14px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          position: relative;
+          color: ${brandColors.primaryText};
+        }
+        
+        #messaging-preview-root .msg-tab.active::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 4px;
+          right: 4px;
+          height: 3px;
+          background-color: ${brandColors.primaryBlue};
+          border-radius: 2px 2px 0 0;
+        }
+        
+        #messaging-preview-root .msg-tab-inactive {
+          color: ${brandColors.secondaryText};
+          font-weight: 500;
+        }
+        
+        /* Chat Box - matches ChatBox.tsx from design reference */
+        #messaging-preview-root .msg-chat-box {
+          flex: 1;
+          background-color: ${brandColors.primaryBg};
+          overflow-y: auto;
+          padding: 16px 12px;
+          border-left: 2px solid ${brandColors.primaryBorder};
+          border-right: 1px solid ${brandColors.primaryBorder};
+        }
+        
+        #messaging-preview-root .msg-content {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        
+        #messaging-preview-root .msg-day-divider {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          width: 100%;
+        }
+        
+        #messaging-preview-root .msg-divider-line {
+          flex: 1;
+          height: 1px;
+          background-color: rgba(189, 193, 201, 0.15);
+          border-radius: 1px;
+        }
+        
+        #messaging-preview-root .msg-divider-text {
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 600;
+          font-size: 12px;
+          color: ${brandColors.tertiaryText};
+          white-space: nowrap;
+        }
+        
+        #messaging-preview-root .msg-message {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        
+        #messaging-preview-root .msg-message-host {
+          align-items: flex-end;
+        }
+        
+        #messaging-preview-root .msg-message-guest {
+          align-items: flex-start;
+        }
+        
+        #messaging-preview-root .msg-author-timestamp {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 0 4px;
+        }
+        
+        #messaging-preview-root .msg-logo {
+          width: 20px;
+          height: 20px;
+          flex-shrink: 0;
+        }
+        
+        #messaging-preview-root .msg-guest-avatar-small {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          object-fit: cover;
+          flex-shrink: 0;
+        }
+        
+        #messaging-preview-root .msg-author-name {
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 600;
+          font-size: 14px;
+          color: ${brandColors.tertiaryText};
+        }
+        
+        #messaging-preview-root .msg-timestamp {
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 400;
+          font-size: 14px;
+          color: ${brandColors.tertiaryText};
+        }
+        
+        #messaging-preview-root .msg-divider-dot {
+          width: 2px;
+          height: 2px;
+          border-radius: 50%;
+          background-color: ${brandColors.quaternaryText};
+        }
+        
+        #messaging-preview-root .msg-smart-template-badge {
+          background-color: #013280;
+          padding: 2px 5px;
+          border-radius: 18px;
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 500;
+          font-size: 12px;
+          color: #d4e4fc;
+          margin-left: 4px;
+        }
+        
+        #messaging-preview-root .msg-bubble {
+          max-width: 480px;
+          padding: 12px;
+          border-radius: 12px;
+          border: 1px solid rgba(189, 193, 201, 0.15);
+        }
+        
+        #messaging-preview-root .msg-bubble-host {
+          background-color: ${brandColors.secondaryBg};
+        }
+        
+        #messaging-preview-root .msg-bubble-guest {
+          background-color: ${brandColors.cardBg};
+        }
+        
+        #messaging-preview-root .msg-bubble-text {
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: normal;
+          color: ${brandColors.primaryText};
+          word-wrap: break-word;
+        }
+        
+        #messaging-preview-root .msg-feedback-info {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 0 2px;
+        }
+        
+        #messaging-preview-root .msg-feedback-btn {
+          background: transparent;
+          border: none;
+          padding: 4px;
+          border-radius: 4px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+          color: ${brandColors.quaternaryText};
+        }
+        
+        /* Text Area - matches TextArea.tsx from design reference */
+        #messaging-preview-root .msg-text-area {
+          background-color: ${brandColors.secondaryBg};
+          border-top: 1px solid ${brandColors.primaryBorder};
+          border-left: 2px solid ${brandColors.primaryBorder};
+          padding: 12px;
+          flex-shrink: 0;
+        }
+        
+        #messaging-preview-root .msg-textarea-content {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        
+        #messaging-preview-root .msg-placeholder {
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 500;
+          font-size: 16px;
+          color: ${brandColors.quaternaryText};
+        }
+        
+        #messaging-preview-root .msg-actions {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        
+        #messaging-preview-root .msg-ai-templates {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+        
+        #messaging-preview-root .msg-dropdown-btn {
+          background: transparent;
+          border: none;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 500;
+          font-size: 14px;
+          color: ${brandColors.secondaryText};
+          height: 32px;
+        }
+        
+        #messaging-preview-root .msg-divider-vertical {
+          width: 1px;
+          height: 16px;
+          background-color: rgba(189, 193, 201, 0.15);
+          border-radius: 1px;
+        }
+        
+        #messaging-preview-root .msg-template-btn {
+          background: transparent;
+          border: none;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 6px 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 600;
+          font-size: 14px;
+          color: ${brandColors.secondaryText};
+          height: 32px;
+        }
+        
+        #messaging-preview-root .msg-send-button-group {
+          display: flex;
+        }
+        
+        #messaging-preview-root .msg-send-btn {
+          background-color: ${brandColors.primaryBlue};
+          color: ${brandColors.primaryText};
+          border: none;
+          padding: 6px 12px;
+          border-radius: 4px 0 0 4px;
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 600;
+          font-size: 14px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          height: 32px;
+        }
+        
+        #messaging-preview-root .msg-send-dropdown {
+          background-color: ${brandColors.primaryBlue};
+          color: ${brandColors.primaryText};
+          border: none;
+          border-left: 1px solid rgba(15, 17, 23, 0.32);
+          padding: 6px 12px;
+          border-radius: 0 4px 4px 0;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+        }
+        
+        /* Icon styles */
+        #messaging-preview-root .msg-icon {
+          width: 16px;
+          height: 16px;
+          flex-shrink: 0;
+        }
+        
+        #messaging-preview-root .msg-icon-20 {
+          width: 20px;
+          height: 20px;
+          flex-shrink: 0;
+        }
+      `}</style>
+      
+      <div id="messaging-preview-root">
+        {/* Chat Header (top) */}
+        <div className="msg-chat-header">
+          <div className="msg-header-content">
+            <div className="msg-name-buttons">
+              <img 
+                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop"
+                alt="Floyd Miles"
+                className="msg-guest-avatar"
               />
-              <style>
-                {`.search-input::placeholder { color: ${brandColors.placeholderText}; }`}
-              </style>
+              <h2 className="msg-guest-name">Floyd Miles</h2>
+              <button className="msg-pin-button" title="Pin conversation">
+                <img src={DefaultPinIcon} alt="Pin" style={{ width: '16px', height: '16px' }} />
+              </button>
+              <button className="msg-details-button">
+                <span>Details</span>
+              </button>
             </div>
-            <button 
-              className="filters-button"
-              style={{ 
-                backgroundColor: brandColors.primaryBlue,
-                color: brandColors.primaryText
-              }}
-            >
-              Filters
-            </button>
+            
+            <div className="msg-tab-menu">
+              <button className="msg-tab active">
+                <img src={PmsIcon} alt="PMS" style={{ width: '14px', height: '14px', marginRight: '6px' }} />
+                <span>PMS</span>
+              </button>
+              <button className="msg-tab msg-tab-inactive">
+                <img src={WhatsAppIcon} alt="WhatsApp" style={{ width: '14px', height: '14px', marginRight: '6px' }} />
+                <span>WhatsApp</span>
+              </button>
+              <button className="msg-tab msg-tab-inactive">
+                <img src={OpenIssueIcon} alt="Open issues" style={{ width: '14px', height: '14px', marginRight: '6px' }} />
+                <span>Open issues</span>
+                <span style={{ 
+                  backgroundColor: 'rgba(189,193,201,0.08)', 
+                  color: brandColors.tertiaryText,
+                  padding: '2px 6px',
+                  borderRadius: '10px',
+                  fontSize: '12px',
+                  fontWeight: '600'
+                }}>3</span>
+              </button>
+              <button className="msg-tab msg-tab-inactive">
+                <img src={NotesIcon} alt="Notes" style={{ width: '14px', height: '14px', marginRight: '6px' }} />
+                <span>Notes</span>
+                <span style={{ 
+                  backgroundColor: 'rgba(189,193,201,0.08)', 
+                  color: brandColors.tertiaryText,
+                  padding: '2px 6px',
+                  borderRadius: '10px',
+                  fontSize: '12px',
+                  fontWeight: '600'
+                }}>2</span>
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* Conversations */}
-        <div className="conversations-list">
-          {conversations.map((conv, idx) => (
-            <div
-              key={idx}
-              className="conversation-item"
-              style={{ 
-                borderColor: brandColors.primaryBorder,
-                backgroundColor: idx === 0 ? brandColors.hoverBg : 'transparent'
-              }}
-            >
-              <div className="conversation-content">
-                {/* Property Image */}
-                <img 
-                  src={conv.image} 
-                  alt={conv.property}
-                  className="conversation-image"
-                />
-                
-                {/* Content */}
-                <div className="conversation-details">
-                  <div className="conversation-header-line">
-                    <div className="conversation-name-section">
-                      <p className="conversation-name" style={{ color: brandColors.primaryText }}>
-                        {conv.name}
-                      </p>
-                      {conv.urgent && (
-                        <span className="urgent-badge" style={{ backgroundColor: brandColors.errorRed, color: brandColors.primaryText }}>
-                          🔥 Urgent
-                        </span>
-                      )}
-                    </div>
-                    <span className="conversation-timestamp" style={{ color: brandColors.tertiaryText }}>
-                      {conv.timestamp}
-                    </span>
+        
+        {/* Chat Box (middle - scrollable) */}
+        <div className="msg-chat-box">
+          <div className="msg-content">
+            {messages.map((msg, idx) => {
+              if (msg.type === 'divider') {
+                return (
+                  <div key={idx} className="msg-day-divider">
+                    <div className="msg-divider-line"></div>
+                    <span className="msg-divider-text">{msg.text}</span>
+                    <div className="msg-divider-line"></div>
                   </div>
-                  
-                  <p className="conversation-message" style={{ color: brandColors.tertiaryText }}>
-                    {conv.message}
-                  </p>
-                  
-                  <div className="conversation-meta" style={{ color: brandColors.quaternaryText }}>
-                    <span>{conv.dateRange}</span>
-                    {conv.property && <span>{conv.property}</span>}
-                  </div>
-                  
-                  <div className="conversation-footer">
-                    <div className="conversation-badges">
-                      <span className="status-badge" style={{ backgroundColor: brandColors.hoverBg, color: brandColors.primaryText }}>
-                        {conv.status}
-                      </span>
-                      {conv.checkIn && (
-                        <span className="checkin-badge" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>
-                          {conv.checkIn}
-                        </span>
-                      )}
-                      <span>{conv.platform}</span>
-                    </div>
-                    {conv.unread > 0 && (
-                      <span className="unread-count" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>
-                        {conv.unread}
-                      </span>
+                );
+              }
+              
+              return (
+                <div key={idx} className={`msg-message ${msg.sender === 'host' ? 'msg-message-host' : 'msg-message-guest'}`}>
+                  {/* Author + Timestamp */}
+                  <div className="msg-author-timestamp">
+                    {msg.sender === 'host' ? (
+                      <>
+                        <img 
+                          src={HostBuddyIcon} 
+                          alt="HostBuddy"
+                          className="msg-logo"
+                        />
+                        <span className="msg-timestamp">{msg.time}</span>
+                        {msg.smartTemplate && (
+                          <span className="msg-smart-template-badge">Smart template</span>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <img 
+                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop"
+                          alt={msg.guestName}
+                          className="msg-guest-avatar-small"
+                        />
+                        <span className="msg-author-name">{msg.guestName}</span>
+                        <div className="msg-divider-dot"></div>
+                        <span className="msg-timestamp">{msg.time}</span>
+                      </>
                     )}
                   </div>
+                  
+                  {/* Message Bubble */}
+                  <div className={`msg-bubble ${msg.sender === 'host' ? 'msg-bubble-host' : 'msg-bubble-guest'}`}>
+                    <p className="msg-bubble-text">{msg.text}</p>
+                  </div>
+                  
+                  {/* Feedback (only for host messages) */}
+                  {msg.showFeedback && (
+                    <div className="msg-feedback-info">
+                      <button className="msg-feedback-btn" title="Thumbs up">
+                        <img src={ThumbsUpIcon} alt="Thumbs up" style={{ width: '16px', height: '16px' }} />
+                      </button>
+                      <button className="msg-feedback-btn" title="Thumbs down">
+                        <img src={ThumbsDownIcon} alt="Thumbs down" style={{ width: '16px', height: '16px' }} />
+                      </button>
+                      <button className="msg-feedback-btn" title="Help">
+                        <img src={HelpCircleIcon} alt="Help" style={{ width: '16px', height: '16px' }} />
+                      </button>
+                    </div>
+                  )}
                 </div>
+              );
+            })}
+          </div>
+        </div>
+        
+        {/* Text Area (bottom) */}
+        <div className="msg-text-area">
+          <div className="msg-textarea-content">
+            <div className="msg-placeholder">Message...</div>
+            
+            <div className="msg-actions">
+              <div className="msg-ai-templates">
+                <button className="msg-dropdown-btn">
+                  <img src={AiMessageIcon} alt="AI" style={{ width: '15px', height: '15px', marginRight: '5px' }} />
+                  <span>AI response</span>
+                  <img src={ChevDownIcon} alt="Dropdown" style={{ width: '20px', height: '20px', marginLeft: '0px' }} />
+                </button>
+                
+                <div className="msg-divider-vertical"></div>
+                
+                <button className="msg-template-btn">
+                  <img src={SendTemplateIcon} alt="Template" style={{ width: '15px', height: '15px', marginRight: '5px' }} />
+                  <span>Send template</span>
+                </button>
+              </div>
+              
+              <div className="msg-send-button-group">
+                <button className="msg-send-btn">
+                  <span>Send</span>
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{ marginLeft: '2px' }}
+                  >
+                    <path
+                      d="M10.5004 12H5.00043M4.91577 12.2915L2.58085 19.2662C2.39742 19.8142 2.3057 20.0881 2.37152 20.2569C2.42868 20.4034 2.55144 20.5145 2.70292 20.5567C2.87736 20.6054 3.14083 20.4869 3.66776 20.2497L20.3792 12.7296C20.8936 12.4981 21.1507 12.3824 21.2302 12.2216C21.2993 12.082 21.2993 11.9181 21.2302 11.7784C21.1507 11.6177 20.8936 11.5019 20.3792 11.2705L3.66193 3.74776C3.13659 3.51135 2.87392 3.39315 2.69966 3.44164C2.54832 3.48375 2.42556 3.59454 2.36821 3.74078C2.30216 3.90917 2.3929 4.18255 2.57437 4.72931L4.91642 11.7856C4.94759 11.8795 4.96317 11.9264 4.96933 11.9744C4.97479 12.0171 4.97473 12.0602 4.96916 12.1028C4.96289 12.1508 4.94718 12.1977 4.91577 12.2915Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                <button className="msg-send-dropdown">
+                  <img src={ChevDownIcon} alt="Dropdown" style={{ width: '20px', height: '20px' }} />
+                </button>
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
-
-      {/* Conversation View */}
-      <div className="conversation-view" style={{ backgroundColor: brandColors.primaryBg }}>
-        {/* Header */}
-        <div className="conversation-view-header" style={{ borderColor: brandColors.primaryBorder, backgroundColor: brandColors.secondaryBg }}>
-          <div className="conversation-view-header-left">
-            <div className="conversation-avatar" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>
-              B
-            </div>
-            <div className="conversation-view-info">
-              <h3 className="conversation-view-name" style={{ color: brandColors.primaryText }}>
-                Brolin Cox
-              </h3>
-              <span className="conversation-view-urgent" style={{ backgroundColor: brandColors.errorRed, color: brandColors.primaryText }}>
-                🔥 Urgent
-              </span>
-            </div>
-          </div>
-          
-          <div className="conversation-view-actions">
-            {['PMS', 'WhatsApp', 'OpenPhone'].map((btn) => (
-              <button key={btn} className="action-pill" style={{ borderColor: brandColors.primaryBorder, backgroundColor: 'transparent', color: brandColors.tertiaryText }}>
-                {btn}
-              </button>
-            ))}
-            <button className="action-pill" style={{ borderColor: brandColors.primaryBorder, backgroundColor: 'transparent', color: brandColors.tertiaryText }}>
-              Open Issue
-              <span className="issue-count" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>1</span>
-            </button>
-            <button className="action-pill" style={{ borderColor: brandColors.primaryBorder, backgroundColor: 'transparent', color: brandColors.tertiaryText }}>
-              Notes
-            </button>
-            <button className="action-pill-primary" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>
-              Details
-            </button>
-          </div>
-        </div>
-
-        {/* Messages */}
-        <div className="wl-preview-messages-area">
-          {messages.map((msg, idx) => (
-            <div key={idx} className={`wl-preview-message ${msg.sender === 'host' ? 'message-host' : 'message-guest'}`}>
-              {msg.sender === 'guest' ? (
-                <>
-                  <div className="wl-preview-message-bubble message-bubble-guest" style={{ backgroundColor: brandColors.secondaryBg, borderColor: brandColors.primaryBorder }}>
-                    <p className="wl-preview-message-text" style={{ color: brandColors.primaryText }}>
-                      {msg.text}
-                    </p>
-                  </div>
-                  <span className="wl-preview-message-time" style={{ color: brandColors.tertiaryText }}>
-                    {msg.time}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <div className="wl-preview-message-bubble message-bubble-host" style={{ backgroundColor: brandColors.hoverBg, border: `1px solid ${brandColors.primaryBorder}` }}>
-                    <p className="wl-preview-message-text" style={{ color: brandColors.primaryText }}>
-                      {msg.text}
-                    </p>
-                  </div>
-                  <div className="wl-preview-message-time-section">
-                    {msg.hostBuddy && (
-                      <div className="hostbuddy-indicator">
-                        <div className="hostbuddy-badge" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>
-                          H
-                        </div>
-                      </div>
-                    )}
-                    <span className="wl-preview-message-time" style={{ color: brandColors.tertiaryText }}>
-                      {msg.time}
-                    </span>
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Input Area */}
-        <div className="wl-preview-message-input-area" style={{ borderColor: brandColors.primaryBorder, backgroundColor: brandColors.secondaryBg }}>
-          <div className="wl-preview-message-input-row">
-            <input 
-              type="text"
-              placeholder="Message..."
-              className="wl-preview-message-input"
-              style={{ 
-                backgroundColor: brandColors.inputBg,
-                borderColor: brandColors.primaryBorder,
-                color: brandColors.primaryText
-              }}
-            />
-            <style>
-              {`.message-input::placeholder { color: ${brandColors.placeholderText}; }`}
-            </style>
-            <button 
-              className="send-button"
-              style={{ 
-                backgroundColor: brandColors.primaryBlue,
-                color: brandColors.primaryText
-              }}
-            >
-              Send
-            </button>
-          </div>
-          <button className="ai-response-button" style={{ color: brandColors.tertiaryText }}>
-            🤖 AI Response
-          </button>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -807,7 +1198,7 @@ export function SettingsPreview({ brandColors }) {
                     className="toggle-knob"
                     style={{ 
                       backgroundColor: brandColors.primaryText,
-                      transform: idx === 0 ? 'translateX(24px)' : 'translateX(0)'
+                      transform: idx === 0 ? 'translateX(30px)' : 'translateX(2px)'
                     }}
                   />
                 </div>
