@@ -261,6 +261,7 @@ const WhiteLabelBranding = () => {
   const [brandColors, setBrandColors] = useState(HOSTBUDDY_ORIGINAL_DARK);
   const [logoUrl, setLogoUrl] = useState('');
   const [faviconUrl, setFaviconUrl] = useState('');
+  const [brandName, setBrandName] = useState('HostBuddy');
   const [previewPage, setPreviewPage] = useState('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   
@@ -507,6 +508,13 @@ const WhiteLabelBranding = () => {
             setDarkModeColors(HOSTBUDDY_ORIGINAL_DARK);
           }
           
+          // Load brand name if available
+          if (response.data.brand_name) {
+            setBrandName(response.data.brand_name);
+          } else {
+            setBrandName('HostBuddy'); // Default
+          }
+          
           // Set brandColors based on current editing mode
           if (editingMode === 'light') {
             setBrandColors(loadedLightColors);
@@ -518,6 +526,7 @@ const WhiteLabelBranding = () => {
         } else {
           // No CSS config found, use defaults
           console.log('No CSS config found for domain, using defaults');
+          setBrandName('HostBuddy'); // Reset to default
         }
       } catch (error) {
         console.error('Error loading CSS config:', error);
@@ -621,7 +630,8 @@ const WhiteLabelBranding = () => {
         domain: selectedDomain,
         key: domainKey,
         css_properties: light_css_properties,
-        dark_mode_css_properties: dark_css_properties
+        dark_mode_css_properties: dark_css_properties,
+        brand_name: brandName
       });
       
       if (response.success) {
@@ -943,6 +953,24 @@ const WhiteLabelBranding = () => {
             <div className="config-header">
               <h1 className="config-title">Branding Configuration</h1>
               <p className="config-subtitle">Customize your HostBuddy experience</p>
+            </div>
+
+            {/* Brand Name */}
+            <div className="config-section">
+              <h3 className="section-title">Brand Name</h3>
+              <div className="brand-name-container mt-2">
+                <label className="brand-name-label">Your Brand Name</label>
+                <input
+                  type="text"
+                  value={brandName}
+                  onChange={(e) => setBrandName(e.target.value)}
+                  placeholder="e.g., HostBuddy, HostBuddy AI, MyBrand AI"
+                  className="brand-name-input"
+                />
+                <p className="brand-name-description">
+                  This will replace "HostBuddy" throughout your application
+                </p>
+              </div>
             </div>
 
             {/* Logo Upload */}
@@ -1476,12 +1504,12 @@ const WhiteLabelBranding = () => {
 
               {/* Main Content Preview */}
               <div className="preview-main" style={{ backgroundColor: brandColors.primaryBg }}>
-                {previewPage === 'dashboard' && <DashboardPreview brandColors={brandColors} />}
-                {previewPage === 'properties' && <PropertiesPreview brandColors={brandColors} />}
-                {previewPage === 'messaging' && <MessagingPreview brandColors={brandColors} />}
-                {previewPage === 'action-items' && <ActionItemsPreview brandColors={brandColors} />}
-                {previewPage === 'insights' && <InsightsPreview brandColors={brandColors} />}
-                {previewPage === 'settings' && <SettingsPreview brandColors={brandColors} />}
+                {previewPage === 'dashboard' && <DashboardPreview brandColors={brandColors} brandName={brandName} />}
+                {previewPage === 'properties' && <PropertiesPreview brandColors={brandColors} brandName={brandName} />}
+                {previewPage === 'messaging' && <MessagingPreview brandColors={brandColors} brandName={brandName} />}
+                {previewPage === 'action-items' && <ActionItemsPreview brandColors={brandColors} brandName={brandName} />}
+                {previewPage === 'insights' && <InsightsPreview brandColors={brandColors} brandName={brandName} />}
+                {previewPage === 'settings' && <SettingsPreview brandColors={brandColors} brandName={brandName} />}
               </div>
             </div>
           </div>

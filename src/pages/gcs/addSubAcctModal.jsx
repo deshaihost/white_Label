@@ -7,6 +7,9 @@ import ToastHandle from "../../helper/ToastMessage";
 
 const AddSubAcctModal = ({ show, handleClose, onAccountAdded }) => {
   const [accountName, setAccountName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -17,14 +20,40 @@ const AddSubAcctModal = ({ show, handleClose, onAccountAdded }) => {
       return;
     }
     
+    // Validate email format if provided
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      ToastHandle("Please enter a valid email address", "warning");
+      return;
+    }
+    
+    // If email is provided, password must also be provided
+    if (email && !password) {
+      ToastHandle("Password is required when email is provided", "warning");
+      return;
+    }
+    
+    // Validate password match if password is provided
+    if (password && password !== confirmPassword) {
+      ToastHandle("Passwords do not match", "warning");
+      return;
+    }
+    
     setIsLoading(true);
     
     try {
-      const response = await callAddSubAccountApi(accountName, setIsLoading);
+      const response = await callAddSubAccountApi({
+        accountName,
+        email: email || undefined,
+        password: password || undefined,
+        confirmPassword: confirmPassword || undefined
+      }, setIsLoading);
       
       if (response && response.subaccount_id) {
         ToastHandle("Account created successfully", "success");
         setAccountName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
         onAccountAdded(); // Trigger refresh in parent component
         handleClose();
       }
@@ -37,6 +66,9 @@ const AddSubAcctModal = ({ show, handleClose, onAccountAdded }) => {
   
   const handleCancel = () => {
     setAccountName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
     handleClose();
   };
 
@@ -48,7 +80,46 @@ const AddSubAcctModal = ({ show, handleClose, onAccountAdded }) => {
       <Modal.Body>
         <div className="simple-text-modal text-center">
           <form onSubmit={handleSubmit}>
-            <input className="form-control" type="text" placeholder="Enter a name for the account" value={accountName} onChange={(e) => setAccountName(e.target.value)} disabled={isLoading}/>
+            <input 
+              className="form-control" 
+              type="text" 
+              placeholder="Enter a name for the account" 
+              value={accountName} 
+              onChange={(e) => setAccountName(e.target.value)} 
+              disabled={isLoading}
+            />
+            
+            <div className="mt-3 mb-2 text-muted" style={{ fontSize: '0.9rem' }}>
+              <em>If provided, these credentials will allow the user to log in to this account directly</em>
+            </div>
+            
+            <input 
+              className="form-control mt-2" 
+              type="email" 
+              placeholder="Email (optional)" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              disabled={isLoading}
+            />
+            
+            <input 
+              className="form-control mt-2" 
+              type="password" 
+              placeholder="Password (optional)" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              disabled={isLoading}
+            />
+            
+            <input 
+              className="form-control mt-2" 
+              type="password" 
+              placeholder="Confirm password (optional)" 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)} 
+              disabled={isLoading}
+            />
+            
             {isLoading ? (
               <div className="mt-3">
                 <Loader />
