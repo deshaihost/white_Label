@@ -36,7 +36,8 @@ function putCompleteActionItemEndPoint(params) {
 
 function getCalryLinkEndPoint(params) {
   const { data } = params;
-  return api.get(`${URL.GET_CALRY_LINK}integration_platform=${data?.platform}`);
+  const currentDomain = window.location.hostname;
+  return api.get(`${URL.GET_CALRY_LINK}integration_platform=${data?.platform}&domain=${encodeURIComponent(currentDomain)}`);
 }
 
 function getActionsItemsEndPoint(params) {
