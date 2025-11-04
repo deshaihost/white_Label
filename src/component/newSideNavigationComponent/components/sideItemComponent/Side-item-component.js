@@ -416,6 +416,7 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
     6: ['insights'],             // Insights
     75: ['action-item-settings'], // Action Items Settings (in Settings dropdown)
     76: ['integrations'],        // Integrations (in Settings dropdown)
+    78: ['subscriptions'],       // Subscription (regular settings)
   };
 
   // Filter navigation items based on feature settings

@@ -26,6 +26,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import StatisticsPage from "../pages/statistics/statistics";
 import ProtectedRoute from "./ProtectedRoute";
 import FeatureProtectedRoute from "./FeatureProtectedRoute";
+import FeatureProtectedUnauthRoute from "./FeatureProtectedUnauthRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import QuestionnairePage from "../pages/properties/addProperties/dynamic_questionnaire/complete_questionnaire";
 import GuidedSetup from "../pages/properties/addProperties/guided_setup/guidedSetup";
@@ -260,11 +261,32 @@ const Routing = () => {
         <Route path="/meet-hostbuddy" element={<MeetHostBoddy />}></Route>
         <Route path="/faqs" element={<Faqs />}></Route>
         <Route path="/about-us" element={<AboutUs />}></Route>
-        <Route path="/login" element={<Login />}></Route>
+        <Route 
+          path="/login" 
+          element={
+            <FeatureProtectedUnauthRoute featureId="auth-pages" redirectTo="/client-login">
+              <Login />
+            </FeatureProtectedUnauthRoute>
+          }
+        />
         <Route path="/client-login" element={<WhiteLabelLogin />}></Route>
-        <Route path="/signup" element={<Signup />}></Route>
+        <Route 
+          path="/signup" 
+          element={
+            <FeatureProtectedUnauthRoute featureId="auth-pages">
+              <Signup />
+            </FeatureProtectedUnauthRoute>
+          }
+        />
         <Route path="/accept-invitation" element={<InviteSignup />}></Route>
-        <Route path="/forgot" element={<ForgotPass />}></Route>
+        <Route 
+          path="/forgot" 
+          element={
+            <FeatureProtectedUnauthRoute featureId="auth-pages">
+              <ForgotPass />
+            </FeatureProtectedUnauthRoute>
+          }
+        />
         <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
         <Route path="/termsof-service" element={<TermsofService />}></Route>
         <Route path="/data-processing-agreement" element={<DPA />}></Route>

@@ -2,10 +2,17 @@ import React, { useState } from "react";
 import { getSubscriptionStatus } from "../../helper/Authorized";
 import AccountNotifBanner from "./accountNotifBanner";
 import { Link } from "react-router-dom";
+import { useFeatureAccess } from "../../helper/useFeatureAccess";
 
 import AddPropertyModal from "../modal/addPropertyModal/AddPropertyModal";
 
 const SubscriptionBanner = ({userData, bottomMargin, topMargin}) => {
+  const { isFeatureEnabled } = useFeatureAccess();
+
+  // Hide banner if subscriptions feature is disabled
+  if (!isFeatureEnabled('subscriptions')) {
+    return null;
+  }
 
   const [showSubscribeModal, setShowSubscribeModal] = useState(false);
 
@@ -28,6 +35,9 @@ const SubscriptionBanner = ({userData, bottomMargin, topMargin}) => {
     const trialEnds = new Date(userData.trial_ends);
     const daysRemaining = Math.ceil((trialEnds - now) / (1000 * 60 * 60 * 24));
 
+    if (daysRemaining > 60) { // don't show the banner
+      return null;
+    }
     if (daysRemaining > 5) {
       // User is in trial with more than 5 days remaining
       title = 'Free Trial';

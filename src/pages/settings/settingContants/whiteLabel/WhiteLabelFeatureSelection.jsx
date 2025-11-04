@@ -167,7 +167,7 @@ const WhiteLabelFeatureSelection = () => {
     { 
       id: 'property-profile', 
       name: 'Property Profile', 
-      description: 'Resources, Basics, SOPs, Conversation Preferences (3 tabs)', 
+      description: 'Users can configure the AI knowledge base and property details',
       enabled: true, 
       available: true, 
       version: 'v1', 
@@ -177,7 +177,7 @@ const WhiteLabelFeatureSelection = () => {
     { 
       id: 'smart-templates', 
       name: 'Smart Templates', 
-      description: 'Manage AI message templates', 
+      description: 'Highly robust, AI-enhanced templated messaging', 
       enabled: true, 
       available: true, 
       version: 'v1', 
@@ -187,7 +187,7 @@ const WhiteLabelFeatureSelection = () => {
     { 
       id: 'upsells', 
       name: 'Upsells', 
-      description: 'Gap Night Upsells & Inquiry Followups', 
+      description: 'Gap night upsells & inquiry followups', 
       enabled: true, 
       available: true, 
       version: 'v1', 
@@ -197,7 +197,7 @@ const WhiteLabelFeatureSelection = () => {
     { 
       id: 'messaging-inbox', 
       name: 'Messaging Inbox', 
-      description: 'All HostBuddy messaging features', 
+      description: 'Comprehensive messaging inbox for teams to send and receive guest messages',
       enabled: true, 
       available: true, 
       version: 'v1', 
@@ -207,7 +207,7 @@ const WhiteLabelFeatureSelection = () => {
     { 
       id: 'action-items', 
       name: 'Action Items', 
-      description: 'Track AI-generated operational tasks', 
+      description: 'AI will notify your team when guest messages need attention',
       enabled: true, 
       available: true, 
       version: 'v1', 
@@ -227,12 +227,22 @@ const WhiteLabelFeatureSelection = () => {
     { 
       id: 'action-item-settings', 
       name: 'Action Item Settings', 
-      description: 'Configure AI task generation rules', 
+      description: 'Configure rules and categories for AI action item generation', 
       enabled: true, 
       available: true, 
       version: 'v1', 
       link: '/setting/action-items',
       paths: ['/setting/action-items']
+    },
+    {
+      id: 'auth-pages',
+      name: 'Direct User Login',
+      description: 'Signup, login, and forgot password pages for end users',
+      enabled: true,
+      available: true,
+      version: 'v1',
+      link: '/login',
+      paths: ['/signup', '/login', '/forgot']
     },
     { 
       id: 'integrations', 
@@ -244,6 +254,16 @@ const WhiteLabelFeatureSelection = () => {
       link: '/setting/integrations',
       paths: ['/setting/integrations']
     },
+    {
+      id: 'subscriptions',
+      name: 'Subscription Management',
+      description: 'Users can subscribe directly and manage their subscriptions',
+      enabled: false,
+      available: false,
+      version: 'v2',
+      link: '/setting/subscription',
+      paths: ['/setting/subscription']
+    }
   ]);
 
   const [customDomain] = useState('');
