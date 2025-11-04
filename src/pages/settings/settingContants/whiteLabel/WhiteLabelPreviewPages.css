@@ -889,7 +889,7 @@
   font-variation-settings: 'opsz' 14;
 }
 
-.messages-area {
+.wl-preview-messages-area {
   flex: 1;
   padding: 16px;
   display: flex;
@@ -898,20 +898,20 @@
   overflow-y: auto;
 }
 
-.message {
+.wl-preview-message {
   display: flex;
   flex-direction: column;
 }
 
-.message-guest {
+.wl-preview-message-guest {
   align-items: flex-start;
 }
 
-.message-host {
+.wl-preview-message-host {
   align-items: flex-end;
 }
 
-.message-bubble {
+.wl-preview-message-bubble {
   max-width: 70%;
   padding: 10px 16px;
   border-radius: 8px;
@@ -920,15 +920,15 @@
   overflow-wrap: break-word;
 }
 
-.message-bubble-guest {
+.wl-preview-message-bubble-guest {
   border: 1px solid;
 }
 
-.message-bubble-host {
+.wl-preview-message-bubble-host {
   border: 1px solid;
 }
 
-.message-text {
+.wl-preview-message-text {
   font-size: 14px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
@@ -936,7 +936,7 @@
   font-variation-settings: 'opsz' 14;
 }
 
-.message-time {
+.wl-preview-message-time {
   font-size: 11px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
@@ -944,7 +944,7 @@
   padding: 0 4px;
 }
 
-.message-time-section {
+.wl-preview-message-time-section {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -969,19 +969,19 @@
   font-variation-settings: 'opsz' 14;
 }
 
-.message-input-area {
+.wl-preview-message-input-area {
   padding: 16px;
   border-top: 2px solid;
   flex-shrink: 0;
 }
 
-.message-input-row {
+.wl-preview-message-input-row {
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
 }
 
-.message-input {
+.wl-preview-message-input {
   flex: 1;
   padding: 8px 12px;
   border-radius: 4px;

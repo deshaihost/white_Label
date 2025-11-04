@@ -412,7 +412,7 @@ export function MessagingPreview({ brandColors }) {
   ];
 
   const messages = [
-    { sender: 'host', text: 'Hi Brolin, Have you access Code to location UUUUUUL', time: 'Host 3:12 PM' },
+    { sender: 'host', text: 'Hi Brolin, just wanted to confirm your early arrival for today!', time: 'Host 3:05 PM' },
     { sender: 'host', text: 'You can check in now unit is ready. Thank you!', time: 'Host 3:12 PM' },
     { sender: 'guest', text: 'Awesome. Thank you we are about 15 minutes away! I appreciate it', time: 'Brolin Cox 3:20 PM' },
     { sender: 'host', text: "That's great to hear! Safe travels for the last stretch of your drive. We hope you have a fantastic stay!", time: 'HostBuddy 3:23 PM', hostBuddy: true },
@@ -441,12 +441,15 @@ export function MessagingPreview({ brandColors }) {
                   color: brandColors.primaryText
                 }}
               />
+              <style>
+                {`.search-input::placeholder { color: ${brandColors.placeholderText}; }`}
+              </style>
             </div>
             <button 
               className="filters-button"
               style={{ 
                 backgroundColor: brandColors.primaryBlue,
-                color: '#FFFFFF'
+                color: brandColors.primaryText
               }}
             >
               Filters
@@ -481,7 +484,7 @@ export function MessagingPreview({ brandColors }) {
                         {conv.name}
                       </p>
                       {conv.urgent && (
-                        <span className="urgent-badge" style={{ backgroundColor: brandColors.errorRed, color: '#FFFFFF' }}>
+                        <span className="urgent-badge" style={{ backgroundColor: brandColors.errorRed, color: brandColors.primaryText }}>
                           🔥 Urgent
                         </span>
                       )}
@@ -506,14 +509,14 @@ export function MessagingPreview({ brandColors }) {
                         {conv.status}
                       </span>
                       {conv.checkIn && (
-                        <span className="checkin-badge" style={{ backgroundColor: brandColors.primaryBlue, color: '#FFFFFF' }}>
+                        <span className="checkin-badge" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>
                           {conv.checkIn}
                         </span>
                       )}
                       <span>{conv.platform}</span>
                     </div>
                     {conv.unread > 0 && (
-                      <span className="unread-count" style={{ backgroundColor: brandColors.primaryBlue, color: '#FFFFFF' }}>
+                      <span className="unread-count" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>
                         {conv.unread}
                       </span>
                     )}
@@ -530,14 +533,14 @@ export function MessagingPreview({ brandColors }) {
         {/* Header */}
         <div className="conversation-view-header" style={{ borderColor: brandColors.primaryBorder, backgroundColor: brandColors.secondaryBg }}>
           <div className="conversation-view-header-left">
-            <div className="conversation-avatar" style={{ backgroundColor: brandColors.primaryBlue, color: '#FFFFFF' }}>
+            <div className="conversation-avatar" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>
               B
             </div>
             <div className="conversation-view-info">
               <h3 className="conversation-view-name" style={{ color: brandColors.primaryText }}>
                 Brolin Cox
               </h3>
-              <span className="conversation-view-urgent" style={{ backgroundColor: brandColors.errorRed, color: '#FFFFFF' }}>
+              <span className="conversation-view-urgent" style={{ backgroundColor: brandColors.errorRed, color: brandColors.primaryText }}>
                 🔥 Urgent
               </span>
             </div>
@@ -551,48 +554,48 @@ export function MessagingPreview({ brandColors }) {
             ))}
             <button className="action-pill" style={{ borderColor: brandColors.primaryBorder, backgroundColor: 'transparent', color: brandColors.tertiaryText }}>
               Open Issue
-              <span className="issue-count" style={{ backgroundColor: brandColors.primaryBlue, color: '#FFFFFF' }}>1</span>
+              <span className="issue-count" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>1</span>
             </button>
             <button className="action-pill" style={{ borderColor: brandColors.primaryBorder, backgroundColor: 'transparent', color: brandColors.tertiaryText }}>
               Notes
             </button>
-            <button className="action-pill-primary" style={{ backgroundColor: brandColors.primaryBlue, color: '#FFFFFF' }}>
+            <button className="action-pill-primary" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>
               Details
             </button>
           </div>
         </div>
 
         {/* Messages */}
-        <div className="messages-area">
+        <div className="wl-preview-messages-area">
           {messages.map((msg, idx) => (
-            <div key={idx} className={`message ${msg.sender === 'host' ? 'message-host' : 'message-guest'}`}>
+            <div key={idx} className={`wl-preview-message ${msg.sender === 'host' ? 'message-host' : 'message-guest'}`}>
               {msg.sender === 'guest' ? (
                 <>
-                  <div className="message-bubble message-bubble-guest" style={{ backgroundColor: brandColors.secondaryBg, borderColor: brandColors.primaryBorder }}>
-                    <p className="message-text" style={{ color: brandColors.primaryText }}>
+                  <div className="wl-preview-message-bubble message-bubble-guest" style={{ backgroundColor: brandColors.secondaryBg, borderColor: brandColors.primaryBorder }}>
+                    <p className="wl-preview-message-text" style={{ color: brandColors.primaryText }}>
                       {msg.text}
                     </p>
                   </div>
-                  <span className="message-time" style={{ color: brandColors.tertiaryText }}>
+                  <span className="wl-preview-message-time" style={{ color: brandColors.tertiaryText }}>
                     {msg.time}
                   </span>
                 </>
               ) : (
                 <>
-                  <div className="message-bubble message-bubble-host" style={{ backgroundColor: brandColors.hoverBg, border: `1px solid ${brandColors.primaryBorder}` }}>
-                    <p className="message-text" style={{ color: brandColors.primaryText }}>
+                  <div className="wl-preview-message-bubble message-bubble-host" style={{ backgroundColor: brandColors.hoverBg, border: `1px solid ${brandColors.primaryBorder}` }}>
+                    <p className="wl-preview-message-text" style={{ color: brandColors.primaryText }}>
                       {msg.text}
                     </p>
                   </div>
-                  <div className="message-time-section">
+                  <div className="wl-preview-message-time-section">
                     {msg.hostBuddy && (
                       <div className="hostbuddy-indicator">
-                        <div className="hostbuddy-badge" style={{ backgroundColor: brandColors.primaryBlue, color: '#FFFFFF' }}>
+                        <div className="hostbuddy-badge" style={{ backgroundColor: brandColors.primaryBlue, color: brandColors.primaryText }}>
                           H
                         </div>
                       </div>
                     )}
-                    <span className="message-time" style={{ color: brandColors.tertiaryText }}>
+                    <span className="wl-preview-message-time" style={{ color: brandColors.tertiaryText }}>
                       {msg.time}
                     </span>
                   </div>
@@ -603,23 +606,26 @@ export function MessagingPreview({ brandColors }) {
         </div>
 
         {/* Input Area */}
-        <div className="message-input-area" style={{ borderColor: brandColors.primaryBorder, backgroundColor: brandColors.secondaryBg }}>
-          <div className="message-input-row">
+        <div className="wl-preview-message-input-area" style={{ borderColor: brandColors.primaryBorder, backgroundColor: brandColors.secondaryBg }}>
+          <div className="wl-preview-message-input-row">
             <input 
               type="text"
               placeholder="Message..."
-              className="message-input"
+              className="wl-preview-message-input"
               style={{ 
                 backgroundColor: brandColors.inputBg,
                 borderColor: brandColors.primaryBorder,
                 color: brandColors.primaryText
               }}
             />
+            <style>
+              {`.message-input::placeholder { color: ${brandColors.placeholderText}; }`}
+            </style>
             <button 
               className="send-button"
               style={{ 
                 backgroundColor: brandColors.primaryBlue,
-                color: '#FFFFFF'
+                color: brandColors.primaryText
               }}
             >
               Send
