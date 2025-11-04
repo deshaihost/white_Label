@@ -167,7 +167,7 @@ const SettingIndex = () => {
             </div>
           </div>
         </div>
-      <HostDaddy />
+        {['white-label-registration', 'white-label-branding', 'white-label-feature-selection'].includes(interFaceSettings) ? null : <HostDaddy />}
     </>
   );
 };

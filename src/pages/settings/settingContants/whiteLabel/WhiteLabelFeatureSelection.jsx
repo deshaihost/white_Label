@@ -162,7 +162,7 @@ const WhiteLabelFeatureSelection = () => {
       available: true, 
       version: 'v1', 
       link: '/properties',
-      path: '/properties'
+      paths: ['/properties']
     },
     { 
       id: 'property-profile', 
@@ -171,8 +171,8 @@ const WhiteLabelFeatureSelection = () => {
       enabled: true, 
       available: true, 
       version: 'v1', 
-      link: '/propertyprofile',
-      path: '/edit-property/:property_name'
+      link: '/properties', // can't have a direct link since it depends on property name
+      paths: ['/edit-property/:property_name']
     },
     { 
       id: 'smart-templates', 
@@ -181,8 +181,8 @@ const WhiteLabelFeatureSelection = () => {
       enabled: true, 
       available: true, 
       version: 'v1', 
-      link: '/smarttemplates',
-      path: '/smart-templates'
+      link: '/inbox/smart-templates',
+      paths: ['/inbox/smart-templates']
     },
     { 
       id: 'upsells', 
@@ -191,8 +191,8 @@ const WhiteLabelFeatureSelection = () => {
       enabled: true, 
       available: true, 
       version: 'v1', 
-      link: '/upsells',
-      path: '/setting/upsells'
+      link: '/inbox/upsells',
+      paths: ['/inbox/upsells']
     },
     { 
       id: 'messaging-inbox', 
@@ -202,7 +202,7 @@ const WhiteLabelFeatureSelection = () => {
       available: true, 
       version: 'v1', 
       link: '/inbox',
-      path: '/inbox'
+      paths: ['/inbox']
     },
     { 
       id: 'action-items', 
@@ -211,8 +211,8 @@ const WhiteLabelFeatureSelection = () => {
       enabled: true, 
       available: true, 
       version: 'v1', 
-      link: '/actionitems',
-      path: '/action-item'
+      link: '/action-item',
+      paths: ['/action-item']
     },
     { 
       id: 'insights', 
@@ -222,7 +222,7 @@ const WhiteLabelFeatureSelection = () => {
       available: true, 
       version: 'v1',
       link: '/insights',
-      path: '/statistics'
+      paths: ['/statistics']
     },
     { 
       id: 'action-item-settings', 
@@ -231,18 +231,18 @@ const WhiteLabelFeatureSelection = () => {
       enabled: true, 
       available: true, 
       version: 'v1', 
-      link: '/actionitemsettings',
-      path: '/setting/action-item-settings'
+      link: '/setting/action-items',
+      paths: ['/setting/action-items']
     },
     { 
       id: 'integrations', 
       name: 'Integrations', 
-      description: 'WhatsApp, OpenTable, Resy, Turo, Webhooks', 
+      description: 'WhatsApp, OpenPhone, Cleaning management softwares, Slack, Webhooks',
       enabled: false, 
       available: false, 
       version: 'v2', 
-      link: '/integrations',
-      path: '/integrations'
+      link: '/setting/integrations',
+      paths: ['/setting/integrations']
     },
   ]);
 
@@ -324,7 +324,7 @@ const WhiteLabelFeatureSelection = () => {
           enabled: feature.enabled,
           name: feature.name,
           description: feature.description,
-          path: feature.path
+          paths: feature.paths
         };
       });
 
@@ -542,7 +542,7 @@ const WhiteLabelFeatureSelection = () => {
                           <span className="module-link-text">{getFeatureLink(feature.id)}</span>
                           <button
                             onClick={() => copyToClipboard(getFeatureLink(feature.id))}
-                            className="copy-button"
+                            className="wl-copy-button"
                           >
                             <CopyIcon />
                             Copy
@@ -626,7 +626,7 @@ const WhiteLabelFeatureSelection = () => {
                           <span className="module-link-text">{getFeatureLink(feature.id)}</span>
                           <button
                             disabled
-                            className="copy-button copy-button-disabled"
+                            className="wl-copy-button wl-copy-button-disabled"
                           >
                             <CopyIcon />
                             Copy

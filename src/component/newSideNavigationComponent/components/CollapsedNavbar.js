@@ -216,12 +216,12 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
 
   const iconsToRender = isInGcsPortal ? gcsDataWithLogo : icons;
 
-  // Feature-based filtering mapping
+  // Feature-based filtering mapping (icon IDs to arrays of feature IDs)
   const iconToFeatureMap = {
-    3: 'properties',           // Properties
-    4: 'action-items',         // Action Items
-    5: 'messaging-inbox',      // Messaging
-    6: 'insights',             // Insights
+    3: ['properties'],           // Properties
+    4: ['action-items'],         // Action Items
+    5: ['messaging-inbox'],      // Messaging
+    6: ['insights'],             // Insights
   };
 
   // Filter icons based on user state
@@ -232,13 +232,14 @@ const CollapsedNavbar = ({ isOpen, onExpand, navigationProps = {} }) => {
     // In protected paths or logged in conditional paths
     if (isProtectedPath || (isConditionalPath && token)) {
       // Check feature-based filtering
-      const featureId = iconToFeatureMap[icon.id];
+      const featureIds = iconToFeatureMap[icon.id];
       
-      if (featureId) {
-        const enabled = isFeatureEnabled(featureId);
+      // If icon has feature mappings, check if ANY of the features are enabled
+      if (featureIds && Array.isArray(featureIds)) {
+        const anyEnabled = featureIds.some(featureId => isFeatureEnabled(featureId));
         
-        if (!enabled) {
-          return false; // Filter out this icon
+        if (!anyEnabled) {
+          return false; // Filter out this icon if NONE of its features are enabled
         }
       }
       
