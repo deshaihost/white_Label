@@ -210,6 +210,57 @@
   outline: none;
 }
 
+/* Brand Name Section */
+.brand-name-container {
+  background: #0F1117;
+  border: 2px solid #013280;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.brand-name-label {
+  display: block;
+  color: #d0d3db;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-variation-settings: 'opsz' 14;
+  margin-bottom: 0.5rem;
+}
+
+.brand-name-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: #0F1117;
+  border: 2px solid #013280;
+  border-radius: 4px;
+  color: #d0d3db;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-variation-settings: 'opsz' 14;
+  transition: border-color 0.3s;
+}
+
+.brand-name-input:focus {
+  border-color: #3e88f7;
+  outline: none;
+}
+
+.brand-name-input::placeholder {
+  color: #676a73;
+}
+
+.brand-name-description {
+  color: #676a73;
+  font-size: 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 14;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
 /* Color Palette Section */
 .palette-header {
   display: flex;

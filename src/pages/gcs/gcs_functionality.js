@@ -54,7 +54,7 @@ export const callGetSubAccountTokenApi = async (subAccountUserId, setLoading=nul
 }
 
 
-export const callAddSubAccountApi = async (subAccountName, setLoading=null) => {
+export const callAddSubAccountApi = async (accountData, setLoading=null) => {
   const baseUrl = process.env.REACT_APP_API_ENDPOINT;
   const API_KEY = process.env.REACT_APP_API_KEY;
   if (setLoading) setLoading(true);
@@ -65,7 +65,17 @@ export const callAddSubAccountApi = async (subAccountName, setLoading=null) => {
       validateStatus: function (status) { return status >= 200 && status < 500; } // don't throw an error for non-2xx responses
     };
 
-    const response = await axios.post(`${baseUrl}/create_subaccount`, { sub_account_name: subAccountName }, config);
+    // Build the request body with all provided fields
+    const requestBody = {
+      sub_account_name: accountData.accountName
+    };
+    
+    // Add optional fields if they exist
+    if (accountData.email) requestBody.email = accountData.email;
+    if (accountData.password) requestBody.password = accountData.password;
+    if (accountData.confirmPassword) requestBody.confirm_password = accountData.confirmPassword;
+
+    const response = await axios.post(`${baseUrl}/create_subaccount`, requestBody, config);
 
     if (response.status === 200) { return response.data; } // {'message':'Account created successfully', 'subaccount_id':subaccount_id}
     else { ToastHandle(response?.data?.error, "danger"); }
