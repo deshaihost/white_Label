@@ -89,13 +89,13 @@ export function DashboardPreview({ brandColors }) {
             className="welcome-text"
             style={{ color: brandColors.primaryBlue }}
           >
-            Welcome to HostBuddy, Sam
+            Welcome, Sam
           </p>
           <button 
             className="welcome-cta"
             style={{ color: brandColors.primaryBlue }}
           >
-            New to HostBuddy? Get Started →
+            New? Get Started →
           </button>
         </div>
       </div>
@@ -335,29 +335,31 @@ export function PropertiesPreview({ brandColors }) {
               </div>
 
               {/* Action Buttons */}
-              <div className="property-actions">
-                <button 
-                  className="property-setup-button"
-                  style={{ 
-                    backgroundColor: 'transparent',
-                    borderColor: brandColors.primaryBlue,
-                    color: brandColors.primaryBlue
-                  }}
-                >
-                  Property Setup
-                </button>
-                <button 
-                  className="property-test-button"
-                  style={{ 
-                    backgroundColor: brandColors.primaryBlue,
-                    color: brandColors.primaryText,
-                    boxShadow: brandColors.buttonGlow
-                  }}
-                >
-                  Test Property
-                </button>
+              <div className="wl-preview-property-actions">
+                <div className="property-action-buttons">
+                  <button 
+                    className="property-setup-button"
+                    style={{ 
+                      backgroundColor: 'transparent',
+                      borderColor: brandColors.primaryBlue,
+                      color: brandColors.primaryBlue
+                    }}
+                  >
+                    Property Setup
+                  </button>
+                  <button 
+                    className="property-test-button"
+                    style={{ 
+                      backgroundColor: brandColors.primaryBlue,
+                      color: brandColors.primaryText,
+                      boxShadow: brandColors.buttonGlow
+                    }}
+                  >
+                    Test Property
+                  </button>
+                </div>
                 <button className="property-more-button">
-                  <MoreVerticalIcon className="more-icon" size={20} style={{ color: brandColors.tertiaryText }} />
+                  <MoreVerticalIcon className="more-icon" size={16} style={{ color: brandColors.tertiaryText }} />
                 </button>
               </div>
             </div>

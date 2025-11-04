@@ -52,7 +52,7 @@
   max-width: 100%;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1300px) {
   .metrics-grid {
     grid-template-columns: 1fr;
   }
@@ -541,23 +541,34 @@
   font-variation-settings: 'opsz' 14;
 }
 
-.property-actions {
+.wl-preview-property-actions {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   flex-shrink: 0;
+  margin-right: 0;
+}
+
+.property-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 110px;
 }
 
 .property-setup-button,
 .property-test-button {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 600;
   font-variation-settings: 'opsz' 14;
   cursor: pointer;
   transition: all 0.2s;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .property-setup-button {
@@ -569,7 +580,6 @@
 }
 
 .property-more-button {
-  padding: 8px;
   background: none;
   border: none;
   cursor: pointer;
@@ -581,8 +591,8 @@
 }
 
 .more-icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 
 /* Messaging Preview */
