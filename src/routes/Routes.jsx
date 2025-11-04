@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, Outlet } from "react-router-dom";
+import { Routes, Route, useLocation, Outlet, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import Home from "../pages/home/Home";
 import Pricing from "../pages/pricing/Pricing";
@@ -83,6 +83,72 @@ import Turno from "../pages/turno/Turno";
 
 // Admin pages
 import CustomerJourney from "../pages/customerJourney/customerJourney";
+
+// Helper function to check if current domain is HostBuddy main domain
+const isHostBuddyDomain = () => {
+  const hostname = window.location.hostname;
+  return hostname === 'hostbuddy.ai' || hostname === 'www.hostbuddy.ai';
+};
+
+// Helper function to check if current domain is localhost
+const isLocalhost = () => {
+  const hostname = window.location.hostname;
+  return hostname === 'localhost' || hostname === '127.0.0.1';
+};
+
+// Component to protect public routes on white label domains
+const PublicRouteGuard = ({ children, allowOnWhiteLabel = false }) => {
+  const isMainDomain = isHostBuddyDomain();
+  const isLocal = isLocalhost();
+  
+  // Allow on HostBuddy domain or localhost
+  if (isMainDomain || isLocal) {
+    return children;
+  }
+  
+  // If it's white label domain and this route is allowed, show it
+  if (allowOnWhiteLabel) {
+    return children;
+  }
+  
+  // Otherwise, redirect to login (for white label domains only)
+  console.log('🔒 PublicRouteGuard: Redirecting to /login (white label domain)');
+  return <Navigate to="/login" replace />;
+};
+
+// Component for root path that prevents flash on white label domains
+const RootPathGuard = () => {
+  const isMainDomain = isHostBuddyDomain();
+  const isLocal = isLocalhost();
+  
+  // For white label domains, redirect immediately without rendering Home
+  if (!isMainDomain && !isLocal) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  // For hostbuddy.ai and localhost, render Home
+  return <Home />;
+};
+
+// Component for 404 page that works correctly with white label domains
+const NotFoundPage = () => {
+  const isMainDomain = isHostBuddyDomain();
+  const isLocal = isLocalhost();
+  
+  // For white label domains, redirect to login instead of showing 404
+  // (since they shouldn't have access to public pages anyway)
+  if (!isMainDomain && !isLocal) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  // For hostbuddy.ai and localhost, show 404 page
+  return (
+    <ThankError
+      imgSrc={ErrorImg}
+      text="We cannot find the page you're looking for"
+    />
+  );
+};
 
 const Routing = () => {
   console.log("🚦 STEP X: Routing component rendering", {
@@ -243,137 +309,362 @@ const Routing = () => {
     location.pathname === path || location.pathname.startsWith(path + "/")
   );
 
+  // Check if NavBar should be shown based on domain and authentication
+  const shouldShowNavBar = () => {
+    const isMainDomain = isHostBuddyDomain();
+    const isLocal = isLocalhost();
+    
+    // Always hide NavBar on these paths regardless of domain
+    const authPaths = ["/login", "/signup", "/reset-password", "/accept-invitation", "/forgot", "/client-login", "/test-show-conversations"];
+    if (authPaths.includes(location.pathname)) {
+      return false;
+    }
+    
+    // For white label domains (not hostbuddy.ai, not localhost), only show NavBar if user is authenticated
+    if (!isMainDomain && !isLocal) {
+      return !!authData;
+    }
+    
+    // For hostbuddy.ai and localhost, show NavBar based on auth state or public pages
+    return !authData || shouldUseUserNavBar;
+  };
+
   const content = (
     <>
-      {location.pathname !== "/login" &&
-        location.pathname !== "/signup" &&
-        location.pathname !== "/reset-password" &&
-        location.pathname !== "/accept-invitation" &&
-        location.pathname !== "/forgot" &&
-        location.pathname !== "/client-login" &&
-        location.pathname !== "/test-show-conversations" && 
-        (!authData || shouldUseUserNavBar) && <NavBar />}
+      {shouldShowNavBar() && <NavBar />}
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/pricing" element={<Pricing />}></Route>
-        <Route path="/meet-hostbuddy" element={<MeetHostBoddy />}></Route>
-        <Route path="/faqs" element={<Faqs />}></Route>
-        <Route path="/about-us" element={<AboutUs />}></Route>
+        {/* Root path: Home for hostbuddy.ai and localhost, redirect to /login for white label domains */}
+        <Route path="/" element={<RootPathGuard />} />
+        
+        {/* Public pages - only accessible on hostbuddy.ai */}
+        <Route 
+          path="/pricing" 
+          element={
+            <PublicRouteGuard>
+              <Pricing />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/meet-hostbuddy" 
+          element={
+            <PublicRouteGuard>
+              <MeetHostBoddy />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/faqs" 
+          element={
+            <PublicRouteGuard>
+              <Faqs />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/about-us" 
+          element={
+            <PublicRouteGuard>
+              <AboutUs />
+            </PublicRouteGuard>
+          } 
+        />
+        
+        {/* Auth routes - always accessible on all domains */}
         <Route path="/login" element={<Login />}></Route>
         <Route path="/client-login" element={<WhiteLabelLogin />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/accept-invitation" element={<InviteSignup />}></Route>
         <Route path="/forgot" element={<ForgotPass />}></Route>
-        <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
-        <Route path="/termsof-service" element={<TermsofService />}></Route>
-        <Route path="/data-processing-agreement" element={<DPA />}></Route>
-        <Route path="/subprocessors" element={<Subprocessors />}></Route>
+        
+        {/* Agreement pages - only on hostbuddy.ai */}
+        <Route 
+          path="/privacy-policy" 
+          element={
+            <PublicRouteGuard>
+              <PrivacyPolicy />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/termsof-service" 
+          element={
+            <PublicRouteGuard>
+              <TermsofService />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/data-processing-agreement" 
+          element={
+            <PublicRouteGuard>
+              <DPA />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/subprocessors" 
+          element={
+            <PublicRouteGuard>
+              <Subprocessors />
+            </PublicRouteGuard>
+          } 
+        />
+        
+        {/* Guide pages - only on hostbuddy.ai */}
         <Route
           path="/scheduling-walkthrough"
-          element={<SchedulingWalkthrough />}
+          element={
+            <PublicRouteGuard>
+              <SchedulingWalkthrough />
+            </PublicRouteGuard>
+          }
         ></Route>
-        <Route path="/tips-and-tricks" element={<TipsAndTricks />}></Route>
-        <Route path="/best-practices" element={<BestPractices />}></Route>
-        <Route path="/schedule-guide" element={<ScheduleHostBuddy />}></Route>
+        <Route 
+          path="/tips-and-tricks" 
+          element={
+            <PublicRouteGuard>
+              <TipsAndTricks />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/best-practices" 
+          element={
+            <PublicRouteGuard>
+              <BestPractices />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/schedule-guide" 
+          element={
+            <PublicRouteGuard>
+              <ScheduleHostBuddy />
+            </PublicRouteGuard>
+          } 
+        />
         <Route
           path="/notifications-guide"
-          element={<NotificationsGuide />}
+          element={
+            <PublicRouteGuard>
+              <NotificationsGuide />
+            </PublicRouteGuard>
+          }
         ></Route>
         <Route
           path="/customize-hostbuddy-guide"
-          element={<CustomizeHostBuddyGuide />}
+          element={
+            <PublicRouteGuard>
+              <CustomizeHostBuddyGuide />
+            </PublicRouteGuard>
+          }
         ></Route>
         <Route
           path="/hostbuddy-for-guesty"
-          element={<HostbuddyForGuesty />}
+          element={
+            <PublicRouteGuard>
+              <HostbuddyForGuesty />
+            </PublicRouteGuard>
+          }
         ></Route>
-        <Route path="/hostbuddy-for-tidy" element={<Home />}></Route>
+        <Route 
+          path="/hostbuddy-for-tidy" 
+          element={
+            <PublicRouteGuard>
+              <Home />
+            </PublicRouteGuard>
+          } 
+        />
 
-        <Route path="/testing-questions" element={<TestingQuestions />}></Route>
+        <Route 
+          path="/testing-questions" 
+          element={
+            <PublicRouteGuard>
+              <TestingQuestions />
+            </PublicRouteGuard>
+          } 
+        />
+        
+        {/* Email confirmation - always accessible */}
         <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
         <Route
           path="/email_confirmation"
           element={<EmailConfirmationAction />}
         ></Route>
         <Route path="/reset-password" element={<ResetPass />}></Route>
-        <Route path="/setup-guide" element={<SetupGuide />}></Route>
-        <Route path="/getstarted" element={<GetStarted />}></Route>
-        <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
-        <Route path="/blog" element={<BlogLandingPage />}></Route>
-        <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
+        
+        {/* Setup and onboarding - only on hostbuddy.ai */}
+        <Route 
+          path="/setup-guide" 
+          element={
+            <PublicRouteGuard>
+              <SetupGuide />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/getstarted" 
+          element={
+            <PublicRouteGuard>
+              <GetStarted />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/hostaway-setup" 
+          element={
+            <PublicRouteGuard>
+              <HostawaySetup />
+            </PublicRouteGuard>
+          } 
+        />
+        
+        {/* Blog - only on hostbuddy.ai */}
+        <Route 
+          path="/blog" 
+          element={
+            <PublicRouteGuard>
+              <BlogLandingPage />
+            </PublicRouteGuard>
+          } 
+        />
+        <Route 
+          path="/blog/:article_name" 
+          element={
+            <PublicRouteGuard>
+              <BlogArticle />
+            </PublicRouteGuard>
+          } 
+        />
 
-        <Route path="/pms-instructions" element={<PmsInstructionsMain />} />
+        <Route 
+          path="/pms-instructions" 
+          element={
+            <PublicRouteGuard>
+              <PmsInstructionsMain />
+            </PublicRouteGuard>
+          } 
+        />
         <Route
           path="/pms-instructions/guesty"
-          element={<GuestyInstructions />}
+          element={
+            <PublicRouteGuard>
+              <GuestyInstructions />
+            </PublicRouteGuard>
+          }
         />
         <Route
           path="/pms-instructions/beds24"
-          element={<Beds24Instructions />}
+          element={
+            <PublicRouteGuard>
+              <Beds24Instructions />
+            </PublicRouteGuard>
+          }
         />
         <Route
           path="/pms-instructions/hostaway"
-          element={<HostawayInstructions />}
+          element={
+            <PublicRouteGuard>
+              <HostawayInstructions />
+            </PublicRouteGuard>
+          }
         />
         <Route
           path="/pms-instructions/lodgify"
-          element={<LodgifyInstructions />}
+          element={
+            <PublicRouteGuard>
+              <LodgifyInstructions />
+            </PublicRouteGuard>
+          }
         />
         <Route
           path="/pms-instructions/smoobu"
-          element={<SmoobuInstructions />}
+          element={
+            <PublicRouteGuard>
+              <SmoobuInstructions />
+            </PublicRouteGuard>
+          }
         />
         <Route
           path="/pms-instructions/hostify"
-          element={<HostifyInstructions />}
+          element={
+            <PublicRouteGuard>
+              <HostifyInstructions />
+            </PublicRouteGuard>
+          }
         />
         <Route
           path="/pms-instructions/hospitable"
-          element={<HospitableInstructions />}
+          element={
+            <PublicRouteGuard>
+              <HospitableInstructions />
+            </PublicRouteGuard>
+          }
         />
         <Route
           path="/pms-instructions/hostfully"
-          element={<HostfullyInstructions />}
+          element={
+            <PublicRouteGuard>
+              <HostfullyInstructions />
+            </PublicRouteGuard>
+          }
         />
         <Route
           path="/pms-instructions/ownerrez"
-          element={<OwnerRezInstructions />}
+          element={
+            <PublicRouteGuard>
+              <OwnerRezInstructions />
+            </PublicRouteGuard>
+          }
         />
         <Route
           path="/pms-instructions/bookingsync"
-          element={<BookingSyncInstructions />}
+          element={
+            <PublicRouteGuard>
+              <BookingSyncInstructions />
+            </PublicRouteGuard>
+          }
         />
 
-        <Route path="/ai-messaging" element={<AiMessaging />} />
-        <Route path="/smart-templates" element={<SmartTemplatesLanding />} />
+        <Route path="/ai-messaging" element={<PublicRouteGuard><AiMessaging /></PublicRouteGuard>} />
+        <Route path="/smart-templates" element={<PublicRouteGuard><SmartTemplatesLanding /></PublicRouteGuard>} />
 
-        <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />} />
-        <Route path="/software-solutions" element={<SoftwareSolutions />} />
-        <Route
+        <Route path="/become-an-affiliate" element={<PublicRouteGuard><BecomeAnAffiliate /></PublicRouteGuard>} />
+        <Route path="/software-solutions" element={<PublicRouteGuard><SoftwareSolutions /></PublicRouteGuard>} />
+        {/* Commented duplicate wildcard route - keeping for reference */}
+        {/* <Route
           path="*"
           element={
             <ThankError
               imgSrc={ErrorImg}
-              text="We cannot find the page you’re looking for"
+              text="We cannot find the page you're looking for"
             />
           }
-        />
+        /> */}
         <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />} />
         <Route
           path="/software-solutions"
           element={<SoftwareSolutions />}
         ></Route>
-        <Route
+        {/* Commented duplicate wildcard route - keeping for reference */}
+        {/* <Route
           path="*"
           element={
             <ThankError
               imgSrc={ErrorImg}
-              text="We cannot find the page you’re looking for"
+              text="We cannot find the page you're looking for"
             />
           }
-        />
+        /> */}
+        <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />} />
+        <Route
+          path="/software-solutions"
+          element={<SoftwareSolutions />}
+        ></Route>
 
+        {/* Protected routes - require authentication */}
         <Route
           path="/dashboard"
           element={
@@ -514,13 +805,16 @@ const Routing = () => {
           }
         />
 
-        <Route path="/integrations" element={<Integrations />} />
-        <Route path="/turno" element={<Turno />} />
+        <Route path="/integrations" element={<PublicRouteGuard><Integrations /></PublicRouteGuard>} />
+        <Route path="/turno" element={<PublicRouteGuard><Turno /></PublicRouteGuard>} />
 
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>
         <Route path="/workbench-multi/:multi_property_id" element={<WorkbenchMulti />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
+        
+        {/* 404 catch-all route - MUST be last */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {shouldShowFooter(location.pathname) && <Footer />}
     </>
