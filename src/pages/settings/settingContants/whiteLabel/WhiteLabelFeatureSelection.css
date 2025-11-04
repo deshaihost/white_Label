@@ -533,7 +533,7 @@
   white-space: nowrap;
 }
 
-.copy-button {
+.wl-copy-button {
   position: absolute !important;
   right: 12px !important;
   top: 50% !important;
@@ -556,14 +556,14 @@
   z-index: 1;
 }
 
-.copy-button:hover:not(:disabled) {
+.wl-copy-button:hover:not(:disabled) {
   background: var(--white-label-border-primary, #013280);
   border-color: var(--white-label-interactive-primary, #3e88f7);
   color: white;
 }
 
-.copy-button:disabled,
-.copy-button-disabled {
+.wl-copy-button:disabled,
+.wl-copy-button-disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }

@@ -61,7 +61,7 @@ const ImageIcon = ({ className, size = 24 }) => (
 );
 
 const HOSTBUDDY_ORIGINAL_DARK = {
-  // Background Colors
+  // Background Colors (9 properties)
   primaryBg: '#0F1117',
   secondaryBg: '#17191F',
   cardBg: '#24262E',
@@ -72,7 +72,7 @@ const HOSTBUDDY_ORIGINAL_DARK = {
   modalOverlay: 'rgba(0, 0, 0, 0.6)',
   sidebarBg: '#17191F',
   
-  // Text Colors
+  // Text Colors (7 properties)
   primaryText: '#FFFFFF',
   secondaryText: '#D0D3DB',
   tertiaryText: '#A6A9B2',
@@ -81,27 +81,43 @@ const HOSTBUDDY_ORIGINAL_DARK = {
   placeholderText: '#8A8E98',
   linkText: '#98BFFA',
   
-  // Border Colors
+  // Border Colors (5 properties)
   primaryBorder: '#013280',
   activeBorder: '#3E88F7',
   inactiveBorder: '#013280',
   subtleBorder: '#24262E',
+  accentBorder: '#2A4A8F',
   
-  // Interactive Colors
+  // Legacy Interactive Colors (for backward compatibility)
   primaryBlue: '#3E88F7',
   primaryBlueHover: '#74A9F7',
   lightBlue: '#98BFFA',
-  secondaryButtonBg: '#01255E',
-  secondaryButtonHover: '#013280',
   
-  // Status Colors
+  // Action Links & Secondary Interactive Elements (1 property)
+  actionLink: '#3E88F7',
+  
+  // Button Colors (8 properties) - INDEPENDENT FROM TEXT COLORS
+  primaryButtonBg: '#3E88F7',
+  primaryButtonText: '#FFFFFF',
+  primaryButtonHover: '#74A9F7',
+  secondaryButtonBg: '#01255E',
+  secondaryButtonText: '#98BFFA',
+  secondaryButtonHover: '#013280',
+  outlineButtonBorder: '#3E88F7',
+  outlineButtonText: '#3E88F7',
+  
+  // Badge & Status Colors (9 properties)
+  statusBadgeBg: '#3E88F7',
+  statusBadgeText: '#FFFFFF',
   successGreen: '#10B981',
   currentGreen: '#4ADE80',
+  onlineGreen: '#00FF88',
   warningOrange: '#FB923C',
   errorRed: '#EF4444',
+  offlineRed: '#FF4444',
   destructiveRed: '#D4183D',
   
-  // Component Colors
+  // Component Colors (6 properties)
   toggleBgOff: '#676A73',
   cancelButton: '#4A4D54',
   cancelButtonHover: '#676A73',
@@ -109,20 +125,25 @@ const HOSTBUDDY_ORIGINAL_DARK = {
   tableHeaderBg: '#0F1117',
   tableRowHover: '#01255E',
   
-  // Shadow & Effects
+  // Charts & Data Visualization (3 properties)
+  chartBarFill: '#3E88F7',
+  chartGridLines: '#013280',
+  chartAxisLines: '#013280',
+  
+  // Shadow & Effects (5 properties)
   cardShadow: '0 0 25px rgba(1, 50, 128, 0.2)',
   primaryGlow: '0 0 15px rgba(62, 136, 247, 0.3)',
   buttonGlow: '0 0 20px rgba(62, 136, 247, 0.25)',
   toggleGlow: '0 0 12px rgba(62, 136, 247, 0.4)',
   warningGlow: '0 0 8px rgba(251, 146, 60, 0.4)',
   
-  // Typography
+  // Typography (2 properties)
   headingFont: 'Poppins',
   bodyFont: 'DM Sans',
 };
 
 const HOSTBUDDY_ORIGINAL_LIGHT = {
-  // Background Colors
+  // Background Colors (9 properties)
   primaryBg: '#F5F7FA',
   secondaryBg: '#FFFFFF',
   cardBg: '#FFFFFF',
@@ -133,7 +154,7 @@ const HOSTBUDDY_ORIGINAL_LIGHT = {
   modalOverlay: 'rgba(15, 17, 23, 0.6)',
   sidebarBg: '#FFFFFF',
   
-  // Text Colors
+  // Text Colors (7 properties)
   primaryText: '#111827',
   secondaryText: '#1F2937',
   tertiaryText: '#6B7280',
@@ -142,27 +163,43 @@ const HOSTBUDDY_ORIGINAL_LIGHT = {
   placeholderText: '#9CA3AF',
   linkText: '#3E88F7',
   
-  // Border Colors
+  // Border Colors (5 properties)
   primaryBorder: '#E5E7EB',
   activeBorder: '#3E88F7',
   inactiveBorder: '#F3F4F6',
   subtleBorder: '#F9FAFB',
+  accentBorder: '#60A5FA',
   
-  // Interactive Colors
+  // Legacy Interactive Colors (for backward compatibility)
   primaryBlue: '#3E88F7',
   primaryBlueHover: '#2563EB',
   lightBlue: '#60A5FA',
-  secondaryButtonBg: '#F3F4F6',
-  secondaryButtonHover: '#E5E7EB',
   
-  // Status Colors
+  // Action Links & Secondary Interactive Elements (1 property)
+  actionLink: '#3E88F7',
+  
+  // Button Colors (8 properties) - INDEPENDENT FROM TEXT COLORS
+  primaryButtonBg: '#3E88F7',
+  primaryButtonText: '#FFFFFF',
+  primaryButtonHover: '#2563EB',
+  secondaryButtonBg: '#F3F4F6',
+  secondaryButtonText: '#1F2937',
+  secondaryButtonHover: '#E5E7EB',
+  outlineButtonBorder: '#3E88F7',
+  outlineButtonText: '#3E88F7',
+  
+  // Badge & Status Colors (9 properties)
+  statusBadgeBg: '#3E88F7',
+  statusBadgeText: '#FFFFFF',
   successGreen: '#059669',
   currentGreen: '#10B981',
+  onlineGreen: '#10B981',
   warningOrange: '#EA580C',
   errorRed: '#DC2626',
+  offlineRed: '#DC2626',
   destructiveRed: '#B91C1C',
   
-  // Component Colors
+  // Component Colors (6 properties)
   toggleBgOff: '#D1D5DB',
   cancelButton: '#F3F4F6',
   cancelButtonHover: '#E5E7EB',
@@ -170,14 +207,19 @@ const HOSTBUDDY_ORIGINAL_LIGHT = {
   tableHeaderBg: '#F9FAFB',
   tableRowHover: '#F3F4F6',
   
-  // Shadow & Effects
+  // Charts & Data Visualization (3 properties)
+  chartBarFill: '#3E88F7',
+  chartGridLines: '#E5E7EB',
+  chartAxisLines: '#E5E7EB',
+  
+  // Shadow & Effects (5 properties)
   cardShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
   primaryGlow: '0 0 0 3px rgba(62, 136, 247, 0.15)',
   buttonGlow: '0 4px 12px rgba(62, 136, 247, 0.2)',
   toggleGlow: '0 0 0 4px rgba(62, 136, 247, 0.15)',
   warningGlow: '0 0 0 3px rgba(234, 88, 12, 0.15)',
   
-  // Typography
+  // Typography (2 properties)
   headingFont: 'Poppins',
   bodyFont: 'DM Sans',
 };
@@ -300,37 +342,53 @@ const WhiteLabelBranding = () => {
             inputBg: cssData.background?.input || HOSTBUDDY_ORIGINAL_DARK.inputBg,
             textareaBg: cssData.background?.textarea || HOSTBUDDY_ORIGINAL_DARK.textareaBg,
             dropdownBg: cssData.background?.dropdown || HOSTBUDDY_ORIGINAL_DARK.dropdownBg,
-            modalBg: cssData.background?.modal || HOSTBUDDY_ORIGINAL_DARK.modalBg,
             modalOverlay: cssData.background?.modal_overlay || HOSTBUDDY_ORIGINAL_DARK.modalOverlay,
+            sidebarBg: cssData.background?.sidebar || HOSTBUDDY_ORIGINAL_DARK.sidebarBg,
             
             // Text
             primaryText: cssData.text?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryText,
             secondaryText: cssData.text?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryText,
             tertiaryText: cssData.text?.tertiary || HOSTBUDDY_ORIGINAL_DARK.tertiaryText,
             quaternaryText: cssData.text?.quaternary || HOSTBUDDY_ORIGINAL_DARK.quaternaryText,
+            disabledText: cssData.text?.disabled || HOSTBUDDY_ORIGINAL_DARK.disabledText,
             placeholderText: cssData.text?.placeholder || HOSTBUDDY_ORIGINAL_DARK.placeholderText,
             linkText: cssData.text?.link || HOSTBUDDY_ORIGINAL_DARK.linkText,
-            linkHoverText: cssData.text?.link_hover || HOSTBUDDY_ORIGINAL_DARK.linkHoverText,
             
             // Borders
             primaryBorder: cssData.borders?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryBorder,
-            secondaryBorder: cssData.borders?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryBorder,
             activeBorder: cssData.borders?.active || HOSTBUDDY_ORIGINAL_DARK.activeBorder,
-            errorBorder: cssData.borders?.error || HOSTBUDDY_ORIGINAL_DARK.errorBorder,
+            inactiveBorder: cssData.borders?.inactive || HOSTBUDDY_ORIGINAL_DARK.inactiveBorder,
+            subtleBorder: cssData.borders?.subtle || HOSTBUDDY_ORIGINAL_DARK.subtleBorder,
+            accentBorder: cssData.borders?.accent || HOSTBUDDY_ORIGINAL_DARK.accentBorder,
             
-            // Buttons
-            primaryBlue: cssData.buttons?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryBlue,
-            primaryBlueHover: cssData.buttons?.primary_hover || HOSTBUDDY_ORIGINAL_DARK.primaryBlueHover,
-            lightBlue: cssData.buttons?.light_blue || HOSTBUDDY_ORIGINAL_DARK.lightBlue,
-            secondaryButtonBg: cssData.buttons?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonBg,
+            // Legacy Interactive Colors (backward compatibility)
+            primaryBlue: cssData.buttons?.primary || cssData.legacy?.primary_blue || HOSTBUDDY_ORIGINAL_DARK.primaryBlue,
+            primaryBlueHover: cssData.buttons?.primary_hover || cssData.legacy?.primary_blue_hover || HOSTBUDDY_ORIGINAL_DARK.primaryBlueHover,
+            lightBlue: cssData.text?.link || cssData.legacy?.light_blue || HOSTBUDDY_ORIGINAL_DARK.lightBlue,
+            
+            // Action Links
+            actionLink: cssData.interactive?.action_link || HOSTBUDDY_ORIGINAL_DARK.actionLink,
+            
+            // Button Colors (independent from text)
+            primaryButtonBg: cssData.buttons?.primary_bg || cssData.buttons?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryButtonBg,
+            primaryButtonText: cssData.buttons?.primary_text || HOSTBUDDY_ORIGINAL_DARK.primaryButtonText,
+            primaryButtonHover: cssData.buttons?.primary_hover || HOSTBUDDY_ORIGINAL_DARK.primaryButtonHover,
+            secondaryButtonBg: cssData.buttons?.secondary_bg || cssData.buttons?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonBg,
+            secondaryButtonText: cssData.buttons?.secondary_text || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonText,
             secondaryButtonHover: cssData.buttons?.secondary_hover || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonHover,
+            outlineButtonBorder: cssData.buttons?.outline_border || HOSTBUDDY_ORIGINAL_DARK.outlineButtonBorder,
+            outlineButtonText: cssData.buttons?.outline_text || HOSTBUDDY_ORIGINAL_DARK.outlineButtonText,
             
-            // Status
+            // Status & Badge Colors
+            statusBadgeBg: cssData.status?.badge_bg || HOSTBUDDY_ORIGINAL_DARK.statusBadgeBg,
+            statusBadgeText: cssData.status?.badge_text || HOSTBUDDY_ORIGINAL_DARK.statusBadgeText,
             successGreen: cssData.status?.success || HOSTBUDDY_ORIGINAL_DARK.successGreen,
             currentGreen: cssData.status?.current || HOSTBUDDY_ORIGINAL_DARK.currentGreen,
+            onlineGreen: cssData.status?.online || HOSTBUDDY_ORIGINAL_DARK.onlineGreen,
             errorRed: cssData.status?.error || HOSTBUDDY_ORIGINAL_DARK.errorRed,
+            offlineRed: cssData.status?.offline || HOSTBUDDY_ORIGINAL_DARK.offlineRed,
             warningOrange: cssData.status?.warning || HOSTBUDDY_ORIGINAL_DARK.warningOrange,
-            infoBlue: cssData.status?.info || HOSTBUDDY_ORIGINAL_DARK.infoBlue,
+            destructiveRed: cssData.status?.destructive || HOSTBUDDY_ORIGINAL_DARK.destructiveRed,
             
             // Components
             toggleBgOff: cssData.components?.toggle_off || HOSTBUDDY_ORIGINAL_DARK.toggleBgOff,
@@ -339,6 +397,18 @@ const WhiteLabelBranding = () => {
             dropdownSelect: cssData.components?.dropdown_select || HOSTBUDDY_ORIGINAL_DARK.dropdownSelect,
             tableHeaderBg: cssData.components?.table_header || HOSTBUDDY_ORIGINAL_DARK.tableHeaderBg,
             tableRowHover: cssData.components?.table_row_hover || HOSTBUDDY_ORIGINAL_DARK.tableRowHover,
+            
+            // Charts & Data Visualization
+            chartBarFill: cssData.charts?.bar_fill || HOSTBUDDY_ORIGINAL_DARK.chartBarFill,
+            chartGridLines: cssData.charts?.grid_lines || HOSTBUDDY_ORIGINAL_DARK.chartGridLines,
+            chartAxisLines: cssData.charts?.axis_lines || HOSTBUDDY_ORIGINAL_DARK.chartAxisLines,
+            
+            // Shadow & Effects
+            cardShadow: cssData.effects?.card_shadow || HOSTBUDDY_ORIGINAL_DARK.cardShadow,
+            primaryGlow: cssData.effects?.primary_glow || HOSTBUDDY_ORIGINAL_DARK.primaryGlow,
+            buttonGlow: cssData.effects?.button_glow || HOSTBUDDY_ORIGINAL_DARK.buttonGlow,
+            toggleGlow: cssData.effects?.toggle_glow || HOSTBUDDY_ORIGINAL_DARK.toggleGlow,
+            warningGlow: cssData.effects?.warning_glow || HOSTBUDDY_ORIGINAL_DARK.warningGlow,
             
             // Typography
             headingFont: cssData.typography?.heading || HOSTBUDDY_ORIGINAL_DARK.headingFont,
@@ -359,37 +429,53 @@ const WhiteLabelBranding = () => {
               inputBg: darkCssData.background?.input || HOSTBUDDY_ORIGINAL_DARK.inputBg,
               textareaBg: darkCssData.background?.textarea || HOSTBUDDY_ORIGINAL_DARK.textareaBg,
               dropdownBg: darkCssData.background?.dropdown || HOSTBUDDY_ORIGINAL_DARK.dropdownBg,
-              modalBg: darkCssData.background?.modal || HOSTBUDDY_ORIGINAL_DARK.modalBg,
               modalOverlay: darkCssData.background?.modal_overlay || HOSTBUDDY_ORIGINAL_DARK.modalOverlay,
+              sidebarBg: darkCssData.background?.sidebar || HOSTBUDDY_ORIGINAL_DARK.sidebarBg,
               
               // Text
               primaryText: darkCssData.text?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryText,
               secondaryText: darkCssData.text?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryText,
               tertiaryText: darkCssData.text?.tertiary || HOSTBUDDY_ORIGINAL_DARK.tertiaryText,
               quaternaryText: darkCssData.text?.quaternary || HOSTBUDDY_ORIGINAL_DARK.quaternaryText,
+              disabledText: darkCssData.text?.disabled || HOSTBUDDY_ORIGINAL_DARK.disabledText,
               placeholderText: darkCssData.text?.placeholder || HOSTBUDDY_ORIGINAL_DARK.placeholderText,
               linkText: darkCssData.text?.link || HOSTBUDDY_ORIGINAL_DARK.linkText,
-              linkHoverText: darkCssData.text?.link_hover || HOSTBUDDY_ORIGINAL_DARK.linkHoverText,
               
               // Borders
               primaryBorder: darkCssData.borders?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryBorder,
-              secondaryBorder: darkCssData.borders?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryBorder,
               activeBorder: darkCssData.borders?.active || HOSTBUDDY_ORIGINAL_DARK.activeBorder,
-              errorBorder: darkCssData.borders?.error || HOSTBUDDY_ORIGINAL_DARK.errorBorder,
+              inactiveBorder: darkCssData.borders?.inactive || HOSTBUDDY_ORIGINAL_DARK.inactiveBorder,
+              subtleBorder: darkCssData.borders?.subtle || HOSTBUDDY_ORIGINAL_DARK.subtleBorder,
+              accentBorder: darkCssData.borders?.accent || HOSTBUDDY_ORIGINAL_DARK.accentBorder,
               
-              // Buttons
-              primaryBlue: darkCssData.buttons?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryBlue,
-              primaryBlueHover: darkCssData.buttons?.primary_hover || HOSTBUDDY_ORIGINAL_DARK.primaryBlueHover,
-              lightBlue: darkCssData.buttons?.light_blue || HOSTBUDDY_ORIGINAL_DARK.lightBlue,
-              secondaryButtonBg: darkCssData.buttons?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonBg,
+              // Legacy Interactive Colors (backward compatibility)
+              primaryBlue: darkCssData.buttons?.primary || darkCssData.legacy?.primary_blue || HOSTBUDDY_ORIGINAL_DARK.primaryBlue,
+              primaryBlueHover: darkCssData.buttons?.primary_hover || darkCssData.legacy?.primary_blue_hover || HOSTBUDDY_ORIGINAL_DARK.primaryBlueHover,
+              lightBlue: darkCssData.text?.link || darkCssData.legacy?.light_blue || HOSTBUDDY_ORIGINAL_DARK.lightBlue,
+              
+              // Action Links
+              actionLink: darkCssData.interactive?.action_link || HOSTBUDDY_ORIGINAL_DARK.actionLink,
+              
+              // Button Colors (independent from text)
+              primaryButtonBg: darkCssData.buttons?.primary_bg || darkCssData.buttons?.primary || HOSTBUDDY_ORIGINAL_DARK.primaryButtonBg,
+              primaryButtonText: darkCssData.buttons?.primary_text || HOSTBUDDY_ORIGINAL_DARK.primaryButtonText,
+              primaryButtonHover: darkCssData.buttons?.primary_hover || HOSTBUDDY_ORIGINAL_DARK.primaryButtonHover,
+              secondaryButtonBg: darkCssData.buttons?.secondary_bg || darkCssData.buttons?.secondary || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonBg,
+              secondaryButtonText: darkCssData.buttons?.secondary_text || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonText,
               secondaryButtonHover: darkCssData.buttons?.secondary_hover || HOSTBUDDY_ORIGINAL_DARK.secondaryButtonHover,
+              outlineButtonBorder: darkCssData.buttons?.outline_border || HOSTBUDDY_ORIGINAL_DARK.outlineButtonBorder,
+              outlineButtonText: darkCssData.buttons?.outline_text || HOSTBUDDY_ORIGINAL_DARK.outlineButtonText,
               
-              // Status
+              // Status & Badge Colors
+              statusBadgeBg: darkCssData.status?.badge_bg || HOSTBUDDY_ORIGINAL_DARK.statusBadgeBg,
+              statusBadgeText: darkCssData.status?.badge_text || HOSTBUDDY_ORIGINAL_DARK.statusBadgeText,
               successGreen: darkCssData.status?.success || HOSTBUDDY_ORIGINAL_DARK.successGreen,
               currentGreen: darkCssData.status?.current || HOSTBUDDY_ORIGINAL_DARK.currentGreen,
+              onlineGreen: darkCssData.status?.online || HOSTBUDDY_ORIGINAL_DARK.onlineGreen,
               errorRed: darkCssData.status?.error || HOSTBUDDY_ORIGINAL_DARK.errorRed,
+              offlineRed: darkCssData.status?.offline || HOSTBUDDY_ORIGINAL_DARK.offlineRed,
               warningOrange: darkCssData.status?.warning || HOSTBUDDY_ORIGINAL_DARK.warningOrange,
-              infoBlue: darkCssData.status?.info || HOSTBUDDY_ORIGINAL_DARK.infoBlue,
+              destructiveRed: darkCssData.status?.destructive || HOSTBUDDY_ORIGINAL_DARK.destructiveRed,
               
               // Components
               toggleBgOff: darkCssData.components?.toggle_off || HOSTBUDDY_ORIGINAL_DARK.toggleBgOff,
@@ -398,6 +484,18 @@ const WhiteLabelBranding = () => {
               dropdownSelect: darkCssData.components?.dropdown_select || HOSTBUDDY_ORIGINAL_DARK.dropdownSelect,
               tableHeaderBg: darkCssData.components?.table_header || HOSTBUDDY_ORIGINAL_DARK.tableHeaderBg,
               tableRowHover: darkCssData.components?.table_row_hover || HOSTBUDDY_ORIGINAL_DARK.tableRowHover,
+              
+              // Charts & Data Visualization
+              chartBarFill: darkCssData.charts?.bar_fill || HOSTBUDDY_ORIGINAL_DARK.chartBarFill,
+              chartGridLines: darkCssData.charts?.grid_lines || HOSTBUDDY_ORIGINAL_DARK.chartGridLines,
+              chartAxisLines: darkCssData.charts?.axis_lines || HOSTBUDDY_ORIGINAL_DARK.chartAxisLines,
+              
+              // Shadow & Effects
+              cardShadow: darkCssData.effects?.card_shadow || HOSTBUDDY_ORIGINAL_DARK.cardShadow,
+              primaryGlow: darkCssData.effects?.primary_glow || HOSTBUDDY_ORIGINAL_DARK.primaryGlow,
+              buttonGlow: darkCssData.effects?.button_glow || HOSTBUDDY_ORIGINAL_DARK.buttonGlow,
+              toggleGlow: darkCssData.effects?.toggle_glow || HOSTBUDDY_ORIGINAL_DARK.toggleGlow,
+              warningGlow: darkCssData.effects?.warning_glow || HOSTBUDDY_ORIGINAL_DARK.warningGlow,
               
               // Typography
               headingFont: darkCssData.typography?.heading || HOSTBUDDY_ORIGINAL_DARK.headingFont,
@@ -551,8 +649,8 @@ const WhiteLabelBranding = () => {
         input: colors.inputBg,
         textarea: colors.textareaBg,
         dropdown: colors.dropdownBg,
-        modal: colors.modalBg,
         modal_overlay: colors.modalOverlay,
+        sidebar: colors.sidebarBg,
       },
       text: {
         primary: colors.primaryText,
@@ -562,26 +660,47 @@ const WhiteLabelBranding = () => {
         disabled: colors.disabledText,
         placeholder: colors.placeholderText,
         link: colors.linkText,
-        link_hover: colors.linkHoverText,
       },
       borders: {
         primary: colors.primaryBorder,
-        secondary: colors.secondaryBorder,
         active: colors.activeBorder,
         inactive: colors.inactiveBorder,
+        subtle: colors.subtleBorder,
+        accent: colors.accentBorder,
+      },
+      // Store legacy values for backward compatibility
+      legacy: {
+        primary_blue: colors.primaryBlue,
+        primary_blue_hover: colors.primaryBlueHover,
+        light_blue: colors.lightBlue,
+      },
+      interactive: {
+        action_link: colors.actionLink,
       },
       buttons: {
-        primary: colors.primaryBlue,
-        primary_hover: colors.primaryBlueHover,
-        light_blue: colors.lightBlue,
+        primary_bg: colors.primaryButtonBg,
+        primary_text: colors.primaryButtonText,
+        primary_hover: colors.primaryButtonHover,
+        secondary_bg: colors.secondaryButtonBg,
+        secondary_text: colors.secondaryButtonText,
+        secondary_hover: colors.secondaryButtonHover,
+        outline_border: colors.outlineButtonBorder,
+        outline_text: colors.outlineButtonText,
+        // Also keep legacy keys for older API versions
+        primary: colors.primaryButtonBg,
+        primary_hover: colors.primaryButtonHover,
         secondary: colors.secondaryButtonBg,
         secondary_hover: colors.secondaryButtonHover,
       },
       status: {
+        badge_bg: colors.statusBadgeBg,
+        badge_text: colors.statusBadgeText,
         success: colors.successGreen,
         current: colors.currentGreen,
+        online: colors.onlineGreen,
         warning: colors.warningOrange,
         error: colors.errorRed,
+        offline: colors.offlineRed,
         destructive: colors.destructiveRed,
       },
       components: {
@@ -591,6 +710,18 @@ const WhiteLabelBranding = () => {
         dropdown_select: colors.dropdownSelect,
         table_header: colors.tableHeaderBg,
         table_row_hover: colors.tableRowHover,
+      },
+      charts: {
+        bar_fill: colors.chartBarFill,
+        grid_lines: colors.chartGridLines,
+        axis_lines: colors.chartAxisLines,
+      },
+      effects: {
+        card_shadow: colors.cardShadow,
+        primary_glow: colors.primaryGlow,
+        button_glow: colors.buttonGlow,
+        toggle_glow: colors.toggleGlow,
+        warning_glow: colors.warningGlow,
       },
       typography: {
         heading: colors.headingFont,
@@ -1043,7 +1174,7 @@ const WhiteLabelBranding = () => {
                 </p>
               </div>
 
-              {/* Loading State */}
+              {/* Loading State Message */}
               {loading && (
                 <div style={{ marginBottom: '16px', padding: '12px', background: '#01255E', borderRadius: '6px', color: '#98bffa', fontSize: '14px', textAlign: 'center' }}>
                   Loading CSS configuration for {selectedDomain}...
@@ -1057,13 +1188,6 @@ const WhiteLabelBranding = () => {
                 </div>
               )}
 
-              {/* Success Messages */}
-              {saveSuccess && (
-                <div style={{ marginBottom: '16px', padding: '12px', background: '#1B2D1B', borderRadius: '6px', color: '#10B981', fontSize: '14px', border: '2px solid #10B981' }}>
-                  {saveSuccess}
-                </div>
-              )}
-
               {/* Color Groups */}
               <div className="color-groups">
                 {/* Background Colors */}
@@ -1072,6 +1196,7 @@ const WhiteLabelBranding = () => {
                   <div className="color-group-items">
                     <ColorInput label="Primary" value={brandColors.primaryBg} onChange={(v) => handleColorChange('primaryBg', v)} description="Main app background" />
                     <ColorInput label="Secondary" value={brandColors.secondaryBg} onChange={(v) => handleColorChange('secondaryBg', v)} description="Elevated surfaces" />
+                    <ColorInput label="Sidebar" value={brandColors.sidebarBg} onChange={(v) => handleColorChange('sidebarBg', v)} description="Sidebar background" />
                     <ColorInput label="Cards" value={brandColors.cardBg} onChange={(v) => handleColorChange('cardBg', v)} description="Card backgrounds" />
                     <ColorInput label="Hover" value={brandColors.hoverBg} onChange={(v) => handleColorChange('hoverBg', v)} description="Hover states" />
                     <ColorInput label="Input" value={brandColors.inputBg} onChange={(v) => handleColorChange('inputBg', v)} description="Input fields" />
@@ -1090,6 +1215,7 @@ const WhiteLabelBranding = () => {
                     <ColorInput label="Quaternary" value={brandColors.quaternaryText} onChange={(v) => handleColorChange('quaternaryText', v)} description="Inactive text" />
                     <ColorInput label="Disabled" value={brandColors.disabledText} onChange={(v) => handleColorChange('disabledText', v)} description="Disabled states" />
                     <ColorInput label="Placeholder" value={brandColors.placeholderText} onChange={(v) => handleColorChange('placeholderText', v)} description="Input placeholders" />
+                    <ColorInput label="Link" value={brandColors.linkText} onChange={(v) => handleColorChange('linkText', v)} description="Link text" />
                   </div>
                 </div>
 
@@ -1100,30 +1226,59 @@ const WhiteLabelBranding = () => {
                     <ColorInput label="Primary" value={brandColors.primaryBorder} onChange={(v) => handleColorChange('primaryBorder', v)} description="Standard borders" />
                     <ColorInput label="Active" value={brandColors.activeBorder} onChange={(v) => handleColorChange('activeBorder', v)} description="Focus & hover" />
                     <ColorInput label="Inactive" value={brandColors.inactiveBorder} onChange={(v) => handleColorChange('inactiveBorder', v)} description="Inactive elements" />
+                    <ColorInput label="Subtle" value={brandColors.subtleBorder} onChange={(v) => handleColorChange('subtleBorder', v)} description="Dividers" />
+                    <ColorInput label="Accent" value={brandColors.accentBorder} onChange={(v) => handleColorChange('accentBorder', v)} description="Highlighted card borders" />
                   </div>
                 </div>
 
-                {/* Interactive Colors */}
+                {/* Button Colors - Primary */}
                 <div className="color-group">
-                  <h4 className="color-group-title">INTERACTIVE</h4>
+                  <h4 className="color-group-title">BUTTONS - PRIMARY</h4>
                   <div className="color-group-items">
-                    <ColorInput label="Primary Blue" value={brandColors.primaryBlue} onChange={(v) => handleColorChange('primaryBlue', v)} description="Main brand color" />
-                    <ColorInput label="Primary Hover" value={brandColors.primaryBlueHover} onChange={(v) => handleColorChange('primaryBlueHover', v)} description="Primary hover" />
-                    <ColorInput label="Light Blue" value={brandColors.lightBlue} onChange={(v) => handleColorChange('lightBlue', v)} description="Link text" />
-                    <ColorInput label="Secondary Button" value={brandColors.secondaryButtonBg} onChange={(v) => handleColorChange('secondaryButtonBg', v)} description="Secondary buttons" />
-                    <ColorInput label="Secondary Hover" value={brandColors.secondaryButtonHover} onChange={(v) => handleColorChange('secondaryButtonHover', v)} description="Secondary hover" />
+                    <ColorInput label="Background" value={brandColors.primaryButtonBg} onChange={(v) => handleColorChange('primaryButtonBg', v)} description="Primary button background" />
+                    <ColorInput label="Text" value={brandColors.primaryButtonText} onChange={(v) => handleColorChange('primaryButtonText', v)} description="Primary button text" />
+                    <ColorInput label="Hover" value={brandColors.primaryButtonHover} onChange={(v) => handleColorChange('primaryButtonHover', v)} description="Primary hover state" />
                   </div>
                 </div>
 
-                {/* Status Colors */}
+                {/* Button Colors - Secondary & Outline */}
                 <div className="color-group">
-                  <h4 className="color-group-title">STATUS</h4>
+                  <h4 className="color-group-title">BUTTONS - SECONDARY & OUTLINE</h4>
                   <div className="color-group-items">
-                    <ColorInput label="Success Green" value={brandColors.successGreen} onChange={(v) => handleColorChange('successGreen', v)} description="Success states" />
-                    <ColorInput label="Current Green" value={brandColors.currentGreen} onChange={(v) => handleColorChange('currentGreen', v)} description="Current indicators" />
-                    <ColorInput label="Warning Orange" value={brandColors.warningOrange} onChange={(v) => handleColorChange('warningOrange', v)} description="Warnings" />
-                    <ColorInput label="Error Red" value={brandColors.errorRed} onChange={(v) => handleColorChange('errorRed', v)} description="Error states" />
-                    <ColorInput label="Destructive Red" value={brandColors.destructiveRed} onChange={(v) => handleColorChange('destructiveRed', v)} description="Delete actions" />
+                    <ColorInput label="Secondary Bg" value={brandColors.secondaryButtonBg} onChange={(v) => handleColorChange('secondaryButtonBg', v)} description="Secondary button background" />
+                    <ColorInput label="Secondary Text" value={brandColors.secondaryButtonText} onChange={(v) => handleColorChange('secondaryButtonText', v)} description="Secondary button text" />
+                    <ColorInput label="Secondary Hover" value={brandColors.secondaryButtonHover} onChange={(v) => handleColorChange('secondaryButtonHover', v)} description="Secondary hover state" />
+                    <ColorInput label="Outline Border" value={brandColors.outlineButtonBorder} onChange={(v) => handleColorChange('outlineButtonBorder', v)} description="Outline button border" />
+                    <ColorInput label="Outline Text" value={brandColors.outlineButtonText} onChange={(v) => handleColorChange('outlineButtonText', v)} description="Outline button text" />
+                    <ColorInput label="Cancel Bg" value={brandColors.cancelButton} onChange={(v) => handleColorChange('cancelButton', v)} description="Cancel button background" />
+                    <ColorInput label="Cancel Hover" value={brandColors.cancelButtonHover} onChange={(v) => handleColorChange('cancelButtonHover', v)} description="Cancel hover state" />
+                  </div>
+                </div>
+
+                {/* Action Links & Interactive */}
+                <div className="color-group">
+                  <h4 className="color-group-title">LINKS & INTERACTIVE</h4>
+                  <div className="color-group-items">
+                    <ColorInput label="Action Links" value={brandColors.actionLink} onChange={(v) => handleColorChange('actionLink', v)} description="'See All', 'See more', etc." />
+                    <ColorInput label="Primary Blue" value={brandColors.primaryBlue} onChange={(v) => handleColorChange('primaryBlue', v)} description="Brand color (legacy)" />
+                    <ColorInput label="Primary Hover" value={brandColors.primaryBlueHover} onChange={(v) => handleColorChange('primaryBlueHover', v)} description="Brand hover (legacy)" />
+                    <ColorInput label="Light Blue" value={brandColors.lightBlue} onChange={(v) => handleColorChange('lightBlue', v)} description="Active menu text (legacy)" />
+                  </div>
+                </div>
+
+                {/* Status & Badge Colors */}
+                <div className="color-group">
+                  <h4 className="color-group-title">STATUS & BADGES</h4>
+                  <div className="color-group-items">
+                    <ColorInput label="Badge Bg" value={brandColors.statusBadgeBg} onChange={(v) => handleColorChange('statusBadgeBg', v)} description="Status badge background" />
+                    <ColorInput label="Badge Text" value={brandColors.statusBadgeText} onChange={(v) => handleColorChange('statusBadgeText', v)} description="Status badge text" />
+                    <ColorInput label="Success" value={brandColors.successGreen} onChange={(v) => handleColorChange('successGreen', v)} description="Success states" />
+                    <ColorInput label="Current" value={brandColors.currentGreen} onChange={(v) => handleColorChange('currentGreen', v)} description="Current indicators" />
+                    <ColorInput label="Online" value={brandColors.onlineGreen} onChange={(v) => handleColorChange('onlineGreen', v)} description="Online status" />
+                    <ColorInput label="Warning" value={brandColors.warningOrange} onChange={(v) => handleColorChange('warningOrange', v)} description="Warning messages" />
+                    <ColorInput label="Error" value={brandColors.errorRed} onChange={(v) => handleColorChange('errorRed', v)} description="Error states" />
+                    <ColorInput label="Offline" value={brandColors.offlineRed} onChange={(v) => handleColorChange('offlineRed', v)} description="Offline status" />
+                    <ColorInput label="Destructive" value={brandColors.destructiveRed} onChange={(v) => handleColorChange('destructiveRed', v)} description="Delete actions" />
                   </div>
                 </div>
 
@@ -1132,13 +1287,28 @@ const WhiteLabelBranding = () => {
                   <h4 className="color-group-title">COMPONENTS</h4>
                   <div className="color-group-items">
                     <ColorInput label="Toggle Off" value={brandColors.toggleBgOff} onChange={(v) => handleColorChange('toggleBgOff', v)} description="Disabled toggles" />
-                    <ColorInput label="Cancel Button" value={brandColors.cancelButton} onChange={(v) => handleColorChange('cancelButton', v)} description="Cancel buttons" />
-                    <ColorInput label="Cancel Hover" value={brandColors.cancelButtonHover} onChange={(v) => handleColorChange('cancelButtonHover', v)} description="Cancel hover" />
-                    <ColorInput label="Dropdown Select" value={brandColors.dropdownSelect} onChange={(v) => handleColorChange('dropdownSelect', v)} description="Dropdown text" />
+                    <ColorInput label="Dropdown Text" value={brandColors.dropdownSelect} onChange={(v) => handleColorChange('dropdownSelect', v)} description="Dropdown selected text" />
                     <ColorInput label="Table Header" value={brandColors.tableHeaderBg} onChange={(v) => handleColorChange('tableHeaderBg', v)} description="Table headers" />
                     <ColorInput label="Table Row Hover" value={brandColors.tableRowHover} onChange={(v) => handleColorChange('tableRowHover', v)} description="Table hover" />
                   </div>
                 </div>
+
+                {/* Charts & Data Visualization */}
+                <div className="color-group">
+                  <h4 className="color-group-title">CHARTS & DATA</h4>
+                  <div className="color-group-items">
+                    <ColorInput label="Bar Fill" value={brandColors.chartBarFill} onChange={(v) => handleColorChange('chartBarFill', v)} description="Chart bar color" />
+                    <ColorInput label="Grid Lines" value={brandColors.chartGridLines} onChange={(v) => handleColorChange('chartGridLines', v)} description="Chart grid lines" />
+                    <ColorInput label="Axis Lines" value={brandColors.chartAxisLines} onChange={(v) => handleColorChange('chartAxisLines', v)} description="Chart axis lines" />
+                  </div>
+                </div>
+
+                {/* Save Success Messages */}
+                {saveSuccess && (
+                  <div style={{ marginBottom: '16px', padding: '12px', background: '#1B2D1B', borderRadius: '6px', color: '#10B981', fontSize: '14px', border: '2px solid #10B981' }}>
+                    {saveSuccess}
+                  </div>
+                )}
 
                 {/* Save Error Messages */}
                 {saveError && (
@@ -1208,6 +1378,8 @@ const WhiteLabelBranding = () => {
                       <div className="preview-logo-placeholder" style={{ backgroundColor: brandColors.primaryBg, color: brandColors.tertiaryText, borderColor: brandColors.primaryBorder }}>
                         Your Logo
                       </div>
+                    ) : faviconUrl ? (
+                      <img src={faviconUrl} alt="Favicon" style={{ width: '32px', height: '32px', borderRadius: '4px', objectFit: 'contain' }} />
                     ) : (
                       <div style={{ width: '32px', height: '32px', borderRadius: '4px', backgroundColor: brandColors.primaryBlue, display: 'flex', alignItems: 'center', justifyContent: 'center', color: brandColors.primaryText, fontWeight: '600', fontSize: '14px' }}>
                         HB

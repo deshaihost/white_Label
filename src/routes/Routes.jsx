@@ -26,6 +26,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import StatisticsPage from "../pages/statistics/statistics";
 import ProtectedRoute from "./ProtectedRoute";
 import FeatureProtectedRoute from "./FeatureProtectedRoute";
+import FeatureProtectedUnauthRoute from "./FeatureProtectedUnauthRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import QuestionnairePage from "../pages/properties/addProperties/dynamic_questionnaire/complete_questionnaire";
 import GuidedSetup from "../pages/properties/addProperties/guided_setup/guidedSetup";
@@ -372,11 +373,32 @@ const Routing = () => {
         />
         
         {/* Auth routes - always accessible on all domains */}
-        <Route path="/login" element={<Login />}></Route>
+        <Route 
+          path="/login" 
+          element={
+            <FeatureProtectedUnauthRoute featureId="auth-pages" redirectTo="/client-login">
+              <Login />
+            </FeatureProtectedUnauthRoute>
+          }
+        />
         <Route path="/client-login" element={<WhiteLabelLogin />}></Route>
-        <Route path="/signup" element={<Signup />}></Route>
+        <Route 
+          path="/signup" 
+          element={
+            <FeatureProtectedUnauthRoute featureId="auth-pages">
+              <Signup />
+            </FeatureProtectedUnauthRoute>
+          }
+        />
         <Route path="/accept-invitation" element={<InviteSignup />}></Route>
-        <Route path="/forgot" element={<ForgotPass />}></Route>
+        <Route 
+          path="/forgot" 
+          element={
+            <FeatureProtectedUnauthRoute featureId="auth-pages">
+              <ForgotPass />
+            </FeatureProtectedUnauthRoute>
+          }
+        />
         
         {/* Agreement pages - only on hostbuddy.ai */}
         <Route 

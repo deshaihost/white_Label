@@ -4,10 +4,12 @@ import { FaUserLarge, FaChessQueen } from "react-icons/fa6";
 import { FaPhoneAlt, FaPlug, FaArrowUp } from "react-icons/fa";
 import { HiBellAlert } from "react-icons/hi2";
 import { LiaCogSolid } from "react-icons/lia";
+import { useFeatureAccess } from "../../../helper/useFeatureAccess";
 
 // SettingSideBarIndex component - renders the sidebar navigation for settings pages
 const SettingSideBarIndex = (props) => {
   const navigate = useNavigate();
+  const { isFeatureEnabled } = useFeatureAccess();
   // Extract props for interface types, change handler, active tab, and admin status
   const { interFaceTypes, changeHndl, activeTab, isAdmin } = props;
   // Destructure the different section types from interFaceTypes
@@ -81,12 +83,14 @@ const SettingSideBarIndex = (props) => {
       */}
 
       {/* Subscription tab - manage subscription and payment settings */}
-      <div className={`px-2 py-2 setting-tab-link ${activeTab === subscription && "active"}`} onClick={() => changeHndl(subscription)}>
-        <h6 className="d-flex align-items-center gap-2 m-0" style={{ cursor: 'pointer' }}>
-          <FaChessQueen />
-          Subscription
-        </h6>
-      </div>
+      {isFeatureEnabled('subscriptions') && (
+        <div className={`px-2 py-2 setting-tab-link ${activeTab === subscription && "active"}`} onClick={() => changeHndl(subscription)}>
+          <h6 className="d-flex align-items-center gap-2 m-0" style={{ cursor: 'pointer' }}>
+            <FaChessQueen />
+            Subscription
+          </h6>
+        </div>
+      )}
 
     </div>
   );

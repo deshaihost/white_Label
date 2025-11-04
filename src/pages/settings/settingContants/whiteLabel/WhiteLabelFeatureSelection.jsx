@@ -162,57 +162,57 @@ const WhiteLabelFeatureSelection = () => {
       available: true, 
       version: 'v1', 
       link: '/properties',
-      path: '/properties'
+      paths: ['/properties']
     },
     { 
       id: 'property-profile', 
       name: 'Property Profile', 
-      description: 'Resources, Basics, SOPs, Conversation Preferences (3 tabs)', 
+      description: 'Users can configure the AI knowledge base and property details',
       enabled: true, 
       available: true, 
       version: 'v1', 
-      link: '/propertyprofile',
-      path: '/edit-property/:property_name'
+      link: '/properties', // can't have a direct link since it depends on property name
+      paths: ['/edit-property/:property_name']
     },
     { 
       id: 'smart-templates', 
       name: 'Smart Templates', 
-      description: 'Manage AI message templates', 
+      description: 'Highly robust, AI-enhanced templated messaging', 
       enabled: true, 
       available: true, 
       version: 'v1', 
-      link: '/smarttemplates',
-      path: '/smart-templates'
+      link: '/inbox/smart-templates',
+      paths: ['/inbox/smart-templates']
     },
     { 
       id: 'upsells', 
       name: 'Upsells', 
-      description: 'Gap Night Upsells & Inquiry Followups', 
+      description: 'Gap night upsells & inquiry followups', 
       enabled: true, 
       available: true, 
       version: 'v1', 
-      link: '/upsells',
-      path: '/setting/upsells'
+      link: '/inbox/upsells',
+      paths: ['/inbox/upsells']
     },
     { 
       id: 'messaging-inbox', 
       name: 'Messaging Inbox', 
-      description: 'All HostBuddy messaging features', 
+      description: 'Comprehensive messaging inbox for teams to send and receive guest messages',
       enabled: true, 
       available: true, 
       version: 'v1', 
       link: '/inbox',
-      path: '/inbox'
+      paths: ['/inbox']
     },
     { 
       id: 'action-items', 
       name: 'Action Items', 
-      description: 'Track AI-generated operational tasks', 
+      description: 'AI will notify your team when guest messages need attention',
       enabled: true, 
       available: true, 
       version: 'v1', 
-      link: '/actionitems',
-      path: '/action-item'
+      link: '/action-item',
+      paths: ['/action-item']
     },
     { 
       id: 'insights', 
@@ -222,28 +222,48 @@ const WhiteLabelFeatureSelection = () => {
       available: true, 
       version: 'v1',
       link: '/insights',
-      path: '/statistics'
+      paths: ['/statistics']
     },
     { 
       id: 'action-item-settings', 
       name: 'Action Item Settings', 
-      description: 'Configure AI task generation rules', 
+      description: 'Configure rules and categories for AI action item generation', 
       enabled: true, 
       available: true, 
       version: 'v1', 
-      link: '/actionitemsettings',
-      path: '/setting/action-item-settings'
+      link: '/setting/action-items',
+      paths: ['/setting/action-items']
+    },
+    {
+      id: 'auth-pages',
+      name: 'Direct User Login',
+      description: 'Signup, login, and forgot password pages for end users',
+      enabled: true,
+      available: true,
+      version: 'v1',
+      link: '/login',
+      paths: ['/signup', '/login', '/forgot']
     },
     { 
       id: 'integrations', 
       name: 'Integrations', 
-      description: 'WhatsApp, OpenTable, Resy, Turo, Webhooks', 
+      description: 'WhatsApp, OpenPhone, Cleaning management softwares, Slack, Webhooks',
       enabled: false, 
       available: false, 
       version: 'v2', 
-      link: '/integrations',
-      path: '/integrations'
+      link: '/setting/integrations',
+      paths: ['/setting/integrations']
     },
+    {
+      id: 'subscriptions',
+      name: 'Subscription Management',
+      description: 'Users can subscribe directly and manage their subscriptions',
+      enabled: false,
+      available: false,
+      version: 'v2',
+      link: '/setting/subscription',
+      paths: ['/setting/subscription']
+    }
   ]);
 
   const [customDomain] = useState('');
@@ -324,7 +344,7 @@ const WhiteLabelFeatureSelection = () => {
           enabled: feature.enabled,
           name: feature.name,
           description: feature.description,
-          path: feature.path
+          paths: feature.paths
         };
       });
 
@@ -542,7 +562,7 @@ const WhiteLabelFeatureSelection = () => {
                           <span className="module-link-text">{getFeatureLink(feature.id)}</span>
                           <button
                             onClick={() => copyToClipboard(getFeatureLink(feature.id))}
-                            className="copy-button"
+                            className="wl-copy-button"
                           >
                             <CopyIcon />
                             Copy
@@ -626,7 +646,7 @@ const WhiteLabelFeatureSelection = () => {
                           <span className="module-link-text">{getFeatureLink(feature.id)}</span>
                           <button
                             disabled
-                            className="copy-button copy-button-disabled"
+                            className="wl-copy-button wl-copy-button-disabled"
                           >
                             <CopyIcon />
                             Copy
