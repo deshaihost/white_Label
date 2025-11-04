@@ -309,14 +309,14 @@ export function PropertiesPreview({ brandColors }) {
         {properties.map((property, idx) => (
           <div 
             key={idx}
-            className="property-card"
+            className="wl-preview-property-card"
             style={{ 
               backgroundColor: brandColors.secondaryBg, 
               borderColor: brandColors.primaryBorder,
               boxShadow: brandColors.cardShadow 
             }}
           >
-            <div className="property-card-content">
+            <div className="wl-preview-property-card-content">
               {/* Property Image */}
               <img 
                 src={property.image} 

@@ -69,19 +69,19 @@ const DropdownComponent = ({
   };
 
   return (
-    <div className={`dropdown-container ${className}`} ref={dropdownRef}>
+    <div className={`dropdown-component-container ${className}`} ref={dropdownRef}>
       <div
-        className={`dropdown-trigger ${
-          isOpen ? "dropdown-trigger--active" : ""
+        className={`dropdown-component-trigger ${
+          isOpen ? "dropdown-component-trigger--active" : ""
         }`}
         onClick={handleToggle}
       >
-        <span className="dropdown-trigger__text">
+        <span className="dropdown-component-trigger__text">
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <svg
-          className={`dropdown-trigger__icon ${
-            isOpen ? "dropdown-trigger__icon--rotated" : ""
+          className={`dropdown-component-trigger__icon ${
+            isOpen ? "dropdown-component-trigger__icon--rotated" : ""
           }`}
           width="16"
           height="16"
@@ -99,7 +99,7 @@ const DropdownComponent = ({
       </div>
       {isOpen && (
         <div
-          className="dropdown-menu"
+          className="dropdown-component-menu"
           style={{
             backgroundColor: "#2B2E36",
             border: "1px solid rgba(189, 193, 201, 0.15)",
@@ -123,12 +123,12 @@ const DropdownComponent = ({
             options.map((option, index) => (
               <div
                 key={option.id}
-                className={`dropdown-option ${
+                className={`dropdown-component-option ${
                   selectedOption?.id === option.id
-                    ? "dropdown-option--selected"
+                    ? "dropdown-component-option--selected"
                     : ""
-                } ${hoveredIndex === index ? "dropdown-option--hovered" : ""} ${
-                  pressedIndex === index ? "dropdown-option--pressed" : ""
+                } ${hoveredIndex === index ? "dropdown-component-option--hovered" : ""} ${
+                  pressedIndex === index ? "dropdown-component-option--pressed" : ""
                 }`}                style={{
                   paddingLeft: "20px", // Add extra left padding for selection indicator
                 }}                onClick={() => handleOptionSelect(option, index)}
@@ -139,7 +139,7 @@ const DropdownComponent = ({
               >                {(selectedOption?.id === option.id ||
                   hoveredIndex === index) && (
                   <div 
-                    className="dropdown-option__selection-indicator"
+                    className="dropdown-component-option__selection-indicator"
                     style={{
                       position: "absolute",
                       left: "0",
@@ -153,7 +153,7 @@ const DropdownComponent = ({
                     }}
                   />
                 )}
-                <span className="dropdown-option__label">{option.label}</span>
+                <span className="dropdown-component-option__label">{option.label}</span>
               </div>
             ))
           ) : isLoading ? (

@@ -449,14 +449,14 @@
   max-width: 100%;
 }
 
-.property-card {
+.wl-preview-property-card {
   border: 2px solid;
   border-radius: 8px;
   padding: 16px;
   transition: all 0.2s;
 }
 
-.property-card-content {
+.wl-preview-property-card-content {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -465,7 +465,7 @@
 }
 
 @media (max-width: 1400px) {
-  .property-card-content {
+  .wl-preview-property-card-content {
     flex-wrap: wrap;
   }
 }
