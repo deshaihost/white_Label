@@ -61,7 +61,7 @@ const SimpleBarChart = ({ data, brandColors, height = 240 }) => {
                   className="chart-bar" 
                   style={{ 
                     height: `${barHeight}%`,
-                    backgroundColor: brandColors.primaryBlue 
+                    backgroundColor: brandColors.chartBarFill 
                   }}
                   title={`${item.hour}: ${item.value}`}
                 />
@@ -102,13 +102,13 @@ export function DashboardPreview({ brandColors }) {
         <div className="welcome-banner-content">
           <p 
             className="welcome-text"
-            style={{ color: brandColors.primaryBlue }}
+            style={{ color: brandColors.actionLink }}
           >
             Welcome, Sam
           </p>
           <button 
             className="welcome-cta"
-            style={{ color: brandColors.primaryBlue }}
+            style={{ color: brandColors.actionLink }}
           >
             New? Get Started →
           </button>
@@ -161,7 +161,7 @@ export function DashboardPreview({ brandColors }) {
           <p className="chart-footer-text" style={{ color: brandColors.tertiaryText }}>
             Above data from Sep 11, 2025 to Oct 13, 2025
           </p>
-          <button className="chart-footer-link" style={{ color: brandColors.primaryBlue }}>
+          <button className="chart-footer-link" style={{ color: brandColors.actionLink }}>
             See more statistics
           </button>
         </div>
@@ -173,7 +173,7 @@ export function DashboardPreview({ brandColors }) {
           <h3 className="table-title" style={{ color: brandColors.primaryText }}>
             Incomplete Action Items <span className="table-subtitle" style={{ color: brandColors.tertiaryText }}>(Most Recent)</span>
           </h3>
-          <button className="table-see-all" style={{ color: brandColors.primaryBlue }}>
+          <button className="table-see-all" style={{ color: brandColors.actionLink }}>
             See All
           </button>
         </div>
@@ -211,9 +211,9 @@ export function DashboardPreview({ brandColors }) {
             <div className="table-cell table-cell-center">
               <button 
                 className="complete-button"
-                style={{ borderColor: brandColors.primaryBlue, boxShadow: brandColors.primaryGlow }}
+                style={{ borderColor: brandColors.outlineButtonBorder, boxShadow: brandColors.primaryGlow }}
               >
-                <CheckIcon size={16} strokeWidth={2.5} color={brandColors.primaryBlue} />
+                <CheckIcon size={16} strokeWidth={2.5} color={brandColors.outlineButtonText} />
               </button>
             </div>
           </div>
@@ -258,7 +258,7 @@ export function PropertiesPreview({ brandColors }) {
       <div className="properties-header">
         <h1 
           className="properties-title"
-          style={{ color: brandColors.primaryBlue }}
+          style={{ color: brandColors.primaryText }}
         >
           Properties
         </h1>
@@ -274,8 +274,8 @@ export function PropertiesPreview({ brandColors }) {
           <button 
             className="stop-all-button"
             style={{ 
-              backgroundColor: brandColors.primaryBlue,
-              color: brandColors.primaryText,
+              backgroundColor: brandColors.primaryButtonBg,
+              color: brandColors.primaryButtonText,
               boxShadow: brandColors.buttonGlow
             }}
           >
@@ -287,7 +287,7 @@ export function PropertiesPreview({ brandColors }) {
       {/* Action Cards */}
       <div className="action-cards-grid">
         <div className="action-card" style={{ borderColor: brandColors.activeBorder, backgroundColor: brandColors.secondaryBg }}>
-          <h3 className="action-card-title" style={{ color: brandColors.primaryBlue }}>
+          <h3 className="action-card-title" style={{ color: brandColors.actionLink }}>
             Import Properties
           </h3>
           <p className="action-card-text" style={{ color: brandColors.tertiaryText }}>
@@ -295,7 +295,7 @@ export function PropertiesPreview({ brandColors }) {
           </p>
         </div>
         <div className="action-card" style={{ borderColor: brandColors.activeBorder, backgroundColor: brandColors.secondaryBg }}>
-          <h3 className="action-card-title" style={{ color: brandColors.primaryBlue }}>
+          <h3 className="action-card-title" style={{ color: brandColors.actionLink }}>
             Subscribe
           </h3>
           <p className="action-card-text" style={{ color: brandColors.tertiaryText }}>
@@ -333,13 +333,13 @@ export function PropertiesPreview({ brandColors }) {
                   <button 
                     className="property-stop-button"
                     style={{ 
-                      backgroundColor: brandColors.primaryBlue,
-                      color: brandColors.primaryText
+                      backgroundColor: brandColors.primaryButtonBg,
+                      color: brandColors.primaryButtonText
                     }}
                   >
                     STOP
                   </button>
-                  <button className="property-schedule-button" style={{ color: brandColors.primaryBlue }}>
+                  <button className="property-schedule-button" style={{ color: brandColors.actionLink }}>
                     <ClockIcon className="schedule-icon" size={14} />
                     Schedule
                   </button>
@@ -356,8 +356,8 @@ export function PropertiesPreview({ brandColors }) {
                     className="property-setup-button"
                     style={{ 
                       backgroundColor: 'transparent',
-                      borderColor: brandColors.primaryBlue,
-                      color: brandColors.primaryBlue
+                      borderColor: brandColors.outlineButtonBorder,
+                      color: brandColors.outlineButtonText
                     }}
                   >
                     Property Setup
@@ -365,8 +365,8 @@ export function PropertiesPreview({ brandColors }) {
                   <button 
                     className="property-test-button"
                     style={{ 
-                      backgroundColor: brandColors.primaryBlue,
-                      color: brandColors.primaryText,
+                      backgroundColor: brandColors.primaryButtonBg,
+                      color: brandColors.primaryButtonText,
                       boxShadow: brandColors.buttonGlow
                     }}
                   >
@@ -486,7 +486,7 @@ export function MessagingPreview({ brandColors }) {
           color: ${brandColors.primaryText};
         }
         #messaging-preview-root .msg-tab.active::after {
-          background-color: ${brandColors.primaryBlue};
+          background-color: ${brandColors.primaryButtonBg};
         }
         #messaging-preview-root .msg-tab-inactive {
           color: ${brandColors.secondaryText};
@@ -538,12 +538,12 @@ export function MessagingPreview({ brandColors }) {
           color: ${brandColors.secondaryText};
         }
         #messaging-preview-root .msg-send-btn {
-          background-color: ${brandColors.primaryBlue};
-          color: ${brandColors.primaryText};
+          background-color: ${brandColors.primaryButtonBg};
+          color: ${brandColors.primaryButtonText};
         }
         #messaging-preview-root .msg-send-dropdown {
-          background-color: ${brandColors.primaryBlue};
-          color: ${brandColors.primaryText};
+          background-color: ${brandColors.primaryButtonBg};
+          color: ${brandColors.primaryButtonText};
         }
       `}</style>
       
@@ -774,9 +774,9 @@ export function ActionItemsPreview({ brandColors }) {
             <div className="action-items-cell action-items-cell-center">
               <button 
                 className="complete-button"
-                style={{ borderColor: brandColors.primaryBlue, boxShadow: brandColors.primaryGlow }}
+                style={{ borderColor: brandColors.outlineButtonBorder, boxShadow: brandColors.primaryGlow }}
               >
-                <CheckIcon size={16} strokeWidth={2.5} color={brandColors.primaryBlue} />
+                <CheckIcon size={16} strokeWidth={2.5} color={brandColors.outlineButtonText} />
               </button>
             </div>
           </div>
@@ -861,7 +861,7 @@ export function SettingsPreview({ brandColors }) {
                 <span className="settings-row-label" style={{ color: brandColors.secondaryText }}>{field}</span>
                 <button 
                   className="settings-row-edit"
-                  style={{ color: brandColors.primaryBlue }}
+                  style={{ color: brandColors.actionLink }}
                 >
                   Edit
                 </button>
@@ -884,12 +884,12 @@ export function SettingsPreview({ brandColors }) {
                 <span className="settings-row-label" style={{ color: brandColors.secondaryText }}>{setting}</span>
                 <div 
                   className="toggle-switch"
-                  style={{ backgroundColor: idx === 0 ? brandColors.primaryBlue : brandColors.toggleBgOff, boxShadow: idx === 0 ? brandColors.toggleGlow : 'none' }}
+                  style={{ backgroundColor: idx === 0 ? brandColors.primaryButtonBg : brandColors.toggleBgOff, boxShadow: idx === 0 ? brandColors.toggleGlow : 'none' }}
                 >
                   <div 
                     className="toggle-knob"
                     style={{ 
-                      backgroundColor: brandColors.primaryText,
+                      backgroundColor: brandColors.primaryButtonText,
                       transform: idx === 0 ? 'translateX(30px)' : 'translateX(2px)'
                     }}
                   />
