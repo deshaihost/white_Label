@@ -309,14 +309,14 @@ export function PropertiesPreview({ brandColors }) {
         {properties.map((property, idx) => (
           <div 
             key={idx}
-            className="property-card"
+            className="wl-preview-property-card"
             style={{ 
               backgroundColor: brandColors.secondaryBg, 
               borderColor: brandColors.primaryBorder,
               boxShadow: brandColors.cardShadow 
             }}
           >
-            <div className="property-card-content">
+            <div className="wl-preview-property-card-content">
               {/* Property Image */}
               <img 
                 src={property.image} 
@@ -463,395 +463,87 @@ export function MessagingPreview({ brandColors }) {
 
   return (
     <>
-      {/* CSS Override styles - CRITICAL for matching design reference. TODO: Move to the CSS file */}
+      {/* Dynamic color styles - these use brandColors variables so must stay inline */}
       <style>{`
-        /* Override messaging preview layout to match design reference */
         #messaging-preview-root {
-          display: flex;
-          flex-direction: column;
-          margin: -32px;
-          height: calc(100vh - 120px);
-          overflow: hidden;
           background-color: ${brandColors.primaryBg};
         }
-        
-        /* Chat Header - matches ChatHeader.tsx from design reference */
         #messaging-preview-root .msg-chat-header {
           background-color: ${brandColors.secondaryBg};
-          border-bottom: 1px solid ${brandColors.primaryBorder};
-          padding: 12px;
-          flex-shrink: 0;
+          border-bottom-color: ${brandColors.primaryBorder};
         }
-        
-        #messaging-preview-root .msg-header-content {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-        
-        #messaging-preview-root .msg-name-buttons {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        
-        #messaging-preview-root .msg-guest-avatar {
-          width: 32px;
-          height: 32px;
-          border-radius: 4px;
-          object-fit: cover;
-          flex-shrink: 0;
-        }
-        
         #messaging-preview-root .msg-guest-name {
-          font-family: 'Poppins', sans-serif;
-          font-weight: 700;
-          font-size: 18px;
-          line-height: 1.4;
           color: ${brandColors.primaryText};
-          flex: 1;
         }
-        
         #messaging-preview-root .msg-details-button {
           background-color: ${brandColors.hoverBg};
           color: ${brandColors.lightBlue};
-          border: none;
-          padding: 6px 12px;
-          border-radius: 4px;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 600;
-          font-size: 14px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 6px;
         }
-        
-        #messaging-preview-root .msg-pin-button {
-          background: transparent;
-          border: none;
-          padding: 4px;
-          border-radius: 4px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 28px;
-          height: 28px;
-        }
-        
         #messaging-preview-root .msg-pin-button:hover {
           background-color: ${brandColors.hoverBg};
         }
-        
-        #messaging-preview-root .msg-tab-menu {
-          height: 32px;
-          border-bottom: 1px solid ${brandColors.primaryBorder};
-          display: flex;
-          gap: 4px;
-        }
-        
         #messaging-preview-root .msg-tab {
-          background: transparent;
-          border: none;
-          padding: 8px 4px;
-          border-radius: 4px 4px 0 0;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 600;
-          font-size: 14px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          position: relative;
           color: ${brandColors.primaryText};
         }
-        
         #messaging-preview-root .msg-tab.active::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 4px;
-          right: 4px;
-          height: 3px;
           background-color: ${brandColors.primaryBlue};
-          border-radius: 2px 2px 0 0;
         }
-        
         #messaging-preview-root .msg-tab-inactive {
           color: ${brandColors.secondaryText};
-          font-weight: 500;
         }
-        
-        /* Chat Box - matches ChatBox.tsx from design reference */
+        #messaging-preview-root .msg-tab-menu {
+          border-bottom-color: ${brandColors.primaryBorder};
+        }
         #messaging-preview-root .msg-chat-box {
-          flex: 1;
           background-color: ${brandColors.primaryBg};
-          overflow-y: auto;
-          padding: 16px 12px;
-          border-left: 2px solid ${brandColors.primaryBorder};
-          border-right: 1px solid ${brandColors.primaryBorder};
+          border-left-color: ${brandColors.primaryBorder};
+          border-right-color: ${brandColors.primaryBorder};
         }
-        
-        #messaging-preview-root .msg-content {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-        
-        #messaging-preview-root .msg-day-divider {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          width: 100%;
-        }
-        
-        #messaging-preview-root .msg-divider-line {
-          flex: 1;
-          height: 1px;
-          background-color: rgba(189, 193, 201, 0.15);
-          border-radius: 1px;
-        }
-        
         #messaging-preview-root .msg-divider-text {
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 600;
-          font-size: 12px;
           color: ${brandColors.tertiaryText};
-          white-space: nowrap;
         }
-        
-        #messaging-preview-root .msg-message {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        
-        #messaging-preview-root .msg-message-host {
-          align-items: flex-end;
-        }
-        
-        #messaging-preview-root .msg-message-guest {
-          align-items: flex-start;
-        }
-        
-        #messaging-preview-root .msg-author-timestamp {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          padding: 0 4px;
-        }
-        
-        #messaging-preview-root .msg-logo {
-          width: 20px;
-          height: 20px;
-          flex-shrink: 0;
-        }
-        
-        #messaging-preview-root .msg-guest-avatar-small {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          object-fit: cover;
-          flex-shrink: 0;
-        }
-        
         #messaging-preview-root .msg-author-name {
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 600;
-          font-size: 14px;
           color: ${brandColors.tertiaryText};
         }
-        
         #messaging-preview-root .msg-timestamp {
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 400;
-          font-size: 14px;
           color: ${brandColors.tertiaryText};
         }
-        
         #messaging-preview-root .msg-divider-dot {
-          width: 2px;
-          height: 2px;
-          border-radius: 50%;
           background-color: ${brandColors.quaternaryText};
         }
-        
-        #messaging-preview-root .msg-smart-template-badge {
-          background-color: #013280;
-          padding: 2px 5px;
-          border-radius: 18px;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 500;
-          font-size: 12px;
-          color: #d4e4fc;
-          margin-left: 4px;
-        }
-        
-        #messaging-preview-root .msg-bubble {
-          max-width: 480px;
-          padding: 12px;
-          border-radius: 12px;
-          border: 1px solid rgba(189, 193, 201, 0.15);
-        }
-        
         #messaging-preview-root .msg-bubble-host {
           background-color: ${brandColors.secondaryBg};
         }
-        
         #messaging-preview-root .msg-bubble-guest {
           background-color: ${brandColors.cardBg};
         }
-        
         #messaging-preview-root .msg-bubble-text {
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 400;
-          font-size: 16px;
-          line-height: normal;
           color: ${brandColors.primaryText};
-          word-wrap: break-word;
         }
-        
-        #messaging-preview-root .msg-feedback-info {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          padding: 0 2px;
-        }
-        
         #messaging-preview-root .msg-feedback-btn {
-          background: transparent;
-          border: none;
-          padding: 4px;
-          border-radius: 4px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 24px;
-          height: 24px;
           color: ${brandColors.quaternaryText};
         }
-        
-        /* Text Area - matches TextArea.tsx from design reference */
         #messaging-preview-root .msg-text-area {
           background-color: ${brandColors.secondaryBg};
-          border-top: 1px solid ${brandColors.primaryBorder};
-          border-left: 2px solid ${brandColors.primaryBorder};
-          padding: 12px;
-          flex-shrink: 0;
+          border-top-color: ${brandColors.primaryBorder};
+          border-left-color: ${brandColors.primaryBorder};
         }
-        
-        #messaging-preview-root .msg-textarea-content {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-        
         #messaging-preview-root .msg-placeholder {
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 500;
-          font-size: 16px;
           color: ${brandColors.quaternaryText};
         }
-        
-        #messaging-preview-root .msg-actions {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        
-        #messaging-preview-root .msg-ai-templates {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-        
         #messaging-preview-root .msg-dropdown-btn {
-          background: transparent;
-          border: none;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          padding: 6px 8px;
-          border-radius: 4px;
-          cursor: pointer;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 500;
-          font-size: 14px;
           color: ${brandColors.secondaryText};
-          height: 32px;
         }
-        
-        #messaging-preview-root .msg-divider-vertical {
-          width: 1px;
-          height: 16px;
-          background-color: rgba(189, 193, 201, 0.15);
-          border-radius: 1px;
-        }
-        
         #messaging-preview-root .msg-template-btn {
-          background: transparent;
-          border: none;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          padding: 6px 8px;
-          border-radius: 4px;
-          cursor: pointer;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 600;
-          font-size: 14px;
           color: ${brandColors.secondaryText};
-          height: 32px;
         }
-        
-        #messaging-preview-root .msg-send-button-group {
-          display: flex;
-        }
-        
         #messaging-preview-root .msg-send-btn {
           background-color: ${brandColors.primaryBlue};
           color: ${brandColors.primaryText};
-          border: none;
-          padding: 6px 12px;
-          border-radius: 4px 0 0 4px;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 600;
-          font-size: 14px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          height: 32px;
         }
-        
         #messaging-preview-root .msg-send-dropdown {
           background-color: ${brandColors.primaryBlue};
           color: ${brandColors.primaryText};
-          border: none;
-          border-left: 1px solid rgba(15, 17, 23, 0.32);
-          padding: 6px 12px;
-          border-radius: 0 4px 4px 0;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 32px;
-          height: 32px;
-        }
-        
-        /* Icon styles */
-        #messaging-preview-root .msg-icon {
-          width: 16px;
-          height: 16px;
-          flex-shrink: 0;
-        }
-        
-        #messaging-preview-root .msg-icon-20 {
-          width: 20px;
-          height: 20px;
-          flex-shrink: 0;
         }
       `}</style>
       

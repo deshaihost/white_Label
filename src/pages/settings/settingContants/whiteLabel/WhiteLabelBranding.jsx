@@ -1208,6 +1208,8 @@ const WhiteLabelBranding = () => {
                       <div className="preview-logo-placeholder" style={{ backgroundColor: brandColors.primaryBg, color: brandColors.tertiaryText, borderColor: brandColors.primaryBorder }}>
                         Your Logo
                       </div>
+                    ) : faviconUrl ? (
+                      <img src={faviconUrl} alt="Favicon" style={{ width: '32px', height: '32px', borderRadius: '4px', objectFit: 'contain' }} />
                     ) : (
                       <div style={{ width: '32px', height: '32px', borderRadius: '4px', backgroundColor: brandColors.primaryBlue, display: 'flex', alignItems: 'center', justifyContent: 'center', color: brandColors.primaryText, fontWeight: '600', fontSize: '14px' }}>
                         HB

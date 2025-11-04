@@ -1,10 +1,10 @@
-.dropdown-container {
+.dropdown-component-container {
   position: relative;
   width: 200px;
   font-family: var(--body-medium-reg-400-font-family, 'DM Sans', sans-serif);
 }
 
-.dropdown-trigger {
+.dropdown-component-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -18,18 +18,18 @@
   box-sizing: border-box;
 }
 
-.dropdown-trigger:hover {
+.dropdown-component-trigger:hover {
   background-color: var(--white-label-background-hover, #1E2026);
   border-color: var(--colors-color-border-bold, rgba(189, 193, 201, 0.25));
 }
 
-.dropdown-trigger--active {
+.dropdown-component-trigger--active {
   background-color: var(--colors-elevation-surface-pressed, #0F1117);
   border-color: var(--colors-color-border-focus, #3E88F7);
   box-shadow: 0 0 0 1px var(--colors-color-border-focus, #3E88F7);
 }
 
-.dropdown-trigger__text {
+.dropdown-component-trigger__text {
   color: var(--white-label-text-secondary, #D0D3DB);
   font-size: var(--body-medium-reg-400-font-size, 14px);
   font-weight: var(--body-medium-reg-400-font-weight, 400);
@@ -37,18 +37,18 @@
   text-align: left;
 }
 
-.dropdown-trigger__icon {
+.dropdown-component-trigger__icon {
   color: var(--colors-color-icon-default, #A6A9B2);
   transition: transform 0.2s ease;
   flex-shrink: 0;
   margin-left: 8px;
 }
 
-.dropdown-trigger__icon--rotated {
+.dropdown-component-trigger__icon--rotated {
   transform: rotate(180deg);
 }
 
-.dropdown-menu {
+.dropdown-component-menu {
   position: absolute;
   padding:0px !important;
   top: 100%;
@@ -68,7 +68,7 @@
   
 }
 
-.dropdown-option {
+.dropdown-component-option {
   padding: 10px 12px;
   color: var(--white-label-text-secondary, #D0D3DB);
   font-family: 'DM Sans', sans-serif;
@@ -83,24 +83,24 @@
   gap: 8px;
 }
 
-.dropdown-option:hover,
-.dropdown-option--hovered {
+.dropdown-component-option:hover,
+.dropdown-component-option--hovered {
   background-color: var(--white-label-background-hover, #013280);
   color: var(--white-label-text-secondary, #D0D3DB);
 }
 
-.dropdown-option:active,
-.dropdown-option--pressed {
+.dropdown-component-option:active,
+.dropdown-component-option--pressed {
   background-color: var(--white-label-background-hover, #001330);
   color: var(--white-label-text-secondary, #D0D3DB);
 }
 
-.dropdown-option:hover .dropdown-option__selection-indicator,
-.dropdown-option--hovered .dropdown-option__selection-indicator {
+.dropdown-component-option:hover .dropdown-component-option__selection-indicator,
+.dropdown-component-option--hovered .dropdown-component-option__selection-indicator {
   opacity: 1;
 }
 
-.dropdown-option__selection-indicator {
+.dropdown-component-option__selection-indicator {
   background-color: #3E88F7;
   border-radius: 0px 2px 2px 0px;
   height: 14px;
@@ -113,22 +113,22 @@
   transition: opacity 0.2s ease;
 }
 
-.dropdown-option__label {
+.dropdown-component-option__label {
   flex: 1;
 }
 
-.dropdown-option--selected {
+.dropdown-component-option--selected {
   background-color: var(--white-label-background-dropdown, #01255E);
    color: var(--white-label-text-secondary, #D0D3DB);
   font-weight: var(--body-medium-semibold-600-font-weight, 600);
 }
 
-.dropdown-option--selected .dropdown-option__selection-indicator {
+.dropdown-component-option--selected .dropdown-component-option__selection-indicator {
   opacity: 1;
 }
 
-.dropdown-option--selected:hover,
-.dropdown-option--selected.dropdown-option--hovered {
+.dropdown-component-option--selected:hover,
+.dropdown-component-option--selected.dropdown-component-option--hovered {
   background-color: var(--white-label-background-hover, #4F94F8);
     color: var(--white-label-text-secondary, #D0D3DB);
 }
@@ -145,17 +145,17 @@
   }
 }
 
-.dropdown-menu {
+.dropdown-component-menu {
   animation: dropdownFadeIn 0.15s ease-out;
 }
 
 /* Focus states for accessibility */
-.dropdown-trigger:focus-visible {
+.dropdown-component-trigger:focus-visible {
   outline: 2px solid var(--colors-color-border-focus, #3E88F7);
   outline-offset: 1px;
 }
 
-.dropdown-option:focus-visible {
+.dropdown-component-option:focus-visible {
   outline: 2px solid var(--colors-color-border-focus, #3E88F7);
   outline-offset: -2px;
 }
