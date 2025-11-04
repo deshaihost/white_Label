@@ -10,6 +10,16 @@ import {
 } from './WhiteLabelPreviewPages';
 import { getDomains, getCssConfig, saveCssConfig, uploadCompanyLogo, getLogo } from './whiteLabelServices';
 
+// Import sidebar icons
+import dashboardIcon from '../../../../component/newSideNavigationComponent/components/sideNavBarElements/sectionIndicatorComponent/navIcons/deshBoardDefault.svg';
+import propertiesIcon from '../../../../component/newSideNavigationComponent/components/sideNavBarElements/sectionIndicatorComponent/navIcons/home-smile.svg';
+import messagingIcon from '../../../../component/newSideNavigationComponent/components/sideNavBarElements/sectionIndicatorComponent/navIcons/messageDefault.svg';
+import actionItemsIcon from '../../../../component/newSideNavigationComponent/components/sideNavBarElements/sectionIndicatorComponent/navIcons/actionDefault.svg';
+import insightsIcon from '../../../../component/newSideNavigationComponent/components/sideNavBarElements/sectionIndicatorComponent/navIcons/insightDefault.svg';
+import settingsIcon from '../../../../component/newSideNavigationComponent/components/sideNavBarElements/sectionIndicatorComponent/navIcons/settingsDefault.svg';
+import chevronLeftDouble from '../../../../component/newSideNavigationComponent/components/sideNavBarElements/sectionIndicatorComponent/navIcons/chevron-left-double.svg';
+import chevronRightDouble from '../../../../component/newSideNavigationComponent/components/sideNavBarElements/sectionIndicatorComponent/navIcons/chevron-right-double.svg';
+
 // SVG Icon Components
 const UploadIcon = ({ className, size = 24 }) => (
   <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -210,6 +220,7 @@ const WhiteLabelBranding = () => {
   const [logoUrl, setLogoUrl] = useState('');
   const [faviconUrl, setFaviconUrl] = useState('');
   const [previewPage, setPreviewPage] = useState('dashboard');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   
   // Logo file management
   const [fullLogoFile, setFullLogoFile] = useState(null);
@@ -486,6 +497,7 @@ const WhiteLabelBranding = () => {
 
   // Save CSS configuration
   const handleSave = async () => {
+    console.log('Saving CSS configuration for domain:', selectedDomain);
     if (!selectedDomain) {
       setSaveError('Please select a domain');
       return;
@@ -1052,13 +1064,6 @@ const WhiteLabelBranding = () => {
                 </div>
               )}
 
-              {/* Save Error Messages */}
-              {saveError && (
-                <div style={{ marginBottom: '16px', padding: '12px', background: '#2D1B1B', borderRadius: '6px', color: '#EF4444', fontSize: '14px', border: '2px solid #EF4444' }}>
-                  {saveError}
-                </div>
-              )}
-
               {/* Color Groups */}
               <div className="color-groups">
                 {/* Background Colors */}
@@ -1135,6 +1140,13 @@ const WhiteLabelBranding = () => {
                   </div>
                 </div>
 
+                {/* Save Error Messages */}
+                {saveError && (
+                  <div style={{ marginBottom: '16px', padding: '12px', background: '#2D1B1B', borderRadius: '6px', color: '#EF4444', fontSize: '14px', border: '2px solid #EF4444' }}>
+                    {saveError}
+                  </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="action-buttons">
                   {/* Currently there is only one save functionality, so no need for three separate buttons
@@ -1147,7 +1159,7 @@ const WhiteLabelBranding = () => {
                     Preview in Sandbox
                   </button>
                   */}
-                  <button className="action-button action-button-publish" onClick={handleSave} disabled={saving || !selectedDomain || !domainKey}>
+                  <button className="action-button action-button-publish" onClick={handleSave}>
                     {saving ? 'Publishing...' : 'Save And Publish Changes'}
                   </button>
                 </div>
@@ -1178,15 +1190,27 @@ const WhiteLabelBranding = () => {
             {/* Preview Content */}
             <div className="preview-content">
               {/* Simulated Sidebar */}
-              <div className="preview-sidebar" style={{ backgroundColor: brandColors.secondaryBg, borderColor: brandColors.primaryBorder }}>
+              <div 
+                className={`preview-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}
+                style={{ 
+                  backgroundColor: brandColors.secondaryBg, 
+                  borderColor: brandColors.primaryBorder,
+                  width: sidebarCollapsed ? '64px' : '180px',
+                  transition: 'width 0.3s ease'
+                }}
+              >
                 <div className="preview-sidebar-content">
                   {/* Logo Area */}
-                  <div className="preview-logo-area">
-                    {logoUrl ? (
+                  <div className="preview-logo-area" style={{ marginBottom: sidebarCollapsed ? '24px' : '16px' }}>
+                    {!sidebarCollapsed && logoUrl ? (
                       <img src={logoUrl} alt="Logo" className="preview-logo-image" />
-                    ) : (
+                    ) : !sidebarCollapsed ? (
                       <div className="preview-logo-placeholder" style={{ backgroundColor: brandColors.primaryBg, color: brandColors.tertiaryText, borderColor: brandColors.primaryBorder }}>
                         Your Logo
+                      </div>
+                    ) : (
+                      <div style={{ width: '32px', height: '32px', borderRadius: '4px', backgroundColor: brandColors.primaryBlue, display: 'flex', alignItems: 'center', justifyContent: 'center', color: brandColors.primaryText, fontWeight: '600', fontSize: '14px' }}>
+                        HB
                       </div>
                     )}
                   </div>
@@ -1194,12 +1218,12 @@ const WhiteLabelBranding = () => {
                   {/* Menu Items */}
                   <div className="preview-menu">
                     {[
-                      { id: 'dashboard', label: 'Dashboard' },
-                      { id: 'properties', label: 'Properties' },
-                      { id: 'messaging', label: 'Messaging' },
-                      { id: 'action-items', label: 'Action Items' },
-                      { id: 'insights', label: 'Insights' },
-                      { id: 'settings', label: 'Settings' }
+                      { id: 'dashboard', label: 'Dashboard', icon: dashboardIcon },
+                      { id: 'properties', label: 'Properties', icon: propertiesIcon },
+                      { id: 'messaging', label: 'Messaging', icon: messagingIcon },
+                      { id: 'action-items', label: 'Action Items', icon: actionItemsIcon },
+                      { id: 'insights', label: 'Insights', icon: insightsIcon },
+                      { id: 'settings', label: 'Settings', icon: settingsIcon }
                     ].map(item => (
                       <button
                         key={item.id}
@@ -1207,15 +1231,73 @@ const WhiteLabelBranding = () => {
                         className="preview-menu-item"
                         style={{
                           backgroundColor: previewPage === item.id ? brandColors.hoverBg : 'transparent',
-                          color: previewPage === item.id ? brandColors.lightBlue : brandColors.tertiaryText
+                          color: previewPage === item.id ? brandColors.lightBlue : brandColors.tertiaryText,
+                          justifyContent: sidebarCollapsed ? 'center' : 'flex-start',
+                          padding: sidebarCollapsed ? '12px 0' : '12px 16px',
+                          position: 'relative'
                         }}
+                        title={sidebarCollapsed ? item.label : ''}
                       >
                         {previewPage === item.id && (
-                          <div className="preview-menu-indicator" style={{ backgroundColor: brandColors.primaryBlue }} />
+                          <div 
+                            className="preview-menu-indicator"
+                            style={{ 
+                              backgroundColor: brandColors.primaryBlue,
+                              position: 'absolute',
+                              left: 0,
+                              top: sidebarCollapsed ? 0 : '50%',
+                              bottom: sidebarCollapsed ? 0 : 'auto',
+                              height: sidebarCollapsed ? '100%' : '14px',
+                              transform: sidebarCollapsed ? 'none' : 'translateY(-50%)',
+                              width: '3px',
+                              borderRadius: '0 2px 2px 0'
+                            }} 
+                          />
                         )}
-                        {item.label}
+                        {sidebarCollapsed ? (
+                          <img 
+                            src={item.icon} 
+                            alt={item.label}
+                            style={{ 
+                              width: '20px', 
+                              height: '20px',
+                              filter: previewPage === item.id ? 'none' : 'brightness(0.7)'
+                            }}
+                          />
+                        ) : (
+                          item.label
+                        )}
                       </button>
                     ))}
+                  </div>
+
+                  {/* Spacer to push collapse button to bottom */}
+                  <div style={{ flex: 1 }} />
+
+                  {/* Collapse/Expand Button */}
+                  <div className="preview-sidebar-collapse-btn-container">
+                    <button
+                      className="preview-sidebar-collapse-btn"
+                      onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                      style={{
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                        color: brandColors.tertiaryText
+                      }}
+                      title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                    >
+                      <img 
+                        src={sidebarCollapsed ? chevronRightDouble : chevronLeftDouble}
+                        alt={sidebarCollapsed ? 'Expand' : 'Collapse'}
+                        style={{ width: '20px', height: '20px' }}
+                      />
+                    </button>
                   </div>
                 </div>
               </div>
